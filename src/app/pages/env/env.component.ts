@@ -18,7 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
-  // @Select(EnvState) env$: Observable<number>;
+  // @Select(EnvState) env$: Observable<any>;
   varName = `{{变量名}}`;
   isVisible = false;
   envInfo: any = {};

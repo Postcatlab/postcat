@@ -27,7 +27,7 @@ import { EnvState } from '../../../shared/store/env.state';
 export class ApiTestComponent implements OnInit, OnDestroy {
   @ViewChild('historyComponent')
   @Select(EnvState)
-  env$: Observable<number>;
+  env$: Observable<any>;
   historyComponent: ApiTestHistoryComponent;
   validateForm!: FormGroup;
   apiData: any;
