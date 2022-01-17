@@ -43,9 +43,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     return this.activeUuid || 0;
   }
   set envUuid(value) {
-    console.log('value', value);
     this.activeUuid = value || 0;
-    // this.emitChangeEnv(this.activeUuid);
     this.handleSwitchEnv(this.activeUuid);
     this.changeStoreEnv(this.activeUuid);
     localStorage.setItem('env:selected', this.activeUuid.toString());
@@ -53,16 +51,7 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getAllEnv();
-    this.envUuid = Number(localStorage.getItem('env:selected'));
-    // this.changeStoreEnv(this.envUuid);
-    // this.messageService
-    //   .get()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((data) => {
-    //     if (data.type === 'getEnv') {
-    //       this.emitChangeEnv(this.envUuid);
-    //     }
-    //   });
+    // this.envUuid = Number(localStorage.getItem('env:selected'));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -77,8 +66,7 @@ export class EnvComponent implements OnInit, OnDestroy {
         return;
       }
       this.envList = result;
-      this.changeStoreEnv(this.activeUuid);
-      // this.emitChangeEnv(this.activeUuid);
+      this.envUuid = Number(localStorage.getItem('env:selected'));
     });
   }
 
@@ -161,13 +149,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
 
   private changeStoreEnv(uuid) {
-    // console.log('start', uuid);
     const data = this.envList.find((val) => val.uuid === uuid);
-    // console.log(this.envList, uuid);
     this.store.dispatch(new Change(data));
   }
-
-  // private emitChangeEnv(uuid) {
-  //   this.messageService.send({ type: 'changeEnv', data: this.envList.find((val) => val.uuid === uuid) });
-  // }
 }

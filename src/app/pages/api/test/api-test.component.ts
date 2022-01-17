@@ -121,10 +121,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.resetApi();
     this.initBasicForm();
     this.watchApiChange();
-    // this.watchEnvChange();
     this.env$.subscribe((data) => {
-      console.log('||=>', data);
-      // this.env = data.env;
+      const { env } = data;
+      this.env = env;
     });
   }
   ngOnDestroy() {
@@ -232,18 +231,4 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       }
     });
   }
-  // private watchEnvChange() {
-  // this.messageService
-  //   .get()
-  //   .pipe(takeUntil(this.destroy$))
-  //   .subscribe(({ type, data }: Message) => {
-  //     if (type === 'changeEnv') {
-  //       this.env = data || {
-  //         parameters: [],
-  //         frontURI: '',
-  //       };
-  //     }
-  //   });
-  // this.messageService.send({ type: 'getEnv', data: '' });
-  // }
 }
