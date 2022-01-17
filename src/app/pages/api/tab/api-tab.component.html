@@ -12,7 +12,7 @@
     (nzSelect)="tabSelect(tab)"
   >
     <ng-template #titleTemplate>
-      <strong *ngIf="tab.method">{{ tab.method | uppercase }}</strong>
+      <span class="mr5 method_text_{{tab.method}}"  *ngIf="tab.method">{{ tab.method | uppercase }}</span>
       {{ tab.title }}
     </ng-template>
   </nz-tab>

@@ -81,7 +81,7 @@ export class ApiTestService {
       },
       baseFun: {
         reduceItemWhenAddChildItem: reduceItemWhenIsOprDepth,
-        watchCheckboxChange:opts.watchFormLastChange
+        watchCheckboxChange: opts.watchFormLastChange,
       },
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
@@ -294,6 +294,26 @@ export class ApiTestService {
         inData.requestBody = treeToListHasLevel(inData.requestBody, {
           listDepth: 0,
           mapItem: (val) => {
+            let typeSorts = [
+              {
+                type: 'string',
+                match: ['file', 'date', 'datetime', 'char', 'byte'],
+              },
+              {
+                type: 'number',
+                match: ['int', 'float', 'double', 'short', 'long'],
+              },
+              {
+                type: 'object',
+                match: ['json'],
+              },
+            ];
+            typeSorts.some((typeItem) => {
+              if (typeItem.match.includes(val.type)) {
+                val.type = typeItem.type;
+                return true;
+              }
+            });
             val.value = val.example;
             return val;
           },

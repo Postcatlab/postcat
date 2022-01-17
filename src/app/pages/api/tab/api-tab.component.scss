@@ -1,0 +1,37 @@
+::ng-deep {
+  eo-api-tab {
+    .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab {
+      border-radius: 6px 6px 0 0;
+      border: 1px solid var(--BORDER);
+    }
+    .ant-tabs-tab {
+      &.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          color: var(--MAIN_TEXT);
+        }
+      }
+      .ant-tabs-tab-btn {
+        font-size: 12px;
+      }
+    }
+    .method_text_GET {
+      color: var(--BLUE_TAG_BG);
+    }
+    .method_text_POST {
+      color: var(--GREEN_TAG_BG);
+    }
+    .method_text_DELETE {
+      color: var(--RED_TAG_BG);
+    }
+    .method_text_HEAD {
+      color: var(--YELLOW_TAG_BG);
+    }
+    .method_text_PATCH {
+      color: var(--ORANGE_TAG_BG);
+    }
+    .method_text_PUT,
+    .method_text_OPTIONS {
+      color: var(--BLACK_TAG_BG);
+    }
+  }
+}

@@ -83,7 +83,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * @param item  test history data
    */
   restoreHistory(item) {
-    console.log('restoreHistory=>', item);
     let result = this.apiTest.getTestDataFromHistory(item);
     //restore request
     this.apiData = result.testData;
@@ -134,7 +133,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.close();
   }
   private test() {
-    console.log(this.apiData);
     this.testServer.send('unitTest', {
       id: 1,
       action: 'ajax',
@@ -155,7 +153,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Receive Test Server Message
    */
   private receiveMessage(message) {
-    console.log('receiveMessage', message);
     this.testResult = message.report;
     //Only has statusCode need save report
     if (this.testResult.response.statusCode) {

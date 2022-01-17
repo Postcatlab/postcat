@@ -10,22 +10,32 @@
         </ng-template>
       </div>
       <div nz-col nzFlex="2">
-        <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu">
+        <nz-button-group>
+          <button nzType="primary" nz-button (click)="onClick({ event: $event, eventName: 'newApi' })">
+            <i nz-icon nzType="plus"></i>
+            API
+          </button>
+          <button
+            nzType="primary"
+            nzTrigger="click"
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="menu"
+            nzPlacement="bottomRight"
+          >
+            <i nz-icon nzType="caret-down" nzTheme="outline"></i>
+          </button>
+        </nz-button-group>
+        <!-- <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu">
           <i nz-icon nzType="plus"></i>
           API
           <i nz-icon nzType="down"></i>
-        </button>
+        </button> -->
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
-            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi' })">
-              <a>新建API</a>
-            </li>
-            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApiTest' })">
-              <a>新建测试</a>
-            </li>
-            <li nz-menu-item (click)="newGroup()">
-              <a>新建分组</a>
-            </li>
+            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi' })">新建API</li>
+            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApiTest' })">新建测试</li>
+            <li nz-menu-item (click)="newGroup()">新建分组</li>
           </ul>
         </nz-dropdown-menu>
       </div>
@@ -55,7 +65,7 @@
           </button>
           <nz-dropdown-menu #groupMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi'})">
+              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi' })">
                 <a>添加API</a>
               </li>
               <li nz-menu-item (click)="newSubGroup(node)">

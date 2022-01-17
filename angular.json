@@ -35,10 +35,6 @@
               }
             ],
             "styles": [
-              "src/assets/theme/antd.less",
-              "src/styles.scss",
-              "src/ng1/index.css",
-              "src/assets/font/iconfont.css",
               {
                 "input": "src/assets/theme/classic_forest.scss",
                 "bundleName": "classic_forest",
@@ -88,7 +84,11 @@
                 "input": "src/assets/theme/night_forest.scss",
                 "bundleName": "night_forest",
                 "inject": false
-              }
+              },
+              "src/styles.scss",
+              "src/ng1/index.css",
+              "src/assets/theme/antd.less",
+              "src/assets/font/iconfont.css"
             ],
             "scripts": [
               "src/ng1/lib/angular/angular.js",

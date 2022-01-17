@@ -21,7 +21,7 @@ export class ApiTabComponent implements OnInit {
   /**
    * Current selected tab index.
    */
-  selectedIndex: number;
+  selectedIndex: number=0;
   /**
    * Default tabs of api.
    */
@@ -42,9 +42,10 @@ export class ApiTabComponent implements OnInit {
   watchChangeRouter() {
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      this.id = Number(this.route.snapshot.queryParams.uuid);
-      this.tabs[this.selectedIndex] = this.getApiTabByID(this.id);
-      //do something
+      if(this.id){
+        this.id = Number(this.route.snapshot.queryParams.uuid);
+        this.tabs[this.selectedIndex] = this.getApiTabByID(this.id);
+      }
     });
   }
   /**
@@ -58,7 +59,8 @@ export class ApiTabComponent implements OnInit {
    */
   initTab() {
     if (!this.apiDataItems[this.id]) {
-      this.appendTab('test');
+      let page=Object.keys(this.defaultTabs)
+      this.appendTab();
       return;
     }
     const tab = this.getApiTabByID(this.id);
