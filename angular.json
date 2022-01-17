@@ -86,8 +86,8 @@
                 "inject": false
               },
               "src/styles.scss",
-              "src/ng1/index.css",
               "src/assets/theme/antd.less",
+              "src/ng1/index.css",
               "src/assets/font/iconfont.css"
             ],
             "scripts": [
