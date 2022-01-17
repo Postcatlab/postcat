@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class SidebarService {
-  collapsed = false;
+  collapsed = true;
   private collapsedChange$ = new Subject();
   constructor() {}
   getCollapsed() {
