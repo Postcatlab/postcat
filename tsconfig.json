@@ -32,7 +32,6 @@
     "annotateForClosureCompiler": true,
     "strictInjectionParameters": true,
     "skipTemplateCodegen": false,
-    "preserveWhitespaces": true,
     "skipMetadataEmit": false,
     "disableTypeScriptVersionCheck": true
   }
