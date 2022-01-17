@@ -101,7 +101,9 @@
               "src/ng1/directive/drop-down-menu.directive.js",
               "src/ng1/directive/sort.directive.js",
               "src/ng1/directive/drop-change-space.directive.js",
-              "src/ng1/directive/inner-html.directive.js"
+              "src/ng1/directive/inner-html.directive.js",
+              "src/ng1/directive/insert-html.directive.js",
+              "src/ng1/directive/copy-common.directive.js"
             ],
             "customWebpackConfig": {
               "path": "./angular.webpack.js",

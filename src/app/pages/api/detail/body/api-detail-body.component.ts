@@ -33,7 +33,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     description: '',
   };
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private apiEdit: ApiDetailService) {
+  constructor(private apiDetail: ApiDetailService) {
     this.initListConf();
   }
   beforeChangeBodyByType(type) {
@@ -63,7 +63,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   private initListConf() {
-    this.listConf = this.apiEdit.initBodyListConf({
+    this.listConf = this.apiDetail.initBodyListConf({
       title: '参数',
       itemStructure: this.itemStructure
     });

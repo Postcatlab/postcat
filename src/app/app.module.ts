@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxsModule } from '@ngxs/store';
 
 //Other module
 import { CoreModule } from './core/core.module';
@@ -10,6 +11,7 @@ import { StorageModule } from './modules/storage/storage.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { EnvState } from './shared/store/env.state';
 
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
@@ -48,6 +50,7 @@ const storageSetting: StorageSetting = {
     AppRoutingModule,
     UpgradeModule,
     NzModalModule,
+    NgxsModule.forRoot([EnvState]),
     StorageModule.forRoot({ setting: storageSetting }),
   ],
   providers: [

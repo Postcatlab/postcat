@@ -17,10 +17,10 @@
         </button>
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
-            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi', node: node })">
+            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi' })">
               <a>新建API</a>
             </li>
-            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApiTest', node: node })">
+            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApiTest' })">
               <a>新建测试</a>
             </li>
             <li nz-menu-item (click)="newGroup()">
@@ -55,7 +55,7 @@
           </button>
           <nz-dropdown-menu #groupMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi', node: node })">
+              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi'})">
                 <a>添加API</a>
               </li>
               <li nz-menu-item (click)="newSubGroup(node)">

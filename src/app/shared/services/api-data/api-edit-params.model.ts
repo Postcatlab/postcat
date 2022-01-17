@@ -76,14 +76,6 @@ export interface BasiApiEditParams {
    * 值可能性
    */
   enum?: ParamsEnum[];
-  /**
-   * 最小长度
-   */
-  minLength?: number;
-  /**
-   * 最大长度
-   */
-  maxLength?: number;
 }
 export type ApiEditHeaders = BasiApiEditParams;
 export type ApiEditQuery = BasiApiEditParams;
@@ -101,6 +93,14 @@ export interface ApiEditBody extends BasiApiEditParams {
    * 最大值
    */
   maximum?: number;
+  /**
+   * 最小长度
+   */
+  minLength?: number;
+  /**
+   * 最大长度
+   */
+  maxLength?: number;
   /**
    * XML attribute
    */
