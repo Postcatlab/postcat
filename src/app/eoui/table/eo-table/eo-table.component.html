@@ -1,0 +1,102 @@
+<nz-table
+  #basicTable
+  #filterTable
+  #smallTable
+  #expandTable
+  #editRowTable
+  nzSize="small"
+  [nzData]="listOfMapData"
+  [nzShowPagination]="isShowPagination"
+>
+  <thead>
+    <tr>
+      <th
+        *ngFor="let item of renderColumns"
+        [nzFilters]="item.listOfFilter"
+        [nzFilterMultiple]="item.filterMultiple"
+        [nzFilterFn]="item.filterFn"
+        [nzWidth]="item.width"
+      >
+        {{ item.title }}
+      </th>
+      <th *ngIf="isExpand">
+        <a class="th_expand" nz-button nzType="link" (click)="handleExpand(null)">
+          <ng-container *ngIf="expandIndexList.length !== basicTable.data.length">全部展开</ng-container>
+          <ng-container *ngIf="expandIndexList.length === basicTable.data.length">全部收缩</ng-container>
+        </a>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of basicTable.data; let i = index">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.nodeKey]">
+        <tr class="eo_table_body_tr" *ngIf="(item.parent && item.parent.expand) || !item.parent">
+          <ng-container *ngFor="let cell of columns; let $i = index">
+            <td
+              *ngIf="cell.isExpand"
+              [nzIndentSize]="item.level! * 20"
+              [nzShowExpand]="!!item.children"
+              [(nzExpand)]="item.expand"
+              (nzExpandChange)="collapse(mapOfExpandedData[data.nodeKey], item, $event)"
+            >
+              {{ item[cell.key] }}
+            </td>
+            <td *ngIf="!cell.isExpand">
+              <ng-template [ngIf]="!cell.isEdit">
+                {{ item[cell.key] }}
+              </ng-template>
+              <ng-template [ngIf]="cell.isEdit">
+                <input
+                  nz-input
+                  type="text"
+                  [(ngModel)]="item[cell.key]"
+                  [ngModelOptions]="{ standalone: true }"
+                  type="text"
+                  (blur)="handleEditData($event, data.nodeKey, cell.key)"
+                />
+              </ng-template>
+              <ng-container *ngIf="cell.key">
+                <!-- copy button if columns include [isCopy] -->
+                <ng-template [ngIf]="item[cell.key] && cell.isCopy">
+                  <button
+                    nz-button
+                    [nzSize]="'small'"
+                    class="copy"
+                    nzType="default"
+                    (click)="handleCopy(item[cell.key])"
+                  >
+                    复制
+                  </button>
+                </ng-template>
+              </ng-container>
+              <!-- share scope if columns include [slot] -->
+              <ng-container *ngIf="slotMap[cell.slot]">
+                <ng-template
+                  [ngTemplateOutlet]="slotMap[cell.slot]"
+                  [ngTemplateOutletContext]="{ scope: item, index: i }"
+                ></ng-template>
+              </ng-container>
+            </td>
+          </ng-container>
+          <td *ngIf="isExpand">
+            <a class="td_expand" nz-button nzType="link" (click)="handleExpand(i)">
+              <ng-container *ngIf="!expandIndexList.includes(i)">展开</ng-container>
+              <ng-container *ngIf="expandIndexList.includes(i)">收缩</ng-container>
+            </a>
+          </td>
+        </tr>
+        <tr [nzExpand]="expandIndexList.includes(i)">
+          <p class="expand" *ngIf="item['limit']"><span>参数限制：</span> {{ item['limit'] }}</p>
+          <p class="expand" *ngIf="item['note']">
+            <span>备注：</span>
+            {{ item['note'] }}
+          </p>
+          <p class="expand" *ngIf="item['demo']">
+            <span>示例：</span>
+            {{ item['demo'] }}
+          </p>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </tbody>
+</nz-table>

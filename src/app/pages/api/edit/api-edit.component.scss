@@ -1,0 +1,23 @@
+.ant-input-group.ant-input-group-compact {
+  display: flex;
+}
+.ant-select{
+  height: 32px;
+}
+.ant-form-item-label {
+  font-weight: bold;
+}
+eo-api-edit-header,
+eo-api-edit-body,
+eo-api-edit-query,
+eo-api-edit-rest {
+  display: block;
+}
+::ng-deep {
+  .param_header {
+    padding: 5px 15px;
+  }
+  .param_header+list-block-common-component .wrap_lbcc {
+    border-top: 1px solid var(--BORDER);
+  }
+}

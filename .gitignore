@@ -1,18 +1,55 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Other files and folders
+# compiled output
+/dist
+/build/SetupScripts/nim/skin.zip
+/tmp
+/out-tsc
+/app-builds
+/release
+app/main.js
+src/**/*.js
+!src/karma.conf.js
+!src/ng1/**/*.js
+*.js.map
+
+# dependencies
+node_modules
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9/
+*.launch
 .settings/
+*.sublime-workspace
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+# IDE - VSCode
+.vscode/*
+.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# misc
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+!/e2e/protractor.conf.js
+/e2e/*.map
+/e2e/tracing
+/e2e/screenshots
+
+# System Files
+.DS_Store
+Thumbs.db
+*-lock.json

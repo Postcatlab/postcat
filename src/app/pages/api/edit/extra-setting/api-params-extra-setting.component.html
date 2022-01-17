@@ -1,0 +1,34 @@
+<!-- 基本参数信息 -->
+<list-block-common-component
+  class="eo-block-container"
+  [list]="[model]"
+  [mainObject]="listConfBasicInfo"
+></list-block-common-component>
+<!-- 最大/最小长度 -->
+<list-block-common-component
+  class="eo-block-container mt20"
+  [list]="[model]"
+  [mainObject]="listConfLenthInterval"
+></list-block-common-component>
+<!-- 最大/最小值 -->
+<list-block-common-component
+  *ngIf="['int', 'float', 'double', 'short', 'long', 'number'].includes(model.type)"
+  class="eo-block-container mt20"
+  [list]="[model]"
+  [mainObject]="listConfValueInterval"
+></list-block-common-component>
+<!-- 值可能性 -->
+<list-block-common-component
+  class="eo-block-container mt20"
+  [list]="model.enum"
+  [mainObject]="listConfEnums"
+></list-block-common-component>
+<!-- 示例 -->
+<div class="eo-block-container mt20">
+  <div class="thead_div">
+    <div class="plr5">示例</div>
+  </div>
+  <div class="m10">
+    <textarea rows="4" placeholder="参数示例" nz-input [(ngModel)]="model.example"></textarea>
+  </div>
+</div>

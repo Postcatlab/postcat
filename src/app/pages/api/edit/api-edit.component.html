@@ -1,0 +1,123 @@
+<div class="p15">
+  <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
+    <button type="button" class="eo_theme_btn_success" (click)="saveApi()">保存</button>
+    <nz-divider></nz-divider>
+    <nz-form-label nzFor="uri">API Path</nz-form-label>
+    <nz-input-group nzCompact>
+      <nz-select class="w_100" formControlName="protocol">
+        <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+      </nz-select>
+      <nz-select class="w_100" formControlName="method">
+        <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+      </nz-select>
+      <nz-form-item nz-col class="fg1">
+        <nz-form-control nzErrorTip="请输入 API Path">
+          <input type="text" [(ngModel)]="apiData.uri" name="uri" id="uri" nz-input formControlName="uri" />
+        </nz-form-control>
+      </nz-form-item>
+    </nz-input-group>
+    <nz-form-label nzFor="name">分组 / API 名称 </nz-form-label>
+    <nz-input-group nzCompact>
+      <nz-form-item nz-col>
+        <nz-form-control class="w_250" nzErrorTip="请选择 API 分组">
+          <nz-tree-select
+            nzAllowClear="false"
+            [nzExpandedKeys]="expandKeys"
+            [nzDropdownMatchSelectWidth]="false"
+            [nzNodes]="groups"
+            [(ngModel)]="apiData.groupID"
+            [nzShowSearch]="true"
+            #apiGroup
+            formControlName="groupID"
+          ></nz-tree-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-col class="fg1">
+        <nz-form-control nzErrorTip="请输入 API 名称">
+          <input type="text" name="name" id="name" nz-input formControlName="name" />
+        </nz-form-control>
+      </nz-form-item>
+    </nz-input-group>
+  </form>
+  <!-- 请求参数 -->
+  <nz-collapse class="eo_collapse mt20" [nzGhost]="true">
+    <nz-collapse-panel #panel [nzActive]="true" nzHeader="请求参数" nzShowArrow="false" [nzExtra]="extraTpl">
+      <ng-template #extraTpl>
+        {{ panel.nzActive ? '收缩' : '展开' }}
+        <span class="iconfont icon-chevron-{{ panel.nzActive ? 'up' : 'down' }}"></span>
+      </ng-template>
+      <nz-tabset [nzAnimated]="false" [nzSelectedIndex]="1" class="mt10">
+        <!-- 请求头部 -->
+        <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+          <ng-template #headerTitleTmp>
+            请求头部
+            <span class="eo-tab-icon">{{ apiData.requestHeaders | apiParamsNum }}</span>
+          </ng-template>
+          <eo-api-edit-header class="eo_theme_iblock bbd bld brd" [model]="apiData.requestHeaders"></eo-api-edit-header>
+        </nz-tab>
+        <!-- 请求体 -->
+        <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
+          <ng-template #bodyTitleTmp>
+            请求体
+            <span class="eo-tab-icon">{{ apiData.requestBody | apiParamsNum }}</span>
+          </ng-template>
+          <eo-api-edit-body
+            class="eo_theme_iblock bbd bld brd"
+            [(bodyType)]="apiData.requestBodyType"
+            [(model)]="apiData.requestBody"
+            [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
+            [(jsonRootType)]="apiData.requestBodyJsonType"
+          ></eo-api-edit-body>
+        </nz-tab>
+        <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+          <ng-template #queryTitleTmp>
+            Query 参数
+            <span class="eo-tab-icon">{{ apiData.queryParams | apiParamsNum }}</span>
+          </ng-template>
+          <eo-api-edit-query class="eo_theme_iblock bbd bld brd" [model]="apiData.queryParams"></eo-api-edit-query>
+        </nz-tab>
+        <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
+          <ng-template #restTitleTmp>
+            REST 参数
+            <span class="eo-tab-icon">{{ apiData.restParams | apiParamsNum }}</span>
+          </ng-template>
+          <eo-api-edit-rest class="eo_theme_iblock bbd bld brd" [model]="apiData.restParams"></eo-api-edit-rest>
+        </nz-tab>
+      </nz-tabset>
+    </nz-collapse-panel>
+  </nz-collapse>
+  <!-- 响应参数 -->
+  <nz-collapse class="eo_collapse mt40" [nzGhost]="true">
+    <nz-collapse-panel #panel [nzActive]="true" nzHeader="响应内容" nzShowArrow="false" [nzExtra]="extraTpl">
+      <ng-template #extraTpl>
+        {{ panel.nzActive ? '收缩' : '展开' }}
+        <span class="iconfont icon-chevron-{{ panel.nzActive ? 'up' : 'down' }}"></span>
+      </ng-template>
+      <nz-tabset [nzAnimated]="false" [nzSelectedIndex]="1" class="mt10">
+        <nz-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">
+          <ng-template #responseHeaderTitleTmp>
+            返回头部
+            <span class="eo-tab-icon">{{ apiData.responseHeaders | apiParamsNum }}</span>
+          </ng-template>
+          <eo-api-edit-header
+            class="eo_theme_iblock bbd bld brd"
+            [model]="apiData.responseHeaders"
+          ></eo-api-edit-header>
+        </nz-tab>
+        <nz-tab [nzTitle]="responseTitleTmp" [nzForceRender]="true">
+          <ng-template #responseTitleTmp>
+            返回结果
+            <span class="eo-tab-icon">{{ apiData.responseBody | apiParamsNum }}</span>
+          </ng-template>
+          <eo-api-edit-body
+            class="eo_theme_iblock bbd bld brd"
+            [(bodyType)]="apiData.responseBodyType"
+            [(model)]="apiData.responseBody"
+            [supportType]="['json', 'xml', 'raw', 'binary']"
+            [(jsonRootType)]="apiData.responseBodyJsonType"
+          ></eo-api-edit-body>
+        </nz-tab>
+      </nz-tabset>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>

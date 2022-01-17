@@ -1,0 +1,127 @@
+.layout {
+  height: 100%;
+}
+
+nz-content {
+  background-color: #fff;
+}
+
+nz-sider {
+  width: 250px;
+}
+
+nz-tree {
+  overflow: hidden;
+}
+
+.custom-node {
+  cursor: pointer;
+  line-height: 24px;
+  display: block;
+}
+
+.folder-name {
+  margin-left: 4px;
+}
+
+.file-desc,
+.folder-desc {
+  display: inline-block;
+  position: relative;
+  button {
+    padding: 0 5px;
+  }
+}
+
+::ng-deep {
+  .ant-layout-sider-children {
+    padding: 5px;
+    .group-btn-add,
+    .group-search {
+      margin-bottom: 12px;
+    }
+    .group-tree {
+      overflow: auto;
+      height: calc(100vh - 129px);
+      .ant-tree-switcher {
+        width: 12px;
+      }
+      .ant-tree-indent-unit {
+        width: 8px;
+      }
+      .ant-tree {
+        .ant-tree-node-content-wrapper {
+          padding: 0 2px;
+        }
+      }
+    }
+  }
+  .ant-layout-sider-children {
+    border-right: 1px solid #f0f0f0;
+  }
+  .tabs-bar {
+    background-color: #f0f0f0;
+    padding: 5px 10px 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .ant-tabs-top {
+      > .ant-tabs-nav {
+        margin: 0;
+        .ant-tabs-nav-wrap {
+          flex: none;
+        }
+        .ant-tabs-nav-add {
+          background-color: rgba(0, 0, 0, 0);
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+          }
+        }
+        .ant-tabs-nav-more {
+          min-width: 40px;
+          min-height: 40px;
+          margin-left: 2px;
+          padding: 0 8px;
+          &:hover {
+            color: #00785a;
+            background-color: rgba(0, 0, 0, 0.1);
+          }
+
+          &:active,
+          &:focus {
+            color: #00785a;
+          }
+        }
+        .ant-tabs-tab {
+          .ant-tabs-tab-remove {
+            color: rgba(0, 0, 0, 0);
+          }
+          &:hover .ant-tabs-tab-remove {
+            color: rgba(0, 0, 0, 0.45);
+          }
+        }
+      }
+    }
+    .env {
+      height: 36px;
+      nz-select {
+        width: 200px;
+      }
+    }
+  }
+  .inside_page_tab {
+    .ant-tabs-nav {
+      padding-left: 20px;
+    }
+  }
+  eo-api {
+    router-outlet + * {
+      display: block;
+      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 45px);
+      overflow: auto;
+    }
+    .has_tab_page router-outlet + * {
+      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 45px - 46px);
+    }
+  }
+}

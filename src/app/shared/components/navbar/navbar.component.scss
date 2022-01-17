@@ -1,0 +1,29 @@
+.eo_navbar {
+  -webkit-app-region: drag;
+  position: fixed;
+  width: 100%;
+  z-index: 11;
+  left: 0;
+  top: 0;
+  // background-color: var(--NAVBAR_BG);
+  // color: var(--NAVBAR_TEXT);
+  // border-bottom: 1px solid var(--NAVBAR_BORDER_BOTTOM);
+  border-bottom: 1px solid var(--BORDER);
+  height: var(--NAVBAR_HEIGHT);
+  .logo {
+    width: 120px;
+  }
+  .tips_wrap {
+    position: relative;
+
+    &:hover {
+      .trigger_item {
+        display: inline-flex;
+      }
+    }
+  }
+}
+
+.can_be_click {
+  -webkit-app-region: no-drag;
+}

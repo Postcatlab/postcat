@@ -1,0 +1,32 @@
+<nz-tabset
+  [(nzSelectedIndex)]="selectedIndex"
+  nzType="editable-card"
+  (nzAdd)="newTab()"
+  (nzClose)="closeTab($event)"
+  [nzTabBarExtraContent]="extraTemplate"
+>
+  <nz-tab
+    *ngFor="let tab of tabs; let i = index"
+    nzClosable
+    [nzTitle]="titleTemplate"
+    (nzSelect)="tabSelect(tab)"
+  >
+    <ng-template #titleTemplate>
+      <strong *ngIf="tab.method">{{ tab.method | uppercase }}</strong>
+      {{ tab.title }}
+    </ng-template>
+  </nz-tab>
+</nz-tabset>
+<ng-template #extraTemplate>
+  <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+    <button class="ant-tabs-nav-more"><i nz-icon nzType="ellipsis" nzTheme="outline"></i></button>
+  </a>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <li nz-menu-item>关闭其它标签页</li>
+      <li nz-menu-item>关闭所有标签</li>
+      <li nz-menu-item>关闭左侧标签页</li>
+      <li nz-menu-item>关闭右侧标签页</li>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>

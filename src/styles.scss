@@ -1,0 +1,24 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+:root {
+  --NAVBAR_HEIGHT: 50px;
+  --FOOTER_HEIGHT: 30px;
+}
+.api_test_history_list {
+  .method_label {
+    padding: 1px 3px;
+  }
+  .thead_div_wrap {
+    overflow-y: scroll;
+  }
+  .tbody_div_wrap {
+    max-height: 190px;
+    overflow-y: scroll;
+  }
+}

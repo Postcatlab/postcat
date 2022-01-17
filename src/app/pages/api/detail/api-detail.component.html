@@ -1,0 +1,40 @@
+<section class="detail_page">
+  <div class="t-1">
+    <nz-tag [nzColor]="'#108ee9'">{{ apiInfo.protocol | uppercase }}</nz-tag>
+    <nz-tag [nzColor]="'#0aa07a'">{{ apiInfo.method | uppercase }}</nz-tag>
+    <span>{{ apiInfo.uri }}</span>
+  </div>
+  <p class="api_name">{{ apiInfo.name }}</p>
+  <div *ngIf="apiInfo.requestHeaders&&apiInfo.requestHeaders.length">
+    <p class="api_line">请求头部</p>
+    <eo-api-detail-header [model]="apiInfo.requestHeaders"></eo-api-detail-header>
+  </div>
+  <div *ngIf="apiInfo.queryParams&&apiInfo.queryParams.length">
+    <p class="api_line">Query 参数</p>
+    <eo-api-detail-query [model]="apiInfo.queryParams"></eo-api-detail-query>
+  </div>
+  <div *ngIf="apiInfo.restParams&&apiInfo.restParams.length">
+    <p class="api_line">Rest 参数</p>
+    <eo-api-detail-rest [model]="apiInfo.restParams"></eo-api-detail-rest>
+  </div>
+  <div *ngIf="apiInfo.requestBody&&apiInfo.requestBody.length">
+    <p class="api_line">Body 请求参数</p>
+    <eo-api-detail-body
+      [bodyType]="apiInfo.requestBodyType"
+      [model]="apiInfo.requestBody"
+      [jsonRootType]="apiInfo.requestBodyJsonType"
+    ></eo-api-detail-body>
+  </div>
+  <div *ngIf="apiInfo.responseHeaders&&apiInfo.responseHeaders.length">
+    <p class="api_line">返回头部</p>
+    <eo-api-detail-header [model]="apiInfo.responseHeaders"></eo-api-detail-header>
+  </div>
+  <div *ngIf="apiInfo.responseBody&&apiInfo.responseBody.length">
+    <p class="api_line">返回参数</p>
+    <eo-api-detail-body
+      [bodyType]="apiInfo.responseBodyType"
+      [model]="apiInfo.responseBody"
+      [jsonRootType]="apiInfo.responseBodyJsonType"
+    ></eo-api-detail-body>
+  </div>
+</section>

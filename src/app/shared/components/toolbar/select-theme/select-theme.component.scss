@@ -1,0 +1,474 @@
+.m-mode {
+  .mode-card {
+    display: flex;
+    flex-wrap: wrap;
+    .card-wrap {
+      margin-right: 10px;
+      margin-bottom: 10px;
+      width: 200px;
+      border-radius: var(--DEFAULT_BORDER_RADIUS);
+      border: 1px solid var(--BORDER);
+
+      .card-container {
+        height: 92px;
+        border-bottom: 1px solid var(--BORDER);
+      }
+
+      .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px;
+      }
+    }
+    .nav_btn_cc {
+      border-radius: 3px;
+      height: 20px;
+      width: 20px;
+    }
+    .item_scc {
+      height: 11px;
+
+      span {
+        height: 5px;
+        border-radius: 3px;
+        margin-left: 5px;
+      }
+    }
+
+    .input_cc {
+      width: 30%;
+      height: 20px;
+      border-radius: 10px;
+    }
+
+    .nav_cc {
+      border-bottom: 1px solid;
+      height: 30px;
+      min-height: 30px;
+    }
+    .sidebar_cc {
+      border-right: 1px solid;
+    }
+  }
+
+  //经典--森林
+  .classic_forest_cc {
+    background-color: #fff;
+
+    .nav_cc {
+      background-color: #004132;
+      border-bottom-color: #004132;
+    }
+
+    .input_cc {
+      background-color: #fff;
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .item_scc span {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #00785a;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #fafafa;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //经典--日出
+  .classic_sunrise_cc {
+    background-color: #fff;
+
+    .nav_cc {
+      background-color: #563725;
+      border-bottom-color: #563725;
+    }
+
+    .input_cc {
+      background-color: #fff;
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .item_scc span {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #f57023;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #f8f8fa;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //经典--玩具
+  .classic_toy_cc {
+    background-color: #fff;
+
+    .nav_cc {
+      background-color: #1f57e7;
+      border-bottom-color: #1f57e7;
+    }
+
+    .input_cc {
+      background-color: #fff;
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .item_scc span {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #ffc806;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #fafafa;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //简洁--云
+  .clean_cloud_cc {
+    background-color: #fff;
+
+    .nav_cc {
+      background-color: #f8f8fa;
+      border-bottom-color: #bbbbbb;
+    }
+
+    .input_cc {
+      background-color: #fff;
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .item_scc span {
+      background-color: #fff;
+    }
+
+    .active_item_scc {
+      background-color: #2d9ee0;
+
+      span {
+        background-color: #fff;
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #f8f8fa;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //简洁--日出
+  .clean_sunrise_cc {
+    background-color: #fff;
+
+    .nav_cc {
+      background-color: #f8f8fa;
+      border-bottom-color: #d9d9d9;
+    }
+
+    .input_cc {
+      background-color: #fff;
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .item_scc span {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #f57023;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #f8f8fa;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //简洁--森林
+  .clean_forest_cc {
+    background-color: #fff;
+
+    .nav_cc {
+      background-color: #f8f8fa;
+      border-bottom-color: #d9d9d9;
+    }
+
+    .input_cc {
+      background-color: #fff;
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .item_scc span {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #00785a;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #f8f8fa;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //简洁--茄紫
+  .clean_purple_cc {
+    background-color: #fff;
+
+    .nav_cc {
+      background-color: #4a154b;
+      border-bottom-color: #bbbbbb;
+    }
+
+    .input_cc {
+      background-color: #fff;
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .item_scc span {
+      background-color: #fff;
+    }
+
+    .active_item_scc {
+      background-color: #4a154b;
+
+      span {
+        background-color: #fff;
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #fbfaf7;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //深色-命令行
+  .night_cmd_cc {
+    background-color: #1e1e1e;
+
+    .nav_cc {
+      background-color: #1a2b23;
+      border-bottom-color: #3c3c3c;
+    }
+
+    .input_cc {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .item_scc span {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #4ee077;
+
+      span {
+        background-color: #1a1d21;
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #1a1d21;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //深色-玩具
+  .night_toy_cc {
+    background-color: #1a1d21;
+
+    .nav_cc {
+      background-color: #1f57e7;
+      border-bottom-color: #bbbbbb;
+    }
+
+    .input_cc {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .item_scc span {
+      background-color: #000;
+    }
+
+    .active_item_scc {
+      background-color: #ffc806;
+
+      span {
+        background-color: #000;
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #f8f8fa;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //深色-森林
+  .night_forest_cc {
+    background-color: #152a2d;
+
+    .nav_cc {
+      background-color: #152a2d;
+      border-bottom-color: #bbbbbb;
+    }
+
+    .input_cc {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .item_scc span {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #eba270;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #323232;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //深色--日落
+  .night_dusk_cc {
+    background-color: #744f4d;
+
+    .nav_cc {
+      background-color: #461412;
+      border-bottom-color: #461412;
+    }
+
+    .input_cc {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .item_scc span {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #6a1b1b;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #150404;
+      border-right-color: var(--BORDER);
+    }
+  }
+
+  //深色--夜晚
+  .night_black_cc {
+    background-color: #1e1e1e;
+
+    .nav_cc {
+      background-color: #3c3c3c;
+      border-bottom-color: #3c3c3c;
+    }
+
+    .input_cc {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav_btn_cc {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .item_scc span {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .active_item_scc {
+      background-color: #00785a;
+
+      span {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .sidebar_cc {
+      background-color: #323232;
+      border-right-color: rgba(255, 255, 255, 0.15);
+    }
+  }
+}

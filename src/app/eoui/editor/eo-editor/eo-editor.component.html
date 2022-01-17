@@ -1,0 +1,26 @@
+<div>
+  <div class="button_list">
+    <span *ngIf="eventList.includes('type') && !hiddenList.includes('type')">
+      内容类型
+      <nz-select [(ngModel)]="editorType">
+        <nz-option *ngFor="let item of typeList" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+      </nz-select>
+    </span>
+    <span class="btn" (click)="handleAction(item.event)" *ngFor="let item of buttonList">
+      <i nz-icon [nzType]="item.icon" nzTheme="outline"></i>
+      <span>{{ item.label }}</span>
+    </span>
+  </div>
+  <ace
+    style="height: 200px; width: 100%"
+    [config]="config"
+    [disabled]="false"
+    [(value)]="code"
+    [mode]="editorType"
+    (blur)="log($event, 'blur')"
+    (focus)="log($event, 'focus')"
+    (copy)="log($event, 'copy')"
+    (paste)="log($event, 'paste')"
+    (change)="handleChange()"
+  ></ace>
+</div>
