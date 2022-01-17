@@ -123,6 +123,7 @@ export class TestServerLocalNodeService implements TestServer {
       return result;
     };
     const formatEnv = (env) => {
+      console.log('env.parameters', env);
       let result = {
         paramList: env.parameters.map((val) => ({ paramKey: val.name, paramValue: val.value })),
         frontURI: env.hostUri,
