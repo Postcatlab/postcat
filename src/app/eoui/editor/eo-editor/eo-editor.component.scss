@@ -1,0 +1,27 @@
+.button_list {
+  border: 1px solid var(--BORDER);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  nz-select {
+    width: 90px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    height: 50px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: var(--MAIN_BG);
+    color: var(--MAIN_TEXT);
+    &:hover {
+      color: var(--BLUE_NORMAL);
+    }
+    > i {
+      margin: 0 5px;
+    }
+  }
+}

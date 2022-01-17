@@ -1,0 +1,43 @@
+{
+  "asar": false,
+  "directories": {
+    "output": "release/"
+  },
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!*.map",
+    "!package.json",
+    "!package-lock.json"
+  ],
+  "extraResources": [
+    {
+      "from": "dist",
+      "to": "app",
+      "filter": [
+        "**/*"
+      ]
+    }
+  ],
+  "win": {
+    "icon": "dist/assets/icons",
+    "target": [
+      "portable"
+    ]
+  },
+  "portable": {
+    "splashImage": "dist/assets/icons/eoapi.bmp"
+  },
+  "mac": {
+    "icon": "dist/assets/icons",
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "dist/assets/icons",
+    "target": [
+      "AppImage"
+    ]
+  }
+}

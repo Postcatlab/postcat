@@ -1,0 +1,112 @@
+<div class="test_wrap">
+  <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
+    <nz-form-item nz-col class="basic_info_container">
+      <nz-form-control>
+        <nz-input-group nzCompact>
+          <nz-select class="w_100" formControlName="protocol">
+            <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+          </nz-select>
+          <nz-select class="w_100" formControlName="method">
+            <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+          </nz-select>
+          <div
+            *ngIf="env.hostUri"
+            nz-typography
+            nzEllipsis
+            class="env_front_uri"
+            nzTooltipTitle="{{ env.hostUri }}"
+            nzTooltipPlacement="bottom"
+            nz-tooltip
+          >
+            {{ env.hostUri }}
+          </div>
+          <input
+            type="text"
+            name="uri"
+            id="uri"
+            nz-input
+            formControlName="uri"
+            [(ngModel)]="apiData.uri"
+            (change)="changeUri()"
+          />
+          <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()">
+            {{ status === 'testing' ? '终止' : '发送' }}
+            <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
+          </button>
+          <button type="button" *ngIf="!apiData.uuid" nz-button nzType="default" (click)="saveTestDataToApi()" class="ml10">保存为新 API</button>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div class="scroll_container">
+    <!-- 请求参数 -->
+    <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [nzAnimated]="false" [nzSelectedIndex]="1">
+      <!-- 请求头部 -->
+      <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+        <ng-template #headerTitleTmp>
+          请求头部
+          <span class="eo-tab-icon">{{ apiData.requestHeaders | apiParamsNum }}</span>
+        </ng-template>
+        <eo-api-test-header class="eo_theme_iblock bbd" [model]="apiData.requestHeaders"></eo-api-test-header>
+      </nz-tab>
+      <!-- 请求信息 -->
+      <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
+        <ng-template #bodyTitleTmp>
+          请求体
+          <span class="eo-tab-icon">{{ apiData.requestBody | apiParamsNum }}</span>
+        </ng-template>
+        <eo-api-test-body
+          class="eo_theme_iblock bbd"
+          [(bodyType)]="apiData.requestBodyType"
+          [(model)]="apiData.requestBody"
+          [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
+          [(jsonRootType)]="apiData.requestBodyJsonType"
+        ></eo-api-test-body>
+      </nz-tab>
+      <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+        <ng-template #queryTitleTmp>
+          Query 参数
+          <span class="eo-tab-icon">{{ apiData.queryParams | apiParamsNum }}</span>
+        </ng-template>
+        <eo-api-test-query
+          class="eo_theme_iblock bbd"
+          [model]="apiData.queryParams"
+          (modelChange)="changeQuery()"
+        ></eo-api-test-query>
+      </nz-tab>
+      <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
+        <ng-template #restTitleTmp>
+          REST 参数
+          <span class="eo-tab-icon">{{ apiData.restParams | apiParamsNum }}</span>
+        </ng-template>
+        <eo-api-test-rest class="eo_theme_iblock bbd" [model]="apiData.restParams"></eo-api-test-rest>
+      </nz-tab>
+    </nz-tabset>
+    <!-- 响应信息 -->
+    <nz-tabset
+      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [(nzSelectedIndex)]="this.tabIndexRes"
+      [nzAnimated]="false"
+      class="mt10"
+    >
+      <nz-tab nzTitle="返回结果">
+        <eo-api-test-result-response [model]="testResult.response"></eo-api-test-result-response>
+      </nz-tab>
+      <div>
+        <nz-tab nzTitle="返回头部">
+          <eo-api-test-result-header [model]="testResult.response.headers"></eo-api-test-result-header>
+        </nz-tab>
+      </div>
+      <nz-tab nzTitle="请求内容">
+        <eo-api-test-result-request-body [model]="testResult.request.requestBody"></eo-api-test-result-request-body>
+      </nz-tab>
+      <nz-tab nzTitle="请求头部">
+        <eo-api-test-result-header [model]="testResult.request.requestHeaders"></eo-api-test-result-header>
+      </nz-tab>
+      <nz-tab nzTitle="测试历史">
+        <eo-api-test-history [apiID]="apiData.uuid" (clickItem)="restoreHistory($event)" #historyComponent>
+        </eo-api-test-history>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>

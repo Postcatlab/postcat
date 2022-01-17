@@ -1,0 +1,29 @@
+<div class="eo_navbar f_row f_js_ac">
+  <img class="logo" src="assets/images/logo.svg" />
+  <div class="can_be_click right_btn_container" *ngIf="!OS_TYPE.includes('mac') && isElectron">
+    <span
+      nz-tooltip
+      nzTooltipTitle="最小化"
+      nzTooltipPlacement="bottom"
+      class="iconfont icon-jianhao mr10 fs24 cp"
+      (click)="minimize()"
+    >
+    </span>
+    <span
+      nz-tooltip
+      [nzTooltipTitle]="isMaximized ? '向下还原' : '最大化'"
+      nzTooltipPlacement="bottom"
+      class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
+      (click)="toggleMaximize()"
+    >
+    </span>
+    <span
+      nz-tooltip
+      nzTooltipTitle="关闭"
+      nzTooltipPlacement="bottom"
+      class="iconfont icon-guanbi pr15 fs24 cp"
+      (click)="close()"
+    >
+    </span>
+  </div>
+</div>

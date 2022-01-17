@@ -1,0 +1,19 @@
+{
+  "name": "eoapi",
+  "version": "0.0.1",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "crypto-js": "^4.0.0",
+    "form-data": "^2.5.1",
+    "https-proxy-agent": "^5.0.0",
+    "iconv-lite": "^0.6.2"
+  },
+  "devDependencies": {
+    "electron": "16.0.0"
+  },
+  "__npminstall_done": false
+}

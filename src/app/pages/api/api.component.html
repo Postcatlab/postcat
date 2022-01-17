@@ -1,0 +1,40 @@
+<nz-layout class="layout">
+  <nz-sider nzTheme="light" nzWidth="250">
+    <nz-content>
+      <div class="inner-content">
+        <eo-api-group-tree
+          [treeNodes]="treeNodes"
+          [expandedKeys]="expandedKeys"
+          (groupTreeEvent)="groupTreeEvent($event)"
+          (updateGroupTreeEvent)="updateGroupTreeEvent($event)"
+        ></eo-api-group-tree>
+      </div>
+    </nz-content>
+  </nz-sider>
+  <nz-layout class="right-layout">
+    <nz-content>
+      <div class="inner-content">
+        <div class="tabs-bar">
+          <eo-api-tab [apiDataItems]="apiDataItems"></eo-api-tab>
+          <div class="env">
+            <eo-env></eo-env>
+          </div>
+        </div>
+        <div class="flex-1 overflow-auto content-box {{ this.id ? 'has_tab_page' : '' }}">
+          <nz-tabset class="inside_page_tab" *ngIf="this.id" nzLinkRouter>
+            <nz-tab>
+              <a *nzTabLink nz-tab-link [routerLink]="['detail']" queryParamsHandling="merge"> 文档 </a>
+            </nz-tab>
+            <nz-tab>
+              <a *nzTabLink nz-tab-link [routerLink]="['edit']" queryParamsHandling="merge"> 编辑 </a>
+            </nz-tab>
+            <nz-tab>
+              <a *nzTabLink nz-tab-link [routerLink]="['test']" queryParamsHandling="merge"> 测试 </a>
+            </nz-tab>
+          </nz-tabset>
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

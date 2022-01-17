@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Windows>
+<!-- 完成 -->
+ <VerticalLayout >
+		<VerticalLayout width="480px" height="200" roundcorner="5,5" bkimage="file='form\pic.png'">
+	
+	</VerticalLayout>
+	<VerticalLayout bkcolor="#FFFFFFFF" >	
+	<Button name="btnRun" padding="125,50,0,0" text="开始使用" font="6" normalimage="form\btn_installation_normal.png" hotimage="form\btn_installation_hovered.png" textcolor="0xFFFFFFFF"  borderround="3,3" height="35" width="230" />
+	</VerticalLayout>
+ </VerticalLayout>
+</Windows>

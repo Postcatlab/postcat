@@ -1,0 +1,70 @@
+// Custom Theming for NG-ZORRO
+// For more information: https://ng.ant.design/docs/customize-theme/en
+// @import '../../../node_modules/ng-zorro-antd/components.less';
+// @import '../../../node_modules/ng-zorro-antd/style/patch.less';
+@import '../../../node_modules/ng-zorro-antd/ng-zorro-antd.less';
+
+// Override less variables to here
+// View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
+@theme-color: #00785a;
+
+@primary-color: @theme-color;
+@success-color: @theme-color;
+@processing-color: @theme-color;
+body {
+  line-height: initial;
+}
+.ant-message-notice-content {
+  background-color: @theme-color;
+  color: #fff;
+  .ant-message-success .anticon {
+    color: #fff;
+  }
+}
+.ant-drawer {
+  .ant-drawer-content-wrapper {
+    height: calc(100vh - 25px);
+    top: 10px;
+    /* box-shadow: var(--MODAL_SHADOW); */
+  }
+  .ant-drawer-content {
+    border-radius: 3px;
+  }
+  .ant-drawer-title {
+    font-weight: bold;
+  }
+}
+.eo_collapse {
+  .ant-collapse-item {
+    .ant-collapse-header {
+      border-left: 3px solid var(--MAIN_THEME_COLOR);
+      background-color: var(--TABLE_HEADER_BG);
+      padding: 5px 10px 5px 12px;
+    }
+    .ant-collapse-content > .ant-collapse-content-box {
+      padding: 0;
+    }
+  }
+}
+.ant-tabs-top {
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
+  .ant-tabs-nav::before{
+    border-color:var(--BORDER);
+  }
+}
+.ant-divider-vertical{
+  border-color:var(--BORDER);
+}
+.ant-radio-group{
+  .ant-radio-wrapper:last-child{
+    margin-right: 0;
+  }
+}
+.ant-modal-footer{
+  text-align: left;
+}
+p {
+  margin-bottom: 0;
+}

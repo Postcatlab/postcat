@@ -1,0 +1,24 @@
+.expand {
+  font-size: 12px;
+  > span {
+    width: 100px;
+    display: inline-block;
+  }
+}
+.td_expand,
+.th_expand {
+  font-size: 12px;
+}
+
+.eo_table_body_tr {
+  .copy {
+    visibility: hidden;
+    font-size: 12px;
+    margin: 0 10px;
+  }
+  &:hover {
+    .copy {
+      visibility: visible;
+    }
+  }
+}

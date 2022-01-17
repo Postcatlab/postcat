@@ -1,0 +1,21 @@
+<div class="pb15" *ngIf="!model.responseType">
+  <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+    <ng-template #contentTpl>
+      <span> 点击发送按钮获取测试报告 </span>
+    </ng-template>
+  </nz-empty>
+</div>
+<div class="p15" *ngIf="model.responseType">
+  <div class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
+    <div class="fs16">{{ model.statusCode || 'No Response' }}</div>
+    <div class="f_row_ac fs12">
+      <span class="mr15">Size: {{ model.responseLength | byteToString }}</span>
+      <span>Time: {{ model.testDeny }}ms</span>
+    </div>
+  </div>
+  <eo-editor
+    class="mt20"
+    [(code)]="model.body"
+    [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"
+  ></eo-editor>
+</div>
