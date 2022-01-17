@@ -1,5 +1,51 @@
 angular.module('eolinker').component('listBlockCommonComponent', {
-  template: `<div class="wrap_lbcc"
+  template: `<script type="text/ng-template" id="paramDetail_Template_js">
+  <div class="container_pdtj" style="padding-left: -{-(item.listDepth||0)*29+20-}-px" {eoData}-show="item.isClick">
+      <p class="f_row" {eoData}-if="item.minLength">
+          <span class="title-span mw_100">最小长度：</span>
+          <span  class="wb_all">-{-item.minLength-}-</span>
+      </p>
+      <p class="f_row" {eoData}-if="item.maxLength">
+          <span class="title-span mw_100">最大长度：</span>
+          <span  class="wb_all">-{-item.maxLength-}-</span>
+      </p>
+      <p class="f_row" {eoData}-if="item.minimum">
+          <span class="title-span mw_100">最小值：</span>
+          <span  class="wb_all">-{-item.minimum-}-</span>
+      </p>
+      <p class="f_row" {eoData}-if="item.maximum">
+          <span class="title-span mw_100">最大值：</span>
+          <span  class="wb_all">-{-item.maximum-}-</span>
+      </p>
+      <div class="f_row" {eoData}-if="item.enum.length>0&&item.enum[0].value">
+          <span class="title-span mw_100">值可能性：</span>
+          <table>
+              <tr {eoData}-repeat="childItem in item.enum track by $index">
+                  <td class="value-td">
+                      <span>-{-childItem.value-}-</span>
+                  </td>
+                  <td class="type-td"  {eoData}-if="childItem.type">
+                      <span class="divide-span">|</span>
+                      <span >-{-childItem.type-}-</span>
+                  </td>
+                  <td class="desc-td f_row f_ac"  {eoData}-if="childItem.description">
+                      <span class="divide-span">|</span>
+                      <span>-{-childItem.description-}-</span>
+                  </td>
+                  <td class="default-td mw_100 f_ac" {eoData}-if="item.default">
+                          <span class="divide-span">|</span>
+                          <span>默认值</span>
+                      </td>
+              </tr>
+          </table>
+      </div>
+      <p class="f_row" {eoData}-if="item.example">
+          <span class="title-span mw_100">参数示例：</span>
+          <span  class="wb_all" {eoData}-class="{'eo-status-warning':item.mark.value}">-{-item.example-}-</span>
+      </p>
+  </div>
+</script>
+<div class="wrap_lbcc"
   ng-class="{'default_screen_container_lbcc':$ctrl.data.screenStatus==='default','full_screen_container_lbcc':$ctrl.data.screenStatus==='full'}">
   <div class="po_re" ng-switch="$ctrl.data.screenStatus"
       ng-if="$ctrl.mainObject.setting.ableToSetFullScreen||$ctrl.data.filterStorageKey">

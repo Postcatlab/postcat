@@ -135,9 +135,9 @@ export const parseTree = (key, value, level = 0) => {
     return {
       name: key,
       required: true,
-      example: '',
+      example: '其他',
       type: 'object',
-      description: '其他',
+      description: '',
       listDepth: level,
       children: Object.keys(value).map((it) => parseTree(it, value[it], level + 1)),
     };
@@ -151,16 +151,16 @@ export const parseTree = (key, value, level = 0) => {
       type: 'array',
       description: '',
       listDepth: level,
-      children: Object.keys(data).map((it) => parseTree(it, data[it], level + 1)),
+      children: data ? Object.keys(data).map((it) => parseTree(it, data[it], level + 1)) : [],
     };
   }
   return {
     name: key,
     value,
-    description: value,
+    description: '',
     type: whatType(value),
     required: true,
-    example: '',
+    example: 'value',
     listDepth: level,
   };
 };

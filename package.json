@@ -58,6 +58,7 @@
     "@angular/platform-browser-dynamic": "13.0.1",
     "@angular/router": "13.0.1",
     "@angular/upgrade": "^13.0.2",
+    "@ngxs/store": "3.7.3",
     "angular": "1.8.2",
     "dexie": "3.2.0",
     "js-beautify": "1.14.0",

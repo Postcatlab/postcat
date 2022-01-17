@@ -13,8 +13,8 @@ import { GroupApiDataModel, GroupTreeItem } from '../../shared/models';
 import { ApiData } from '../../shared/services/api-data/api-data.model';
 import { listToTree } from '../../utils/tree';
 
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 import { Group } from '../../shared/services/group/group.model';
 @Component({
   selector: 'eo-api',
@@ -164,7 +164,7 @@ export class ApiComponent implements OnInit, OnDestroy {
       .subscribe((data: Message) => {
         switch (data.type) {
           case 'apiAdd':
-          case 'apiEdit':
+          case 'editApi':
           case 'groupAdd':
           case 'groupEdit':
           case 'groupDelete':

@@ -18,12 +18,11 @@ npm  start
 ```
 
 # 打包
-Windows 如果需要安装包样式：
+Windows 打包
 ```
 npm run pack:win
 ```
-
-不需要安装包样式的 windows/其他系统打包：
+其他平台打包
 ```
 npm run build
 ```

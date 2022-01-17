@@ -100,6 +100,13 @@ export class ParamsImportComponent {
     }
     // * tree to array for table render
     const cacheData = flatData(Object.keys(paramCode).map((it) => parseTree(it, paramCode[it])));
+    console.log(
+      JSON.stringify(
+        Object.keys(paramCode).map((it) => parseTree(it, paramCode[it])),
+        null,
+        2
+      )
+    );
     // TODO delete useless attribute in cacheData
     switch (type) {
       case 'mixin': {

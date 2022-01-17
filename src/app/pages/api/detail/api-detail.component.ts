@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiData } from '../../../shared/services/api-data/api-data.model';
-import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
 import { ActivatedRoute } from '@angular/router';
+
+import { ApiData } from '../../../shared/services/api-data/api-data.model';
+import { ApiBodyType, JsonRootType } from '../../../shared/services/api-data/api-body-type';
+
+import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
+import { treeToListHasLevel } from '../../../utils/tree';
+import { reverseObj } from '../../../utils';
 
 export interface TreeNodeInterface {
   key?: string;
@@ -20,7 +25,13 @@ export interface TreeNodeInterface {
 })
 export class ApiDetailComponent implements OnInit {
   apiInfo: ApiData | any = {};
-  constructor(private apiService: ApiDataService, private route: ActivatedRoute) {}
+  CONST = {
+    BODY_TYPE: reverseObj(ApiBodyType),
+    JSON_ROOT_TYPE: reverseObj(JsonRootType)
+  };
+  constructor(private apiService: ApiDataService, private route: ActivatedRoute) {
+    console.log(this.CONST.BODY_TYPE);
+  }
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       if (params.uuid) {
@@ -32,6 +43,11 @@ export class ApiDetailComponent implements OnInit {
   }
   getApiByUuid(id: number) {
     this.apiService.load(id).subscribe((result: ApiData) => {
+      ['requestBody', 'responseBody'].forEach((tableName) => {
+        if (['xml', 'json'].includes(result[`${tableName}Type`])) {
+          result[tableName] = treeToListHasLevel(result[tableName]);
+        }
+      });
       this.apiInfo = result;
       console.log(this.apiInfo);
     });

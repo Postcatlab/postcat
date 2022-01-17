@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store, Select } from '@ngxs/store';
 
 import { ApiData, RequestMethod, RequestProtocol } from '../../../shared/services/api-data/api-data.model';
 
@@ -14,6 +15,10 @@ import { ApiTestHistoryComponent } from './history/api-test-history.component';
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
 import { ApiTestService } from './api-test.service';
+import { objectToArray } from '../../../utils';
+
+import { EnvState } from '../../../shared/store/env.state';
+
 @Component({
   selector: 'eo-api-test',
   templateUrl: './api-test.component.html',
@@ -21,6 +26,8 @@ import { ApiTestService } from './api-test.service';
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
   @ViewChild('historyComponent')
+  @Select(EnvState)
+  env$: Observable<number>;
   historyComponent: ApiTestHistoryComponent;
   validateForm!: FormGroup;
   apiData: any;
@@ -33,14 +40,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     request: {},
   };
   testServer;
-  REQUEST_METHOD: { key: string; value: string }[] = Object.keys(RequestMethod).map((val) => ({
-    key: val,
-    value: RequestMethod[val],
-  }));
-  REQUEST_PROTOCOL: { key: string; value: string }[] = Object.keys(RequestProtocol).map((val) => ({
-    key: val,
-    value: RequestProtocol[val],
-  }));
+  REQUEST_METHOD = objectToArray(RequestMethod);
+  REQUEST_PROTOCOL = objectToArray(RequestProtocol);
+
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
   private api$: Observable<object>;
@@ -120,7 +122,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.resetApi();
     this.initBasicForm();
     this.watchApiChange();
-    this.watchEnvChange();
+    // this.watchEnvChange();
+    this.env$.subscribe((data) => {
+      console.log('||=>', data);
+      // this.env = data.env;
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -128,7 +134,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.close();
   }
   private test() {
-    console.log(this.apiData)
+    console.log(this.apiData);
     this.testServer.send('unitTest', {
       id: 1,
       action: 'ajax',
@@ -229,18 +235,18 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       }
     });
   }
-  private watchEnvChange() {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(({ type, data }: Message) => {
-        if (type === 'changeEnv') {
-          this.env = data || {
-            parameters: [],
-            frontURI: '',
-          };
-        }
-      });
-    this.messageService.send({ type: 'getEnv', data: '' });
-  }
+  // private watchEnvChange() {
+  // this.messageService
+  //   .get()
+  //   .pipe(takeUntil(this.destroy$))
+  //   .subscribe(({ type, data }: Message) => {
+  //     if (type === 'changeEnv') {
+  //       this.env = data || {
+  //         parameters: [],
+  //         frontURI: '',
+  //       };
+  //     }
+  //   });
+  // this.messageService.send({ type: 'getEnv', data: '' });
+  // }
 }

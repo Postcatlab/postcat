@@ -11,12 +11,12 @@ import { switchMap, debounceTime, take, takeUntil } from 'rxjs/operators';
 import { ApiEditRest } from '../../../shared/services/api-data/api-edit-params.model';
 import { ApiData, RequestProtocol, RequestMethod } from '../../../shared/services/api-data/api-data.model';
 import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
-import { Message, MessageService } from '../../../shared/services/message';
+import { MessageService } from '../../../shared/services/message';
 
 import { Group } from '../../../shared/services/group/group.model';
 import { GroupService } from '../../../shared/services/group/group.service';
 
-import { addEnvPrefix } from '../../../utils';
+import { objectToArray } from '../../../utils';
 import { treeToListHasLevel, listToTree, listToTreeHasLevel } from '../../../utils/tree';
 import { getRest } from '../../../utils/api';
 
@@ -31,14 +31,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   apiData: ApiData;
   groups: any[];
   expandKeys: string[];
-  REQUEST_METHOD: { key: string; value: string }[] = Object.keys(RequestMethod).map((val) => ({
-    key: val,
-    value: RequestMethod[val],
-  }));
-  REQUEST_PROTOCOL: { key: string; value: string }[] = Object.keys(RequestProtocol).map((val) => ({
-    key: val,
-    value: RequestProtocol[val],
-  }));
+  REQUEST_METHOD = objectToArray(RequestMethod);
+  REQUEST_PROTOCOL = objectToArray(RequestProtocol);
 
   private api$: Observable<object>;
   private destroy$: Subject<void> = new Subject<void>();
@@ -165,7 +159,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       this.apiData.groupID = (this.apiData.groupID === 0 ? -1 : this.apiData.groupID).toString();
       this.expandGroup();
     });
-    this.watchEnvChange();
     this.validateForm
       .get('uri')
       .valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$))
@@ -226,20 +219,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   /**
-   * Add prefix url and replace global params when env change
-   */
-  private watchEnvChange() {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(({ type, data: { value } }: Message) => {
-        if (type === 'env') {
-          const { uri } = this.apiData;
-          this.apiData.uri = addEnvPrefix(value, uri);
-        }
-      });
-  }
-  /**
    * Reset Group ID after group list load
    */
   private afterInitGroup() {
@@ -290,9 +269,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
 
   private editApi(formData) {
-    const busEvent = formData.uuid ? 'apiEdit' : 'apiAdd';
-    const title = busEvent === 'apiEdit' ? '编辑成功' : '新增成功';
-    this.storage[busEvent === 'apiEdit' ? 'update' : 'create'](formData, this.apiData.uuid).subscribe(
+    const busEvent = formData.uuid ? 'editApi' : 'apiAdd';
+    const title = busEvent === 'editApi' ? '编辑成功' : '新增成功';
+    this.storage[busEvent === 'editApi' ? 'update' : 'create'](formData, this.apiData.uuid).subscribe(
       (result: ApiData) => {
         this.message.success(title);
         this.messageService.send({ type: busEvent, data: result });

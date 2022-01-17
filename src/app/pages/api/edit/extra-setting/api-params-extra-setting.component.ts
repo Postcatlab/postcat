@@ -115,7 +115,8 @@ export class ApiParamsExtraSettingComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
-    if (this.model && this.model.enum && !this.model.enum.length) {
+    if (this.model && (!this.model.enum || !this.model.enum.length)) {
+      this.model.enum=this.model.enum||[];
       this.model.enum.push(
         Object.assign({}, this.itemStructureEnums)
       );

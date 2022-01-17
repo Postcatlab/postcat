@@ -1,4 +1,4 @@
-const { xml2json, form2json } = require('../src/app/utils/tree');
+const { xml2json, form2json, parseTree } = require('../src/app/utils/tree');
 
 describe('test the xml2json', () => {
   test('base', () => {
@@ -102,5 +102,141 @@ describe('test form2json', () => {
     const result = [];
     const json = form2json(form);
     expect(json).toEqual(result);
+  });
+});
+
+describe('test the parseTree', () => {
+  test('base', () => {
+    const data = {
+      string: '',
+      array: [
+        {
+          dom1: {},
+          dom2: false,
+          dom3: [],
+        },
+      ],
+      object: {
+        dom1: '',
+        dom2: 0,
+      },
+      null: null,
+      float: 11.11,
+      int: 1,
+      boolean: false,
+    };
+    const result = [
+      {
+        name: 'string',
+        value: '',
+        description: '',
+        type: 'string',
+        required: true,
+        example: 'value',
+        listDepth: 0,
+      },
+      {
+        name: 'array',
+        required: true,
+        example: '',
+        type: 'array',
+        description: '',
+        listDepth: 0,
+        children: [
+          {
+            name: 'dom1',
+            required: true,
+            example: '其他',
+            type: 'object',
+            description: '',
+            listDepth: 1,
+            children: [],
+          },
+          {
+            name: 'dom2',
+            value: false,
+            description: '',
+            type: 'boolean',
+            required: true,
+            example: 'value',
+            listDepth: 1,
+          },
+          {
+            name: 'dom3',
+            required: true,
+            example: '',
+            type: 'array',
+            description: '',
+            listDepth: 1,
+            children: [],
+          },
+        ],
+      },
+      {
+        name: 'object',
+        required: true,
+        example: '其他',
+        type: 'object',
+        description: '',
+        listDepth: 0,
+        children: [
+          {
+            name: 'dom1',
+            value: '',
+            description: '',
+            type: 'string',
+            required: true,
+            example: 'value',
+            listDepth: 1,
+          },
+          {
+            name: 'dom2',
+            value: 0,
+            description: '',
+            type: 'number',
+            required: true,
+            example: 'value',
+            listDepth: 1,
+          },
+        ],
+      },
+      {
+        name: 'null',
+        value: null,
+        description: '',
+        type: 'null',
+        required: true,
+        example: 'value',
+        listDepth: 0,
+      },
+      {
+        name: 'float',
+        value: 11.11,
+        description: '',
+        type: 'number',
+        required: true,
+        example: 'value',
+        listDepth: 0,
+      },
+      {
+        name: 'int',
+        value: 1,
+        description: '',
+        type: 'number',
+        required: true,
+        example: 'value',
+        listDepth: 0,
+      },
+      {
+        name: 'boolean',
+        value: false,
+        description: '',
+        type: 'boolean',
+        required: true,
+        example: 'value',
+        listDepth: 0,
+      },
+    ];
+    expect(Object.keys(data).map((it) => parseTree(it, data[it]))).toEqual(result);
   });
 });

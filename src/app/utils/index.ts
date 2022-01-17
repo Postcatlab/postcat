@@ -37,6 +37,9 @@ export const whatType = (data: any): string => {
   if (typeof data === 'number') {
     return 'number';
   }
+  if (typeof data === 'boolean') {
+    return 'boolean';
+  }
   return 'unknown';
 };
 
@@ -54,4 +57,24 @@ export const whatRootType = (tmpText) => {
   } else {
     return 'text';
   }
+};
+/**
+ * reverse object key and value
+ * @param obj
+ */
+export const reverseObj = (obj) => {
+  return Object.keys(obj).reduce((acc, key) => {
+    acc[obj[key]] = key;
+    return acc;
+  }, {});
+};
+/**
+ * reverse object key and value
+ * @param obj
+ */
+export const objectToArray = (obj) => {
+  return Object.keys(obj).map((val) => ({
+    key: val,
+    value: obj[val],
+  }));
 };
