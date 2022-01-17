@@ -1,6 +1,3 @@
-=== Env
-
---- open modal
 goto localhost:4200
 
 find:
@@ -8,5 +5,3 @@ find:
 
 capture
 
---- add new Env
-goto localhost:4200

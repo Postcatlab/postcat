@@ -123,7 +123,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.watchApiChange();
     this.env$.subscribe((data) => {
       const { env } = data;
-      this.env = env;
+      if (env) {
+        this.env = env;
+      }
     });
   }
   ngOnDestroy() {
