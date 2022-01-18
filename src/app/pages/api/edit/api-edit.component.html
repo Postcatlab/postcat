@@ -1,6 +1,6 @@
 <div class="p15">
   <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
-    <button type="button" class="eo_theme_btn_success" (click)="saveApi()">保存</button>
+    <button type="button" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()">保存</button>
     <nz-divider></nz-divider>
     <nz-form-label nzFor="uri">API Path</nz-form-label>
     <nz-input-group nzCompact>

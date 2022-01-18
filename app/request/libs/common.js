@@ -1,6 +1,6 @@
 /**
  * @name 通用方法
- * @author 广州银云信息科技有限公司
+ * @author EOAPI
  */
 'use strict';
 let _LibsDataConstructor = new (require('./data_constructor').core)();

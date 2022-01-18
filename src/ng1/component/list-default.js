@@ -1,5 +1,5 @@
 /**
- * @author 广州银云信息科技有限公司
+ * @author EOAPI
  * @description 默认列表组件
  * @extend {object} authorityObject 权限类{operate}
  * @extend {object} mainObject 主类{setting:{colspan,warning},item:{default,fun}}

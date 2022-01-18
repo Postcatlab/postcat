@@ -63,6 +63,7 @@ nz-tree {
     background-color: #f0f0f0;
     padding: 5px 10px 0 15px;
     display: flex;
+    margin-bottom: -1px;
     align-items: center;
     justify-content: space-between;
     .ant-tabs-top {
@@ -106,11 +107,15 @@ nz-tree {
       height: 36px;
     }
   }
-  .inside_page_tab {
-    .ant-tabs-nav {
-      padding-left: 20px;
+  .content_container {
+    border-top: 1px solid var(--BORDER);
+    .inside_page_tab {
+      .ant-tabs-nav {
+        padding-left: 20px;
+      }
     }
   }
+
   eo-api {
     router-outlet + * {
       display: block;
