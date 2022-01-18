@@ -28,6 +28,82 @@ describe('test the xml2json', () => {
     const json = xml2json(xml);
     expect(json).toEqual(result);
   });
+  test('<?xml ... ?>', () => {
+    const xml = `
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <root>
+        <type version="1.0">projectMember</type>
+        <statusCode version="{{globalParams}}">000000</statusCode>
+        <memberList>
+            <connID>2787</connID>
+            <memberNickName></memberNickName>
+            <inviteCall>2177295417@qq.com</inviteCall>
+            <userNickName>[随机]无崖子</userNickName>
+            <userImage></userImage>
+        </memberList>
+    </root>
+    `;
+    const result = [
+      {
+        tagName: 'root',
+        attr: '',
+        content: '\n\n\n\n',
+        children: [
+          {
+            tagName: 'type',
+            attr: 'version="1.0"',
+            content: 'projectMember',
+            children: [],
+          },
+          {
+            tagName: 'statusCode',
+            attr: 'version="{{globalParams}}"',
+            content: '000000',
+            children: [],
+          },
+          {
+            tagName: 'memberList',
+            attr: '',
+            content: '\n\n\n\n\n\n',
+            children: [
+              {
+                tagName: 'connID',
+                attr: '',
+                content: '2787',
+                children: [],
+              },
+              {
+                tagName: 'memberNickName',
+                attr: '',
+                content: '',
+                children: [],
+              },
+              {
+                tagName: 'inviteCall',
+                attr: '',
+                content: '2177295417@qq.com',
+                children: [],
+              },
+              {
+                tagName: 'userNickName',
+                attr: '',
+                content: '[随机]无崖子',
+                children: [],
+              },
+              {
+                tagName: 'userImage',
+                attr: '',
+                content: '',
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    const json = xml2json(xml);
+    expect(json).toEqual(result);
+  });
   test('empty', () => {
     const xml = `
     `;
@@ -92,6 +168,31 @@ describe('test form2json', () => {
         key: 'x-powered-by',
         value: 'PHP/7.2.1',
       },
+    ];
+    const json = form2json(form);
+    expect(json).toEqual(result);
+  });
+  test('empty value', () => {
+    const form = `multiple:multiple
+    multiple:
+    test1:
+    file:
+    formDataStructure:formDataStructure
+    formDataStructure:
+    formDataStructure:formDataStructure
+    formDataStructure:
+    a:
+    `;
+    const result = [
+      { key: 'multiple', value: 'multiple' },
+      { key: 'multiple', value: '' },
+      { key: 'test1', value: '' },
+      { key: 'file', value: '' },
+      { key: 'formDataStructure', value: 'formDataStructure' },
+      { key: 'formDataStructure', value: '' },
+      { key: 'formDataStructure', value: 'formDataStructure' },
+      { key: 'formDataStructure', value: '' },
+      { key: 'a', value: '' },
     ];
     const json = form2json(form);
     expect(json).toEqual(result);

@@ -176,7 +176,8 @@ export const form2json = (tmpl) =>
     });
 
 export const xml2json = (tmpl) => {
-  let xml = tmpl.trim();
+  // * delete <?xml ... ?>
+  let xml = tmpl.replace(/<\?xml.+\?>/g, '').trim();
   if (xml === '') {
     return [];
   }
