@@ -233,7 +233,7 @@ describe('test the parseTree', () => {
         description: '',
         type: 'string',
         required: true,
-        example: 'value',
+        example: '',
         listDepth: 0,
       },
       {
@@ -247,7 +247,7 @@ describe('test the parseTree', () => {
           {
             name: 'dom1',
             required: true,
-            example: '其他',
+            example: '',
             type: 'object',
             description: '',
             listDepth: 1,
@@ -259,7 +259,7 @@ describe('test the parseTree', () => {
             description: '',
             type: 'boolean',
             required: true,
-            example: 'value',
+            example: '',
             listDepth: 1,
           },
           {
@@ -276,7 +276,7 @@ describe('test the parseTree', () => {
       {
         name: 'object',
         required: true,
-        example: '其他',
+        example: '',
         type: 'object',
         description: '',
         listDepth: 0,
@@ -287,7 +287,7 @@ describe('test the parseTree', () => {
             description: '',
             type: 'string',
             required: true,
-            example: 'value',
+            example: '',
             listDepth: 1,
           },
           {
@@ -296,7 +296,7 @@ describe('test the parseTree', () => {
             description: '',
             type: 'number',
             required: true,
-            example: 'value',
+            example: '',
             listDepth: 1,
           },
         ],
@@ -307,7 +307,7 @@ describe('test the parseTree', () => {
         description: '',
         type: 'null',
         required: true,
-        example: 'value',
+        example: '',
         listDepth: 0,
       },
       {
@@ -316,7 +316,7 @@ describe('test the parseTree', () => {
         description: '',
         type: 'number',
         required: true,
-        example: 'value',
+        example: 11.11,
         listDepth: 0,
       },
       {
@@ -325,7 +325,7 @@ describe('test the parseTree', () => {
         description: '',
         type: 'number',
         required: true,
-        example: 'value',
+        example: 1,
         listDepth: 0,
       },
       {
@@ -334,7 +334,7 @@ describe('test the parseTree', () => {
         description: '',
         type: 'boolean',
         required: true,
-        example: 'value',
+        example: '',
         listDepth: 0,
       },
     ];
