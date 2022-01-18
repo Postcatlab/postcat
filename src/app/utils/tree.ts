@@ -135,7 +135,7 @@ export const parseTree = (key, value, level = 0) => {
     return {
       name: key,
       required: true,
-      example: '其他',
+      example: '',
       type: 'object',
       description: '',
       listDepth: level,
@@ -160,7 +160,7 @@ export const parseTree = (key, value, level = 0) => {
     description: '',
     type: whatType(value),
     required: true,
-    example: 'value',
+    example: value || '',
     listDepth: level,
   };
 };
@@ -176,7 +176,8 @@ export const form2json = (tmpl) =>
     });
 
 export const xml2json = (tmpl) => {
-  let xml = tmpl.trim();
+  // * delete <?xml ... ?>
+  let xml = tmpl.replace(/<\?xml.+\?>/g, '').trim();
   if (xml === '') {
     return [];
   }

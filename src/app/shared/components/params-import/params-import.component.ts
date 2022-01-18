@@ -15,7 +15,7 @@ export class ParamsImportComponent {
   isVisible = false;
   paramCode = '';
 
-  constructor(private message: NzMessageService) {}
+  constructor(private message: NzMessageService) { }
 
   get contentTypeTitle() {
     switch (this.contentType) {
@@ -68,8 +68,8 @@ export class ParamsImportComponent {
     if (this.contentType === 'xml') {
       const data: any[] = xml2json(this.paramCode);
       const res = {};
-      const mapAttr = (data: any) => {
-        const { tagName, attr, children } = data;
+      const mapAttr = (obj: any) => {
+        const { tagName, attr, children } = obj;
         return {
           [tagName]: children.length ? mapAttr(children[0]) : attr,
         };
