@@ -1,15 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { Environment } from '../../shared/services/environment/environment.model';
 import { EnvironmentService } from '../../shared/services/environment/environment.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { uuid as uid } from '../../utils/index';
-import { MessageService } from '../../shared/services/message';
 import { EoTableComponent } from '../../eoui/table/eo-table/eo-table.component';
-import { Change, EnvState } from '../../shared/store/env.state';
+import { Change } from '../../shared/store/env.state';
 
-import { Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'eo-env',
@@ -18,12 +16,12 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
-  // @Select(EnvState) env$: Observable<any>;
   varName = `{{变量名}}`;
   isVisible = false;
   envInfo: any = {};
   envList: any[] = [];
   activeUuid = 0;
+  selectUuid = null;
   envListColumns = [
     { title: '变量名', key: 'name', isEdit: true },
     { title: '变量值', key: 'value', isEdit: true },
@@ -32,26 +30,19 @@ export class EnvComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(
-    private envService: EnvironmentService,
-    private message: NzMessageService,
-    private messageService: MessageService,
-    private store: Store
-  ) {}
+  constructor(private envService: EnvironmentService, private message: NzMessageService, private store: Store) {}
 
   get envUuid(): number {
-    return this.activeUuid || 0;
+    return Number(localStorage.getItem('env:selected')) || 0;
   }
   set envUuid(value) {
     this.activeUuid = value || 0;
-    this.handleSwitchEnv(this.activeUuid);
-    this.changeStoreEnv(this.activeUuid);
-    localStorage.setItem('env:selected', this.activeUuid.toString());
+    localStorage.setItem('env:selected', value.toString());
+    this.changeStoreEnv(value);
   }
 
   ngOnInit(): void {
     this.getAllEnv();
-    // this.envUuid = Number(localStorage.getItem('env:selected'));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -66,7 +57,6 @@ export class EnvComponent implements OnInit, OnDestroy {
         return;
       }
       this.envList = result;
-      this.envUuid = Number(localStorage.getItem('env:selected'));
     });
   }
 
@@ -116,8 +106,6 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleTableChange(data) {
     const list = data.filter((it) => it.name || it.value || it.description);
-    // this.table.pushData({ name: '', value: '', description: '' });
-    // console.log(data);
     this.envInfo.parameters = [...list, { name: '', value: '', description: '' }];
   }
 
@@ -127,7 +115,6 @@ export class EnvComponent implements OnInit, OnDestroy {
     const data = parameters.filter((it) => it.name && it.value);
     this.envService.update({ ...other, parameters: data }, uuid).subscribe((result: Environment) => {
       this.message.success('Save suceess');
-      // console.log('update =>', result);
       this.getAllEnv();
     });
   }
@@ -144,6 +131,8 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleEnvSelectStatus(event) {
     if (event) {
+      this.activeUuid = this.envUuid;
+      this.handleSwitchEnv(this.activeUuid);
       this.getAllEnv();
     }
   }
