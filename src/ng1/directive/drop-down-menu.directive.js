@@ -1,6 +1,6 @@
 /**
  * @description 手动控制按钮focus状态，使用与mac os 非chrome浏览器
- * @author 广州银云信息科技有限公司
+ * @author EOAPI
  */
 angular
   .module('eolinker.directive')

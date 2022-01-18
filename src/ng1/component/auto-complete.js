@@ -5,7 +5,7 @@
  * （3）能够通过上下箭头控制下拉菜单选中项
  */
 /**
- * @author 广州银云信息科技有限公司
+ * @author EOAPI
  * @description 自动补全控件
  * @extends {string} placeholder 内置输入框placeholder内容[optional]
  * @extends {array} array 预设列表

@@ -1,5 +1,5 @@
   /*
-     * author：广州银云信息科技有限公司
+     * author：EOAPI
      * 分组相关服务js
      */
   angular.module('eolinker')

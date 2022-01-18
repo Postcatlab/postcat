@@ -1,5 +1,5 @@
 import { StorageModel } from '../../../modules/storage/storage.model';
-import { JsonRootType } from '../api-data/api-body-type';
+import { JsonRootType } from '../api-data/api-data.model';
 
 export interface ApiTestHistoryFrame {
   /**

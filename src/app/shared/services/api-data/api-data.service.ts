@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiData} from './api-data.model';
-import { StorageModelService } from '../../../modules/storage/storage.model.service'
+import { ApiData } from './api-data.model';
+import { StorageModelService } from '../../../modules/storage/storage.model.service';
 import { Query } from '../../../modules/storage/storage.config';
 
 /**
@@ -13,7 +13,7 @@ export class ApiDataService extends StorageModelService {
    * 表名
    * @type {string}
    */
-  protected tableName:string = 'apiData';
+  protected tableName: string = 'apiData';
 
   create(data: ApiData): Observable<object> {
     if (!data.weight) {
@@ -23,7 +23,7 @@ export class ApiDataService extends StorageModelService {
   }
 
   bulkCreate(data: Array<ApiData>): Observable<object> {
-    data = data.map(item => {
+    data = data.map((item) => {
       if (!item.weight) {
         item.weight = 0;
       }
@@ -32,29 +32,28 @@ export class ApiDataService extends StorageModelService {
     return super.bulkCreate(data);
   }
 
-  update(data: ApiData, uuid: number|string): Observable<object> {
+  update(data: ApiData, uuid: number | string): Observable<object> {
     return super.update(data, uuid);
   }
 
-  loadAllByProjectID(projectID: string|number): Observable<Array<object>> {
+  loadAllByProjectID(projectID: string | number): Observable<Array<object>> {
     const query: Query = {
-      where: {projectID: projectID}
+      where: { projectID: projectID },
     };
     return this.loadAllBy(query);
   }
 
-  loadAllByGroupID(groupID: string|number): Observable<Array<object>> {
+  loadAllByGroupID(groupID: string | number): Observable<Array<object>> {
     const query: Query = {
-      where: {groupID: groupID}
+      where: { groupID: groupID },
     };
     return this.loadAllBy(query);
   }
 
-  loadAllByProjectIDAndGroupID(projectID: string|number, groupID: string|number): Observable<Array<object>> {
+  loadAllByProjectIDAndGroupID(projectID: string | number, groupID: string | number): Observable<Array<object>> {
     const query: Query = {
-      where: {projectID: projectID, groupID: groupID}
+      where: { projectID: projectID, groupID: groupID },
     };
     return this.loadAllBy(query);
   }
-
 }

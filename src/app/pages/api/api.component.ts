@@ -1,21 +1,20 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { Message, MessageService } from '../../shared/services/message';
 import { ApiTabComponent } from './tab/api-tab.component';
-
 import { GroupService } from '../../shared/services/group/group.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ApiDataService } from '../../shared/services/api-data/api-data.service';
+import { listToTree } from '../../utils/tree';
 
 import { GroupApiDataModel, GroupTreeItem } from '../../shared/models';
 import { ApiData } from '../../shared/services/api-data/api-data.model';
-import { listToTree } from '../../utils/tree';
-
-import { of, Subject } from 'rxjs';
-import { filter, switchMap, takeUntil } from 'rxjs/operators';
 import { Group } from '../../shared/services/group/group.model';
+
+import {  Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'eo-api',
   templateUrl: './api.component.html',
@@ -79,6 +78,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.groupByID = {};
     this.apiDataItems = {};
     this.treeItems = [];
+    this.getGroups();
+  }
+  getGroups() {
     this.groupService.loadAllByProjectID(this.projectID).subscribe((items: Array<Group>) => {
       items.forEach((item) => {
         delete item.updatedAt;
@@ -91,21 +93,25 @@ export class ApiComponent implements OnInit, OnDestroy {
           isLeaf: false,
         });
       });
-      this.apiDataService.loadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
-        items.forEach((item) => {
-          delete item.updatedAt;
-          this.apiDataItems[item.uuid] = item;
-          this.treeItems.push({
-            title: item.name,
-            key: item.uuid,
-            weight: item.weight || 0,
-            parentID: item.groupID || 0,
-            method: item.method,
-            isLeaf: true,
-          });
+      this.getApis();
+    });
+  }
+  getApis() {
+    this.apiDataService.loadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
+      items.forEach((item) => {
+        delete item.updatedAt;
+        this.apiDataItems[item.uuid] = item;
+        this.treeItems.push({
+          title: item.name,
+          key: item.uuid,
+          weight: item.weight || 0,
+          parentID: item.groupID || 0,
+          method: item.method,
+          isLeaf: true,
         });
-        this.generateGroupTreeData();
       });
+      this.generateGroupTreeData();
+      this.apiTabComponent.initTab();
     });
   }
   /**
@@ -203,9 +209,9 @@ export class ApiComponent implements OnInit, OnDestroy {
    * Generate group tree nodes.
    */
   generateGroupTreeData(): void {
-    this.apiTabComponent.initTab();
     this.treeItems.sort((a, b) => a.weight - b.weight);
     this.treeNodes = [];
+    console.log('generateGroupTreeData=>',this.treeItems)
     listToTree(this.treeItems, this.treeNodes, 0);
   }
 
@@ -317,21 +323,17 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.getChildrenFromTree(this.treeItems, data, group.uuid);
     if (data.group.length > 0 && data.api.length > 0) {
       this.groupService.bulkRemove(data.group).subscribe((result) => {
-        console.log(result);
         this.apiDataService.bulkRemove(data.api).subscribe((result) => {
-          console.log(result);
           this.buildGroupTreeData();
           this.messageService.send({ type: 'apiBatchDelete', data: { uuids: data.api } });
         });
       });
     } else if (data.group.length > 0) {
       this.groupService.bulkRemove(data.group).subscribe((result) => {
-        console.log(result);
         this.buildGroupTreeData();
       });
     } else if (data.api.length > 0) {
       this.apiDataService.bulkRemove(data.api).subscribe((result) => {
-        console.log(result);
         this.buildGroupTreeData();
         this.messageService.send({ type: 'apiBatchDelete', data: { uuids: data.api } });
       });

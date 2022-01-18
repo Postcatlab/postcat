@@ -25,7 +25,7 @@
          */
         setDefaultRequestHeader(inputHeaderObj = {}, inputOptions = {}) {
             let TMP_DEAFULT_HEADER_OBJ = {
-                "User-Agent": "Eolink",
+                "User-Agent": "Eoapi",
                 "Accept":"*/*"
             };
             if (inputOptions.sendNocacheToken) {

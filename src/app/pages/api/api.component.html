@@ -20,7 +20,7 @@
             <eo-env></eo-env>
           </div>
         </div>
-        <div class="flex-1 overflow-auto content-box {{ this.id ? 'has_tab_page' : '' }}">
+        <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <nz-tabset class="inside_page_tab" *ngIf="this.id" nzLinkRouter>
             <nz-tab>
               <a *nzTabLink nz-tab-link [routerLink]="['detail']" queryParamsHandling="merge"> 文档 </a>

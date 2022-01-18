@@ -21,7 +21,7 @@ export class ApiTabComponent implements OnInit {
   /**
    * Current selected tab index.
    */
-  selectedIndex: number=0;
+  selectedIndex: number = 0;
   /**
    * Default tabs of api.
    */
@@ -34,18 +34,17 @@ export class ApiTabComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchChangeRouter();
   }
   /**
    * Get current path to update tab
    */
   watchChangeRouter() {
-    this.id = Number(this.route.snapshot.queryParams.uuid);
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      if(this.id){
-        this.id = Number(this.route.snapshot.queryParams.uuid);
-        this.tabs[this.selectedIndex] = this.getApiTabByID(this.id);
-      }
+      this.id = Number(this.route.snapshot.queryParams.uuid);
+      if (!this.id) return;
+      this.tabs[this.selectedIndex] = this.getCurrentTabByID(this.id);
     });
   }
   /**
@@ -59,12 +58,18 @@ export class ApiTabComponent implements OnInit {
    */
   initTab() {
     if (!this.apiDataItems[this.id]) {
-      let page=Object.keys(this.defaultTabs)
-      this.appendTab();
+      this.closeTab({ index: this.selectedIndex });
       return;
     }
-    const tab = this.getApiTabByID(this.id);
-    this.tabs[this.selectedIndex] = tab;
+    let module = Object.keys(this.defaultTabs).find((keyName) =>
+      this.router.url.split('?')[0].includes(this.defaultTabs[keyName].path)
+    );
+    const tab = this.getCurrentTabByID(this.id);
+    if (this.tabs.length < 1) {
+      this.appendTab(module, tab);
+    } else {
+      this.tabs[this.selectedIndex] = tab;
+    }
   }
   /**
    * Push new tab.
@@ -73,9 +78,13 @@ export class ApiTabComponent implements OnInit {
    */
   appendTab(which = 'test', apiData = {}): void {
     let tab: TabItem = Object.assign({}, this.defaultTabs[which], apiData);
-    this.tabs.push(tab);
-    this.selectedIndex = this.tabs.length - 1;
-    this.activeRoute(tab);
+    let existTabIndex = this.tabs.findIndex((val) => val.key === tab.key);
+    if (tab.key && existTabIndex !== -1) {
+      this.tabSelect({ index: existTabIndex, tab: tab });
+    } else {
+      this.tabs.push(tab);
+      this.tabSelect({ index: this.tabs.length - 1, tab: tab });
+    }
   }
   /**
    * Close current tab.
@@ -91,10 +100,12 @@ export class ApiTabComponent implements OnInit {
   /**
    * Switch the tab.
    *
-   * @param tab
+   * @param {TabItem} inArg.tab
+   * @param inArg.index
    */
-  tabSelect(tab) {
-    this.activeRoute(tab);
+  tabSelect(inArg) {
+    this.selectedIndex = inArg.index;
+    this.activeRoute(inArg.tab);
   }
 
   /**
@@ -123,7 +134,7 @@ export class ApiTabComponent implements OnInit {
       this.closeTab(item);
     });
   }
-  private getApiTabByID(id) {
+  private getCurrentTabByID(id) {
     const result = {
       path: this.router.url.split('?')[0],
       title: this.apiDataItems[id].name,

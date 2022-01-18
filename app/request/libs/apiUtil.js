@@ -1,6 +1,6 @@
 /**
  * @name 返回通用方法
- * @author 广州银云信息科技有限公司
+ * @author EOAPI
  */
 let _LIB_WORKER_THREAD = require('./exec_worker_thread');
 let CryptoJS = require('crypto-js');
