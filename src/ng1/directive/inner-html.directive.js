@@ -1,5 +1,5 @@
 /*
- * author：广州银云信息科技有限公司
+ * author：EOAPI
  * 注入HTML指令js
  * @require {string} html 所需注入的代码
  * @param {string} status 注入代码类型，默认绑定angular元素，若关闭状态为unbind-angular

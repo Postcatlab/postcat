@@ -15,7 +15,10 @@ import { EnvState } from './shared/store/env.state';
 
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
+
+//Storage Module
 import { StorageSetting } from './modules/storage/storage.config';
+import { demoApi } from './storageSetting.model';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
@@ -35,6 +38,10 @@ const storageSetting: StorageSetting = {
     {
       name: 'project',
       items: [{ uuid: 1, name: 'Default' }],
+    },
+    {
+      name: 'apiData',
+      items: demoApi,
     },
   ],
 };

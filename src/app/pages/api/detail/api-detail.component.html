@@ -20,7 +20,7 @@
   <div *ngIf="apiInfo.requestBody && apiInfo.requestBody.length">
     <div class="api_line">
       Body 请求参数<nz-tag class="ml10" nzColor="default">{{ CONST.BODY_TYPE[apiInfo.requestBodyType] }}</nz-tag>
-      <nz-tag nzColor="default">最外层结构为：{{ CONST.JSON_ROOT_TYPE[apiInfo.requestBodyJsonType] }}</nz-tag>
+      <nz-tag *ngIf="apiInfo.requestBodyType==='json'" nzColor="default">最外层结构为：{{ CONST.JSON_ROOT_TYPE[apiInfo.requestBodyJsonType] }}</nz-tag>
     </div>
     <eo-api-detail-body
       [bodyType]="apiInfo.requestBodyType"

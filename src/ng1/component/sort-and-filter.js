@@ -1,5 +1,5 @@
 /**
- * @author 广州银云信息科技有限公司
+ * @author EOAPI
  * @description 排序和筛选
  */
 angular.module('eolinker').component('sortAndFilterListDefaultComponent', {

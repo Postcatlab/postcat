@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ApiData } from '../../../shared/services/api-data/api-data.model';
-import { ApiBodyType, JsonRootType } from '../../../shared/services/api-data/api-body-type';
+import { ApiBodyType, JsonRootType } from '../../../shared/services/api-data/api-data.model';
 
 import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
 import { treeToListHasLevel } from '../../../utils/tree';
@@ -30,7 +30,6 @@ export class ApiDetailComponent implements OnInit {
     JSON_ROOT_TYPE: reverseObj(JsonRootType)
   };
   constructor(private apiService: ApiDataService, private route: ActivatedRoute) {
-    console.log(this.CONST.BODY_TYPE);
   }
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -49,7 +48,6 @@ export class ApiDetailComponent implements OnInit {
         }
       });
       this.apiInfo = result;
-      console.log(this.apiInfo);
     });
   }
 }

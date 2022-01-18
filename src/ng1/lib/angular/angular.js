@@ -98,7 +98,7 @@
      */
     /**
      * @description 解析语言HTML
-     * @author 广州银云信息科技有限公司
+     * @author EOAPI
      * @param {string} inputHtml 待解析数据
      * @return {string} 语言解析后内容
      */
@@ -126,7 +126,7 @@
     function minErr(module, ErrorConstructor) {
         ErrorConstructor = ErrorConstructor || Error;
 
-        var url="https://www.eolinker.com";        //广州银云信息科技有限公司 源码：var url = 'https://errors.angularjs.org/1.8.2/';
+        var url="https://www.eolinker.com";        //EOAPI 源码：var url = 'https://errors.angularjs.org/1.8.2/';
         var regex = url.replace('.', '\\.') + '[\\s\\S]*';
         var errRegExp = new RegExp(regex, 'g');
 
@@ -668,7 +668,7 @@
     }
 
     function hasCustomToString(obj) {
-        //广州银云信息科技有限公司，处理 object 没有正常转换 bug
+        //EOAPI，处理 object 没有正常转换 bug
         return isFunction(obj.toString) && obj.toString !== toString&&obj.toString()!=="[object Object]";//自定义
         //源码：return isFunction(obj.toString) && obj.toString !== toString;
         //end
@@ -3059,7 +3059,7 @@
                 }
             ])
             .info({
-                  //广州银云信息科技有限公司 源码：angularVersion: '1.8.2';
+                  //EOAPI 源码：angularVersion: '1.8.2';
             });
     }
 
@@ -7231,7 +7231,7 @@
                             refresh(lruEntry);
                         }
 
-                        return eoFnParseConf(data[key]); //广州银云信息科技有限公司，将return data[key]改为return eoFnParseConf(data[key])
+                        return eoFnParseConf(data[key]); //EOAPI，将return data[key]改为return eoFnParseConf(data[key])
                     },
 
 
@@ -9106,7 +9106,7 @@
                 var template = (!options.template && !options.templateUrl ? '' : options.template);
                 /**
                  * @description 占位，待处理语言html数据，template
-                 * @author 广州银云信息科技有限公司
+                 * @author EOAPI
                  */
                 var ddo = {
                     controller: controller,
@@ -9950,7 +9950,7 @@
                         }
                         /**
                          * @desc 加入默认class，便于后续删除
-                         * @author 广州银云信息科技有限公司
+                         * @author EOAPI
                          */
                         // if(!$linkNode.hasClass("eoui_view"))$linkNode.addClass("eoscope_"+scope.$id)
                         /**--end-- */
@@ -11138,7 +11138,7 @@
                             var compileNode, tempTemplateAttrs, $template, childBoundTranscludeFn;
                             /**
                              * @description 占位，待处理语言html数据，templateUrl
-                             * @author 广州银云信息科技有限公司
+                             * @author EOAPI
                              */
                             if (window.eoLang) {
                                 content = denormalizeTemplate(eoFunParseLang(content));
@@ -18995,7 +18995,7 @@
                 }
                 /**
                  * @desc 自动自循环去清理节点
-                 * @author 广州银云信息科技有限公司  
+                 * @author EOAPI  
                  */
                 function cleanUpScope($scope) {
                     // Support: IE 9 only
@@ -19012,7 +19012,7 @@
                     // }
                     $scope = $scope.$parent = $scope.$$nextSibling = $scope.$$prevSibling = $scope.$$childHead = $scope.$$childTail = $scope.$root = $scope.$$watchers = null;
                 }
-                /**--start old--- 广州银云信息科技有限公司
+                /**--start old--- EOAPI
                  * function cleanUpScope($scope) {
                  * 
                  *    // Support: IE 9 only
@@ -19040,7 +19040,7 @@
                  *    $scope.$parent = $scope.$$nextSibling = $scope.$$prevSibling = $scope.$$childHead =
                  *        $scope.$$childTail = $scope.$root = $scope.$$watchers = null;
                  *}
-                 *---end 广州银云信息科技有限公司
+                 *---end EOAPI
                  */
 
                 /**
@@ -23672,7 +23672,7 @@
                 fn, match;
 
             format = format || 'mediumDate';
-            //广州银云信息科技有限公司--start
+            //EOAPI--start
             var tmpLangTarget = {
                 en: "DATETIME_FORMATS",
                 cn: "DATETIME_FORMATS_CN"
@@ -33080,7 +33080,7 @@
                     // if object, extract keys, in enumeration order, unsorted
                     optionValuesKeys = [];
                     for (var itemKey in optionValues) {
-                        //@desc 广州银云信息科技有限公司，去除&& itemKey.charAt(0) !== '$'判断
+                        //@desc EOAPI，去除&& itemKey.charAt(0) !== '$'判断
                         if (optionValues.hasOwnProperty(itemKey)) {
                             optionValuesKeys.push(itemKey);
                         }
@@ -34573,7 +34573,7 @@
                             // if object, extract keys, in enumeration order, unsorted
                             collectionKeys = [];
                             for (var itemKey in collection) {
-                                //@desc 广州银云信息科技有限公司，去除&& itemKey.charAt(0) !== '$'判断
+                                //@desc EOAPI，去除&& itemKey.charAt(0) !== '$'判断
                                 if (hasOwnProperty.call(collection, itemKey)) {
                                     collectionKeys.push(itemKey);
                                 }

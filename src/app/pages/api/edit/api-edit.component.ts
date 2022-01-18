@@ -53,7 +53,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       const treeItems: any = [
         {
           title: '根目录',
-          //actually is 0,but 0 will hidden,so use -1 replace 0
+          //!actually is 0,but 0 will hidden in nz component,so use -1 replace 0
           key: '-1',
           weight: 0,
           parentID: '0',

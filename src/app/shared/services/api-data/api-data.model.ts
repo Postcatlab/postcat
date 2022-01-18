@@ -1,6 +1,22 @@
 import { StorageModel } from '../../../modules/storage/storage.model';
 import { ApiEditBody, ApiEditHeaders } from './api-edit-params.model';
-import { ApiBodyType, JsonRootType } from './api-body-type';
+export enum ApiBodyType {
+  'Form-data' = 'formData',
+  JSON = 'json',
+  XML = 'xml',
+  Raw = 'raw',
+  Binary = 'binary',
+}
+/**
+ * Json Root Type
+ *
+ * @description body type is json,set root type of object/array
+ */
+export enum JsonRootType {
+  Object = 'object',
+  Array = 'array',
+}
+
 export enum RequestMethod {
   POST = 'POST',
   GET = 'GET',

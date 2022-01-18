@@ -17,7 +17,7 @@ import {
   ApiParamsTypeJsonOrXml,
 } from '../../../../shared/services/api-data/api-edit-params.model';
 import { ApiEditBody } from '../../../../shared/services/api-data/api-edit-params.model';
-import { ApiBodyType, JsonRootType } from '../../../../shared/services/api-data/api-body-type';
+import { ApiBodyType, JsonRootType } from '../../../../shared/services/api-data/api-data.model';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-body',

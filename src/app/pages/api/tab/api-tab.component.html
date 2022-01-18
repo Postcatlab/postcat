@@ -1,3 +1,4 @@
+
 <nz-tabset
   [(nzSelectedIndex)]="selectedIndex"
   nzType="editable-card"
@@ -9,7 +10,7 @@
     *ngFor="let tab of tabs; let i = index"
     nzClosable
     [nzTitle]="titleTemplate"
-    (nzSelect)="tabSelect(tab)"
+    (nzSelect)="tabSelect({index:i,tab:tab})"
   >
     <ng-template #titleTemplate>
       <span class="mr5 method_text_{{tab.method}}"  *ngIf="tab.method">{{ tab.method | uppercase }}</span>
