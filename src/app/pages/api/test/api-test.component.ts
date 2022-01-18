@@ -25,13 +25,15 @@ import { EnvState } from '../../../shared/store/env.state';
   styleUrls: ['./api-test.component.scss'],
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
-  @ViewChild('historyComponent')
+  @ViewChild('historyComponent') historyComponent: ApiTestHistoryComponent;
   @Select(EnvState)
   env$: Observable<any>;
-  historyComponent: ApiTestHistoryComponent;
   validateForm!: FormGroup;
   apiData: any;
-  env: any = {};
+  env: any = {
+    parameters:[],
+    hostUri:''
+  };
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   tabIndexRes: number = 0;

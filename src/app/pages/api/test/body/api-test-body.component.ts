@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
 import { ApiTestBody } from '../../../../shared/services/api-test/api-test-params.model';
-import { ApiBodyType, JsonRootType } from '../../../../shared/services/api-data/api-body-type';
+import { ApiBodyType, JsonRootType } from '../../../../shared/services/api-data/api-data.model';
 import {
   ApiTestParamsTypeFormData,
   ApiTestParamsTypeJsonOrXml,

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Project } from './project.model';
 import { StorageModelService } from '../../../modules/storage/storage.model.service'
-import { Group } from '../group/group.model';
 
 /**
  * 项目服务

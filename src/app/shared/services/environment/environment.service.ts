@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { Environment } from './environment.model';
 import { StorageModelService } from '../../../modules/storage/storage.model.service'
 import { Query } from '../../../modules/storage/storage.config';
-import { Group } from '../group/group.model';
 
 /**
  * 环境服务

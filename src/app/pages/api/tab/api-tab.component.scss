@@ -2,7 +2,15 @@
   eo-api-tab {
     .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab {
       border-radius: 6px 6px 0 0;
-      border: 1px solid var(--BORDER);
+      border-width: 1px;
+      border-bottom: 1px solid var(--BORDER);
+    }
+    .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {
+      border-color: rgba($color: #000000, $alpha: 0.15);
+      border-bottom-color: var(--MAIN_BG);
+    }
+    .ant-tabs > .ant-tabs-nav .ant-tabs-nav-add {
+      border: 0 none;
     }
     .ant-tabs-tab {
       &.ant-tabs-tab-active {

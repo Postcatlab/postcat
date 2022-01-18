@@ -1,6 +1,6 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 
-import { ApiBodyType } from '../../api-data/api-body-type';
+import { ApiBodyType } from '../../api-data/api-data.model';
 import { TestLocalNodeData } from '../local-node/api-server-data.model';
 
 import { formatDate } from '@angular/common';

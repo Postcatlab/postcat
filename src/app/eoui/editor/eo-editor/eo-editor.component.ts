@@ -155,14 +155,12 @@ export class EoEditorComponent implements AfterViewInit, OnChanges {
       }
       case 'newTab':
         {
-          if (this.code) {
-            const tmpNewWin = window.open();
-            const value = session.getValue();
-            const code = this.formatCode(value, this.editorType);
-            tmpNewWin.document.open();
-            tmpNewWin.document.write(code);
-            tmpNewWin.document.close();
-          }
+          const tmpNewWin = window.open();
+          const value = session.getValue();
+          const code = this.formatCode(value, this.editorType);
+          tmpNewWin.document.open();
+          tmpNewWin.document.write(code);
+          tmpNewWin.document.close();
         }
         break;
       case 'download':

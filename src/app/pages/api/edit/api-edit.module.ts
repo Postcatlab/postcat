@@ -19,6 +19,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
 
 import { ApiEditComponent } from './api-edit.component';
 import { ApiEditHeaderComponent } from './header/api-edit-header.component';
@@ -42,6 +43,7 @@ const NZ_COMPONETS = [
   NzTabsModule,
   NzRadioModule,
   NzDividerModule,
+  NzAffixModule
 ];
 const COMPONENTS = [
   ApiEditComponent,
