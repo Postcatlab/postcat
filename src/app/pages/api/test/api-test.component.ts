@@ -1,20 +1,21 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store, Select } from '@ngxs/store';
+import { Select } from '@ngxs/store';
 
 import { ApiData, RequestMethod, RequestProtocol } from '../../../shared/services/api-data/api-data.model';
 
-import { Message, MessageService } from '../../../shared/services/message';
+import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, of, Subject } from 'rxjs';
-import { switchMap, take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { take, takeUntil, distinctUntilChanged, pairwise } from 'rxjs/operators';
 
 import { ApiTestHistoryComponent } from './history/api-test-history.component';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
 import { ApiTestService } from './api-test.service';
+import { ApiTabService } from '../tab/api-tab.service';
 import { objectToArray } from '../../../utils';
 
 import { EnvState } from '../../../shared/store/env.state';
@@ -26,13 +27,12 @@ import { EnvState } from '../../../shared/store/env.state';
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
   @ViewChild('historyComponent') historyComponent: ApiTestHistoryComponent;
-  @Select(EnvState)
-  env$: Observable<any>;
+  @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
   apiData: any;
   env: any = {
-    parameters:[],
-    hostUri:''
+    parameters: [],
+    hostUri: '',
   };
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
@@ -57,7 +57,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private messageService: MessageService,
     private ref: ChangeDetectorRef,
-    private apiTest: ApiTestService
+    private apiTest: ApiTestService,
+    private apiTab: ApiTabService
   ) {
     this.testServer = this.testServerService.getService();
     this.testServer.init((message) => {
@@ -120,15 +121,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }).query;
   }
   ngOnInit(): void {
-    this.resetApi();
-    this.initBasicForm();
-    this.watchApiChange();
-    this.env$.subscribe((data) => {
-      const { env } = data;
-      if (env) {
-        this.env = env;
-      }
-    });
+    console.log('ngOnInit');
+    this.initApi(Number(this.route.snapshot.queryParams.uuid));
+    this.watchTabChange();
+    this.watchEnvChange();
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -187,6 +183,42 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       }
     }
   }
+  private initApi(id) {
+    this.resetApi();
+    this.initBasicForm();
+    //recovery from tab
+    if (this.apiTab.currentTab && this.apiTab.tabs[this.apiTab.currentTab.uuid]) {
+      this.apiData = this.apiTab.tabs[this.apiTab.currentTab.uuid];
+      return;
+    }
+    if (!id) {
+      Object.assign(this.apiData, {
+        uuid: 0,
+        requestBodyType: 'json',
+        requestBodyJsonType: 'object',
+        requestBody: [],
+        queryParams: [],
+        restParams: [],
+        requestHeaders: [],
+      });
+    } else {
+      this.getApi(id);
+    }
+  }
+  private watchEnvChange() {
+    this.env$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      const { env } = data;
+      if (env) {
+        this.env = env;
+      }
+    });
+  }
+  private watchTabChange() {
+    this.apiTab.tabChange$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(([nowTab, nextTab]) => {
+      this.apiTab.saveTabData$.next({ tab: nowTab, data: this.apiData });
+      this.initApi(nextTab.key);
+    });
+  }
   /**
    * Init API data structure
    */
@@ -207,32 +239,5 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       controls[name] = [this.apiData[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
-  }
-  private watchApiChange() {
-    if (!this.route.snapshot.queryParams.uuid) {
-      Object.assign(this.apiData, {
-        requestBodyType: 'json',
-        requestBodyJsonType: 'object',
-        requestBody: [],
-        queryParams: [],
-        restParams: [],
-        requestHeaders: [],
-      });
-    }
-    this.api$ = this.route.queryParamMap.pipe(
-      switchMap((params) => {
-        const id = Number(params.get('uuid'));
-        return of({ id });
-      }),
-      takeUntil(this.destroy$)
-    );
-    this.api$.subscribe((inArg: any = {}) => {
-      if (inArg.id) {
-        this.getApi(inArg.id);
-      } else {
-        //add history need
-        this.apiData.uuid = 0;
-      }
-    });
   }
 }
