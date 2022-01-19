@@ -37,7 +37,11 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
   set envUuid(value) {
     this.activeUuid = value || 0;
-    localStorage.setItem('env:selected', value.toString());
+    if(value){
+      localStorage.setItem('env:selected', value.toString());
+    }else{
+      localStorage.removeItem('env:selected');
+    }
     this.changeStoreEnv(value);
   }
 

@@ -1,16 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
 
 import { TabItem } from './tab.model';
+import { ApiTabService } from './api-tab.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
   styleUrls: ['./api-tab.component.scss'],
 })
-export class ApiTabComponent implements OnInit {
+export class ApiTabComponent implements OnInit, OnChanges {
   @Input() apiDataItems;
   id: number;
   /**
@@ -31,20 +32,26 @@ export class ApiTabComponent implements OnInit {
     detail: { path: '/home/api/detail', title: 'API 详情' },
   };
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private router: Router, private route: ActivatedRoute, private tabSerive: ApiTabService) {}
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchChangeRouter();
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.apiDataItems && changes.apiDataItems.currentValue) {
+      this.initTab();
+    }
+  }
   /**
-   * Get current path to update tab
+   * path change
    */
   watchChangeRouter() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.id = Number(this.route.snapshot.queryParams.uuid);
       if (!this.id) return;
-      this.tabs[this.selectedIndex] = this.getCurrentTabByID(this.id);
+      this.tabs[this.selectedIndex] =Object.assign({
+        uuid:this.tabs[this.selectedIndex].uuid
+      }, this.getTabInfoByID(this.id));
     });
   }
   /**
@@ -57,19 +64,14 @@ export class ApiTabComponent implements OnInit {
    * Init tab data after load or update.
    */
   initTab() {
-    if (!this.apiDataItems[this.id]) {
+    this.id = Number(this.route.snapshot.queryParams.uuid);
+    let apiHasDelete = !this.apiDataItems[this.id];
+    if (apiHasDelete) {
       this.closeTab({ index: this.selectedIndex });
       return;
     }
-    let module = Object.keys(this.defaultTabs).find((keyName) =>
-      this.router.url.split('?')[0].includes(this.defaultTabs[keyName].path)
-    );
-    const tab = this.getCurrentTabByID(this.id);
-    if (this.tabs.length < 1) {
-      this.appendTab(module, tab);
-    } else {
-      this.tabs[this.selectedIndex] = tab;
-    }
+    const tab = this.getTabInfoByID(this.id);
+    this.appendTab('unset', tab);
   }
   /**
    * Push new tab.
@@ -77,46 +79,20 @@ export class ApiTabComponent implements OnInit {
    * @param tab TabItem
    */
   appendTab(which = 'test', apiData = {}): void {
-    let tab: TabItem = Object.assign({}, this.defaultTabs[which], apiData);
+    let tab: TabItem = Object.assign(
+      {
+        uuid: new Date().getTime(),
+      },
+      which === 'unset' ? {} : this.defaultTabs[which],
+      apiData
+    );
     let existTabIndex = this.tabs.findIndex((val) => val.key === tab.key);
     if (tab.key && existTabIndex !== -1) {
-      this.tabSelect({ index: existTabIndex, tab: tab });
+      this.selectedIndex = existTabIndex;
     } else {
       this.tabs.push(tab);
-      this.tabSelect({ index: this.tabs.length - 1, tab: tab });
+      this.selectedIndex = this.tabs.length - 1;
     }
-  }
-  /**
-   * Close current tab.
-   *
-   * @param index number
-   */
-  closeTab({ index }: { index: number }): void {
-    this.tabs.splice(index, 1);
-    if (0 === this.tabs.length) {
-      this.newTab();
-    }
-  }
-  /**
-   * Switch the tab.
-   *
-   * @param {TabItem} inArg.tab
-   * @param inArg.index
-   */
-  tabSelect(inArg) {
-    this.selectedIndex = inArg.index;
-    this.activeRoute(inArg.tab);
-  }
-
-  /**
-   * Action new tab route.
-   *
-   * @param tab
-   */
-  activeRoute(tab) {
-    this.router
-      .navigate([tab.path], { queryParams: { uuid: tab.key, groupID: tab.groupID, projectID: tab.projectID } })
-      .finally();
   }
   /**
    * Remove api data tabs.
@@ -134,7 +110,42 @@ export class ApiTabComponent implements OnInit {
       this.closeTab(item);
     });
   }
-  private getCurrentTabByID(id) {
+  /**
+   * Close current tab.
+   *
+   * @param index number
+   */
+  closeTab({ index }: { index: number }): void {
+    this.tabs.splice(index, 1);
+    if (0 === this.tabs.length) {
+      this.newTab();
+    }
+  }
+  /**
+   * Switch the tab.
+   * @param {TabItem} inArg.tab
+   * @param inArg.index
+   */
+  switchTab() {
+    let tab = this.tabs[this.selectedIndex];
+    this.tabSerive.tabChange$.next(tab);
+    this.activeRoute(tab);
+  }
+
+  /**
+   * Action new tab route.
+   *
+   * @param tab
+   */
+  private activeRoute(tab) {
+    this.router
+      .navigate([tab.path], {
+        queryParams: { uuid: tab.key, groupID: tab.groupID, projectID: tab.projectID },
+      })
+      .finally();
+  }
+
+  private getTabInfoByID(id) {
     const result = {
       path: this.router.url.split('?')[0],
       title: this.apiDataItems[id].name,

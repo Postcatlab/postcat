@@ -11,8 +11,7 @@ import { EouiModule } from '../../eoui/eoui.module';
 import { ParamsImportModule } from '../../shared/components/params-import/params-import.module';
 
 import { ApiComponent } from './api.component';
-import { ApiGroupEditComponent} from './group/edit/api-group-edit.component';
-
+import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -25,6 +24,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { ApiDataService } from '../../shared/services/api-data/api-data.service';
 import { GroupService } from '../../shared/services/group/group.service';
+import { ApiTabService } from './tab/api-tab.service';
 import { MessageService } from '../../shared/services/message';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
@@ -54,6 +54,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent];
   ],
   declarations: [...COMPONENTS, ApiTabComponent],
   exports: [],
-  providers: [ApiDataService, GroupService, MessageService],
+  providers: [ApiDataService, GroupService, MessageService, ApiTabService],
 })
 export class ApiModule {}

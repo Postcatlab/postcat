@@ -76,7 +76,6 @@ export class ApiComponent implements OnInit, OnDestroy {
    */
   buildGroupTreeData(): void {
     this.groupByID = {};
-    this.apiDataItems = {};
     this.treeItems = [];
     this.getGroups();
   }
@@ -98,9 +97,10 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   getApis() {
     this.apiDataService.loadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
+      let apiItems={};
       items.forEach((item) => {
         delete item.updatedAt;
-        this.apiDataItems[item.uuid] = item;
+        apiItems[item.uuid] = item;
         this.treeItems.push({
           title: item.name,
           key: item.uuid,
@@ -110,8 +110,8 @@ export class ApiComponent implements OnInit, OnDestroy {
           isLeaf: true,
         });
       });
+      this.apiDataItems=apiItems;
       this.generateGroupTreeData();
-      this.apiTabComponent.initTab();
     });
   }
   /**
@@ -211,7 +211,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   generateGroupTreeData(): void {
     this.treeItems.sort((a, b) => a.weight - b.weight);
     this.treeNodes = [];
-    console.log('generateGroupTreeData=>',this.treeItems)
     listToTree(this.treeItems, this.treeNodes, 0);
   }
 
