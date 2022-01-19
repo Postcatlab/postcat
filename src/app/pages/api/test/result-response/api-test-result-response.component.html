@@ -15,6 +15,7 @@
   </div>
   <eo-editor
     class="mt20"
+    [autoFormat]="true"
     [(code)]="model.body"
     [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"
   ></eo-editor>
