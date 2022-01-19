@@ -49,6 +49,7 @@ export class EoEditorComponent implements AfterViewInit, OnChanges {
   @Input() hiddenList: string[] = [];
   @Input() code: string;
   @Input() editorType = 'json';
+  @Input() autoFormat = false;
   @Output() codeChange = new EventEmitter<string>();
   @ViewChild(AceComponent, { static: false }) aceRef?: AceComponent;
   @ViewChild(AceDirective, { static: false }) directiveRef?: AceDirective;
@@ -95,7 +96,9 @@ export class EoEditorComponent implements AfterViewInit, OnChanges {
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
       const type = whatRootType(this.code || '');
       this.editorType = type;
-      this.code = this.formatCode(this.code, type);
+      if (this.autoFormat) {
+        this.code = this.formatCode(this.code, type);
+      }
     }
   }
   log(event, txt) {
