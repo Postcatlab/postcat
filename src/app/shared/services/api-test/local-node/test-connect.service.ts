@@ -115,7 +115,8 @@ export class TestServerLocalNodeService implements TestServer {
           break;
         }
         case ApiBodyType.Raw:
-        case ApiBodyType.Binary: {
+        // case ApiBodyType.Binary: 
+        {
           result = inData.requestBody;
           break;
         }

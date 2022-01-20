@@ -56,8 +56,8 @@
           </button>
           <nz-dropdown-menu #groupMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi' })">
-                <a>添加API</a>
+              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi',node:node })">
+                <a>添加 API</a>
               </li>
               <li nz-menu-item (click)="newSubGroup(node)">
                 <a>新建子分组</a>

@@ -59,8 +59,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, AfterViewChecked
   }
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiBodyType.Raw:
-      case ApiBodyType.Binary: {
+      case ApiBodyType.Raw: // case ApiBodyType.Binary:
+      {
         this.cache[type] = this.model || '';
         break;
       }
@@ -105,13 +105,12 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, AfterViewChecked
   }
   /**
    * Set model after change bodyType
-   * 
+   *
    * Add last row| RestoreData From cache| XML first row type must be object
    */
   private setModel() {
     switch (this.bodyType) {
-      case ApiBodyType.Raw:
-      case ApiBodyType.Binary: {
+      case ApiBodyType.Raw: { // case ApiBodyType.Binary:
         this.model = this.cache[this.bodyType] || '';
         break;
       }

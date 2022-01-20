@@ -121,7 +121,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }).query;
   }
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.initApi(Number(this.route.snapshot.queryParams.uuid));
     this.watchTabChange();
     this.watchEnvChange();

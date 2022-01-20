@@ -262,7 +262,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       name: '',
       projectID: 1,
       uri: '/',
-      groupID: '-1',
+      groupID: this.route.snapshot.queryParams.groupID||'-1',
       protocol: RequestProtocol.HTTP,
       method: RequestMethod.POST,
     };

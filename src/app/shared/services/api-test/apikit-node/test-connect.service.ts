@@ -16,7 +16,7 @@ export class TestServerAPIKitService implements TestServer {
   constructor(@Inject(LOCALE_ID) private locale: string) {}
   init(receiveMessage: (message) => void) {
     this.socket = new WebSocket('ws://dev.test.eolinker.com:1204/nodeWebsocketServer/unit');
-    this.socket.onopen =()=>{
+    this.socket.onopen = () => {
       this.socket.send(
         '{"status":"init","lang":"cn","globals":{},"spaceKey":"eolinker","projectHashKey":"ccsIhPl17503a6b2326f09fbc4e3a7c03874c7333002038","module":0,"apiID":"5622482","markFrontUrl":"apiManagementPro","from":"default"}	'
       );
@@ -125,8 +125,8 @@ export class TestServerAPIKitService implements TestServer {
           });
           break;
         }
-        case ApiBodyType.Raw:
-        case ApiBodyType.Binary: {
+        case ApiBodyType.Raw: // case ApiBodyType.Binary:
+        {
           result = inData.requestBody;
           break;
         }
@@ -162,9 +162,9 @@ export class TestServerAPIKitService implements TestServer {
    * @param  {object} history storage test history
    */
   formatResponseData({ report, history }) {
-    ['general','requestInfo','resultInfo'].forEach(keyName=>{
-      history[keyName]=JSON.parse(history[keyName])
-    })
+    ['general', 'requestInfo', 'resultInfo'].forEach((keyName) => {
+      history[keyName] = JSON.parse(history[keyName]);
+    });
     let { httpCode, ...historyRes } = history.resultInfo;
     historyRes = {
       statusCode: httpCode,
