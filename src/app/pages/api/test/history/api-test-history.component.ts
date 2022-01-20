@@ -74,7 +74,7 @@ export class ApiTestHistoryComponent implements OnInit {
         {
           thKey: '请求地址',
           type: 'html',
-          html: '<span class="eo-label-success method_label mr5">{{item.request.method}}</span>{{item.request.uri}}',
+          html: '<span class="method_text_{{item.request.method}} method_label mr5">{{item.request.method}}</span>{{item.request.uri}}',
         },
         {
           thKey: '返回状态',

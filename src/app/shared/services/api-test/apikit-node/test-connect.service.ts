@@ -154,6 +154,7 @@ export class TestServerAPIKitService implements TestServer {
       env: formatEnv(opts.env),
       testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale),
     };
+    console.log(data,result)
     return result;
   }
   /**

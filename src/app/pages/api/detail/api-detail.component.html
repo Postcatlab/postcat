@@ -1,43 +1,43 @@
 <section class="detail_page">
   <div class="t-1">
-    <nz-tag [nzColor]="'#108ee9'">{{ apiInfo.protocol | uppercase }}</nz-tag>
-    <nz-tag [nzColor]="'#0aa07a'">{{ apiInfo.method | uppercase }}</nz-tag>
-    <span>{{ apiInfo.uri }}</span>
+    <nz-tag [nzColor]="'#108ee9'">{{ apiData.protocol | uppercase }}</nz-tag>
+    <nz-tag [nzColor]="'#0aa07a'">{{ apiData.method | uppercase }}</nz-tag>
+    <span>{{ apiData.uri }}</span>
   </div>
-  <p class="api_name">{{ apiInfo.name }}</p>
-  <div *ngIf="apiInfo.requestHeaders && apiInfo.requestHeaders.length">
+  <p class="api_name">{{ apiData.name }}</p>
+  <div *ngIf="apiData.requestHeaders && apiData.requestHeaders.length">
     <p class="api_line">请求头部</p>
-    <eo-api-detail-header [model]="apiInfo.requestHeaders"></eo-api-detail-header>
+    <eo-api-detail-header [model]="apiData.requestHeaders"></eo-api-detail-header>
   </div>
-  <div *ngIf="apiInfo.queryParams && apiInfo.queryParams.length">
+  <div *ngIf="apiData.queryParams && apiData.queryParams.length">
     <p class="api_line">Query 参数</p>
-    <eo-api-detail-query [model]="apiInfo.queryParams"></eo-api-detail-query>
+    <eo-api-detail-query [model]="apiData.queryParams"></eo-api-detail-query>
   </div>
-  <div *ngIf="apiInfo.restParams && apiInfo.restParams.length">
+  <div *ngIf="apiData.restParams && apiData.restParams.length">
     <p class="api_line">Rest 参数</p>
-    <eo-api-detail-rest [model]="apiInfo.restParams"></eo-api-detail-rest>
+    <eo-api-detail-rest [model]="apiData.restParams"></eo-api-detail-rest>
   </div>
-  <div *ngIf="apiInfo.requestBody && apiInfo.requestBody.length">
+  <div *ngIf="apiData.requestBody && apiData.requestBody.length">
     <div class="api_line">
-      Body 请求参数<nz-tag class="ml10" nzColor="default">{{ CONST.BODY_TYPE[apiInfo.requestBodyType] }}</nz-tag>
-      <nz-tag *ngIf="apiInfo.requestBodyType==='json'" nzColor="default">最外层结构为：{{ CONST.JSON_ROOT_TYPE[apiInfo.requestBodyJsonType] }}</nz-tag>
+      Body 请求参数<nz-tag class="ml10" nzColor="default">{{ CONST.BODY_TYPE[apiData.requestBodyType] }}</nz-tag>
+      <nz-tag *ngIf="apiData.requestBodyType==='json'" nzColor="default">最外层结构为：{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}</nz-tag>
     </div>
     <eo-api-detail-body
-      [bodyType]="apiInfo.requestBodyType"
-      [model]="apiInfo.requestBody"
-      [jsonRootType]="apiInfo.requestBodyJsonType"
+      [bodyType]="apiData.requestBodyType"
+      [model]="apiData.requestBody"
+      [jsonRootType]="apiData.requestBodyJsonType"
     ></eo-api-detail-body>
   </div>
-  <div *ngIf="apiInfo.responseHeaders && apiInfo.responseHeaders.length">
+  <div *ngIf="apiData.responseHeaders && apiData.responseHeaders.length">
     <p class="api_line">返回头部</p>
-    <eo-api-detail-header [model]="apiInfo.responseHeaders"></eo-api-detail-header>
+    <eo-api-detail-header [model]="apiData.responseHeaders"></eo-api-detail-header>
   </div>
-  <div *ngIf="apiInfo.responseBody && apiInfo.responseBody.length">
+  <div *ngIf="apiData.responseBody && apiData.responseBody.length">
     <p class="api_line">返回参数</p>
     <eo-api-detail-body
-      [bodyType]="apiInfo.responseBodyType"
-      [model]="apiInfo.responseBody"
-      [jsonRootType]="apiInfo.responseBodyJsonType"
+      [bodyType]="apiData.responseBodyType"
+      [model]="apiData.responseBody"
+      [jsonRootType]="apiData.responseBodyJsonType"
     ></eo-api-detail-body>
   </div>
 </section>

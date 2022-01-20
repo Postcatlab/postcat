@@ -30,6 +30,7 @@ export class ApiTabComponent implements OnInit, OnChanges {
     test: { path: '/home/api/test', title: '新 API' },
     detail: { path: '/home/api/detail', title: 'API 详情' },
   };
+  MAX_LIMIT = 15;
 
   constructor(private router: Router, private route: ActivatedRoute, private tabSerive: ApiTabService) {}
 
@@ -48,7 +49,6 @@ export class ApiTabComponent implements OnInit, OnChanges {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.id = Number(this.route.snapshot.queryParams.uuid);
       if (!this.id) return;
-      console.log('watchChangeRouter', this.tabs[this.selectedIndex]);
       this.tabs[this.selectedIndex] = Object.assign(
         {
           uuid: this.tabs[this.selectedIndex].uuid,
@@ -80,7 +80,7 @@ export class ApiTabComponent implements OnInit, OnChanges {
       let module = Object.keys(this.defaultTabs).find((keyName) =>
         this.router.url.split('?')[0].includes(this.defaultTabs[keyName].path)
       );
-      this.appendTab(module,this.route.snapshot.queryParams);
+      this.appendTab(module, this.route.snapshot.queryParams);
     }
   }
   /**
@@ -89,6 +89,7 @@ export class ApiTabComponent implements OnInit, OnChanges {
    * @param tab TabItem
    */
   appendTab(which = 'test', apiData = {}): void {
+    if (this.tabs.length >= this.MAX_LIMIT) return;
     let tab: TabItem = Object.assign(
       {
         uuid: new Date().getTime(),
@@ -131,6 +132,7 @@ export class ApiTabComponent implements OnInit, OnChanges {
    * @param index number
    */
   closeTab({ index }: { index: number }): void {
+    this.tabSerive.removeData(this.tabs[index].uuid);
     this.tabs.splice(index, 1);
     if (0 === this.tabs.length) {
       this.newTab();

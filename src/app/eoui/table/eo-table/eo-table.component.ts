@@ -8,6 +8,7 @@ import {
   TemplateRef,
   Output,
   EventEmitter,
+  OnInit,
 } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { addKeyInTree, findDataInTree, flatData } from '../../../utils/tree';
@@ -43,7 +44,7 @@ const eoFilterFn = (key) => (list: string[], item: any) => list.some((text) => i
   templateUrl: './eo-table.component.html',
   styleUrls: ['./eo-table.component.scss'],
 })
-export class EoTableComponent implements OnChanges, AfterContentInit {
+export class EoTableComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() data: any[] = [];
   @Input() columns: Column[];
   @Input() isShowPagination = false; // * 是否显示页脚
@@ -58,11 +59,14 @@ export class EoTableComponent implements OnChanges, AfterContentInit {
   renderColumns: any[] = [];
   renderData: any[] = [];
   expandIndexList: number[] = [];
+  /**
+   * row data by node key
+   */
   mapOfExpandedData: { [nodeKey: string]: TreeNodeInterface[] } = {};
 
   constructor(private message: NzMessageService) {}
 
-  ngOnChanges(): void {
+  ngOnInit(): void {
     this.renderColumns = this.columns.map(
       ({
         filterListFn = null,
@@ -86,6 +90,8 @@ export class EoTableComponent implements OnChanges, AfterContentInit {
         ...it,
       })
     );
+  }
+  ngOnChanges(changes): void {
     this.mapOfExpandedData = {};
     this.listOfMapData = this.data?.map((it, index) => addKeyInTree(it, index));
     this.listOfMapData?.forEach((item) => {
@@ -100,6 +106,10 @@ export class EoTableComponent implements OnChanges, AfterContentInit {
   }
 
   handleEditData(data, nodeKey, key) {
+    console.log(data)
+    document.getElementById("mytext").focus();
+    // data.relatedTarget.focus()
+    data.path[0].focus();
     this.data = this.listOfMapData.map((it) => findDataInTree(it, data.target.value, { id: nodeKey, key }));
     this.dataChange.emit(this.data);
   }

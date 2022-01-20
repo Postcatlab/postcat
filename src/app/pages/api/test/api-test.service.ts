@@ -227,6 +227,7 @@ export class ApiTestService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
+    console.log(inData)
     let result = {
       testData: {
         uuid: inData.apiDataID,

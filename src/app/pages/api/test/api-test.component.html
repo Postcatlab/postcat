@@ -3,10 +3,10 @@
     <nz-form-item nz-col class="basic_info_container">
       <nz-form-control>
         <nz-input-group nzCompact>
-          <nz-select class="w_100" formControlName="protocol">
+          <nz-select class="w_100" [(ngModel)]="apiData.protocol" formControlName="protocol">
             <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
           </nz-select>
-          <nz-select class="w_100" formControlName="method">
+          <nz-select class="w_100" [(ngModel)]="apiData.method" formControlName="method">
             <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
           </nz-select>
           <div
