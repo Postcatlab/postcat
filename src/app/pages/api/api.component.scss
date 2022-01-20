@@ -3,7 +3,7 @@
 }
 
 nz-content {
-  background-color: #fff;
+  background-color:  var(--MAIN_BG);
 }
 
 nz-sider {
@@ -46,43 +46,6 @@ nz-sider {
     margin-bottom: -1px;
     align-items: center;
     justify-content: space-between;
-    .ant-tabs-top {
-      > .ant-tabs-nav {
-        margin: 0;
-        .ant-tabs-nav-wrap {
-          flex: none;
-        }
-        .ant-tabs-nav-add {
-          background-color: rgba(0, 0, 0, 0);
-          &:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-          }
-        }
-        .ant-tabs-nav-more {
-          min-width: 40px;
-          min-height: 40px;
-          margin-left: 2px;
-          padding: 0 8px;
-          &:hover {
-            color: #00785a;
-            background-color: rgba(0, 0, 0, 0.1);
-          }
-
-          &:active,
-          &:focus {
-            color: #00785a;
-          }
-        }
-        .ant-tabs-tab {
-          .ant-tabs-tab-remove {
-            color: rgba(0, 0, 0, 0);
-          }
-          &:hover .ant-tabs-tab-remove {
-            color: rgba(0, 0, 0, 0.45);
-          }
-        }
-      }
-    }
     .env {
       height: 36px;
     }

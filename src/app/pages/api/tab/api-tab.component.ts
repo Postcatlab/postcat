@@ -48,9 +48,13 @@ export class ApiTabComponent implements OnInit, OnChanges {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.id = Number(this.route.snapshot.queryParams.uuid);
       if (!this.id) return;
-      this.tabs[this.selectedIndex] =Object.assign({
-        uuid:this.tabs[this.selectedIndex].uuid
-      }, this.getTabInfoByID(this.id));
+      console.log('watchChangeRouter', this.tabs[this.selectedIndex]);
+      this.tabs[this.selectedIndex] = Object.assign(
+        {
+          uuid: this.tabs[this.selectedIndex].uuid,
+        },
+        this.getTabInfoByID(this.id)
+      );
     });
   }
   /**
@@ -64,13 +68,20 @@ export class ApiTabComponent implements OnInit, OnChanges {
    */
   initTab() {
     this.id = Number(this.route.snapshot.queryParams.uuid);
-    let apiHasDelete = !this.apiDataItems[this.id];
-    if (apiHasDelete) {
-      this.closeTab({ index: this.selectedIndex });
-      return;
+    if (this.id) {
+      let apiHasDelete = !this.apiDataItems[this.id];
+      if (apiHasDelete) {
+        this.closeTab({ index: this.selectedIndex });
+        return;
+      }
+      const tab = this.getTabInfoByID(this.id);
+      this.appendTab('unset', tab);
+    } else {
+      let module = Object.keys(this.defaultTabs).find((keyName) =>
+        this.router.url.split('?')[0].includes(this.defaultTabs[keyName].path)
+      );
+      this.appendTab(module,this.route.snapshot.queryParams);
     }
-    const tab = this.getTabInfoByID(this.id);
-    this.appendTab('unset', tab);
   }
   /**
    * Push new tab.
@@ -88,9 +99,14 @@ export class ApiTabComponent implements OnInit, OnChanges {
     let existTabIndex = this.tabs.findIndex((val) => val.key === tab.key);
     if (tab.key && existTabIndex !== -1) {
       this.selectedIndex = existTabIndex;
-    } else {
-      this.tabs.push(tab);
+      return;
+    }
+    let hasTab = this.tabs.length > 0;
+    this.tabs.push(tab);
+    if (hasTab) {
       this.selectedIndex = this.tabs.length - 1;
+    } else {
+      this.switchTab();
     }
   }
   /**
@@ -116,6 +132,9 @@ export class ApiTabComponent implements OnInit, OnChanges {
    */
   closeTab({ index }: { index: number }): void {
     this.tabs.splice(index, 1);
+    if (0 === this.tabs.length) {
+      this.newTab();
+    }
   }
   /**
    * Switch the tab.

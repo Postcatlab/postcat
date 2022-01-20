@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { ApiEditBody } from '../../../../shared/services/api-data/api-edit-params.model';
@@ -38,8 +32,8 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiBodyType.Raw:
-      case ApiBodyType.Binary: {
+      case ApiBodyType.Raw: // case ApiBodyType.Binary:
+      {
         this.cache[type] = this.model || '';
         break;
       }
@@ -50,8 +44,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
-      .map((val) => ({ key: val, value: ApiBodyType[val] }));
+    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType).map((val) => ({ key: val, value: ApiBodyType[val] }));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -65,7 +58,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   private initListConf() {
     this.listConf = this.apiDetail.initBodyListConf({
       title: '参数',
-      itemStructure: this.itemStructure
+      itemStructure: this.itemStructure,
     });
   }
 }

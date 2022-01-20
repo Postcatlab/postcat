@@ -4,8 +4,8 @@
   (nzAdd)="newTab()"
   (nzClose)="closeTab($event)"
   (nzSelectChange)="switchTab()"
-  [nzTabBarExtraContent]="extraTemplate"
 >
+<!-- [nzTabBarExtraContent]="extraTemplate" -->
   <nz-tab
     *ngFor="let tab of tabs; let i = index"
     nzClosable

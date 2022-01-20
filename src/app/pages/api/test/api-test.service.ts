@@ -297,7 +297,8 @@ export class ApiTestService {
             let typeSorts = [
               {
                 type: 'string',
-                match: ['file', 'date', 'datetime', 'char', 'byte'],
+                match: ['file', 
+                'date', 'datetime', 'char', 'byte'],
               },
               {
                 type: 'number',
@@ -321,7 +322,11 @@ export class ApiTestService {
         break;
       }
       case 'formData': {
-        editToTestParams(inData.requestBody);
+        inData.requestBody.forEach((val) => {
+          val.value = val.example;
+          val.type='string';
+          delete val.example;
+        });
         break;
       }
     }

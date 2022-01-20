@@ -5,7 +5,7 @@ export enum ApiBodyType {
   JSON = 'json',
   XML = 'xml',
   Raw = 'raw',
-  Binary = 'binary',
+  // Binary = 'binary',
 }
 /**
  * Json Root Type

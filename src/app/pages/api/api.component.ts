@@ -216,6 +216,7 @@ export class ApiComponent implements OnInit, OnDestroy {
    * @param item GroupTreeItem
    */
   newApi(node?: NzTreeNode): void {
+    console.log('newApi',node)
     this.apiTabComponent.appendTab('edit', node ? { groupID: node.key } : {});
   }
 
