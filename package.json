@@ -62,7 +62,7 @@
     "angular": "1.8.2",
     "dexie": "3.2.0",
     "js-beautify": "1.14.0",
-    "ng-zorro-antd": "13.0.0",
+    "ng-zorro-antd": "13.0.1",
     "ngx-ace-wrapper": "11.0.1",
     "rxjs": "7.4.0",
     "tslib": "^2.1.0",

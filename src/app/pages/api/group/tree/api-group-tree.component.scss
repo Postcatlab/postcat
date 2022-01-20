@@ -1,0 +1,19 @@
+::ng-deep {
+  .ant-tree-node-selected * {
+    color: var(--TEXT_ACTIVE);
+  }
+}
+.ant-dropdown-menu {
+  min-width: 100px;
+}
+.tree_node {
+  font-size: 12px;
+  .tree_node_operate {
+    font-size: 14px;
+    font-weight: bold;
+    visibility: hidden;
+  }
+  &:hover .tree_node_operate {
+    visibility: visible;
+  }
+}

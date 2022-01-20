@@ -4,7 +4,6 @@
       <div class="inner-content">
         <eo-api-group-tree
           [treeNodes]="treeNodes"
-          [expandedKeys]="expandedKeys"
           (groupTreeEvent)="groupTreeEvent($event)"
           (updateGroupTreeEvent)="updateGroupTreeEvent($event)"
         ></eo-api-group-tree>
@@ -14,8 +13,8 @@
   <nz-layout class="right-layout">
     <nz-content>
       <div class="inner-content">
-        <div class="tabs-bar">
-          <eo-api-tab [apiDataItems]="apiDataItems"></eo-api-tab>
+        <div class="tabs-bar f_row">
+          <eo-api-tab class="fg1" [apiDataItems]="apiDataItems"></eo-api-tab>
           <div class="env">
             <eo-env></eo-env>
           </div>
