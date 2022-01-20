@@ -109,7 +109,12 @@ export const addKeyInTree = ({ children, ...data }, index = 0, key = '1') => {
     nodeKey: `${key}-${index}`,
   };
 };
-
+/**
+ * Find tree node and give value to it
+ * @param _data seach pool tree node
+ * @param value value need to be set
+ * @param param2 should be find tree node
+ */
 export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key }): any => {
   const findData = ({ children, ...it }) => {
     if (it[nodeId] === id) {

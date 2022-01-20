@@ -132,7 +132,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private test() {
     this.testServer.send('unitTest', {
-      id: 1,
+      id: this.apiTab.tabID,
       action: 'ajax',
       data: this.testServer.formatRequestData(this.apiData, {
         env: this.env,
@@ -142,7 +142,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private abort() {
     this.testServer.send('unitTest', {
-      id: 1,
+      id: this.apiTab.tabID,
       action: 'abort',
     });
     this.status$.next('tested');
@@ -183,11 +183,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
   }
   private initApi(id) {
-    this.resetApi();
+    this.resetForm();
     this.initBasicForm();
     //recovery from tab
-    if (this.apiTab.currentTab && this.apiTab.tabs[this.apiTab.currentTab.uuid]) {
-      this.apiData = this.apiTab.tabs[this.apiTab.currentTab.uuid];
+    if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
+      let tabData = this.apiTab.tabCache[this.apiTab.tabID];
+      this.apiData = tabData.apiData;
+      this.testResult = tabData.testResult;
       return;
     }
     if (!id) {
@@ -214,19 +216,29 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private watchTabChange() {
     this.apiTab.tabChange$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(([nowTab, nextTab]) => {
-      this.apiTab.saveTabData$.next({ tab: nowTab, data: this.apiData });
+      this.apiTab.saveTabData$.next({
+        tab: nowTab,
+        data: {
+          apiData: this.apiData,
+          testResult: this.testResult,
+        },
+      });
       this.initApi(nextTab.key);
     });
   }
   /**
    * Init API data structure
    */
-  private resetApi() {
+  private resetForm() {
     this.apiData = {
       projectID: 1,
       uri: '/',
       protocol: RequestProtocol.HTTP,
       method: RequestMethod.POST,
+    };
+    this.testResult = {
+      response: {},
+      request: {},
     };
   }
   /**

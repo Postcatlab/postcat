@@ -24,7 +24,7 @@ export interface TreeNodeInterface {
   styleUrls: ['./api-detail.component.scss'],
 })
 export class ApiDetailComponent implements OnInit {
-  apiInfo: ApiData | any = {};
+  apiData: ApiData | any = {};
   CONST = {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType)
@@ -47,7 +47,7 @@ export class ApiDetailComponent implements OnInit {
           result[tableName] = treeToListHasLevel(result[tableName]);
         }
       });
-      this.apiInfo = result;
+      this.apiData = result;
     });
   }
 }
