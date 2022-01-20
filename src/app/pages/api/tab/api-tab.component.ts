@@ -5,7 +5,6 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { TabItem } from './tab.model';
 import { ApiTabService } from './api-tab.service';
 import { filter } from 'rxjs';
-
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -117,9 +116,6 @@ export class ApiTabComponent implements OnInit, OnChanges {
    */
   closeTab({ index }: { index: number }): void {
     this.tabs.splice(index, 1);
-    if (0 === this.tabs.length) {
-      this.newTab();
-    }
   }
   /**
    * Switch the tab.

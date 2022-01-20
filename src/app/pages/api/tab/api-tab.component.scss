@@ -1,10 +1,14 @@
 ::ng-deep {
   eo-api-tab {
+    width: calc(100% - 160px);
     .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab {
       border-radius: 6px 6px 0 0;
       border-width: 1px;
       border-bottom: 1px solid var(--BORDER);
     }
+    .ant-tabs-nav-wrap {
+      width: calc(100% - 135px);
+        }
     .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab-active {
       border-color: rgba($color: #000000, $alpha: 0.15);
       border-bottom-color: var(--MAIN_BG);
@@ -16,30 +20,13 @@
       &.ant-tabs-tab-active {
         .ant-tabs-tab-btn {
           color: var(--MAIN_TEXT);
+          text-shadow: none;
         }
       }
       .ant-tabs-tab-btn {
         font-size: 12px;
+        font-weight: bold;
       }
-    }
-    .method_text_GET {
-      color: var(--BLUE_TAG_BG);
-    }
-    .method_text_POST {
-      color: var(--GREEN_TAG_BG);
-    }
-    .method_text_DELETE {
-      color: var(--RED_TAG_BG);
-    }
-    .method_text_HEAD {
-      color: var(--YELLOW_TAG_BG);
-    }
-    .method_text_PATCH {
-      color: var(--ORANGE_TAG_BG);
-    }
-    .method_text_PUT,
-    .method_text_OPTIONS {
-      color: var(--BLACK_TAG_BG);
     }
   }
 }

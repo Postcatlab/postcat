@@ -3,7 +3,7 @@
   nzType="editable-card"
   (nzAdd)="newTab()"
   (nzClose)="closeTab($event)"
-  (nzSelectChange)="switchTab($event)"
+  (nzSelectChange)="switchTab()"
   [nzTabBarExtraContent]="extraTemplate"
 >
   <nz-tab
@@ -25,6 +25,7 @@
     <ul nz-menu>
       <li nz-menu-item>关闭其它标签页</li>
       <li nz-menu-item>关闭所有标签</li>
+      <!-- <li nz-menu-item>关闭已保存</li> -->
       <li nz-menu-item>关闭左侧标签页</li>
       <li nz-menu-item>关闭右侧标签页</li>
     </ul>

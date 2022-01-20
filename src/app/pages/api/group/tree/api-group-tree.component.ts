@@ -15,10 +15,13 @@ import { Message } from '../../../../shared/services/message/message.model';
   styleUrls: ['./api-group-tree.component.scss'],
 })
 export class ApiGroupTreeComponent implements OnInit {
-  @Input() expandedKeys?: Array<string | number>;
   @Input() treeNodes: Array<GroupTreeItem> | any;
   @Output() groupTreeEvent = new EventEmitter();
   @Output() updateGroupTreeEvent = new EventEmitter();
+  /**
+   * Expanded keys of tree.
+   */
+  expandedKeys: Array<string | number>;
 
   searchValue = '';
   constructor(private modalService: NzModalService) {}
@@ -150,7 +153,7 @@ export class ApiGroupTreeComponent implements OnInit {
   private nodeToGroup(node: NzTreeNode): Group {
     return {
       projectID: 1,
-      uuid:node.origin.key,
+      uuid: node.origin.key,
       name: node.origin.title,
       parentID: node.origin.parentID,
       weight: node.origin.weight,

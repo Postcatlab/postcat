@@ -10,28 +10,8 @@ nz-sider {
   width: 250px;
 }
 
-nz-tree {
-  overflow: hidden;
-}
 
-.custom-node {
-  cursor: pointer;
-  line-height: 24px;
-  display: block;
-}
 
-.folder-name {
-  margin-left: 4px;
-}
-
-.file-desc,
-.folder-desc {
-  display: inline-block;
-  position: relative;
-  button {
-    padding: 0 5px;
-  }
-}
 
 ::ng-deep {
   .ant-layout-sider-children {
@@ -60,8 +40,8 @@ nz-tree {
     border-right: 1px solid #f0f0f0;
   }
   .tabs-bar {
-    background-color: #f0f0f0;
-    padding: 5px 10px 0 15px;
+    background-color: var(--SEC_BG);
+        padding: 5px 10px 0 15px;
     display: flex;
     margin-bottom: -1px;
     align-items: center;
@@ -125,5 +105,24 @@ nz-tree {
     .has_tab_page router-outlet + * {
       height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 45px - 46px);
     }
+  }
+  .method_text_GET {
+    color: var(--BLUE_TAG_BG);
+  }
+  .method_text_POST {
+    color: var(--GREEN_TAG_BG);
+  }
+  .method_text_DELETE {
+    color: var(--RED_TAG_BG);
+  }
+  .method_text_HEAD {
+    color: var(--YELLOW_TAG_BG);
+  }
+  .method_text_PATCH {
+    color: var(--ORANGE_TAG_BG);
+  }
+  .method_text_PUT,
+  .method_text_OPTIONS {
+    color: var(--BLACK_TAG_BG);
   }
 }

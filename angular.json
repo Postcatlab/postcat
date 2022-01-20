@@ -87,8 +87,8 @@
               },
               "src/styles.scss",
               "src/assets/theme/antd.less",
-              "src/ng1/index.css",
-              "src/assets/font/iconfont.css"
+              "src/assets/font/iconfont.css",
+              "src/ng1/index.css"
             ],
             "scripts": [
               "src/ng1/lib/angular/angular.js",

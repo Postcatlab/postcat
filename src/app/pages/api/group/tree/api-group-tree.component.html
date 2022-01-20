@@ -1,7 +1,7 @@
-<div class="group-search">
+<header class="group_header">
   <nz-input-group>
     <div nz-row [nzGutter]="8">
-      <div nz-col nzFlex="3">
+      <div nz-col nzFlex="4">
         <nz-input-group [nzPrefix]="prefixIcon" nzCompact>
           <input type="text" nz-input placeholder="搜索" [(ngModel)]="searchValue" />
         </nz-input-group>
@@ -15,14 +15,7 @@
             <i nz-icon nzType="plus"></i>
             API
           </button>
-          <button
-            nzType="primary"
-            nzTrigger="click"
-            nz-button
-            nz-dropdown
-            [nzDropdownMenu]="menu"
-            nzPlacement="bottomRight"
-          >
+          <button nzType="primary" nz-button nz-dropdown [nzDropdownMenu]="menu" nzPlacement="bottomRight">
             <i nz-icon nzType="caret-down" nzTheme="outline"></i>
           </button>
         </nz-button-group>
@@ -36,8 +29,8 @@
       </div>
     </div>
   </nz-input-group>
-</div>
-<div class="group-tree">
+</header>
+<div class="group_container group-tree pt10">
   <nz-tree
     [nzData]="treeNodes"
     [nzSearchValue]="searchValue"
@@ -50,11 +43,14 @@
     [nzTreeTemplate]="nzTreeTemplate"
   ></nz-tree>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
-    <div class="custom-node">
-      <div *ngIf="!node.isLeaf">
-        <i nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'"></i>
-        <span class="folder-name">{{ node.title }}</span>
-        <span class="folder-desc">
+    <div class="pl5">
+      <!-- Folder -->
+      <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
+        <div class="f_row_ac">
+          <span class="iconfont icon-folder-outline fs16 mr5"></span>
+          <span>{{ node.title }}</span>
+        </div>
+        <span class="tree_node_operate">
           <button nz-dropdown [nzDropdownMenu]="groupMenu">
             <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
           </button>
@@ -76,13 +72,18 @@
           </nz-dropdown-menu>
         </span>
       </div>
-      <div *ngIf="node.isLeaf">
-        <span class="file-name">
-          <strong *ngIf="node.origin.method">{{ node.origin.method | uppercase }}</strong> {{ node.title }}
-        </span>
-        <span class="file-desc">
+      <!-- Leaf -->
+      <div class="tree_node f_row f_js_ac" *ngIf="node.isLeaf">
+        <div>
+          <b class="method_text_{{ node.origin.method }}" *ngIf="node.origin.method">{{
+            node.origin.method | uppercase
+          }}</b>
+          {{ node.title }}
+        </div>
+        <span class="tree_node_operate">
           <button>
             <i
+              class="mr5"
               nz-icon
               nzType="thunderbolt"
               nzTheme="outline"

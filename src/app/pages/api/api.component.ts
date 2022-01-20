@@ -45,10 +45,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   treeNodes: Array<GroupTreeItem>;
 
   /**
-   * Expanded keys of tree.
-   */
-  expandedKeys: [];
-  /**
    * API uuid
    */
   id: number;
