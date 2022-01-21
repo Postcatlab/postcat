@@ -1,4 +1,12 @@
 export const uuid = (): string => Math.random().toString(36).slice(-8);
+/**
+ * get rest param from url,format like {restName}
+ * @param url
+ * @returns {Array[string]}
+ */
+export const getRest: (url: string) => string[] = (url) => {
+  return [...url.replace(/{{(.*?)}}/g, '').matchAll(/{(.*?)}/g)].map((val) => val[1]);
+};
 
 export const addEnvPrefix = (prefix, uri) => {
   // * 需要先判断uri是否已经包含 http:// 前缀
@@ -17,7 +25,6 @@ export const addEnvPrefix = (prefix, uri) => {
 //   '(^((http|wss|ws|ftp|https)://))|(^(((http|wss|ws|ftp|https)://)|)(([\\w\\-_]+([\\w\\-\\.]*)?(\\.(' +
 //   DOMAIN_CONSTANT.join('|') +
 //   ')))|((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(localhost))((\\/)|(\\?)|(:)|($)))';
-
 export const whatType = (data: any): string => {
   if (data === undefined) {
     return 'undefined';
@@ -42,8 +49,11 @@ export const whatType = (data: any): string => {
   }
   return 'unknown';
 };
-
-export const whatRootType = (tmpText) => {
+/**
+ * judge text content type
+ * @returns textType - xml|json|html|text
+ */
+export const whatTextType = (tmpText) => {
   // TODO it can be better
   const tmpCompareText = tmpText.replace(/\s/g, '');
   if (/^({|\[)(.*)(}|])$/.test(tmpCompareText) && JSON.parse(tmpCompareText)) {
