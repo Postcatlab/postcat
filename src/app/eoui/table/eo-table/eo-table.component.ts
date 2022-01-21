@@ -9,11 +9,11 @@ import {
   Output,
   EventEmitter,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { addKeyInTree, findDataInTree, flatData } from '../../../utils/tree';
 import { CellDirective } from './cell.directive';
-
 type Column = {
   title: string;
   key?: string;
@@ -104,16 +104,22 @@ export class EoTableComponent implements OnInit, OnChanges, AfterContentInit {
       this.slotMap[cellName] = templateRef;
     });
   }
-
-  handleEditData(data, nodeKey, key) {
-    console.log(data)
-    document.getElementById("mytext").focus();
-    // data.relatedTarget.focus()
-    data.path[0].focus();
-    this.data = this.listOfMapData.map((it) => findDataInTree(it, data.target.value, { id: nodeKey, key }));
+  handleEditData(event, nodeKey, key) {
+    this.data = this.listOfMapData.map((it) => findDataInTree(it, event.target.value, { id: nodeKey, key }));
+    let elLocation = event.relatedTarget.getBoundingClientRect();
     this.dataChange.emit(this.data);
+    /**
+     * ! Angular Onpush will reRender table cause input blur
+     * TODO use native dom to refator this component
+     */
+    setTimeout(() => {
+      let dom = document.elementFromPoint(elLocation.x, elLocation.y);
+      if (dom.tagName !== 'INPUT') {
+        dom = dom.getElementsByClassName('ant-input')[0];
+      }
+      (dom as HTMLInputElement).focus();
+    }, 0);
   }
-
   handleCopy(value) {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(value);
