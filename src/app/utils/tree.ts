@@ -1,7 +1,6 @@
-import { whatType } from '.';
 import { GroupTreeItem } from '../shared/models';
 /**
- * Convert array items have level without  parent id to  tree nodes
+ * Convert old component listBlock array items has level without  parent id to  tree nodes
  * @param list Array<GroupTreeItem>
  */
 export const listToTreeHasLevel = (
@@ -133,109 +132,4 @@ export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key 
     return it;
   };
   return findData(_data);
-};
-
-export const parseTree = (key, value, level = 0) => {
-  if (whatType(value) === 'object') {
-    return {
-      name: key,
-      required: true,
-      example: '',
-      type: 'object',
-      description: '',
-      listDepth: level,
-      children: Object.keys(value).map((it) => parseTree(it, value[it], level + 1)),
-    };
-  }
-  if (whatType(value) === 'array') {
-    const [data] = value;
-    return {
-      name: key,
-      required: true,
-      example: '',
-      type: 'array',
-      description: '',
-      listDepth: level,
-      children: data ? Object.keys(data).map((it) => parseTree(it, data[it], level + 1)) : [],
-    };
-  }
-  return {
-    name: key,
-    value,
-    description: '',
-    type: whatType(value),
-    required: true,
-    example: value || '',
-    listDepth: level,
-  };
-};
-
-export const form2json = (tmpl) =>
-  tmpl
-    .split('\n')
-    .filter((it) => it.trim())
-    .map((it) => it.split(':'))
-    .map((it) => {
-      const [key, value] = it;
-      return { key: key.trim(), value: value.trim() };
-    });
-
-export const xml2json = (tmpl) => {
-  // * delete <?xml ... ?>
-  let xml = tmpl.replace(/<\?xml.+\?>/g, '').trim();
-  if (xml === '') {
-    return [];
-  }
-  const startTag = /^<([^>\s\/]+)((\s+[^=>\s]+(\s*=\s*((\"[^"]*\")|(\'[^']*\')|[^>\s]+))?)*)\s*\/?\s*>/m;
-  const endTag = /^<\/([^>\s]+)[^>]*>/m;
-  const stack = [];
-  const result = [];
-  let start = null;
-  let index = null;
-  while (xml) {
-    // * handle end tags
-    if (xml.substring(0, 2) === '</') {
-      const end = xml.match(endTag);
-      const [str, label] = end;
-      const last = stack.pop();
-      if (last.tagName !== label) {
-        throw new Error('Parse error 101');
-      }
-      if (stack.length === 0) {
-        result.push(last);
-      } else {
-        const parent = stack.pop();
-        parent.children.push(last);
-        stack.push(parent);
-      }
-      xml = xml.substring(str.length);
-      continue;
-    }
-    // * handle start tags
-    if ((start = xml.match(startTag))) {
-      const [str, label, attr] = start;
-      stack.push({
-        tagName: label.trim(),
-        attr: attr.trim(),
-        content: '',
-        children: [],
-      });
-      xml = xml.trim().substring(str.length);
-      continue;
-    }
-    // * handle text content
-    if ((index = xml.indexOf('<') > 0)) {
-      const content = xml.slice(0, index);
-      const last = stack.pop();
-      last.content += content;
-      stack.push(last);
-      xml = xml.substring(index);
-      index = null;
-    }
-    xml = xml.trim();
-  }
-  if (stack.length) {
-    throw new Error('Parse error 102');
-  }
-  return result;
 };
