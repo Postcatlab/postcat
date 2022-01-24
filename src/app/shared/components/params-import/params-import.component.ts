@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { whatType } from '../../../utils';
+import { whatType, isXML } from '../../../utils';
 import { flatData } from '../../../utils/tree';
 import { form2json, parseTree, xml2UiData } from '../../../utils/data-transfer';
 @Component({
@@ -66,6 +66,11 @@ export class ParamsImportComponent {
       paramCode = JSON.parse(JSON.stringify(json));
     }
     if (this.contentType === 'xml') {
+      const status = isXML(this.paramCode);
+      if (!status) {
+        this.message.error('XML格式不合法');
+        return;
+      }
       paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
     }
     if (this.contentType === 'raw') {

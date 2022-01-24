@@ -1,4 +1,4 @@
-const { xml2json, form2json, parseTree } = require('../src/app/utils/tree');
+const { form2json, parseTree, xml2json } = require('../src/app/utils/data-transfer');
 
 describe('test the xml2json', () => {
   test('base', () => {
@@ -341,3 +341,25 @@ describe('test the parseTree', () => {
     expect(Object.keys(data).map((it) => parseTree(it, data[it]))).toEqual(result);
   });
 });
+
+// describe('xml util', () => {
+//   test('is xml?', () => {
+//     const status = isXML(`<?xml version="1.0" encoding="UTF-8" ?>
+//     <root>
+//         <type version="1.0">projectMember</type>
+//         <statusCode version="{{globalParams}}">000000</statusCode>
+//         <memberList>
+//             <connID>2787</connID>
+//             <memberNickName></memberNickName>
+//             <inviteCall>2177295417@qq.com</inviteCall>
+//             <userNickName>[随机]无崖子</userNickName>
+//             <userImage></userImage>
+//         </memberList>
+//     </root>`);
+//     expect(status).toEqual(true);
+//   });
+//   test('is not xml?', () => {
+//     const status = isXML('{"a":"b"}');
+//     expect(status).toEqual(false);
+//   });
+// });

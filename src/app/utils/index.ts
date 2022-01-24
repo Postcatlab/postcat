@@ -88,3 +88,18 @@ export const objectToArray = (obj) => {
     value: obj[val],
   }));
 };
+
+export const isXML = (data) => {
+  const parser = new DOMParser();
+  let xml = null;
+  try {
+    const xmlContent = parser.parseFromString(data, 'text/xml');
+    xml = xmlContent.getElementsByTagName('parsererror');
+  } catch (error) {
+    return false;
+  }
+  if (xml.length > 0) {
+    return false;
+  }
+  return true;
+};
