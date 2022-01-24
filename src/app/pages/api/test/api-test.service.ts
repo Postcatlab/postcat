@@ -4,6 +4,7 @@ import { ApiTestQuery } from '../../../shared/services/api-test/api-test-params.
 import { ApiTestHistory } from '../../../shared/services/api-test-history/api-test-history.model';
 
 import { treeToListHasLevel } from '../../../utils/tree';
+import { text2UiData } from '../../../utils/data-transfer';
 
 @Injectable()
 export class ApiTestService {
@@ -227,7 +228,7 @@ export class ApiTestService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
-    console.log(inData)
+    console.log(inData);
     let result = {
       testData: {
         uuid: inData.apiDataID,
@@ -251,6 +252,7 @@ export class ApiTestService {
    * @returns {ApiData}
    */
   getApiFromTestData(inData) {
+    console.log('getApiFromTestData=>', inData);
     let testToEditParams = (arr) => {
       let result = [];
       arr.forEach((val) => {
@@ -263,12 +265,23 @@ export class ApiTestService {
     };
     let result = {
       ...inData.testData,
+      responseHeaders: [],
+      responseBodyType: 'json',
+      responseBodyJsonType: 'object',
+      responseBody: [],
     };
     delete result.uuid;
     ['requestHeaders', 'requestBody', 'restParams', 'queryParams'].forEach((keyName) => {
       if (!result[keyName] || typeof result[keyName] !== 'object') return;
       result[keyName] = testToEditParams(result[keyName]);
     });
+    if(inData.history.response.responseType==='text'){
+      let bodyInfo=text2UiData(inData.history.response.body)
+      result.responseBody=bodyInfo.data;
+      result.responseBodyType=bodyInfo.textType;
+      result.responseBodyJsonType=bodyInfo.rootType;
+    }
+    console.log('getApiFromTestData=>', result);
     return result;
   }
   getTestDataFromApi(inData) {
@@ -298,8 +311,7 @@ export class ApiTestService {
             let typeSorts = [
               {
                 type: 'string',
-                match: ['file', 
-                'date', 'datetime', 'char', 'byte'],
+                match: ['file', 'date', 'datetime', 'char', 'byte'],
               },
               {
                 type: 'number',
@@ -325,7 +337,7 @@ export class ApiTestService {
       case 'formData': {
         inData.requestBody.forEach((val) => {
           val.value = val.example;
-          val.type='string';
+          val.type = 'string';
           delete val.example;
         });
         break;

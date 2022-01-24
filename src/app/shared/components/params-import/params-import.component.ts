@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { whatType } from '../../../utils';
-import { flatData, form2json, xml2json, parseTree } from '../../../utils/tree';
+import { flatData } from '../../../utils/tree';
+import { form2json, parseTree, xml2UiData } from '../../../utils/data-transfer';
 @Component({
   selector: 'params-import',
   templateUrl: './params-import.component.html',
@@ -14,8 +15,7 @@ export class ParamsImportComponent {
   @Output() baseDataChange = new EventEmitter<any>();
   isVisible = false;
   paramCode = '';
-
-  constructor(private message: NzMessageService) { }
+  constructor(private message: NzMessageService) {}
 
   get contentTypeTitle() {
     switch (this.contentType) {
@@ -66,19 +66,7 @@ export class ParamsImportComponent {
       paramCode = JSON.parse(JSON.stringify(json));
     }
     if (this.contentType === 'xml') {
-      const data: any[] = xml2json(this.paramCode);
-      const res = {};
-      const mapAttr = (obj: any) => {
-        const { tagName, attr, children } = obj;
-        return {
-          [tagName]: children.length ? mapAttr(children[0]) : attr,
-        };
-      };
-      data.forEach((it) => {
-        const { tagName, attr, children } = it;
-        res[tagName] = children.length ? mapAttr(children[0]) : attr;
-      });
-      paramCode = JSON.parse(JSON.stringify(res));
+      paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
     }
     if (this.contentType === 'raw') {
       paramCode = this.paramCode;
@@ -100,13 +88,6 @@ export class ParamsImportComponent {
     }
     // * tree to array for table render
     const cacheData = flatData(Object.keys(paramCode).map((it) => parseTree(it, paramCode[it])));
-    console.log(
-      JSON.stringify(
-        Object.keys(paramCode).map((it) => parseTree(it, paramCode[it])),
-        null,
-        2
-      )
-    );
     // TODO delete useless attribute in cacheData
     switch (type) {
       case 'mixin': {

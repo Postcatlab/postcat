@@ -16,9 +16,8 @@ import { MessageService } from '../../../shared/services/message';
 import { Group } from '../../../shared/services/group/group.model';
 import { GroupService } from '../../../shared/services/group/group.service';
 
-import { objectToArray } from '../../../utils';
+import { objectToArray,getRest } from '../../../utils';
 import { treeToListHasLevel, listToTree, listToTreeHasLevel } from '../../../utils/tree';
-import { getRest } from '../../../utils/api';
 
 @Component({
   selector: 'eo-api-edit-edit',
@@ -130,12 +129,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         //Add From Test
         Object.assign(
           this.apiData,
-          {
-            responseHeaders: [],
-            responseBodyType: 'json',
-            responseBodyJsonType: 'object',
-            responseBody: [],
-          },
           JSON.parse(testData)
         );
       } else {
