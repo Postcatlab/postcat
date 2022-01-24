@@ -37,9 +37,9 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
   set envUuid(value) {
     this.activeUuid = value || 0;
-    if(value){
+    if (value) {
       localStorage.setItem('env:selected', value.toString());
-    }else{
+    } else {
       localStorage.removeItem('env:selected');
     }
     this.changeStoreEnv(value);
@@ -61,6 +61,7 @@ export class EnvComponent implements OnInit, OnDestroy {
         return;
       }
       this.envList = result;
+      this.handleSwitchEnv(result[0].uuid);
     });
   }
 
