@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
-import { Observable, of, Subject } from 'rxjs';
-import { switchMap, debounceTime, take, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, take, takeUntil, pairwise, filter } from 'rxjs/operators';
 
 import { ApiEditRest } from '../../../shared/services/api-data/api-edit-params.model';
 import { ApiData, RequestProtocol, RequestMethod } from '../../../shared/services/api-data/api-data.model';
@@ -15,10 +15,12 @@ import { MessageService } from '../../../shared/services/message';
 
 import { Group } from '../../../shared/services/group/group.model';
 import { GroupService } from '../../../shared/services/group/group.service';
+import { ApiTabService } from '../tab/api-tab.service';
 
-import { objectToArray,getRest } from '../../../utils';
+import { objectToArray } from '../../../utils';
+import { getRest } from '../../../utils/api';
 import { treeToListHasLevel, listToTree, listToTreeHasLevel } from '../../../utils/tree';
-
+import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -33,7 +35,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
 
-  private api$: Observable<object>;
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
 
@@ -41,10 +42,10 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private storage: ApiDataService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private router: Router,
     private message: NzMessageService,
     private messageService: MessageService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private apiTab: ApiTabService
   ) {}
   getApiGroup() {
     this.groups = [];
@@ -115,22 +116,37 @@ export class ApiEditComponent implements OnInit, OnDestroy {
 
     this.editApi(formData);
   }
-
+  bindGetApiParamNum(params) {
+    return new ApiParamsNumPipe().transform(params);
+  }
   ngOnInit(): void {
     this.getApiGroup();
-    this.resetApi();
+    this.initApi(Number(this.route.snapshot.queryParams.uuid));
+    this.watchTabChange();
+    this.watchGroupIDChange();
+    this.watchUri();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  private initApi(id) {
+    this.resetForm();
     this.initBasicForm();
-    if (this.route.snapshot.queryParams.uuid) {
-      //Edit
-      this.watchQueryChange();
-    } else {
-      let testData = window.sessionStorage.getItem('testDataToAPI');
-      if (testData) {
-        //Add From Test
-        Object.assign(
-          this.apiData,
-          JSON.parse(testData)
-        );
+    //recovery from tab
+    if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
+      let tabData = this.apiTab.tabCache[this.apiTab.tabID];
+      this.apiData = tabData.apiData;
+      return;
+    }
+    if (!id) {
+      let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
+      if (tmpApiData) {
+        //Add From Test|Copy Api
+        window.sessionStorage.removeItem('apiDataWillbeSave');
+        Object.assign(this.apiData, JSON.parse(tmpApiData));
+        this.validateForm.patchValue(this.apiData);
       } else {
         //Add directly
         Object.assign(this.apiData, {
@@ -146,70 +162,56 @@ export class ApiEditComponent implements OnInit, OnDestroy {
           responseBody: [],
         });
       }
+    } else {
+      this.getApi(id);
     }
-
+  }
+  private watchTabChange() {
+    this.apiTab.tabChange$
+      .pipe(
+        pairwise(),
+        //actually change tab,not init tab
+        filter((data) => data[0].uuid !== data[1].uuid),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(([nowTab, nextTab]) => {
+        this.apiTab.saveTabData$.next({
+          tab: nowTab,
+          data: {
+            apiData: this.apiData,
+          },
+        });
+        this.initApi(nextTab.key);
+      });
+  }
+  private watchGroupIDChange() {
     this.changeGroupID$.pipe(debounceTime(500), take(1)).subscribe((id) => {
       this.apiData.groupID = (this.apiData.groupID === 0 ? -1 : this.apiData.groupID).toString();
       this.expandGroup();
-    });
-    this.validateForm
-      .get('uri')
-      .valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$))
-      .subscribe((url) => {
-        this.changeUri(url);
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-  private watchQueryChange() {
-    this.api$ = this.route.queryParamMap.pipe(
-      switchMap((params) => {
-        const id = Number(params.get('uuid'));
-        if (!id) {
-          const groupID = params.get('groupID');
-          if (groupID) {
-            return of({
-              groupID,
-            });
-          }
-          return of();
-        }
-        return of({ id });
-      }),
-      takeUntil(this.destroy$)
-    );
-    this.api$.subscribe({
-      next: (inArg: any = {}) => {
-        if (inArg.id) {
-          this.getApi(inArg.id);
-        }
-        if (inArg.groupID) {
-          this.apiData.groupID = inArg.groupID;
-          this.changeGroupID$.next(this.apiData.groupID);
-        }
-      },
     });
   }
   /**
    * Generate Rest Param From Url
    */
-  private changeUri(url) {
-    const rests = getRest(url);
-    rests.forEach((newRest) => {
-      if (this.apiData.restParams.find((val: ApiEditRest) => val.name === newRest)) {
-        return;
-      }
-      const restItem: ApiEditRest = {
-        name: newRest,
-        required: true,
-        example: '',
-        description: '',
-      };
-      this.apiData.restParams.splice(this.apiData.restParams.length - 1, 0, restItem);
-    });
+  private watchUri() {
+    this.validateForm
+      .get('uri')
+      .valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$))
+      .subscribe((url) => {
+        const rests = getRest(url);
+        rests.forEach((newRest) => {
+          if (this.apiData.restParams.find((val: ApiEditRest) => val.name === newRest)) {
+            return;
+          }
+          const restItem: ApiEditRest = {
+            name: newRest,
+            required: true,
+            example: '',
+            description: '',
+          };
+          this.apiData.restParams.splice(this.apiData.restParams.length - 1, 0, restItem);
+        });
+      });
   }
   /**
    * Reset Group ID after group list load
@@ -250,25 +252,24 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   /**
    * Init API data structure
    */
-  private resetApi() {
+  private resetForm() {
     this.apiData = {
       name: '',
       projectID: 1,
       uri: '/',
-      groupID: this.route.snapshot.queryParams.groupID||'-1',
+      groupID: this.route.snapshot.queryParams.groupID || '-1',
       protocol: RequestProtocol.HTTP,
       method: RequestMethod.POST,
     };
   }
 
   private editApi(formData) {
-    const busEvent = formData.uuid ? 'editApi' : 'apiAdd';
+    const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? '编辑成功' : '新增成功';
     this.storage[busEvent === 'editApi' ? 'update' : 'create'](formData, this.apiData.uuid).subscribe(
       (result: ApiData) => {
         this.message.success(title);
         this.messageService.send({ type: busEvent, data: result });
-        this.router.navigate(['/home/api/detail'], { queryParams: { uuid: result.uuid } });
       }
     );
   }

@@ -22,7 +22,7 @@
           }
         }
         .ant-tabs-nav-wrap {
-          width: calc(100% - 135px);
+          max-width: calc(100% - 135px);
           flex: none;
         }
         .ant-tabs-nav-add {

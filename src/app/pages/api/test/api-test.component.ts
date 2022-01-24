@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
 
@@ -8,7 +8,7 @@ import { ApiData, RequestMethod, RequestProtocol } from '../../../shared/service
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, of, Subject } from 'rxjs';
-import { take, takeUntil, distinctUntilChanged, pairwise } from 'rxjs/operators';
+import { take, takeUntil, distinctUntilChanged, pairwise, filter } from 'rxjs/operators';
 
 import { ApiTestHistoryComponent } from './history/api-test-history.component';
 
@@ -19,6 +19,7 @@ import { ApiTabService } from '../tab/api-tab.service';
 import { objectToArray } from '../../../utils';
 
 import { EnvState } from '../../../shared/store/env.state';
+import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 
 @Component({
   selector: 'eo-api-test',
@@ -47,18 +48,16 @@ export class ApiTestComponent implements OnInit, OnDestroy {
 
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
-  private api$: Observable<object>;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private fb: FormBuilder,
-    private router: Router,
-    private testServerService: TestServerService,
     private storage: ApiDataService,
     private route: ActivatedRoute,
-    private messageService: MessageService,
     private ref: ChangeDetectorRef,
     private apiTest: ApiTestService,
-    private apiTab: ApiTabService
+    private apiTab: ApiTabService,
+    private testServerService: TestServerService,
+    private messageService: MessageService
   ) {
     this.testServer = this.testServerService.getService();
     this.testServer.init((message) => {
@@ -105,8 +104,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       history: this.testResult,
       testData: this.apiData,
     });
-    window.sessionStorage.setItem('testDataToAPI', JSON.stringify(apiData));
-    this.router.navigate(['/home/api/edit']);
+    window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
+    this.apiTab.apiEvent$.next({action:'addApiFromTest',data:apiData})
   }
   changeQuery() {
     this.apiData.uri = this.apiTest.transferUrlAndQuery(this.apiData.uri, this.apiData.queryParams, {
@@ -119,6 +118,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       priority: 'url',
       replaceType: 'replace',
     }).query;
+  }
+  bindGetApiParamNum(params) {
+    return new ApiParamsNumPipe().transform(params);
   }
   ngOnInit(): void {
     this.initApi(Number(this.route.snapshot.queryParams.uuid));
@@ -215,16 +217,23 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   private watchTabChange() {
-    this.apiTab.tabChange$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(([nowTab, nextTab]) => {
-      this.apiTab.saveTabData$.next({
-        tab: nowTab,
-        data: {
-          apiData: this.apiData,
-          testResult: this.testResult,
-        },
+    this.apiTab.tabChange$
+      .pipe(
+        pairwise(),
+        //actually change tab,not init tab
+        filter((data) => data[0].uuid !== data[1].uuid),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(([nowTab, nextTab]) => {
+        this.apiTab.saveTabData$.next({
+          tab: nowTab,
+          data: {
+            apiData: this.apiData,
+            testResult: this.testResult,
+          },
+        });
+        this.initApi(nextTab.key);
       });
-      this.initApi(nextTab.key);
-    });
   }
   /**
    * Init API data structure

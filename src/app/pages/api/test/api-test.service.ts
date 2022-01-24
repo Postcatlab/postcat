@@ -146,7 +146,7 @@ export class ApiTestService {
    * @description Add query to URL and read query form url
    * @param {string} url - whole url include query
    * @param {object} query - ui query param
-   * @param {string} opts.priority - who's priority higher,url or query
+   * @param {string} opts.priority - which as priority higher,url or query
    * @param {string} opts.replaceType - replace means only keep replace array,merge means union
    * @returns {object} - {url:"",query:[]}
    */
@@ -252,7 +252,6 @@ export class ApiTestService {
    * @returns {ApiData}
    */
   getApiFromTestData(inData) {
-    console.log('getApiFromTestData=>', inData);
     let testToEditParams = (arr) => {
       let result = [];
       arr.forEach((val) => {
@@ -265,7 +264,7 @@ export class ApiTestService {
     };
     let result = {
       ...inData.testData,
-      responseHeaders: [],
+      responseHeaders: inData.history.response.headers,
       responseBodyType: 'json',
       responseBodyJsonType: 'object',
       responseBody: [],
@@ -281,7 +280,6 @@ export class ApiTestService {
       result.responseBodyType=bodyInfo.textType;
       result.responseBodyJsonType=bodyInfo.rootType;
     }
-    console.log('getApiFromTestData=>', result);
     return result;
   }
   getTestDataFromApi(inData) {
