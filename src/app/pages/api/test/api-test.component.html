@@ -23,7 +23,6 @@
           <input
             type="text"
             name="uri"
-            id="uri"
             nz-input
             formControlName="uri"
             [(ngModel)]="apiData.uri"
@@ -33,7 +32,16 @@
             {{ status === 'testing' ? '终止' : '发送' }}
             <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
           </button>
-          <button type="button" *ngIf="!apiData.uuid" nz-button nzType="default" (click)="saveTestDataToApi()" class="ml10">保存为新 API</button>
+          <button
+            type="button"
+            *ngIf="!apiData.uuid"
+            nz-button
+            nzType="default"
+            (click)="saveTestDataToApi()"
+            class="ml10"
+          >
+            保存为新 API
+          </button>
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
@@ -45,7 +53,9 @@
       <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
         <ng-template #headerTitleTmp>
           请求头部
-          <span class="eo-tab-icon">{{ apiData.requestHeaders | apiParamsNum }}</span>
+          <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.requestHeaders)">{{
+            apiData.requestHeaders | apiParamsNum
+          }}</span>
         </ng-template>
         <eo-api-test-header class="eo_theme_iblock bbd" [model]="apiData.requestHeaders"></eo-api-test-header>
       </nz-tab>
@@ -53,7 +63,14 @@
       <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
         <ng-template #bodyTitleTmp>
           请求体
-          <span class="eo-tab-icon">{{ apiData.requestBody | apiParamsNum }}</span>
+          <span
+            class="iconfont icon-circle eo-tab-theme-icon"
+            *ngIf="
+              ['formData', 'json', 'xml'].includes(apiData.requestBodyType)
+                ? bindGetApiParamNum(apiData.requestBody)
+                : apiData.requestBody?.length
+            "
+          ></span>
         </ng-template>
         <eo-api-test-body
           class="eo_theme_iblock bbd"
@@ -66,7 +83,9 @@
       <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
         <ng-template #queryTitleTmp>
           Query 参数
-          <span class="eo-tab-icon">{{ apiData.queryParams | apiParamsNum }}</span>
+          <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.queryParams)">{{
+            apiData.queryParams | apiParamsNum
+          }}</span>
         </ng-template>
         <eo-api-test-query
           class="eo_theme_iblock bbd"
@@ -77,7 +96,9 @@
       <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
         <ng-template #restTitleTmp>
           REST 参数
-          <span class="eo-tab-icon">{{ apiData.restParams | apiParamsNum }}</span>
+          <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
+            apiData.restParams | apiParamsNum
+          }}</span>
         </ng-template>
         <eo-api-test-rest class="eo_theme_iblock bbd" [model]="apiData.restParams"></eo-api-test-rest>
       </nz-tab>
@@ -85,7 +106,7 @@
     <!-- 响应信息 -->
     <nz-tabset
       [nzTabBarStyle]="{ 'padding-left': '10px' }"
-      [(nzSelectedIndex)]="this.tabIndexRes"
+      [(nzSelectedIndex)]="tabIndexRes"
       [nzAnimated]="false"
       class="mt10"
     >

@@ -47,7 +47,7 @@ export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (v
       val = opts.mapItem(val);
     }
     result.push(val);
-    if (val.children && val.children.length) {
+    if (val.children?.length) {
       result = result.concat(
         treeToListHasLevel(val.children, {
           listDepth: opts.listDepth + 1,

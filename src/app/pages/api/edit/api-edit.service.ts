@@ -213,11 +213,12 @@ export class ApiEditService {
             {
               key: '插入',
               operateName: 'insert',
-              itemExpression: `ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"`,
+              itemExpression: `ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"`
             },
             {
               key: '删除',
               operateName: 'delete',
+              itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"'
             },
           ],
         },

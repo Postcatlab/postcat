@@ -6,7 +6,6 @@
   (nzSelectChange)="switchTab()"
   [nzTabBarExtraContent]="extraTemplate"
 >
-
   <nz-tab *ngFor="let tab of tabs; let i = index" nzClosable [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <span class="mr5 method_text_{{ tab.method }}" *ngIf="tab.method">{{ tab.method.slice(0, 4) }}</span>

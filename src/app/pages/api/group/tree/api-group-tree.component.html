@@ -22,7 +22,7 @@
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
             <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi' })"><a>新建API</a></li>
-            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApiTest' })"><a>新建测试</a></li>
+            <!-- <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApiTest' })"><a>新建测试</a></li> -->
             <li nz-menu-item (click)="newGroup()"><a>新建分组</a></li>
           </ul>
         </nz-dropdown-menu>
@@ -48,7 +48,7 @@
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
         <div class="f_row_ac">
           <span class="iconfont icon-folder-outline fs16 mr5"></span>
-          <span>{{ node.title }}</span>
+          <span class="text_omit node_title">{{ node.title }}</span>
         </div>
         <span class="tree_node_operate">
           <button nz-dropdown [nzDropdownMenu]="groupMenu">
@@ -75,8 +75,10 @@
       <!-- Leaf -->
       <div class="tree_node f_row f_js_ac" *ngIf="node.isLeaf">
         <div class="f_row_ac">
-          <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">{{node.origin.method.slice(0, 4)}}</b>
-          {{ node.title }}
+          <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">{{
+            node.origin.method.slice(0, 4)
+          }}</b>
+          <span class="text_omit node_title">{{ node.title }}</span>
         </div>
         <span class="tree_node_operate">
           <button>

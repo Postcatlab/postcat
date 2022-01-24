@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AceConfigInterface, AceComponent, AceDirective } from 'ngx-ace-wrapper';
 import { whatTextType } from '../../../utils';
@@ -44,7 +44,7 @@ const eventHash = new Map()
   templateUrl: './eo-editor.component.html',
   styleUrls: ['./eo-editor.component.scss'],
 })
-export class EoEditorComponent implements AfterViewInit, OnChanges {
+export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
   @Input() code: string;
@@ -82,15 +82,7 @@ export class EoEditorComponent implements AfterViewInit, OnChanges {
 
   constructor(private message: NzMessageService) {}
 
-  ngAfterViewInit(): void {
-    // To get the Ace instance:
-    this.buttonList = this.eventList
-      .filter((it) => it !== 'type')
-      .map((it) => ({
-        event: it,
-        ...eventHash.get(it),
-      }));
-  }
+  ngAfterViewInit(): void {}
   ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
@@ -100,6 +92,15 @@ export class EoEditorComponent implements AfterViewInit, OnChanges {
         this.code = this.formatCode(this.code, type);
       }
     }
+  }
+  ngOnInit() {
+    // To get the Ace instance:
+    this.buttonList = this.eventList
+      .filter((it) => it !== 'type')
+      .map((it) => ({
+        event: it,
+        ...eventHash.get(it),
+      }));
   }
   log(event, txt) {
     console.log('ace event', event, txt);

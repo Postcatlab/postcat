@@ -17,7 +17,7 @@
     <p class="api_line">Rest 参数</p>
     <eo-api-detail-rest [model]="apiData.restParams"></eo-api-detail-rest>
   </div>
-  <div *ngIf="apiData.requestBody && apiData.requestBody.length">
+  <div *ngIf="apiData.requestBody?.length">
     <div class="api_line">
       Body 请求参数<nz-tag class="ml10" nzColor="default">{{ CONST.BODY_TYPE[apiData.requestBodyType] }}</nz-tag>
       <nz-tag *ngIf="apiData.requestBodyType==='json'" nzColor="default">最外层结构为：{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}</nz-tag>

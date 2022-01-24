@@ -4,9 +4,12 @@ import { TabItem } from './tab.model';
 export class ApiTabService {
   currentTab: TabItem;
   tabCache = {};
+  /**
+   * Tab Or Tab Content Change
+   */
   tabChange$: ReplaySubject<TabItem> = new ReplaySubject(1);
   saveTabData$: Subject<{ tab: TabItem; data: any }> = new Subject();
-
+  apiEvent$: Subject<{ action: string; data?: any }> = new Subject();
   get tabID(): number {
     return this.currentTab.uuid;
   }
