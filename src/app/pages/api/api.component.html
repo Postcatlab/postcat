@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
-          <nz-tabset class="inside_page_tab" *ngIf="this.id" nzLinkRouter>
+          <nz-tabset class="inside_page_tab"  *ngIf="this.id" nzLinkRouter>
             <nz-tab>
               <a *nzTabLink nz-tab-link [routerLink]="['detail']" queryParamsHandling="merge"> 文档 </a>
             </nz-tab>
