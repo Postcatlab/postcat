@@ -18,7 +18,18 @@ export const parseTree = (key, value, level = 0) => {
     };
   }
   if (whatType(value) === 'array') {
+    // * just by first
     const [data] = value;
+    if (whatType(data) === 'string') {
+      return {
+        name: key,
+        required: true,
+        example: JSON.stringify(value),
+        type: 'array',
+        description: '',
+        listDepth: level,
+      };
+    }
     return {
       name: key,
       required: true,
