@@ -23,11 +23,11 @@ export class ApiTestHistoryComponent implements OnInit {
   ) {
     this.initListConf();
   }
-  add(history: ApiTestHistory) {
+  add(history: ApiTestHistory,apiID) {
     this.apiTestHistory
       .create({
         projectID: 1,
-        apiDataID: this.apiID,
+        apiDataID: apiID,
         ...history,
       })
       .subscribe({

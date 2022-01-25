@@ -12,6 +12,7 @@ process.on('message', (message) => {
         process.send({
           action: 'finish',
           data: {
+            id: message.id,
             report: tmpInputReport,
             history: tmpInputHistory,
           },

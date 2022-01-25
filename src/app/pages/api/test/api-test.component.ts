@@ -105,7 +105,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       testData: this.apiData,
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    this.apiTab.apiEvent$.next({action:'addApiFromTest',data:apiData})
+    this.apiTab.apiEvent$.next({ action: 'addApiFromTest', data: apiData });
   }
   changeQuery() {
     this.apiData.uri = this.apiTest.transferUrlAndQuery(this.apiData.uri, this.apiData.queryParams, {
@@ -149,15 +149,27 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
     this.status$.next('tested');
   }
+  private addHistory(message, id) {
+    //Only has statusCode need save report
+    if (message.report.response.statusCode) {
+      this.historyComponent.add(message.history, id);
+    }
+  }
   /**
    * Receive Test Server Message
    */
   private receiveMessage(message) {
-    this.testResult = message.report;
-    //Only has statusCode need save report
-    if (this.testResult.response.statusCode) {
-      this.historyComponent.add(message.history);
+    // other tab test finish,support multiple tab test same time
+    if (message.id && this.apiTab.tabID !== message.id) {
+      this.apiTab.tabCache[message.id].testResult = message.report;
+      let tab = this.apiTab.tabs.find((val) => val.uuid === message.id);
+      if (tab) {
+        this.addHistory(message, tab.key);
+      }
+      return;
     }
+    this.testResult = message.report;
+    this.addHistory(message, this.apiData.uuid);
     this.status$.next('tested');
   }
   /**
@@ -249,6 +261,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       response: {},
       request: {},
     };
+    this.status$.next('start');
+    if (this.timer$) this.timer$.unsubscribe();
+    this.waitSeconds = 0;
+    this.tabIndexRes = 0;
   }
   /**
    * Init basic form,such as url,protocol,method

@@ -11,7 +11,7 @@
       </div>
       <div nz-col nzFlex="2">
         <nz-button-group>
-          <button nzType="primary" nz-button (click)="onClick({ event: $event, eventName: 'newApi' })">
+          <button nzType="primary" nz-button (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })">
             <i nz-icon nzType="plus"></i>
             API
           </button>
@@ -21,9 +21,9 @@
         </nz-button-group>
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
-            <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi' })"><a>新建API</a></li>
-            <!-- <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApiTest' })"><a>新建测试</a></li> -->
-            <li nz-menu-item (click)="newGroup()"><a>新建分组</a></li>
+            <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })"><a>新建API</a></li>
+            <!-- <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'testApi' })"><a>新建测试</a></li> -->
+            <li nz-menu-item (click)="addGroup()"><a>新建分组</a></li>
           </ul>
         </nz-dropdown-menu>
       </div>
@@ -33,10 +33,11 @@
 <div class="group_container group-tree pt10">
   <nz-tree
     [nzData]="treeNodes"
+    #apiGroup
     [nzSearchValue]="searchValue"
-    [nzExpandedKeys]="expandedKeys"
-    (nzClick)="treeItemClick($event)"
-    (nzExpandChange)="groupTreeEvent($event)"
+    [nzExpandedKeys]="expandKeys"
+    (nzClick)="clickTreeItem($event)"
+    (nzExpandChange)="toggleExpand()"
     nzDraggable
     nzBlockNode
     (nzOnDrop)="treeItemDrop($event)"
@@ -56,10 +57,10 @@
           </button>
           <nz-dropdown-menu #groupMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'newApi', node: node })">
+              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi', node: node })">
                 <a>添加 API</a>
               </li>
-              <li nz-menu-item (click)="newSubGroup(node)">
+              <li nz-menu-item (click)="addSubGroup(node)">
                 <a>新建子分组</a>
               </li>
               <li nz-menu-item (click)="editGroup(node)">
@@ -87,7 +88,7 @@
               nz-icon
               nzType="thunderbolt"
               nzTheme="outline"
-              (click)="onClick({ event: $event, eventName: 'testApi', node: node })"
+              (click)="operateApiEvent({ event: $event, eventName: 'testApi', node: node })"
             ></i>
           </button>
           <button nz-dropdown [nzDropdownMenu]="apiDataMenu">
@@ -95,13 +96,13 @@
           </button>
           <nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'editApi', node: node })">
+              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoEditApi', node: node })">
                 <a>编辑</a>
               </li>
-              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'copyApi', node: node })">
+              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })">
                 <a>复制</a>
               </li>
-              <li nz-menu-item (click)="onClick({ event: $event, eventName: 'deleteApi', node: node })">
+              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
                 <a>删除</a>
               </li>
             </ul>
