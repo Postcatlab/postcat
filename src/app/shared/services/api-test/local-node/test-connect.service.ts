@@ -114,8 +114,7 @@ export class TestServerLocalNodeService implements TestServer {
           });
           break;
         }
-        case ApiBodyType.Raw:
-        // case ApiBodyType.Binary: 
+        case ApiBodyType.Raw: // case ApiBodyType.Binary:
         {
           result = inData.requestBody;
           break;
@@ -145,7 +144,6 @@ export class TestServerLocalNodeService implements TestServer {
       env: formatEnv(opts.env),
       testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale),
     };
-    console.log('formatRequestData', result);
     return result;
   }
 
@@ -157,7 +155,7 @@ export class TestServerLocalNodeService implements TestServer {
    * @param  {object} report test result after test finish
    * @param  {object} history storage test history
    */
-  formatResponseData({ report, history }) {
+  formatResponseData({ report, history,id }) {
     let { httpCode, ...historyRes } = history.resultInfo;
     historyRes = {
       statusCode: httpCode,
@@ -165,7 +163,8 @@ export class TestServerLocalNodeService implements TestServer {
       body: historyRes.body || '',
       headers: historyRes.headers.map((val) => ({ name: val.key, value: val.value })),
     };
-    let result: { report: any; history: ApiTestHistoryFrame } = {
+    let result: { report: any; history: ApiTestHistoryFrame,id:number} = {
+      id:id,
       report: {
         general: report.general,
         request: {

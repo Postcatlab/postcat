@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { Message, MessageService } from '../../shared/services/message';
+import { ApiService } from './api.service';
 
-import { ApiTabService } from './tab/api-tab.service';
 @Component({
   selector: 'eo-api',
   templateUrl: './api.component.html',
   styleUrls: ['./api.component.scss'],
 })
-export class ApiComponent implements OnInit {
+export class ApiComponent implements OnInit, OnDestroy {
   /**
    * API uuid
    */
@@ -27,15 +29,36 @@ export class ApiComponent implements OnInit {
       title: '测试',
     },
   ];
-  constructor(
-    private route: ActivatedRoute,
-    private tabSerive: ApiTabService
-  ) {}
+  private destroy$: Subject<void> = new Subject<void>();
+
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.watchChangeRouter();
+    this.watchApiAction();
   }
-
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  watchApiAction(): void {
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'gotoCopyApi':
+            this.apiService.copy(inArg.data);
+            break;
+          case 'gotoDeleteApi':
+            this.apiService.delete(inArg.data);
+            break;
+          case 'gotoBulkDeleteApi':
+            this.apiService.bulkDelete(inArg.data.uuids);
+            break;
+        }
+      });
+  }
 
   /**
    * Get current API ID to show content tab
@@ -47,6 +70,6 @@ export class ApiComponent implements OnInit {
     });
   }
   clickContentMenu(data) {
-    this.tabSerive.apiEvent$.next({ action: 'beforeChangeRouter', data: data });
+    this.messageService.send({ type: 'beforeChangeRouter', data: data });
   }
 }

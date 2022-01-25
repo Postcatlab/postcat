@@ -2,6 +2,7 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { TabItem } from './tab.model';
 
 export class ApiTabService {
+  tabs: Array<TabItem> = [];
   currentTab: TabItem;
   tabCache = {};
   /**
