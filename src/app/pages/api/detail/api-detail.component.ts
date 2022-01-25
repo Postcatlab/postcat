@@ -29,7 +29,7 @@ export class ApiDetailComponent implements OnInit {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType)
   };
-  constructor(private apiService: ApiDataService, private route: ActivatedRoute) {
+  constructor(private apiDataService: ApiDataService, private route: ActivatedRoute) {
   }
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -41,7 +41,7 @@ export class ApiDetailComponent implements OnInit {
     });
   }
   getApiByUuid(id: number) {
-    this.apiService.load(id).subscribe((result: ApiData) => {
+    this.apiDataService.load(id).subscribe((result: ApiData) => {
       ['requestBody', 'responseBody'].forEach((tableName) => {
         if (['xml', 'json'].includes(result[`${tableName}Type`])) {
           result[tableName] = treeToListHasLevel(result[tableName]);

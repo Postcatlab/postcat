@@ -28,6 +28,7 @@ import { ApiTabService } from './tab/api-tab.service';
 import { MessageService } from '../../shared/services/message';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
+import { ApiService } from './api.service';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent];
 @NgModule({
@@ -54,6 +55,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent];
   ],
   declarations: [...COMPONENTS, ApiTabComponent],
   exports: [],
-  providers: [ApiDataService, GroupService, MessageService, ApiTabService],
+  providers: [ApiDataService, GroupService, MessageService, ApiTabService,ApiService],
 })
 export class ApiModule {}

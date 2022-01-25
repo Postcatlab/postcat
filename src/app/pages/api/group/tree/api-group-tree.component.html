@@ -36,7 +36,7 @@
     [nzSearchValue]="searchValue"
     [nzExpandedKeys]="expandedKeys"
     (nzClick)="treeItemClick($event)"
-    (nzExpandChange)="nzEvent($event)"
+    (nzExpandChange)="groupTreeEvent($event)"
     nzDraggable
     nzBlockNode
     (nzOnDrop)="treeItemDrop($event)"

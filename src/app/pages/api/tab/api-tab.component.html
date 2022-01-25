@@ -1,29 +1,32 @@
 <nz-tabset
   [(nzSelectedIndex)]="selectedIndex"
   nzType="editable-card"
-  (nzAdd)="newTab()"
+  nzHideAdd="true"
   (nzClose)="closeTab($event)"
-  (nzSelectChange)="switchTab()"
+  (nzSelectChange)="pickTab()"
   [nzTabBarExtraContent]="extraTemplate"
 >
   <nz-tab *ngFor="let tab of tabs; let i = index" nzClosable [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <span class="mr5 method_text_{{ tab.method }}" *ngIf="tab.method">{{ tab.method.slice(0, 4) }}</span>
-      {{ tab.title }}
+      <span class="text_omit tab_text"> {{ tab.title }}</span>
     </ng-template>
   </nz-tab>
 </nz-tabset>
 <ng-template #extraTemplate>
+  <button (click)="newTab()" class="ant-tabs-nav-add {{ tabs.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}">
+    <i nz-icon nzType="plus"></i>
+  </button>
   <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
     <button class="ant-tabs-nav-more"><i nz-icon nzType="ellipsis" nzTheme="outline"></i></button>
   </a>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item>关闭其它标签页</li>
-      <li nz-menu-item>关闭所有标签</li>
+      <li nz-menu-item (click)="operateTab('closeOther')">关闭所有标签（当前标签除外）</li>
+      <li nz-menu-item (click)="operateTab('closeAll')">关闭所有标签</li>
       <!-- <li nz-menu-item>关闭已保存</li> -->
-      <li nz-menu-item>关闭左侧标签页</li>
-      <li nz-menu-item>关闭右侧标签页</li>
+      <li nz-menu-item (click)="operateTab('closeLeft')">关闭左侧标签页</li>
+      <li nz-menu-item (click)="operateTab('closeRight')">关闭右侧标签页</li>
     </ul>
   </nz-dropdown-menu>
 </ng-template>

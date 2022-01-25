@@ -2,9 +2,9 @@
   <div class="t-1">
     <nz-tag [nzColor]="'#108ee9'">{{ apiData.protocol | uppercase }}</nz-tag>
     <nz-tag [nzColor]="'#0aa07a'">{{ apiData.method | uppercase }}</nz-tag>
-    <span>{{ apiData.uri }}</span>
+    <span class="mt10 dp_b text_omit">{{ apiData.uri }}</span>
   </div>
-  <p class="api_name">{{ apiData.name }}</p>
+  <p class="api_name text_omit">{{ apiData.name }}</p>
   <div *ngIf="apiData.requestHeaders && apiData.requestHeaders.length">
     <p class="api_line">请求头部</p>
     <eo-api-detail-header [model]="apiData.requestHeaders"></eo-api-detail-header>

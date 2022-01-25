@@ -1,3 +1,6 @@
+.tab_text{
+  max-width: 100px;
+}
 ::ng-deep {
   eo-api-tab {
     width: calc(100% - 160px);
@@ -18,7 +21,7 @@
           }
           .ant-tabs-tab-btn {
             font-size: 12px;
-            font-weight: bold;
+            display: flex;
           }
         }
         .ant-tabs-nav-wrap {
