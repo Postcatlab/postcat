@@ -18,7 +18,7 @@ export class EnvState {
   @Action(Change)
   changeEnv({ setState }, { data }) {
     setState({
-      env: data,
+      env: data || {},
     });
   }
 }

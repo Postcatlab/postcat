@@ -21,7 +21,6 @@ export class EnvComponent implements OnInit, OnDestroy {
   envInfo: any = {};
   envList: any[] = [];
   activeUuid = 0;
-  selectUuid = null;
   envListColumns = [
     { title: '变量名', key: 'name', isEdit: true },
     { title: '变量值', key: 'value', isEdit: true },
@@ -36,9 +35,9 @@ export class EnvComponent implements OnInit, OnDestroy {
     return Number(localStorage.getItem('env:selected')) || 0;
   }
   set envUuid(value) {
-    this.activeUuid = value || 0;
+    this.activeUuid = value;
     if (value) {
-      localStorage.setItem('env:selected', value.toString());
+      localStorage.setItem('env:selected', value == null ? '' : value.toString());
     } else {
       localStorage.removeItem('env:selected');
     }
@@ -47,6 +46,7 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getAllEnv();
+    this.changeStoreEnv(localStorage.getItem('env:selected'));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -143,7 +143,16 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
 
   private changeStoreEnv(uuid) {
-    const data = this.envList.find((val) => val.uuid === uuid);
-    this.store.dispatch(new Change(data));
+    if (uuid == null) {
+      this.store.dispatch(new Change(null));
+      return;
+    }
+    this.envService.loadAll().subscribe((result: Array<Environment>) => {
+      if (result.length === 0) {
+        return;
+      }
+      const data = result.find((val) => val.uuid === Number(uuid));
+      this.store.dispatch(new Change(data));
+    });
   }
 }
