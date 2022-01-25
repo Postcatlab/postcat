@@ -2,11 +2,7 @@
   <nz-sider nzTheme="light" nzWidth="250">
     <nz-content>
       <div class="inner-content">
-        <eo-api-group-tree
-          [treeNodes]="treeNodes"
-          (groupTreeEvent)="groupTreeEvent($event)"
-          (updateGroupTreeEvent)="updateGroupTreeEvent($event)"
-        ></eo-api-group-tree>
+        <eo-api-group-tree></eo-api-group-tree>
       </div>
     </nz-content>
   </nz-sider>
@@ -14,7 +10,7 @@
     <nz-content>
       <div class="inner-content">
         <div class="tabs-bar f_row">
-          <eo-api-tab class="fg1" [apiDataItems]="apiDataItems"></eo-api-tab>
+          <eo-api-tab class="fg1"></eo-api-tab>
           <div class="env">
             <eo-env></eo-env>
           </div>

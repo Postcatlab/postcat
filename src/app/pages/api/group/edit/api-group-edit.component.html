@@ -7,11 +7,14 @@
       </nz-form-control>
     </nz-form-item>
   </form>
-  <div *ngIf="isDelete">
-    删除<strong>{{ group.name }}</strong>后，该分组下的数据都会删除。该操作无法撤销，确认删除吗？
-  </div>
+  <p *ngIf="isDelete">
+    删除 <strong title="{{ group.name }}">{{
+      group.name.length > 50 ? group.name.slice(0, 50) + '...' : group.name
+    }}</strong
+    > 后，该分组下的数据都会删除。该操作无法撤销，确认删除吗？
+  </p>
 </div>
 <footer class="group_edit_footer">
-  <button nz-button nzType="primary" (click)='submit()' [nzLoading]="showLoading">确定</button>
+  <button nz-button nzType="primary" (click)="submit()" [nzLoading]="showLoading">确定</button>
   <button nz-button (click)="close()">取消</button>
 </footer>

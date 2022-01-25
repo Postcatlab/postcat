@@ -1,18 +1,20 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { TabItem } from './tab.model';
+import { ApiData } from '../../../shared/services/api-data/api-data.model';
+
 import { ApiTabService } from './api-tab.service';
-import { filter, Subject, takeUntil } from 'rxjs';
+
+import { min, Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
   styleUrls: ['./api-tab.component.scss'],
 })
-export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() apiDataItems;
-  id: number;
+export class ApiTabComponent implements OnInit, OnDestroy {
+  apiDataItems: { [key: number | string]: ApiData };
   /**
    * Tab items.
    */
@@ -30,18 +32,13 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
     test: { path: '/home/api/test', title: '新 API' },
     detail: { path: '/home/api/detail', title: 'API 详情' },
   };
-  MAX_LIMIT = 15;
+  MAX_TAB_LIMIT = 15;
 
   private destroy$: Subject<void> = new Subject<void>();
   constructor(private router: Router, private route: ActivatedRoute, private tabSerive: ApiTabService) {}
 
   ngOnInit(): void {
     this.watchApiAction();
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.apiDataItems && !changes.apiDataItems.previousValue && changes.apiDataItems.currentValue) {
-      this.initTab();
-    }
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -58,12 +55,13 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
    */
   initTab() {
     let apiID = Number(this.route.snapshot.queryParams.uuid);
+    let hasApiExist = this.apiDataItems[apiID];
+    //delete api
+    if (!hasApiExist) {
+      this.closeTab({ index: this.selectedIndex });
+      return;
+    }
     if (apiID) {
-      let hasApiExist = this.apiDataItems[apiID];
-      if (!hasApiExist) {
-        this.closeTab({ index: this.selectedIndex });
-        return;
-      }
       const tab = this.getTabInfo({
         id: apiID,
       });
@@ -81,7 +79,7 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
    * @param tab TabItem
    */
   appendTab(which = 'test', apiData: any = {}): void {
-    if (this.tabs.length >= this.MAX_LIMIT) return;
+    if (this.tabs.length >= this.MAX_TAB_LIMIT) return;
     let tab: TabItem = Object.assign(
       {
         uuid: new Date().getTime(),
@@ -89,20 +87,20 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
       which === 'unset' ? {} : this.defaultTabs[which],
       apiData
     );
-    let existTabIndex = this.tabs.findIndex((val) => val.key === tab.key);
-    if (tab.key && existTabIndex !== -1) {
-      this.selectedIndex = existTabIndex;
-      if (this.tabs[existTabIndex].path !== tab.path) {
-        //exist api(same tab) change page
-        this.tabs[existTabIndex].path = tab.path;
-        this.switchTab();
+    let existApiIndex = this.tabs.findIndex((val) => val.key === tab.key);
+    if (tab.key && existApiIndex !== -1) {
+      this.selectedIndex = existApiIndex;
+      if (this.tabs[existApiIndex].path !== tab.path) {
+        //* exist api in same tab change route,such as edit page to detail
+        this.tabs[existApiIndex].path = tab.path;
+        this.pickTab();
       }
       return;
     }
     this.tabs.push(tab);
     // if index no change,manual change  reflesh content
     if (this.selectedIndex === this.tabs.length - 1) {
-      this.switchTab();
+      this.pickTab();
       return;
     }
     this.selectedIndex = this.tabs.length - 1;
@@ -123,32 +121,68 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
       this.closeTab(item);
     });
   }
+  removeTabCache(index) {
+    if (!this.tabs[index]) return;
+    this.tabSerive.removeData(this.tabs[index].uuid);
+  }
   /**
    * Close Tab and keep tab status
    *
    * @param index number
    */
   closeTab({ index }: { index: number }): void {
-    if (this.tabs[index]) {
-      this.tabSerive.removeData(this.tabs[index].uuid);
-    }
-    this.tabs.splice(index, 1);
-    //no tab left
+    let selectIndex = this.selectedIndex <= index ? index - 1 : this.selectedIndex;
+    this.batchCloseTab([index], selectIndex);
+  }
+  batchCloseTab(closeTabs, selectIndex?) {
+    closeTabs.forEach((index) => {
+      this.removeTabCache(index);
+    });
+    this.tabs = this.tabs.filter((val, index) => !closeTabs.includes(index));
     if (0 === this.tabs.length) {
       this.newTab();
       return;
     }
-    //selectedIndex no change
-    if (this.selectedIndex < this.tabs.length) {
-      this.switchTab();
+    if (selectIndex !== this.selectedIndex) {
+      this.selectedIndex = selectIndex;
     }
   }
   /**
-   * router change after switch the tab or tab content
+   * Tab  Close operate
+   * @param action closeOther|closeAll|closeLeft|closeRight
+   */
+  oeprateCloseTab(action) {
+    let closeTabs = [...new Array(this.tabs.length).keys()],
+      tmpSelectIndex = 0;
+    switch (action) {
+      case 'closeOther':
+        closeTabs.splice(this.selectedIndex, 1);
+        break;
+      case 'closeLeft':
+        closeTabs = closeTabs.slice(0, this.selectedIndex);
+        break;
+      case 'closeRight':
+        closeTabs = closeTabs.slice(this.selectedIndex + 1);
+        tmpSelectIndex = this.selectedIndex;
+        break;
+    }
+    this.batchCloseTab(closeTabs, tmpSelectIndex);
+  }
+  /**
+   * Tab operate
+   * @param action closeOther|closeAll|closeLeft|closeRight
+   */
+  operateTab(action) {
+    if (action.includes('close')) {
+      this.oeprateCloseTab(action);
+    }
+  }
+  /**
+   * Pick tab after switch the tab or tab content
    * @param {TabItem} inArg.tab
    * @param inArg.index
    */
-  switchTab() {
+  pickTab() {
     let tab = this.tabs[this.selectedIndex];
     this.tabSerive.tabChange$.next(tab);
     this.activeRoute(tab);
@@ -170,6 +204,7 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
         case 'editApi':
           this.appendTab('edit', inArg.data.origin);
           break;
+        case 'copyApi':
         case 'newApi':
           this.appendTab('edit', inArg.data ? { groupID: inArg.data.key } : {});
           break;
@@ -180,6 +215,7 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
               apiData: inArg.data,
             })
           );
+          this.pickTab();
           break;
         }
         case 'addApiFinish':
@@ -190,11 +226,16 @@ export class ApiTabComponent implements OnInit, OnChanges, OnDestroy {
               apiData: inArg.data,
             })
           );
-          this.switchTab();
+          this.pickTab();
           break;
         }
         case 'removeApiDataTabs': {
           this.removeApiDataTabs(inArg.data);
+          break;
+        }
+        case 'afterLoadApi': {
+          this.apiDataItems = inArg.data;
+          this.initTab();
           break;
         }
         case 'beforeChangeRouter': {
