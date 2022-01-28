@@ -48,7 +48,7 @@
     "pack:win": "npm run electron:build && npm run wininstaller"
   },
   "dependencies": {
-    "@angular/animations": "13.0.3",
+    "@angular/animations": "13.0.1",
     "@angular/common": "13.0.1",
     "@angular/compiler": "13.0.1",
     "@angular/core": "13.0.1",
@@ -57,10 +57,11 @@
     "@angular/platform-browser": "13.0.1",
     "@angular/platform-browser-dynamic": "13.0.1",
     "@angular/router": "13.0.1",
-    "@angular/upgrade": "^13.0.2",
+    "@angular/upgrade": "13.0.1",
     "@ngxs/store": "3.7.3",
     "angular": "1.8.2",
     "dexie": "3.2.0",
+    "eoapi-core": "file:../eoapi-core",
     "js-beautify": "1.14.0",
     "ng-zorro-antd": "13.0.1",
     "ngx-ace-wrapper": "11.0.1",
