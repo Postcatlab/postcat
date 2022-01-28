@@ -135,7 +135,7 @@ export class TestServerAPIKitService implements TestServer {
     };
     const formatEnv = (env) => {
       let result = {
-        paramList: env.parameters.map((val) => ({ paramKey: val.name, paramValue: val.value })),
+        paramList: (env.parameters||[]).map((val) => ({ paramKey: val.name, paramValue: val.value })),
         frontURI: env.hostUri,
       };
       return result;

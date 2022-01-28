@@ -39,7 +39,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     public tabSerive: ApiTabService,
     private messageService: MessageService
   ) {}
-
   ngOnInit(): void {
     this.watchApiAction();
   }
@@ -149,8 +148,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     }
     if (selectIndex !== this.selectedIndex) {
       this.selectedIndex = selectIndex;
-    }else{
-      this.pickTab()
+    } else {
+      this.pickTab();
     }
   }
   /**
