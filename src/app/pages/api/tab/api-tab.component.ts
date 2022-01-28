@@ -215,8 +215,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
           case 'gotoAddApi':
             this.appendTab('edit', inArg.data ? { groupID: inArg.data.key } : {});
             break;
-          case 'addApi':
-          case 'editApi':
+          case 'addApiSuccess':
+          case 'editApiSuccess':
             this.changeCurrentTab(
               this.getTabInfo({
                 path: this.defaultTabs['detail'].path,
@@ -225,10 +225,10 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             );
             this.pickTab();
             break;
-          case 'deleteApi':
+          case 'deleteApiSuccess':
             this.removeApiDataTabs([inArg.data.uuid]);
             break;
-          case 'bulkDeleteApi':
+          case 'bulkDeleteApiSuccess':
             this.removeApiDataTabs(inArg.data.uuids);
             break;
           case 'loadApi': {

@@ -19,7 +19,7 @@ import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';
 import { getRest } from '../../../utils/api';
-import { treeToListHasLevel, listToTree, listToTreeHasLevel } from '../../../utils/tree';
+import { treeToListHasLevel, listToTree, listToTreeHasLevel, getExpandGroupByKey } from '../../../utils/tree';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 @Component({
   selector: 'eo-api-edit-edit',
@@ -228,16 +228,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Expand Select Group
    */
   private expandGroup() {
-    let treeNode = this.apiGroup.getTreeNodeByKey(this.apiData.groupID.toString());
-    if (!treeNode) {
-      return;
-    }
-    const expandKeys = [];
-    while (treeNode.parentNode) {
-      expandKeys.push(treeNode.parentNode.key);
-      treeNode = treeNode.parentNode;
-    }
-    this.expandKeys = expandKeys;
+    this.expandKeys=getExpandGroupByKey(this.apiGroup,this.apiData.groupID.toString())
   }
   /**
    * Init basic form,such as url,protocol,method
@@ -269,7 +260,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.storage[busEvent === 'editApi' ? 'update' : 'create'](formData, this.apiData.uuid).subscribe(
       (result: ApiData) => {
         this.message.success(title);
-        this.messageService.send({ type: busEvent, data: result });
+        this.messageService.send({ type: `${busEvent}Success`, data: result });
       }
     );
   }

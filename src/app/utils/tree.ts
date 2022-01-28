@@ -133,3 +133,16 @@ export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key 
   };
   return findData(_data);
 };
+
+export const getExpandGroupByKey = (component, key) => {
+  let treeNode = component.getTreeNodeByKey(key);
+  if (!treeNode) {
+    return;
+  }
+  const expandKeys = [];
+  while (treeNode.parentNode) {
+    expandKeys.push(treeNode.parentNode.key);
+    treeNode = treeNode.parentNode;
+  }
+  return expandKeys;
+};
