@@ -29,14 +29,14 @@ export class ApiService {
       }</strong> 吗？删除后不可恢复！`,
       nzOnOk: () => {
         this.apiDataService.remove(apiData.uuid).subscribe((result: boolean) => {
-          this.messageService.send({ type: 'deleteApi', data: { uuid: apiData.uuid } });
+          this.messageService.send({ type: 'deleteApiSuccess', data: { uuid: apiData.uuid } });
         });
       },
     });
   }
   bulkDelete(apis) {
     this.apiDataService.bulkRemove(apis).subscribe((result) => {
-      this.messageService.send({ type: 'bulkDeleteApi', data: { uuids: apis } });
+      this.messageService.send({ type: 'bulkDeleteApiSuccess', data: { uuids: apis } });
     });
   }
 }
