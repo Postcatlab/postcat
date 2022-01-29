@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgxsModule } from '@ngxs/store';
 
 //Other module
@@ -22,6 +23,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     BrowserAnimationsModule,
     CoreModule,
     AppRoutingModule,
+    HttpClientModule,
     UpgradeModule,
     NzModalModule,
     NgxsModule.forRoot([EnvState]),
