@@ -3,6 +3,7 @@
   "directories": {
     "output": "release/"
   },
+  "publish": ["github"],
   "files": [
     "**/*",
     "!**/*.ts",
