@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { ApiTestQuery } from '../../../shared/services/api-test/api-test-params.model';
-import { ApiTestHistory } from '../../../shared/services/api-test-history/api-test-history.model';
-
+import { ApiTestHistory } from 'eoapi-core';
 import { treeToListHasLevel } from '../../../utils/tree';
 import { text2UiData } from '../../../utils/data-transfer';
 

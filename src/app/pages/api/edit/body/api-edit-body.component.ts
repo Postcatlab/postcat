@@ -12,12 +12,7 @@ import {
 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
-import {
-  ApiParamsTypeFormData,
-  ApiParamsTypeJsonOrXml,
-} from '../../../../shared/services/api-data/api-edit-params.model';
-import { ApiEditBody } from '../../../../shared/services/api-data/api-edit-params.model';
-import { ApiBodyType, JsonRootType } from '../../../../shared/services/api-data/api-data.model';
+import { ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, ApiEditBody, ApiBodyType, JsonRootType } from 'eoapi-core';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-body',

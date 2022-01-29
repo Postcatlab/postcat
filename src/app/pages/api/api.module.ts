@@ -22,13 +22,12 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
-import { ApiDataService } from '../../shared/services/api-data/api-data.service';
-import { GroupService } from '../../shared/services/group/group.service';
 import { ApiTabService } from './tab/api-tab.service';
 import { MessageService } from '../../shared/services/message';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { ApiService } from './api.service';
+import { EOService } from '../../shared/services/eo.service';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent];
 @NgModule({
@@ -55,6 +54,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent];
   ],
   declarations: [...COMPONENTS, ApiTabComponent],
   exports: [],
-  providers: [ApiDataService, GroupService, MessageService, ApiTabService,ApiService],
+  providers: [EOService, MessageService, ApiTabService, ApiService],
 })
 export class ApiModule {}

@@ -1,12 +1,9 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
-
-import { ApiBodyType } from '../../api-data/api-data.model';
+import { ApiBodyType, ApiTestHistoryFrame } from 'eoapi-core';
 import { TestLocalNodeData } from '../local-node/api-server-data.model';
-
 import { formatDate } from '@angular/common';
 import { listToTreeHasLevel } from '../../../../utils/tree';
 import { TestServer } from '../test-server.model';
-import { ApiTestHistoryFrame } from '../../api-test-history/api-test-history.model';
 @Injectable()
 export class TestServerAPIKitService implements TestServer {
   socket: WebSocket;

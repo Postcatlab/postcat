@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef,AfterViewChecked,OnChanges } from '@angular/core';
-import { ApiEditQuery } from '../../../../shared/services/api-data/api-edit-params.model';
+import { ApiEditQuery } from 'eoapi-core';
 import { ApiEditService } from '../api-edit.service';
 
 @Component({

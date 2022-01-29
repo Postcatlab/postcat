@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges } from '@angular/core';
-import { ApiEditHeaders } from '../../../../shared/services/api-data/api-edit-params.model';
+import { ApiEditHeaders } from 'eoapi-core';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-header',

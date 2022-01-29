@@ -3,12 +3,8 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
-import { ApiTestBody } from '../../../../shared/services/api-test/api-test-params.model';
-import { ApiBodyType, JsonRootType } from '../../../../shared/services/api-data/api-data.model';
-import {
-  ApiTestParamsTypeFormData,
-  ApiTestParamsTypeJsonOrXml,
-} from '../../../../shared/services/api-test/api-test-params.model';
+import { ApiTestParamsTypeFormData, ApiTestParamsTypeJsonOrXml, ApiTestBody } from '../../../../shared/services/api-test/api-test-params.model';
+import { ApiBodyType, JsonRootType } from 'eoapi-core';
 import { ApiTestService } from '../api-test.service';
 import { Message, MessageService } from '../../../../shared/services/message';
 

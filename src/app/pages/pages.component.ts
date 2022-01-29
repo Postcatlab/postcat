@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EO } from 'eoapi-core';
 
 @Component({
   selector: 'eo-pages',
@@ -11,8 +10,6 @@ export class PagesComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    const eo = new EO();
-    eo.hookDemo();
   }
 
 }

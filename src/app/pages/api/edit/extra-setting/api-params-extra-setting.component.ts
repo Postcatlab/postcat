@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ParamsEnum } from '../../../../shared/services/api-data/api-edit-params.model';
-import { BasiApiEditParams } from '../../../../shared/services/api-data/api-edit-params.model';
+import { ParamsEnum, BasiApiEditParams } from 'eoapi-core';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { TestServerLocalNodeService } from './local-node/test-connect.service';
 import { TestServerAPIKitService } from './apikit-node/test-connect.service';
 import { ElectronService } from '../../../core/services';
-import { TestServer } from './test-server.model';
 @Injectable()
 export class TestServerService {
   isElectron = true;

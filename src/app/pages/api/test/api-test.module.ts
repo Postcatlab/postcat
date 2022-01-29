@@ -26,7 +26,6 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { ByteToStringPipe } from './result-response/get-size.pipe';
 
-import { ApiTestHistoryService } from '../../../shared/services/api-test-history/api-test-history.service';
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
 import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
@@ -83,6 +82,6 @@ const COMPONENTS = [
     SharedModule,
     ParamsImportModule,
   ],
-  providers: [ApiTestHistoryService, ApiTestService, TestServerService, TestServerLocalNodeService,TestServerAPIKitService],
+  providers: [ApiTestService, TestServerService, TestServerLocalNodeService,TestServerAPIKitService],
 })
 export class ApiTestModule {}

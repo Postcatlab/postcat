@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Group } from '../../../../shared/services/group/group.model';
+import { Group } from 'eoapi-core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { GroupService } from '../../../../shared/services/group/group.service';
+import { EOService } from '../../../../shared/services/eo.service';
 
 @Component({
   selector: 'eo-api-group-edit',
@@ -20,7 +20,7 @@ export class ApiGroupEditComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalRef: NzModalRef,
-    private groupService: GroupService,
+    private eo: EOService,
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +64,7 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   create(): void {
-    this.groupService.create(this.group).subscribe((data: Group) => {
+    this.eo.getStorage().groupCreate(this.group).subscribe((data: Group) => {
       this.showLoading = false;
       this.modalRef.destroy({type: 'createGroup', data: {group: data}});
     }, error => {
@@ -74,7 +74,7 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   update(): void {
-    this.groupService.update(this.group, this.group.uuid).subscribe((data: Group) => {
+    this.eo.getStorage().groupUpdate(this.group, this.group.uuid).subscribe((data: Group) => {
       this.showLoading = false;
       this.modalRef.destroy({type: 'updateGroup', data: {group: data}});
     }, error => {
@@ -84,7 +84,7 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   delete(): void {
-    this.groupService.remove(this.group.uuid).subscribe(data => {
+    this.eo.getStorage().groupRemove(this.group.uuid).subscribe(data => {
       this.showLoading = false;
       this.modalRef.destroy({type: 'deleteGroup', data: {group: this.group}});
     }, error => {

@@ -7,14 +7,10 @@ import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
 import { Subject } from 'rxjs';
 import { debounceTime, take, takeUntil, pairwise, filter } from 'rxjs/operators';
-
-import { ApiEditRest } from '../../../shared/services/api-data/api-edit-params.model';
-import { ApiData, RequestProtocol, RequestMethod } from '../../../shared/services/api-data/api-data.model';
-import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
 import { MessageService } from '../../../shared/services/message';
 
-import { Group } from '../../../shared/services/group/group.model';
-import { GroupService } from '../../../shared/services/group/group.service';
+import { Group, ApiData, RequestProtocol, RequestMethod, ApiEditRest } from 'eoapi-core';
+import { EOService } from '../../../shared/services/eo.service';
 import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';
@@ -39,17 +35,16 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private changeGroupID$: Subject<string | number> = new Subject();
 
   constructor(
-    private storage: ApiDataService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private message: NzMessageService,
     private messageService: MessageService,
-    private groupService: GroupService,
+    private eo: EOService,
     private apiTab: ApiTabService
   ) {}
   getApiGroup() {
     this.groups = [];
-    this.groupService.loadAllByProjectID(1).subscribe((items: Array<Group>) => {
+    this.eo.getStorage().groupLoadAllByProjectID(1).subscribe((items: Array<Group>) => {
       const treeItems: any = [
         {
           title: '根目录',
@@ -76,7 +71,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   getApi(id) {
-    this.storage.load(id).subscribe((result: ApiData) => {
+    this.eo.getStorage().apiDataLoad(id).subscribe((result: ApiData) => {
       ['requestBody', 'responseBody'].forEach((tableName) => {
         if (['xml', 'json'].includes(result[`${tableName}Type`])) {
           result[tableName] = treeToListHasLevel(result[tableName]);
@@ -264,13 +259,19 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
 
   private editApi(formData) {
-    const busEvent = formData.uuid ? 'editApi' : 'addApi';
-    const title = busEvent === 'editApi' ? '编辑成功' : '新增成功';
-    this.storage[busEvent === 'editApi' ? 'update' : 'create'](formData, this.apiData.uuid).subscribe(
-      (result: ApiData) => {
-        this.message.success(title);
-        this.messageService.send({ type: busEvent, data: result });
-      }
-    );
+
+    if (formData.uuid) {
+      this.eo.getStorage().apiDataUpdate(formData, this.apiData.uuid).subscribe(
+        (result: ApiData) => {
+          this.message.success('编辑成功');
+          this.messageService.send({ type: 'editApi', data: result });
+        });
+    } else {
+      this.eo.getStorage().apiDataCreate(formData).subscribe(
+        (result: ApiData) => {
+          this.message.success('新增成功');
+          this.messageService.send({ type: 'addApi', data: result });
+        });
+    }
   }
 }

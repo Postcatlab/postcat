@@ -60,7 +60,6 @@
     "@angular/upgrade": "13.0.1",
     "@ngxs/store": "3.7.3",
     "angular": "1.8.2",
-    "dexie": "3.2.0",
     "eoapi-core": "file:../eoapi-core",
     "js-beautify": "1.14.0",
     "ng-zorro-antd": "13.0.1",

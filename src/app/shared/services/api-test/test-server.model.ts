@@ -1,5 +1,4 @@
-import { ApiTestHistoryFrame } from '../api-test-history/api-test-history.model';
-import { Environment } from '../environment/environment.model';
+import { Environment, ApiTestHistoryFrame } from 'eoapi-core';
 export interface TestServer {
   init: (receiveMessage: (message: any) => void) => void;
   send: (action: string, message: any) => void;
