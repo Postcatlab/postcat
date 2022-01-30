@@ -52,6 +52,7 @@ export class ParamsImportComponent {
     if (this.contentType === 'json') {
       try {
         paramCode = JSON.parse(this.paramCode);
+        console.log('lll', paramCode);
       } catch (error) {
         this.message.error('JSON格式不合法');
         return;
@@ -72,6 +73,7 @@ export class ParamsImportComponent {
         return;
       }
       paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
+      console.log('-->', paramCode);
     }
     if (this.contentType === 'raw') {
       paramCode = this.paramCode;
@@ -83,10 +85,10 @@ export class ParamsImportComponent {
       // TODO Perhaps should be handled about format compatibility later.
       console.warn('The code that you input is no-equal to the root type.');
     }
-    if (whatType(paramCode) === 'object') {
-      // console.log('kk', paramCode);
-      // * transform to array of table format.
-    }
+    // if (whatType(paramCode) === 'object') {
+    // console.log('kk', paramCode);
+    // * transform to array of table format.
+    // }
     if (this.rootType === 'array' && whatType(paramCode) === 'array') {
       // * only select first data
       const [data] = paramCode;

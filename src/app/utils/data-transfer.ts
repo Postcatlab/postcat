@@ -130,9 +130,10 @@ interface uiData {
 }
 export const xml2UiData = (text) => {
   const data: any[] = xml2json(text);
+  console.log('=>', data);
   const result = {};
   const mapAttr = (obj: any) => {
-    const { tagName, attr, children } = obj;
+    const { tagName, attr, children, content } = obj;
     return {
       [tagName]: children.length ? mapAttr(children[0]) : attr,
     };
