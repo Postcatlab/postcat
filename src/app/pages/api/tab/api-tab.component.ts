@@ -50,12 +50,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * Create a new tab.
    */
   newTab(): void {
-    this.appendTab('test');
+    this.appendOrSwitchTab('test');
   }
   /**
    * Init tab data after load or update.
    */
-  initTab() {
+  private initTab() {
     let apiID = Number(this.route.snapshot.queryParams.uuid);
     let hasApiExist = this.apiDataItems[apiID];
     //delete api
@@ -67,52 +67,67 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       const tab = this.getTabInfo({
         id: apiID,
       });
-      this.appendTab('unset', tab);
+      this.appendOrSwitchTab('unset', tab);
     } else {
       let module = Object.keys(this.defaultTabs).find((keyName) =>
         this.router.url.split('?')[0].includes(this.defaultTabs[keyName].path)
       );
-      this.appendTab(module, this.route.snapshot.queryParams);
+      this.appendOrSwitchTab(module, this.route.snapshot.queryParams);
     }
   }
   /**
-   * Push new tab.
-   *
-   * @param tab TabItem
+   * Append or switch tab
+   * @param which test|detail|edit
+   * @param tabContent
    */
-  appendTab(which = 'test', apiData: any = {}): void {
+  private appendOrSwitchTab(which = 'test', tabContent: any = {}): void {
     if (this.tabSerive.tabs.length >= this.MAX_TAB_LIMIT) return;
     let tab: TabItem = Object.assign(
       {
         uuid: new Date().getTime(),
       },
       which === 'unset' ? {} : this.defaultTabs[which],
-      apiData
+      tabContent
     );
     let existApiIndex = this.tabSerive.tabs.findIndex((val) => val.key === tab.key);
     if (tab.key && existApiIndex !== -1) {
-      this.selectedIndex = existApiIndex;
+      let switchTab = {};
       if (this.tabSerive.tabs[existApiIndex].path !== tab.path) {
         //* exist api in same tab change route,such as edit page to detail
-        this.tabSerive.tabs[existApiIndex].path = tab.path;
-        this.pickTab();
+        switchTab['path'] = tab.path;
       }
+      this.switchTab(existApiIndex, switchTab);
       return;
     }
+    this.appendTab(tab);
+  }
+  private appendTab(tab) {
     this.tabSerive.tabs.push(tab);
+    this.changeSelectIndex(this.tabSerive.tabs.length - 1);
+  }
+  /**
+   * Switch to exist tab or replace exist tab content
+   * @param selectIndex
+   * @param tab
+   */
+  private switchTab(selectIndex, tab = {}) {
+    Object.assign(this.tabSerive.tabs[selectIndex], tab);
+    this.changeSelectIndex(selectIndex);
+  }
+  private changeSelectIndex(selectIndex) {
     // if index no change,manual change  reflesh content
-    if (this.selectedIndex === this.tabSerive.tabs.length - 1) {
+    if (this.selectedIndex === selectIndex) {
       this.pickTab();
       return;
     }
-    this.selectedIndex = this.tabSerive.tabs.length - 1;
+    this.selectedIndex = selectIndex;
   }
   /**
    * Remove api data tabs.
    *
    * @param uuids Array<string|number>
    */
-  removeApiDataTabs(uuids: Array<string | number>): void {
+  private removeApiDataTabs(uuids: Array<string | number>): void {
     const items = [];
     this.tabSerive.tabs.forEach((tab: TabItem, index: number) => {
       if (uuids.includes(tab.key)) {
@@ -123,7 +138,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       this.closeTab(item);
     });
   }
-  removeTabCache(index) {
+  private removeTabCache(index) {
     if (!this.tabSerive.tabs[index]) return;
     this.tabSerive.removeData(this.tabSerive.tabs[index].uuid);
   }
@@ -203,27 +218,27 @@ export class ApiTabComponent implements OnInit, OnDestroy {
         console.log('watchApiAction', inArg);
         switch (inArg.type) {
           case 'testApi':
-            this.appendTab('test', inArg.data ? inArg.data.origin : {});
+            this.appendOrSwitchTab('test', inArg.data ? inArg.data.origin : {});
             break;
           case 'detailApi':
-            this.appendTab('detail', inArg.data.origin);
+            this.appendOrSwitchTab('detail', inArg.data.origin);
             break;
           case 'gotoEditApi':
-            this.appendTab('edit', inArg.data.origin);
+            this.appendOrSwitchTab('edit', inArg.data.origin);
             break;
           case 'copyApi':
           case 'gotoAddApi':
-            this.appendTab('edit', inArg.data ? { groupID: inArg.data.key } : {});
+            this.appendOrSwitchTab('edit', inArg.data ? { groupID: inArg.data.key } : {});
             break;
           case 'addApiSuccess':
           case 'editApiSuccess':
-            this.changeCurrentTab(
+            this.switchTab(
+              this.selectedIndex,
               this.getTabInfo({
                 path: this.defaultTabs['detail'].path,
                 apiData: inArg.data,
               })
             );
-            this.pickTab();
             break;
           case 'deleteApiSuccess':
             this.removeApiDataTabs([inArg.data.uuid]);
@@ -237,7 +252,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             break;
           }
           case 'beforeChangeRouter': {
-            this.changeCurrentTab(
+            this.switchTab(
+              this.selectedIndex,
               this.getTabInfo({
                 path: this.defaultTabs[inArg.data.routerLink].path,
                 id: Number(this.route.snapshot.queryParams.uuid),
@@ -246,13 +262,13 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             break;
           }
           case 'addApiFromTest': {
-            this.changeCurrentTab(
+            this.switchTab(
+              this.selectedIndex,
               this.getTabInfo({
                 path: this.defaultTabs['edit'].path,
                 apiData: inArg.data,
               })
             );
-            this.pickTab();
             break;
           }
         }
@@ -270,9 +286,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       })
       .finally();
   }
-  private changeCurrentTab(tabInfo) {
-    this.tabSerive.tabs[this.selectedIndex] = Object.assign(this.tabSerive.tabs[this.selectedIndex], tabInfo);
-  }
   /**
    * Get tab info by api id or api data
    * @param inArg.id exist api id
@@ -285,7 +298,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       path: inArg.path || this.router.url.split('?')[0],
       title: apiData.name,
       method: apiData.method,
-      key: apiData.uuid,
+      key: apiData.uuid?.toString(),
     };
     return result;
   }

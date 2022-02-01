@@ -1,7 +1,8 @@
 <ul class="eo_sidebar" [ngClass]="{ eo_sidebar_shrink: isCollapsed }">
-  <li  nz-tooltip [nzTooltipTitle]="isCollapsed ? 'API' : ''" class="sidebar_item sidebar_item_active">
-    <span class="iconfont fs28 icon-link"></span>
-    <span *ngIf="!isCollapsed">API</span>
-  </li>
+  <a routerLink="home/api">
+    <li nz-tooltip  [nzTooltipTitle]="isCollapsed ? 'API' : ''" class="sidebar_item sidebar_item_active">
+      <span class="iconfont fs28 icon-link"></span>
+      <span *ngIf="!isCollapsed">API</span>
+    </li>
+  </a>
 </ul>
-
