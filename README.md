@@ -1,6 +1,6 @@
 # NodeJS
 
-requires a minimum Node.js version of either v12.20, v14.15, or v16.10.
+NodeJS requires a minimum Node.js version of v14.17
 
 # 安装依赖
 
@@ -8,7 +8,7 @@ requires a minimum Node.js version of either v12.20, v14.15, or v16.10.
 npm ci
 ```
 
-# 启动应用
+# 命令行
 
 ```
 npm  start
