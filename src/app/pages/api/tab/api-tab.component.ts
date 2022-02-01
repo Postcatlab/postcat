@@ -65,7 +65,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     }
     if (apiID) {
       const tab = this.getTabInfo({
-        id: apiID,
+        tabData: this.apiDataItems[apiID],
       });
       this.appendOrSwitchTab('unset', tab);
     } else {
@@ -81,7 +81,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param tabContent
    */
   private appendOrSwitchTab(which = 'test', tabContent: any = {}): void {
-    if (this.tabSerive.tabs.length >= this.MAX_TAB_LIMIT) return;
     let tab: TabItem = Object.assign(
       {
         uuid: new Date().getTime(),
@@ -99,9 +98,15 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       this.switchTab(existApiIndex, switchTab);
       return;
     }
+    // avoid open too much tab,if detail or no change,open page in current tab
+    if(this.tabSerive.currentTab?.path.includes('detail')){
+      this.switchTab(this.selectedIndex, tab);
+      return;
+    }
     this.appendTab(tab);
   }
   private appendTab(tab) {
+    if (this.tabSerive.tabs.length >= this.MAX_TAB_LIMIT) return;
     this.tabSerive.tabs.push(tab);
     this.changeSelectIndex(this.tabSerive.tabs.length - 1);
   }
@@ -232,11 +237,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             break;
           case 'addApiSuccess':
           case 'editApiSuccess':
+            //jump to detail page
             this.switchTab(
               this.selectedIndex,
               this.getTabInfo({
                 path: this.defaultTabs['detail'].path,
-                apiData: inArg.data,
+                tabData: inArg.data,
               })
             );
             break;
@@ -256,7 +262,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
               this.selectedIndex,
               this.getTabInfo({
                 path: this.defaultTabs[inArg.data.routerLink].path,
-                id: Number(this.route.snapshot.queryParams.uuid),
+                tabData: this.apiDataItems[this.route.snapshot.queryParams.uuid],
               })
             );
             break;
@@ -266,7 +272,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
               this.selectedIndex,
               this.getTabInfo({
                 path: this.defaultTabs['edit'].path,
-                apiData: inArg.data,
+                tabData: inArg.data,
               })
             );
             break;
@@ -292,13 +298,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param apiData tab content api data
    * @returns {TabItem}
    */
-  private getTabInfo(inArg: { id?: number; apiData?: any; path?: string }) {
-    let apiData = inArg.apiData || this.apiDataItems[inArg.id];
+  private getTabInfo(inArg: { tabData: any; path?: string }) {
     const result = {
       path: inArg.path || this.router.url.split('?')[0],
-      title: apiData.name,
-      method: apiData.method,
-      key: apiData.uuid?.toString(),
+      title: inArg.tabData.name,
+      method: inArg.tabData.method,
+      key: inArg.tabData.uuid?.toString(),
     };
     return result;
   }
