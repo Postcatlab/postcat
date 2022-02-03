@@ -1,11 +1,15 @@
-# EOAPI
+![](https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png?token=GHSAT0AAAAAABRGKRUAKZLRZZKLCCWSV7GAYP3JYZA)
 
-离线可用的 API 测试桌面端工具
+<h1 align="center">EOAPI</h1>
+<div align="center">
+Open source API Test desktop tool
+</div>
+
+![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png?token=GHSAT0AAAAAABRGKRUBJ634JVP7XL7KWAECYP3J36Q)
+
 
 [English](README.md)｜[简体中文](README.zh-cn.md)
 
-[快速体验]
-[下载安装]
 
 # 源码运行/构建
 
@@ -41,7 +45,7 @@ npm install -g @angular/cli
 | 命令                           | 描述                  |
 | ---------------------------- | ------------------- |
 | `npm run electron:build`     | 各系统打包 Electron 应用   |
-| `npm run electron:build:win` | windows 系统打包主题安装包应用 |
+| `npm run electron:build:win` | windows 打包定制化安装包应用 |
 | `npm run web:build`          | 打包 Web 代码           |
 
 ### 测试
