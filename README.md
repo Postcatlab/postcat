@@ -1,56 +1,54 @@
-![](https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png?token=GHSAT0AAAAAABRGKRUAKZLRZZKLCCWSV7GAYP3JYZA)
+![](https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png?token=GHSAT0AAAAAABRGKRUA6EOYNPFMLMC747IQYP3KNNA)
 
 <h1 align="center">EOAPI</h1>
 <div align="center">
-Open source API Test desktop tool
+Easy-to-use API testing desktop tool
 </div>
 
-![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png?token=GHSAT0AAAAAABRGKRUBJ634JVP7XL7KWAECYP3J36Q)
-
+![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png?token=GHSAT0AAAAAABRGKRUA6EOYNPFMLMC747IQYP3KNNA)
 
 [English](README.md)｜[简体中文](README.zh-cn.md)
 
+# Build and run from source
 
-# 源码运行/构建
+## Prerequisites
 
-## 环境
+- Node.js,version ^14.17
 
-- Node.js，版本大于 14.17.x
-
-## 运行
+## Run
 
 ```
 npm ci
 npm start
 ```
 
-如果想提高开发效率，可以安装 Angular 官方提供的命令行 Angular-cli 快速生成组件、服务等模板。
+If you want to improve development efficiency, you can install the command-line Angular-cli officially provided by Angular to quickly generate templates such as components and services.
 
 ```
 npm install -g @angular/cli
 ```
 
-## 命令
+## Command
 
-### 运行
+### Run
 
-| 命令                       | 描述                 |
-| ------------------------ | ------------------ |
-| `npm start`              | 开发模式下，同时运行在浏览器和桌面端 |
-| `npm run ng:serve`       | 仅运行在浏览器            |
-| `npm run electron:serve` | 仅运行在桌面端            |
+| Command                  | Description                                                          |
+| ------------------------ | -------------------------------------------------------------------- |
+| `npm start`              | In development mode, running on browser and desktop at the same time |
+| `npm run ng:serve`       | only runs in the browser                                             |
+| `npm run electron:serve` | only runs in the desktop                                             |
 
-### 打包
+### Build
 
-| 命令                           | 描述                  |
-| ---------------------------- | ------------------- |
-| `npm run electron:build`     | 各系统打包 Electron 应用   |
-| `npm run electron:build:win` | windows 打包定制化安装包应用 |
-| `npm run web:build`          | 打包 Web 代码           |
+| Command                      | Description                                                   |
+| ---------------------------- | ------------------------------------------------------------- |
+| `npm run electron:build`     | Packaging Electron applications for each platform             |
+| `npm run electron:build:win` | Packaging install customized installation package for windows |
+| `npm run web:build`          | Packaging Web applications|
 
-### 测试
+### Test
 
-| 命令             | 描述       |
-| -------------- | -------- |
-| `npm run test` | 执行单元测试   |
-| `npm run e2e`  | 执行 E2E测试 |
+| Command           | Description          |
+| -------------- | ------------- |
+| `npm run test` | Execute unit tests |
+| `npm run e2e`  | Execute end to end tests|
