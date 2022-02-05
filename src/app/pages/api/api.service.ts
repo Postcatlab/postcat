@@ -4,7 +4,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { ApiData } from '../../shared/services/api-data/api-data.model';
 import { ApiDataService } from '../../shared/services/api-data/api-data.service';
 import { MessageService } from '../../shared/services/message';
-
 @Injectable()
 export class ApiService {
   constructor(

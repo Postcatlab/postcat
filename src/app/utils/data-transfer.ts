@@ -151,7 +151,7 @@ export const xml2UiData = (text) => {
 export const text2UiData: (text: string) => uiData = (text) => {
   let result: uiData = {
     textType: 'raw',
-    rootType: 'json',
+    rootType: 'object',
     data: text,
   };
   let textType = whatTextType(text);

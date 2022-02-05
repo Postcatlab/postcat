@@ -275,7 +275,8 @@ export class ApiTestService {
       result[keyName] = testToEditParams(result[keyName]);
     });
     if(inData.history.response.responseType==='text'){
-      let bodyInfo=text2UiData(inData.history.response.body)
+      let bodyInfo=text2UiData(inData.history.response.body);
+      console.log(bodyInfo)
       result.responseBody=bodyInfo.data;
       result.responseBodyType=bodyInfo.textType;
       result.responseBodyJsonType=bodyInfo.rootType;

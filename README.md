@@ -9,6 +9,10 @@ Easy-to-use API testing desktop tool
 
 [English](README.md)｜[简体中文](README.zh-cn.md)
 
+# Install
+
+You can download it for Windows, macOS on [Releases](https://github.com/eolinker/eoapi/releases)
+
 # Build and run from source
 
 ## Prerequisites
@@ -44,11 +48,10 @@ npm install -g @angular/cli
 | ---------------------------- | ------------------------------------------------------------- |
 | `npm run electron:build`     | Packaging Electron applications for each platform             |
 | `npm run electron:build:win` | Packaging install customized installation package for windows |
-| `npm run web:build`          | Packaging Web applications|
 
 ### Test
 
-| Command           | Description          |
-| -------------- | ------------- |
-| `npm run test` | Execute unit tests |
-| `npm run e2e`  | Execute end to end tests|
+| Command        | Description              |
+| -------------- | ------------------------ |
+| `npm run test` | Execute unit tests       |
+| `npm run e2e`  | Execute end to end tests |

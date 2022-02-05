@@ -18,7 +18,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 
 //Storage Module
 import { StorageSetting } from './modules/storage/storage.config';
-import { demoApi } from './storageSetting.model';
+import { demoApi } from './shared/models/storageSetting.model';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 

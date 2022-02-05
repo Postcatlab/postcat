@@ -6,7 +6,6 @@ import {
   Output,
   EventEmitter,
   OnChanges,
-  AfterViewChecked,
   OnDestroy,
 } from '@angular/core';
 
@@ -24,7 +23,7 @@ import { ApiEditService } from '../api-edit.service';
   templateUrl: './api-edit-body.component.html',
   styleUrls: ['./api-edit-body.component.scss'],
 })
-export class ApiEditBodyComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
+export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
   @Input() bodyType: ApiBodyType | string;
@@ -59,8 +58,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, AfterViewChecked
   }
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiBodyType.Raw: // case ApiBodyType.Binary:
-      {
+      case ApiBodyType.Raw: { // case ApiBodyType.Binary:
+        if (typeof this.model !== 'string') return;
         this.cache[type] = this.model || '';
         break;
       }
@@ -73,11 +72,13 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, AfterViewChecked
   rawDataChange() {
     this.rawChange$.next(this.model);
   }
-  changeBodyType() {
+  changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
     this.setListConf();
     this.setModel();
+    if(type==='init') return;
+    this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
     this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
@@ -91,12 +92,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, AfterViewChecked
   ngOnChanges(changes) {
     if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
       this.beforeChangeBodyByType(this.bodyType);
-      this.changeBodyType();
+      this.changeBodyType('init');
     }
-  }
-  ngAfterViewChecked() {
-    // prevent AngularJS error when dragging and sorting item
-    this.cdRef.detectChanges();
   }
 
   handleParamsImport(data) {
@@ -110,7 +107,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, AfterViewChecked
    */
   private setModel() {
     switch (this.bodyType) {
-      case ApiBodyType.Raw: { // case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        // case ApiBodyType.Binary:
         this.model = this.cache[this.bodyType] || '';
         break;
       }
