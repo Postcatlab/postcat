@@ -74,7 +74,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         break;
       }
       default: {
-        this.messageService.send({ type: 'clear', data: null });
         this.test();
         break;
       }

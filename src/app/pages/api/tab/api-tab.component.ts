@@ -99,7 +99,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       return;
     }
     // avoid open too much tab,if detail or no change,open page in current tab
-    if(this.tabSerive.currentTab?.path.includes('detail')){
+    if(this.tabSerive.tabs.length&&this.tabSerive.currentTab?.path.includes('detail')){
       this.switchTab(this.selectedIndex, tab);
       return;
     }
@@ -220,7 +220,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
-        console.log('watchApiAction', inArg);
         switch (inArg.type) {
           case 'testApi':
             this.appendOrSwitchTab('test', inArg.data ? inArg.data.origin : {});
@@ -233,7 +232,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             break;
           case 'copyApi':
           case 'gotoAddApi':
-            this.appendOrSwitchTab('edit', inArg.data ? { groupID: inArg.data.key } : {});
+            this.appendOrSwitchTab('edit', inArg.data ? { groupID: inArg.data.key.replace('group-','') } : {});
             break;
           case 'addApiSuccess':
           case 'editApiSuccess':

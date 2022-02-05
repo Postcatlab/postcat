@@ -209,7 +209,6 @@ function listBlockController($rootScope, $element, $scope) {
     movePart: null,
   };
   const CONFIG = {
-    MAX_PARAM_SHRINK: 100,
     draggableMainObject: {
       setting: {
         object: 'width',
@@ -2016,7 +2015,6 @@ function listBlockController($rootScope, $element, $scope) {
         .replace('{{class}}', val.blockDefinedClass || '')
         .replace('{{placeholder}}', val.placeholder ? `placeholder="${val.placeholder}"` : '');
     }
-    CONFIG.MAX_PARAM_SHRINK = vm.mainObject.setting.MAX_PARAM_SHRINK || CONFIG.MAX_PARAM_SHRINK;
     tmp.html = `${
       vm.mainObject.setting.isForm
         ? `<ng-form name="ListBlockCommonComponentForm" ${vm.mainObject.setting.tbodyExpression || ''}>`
@@ -2036,7 +2034,7 @@ function listBlockController($rootScope, $element, $scope) {
     } track by $index" 
                 ${
                   vm.data.isDepth
-                    ? `ng-hide="$ctrl.list.length<=${CONFIG.MAX_PARAM_SHRINK}?item.isHide:false" ng-if="$ctrl.list.length>${CONFIG.MAX_PARAM_SHRINK}?!item.isHide:true"`
+                    ? `ng-hide="item.isHide" ng-if="!item.isHide"`
                     : ''
                 } 
                 sv-group-element="$ctrl.data.sortForm" eo-attr-index="{{$index}}" eo-attr-depth="{{item.listDepth}}"  {{trExpression}}>`;

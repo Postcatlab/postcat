@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ModalButtonOptions } from 'ng-zorro-antd/modal';
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ModalService {
   constructor(private modalService: NzModalService) {}
   create(inOpts) {

@@ -594,7 +594,6 @@ angular
     return {
       require: '?^svGroupElement', // 依赖svElement指令
       link($scope, $element, $attrs, $svCtrl) {
-        console.log();
         if ($svCtrl) $svCtrl.handle = $element.add($svCtrl.handle); // 支持添加多级把手
         $scope.$on('$destroy', () => {
           $element.remove();
