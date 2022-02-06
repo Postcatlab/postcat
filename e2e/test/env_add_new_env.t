@@ -28,6 +28,11 @@ wait
 
 cancel -> click
 
+find:
+    [select 'jspath:body > eo-root > eo-pages > div > div > eo-api > nz-layout > nz-layout > nz-content > div > div.tabs-bar.f_row > div > eo-env > nz-select > nz-select-top-control > nz-select-search > input']=sel
+
+wait 
+
 sel -> '环境名称A'
 
 wait
@@ -35,4 +40,7 @@ wait
 find: 
     [label 'http://www.youtube.com'] = url
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> change test unit
