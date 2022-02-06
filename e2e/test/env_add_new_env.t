@@ -40,7 +40,4 @@ wait
 find: 
     [label 'http://www.youtube.com'] = url
 
-<<<<<<< HEAD
-=======
 
->>>>>>> change test unit
