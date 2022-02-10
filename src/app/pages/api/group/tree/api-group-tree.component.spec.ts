@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { ApiGroupTreeComponent } from './api-group-tree.component';
 
@@ -8,6 +9,7 @@ describe('ApiGroupTreeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports:[Router],
       declarations: [ ApiGroupTreeComponent ]
     })
     .compileComponents();

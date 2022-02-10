@@ -8,7 +8,8 @@ describe('ApiTestHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiTestHistoryComponent ]
+      declarations: [ ApiTestHistoryComponent ],
+      providers:['ApiTestHistoryService']
     })
     .compileComponents();
   });

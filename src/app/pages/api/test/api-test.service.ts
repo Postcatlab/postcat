@@ -4,7 +4,7 @@ import { ApiTestQuery } from '../../../shared/services/api-test/api-test-params.
 import { ApiTestHistory } from '../../../shared/services/api-test-history/api-test-history.model';
 
 import { treeToListHasLevel } from '../../../utils/tree';
-import { text2UiData } from '../../../utils/data-transfer';
+import { text2UiData } from '../../../utils/data-transfer/data-transfer';
 
 @Injectable()
 export class ApiTestService {
