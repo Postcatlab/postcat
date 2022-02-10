@@ -1,6 +1,6 @@
-import { whatType, whatTextType } from '.';
-import { ApiBodyType, JsonRootType } from '../shared/services/api-data/api-data.model';
-import { flatData } from './tree';
+import { whatType, whatTextType } from '..';
+import { ApiBodyType, JsonRootType } from '../../shared/services/api-data/api-data.model';
+import { flatData } from '../tree';
 
 /**
  * Parse item to table need row data

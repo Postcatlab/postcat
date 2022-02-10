@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApiTabComponent } from './api-tab/api-tab.component';
+import { ApiTabComponent } from './api-tab.component';
 
 describe('ApiTabComponent', () => {
   let component: ApiTabComponent;

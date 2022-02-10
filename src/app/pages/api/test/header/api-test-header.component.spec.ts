@@ -1,20 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiTestService } from '../api-test.service';
 
-import { ApiHeaderComponent } from './api-header.component';
+import { ApiTestHeaderComponent } from './api-test-header.component';
 
-describe('ApiHeaderComponent', () => {
-  let component: ApiHeaderComponent;
-  let fixture: ComponentFixture<ApiHeaderComponent>;
+describe('ApiTestHeaderComponent', () => {
+  let component: ApiTestHeaderComponent;
+  let fixture: ComponentFixture<ApiTestHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiHeaderComponent ]
+      providers:[ApiTestService],
+      declarations: [ ApiTestHeaderComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiHeaderComponent);
+    fixture = TestBed.createComponent(ApiTestHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

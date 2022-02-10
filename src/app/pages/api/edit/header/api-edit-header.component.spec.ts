@@ -1,20 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiEditService } from '../api-edit.service';
 
-import { ApiHeaderComponent } from './api-edit-header.component';
+import { ApiEditHeaderComponent } from './api-edit-header.component';
 
-describe('ApiHeaderComponent', () => {
-  let component: ApiHeaderComponent;
-  let fixture: ComponentFixture<ApiHeaderComponent>;
+describe('ApiEditHeaderComponent', () => {
+  let component: ApiEditHeaderComponent;
+  let fixture: ComponentFixture<ApiEditHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiHeaderComponent ]
+      providers:[ApiEditService],
+      declarations: [ ApiEditHeaderComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiHeaderComponent);
+    fixture = TestBed.createComponent(ApiEditHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
