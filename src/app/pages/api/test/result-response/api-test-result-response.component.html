@@ -7,10 +7,10 @@
 </div>
 <div class="p15" *ngIf="model.responseType">
   <div class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
-    <div class="fs16">{{ model.statusCode || 'No Response' }}</div>
+    <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
     <div class="f_row_ac fs12">
-      <span class="mr15">Size: {{ model.responseLength | byteToString }}</span>
-      <span>Time: {{ model.testDeny }}ms</span>
+      <span class="mr15" id="size">Size: {{ model.responseLength | byteToString }}</span>
+      <span id="time">Time: {{ model.testDeny }}ms</span>
     </div>
   </div>
   <eo-editor

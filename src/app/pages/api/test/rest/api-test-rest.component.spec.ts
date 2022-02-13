@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiTestService } from '../api-test.service';
 
 import { ApiTestRestComponent } from './api-test-rest.component';
 
@@ -8,9 +9,9 @@ describe('ApiTestRestComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiTestRestComponent ]
-    })
-    .compileComponents();
+      providers: [ApiTestService],
+      declarations: [ApiTestRestComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
