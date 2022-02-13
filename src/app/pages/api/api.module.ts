@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { Ng1Module } from '../../ng1/ng1.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiRoutingModule } from './api-routing.module';
@@ -40,7 +39,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent];
     ApiEditModule,
     ApiDetailModule,
     ApiTestModule,
-    Ng1Module,
     NzButtonModule,
     NzIconModule,
     NzTabsModule,

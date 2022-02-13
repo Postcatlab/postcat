@@ -1,4 +1,6 @@
-export const demoApi = [
+import { StorageSetting } from "../../modules/storage/storage.config";
+
+const demoApi = [
   {
     name: '获取城市今日天气',
     projectID: 1,
@@ -216,3 +218,26 @@ export const demoApi = [
     weight: 0,
   },
 ];
+// 数据库配置
+export const storageSettingData: StorageSetting = {
+  name: 'storage_module',
+  version: 2,
+  schema: {
+    project: '++uuid, name',
+    environment: '++uuid, name, projectID',
+    group: '++uuid, name, projectID, parentID',
+    apiData: '++uuid, name, projectID, groupID',
+    apiTestHistory: '++uuid, projectID, apiDataID',
+  },
+  // 数据库创建库初始数据
+  initData: [
+    {
+      name: 'project',
+      items: [{ uuid: 1, name: 'Default' }],
+    },
+    {
+      name: 'apiData',
+      items: demoApi,
+    },
+  ],
+};

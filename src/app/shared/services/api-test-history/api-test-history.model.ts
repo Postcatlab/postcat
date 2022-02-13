@@ -1,6 +1,19 @@
 import { StorageModel } from '../../../modules/storage/storage.model';
 import { JsonRootType } from '../api-data/api-data.model';
 
+export interface ApiTestHistoryResponse {
+  headers: object[];
+  statusCode: number;
+  body: string;
+  contentType: string;
+  responseType: 'text' | 'longText' | 'stream';
+  responseLength: number;
+  testDeny: string;
+  /**
+   * Inject Code println
+   */
+  reportList: string[] | object[];
+}
 export interface ApiTestHistoryFrame {
   /**
    * General indicators
@@ -55,19 +68,7 @@ export interface ApiTestHistoryFrame {
    * HTTP response
    * @type {object}
    */
-  response: {
-    headers: object[];
-    statusCode: number;
-    body: string;
-    contentType: string;
-    responseType: 'text' | 'longText' | 'stream';
-    responseLength: number;
-    testDeny: string;
-    /**
-     * Inject Code println
-     */
-    reportList: string[] | object[];
-  };
+  response: ApiTestHistoryResponse;
 }
 /**
  * API测试历史对象接口
