@@ -1,11 +1,14 @@
-![](https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png?token=GHSAT0AAAAAABRGKRUA6EOYNPFMLMC747IQYP3KNNA)
-
+<p align="center">
+  <a href="https://github.com/eolinker/eoapi">
+    <img width="200" src="https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png">
+  </a>
+</p>
 <h1 align="center">EOAPI</h1>
 <div align="center">
-Easy-to-use API testing desktop tool
+Easy-to-use API Manage desktop tool
 </div>
 
-![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png?token=GHSAT0AAAAAABRGKRUA6EOYNPFMLMC747IQYP3KNNA)
+![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png)
 
 [English](README.md)｜[简体中文](README.zh-cn.md)
 

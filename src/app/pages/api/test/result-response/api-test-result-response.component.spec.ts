@@ -3,7 +3,7 @@ import { ApiTestService } from '../api-test.service';
 import { ApiTestResultResponseComponent } from './api-test-result-response.component';
 import { ByteToStringPipe } from './get-size.pipe';
 
-describe('ApiTestResultResponseComponent', () => {
+describe ('ApiTestResultResponseComponent', () => {
   let component: ApiTestResultResponseComponent;
   let fixture: ComponentFixture<ApiTestResultResponseComponent>;
 
@@ -29,7 +29,7 @@ describe('ApiTestResultResponseComponent', () => {
   });
   it('should have dom with Size,StatusCode,Time', () => {
     expect(fixture.nativeElement.querySelector('#statusCode').textContent).toEqual('200');
-    expect(fixture.nativeElement.querySelector('#size').textContent).toEqual('Size: 1.00KB');
-    expect(fixture.nativeElement.querySelector('#time').textContent).toEqual('Time: 200ms');
+    expect(fixture.nativeElement.querySelector('#size').textContent).toContain('1.00KB');
+    expect(fixture.nativeElement.querySelector('#time').textContent).toContain('200ms');
   });
 });
