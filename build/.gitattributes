@@ -1,0 +1,8 @@
+*.exe linguist-language=typescript
+*.nsh linguist-language=typescript
+*.bmp linguist-language=typescript
+*.dll linguist-language=typescript
+*.bin linguist-language=typescript
+*.bat linguist-language=typescript
+*.nsi linguist-language=typescript
+*.rtf linguist-language=typescript
