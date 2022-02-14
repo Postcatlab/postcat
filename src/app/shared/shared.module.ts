@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
 import {
   PageNotFoundComponent,
   SelectThemeComponent,
@@ -20,7 +18,6 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
 
 import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
-import { DatePipe } from '@angular/common';
 const COMPONENTS = [PageNotFoundComponent, ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent];
 @NgModule({
   imports: [

@@ -4,6 +4,8 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as url from 'url';
 import * as child_process from 'child_process';
+import eo from './apis/core';
+
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
   serve = args.some((val) => val === '--serve'),
@@ -139,6 +141,18 @@ try {
         break;
       }
     }
+  });
+  ipcMain.on('eo', (event, args) => {
+    eo.logger.info('get data from ipcRenderer');
+    eo.logger.info(args);
+    const modules = eo.module.getEnabledModules();
+    modules.forEach((key, value) => {
+      //eo.logger.info(key);
+      eo.logger.info('module:' + value);
+    });
+    const params = {message: 'ipcMain eo'};
+    event.sender.send('eo', params);
+    eo.logger.info(JSON.stringify(params));
   });
 } catch (e) {
   // Catch Error

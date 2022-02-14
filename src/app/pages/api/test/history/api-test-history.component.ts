@@ -3,7 +3,7 @@ import { formatDate } from '@angular/common';
 import { ApiTestService } from '../api-test.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ApiTestHistory } from 'eoapi-core';
-import { EOService } from '../../../../shared/services/eo.service';
+import { StorageService } from '../../../../shared/services/storage.service';
 
 @Component({
   selector: 'eo-api-test-history',
@@ -17,14 +17,14 @@ export class ApiTestHistoryComponent implements OnInit {
   @Output() clickItem: EventEmitter<any> = new EventEmitter();
   constructor(
     @Inject(LOCALE_ID) private locale: string,
-    private eo: EOService,
+    private storage: StorageService,
     private nzMessageService: NzMessageService,
     private apiTest: ApiTestService
   ) {
     this.initListConf();
   }
   add(history: ApiTestHistory,apiID) {
-    this.eo.getStorage().apiTestHistoryCreate({
+    this.storage.storage.apiTestHistoryCreate({
         projectID: 1,
         apiDataID: apiID,
         ...history,
@@ -38,7 +38,7 @@ export class ApiTestHistoryComponent implements OnInit {
       });
   }
   deleteAll() {
-    this.eo.getStorage().apiTestHistoryBulkRemove(this.model.map((val) => val.uuid)).subscribe({
+    this.storage.storage.apiTestHistoryBulkRemove(this.model.map((val) => val.uuid)).subscribe({
       next: (res) => {
         this.model = [];
         this.nzMessageService.success('删除成功');
@@ -104,7 +104,7 @@ export class ApiTestHistoryComponent implements OnInit {
     };
   }
   private delete(inArg) {
-    this.eo.getStorage().apiTestHistoryRemove(inArg.item.uuid).subscribe({
+    this.storage.storage.apiTestHistoryRemove(inArg.item.uuid).subscribe({
       next: (res) => {
         this.model.splice(inArg.$index, 1);
         this.nzMessageService.success('删除成功');
@@ -113,7 +113,7 @@ export class ApiTestHistoryComponent implements OnInit {
     });
   }
   private getList() {
-    this.eo.getStorage().apiTestHistoryLoadAllByApiDataID(this.apiID).subscribe({
+    this.storage.storage.apiTestHistoryLoadAllByApiDataID(this.apiID).subscribe({
       next: (res) => {
         res.forEach((val: any) => {
           this.parseItem(val);

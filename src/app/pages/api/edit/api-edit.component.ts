@@ -10,7 +10,7 @@ import { debounceTime, take, takeUntil, pairwise, filter } from 'rxjs/operators'
 import { MessageService } from '../../../shared/services/message';
 
 import { Group, ApiData, RequestProtocol, RequestMethod, ApiEditRest } from 'eoapi-core';
-import { EOService } from '../../../shared/services/eo.service';
+import { StorageService } from '../../../shared/services/storage.service';
 import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';
@@ -39,12 +39,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private message: NzMessageService,
     private messageService: MessageService,
-    private eo: EOService,
+    private storage: StorageService,
     private apiTab: ApiTabService
   ) {}
   getApiGroup() {
     this.groups = [];
-    this.eo.getStorage().groupLoadAllByProjectID(1).subscribe((items: Array<Group>) => {
+    this.storage.storage.groupLoadAllByProjectID(1).subscribe((items: Array<Group>) => {
       const treeItems: any = [
         {
           title: '根目录',
@@ -71,7 +71,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   getApi(id) {
-    this.eo.getStorage().apiDataLoad(id).subscribe((result: ApiData) => {
+    this.storage.storage.apiDataLoad(id).subscribe((result: ApiData) => {
       ['requestBody', 'responseBody'].forEach((tableName) => {
         if (['xml', 'json'].includes(result[`${tableName}Type`])) {
           result[tableName] = treeToListHasLevel(result[tableName]);
@@ -261,13 +261,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private editApi(formData) {
 
     if (formData.uuid) {
-      this.eo.getStorage().apiDataUpdate(formData, this.apiData.uuid).subscribe(
+      this.storage.storage.apiDataUpdate(formData, this.apiData.uuid).subscribe(
         (result: ApiData) => {
           this.message.success('编辑成功');
           this.messageService.send({ type: 'editApi', data: result });
         });
     } else {
-      this.eo.getStorage().apiDataCreate(formData).subscribe(
+      this.storage.storage.apiDataCreate(formData).subscribe(
         (result: ApiData) => {
           this.message.success('新增成功');
           this.messageService.send({ type: 'addApi', data: result });

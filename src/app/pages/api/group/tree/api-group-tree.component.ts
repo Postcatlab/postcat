@@ -6,7 +6,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
 import { MessageService } from '../../../../shared/services/message';
-import { EOService } from '../../../../shared/services/eo.service';
+import { StorageService } from '../../../../shared/services/storage.service';
 import { Subject, takeUntil } from 'rxjs';
 import { listToTree } from '../../../../utils/tree';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
@@ -47,7 +47,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private modalService: NzModalService,
-    private eo: EOService,
+    private storage: StorageService,
     private messageService: MessageService
   ) {}
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.getGroups();
   }
   getGroups() {
-    this.eo.getStorage().groupLoadAllByProjectID(this.projectID).subscribe((items: Array<Group>) => {
+    this.storage.storage.groupLoadAllByProjectID(this.projectID).subscribe((items: Array<Group>) => {
       items.forEach((item) => {
         delete item.updatedAt;
         this.groupByID[item.uuid] = item;
@@ -92,7 +92,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   getApis() {
-    this.eo.getStorage().apiDataLoadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
+    this.storage.storage.apiDataLoadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
       let apiItems = {};
       items.forEach((item) => {
         delete item.updatedAt;
@@ -270,13 +270,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0 && data.api.length > 0) {
-      this.eo.getStorage().groupBulkUpdate(data.group).subscribe((result) => {
-        this.eo.getStorage().apiDataBulkUpdate(data.api).subscribe((result) => {});
+      this.storage.storage.groupBulkUpdate(data.group).subscribe((result) => {
+        this.storage.storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
       });
     } else if (data.group.length > 0) {
-      this.eo.getStorage().groupBulkUpdate(data.group).subscribe((result) => {});
+      this.storage.storage.groupBulkUpdate(data.group).subscribe((result) => {});
     } else if (data.api.length > 0) {
-      this.eo.getStorage().apiDataBulkUpdate(data.api).subscribe((result) => {});
+      this.storage.storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
     }
   }
   private nodeToGroup(node: NzTreeNode): Group {
@@ -317,11 +317,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const data: GroupApiDataModel = { group: [], api: [] };
     this.getChildrenFromTree(this.treeItems, data, group.uuid);
     if (data.group.length > 0 && data.api.length > 0) {
-      this.eo.getStorage().groupBulkRemove(data.group).subscribe((result) => {
+      this.storage.storage.groupBulkRemove(data.group).subscribe((result) => {
         this.messageService.send({ type: 'gotoBulkDeleteApi', data: { uuids: data.api } });
       });
     } else if (data.group.length > 0) {
-      this.eo.getStorage().groupBulkRemove(data.group).subscribe((result) => {
+      this.storage.storage.groupBulkRemove(data.group).subscribe((result) => {
         this.buildGroupTreeData();
       });
     } else if (data.api.length > 0) {
