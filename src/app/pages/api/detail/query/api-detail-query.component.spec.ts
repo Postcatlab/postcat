@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ModalService } from '../../../../shared/services/modal.service';
+import { ApiDetailService } from '../api-detail.service';
 
 import { ApiDetailQueryComponent } from './api-detail-query.component';
 
@@ -8,6 +10,7 @@ describe('ApiDetailQueryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers:[ApiDetailService,{provide:ModalService,useValue:{}}],
       declarations: [ ApiDetailQueryComponent ]
     })
     .compileComponents();

@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from '../../../shared/services/message';
 
 import { ApiTabComponent } from './api-tab.component';
+import { ApiTabService } from './api-tab.service';
 
 describe('ApiTabComponent', () => {
   let component: ApiTabComponent;
@@ -8,9 +11,14 @@ describe('ApiTabComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiTabComponent ]
-    })
-    .compileComponents();
+      providers: [
+        ApiTabService,
+        MessageService,
+        { provide: Router, useValue: { url: '' } },
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParams: { uuid: 1 } } } },
+      ],
+      declarations: [ApiTabComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

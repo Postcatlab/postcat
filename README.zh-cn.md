@@ -1,8 +1,12 @@
-![](https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png?token=GHSAT0AAAAAABRGKRUAKZLRZZKLCCWSV7GAYP3JYZA)
+<p align="center">
+  <a href="https://github.com/eolinker/eoapi">
+    <img width="200" src="https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png">
+  </a>
+</p>
 
 <h1 align="center">EOAPI</h1>
 <div align="center">
-Open source API Test desktop tool
+简单易用的开源 API 管理工具
 </div>
 
 ![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png?token=GHSAT0AAAAAABRGKRUBJ634JVP7XL7KWAECYP3J36Q)

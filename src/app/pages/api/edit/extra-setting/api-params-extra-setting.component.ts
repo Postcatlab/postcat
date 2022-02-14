@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ParamsEnum } from '../../../../shared/services/api-data/api-edit-params.model';
+import { ApiParamsTypeJsonOrXml, ParamsEnum } from '../../../../shared/services/api-data/api-edit-params.model';
 import { BasiApiEditParams } from '../../../../shared/services/api-data/api-edit-params.model';
 
 @Component({
@@ -8,7 +8,7 @@ import { BasiApiEditParams } from '../../../../shared/services/api-data/api-edit
   styleUrls: ['./api-params-extra-setting.component.scss'],
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
-  @Input() model: { type: string } & BasiApiEditParams;
+  @Input() model: { type: string | ApiParamsTypeJsonOrXml } & BasiApiEditParams;
   listConfBasicInfo = {
     setting: {
       readonly: true,
@@ -116,10 +116,8 @@ export class ApiParamsExtraSettingComponent implements OnInit {
   constructor() {}
   ngOnInit(): void {
     if (this.model && (!this.model.enum || !this.model.enum.length)) {
-      this.model.enum=this.model.enum||[];
-      this.model.enum.push(
-        Object.assign({}, this.itemStructureEnums)
-      );
+      this.model.enum = this.model.enum || [];
+      this.model.enum.push(Object.assign({}, this.itemStructureEnums));
     }
   }
 }
