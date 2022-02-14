@@ -1,15 +1,17 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
 import { Group, ApiData } from 'eoapi-core';
 import { Message } from '../../../../shared/services/message/message.model';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
 import { MessageService } from '../../../../shared/services/message';
 import { StorageService } from '../../../../shared/services/storage.service';
-import { Subject, takeUntil } from 'rxjs';
-import { listToTree } from '../../../../utils/tree';
+import { filter, Subject, takeUntil } from 'rxjs';
+import { getExpandGroupByKey, listToTree } from '../../../../utils/tree';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { ModalService } from '../../../../shared/services/modal.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -44,28 +46,35 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Level Tree nodes.
    */
   treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
+  nzSelectedKeys: number[];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
-    private modalService: NzModalService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private modalService: ModalService,
     private storage: StorageService,
     private messageService: MessageService
   ) {}
   ngOnInit(): void {
     this.buildGroupTreeData();
     this.watchApiAction();
+    this.watchRouterChange();
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
   /**
    * Generate group tree nodes.
    */
   generateGroupTreeData(): void {
     this.treeItems.sort((a, b) => a.weight - b.weight);
     this.treeNodes = [];
-    listToTree(this.treeItems, this.treeNodes, 0);
+    listToTree(this.treeItems, this.treeNodes, '0');
+    setTimeout(() => {
+      this.expandGroup();
+      this.setSelectedKeys();
+    }, 0);
   }
   /**
    * Load all group and apiData items.
@@ -82,9 +91,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         this.groupByID[item.uuid] = item;
         this.treeItems.push({
           title: item.name,
-          key: item.uuid,
+          key: `group-${item.uuid}`,
           weight: item.weight || 0,
-          parentID: item.parentID || 0,
+          parentID: item.parentID ? `group-${item.parentID}` : '0',
           isLeaf: false,
         });
       });
@@ -99,9 +108,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         apiItems[item.uuid] = item;
         this.treeItems.push({
           title: item.name,
-          key: item.uuid,
+          key: item.uuid.toString(),
           weight: item.weight || 0,
-          parentID: item.groupID || 0,
+          parentID: item.groupID ? `group-${item.groupID}` : '0',
           method: item.method,
           isLeaf: true,
         });
@@ -121,6 +130,16 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.expandKeys = this.apiGroup.getExpandedNodeList().map((tree) => tree.key);
   }
   /**
+   * Expand Select Group
+   */
+  private expandGroup() {
+    if (!this.route.snapshot.queryParams.uuid) return;
+    this.expandKeys = [
+      ...this.expandKeys,
+      ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
+    ];
+  }
+  /**
    * Watch  apiData change event.
    */
   watchApiAction(): void {
@@ -128,11 +147,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
+        console.log('watchApiAction', inArg);
         switch (inArg.type) {
-          case 'addApi':
-          case 'editApi':
-          case 'deleteApi':
-          case 'bulkDeleteApi': {
+          case 'addApiSuccess':
+          case 'editApiSuccess':
+          case 'deleteApiSuccess':
+          case 'bulkDeleteApiSuccess':
+          case 'updateGroupSuccess': {
             this.buildGroupTreeData();
             break;
           }
@@ -170,10 +191,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param parentID number
    * @return Group
    */
-  buildGroupModel(parentID?: number | string): Group {
+  buildGroupModel(parentID?: string): Group {
     const groupModel: Group = {
       projectID: 1,
-      parentID: parentID || 0,
+      parentID: parentID ? Number(parentID.replace('group-', '')) : 0,
       weight: 0,
       name: '',
     };
@@ -210,7 +231,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   deleteGroup(node: NzTreeNode) {
-    this.groupModal('删除分组', { group: this.nodeToGroup(node), action: 'delete' });
+    this.groupModal('删除分组', { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
   }
 
   /**
@@ -223,18 +244,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const modal: NzModalRef = this.modalService.create({
       nzTitle: title,
       nzContent: ApiGroupEditComponent,
+      nzClosable: false,
       nzComponentParams: params,
-      nzFooter: null,
-    });
-    modal.afterClose.subscribe((res: Message) => {
-      if (res) {
-        if ('deleteGroup' === res.type) {
-          const group: Group = res.data.group;
-          this.deleteGroupTreeItems(group);
-        } else {
-          this.buildGroupTreeData();
-        }
-      }
+      nzOnOk() {
+        modal.componentInstance.submit();
+      },
     });
   }
   /**
@@ -256,9 +270,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       });
     } else {
       if (dragNode.isLeaf) {
-        groupApiData.api.push({ uuid: dragNode.key, weight: 0, groupID: 0 });
+        groupApiData.api.push({ uuid: dragNode.key, weight: 0, groupID: '0' });
       } else {
-        groupApiData.group.push({ uuid: dragNode.key, weight: 0, parentID: 0 });
+        groupApiData.group.push({ uuid: dragNode.key, weight: 0, parentID: '0' });
       }
     }
     this.updateoperateApiEvent(groupApiData);
@@ -279,55 +293,27 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       this.storage.storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
     }
   }
+  private watchRouterChange() {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
+      this.setSelectedKeys();
+      this.expandGroup();
+    });
+  }
   private nodeToGroup(node: NzTreeNode): Group {
     return {
       projectID: 1,
-      uuid: node.origin.key,
+      uuid: Number(node.origin.key.replace('group-', '')),
       name: node.origin.title,
-      parentID: node.origin.parentID,
+      parentID: Number(node.origin.parentID.replace('group-', '')),
       weight: node.origin.weight,
     };
   }
 
-  /**
-   * Get all child items belong to parentID
-   *
-   * @param list
-   * @param tree
-   * @param parentID
-   */
-  getChildrenFromTree(list: Array<GroupTreeItem>, tree: GroupApiDataModel, parentID: number | string): void {
-    list.forEach((data) => {
-      if (data.parentID === parentID) {
-        if (!data.isLeaf) {
-          tree.group.push(data.key);
-          this.getChildrenFromTree(list, tree, data.key);
-        } else {
-          tree.api.push(data.key);
-        }
-      }
-    });
-  }
-  /**
-   * Delete all tree items of parent node.
-   *
-   * @param data GroupApiDataModel
-   */
-  deleteGroupTreeItems(group: Group) {
-    const data: GroupApiDataModel = { group: [], api: [] };
-    this.getChildrenFromTree(this.treeItems, data, group.uuid);
-    if (data.group.length > 0 && data.api.length > 0) {
-      this.storage.storage.groupBulkRemove(data.group).subscribe((result) => {
-        this.messageService.send({ type: 'gotoBulkDeleteApi', data: { uuids: data.api } });
-      });
-    } else if (data.group.length > 0) {
-      this.storage.storage.groupBulkRemove(data.group).subscribe((result) => {
-        this.buildGroupTreeData();
-      });
-    } else if (data.api.length > 0) {
-      this.messageService.send({ type: 'gotoBulkDeleteApi', data: { uuids: data.api } });
+  private setSelectedKeys() {
+    if (this.route.snapshot.queryParams.uuid) {
+      this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];
     } else {
-      this.buildGroupTreeData();
+      this.nzSelectedKeys = [];
     }
   }
 }

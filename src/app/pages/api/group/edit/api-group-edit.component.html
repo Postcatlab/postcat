@@ -1,20 +1,13 @@
-<div class="group_edit">
-  <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="submit()" *ngIf="!isDelete">
-    <nz-form-item nz-col class="fg1">
-      <nz-form-label nzFor="name">分组名称 </nz-form-label>
-      <nz-form-control nzErrorTip="请输入分组名称">
-        <input type="text" autofocus nz-input id="name" formControlName="name" [(ngModel)]="group.name" />
-      </nz-form-control>
-    </nz-form-item>
-  </form>
-  <p *ngIf="isDelete">
-    删除 <strong title="{{ group.name }}">{{
-      group.name.length > 50 ? group.name.slice(0, 50) + '...' : group.name
-    }}</strong
-    > 后，该分组下的数据都会删除。该操作无法撤销，确认删除吗？
-  </p>
-</div>
-<footer class="group_edit_footer">
-  <button nz-button nzType="primary" (click)="submit()" [nzLoading]="showLoading">确定</button>
-  <button nz-button (click)="close()">取消</button>
-</footer>
+<form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="submit()" *ngIf="!isDelete">
+  <nz-form-item nz-col class="fg1">
+    <nz-form-label nzFor="name">分组名称 </nz-form-label>
+    <nz-form-control nzErrorTip="请输入分组名称">
+      <input type="text" autofocus nz-input id="name" formControlName="name" [(ngModel)]="group.name" />
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<p *ngIf="isDelete">
+  删除
+  <strong title="{{ group.name }}">{{ group.name.length > 50 ? group.name.slice(0, 50) + '...' : group.name }}</strong>
+  后，该分组下的数据都会删除。该操作无法撤销，确认删除吗？
+</p>

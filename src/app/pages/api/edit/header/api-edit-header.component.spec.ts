@@ -1,20 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { ModalService } from '../../../../shared/services/modal.service';
+import { ApiEditService } from '../api-edit.service';
 
-import { ApiHeaderComponent } from './api-edit-header.component';
+import { ApiEditHeaderComponent } from './api-edit-header.component';
 
-describe('ApiHeaderComponent', () => {
-  let component: ApiHeaderComponent;
-  let fixture: ComponentFixture<ApiHeaderComponent>;
+describe('ApiEditHeaderComponent', () => {
+  let component: ApiEditHeaderComponent;
+  let fixture: ComponentFixture<ApiEditHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiHeaderComponent ]
-    })
-    .compileComponents();
+      imports: [NzModalModule],
+      providers: [ApiEditService, ModalService, NzModalService],
+      declarations: [ApiEditHeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiHeaderComponent);
+    fixture = TestBed.createComponent(ApiEditHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

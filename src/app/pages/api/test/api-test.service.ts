@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiTestQuery } from '../../../shared/services/api-test/api-test-params.model';
 import { ApiTestHistory } from 'eoapi-core';
 import { treeToListHasLevel } from '../../../utils/tree';
-import { text2UiData } from '../../../utils/data-transfer';
+import { text2UiData } from '../../../utils/data-transfer/data-transfer';
 
 @Injectable()
 export class ApiTestService {
@@ -273,7 +273,8 @@ export class ApiTestService {
       result[keyName] = testToEditParams(result[keyName]);
     });
     if(inData.history.response.responseType==='text'){
-      let bodyInfo=text2UiData(inData.history.response.body)
+      let bodyInfo=text2UiData(inData.history.response.body);
+      console.log(bodyInfo)
       result.responseBody=bodyInfo.data;
       result.responseBodyType=bodyInfo.textType;
       result.responseBodyJsonType=bodyInfo.rootType;

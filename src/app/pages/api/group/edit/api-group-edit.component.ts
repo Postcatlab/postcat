@@ -3,38 +3,35 @@ import { Group } from 'eoapi-core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { StorageService } from '../../../../shared/services/storage.service';
-import { ElectronService } from '../../../../core/services';
+import { MessageService } from '../../../../shared/services/message';
+import { GroupApiDataModel, GroupTreeItem } from '../../../../shared/models';
 
 @Component({
   selector: 'eo-api-group-edit',
   templateUrl: './api-group-edit.component.html',
-  styleUrls: ['./api-group-edit.component.scss']
+  styleUrls: ['./api-group-edit.component.scss'],
 })
 export class ApiGroupEditComponent implements OnInit {
   @Input() group: Group;
   @Input() action?: string;
+  @Input() treeItems?: any;
 
   validateForm!: FormGroup;
-  showLoading: boolean = false;
   isDelete: boolean;
 
   constructor(
     private fb: FormBuilder,
+    private messageService: MessageService,
     private modalRef: NzModalRef,
     private storage: StorageService,
-    private electron: ElectronService,
   ) { }
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';
     if (!this.isDelete) {
-      const controls = {name: [null, [Validators.required]]};
+      const controls = { name: [null, [Validators.required]] };
       this.validateForm = this.fb.group(controls);
     }
-  }
-
-  close(): void {
-    this.modalRef.destroy();
   }
 
   submit(): void {
@@ -53,7 +50,6 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   save(): void {
-    this.showLoading = true;
     if (this.isDelete) {
       this.delete();
     } else {
@@ -67,32 +63,55 @@ export class ApiGroupEditComponent implements OnInit {
 
   create(): void {
     this.storage.storage.groupCreate(this.group).subscribe((data: Group) => {
-      this.showLoading = false;
-      this.modalRef.destroy({type: 'createGroup', data: {group: data}});
+      this.modalRef.destroy();
+      this.messageService.send({ type: 'updateGroupSuccess', data: { group: data } });
     }, error => {
-      this.showLoading = false;
       console.log(error);
     });
   }
 
   update(): void {
     this.storage.storage.groupUpdate(this.group, this.group.uuid).subscribe((data: Group) => {
-      this.showLoading = false;
-      this.modalRef.destroy({type: 'updateGroup', data: {group: data}});
+      this.modalRef.destroy();
+      this.messageService.send({ type: 'updateGroupSuccess', data: { group: data } });
     }, error => {
-      this.showLoading = false;
       console.log(error);
     });
   }
 
+  /**
+   * Get all child items belong to parentID
+   *
+   * @param list
+   * @param tree
+   * @param parentID
+   */
+  getChildrenFromTree(list: Array<GroupTreeItem>, tree: GroupApiDataModel, parentID: string): void {
+    list.forEach((item) => {
+      if (item.parentID === parentID) {
+        if (!item.isLeaf) {
+          tree.group.push(Number(item.key.replace('group-', '')));
+          this.getChildrenFromTree(list, tree, item.key);
+        } else {
+          tree.api.push(Number(item.key));
+        }
+      }
+    });
+  }
+  /**
+   * Delete all tree items
+   */
   delete(): void {
-    this.storage.storage.groupRemove(this.group.uuid).subscribe(data => {
-      this.showLoading = false;
-      this.modalRef.destroy({type: 'deleteGroup', data: {group: this.group}});
-    }, error => {
-      this.showLoading = false;
-      console.log(error);
+    const data: GroupApiDataModel = { group: [this.group.uuid], api: [] };
+    this.getChildrenFromTree(this.treeItems, data, `group-${this.group.uuid}`);
+    this.modalRef.destroy();
+    this.storage.storage.groupBulkRemove(data.group).subscribe((result) => {
+      if (data.api.length) return;
+      this.messageService.send({ type: 'updateGroupSuccess', data: {} });
     });
+    //delete group api
+    if (data.api.length > 0) {
+      this.messageService.send({ type: 'gotoBulkDeleteApi', data: { uuids: data.api } });
+    }
   }
-
 }

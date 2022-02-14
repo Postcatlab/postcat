@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApiHeaderComponent } from './api-detail-header.component';
+import { ApiDetailHeaderComponent } from './api-detail-header.component';
 
-describe('ApiHeaderComponent', () => {
-  let component: ApiHeaderComponent;
-  let fixture: ComponentFixture<ApiHeaderComponent>;
+describe('ApiDetailHeaderComponent', () => {
+  let component: ApiDetailHeaderComponent;
+  let fixture: ComponentFixture<ApiDetailHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiHeaderComponent ]
+      declarations: [ ApiDetailHeaderComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiHeaderComponent);
+    fixture = TestBed.createComponent(ApiDetailHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

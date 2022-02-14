@@ -33,8 +33,10 @@
 <div class="group_container group-tree pt10">
   <nz-tree
     [nzData]="treeNodes"
+    [nzSelectedKeys]="nzSelectedKeys"
     #apiGroup
     [nzSearchValue]="searchValue"
+    [nzHideUnMatched]="true"
     [nzExpandedKeys]="expandKeys"
     (nzClick)="clickTreeItem($event)"
     (nzExpandChange)="toggleExpand()"

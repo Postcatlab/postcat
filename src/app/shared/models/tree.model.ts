@@ -14,7 +14,7 @@ export interface GroupTreeItem {
    *
    * @type {string}
    */
-  key: string|number;
+  key: string;
 
   /**
    * Weight
@@ -26,9 +26,9 @@ export interface GroupTreeItem {
   /**
    * Parent item id
    *
-   * @type {string | number}
+   * @type {string }
    */
-  parentID: string|number;
+  parentID: string;
 
   /**
    * Item or folder

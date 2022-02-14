@@ -3,10 +3,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxsModule } from '@ngxs/store';
 
 //Other module
 import { CoreModule } from './core/core.module';
+import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnvState } from './shared/store/env.state';

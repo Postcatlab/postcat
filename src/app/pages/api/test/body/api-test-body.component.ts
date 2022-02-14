@@ -38,14 +38,14 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   private rawChange$: Subject<string> = new Subject<string>();
   constructor(private apiTest: ApiTestService, private messageService: MessageService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
-      this.saveBodyByType(val[0]);
+      this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {
       this.modelChange.emit(this.model);
     });
   }
-  saveBodyByType(type) {
+  beforeChangeBodyByType(type) {
     switch (type) {
       case ApiBodyType.Raw: // case ApiBodyType.Binary:
       {
@@ -58,37 +58,28 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
-  changeBodyType() {
+  changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
     this.setListConf();
     this.setModel();
+    if(type==='init') return;
+    this.modelChange.emit(this.model);
   }
 
   ngOnInit(): void {
     this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
       .filter((val) => this.supportType.includes(ApiBodyType[val]))
       .map((val) => ({ key: val, value: ApiBodyType[val] }));
-
-    // ! it is not working.
-    this.messageService.get().subscribe(({ type }: Message) => {
-      if (type === 'clear') {
-        this.isReload = false;
-        setTimeout(() => {
-          this.isReload = true;
-        }, 0);
-      }
-    });
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (changes.model && changes.model.currentValue) {
-      this.saveBodyByType(this.bodyType);
-      this.setListConf();
-      this.setModel();
+    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
+      this.beforeChangeBodyByType(this.bodyType);
+      this.changeBodyType('init');
     }
   }
 

@@ -1,20 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiTestService } from '../api-test.service';
 
-import { ApiEditQueryComponent } from './api-query.component';
+import { ApiTestQueryComponent } from './api-test-query.component';
 
-describe('ApiEditQueryComponent', () => {
-  let component: ApiEditQueryComponent;
-  let fixture: ComponentFixture<ApiEditQueryComponent>;
+describe('ApiTestQueryComponent', () => {
+  let component: ApiTestQueryComponent;
+  let fixture: ComponentFixture<ApiTestQueryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiEditQueryComponent ]
+      providers:[ApiTestService],
+      declarations: [ ApiTestQueryComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiEditQueryComponent);
+    fixture = TestBed.createComponent(ApiTestQueryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

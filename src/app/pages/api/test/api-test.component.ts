@@ -73,7 +73,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         break;
       }
       default: {
-        this.messageService.send({ type: 'clear', data: null });
         this.test();
         break;
       }
@@ -104,7 +103,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       testData: this.apiData,
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    this.apiTab.apiEvent$.next({ action: 'addApiFromTest', data: apiData });
+    this.messageService.send({ type: 'addApiFromTest', data: apiData });
   }
   changeQuery() {
     this.apiData.uri = this.apiTest.transferUrlAndQuery(this.apiData.uri, this.apiData.queryParams, {

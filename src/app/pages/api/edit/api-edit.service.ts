@@ -3,9 +3,9 @@ import { ModalService } from '../../../shared/services/modal.service';
 import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra-setting.component';
 @Injectable()
 export class ApiEditService {
-  constructor(private modal: ModalService) {}
+  constructor(private modalService: ModalService) {}
   showMore(inputArg, opts: { nzOnOk: (result: any) => void; title: string }) {
-    const modal = this.modal.create({
+    const modal = this.modalService.create({
       nzTitle: `${opts.title}详情`,
       nzContent: ApiParamsExtraSettingComponent,
       nzClosable: false,

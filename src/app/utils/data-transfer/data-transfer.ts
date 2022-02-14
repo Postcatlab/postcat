@@ -1,6 +1,6 @@
-import { whatType, whatTextType } from '.';
+import { whatType, whatTextType } from '..';
 import { ApiBodyType, JsonRootType } from 'eoapi-core';
-import { flatData } from './tree';
+import { flatData } from '../tree';
 
 /**
  * Parse item to table need row data
@@ -130,9 +130,10 @@ interface uiData {
 }
 export const xml2UiData = (text) => {
   const data: any[] = xml2json(text);
+  console.log('=>', data);
   const result = {};
   const mapAttr = (obj: any) => {
-    const { tagName, attr, children } = obj;
+    const { tagName, attr, children, content } = obj;
     return {
       [tagName]: children.length ? mapAttr(children[0]) : attr,
     };
@@ -150,7 +151,7 @@ export const xml2UiData = (text) => {
 export const text2UiData: (text: string) => uiData = (text) => {
   let result: uiData = {
     textType: 'raw',
-    rootType: 'json',
+    rootType: 'object',
     data: text,
   };
   let textType = whatTextType(text);

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApiParamsExtraSettingComponent } from './api-edit-params-extra-setting.component';
+import { ApiParamsExtraSettingComponent } from './api-params-extra-setting.component';
 
 describe('ApiParamsExtraSettingComponent', () => {
   let component: ApiParamsExtraSettingComponent;

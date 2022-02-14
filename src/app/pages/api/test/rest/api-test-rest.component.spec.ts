@@ -1,20 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiTestService } from '../api-test.service';
 
-import { ApiEditRestComponent } from './api-rest.component';
+import { ApiTestRestComponent } from './api-test-rest.component';
 
-describe('ApiEditRestComponent', () => {
-  let component: ApiEditRestComponent;
-  let fixture: ComponentFixture<ApiEditRestComponent>;
+describe('ApiTestRestComponent', () => {
+  let component: ApiTestRestComponent;
+  let fixture: ComponentFixture<ApiTestRestComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiEditRestComponent ]
-    })
-    .compileComponents();
+      providers: [ApiTestService],
+      declarations: [ApiTestRestComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ApiEditRestComponent);
+    fixture = TestBed.createComponent(ApiTestRestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
