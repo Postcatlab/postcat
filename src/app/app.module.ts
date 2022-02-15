@@ -35,7 +35,7 @@ import { storageSettingData } from './shared/models/storageSetting.model';
     UpgradeModule,
     NzModalModule,
     NgxsModule.forRoot([EnvState]),
-    StorageModule.forRoot({ setting: storageSettingData }),
+    StorageModule.forRoot({ setting: storageSettingData })
   ],
   providers: [
     {

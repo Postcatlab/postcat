@@ -1,5 +1,5 @@
 {
-  "asar": false,
+  "asar": true,
   "directories": {
     "output": "release/"
   },
@@ -21,7 +21,7 @@
     }
   ],
   "win": {
-    "icon": "dist/assets/icons",
+    "icon": "dist/assets/icons/256x256.png",
     "target": [
       "portable"
     ]
