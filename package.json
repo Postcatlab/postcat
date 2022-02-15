@@ -2,10 +2,10 @@
   "name": "eoapi",
   "version": "0.0.1",
   "description": "API ToolKit",
-  "homepage": "https://github.com/eolinker/eoapi",
+  "homepage": "https://github.com/scarqin/eoapi.git",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eolinker/eoapi"
+    "url": "https://github.com/scarqin/eoapi.git"
   },
   "author": {
     "name": "eoapi",
