@@ -12,9 +12,16 @@ Easy-to-use API Manage desktop tool
 
 [English](README.md)｜[简体中文](README.zh-cn.md)
 
-# Install
+# Featue
 
-You can download it for Windows, macOS on [Releases](https://github.com/eolinker/eoapi/releases)
+- API Test
+- API Management
+- Test Enviroment Management
+
+# Getting started
+
+<!-- - Try the [live demo](http://eoapi.dev.eolink.com/) -->
+- You can download it for Windows, macOS on [Releases](https://github.com/eolinker/eoapi/releases)
 
 # Build and run from source
 
@@ -22,7 +29,7 @@ You can download it for Windows, macOS on [Releases](https://github.com/eolinker
 
 - Node.js,version ^14.17
 
-## Run
+## Running the code
 
 ```
 npm ci
@@ -52,9 +59,17 @@ npm install -g @angular/cli
 | `npm run electron:build`     | Packaging Electron applications for each platform             |
 | `npm run electron:build:win` | Packaging install customized installation package for windows |
 
-### Test
+### Running the tests
 
 | Command        | Description              |
 | -------------- | ------------------------ |
 | `npm run test` | Execute unit tests       |
 | `npm run e2e`  | Execute end to end tests |
+
+# License
+
+This project is licensed under the Apache-2.0 License - see the [LICENSE.md](LICENSE) file for details
+
+# Contact us
+
+If you'd like to contact us, please create a [Github issue](https://github.com/eolinker/eoapi/issues). Thank you!

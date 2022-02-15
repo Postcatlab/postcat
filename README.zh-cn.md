@@ -13,9 +13,15 @@
 
 [English](README.md)｜[简体中文](README.zh-cn.md)
 
-# 安装
+# 功能
 
-你可以访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows，macOS 版本的安装包。
+- API 测试
+- API 管理
+- 测试环境管理
+
+# 快速开始
+
+- 你可以访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows，macOS 版本的安装包。
 
 # 源码运行/构建
 
@@ -23,7 +29,7 @@
 
 - Node.js，版本大于 14.17.x
 
-## 运行
+## 运行代码
 
 ```
 npm ci
@@ -46,16 +52,24 @@ npm install -g @angular/cli
 | `npm run ng:serve`       | 仅运行在浏览器                       |
 | `npm run electron:serve` | 仅运行在桌面端                       |
 
-### 打包
+### 打包构建
 
 | 命令                         | 描述                         |
 | ---------------------------- | ---------------------------- |
 | `npm run electron:build`     | 各系统打包 Electron 应用     |
 | `npm run electron:build:win` | windows 打包定制化安装包应用 |
 
-### 测试
+### 运行测试
 
 | 命令           | 描述          |
 | -------------- | ------------- |
 | `npm run test` | 执行单元测试  |
 | `npm run e2e`  | 执行 E2E 测试 |
+
+# 协议
+
+This project is licensed under the Apache-2.0 License - see the [LICENSE.md](LICENSE) file for details
+
+# Contact us
+
+If you'd like to contact us, please create a [Github issue](https://github.com/eolinker/eoapi/issues). Thank you!

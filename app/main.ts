@@ -33,17 +33,26 @@ function createWindow(): BrowserWindow {
   } else {
     // Path when running electron executable
     let pathIndex = './index.html';
-    if (fs.existsSync(path.join(__dirname, '../dist/index.html'))) {
-      // Path when running electron in local folder
-      pathIndex = '../dist/index.html';
+    ['dist', 'app'].some((pathName) => {
+      let htmlPath = `../${pathName}/index.html`;
+      if (fs.existsSync(path.join(__dirname, htmlPath))) {
+        // Path when running electron in local folder
+        pathIndex = htmlPath;
+      }
+    });
+    let loadPage=()=>{
+      win.loadURL(
+        url.format({
+          pathname: path.join(__dirname, pathIndex),
+          protocol: 'file:',
+          slashes: true,
+        })
+      );
     }
-    win.loadURL(
-      url.format({
-        pathname: path.join(__dirname, pathIndex),
-        protocol: 'file:',
-        slashes: true,
-      })
-    );
+    win.webContents.on('did-fail-load', () => {
+      loadPage();
+    });
+    loadPage();
   }
 
   // Emitted when the window is closed.
@@ -127,7 +136,7 @@ try {
     }
   });
   ipcMain.on('unitTest', function (event, message) {
-    let id=message.id;
+    let id = message.id;
     switch (message.action) {
       case 'ajax': {
         workerLoop[id] = new UnitWorker();
