@@ -40,7 +40,7 @@ function createWindow(): BrowserWindow {
         pathIndex = htmlPath;
       }
     });
-    let loadPage=()=>{
+    let loadPage = () => {
       win.loadURL(
         url.format({
           pathname: path.join(__dirname, pathIndex),
@@ -48,7 +48,7 @@ function createWindow(): BrowserWindow {
           slashes: true,
         })
       );
-    }
+    };
     win.webContents.on('did-fail-load', () => {
       loadPage();
     });
