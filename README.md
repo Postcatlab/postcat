@@ -14,9 +14,10 @@ Easy-to-use API Manage desktop tool
 
 # Featue
 
-- API Test
-- API Management
-- Test Enviroment Management
+- API Test : Quick API can be tested after installation.
+- API management : Management API with zero learning cost.
+- Test environment management
+- Available offline
 
 # Getting started
 
