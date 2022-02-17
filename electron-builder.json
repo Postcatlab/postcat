@@ -3,12 +3,6 @@
   "directories": {
     "output": "release/"
   },
-  "nsis": {
-    "oneClick": false,
-    "allowElevation": true,
-    "allowToChangeInstallationDirectory": true
-  },
-  "publish": ["github"],
   "files": ["**/*", "!**/*.ts", "!*.map", "!package.json", "!package-lock.json"],
   "extraResources": [
     {
@@ -17,6 +11,13 @@
       "filter": ["**/*"]
     }
   ],
+  "publish": ["github"],
+  "generateUpdatesFilesForAllChannels":true,
+  "nsis": {
+    "oneClick": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true
+  },
   "win": {
     "icon": "dist/assets/icons/256x256.png",
     "target": [
