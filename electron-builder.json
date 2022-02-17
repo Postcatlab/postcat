@@ -3,26 +3,26 @@
   "directories": {
     "output": "release/"
   },
+  "nsis": {
+    "oneClick": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true
+  },
   "publish": ["github"],
-  "files": [
-    "**/*",
-    "!**/*.ts",
-    "!*.map",
-    "!package.json",
-    "!package-lock.json"
-  ],
+  "files": ["**/*", "!**/*.ts", "!*.map", "!package.json", "!package-lock.json"],
   "extraResources": [
     {
       "from": "dist",
       "to": "app",
-      "filter": [
-        "**/*"
-      ]
+      "filter": ["**/*"]
     }
   ],
   "win": {
     "icon": "dist/assets/icons/256x256.png",
     "target": [
+      {
+        "target": "nsis"
+      },
       "portable"
     ]
   },
@@ -31,14 +31,10 @@
   },
   "mac": {
     "icon": "dist/assets/icons",
-    "target": [
-      "dmg"
-    ]
+    "target": ["dmg"]
   },
   "linux": {
     "icon": "dist/assets/icons",
-    "target": [
-      "AppImage"
-    ]
+    "target": ["AppImage"]
   }
 }
