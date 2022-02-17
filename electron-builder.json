@@ -8,7 +8,6 @@
     "allowElevation": true,
     "allowToChangeInstallationDirectory": true
   },
-  "generateUpdatesFilesForAllChannels": true,
   "publish": ["github"],
   "files": ["**/*", "!**/*.ts", "!*.map", "!package.json", "!package-lock.json"],
   "extraResources": [

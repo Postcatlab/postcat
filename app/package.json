@@ -1,6 +1,6 @@
 {
   "name": "eoapi",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -11,7 +11,9 @@
     "form-data": "^2.5.1",
     "iconv-lite": "^0.6.2",
     "xml2js": "^0.4.23",
-    "content-disposition": "^0.5.4"
+    "content-disposition": "^0.5.4",
+    "electron-log": "^4.4.6",
+    "electron-updater": "^4.6.5"
   },
   "devDependencies": {
     "electron": "16.0.0"
