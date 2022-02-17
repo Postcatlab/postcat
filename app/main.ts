@@ -1,13 +1,16 @@
 import { app, BrowserWindow, screen, ipcMain } from 'electron';
+import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as url from 'url';
-import * as child_process from 'child_process';
+import { UnitWorker } from './unitWorker';
+
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
-  serve = args.some((val) => val === '--serve'),
-  workerLoop = {};
+  eoUpdater = new EoUpdater(),
+  workerLoop = {},
+  serve = args.some((val) => val === '--serve');
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -65,38 +68,16 @@ function createWindow(): BrowserWindow {
 
   return win;
 }
-class UnitWorker {
-  instance: child_process.ChildProcess;
-  constructor() {}
-  start(message) {
-    this.instance = child_process.fork(`${__dirname}/request/main.js`);
-    this.watch();
-    this.instance.send(message);
-  }
-  finish(message) {
-    win.webContents.send('unitTest', message);
-    this.kill();
-  }
-  kill() {
-    this.instance.kill();
-  }
-  private watch() {
-    this.instance.on('message', (message: any) => {
-      switch (message.action) {
-        case 'finish': {
-          this.finish(message.data);
-          break;
-        }
-      }
-    });
-  }
-}
+
 try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-  app.on('ready', () => setTimeout(createWindow, 400));
+  app.on('ready', () => {
+    setTimeout(createWindow, 400);
+    eoUpdater.check();
+  });
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
@@ -139,7 +120,7 @@ try {
     let id = message.id;
     switch (message.action) {
       case 'ajax': {
-        workerLoop[id] = new UnitWorker();
+        workerLoop[id] = new UnitWorker(win);
         workerLoop[id].start(message);
         break;
       }
