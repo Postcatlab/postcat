@@ -73,7 +73,6 @@ export class ApiEditService {
           modelKey: 'example',
           placeholder: `${opts.title}示例`,
           width: 200,
-          hide: 1,
           mark: 'example',
         },
         {
