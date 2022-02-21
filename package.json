@@ -43,8 +43,6 @@
     "e2e:web": "npx playwright test e2e/cases/",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
-    "wininstaller": "cd build && build-nim-nozip.bat",
-    "electron:build:win": "npm run electron:build && npm run wininstaller",
     "release": "electron-builder"
   },
   "dependencies": {
