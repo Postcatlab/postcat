@@ -1,8 +1,12 @@
-import { listToTreeHasLevel } from '../../../utils/tree';
+import { listToTreeHasLevel } from '../../../utils/tree/tree.utils';
 import { ApiBodyType } from '../api-data/api-data.model';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-import { ApiTestHistoryFrame } from '../api-test-history/api-test-history.model';
+import {
+  ApiTestHistoryFrame,
+  ApiTestResGeneral,
+  ApiTestHistoryResponse,
+} from '../api-test-history/api-test-history.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
@@ -16,9 +20,9 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
       }
       return { ...acc, [val.name]: val.value };
     }, {});
-    Object.keys(restByName).forEach(restName => {
+    Object.keys(restByName).forEach((restName) => {
       result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
-    })
+    });
     return result;
   };
   const formatList = (inArr) => {
@@ -100,27 +104,31 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
   return result;
 };
 export const eoFormatResponseData = ({ report, history, id }) => {
-  let { httpCode, ...historyRes } = history.resultInfo;
-  historyRes = {
+  let { httpCode, ...response } = history.resultInfo;
+  response = {
     statusCode: httpCode,
-    ...historyRes,
-    body: historyRes.body || '',
-    headers: historyRes.headers.map((val) => ({ name: val.key, value: val.value })),
+    ...response,
+    body: response.body || '',
+    headers: response.headers.map((val) => ({ name: val.key, value: val.value })),
   };
-  let result: { report: any; history: ApiTestHistoryFrame; id: number } = {
+  let result: {
+    report: any;
+    general: ApiTestResGeneral;
+    response: ApiTestHistoryResponse;
+    history: any;
+    id: number;
+  } = {
     id: id,
+    general: report.general,
+    response: response,
     report: {
-      general: report.general,
       request: {
         requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
         requestBodyType: REQUEST_BODY_TYPE[report.request.requestType],
         requestBody: report.request.body,
       },
-      reportList: report.reportList,
-      response: historyRes,
     },
     history: {
-      general: history.general,
       request: {
         uri: history.requestInfo.URL,
         method: history.requestInfo.method,
@@ -130,7 +138,6 @@ export const eoFormatResponseData = ({ report, history, id }) => {
         requestBodyType: REQUEST_BODY_TYPE[history.requestInfo.requestType],
         requestBody: history.requestInfo.params,
       },
-      response: historyRes,
     },
   };
   if (result.report.request.requestBodyType === 'formData') {

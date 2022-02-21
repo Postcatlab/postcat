@@ -1,4 +1,4 @@
-import { GroupTreeItem } from '../shared/models';
+import { GroupTreeItem } from '../../shared/models';
 /**
  * Convert old component listBlock array items has level without  parent id to  tree nodes
  * @param list Array<GroupTreeItem>

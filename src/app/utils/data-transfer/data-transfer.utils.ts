@@ -1,7 +1,21 @@
 import { whatType, whatTextType } from '..';
 import { ApiBodyType, JsonRootType } from '../../shared/services/api-data/api-data.model';
-import { flatData } from '../tree';
+import { flatData } from '../tree/tree.utils';
 
+export const isXML = (data) => {
+  const parser = new DOMParser();
+  let xml = null;
+  try {
+    const xmlContent = parser.parseFromString(data, 'text/xml');
+    xml = xmlContent.getElementsByTagName('parsererror');
+  } catch (error) {
+    return false;
+  }
+  if (xml.length > 0) {
+    return false;
+  }
+  return true;
+};
 /**
  * Parse item to table need row data
  */

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { ApiTestQuery } from '../../../shared/services/api-test/api-test-params.model';
 import { ApiTestHistory } from '../../../shared/services/api-test-history/api-test-history.model';
 
-import { treeToListHasLevel } from '../../../utils/tree';
-import { text2UiData } from '../../../utils/data-transfer/data-transfer';
+import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
+import { text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
 export class ApiTestService {
@@ -146,15 +146,15 @@ export class ApiTestService {
    * @description Add query to URL and read query form url
    * @param {string} url - whole url include query
    * @param {object} query - ui query param
-   * @param {string} opts.priority - which as priority higher,url or query
+   * @param {string} opts.base - based on which,url or query,delete no exist and replace same
    * @param {string} opts.replaceType - replace means only keep replace array,merge means union
    * @returns {object} - {url:"",query:[]}
    */
   transferUrlAndQuery(
     url,
     query,
-    opts: { priority: string; replaceType: string } = {
-      priority: 'url',
+    opts: { base: string; replaceType: string } = {
+      base: 'url',
       replaceType: 'replace',
     }
   ) {
@@ -170,8 +170,8 @@ export class ApiTestService {
       urlQuery.push(item);
     });
     //get replace result
-    let origin = opts.priority === 'url' ? uiQuery : urlQuery,
-      replace = opts.priority === 'url' ? urlQuery : uiQuery;
+    let origin = opts.base === 'url' ? uiQuery : urlQuery,
+      replace = opts.base === 'url' ? urlQuery : uiQuery;
     if (opts.replaceType === 'replace') origin.forEach((val) => (val.required = false));
     let result = [...replace, ...origin];
     for (var i = 0; i < result.length; ++i) {
@@ -228,7 +228,6 @@ export class ApiTestService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
-    console.log(inData);
     let result = {
       testData: {
         uuid: inData.apiDataID,
@@ -274,12 +273,12 @@ export class ApiTestService {
       if (!result[keyName] || typeof result[keyName] !== 'object') return;
       result[keyName] = testToEditParams(result[keyName]);
     });
-    if(inData.history.response.responseType==='text'){
-      let bodyInfo=text2UiData(inData.history.response.body);
-      console.log(bodyInfo)
-      result.responseBody=bodyInfo.data;
-      result.responseBodyType=bodyInfo.textType;
-      result.responseBodyJsonType=bodyInfo.rootType;
+    if (inData.history.response.responseType === 'text') {
+      let bodyInfo = text2UiData(inData.history.response.body);
+      console.log(bodyInfo);
+      result.responseBody = bodyInfo.data;
+      result.responseBodyType = bodyInfo.textType;
+      result.responseBodyJsonType = bodyInfo.rootType;
     }
     return result;
   }
@@ -295,7 +294,7 @@ export class ApiTestService {
     });
     //handle query and url
     let tmpResult = this.transferUrlAndQuery(inData.uri, inData.queryParams, {
-      priority: 'url',
+      base: 'url',
       replaceType: 'merge',
     });
     inData.uri = tmpResult.url;

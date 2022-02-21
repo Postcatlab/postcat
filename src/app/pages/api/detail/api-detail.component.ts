@@ -5,7 +5,7 @@ import { ApiData } from '../../../shared/services/api-data/api-data.model';
 import { ApiBodyType, JsonRootType } from '../../../shared/services/api-data/api-data.model';
 
 import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
-import { treeToListHasLevel } from '../../../utils/tree';
+import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 
 export interface TreeNodeInterface {
