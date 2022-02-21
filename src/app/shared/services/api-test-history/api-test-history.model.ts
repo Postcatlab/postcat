@@ -14,42 +14,42 @@ export interface ApiTestHistoryResponse {
    */
   reportList: string[] | object[];
 }
+/**
+ * General indicators
+ * @type {object}
+ */
+export interface ApiTestResGeneral {
+  downloadRate: string;
+  downloadSize: number;
+  redirectTimes: number;
+  time: string;
+  timingSummary: {
+    dnsTiming: string;
+    tcpTiming: string;
+    /**
+     * SSL/TSL
+     */
+    tlsTiming: string;
+    /**
+     * The request is being sent until recieve firstByte
+     */
+    requestSentTiming: string;
+    /**
+     * Content download
+     */
+    contentDeliveryTiming: string;
+    /**
+     * Waiting (TTFB) - Time To First Byte
+     */
+    firstByteTiming: string;
+    /**
+     * Total Time
+     */
+    responseTiming: string;
+  }[];
+}
 export interface ApiTestHistoryFrame {
-  /**
-   * General indicators
-   * @type {object}
-   */
-  general: {
-    downloadRate: string;
-    downloadSize: number;
-    redirectTimes: number;
-    time: string;
-    timingSummary: {
-      dnsTiming: string;
-      tcpTiming: string;
-      /**
-       * SSL/TSL
-       */
-      tlsTiming: string;
-      /**
-       * The request is being sent until recieve firstByte
-       */
-      requestSentTiming: string;
-      /**
-       * Content download
-       */
-      contentDeliveryTiming: string;
-      /**
-       * Waiting (TTFB) - Time To First Byte
-       */
-      firstByteTiming: string;
-      /**
-       * Total Time
-       */
-      responseTiming: string;
-    }[];
-  };
-
+  general: ApiTestResGeneral;
   /**
    * HTTP Request
    * @type {object}
@@ -63,7 +63,6 @@ export interface ApiTestHistoryFrame {
     requestBodyType: string | 'formData' | 'raw';
     requestBody: any | object[] | string;
   };
-
   /**
    * HTTP response
    * @type {object}

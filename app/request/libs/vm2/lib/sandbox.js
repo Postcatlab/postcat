@@ -6,7 +6,11 @@
 const {Script} = host.require('vm');
 const fs = host.require('fs');
 const pa = host.require('path');
-const {match} = host.require('../lib/wildcard');
+const match = (wildcard, s) => {
+	const regexString = wildcard.replace(/\*/, '\\S*').replace(/\?/g, '.');
+	const regex = new RegExp(regexString);
+	return regex.test(s);
+};
 
 const BUILTIN_MODULES = host.process.binding('natives');
 const parseJSON = JSON.parse;

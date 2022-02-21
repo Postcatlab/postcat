@@ -5,17 +5,14 @@ import { TestServer } from '../test-server.model';
 import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
 @Injectable()
 export class TestServerLocalNodeService implements TestServer {
-  METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
-  PROTOCOL = ['http', 'https'];
-  REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
   constructor(private electron: ElectronService, @Inject(LOCALE_ID) private locale: string) {}
   init(receiveMessage: (message) => void) {
     this.electron.ipcRenderer.on('unitTest', (event, args) => {
       receiveMessage(this.formatResponseData(args));
     });
   }
-  send(action, message) {
-    this.electron.ipcRenderer.send(action, message);
+  send(module, message) {
+    this.electron.ipcRenderer.send(module, message);
   }
   close() {
     this.electron.ipcRenderer.removeAllListeners('unitTest');
