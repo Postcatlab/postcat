@@ -19,7 +19,7 @@ import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';
 import { getRest } from '../../../utils/api';
-import { treeToListHasLevel, listToTree, listToTreeHasLevel, getExpandGroupByKey } from '../../../utils/tree';
+import { treeToListHasLevel, listToTree, listToTreeHasLevel, getExpandGroupByKey } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 @Component({
   selector: 'eo-api-edit-edit',

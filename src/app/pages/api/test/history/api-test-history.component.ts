@@ -4,7 +4,7 @@ import { formatDate } from '@angular/common';
 import { ApiTestHistoryService } from '../../../../shared/services/api-test-history/api-test-history.service';
 import { ApiTestService } from '../api-test.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ApiTestHistory } from '../../../../shared/services/api-test-history/api-test-history.model';
+import { ApiTestHistory, ApiTestHistoryFrame } from '../../../../shared/services/api-test-history/api-test-history.model';
 @Component({
   selector: 'eo-api-test-history',
   templateUrl: './api-test-history.component.html',
@@ -23,7 +23,7 @@ export class ApiTestHistoryComponent implements OnInit {
   ) {
     this.initListConf();
   }
-  add(history: ApiTestHistory,apiID) {
+  add(history: ApiTestHistoryFrame,apiID) {
     this.apiTestHistory
       .create({
         projectID: 1,

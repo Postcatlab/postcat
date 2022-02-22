@@ -12,7 +12,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { addKeyInTree, findDataInTree, flatData } from '../../../utils/tree';
+import { addKeyInTree, findDataInTree, flatData } from '../../../utils/tree/tree.utils';
 import { CellDirective } from './cell.directive';
 type Column = {
   title: string;

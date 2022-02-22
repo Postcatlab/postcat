@@ -30,7 +30,7 @@ import { ApiTestHistoryService } from '../../../shared/services/api-test-history
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
 import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
-import { TestServerAPIKitService } from '../../../shared/services/api-test/apikit-node/test-connect.service';
+import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
 
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestHeaderComponent } from './header/api-test-header.component';
@@ -83,6 +83,6 @@ const COMPONENTS = [
     SharedModule,
     ParamsImportModule,
   ],
-  providers: [ApiTestHistoryService, ApiTestService, TestServerService, TestServerLocalNodeService,TestServerAPIKitService],
+  providers: [ApiTestHistoryService, ApiTestService, TestServerService, TestServerLocalNodeService,TestServerServerlessService],
 })
 export class ApiTestModule {}

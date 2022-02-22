@@ -15,7 +15,7 @@ import { ApiDataService } from '../../../../shared/services/api-data/api-data.se
 import { MessageService } from '../../../../shared/services/message';
 
 import { filter, Subject, takeUntil } from 'rxjs';
-import { getExpandGroupByKey, listToTree } from '../../../../utils/tree';
+import { getExpandGroupByKey, listToTree } from '../../../../utils/tree/tree.utils';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { ModalService } from '../../../../shared/services/modal.service';
 @Component({
@@ -108,7 +108,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   getApis() {
-    console.log('getApis',this.apiDataItems)
     this.apiDataService.loadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
       let apiItems = {};
       items.forEach((item) => {
