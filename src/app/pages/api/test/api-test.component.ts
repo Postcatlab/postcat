@@ -106,8 +106,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
     this.messageService.send({ type: 'addApiFromTest', data: apiData });
   }
-  changeQuery() {
-    this.apiData.uri = this.apiTest.transferUrlAndQuery(this.apiData.uri, this.apiData.queryParams, {
+  changeQuery(queryParams) {
+    this.apiData.uri = this.apiTest.transferUrlAndQuery(this.apiData.uri, queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
