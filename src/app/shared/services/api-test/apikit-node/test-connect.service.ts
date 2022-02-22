@@ -5,12 +5,9 @@ import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
 @Injectable()
 export class TestServerAPIKitService implements TestServer {
   socket: WebSocket;
-  METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
-  PROTOCOL = ['http', 'https'];
-  REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
   constructor(@Inject(LOCALE_ID) private locale: string) {}
   init(receiveMessage: (message) => void) {
-    this.socket = new WebSocket(`ws://eoapi.dev.eolink.com:1204/nodeWebsocketServer/unit`);
+    this.socket = new WebSocket(`/nodeWebsocketServer/unit`);
     this.socket.onopen = () => {
       this.socket.send(
         '{"status":"init","lang":"cn","globals":{},"spaceKey":"eolinker","projectHashKey":"ccsIhPl17503a6b2326f09fbc4e3a7c03874c7333002038","module":0,"apiID":"5622482","markFrontUrl":"apiManagementPro","from":"default"}	'
@@ -20,7 +17,7 @@ export class TestServerAPIKitService implements TestServer {
       receiveMessage(this.formatResponseData(JSON.parse(inputEvt.data)));
     };
   }
-  send(action, message) {
+  send(module, message) {
     this.socket.send(
       JSON.stringify({
         status: message.action,
