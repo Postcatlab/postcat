@@ -99,9 +99,13 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleSaveEnv() {
     // * update list after call save api
-    const { parameters, ...other } = this.envInfo;
+    const { parameters, name, ...other } = this.envInfo;
+    if (!name) {
+      this.message.error('Name is not allowed to be empty.');
+      return;
+    }
     const data = parameters.filter((it) => it.name && it.value);
-    this.envService.create({ ...other, parameters: data }).subscribe((result: Environment) => {
+    this.envService.create({ ...other, name, parameters: data }).subscribe((result: Environment) => {
       this.envInfo = result;
       this.activeUuid = Number(result.uuid);
       this.handleSwitchEnv(result.uuid);
@@ -116,9 +120,13 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleUpdateEnv(uuid: string | number) {
     // * update env
-    const { parameters, ...other } = this.envInfo;
+    const { parameters, name, ...other } = this.envInfo;
+    if (!name) {
+      this.message.error('Name is not allowed to be empty.');
+      return;
+    }
     const data = parameters.filter((it) => it.name && it.value);
-    this.envService.update({ ...other, parameters: data }, uuid).subscribe((result: Environment) => {
+    this.envService.update({ ...other, name, parameters: data }, uuid).subscribe((result: Environment) => {
       this.message.success('Save suceess');
       this.getAllEnv();
     });
