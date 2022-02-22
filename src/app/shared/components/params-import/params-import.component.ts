@@ -52,7 +52,6 @@ export class ParamsImportComponent {
     if (this.contentType === 'json') {
       try {
         paramCode = JSON.parse(this.paramCode);
-        console.log('lll', paramCode);
       } catch (error) {
         this.message.error('JSON格式不合法');
         return;
@@ -86,7 +85,6 @@ export class ParamsImportComponent {
       console.warn('The code that you input is no-equal to the root type.');
     }
     // if (whatType(paramCode) === 'object') {
-    // console.log('kk', paramCode);
     // * transform to array of table format.
     // }
     if (this.rootType === 'array' && whatType(paramCode) === 'array') {
@@ -96,6 +94,7 @@ export class ParamsImportComponent {
     }
     // * tree to array for table render
     const cacheData = flatData(Object.keys(paramCode).map((it) => parseTree(it, paramCode[it])));
+
     // TODO delete useless attribute in cacheData
     switch (type) {
       case 'mixin': {
