@@ -90,7 +90,7 @@
         <eo-api-test-query
           class="eo_theme_iblock bbd"
           [model]="apiData.queryParams"
-          (modelChange)="changeQuery()"
+          (modelChange)="changeQuery($event)"
         ></eo-api-test-query>
       </nz-tab>
       <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
