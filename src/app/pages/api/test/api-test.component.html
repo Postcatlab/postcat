@@ -57,7 +57,7 @@
             apiData.requestHeaders | apiParamsNum
           }}</span>
         </ng-template>
-        <eo-api-test-header class="eo_theme_iblock bbd" [model]="apiData.requestHeaders"></eo-api-test-header>
+        <eo-api-test-header class="eo_theme_iblock bbd" [(model)]="apiData.requestHeaders"></eo-api-test-header>
       </nz-tab>
       <!-- 请求信息 -->
       <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">

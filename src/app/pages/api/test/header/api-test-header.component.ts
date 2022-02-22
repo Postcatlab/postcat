@@ -1,4 +1,8 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+
+import { Subject, takeUntil } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 import { ApiTestHeaders } from '../../../../shared/services/api-test/api-test-params.model';
 import { ApiTestService } from '../api-test.service';
 @Component({
@@ -8,13 +12,21 @@ import { ApiTestService } from '../api-test.service';
 })
 export class ApiTestHeaderComponent implements OnInit, OnChanges {
   @Input() model: object[];
+  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+
   listConf: object = {};
+  private modelChange$: Subject<void> = new Subject();
+  private destroy$: Subject<void> = new Subject();
   private itemStructure: ApiTestHeaders = {
     name: '',
     required: true,
     value: '',
   };
-  constructor(private editService: ApiTestService) {}
+  constructor(private editService: ApiTestService) {
+    this.modelChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+      this.modelChange.emit(this.model);
+    });
+  }
 
   ngOnInit(): void {
     this.initListConf();
@@ -27,6 +39,10 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges {
       }
     }
   }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   private initListConf() {
     this.listConf = this.editService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_HEADER',
@@ -34,6 +50,9 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges {
       title: '头部',
       nameTitle: '标签',
       valueTitle: '内容',
+      watchFormLastChange: () => {
+        this.modelChange$.next();
+      },
     });
   }
 }
