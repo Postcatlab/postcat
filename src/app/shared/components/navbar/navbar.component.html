@@ -1,40 +1,41 @@
 <div class="eo_navbar f_row f_js_ac">
   <img class="logo" src="assets/images/logo.svg" />
-  <span class="help" nz-dropdown [nzDropdownMenu]="menu">
-    <i nz-icon nzType="question-circle" nzTheme="outline"></i>
-  </span>
-  <nz-dropdown-menu #menu="nzDropdownMenu">
-    <ul nz-menu nzSelectable>
-      <a href="https://eoapi.vercel.app/" nz-menu-item>产品文档</a>
-      <li nz-menu-divider></li>
-      <a href="https://github.com/eolinker/eoapi/issues" nz-menu-item>问题反馈</a>
-    </ul>
-  </nz-dropdown-menu>
-
-  <div class="can_be_click right_btn_container" *ngIf="!OS_TYPE.includes('mac') && isElectron">
-    <span
-      nz-tooltip
-      nzTooltipTitle="最小化"
-      nzTooltipPlacement="bottom"
-      class="iconfont icon-jianhao mr10 fs24 cp"
-      (click)="minimize()"
-    >
+  <div class="can_be_click f_row_ac right_btn_container">
+    <span class="help mr10 " nz-dropdown [nzDropdownMenu]="menu">
+      <i nz-icon nzType="question-circle" nzTheme="outline"></i>
     </span>
-    <span
-      nz-tooltip
-      [nzTooltipTitle]="isMaximized ? '向下还原' : '最大化'"
-      nzTooltipPlacement="bottom"
-      class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
-      (click)="toggleMaximize()"
-    >
-    </span>
-    <span
-      nz-tooltip
-      nzTooltipTitle="关闭"
-      nzTooltipPlacement="bottom"
-      class="iconfont icon-guanbi pr15 fs24 cp"
-      (click)="close()"
-    >
-    </span>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <a href="https://eoapi.vercel.app/" nz-menu-item>产品文档</a>
+        <li nz-menu-divider></li>
+        <!-- <a (click)="openLink('https://github.com/eolinker/eoapi/issues/new')" target="_blank" nz-menu-item>问题反馈</a> -->
+      </ul>
+    </nz-dropdown-menu>
+    <div *ngIf="!OS_TYPE.includes('mac') && isElectron">
+      <span
+        nz-tooltip
+        nzTooltipTitle="最小化"
+        nzTooltipPlacement="bottom"
+        class="iconfont icon-jianhao mr10 fs24 cp"
+        (click)="minimize()"
+      >
+      </span>
+      <span
+        nz-tooltip
+        [nzTooltipTitle]="isMaximized ? '向下还原' : '最大化'"
+        nzTooltipPlacement="bottom"
+        class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
+        (click)="toggleMaximize()"
+      >
+      </span>
+      <span
+        nz-tooltip
+        nzTooltipTitle="关闭"
+        nzTooltipPlacement="bottom"
+        class="iconfont icon-guanbi pr15 fs24 cp"
+        (click)="close()"
+      >
+      </span>
+    </div>
   </div>
 </div>
