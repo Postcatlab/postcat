@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 import { ipcRenderer, webFrame } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +12,6 @@ export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
   webFrame: typeof webFrame;
   childProcess: typeof childProcess;
-  // shell: typeof shell;
   fs: typeof fs;
 
   constructor() {
@@ -21,7 +19,6 @@ export class ElectronService {
     if (this.isElectron) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
-      // this.shell = window.require('electron').shell;
       this.childProcess = window.require('child_process');
       this.fs = window.require('fs');
       // Notes :
@@ -35,7 +32,7 @@ export class ElectronService {
       // If you want to use a NodeJS 3rd party deps in Renderer process,
       // ipcRenderer.invoke can serve many common use cases.
       // https://www.electronjs.org/docs/latest/api/ipc-renderer#ipcrendererinvokechannel-args
-    }
+    } 
   }
 
   get isElectron(): boolean {

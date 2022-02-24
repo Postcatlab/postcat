@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, ipcMain } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, shell } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -26,7 +26,13 @@ function createWindow(): BrowserWindow {
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
-
+  //open link through default browser not electron
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    setImmediate(() => {
+      shell.openExternal(url);
+    });
+    return { action: 'deny' };
+  });
   if (serve) {
     win.webContents.openDevTools();
     require('electron-reload')(__dirname, {

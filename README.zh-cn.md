@@ -6,7 +6,7 @@
 
 <h1 align="center">EOAPI</h1>
 <div align="center">
-简单易用的开源 API 管理工具
+希望成为最适合你的 API 工具
 </div>
 
 ![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png?token=GHSAT0AAAAAABRGKRUBJ634JVP7XL7KWAECYP3J36Q)
@@ -19,10 +19,13 @@
 - API 管理：可通过界面编辑 API 文档，零学习成本。
 - 测试环境管理
 - 可离线使用
+- 插件集市
 
 # 快速开始
 
-- 你可以访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows，macOS 版本的安装包。
+- 访问 [在线示例](https://demo.eoapi.io/) 快速体验产品
+
+- 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows，macOS 版本的安装包。
 
 # 源码运行/构建
 

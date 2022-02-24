@@ -5,7 +5,7 @@
 </p>
 <h1 align="center">EOAPI</h1>
 <div align="center">
-Easy-to-use API Manage desktop tool
+Hope to be the best api tool for you.
 </div>
 
 ![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png)
@@ -18,10 +18,12 @@ Easy-to-use API Manage desktop tool
 - API management : Management API with zero learning cost.
 - Test environment management
 - Available offline
+- Extension Marketplace
 
 # Getting started
 
-<!-- - Try the [live demo](http://eoapi.dev.eolink.com/) -->
+- Try the [live demo](https://demo.eoapi.io/)
+
 - You can download it for Windows, macOS on [Releases](https://github.com/eolinker/eoapi/releases)
 
 # Build and run from source
