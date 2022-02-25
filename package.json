@@ -64,7 +64,7 @@
     "@angular/upgrade": "^13.2.0",
     "@ngxs/store": "3.7.3",
     "angular": "1.8.2",
-    "eoapi-core": "file:../eoapi-core",
+    "eoapi-core": "1.0.1",
     "js-beautify": "1.14.0",
     "ng-zorro-antd": "13.0.1",
     "ngx-ace-wrapper": "11.0.1",
