@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject, LOCALE_ID, EventEmitter, Input, Output } from '@angular/core';
 import { formatDate } from '@angular/common';
-
-import { ApiTestHistoryService } from '../../../../shared/services/api-test-history/api-test-history.service';
 import { ApiTestService } from '../api-test.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ApiTestHistory, ApiTestHistoryFrame } from '../../../../shared/services/api-test-history/api-test-history.model';
+import { ApiTestHistory, ApiTestHistoryFrame } from 'eoapi-core';
+import { StorageService } from '../../../../shared/services/storage.service';
+
 @Component({
   selector: 'eo-api-test-history',
   templateUrl: './api-test-history.component.html',
@@ -17,15 +17,15 @@ export class ApiTestHistoryComponent implements OnInit {
   @Output() clickItem: EventEmitter<any> = new EventEmitter();
   constructor(
     @Inject(LOCALE_ID) private locale: string,
-    private apiTestHistory: ApiTestHistoryService,
+    private storage: StorageService,
     private nzMessageService: NzMessageService,
     private apiTest: ApiTestService
   ) {
     this.initListConf();
   }
+
   add(history: ApiTestHistoryFrame,apiID) {
-    this.apiTestHistory
-      .create({
+    this.storage.storage.apiTestHistoryCreate({
         projectID: 1,
         apiDataID: apiID,
         ...history,
@@ -39,7 +39,7 @@ export class ApiTestHistoryComponent implements OnInit {
       });
   }
   deleteAll() {
-    this.apiTestHistory.bulkRemove(this.model.map((val) => val.uuid)).subscribe({
+    this.storage.storage.apiTestHistoryBulkRemove(this.model.map((val) => val.uuid)).subscribe({
       next: (res) => {
         this.model = [];
         this.nzMessageService.success('删除成功');
@@ -105,7 +105,7 @@ export class ApiTestHistoryComponent implements OnInit {
     };
   }
   private delete(inArg) {
-    this.apiTestHistory.remove(inArg.item.uuid).subscribe({
+    this.storage.storage.apiTestHistoryRemove(inArg.item.uuid).subscribe({
       next: (res) => {
         this.model.splice(inArg.$index, 1);
         this.nzMessageService.success('删除成功');
@@ -114,7 +114,7 @@ export class ApiTestHistoryComponent implements OnInit {
     });
   }
   private getList() {
-    this.apiTestHistory.loadAllByApiDataID(this.apiID).subscribe({
+    this.storage.storage.apiTestHistoryLoadAllByApiDataID(this.apiID).subscribe({
       next: (res) => {
         res.forEach((val: any) => {
           this.parseItem(val);

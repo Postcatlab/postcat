@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Environment } from '../../shared/services/environment/environment.model';
-import { EnvironmentService } from '../../shared/services/environment/environment.service';
+import { Environment } from 'eoapi-core';
+import { StorageService } from '../../shared/services/storage.service';
+import { ElectronService } from '../../core/services';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { uuid as uid } from '../../utils/index';
 import { EoTableComponent } from '../../eoui/table/eo-table/eo-table.component';
@@ -29,7 +30,12 @@ export class EnvComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private envService: EnvironmentService, private message: NzMessageService, private store: Store) {}
+  constructor(
+    private storage: StorageService,
+    private electron: ElectronService,
+    private message: NzMessageService,
+    private store: Store
+  ) {}
 
   get envUuid(): number {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -54,7 +60,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
 
   getAllEnv() {
-    this.envService.loadAll().subscribe((result: Array<Environment>) => {
+    this.storage.storage.environmentLoadAllByProjectID(1).subscribe((result: Array<Environment>) => {
       if (result.length === 0) {
         this.envList = [];
         this.handleAddEnv(null);
@@ -67,7 +73,7 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleDeleteEnv(uuid: string) {
     // * delete env in menu on left sidebar
-    this.envService.remove(uuid).subscribe((result: boolean) => {
+    this.storage.storage.environmentRemove(uuid).subscribe((result: boolean) => {
       this.getAllEnv();
     });
   }
@@ -78,7 +84,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
   handleSwitchEnv(uuid) {
     // * switch env in menu on left sidebar
-    this.envService.load(uuid).subscribe((result: Environment) => {
+    this.storage.storage.environmentLoad(uuid).subscribe((result: Environment) => {
       const { parameters, ...other } = result;
       const list = JSON.parse(JSON.stringify(parameters));
       this.envInfo = { ...other, parameters: [...list, { name: '', value: '', description: '' }] };
@@ -105,7 +111,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       return;
     }
     const data = parameters.filter((it) => it.name && it.value);
-    this.envService.create({ ...other, name, parameters: data }).subscribe((result: Environment) => {
+    this.storage.storage.environmentCreate({ ...other, name, parameters: data }).subscribe((result: Environment) => {
       this.envInfo = result;
       this.activeUuid = Number(result.uuid);
       this.handleSwitchEnv(result.uuid);
@@ -126,8 +132,8 @@ export class EnvComponent implements OnInit, OnDestroy {
       return;
     }
     const data = parameters.filter((it) => it.name && it.value);
-    this.envService.update({ ...other, name, parameters: data }, uuid).subscribe((result: Environment) => {
-      this.message.success('Save suceess');
+    this.storage.storage.environmentUpdate({ ...other, name, parameters: data }, uuid).subscribe((result: Environment) => {
+      this.message.success('Save success');
       this.getAllEnv();
     });
   }
@@ -155,7 +161,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.store.dispatch(new Change(null));
       return;
     }
-    this.envService.loadAll().subscribe((result: Array<Environment>) => {
+    this.storage.storage.environmentLoadAllByProjectID(1).subscribe((result: Array<Environment>) => {
       if (result.length === 0) {
         return;
       }

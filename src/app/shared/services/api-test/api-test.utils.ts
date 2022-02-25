@@ -1,12 +1,7 @@
 import { listToTreeHasLevel } from '../../../utils/tree/tree.utils';
-import { ApiBodyType } from '../api-data/api-data.model';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-import {
-  ApiTestHistoryFrame,
-  ApiTestResGeneral,
-  ApiTestHistoryResponse,
-} from '../api-test-history/api-test-history.model';
+import { ApiBodyType, ApiTestResGeneral, ApiTestHistoryResponse } from 'eoapi-core';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];

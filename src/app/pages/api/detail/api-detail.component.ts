@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { ApiData } from '../../../shared/services/api-data/api-data.model';
-import { ApiBodyType, JsonRootType } from '../../../shared/services/api-data/api-data.model';
-
-import { ApiDataService } from '../../../shared/services/api-data/api-data.service';
+import { ApiData, ApiBodyType, JsonRootType } from 'eoapi-core';
+import { StorageService } from '../../../shared/services/storage.service';
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 
@@ -29,7 +26,7 @@ export class ApiDetailComponent implements OnInit {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType)
   };
-  constructor(private apiDataService: ApiDataService, private route: ActivatedRoute) {
+  constructor(private storage: StorageService, private route: ActivatedRoute) {
   }
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -41,7 +38,7 @@ export class ApiDetailComponent implements OnInit {
     });
   }
   getApiByUuid(id: number) {
-    this.apiDataService.load(id).subscribe((result: ApiData) => {
+    this.storage.storage.apiDataLoad(id).subscribe((result: ApiData) => {
       ['requestBody', 'responseBody'].forEach((tableName) => {
         if (['xml', 'json'].includes(result[`${tableName}Type`])) {
           result[tableName] = treeToListHasLevel(result[tableName]);

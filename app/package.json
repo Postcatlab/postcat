@@ -8,12 +8,14 @@
   },
   "dependencies": {
     "crypto-js": "^4.0.0",
+    "eoapi-core": "^1.0.2",
     "form-data": "^2.5.1",
     "iconv-lite": "^0.6.2",
     "xml2js": "^0.4.23",
     "content-disposition": "^0.5.4",
     "electron-log": "^4.4.6",
-    "electron-updater": "^4.6.5"
+    "electron-updater": "^4.6.5",
+    "rxjs": "^7.5.4"
   },
   "devDependencies": {
     "electron": "16.0.0"

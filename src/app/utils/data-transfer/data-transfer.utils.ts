@@ -1,5 +1,5 @@
 import { whatType, whatTextType } from '..';
-import { ApiBodyType, JsonRootType } from '../../shared/services/api-data/api-data.model';
+import { ApiBodyType, JsonRootType } from 'eoapi-core';
 import { flatData } from '../tree/tree.utils';
 
 export const isXML = (data) => {

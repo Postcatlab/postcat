@@ -1,19 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
-import { Group } from '../../../../shared/services/group/group.model';
+import { Group, ApiData } from 'eoapi-core';
 import { Message } from '../../../../shared/services/message/message.model';
-import { ApiData } from '../../../../shared/services/api-data/api-data.model';
-
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
-
-import { GroupService } from '../../../../shared/services/group/group.service';
-import { ApiDataService } from '../../../../shared/services/api-data/api-data.service';
 import { MessageService } from '../../../../shared/services/message';
-
+import { StorageService } from '../../../../shared/services/storage.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { getExpandGroupByKey, listToTree } from '../../../../utils/tree/tree.utils';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
@@ -58,8 +52,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
-    private groupService: GroupService,
-    private apiDataService: ApiDataService,
+    private storage: StorageService,
     private messageService: MessageService
   ) {}
   ngOnInit(): void {
@@ -92,7 +85,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.getGroups();
   }
   getGroups() {
-    this.groupService.loadAllByProjectID(this.projectID).subscribe((items: Array<Group>) => {
+    this.storage.storage.groupLoadAllByProjectID(this.projectID).subscribe((items: Array<Group>) => {
       items.forEach((item) => {
         delete item.updatedAt;
         this.groupByID[item.uuid] = item;
@@ -108,7 +101,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   getApis() {
-    this.apiDataService.loadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
+    this.storage.storage.apiDataLoadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
       let apiItems = {};
       items.forEach((item) => {
         delete item.updatedAt;
@@ -291,13 +284,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0 && data.api.length > 0) {
-      this.groupService.bulkUpdate(data.group).subscribe((result) => {
-        this.apiDataService.bulkUpdate(data.api).subscribe((result) => {});
+      this.storage.storage.groupBulkUpdate(data.group).subscribe((result) => {
+        this.storage.storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
       });
     } else if (data.group.length > 0) {
-      this.groupService.bulkUpdate(data.group).subscribe((result) => {});
+      this.storage.storage.groupBulkUpdate(data.group).subscribe((result) => {});
     } else if (data.api.length > 0) {
-      this.apiDataService.bulkUpdate(data.api).subscribe((result) => {});
+      this.storage.storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
     }
   }
   private watchRouterChange() {
@@ -315,6 +308,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       weight: node.origin.weight,
     };
   }
+
   private setSelectedKeys() {
     if (this.route.snapshot.queryParams.uuid) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];

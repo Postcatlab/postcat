@@ -1,5 +1,5 @@
 import { Component, OnInit, Input} from '@angular/core';
-import { ApiEditQuery } from '../../../../shared/services/api-data/api-edit-params.model';
+import { ApiEditQuery } from 'eoapi-core';
 import { ApiDetailService } from '../api-detail.service';
 
 @Component({

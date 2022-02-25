@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../shared/services/message';
 import { ApiService } from './api.service';
+import { ElectronService } from '../../core/services';
 
 @Component({
   selector: 'eo-api',
@@ -31,11 +32,21 @@ export class ApiComponent implements OnInit, OnDestroy {
   ];
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private messageService: MessageService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private apiService: ApiService,
+    private messageService: MessageService,
+    private electronService: ElectronService
+  ) {}
 
   ngOnInit(): void {
     this.watchChangeRouter();
     this.watchApiAction();
+    this.electronService.ipcRenderer.send('eo', {action: 'getEnabledModules'});
+    this.electronService.ipcRenderer.on('eo', (event, args) => {
+      console.log('receive from ipcMain');
+      console.log(args);
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();

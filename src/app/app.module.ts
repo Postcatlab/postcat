@@ -6,22 +6,14 @@ import { HttpClientModule } from '@angular/common/http';
 
 //Other module
 import { CoreModule } from './core/core.module';
-import { StorageModule } from './modules/storage/storage.module';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NgxsModule } from '@ngxs/store';
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnvState } from './shared/store/env.state';
 
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
-
-//Storage Module
-import { storageSettingData } from './shared/models/storageSetting.model';
-
-
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,13 +21,12 @@ import { storageSettingData } from './shared/models/storageSetting.model';
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     CoreModule,
     AppRoutingModule,
+    HttpClientModule,
     UpgradeModule,
     NzModalModule,
     NgxsModule.forRoot([EnvState]),
-    StorageModule.forRoot({ setting: storageSettingData })
   ],
   providers: [
     {

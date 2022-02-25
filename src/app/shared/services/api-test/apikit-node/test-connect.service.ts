@@ -1,5 +1,4 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
-
 import { TestServer } from '../test-server.model';
 import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
 @Injectable()

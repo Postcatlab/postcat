@@ -1,5 +1,5 @@
 import { Component, OnInit, Input} from '@angular/core';
-import { ApiEditRest } from '../../../../shared/services/api-data/api-edit-params.model';
+import { ApiEditRest } from 'eoapi-core';
 import { ApiDetailService } from '../api-detail.service';
 @Component({
   selector: 'eo-api-detail-rest',

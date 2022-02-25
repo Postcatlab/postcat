@@ -1,12 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { TabItem } from './tab.model';
-import { ApiData } from '../../../shared/services/api-data/api-data.model';
-
+import { ApiData } from 'eoapi-core';
 import { ApiTabService } from './api-tab.service';
-
 import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../../shared/services/message';
 @Component({
