@@ -51,8 +51,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiBodyType.Raw: // case ApiBodyType.Binary:
-      {
+      case ApiBodyType.Raw: {
+        // case ApiBodyType.Binary:
         this.cache[type] = this.model;
         break;
       }
@@ -67,7 +67,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.bodyTypeChange.emit(this.bodyType);
     this.setListConf();
     this.setModel();
-    if(type==='init') return;
+    if (type === 'init') return;
     this.modelChange.emit(this.model);
   }
 
@@ -81,7 +81,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
+    if ((changes.model && !changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length===0) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
@@ -101,7 +101,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
    */
   private setModel() {
     switch (this.bodyType) {
-      case ApiBodyType.Raw: { // case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        // case ApiBodyType.Binary:
         this.model = this.cache[this.bodyType] || '';
         break;
       }
