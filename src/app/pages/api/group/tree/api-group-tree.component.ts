@@ -154,7 +154,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
-        console.log('watchApiAction', inArg);
         switch (inArg.type) {
           case 'addApiSuccess':
           case 'editApiSuccess':
