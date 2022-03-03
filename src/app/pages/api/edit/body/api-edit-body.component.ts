@@ -90,7 +90,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
+    if ((changes.model && !changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length===0) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
