@@ -79,9 +79,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleSwitchEnv(uuid) {
     // * switch env in menu on left sidebar
     this.envService.load(uuid).subscribe((result: Environment) => {
-      const { parameters, ...other } = result;
-      const list = JSON.parse(JSON.stringify(parameters));
-      this.envInfo = { ...other, parameters: [...list, { name: '', value: '', description: '' }] };
+      this.envInfo = result;
     });
     this.activeUuid = uuid;
   }
@@ -92,12 +90,12 @@ export class EnvComponent implements OnInit, OnDestroy {
       projectID: pid || uid(),
       name: '',
       hostUri: '',
-      parameters: [{ name: '', value: '', description: '' }],
+      parameters: [],
     };
     this.activeUuid = null;
   }
 
-  handleSaveEnv() {
+  handleSaveEnv(uuid: string | number | undefined = undefined) {
     // * update list after call save api
     const { parameters, name, ...other } = this.envInfo;
     if (!name) {
@@ -105,29 +103,17 @@ export class EnvComponent implements OnInit, OnDestroy {
       return;
     }
     const data = parameters.filter((it) => it.name && it.value);
+    if (uuid) {
+      this.envService.update({ ...other, name, parameters: data }, uuid).subscribe((result: Environment) => {
+        this.message.success('编辑成功');
+        this.getAllEnv();
+      });
+    }
     this.envService.create({ ...other, name, parameters: data }).subscribe((result: Environment) => {
+      this.message.success('新增成功');
       this.envInfo = result;
       this.activeUuid = Number(result.uuid);
       this.handleSwitchEnv(result.uuid);
-      this.getAllEnv();
-    });
-  }
-
-  handleTableChange(data) {
-    const list = data.filter((it) => it.name || it.value || it.description);
-    this.envInfo.parameters = [...list, { name: '', value: '', description: '' }];
-  }
-
-  handleUpdateEnv(uuid: string | number) {
-    // * update env
-    const { parameters, name, ...other } = this.envInfo;
-    if (!name) {
-      this.message.error('Name is not allowed to be empty.');
-      return;
-    }
-    const data = parameters.filter((it) => it.name && it.value);
-    this.envService.update({ ...other, name, parameters: data }, uuid).subscribe((result: Environment) => {
-      this.message.success('Save suceess');
       this.getAllEnv();
     });
   }
