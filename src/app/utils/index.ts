@@ -1,6 +1,5 @@
 export const uuid = (): string => Math.random().toString(36).slice(-8);
 
-
 // const DOMAIN_REGEX =
 //   '(^((http|wss|ws|ftp|https)://))|(^(((http|wss|ws|ftp|https)://)|)(([\\w\\-_]+([\\w\\-\\.]*)?(\\.(' +
 //   DOMAIN_CONSTANT.join('|') +
@@ -69,4 +68,9 @@ export const objectToArray = (obj) => {
   }));
 };
 
-
+export const isEmptyValue = (obj) => {
+  const list = Object.keys(obj);
+  const emptyList = list.filter((it) => !obj[it]);
+  // * If they length are equal, means each value of obj is empty. like { name: '', value: '' }
+  return emptyList.length === list.length;
+};
