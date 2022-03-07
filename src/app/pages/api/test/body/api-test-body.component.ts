@@ -81,7 +81,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if ((changes.model && !changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length===0) {
+    if (
+      (changes.model && !changes.model.previousValue && changes.model.currentValue) ||
+      changes.model.currentValue?.length === 0
+    ) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
@@ -113,12 +116,12 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (['formData', 'json'].includes(this.bodyType)) {
       if (!this.model.length || this.model[this.model.length - 1].name) {
-        this.model.push(Object.assign({ listDepth: 0 }, this.itemStructure));
+        // ! this.model.push(Object.assign({ listDepth: 0 }, this.itemStructure));
       }
     }
     if (this.bodyType === 'xml') {
       if (!this.model.length) {
-        this.model.push(Object.assign({ listDepth: 0 }, this.itemStructure));
+        // ! this.model.push(Object.assign({ listDepth: 0 }, this.itemStructure));
       }
       this.model[0].type = 'object';
     }

@@ -1,0 +1,116 @@
+.eo-table {
+  position: relative;
+  &:hover {
+    div.col-menu {
+      display: inline-flex;
+    }
+  }
+  div.col-menu {
+    position: absolute;
+    display: none;
+    width: 80px;
+    height: 36px;
+    bottom: 100%;
+    right: 0;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    background-color: #ffffff;
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+    .eo-button {
+      padding: 0px 8px;
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      transition: all 0.4s ease;
+      &:hover {
+        border-color: #00785a;
+        color: #00785a;
+      }
+    }
+  }
+  div.col-control {
+    position: fixed;
+    right: 0;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    width: 100px;
+    border: 1px solid red;
+    background-color: #ffffff;
+    z-index: 2;
+    display: flex;
+    table.col-table {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      th,
+      td {
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        text-align: center;
+        vertical-align: center;
+      }
+      thead {
+        height: 30px;
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+  table.main-table {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    border: 1px solid #f1f1f1;
+    thead {
+      height: 40px;
+      background-color: #fafafa;
+      th {
+        padding: 0 10px;
+        position: relative;
+        white-space: nowrap;
+        &:after {
+          position: absolute;
+          content: '';
+          display: block;
+          right: 0;
+          top: 10px;
+          bottom: 10px;
+          width: 1px;
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+        &:last-child:after {
+          display: none;
+        }
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: #f7f7f7;
+          td {
+            input {
+              border: 1px solid rgba(0, 0, 0, 0.1);
+            }
+          }
+        }
+        td {
+          border: none;
+          padding: 5px 8px;
+          font-size: 14px;
+
+          > input {
+            height: 30px;
+            width: 100%;
+            padding: 0 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            &:hover,
+            &:focus {
+              border-color: #00785a;
+              box-shadow: 0 0 3px rgba(0, 120, 90, 0.3);
+            }
+          }
+        }
+      }
+    }
+  }
+}

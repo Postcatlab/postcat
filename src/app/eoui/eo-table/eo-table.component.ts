@@ -12,7 +12,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CellDirective } from './cell.directive';
-import { isEmptyValue } from '../../../utils/index';
+import { isEmptyValue } from '../../utils/index';
 
 type Column = {
   title: string;
@@ -35,7 +35,7 @@ type Column = {
 })
 export class EoTableComponent implements OnInit, AfterContentInit {
   @Input() columns: Column[] = [];
-  @Input() dataModel: {} = {};
+  @Input() dataModel: any = {};
   @Input() rules: [] = [];
   @Output() modelChange = new EventEmitter<any>();
 
@@ -43,7 +43,10 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   @ContentChildren(CellDirective) slotList: QueryList<CellDirective>;
   slotMap: { [key: string]: TemplateRef<any> } = {};
 
-  modelData: any[];
+  private modelData: any[];
+
+  constructor() {}
+
   get model(): any[] {
     return this.modelData;
   }
@@ -55,7 +58,6 @@ export class EoTableComponent implements OnInit, AfterContentInit {
       this.modelData = this.modelData.concat([JSON.parse(JSON.stringify(this.dataModel))]);
     }
   }
-  constructor() {}
 
   ngOnInit(): void {
     console.log('->', this.columns);

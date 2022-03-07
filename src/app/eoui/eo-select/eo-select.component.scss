@@ -1,0 +1,13 @@
+select {
+  height: 30px;
+  width: 100%;
+  padding: 0 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  &:hover,
+  &:focus {
+    border-color: #00785a;
+    box-shadow: 0 0 3px rgba(0, 120, 90, 0.3);
+  }
+}

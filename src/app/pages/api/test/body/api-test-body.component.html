@@ -27,6 +27,26 @@
   [mainObject]="listConf"
   [(list)]="model"
 ></list-block-common-component>
+<eo-table
+  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
+  [columns]="[
+    { title: '参数名', key: 'name', isEdit: true },
+    {
+      title: '类型',
+      key: 'value',
+      isSelect: true,
+      options: [
+        { label: 'string', value: 'string' },
+        { label: 'number', value: 'number' },
+        { label: 'null', value: 'null' }
+      ]
+    },
+    { title: '参数值', key: 'description', isEdit: true },
+    { title: '操作', slot: 'action', width: '15%' }
+  ]"
+  [dataModel]="itemStructure"
+  [(model)]="model"
+></eo-table>
 <!-- Raw -->
 <eo-editor
   [(code)]="model"

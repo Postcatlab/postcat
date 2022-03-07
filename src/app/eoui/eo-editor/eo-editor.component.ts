@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AceConfigInterface, AceComponent, AceDirective } from 'ngx-ace-wrapper';
-import { whatTextType } from '../../../utils';
+import { whatTextType } from '../../utils';
 import beautifier from 'js-beautify';
 import 'brace';
 import 'brace/theme/tomorrow_night_eighties';

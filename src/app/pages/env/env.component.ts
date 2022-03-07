@@ -4,7 +4,6 @@ import { Environment } from '../../shared/services/environment/environment.model
 import { EnvironmentService } from '../../shared/services/environment/environment.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { uuid as uid } from '../../utils/index';
-import { EoTableComponent } from '../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../shared/store/env.state';
 
 import { Subject } from 'rxjs';
@@ -15,7 +14,6 @@ import { Subject } from 'rxjs';
   styleUrls: ['./env.component.scss'],
 })
 export class EnvComponent implements OnInit, OnDestroy {
-  @ViewChild('table') table: EoTableComponent; // * child component ref
   varName = `{{变量名}}`;
   isVisible = false;
   envInfo: any = {};

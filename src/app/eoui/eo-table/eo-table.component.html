@@ -1,0 +1,46 @@
+<section class="eo-table">
+  <div class="col-menu">
+    <span><button class="eo-button">列表项</button></span>
+  </div>
+  <div class="col-control">
+    <table class="col-table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" /></th>
+          <th>列表项</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cell of columns; let $i = index">
+          <td><input type="checkbox" /></td>
+          <td>{{ cell.title }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <table class="main-table">
+    <thead>
+      <tr>
+        <th *ngFor="let title of columns" [width]="title.width">{{ title.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let body of model; let i = index">
+        <ng-container *ngFor="let cell of columns; let $i = index">
+          <td>
+            <input *ngIf="cell.isEdit" type="text" [(ngModel)]="body[cell['key']]" (input)="handleChange($event)" />
+            <eo-select *ngIf="cell.isSelect" [dataModel]="cell.options" [(model)]="body[cell['key']]"></eo-select>
+            <span *ngIf="!cell.isEdit">{{ body[cell['key']] }}</span>
+            <!-- share scope if columns include [slot] -->
+            <ng-container *ngIf="slotMap[cell.slot]">
+              <ng-template
+                [ngTemplateOutlet]="slotMap[cell.slot]"
+                [ngTemplateOutletContext]="{ scope: body, index: i }"
+              ></ng-template>
+            </ng-container>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</section>
