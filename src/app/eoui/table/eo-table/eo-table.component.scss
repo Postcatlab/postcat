@@ -19,6 +19,9 @@ table.eo-table {
         width: 1px;
         background-color: rgba(0, 0, 0, 0.05);
       }
+      &:last-child:after {
+        display: none;
+      }
     }
   }
   tbody {
@@ -33,7 +36,7 @@ table.eo-table {
       }
       td {
         border: none;
-        padding: 5px;
+        padding: 5px 8px;
         font-size: 14px;
 
         input {
@@ -42,7 +45,8 @@ table.eo-table {
           padding: 0 8px;
           border-radius: 4px;
           border: 1px solid rgba(0, 0, 0, 0.05);
-          &:hover {
+          &:hover,
+          &:focus {
             border-color: #00785a;
             box-shadow: 0 0 3px rgba(0, 120, 90, 0.3);
           }

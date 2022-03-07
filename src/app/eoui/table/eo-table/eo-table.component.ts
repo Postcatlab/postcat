@@ -35,6 +35,8 @@ type Column = {
 })
 export class EoTableComponent implements OnInit, AfterContentInit {
   @Input() columns: Column[] = [];
+  @Input() dataModel: {} = {};
+  @Input() rules: [] = [];
   @Output() modelChange = new EventEmitter<any>();
 
   // * about share scope
@@ -50,7 +52,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
     const emptyList = this.modelData.filter(isEmptyValue);
     if (emptyList.length === 0) {
       // * If has no empty line, then add a new line.
-      this.modelData = this.modelData.concat([{ name: '', value: '', description: '' }]);
+      this.modelData = this.modelData.concat([JSON.parse(JSON.stringify(this.dataModel))]);
     }
   }
   constructor() {}
@@ -69,7 +71,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
     const emptyList = this.modelData.filter(isEmptyValue);
     if (emptyList.length === 0) {
       // * If has no empty line, then add a new line.
-      this.modelData = this.modelData.concat([{ name: '', value: '', description: '' }]);
+      this.modelData = this.modelData.concat([JSON.parse(JSON.stringify(this.dataModel))]);
     }
   }
 }
