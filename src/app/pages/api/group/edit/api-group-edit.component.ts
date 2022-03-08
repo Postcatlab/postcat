@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Group } from 'eoapi-core';
+import { storage, Group } from '@eoapi/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { StorageService } from '../../../../shared/services/storage.service';
 import { MessageService } from '../../../../shared/services/message';
 import { GroupApiDataModel, GroupTreeItem } from '../../../../shared/models';
 
@@ -23,7 +22,6 @@ export class ApiGroupEditComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private modalRef: NzModalRef,
-    private storage: StorageService,
   ) { }
 
   ngOnInit(): void {
@@ -62,7 +60,7 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   create(): void {
-    this.storage.storage.groupCreate(this.group).subscribe((data: Group) => {
+    storage.groupCreate(this.group).subscribe((data: Group) => {
       this.modalRef.destroy();
       this.messageService.send({ type: 'updateGroupSuccess', data: { group: data } });
     }, error => {
@@ -71,7 +69,7 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   update(): void {
-    this.storage.storage.groupUpdate(this.group, this.group.uuid).subscribe((data: Group) => {
+    storage.groupUpdate(this.group, this.group.uuid).subscribe((data: Group) => {
       this.modalRef.destroy();
       this.messageService.send({ type: 'updateGroupSuccess', data: { group: data } });
     }, error => {
@@ -105,7 +103,7 @@ export class ApiGroupEditComponent implements OnInit {
     const data: GroupApiDataModel = { group: [this.group.uuid], api: [] };
     this.getChildrenFromTree(this.treeItems, data, `group-${this.group.uuid}`);
     this.modalRef.destroy();
-    this.storage.storage.groupBulkRemove(data.group).subscribe((result) => {
+    storage.groupBulkRemove(data.group).subscribe((result) => {
       if (data.api.length) return;
       this.messageService.send({ type: 'updateGroupSuccess', data: {} });
     });

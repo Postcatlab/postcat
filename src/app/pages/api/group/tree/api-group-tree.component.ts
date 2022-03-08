@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
-import { Group, ApiData } from 'eoapi-core';
+import { storage, Group, ApiData } from '@eoapi/storage';
 import { Message } from '../../../../shared/services/message/message.model';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
 import { MessageService } from '../../../../shared/services/message';
-import { StorageService } from '../../../../shared/services/storage.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { getExpandGroupByKey, listToTree } from '../../../../utils/tree/tree.utils';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
@@ -52,7 +51,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
-    private storage: StorageService,
     private messageService: MessageService
   ) {}
   ngOnInit(): void {
@@ -85,7 +83,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.getGroups();
   }
   getGroups() {
-    this.storage.storage.groupLoadAllByProjectID(this.projectID).subscribe((items: Array<Group>) => {
+    storage.groupLoadAllByProjectID(this.projectID).subscribe((items: Array<Group>) => {
       items.forEach((item) => {
         delete item.updatedAt;
         this.groupByID[item.uuid] = item;
@@ -101,7 +99,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   getApis() {
-    this.storage.storage.apiDataLoadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
+    storage.apiDataLoadAllByProjectID(this.projectID).subscribe((items: Array<ApiData>) => {
       let apiItems = {};
       items.forEach((item) => {
         delete item.updatedAt;
@@ -284,13 +282,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0 && data.api.length > 0) {
-      this.storage.storage.groupBulkUpdate(data.group).subscribe((result) => {
-        this.storage.storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
+      storage.groupBulkUpdate(data.group).subscribe((result) => {
+        storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
       });
     } else if (data.group.length > 0) {
-      this.storage.storage.groupBulkUpdate(data.group).subscribe((result) => {});
+      storage.groupBulkUpdate(data.group).subscribe((result) => {});
     } else if (data.api.length > 0) {
-      this.storage.storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
+      storage.apiDataBulkUpdate(data.api).subscribe((result) => {});
     }
   }
   private watchRouterChange() {

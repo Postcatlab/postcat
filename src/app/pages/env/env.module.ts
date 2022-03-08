@@ -15,7 +15,6 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { EouiModule } from '../../eoui/eoui.module';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ElectronService } from '../../core/services';
-import { StorageService } from '../../shared/services/storage.service';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -32,6 +31,6 @@ const ANTDMODULES = [
   declarations: [EnvComponent],
   imports: [FormsModule, CommonModule, EouiModule, ...ANTDMODULES],
   exports: [EnvComponent],
-  providers: [StorageService, ElectronService],
+  providers: [ElectronService],
 })
 export class EnvModule {}

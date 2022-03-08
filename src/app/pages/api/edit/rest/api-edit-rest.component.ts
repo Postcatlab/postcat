@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges } from '@angular/core';
-import { ApiEditRest } from 'eoapi-core';
+import { ApiEditRest } from '@eoapi/storage';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-rest',

@@ -9,8 +9,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, take, takeUntil, pairwise, filter } from 'rxjs/operators';
 import { MessageService } from '../../../shared/services/message';
 
-import { Group, ApiData, RequestProtocol, RequestMethod, ApiEditRest } from 'eoapi-core';
-import { StorageService } from '../../../shared/services/storage.service';
+import { storage, Group, ApiData, RequestProtocol, RequestMethod, ApiEditRest } from '@eoapi/storage';
 import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';
@@ -39,12 +38,11 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private message: NzMessageService,
     private messageService: MessageService,
-    private storage: StorageService,
     private apiTab: ApiTabService
   ) {}
   getApiGroup() {
     this.groups = [];
-    this.storage.storage.groupLoadAllByProjectID(1).subscribe((items: Array<Group>) => {
+    storage.groupLoadAllByProjectID(1).subscribe((items: Array<Group>) => {
       const treeItems: any = [
         {
           title: '根目录',
@@ -71,7 +69,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   getApi(id) {
-    this.storage.storage.apiDataLoad(id).subscribe((result: ApiData) => {
+    storage.apiDataLoad(id).subscribe((result: ApiData) => {
       ['requestBody', 'responseBody'].forEach((tableName) => {
         if (['xml', 'json'].includes(result[`${tableName}Type`])) {
           result[tableName] = treeToListHasLevel(result[tableName]);
@@ -251,13 +249,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
 
   private editApi(formData) {
     if (formData.uuid) {
-      this.storage.storage.apiDataUpdate(formData, this.apiData.uuid).subscribe(
+      storage.apiDataUpdate(formData, this.apiData.uuid).subscribe(
         (result: ApiData) => {
           this.message.success('编辑成功');
           this.messageService.send({ type: 'editApi', data: result });
         });
     } else {
-      this.storage.storage.apiDataCreate(formData).subscribe(
+      storage.apiDataCreate(formData).subscribe(
         (result: ApiData) => {
           this.message.success('新增成功');
           this.messageService.send({ type: 'addApi', data: result });

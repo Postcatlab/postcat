@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { ApiData } from 'eoapi-core';
-import { StorageService } from '../../shared/services/storage.service';
+import { storage, ApiData } from '@eoapi/storage';
 import { MessageService } from '../../shared/services/message';
 @Injectable()
 export class ApiService {
   constructor(
-    private storage: StorageService,
     private modalService: NzModalService,
     private messageService: MessageService
   ) {}
@@ -27,14 +24,14 @@ export class ApiService {
         apiData.name.length > 50 ? apiData.name.slice(0, 50) + '...' : apiData.name
       }</strong> 吗？删除后不可恢复！`,
       nzOnOk: () => {
-        this.storage.storage.apiDataRemove(apiData.uuid).subscribe((result: boolean) => {
+        storage.apiDataRemove(apiData.uuid).subscribe((result: boolean) => {
           this.messageService.send({ type: 'deleteApi', data: { uuid: apiData.uuid } });
         });
       },
     });
   }
   bulkDelete(apis) {
-    this.storage.storage.apiDataBulkRemove(apis).subscribe((result) => {
+    storage.apiDataBulkRemove(apis).subscribe((result) => {
       this.messageService.send({ type: 'bulkDeleteApi', data: { uuids: apis } });
     });
   }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { ApiTestHistoryResponse } from 'eoapi-core';
+import { ApiTestHistoryResponse } from '@eoapi/storage';
 import { ApiTestService } from '../api-test.service';
 @Component({
   selector: 'eo-api-test-result-response',

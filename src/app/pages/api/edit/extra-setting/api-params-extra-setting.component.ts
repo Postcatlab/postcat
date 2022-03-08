@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ApiParamsTypeJsonOrXml, ParamsEnum, BasiApiEditParams } from 'eoapi-core';
+import { ApiParamsTypeJsonOrXml, ParamsEnum, BasiApiEditParams } from '@eoapi/storage';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',

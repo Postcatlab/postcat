@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { ApiEditHeaders } from 'eoapi-core';
+import { ApiEditHeaders } from '@eoapi/storage';
 import { ApiDetailService } from '../api-detail.service';
 @Component({
   selector: 'eo-api-detail-header',

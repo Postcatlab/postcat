@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
 
-import { ApiData, RequestMethod, RequestProtocol } from 'eoapi-core';
-import { StorageService } from '../../../shared/services/storage.service';
+import { storage, ApiData, RequestMethod, RequestProtocol } from '@eoapi/storage';
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, of, Subject } from 'rxjs';
@@ -50,7 +49,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private fb: FormBuilder,
-    private storage: StorageService,
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef,
     private apiTest: ApiTestService,
@@ -92,7 +90,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testResult = result.response;
   }
   getApi(id) {
-    this.storage.storage.apiDataLoad(id).subscribe((result: ApiData) => {
+    storage.apiDataLoad(id).subscribe((result: ApiData) => {
       this.apiData = this.apiTest.getTestDataFromApi(result);
       this.validateForm.patchValue(this.apiData);
     });
