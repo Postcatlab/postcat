@@ -1,5 +1,6 @@
 {
   "asar": true,
+  "artifactName":"${productName}.${ext}",
   "directories": {
     "output": "release/"
   },
@@ -31,7 +32,7 @@
     "splashImage": "dist/assets/icons/eoapi.bmp"
   },
   "mac": {
-    "icon": "dist/assets/icons",
+    "icon": "dist/assets/icons/512x512.png",
     "target": ["dmg"]
   },
   "linux": {
