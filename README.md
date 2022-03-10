@@ -3,86 +3,85 @@
     <img width="200" src="https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png">
   </a>
 </p>
-
-<h1 align="center">EOAPI</h1>
+<h1 align="center">Eoapi</h1>
 <div align="center">
-一个轻量的开源 API 工具
+A lightweight open source API tool.
 </div>
 
-![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png?token=GHSAT0AAAAAABRGKRUBJ634JVP7XL7KWAECYP3J36Q)
+![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png)
 
-[简体中文](README.md)｜[English](README.en.md)
+English | [简体中文](README.zh_CN.md)
 
-# 功能
+# Featue
 
-⚡ API 测试
+⚡ API Test
 
-- 快速对 API 发起测试
-- 支持本地测试
+- Quickly test the API
+- Test local API
 
-📃 API 管理
+📃 API management
 
-- HTTP 协议
-- 各种格式请求体：FormData、XML、JSON、Raw
+- HTTP protocol
+- Various formats of request body: FormData, XML, JSON, Raw
 
-📶 可离线使用
+🌐 Test environment management
 
-🌐 测试环境管理
+📶 Available offline
 
-🌱 插件集市
+🌱 Extension Marketplace
 
-# 快速开始
+# Getting started
 
-- 访问 [在线示例](https://demo.eoapi.io/) 快速体验产品特性
+- Try the [live demo](https://demo.eoapi.io/)
 
-- 查看 [官方文档](https://www.eoapi.io/docs/about.html) 了解更多功能
+- You can download it on [Releases](https://github.com/eolinker/eoapi/releases) available for macOS, Windows
 
-- 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
+- Read our [document](https://www.eoapi.io/) for more features
 
-# 源码运行/构建
+# Build and run from source
 
-## 环境
+## Prerequisites
 
-- Node.js，版本大于 14.17.x
+- Node.js,version ^14.17
 
-## 运行代码
+## Running the code
 
 ```
 npm ci
 npm start
 ```
 
-如果想提高开发效率，可以安装 Angular 官方提供的命令行 Angular-cli 快速生成组件、服务等模板。
+If you want to improve development efficiency, you can install the command-line Angular-cli officially provided by Angular to quickly generate templates such as components and services.
 
 ```
 npm install -g @angular/cli
 ```
 
-## 命令
+## Command
 
-### 运行
+### Run
 
-| 命令                     | 描述                                 |
-| ------------------------ | ------------------------------------ |
-| `npm start`              | 开发模式下，同时运行在浏览器和桌面端 |
-| `npm run ng:serve`       | 仅运行在浏览器                       |
-| `npm run electron:serve` | 仅运行在桌面端                       |
+| Command                  | Description                                                          |
+| ------------------------ | -------------------------------------------------------------------- |
+| `npm start`              | In development mode, running on browser and desktop at the same time |
+| `npm run ng:serve`       | only runs in the browser                                             |
+| `npm run electron:serve` | only runs in the desktop                                             |
 
-### 打包构建
+### Build
 
-| 命令                         | 描述                         |
-| ---------------------------- | ---------------------------- |
-| `npm run electron:build`     | 各系统打包 Electron 应用     |
-| `npm run electron:build:win` | windows 打包定制化安装包应用 |
+| Command                      | Description                                                   |
+| ---------------------------- | ------------------------------------------------------------- |
+| `npm run electron:build`     | Packaging Electron applications for each platform             |
+| `npm run electron:build:win` | Packaging install customized installation package for windows |
 
-### 运行测试
+### Running the tests
 
-| 命令           | 描述          |
-| -------------- | ------------- |
-| `npm run test` | 执行单元测试  |
-| `npm run e2e`  | 执行 E2E 测试 |
+| Command        | Description              |
+| -------------- | ------------------------ |
+| `npm run test` | Execute unit tests       |
+| `npm run e2e`  | Execute end to end tests |
 
-# 协议
+# License
 
 This project is licensed under the Apache-2.0 License - see the [LICENSE.md](LICENSE) file for details
 
