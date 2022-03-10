@@ -1,6 +1,6 @@
 'use strict';
 /* 参考文档：https://github.com/kamilkp/angular-sortable-view
- *改进者：EOAPI
+ *改进者：Eoapi
  */
 const $watch = [];
 angular

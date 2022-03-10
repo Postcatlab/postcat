@@ -1,6 +1,5 @@
 {
   "asar": true,
-  "artifactName":"${productName}.${ext}",
   "directories": {
     "output": "release/"
   },
