@@ -801,7 +801,7 @@ BufferMock.allocUnsafeSlow = function allocUnsafeSlow(size) {
 };
 /**
  * start
- * @author EOAPI
+ * @author Eoapi
  * @desc Buffer默认取原始的Buffer，不做安全过滤，不能随意更改，会导致脚本步骤crypto执行错误
  */
 const LocalBuffer = global.Buffer = Contextify.readonly(host.Buffer, BufferMock);

@@ -88,4 +88,4 @@ npm install -g @angular/cli
 
 # 联系我们
 
-如果你想联系我们，可以通过创建一个 [Github issue](https://github.com/eolinker/eoapi/issues) 向我们反馈 Bug、提供产品意见，十分感谢！
+如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/eoapi/issues) 联系我们，十分感谢！

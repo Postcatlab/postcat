@@ -1,5 +1,5 @@
 /**
- * @author EOAPI
+ * @author Eoapi
  * @description 排序和筛选
  */
 angular.module('eolinker').component('sortAndFilterListDefaultComponent', {

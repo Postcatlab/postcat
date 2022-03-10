@@ -2,7 +2,7 @@
     'use strict';
     /**
      * @name 信息构造器类
-     * @author EOAPI
+     * @author Eoapi
      */
     class main {
         constructor() {
