@@ -76,7 +76,6 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   constructor() {}
 
   @Input() set model(value) {
-    console.log('kkkl');
     if (this.isUpdate) {
       this.isUpdate = false;
       return;

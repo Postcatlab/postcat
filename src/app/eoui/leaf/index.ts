@@ -13,9 +13,7 @@ class Leaf {
     const pidList = Array.from(new Set(list.map((it) => it.__pid)));
     pidList.forEach((pid) => {
       const $index = _.findLastIndex(list, { __pid: pid });
-      console.log('$index', $index);
       const { __index, __mid, __pid, __isExpand, __hasChild, ...last } = list[$index];
-      console.log('addEmptyData =>>', pid == null ? `${__index + 1}` : `${pid}-${__index + 1}`);
       if (!_.isEqual(last, this.dataModel)) {
         list.splice($index + 1, 0, {
           ...this.dataModel,
@@ -46,7 +44,6 @@ class Leaf {
   setData(id: string[], data: object) {
     const list = this.realData.map((it) => (id.includes(it.__mid) ? { ...it, ...data } : it));
     this.realData = this.addEmptyData(list);
-    console.log();
     return this.getData();
   }
 
@@ -73,13 +70,12 @@ class Leaf {
     // * add empty line
     list.splice($i + 1, 0, {
       ...this.dataModel,
-      __mid: $pid == null ? `${$index + 1}` : `${$pid}-${$index + 1}`,
+      __mid: $pid == null ? `${$index}` : `${$pid}-${$index}`,
       __pid: $pid,
-      __index: $index + 1,
+      __index: $index,
       __isExpand: true,
       __isHasChild: false,
     });
-    console.log('updateData =>>', $pid == null ? `${$index + 1}` : `${$pid}-${$index + 1}`);
   }
 
   expandData(mids: string[], isExpand: boolean) {
