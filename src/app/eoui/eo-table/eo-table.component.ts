@@ -30,6 +30,28 @@ type Column = {
   isEdit?: boolean;
 };
 
+const mock = [
+  { required: true, name: 'FFF-0', type: 'object', value: 'fff-0' },
+  {
+    required: true,
+    name: 'FFF-1',
+    type: 'object',
+    value: 'fff-1',
+    children: [
+      { required: true, name: 'FFF-1-0', type: 'object', value: 'fff-1-0' },
+      {
+        required: true,
+        name: 'FFF-1-1',
+        type: 'object',
+        value: 'fff-1-1',
+        children: [{ required: true, name: 'FFF-1-1-0', type: 'object', value: 'fff-1-1-0' }],
+      },
+      { required: true, name: 'FFF-1-2', type: 'object', value: 'fff-1-2' },
+    ],
+  },
+  { required: true, name: 'FFF-2', type: 'object', value: 'fff-2' },
+];
+
 @Component({
   selector: 'eo-table',
   templateUrl: './eo-table.component.html',
@@ -48,41 +70,22 @@ export class EoTableComponent implements OnInit, AfterContentInit {
 
   isColTableActive = false;
   private leaf = null; // 引擎的实例引用
+  private isUpdate = false;
   private modelData: any[];
 
   constructor() {}
 
   @Input() set model(value) {
-    // this.modelData = value.flat(Infinity);
-    const mock = [
-      { required: true, name: 'FFF-0', type: 'object', value: 'fff-0' },
-      {
-        required: true,
-        name: 'FFF-1',
-        type: 'object',
-        value: 'fff-1',
-        children: [
-          { required: true, name: 'FFF-1-0', type: 'object', value: 'fff-1-0' },
-          {
-            required: true,
-            name: 'FFF-1-1',
-            type: 'object',
-            value: 'fff-1-1',
-            children: [{ required: true, name: 'FFF-1-1-0', type: 'object', value: 'fff-1-1-0' }],
-          },
-          { required: true, name: 'FFF-1-2', type: 'object', value: 'fff-1-2' },
-        ],
-      },
-      { required: true, name: 'FFF-2', type: 'object', value: 'fff-2' },
-    ];
-    this.leaf = new Leaf(mock);
-    this.modelData = this.leaf.getData();
-    console.log(JSON.stringify(this.modelData, null, 2));
-    const emptyList = this.modelData.filter(isEmptyValue);
-    if (emptyList.length === 0) {
-      // * If has no empty line, then add a new line.
-      this.modelData = this.modelData.concat([JSON.parse(JSON.stringify(this.dataModel))]);
+    console.log('kkkl');
+    if (this.isUpdate) {
+      this.isUpdate = false;
+      return;
     }
+    this.leaf = new Leaf(mock, this.dataModel);
+    this.modelData = this.leaf.getData();
+    const tree = this.leaf.getTreeData();
+    this.isUpdate = true;
+    this.modelChange.emit(tree);
   }
 
   ngOnInit(): void {}
@@ -93,14 +96,10 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   }
 
   handleChange(event, key, id) {
-    console.log('lllll');
-    this.leaf.setData([id], { [key]: event.target.value });
-    // this.modelChange.emit(this.modelData);
-    // const emptyList = this.modelData.filter(isEmptyValue);
-    // if (emptyList.length === 0) {
-    //   // * If has no empty line, then add a new line.
-    //   this.modelData = this.modelData.concat([JSON.parse(JSON.stringify(this.dataModel))]);
-    // }
+    this.leaf.updateData(this.modelData, { id, data: { [key]: event.target.value } });
+    const tree = this.leaf.getTreeData();
+    this.isUpdate = true;
+    this.modelChange.emit(tree);
   }
 
   handleExpand(mid, isExpand) {

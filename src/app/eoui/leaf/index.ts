@@ -1,13 +1,39 @@
+import * as _ from 'lodash';
+
 class Leaf {
   realData: any[] = [];
-  constructor(treeData = []) {
-    this.realData = Leaf.tree2list(treeData);
+  dataModel: {} = {};
+  constructor(treeData = [], dataModel = {}) {
+    this.dataModel = dataModel;
+    this.realData = this.addEmptyData(Leaf.tree2list(treeData.length ? treeData : [dataModel]));
+  }
+
+  addEmptyData(data: any[]): any[] {
+    const list = JSON.parse(JSON.stringify(data));
+    const pidList = Array.from(new Set(list.map((it) => it.__pid)));
+    pidList.forEach((pid) => {
+      const $index = _.findLastIndex(list, { __pid: pid });
+      console.log('$index', $index);
+      const { __index, __mid, __pid, __isExpand, __hasChild, ...last } = list[$index];
+      console.log('addEmptyData =>>', pid == null ? `${__index + 1}` : `${pid}-${__index + 1}`);
+      if (!_.isEqual(last, this.dataModel)) {
+        list.splice($index + 1, 0, {
+          ...this.dataModel,
+          __mid: pid == null ? `${__index + 1}` : `${pid}-${__index + 1}`,
+          __pid: pid,
+          __index: __index + 1,
+          __isExpand: true,
+          __hasChild: false,
+        });
+      }
+    });
+    return list;
   }
 
   getData() {
-    // return render data
+    // * return render data
     const list = JSON.parse(JSON.stringify(this.realData));
-    // filter by __isExpand
+    // * filter by __isExpand
     const shrinkPid = list.filter((it) => it.__isExpand === false).map((it) => it.__mid);
     return list.filter((it) => {
       // * It must be filter same like 1-1-1 & 1-11-1
@@ -18,9 +44,42 @@ class Leaf {
   }
 
   setData(id: string[], data: object) {
-    console.log('kko', data);
-    this.realData = this.realData.map((it) => (id.includes(it.__mid) ? { ...it, ...data } : it));
+    const list = this.realData.map((it) => (id.includes(it.__mid) ? { ...it, ...data } : it));
+    this.realData = this.addEmptyData(list);
+    console.log();
     return this.getData();
+  }
+
+  updateData(list, { id, data }) {
+    this.setData([id], data);
+    let $i = null,
+      $pid = null,
+      $index = null;
+    list.forEach((it, i) => {
+      if (it.__mid === id) {
+        $i = i;
+        $pid = it.__pid;
+        $index = it.__index + 1;
+        Object.keys(data).forEach((item) => {
+          it[item] = data[item];
+        });
+      }
+    });
+    const { __pid } = list[$i + 1] || { __pid: undefined };
+    if (__pid !== undefined && __pid === $pid) {
+      // * If node has little borther, then it no need to handle whatever it is empty or not.
+      return;
+    }
+    // * add empty line
+    list.splice($i + 1, 0, {
+      ...this.dataModel,
+      __mid: $pid == null ? `${$index + 1}` : `${$pid}-${$index + 1}`,
+      __pid: $pid,
+      __index: $index + 1,
+      __isExpand: true,
+      __isHasChild: false,
+    });
+    console.log('updateData =>>', $pid == null ? `${$index + 1}` : `${$pid}-${$index + 1}`);
   }
 
   expandData(mids: string[], isExpand: boolean) {
@@ -36,6 +95,10 @@ class Leaf {
     return this.getData();
   }
 
+  getTreeData() {
+    return Leaf.list2tree(this.realData, this.dataModel);
+  }
+
   static tree2list(data) {
     // * DFS
     const arr = [];
@@ -49,7 +112,27 @@ class Leaf {
     return arr;
   }
 
-  static list2tree(list) {}
+  static list2tree(data, dataModel) {
+    // * clear all empty data
+    const list = data.filter(({ __index, __mid, __pid, __hasChild, __isExpand, ...it }) => !_.isEqual(it, dataModel));
+    const filterArray = (data, pid) => {
+      const tree = [];
+      let temp;
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].__pid === pid) {
+          const obj = data[i];
+          temp = filterArray(data, data[i].__mid);
+          if (temp.length > 0) {
+            obj.children = temp.map(({ __index, __mid, __pid, __hasChild, __isExpand, ...it }) => it);
+          }
+          const { __index, __mid, __pid, __hasChild, __isExpand, ...node } = obj;
+          tree.push(node);
+        }
+      }
+      return tree;
+    };
+    return filterArray(list, null);
+  }
 }
 
 export default Leaf;

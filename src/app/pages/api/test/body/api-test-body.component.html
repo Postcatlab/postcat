@@ -42,6 +42,7 @@
   [dataModel]="itemStructure"
   [(model)]="model"
 ></eo-table>
+<div>{{ model | json }}</div>
 <list-block-common-component
   *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
   [mainObject]="listConf"
