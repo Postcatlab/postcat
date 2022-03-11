@@ -22,15 +22,10 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
-<list-block-common-component
-  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-  [mainObject]="listConf"
-  [(list)]="model"
-></list-block-common-component>
 <eo-table
   *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
   [columns]="[
-    { title: '参数名', key: 'name', isEdit: true },
+    { title: '参数名', key: 'name', isEdit: true, isExpand: true },
     {
       title: '类型',
       key: 'value',
@@ -47,6 +42,11 @@
   [dataModel]="itemStructure"
   [(model)]="model"
 ></eo-table>
+<list-block-common-component
+  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
+  [mainObject]="listConf"
+  [(list)]="model"
+></list-block-common-component>
 <!-- Raw -->
 <eo-editor
   [(code)]="model"

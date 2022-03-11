@@ -19,6 +19,9 @@
     font-size: 12px;
     align-items: center;
     justify-content: center;
+    &.active {
+      display: inline-flex;
+    }
     .eo-button {
       padding: 0px 8px;
       box-sizing: border-box;
@@ -34,16 +37,20 @@
   div.col-control {
     position: fixed;
     right: 0;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     width: 100px;
-    border: 1px solid red;
+    // border: 1px solid rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
     z-index: 2;
     display: flex;
     table.col-table {
       width: 100%;
       border: 1px solid rgba(0, 0, 0, 0.1);
+      tr {
+        height: 30px;
+        cursor: pointer;
+      }
       th,
       td {
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -84,6 +91,23 @@
     }
     tbody {
       tr {
+        height: 30px;
+        position: relative;
+        &:after {
+          content: '';
+          position: absolute;
+          height: 1px;
+          display: block;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+        &:last-child {
+          &:after {
+            display: none;
+          }
+        }
         &:hover {
           background-color: #f7f7f7;
           td {
@@ -94,19 +118,53 @@
         }
         td {
           border: none;
-          padding: 5px 8px;
+          padding: 0px;
           font-size: 14px;
+          height: 100%;
+          box-sizing: border-box;
 
-          > input {
-            height: 30px;
+          > .td-input {
+            display: inline-flex;
+            padding: 5px 8px 5px 0;
             width: 100%;
-            padding: 0 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            &:hover,
-            &:focus {
-              border-color: #00785a;
-              box-shadow: 0 0 3px rgba(0, 120, 90, 0.3);
+            height: 100%;
+            position: relative;
+            > .level-icon {
+              width: 30px;
+              font-size: 16px;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              i {
+                cursor: pointer;
+              }
+            }
+            .padding-input {
+              display: block;
+              width: 15px;
+              position: relative;
+              &:after {
+                content: '';
+                display: block;
+                position: absolute;
+                width: 1px;
+                top: -5px;
+                bottom: -5px;
+                left: 0;
+                background: rgba(0, 0, 0, 0.1);
+              }
+            }
+            > input {
+              flex: 1;
+              height: 30px;
+              padding: 0 8px;
+              border-radius: 4px;
+              border: 1px solid rgba(0, 0, 0, 0);
+              &:hover,
+              &:focus {
+                border-color: #00785a;
+                box-shadow: 0 0 3px rgba(0, 120, 90, 0.3);
+              }
             }
           }
         }
