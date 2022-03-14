@@ -122,6 +122,18 @@ var ModuleManager = /** @class */ (function () {
         return this.modules;
     };
     /**
+     * 获取某个模块信息
+     * belongs为true，返回关联子模块集合
+     * @param belongs
+     */
+    ModuleManager.prototype.getModule = function (moduleID, belongs) {
+        belongs = belongs || false;
+        if (belongs) {
+            return this.moduleBelongs().get(moduleID);
+        }
+        return this.modules.get(moduleID);
+    };
+    /**
      * 设置模块信息到模块列表
      * @param moduleInfo
      */

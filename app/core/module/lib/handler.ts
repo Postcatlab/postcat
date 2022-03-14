@@ -49,6 +49,9 @@ export class ModuleHandler {
     const moduleInfo: ModuleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
     moduleInfo.main = main;
     moduleInfo.baseDir = baseDir;
+    if (moduleInfo.preload && moduleInfo.preload.length > 0) {
+      moduleInfo.preload = path.join(baseDir, moduleInfo.preload);
+    }
     return moduleInfo;
   }
 

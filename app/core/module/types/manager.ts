@@ -67,5 +67,6 @@ export interface ModuleManagerInterface {
   install: (module: ModuleManagerInfo) => Promise<void>;
   uninstall: (module: ModuleManagerInfo) => Promise<void>;
   refresh: (module: ModuleManagerInfo) => void;
+  getModule: (moduleID: string, belongs?: boolean) => ModuleInfo;
   getModules: (belongs?: boolean) => Map<string, ModuleInfo>;
 }

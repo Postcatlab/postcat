@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, shell, BrowserView, session } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -6,9 +6,12 @@ import * as os from 'os';
 import * as url from 'url';
 import { UnitWorker } from './unitWorker';
 import ModuleManager from './core/module/lib/manager';
-import { ModuleManagerInterface } from './core/module/types';
+import { ModuleInfo, ModuleManagerInterface } from './core/module/types';
 
 let win: BrowserWindow = null;
+let view: BrowserView = null;
+let width: number;
+let height: number;
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const args = process.argv.slice(1),
   eoUpdater = new EoUpdater(),
@@ -17,11 +20,12 @@ const args = process.argv.slice(1),
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
-
+  width = size.width * 0.8;
+  height = size.height * 0.8;
   // Create the browser window.
   win = new BrowserWindow({
-    width: size.width * 0.8,
-    height: size.height * 0.8,
+    width: width,
+    height: height,
     frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
       nodeIntegration: true,
@@ -77,6 +81,42 @@ function createWindow(): BrowserWindow {
 
   return win;
 }
+
+
+
+const createView = (module: ModuleInfo, window: BrowserWindow) => {
+  const main = `file://${module.main}`;
+  const ses = session.fromPartition("<" + module.moduleID + ">");
+  ses.setPreloads([module.preload]);
+
+  view = new BrowserView({
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true,
+      webviewTag: true,
+      preload: module.preload,
+      session: ses,
+    },
+  });
+  view.setBackgroundColor('#F5F5F5');
+  window.setBrowserView(view);
+  view.webContents.loadURL(main);
+  view.webContents.once('dom-ready', () => {
+    view.setBounds({ x: 0, y: 50, width: width, height: (height - 80) });
+    view.setAutoResize({ width: true });
+    //window.webContents.executeJavaScript(`window.pluginLoaded()`);
+  });
+};
+
+const removeView = (window: BrowserWindow) => {
+  if (view) {
+    window.removeBrowserView(view);
+    // window.webContents.executeJavaScript(`window.initRubick()`);
+    view = undefined;
+  }
+};
 
 try {
   // This method will be called when Electron has finished
@@ -148,6 +188,10 @@ try {
     let returnValue: any;
     if (arg.type === 'getModules') {
       returnValue = moduleManager.getModules();
+    } else if (arg.type === 'openApp') {
+      removeView(win);
+      createView(moduleManager.getModule(arg.moduleID), win);
+      returnValue = 'view id';
     } else {
       returnValue = 'Invalid data';
     }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../../../core/services';
+import { ModuleInfo } from '../../../utils/module-loader';
 
 @Component({
   selector: 'eo-navbar',
@@ -10,6 +11,7 @@ export class NavbarComponent implements OnInit {
   isMaximized = false;
   isElectron: boolean = true;
   OS_TYPE = navigator.platform.toLowerCase();
+  modules: Map<string, ModuleInfo>;
   constructor(private electron: ElectronService) {
     this.isElectron = this.electron.isElectron;
   }
@@ -29,5 +31,19 @@ export class NavbarComponent implements OnInit {
       action: 'close',
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.isElectron) {
+      this.modules = this.electron.ipcRenderer.sendSync('eo-sync', {type: 'getModules'});
+    } else {
+      this.modules = new Map();
+    }
+  }
+
+  getModules(): Array<ModuleInfo> {
+    return Array.from(this.modules.values());
+  }
+
+  openApp(moduleID: string) {
+    this.electron.ipcRenderer.sendSync('eo-sync', {type: 'openApp', moduleID: moduleID});
+  }
 }

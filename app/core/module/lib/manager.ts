@@ -71,6 +71,19 @@ export class ModuleManager implements ModuleManagerInterface {
   }
 
   /**
+   * 获取某个模块信息
+   * belongs为true，返回关联子模块集合
+   * @param belongs
+   */
+  getModule(moduleID: string, belongs?: boolean): ModuleInfo {
+    belongs = belongs || false;
+    if (belongs) {
+      return this.moduleBelongs().get(moduleID);
+    }
+    return this.modules.get(moduleID);
+  }
+
+  /**
    * 设置模块信息到模块列表
    * @param moduleInfo
    */

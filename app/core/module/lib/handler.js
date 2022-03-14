@@ -70,6 +70,9 @@ var ModuleHandler = /** @class */ (function () {
         var moduleInfo = (0, util_1.readJson)(path.join(baseDir, 'package.json'));
         moduleInfo.main = main;
         moduleInfo.baseDir = baseDir;
+        if (moduleInfo.preload && moduleInfo.preload.length > 0) {
+            moduleInfo.preload = path.join(baseDir, moduleInfo.preload);
+        }
         return moduleInfo;
     };
     /**
