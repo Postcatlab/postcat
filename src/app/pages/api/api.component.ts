@@ -42,11 +42,9 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.watchChangeRouter();
     this.watchApiAction();
-    this.electronService.ipcRenderer.send('eo', {action: 'getEnabledModules'});
-    this.electronService.ipcRenderer.on('eo', (event, args) => {
-      console.log('receive from ipcMain');
-      console.log(args);
-    });
+    const data = this.electronService.ipcRenderer.sendSync('eo-sync', {type: 'getModules'});
+    console.log('receive from ipcMain');
+    console.log(data);
   }
   ngOnDestroy() {
     this.destroy$.next();

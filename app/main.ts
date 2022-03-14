@@ -5,9 +5,11 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as url from 'url';
 import { UnitWorker } from './unitWorker';
-import eo from './apis/core';
+import ModuleManager from './core/module/lib/manager';
+import { ModuleManagerInterface } from './core/module/types';
 
 let win: BrowserWindow = null;
+const moduleManager: ModuleManagerInterface = ModuleManager();
 const args = process.argv.slice(1),
   eoUpdater = new EoUpdater(),
   workerLoop = {},
@@ -138,17 +140,19 @@ try {
     }
   });
   ipcMain.on('eo', (event, args) => {
-    eo.logger.info('get data from ipcRenderer');
-    eo.logger.info(args);
-    const modules = eo.module.getEnabledModules();
-    modules.forEach((key, value) => {
-      //eo.logger.info(key);
-      eo.logger.info('module:' + value);
-    });
-    const params = {message: 'ipcMain eo'};
+    const params = {message: 'ipcMain eo', data: moduleManager.getModules()};
     event.sender.send('eo', params);
-    eo.logger.info(JSON.stringify(params));
   });
+
+  ipcMain.on('eo-sync', (event, arg) => {
+    let returnValue: any;
+    if (arg.type === 'getModules') {
+      returnValue = moduleManager.getModules();
+    } else {
+      returnValue = 'Invalid data';
+    }
+    event.returnValue = returnValue;
+  })
 } catch (e) {
   // Catch Error
   // throw e;
