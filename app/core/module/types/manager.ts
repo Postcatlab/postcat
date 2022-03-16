@@ -1,3 +1,5 @@
+import { SlidePosition } from '../../common/util';
+
 /**
  * 模块类型
  * system 系统模块
@@ -8,7 +10,6 @@
 export enum ModuleType {
   system = 'system',
   app = 'app',
-  ui = 'ui',
   feature = 'feature'
 }
 
@@ -36,14 +37,20 @@ export interface ModuleInfo {
   main: string;
   // 预加载js文件
   preload?: string;
+  // 判断是不是顶层App
+  isApp?: boolean;
   // web运行支持
   web?: boolean;
   // 模块对应上层模块ID
   belongs?: Array<string>;
   // 下层关联模块ID集合
-  subModules?: Array<string>;
+  slideItems?: Array<string>;
+  // 下层功能模块ID集合
+  featureItems?: Array<string>;
   // 模块路径
   baseDir?: string;
+  // 边栏显示
+  slidePosition?: SlidePosition;
 }
 
 /**
@@ -69,4 +76,6 @@ export interface ModuleManagerInterface {
   refresh: (module: ModuleManagerInfo) => void;
   getModule: (moduleID: string, belongs?: boolean) => ModuleInfo;
   getModules: (belongs?: boolean) => Map<string, ModuleInfo>;
+  getAppModuleList: () => Array<ModuleInfo>;
+  getSlideModuleList: (moduleID: string) => Array<ModuleInfo>;
 }

@@ -12,7 +12,6 @@ var ModuleType;
 (function (ModuleType) {
     ModuleType["system"] = "system";
     ModuleType["app"] = "app";
-    ModuleType["ui"] = "ui";
     ModuleType["feature"] = "feature";
 })(ModuleType = exports.ModuleType || (exports.ModuleType = {}));
 //# sourceMappingURL=manager.js.map

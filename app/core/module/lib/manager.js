@@ -39,6 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ModuleManager = void 0;
 var main_1 = require("../../common/constant/main");
 var handler_1 = require("./handler");
+var types_1 = require("../types");
+var path = require("path");
 var ModuleManager = /** @class */ (function () {
     function ModuleManager() {
         this.moduleHandler = new handler_1.ModuleHandler({ baseDir: main_1.MODULE_DIR });
@@ -110,6 +112,33 @@ var ModuleManager = /** @class */ (function () {
         this.set(moduleInfo);
     };
     /**
+     * 获取应用级app列表
+     */
+    ModuleManager.prototype.getAppModuleList = function () {
+        var output = [];
+        var modules = this.moduleBelongs();
+        modules === null || modules === void 0 ? void 0 : modules.forEach(function (module) {
+            if (module.isApp) {
+                output.push(module);
+            }
+        });
+        return output;
+    };
+    /**
+     * 获取边栏应用列表
+     */
+    ModuleManager.prototype.getSlideModuleList = function (moduleID) {
+        var _a;
+        var output = [];
+        var modules = this.moduleBelongs();
+        (_a = modules.get(moduleID).slideItems) === null || _a === void 0 ? void 0 : _a.forEach(function (_moduleID) {
+            if (modules.has(_moduleID)) {
+                output.push(modules.get(_moduleID));
+            }
+        });
+        return output;
+    };
+    /**
      * 获取所有模块列表
      * belongs为true，返回关联子模块集合
      * @param belongs
@@ -164,40 +193,74 @@ var ModuleManager = /** @class */ (function () {
      * @param module
      */
     ModuleManager.prototype.moduleBelongs = function () {
+        var _a;
         var newModules = new Map();
-        var subModules = new Map();
-        var _loop_1 = function (key, value) {
-            newModules.set(key, value);
-            if (value.belongs) {
-                var belongs = value.belongs;
-                belongs.forEach(function (belong) {
-                    var _modules;
-                    if (!subModules.has(belong)) {
+        var slideItems = new Map();
+        var featureItems = new Map();
+        // 绑定默认
+        var defaultModule = {
+            name: 'default',
+            author: 'system',
+            version: '1.0.0',
+            description: '系统默认模块',
+            moduleID: 'default',
+            moduleName: 'API',
+            type: types_1.ModuleType.app,
+            isApp: true,
+            logo: path.join(__dirname, '../../../../app/assets/images/icon.png'),
+            main: path.join(__dirname, '../../../../app/index.html'),
+        };
+        // 加入系统默认模块做关联
+        newModules.set(defaultModule.moduleID, defaultModule);
+        slideItems.set(defaultModule.moduleID, [defaultModule.moduleID]);
+        (_a = this.modules) === null || _a === void 0 ? void 0 : _a.forEach(function (module) {
+            var belongs = module.belongs || [defaultModule.moduleID];
+            // 如果包含自己则是主应用
+            // 后期加入权限限制是否能成为顶层应用
+            module.isApp = belongs.includes(module.moduleID);
+            newModules.set(module.moduleID, module);
+            belongs.forEach(function (belong) {
+                var _modules;
+                if (module.type === types_1.ModuleType.app) {
+                    if (!slideItems.has(belong)) {
                         _modules = [];
                     }
                     else {
-                        _modules = subModules.get(belong);
+                        _modules = slideItems.get(belong);
                     }
-                    _modules.push(value.moduleID);
-                    subModules.set(belong, _modules);
-                });
-            }
-        };
-        // @ts-ignore
-        for (var _i = 0, _a = this.modules; _i < _a.length; _i++) {
-            var _b = _a[_i], key = _b[0], value = _b[1];
-            _loop_1(key, value);
-        }
-        // @ts-ignore
-        for (var _c = 0, subModules_1 = subModules; _c < subModules_1.length; _c++) {
-            var _d = subModules_1[_c], key = _d[0], value = _d[1];
-            if (newModules.has(key)) {
-                // @ts-ignore
-                var _current = newModules.get(key);
-                _current.subModules = value;
+                    // 如果指定上层是自己，自己放最前面
+                    if (module.moduleID === belong) {
+                        _modules.unshift(module.moduleID);
+                    }
+                    else {
+                        _modules.push(module.moduleID);
+                    }
+                    slideItems.set(belong, _modules);
+                }
+                else if (module.type === types_1.ModuleType.feature) {
+                    if (!featureItems.has(belong)) {
+                        _modules = [];
+                    }
+                    else {
+                        _modules = featureItems.get(belong);
+                    }
+                    _modules.push(module.moduleID);
+                    featureItems.set(belong, _modules);
+                }
+            });
+        });
+        slideItems === null || slideItems === void 0 ? void 0 : slideItems.forEach(function (value, key) {
+            var _current = newModules.get(key);
+            if (_current.isApp) {
+                _current.slideItems = value;
                 newModules.set(key, _current);
             }
-        }
+        });
+        featureItems === null || featureItems === void 0 ? void 0 : featureItems.forEach(function (value, key) {
+            var _current = newModules.get(key);
+            _current.featureItems = value;
+            newModules.set(key, _current);
+        });
         return newModules;
     };
     return ModuleManager;

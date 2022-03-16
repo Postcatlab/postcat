@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../shared/services/message';
 import { ApiService } from './api.service';
-import { ElectronService } from '../../core/services';
 
 @Component({
   selector: 'eo-api',
@@ -35,16 +34,12 @@ export class ApiComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private messageService: MessageService,
-    private electronService: ElectronService
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.watchChangeRouter();
     this.watchApiAction();
-    const data = this.electronService.ipcRenderer.sendSync('eo-sync', {type: 'getModules'});
-    console.log('receive from ipcMain');
-    console.log(data);
   }
   ngOnDestroy() {
     this.destroy$.next();

@@ -41,7 +41,7 @@ export class ModuleLoader implements ModuleLoaderInterface {
   loadModule(module: ModuleInfo): void {
     console.log(module);
     if ((this.runtime === ModuleRuntime.main && ![ModuleType.system, ModuleType.app].indexOf(module.type))
-      || (this.runtime === ModuleRuntime.render && ![ModuleType.ui, ModuleType.feature].indexOf(module.type))
+      || (this.runtime === ModuleRuntime.render && ![ModuleType.feature].indexOf(module.type))
       || (this.runtime === ModuleRuntime.web && !module.web)) {
       console.log(`The [${module.type}] module [${module.name}] can not run in runtime [${this.runtime}].`);
       return;

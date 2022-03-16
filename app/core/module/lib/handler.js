@@ -66,12 +66,14 @@ var ModuleHandler = /** @class */ (function () {
     ModuleHandler.prototype.info = function (name) {
         var main = (0, util_1.resolveModule)(name, this.baseDir);
         var baseDir = path.dirname(main);
-        (0, util_1.writeFile)(path.join(this.baseDir, 'eo.log'), "baseDir:".concat(baseDir, " name:").concat(name));
         var moduleInfo = (0, util_1.readJson)(path.join(baseDir, 'package.json'));
         moduleInfo.main = main;
         moduleInfo.baseDir = baseDir;
         if (moduleInfo.preload && moduleInfo.preload.length > 0) {
             moduleInfo.preload = path.join(baseDir, moduleInfo.preload);
+        }
+        if (moduleInfo.logo && moduleInfo.logo.length > 0 && !moduleInfo.logo.startsWith('http')) {
+            moduleInfo.logo = path.join(baseDir, moduleInfo.logo);
         }
         return moduleInfo;
     };

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import spawn from 'cross-spawn';
 import { ModuleHandlerOptions, ModuleHandlerResult, ModuleInfo } from '../types';
-import { fileExists, readJson, writeJson, resolveModule, writeFile } from '../../common/util';
+import { fileExists, readJson, writeJson, resolveModule } from '../../common/util';
 
 /**
  * 本地模块管理器
@@ -45,12 +45,15 @@ export class ModuleHandler {
   info(name: string): ModuleInfo {
     const main: string = resolveModule(name, this.baseDir);
     const baseDir: string = path.dirname(main);
-    writeFile(path.join(this.baseDir, 'eo.log'), `baseDir:${baseDir} name:${name}`);
     const moduleInfo: ModuleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
+    // 这里要加上判断或try catch，避免异常读取不到文件，或格式错误
     moduleInfo.main = main;
     moduleInfo.baseDir = baseDir;
     if (moduleInfo.preload && moduleInfo.preload.length > 0) {
       moduleInfo.preload = path.join(baseDir, moduleInfo.preload);
+    }
+    if (moduleInfo.logo && moduleInfo.logo.length > 0 && !moduleInfo.logo.startsWith('http')) {
+      moduleInfo.logo = path.join(baseDir, moduleInfo.logo);
     }
     return moduleInfo;
   }

@@ -34,6 +34,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     if (this.isElectron) {
       this.modules = this.electron.ipcRenderer.sendSync('eo-sync', {type: 'getModules'});
+      console.log(this.modules);
     } else {
       this.modules = new Map();
     }

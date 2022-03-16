@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen, ipcMain, shell, BrowserView, session } from 'electron';
+import { app, BrowserView, BrowserWindow, ipcMain, screen, session, shell } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -6,26 +6,28 @@ import * as os from 'os';
 import * as url from 'url';
 import { UnitWorker } from './unitWorker';
 import ModuleManager from './core/module/lib/manager';
-import { ModuleInfo, ModuleManagerInterface } from './core/module/types';
+import { ModuleInfo, ModuleManagerInterface, ModuleType } from './core/module/types';
+import { getViewBounds, SlidePosition, ViewBounds, ViewZone } from './core/common/util';
 
 let win: BrowserWindow = null;
-let view: BrowserView = null;
-let width: number;
-let height: number;
+let slidePosition: SlidePosition = SlidePosition.left;
+let currentAppModuleID: string;
+let lastAppModuleID: string;
+const browserViews: Map<ViewZone, BrowserView> = new Map();
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const args = process.argv.slice(1),
   eoUpdater = new EoUpdater(),
   workerLoop = {},
   serve = args.some((val) => val === '--serve');
+
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
-  width = size.width * 0.8;
-  height = size.height * 0.8;
   // Create the browser window.
   win = new BrowserWindow({
-    width: width,
-    height: height,
+    width: size.width * 0.8,
+    height: size.height * 0.8,
+    useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
     frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
       nodeIntegration: true,
@@ -47,26 +49,17 @@ function createWindow(): BrowserWindow {
     });
     win.loadURL('http://localhost:4200');
   } else {
-    // Path when running electron executable
-    let pathIndex = './index.html';
-    ['dist', 'app'].some((pathName) => {
-      let htmlPath = `../${pathName}/index.html`;
-      if (fs.existsSync(path.join(__dirname, htmlPath))) {
-        // Path when running electron in local folder
-        pathIndex = htmlPath;
-      }
-    });
     let loadPage = () => {
-      win.loadURL(
-        url.format({
-          pathname: path.join(__dirname, pathIndex),
-          protocol: 'file:',
-          slashes: true,
-        })
-      );
+      const file: string = `file://${path.join(__dirname, 'views', 'default', 'index.html')}`;
+      win.loadURL(file).finally();
     };
     win.webContents.on('did-fail-load', () => {
       loadPage();
+    });
+    win.webContents.on('did-finish-load', () => {
+      createApp('default');
+      createNormalView(ViewZone.bottom, win);
+      createNormalView(ViewZone.top, win);
     });
     loadPage();
   }
@@ -82,14 +75,56 @@ function createWindow(): BrowserWindow {
   return win;
 }
 
+/**
+ * 创建标准视图，静态区域
+ * @param zone
+ * @param window
+ */
+const createNormalView = (zone: ViewZone, window: BrowserWindow): BrowserView => {
+  const file: string = `file://${path.join(__dirname, 'views', zone, 'index.html')}`;
+  const ses = session.fromPartition('normal_view');
+  ses.setPreloads([path.join(__dirname, 'views', 'preload.js')]);
+  const _view: BrowserView = new BrowserView({
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: true,
+      contextIsolation: false,
+      session: ses,
+    },
+  });
+  window.addBrowserView(_view);
+  const bounds = window.getContentBounds();
+  const _bounds: ViewBounds = getViewBounds(zone, bounds.width, bounds.height, slidePosition);
+  _view.webContents.loadURL(file).finally();
+  _view.webContents.once('did-finish-load', () => {
+    _view.setBackgroundColor('#FFF');
+  });
+  _view.webContents.once('dom-ready', () => {
+    _view.setBounds(_bounds);
+    if (browserViews.has(zone)) {
+      removeView(browserViews.get(zone), window);
+      browserViews.delete(zone);
+    }
+    browserViews.set(zone, _view);
+    /*
+    if (zone === ViewZone.top) {
+      _view.webContents.openDevTools();
+    }
+    */
+  });
+  return _view;
+};
 
-
-const createView = (module: ModuleInfo, window: BrowserWindow) => {
-  const main = `file://${module.main}`;
+/**
+ * 创建主视图，主要从模块载入文件
+ * @param module
+ * @param window
+ */
+const createMainView = (module: ModuleInfo, window: BrowserWindow, refresh: boolean): BrowserView => {
+  const file: string = `file://${module.main}`;
   const ses = session.fromPartition("<" + module.moduleID + ">");
-  ses.setPreloads([module.preload]);
-
-  view = new BrowserView({
+  ses.setPreloads([path.join(__dirname, 'views', 'preload.js')]);
+  const _view: BrowserView = new BrowserView({
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -100,21 +135,63 @@ const createView = (module: ModuleInfo, window: BrowserWindow) => {
       session: ses,
     },
   });
-  view.setBackgroundColor('#F5F5F5');
-  window.setBrowserView(view);
-  view.webContents.loadURL(main);
-  view.webContents.once('dom-ready', () => {
-    view.setBounds({ x: 0, y: 50, width: width, height: (height - 80) });
-    view.setAutoResize({ width: true });
-    //window.webContents.executeJavaScript(`window.pluginLoaded()`);
+  window.addBrowserView(_view);
+  if (refresh) {
+    createNormalView(ViewZone.slide, window);
+  }
+  const bounds = window.getContentBounds();
+  const _bounds: ViewBounds = getViewBounds(ViewZone.main, bounds.width, bounds.height, slidePosition);
+  _view.webContents.loadURL(file).finally();
+  _view.webContents.once('did-finish-load', () => {
+    _view.setBackgroundColor('#FFF');
   });
+  _view.webContents.once('dom-ready', () => {
+    _view.setBounds(_bounds);
+    if (browserViews.has(ViewZone.main)) {
+      removeView(browserViews.get(ViewZone.main), window);
+      browserViews.delete(ViewZone.main);
+    }
+    browserViews.set(ViewZone.main, _view);
+    //_view.webContents.openDevTools();
+    //view.setAutoResize({ width: true });
+    //window.webContents.executeJavaScript(`window.getModules1()`);
+  });
+  return _view;
 };
 
-const removeView = (window: BrowserWindow) => {
+/**
+ * 删除视图
+ * @param view
+ * @param window
+ */
+const removeView = (view: BrowserView, window: BrowserWindow) => {
   if (view) {
     window.removeBrowserView(view);
-    // window.webContents.executeJavaScript(`window.initRubick()`);
+    // window.webContents.executeJavaScript(`window.init()`);
     view = undefined;
+  }
+};
+
+/**
+ * 根据模块ID启动app模块的加载
+ * @param moduleID
+ * @param load
+ */
+const createApp = (moduleID: string) => {
+  // 如果要打开是同一app，忽略
+  if (lastAppModuleID === moduleID) {
+    return;
+  }
+  const module: ModuleInfo = moduleManager.getModule(moduleID, true);
+  if (module && module.type === ModuleType.app) {
+    let refresh: boolean = false;
+    if (module.isApp && currentAppModuleID !== module.moduleID) {
+      currentAppModuleID = module.moduleID;
+      slidePosition = module.slidePosition;
+      refresh = true;
+    }
+    lastAppModuleID = moduleID;
+    createMainView(module, win, refresh);
   }
 };
 
@@ -136,6 +213,8 @@ try {
       app.quit();
     }
   });
+
+  // resize 监听，改变browserview bounds
 
   app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
@@ -179,18 +258,29 @@ try {
       }
     }
   });
-  ipcMain.on('eo', (event, args) => {
-    const params = {message: 'ipcMain eo', data: moduleManager.getModules()};
-    event.sender.send('eo', params);
-  });
 
+  // 这里可以封装成类+方法匹配调用，不用多个if else
   ipcMain.on('eo-sync', (event, arg) => {
     let returnValue: any;
-    if (arg.type === 'getModules') {
-      returnValue = moduleManager.getModules();
+    if (arg.type === 'getApiAccessRules') {
+      // 后期加入权限生成，根据moduleID，上层moduleID，应用范围等
+      // 或者是像Android, 跳出权限列表让用户自己选择确认放开的权限。
+      const output: string[] = ['getModules', 'getAppModuleList', 'getSlideModuleList', 'hook'];
+      returnValue = output;
+    } else if (arg.type === 'getModules') {
+      returnValue = moduleManager.getModules(true);
+    } else if (arg.type === 'getAppModuleList') {
+      returnValue = moduleManager.getAppModuleList();
+    } else if (arg.type === 'getSlideModuleList') {
+      returnValue = moduleManager.getSlideModuleList(currentAppModuleID);
+    } else if (arg.type === 'getSlidePosition') {
+      returnValue = slidePosition;
+    } else if (arg.type === 'hook') {
+      returnValue = 'hook返回';
     } else if (arg.type === 'openApp') {
-      removeView(win);
-      createView(moduleManager.getModule(arg.moduleID), win);
+      if (arg.moduleID) {
+        createApp(arg.moduleID);
+      }
       returnValue = 'view id';
     } else {
       returnValue = 'Invalid data';

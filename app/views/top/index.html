@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-size: 14px;
+      margin: 0;
+      padding: 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .eo_navbar {
+      width: 100%;
+      height: 49px;
+    }
+    .logo {
+      width: 120px;
+      margin: 10px 10px 0 10px;
+    }
+    #app-list {
+      float: right;
+    }
+    #app-list img {
+      height: 30px;
+      margin: 10px 10px 0 10px;
+      cursor: pointer;
+    }
+
+    .dropbtn {
+       background-color: #4CAF50;
+       color: white;
+       padding: 5px;
+       border: none;
+       cursor: pointer;
+     }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      float: right;
+      padding: 10px;
+    }
+    .dropdown-content {
+      display: none;
+      right: 0;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 100px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    }
+    .dropdown-content a {
+      color: black;
+      padding: 10px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .dropdown:hover .dropbtn {
+      background-color: #3e8e41;
+    }
+  </style>
+</head>
+<body>
+  <div class="eo_navbar">
+    <img src="images/logo.svg" class="logo">
+    <div id="app-list"></div>
+    <div class="dropdown">
+      <button class="dropbtn">下拉菜单</button>
+      <div class="dropdown-content">
+        <a href="#">下拉菜单 1</a>
+        <a href="#">下拉菜单 2</a>
+        <a href="#">下拉菜单 3</a>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function switchApp(moduleID) {
+      console.log('switchApp: ' + moduleID);
+      window.eo.tempApi({type:'openApp', moduleID: moduleID});
+    }
+    var appStr = '';
+    var appArr = window.eo.getAppModuleList() || [];
+    for (let i = 0; i < appArr.length; i++) {
+      appStr += '<img src="' + appArr[i].logo + '" title="' + appArr[i].moduleName + '" onclick="switchApp(\'' + appArr[i].moduleID + '\');"></img>';
+    };
+    console.log(appStr)
+    document.getElementById('app-list').innerHTML = appStr;
+  </script>
+</body>
+</html>
