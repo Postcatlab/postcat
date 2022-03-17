@@ -25,11 +25,13 @@
   <table class="main-table">
     <thead>
       <tr>
+        <th class="checkbox-th" width="40px"><input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs()" /></th>
         <th *ngFor="let title of columns" [width]="title.width">{{ title.title }}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let body of modelData; let i = index">
+        <td width="40px" class="checkbox-td"><input type="checkbox" [ngModel]="body.__isCheck"  (change)="handleCheckboxs($event, body)" /></td>
         <ng-container *ngFor="let cell of columns; let $i = index">
           <td>
             <div class="td-input" *ngIf="cell.isExpand">

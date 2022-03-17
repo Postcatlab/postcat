@@ -95,6 +95,23 @@ class Leaf {
     return Leaf.list2tree(this.realData, this.dataModel);
   }
 
+  checkAll(bool: boolean) {
+    const list = JSON.parse(JSON.stringify(this.realData));
+    this.realData = list.map((it) => ({ ...it, __isCheck: bool }));
+    return this.getData();
+  }
+
+  checkNode(mid) {
+    console.log(mid);
+    this.realData = this.realData.map((it) => {
+      if (mid == it.__mid) {
+        return { ...it, __isCheck: true };
+      }
+      return it;
+    });
+    return this.getData()
+  }
+
   static tree2list(data) {
     // * DFS
     const arr = [];

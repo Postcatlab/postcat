@@ -71,6 +71,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   isColTableActive = false;
   private leaf = null; // 引擎的实例引用
   private isUpdate = false;
+  private isSelectAll = true;
   private modelData: any[];
 
   constructor() {}
@@ -80,8 +81,10 @@ export class EoTableComponent implements OnInit, AfterContentInit {
       this.isUpdate = false;
       return;
     }
+    this.isSelectAll = true;
     this.leaf = new Leaf(mock, this.dataModel);
-    this.modelData = this.leaf.getData();
+    // this.modelData = this.leaf.getData();
+    this.modelData = this.leaf.checkAll(this.isSelectAll);
     const tree = this.leaf.getTreeData();
     this.isUpdate = true;
     this.modelChange.emit(tree);
@@ -122,5 +125,15 @@ export class EoTableComponent implements OnInit, AfterContentInit {
 
   stopEvent($event) {
     $event.stopPropagation();
+  }
+
+  handleCheckboxs(event, node = null) {
+    console.log('event', event);
+    // * select checkbox
+    if (node == null) {
+      this.modelData = this.leaf.checkAll(this.isSelectAll);
+      return;
+    }
+    this.modelData = this.leaf.checkNode(node.__mid);
   }
 }

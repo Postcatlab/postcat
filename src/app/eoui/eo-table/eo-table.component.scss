@@ -1,3 +1,8 @@
+@mixin checkbox_col {
+  width: 40px;
+  text-align: center;
+}
+
 .eo-table {
   position: relative;
   &:hover {
@@ -70,6 +75,9 @@
     thead {
       height: 40px;
       background-color: #fafafa;
+      th.checkbox-th {
+        @include checkbox_col;
+      }
       th {
         padding: 0 10px;
         position: relative;
@@ -115,6 +123,10 @@
               border: 1px solid rgba(0, 0, 0, 0.1);
             }
           }
+        }
+        td.checkbox-td {
+          @include checkbox_col;
+          border-right: 1px solid rgba(0, 0, 0, 0.1);
         }
         td {
           border: none;
