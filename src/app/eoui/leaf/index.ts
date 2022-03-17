@@ -101,14 +101,27 @@ class Leaf {
     return this.getData();
   }
 
-  checkNode(mid, isCheck) {
-    this.realData = this.realData.map((it) => {
-      if (mid === it.__mid || it.__mid.indexOf(`${mid}-`) === 0) {
-        // * the node and its children
-        return { ...it, __isCheck: isCheck };
-      }
-      return it;
-    });
+  checkNode(mid, isCheck, isCheckChild = true) {
+    if (isCheck) {
+      this.realData = this.realData.map((it) => {
+        if (mid === it.__mid) {
+          // * the node and its children
+          return { ...it, __isCheck: isCheck };
+        }
+        if (isCheckChild && it.__mid.indexOf(`${mid}-`) === 0) {
+          return { ...it, __isCheck: isCheck };
+        }
+        return it;
+      });
+    } else {
+      this.realData = this.realData.map((it) => {
+        if (mid === it.__mid || it.__mid.indexOf(`${mid}-`) === 0) {
+          // * the node and its children
+          return { ...it, __isCheck: isCheck };
+        }
+        return it;
+      });
+    }
     return this.getData();
   }
 

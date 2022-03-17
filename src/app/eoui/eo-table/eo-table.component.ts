@@ -61,6 +61,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   @Input() columns: Column[] = [];
   @Input() dataModel: any = {};
   @Input() rules: [] = [];
+  @Input() isCheckChild = true;
   @Output() modelChange = new EventEmitter<any>();
   @ViewChild('colTable') colTableRef: ElementRef;
 
@@ -133,7 +134,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
       this.modelData = this.leaf.checkAll(this.isSelectAll);
       return;
     }
-    this.modelData = this.leaf.checkNode(node.__mid, event.target.checked);
+    this.modelData = this.leaf.checkNode(node.__mid, event.target.checked, this.isCheckChild);
     const tree = this.leaf.getTreeData();
     this.isUpdate = true;
     this.modelChange.emit(tree);
