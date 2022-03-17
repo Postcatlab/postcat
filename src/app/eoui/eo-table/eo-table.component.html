@@ -1,9 +1,8 @@
 <section class="eo-table">
-
   <div class="col-menu" [class.active]="isColTableActive">
     <span><button class="eo-button" (click)="switchColTable(true)">列表项</button></span>
   </div>
-  
+
   <div class="col-control" tabindex="-1" (blur)="switchColTable(false)" #colTable>
     <table class="col-table" *ngIf="isColTableActive">
       <thead>
@@ -21,28 +20,48 @@
     </table>
   </div>
 
-
   <table class="main-table">
     <thead>
       <tr>
-        <th class="checkbox-th" width="40px"><input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs()" /></th>
+        <th class="checkbox-th" width="40px">
+          <input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs($event)" />
+        </th>
         <th *ngFor="let title of columns" [width]="title.width">{{ title.title }}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let body of modelData; let i = index">
-        <td width="40px" class="checkbox-td"><input type="checkbox" [ngModel]="body.__isCheck"  (change)="handleCheckboxs($event, body)" /></td>
+        <td width="40px" class="checkbox-td">
+          <input type="checkbox" [ngModel]="body.__isCheck" (change)="handleCheckboxs($event, body)" />
+        </td>
         <ng-container *ngFor="let cell of columns; let $i = index">
           <td>
             <div class="td-input" *ngIf="cell.isExpand">
               <span class="level-icon">
-                <i nz-icon nzType="plus-square" nzTheme="outline" *ngIf="body.__hasChild && !body.__isExpand" (click)="handleExpand(body.__mid, !body.__isExpand)"></i>
-                <i nz-icon nzType="minus-square" nzTheme="outline" *ngIf="body.__hasChild && body.__isExpand" (click)="handleExpand(body.__mid, !body.__isExpand)"></i>
+                <i
+                  nz-icon
+                  nzType="plus-square"
+                  nzTheme="outline"
+                  *ngIf="body.__hasChild && !body.__isExpand"
+                  (click)="handleExpand(body.__mid, !body.__isExpand)"
+                ></i>
+                <i
+                  nz-icon
+                  nzType="minus-square"
+                  nzTheme="outline"
+                  *ngIf="body.__hasChild && body.__isExpand"
+                  (click)="handleExpand(body.__mid, !body.__isExpand)"
+                ></i>
               </span>
               <ng-container>
                 <i *ngFor="let pd of body.__mid?.split('-'); let $pd = index" class="padding-input"></i>
               </ng-container>
-              <input *ngIf="cell.isEdit" type="text" [(ngModel)]="body[cell['key']]" (input)="handleChange($event, cell['key'], body.__mid)" />
+              <input
+                *ngIf="cell.isEdit"
+                type="text"
+                [(ngModel)]="body[cell['key']]"
+                (input)="handleChange($event, cell['key'], body.__mid)"
+              />
             </div>
             <eo-select *ngIf="cell.isSelect" [dataModel]="cell.options" [(model)]="body[cell['key']]"></eo-select>
             <!-- <span *ngIf="!cell.isEdit">{{ body[cell['key']] }}</span> -->

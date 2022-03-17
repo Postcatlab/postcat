@@ -128,12 +128,30 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   }
 
   handleCheckboxs(event, node = null) {
-    console.log('event', event);
     // * select checkbox
     if (node == null) {
       this.modelData = this.leaf.checkAll(this.isSelectAll);
       return;
     }
-    this.modelData = this.leaf.checkNode(node.__mid);
+    this.modelData = this.leaf.checkNode(node.__mid, event.target.checked);
+    const tree = this.leaf.getTreeData();
+    this.isUpdate = true;
+    this.modelChange.emit(tree);
+  }
+
+  addChild(node) {
+    const { __mid } = node;
+    this.modelData = this.leaf.addChildNode(__mid);
+    const tree = this.leaf.getTreeData();
+    this.isUpdate = true;
+    this.modelChange.emit(tree);
+  }
+
+  deleteNode(node) {
+    const { __mid, __pid, __index } = node;
+    this.modelData = this.leaf.deleteNode(__mid, __pid, __index);
+    const tree = this.leaf.getTreeData();
+    this.isUpdate = true;
+    this.modelChange.emit(tree);
   }
 }

@@ -101,15 +101,77 @@ class Leaf {
     return this.getData();
   }
 
-  checkNode(mid) {
-    console.log(mid);
+  checkNode(mid, isCheck) {
     this.realData = this.realData.map((it) => {
-      if (mid == it.__mid) {
-        return { ...it, __isCheck: true };
+      if (mid === it.__mid || it.__mid.indexOf(`${mid}-`) === 0) {
+        // * the node and its children
+        return { ...it, __isCheck: isCheck };
       }
       return it;
     });
-    return this.getData()
+    return this.getData();
+  }
+
+  addChildNode(mid) {
+    const list = this.realData.map((it, i) => ({ ...it, __i: i }));
+    const chilList = list.filter((it) => it.__pid === mid);
+
+    if (chilList.length) {
+      const [last] = chilList
+        .filter((it) => it.__pid === mid)
+        .sort((a, b) => a.__index - b.__index)
+        .slice(-1);
+      list.splice(last.__i + 1, 0, {
+        ...this.dataModel,
+        // for debug
+        // name: `${mid}-${last.__index + 1}`,
+        __mid: `${mid}-${last.__index + 1}`,
+        __pid: mid,
+        __index: last.__index + 1,
+        __isExpand: last.__isExpand,
+        __isHasChild: false,
+        __isCheck: true,
+      });
+    } else {
+      const [last] = list.filter((it) => it.__mid === mid);
+      list.splice(last.__i + 1, 0, {
+        ...this.dataModel,
+        // for debug
+        // name: `${mid}-0`,
+        __mid: `${mid}-0`,
+        __pid: mid,
+        __index: 0,
+        __isExpand: true,
+        __isHasChild: false,
+        __isCheck: true,
+      });
+    }
+
+    this.realData = list.map(({ __i, ...it }) => {
+      if (it.__mid === mid) {
+        return {
+          ...it,
+          __isHasChild: true,
+        };
+      }
+      return it;
+    });
+    return this.getData();
+  }
+
+  deleteNode(mid, pid, index) {
+    this.realData = this.realData
+      .filter((it) => it.__mid !== mid && it.__mid.indexOf(`${mid}-`) !== 0)
+      .map((it) => {
+        if (it.__pid === pid) {
+          return {
+            ...it,
+            __index: it.__index < index ? it.__index : it.__index - 1,
+          };
+        }
+        return it;
+      });
+    return this.getData();
   }
 
   static tree2list(data) {
@@ -126,8 +188,10 @@ class Leaf {
   }
 
   static list2tree(data, dataModel) {
-    // * clear all empty data
-    const list = data.filter(({ __index, __mid, __pid, __hasChild, __isExpand, ...it }) => !_.isEqual(it, dataModel));
+    // * clear all empty or not checked data
+    const list = data
+      .filter(({ __isCheck }) => __isCheck)
+      .filter(({ __index, __mid, __pid, __hasChild, __isExpand, __isCheck, ...it }) => !_.isEqual(it, dataModel));
     const filterArray = (data, pid) => {
       const tree = [];
       let temp;
@@ -136,9 +200,9 @@ class Leaf {
           const obj = data[i];
           temp = filterArray(data, data[i].__mid);
           if (temp.length > 0) {
-            obj.children = temp.map(({ __index, __mid, __pid, __hasChild, __isExpand, ...it }) => it);
+            obj.children = temp.map(({ __index, __mid, __pid, __hasChild, __isExpand, __isCheck, ...it }) => it);
           }
-          const { __index, __mid, __pid, __hasChild, __isExpand, ...node } = obj;
+          const { __index, __mid, __pid, __hasChild, __isExpand, __isCheck, ...node } = obj;
           tree.push(node);
         }
       }

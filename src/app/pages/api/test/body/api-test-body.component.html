@@ -23,6 +23,7 @@
 <!-- JSON -->
 <!-- XML -->
 <eo-table
+  #eoTable
   *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
   [columns]="[
     { title: '参数名', key: 'name', isEdit: true, isExpand: true },
@@ -41,7 +42,12 @@
   ]"
   [dataModel]="itemStructure"
   [(model)]="model"
-></eo-table>
+>
+  <ng-template cell="action" let-scope="scope" let-index="index">
+    <a nz-button nzSize="small" nzType="link" (click)="eoTable.addChild(scope)">添加子字段</a>
+    <a nz-button nzSize="small" nzType="link" (click)="eoTable.deleteNode(scope)">删除</a>
+  </ng-template>
+</eo-table>
 <div>{{ model | json }}</div>
 <list-block-common-component
   *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
