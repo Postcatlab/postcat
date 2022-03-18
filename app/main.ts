@@ -18,7 +18,7 @@ const moduleManager: ModuleManagerInterface = ModuleManager();
 const args = process.argv.slice(1),
   eoUpdater = new EoUpdater(),
   workerLoop = {},
-  serve = args.some((val) => val === '--serve');
+  env = args.some((val) => val === '--serve')?'serve':args.some((val) => val === '--development')?'development':'production';
 
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
@@ -31,7 +31,7 @@ function createWindow(): BrowserWindow {
     frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
       nodeIntegration: true,
-      allowRunningInsecureContent: serve ? true : false,
+      allowRunningInsecureContent: env==='serve' ? true : false,
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
@@ -42,7 +42,7 @@ function createWindow(): BrowserWindow {
     });
     return { action: 'deny' };
   });
-  if (serve) {
+  if (env==='serve') {
     win.webContents.openDevTools();
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '/../node_modules/electron')),
@@ -152,7 +152,7 @@ const createMainView = (module: ModuleInfo, window: BrowserWindow, refresh: bool
       browserViews.delete(ViewZone.main);
     }
     browserViews.set(ViewZone.main, _view);
-    //_view.webContents.openDevTools();
+    _view.webContents.openDevTools();
     //view.setAutoResize({ width: true });
     //window.webContents.executeJavaScript(`window.getModules1()`);
   });

@@ -159,8 +159,8 @@ export class ModuleManager implements ModuleManagerInterface {
       moduleName: 'API',
       type: ModuleType.app,
       isApp: true,
-      logo: path.join(__dirname, '../../../../app/assets/images/icon.png'),
-      main: path.join(__dirname, '../../../../app/index.html'),
+      logo: path.join(__dirname, '../../../../dist/assets/images/icon.png'),
+      main: path.join(__dirname, '../../../../dist/index.html'),
     };
     // 加入系统默认模块做关联
     newModules.set(defaultModule.moduleID, defaultModule);

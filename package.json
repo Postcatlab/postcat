@@ -34,7 +34,7 @@
     "ng:serve": "ng serve -c web -o",
     "ng:web": "ng serve -c webaot -o",
     "electron:serve-tsc": "tsc -p tsconfig.serve.json",
-    "electron:dev":"npm run electron:serve-tsc && electron .",
+    "electron:dev":"npm run electron:serve-tsc && electron . --development",
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && electron . --serve",
     "electron:local": "npm run build:prod && electron .",
     "electron:build": "npm run build:prod && electron-builder build",
