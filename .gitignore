@@ -7,7 +7,8 @@
 /out-tsc
 /app-builds
 /release
-app/*.js
+app/**/*.js
+!app/request/**/*.js
 src/**/*.js
 !src/karma.conf.js
 !src/ng1/**/*.js

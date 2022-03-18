@@ -135,7 +135,7 @@ export class ModuleManager implements ModuleManagerInterface {
   private init() {
     const moduleNames: string[] = this.moduleHandler.list();
     moduleNames.forEach((moduleName: string) => {
-      / 这里要加上try catch，避免异常
+      // 这里要加上try catch，避免异常
       const moduleInfo: ModuleInfo = this.moduleHandler.info(moduleName);
       this.set(moduleInfo);
     });

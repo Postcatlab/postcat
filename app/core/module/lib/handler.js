@@ -67,6 +67,7 @@ var ModuleHandler = /** @class */ (function () {
         var main = (0, util_1.resolveModule)(name, this.baseDir);
         var baseDir = path.dirname(main);
         var moduleInfo = (0, util_1.readJson)(path.join(baseDir, 'package.json'));
+        // 这里要加上判断或try catch，避免异常读取不到文件，或格式错误
         moduleInfo.main = main;
         moduleInfo.baseDir = baseDir;
         if (moduleInfo.preload && moduleInfo.preload.length > 0) {

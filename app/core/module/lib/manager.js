@@ -184,6 +184,7 @@ var ModuleManager = /** @class */ (function () {
         var _this = this;
         var moduleNames = this.moduleHandler.list();
         moduleNames.forEach(function (moduleName) {
+            // 这里要加上try catch，避免异常
             var moduleInfo = _this.moduleHandler.info(moduleName);
             _this.set(moduleInfo);
         });
