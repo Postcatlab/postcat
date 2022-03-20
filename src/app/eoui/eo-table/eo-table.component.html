@@ -42,65 +42,69 @@
   <table class="main-table">
     <thead>
       <tr>
-        <th class="checkbox-th" width="40px">
-          <input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs($event)" />
-        </th>
         <ng-container *ngFor="let cell of columnData">
-          <th *ngIf="!cell.isHidden" [width]="cell.width">{{ cell.title }}</th>
+          <th class="checkbox-th" width="40px" *ngIf="cell.type === 'selection'; else thKey">
+            <input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs($event)" />
+          </th>
+          <ng-template #thKey>
+            <th *ngIf="!cell.isHidden" [width]="cell.width">{{ cell.title }}</th>
+          </ng-template>
         </ng-container>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let body of modelData; let i = index">
-        <td width="40px" class="checkbox-td">
-          <input type="checkbox" [ngModel]="body.__isCheck" (change)="handleCheckboxs($event, body)" />
-        </td>
         <ng-container *ngFor="let cell of columnData; let $i = index">
-          <td *ngIf="!cell.isHidden">
-            <div class="td-content">
-              <span class="level-icon" *ngIf="cell.isExpand">
-                <i
-                  nz-icon
-                  nzType="plus-square"
-                  nzTheme="outline"
-                  *ngIf="body.__hasChild && !body.__isExpand"
-                  (click)="handleExpand(body.__mid, !body.__isExpand)"
-                ></i>
-                <i
-                  nz-icon
-                  nzType="minus-square"
-                  nzTheme="outline"
-                  *ngIf="body.__hasChild && body.__isExpand"
-                  (click)="handleExpand(body.__mid, !body.__isExpand)"
-                ></i>
-              </span>
-              <ng-container *ngIf="cell.isExpand">
-                <i *ngFor="let pd of body.__mid?.split('-'); let $pd = index" class="padding-input"></i>
-              </ng-container>
-              <div *ngIf="cell.isEdit" class="td-input">
-                <input
-                  type="text"
-                  [(ngModel)]="body[cell['key']]"
-                  (input)="handleChange($event, cell['key'], body.__mid)"
-                />
-              </div>
-              <div *ngIf="cell.isSelect" class="td-select">
-                <eo-select
-                  [dataModel]="cell.options"
-                  [(model)]="body[cell['key']]"
-                  (modelChange)="handleSelect($event, cell['key'], body.__mid)"
-                ></eo-select>
-              </div>
-
-              <!-- share scope if columnData include [slot] -->
-              <ng-container *ngIf="slotMap[cell.slot]">
-                <ng-template
-                  [ngTemplateOutlet]="slotMap[cell.slot]"
-                  [ngTemplateOutletContext]="{ scope: body, index: i }"
-                ></ng-template>
-              </ng-container>
-            </div>
+          <td width="40px" class="checkbox-td" *ngIf="cell.type === 'selection'; else tdKey">
+            <input type="checkbox" [ngModel]="body.__isCheck" (change)="handleCheckboxs($event, body)" />
           </td>
+          <ng-template #tdKey>
+            <td *ngIf="!cell.isHidden">
+              <div class="td-content">
+                <span class="level-icon" *ngIf="cell.isExpand">
+                  <i
+                    nz-icon
+                    nzType="plus-square"
+                    nzTheme="outline"
+                    *ngIf="body.__isHasChild && !body.__isExpand"
+                    (click)="handleExpand(body.__mid, !body.__isExpand)"
+                  ></i>
+                  <i
+                    nz-icon
+                    nzType="minus-square"
+                    nzTheme="outline"
+                    *ngIf="body.__isHasChild && body.__isExpand"
+                    (click)="handleExpand(body.__mid, !body.__isExpand)"
+                  ></i>
+                </span>
+                <ng-container *ngIf="cell.isExpand">
+                  <i *ngFor="let pd of body.__mid?.split('-'); let $pd = index" class="padding-input"></i>
+                </ng-container>
+                <div *ngIf="cell.isEdit" class="td-input">
+                  <input
+                    type="text"
+                    [(ngModel)]="body[cell['key']]"
+                    (input)="handleChange($event, cell['key'], body.__mid)"
+                  />
+                </div>
+                <div *ngIf="cell.isSelect" class="td-select">
+                  <eo-select
+                    [dataModel]="cell.options"
+                    [(model)]="body[cell['key']]"
+                    (modelChange)="handleSelect($event, cell['key'], body.__mid)"
+                  ></eo-select>
+                </div>
+
+                <!-- share scope if columnData include [slot] -->
+                <ng-container *ngIf="slotMap[cell.slot]">
+                  <ng-template
+                    [ngTemplateOutlet]="slotMap[cell.slot]"
+                    [ngTemplateOutletContext]="{ scope: body, index: i }"
+                  ></ng-template>
+                </ng-container>
+              </div>
+            </td>
+          </ng-template>
         </ng-container>
       </tr>
     </tbody>

@@ -13,7 +13,7 @@ class Leaf {
     const pidList = Array.from(new Set(list.map((it) => it.__pid)));
     pidList.forEach((pid) => {
       const $index = _.findLastIndex(list, { __pid: pid });
-      const { __index, __mid, __pid, __isExpand, __hasChild, __isCheck, ...last } = list[$index];
+      const { __index, __mid, __pid, __isExpand, __isHasChild, __isCheck, ...last } = list[$index];
       if (!_.isEqual(last, this.dataModel)) {
         list.splice($index + 1, 0, {
           ...this.dataModel,
@@ -21,7 +21,7 @@ class Leaf {
           __pid: pid,
           __index: __index + 1,
           __isExpand: true,
-          __hasChild: false,
+          __isHasChild: false,
           __isCheck: true,
         });
       }
@@ -193,7 +193,7 @@ class Leaf {
     const arr = [];
     data.forEach((item, i) => {
       const loop = ({ children = null, __mid = '0', ...it }) => {
-        arr.push({ ...it, __mid, __hasChild: !!children, __isExpand: true });
+        arr.push({ ...it, __mid, __isHasChild: !!children, __isExpand: true });
         children?.forEach((x, $i) => loop({ ...x, __index: $i, __mid: `${__mid}-${$i}`, __pid: __mid }));
       };
       loop({ ...item, __mid: `${i}`, __pid: null, __index: i });
@@ -205,7 +205,7 @@ class Leaf {
     // * clear all empty or not checked data
     const list = data
       .filter(({ __isCheck }) => __isCheck)
-      .filter(({ __index, __mid, __pid, __hasChild, __isExpand, __isCheck, ...it }) => !_.isEqual(it, dataModel));
+      .filter(({ __index, __mid, __pid, __isHasChild, __isExpand, __isCheck, ...it }) => !_.isEqual(it, dataModel));
     const filterArray = (data, pid) => {
       const tree = [];
       let temp;
@@ -214,9 +214,9 @@ class Leaf {
           const obj = data[i];
           temp = filterArray(data, data[i].__mid);
           if (temp.length > 0) {
-            obj.children = temp.map(({ __index, __mid, __pid, __hasChild, __isExpand, __isCheck, ...it }) => it);
+            obj.children = temp.map(({ __index, __mid, __pid, __isHasChild, __isExpand, __isCheck, ...it }) => it);
           }
-          const { __index, __mid, __pid, __hasChild, __isExpand, __isCheck, ...node } = obj;
+          const { __index, __mid, __pid, __isHasChild, __isExpand, __isCheck, ...node } = obj;
           tree.push(node);
         }
       }

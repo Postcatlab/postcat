@@ -140,6 +140,15 @@
             > .td-select {
               padding: 3px 6px;
               flex: 1;
+              ::ng-deep .ant-select-selector {
+                border-color: rgba(0, 0, 0, 0);
+                &:hover,
+                &:focus,
+                &:active,
+                &.ant-select-focused {
+                  border-color: #00785a;
+                }
+              }
             }
 
             > .td-input {

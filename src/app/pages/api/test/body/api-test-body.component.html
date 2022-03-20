@@ -26,6 +26,7 @@
   #eoTable
   *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
   [columns]="[
+    { type: 'selection' },
     { title: '参数名', key: 'name', isEdit: true, isExpand: true },
     {
       title: '类型',
