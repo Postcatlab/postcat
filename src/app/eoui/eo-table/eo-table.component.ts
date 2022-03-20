@@ -21,6 +21,7 @@ type Column = {
   key?: string;
   slot?: string;
   filterFn?: any;
+  isHidden?: false;
   filterMultiple?: boolean;
   isCopy?: boolean;
   filterKey?: string;
@@ -31,25 +32,25 @@ type Column = {
 };
 
 const mock = [
-  { required: true, name: 'FFF-0', type: 'object', value: 'fff-0' },
+  { required: true, name: 'FFF-0', type: 'string', value: 'fff-0' },
   {
     required: true,
     name: 'FFF-1',
     type: 'object',
     value: 'fff-1',
     children: [
-      { required: true, name: 'FFF-1-0', type: 'object', value: 'fff-1-0' },
+      { required: true, name: 'FFF-1-0', type: 'string', value: 'fff-1-0' },
       {
         required: true,
         name: 'FFF-1-1',
         type: 'object',
         value: 'fff-1-1',
-        children: [{ required: true, name: 'FFF-1-1-0', type: 'object', value: 'fff-1-1-0' }],
+        children: [{ required: true, name: 'FFF-1-1-0', type: 'string', value: 'fff-1-1-0' }],
       },
-      { required: true, name: 'FFF-1-2', type: 'object', value: 'fff-1-2' },
+      { required: true, name: 'FFF-1-2', type: 'string', value: 'fff-1-2' },
     ],
   },
-  { required: true, name: 'FFF-2', type: 'object', value: 'fff-2' },
+  { required: true, name: 'FFF-2', type: 'string', value: 'fff-2' },
 ];
 
 @Component({
@@ -58,10 +59,10 @@ const mock = [
   styleUrls: ['./eo-table.component.scss'],
 })
 export class EoTableComponent implements OnInit, AfterContentInit {
-  @Input() columns: Column[] = [];
   @Input() dataModel: any = {};
   @Input() rules: [] = [];
   @Input() isCheckChild = true;
+  @Input() addChildCallback: () => {} = null;
   @Output() modelChange = new EventEmitter<any>();
   @ViewChild('colTable') colTableRef: ElementRef;
 
@@ -73,7 +74,9 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   private leaf = null; // 引擎的实例引用
   private isUpdate = false;
   private isSelectAll = true;
+  private isSelectColAll = false;
   private modelData: any[];
+  private columnData: any[];
 
   constructor() {}
 
@@ -91,6 +94,12 @@ export class EoTableComponent implements OnInit, AfterContentInit {
     this.modelChange.emit(tree);
   }
 
+  @Input() set columns(value) {
+    this.columnData = value.map(({ isHidden, ...it }) => ({ ...it, isHidden: isHidden || false }));
+    const len = this.columnData.filter(({ isHidden }) => !isHidden).length;
+    this.isSelectColAll = len === this.columnData.length;
+  }
+
   ngOnInit(): void {}
   ngAfterContentInit() {
     this.slotList.forEach(({ cellName, templateRef }) => {
@@ -100,6 +109,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
 
   handleChange(event, key, id) {
     this.leaf.updateData(this.modelData, { id, data: { [key]: event.target.value } });
+
     const tree = this.leaf.getTreeData();
     this.isUpdate = true;
     this.modelChange.emit(tree);
@@ -119,13 +129,19 @@ export class EoTableComponent implements OnInit, AfterContentInit {
     }
   }
 
-  handleColMenu(index) {
+  handleColMenu(event, index) {
     if (index == null) {
+      this.isSelectColAll = !this.isSelectColAll;
+      this.columnData = this.columnData.map(({ isHidden, ...it }) => ({ ...it, isHidden: !this.isSelectColAll }));
+      return;
     }
-  }
-
-  stopEvent($event) {
-    $event.stopPropagation();
+    const isHidden = !event.target.checked;
+    this.columnData = this.columnData.map((it, i) => {
+      if (index === i) {
+        return { ...it, isHidden };
+      }
+      return it;
+    });
   }
 
   handleCheckboxs(event, node = null) {
@@ -140,9 +156,16 @@ export class EoTableComponent implements OnInit, AfterContentInit {
     this.modelChange.emit(tree);
   }
 
+  handleSelect(event, key, mid) {
+    this.modelData = this.leaf.setData([mid], { [key]: event });
+    const tree = this.leaf.getTreeData();
+    this.isUpdate = true;
+    this.modelChange.emit(tree);
+  }
+
   addChild(node) {
     const { __mid } = node;
-    this.modelData = this.leaf.addChildNode(__mid);
+    this.modelData = this.leaf.addChildNode(__mid, { afterCallback: this.addChildCallback });
     const tree = this.leaf.getTreeData();
     this.isUpdate = true;
     this.modelChange.emit(tree);

@@ -156,6 +156,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       value: TYPE_CONST[val],
     }));
   }
+
+  addChildCallback(it) {
+    return { ...it, type: 'object' };
+  }
+
   private initListConf() {
     this.listConf = this.apiTest.initBodyListConf({
       title: '参数',

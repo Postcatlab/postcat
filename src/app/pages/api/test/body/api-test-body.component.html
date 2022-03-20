@@ -29,17 +29,19 @@
     { title: '参数名', key: 'name', isEdit: true, isExpand: true },
     {
       title: '类型',
-      key: 'value',
+      key: 'type',
       isSelect: true,
       options: [
         { label: 'string', value: 'string' },
         { label: 'number', value: 'number' },
+        { label: 'object', value: 'object' },
         { label: 'null', value: 'null' }
       ]
     },
-    { title: '参数值', key: 'description', isEdit: true },
+    { title: '参数值', key: 'value', isEdit: true },
     { title: '操作', slot: 'action', width: '15%' }
   ]"
+  [addChildCallback]="addChildCallback"
   [dataModel]="itemStructure"
   [(model)]="model"
 >

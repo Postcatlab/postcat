@@ -15,4 +15,8 @@ export class EoSelectComponent implements OnInit {
   ngOnInit(): void {
     // console.log('->', this.model);
   }
+
+  handleSelect(event) {
+    this.modelChange.emit(event);
+  }
 }

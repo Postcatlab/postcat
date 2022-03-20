@@ -1,23 +1,42 @@
 <section class="eo-table">
   <div class="col-menu" [class.active]="isColTableActive">
-    <span><button class="eo-button" (click)="switchColTable(true)">列表项</button></span>
-  </div>
-
-  <div class="col-control" tabindex="-1" (blur)="switchColTable(false)" #colTable>
-    <table class="col-table" *ngIf="isColTableActive">
-      <thead>
-        <tr (click)="handleColMenu()">
-          <th><input type="checkbox" /></th>
-          <th>列表项</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cell of columns; let $i = index" (click)="handleColMenu($i, cell.isIgnore)">
-          <td><input type="checkbox" [(ngModel)]="!!cell.isIgnore" (click)="stopEvent($event)" /></td>
-          <td>{{ cell.title }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <span>
+      <button
+        nz-button
+        nzType="default"
+        nzSize="small"
+        nzprimary
+        nz-popover
+        class="eo-button"
+        nzPopoverTitle=""
+        [(nzPopoverVisible)]="isColTableActive"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="contentTemplate"
+        nzPopoverPlacement="bottomRight"
+      >
+        列表项
+      </button>
+      <ng-template #contentTemplate>
+        <div class="col-control">
+          <table class="col-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" [(ngModel)]="isSelectColAll" (click)="handleColMenu($event)" /></th>
+                <th>列表项</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cell of columnData; let $i = index">
+                <td>
+                  <input type="checkbox" [(ngModel)]="!cell.isHidden" (click)="handleColMenu($event, $i)" />
+                </td>
+                <td>{{ cell.title }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+    </span>
   </div>
 
   <table class="main-table">
@@ -26,7 +45,9 @@
         <th class="checkbox-th" width="40px">
           <input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs($event)" />
         </th>
-        <th *ngFor="let title of columns" [width]="title.width">{{ title.title }}</th>
+        <ng-container *ngFor="let cell of columnData">
+          <th *ngIf="!cell.isHidden" [width]="cell.width">{{ cell.title }}</th>
+        </ng-container>
       </tr>
     </thead>
     <tbody>
@@ -34,10 +55,10 @@
         <td width="40px" class="checkbox-td">
           <input type="checkbox" [ngModel]="body.__isCheck" (change)="handleCheckboxs($event, body)" />
         </td>
-        <ng-container *ngFor="let cell of columns; let $i = index">
-          <td>
-            <div class="td-input" *ngIf="cell.isExpand">
-              <span class="level-icon">
+        <ng-container *ngFor="let cell of columnData; let $i = index">
+          <td *ngIf="!cell.isHidden">
+            <div class="td-content">
+              <span class="level-icon" *ngIf="cell.isExpand">
                 <i
                   nz-icon
                   nzType="plus-square"
@@ -53,25 +74,32 @@
                   (click)="handleExpand(body.__mid, !body.__isExpand)"
                 ></i>
               </span>
-              <ng-container>
+              <ng-container *ngIf="cell.isExpand">
                 <i *ngFor="let pd of body.__mid?.split('-'); let $pd = index" class="padding-input"></i>
               </ng-container>
-              <input
-                *ngIf="cell.isEdit"
-                type="text"
-                [(ngModel)]="body[cell['key']]"
-                (input)="handleChange($event, cell['key'], body.__mid)"
-              />
+              <div *ngIf="cell.isEdit" class="td-input">
+                <input
+                  type="text"
+                  [(ngModel)]="body[cell['key']]"
+                  (input)="handleChange($event, cell['key'], body.__mid)"
+                />
+              </div>
+              <div *ngIf="cell.isSelect" class="td-select">
+                <eo-select
+                  [dataModel]="cell.options"
+                  [(model)]="body[cell['key']]"
+                  (modelChange)="handleSelect($event, cell['key'], body.__mid)"
+                ></eo-select>
+              </div>
+
+              <!-- share scope if columnData include [slot] -->
+              <ng-container *ngIf="slotMap[cell.slot]">
+                <ng-template
+                  [ngTemplateOutlet]="slotMap[cell.slot]"
+                  [ngTemplateOutletContext]="{ scope: body, index: i }"
+                ></ng-template>
+              </ng-container>
             </div>
-            <eo-select *ngIf="cell.isSelect" [dataModel]="cell.options" [(model)]="body[cell['key']]"></eo-select>
-            <!-- <span *ngIf="!cell.isEdit">{{ body[cell['key']] }}</span> -->
-            <!-- share scope if columns include [slot] -->
-            <ng-container *ngIf="slotMap[cell.slot]">
-              <ng-template
-                [ngTemplateOutlet]="slotMap[cell.slot]"
-                [ngTemplateOutletContext]="{ scope: body, index: i }"
-              ></ng-template>
-            </ng-container>
           </td>
         </ng-container>
       </tr>

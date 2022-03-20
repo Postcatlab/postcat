@@ -1,5 +1,3 @@
-<select name="" id="">
-  <option *ngFor="let option of dataModel" [value]="option.value">
-    {{ option.label }}
-  </option>
-</select>
+<nz-select [(ngModel)]="model" (ngModelChange)="handleSelect($event)">
+  <nz-option *ngFor="let option of dataModel" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+</nz-select>

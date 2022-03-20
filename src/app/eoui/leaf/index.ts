@@ -13,7 +13,7 @@ class Leaf {
     const pidList = Array.from(new Set(list.map((it) => it.__pid)));
     pidList.forEach((pid) => {
       const $index = _.findLastIndex(list, { __pid: pid });
-      const { __index, __mid, __pid, __isExpand, __hasChild, ...last } = list[$index];
+      const { __index, __mid, __pid, __isExpand, __hasChild, __isCheck, ...last } = list[$index];
       if (!_.isEqual(last, this.dataModel)) {
         list.splice($index + 1, 0, {
           ...this.dataModel,
@@ -22,6 +22,7 @@ class Leaf {
           __index: __index + 1,
           __isExpand: true,
           __hasChild: false,
+          __isCheck: true,
         });
       }
     });
@@ -125,7 +126,7 @@ class Leaf {
     return this.getData();
   }
 
-  addChildNode(mid) {
+  addChildNode(mid, { afterCallback }) {
     const list = this.realData.map((it, i) => ({ ...it, __i: i }));
     const chilList = list.filter((it) => it.__pid === mid);
 
@@ -163,7 +164,7 @@ class Leaf {
     this.realData = list.map(({ __i, ...it }) => {
       if (it.__mid === mid) {
         return {
-          ...it,
+          ...(afterCallback ? afterCallback(it) : it),
           __isHasChild: true,
         };
       }
