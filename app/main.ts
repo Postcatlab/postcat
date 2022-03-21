@@ -9,7 +9,7 @@ import ModuleManager from './core/module/lib/manager';
 import { ModuleInfo, ModuleManagerInterface, ModuleType } from './core/module/types';
 import { getViewBounds, SlidePosition, ViewBounds, ViewZone } from './core/common/util';
 
-let win: BrowserWindow = null;
+let win: BrowserWindow = null,mainView:BrowserView=null;
 let slidePosition: SlidePosition = SlidePosition.left;
 let currentAppModuleID: string;
 let lastAppModuleID: string;
@@ -18,7 +18,11 @@ const moduleManager: ModuleManagerInterface = ModuleManager();
 const args = process.argv.slice(1),
   eoUpdater = new EoUpdater(),
   workerLoop = {},
-  env = args.some((val) => val === '--serve')?'serve':args.some((val) => val === '--development')?'development':'production';
+  env = args.some((val) => val === '--serve')
+    ? 'serve'
+    : args.some((val) => val === '--development')
+    ? 'development'
+    : 'production';
 
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
@@ -31,7 +35,7 @@ function createWindow(): BrowserWindow {
     frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
       nodeIntegration: true,
-      allowRunningInsecureContent: env==='serve' ? true : false,
+      allowRunningInsecureContent: env === 'serve' ? true : false,
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
@@ -42,7 +46,7 @@ function createWindow(): BrowserWindow {
     });
     return { action: 'deny' };
   });
-  if (env==='serve') {
+  if (env === 'serve') {
     win.webContents.openDevTools();
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '/../node_modules/electron')),
@@ -57,7 +61,7 @@ function createWindow(): BrowserWindow {
       loadPage();
     });
     win.webContents.on('did-finish-load', () => {
-      createApp('default');
+      mainView=createApp('default');
       createNormalView(ViewZone.bottom, win);
       createNormalView(ViewZone.top, win);
     });
@@ -122,7 +126,7 @@ const createNormalView = (zone: ViewZone, window: BrowserWindow): BrowserView =>
  */
 const createMainView = (module: ModuleInfo, window: BrowserWindow, refresh: boolean): BrowserView => {
   const file: string = `file://${module.main}`;
-  const ses = session.fromPartition("<" + module.moduleID + ">");
+  const ses = session.fromPartition('<' + module.moduleID + '>');
   ses.setPreloads([path.join(__dirname, 'views', 'preload.js')]);
   const _view: BrowserView = new BrowserView({
     webPreferences: {
@@ -191,7 +195,7 @@ const createApp = (moduleID: string) => {
       refresh = true;
     }
     lastAppModuleID = moduleID;
-    createMainView(module, win, refresh);
+    return createMainView(module, win, refresh);
   }
 };
 
@@ -248,7 +252,7 @@ try {
     let id = message.id;
     switch (message.action) {
       case 'ajax': {
-        workerLoop[id] = new UnitWorker(win);
+        workerLoop[id] = new UnitWorker(mainView);
         workerLoop[id].start(message);
         break;
       }
@@ -286,7 +290,7 @@ try {
       returnValue = 'Invalid data';
     }
     event.returnValue = returnValue;
-  })
+  });
 } catch (e) {
   // Catch Error
   // throw e;
