@@ -1,4 +1,4 @@
-@mixin checkbox_col {
+@mixin center_col {
   width: 40px;
   text-align: center;
 }
@@ -48,7 +48,7 @@
       height: 40px;
       background-color: #fafafa;
       th.checkbox-th {
-        @include checkbox_col;
+        @include center_col;
       }
       th {
         padding: 0 10px;
@@ -97,8 +97,21 @@
           }
         }
         td.checkbox-td {
-          @include checkbox_col;
+          @include center_col;
           border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        td.drag-td {
+          @include center_col;
+          .drag-icon {
+            padding: 2px;
+            color: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+            &:hover {
+              color: rgba(0, 0, 0, 0.7);
+              cursor: move;
+            }
+          }
         }
         td {
           border: none;

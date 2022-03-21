@@ -43,9 +43,12 @@
     <thead>
       <tr>
         <ng-container *ngFor="let cell of columnData">
-          <th class="checkbox-th" width="40px" *ngIf="cell.type === 'selection'; else thKey">
-            <input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs($event)" />
-          </th>
+          <th class="drag-th" width="40px" *ngIf="cell.type === 'drag'; else thSelection"></th>
+          <ng-template #thSelection>
+            <th class="checkbox-th" width="40px" *ngIf="cell.type === 'selection'; else thKey">
+              <input type="checkbox" [(ngModel)]="isSelectAll" (change)="handleCheckboxs($event)" />
+            </th>
+          </ng-template>
           <ng-template #thKey>
             <th *ngIf="!cell.isHidden" [width]="cell.width">{{ cell.title }}</th>
           </ng-template>
@@ -55,9 +58,16 @@
     <tbody>
       <tr *ngFor="let body of modelData; let i = index">
         <ng-container *ngFor="let cell of columnData; let $i = index">
-          <td width="40px" class="checkbox-td" *ngIf="cell.type === 'selection'; else tdKey">
-            <input type="checkbox" [ngModel]="body.__isCheck" (change)="handleCheckboxs($event, body)" />
+          <td class="drag-td" width="40px" *ngIf="cell.type === 'drag'; else tdSelection">
+            <span class="drag-icon">
+              <i nz-icon nzType="drag" nzTheme="outline"></i>
+            </span>
           </td>
+          <ng-template #tdSelection>
+            <td width="40px" class="checkbox-td" *ngIf="cell.type === 'selection'; else tdKey">
+              <input type="checkbox" [ngModel]="body.__isCheck" (change)="handleCheckboxs($event, body)" />
+            </td>
+          </ng-template>
           <ng-template #tdKey>
             <td *ngIf="!cell.isHidden">
               <div class="td-content">
