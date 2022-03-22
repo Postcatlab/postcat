@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ipcRenderer } from 'electron';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from '../../../utils/module-loader';
 
@@ -15,9 +14,10 @@ export class NavbarComponent implements OnInit {
   modules: Map<string, ModuleInfo>;
   constructor(private electron: ElectronService) {
     this.isElectron = this.electron.isElectron;
+    console.log(this.electron.isElectron)
   }
   mouseover($event) {
-    // console.log('mouseover',$event.target);
+    console.log('mouseover',$event.target);
     this.electron.ipcRenderer.send('message',{
       action: 'connect-dropdown',
       data:{
