@@ -9,7 +9,8 @@ import ModuleManager from './core/module/lib/manager';
 import { ModuleInfo, ModuleManagerInterface, ModuleType } from './core/module/types';
 import { getViewBounds, SlidePosition, ViewBounds, ViewZone } from './core/common/util';
 
-let win: BrowserWindow = null,mainView:BrowserView=null;
+let win: BrowserWindow = null,
+  mainView: BrowserView = null;
 let slidePosition: SlidePosition = SlidePosition.left;
 let currentAppModuleID: string;
 let lastAppModuleID: string;
@@ -61,7 +62,7 @@ function createWindow(): BrowserWindow {
       loadPage();
     });
     win.webContents.on('did-finish-load', () => {
-      mainView=createApp('default');
+      mainView = createApp('default');
       createNormalView(ViewZone.bottom, win);
       createNormalView(ViewZone.top, win);
     });
@@ -110,11 +111,9 @@ const createNormalView = (zone: ViewZone, window: BrowserWindow): BrowserView =>
       browserViews.delete(zone);
     }
     browserViews.set(zone, _view);
-    /*
-    if (zone === ViewZone.top) {
-      _view.webContents.openDevTools();
-    }
-    */
+    // if (zone === ViewZone.top) {
+    //   _view.webContents.openDevTools();
+    // }
   });
   return _view;
 };
@@ -141,7 +140,7 @@ const createMainView = (module: ModuleInfo, window: BrowserWindow, refresh: bool
   });
   window.addBrowserView(_view);
   if (refresh) {
-    createNormalView(ViewZone.slide, window);
+    createNormalView(ViewZone.side, window);
   }
   const bounds = window.getContentBounds();
   const _bounds: ViewBounds = getViewBounds(ViewZone.main, bounds.width, bounds.height, slidePosition);
@@ -283,7 +282,7 @@ try {
       returnValue = 'hook返回';
     } else if (arg.type === 'openApp') {
       if (arg.moduleID) {
-        createApp(arg.moduleID);
+        mainView = createApp(arg.moduleID);
       }
       returnValue = 'view id';
     } else {

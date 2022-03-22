@@ -14,7 +14,7 @@ export enum SlidePosition {
 export enum ViewZone {
   top = 'top',
   bottom = 'bottom',
-  slide = 'slide',
+  side = 'side',
   main = 'main'
 }
 
@@ -54,40 +54,40 @@ export const calculateViewBounds = (width: number, height: number, slidePosition
   const _mainHeight: number = height - _topHeight - _bottomHeight;
   let topBounds: ViewBounds = {x: 0, y: 0, width: width, height: _topHeight};
   let bottomBounds: ViewBounds = {x: 0, y: (height - _bottomHeight), width: width, height: _bottomHeight};
-  let slideBounds: ViewBounds = {x: 0, y: 0, width: _slideWidth, height: _mainHeight };
+  let sideBounds: ViewBounds = {x: 0, y: 0, width: _slideWidth, height: _mainHeight };
   let mainBounds: ViewBounds = {x: 0, y: 0, width: width, height: _mainHeight};
   switch (position) {
     case SlidePosition.left:
-      slideBounds.y = topBounds.height;
-      mainBounds.x = slideBounds.width;
+      sideBounds.y = topBounds.height;
+      mainBounds.x = sideBounds.width;
       mainBounds.y = topBounds.height;
       mainBounds.width -= mainBounds.x;
       break;
     case SlidePosition.right:
-      slideBounds.y = topBounds.height;
-      slideBounds.x = width - slideBounds.width;
+      sideBounds.y = topBounds.height;
+      sideBounds.x = width - sideBounds.width;
       mainBounds.y = topBounds.height;
-      mainBounds.width = slideBounds.x;
+      mainBounds.width = sideBounds.x;
       break;
     case SlidePosition.top:
-      slideBounds.height = slideBounds.width;
-      slideBounds.width = width;
-      slideBounds.y = topBounds.height;
-      mainBounds.height = height - topBounds.height - slideBounds.height - bottomBounds.height;
-      mainBounds.y = topBounds.height + slideBounds.height;
+      sideBounds.height = sideBounds.width;
+      sideBounds.width = width;
+      sideBounds.y = topBounds.height;
+      mainBounds.height = height - topBounds.height - sideBounds.height - bottomBounds.height;
+      mainBounds.y = topBounds.height + sideBounds.height;
       break;
     case SlidePosition.bottom:
-      slideBounds.height = slideBounds.width;
-      slideBounds.width = width;
+      sideBounds.height = sideBounds.width;
+      sideBounds.width = width;
       mainBounds.y = topBounds.height;
-      mainBounds.height -= slideBounds.height;
-      slideBounds.y = topBounds.height + mainBounds.height;
+      mainBounds.height -= sideBounds.height;
+      sideBounds.y = topBounds.height + mainBounds.height;
       break;
   }
   return new Map([
     [ViewZone.top, topBounds],
     [ViewZone.bottom, bottomBounds],
-    [ViewZone.slide, slideBounds],
+    [ViewZone.side, sideBounds],
     [ViewZone.main, mainBounds]
   ]);
 };
