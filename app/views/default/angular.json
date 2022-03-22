@@ -1,0 +1,240 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false,
+    "defaultCollection": "@angular-eslint/schematics"
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "eoapi": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "src/icon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
+            ],
+            "styles": [
+              {
+                "input": "src/assets/theme/classic_forest.scss",
+                "bundleName": "classic_forest",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/classic_sunrise.scss",
+                "bundleName": "classic_sunrise",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/classic_toy.scss",
+                "bundleName": "classic_toy",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/clean_cloud.scss",
+                "bundleName": "clean_cloud",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/clean_forest.scss",
+                "bundleName": "clean_forest",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/clean_sunrise.scss",
+                "bundleName": "clean_sunrise",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/night_black.scss",
+                "bundleName": "night_black",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/night_cmd.scss",
+                "bundleName": "night_cmd",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/night_dusk.scss",
+                "bundleName": "night_dusk",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/night_forest.scss",
+                "bundleName": "night_forest",
+                "inject": false
+              },
+              "src/assets/theme/antd.less",
+              "src/styles.scss",
+              "src/assets/font/iconfont.css"
+            ],
+            "scripts": [
+            ],
+            "customWebpackConfig": {
+              "path": "./angular.webpack.js",
+              "replaceDuplicatePlugins": true
+            },
+            "allowedCommonJsDependencies": ["brace"]
+          },
+          "configurations": {
+            "dev": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
+            "web": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.web.ts"
+                }
+              ]
+            },
+            "webaot": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.web.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": {
+            "browserTarget": "eoapi:build"
+          },
+          "configurations": {
+            "dev": {
+              "browserTarget": "eoapi:build:dev"
+            },
+            "web": {
+              "browserTarget": "eoapi:build:web"
+            },
+            "webaot": {
+              "browserTarget": "eoapi:build:web"
+            },
+            "production": {
+              "browserTarget": "eoapi:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "eoapi:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/custom-webpack:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills-test.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "scripts": [],
+            "styles": ["src/styles.scss"],
+            "assets": ["src/assets"],
+            "customWebpackConfig": {
+              "path": "./angular.webpack.js",
+              "replaceDuplicatePlugins": true
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+          }
+        }
+      }
+    },
+    "eoapi-e2e": {
+      "root": "e2e",
+      "projectType": "application",
+      "architect": {
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["e2e/**/*.ts"]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "eoapi",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "eo",
+      "style": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "eo"
+    }
+  }
+}

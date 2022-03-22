@@ -1,0 +1,55 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,WenQuanYi Micro Hei,Arial,sans-serif;
+  background: #fff;
+  color: var(--MAIN_TEXT);
+  font-size: var(--GLOBAL_FONT_SIZE);
+}
+:root {
+  --NAVBAR_HEIGHT: 50px;
+  --FOOTER_HEIGHT: 30px;
+}
+.api_test_history_list {
+  .method_label {
+    padding: 1px 3px;
+  }
+  .thead_div_wrap {
+    overflow-y: scroll;
+  }
+  .tbody_div_wrap {
+    max-height: 190px;
+    overflow-y: scroll;
+  }
+}
+ol, ul {
+  list-style-type: none;
+}
+.f_row {
+  display: flex;
+}
+.f_js_ac {
+  justify-content: space-between;
+  align-items: center;
+}
+.f_row_ac {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.fs28 {
+  font-size: 28px !important;
+}
+.fs24 {
+  font-size: 24px !important;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.fg1{
+  flex: 1;
+}

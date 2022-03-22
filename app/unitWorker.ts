@@ -1,5 +1,24 @@
 import * as child_process from 'child_process';
 import { BrowserView, ipcMain } from 'electron';
+const workerLoop = {};
+
+export const setupUnit = (mainView) => {
+  ipcMain.on('unitTest', function (event, message) {
+    let id = message.id;
+    switch (message.action) {
+      case 'ajax': {
+        workerLoop[id] = new UnitWorker(mainView);
+        workerLoop[id].start(message);
+        break;
+      }
+      case 'abort': {
+        workerLoop[id].kill();
+        break;
+      }
+    }
+  });
+};
+
 export class UnitWorker {
   instance: child_process.ChildProcess;
   view: BrowserView;
@@ -29,4 +48,3 @@ export class UnitWorker {
     });
   }
 }
-

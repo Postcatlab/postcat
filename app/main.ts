@@ -1,24 +1,20 @@
-import { app, BrowserView, BrowserWindow, ipcMain, screen, session, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, shell } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
-import * as fs from 'fs';
 import * as os from 'os';
-import * as url from 'url';
-import { UnitWorker } from './unitWorker';
+import { setupUnit } from './unitWorker';
 import ModuleManager from './core/module/lib/manager';
-import { ModuleInfo, ModuleManagerInterface, ModuleType } from './core/module/types';
-import { getViewBounds, SlidePosition, ViewBounds, ViewZone } from './core/common/util';
-
-let win: BrowserWindow = null,
-  mainView: BrowserView = null;
-let slidePosition: SlidePosition = SlidePosition.left;
-let currentAppModuleID: string;
-let lastAppModuleID: string;
-const browserViews: Map<ViewZone, BrowserView> = new Map();
+import { ModuleManagerInterface } from './core/module/types';
+import { subMenu } from './views/submenu/submenu';
+import { appViews } from './views/app/app';
+let win: BrowserWindow = null;
+const subView = {
+  appView: null,
+  dropdownView: null,
+};
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const args = process.argv.slice(1),
   eoUpdater = new EoUpdater(),
-  workerLoop = {},
   env = args.some((val) => val === '--serve')
     ? 'serve'
     : args.some((val) => val === '--development')
@@ -55,16 +51,17 @@ function createWindow(): BrowserWindow {
     win.loadURL('http://localhost:4200');
   } else {
     let loadPage = () => {
-      const file: string = `file://${path.join(__dirname, 'views', 'default', 'index.html')}`;
+      const file: string = `file://${path.join(__dirname, 'views', 'default', 'dist', 'index.html')}`;
       win.loadURL(file).finally();
+      // win.loadURL('http://localhost:4201').finally();
+      win.webContents.openDevTools();
     };
     win.webContents.on('did-fail-load', () => {
       loadPage();
     });
     win.webContents.on('did-finish-load', () => {
-      mainView = createApp('default');
-      createNormalView(ViewZone.bottom, win);
-      createNormalView(ViewZone.top, win);
+      subView.appView = new appViews(win).create('default');
+      new subMenu().create();
     });
     loadPage();
   }
@@ -80,124 +77,6 @@ function createWindow(): BrowserWindow {
   return win;
 }
 
-/**
- * 创建标准视图，静态区域
- * @param zone
- * @param window
- */
-const createNormalView = (zone: ViewZone, window: BrowserWindow): BrowserView => {
-  const file: string = `file://${path.join(__dirname, 'views', zone, 'index.html')}`;
-  const ses = session.fromPartition('normal_view');
-  ses.setPreloads([path.join(__dirname, 'views', 'preload.js')]);
-  const _view: BrowserView = new BrowserView({
-    webPreferences: {
-      webSecurity: false,
-      nodeIntegration: true,
-      contextIsolation: false,
-      session: ses,
-    },
-  });
-  window.addBrowserView(_view);
-  const bounds = window.getContentBounds();
-  const _bounds: ViewBounds = getViewBounds(zone, bounds.width, bounds.height, slidePosition);
-  _view.webContents.loadURL(file).finally();
-  _view.webContents.once('did-finish-load', () => {
-    _view.setBackgroundColor('#FFF');
-  });
-  _view.webContents.once('dom-ready', () => {
-    _view.setBounds(_bounds);
-    if (browserViews.has(zone)) {
-      removeView(browserViews.get(zone), window);
-      browserViews.delete(zone);
-    }
-    browserViews.set(zone, _view);
-    // if (zone === ViewZone.top) {
-    //   _view.webContents.openDevTools();
-    // }
-  });
-  return _view;
-};
-
-/**
- * 创建主视图，主要从模块载入文件
- * @param module
- * @param window
- */
-const createMainView = (module: ModuleInfo, window: BrowserWindow, refresh: boolean): BrowserView => {
-  const file: string = `file://${module.main}`;
-  const ses = session.fromPartition('<' + module.moduleID + '>');
-  ses.setPreloads([path.join(__dirname, 'views', 'preload.js')]);
-  const _view: BrowserView = new BrowserView({
-    webPreferences: {
-      webSecurity: false,
-      nodeIntegration: true,
-      contextIsolation: false,
-      devTools: true,
-      webviewTag: true,
-      preload: module.preload,
-      session: ses,
-    },
-  });
-  window.addBrowserView(_view);
-  if (refresh) {
-    createNormalView(ViewZone.side, window);
-  }
-  const bounds = window.getContentBounds();
-  const _bounds: ViewBounds = getViewBounds(ViewZone.main, bounds.width, bounds.height, slidePosition);
-  _view.webContents.loadURL(file).finally();
-  _view.webContents.once('did-finish-load', () => {
-    _view.setBackgroundColor('#FFF');
-  });
-  _view.webContents.once('dom-ready', () => {
-    _view.setBounds(_bounds);
-    if (browserViews.has(ViewZone.main)) {
-      removeView(browserViews.get(ViewZone.main), window);
-      browserViews.delete(ViewZone.main);
-    }
-    browserViews.set(ViewZone.main, _view);
-    _view.webContents.openDevTools();
-    //view.setAutoResize({ width: true });
-    //window.webContents.executeJavaScript(`window.getModules1()`);
-  });
-  return _view;
-};
-
-/**
- * 删除视图
- * @param view
- * @param window
- */
-const removeView = (view: BrowserView, window: BrowserWindow) => {
-  if (view) {
-    window.removeBrowserView(view);
-    // window.webContents.executeJavaScript(`window.init()`);
-    view = undefined;
-  }
-};
-
-/**
- * 根据模块ID启动app模块的加载
- * @param moduleID
- * @param load
- */
-const createApp = (moduleID: string) => {
-  // 如果要打开是同一app，忽略
-  if (lastAppModuleID === moduleID) {
-    return;
-  }
-  const module: ModuleInfo = moduleManager.getModule(moduleID, true);
-  if (module && module.type === ModuleType.app) {
-    let refresh: boolean = false;
-    if (module.isApp && currentAppModuleID !== module.moduleID) {
-      currentAppModuleID = module.moduleID;
-      slidePosition = module.slidePosition;
-      refresh = true;
-    }
-    lastAppModuleID = moduleID;
-    return createMainView(module, win, refresh);
-  }
-};
-
 try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
@@ -207,7 +86,8 @@ try {
     setTimeout(createWindow, 400);
     eoUpdater.check();
   });
-
+  //!TODO only api manage app need this
+  setupUnit(subView.appView);
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
     // On OS X it is common for applications and their menu bar
@@ -245,23 +125,11 @@ try {
         win.close();
         break;
       }
-    }
-  });
-  ipcMain.on('unitTest', function (event, message) {
-    let id = message.id;
-    switch (message.action) {
-      case 'ajax': {
-        workerLoop[id] = new UnitWorker(mainView);
-        workerLoop[id].start(message);
-        break;
-      }
-      case 'abort': {
-        workerLoop[id].kill();
+      case 'connect-dropdown': {
         break;
       }
     }
   });
-
   // 这里可以封装成类+方法匹配调用，不用多个if else
   ipcMain.on('eo-sync', (event, arg) => {
     let returnValue: any;
@@ -275,14 +143,18 @@ try {
     } else if (arg.type === 'getAppModuleList') {
       returnValue = moduleManager.getAppModuleList();
     } else if (arg.type === 'getSlideModuleList') {
-      returnValue = moduleManager.getSlideModuleList(currentAppModuleID);
+      returnValue = moduleManager.getSlideModuleList(subView.appView.moduleID);
     } else if (arg.type === 'getSlidePosition') {
-      returnValue = slidePosition;
+      returnValue = subView.appView.slidePosition;
     } else if (arg.type === 'hook') {
       returnValue = 'hook返回';
     } else if (arg.type === 'openApp') {
       if (arg.moduleID) {
-        mainView = createApp(arg.moduleID);
+        // 如果要打开是同一app，忽略
+        if (subView.appView.moduleID === arg.moduleID) {
+          return;
+        }
+        subView.appView = new appViews(win).create(arg.moduleID);
       }
       returnValue = 'view id';
     } else {
