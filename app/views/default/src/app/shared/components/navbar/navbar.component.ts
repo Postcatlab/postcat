@@ -16,16 +16,11 @@ export class NavbarComponent implements OnInit {
     this.isElectron = this.electron.isElectron;
     console.log(this.electron.isElectron)
   }
-  mouseover($event) {
-    console.log('mouseover',$event.target);
+  changeHelpVisible($event) {
     this.electron.ipcRenderer.send('message',{
       action: 'connect-dropdown',
       data:{
-        action:'show',
-        positon:{
-          x:0,
-          y:0
-        }
+        action:$event?'show':'hide'
       }
     });
   }

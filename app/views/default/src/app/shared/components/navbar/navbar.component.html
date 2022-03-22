@@ -2,7 +2,7 @@
   <img class="logo" src="assets/images/logo.svg" />
   <div class="can_be_click f_row_ac right_btn_container">
     <span (click)="openApp(item.moduleID)" *ngFor="let item of getModules()" >&nbsp;{{ item.moduleName }}&nbsp;</span>
-    <span class="help mr10" nz-dropdown (mouseover)="mouseover($event)" [nzDropdownMenu]="menu">
+    <span class="help mr10" nz-dropdown (nzVisibleChange)="changeHelpVisible($event)" [nzDropdownMenu]="menu">
       <i nz-icon nzType="question-circle" nzTheme="outline"></i>
     </span>
     <nz-dropdown-menu #menu="nzDropdownMenu">

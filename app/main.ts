@@ -9,7 +9,7 @@ import { appViews } from './views/app/app';
 let win: BrowserWindow = null;
 const subView = {
   appView: null,
-  mainView: null
+  mainView: null,
 };
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const args = process.argv.slice(1),
@@ -47,7 +47,6 @@ function createWindow(): BrowserWindow {
       const file: string = `file://${path.join(__dirname, 'views', 'message', 'index.html')}`;
       // const file: string = `file://${path.join(__dirname, 'views', 'default', 'dist', 'index.html')}`;
       win.loadURL(file).finally();
-      // win.loadURL('http://localhost:4201').finally();
       // win.webContents.openDevTools();
     };
     win.webContents.on('did-fail-load', () => {
@@ -56,23 +55,24 @@ function createWindow(): BrowserWindow {
     win.webContents.on('did-finish-load', () => {
       subView.mainView = new BrowserView({
         webPreferences: {
+          webSecurity: false,
           nodeIntegration: true,
-          allowRunningInsecureContent: false,
           contextIsolation: false,
-          defaultEncoding: 'utf-8',
+          devTools: true,
+          webviewTag: true,
         },
       });
       subView.mainView.webContents.loadURL('http://localhost:4201').finally();
-      subView.mainView.webContents.openDevTools();
       // subView.mainView.webContents.loadURL(`file://${path.join(__dirname, 'views', 'default', 'dist', 'index.html')}`).finally();
+      subView.mainView.webContents.openDevTools();
+      win.addBrowserView(subView.mainView);
+      subView.appView = new appViews(win).create('default');
       subView.mainView.setBounds({
         x: 0,
         y: 0,
         width: size.width * 0.8,
         height: size.height * 0.8,
       });
-      win.addBrowserView(subView.mainView);
-      subView.appView = new appViews(win).create('default');
       for (var i in subView) {
         if (!subView[i]) return;
         proxyOpenExternel(subView[i]);
@@ -149,7 +149,9 @@ try {
         break;
       }
       case 'connect-dropdown': {
-        win.setTopBrowserView(subView.mainView);
+        setTimeout(() => {
+          win.setTopBrowserView(arg.data.action === 'show' ? subView.mainView : subView.appView);
+        }, 0);
         break;
       }
     }

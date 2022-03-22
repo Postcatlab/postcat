@@ -9,6 +9,7 @@
 /release
 app/**/*.js
 !app/request/**/*.js
+!app/views/**/*.js
 src/**/*.js
 !src/karma.conf.js
 !src/ng1/**/*.js
