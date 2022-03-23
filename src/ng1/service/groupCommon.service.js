@@ -1,5 +1,5 @@
 /**
- * @author EOAPI
+ * @author Eoapi
  * @description 分组操作服务
  * @required Group_MultistageService
  */

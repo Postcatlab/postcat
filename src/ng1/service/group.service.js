@@ -1,5 +1,5 @@
   /*
-     * author：EOAPI
+     * author：Eoapi
      * 分组相关服务js
      */
   angular.module('eolinker')

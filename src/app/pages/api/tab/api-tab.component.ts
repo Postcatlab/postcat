@@ -94,7 +94,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       return;
     }
     // avoid open too much tab,if detail or no change,open page in current tab
-    if(this.tabSerive.tabs.length&&this.tabSerive.currentTab?.path.includes('detail')){
+    if(this.tabSerive.tabs.length&&this.tabSerive.currentTab?.path.includes('detail')&&tab.path.includes('detail')){
       this.switchTab(this.selectedIndex, tab);
       return;
     }
