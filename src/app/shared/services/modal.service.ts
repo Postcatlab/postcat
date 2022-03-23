@@ -32,12 +32,16 @@ export class ModalService {
         },
         {
           label: '取消',
-          onClick: () => modal.destroy(),
+          onClick: () =>{
+            window.eo.closeModal();
+            modal.destroy();
+          } 
         },
       ],
     };
     Object.assign(modalOpts, inOpts);
     const modal = this.modalService.create(modalOpts);
+    window.eo.openModal();
     return modal;
   }
 }

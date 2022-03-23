@@ -37,4 +37,10 @@ if (apiAccessRules.includes('hook')) {
 window.eo.tempApi = function (params) {
     return ipcRenderer.sendSync('eo-sync', params);
 };
+window.eo.openModal = function () {
+    return ipcRenderer.sendSync('eo-sync', { action: 'openModal' });
+};
+window.eo.closeModal = function () {
+    return ipcRenderer.sendSync('eo-sync', { action: 'closeModal' });
+};
 //# sourceMappingURL=preload.js.map

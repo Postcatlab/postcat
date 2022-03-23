@@ -59,7 +59,7 @@ function createWindow(): BrowserWindow {
         if (!subView[i]) break;
         subView[i].remove();
       }
-      subView.mainView=new coreViews(win).create();
+      subView.mainView = new coreViews(win).create();
       subView.appView = new appViews(win).create('default');
       for (var i in subView) {
         if (!subView[i]) break;
@@ -119,7 +119,7 @@ try {
   });
   ipcMain.on('message', function (event, arg) {
     console.log('recieve render msg=>', arg, arg.action);
-    //only action from mainView can be executed 
+    //only action from mainView can be executed
     if (event.frameId !== 1) return;
     switch (arg.action) {
       case 'minimize': {
@@ -148,9 +148,9 @@ try {
       // 或者是像Android, 跳出权限列表让用户自己选择确认放开的权限。
       const output: string[] = ['getModules', 'getAppModuleList', 'getSlideModuleList', 'hook'];
       returnValue = output;
-    }else if (arg.action === 'getModules') {
+    } else if (arg.action === 'getModules') {
       returnValue = moduleManager.getModules(true);
-    }   else if (arg.action === 'getAppModuleList') {
+    } else if (arg.action === 'getAppModuleList') {
       returnValue = moduleManager.getAppModuleList();
     } else if (arg.action === 'getSlideModuleList') {
       returnValue = moduleManager.getSlideModuleList(subView.appView.moduleID);
@@ -167,6 +167,8 @@ try {
         subView.appView = new appViews(win).create(arg.data.moduleID);
       }
       returnValue = 'view id';
+    } else if (arg.action === 'openModal') {
+      subView.mainView.webContents.send('connect-main',{action:'openModal'} );
     } else {
       returnValue = 'Invalid data';
     }

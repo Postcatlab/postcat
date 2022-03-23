@@ -1,10 +1,4 @@
 export const uuid = (): string => Math.random().toString(36).slice(-8);
-
-
-// const DOMAIN_REGEX =
-//   '(^((http|wss|ws|ftp|https)://))|(^(((http|wss|ws|ftp|https)://)|)(([\\w\\-_]+([\\w\\-\\.]*)?(\\.(' +
-//   DOMAIN_CONSTANT.join('|') +
-//   ')))|((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(localhost))((\\/)|(\\?)|(:)|($)))';
 export const whatType = (data: any): string => {
   if (data === undefined) {
     return 'undefined';

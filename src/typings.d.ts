@@ -8,5 +8,5 @@ interface Window {
   requirejs:any;
   require: any;
   angular:any;
-  eo: object;
+  eo: any;
 }

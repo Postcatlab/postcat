@@ -37,3 +37,9 @@ if (apiAccessRules.includes('hook')) {
 window.eo.tempApi = (params) => {
   return ipcRenderer.sendSync('eo-sync', params);
 };
+window.eo.openModal=()=>{
+  return ipcRenderer.sendSync('eo-sync', {action: 'openModal'});
+}
+window.eo.closeModal=()=>{
+  return ipcRenderer.sendSync('eo-sync', {action: 'closeModal'});
+}

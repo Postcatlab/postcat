@@ -1,7 +1,6 @@
 import { Component, OnInit, ɵɵsetComponentScope } from '@angular/core';
 import { ElectronService } from '../../../core/services';
-import { ModuleInfo } from '../../../utils/module-loader';
-
+import { ModuleInfo } from '../../../utils/module-loader/type'; 
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',

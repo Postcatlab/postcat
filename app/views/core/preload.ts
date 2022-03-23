@@ -1,4 +1,7 @@
 import { ipcRenderer } from 'electron';
+ipcRenderer.on('connect-main',(event,msg)=>{
+  console.log(event,msg)
+})
 window['eo'] = {
   toogleViewZIndex(visible) {
     ipcRenderer.send('message', {
