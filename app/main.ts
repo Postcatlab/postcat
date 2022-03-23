@@ -1,4 +1,4 @@
-import { app, BrowserView, BrowserWindow, ipcMain, screen, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, shell } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
@@ -6,8 +6,9 @@ import { setupUnit } from './unitWorker';
 import ModuleManager from './core/module/lib/manager';
 import { ModuleManagerInterface } from './core/module/types';
 import { appViews } from './views/app/app';
+import { coreViews } from './views/core/core';
 let win: BrowserWindow = null;
-const subView = {
+export const subView = {
   appView: null,
   mainView: null,
 };
@@ -53,28 +54,15 @@ function createWindow(): BrowserWindow {
       loadPage();
     });
     win.webContents.on('did-finish-load', () => {
-      subView.mainView = new BrowserView({
-        webPreferences: {
-          webSecurity: false,
-          nodeIntegration: true,
-          contextIsolation: false,
-          devTools: true,
-          webviewTag: true,
-        },
-      });
-      subView.mainView.webContents.loadURL('http://localhost:4201').finally();
-      // subView.mainView.webContents.loadURL(`file://${path.join(__dirname, 'views', 'default', 'dist', 'index.html')}`).finally();
-      subView.mainView.webContents.openDevTools();
-      win.addBrowserView(subView.mainView);
-      subView.appView = new appViews(win).create('default');
-      subView.mainView.setBounds({
-        x: 0,
-        y: 0,
-        width: size.width * 0.8,
-        height: size.height * 0.8,
-      });
+      //remove origin view
       for (var i in subView) {
-        if (!subView[i]) return;
+        if (!subView[i]) break;
+        subView[i].remove();
+      }
+      subView.mainView=new coreViews(win).create();
+      subView.appView = new appViews(win).create('default');
+      for (var i in subView) {
+        if (!subView[i]) break;
         proxyOpenExternel(subView[i]);
       }
     });
@@ -131,6 +119,8 @@ try {
   });
   ipcMain.on('message', function (event, arg) {
     console.log('recieve render msg=>', arg, arg.action);
+    //only action from mainView can be executed 
+    if (event.frameId !== 1) return;
     switch (arg.action) {
       case 'minimize': {
         win.minimize();
@@ -148,39 +138,33 @@ try {
         win.close();
         break;
       }
-      case 'connect-dropdown': {
-        setTimeout(() => {
-          win.setTopBrowserView(arg.data.action === 'show' ? subView.mainView : subView.appView);
-        }, 0);
-        break;
-      }
     }
   });
   // 这里可以封装成类+方法匹配调用，不用多个if else
   ipcMain.on('eo-sync', (event, arg) => {
     let returnValue: any;
-    if (arg.type === 'getApiAccessRules') {
+    if (arg.action === 'getApiAccessRules') {
       // 后期加入权限生成，根据moduleID，上层moduleID，应用范围等
       // 或者是像Android, 跳出权限列表让用户自己选择确认放开的权限。
       const output: string[] = ['getModules', 'getAppModuleList', 'getSlideModuleList', 'hook'];
       returnValue = output;
-    } else if (arg.type === 'getModules') {
+    }else if (arg.action === 'getModules') {
       returnValue = moduleManager.getModules(true);
-    } else if (arg.type === 'getAppModuleList') {
+    }   else if (arg.action === 'getAppModuleList') {
       returnValue = moduleManager.getAppModuleList();
-    } else if (arg.type === 'getSlideModuleList') {
+    } else if (arg.action === 'getSlideModuleList') {
       returnValue = moduleManager.getSlideModuleList(subView.appView.moduleID);
-    } else if (arg.type === 'getSlidePosition') {
+    } else if (arg.action === 'getSlidePosition') {
       returnValue = subView.appView.slidePosition;
-    } else if (arg.type === 'hook') {
+    } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
-    } else if (arg.type === 'openApp') {
-      if (arg.moduleID) {
+    } else if (arg.action === 'openApp') {
+      if (arg.data.moduleID) {
         // 如果要打开是同一app，忽略
-        if (subView.appView.moduleID === arg.moduleID) {
+        if (subView.appView.moduleID === arg.data.moduleID) {
           return;
         }
-        subView.appView = new appViews(win).create(arg.moduleID);
+        subView.appView = new appViews(win).create(arg.data.moduleID);
       }
       returnValue = 'view id';
     } else {

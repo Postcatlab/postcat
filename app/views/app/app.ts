@@ -45,7 +45,8 @@ export class appViews {
    * @param window
    */
   private createAppView(module: ModuleInfo, refresh: boolean): BrowserView {
-    const file: string = `file://${module.main}`;
+    // const file: string = `file://${module.main}`;
+    const file: string = `http://localhost:4200`;
     const ses = session.fromPartition('<' + module.moduleID + '>');
     ses.setPreloads([path.join(__dirname,  'preload.js')]);
     const _view: BrowserView = new BrowserView({

@@ -7,23 +7,11 @@
     "experimentalDecorators": true,
     "module": "commonjs",
     "target": "es5",
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "es2017",
-      "es2016",
-      "es2015",
-      "dom"
-    ]
+    "types": ["node"],
+    "lib": ["es2017", "es2016", "es2015", "dom"]
   },
-  "include": [
-    "app/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ],
+  "include": ["app/**/**.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "app/**/browser/**/*.ts"],
   "angularCompilerOptions": {
     "enableIvy": true
   }

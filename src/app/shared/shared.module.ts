@@ -2,10 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   PageNotFoundComponent,
-  SelectThemeComponent,
-  ToolbarComponent,
-  SidebarComponent,
-  NavbarComponent,
 } from './components';
 import { WebviewDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,7 +17,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
 import { ModalService } from './services/modal.service';
 
-const COMPONENTS = [PageNotFoundComponent, ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent];
+const COMPONENTS = [PageNotFoundComponent];
 @NgModule({
   imports: [
     CommonModule,

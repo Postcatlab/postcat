@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵɵsetComponentScope } from '@angular/core';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from '../../../utils/module-loader';
 
@@ -14,6 +14,9 @@ export class NavbarComponent implements OnInit {
   modules: Map<string, ModuleInfo>;
   constructor(private electron: ElectronService) {
     this.isElectron = this.electron.isElectron;
+  }
+  changeHelpVisible(visible) {
+    window.eo.toogleViewZIndex(visible);
   }
   minimize() {
     this.electron.ipcRenderer.send('message', {
@@ -33,8 +36,7 @@ export class NavbarComponent implements OnInit {
   }
   ngOnInit(): void {
     if (this.isElectron) {
-      this.modules = this.electron.ipcRenderer.sendSync('eo-sync', {type: 'getModules'});
-      console.log(this.modules);
+      this.modules = window.eo.getModules();
     } else {
       this.modules = new Map();
     }
@@ -45,6 +47,6 @@ export class NavbarComponent implements OnInit {
   }
 
   openApp(moduleID: string) {
-    this.electron.ipcRenderer.sendSync('eo-sync', {type: 'openApp', moduleID: moduleID});
+    this.modules = window.eo.openApp({moduleID: moduleID});
   }
 }

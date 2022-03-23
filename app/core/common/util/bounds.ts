@@ -41,7 +41,7 @@ export const getViewBounds = (zone: ViewZone, width: number, height: number, sli
 
 /**
  * 根据容器的尺寸计算所有显示区域的尺寸与位置
- * 待做：需要加上隐藏边栏的属性参数判断
+ * TODO：需要加上隐藏边栏的属性参数判断
  * @param width
  * @param height
  * @param slidePosition
