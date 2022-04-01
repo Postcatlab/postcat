@@ -16,7 +16,7 @@
 
 <nz-modal
   [(nzVisible)]="isVisible"
-  [nzTitle]="'导入' + contentTypeTitle"
+  [nzTitle]="'导入' + (modalTitle || contentTypeTitle)"
   [nzStyle]="{ width: '800px' }"
   (nzOnCancel)="handleCancel()"
 >
