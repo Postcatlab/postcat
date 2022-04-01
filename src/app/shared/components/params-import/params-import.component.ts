@@ -12,6 +12,7 @@ export class ParamsImportComponent {
   @Input() rootType: 'array' | string | 'object' = 'object';
   @Input() contentType = 'json';
   @Input() baseData: object[] = [];
+  @Input() modalTitle: string = '';
   @Output() baseDataChange = new EventEmitter<any>();
   isVisible = false;
   paramCode = '';
