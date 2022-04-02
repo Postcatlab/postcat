@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { whatType } from '../../../utils';
 import { flatData } from '../../../utils/tree/tree.utils';
+import * as qs from 'qs';
 import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-transfer/data-transfer.utils';
 @Component({
   selector: 'params-import',
@@ -34,6 +35,7 @@ export class ParamsImportComponent {
   get contenTypeEditor() {
     switch (this.contentType) {
       case 'formData':
+      case 'query':
         return 'text';
       default:
         return this.contentType;
@@ -73,7 +75,11 @@ export class ParamsImportComponent {
         return;
       }
       paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
-      console.log('-->', paramCode);
+      // console.log('-->', paramCode);
+    }
+    if (this.contentType === 'query') {
+      paramCode = qs.parse(this.paramCode.split('?')[1]);
+      // console.log('-->', paramCode);
     }
     if (this.contentType === 'raw') {
       paramCode = this.paramCode;
