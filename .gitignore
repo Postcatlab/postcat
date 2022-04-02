@@ -12,6 +12,7 @@ src/**/*.js
 !src/karma.conf.js
 !src/ng1/**/*.js
 *.js.map
+pnpm-lock.yaml
 
 # dependencies
 node_modules
