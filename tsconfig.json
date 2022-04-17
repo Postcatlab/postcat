@@ -8,7 +8,11 @@
     "module": "commonjs",
     "target": "es5",
     "types": ["node"],
-    "lib": ["es2017", "es2016", "es2015", "dom"]
+    "lib": ["es2017", "es2016", "es2015", "dom"],
+    "baseUrl": "./",
+    "paths": {
+      "@utils/*": ["core/api-manager/browser/src/app/utils/*"]
+    }
   },
   "include": ["**/**.ts"],
   "exclude": ["node_modules", "**/*.spec.ts", "**/browser/**/*.ts"],
