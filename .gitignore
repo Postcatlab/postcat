@@ -1,18 +1,14 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/build/SetupScripts/nim/skin.zip
 dist/
 /tmp
 /out-tsc
 /app-builds
 /release
-app/*.js
-src/**/*.js
-!src/karma.conf.js
-!src/ng1/**/*.js
+*.js
 *.js.map
-pnpm-lock.yaml
+!core/market/browser/**/*.js
 
 # dependencies
 node_modules
@@ -34,7 +30,7 @@ node_modules
 !.vscode/extensions.json
 
 # misc
-/.angular/cache
+.angular/
 /.sass-cache
 /connect.lock
 /coverage
