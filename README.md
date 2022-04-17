@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/eolinker/eoapi">
-    <img width="200" src="https://raw.githubusercontent.com/eolinker/eoapi/main/src/assets/icons/128x128.png">
+    <img width="200" src="./wiki/images/logo.png">
   </a>
 </p>
 <h1 align="center">Eoapi</h1>
@@ -8,9 +8,9 @@
 A lightweight open source API tool.
 </div>
 
-![](https://raw.githubusercontent.com/eolinker/eoapi/main/wiki/preview_1.png)
+![](./wiki/images/preview_1.png)
 
-English | [简体中文](README.zh_CN.md)
+English | [简体中文](wiki/README.zh_CN.md)
 
 # Featue
 
@@ -47,11 +47,11 @@ English | [简体中文](README.zh_CN.md)
 ## Running the code
 
 ```
-npm ci
+npm install
 npm start
 ```
 
-If you want to improve development efficiency, you can install the command-line Angular-cli officially provided by Angular to quickly generate templates such as components and services.
+If you want to improve Angular development efficiency, you can install the command-line Angular-cli officially provided by Angular to quickly generate templates such as components and services.
 
 ```
 npm install -g @angular/cli
