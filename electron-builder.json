@@ -1,15 +1,19 @@
 {
-  "asar": true,
+  "asar": false,
   "directories": {
     "output": "release/"
   },
-  "files": ["**/*", "!**/*.ts", "!*.map", "!package.json", "!package-lock.json"],
-  "extraResources": [
-    {
-      "from": "dist",
-      "to": "app",
-      "filter": ["**/*"]
-    }
+  "files": [
+    "app/**/*.js*",
+    "platform/**/*.js*",
+    "shared/**/*.js*",
+    "**/*/browser/dist/**/*",
+    "**/*/node/dist/**/*",
+    "core/api-manager/node/",
+    "core/**/package.json",
+    "app/common/**/*",
+    "app/browser/index.html",
+    "!**/*.ts"
   ],
   "publish": ["github"],
   "generateUpdatesFilesForAllChannels":true,
@@ -19,7 +23,7 @@
     "allowToChangeInstallationDirectory": true
   },
   "win": {
-    "icon": "dist/assets/icons/256x256.png",
+    "icon": "app/common/images/256x256.png",
     "target": [
       {
         "target": "nsis"
@@ -28,14 +32,14 @@
     ]
   },
   "portable": {
-    "splashImage": "dist/assets/icons/eoapi.bmp"
+    "splashImage": "app/common/images/eoapi.bmp"
   },
   "mac": {
-    "icon": "dist/assets/icons/512x512.png",
+    "icon": "app/common/images/512x512.png",
     "target": ["dmg"]
   },
   "linux": {
-    "icon": "dist/assets/icons",
+    "icon": "app/common/images/",
     "target": ["AppImage"]
   }
 }

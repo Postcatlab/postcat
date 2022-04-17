@@ -1,0 +1,8 @@
+<div class="eo_sidebar" [ngClass]="{ eo_sidebar_shrink: isCollapsed }">
+  <a (click)="openApp(item.moduleID)" *ngFor="let item of getModules()">
+    <div nz-tooltip (nzTooltipVisibleChange)="tooltipVisibleChange($event)" [nzTooltipTitle]="isCollapsed ? item.moduleName : ''" class="sidebar_item sidebar_item_active">
+      <img [src]="item.logo" />
+      <span *ngIf="!isCollapsed">{{ item.moduleName }}</span>
+    </div>
+  </a>
+</div>
