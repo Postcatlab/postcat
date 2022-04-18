@@ -4,26 +4,26 @@
     "output": "release/"
   },
   "files": [
-    "app/**/*.js*",
-    "platform/**/*.js*",
-    "shared/**/*.js*",
+    "src/app/**/*.js*",
+    "src/platform/**/*.js*",
+    "src/shared/**/*.js*",
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
-    "core/api-manager/node/",
+    "src/core/api-manager/node/",
     "core/**/package.json",
-    "app/common/**/*",
-    "app/browser/index.html",
+    "src/app/common/**/*",
+    "src/app/browser/index.html",
     "!**/*.ts"
   ],
   "publish": ["github"],
-  "generateUpdatesFilesForAllChannels":true,
+  "generateUpdatesFilesForAllChannels": true,
   "nsis": {
     "oneClick": false,
     "allowElevation": true,
     "allowToChangeInstallationDirectory": true
   },
   "win": {
-    "icon": "app/common/images/256x256.png",
+    "icon": "src/app/common/images/256x256.png",
     "target": [
       {
         "target": "nsis"
@@ -32,14 +32,14 @@
     ]
   },
   "portable": {
-    "splashImage": "app/common/images/eoapi.bmp"
+    "splashImage": "src/app/common/images/eoapi.bmp"
   },
   "mac": {
-    "icon": "app/common/images/512x512.png",
+    "icon": "src/app/common/images/512x512.png",
     "target": ["dmg"]
   },
   "linux": {
-    "icon": "app/common/images/",
+    "icon": "src/app/common/images/",
     "target": ["AppImage"]
   }
 }
