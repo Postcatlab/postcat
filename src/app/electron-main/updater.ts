@@ -1,6 +1,6 @@
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-const appVersion = require('../../package.json').version;
+const appVersion = require('../../../package.json').version;
 
 export class EoUpdater {
   constructor() {

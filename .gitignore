@@ -8,7 +8,10 @@ dist/
 /release
 *.js
 *.js.map
-!core/market/browser/**/*.js
+!src/core/api-manager/browser/**/*.js
+!src/core/market/browser/**/*.js
+!src/core/market/browser/dist/icon.png
+!src/core/api-manager/browser/dist/assets/images/icon.png
 
 # dependencies
 node_modules
