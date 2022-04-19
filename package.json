@@ -12,7 +12,7 @@
     "install:api-manager": "cd src/core/api-manager/browser&&npm install",
     "start:api-manager": "cd src/core/api-manager/browser&&npm start",
     "build:api-manager": "cd src/core/api-manager/browser&&npm run build:prod",
-    "test:api-manager":"cd src/core/api-manager/browser&&npm run test",
+    "test:api-manager": "cd src/core/api-manager/browser&&npm run test",
     "install:workbench": "cd src/workbench/browser&&npm install",
     "start:workbench": "cd src/workbench/browser&&npm start",
     "build:workbench": "cd src/workbench/browser&&npm run build",
@@ -24,8 +24,9 @@
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
     "electron:build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
+    "build": "electron-builder build",
     "release": "electron-builder",
-    "test":"npm-run-all --serial test:*",
+    "test": "npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json"
   },
   "dependencies": {
@@ -48,7 +49,7 @@
     "@typescript-eslint/eslint-plugin": "5.14.0",
     "@typescript-eslint/parser": "5.14.0",
     "electron": "17.1.2",
-    "electron-builder": "^22.14.13",
+    "electron-builder": "23.0.3",
     "electron-reload": "1.5.0",
     "eslint": "8.10.0",
     "eslint-plugin-import": "2.25.4",

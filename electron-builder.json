@@ -10,7 +10,7 @@
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
     "src/core/api-manager/node/",
-    "core/**/package.json",
+    "src/core/**/package.json",
     "src/app/common/**/*",
     "src/app/browser/index.html",
     "!**/*.ts"
