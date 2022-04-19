@@ -13,6 +13,7 @@ dist/
 !src/core/market/browser/**/*.js
 !src/core/market/browser/dist/icon.png
 !src/core/api-manager/browser/dist/assets/images/icon.png
+!src/core/api-manager/node/request/**/*.js
 
 # dependencies
 node_modules
