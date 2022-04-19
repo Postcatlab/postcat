@@ -3,7 +3,7 @@ import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
 import ModuleManager from '../../platform/node/extension-manager/lib/manager'; 
-import { ModuleManagerInterface } from '../../platform/node/extension-manager';
+import { ModuleInfo, ModuleManagerInterface } from '../../platform/node/extension-manager';
 import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
 import { AppViews } from './appView';
 import { CoreViews } from './coreView';
@@ -68,7 +68,7 @@ function createWindow(): BrowserWindow {
     subView.appView = new AppViews(win);
     subView.mainView = new CoreViews(win);
     subView.mainView.create();
-    subView.appView.create('default');
+    subView.appView.create(moduleManager.getModule('default'));
   });
   loadPage();
 
@@ -202,7 +202,7 @@ try {
       }
       returnValue = Object.assign(data, { modules: moduleManager.getModules() });
     } else if (arg.action === 'getSideModuleList') {
-      returnValue = moduleManager.getSideModuleList(subView.appView.mainModuleID);
+      returnValue = moduleManager.getSideModuleList(subView.appView.mainModuleID || 'default');
     } else if (arg.action === 'getSidePosition') {
       returnValue = subView.appView.sidePosition;
     } else if (arg.action === 'hook') {
@@ -210,11 +210,13 @@ try {
     } else if (arg.action === 'openApp') {
       if (arg.data.moduleID) {
         // 如果要打开是同一app，忽略
-        if (subView.appView.moduleID === arg.data.moduleID) {
+        if (subView.appView.mainModuleID === arg.data.moduleID) {
           return;
         }
-        // subView.appView = new AppViews(win);
-        subView.appView.create(arg.data.moduleID);
+        const module: ModuleInfo = moduleManager.getModule(arg.data.moduleID);
+        if (module) {
+          subView.appView.create(module);
+        }
       }
       returnValue = 'view id';
     } else if (arg.action === 'autoResize') {

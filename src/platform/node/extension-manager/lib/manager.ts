@@ -3,6 +3,7 @@ import { ModuleHandler } from './handler';
 import { CoreHandler } from './core';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
 import * as path from 'path';
+import { isNotEmpty } from '../../../..//shared/common/common';
 
 export class ModuleManager implements ModuleManagerInterface {
   /**
@@ -148,7 +149,7 @@ export class ModuleManager implements ModuleManagerInterface {
     moduleNames.forEach((moduleName: string) => {
       // 这里要加上try catch，避免异常
       const moduleInfo: ModuleInfo = this.moduleHandler.info(moduleName);
-      if (moduleInfo.moduleID) {
+      if (isNotEmpty(moduleInfo.moduleID)) {
         this.set(moduleInfo);
       }
     });
@@ -163,7 +164,7 @@ export class ModuleManager implements ModuleManagerInterface {
     const moduleNames: string[] = coreHandler.list();
     moduleNames.forEach((moduleName: string) => {
       const moduleInfo: ModuleInfo = coreHandler.info(moduleName);
-      if (moduleInfo.moduleID) {
+      if (isNotEmpty(moduleInfo.moduleID)) {
         this.set(moduleInfo);
       }
     });
