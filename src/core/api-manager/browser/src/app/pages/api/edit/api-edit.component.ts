@@ -54,35 +54,37 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         isLeaf: false,
       },
     ];
-    const result: StorageHandleResult = this.storage.run('groupLoadAllByProjectID', [1]);
-    if (result.status === StorageHandleStatus.success) {
-      result.data.forEach((item: Group) => {
-        delete item.updatedAt;
-        treeItems.push({
-          title: item.name,
-          key: item.uuid.toString(),
-          weight: item.weight || 0,
-          parentID: (item.parentID || 0).toString(),
-          isLeaf: false,
+    this.storage.run('groupLoadAllByProjectID', [1], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        result.data.forEach((item: Group) => {
+          delete item.updatedAt;
+          treeItems.push({
+            title: item.name,
+            key: item.uuid.toString(),
+            weight: item.weight || 0,
+            parentID: (item.parentID || 0).toString(),
+            isLeaf: false,
+          });
         });
-      });
-      treeItems.sort((a, b) => a.weight - b.weight);
-    }
-    listToTree(treeItems, this.groups, '-1');
-    this.afterInitGroup();
+        treeItems.sort((a, b) => a.weight - b.weight);
+      }
+      listToTree(treeItems, this.groups, '-1');
+      this.afterInitGroup();
+    });
   }
   getApi(id) {
-    const result: StorageHandleResult =  this.storage.run('apiDataLoad', [id]);
-    if (result.status === StorageHandleStatus.success) {
-      ['requestBody', 'responseBody'].forEach((tableName) => {
-        if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
-          result.data[tableName] = treeToListHasLevel(result.data[tableName]);
-        }
-      });
-      this.apiData = result.data;
-      this.changeGroupID$.next(this.apiData.groupID);
-      this.validateForm.patchValue(this.apiData);
-    }
+    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        ['requestBody', 'responseBody'].forEach((tableName) => {
+          if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
+            result.data[tableName] = treeToListHasLevel(result.data[tableName]);
+          }
+        });
+        this.apiData = result.data;
+        this.changeGroupID$.next(this.apiData.groupID);
+        this.validateForm.patchValue(this.apiData);
+      }
+    });
   }
   saveApi() {
     //manual set dirty in case user submit directly without edit
@@ -256,21 +258,23 @@ export class ApiEditComponent implements OnInit, OnDestroy {
 
   private editApi(formData) {
     if (formData.uuid) {
-      const result: StorageHandleResult = this.storage.run('apiDataUpdate', [formData, this.apiData.uuid]);
-      if (result.status === StorageHandleStatus.success) {
-        this.message.success('编辑成功');
-        this.messageService.send({ type: 'editApi', data: result.data });
-      } else {
-        this.message.success('编辑失败');
-      }
+      this.storage.run('apiDataUpdate', [formData, this.apiData.uuid], (result: StorageHandleResult) => {
+        if (result.status === StorageHandleStatus.success) {
+          this.message.success('编辑成功');
+          this.messageService.send({ type: 'editApi', data: result.data });
+        } else {
+          this.message.success('编辑失败');
+        }
+      });
     } else {
-      const result: StorageHandleResult = this.storage.run('apiDataCreate', [formData]);
-      if (result.status === StorageHandleStatus.success) {
-        this.message.success('新增成功');
-        this.messageService.send({ type: 'addApi', data: result.data });
-      } else {
-        this.message.success('新增失败');
-      }
+      this.storage.run('apiDataCreate', [formData], (result: StorageHandleResult) => {
+        if (result.status === StorageHandleStatus.success) {
+          this.message.success('新增成功');
+          this.messageService.send({ type: 'addApi', data: result.data });
+        } else {
+          this.message.success('新增失败');
+        }
+      });
     }
   }
 }

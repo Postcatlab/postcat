@@ -62,23 +62,25 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   create(): void {
-    const result: StorageHandleResult = this.storage.run('groupCreate', [this.group]);
-    if (result.status === StorageHandleStatus.success) {
-      this.modalRef.destroy();
-      this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
-    } else {
-      console.log(result.data);
-    }
+    this.storage.run('groupCreate', [this.group], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.modalRef.destroy();
+        this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
+      } else {
+        console.log(result.data);
+      }
+    });
   }
 
   update(): void {
-    const result: StorageHandleResult = this.storage.run('groupUpdate', [this.group, this.group.uuid]);
-    if (result.status === StorageHandleStatus.success) {
-      this.modalRef.destroy();
-      this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
-    } else {
-      console.log(result.data);
-    }
+    this.storage.run('groupUpdate', [this.group, this.group.uuid], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.modalRef.destroy();
+        this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
+      } else {
+        console.log(result.data);
+      }
+    });
   }
 
   /**
@@ -107,14 +109,14 @@ export class ApiGroupEditComponent implements OnInit {
     const data: GroupApiDataModel = { group: [this.group.uuid], api: [] };
     this.getChildrenFromTree(this.treeItems, data, `group-${this.group.uuid}`);
     this.modalRef.destroy();
-    const result: StorageHandleResult = this.storage.run('groupBulkRemove', [data.group]);
-    if (result.status !== StorageHandleStatus.success) {
-      return;
-    }
-    this.messageService.send({ type: 'updateGroupSuccess', data: {} });
-    //delete group api
-    if (data.api.length > 0) {
-      this.messageService.send({ type: 'gotoBulkDeleteApi', data: { uuids: data.api } });
-    }
+    this.storage.run('groupBulkRemove', [data.group], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.messageService.send({ type: 'updateGroupSuccess', data: {} });
+        //delete group api
+        if (data.api.length > 0) {
+          this.messageService.send({ type: 'gotoBulkDeleteApi', data: { uuids: data.api } });
+        }
+      }
+    });
   }
 }

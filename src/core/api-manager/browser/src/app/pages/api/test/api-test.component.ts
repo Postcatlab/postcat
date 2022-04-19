@@ -92,11 +92,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testResult = result.response;
   }
   getApi(id) {
-    const result: StorageHandleResult = this.storage.run('apiDataLoad', [id]);
-    if (result.status === StorageHandleStatus.success) {
-      this.apiData = this.apiTest.getTestDataFromApi(result.data);
-      this.validateForm.patchValue(this.apiData);
-    }
+    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.apiData = this.apiTest.getTestDataFromApi(result.data);
+        this.validateForm.patchValue(this.apiData);
+      }
+    });
   }
   saveTestDataToApi() {
     let apiData = this.apiTest.getApiFromTestData({

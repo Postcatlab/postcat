@@ -60,20 +60,22 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
 
   getAllEnv() {
-    const result: StorageHandleResult = this.storage.run('environmentLoadAllByProjectID', [1]);
-    if (result.status !== StorageHandleStatus.success) {
-      this.envList = [];
-      this.handleAddEnv(null);
-      return;
-    }
-    this.envList = result.data;
-    this.handleSwitchEnv(result.data[0].uuid);
+    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageHandleResult) => {
+      if (result.status !== StorageHandleStatus.success) {
+        this.envList = [];
+        this.handleAddEnv(null);
+        return;
+      }
+      this.envList = result.data;
+      this.handleSwitchEnv(result.data[0].uuid);
+    });
   }
 
   handleDeleteEnv(uuid: string) {
     // * delete env in menu on left sidebar
-    const result: StorageHandleResult = this.storage.run('environmentRemove', [uuid]);
-    this.getAllEnv();
+    this.storage.run('environmentRemove', [uuid], (result: StorageHandleResult) => {
+      this.getAllEnv();
+    });
   }
   handleDeleteParams(index) {
     // * delete params in table
@@ -82,11 +84,12 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
   handleSwitchEnv(uuid) {
     // * switch env in menu on left sidebar
-    const result: StorageHandleResult = this.storage.run('environmentLoad', [uuid]);
-    if (result.status === StorageHandleStatus.success) {
-      this.envInfo = result.data;
-    }
-    this.activeUuid = uuid;
+    this.storage.run('environmentLoad', [uuid], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.envInfo = result.data;
+      }
+      this.activeUuid = uuid;
+    });
   }
 
   handleAddEnv(pid) {
@@ -109,24 +112,26 @@ export class EnvComponent implements OnInit, OnDestroy {
     }
     const data = parameters.filter((it) => it.name && it.value);
     if (uuid) {
-      const result: StorageHandleResult = this.storage.run('environmentUpdate', [{ ...other, name, parameters: data }, uuid]);
-      if (result.status === StorageHandleStatus.success) {
-        this.message.success('编辑成功');
-        this.getAllEnv();
-      } else {
-        this.message.success('编辑失败');
-      }
+      this.storage.run('environmentUpdate', [{ ...other, name, parameters: data }, uuid], (result: StorageHandleResult) => {
+        if (result.status === StorageHandleStatus.success) {
+          this.message.success('编辑成功');
+          this.getAllEnv();
+        } else {
+          this.message.success('编辑失败');
+        }
+      });
     } else {
-      const result: StorageHandleResult = this.storage.run('environmentCreate', [{ ...other, name, parameters: data }]);
-      if (result.status === StorageHandleStatus.success) {
-        this.message.success('新增成功');
-        this.envInfo = result.data;
-        this.activeUuid = Number(result.data.uuid);
-        this.handleSwitchEnv(result.data.uuid);
-        this.getAllEnv();
-      } else {
-        this.message.success('新增失败');
-      }
+      this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageHandleResult) => {
+        if (result.status === StorageHandleStatus.success) {
+          this.message.success('新增成功');
+          this.envInfo = result.data;
+          this.activeUuid = Number(result.data.uuid);
+          this.handleSwitchEnv(result.data.uuid);
+          this.getAllEnv();
+        } else {
+          this.message.success('新增失败');
+        }
+      });
     }
   }
 
@@ -153,11 +158,11 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.store.dispatch(new Change(null));
       return;
     }
-    const result: StorageHandleResult = this.storage.run('environmentLoadAllByProjectID', [1]);
-    if (result.status !== StorageHandleStatus.success) {
-      return;
-    }
-    const data = result.data.find((val) => val.uuid === Number(uuid));
-    this.store.dispatch(new Change(data));
+    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        const data = result.data.find((val) => val.uuid === Number(uuid));
+        this.store.dispatch(new Change(data));
+      }
+    });
   }
 }

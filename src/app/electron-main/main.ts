@@ -172,7 +172,7 @@ try {
         ++count;
       }
       deleteFile(storageTemp);
-      returnValue = data;    
+      returnValue = data;
     } else if (args.type === 'result') {
       subView.appView.view.webContents.send('storageCallback', args.result);
     }

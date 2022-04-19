@@ -85,43 +85,45 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.getGroups();
   }
   getGroups() {
-    let result: StorageHandleResult = this.storage.run('groupLoadAllByProjectID', [this.projectID]);
-    if (result.status === StorageHandleStatus.success) {
-      result.data.forEach((item) => {
-        delete item.__proto__.updatedAt;
-        this.groupByID[item.uuid] = item;
-        this.treeItems.push({
-          title: item.name,
-          key: `group-${item.uuid}`,
-          weight: item.weight || 0,
-          parentID: item.parentID ? `group-${item.parentID}` : '0',
-          isLeaf: false,
+    this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        result.data.forEach((item) => {
+          delete item.updatedAt;
+          this.groupByID[item.uuid] = item;
+          this.treeItems.push({
+            title: item.name,
+            key: `group-${item.uuid}`,
+            weight: item.weight || 0,
+            parentID: item.parentID ? `group-${item.parentID}` : '0',
+            isLeaf: false,
+          });
         });
-      });
-    }
-    this.getApis();
+      }
+      this.getApis();
+    });
   }
   getApis() {
-    let result: StorageHandleResult = this.storage.run('apiDataLoadAllByProjectID', [this.projectID]);
-    if (result.status === StorageHandleStatus.success) {
-      let apiItems = {};
-      result.data.forEach((item) => {
-        delete item.__proto__.updatedAt;
-        apiItems[item.uuid] = item;
-        this.treeItems.push({
-          title: item.name,
-          key: item.uuid.toString(),
-          weight: item.weight || 0,
-          parentID: item.groupID ? `group-${item.groupID}` : '0',
-          method: item.method,
-          isLeaf: true,
+    this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        let apiItems = {};
+        result.data.forEach((item) => {
+          delete item.updatedAt;
+          apiItems[item.uuid] = item;
+          this.treeItems.push({
+            title: item.name,
+            key: item.uuid.toString(),
+            weight: item.weight || 0,
+            parentID: item.groupID ? `group-${item.groupID}` : '0',
+            method: item.method,
+            isLeaf: true,
+          });
         });
-      });
-      this.apiDataItems = apiItems;
-      this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
-      this.generateGroupTreeData();
-      this.restoreExpandStatus();
-    }
+        this.apiDataItems = apiItems;
+        this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+        this.generateGroupTreeData();
+        this.restoreExpandStatus();
+      }
+    });
   }
   restoreExpandStatus() {
     let key = this.expandKeys.slice(0);
@@ -284,10 +286,14 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0) {
-      this.storage.run('groupBulkUpdate', [data.group]);
+      this.storage.run('groupBulkUpdate', [data.group], (result: StorageHandleResult) => {
+
+      });
     }
     if (data.api.length > 0) {
-      this.storage.run('apiDataBulkUpdate', [data.api]);
+      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageHandleResult) => {
+
+      });
     }
   }
   private watchRouterChange() {
