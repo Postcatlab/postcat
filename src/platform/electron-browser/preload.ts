@@ -3,11 +3,16 @@ console.log('eoapi public api load');
 // 可以加上条件判断，根据不同模块id哪些允许放出
 const apiAccessRules = ipcRenderer.sendSync('eo-sync', { action: 'getApiAccessRules' }) || [];
 
-let storageCallback = null;
+// 异步防止返回处理覆盖
+const storageCallback = new Map();
 ipcRenderer.on('storageCallback', (event, result) => {
-  console.log('storageCallback');
-  if (storageCallback && typeof storageCallback === 'function') {
-    storageCallback(result);
+  if (storageCallback.has(result.callback) && typeof storageCallback.get(result.callback) === 'function') {
+    try {
+      storageCallback.get(result.callback)(result);
+      storageCallback.delete(result.callback);
+    } catch (e) {
+      storageCallback.delete(result.callback); 
+    }
   }
 });
 // 其他子应用可访问的api队列都集中到.eo上
@@ -71,9 +76,10 @@ window.eo.openApp = (inputArg) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'openApp', data: inputArg });
 };
 window.eo.storage = (args, callback: any) => {
-  console.log('run preload storage');
-  storageCallback = callback;
+  const key = `${args.action}_${Date.now()}`;
+  storageCallback.set(key, callback);
   args.type = 'default';
+  args.callback = key;
   ipcRenderer.send('eo-storage', args);
 };
 window.eo.storageSync = (args) => {

@@ -568,6 +568,7 @@ export type StorageItem = Project | Environment | Group | ApiData | ApiTestHisto
 
 export interface StorageHandleArgs {
   type?: StorageProcessType;
+  callback?: any;
   action: string;
   params: Array<any>;
 }
@@ -575,6 +576,7 @@ export interface StorageHandleArgs {
 export interface StorageHandleResult {
   status: StorageHandleStatus;
   data: any;
+  callback: any;
 }
 
 export enum StorageHandleStatus {

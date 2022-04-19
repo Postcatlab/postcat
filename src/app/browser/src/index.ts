@@ -10,7 +10,6 @@ class StorageService {
   private fs: typeof fs;
   private path: typeof path;
   constructor() {
-    console.log('test');
     this.ipcRenderer = window.require('electron').ipcRenderer;
     this.app= window.require('electron').app;
     this.fs = window.require('fs');
@@ -23,14 +22,13 @@ class StorageService {
    * @param args 
    */
   private storageListenHandle(args: StorageHandleArgs): void {
-    console.log(args);
     const action: string = args.action || undefined;
     const handleResult: StorageHandleResult = {
       status: StorageHandleStatus.invalid,
-      data: undefined 
+      data: undefined,
+      callback: args.callback || null
     };
     if (storage && storage[action] && typeof storage[action] === 'function') {
-      console.log('storage run');
       storage[action](...args.params).subscribe((result: any) => {
         handleResult.data = result;
         if (isNotEmpty(result)) {

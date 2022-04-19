@@ -38,14 +38,15 @@ export class ApiDetailComponent implements OnInit {
     });
   }
   getApiByUuid(id: number) {
-    const result: StorageHandleResult = this.storage.run('apiDataLoad', [id]);
-    if (result.status === StorageHandleStatus.success) {
-      ['requestBody', 'responseBody'].forEach((tableName) => {
-        if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
-          result.data[tableName] = treeToListHasLevel(result.data[tableName]);
-        }
-      });
-      this.apiData = result.data;
-    }
+    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        ['requestBody', 'responseBody'].forEach((tableName) => {
+          if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
+            result.data[tableName] = treeToListHasLevel(result.data[tableName]);
+          }
+        });
+        this.apiData = result.data;
+      }
+    });
   }
 }

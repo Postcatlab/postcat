@@ -29,18 +29,20 @@ export class ApiService {
         apiData.name.length > 50 ? apiData.name.slice(0, 50) + '...' : apiData.name
       }</strong> 吗？删除后不可恢复！`,
       nzOnOk: () => {
-        const result: StorageHandleResult = this.storage.run('apiDataRemove', [apiData.uuid]);
-        if (result.status === StorageHandleStatus.success) {
-          this.messageService.send({ type: 'deleteApi', data: { uuid: apiData.uuid } });
-        }
+        this.storage.run('apiDataRemove', [apiData.uuid], (result: StorageHandleResult) => {
+          if (result.status === StorageHandleStatus.success) {
+            this.messageService.send({ type: 'deleteApi', data: { uuid: apiData.uuid } });
+          }
+        });
       },
     });
   }
   bulkDelete(apis) {
-    const result: StorageHandleResult = this.storage.run('apiDataBulkRemove', [apis]);
-    if (result.status === StorageHandleStatus.success) {
-      this.messageService.send({ type: 'bulkDeleteApi', data: { uuids: apis } });
-    }
+    this.storage.run('apiDataBulkRemove', [apis], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.messageService.send({ type: 'bulkDeleteApi', data: { uuids: apis } });
+      }
+    });
   }
   export(apiData: ApiData) {
     const modal: NzModalRef = this.modalService.create({

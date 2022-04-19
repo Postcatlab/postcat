@@ -25,28 +25,30 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   add(history: ApiTestHistoryFrame,apiID) {
-    const result: StorageHandleResult = this.storage.run('apiTestHistoryCreate', [{
+    this.storage.run('apiTestHistoryCreate', [{
       projectID: 1,
       apiDataID: apiID,
       ...history,
-    }]);
-    if (result.status === StorageHandleStatus.success) {
-      this.parseItem(result.data);
-      this.model.unshift(result.data);
-    } else {
-      console.error(result.data);
-    }
+    }], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.parseItem(result.data);
+        this.model.unshift(result.data);
+      } else {
+        console.error(result.data);
+      }
+    });
   }
 
   deleteAll() {
-    const result: StorageHandleResult = this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)]);
-    if (result.status === StorageHandleStatus.success) {
-      this.model = [];
-      this.nzMessageService.success('删除成功');
-    } else {
-      this.nzMessageService.success('删除失败');
-      console.error(result.data);
-    }
+    this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.model = [];
+        this.nzMessageService.success('删除成功');
+      } else {
+        this.nzMessageService.success('删除失败');
+        console.error(result.data);
+      }
+    });
   }
 
   ngOnChanges(changes) {
@@ -109,29 +111,31 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   private delete(inArg) {
-    const result: StorageHandleResult = this.storage.run('apiTestHistoryRemove', [inArg.item.uuid]);
-    if (result.status === StorageHandleStatus.success) {
-      this.model.splice(inArg.$index, 1);
-      this.nzMessageService.success('删除成功');
-    } else {
-      this.nzMessageService.success('删除失败');
-      console.error(result.data);
-    }
+    this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        this.model.splice(inArg.$index, 1);
+        this.nzMessageService.success('删除成功');
+      } else {
+        this.nzMessageService.success('删除失败');
+        console.error(result.data);
+      }
+    });
   }
 
   private getList() {
     if (!this.apiID) {
       return;
     }
-    const result: StorageHandleResult = this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID]);
-    if (result.status === StorageHandleStatus.success) {
-      result.data.forEach((val: any) => {
-        this.parseItem(val);
-      });
-      this.model = result.data || [];
-    } else {
-      console.error(result.data); 
-    }
+    this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageHandleResult) => {
+      if (result.status === StorageHandleStatus.success) {
+        result.data.forEach((val: any) => {
+          this.parseItem(val);
+        });
+        this.model = result.data || [];
+      } else {
+        console.error(result.data); 
+      }
+    });
   }
 
   private parseItem(item) {
