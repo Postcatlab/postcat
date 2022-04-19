@@ -49,9 +49,9 @@ function createWindow(): BrowserWindow {
   let loadPage = () => {
     const file: string = `file://${path.join(__dirname, '../browser', 'index.html')}`;
     win.loadURL(file);
-    win.webContents.openDevTools({
-      mode:"undocked"
-    });
+    // win.webContents.openDevTools({
+    //   mode:"undocked"
+    // });
   };
   win.webContents.on('did-fail-load', () => {
     loadPage();

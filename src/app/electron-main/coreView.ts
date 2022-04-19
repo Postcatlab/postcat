@@ -36,7 +36,6 @@ export class CoreViews {
           ? 'http://localhost:4201'
           : `file://${path.join(__dirname, '../../', 'workbench', 'browser', 'dist', 'index.html')}`,
     }).init(this.win);
-
     this.view.webContents.once('dom-ready', () => {
       require('@electron/remote/main').enable(this.view.webContents);
     });

@@ -29,10 +29,10 @@ export class BrowserViewInstance {
     }
     let view = new BrowserView(viewOps);
     view.webContents.loadURL(this.opts.viewPath);
-    view.webContents.on("console-message",(e,level,message)=>{
-      console.log(message)
-    })
-    view.webContents.openDevTools();
+    // view.webContents.on("console-message",(e,level,message)=>{
+    //   console.log(message)
+    // })
+    // view.webContents.openDevTools();
     win.addBrowserView(view);
     view.setBounds(this.bounds);
     proxyOpenExternal(view);
