@@ -1,7 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
-import { Group, ApiData, StorageHandleResult, StorageHandleStatus } from '../../../../../../../../../platform/browser/IndexedDB';
+import {
+  Group,
+  ApiData,
+  StorageHandleResult,
+  StorageHandleStatus,
+} from '../../../../../../../../../platform/browser/IndexedDB';
 import { Message } from '../../../../shared/services/message/message.model';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
@@ -86,6 +91,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   getGroups() {
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
+      console.log('groupLoadAllByProjectID');
       if (result.status === StorageHandleStatus.success) {
         result.data.forEach((item) => {
           delete item.updatedAt;
@@ -286,14 +292,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0) {
-      this.storage.run('groupBulkUpdate', [data.group], (result: StorageHandleResult) => {
-
-      });
+      this.storage.run('groupBulkUpdate', [data.group], (result: StorageHandleResult) => {});
     }
     if (data.api.length > 0) {
-      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageHandleResult) => {
-
-      });
+      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageHandleResult) => {});
     }
   }
   private watchRouterChange() {

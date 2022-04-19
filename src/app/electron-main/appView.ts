@@ -81,6 +81,7 @@ export class AppViews {
     }).init(this.win);
     this.remove()
     this.view = _view;
+    this.view.webContents.openDevTools();
     this.view.webContents.once('did-finish-load', () => {
       _view.setBackgroundColor('#FFF');
     });
