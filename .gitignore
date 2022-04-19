@@ -8,7 +8,8 @@ dist/
 /release
 *.js
 *.js.map
-!src/core/api-manager/browser/**/*.js
+!src/core/api-manager/browser/**/*.webpack.js
+!src/workbench/browser/**/*.webpack.js
 !src/core/market/browser/**/*.js
 !src/core/market/browser/dist/icon.png
 !src/core/api-manager/browser/dist/assets/images/icon.png
@@ -33,8 +34,6 @@ node_modules
 !.vscode/extensions.json
 
 # misc
-.angular/
-/.sass-cache
 /connect.lock
 /coverage
 /libpeerconnection.log

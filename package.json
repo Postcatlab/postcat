@@ -12,6 +12,7 @@
     "install:api-manager": "cd src/core/api-manager/browser&&npm ci",
     "start:api-manager": "cd src/core/api-manager/browser&&npm start",
     "build:api-manager": "cd src/core/api-manager/browser&&npm run build:prod",
+    "test:api-manager":"cd src/core/api-manager/browser&&npm run test",
     "install:workbench": "cd src/workbench/browser&&npm install",
     "start:workbench": "cd src/workbench/browser&&npm start",
     "build:workbench": "cd src/workbench/browser&&npm run build",
@@ -24,6 +25,7 @@
     "electron:dev": "npm run electron:tsc && electron . --development",
     "electron:build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
     "release": "electron-builder",
+    "test":"npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json"
   },
   "dependencies": {
