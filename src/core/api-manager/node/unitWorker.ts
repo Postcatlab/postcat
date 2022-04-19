@@ -34,11 +34,8 @@ class UnitWorker {
 export const module = {
   works: {},
   setup(eo: any) {
-    console.log('setup');
     ipcMain.removeAllListeners('unitTest');
     ipcMain.on('unitTest', function (event, message) {
-      console.log('unitTest run');
-      console.log(message);
       const id = message.id;
       switch (message.action) {
         case 'ajax': {
