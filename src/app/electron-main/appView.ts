@@ -1,43 +1,35 @@
-import ModuleManager from '../../platform/node/extension-manager/lib/manager';
-import { ModuleInfo, ModuleManagerInterface, ModuleType } from '../../platform/node/extension-manager/types';
+import { ModuleInfo, ModuleType } from '../../platform/node/extension-manager/types';
 import { getViewBounds, SidePosition, ViewBounds, ViewZone } from '../../shared/common/bounds';
 import { BrowserView, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { BrowserViewInstance } from '../../platform/electron-main/browserView/browserView';
 import { processEnv } from '../../platform/node/constant';
-const browserViews: Map<ViewZone, BrowserView> = new Map();
-const moduleManager: ModuleManagerInterface = ModuleManager();
 export class AppViews {
-  mainModuleID: string = 'default';
-  moduleID: string = 'default';
+  mainModuleID: string;
   view: BrowserView;
   sidePosition: SidePosition = SidePosition.left;
   constructor(private win: BrowserWindow) {}
 
   /**
-   * 根据模块ID启动app模块的加载
-   * @param moduleID
+   * 加载app模块
+   * @param module
    */
-  create(moduleID: string) {
-    this.moduleID = moduleID;
-    const module: ModuleInfo = moduleManager.getModule(moduleID, true);
+  create(module: ModuleInfo) {
     if (module && module.moduleType === ModuleType.app) {
-      let refresh: boolean = false;
       if (module.isApp && this.mainModuleID !== module.moduleID) {
         this.mainModuleID = module.moduleID;
         this.sidePosition = module.sidePosition;
-        refresh = true;
       }
-      this.createAppView(module, refresh);
-    }
-    if (module.main_node) {
-      const main_node = require(module.main_node);
-      if (main_node.module && typeof main_node.module === 'object') {
-        const _fun = main_node.module;
-        console.log(_fun);
-        _fun.setup({
-          appView: this.view
-        });
+      this.createAppView(module);
+
+      if (module.main_node) {
+        const main_node = require(module.main_node);
+        if (main_node.module && typeof main_node.module === 'object') {
+          const _fun = main_node.module;
+          _fun.setup({
+            appView: this.view
+          });
+        }
       }
     }
     return this.view;
@@ -67,9 +59,8 @@ export class AppViews {
   /**
    * 创建主视图，主要从模块载入文件
    * @param module
-   * @param window
    */
-  private createAppView(module: ModuleInfo, refresh: boolean) {
+  private createAppView(module: ModuleInfo) {
     const windBounds = this.win.getContentBounds();
     const _bounds: ViewBounds = getViewBounds(ViewZone.main, windBounds.width, windBounds.height, this.sidePosition);
     let _view = new BrowserViewInstance({
@@ -79,7 +70,7 @@ export class AppViews {
       preload: module.preload,
       viewPath: processEnv === 'development' && module.main_debug ? module.main_debug : module.main,
     }).init(this.win);
-    this.remove()
+    this.remove();
     this.view = _view;
     this.view.webContents.openDevTools();
     this.view.webContents.once('did-finish-load', () => {
@@ -88,9 +79,6 @@ export class AppViews {
     this.view.webContents.once('dom-ready', () => {
       this.rebuildBounds();
       require('@electron/remote/main').enable(this.view.webContents);
-      //_view.setAutoResize({ width: true });
-      //this.win.webContents.executeJavaScript(`window.getModules1()`);
     });
-    //return this.view;
   }
 }
