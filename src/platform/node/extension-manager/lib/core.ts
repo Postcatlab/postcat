@@ -45,7 +45,7 @@ export class CoreHandler {
       if (moduleInfo.main_node && moduleInfo.main_node.length > 0) {
         moduleInfo.main_node = path.join(moduleInfo.baseDir, moduleInfo.main_node);
       }
-      if (moduleInfo.logo && moduleInfo.logo.length > 0 && !moduleInfo.logo.startsWith('http')) {
+      if (moduleInfo.logo && moduleInfo.logo.length > 0 && !moduleInfo.logo.startsWith('http')&&!moduleInfo.logo.includes("icon-")) {
         moduleInfo.logo = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.logo);
       }
       if (!moduleInfo.belongs || !isNotEmpty(moduleInfo.belongs)) {

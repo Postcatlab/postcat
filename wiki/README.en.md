@@ -22,15 +22,15 @@ English | [简体中文](README.md)
 
 # Featue
 
-⚡ API Test
-
-- Quickly test the API
-- Test local API
-
-📃 API management
+📃 API Documentation
 
 - HTTP protocol
 - Various formats of request body: FormData, XML, JSON, Raw
+
+⚡ API Test
+- Quickly test the API
+- Test local API
+
 
 🌐 Test environment management
 

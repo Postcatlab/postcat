@@ -24,15 +24,15 @@
 
 # 功能
 
+📃 API 文档
+
+- HTTP 协议
+- 各种格式请求体：FormData、XML、JSON、Raw
+
 ⚡ API 测试
 
 - 快速对 API 发起测试
 - 支持本地测试
-
-📃 API 管理
-
-- HTTP 协议
-- 各种格式请求体：FormData、XML、JSON、Raw
 
 📶 可离线使用
 

@@ -12,6 +12,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isCollapsed: boolean;
   destroy = false;
   isElectron: boolean = false;
+  moduleID:string='default';
   modules: Map<string, ModuleInfo>;
   constructor(private electron: ElectronService, private sidebar: SidebarService) {
     this.isElectron = this.electron.isElectron;
@@ -41,6 +42,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.isElectron) {
       this.modules = window.eo.getSideModuleList();
+      console.log(this.modules)
       this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
         console.log('get moduleUpdate');
         this.modules = window.eo.getSideModuleList();
@@ -55,6 +57,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   openApp(moduleID: string) {
+    this.moduleID=moduleID;
     window.eo.openApp({ moduleID: moduleID });
   }
 
