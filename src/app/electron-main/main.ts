@@ -222,8 +222,21 @@ try {
     } else if (arg.action === 'autoResize') {
       resize(arg.data.sideWidth);
     } else if (arg.action === 'openModal') {
-      console.log('openModal');
-      subView.mainView.view.webContents.send('connect-main', { action: 'openModal' });
+      const background = arg.data.background || '#00000073';
+      subView.mainView.view.webContents.executeJavaScript(`
+        var mask = document.querySelector('#mask');
+        if (mask) {
+          mask.style.background = '${background}';
+          mask.style.display = 'block';
+        }
+      `);
+    } else if (arg.action === 'closeModal') {
+      subView.mainView.view.webContents.executeJavaScript(`
+        var mask = document.querySelector('#mask');
+        if (mask) {
+          mask.style.display = 'none';
+        }
+      `);
     } else {
       returnValue = 'Invalid data';
     }

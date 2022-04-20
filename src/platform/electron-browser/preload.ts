@@ -46,8 +46,9 @@ if (apiAccessRules.includes('hook')) {
 window.eo.tempApi = (params) => {
   return ipcRenderer.sendSync('eo-sync', params);
 };
-window.eo.openModal = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'openModal' });
+window.eo.openModal = (background) => {
+  background = background || '#00000073';
+  return ipcRenderer.sendSync('eo-sync', { action: 'openModal', data: { background: background } });
 };
 window.eo.closeModal = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'closeModal' });
