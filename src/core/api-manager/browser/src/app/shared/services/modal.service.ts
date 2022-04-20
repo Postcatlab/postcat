@@ -26,6 +26,9 @@ export class ModalService {
             if (inOpts.nzOnOk) {
               inOpts.nzOnOk();
             } else {
+              setTimeout(() => {
+                window.eo.closeModal();
+              }, 123);
               modal.destroy();
             }
           },
@@ -33,15 +36,21 @@ export class ModalService {
         {
           label: '取消',
           onClick: () =>{
+            setTimeout(() => {
+              window.eo.closeModal();
+            }, 123);
             modal.destroy();
           } 
         },
       ],
     };
     Object.assign(modalOpts, inOpts);
+    setTimeout(() => {
+      window.eo.openModal();
+    }, 123);
     const modal = this.modalService.create(modalOpts);
-    modal.afterOpen.subscribe(() => window.eo.openModal());
-    modal.afterClose.subscribe(() => window.eo.closeModal());
+    //modal.afterOpen.subscribe(() => window.eo.openModal());
+    //modal.afterClose.subscribe(() => window.eo.closeModal());
     return modal;
   }
 }
