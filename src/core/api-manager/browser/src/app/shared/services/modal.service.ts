@@ -33,7 +33,6 @@ export class ModalService {
         {
           label: '取消',
           onClick: () =>{
-            window.eo.closeModal();
             modal.destroy();
           } 
         },
@@ -41,7 +40,8 @@ export class ModalService {
     };
     Object.assign(modalOpts, inOpts);
     const modal = this.modalService.create(modalOpts);
-    window.eo.openModal();
+    modal.afterOpen.subscribe(() => window.eo.openModal());
+    modal.afterClose.subscribe(() => window.eo.closeModal());
     return modal;
   }
 }
