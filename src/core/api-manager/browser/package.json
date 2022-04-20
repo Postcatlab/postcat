@@ -8,7 +8,7 @@
   "moduleID": "default",
   "moduleName": "API Manager",
   "moduleType": "app",
-  "logo": "dist/assets/images/icon.png",
+  "logo": "icon-link",
   "main": "dist/index.html",
   "main_node": "../node/unitWorker.js",
   "main_debug": "http://localhost:4200",

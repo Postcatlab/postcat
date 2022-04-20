@@ -6,7 +6,7 @@
   "belongs": [
     "default"
   ],
-  "logo": "dist/icon.png",
+  "logo": "icon-apps",
   "main_debug": "http://localhost:8080",
   "moduleID": "market",
   "moduleName": "Market",
