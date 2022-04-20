@@ -1,5 +1,5 @@
 {
-  "asar": false,
+  "asar": true,
   "directories": {
     "output": "release/"
   },
@@ -36,7 +36,7 @@
   },
   "mac": {
     "icon": "src/app/common/images/512x512.png",
-    "target": ["dmg"]
+    "target": ["default"]
   },
   "linux": {
     "icon": "src/app/common/images/",

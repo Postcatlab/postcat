@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "description": "API Manager",
-  "homepage": "https://github.com/eolinker/eoapi.git",
   "author": "eoapi",
   "moduleID": "default",
   "moduleName": "API Manager",
