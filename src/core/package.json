@@ -2,7 +2,6 @@
     "name": "core-modules",
     "description": "API toolkit core modules",
     "dependencies": {
-      "api-manager": "0.0.1",
       "market": "0.0.1"
     }
   }
