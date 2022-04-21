@@ -12,7 +12,7 @@ dist/
 !src/core/market/browser/**/*.js
 !src/core/market/browser/dist/icon.png
 !src/workbench/node/request/**/*.js
-!src/workbench/browser/api/*.js
+!/api/*.js
 
 
 # dependencies
