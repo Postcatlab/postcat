@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
-import ModuleManager from '../../platform/node/extension-manager/lib/manager'; 
+import ModuleManager from '../../platform/node/extension-manager/lib/manager';
 import { ModuleInfo, ModuleManagerInterface } from '../../platform/node/extension-manager';
 import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
 import { AppViews } from './appView';
@@ -11,6 +11,7 @@ import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
 import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
+import { UnitWorkerModule } from '../../workbench/node/unitWorker';
 let win: BrowserWindow = null;
 export const subView = {
   appView: null,
@@ -22,7 +23,7 @@ const moduleManager: ModuleManagerInterface = ModuleManager();
 const mainRemote = require('@electron/remote/main');
 mainRemote.initialize();
 global.shareObject = {
-  storageResult: null
+  storageResult: null,
 };
 
 function createWindow(): BrowserWindow {
@@ -35,23 +36,31 @@ function createWindow(): BrowserWindow {
     useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
     frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
+      webSecurity: false,
+      preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
       nodeIntegration: true,
       allowRunningInsecureContent: processEnv === 'serve' ? true : false,
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
-  if (processEnv === 'serve') {
+  if (['serve'].includes(processEnv) ) {
     require('electron-reload')(__dirname, {
-      electron: require(path.join(__dirname, '/../node_modules/electron')),
+      electron: require(path.join(process.cwd(), '/node_modules/electron')),
     });
   }
   proxyOpenExternal(win);
   let loadPage = () => {
-    const file: string = `file://${path.join(__dirname, '../browser', 'index.html')}`;
+    const file: string =
+      processEnv === 'development'
+        ? 'http://localhost:4200'
+        : `file://${path.join(__dirname, '../browser', 'index.html')}`;
     win.loadURL(file);
-    // win.webContents.openDevTools({
-    //   mode:"undocked"
-    // });
+    win.webContents.openDevTools({
+      mode: 'undocked',
+    });
+    UnitWorkerModule.setup({
+      view:win
+    });
   };
   win.webContents.on('did-fail-load', () => {
     loadPage();
@@ -65,10 +74,6 @@ function createWindow(): BrowserWindow {
       }
       subView[i].remove();
     }
-    subView.appView = new AppViews(win);
-    subView.mainView = new CoreViews(win);
-    subView.mainView.create();
-    subView.appView.create(moduleManager.getModule('default'));
   });
   loadPage();
 
@@ -118,7 +123,7 @@ try {
       app.quit();
     }
   });
-  
+
   app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -164,7 +169,7 @@ try {
         if (count > 1500) {
           data = {
             status: StorageHandleStatus.error,
-            data: 'storage sync load error'
+            data: 'storage sync load error',
           };
           break;
         }
@@ -174,7 +179,8 @@ try {
       deleteFile(storageTemp);
       returnValue = data;
     } else if (args.type === 'result') {
-      subView.appView.view.webContents.send('storageCallback', args.result);
+      let view = subView.appView ? subView.appView.view.webContents : win.webContents;
+      view.send('storageCallback', args.result);
     }
   });
   // 这里可以封装成类+方法匹配调用，不用多个if else
@@ -202,19 +208,20 @@ try {
       }
       returnValue = Object.assign(data, { modules: moduleManager.getModules() });
     } else if (arg.action === 'getSideModuleList') {
-      returnValue = moduleManager.getSideModuleList(subView.appView.mainModuleID || 'default');
+      returnValue = moduleManager.getSideModuleList(subView.appView?.mainModuleID || 'default');
     } else if (arg.action === 'getSidePosition') {
-      returnValue = subView.appView.sidePosition;
+      returnValue = subView.appView?.sidePosition;
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else if (arg.action === 'openApp') {
       if (arg.data.moduleID) {
         // 如果要打开是同一app，忽略
-        if (subView.appView.mainModuleID === arg.data.moduleID) {
+        if (subView.appView?.mainModuleID === arg.data.moduleID) {
           return;
         }
         const module: ModuleInfo = moduleManager.getModule(arg.data.moduleID);
         if (module) {
+          if (!subView.appView) subView.appView = new AppViews(win);
           subView.appView.create(module);
         }
       }

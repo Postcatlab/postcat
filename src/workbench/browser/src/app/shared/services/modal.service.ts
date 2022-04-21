@@ -32,7 +32,9 @@ export class ModalService {
         },
         {
           label: '取消',
-          onClick: () => modal.destroy(),
+          onClick: () =>{
+            modal.destroy();
+          } 
         },
       ],
     };

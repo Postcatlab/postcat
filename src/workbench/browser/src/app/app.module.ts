@@ -6,9 +6,13 @@ import { HttpClientModule } from '@angular/common/http';
 
 //Other module
 import { CoreModule } from './core/core.module';
+import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { EnvState } from './shared/store/env.state';
 
+// NG1 Upgrade
+import { UpgradeModule } from '@angular/upgrade/static';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
@@ -20,7 +24,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     CoreModule,
     AppRoutingModule,
     HttpClientModule,
-    NzModalModule
+    UpgradeModule,
+    NzModalModule,
+    NgxsModule.forRoot([EnvState]),
   ],
   providers: [
     {
@@ -32,6 +38,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor() {
+  constructor(private upgrade: UpgradeModule) {
+    this.upgrade.bootstrap(document.body, ['eolinker']);
   }
 }

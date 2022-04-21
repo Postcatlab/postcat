@@ -212,7 +212,7 @@ export class ModuleManager implements ModuleManagerInterface {
     });
     sideItems?.forEach((value: Array<string>, key: string) => {
       const _current: ModuleInfo = newModules.get(key);
-      if (_current.isApp) {
+      if (_current&&_current.isApp) {
         _current.sideItems = value;
         newModules.set(key, _current);
       }
@@ -222,7 +222,6 @@ export class ModuleManager implements ModuleManagerInterface {
       _current.featureItems = value;
       newModules.set(key, _current);
     });
-
     return newModules;
   }
 }

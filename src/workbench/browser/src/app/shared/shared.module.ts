@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  PageNotFoundComponent,
   SelectThemeComponent,
   ToolbarComponent,
   SidebarComponent,
@@ -20,7 +21,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
 import { ModalService } from './services/modal.service';
 
-const COMPONENTS = [ ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent];
+const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent,PageNotFoundComponent];
 @NgModule({
   imports: [
     CommonModule,

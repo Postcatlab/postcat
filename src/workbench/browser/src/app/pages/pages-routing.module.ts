@@ -2,7 +2,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
-
 const routes: Routes = [
   {
     path: '',
@@ -12,7 +11,11 @@ const routes: Routes = [
         path: '',
         redirectTo: 'api',
         pathMatch: 'full',
-      }
+      },
+      {
+        path: 'api',
+        loadChildren: () => import('./api/api.module').then((m) => m.ApiModule),
+      },
     ],
   },
 ];

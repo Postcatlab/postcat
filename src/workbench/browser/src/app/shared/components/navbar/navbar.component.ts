@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit {
   modules: Map<string, ModuleInfo>;
   constructor(private electron: ElectronService) {
     this.isElectron = this.electron.isElectron;
+    console.log(this.electron.ipcRenderer)
   }
   changeHelpVisible(visible) {
     window.eo.toogleViewZIndex(visible);
