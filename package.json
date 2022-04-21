@@ -7,7 +7,7 @@
   "author": "eoapi",
   "private": true,
   "scripts": {
-    "postinstall": "npm-run-all --serial install:* build:app",
+    "postinstall": "npm-run-all --serial install:*",
     "start": "npm-run-all -p startall electron:serve",
     "startall": "npm-run-all -p start:*",
     "install:workbench": "cd src/workbench/browser&&npm install",
