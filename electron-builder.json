@@ -9,10 +9,9 @@
     "src/shared/**/*.js*",
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
-    "src/core/api-manager/node/",
+    "src/workbench/node/",
     "src/core/**/package.json",
     "src/app/common/**/*",
-    "src/app/browser/index.html",
     "!**/*.ts"
   ],
   "publish": ["github"],
