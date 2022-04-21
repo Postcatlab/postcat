@@ -39,6 +39,7 @@ export class ApiDetailComponent implements OnInit {
   }
   getApiByUuid(id: number) {
     this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
+      console.log(result,id)
       if (result.status === StorageHandleStatus.success) {
         ['requestBody', 'responseBody'].forEach((tableName) => {
           if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {

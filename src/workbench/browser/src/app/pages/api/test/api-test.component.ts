@@ -166,6 +166,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Receive Test Server Message
    */
   private receiveMessage(message) {
+    console.log(message)
     let tmpHistory = {
       general: message.general,
       request: message.report.request,
