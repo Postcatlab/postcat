@@ -9,7 +9,7 @@
   "logo": "icon-apps",
   "main_debug": "http://localhost:8080",
   "moduleID": "market",
-  "moduleName": "Market",
+  "moduleName": "插件广场",
   "moduleType": "app",
   "scripts": {
     "serve": "vue-cli-service serve",

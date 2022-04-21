@@ -5,7 +5,7 @@
   "description": "API Manager",
   "author": "eoapi",
   "moduleID": "default",
-  "moduleName": "API Manager",
+  "moduleName": "API",
   "moduleType": "app",
   "logo": "icon-link",
   "main": "dist/index.html",
