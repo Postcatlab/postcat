@@ -38,7 +38,7 @@ export class ModalService {
           onClick: () =>{
             setTimeout(() => {
               window.eo.closeModal();
-            }, 123);
+            }, 100);
             modal.destroy();
           } 
         },
@@ -47,7 +47,7 @@ export class ModalService {
     Object.assign(modalOpts, inOpts);
     setTimeout(() => {
       window.eo.openModal();
-    }, 123);
+    }, 120);
     const modal = this.modalService.create(modalOpts);
     //modal.afterOpen.subscribe(() => window.eo.openModal());
     //modal.afterClose.subscribe(() => window.eo.closeModal());
