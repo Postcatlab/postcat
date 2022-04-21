@@ -45,7 +45,7 @@ function createWindow(): BrowserWindow {
   });
   if (['serve'].includes(processEnv) ) {
     require('electron-reload')(__dirname, {
-      electron: require(path.join(process.cwd(), '/node_modules/electron')),
+      electron: require(path.join(__dirname, '../node_modules/electron')),
     });
   }
   proxyOpenExternal(win);
@@ -53,7 +53,7 @@ function createWindow(): BrowserWindow {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(__dirname, '../browser', 'index.html')}`;
+        : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
     win.loadURL(file);
     win.webContents.openDevTools({
       mode: 'undocked',

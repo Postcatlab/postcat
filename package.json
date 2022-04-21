@@ -10,8 +10,6 @@
     "postinstall": "npm-run-all --serial install:* build:app",
     "start": "npm-run-all -p startall electron:serve",
     "startall": "npm-run-all -p start:*",
-    "install:app": "cd src/app/browser&&npm install",
-    "build:app": "cd src/app/browser&&npm run build",
     "install:workbench": "cd src/workbench/browser&&npm install",
     "start:workbench": "cd src/workbench/browser&&npm start",
     "build:workbench": "cd src/workbench/browser&&npm run build",
