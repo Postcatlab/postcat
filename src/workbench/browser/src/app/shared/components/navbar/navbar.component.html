@@ -3,7 +3,7 @@
   <div class="can_be_click f_row_ac right_btn_container">
     <div class="mr10" *ngIf="!isElectron">
       <span  nz-dropdown [nzDropdownMenu]="download">
-        <i nz-icon nzType="cloud-download" nzTheme="outline"></i>
+        <i nz-icon nzType="cloud-download" class="fs24" nzTheme="outline"></i>
       </span>
       <nz-dropdown-menu #download="nzDropdownMenu">
         <ul nz-menu nzSelectable>
@@ -16,7 +16,7 @@
     </div>
     <!-- <span (click)="openApp(item.moduleID)" *ngFor="let item of getModules()" >&nbsp;{{ item.moduleName }}&nbsp;</span> -->
     <span class="mr10" nz-dropdown (nzVisibleChange)="changeHelpVisible($event)" [nzDropdownMenu]="menu">
-      <i nz-icon nzType="question-circle" nzTheme="outline"></i>
+      <i nz-icon nzType="question-circle" class="fs24" nzTheme="outline"></i>
     </span>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu nzSelectable>

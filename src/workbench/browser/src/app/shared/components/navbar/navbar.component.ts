@@ -47,7 +47,9 @@ export class NavbarComponent implements OnInit {
       });
   }
   changeHelpVisible(visible) {
-    window.eo.toogleViewZIndex(visible);
+    if(this.isElectron){
+      window.eo.toogleViewZIndex(visible);
+    }
   }
   minimize() {
     this.electron.ipcRenderer.send('message', {
