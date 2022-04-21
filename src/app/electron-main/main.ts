@@ -214,7 +214,8 @@ try {
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else if (arg.action === 'openApp') {
-      if (arg.data.moduleID) {
+      if(subView.appView) subView.appView.remove();
+      if (arg.data.moduleID&&!arg.data.moduleID.includes('@eo-core')) {
         // 如果要打开是同一app，忽略
         if (subView.appView?.mainModuleID === arg.data.moduleID) {
           return;
