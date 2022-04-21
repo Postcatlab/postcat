@@ -13,7 +13,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   destroy = false;
   isElectron: boolean = false;
   moduleID: string = '@eo-core-apimanger';
-  modules: Array<ModuleInfo|any>;
+  modules: Array<ModuleInfo | any>;
   constructor(private electron: ElectronService, private sidebar: SidebarService) {
     this.isElectron = this.electron.isElectron;
     this.isCollapsed = this.sidebar.getCollapsed();
@@ -40,15 +40,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    let defaultModule = { moduleName: 'API', moduleID: '@eo-core-apimanger', logo: 'icon-api', route: 'home/api/test' };
     if (this.isElectron) {
       // TODO change app to blank page
-      this.modules =[{ moduleName: 'API', moduleID: '@eo-core-apimanger', logo: 'icon-api',route:'home/api/test' },...Array.from(window.eo.getSideModuleList())] 
+      this.modules = [defaultModule, ...Array.from(window.eo.getSideModuleList())];
       this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
         console.log('get moduleUpdate');
         this.modules = window.eo.getSideModuleList();
       });
     } else {
-      this.modules =[];
+      this.modules = [defaultModule];
     }
   }
 

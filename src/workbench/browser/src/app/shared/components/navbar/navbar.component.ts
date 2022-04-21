@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../../../core/services';
-import { ModuleInfo } from '../../../../../../../platform/node/extension-manager'; 
+import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -11,9 +11,40 @@ export class NavbarComponent implements OnInit {
   isElectron: boolean = false;
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
+  resourceInfo = [
+    {
+      id: 'win',
+      name: 'Windows 客户端',
+      icon: 'windows',
+      keyword: 'Setup',
+      suffix: 'exe',
+      link: '',
+    },
+    {
+      id: 'mac',
+      name: 'macOS 客户端',
+      icon: 'mac',
+      suffix: 'dmg',
+      link: '',
+    },
+  ];
+
   constructor(private electron: ElectronService) {
     this.isElectron = this.electron.isElectron;
-    console.log(this.electron.ipcRenderer)
+  }
+  getInstaller() {
+    fetch('https://api.github.com/repos/eolinker/eoapi/releases')
+      .then((response) => response.json())
+      .then((data) => {
+        this.resourceInfo.forEach((item) => {
+          let assetItem = data[0].assets.find(
+            (asset) =>
+              asset.browser_download_url.slice(-item.suffix.length) === item.suffix &&
+              (!item.keyword || asset.browser_download_url.includes(item.keyword))
+          );
+          item.link = assetItem.browser_download_url;
+        });
+      });
   }
   changeHelpVisible(visible) {
     window.eo.toogleViewZIndex(visible);
@@ -47,6 +78,6 @@ export class NavbarComponent implements OnInit {
   }
 
   openApp(moduleID: string) {
-    window.eo.openApp({moduleID: moduleID});
+    window.eo.openApp({ moduleID: moduleID });
   }
 }

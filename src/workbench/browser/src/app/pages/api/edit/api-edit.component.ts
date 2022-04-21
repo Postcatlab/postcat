@@ -10,12 +10,25 @@ import { debounceTime, take, takeUntil, pairwise, filter } from 'rxjs/operators'
 import { MessageService } from '../../../shared/services/message';
 import { StorageService } from '../../../shared/services/storage';
 
-import { Group, ApiData, RequestProtocol, RequestMethod, ApiEditRest, StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import {
+  Group,
+  ApiData,
+  RequestProtocol,
+  RequestMethod,
+  ApiEditRest,
+  StorageHandleResult,
+  StorageHandleStatus,
+} from '../../../../../../../platform/browser/IndexedDB';
 import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';
 import { getRest } from '../../../utils/api';
-import { treeToListHasLevel, listToTree, listToTreeHasLevel, getExpandGroupByKey } from '../../../utils/tree/tree.utils';
+import {
+  treeToListHasLevel,
+  listToTree,
+  listToTreeHasLevel,
+  getExpandGroupByKey,
+} from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 @Component({
   selector: 'eo-api-edit-edit',
@@ -68,7 +81,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         });
         treeItems.sort((a, b) => a.weight - b.weight);
       }
-      listToTree(treeItems, this.groups, '-1');
+      listToTree(treeItems, this.groups, '0');
+      console.log(treeItems, this.groups);
       this.afterInitGroup();
     });
   }
@@ -230,7 +244,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Expand Select Group
    */
   private expandGroup() {
-    this.expandKeys=getExpandGroupByKey(this.apiGroup,this.apiData.groupID.toString())
+    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.apiData.groupID.toString());
   }
   /**
    * Init basic form,such as url,protocol,method
@@ -257,24 +271,19 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
 
   private editApi(formData) {
-    if (formData.uuid) {
-      this.storage.run('apiDataUpdate', [formData, this.apiData.uuid], (result: StorageHandleResult) => {
+    const busEvent = formData.uuid ? 'editApi' : 'addApi';
+    const title = busEvent === 'editApi' ? '编辑成功' : '新增成功';
+    this.storage.run(
+      busEvent === 'editApi' ? 'apiDataUpdate' : 'apiDataCreate',
+      [formData, this.apiData.uuid],
+      (result: StorageHandleResult) => {
         if (result.status === StorageHandleStatus.success) {
-          this.message.success('编辑成功');
-          this.messageService.send({ type: 'editApi', data: result.data });
+          this.message.success(title);
+          this.messageService.send({ type: `${busEvent}Success`, data: result.data });
         } else {
-          this.message.success('编辑失败');
+          this.message.success('失败');
         }
-      });
-    } else {
-      this.storage.run('apiDataCreate', [formData], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
-          this.message.success('新增成功');
-          this.messageService.send({ type: 'addApi', data: result.data });
-        } else {
-          this.message.success('新增失败');
-        }
-      });
-    }
+      }
+    );
   }
 }
