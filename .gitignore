@@ -8,12 +8,12 @@ dist/
 /release
 *.js
 *.js.map
-!src/core/api-manager/browser/**/*.webpack.js
-!src/workbench/browser/**/*.webpack.js
+*.webpack.js
 !src/core/market/browser/**/*.js
 !src/core/market/browser/dist/icon.png
-!src/core/api-manager/browser/dist/assets/images/icon.png
-!src/core/api-manager/node/request/**/*.js
+!src/workbench/node/request/**/*.js
+!src/workbench/browser/api/*.js
+
 
 # dependencies
 node_modules
