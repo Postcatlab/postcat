@@ -1,12 +1,12 @@
 <template>
-  <div class="border-b px-4 py-4">
+  <div class="border-b px-3 py-4">
     <a-input v-model:value="search" placeholder="搜索关键字" class="w-60">
       <template #prefix>
         <search-outlined type="user" />
       </template>
     </a-input>
   </div>
-  <div class="list-block grid grid-cols-4 gap-5 py-5 px-1">
+  <div class="list-block grid grid-cols-4 gap-6 py-5 px-3">
     <div
       class="border w-full h-70 p-4 border rounded-lg flex items-center flex-col flex-wrap plugin-block"
       v-for="(it, index) in renderList"
@@ -17,7 +17,7 @@
         class="block w-20 h-20 my-3 bg-cover bg-center bg-no-repeat"
         :style="{ backgroundImage: `url(${it.logo || ''})` }"
       ></i>
-      <span class="font-bold">{{ it.name }}</span>
+      <span class="text-lg font-bold">{{ it.name }}</span>
       <span class="text-gray-400 my-2">{{ it.author }}</span>
       <span class="text-gray-500 my-1 desc">{{ it.description }}</span>
     </div>
