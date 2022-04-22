@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { whatType } from '../../../utils';
 import { flatData } from '../../../utils/tree/tree.utils';
+import * as qs from 'qs';
 import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-transfer/data-transfer.utils';
 @Component({
   selector: 'params-import',
@@ -12,6 +13,7 @@ export class ParamsImportComponent {
   @Input() rootType: 'array' | string | 'object' = 'object';
   @Input() contentType = 'json';
   @Input() baseData: object[] = [];
+  @Input() modalTitle: string = '';
   @Output() baseDataChange = new EventEmitter<any>();
   isVisible = false;
   paramCode = '';
@@ -33,6 +35,7 @@ export class ParamsImportComponent {
   get contenTypeEditor() {
     switch (this.contentType) {
       case 'formData':
+      case 'query':
         return 'text';
       default:
         return this.contentType;
@@ -56,6 +59,10 @@ export class ParamsImportComponent {
         this.message.error('JSON格式不合法');
         return;
       }
+    }
+    if (this.contentType === 'query') {
+      paramCode = qs.parse(this.paramCode.split('?')[1]);
+      // console.log('-->', paramCode);
     }
     if (this.contentType === 'formData') {
       const json = {};
