@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StorageHandleResult, StorageHandleStatus } from '../../../../../../platform/browser/IndexedDB';
-import { ElectronService } from '../../core/services';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { uuid as uid } from '../../utils/index';
 import { EoTableComponent } from '../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../shared/store/env.state';
 import { StorageService } from '../../shared/services/storage';
@@ -31,7 +29,6 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
-    private electron: ElectronService,
     private storage: StorageService,
     private message: NzMessageService,
     private store: Store
@@ -60,10 +57,11 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
 
   getAllEnv() {
-    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageHandleResult) => {
+    const projectID = 1;
+    this.storage.run('environmentLoadAllByProjectID', [projectID], (result: StorageHandleResult) => {
       if (result.status !== StorageHandleStatus.success) {
         this.envList = [];
-        this.handleAddEnv(null);
+        this.handleAddEnv(projectID);
         return;
       }
       this.envList = result.data;
@@ -95,7 +93,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleAddEnv(pid) {
     // * init form of env, create new env-id
     this.envInfo = {
-      projectID: pid || uid(),
+      projectID: pid || 1,
       name: '',
       hostUri: '',
       parameters: [],
