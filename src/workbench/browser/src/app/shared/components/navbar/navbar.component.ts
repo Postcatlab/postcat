@@ -31,6 +31,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(private electron: ElectronService) {
     this.isElectron = this.electron.isElectron;
+    this.getInstaller();
   }
   getInstaller() {
     fetch('https://api.github.com/repos/eolinker/eoapi/releases')
