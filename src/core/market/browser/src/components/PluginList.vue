@@ -1,38 +1,25 @@
 <template>
-  <div class="border-b px-4 py-4">
+  <div class="border-b px-3 py-4">
     <a-input v-model:value="search" placeholder="搜索关键字" class="w-60">
       <template #prefix>
         <search-outlined type="user" />
       </template>
     </a-input>
   </div>
-  <div class="list-block grid grid-cols-4">
+  <div class="list-block grid grid-cols-4 gap-6 py-5 px-3">
     <div
-      class="
-        min-w-1/2
-        max-w-11/12
-        h-60
-        p-4
-        m-4
-        border
-        rounded-lg
-        flex
-        items-center
-        justify-self-center
-        flex-col flex-wrap
-        plugin-block
-      "
+      class="border w-full h-70 p-4 border rounded-lg flex items-center flex-col flex-wrap plugin-block"
       v-for="(it, index) in renderList"
       :key="index"
       @click="handleClick(it)"
     >
       <i
-        class="block w-20 h-20 bg-cover bg-center bg-no-repeat"
+        class="block w-20 h-20 my-3 bg-cover bg-center bg-no-repeat"
         :style="{ backgroundImage: `url(${it.logo || ''})` }"
       ></i>
-      <span>{{ it.name }}</span>
-      <span>{{ it.author }}</span>
-      <div class="desc">{{ it.description }}</div>
+      <span class="text-lg font-bold">{{ it.name }}</span>
+      <span class="text-gray-400 my-2">{{ it.author }}</span>
+      <span class="text-gray-500 my-1 desc">{{ it.description }}</span>
     </div>
   </div>
 </template>
@@ -46,19 +33,6 @@ let search = ref('');
 const renderList = ref([]);
 const router = useRouter();
 const route = useRoute();
-
-if (window && window.eo && window.eo.storage) {
-  console.log('get data from storageRemote');
-  window.eo.storage({
-    action: 'groupLoadAllByProjectID',
-    params: [1]
-  }, (data) => {
-    console.log(data);
-  });
-}
-else {
-  console.log('no storageRemote'); 
-}
 
 const handleClick = ({ name }) => {
   router.push({ path: '/plugin-detail', query: { name } });
@@ -95,6 +69,7 @@ watch(
 .desc {
   overflow: hidden;
   display: -webkit-box;
+  text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }

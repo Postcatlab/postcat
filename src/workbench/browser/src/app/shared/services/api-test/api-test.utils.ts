@@ -98,7 +98,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
   };
   return result;
 };
-export const eoFormatResponseData = ({ report, history, id }) => {
+export const eoFormatResponseData = ({type,report, history, id }) => {
   let { httpCode, ...response } = history.resultInfo;
   response = {
     statusCode: httpCode,
@@ -151,5 +151,6 @@ export const eoFormatResponseData = ({ report, history, id }) => {
       value: val.value,
     }));
   }
+  console.log(JSON.stringify(result))
   return result;
 };
