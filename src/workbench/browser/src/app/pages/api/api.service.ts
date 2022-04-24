@@ -31,7 +31,7 @@ export class ApiService {
       nzOnOk: () => {
         this.storage.run('apiDataRemove', [apiData.uuid], (result: StorageHandleResult) => {
           if (result.status === StorageHandleStatus.success) {
-            this.messageService.send({ type: 'deleteApi', data: { uuid: apiData.uuid } });
+            this.messageService.send({ type: 'deleteApiSuccess', data: { uuid: apiData.uuid } });
           }
         });
       },
@@ -40,20 +40,12 @@ export class ApiService {
   bulkDelete(apis) {
     this.storage.run('apiDataBulkRemove', [apis], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
-        this.messageService.send({ type: 'bulkDeleteApi', data: { uuids: apis } });
+        this.messageService.send({ type: 'bulkDeleteApiSuccess', data: { uuids: apis } });
       }
     });
   }
   export(apiData: ApiData) {
-    const modal: NzModalRef = this.modalService.create({
-      nzTitle: "导出 API",
-      nzContent: ExportApiComponent,
-      nzClosable: false,
-      nzComponentParams:{},
-      nzOnOk() {
-        modal.componentInstance.submit();
-      },
-    });
+
   }
   bulkExport(groups) {}
 }

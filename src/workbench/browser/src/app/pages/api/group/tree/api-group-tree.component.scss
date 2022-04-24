@@ -2,14 +2,39 @@
   .ant-tree-node-selected * {
     color: var(--TEXT_ACTIVE);
   }
+  .ant-tree-list-holder-inner {
+    .nz-tree-node:first {
+      border-bottom: 1px solid var(--BORDER);
+    }
+  }
+  .fixed_group_tree {
+    nz-tree-node-switcher {
+      display: none;
+    }
+  }
+}
+.group_tree {
+  overflow: auto;
+  height: calc(100vh - 129px);
+  .ant-tree-switcher {
+    width: 12px;
+  }
+  .ant-tree-indent-unit {
+    width: 8px;
+  }
+  .ant-tree {
+    .ant-tree-node-content-wrapper {
+      padding: 0 2px;
+    }
+  }
 }
 .ant-dropdown-menu {
   min-width: 100px;
 }
-.method_text{
+.method_text {
   width: 32px;
 }
-.node_title{
+.node_title {
   max-width: 145px;
 }
 .tree_node {
