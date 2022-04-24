@@ -82,7 +82,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         treeItems.sort((a, b) => a.weight - b.weight);
       }
       listToTree(treeItems, this.groups, '0');
-      console.log(treeItems, this.groups);
       this.afterInitGroup();
     });
   }

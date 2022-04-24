@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ApiComponent } from './api.component';
 import { ApiDetailComponent } from './detail/api-detail.component';
 import { ApiEditComponent } from './edit/api-edit.component';
+import { ApiOverviewComponent } from './overview/api-overview.component';
 import { ApiTestComponent } from './test/api-test.component';
 
 const routes: Routes = [
@@ -15,6 +16,10 @@ const routes: Routes = [
         path: '',
         redirectTo: 'test',
         pathMatch: 'full',
+      },
+      {
+        path: 'overview',
+        component: ApiOverviewComponent,
       },
       {
         path: 'detail',

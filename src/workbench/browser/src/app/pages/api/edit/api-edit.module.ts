@@ -43,7 +43,7 @@ const NZ_COMPONETS = [
   NzTabsModule,
   NzRadioModule,
   NzDividerModule,
-  NzAffixModule
+  NzAffixModule,
 ];
 const COMPONENTS = [
   ApiEditComponent,

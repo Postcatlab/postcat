@@ -24,6 +24,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     edit: { path: '/home/api/edit', title: '新 API' },
     test: { path: '/home/api/test', title: '新 API' },
     detail: { path: '/home/api/detail', title: 'API 详情' },
+    overview: { path: '/home/api/overview', title: '概况', key: 'overview' },
   };
   MAX_TAB_LIMIT = 15;
 
@@ -52,22 +53,22 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    */
   private initTab() {
     let apiID = Number(this.route.snapshot.queryParams.uuid);
-    let hasApiExist = this.apiDataItems[apiID];
-    //delete api
-    if (!hasApiExist) {
-      this.closeTab({ index: this.selectedIndex });
-      return;
-    }
-    if (apiID) {
-      const tab = this.getTabInfo({
-        tabData: this.apiDataItems[apiID],
-      });
-      this.appendOrSwitchTab('unset', tab);
-    } else {
+    if (!apiID) {
       let module = Object.keys(this.defaultTabs).find((keyName) =>
         this.router.url.split('?')[0].includes(this.defaultTabs[keyName].path)
       );
       this.appendOrSwitchTab(module, this.route.snapshot.queryParams);
+    } else {
+      let isApiExist = this.apiDataItems[apiID];
+      //not exist api or delete api
+      if (!isApiExist) {
+        this.closeTab({ index: this.selectedIndex });
+        return;
+      }
+      const tab = this.getTabInfo({
+        tabData: this.apiDataItems[apiID],
+      });
+      this.appendOrSwitchTab('unset', tab);
     }
   }
   /**
@@ -83,18 +84,22 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       which === 'unset' ? {} : this.defaultTabs[which],
       tabContent
     );
-    let existApiIndex = this.tabSerive.tabs.findIndex((val) => val.key === tab.key);
-    if (tab.key && existApiIndex !== -1) {
+    let existTabIndex = this.tabSerive.tabs.findIndex((val) => val.key === tab.key);
+    if (tab.key && existTabIndex !== -1) {
       let switchTab = {};
-      if (this.tabSerive.tabs[existApiIndex].path !== tab.path) {
+      if (this.tabSerive.tabs[existTabIndex].path !== tab.path) {
         //* exist api in same tab change route,such as edit page to detail
         switchTab['path'] = tab.path;
       }
-      this.switchTab(existApiIndex, switchTab);
+      this.switchTab(existTabIndex, switchTab);
       return;
     }
     // avoid open too much tab,if detail or no change,open page in current tab
-    if(this.tabSerive.tabs.length&&this.tabSerive.currentTab?.path.includes('detail')&&tab.path.includes('detail')){
+    if (
+      this.tabSerive.tabs.length &&
+      this.tabSerive.currentTab?.path.includes('detail') &&
+      tab.path.includes('detail')
+    ) {
       this.switchTab(this.selectedIndex, tab);
       return;
     }
@@ -222,12 +227,17 @@ export class ApiTabComponent implements OnInit, OnDestroy {
           case 'detailApi':
             this.appendOrSwitchTab('detail', inArg.data.origin);
             break;
+          case 'detailOverview': {
+            console.log(inArg.data.origin);
+            this.appendOrSwitchTab('overview', inArg.data.origin);
+            break;
+          }
           case 'gotoEditApi':
             this.appendOrSwitchTab('edit', inArg.data.origin);
             break;
           case 'copyApi':
           case 'gotoAddApi':
-            this.appendOrSwitchTab('edit', inArg.data ? { groupID: inArg.data.key.replace('group-','') } : {});
+            this.appendOrSwitchTab('edit', inArg.data ? { groupID: inArg.data.key.replace('group-', '') } : {});
             break;
           case 'addApiSuccess':
           case 'editApiSuccess':
