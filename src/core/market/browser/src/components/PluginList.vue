@@ -34,21 +34,6 @@ const renderList = ref([]);
 const router = useRouter();
 const route = useRoute();
 
-if (window && window.eo && window.eo.storage) {
-  console.log('get data from storageRemote');
-  window.eo.storage(
-    {
-      action: 'groupLoadAllByProjectID',
-      params: [1],
-    },
-    (data) => {
-      console.log(data);
-    }
-  );
-} else {
-  console.log('no storageRemote');
-}
-
 const handleClick = ({ name }) => {
   router.push({ path: '/plugin-detail', query: { name } });
 };
