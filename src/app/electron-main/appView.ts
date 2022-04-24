@@ -45,6 +45,7 @@ export class AppViews {
     this.view.webContents.closeDevTools();
     this.win.removeBrowserView(this.view);
     this.view = undefined;
+    this.mainModuleID = undefined;
   }
   
   rebuildBounds(sideWidth?: number) {
