@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { MessageService } from '../../../shared/services/message';
 import { StorageService } from '../../../shared/services/storage';
 
 @Component({
@@ -9,15 +8,29 @@ import { StorageService } from '../../../shared/services/storage';
   styleUrls: ['./export-api.component.scss'],
 })
 export class ExportApiComponent implements OnInit {
-  exportType:'eoapi'
-  constructor(
-    private modalRef: NzModalRef,
-    private storage: StorageService
-  ) { }
-
-  ngOnInit(): void {
-  }
-  submit(){
-    console.log('export')
+  exportType: string = 'eoapi';
+  supportList: any[] = [
+    {
+      key: 'eoapi',
+      image:'',
+      title: 'Eoapi(.json)',
+    },
+    {
+      key: 'openapi3',
+      image:'',
+      title: 'Swagger V3.0',
+    },
+  ];
+  constructor(private modalRef: NzModalRef, private storage: StorageService) {}
+  ngOnInit(): void {}
+  exportEoapi() {}
+  submit() {
+    switch (this.exportType) {
+      case 'eoapi': {
+        this.exportEoapi();
+        break;
+      }
+    }
+    console.log('export');
   }
 }

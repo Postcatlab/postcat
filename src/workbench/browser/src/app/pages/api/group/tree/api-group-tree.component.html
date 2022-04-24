@@ -22,7 +22,6 @@
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
             <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })"><a>新建API</a></li>
-            <!-- <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'testApi' })"><a>新建测试</a></li> -->
             <li nz-menu-item (click)="addGroup()"><a>新建分组</a></li>
           </ul>
         </nz-dropdown-menu>
@@ -30,7 +29,27 @@
     </div>
   </nz-input-group>
 </header>
-<div class="group_container group-tree pt10">
+<!-- Fixed Group -->
+<div class="group_container fixed_group_tree pt10">
+  <nz-tree
+    [nzData]="fixedTreeNode"
+    [nzSelectedKeys]="nzSelectedKeys"
+    nzBlockNode
+    (nzClick)="clickTreeItem($event)"
+    [nzTreeTemplate]="nzFixedTreeTemplate"
+  ></nz-tree>
+  <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
+    <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
+      <div class="f_row_ac">
+        <i class="mr10" nz-icon nzType="home" nzTheme="outline"></i>
+        <span class="text_omit node_title">{{ node.title }}</span>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<div class="bbd"></div>
+<!-- Custom Group -->
+<div class="group_container group_tree pt10">
   <nz-tree
     [nzData]="treeNodes"
     [nzSelectedKeys]="nzSelectedKeys"
@@ -79,7 +98,7 @@
         </span>
       </div>
       <!-- Leaf -->
-      <div class="tree_node f_row f_js_ac" *ngIf="node.isLeaf">
+      <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
         <div class="f_row_ac">
           <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">{{
             node.origin.method.slice(0, 4)
@@ -104,13 +123,22 @@
               <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoEditApi', node: node })">
                 <a>编辑</a>
               </li>
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })">
+              <li
+                nz-menu-item
+                (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })"
+              >
                 <a>复制</a>
               </li>
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'exportApi', node: apiDataItems[node.key] })">
+              <li
+                nz-menu-item
+                (click)="operateApiEvent({ event: $event, eventName: 'exportApi', node: apiDataItems[node.key] })"
+              >
                 <a>导出 API</a>
               </li>
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
+              <li
+                nz-menu-item
+                (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })"
+              >
                 <a>删除</a>
               </li>
             </ul>

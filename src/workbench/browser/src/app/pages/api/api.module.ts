@@ -7,11 +7,11 @@ import { ApiDetailModule } from './detail/api-detail.module';
 import { ApiTestModule } from './test/api-test.module';
 import { EnvModule } from '../env/env.module';
 import { EouiModule } from '../../eoui/eoui.module';
-import { ParamsImportModule } from '../../shared/components/params-import/params-import.module';
 
 import { ApiComponent } from './api.component';
 import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';
 import { ExportApiComponent } from '../../shared/components/export-api/export-api.component';
+import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -21,6 +21,9 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzCardModule } from 'ng-zorro-antd/card';
+
 
 import { ApiTabService } from './tab/api-tab.service';
 import { MessageService } from '../../shared/services/message';
@@ -29,8 +32,9 @@ import { ApiTabComponent } from './tab/api-tab.component';
 import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
+import { ApiOverviewComponent } from './overview/api-overview.component';
 
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent];
+const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent,SyncApiComponent];
 @NgModule({
   imports: [
     FormsModule,
@@ -49,11 +53,12 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     NzInputModule,
     NzRadioModule,
     NzDropDownModule,
-    ParamsImportModule,
+    NzDividerModule,
     EouiModule,
     EnvModule,
+    NzCardModule
   ],
-  declarations: [...COMPONENTS, ApiTabComponent],
+  declarations: [...COMPONENTS, ApiTabComponent, ApiOverviewComponent],
   exports: [],
   providers: [ElectronService, MessageService, ApiTabService, ApiService, StorageService],
 })

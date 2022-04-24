@@ -51,7 +51,17 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Level Tree nodes.
    */
   treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
-  nzSelectedKeys: number[];
+  fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
+    {
+      title: '概况',
+      key: 'overview',
+      weight: 0,
+      parentID: '0',
+      isLeaf: true,
+      isFixed: true,
+    },
+  ];
+  nzSelectedKeys: number[]=[];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private router: Router,
@@ -91,7 +101,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   getGroups() {
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
-      console.log('groupLoadAllByProjectID');
       if (result.status === StorageHandleStatus.success) {
         result.data.forEach((item) => {
           delete item.updatedAt;
@@ -103,6 +112,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             parentID: item.parentID ? `group-${item.parentID}` : '0',
             isLeaf: false,
           });
+          console.log(this.treeItems);
         });
       }
       this.getApis();
@@ -184,12 +194,23 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param event
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
-    if (!event.node.isLeaf) {
-      event.node.isExpanded = !event.node.isExpanded;
-      this.toggleExpand();
-    } else {
-      event.eventName = 'detailApi';
-      this.operateApiEvent(event);
+    let eventName=!event.node.isLeaf?'clickFolder':event.node?.origin.isFixed?'clickFixedItem':'clickItem';
+    switch(eventName){
+      case 'clickFolder':{
+        event.node.isExpanded = !event.node.isExpanded;
+        this.toggleExpand();
+        break;
+      }
+      case 'clickFixedItem':{
+        event.eventName = 'detailOverview';
+        this.operateApiEvent(event);
+        break;
+      }
+      case 'clickItem':{
+        event.eventName = 'detailApi';
+        this.operateApiEvent(event);
+        break;
+      }
     }
   }
 
