@@ -3,7 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
 
-import { ApiData, RequestMethod, RequestProtocol, StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import {
+  ApiData,
+  RequestMethod,
+  RequestProtocol,
+  StorageHandleResult,
+  StorageHandleStatus,
+} from '../../../../../../../platform/browser/IndexedDB';
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, of, Subject } from 'rxjs';
@@ -166,7 +172,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Receive Test Server Message
    */
   private receiveMessage(message) {
-    console.log(message)
+    console.log(message);
     let tmpHistory = {
       general: message.general,
       request: message.report.request,
@@ -191,12 +197,19 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   private changeStatus(status) {
     this.status = status;
+    let that = this;
     switch (status) {
       case 'testing': {
         this.timer$ = interval(1000)
-          .pipe(take(5))
-          .subscribe((val) => {
-            this.waitSeconds = val + 1;
+          .pipe(take(60))
+          .subscribe({
+            next(val) {
+              console.log('next');
+              that.waitSeconds = val + 1;
+            },
+            complete() {
+              that.changeStatus('tested');
+            },
           });
         break;
       }
