@@ -39,6 +39,14 @@ export interface GroupTreeItem {
   isLeaf: boolean;
 
   /**
+   * Item or folder
+   * If true, it means fixed group
+   *
+   * @type {boolean}
+   */
+  isFixed?: boolean;
+
+  /**
    * Api data request method. only for display.
    *
    * @type {string}

@@ -16,29 +16,12 @@ nz-sider {
 
 ::ng-deep {
   .ant-layout-sider-children {
+    border-right: 1px solid #f0f0f0;
     padding: 5px;
     .group-btn-add,
     .group-search {
       margin-bottom: 12px;
     }
-    .group-tree {
-      overflow: auto;
-      height: calc(100vh - 129px);
-      .ant-tree-switcher {
-        width: 12px;
-      }
-      .ant-tree-indent-unit {
-        width: 8px;
-      }
-      .ant-tree {
-        .ant-tree-node-content-wrapper {
-          padding: 0 2px;
-        }
-      }
-    }
-  }
-  .ant-layout-sider-children {
-    border-right: 1px solid #f0f0f0;
   }
   .tabs-bar {
     background-color: var(--SEC_BG);
