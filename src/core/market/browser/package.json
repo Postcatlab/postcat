@@ -20,6 +20,7 @@
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
     "ant-design-vue": "^2.2.8",
+    "codemirror-editor-vue3": "^2.0.6",
     "core-js": "^3.8.3",
     "ky": "^0.30.0",
     "pinia": "^2.0.13",
