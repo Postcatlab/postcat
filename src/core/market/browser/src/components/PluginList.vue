@@ -8,11 +8,14 @@
   </div>
   <div class="list-block grid grid-cols-4 gap-6 py-5 px-3">
     <div
-      class="border w-full h-70 p-4 border rounded-lg flex items-center flex-col flex-wrap plugin-block"
+      class="border w-full h-70 py-2 px-3 border rounded-lg flex items-center flex-col flex-wrap plugin-block"
       v-for="(it, index) in renderList"
       :key="index"
-      @click="handleClick(it)"
+      @click="handleClickPlugin(it)"
     >
+      <span class="h-8 w-full text-lg flex justify-end items-center text-gray-400" @click.stop="handleSetingPlugin(it)">
+        <setting-outlined type="user" />
+      </span>
       <i
         class="block w-20 h-20 my-3 bg-cover bg-center bg-no-repeat"
         :style="{ backgroundImage: `url(${it.logo || ''})` }"
@@ -26,7 +29,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { SearchOutlined } from '@ant-design/icons-vue';
+import { SearchOutlined, SettingOutlined } from '@ant-design/icons-vue';
 import { getList } from '../http';
 
 let search = ref('');
@@ -34,8 +37,11 @@ const renderList = ref([]);
 const router = useRouter();
 const route = useRoute();
 
-const handleClick = ({ name }) => {
+const handleClickPlugin = ({ name }) => {
   router.push({ path: '/plugin-detail', query: { name } });
+};
+const handleSetingPlugin = ({ name }) => {
+  router.push({ path: '/plugin-detail', query: { name, isSetting: true } });
 };
 
 const searchPlugin = async (type = 'all') => {
