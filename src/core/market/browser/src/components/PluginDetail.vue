@@ -132,6 +132,6 @@ onMounted(async () => {
 <style>
 .CodeMirror {
   font-family: Arial, monospace;
-  font-size: 18px;
+  font-size: 16px;
 }
 </style>
