@@ -1,6 +1,6 @@
 <template>
   <div class="border-b py-4">
-    <a-button @click="handleBack" type="link">&lt; 返回列表</a-button>
+    <a-button @click="handleBackArrow()" type="link"><left-outlined />返回列表</a-button>
   </div>
   <section class="">
     <div class="flex p-8">
@@ -26,27 +26,30 @@
       </div>
     </div>
     <div>
-      <a-tabs default-active-key="1" :animated="false">
-        <a-tab-pane key="1" tab="概述"> Content of Tab Pane 1 </a-tab-pane>
-        <a-tab-pane key="2" tab="更多信息"> Content of Tab Pane 2 </a-tab-pane>
+      <a-tabs default-active-key="desc" :activeKey="tab" :animated="false">
+        <a-tab-pane key="desc" tab="概述"> {{ pluginDetail.description }} </a-tab-pane>
+        <a-tab-pane key="more" tab="更多信息"> Content of Tab Pane 2 </a-tab-pane>
+        <a-tab-pane key="setting" tab="设置"> 设置 </a-tab-pane>
       </a-tabs>
     </div>
   </section>
 </template>
 
 <script setup>
-import { reactive, computed, onMounted } from 'vue';
+import { reactive, computed, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { LeftOutlined } from '@ant-design/icons-vue';
 import { getDetail } from '../http';
 import { useStore } from '../store';
 
 const store = useStore();
 const pluginDetail = reactive({});
+const tab = ref('desc');
 const router = useRouter();
 const route = useRoute();
 
 const pluginList = computed(() => store.getPluginList);
-const handleBack = () => {
+const handleBackArrow = () => {
   router.go(-1);
 };
 
@@ -72,11 +75,17 @@ const uninstallApp = (name) => {
 };
 
 onMounted(async () => {
-  const name = route.query.name || '';
-  const [data, err] = await getDetail(name);
+  const { name, isSetting } = route.query;
+  if (isSetting === 'true') {
+    tab.value = 'setting';
+    console.log('=>', tab.value);
+  }
+  const [data, err] = await getDetail(name || '');
   if (err) {
     return;
   }
+  console.log('kk');
+
   console.log(pluginList.value);
   Object.assign(pluginDetail, data);
 });
