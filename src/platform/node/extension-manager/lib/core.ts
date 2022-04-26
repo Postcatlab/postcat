@@ -64,7 +64,6 @@ export class CoreHandler {
       const { name } = moduleInfo.author;
       moduleInfo.author = name;
     }
-    console.log('moduleInfo.author ', moduleInfo.author);
     return moduleInfo;
   }
 
