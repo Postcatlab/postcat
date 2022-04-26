@@ -72,6 +72,8 @@ const installApp = (name) => {
   console.log('Install module:', name);
   const { code, data, modules } = window.eo.installModule(name);
   if (code === 0) {
+    pluginDetail.installed = true;
+    store.updateLocalModules(modules);
     store.updatePluginList(modules);
     return;
   }
@@ -82,6 +84,9 @@ const uninstallApp = (name) => {
   console.log('Uninstall module:', name);
   const { code, data, modules } = window.eo.uninstallModule(name);
   if (code === 0) {
+    console.log(modules);
+    pluginDetail.installed = false;
+    store.updateLocalModules(modules);
     store.updatePluginList(modules);
     return;
   }
