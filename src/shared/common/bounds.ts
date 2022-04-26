@@ -49,7 +49,7 @@ export const getViewBounds = (zone: ViewZone, width: number, height: number, sid
 export const calculateViewBounds = (width: number, height: number, sidePosition?: SidePosition, sideWidth?: number): Map<ViewZone, ViewBounds> => {
   const position: SidePosition = sidePosition || SidePosition.left;
   const _topHeight: number = 50;
-  const _bottomHeight: number = 30;
+  const _bottomHeight: number = 0;
   const _sideWidth: number = sideWidth || 50;
   const _mainHeight: number = height - _topHeight - _bottomHeight;
   let topBounds: ViewBounds = {x: 0, y: 0, width: width, height: _topHeight};

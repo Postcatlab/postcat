@@ -3,6 +3,7 @@ import { takeWhile } from 'rxjs/operators';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 import { SidebarService } from './sidebar.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'eo-sidebar',
   templateUrl: './sidebar.component.html',
@@ -14,7 +15,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isElectron: boolean = false;
   moduleID: string = '@eo-core-apimanger';
   modules: Array<ModuleInfo | any>;
-  constructor(private electron: ElectronService, private sidebar: SidebarService) {
+  constructor(private electron: ElectronService,private router: Router, private sidebar: SidebarService) {
     this.isElectron = this.electron.isElectron;
     this.isCollapsed = this.sidebar.getCollapsed();
     this.sidebar
@@ -54,7 +55,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   openApp(moduleID: string) {
+    let currentApp=this.modules.find(val=>val.moduleID===this.moduleID),nextApp=this.modules.find(val=>val.moduleID===moduleID);
+    if(currentApp.route){
+      //core app
+      this.router.navigate(['home/blank']);
+    }
     this.moduleID = moduleID;
+    if(nextApp.route){
+      this.router.navigate([nextApp.route]);
+    }
     window.eo.openApp({ moduleID: moduleID });
   }
 

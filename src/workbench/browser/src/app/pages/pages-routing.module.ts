@@ -2,6 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
+import { PageBlankComponent } from '../shared/components/page-blank/page-blank.component';
 const routes: Routes = [
   {
     path: '',
@@ -11,6 +12,10 @@ const routes: Routes = [
         path: '',
         redirectTo: 'api',
         pathMatch: 'full',
+      },
+      {
+        path: 'blank',
+        component:PageBlankComponent
       },
       {
         path: 'api',
