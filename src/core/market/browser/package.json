@@ -1,6 +1,7 @@
 {
   "name": "market",
   "version": "0.1.0",
+  "author": "Eolink",
   "private": true,
   "description": "API Toolkit Market",
   "belongs": [
@@ -11,6 +12,25 @@
   "moduleID": "default",
   "moduleName": "插件广场",
   "moduleType": "app",
+  "configuration": {
+	  "title": "插件广场配置",
+    "properties": {
+      "core.market.url": {
+        "type": "string",
+        "required": true,
+        "default": "",
+        "label": "服务器地址",
+        "description": "插件安装来源的服务器地址"
+      },
+      "core.market.test": {
+        "type": "string",
+        "required": false,
+        "default": "",
+        "label": "测试配置",
+        "description": "这是另外一个测试的配置"
+      }
+    }
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -20,7 +40,6 @@
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
     "ant-design-vue": "^2.2.8",
-    "codemirror-editor-vue3": "^2.0.6",
     "core-js": "^3.8.3",
     "ky": "^0.30.0",
     "pinia": "^2.0.13",

@@ -13,7 +13,7 @@
       :key="index"
       @click="handleClickPlugin(it)"
     >
-      <span class="h-8 w-full text-lg flex justify-end items-center text-gray-400" @click.stop="handleSetingPlugin(it)">
+      <span class="h-8 w-full text-lg flex justify-end items-center text-gray-400" @click.stop="handleSetingPlugin(it)" v-if="localModules.has(it.moduleID) && localModules.get(it.moduleID).configuration">
         <setting-outlined type="user" />
       </span>
       <i
@@ -31,17 +31,21 @@ import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { SearchOutlined, SettingOutlined } from '@ant-design/icons-vue';
 import { getList } from '../http';
+import { useStore } from '../store';
 
 let search = ref('');
+const store = useStore();
 const renderList = ref([]);
 const router = useRouter();
 const route = useRoute();
 
-const handleClickPlugin = ({ name }) => {
-  router.push({ path: '/plugin-detail', query: { name } });
+const localModules = store.getLocalModules;
+
+const handleClickPlugin = ({ name, moduleID }) => {
+  router.push({ path: '/plugin-detail', query: { name, moduleID } });
 };
-const handleSetingPlugin = ({ name }) => {
-  router.push({ path: '/plugin-detail', query: { name, isSetting: true } });
+const handleSetingPlugin = ({ moduleID }) => {
+  router.push({ path: '/plugin-detail', query: { moduleID, isSetting: true } });
 };
 
 const searchPlugin = async (type = 'all') => {

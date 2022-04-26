@@ -7,12 +7,14 @@ export const useStore = defineStore({
   // state: 返回对象的函数
   state: () => ({
     pluginList: [],
+    localModules: window.eo.getModules()
   }),
   // getter 第一个参数是 state，是当前的状态，也可以使用 this 获取状态
   // getter 中也可以访问其他的 getter，或者是其他的 Store
   getters: {
     // 通过 state 获取状态
     getPluginList: (state) => state.pluginList,
+    getLocalModules: (state) => state.localModules
   },
   actions: {
     updatePluginList(list) {
