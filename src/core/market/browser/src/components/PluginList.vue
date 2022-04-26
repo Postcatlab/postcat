@@ -13,11 +13,14 @@
       :key="index"
       @click="handleClickPlugin(it)"
     >
-      <span class="h-8 w-full text-lg flex justify-end items-center text-gray-400">
+      <span class="h-8 w-full flex justify-between items-center">
+        <span v-if="localModules.has(it.moduleID)" class="text-xs bg-green-700 text-white p-1 rounded-sm">已安装</span>
+        <span v-else class="text-xs p-1 border rounded-sm text-green-700 border-green-700">未安装</span>
         <setting-outlined
           type="user"
-          @click.stop="handleSetingPlugin(it)"
+          class="text-gray-400 text-lg"
           v-show="localModules.has(it.moduleID) && localModules.get(it.moduleID).configuration"
+          @click.stop="handleSetingPlugin(it)"
         />
       </span>
       <!-- <i
@@ -100,5 +103,8 @@ watch(
 .list-block {
   height: calc(100vh - 65px);
   overflow: auto;
+}
+.warn-color {
+  color: #00785a;
 }
 </style>
