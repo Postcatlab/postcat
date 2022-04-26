@@ -17,7 +17,7 @@
           <p class="w-full h-20">{{ pluginDetail.description }}</p>
         </div>
         <div class="flex">
-          <div class="flex items-center" v-if="!pluginList.includes(pluginDetail.name)">
+          <div class="flex items-center" v-if="!pluginDetail.installed">
             <a-button type="primary mr-4" size="large" @click="installApp(pluginDetail.name)">安装</a-button>
             <span>安装完成后需要重启</span>
           </div>
@@ -29,8 +29,21 @@
       <a-tabs default-active-key="desc" v-model:activeKey="tab" :animated="false">
         <a-tab-pane key="desc" tab="概述"> {{ pluginDetail.description }} </a-tab-pane>
         <a-tab-pane key="more" tab="更多信息"> Content of Tab Pane 2 </a-tab-pane>
-        <a-tab-pane key="setting" tab="设置">
-          <Codemirror v-model:value="code" border :options="cmOptions" :height="330" @change="onChangeCode" />
+        <a-tab-pane key="setting" tab="设置" v-if="pluginDetail.configuration && pluginDetail.configuration.properties">
+        <a-form name="basic" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }" autocomplete="off">
+          <a-form-item v-for="(item, field) in pluginDetail.configuration.properties"
+            :label="item.label"
+            :name="field"
+            :key="field"
+            :rules="[{ required: item.required }]"
+          >
+            <a-input />
+          </a-form-item>
+
+          <a-form-item :wrapper-col="{ offset: 4, span: 20 }">
+            <a-button type="primary" html-type="submit">Submit</a-button>
+          </a-form-item>
+        </a-form>
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -38,12 +51,9 @@
 </template>
 
 <script setup>
-import { reactive, computed, onMounted, ref } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { LeftOutlined } from '@ant-design/icons-vue';
-import Codemirror from 'codemirror-editor-vue3';
-import 'codemirror/mode/javascript/javascript.js';
-import 'codemirror/theme/dracula.css';
 import { getDetail } from '../http';
 import { useStore } from '../store';
 
@@ -52,44 +62,11 @@ const pluginDetail = reactive({});
 const tab = ref('desc');
 const router = useRouter();
 const route = useRoute();
-const code = ref(`{
-        "title": "模块远程同步配置",
-          "properties": {
-            "modulename.username": {
-              "type": "string",
-              "default": "",
-              "description": "username."
-            },
-            "modulename.password": {
-              "type": "string",
-              "default": "",
-              "description": "password."
-            },
-            "modulename.other": {
-              "type": ["string", "null"],
-              "default": null,
-              "description": "其他字段XXX等."
-            }
-        }
-      }`);
-const cmOptions = {
-  mode: 'application/json',
-  theme: 'default', // 主题
-  lineNumbers: true, // 显示行号
-  smartIndent: true, // 智能缩进
-  indentUnit: 2, // 智能缩进单位为4个空格长度
-  foldGutter: true, // 启用行槽中的代码折叠
-  styleActiveLine: true, // 显示选中行的样式
-};
-
-const pluginList = computed(() => store.getPluginList);
 const handleBackArrow = () => {
   router.go(-1);
 };
 
-const onChangeCode = (code) => {
-  console.log(code);
-};
+const localModules = store.getLocalModules;
 
 const installApp = (name) => {
   console.log('Install module:', name);
@@ -112,11 +89,14 @@ const uninstallApp = (name) => {
 };
 
 onMounted(async () => {
-  const { name, isSetting } = route.query;
+  const { name, moduleID, isSetting } = route.query;
   if (isSetting === 'true') {
     tab.value = 'setting';
     console.log('=>', tab.value);
   }
+  if (localModules.has(moduleID)) {
+    Object.assign(pluginDetail, localModules.get(moduleID), { installed: true });
+  } 
   const [data, err] = await getDetail(name || '');
   if (err) {
     return;

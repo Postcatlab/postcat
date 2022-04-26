@@ -56,6 +56,29 @@ export interface ModuleInfo {
   baseDir?: string;
   // 边栏显示
   sidePosition?: SidePosition;
+  // 配置项
+  configuration?: ModuleConfiguration;
+}
+
+/**
+ * 模块配置项接口
+ */
+export interface ModuleConfiguration {
+  title: string;
+  properties: {
+    [index: string]: ModuleConfigurationField;
+  }
+}
+
+/**
+ * 模块配置项目字段接口
+ */
+export interface ModuleConfigurationField {
+  type: string | Array<string>;
+  default: string | number | null;
+  label: string;
+  description?: string;
+  required?: boolean;
 }
 
 /**
