@@ -13,11 +13,19 @@
       :key="index"
       @click="handleClickPlugin(it)"
     >
-      <span class="h-8 w-full text-lg flex justify-end items-center text-gray-400" @click.stop="handleSetingPlugin(it)" v-if="localModules.has(it.moduleID) && localModules.get(it.moduleID).configuration">
-        <setting-outlined type="user" />
+      <span class="h-8 w-full text-lg flex justify-end items-center text-gray-400">
+        <setting-outlined
+          type="user"
+          @click.stop="handleSetingPlugin(it)"
+          v-show="localModules.has(it.moduleID) && localModules.get(it.moduleID).configuration"
+        />
       </span>
+      <!-- <i
+        :class="['block w-20 h-20 my-3 rounded-lg bg-cover bg-center bg-no-repeat', it.logo || 'bg-gray-100']"
+        :style="{ backgroundImage: `url(${it.logo || ''})` }"
+      ></i> -->
       <i
-        class="block w-20 h-20 my-3 bg-cover bg-center bg-no-repeat"
+        class="block w-20 h-20 my-3 rounded-lg bg-cover bg-center bg-no-repeat"
         :style="{ backgroundImage: `url(${it.logo || ''})` }"
       ></i>
       <span class="text-lg font-bold">{{ it.name }}</span>
@@ -49,16 +57,16 @@ const handleSetingPlugin = ({ moduleID }) => {
 };
 
 const searchPlugin = async (type = 'all') => {
-  if (type === 'local') {
+  if (type === 'installed') {
     const map = window.eo.getModules();
-    return [...map].map((it) => it[1]);
+    return [...map].map((it) => it[1]).filter((it) => store.getPluginList.includes(it.moduleID));
   }
   const [res, err] = await getList();
   if (err) {
     return;
   }
   if (type === 'official') {
-    return res.filter((it) => it.name.includes('eo-module-'));
+    return res.filter((it) => it.author === 'Eolink');
   }
   return res;
 };
