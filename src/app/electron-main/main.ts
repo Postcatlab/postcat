@@ -198,13 +198,13 @@ try {
     } else if (arg.action === 'installModule') {
       const data = await moduleManager.install(arg.data);
       if (data.code === 0) {
-        subView.mainView.view.webContents.send('moduleUpdate');
+        //subView.mainView.view.webContents.send('moduleUpdate');
       }
       returnValue = Object.assign(data, { modules: moduleManager.getModules() });
     } else if (arg.action === 'uninstallModule') {
       const data = await moduleManager.uninstall(arg.data);
       if (data.code === 0) {
-        subView.mainView.view.webContents.send('moduleUpdate');
+        // subView.mainView.view.webContents.send('moduleUpdate');
       }
       returnValue = Object.assign(data, { modules: moduleManager.getModules() });
     } else if (arg.action === 'getSideModuleList') {
