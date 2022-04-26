@@ -39,18 +39,13 @@ export class CoreHandler {
       moduleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
       moduleInfo.baseDir = baseDir;
       moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
-      if (moduleInfo.preload && moduleInfo.preload.length > 0) {
+      if (moduleInfo.preload?.length > 0) {
         moduleInfo.preload = path.join(moduleInfo.baseDir, moduleInfo.preload);
       }
-      if (moduleInfo.main_node && moduleInfo.main_node.length > 0) {
+      if (moduleInfo.main_node?.length > 0) {
         moduleInfo.main_node = path.join(moduleInfo.baseDir, moduleInfo.main_node);
       }
-      if (
-        moduleInfo.logo &&
-        moduleInfo.logo.length > 0 &&
-        !moduleInfo.logo.startsWith('http') &&
-        !moduleInfo.logo.includes('icon-')
-      ) {
+      if (moduleInfo.logo?.length > 0 && !moduleInfo.logo.startsWith('http') && !moduleInfo.logo.includes('icon-')) {
         moduleInfo.logo = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.logo);
       }
       if (!moduleInfo.belongs || !isNotEmpty(moduleInfo.belongs)) {
@@ -59,12 +54,12 @@ export class CoreHandler {
     } catch (e) {
       moduleInfo = {} as ModuleInfo;
     }
-    if (typeof moduleInfo.author === 'string') {
-    } else {
-      const { name } = moduleInfo.author;
-      moduleInfo.author = name;
+    const { author } = moduleInfo;
+    if (typeof author === 'string') {
+      return moduleInfo;
     }
-    return moduleInfo;
+    const { name: authorName } = author;
+    return { ...moduleInfo, author: authorName };
   }
 
   /**
