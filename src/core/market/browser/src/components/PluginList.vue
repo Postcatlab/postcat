@@ -1,14 +1,14 @@
 <template>
   <div class="border-b px-3 py-4">
-    <a-input v-model:value="search" placeholder="搜索关键字" class="w-60">
+    <a-input v-model:value="search" @change="handleSearch(search)" placeholder="搜索关键字" class="w-60">
       <template #prefix>
         <search-outlined type="user" />
       </template>
     </a-input>
   </div>
-  <div class="list-block grid grid-cols-4 gap-6 py-5 px-3">
+  <div class="list-block grid gap-6 py-5 px-3 grid-cols-4 <xl:grid-cols-3 <lg:grid-cols-2 <sm:grid-cols-1">
     <div
-      class="border w-full h-70 py-2 px-3 border rounded-lg flex items-center flex-col flex-wrap plugin-block"
+      class="border w-full h-76 py-2 px-3 border rounded-lg flex flex-col flex-wrap items-center plugin-block"
       v-for="(it, index) in renderList"
       :key="index"
       @click="handleClickPlugin(it)"
@@ -23,15 +23,15 @@
           @click.stop="handleSetingPlugin(it)"
         />
       </span>
-      <!-- <i
+      <i
         :class="['block w-20 h-20 my-3 rounded-lg bg-cover bg-center bg-no-repeat', it.logo || 'bg-gray-100']"
         :style="{ backgroundImage: `url(${it.logo || ''})` }"
-      ></i> -->
-      <i
+      ></i>
+      <!-- <i
         class="block w-20 h-20 my-3 rounded-lg bg-cover bg-center bg-no-repeat"
         :style="{ backgroundImage: `url(${it.logo || ''})` }"
-      ></i>
-      <span class="text-lg font-bold">{{ it.name }}</span>
+      ></i> -->
+      <span class="text-lg font-bold">{{ it.moduleName }}</span>
       <span class="text-gray-400 my-2">{{ it.author }}</span>
       <span class="text-gray-500 my-1 desc">{{ it.description }}</span>
     </div>
@@ -59,19 +59,29 @@ const handleSetingPlugin = ({ moduleID }) => {
   router.push({ path: '/plugin-detail', query: { moduleID, isSetting: true } });
 };
 
-const searchPlugin = async (type = 'all') => {
+const searchPlugin = async (type = 'all', string = '') => {
   if (type === 'installed') {
     const map = window.eo.getModules();
-    return [...map].map((it) => it[1]).filter((it) => store.getPluginList.includes(it.moduleID));
+    return [...map]
+      .map((it) => it[1])
+      .filter((it) => store.getPluginList.includes(it.moduleID))
+      .filter((it) => it.moduleID.includes(string) || it.name.includes(string) || it.keywords.includes(string));
   }
   const [res, err] = await getList();
   if (err) {
     return;
   }
   if (type === 'official') {
-    return res.filter((it) => it.author === 'Eolink');
+    return res
+      .filter((it) => it.author === 'Eolink')
+      .filter((it) => it.moduleID.includes(string) || it.name.includes(string) || it.keywords.includes(string));
   }
-  return res;
+  return res.filter((it) => it.moduleID.includes(string) || it.name.includes(string) || it.keywords.includes(string));
+};
+
+const handleSearch = async (string = '') => {
+  const type = route.query.type || '';
+  renderList.value = await searchPlugin(type, string);
 };
 
 onMounted(async () => {

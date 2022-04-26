@@ -13,7 +13,7 @@
   "moduleName": "插件广场",
   "moduleType": "app",
   "configuration": {
-	  "title": "插件广场配置",
+    "title": "插件广场配置",
     "properties": {
       "core.market.url": {
         "type": "string",

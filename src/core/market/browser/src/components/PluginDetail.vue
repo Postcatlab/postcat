@@ -3,14 +3,14 @@
     <a-button @click="handleBackArrow()" type="link"><left-outlined />返回列表</a-button>
   </div>
   <section class="">
-    <div class="flex p-8">
+    <div class="flex p-8 <sm:flex-col">
       <i
-        class="block border rounded-lg h-40 w-40 bg-cover bg-center bg-no-repeat mr-8"
+        class="block border rounded-lg h-40 w-40 bg-cover bg-center bg-no-repeat mr-8 <sm:mb-4"
         :style="{ backgroundImage: `url(${pluginDetail.logo || ''})` }"
       ></i>
       <div class="flex flex-col flex-1">
         <div class="flex flex-col">
-          <span class="text-xl mb-2 font-bold">{{ pluginDetail.name }}</span>
+          <span class="text-xl mb-2 font-bold">{{ pluginDetail.moduleName }}</span>
           <span>作者: {{ pluginDetail.author }}</span>
           <!-- <span class="mb-4">Tags: {{ pluginDetail.keywords }}</span> -->
           <span class="mb-2">Version: {{ pluginDetail.version }}</span>
