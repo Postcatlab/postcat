@@ -51,15 +51,14 @@ export class CoreHandler {
       if (!moduleInfo.belongs || !isNotEmpty(moduleInfo.belongs)) {
         moduleInfo.belongs = ['default'];
       }
+      if (typeof moduleInfo.author === 'object') {
+        moduleInfo.author = moduleInfo.author['name'] || '';
+      }
     } catch (e) {
       moduleInfo = {} as ModuleInfo;
     }
-    const { author } = moduleInfo;
-    if (typeof author === 'string') {
-      return moduleInfo;
-    }
-    const { name: authorName } = author;
-    return { ...moduleInfo, author: authorName };
+
+    return moduleInfo;
   }
 
   /**
