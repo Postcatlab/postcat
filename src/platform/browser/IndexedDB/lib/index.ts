@@ -603,7 +603,6 @@ class Storage extends Dexie implements StorageInterface {
         for (var i = 0; i < tables.length; i++) {
           let tableName = tables[i];
           result[tableName] = await this[tableName].toArray();
-          console.log(result)
         }
         obs.next(result);
         obs.complete();
