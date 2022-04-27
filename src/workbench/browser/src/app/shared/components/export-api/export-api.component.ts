@@ -10,19 +10,24 @@ import packageJson from '../../../../../../../../package.json';
 export class ExportApiComponent implements OnInit {
   exportType: string = 'eoapi';
   supportList: any[] = [
-    {
-      key: 'eoapi',
-      image: '',
-      title: 'Eoapi(.json)',
-    },
-    {
-      key: 'openapi3',
-      image: '',
-      title: 'Swagger V3.0',
-    },
+    // {
+    //   key: 'eoapi',
+    //   image: '',
+    //   title: 'Eoapi(.json)',
+    // },
   ];
   constructor(private storage: StorageService) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const extensionList = window.eo.getModules();
+    this.supportList = Object.values([...extensionList])
+      .map((it) => it[1])
+      .filter((it) => it.moduleType === 'feature')
+      .map((it: any) => ({
+        key: it.moduleName,
+        image: it.logo,
+        title: it.features['apimanager.export'].label,
+      }));
+  }
   private transferTextToFile(fileName: string, exportData: any) {
     let file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
     let element = document.createElement('a'),
