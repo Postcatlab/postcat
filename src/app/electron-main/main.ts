@@ -198,13 +198,13 @@ try {
     } else if (arg.action === 'installModule') {
       const data = await moduleManager.install(arg.data);
       if (data.code === 0) {
-        subView.mainView.view.webContents.send('moduleUpdate');
+        //subView.mainView.view.webContents.send('moduleUpdate');
       }
       returnValue = Object.assign(data, { modules: moduleManager.getModules() });
     } else if (arg.action === 'uninstallModule') {
       const data = await moduleManager.uninstall(arg.data);
       if (data.code === 0) {
-        subView.mainView.view.webContents.send('moduleUpdate');
+        // subView.mainView.view.webContents.send('moduleUpdate');
       }
       returnValue = Object.assign(data, { modules: moduleManager.getModules() });
     } else if (arg.action === 'getSideModuleList') {
@@ -214,8 +214,7 @@ try {
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else if (arg.action === 'openApp') {
-      if(subView.appView) subView.appView.remove();
-      if (arg.data.moduleID&&!arg.data.moduleID.includes('@eo-core')) {
+      if (arg.data.moduleID && !arg.data.moduleID.includes('@eo-core')) {
         // 如果要打开是同一app，忽略
         if (subView.appView?.mainModuleID === arg.data.moduleID) {
           return;
@@ -224,6 +223,10 @@ try {
         if (module) {
           if (!subView.appView) subView.appView = new AppViews(win);
           subView.appView.create(module);
+        }
+      } else {
+        if (subView.appView) {
+          subView.appView.remove();
         }
       }
       returnValue = 'view id';
