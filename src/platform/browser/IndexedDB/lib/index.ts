@@ -4,11 +4,11 @@ import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface,
 import { sampleApiData } from '../sample';
 
 class Storage extends Dexie implements StorageInterface {
-  project!: Table<Project, number|string>;
-  group!: Table<Group, number|string>;
-  environment!: Table<Environment, number|string>;
-  apiData!: Table<ApiData, number|string>;
-  apiTestHistory!: Table<ApiTestHistory, number|string>;
+  project!: Table<Project, number | string>;
+  group!: Table<Group, number | string>;
+  environment!: Table<Environment, number | string>;
+  apiData!: Table<ApiData, number | string>;
+  apiTestHistory!: Table<ApiTestHistory, number | string>;
 
   constructor() {
     console.log('eoapi indexedDB storage start');
@@ -37,12 +37,15 @@ class Storage extends Dexie implements StorageInterface {
    */
   private create(table: Table, item: StorageItem): Observable<object> {
     return new Observable((obs) => {
-      table.add(item).then((result) => {
-        obs.next(Object.assign(item,{uuid: result}));
-        obs.complete();
-      }).catch((error) => {
-        obs.error(error);
-      });
+      table
+        .add(item)
+        .then((result) => {
+          obs.next(Object.assign(item, { uuid: result }));
+          obs.complete();
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -61,12 +64,15 @@ class Storage extends Dexie implements StorageInterface {
     });
     return new Observable((obs) => {
       // @ts-ignore
-      table.bulkAdd(items).then((result) => {
-        obs.next({number: result});
-        obs.complete();
-      }).catch((error: any) => {
-        obs.error(error);
-      });
+      table
+        .bulkAdd(items)
+        .then((result) => {
+          obs.next({ number: result });
+          obs.complete();
+        })
+        .catch((error: any) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -76,22 +82,25 @@ class Storage extends Dexie implements StorageInterface {
    * @param item
    * @param uuid
    */
-  private update(table: Table, item: StorageItem, uuid: number|string): Observable<object> {
+  private update(table: Table, item: StorageItem, uuid: number | string): Observable<object> {
     if (!item.updatedAt) {
       item.updatedAt = new Date();
     }
     return new Observable((obs) => {
-      table.update(uuid, item).then(async (updated) => {
-        if (updated) {
-          let result = await table.get(uuid);
-          obs.next(result);
-          obs.complete();
-        } else {
-          // obs.error(`Nothing was updated [${table.name}] - there were no data with primary key: ${uuid}`);
-        }
-      }).catch((error) => {
-        obs.error(error);
-      });
+      table
+        .update(uuid, item)
+        .then(async (updated) => {
+          if (updated) {
+            let result = await table.get(uuid);
+            obs.next(result);
+            obs.complete();
+          } else {
+            // obs.error(`Nothing was updated [${table.name}] - there were no data with primary key: ${uuid}`);
+          }
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -108,36 +117,46 @@ class Storage extends Dexie implements StorageInterface {
       return item;
     });
     return new Observable((obs) => {
-      let uuids: Array<number|string> = [];
+      let uuids: Array<number | string> = [];
       let updateData = {};
-      items.filter((item: StorageItem) => item.uuid).forEach((item: StorageItem) => {
-        if (item.uuid) {
-          uuids.push(item.uuid);
-          // @ts-ignore
-          updateData[item.uuid] = item;
-          delete item['uuid'];
-        }
-      });
-      table.bulkGet(uuids).then((existItems) => {
-        if (existItems) {
-          let newItems: Array<StorageItem> = [];
-          existItems.filter(x => x).forEach((item: StorageItem) => {
+      items
+        .filter((item: StorageItem) => item.uuid)
+        .forEach((item: StorageItem) => {
+          if (item.uuid) {
+            uuids.push(item.uuid);
             // @ts-ignore
-            newItems.push(Object.assign(item, (updateData[item.uuid] || {})));
-          });
-          // @ts-ignore
-          table.bulkPut(newItems).then((result) => {
-            obs.next({number: result, items: newItems});
-            obs.complete();
-          }).catch((error: any) => {
-            obs.error(error);
-          });
-        } else {
-          // obs.error(`Nothing found from table [${table.name}].`);
-        }
-      }).catch((error) => {
-        obs.error(error);
-      });
+            updateData[item.uuid] = item;
+            delete item['uuid'];
+          }
+        });
+      table
+        .bulkGet(uuids)
+        .then((existItems) => {
+          if (existItems) {
+            let newItems: Array<StorageItem> = [];
+            existItems
+              .filter((x) => x)
+              .forEach((item: StorageItem) => {
+                // @ts-ignore
+                newItems.push(Object.assign(item, updateData[item.uuid] || {}));
+              });
+            // @ts-ignore
+            table
+              .bulkPut(newItems)
+              .then((result) => {
+                obs.next({ number: result, items: newItems });
+                obs.complete();
+              })
+              .catch((error: any) => {
+                obs.error(error);
+              });
+          } else {
+            // obs.error(`Nothing found from table [${table.name}].`);
+          }
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -146,14 +165,17 @@ class Storage extends Dexie implements StorageInterface {
    * @param table
    * @param uuid
    */
-  private remove(table: Table, uuid: number|string): Observable<boolean> {
+  private remove(table: Table, uuid: number | string): Observable<boolean> {
     return new Observable((obs) => {
-      table.delete(uuid).then(() => {
-        obs.next(true);
-        obs.complete();
-      }).catch((error) => {
-        obs.error(error);
-      });
+      table
+        .delete(uuid)
+        .then(() => {
+          obs.next(true);
+          obs.complete();
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -162,14 +184,17 @@ class Storage extends Dexie implements StorageInterface {
    * @param table
    * @param uuids
    */
-  private bulkRemove(table: Table, uuids: Array<number|string>): Observable<boolean> {
+  private bulkRemove(table: Table, uuids: Array<number | string>): Observable<boolean> {
     return new Observable((obs) => {
-      table.bulkDelete(uuids).then(() => {
-        obs.next(true);
-        obs.complete();
-      }).catch((error) => {
-        obs.error(error);
-      });
+      table
+        .bulkDelete(uuids)
+        .then(() => {
+          obs.next(true);
+          obs.complete();
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -178,18 +203,21 @@ class Storage extends Dexie implements StorageInterface {
    * @param table
    * @param uuid
    */
-  private load(table: Table, uuid: number|string): Observable<object> {
+  private load(table: Table, uuid: number | string): Observable<object> {
     return new Observable((obs) => {
-      table.get(uuid).then((result) => {
-        if (result) {
-          obs.next(result);
-          obs.complete();
-        } else {
-          // obs.error(`Nothing found from table [${table.name}] with id [${uuid}].`);
-        }
-      }).catch((error) => {
-        obs.error(error);
-      });
+      table
+        .get(uuid)
+        .then((result) => {
+          if (result) {
+            obs.next(result);
+            obs.complete();
+          } else {
+            // obs.error(`Nothing found from table [${table.name}] with id [${uuid}].`);
+          }
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -198,18 +226,21 @@ class Storage extends Dexie implements StorageInterface {
    * @param table
    * @param uuids
    */
-  private bulkLoad(table: Table, uuids: Array<number|string>): Observable<Array<object>> {
+  private bulkLoad(table: Table, uuids: Array<number | string>): Observable<Array<object>> {
     return new Observable((obs) => {
-      table.bulkGet(uuids).then((result) => {
-        if (result) {
-          obs.next(result);
-          obs.complete();
-        } else {
-          // obs.error(`Nothing found from table [${table.name}] with uuids [${JSON.stringify(uuids)}].`);
-        }
-      }).catch((error) => {
-        obs.error(error);
-      });
+      table
+        .bulkGet(uuids)
+        .then((result) => {
+          if (result) {
+            obs.next(result);
+            obs.complete();
+          } else {
+            // obs.error(`Nothing found from table [${table.name}] with uuids [${JSON.stringify(uuids)}].`);
+          }
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -218,18 +249,25 @@ class Storage extends Dexie implements StorageInterface {
    * @param table
    * @param where
    */
-  private loadAllByConditions(table: Table, where: {[key: string]: string|number|null}): Observable<Array<object>> {
+  private loadAllByConditions(
+    table: Table,
+    where: { [key: string]: string | number | null }
+  ): Observable<Array<object>> {
     return new Observable((obs) => {
-      table.where(where).toArray().then((result) => {
-        if (result) {
-          obs.next(result);
-          obs.complete();
-        } else {
-          // obs.error(`Nothing found from table [${table.name}].`);
-        }
-      }).catch((error) => {
-        obs.error(error);
-      });
+      table
+        .where(where)
+        .toArray()
+        .then((result) => {
+          if (result) {
+            obs.next(result);
+            obs.complete();
+          } else {
+            // obs.error(`Nothing found from table [${table.name}].`);
+          }
+        })
+        .catch((error) => {
+          obs.error(error);
+        });
     });
   }
 
@@ -277,7 +315,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load apiData item with primary key.
    * @param uuid
    */
-  apiDataLoad(uuid: (number | string)): Observable<object> {
+  apiDataLoad(uuid: number | string): Observable<object> {
     return this.load(this.apiData, uuid);
   }
 
@@ -285,7 +323,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load all apiData items by groupID.
    * @param groupID
    */
-  apiDataLoadAllByGroupID(groupID: (number | string)): Observable<Array<object>> {
+  apiDataLoadAllByGroupID(groupID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.apiData, { groupID: groupID });
   }
 
@@ -293,7 +331,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load all apiData items by projectID.
    * @param projectID
    */
-  apiDataLoadAllByProjectID(projectID: (number | string)): Observable<Array<object>> {
+  apiDataLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.apiData, { projectID: projectID });
   }
 
@@ -302,7 +340,7 @@ class Storage extends Dexie implements StorageInterface {
    * @param projectID
    * @param groupID
    */
-  apiDataLoadAllByProjectIDAndGroupID(projectID: (number | string), groupID: (number | string)): Observable<Array<object>> {
+  apiDataLoadAllByProjectIDAndGroupID(projectID: number | string, groupID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.apiData, { projectID: projectID, groupID: groupID });
   }
 
@@ -310,7 +348,7 @@ class Storage extends Dexie implements StorageInterface {
    * Delete apiData item.
    * @param uuid
    */
-  apiDataRemove(uuid: (number | string)): Observable<boolean> {
+  apiDataRemove(uuid: number | string): Observable<boolean> {
     return this.remove(this.apiData, uuid);
   }
 
@@ -319,7 +357,7 @@ class Storage extends Dexie implements StorageInterface {
    * @param item
    * @param uuid
    */
-  apiDataUpdate(item: ApiData, uuid: (number | string)): Observable<object> {
+  apiDataUpdate(item: ApiData, uuid: number | string): Observable<object> {
     return this.update(this.apiData, item, uuid);
   }
 
@@ -367,7 +405,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load apiTestHistory item.
    * @param uuid
    */
-  apiTestHistoryLoad(uuid: (number | string)): Observable<object> {
+  apiTestHistoryLoad(uuid: number | string): Observable<object> {
     return this.load(this.apiTestHistory, uuid);
   }
 
@@ -375,7 +413,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load all apiTestHistory items by apiDataID.
    * @param apiDataID
    */
-  apiTestHistoryLoadAllByApiDataID(apiDataID: (number | string)): Observable<Array<object>> {
+  apiTestHistoryLoadAllByApiDataID(apiDataID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.apiTestHistory, { apiDataID: apiDataID });
   }
 
@@ -383,7 +421,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load all apiTestHistory items by projectID.
    * @param projectID
    */
-  apiTestHistoryLoadAllByProjectID(projectID: (number | string)): Observable<Array<object>> {
+  apiTestHistoryLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.apiTestHistory, { projectID: projectID });
   }
 
@@ -391,7 +429,7 @@ class Storage extends Dexie implements StorageInterface {
    * Delete apiTestHistory item.
    * @param uuid
    */
-  apiTestHistoryRemove(uuid: (number | string)): Observable<boolean> {
+  apiTestHistoryRemove(uuid: number | string): Observable<boolean> {
     return this.remove(this.apiTestHistory, uuid);
   }
 
@@ -400,7 +438,7 @@ class Storage extends Dexie implements StorageInterface {
    * @param item
    * @param uuid
    */
-  apiTestHistoryUpdate(item: ApiTestHistory, uuid: (number | string)): Observable<object> {
+  apiTestHistoryUpdate(item: ApiTestHistory, uuid: number | string): Observable<object> {
     return this.update(this.apiTestHistory, item, uuid);
   }
 
@@ -448,7 +486,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load environment item.
    * @param uuid
    */
-  environmentLoad(uuid: (number | string)): Observable<object> {
+  environmentLoad(uuid: number | string): Observable<object> {
     return this.load(this.environment, uuid);
   }
 
@@ -456,7 +494,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load all environment items by projectID.
    * @param projectID
    */
-  environmentLoadAllByProjectID(projectID: (number | string)): Observable<Array<object>> {
+  environmentLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.environment, { projectID: projectID });
   }
 
@@ -464,7 +502,7 @@ class Storage extends Dexie implements StorageInterface {
    * Delete environment item.
    * @param uuid
    */
-  environmentRemove(uuid: (number | string)): Observable<boolean> {
+  environmentRemove(uuid: number | string): Observable<boolean> {
     return this.remove(this.environment, uuid);
   }
 
@@ -473,7 +511,7 @@ class Storage extends Dexie implements StorageInterface {
    * @param item
    * @param uuid
    */
-  environmentUpdate(item: Environment, uuid: (number | string)): Observable<object> {
+  environmentUpdate(item: Environment, uuid: number | string): Observable<object> {
     return this.update(this.environment, item, uuid);
   }
 
@@ -521,7 +559,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load group item.
    * @param uuid
    */
-  groupLoad(uuid: (number | string)): Observable<object> {
+  groupLoad(uuid: number | string): Observable<object> {
     return this.load(this.group, uuid);
   }
 
@@ -529,7 +567,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load all group items by projectID.
    * @param projectID
    */
-  groupLoadAllByProjectID(projectID: (number | string)): Observable<Array<object>> {
+  groupLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.group, { projectID: projectID });
   }
 
@@ -537,7 +575,7 @@ class Storage extends Dexie implements StorageInterface {
    * Delete group item.
    * @param uuid
    */
-  groupRemove(uuid: (number | string)): Observable<boolean> {
+  groupRemove(uuid: number | string): Observable<boolean> {
     return this.remove(this.group, uuid);
   }
 
@@ -546,7 +584,7 @@ class Storage extends Dexie implements StorageInterface {
    * @param item
    * @param uuid
    */
-  groupUpdate(item: Group, uuid: (number | string)): Observable<object> {
+  groupUpdate(item: Group, uuid: number | string): Observable<object> {
     return this.update(this.group, item, uuid);
   }
 
@@ -557,7 +595,22 @@ class Storage extends Dexie implements StorageInterface {
   projectBulkCreate(items: Array<Project>): Observable<object> {
     return this.bulkCreate(this.project, items);
   }
-
+  projectExport(): Observable<object> {
+    return new Observable((obs) => {
+      let fun = async () => {
+        let result = {},
+          tables = ['environment', 'group', 'project', 'apiData'];
+        for (var i = 0; i < tables.length; i++) {
+          let tableName = tables[i];
+          result[tableName] = await this[tableName].toArray();
+          console.log(result)
+        }
+        obs.next(result);
+        obs.complete();
+      };
+      fun();
+    });
+  }
   /**
    * Bulk load project items.
    * @param uuids
@@ -594,7 +647,7 @@ class Storage extends Dexie implements StorageInterface {
    * Load project item.
    * @param uuid
    */
-  projectLoad(uuid: (number | string)): Observable<object> {
+  projectLoad(uuid: number | string): Observable<object> {
     return this.load(this.project, uuid);
   }
 
@@ -602,7 +655,7 @@ class Storage extends Dexie implements StorageInterface {
    * Delete project item.
    * @param uuid
    */
-  projectRemove(uuid: (number | string)): Observable<boolean> {
+  projectRemove(uuid: number | string): Observable<boolean> {
     return this.remove(this.project, uuid);
   }
 
@@ -611,7 +664,7 @@ class Storage extends Dexie implements StorageInterface {
    * @param item
    * @param uuid
    */
-  projectUpdate(item: Project, uuid: (number | string)): Observable<object> {
+  projectUpdate(item: Project, uuid: number | string): Observable<object> {
     return this.update(this.project, item, uuid);
   }
 }

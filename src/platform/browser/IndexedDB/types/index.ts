@@ -513,12 +513,12 @@ export interface StorageInterface {
   // Project
   projectCreate: (item: Project) => Observable<object>;
   projectUpdate: (item: Project, uuid: number|string) => Observable<object>;
-  projectBulkCreate: (items: Array<Project>) => Observable<object>;
   projectBulkUpdate: (items: Array<Project>) => Observable<object>;
   projectRemove: (uuid: number|string) => Observable<boolean>;
   projectBulkRemove: (uuids: Array<number|string>) => Observable<boolean>;
   projectLoad: (uuid: number|string) => Observable<object>;
   projectBulkLoad: (uuids: Array<number|string>) => Observable<Array<object>>;
+  projectExport: () => Observable<object>;
   // Environment
   environmentCreate: (item: Environment) => Observable<object>;
   environmentUpdate: (item: Environment, uuid: number|string) => Observable<object>;
