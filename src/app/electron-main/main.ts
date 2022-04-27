@@ -179,7 +179,7 @@ try {
       deleteFile(storageTemp);
       returnValue = data;
     } else if (args.type === 'result') {
-      let view = subView.appView ? subView.appView.view.webContents : win.webContents;
+      let view = subView.appView ? subView.appView?.view.webContents : win.webContents;
       view.send('storageCallback', args.result);
     }
   });
