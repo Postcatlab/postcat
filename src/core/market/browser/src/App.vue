@@ -11,7 +11,10 @@
       >
         官方插件
       </div>
-      <div :class="['plugin-link', 'px-1', 'py-2', { active: activeKey === 'local' }]" @click="handleSelect('local')">
+      <div
+        :class="['plugin-link', 'px-1', 'py-2', { active: activeKey === 'installed' }]"
+        @click="handleSelect('installed')"
+      >
         已安装（{{ installedPlugin }}）
       </div>
     </section>
