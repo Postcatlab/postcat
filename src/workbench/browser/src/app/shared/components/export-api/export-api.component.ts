@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NzModalRef } from 'ng-zorro-antd/modal';
 import { StorageService } from '../../../shared/services/storage';
 import { StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import packageJson from '../../../../../../../../package.json';
 @Component({
   selector: 'eo-export-api',
   templateUrl: './export-api.component.html',
@@ -12,29 +12,45 @@ export class ExportApiComponent implements OnInit {
   supportList: any[] = [
     {
       key: 'eoapi',
-      image:'',
+      image: '',
       title: 'Eoapi(.json)',
     },
     {
       key: 'openapi3',
-      image:'',
+      image: '',
       title: 'Swagger V3.0',
     },
   ];
-  constructor(private modalRef: NzModalRef, private storage: StorageService) {}
+  constructor(private storage: StorageService) {}
   ngOnInit(): void {}
-  exportEoapi() {
+  private transferTextToFile(fileName: string, exportData: any) {
+    let file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
+    let element = document.createElement('a'),
+      url = URL.createObjectURL(file);
+    element.href = url;
+    element.download = fileName;
+    document.body.appendChild(element);
+    element.click();
+    setTimeout(function () {
+      document.body.removeChild(element);
+      window.URL.revokeObjectURL(url);
+    }, 0);
+  }
+  private exportEoapi(callback) {
     this.storage.run('projectExport', [], (result: StorageHandleResult) => {
-      console.log(result)
       if (result.status === StorageHandleStatus.success) {
+        result.data.version = packageJson.version;
+        this.transferTextToFile('Eoapi-export.json', result.data);
+        callback(true);
       } else {
+        callback(false);
       }
     });
   }
-  submit() {
+  submit(callback: () => boolean) {
     switch (this.exportType) {
       case 'eoapi': {
-        this.exportEoapi();
+        this.exportEoapi(callback);
         break;
       }
     }

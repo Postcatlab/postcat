@@ -9,6 +9,7 @@
   "scripts": {
     "postinstall": "npm-run-all --serial install:*",
     "start": "npm-run-all -p startall electron:serve",
+    "serve:web": "cd src/workbench/browser && npm run ng:serve",
     "startall": "npm-run-all -p start:*",
     "install:workbench": "cd src/workbench/browser&&npm install",
     "start:workbench": "cd src/workbench/browser&&npm start",
