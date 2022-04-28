@@ -140,6 +140,6 @@ export class ApiTestHistoryComponent implements OnInit {
 
   private parseItem(item) {
     item.codeClass = this.apiTest.getHTTPStatus(item.response.statusCode).fontClass;
-    item.testTime = formatDate(item.createdAt, 'YYYY-MM-dd HH:mm:ss', this.locale);
+    item.testTime = formatDate(item.createdAt||new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale);
   }
 }
