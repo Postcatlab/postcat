@@ -19,9 +19,18 @@ export class ExportApiComponent implements OnInit {
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
     const extensionList = window.eo.getModules();
+    console.log(
+      '==>',
+      JSON.stringify(
+        Object.values([...extensionList]).map((it) => it[1].features),
+        null,
+        2
+      )
+    );
     this.supportList = Object.values([...extensionList])
       .map((it) => it[1])
       .filter((it) => it.moduleType === 'feature')
+      .filter((it) => it.features['apimanager.export'])
       .map((it: any) => ({
         key: it.moduleName,
         image: it.logo,

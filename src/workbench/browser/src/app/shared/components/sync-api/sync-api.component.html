@@ -1,5 +1,3 @@
 <nz-radio-group [(ngModel)]="exportType">
-  <label nz-radio-button nzValue="eolink">Eolink</label>
-  <label nz-radio-button nzValue="zion">Zion</label>
-  <label nz-radio-button nzValue="apisix">APISix</label>
+  <label *ngFor="let item of supportList" nz-radio-button [nzValue]="item.key">{{item.title}}</label>
 </nz-radio-group>
