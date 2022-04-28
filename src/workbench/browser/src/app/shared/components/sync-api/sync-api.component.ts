@@ -9,14 +9,22 @@ import { StorageService } from '../../services/storage';
 })
 export class SyncApiComponent implements OnInit {
   exportType: string = 'eolink';
-  constructor(
-    private modalRef: NzModalRef,
-    private storage: StorageService
-  ) { }
+  supportList: any[] = [];
+  constructor(private modalRef: NzModalRef, private storage: StorageService) {}
 
   ngOnInit(): void {
+    const extensionList = window.eo.getModules();
+    this.supportList = Object.values([...extensionList])
+      .map((it) => it[1])
+      .filter((it) => it.moduleType === 'feature')
+      .filter((it) => it.features['apimanager.sync'])
+      .map((it: any) => ({
+        key: it.moduleName,
+        image: it.logo,
+        title: it.features['apimanager.sync'].label,
+      }));
   }
-  submit(){
-    console.log('export')
+  submit() {
+    console.log('sync');
   }
 }
