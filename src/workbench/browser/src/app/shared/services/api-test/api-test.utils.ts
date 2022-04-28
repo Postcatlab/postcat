@@ -151,6 +151,5 @@ export const eoFormatResponseData = ({type,report, history, id }) => {
       value: val.value,
     }));
   }
-  console.log(JSON.stringify(result))
   return result;
 };
