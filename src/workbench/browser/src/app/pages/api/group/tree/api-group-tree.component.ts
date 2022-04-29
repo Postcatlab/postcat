@@ -70,7 +70,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private messageService: MessageService,
     private storage: StorageService,
-    private electron: ElectronService
+    public electron: ElectronService
   ) {}
   ngOnInit(): void {
     this.buildGroupTreeData();
