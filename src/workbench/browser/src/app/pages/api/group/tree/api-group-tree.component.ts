@@ -17,6 +17,7 @@ import { getExpandGroupByKey, listToTree } from '../../../../utils/tree/tree.uti
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
+import { ElectronService } from '../../../../core/services';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -61,14 +62,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       isFixed: true,
     },
   ];
-  nzSelectedKeys: number[]=[];
+  nzSelectedKeys: number[] = [];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
     private messageService: MessageService,
-    private storage: StorageService
+    private storage: StorageService,
+    private electron: ElectronService
   ) {}
   ngOnInit(): void {
     this.buildGroupTreeData();
@@ -112,7 +114,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             parentID: item.parentID ? `group-${item.parentID}` : '0',
             isLeaf: false,
           });
-          console.log(this.treeItems);
         });
       }
       this.getApis();
@@ -194,19 +195,19 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param event
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
-    let eventName=!event.node.isLeaf?'clickFolder':event.node?.origin.isFixed?'clickFixedItem':'clickItem';
-    switch(eventName){
-      case 'clickFolder':{
+    let eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
+    switch (eventName) {
+      case 'clickFolder': {
         event.node.isExpanded = !event.node.isExpanded;
         this.toggleExpand();
         break;
       }
-      case 'clickFixedItem':{
+      case 'clickFixedItem': {
         event.eventName = 'detailOverview';
         this.operateApiEvent(event);
         break;
       }
-      case 'clickItem':{
+      case 'clickItem': {
         event.eventName = 'detailApi';
         this.operateApiEvent(event);
         break;

@@ -22,12 +22,15 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
 import { ModalService } from './services/modal.service';
 import { PageBlankComponent } from './components/page-blank/page-blank.component';
+import { PageFeaturePreviewComponent } from './components/page-feature-preview/page-feature-preview.component';
+import { RouterModule } from '@angular/router';
 
 const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent,PageNotFoundComponent];
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
     ReactiveFormsModule,
     NzDrawerModule,
     NzRadioModule,
@@ -38,7 +41,7 @@ const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, Na
     NzDropDownModule,
     NzSpinModule
   ],
-  declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent],
+  declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
   providers: [ModalService],
   exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
 })

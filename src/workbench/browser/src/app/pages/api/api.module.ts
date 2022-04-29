@@ -25,7 +25,6 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 
 
-import { ApiTabService } from './tab/api-tab.service';
 import { MessageService } from '../../shared/services/message';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
@@ -60,6 +59,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   ],
   declarations: [...COMPONENTS, ApiTabComponent, ApiOverviewComponent],
   exports: [],
-  providers: [ElectronService, MessageService, ApiTabService, ApiService, StorageService],
+  providers: [ElectronService, MessageService, ApiService, StorageService],
 })
 export class ApiModule {}

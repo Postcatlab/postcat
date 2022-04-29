@@ -1,6 +1,11 @@
+import { Injectable } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
+import { AppModule } from '../../../app.module';
 import { TabItem } from './tab.model';
 
+@Injectable({
+  providedIn:AppModule
+})
 export class ApiTabService {
   tabs: Array<TabItem> = [];
   currentTab: TabItem;
@@ -11,9 +16,11 @@ export class ApiTabService {
   tabChange$: ReplaySubject<TabItem> = new ReplaySubject(1);
   saveTabData$: Subject<{ tab: TabItem; data: any }> = new Subject();
   get tabID(): number {
+    console.log('tab change', this);
     return this.currentTab.uuid;
   }
   constructor() {
+    console.log('init api tab service');
     this.saveTabData$.subscribe((inData) => {
       this.addData(inData);
     });
@@ -27,5 +34,11 @@ export class ApiTabService {
   removeData(tabID) {
     if (!this.tabCache.hasOwnProperty(tabID)) return;
     delete this.tabCache[tabID];
+  }
+  destroy(){
+    this.saveTabData$.complete();
+    this.tabChange$.complete();
+    this.tabs=[];
+    this.tabCache={};
   }
 }
