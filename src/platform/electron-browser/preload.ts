@@ -15,6 +15,8 @@ ipcRenderer.on('storageCallback', (event, result) => {
     }
   }
 });
+// 已加载feature模块列表
+const featureModules = new Map();
 // 其他子应用可访问的api队列都集中到.eo上
 window.eo = {
   name: 'Eoapi public api',
@@ -23,18 +25,45 @@ window.eo = {
 // 边栏显示
 // window.eo.sidePosition = ipcRenderer.sendSync('eo-sync', { action: 'getSidePosition' }) || 'left';
 // 获取模块列表
-if (apiAccessRules.includes('getModules')) {
-  window.eo.getModules = () => {
-    return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
-  };
-}
-// 获取App应用列
+window.eo.getModules = () => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
+};
+// 获取某个模块
+window.eo.getModule = (moduleID) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID} });
+};
+// 获取App应用列表
 window.eo.getAppModuleList = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getAppModuleList' });
 };
 // 获取边栏应用列表
 window.eo.getSideModuleList = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getSideModuleList' });
+};
+// 获取所有功能点列表
+window.eo.getFeatures = () => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
+};
+// 获取某个功能点
+window.eo.getFeature = (featureKey) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
+};
+// 加载feature模块
+window.eo.loadFeatureModule = (moduleID) => {
+  if (!featureModules.has(moduleID)) {
+    try {
+      const module = window.eo.getModule(moduleID);
+      const _module = window.require(module.baseDir);
+      featureModules.set(moduleID, _module);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  return featureModules.get(moduleID);
+};
+// 卸载feature模块
+window.eo.unloadFeatureModule = (moduleID) => {
+  featureModules.delete(moduleID);
 };
 // Hook请求返回
 if (apiAccessRules.includes('hook')) {
