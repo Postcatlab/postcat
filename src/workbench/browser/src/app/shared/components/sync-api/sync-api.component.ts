@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { StorageService } from '../../services/storage';
-import { sync_to_remote } from './push.js';
 
 @Component({
   selector: 'eo-sync-api',
