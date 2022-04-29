@@ -30,7 +30,7 @@
   </nz-input-group>
 </header>
 <!-- Fixed Group -->
-<div class="group_container fixed_group_tree pt10">
+<div class="group_container fixed_group_tree pt10" *ngIf="this.electron.isElectron">
   <nz-tree
     [nzData]="fixedTreeNode"
     [nzSelectedKeys]="nzSelectedKeys"
@@ -47,7 +47,7 @@
     </div>
   </ng-template>
 </div>
-<div class="bbd"></div>
+<div class="bbd" *ngIf="this.electron.isElectron"></div>
 <!-- Custom Group -->
 <div class="group_container group_tree pt10">
   <nz-tree

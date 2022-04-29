@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { PageBlankComponent } from '../shared/components/page-blank/page-blank.component';
+import { PageFeaturePreviewComponent } from '../shared/components/page-feature-preview/page-feature-preview.component';
 const routes: Routes = [
   {
     path: '',
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: 'blank',
         component:PageBlankComponent
+      },
+      {
+        path: 'preview',
+        component:PageFeaturePreviewComponent
       },
       {
         path: 'api',

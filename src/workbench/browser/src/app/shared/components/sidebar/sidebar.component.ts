@@ -4,6 +4,7 @@ import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 import { SidebarService } from './sidebar.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'eo-sidebar',
   templateUrl: './sidebar.component.html',
@@ -12,18 +13,16 @@ import { Router } from '@angular/router';
 export class SidebarComponent implements OnInit, OnDestroy {
   isCollapsed: boolean;
   destroy = false;
-  isElectron: boolean = false;
   moduleID: string = '@eo-core-apimanger';
   modules: Array<ModuleInfo | any>;
-  constructor(private electron: ElectronService,private router: Router, private sidebar: SidebarService) {
-    this.isElectron = this.electron.isElectron;
+  constructor(private electron: ElectronService, private router: Router, private sidebar: SidebarService) {
     this.isCollapsed = this.sidebar.getCollapsed();
     this.sidebar
       .onCollapsedChange()
       .pipe(takeWhile(() => !this.destroy))
       .subscribe((isCollapsed) => {
         this.isCollapsed = isCollapsed;
-        if (this.isElectron) {
+        if (this.electron.isElectron) {
           const sideWidth: number = isCollapsed ? 50 : 90;
           window.eo.autoResize(sideWidth);
         }
@@ -31,7 +30,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   tooltipVisibleChange(visible) {
-    if (this.isCollapsed) {
+    if (this.electron.isElectron && this.isCollapsed) {
       window.eo.toogleViewZIndex(visible);
     }
   }
@@ -41,33 +40,55 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let defaultModule = { moduleName: 'API', moduleID: '@eo-core-apimanger', logo: 'icon-api', route: 'home/api/test' };
-    if (this.isElectron) {
-      // TODO change app to blank page
-      this.modules = [defaultModule, ...Array.from(window.eo.getSideModuleList())];
+    this.getApps();
+    this.getModuleIDFromRoute();
+  }
+
+  openApp(moduleID: string) {
+    this.moduleID = moduleID;
+    let nextApp = this.modules.find((val) => val.moduleID === moduleID);
+    if (nextApp.route) {
+      this.router.navigate([nextApp.route]);
+    }
+    if (this.electron.isElectron) {
+      window.eo.openApp({ moduleID: moduleID });
+    }
+  }
+  ngOnDestroy(): void {
+    this.destroy = true;
+  }
+  private getApps() {
+    let defaultModule = [
+      {
+        moduleName: 'API',
+        moduleID: '@eo-core-apimanger',
+        logo: 'icon-api',
+        activeRoute: 'home/api',
+        route: 'home/api/test',
+      },
+    ];
+    if (!this.electron.isElectron) {
+      defaultModule.push({
+        moduleName: '插件广场',
+        moduleID: '@eo-core-extension',
+        logo: 'icon-apps',
+        activeRoute: 'home/preview',
+        route: 'home/preview',
+      });
+    }
+    if (this.electron.isElectron) {
+      this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
       this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
         console.log('get moduleUpdate');
         this.modules = window.eo.getSideModuleList();
       });
     } else {
-      this.modules = [defaultModule];
+      this.modules = [...defaultModule];
     }
   }
-
-  openApp(moduleID: string) {
-    let currentApp=this.modules.find(val=>val.moduleID===this.moduleID),nextApp=this.modules.find(val=>val.moduleID===moduleID);
-    if(currentApp.route){
-      //core app
-      this.router.navigate(['home/blank']);
-    }
-    this.moduleID = moduleID;
-    if(nextApp.route){
-      this.router.navigate([nextApp.route]);
-    }
-    window.eo.openApp({ moduleID: moduleID });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy = true;
+  private getModuleIDFromRoute() {
+    let currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
+    this.moduleID = currentModule?.moduleID || '@eo-core-apimanger';
+    if (!currentModule) this.openApp(this.moduleID);
   }
 }
