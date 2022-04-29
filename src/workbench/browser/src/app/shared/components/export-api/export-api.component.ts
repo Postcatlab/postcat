@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
 import { StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
 import packageJson from '../../../../../../../../package.json';
@@ -9,33 +9,23 @@ import packageJson from '../../../../../../../../package.json';
 })
 export class ExportApiComponent implements OnInit {
   exportType: string = 'eoapi';
-  supportList: any[] = [
-    // {
-    //   key: 'eoapi',
-    //   image: '',
-    //   title: 'Eoapi(.json)',
-    // },
+  supportList: Array<object> = [
+    {
+      key: 'eoapi',
+      image: '',
+      title: 'Eoapi(.json)'
+    }
   ];
+  featureList = window.eo.getFeature('apimanager.export');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
-    const extensionList = window.eo.getModules();
-    console.log(
-      '==>',
-      JSON.stringify(
-        Object.values([...extensionList]).map((it) => it[1].features),
-        null,
-        2
-      )
-    );
-    this.supportList = Object.values([...extensionList])
-      .map((it) => it[1])
-      .filter((it) => it.moduleType === 'feature')
-      .filter((it) => it.features['apimanager.export'])
-      .map((it: any) => ({
-        key: it.moduleName,
-        image: it.logo,
-        title: it.features['apimanager.export'].label,
-      }));
+    this.featureList?.forEach((feature: object, key: string) => {
+      this.supportList.push({
+        key: key,
+        image: feature['icon'],
+        title: feature['label']
+      });
+    });
   }
   private transferTextToFile(fileName: string, exportData: any) {
     let file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
@@ -50,6 +40,11 @@ export class ExportApiComponent implements OnInit {
       window.URL.revokeObjectURL(url);
     }, 0);
   }
+
+  /**
+   * Default export
+   * @param callback 
+   */
   private exportEoapi(callback) {
     this.storage.run('projectExport', [], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
@@ -61,12 +56,44 @@ export class ExportApiComponent implements OnInit {
       }
     });
   }
+
+  /**
+   * Module export
+   * callback应该支持返回具体的错误信息显示
+   * @param callback
+   */
+  private export(callback) {
+    const feature = this.featureList.get(this.exportType);
+    const action = feature.action || null;
+    const filename = feature.filename || null;
+    const module = window.eo.loadFeatureModule(this.exportType);
+    if (action && filename && module && module[action] && typeof module[action] === 'function') {
+      this.storage.run('projectExport', [], (result: StorageHandleResult) => {
+        if (result.status === StorageHandleStatus.success) {
+          result.data.version = packageJson.version;
+          try {
+            const output = module[action](result);
+            this.transferTextToFile(filename, output);
+            callback(true);
+          } catch (e) {
+            console.log(e);
+            callback(false);
+          }
+        } else {
+          callback(false);
+        }
+      });
+    } else {
+      callback(false);
+    }
+  }
+
   submit(callback: () => boolean) {
-    switch (this.exportType) {
-      case 'eoapi': {
-        this.exportEoapi(callback);
-        break;
-      }
+    console.log(this.exportType);
+    if ('eoapi' === this.exportType) {
+      this.exportEoapi(callback); 
+    } else {
+      this.export(callback);
     }
   }
 }

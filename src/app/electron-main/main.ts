@@ -193,6 +193,8 @@ try {
       returnValue = output;
     } else if (arg.action === 'getModules') {
       returnValue = moduleManager.getModules(true);
+    } else if (arg.action === 'getModule') {
+      returnValue = moduleManager.getModule(arg.data.moduleID);
     } else if (arg.action === 'getAppModuleList') {
       returnValue = moduleManager.getAppModuleList();
     } else if (arg.action === 'installModule') {
@@ -209,6 +211,10 @@ try {
       returnValue = Object.assign(data, { modules: moduleManager.getModules() });
     } else if (arg.action === 'getSideModuleList') {
       returnValue = moduleManager.getSideModuleList(subView.appView?.mainModuleID || 'default');
+    } else if (arg.action === 'getFeatures') {
+      returnValue = moduleManager.getFeatures();
+    } else if (arg.action === 'getFeature') {
+      returnValue = moduleManager.getFeature(arg.data.featureKey);
     } else if (arg.action === 'getSidePosition') {
       returnValue = subView.appView?.sidePosition;
     } else if (arg.action === 'hook') {

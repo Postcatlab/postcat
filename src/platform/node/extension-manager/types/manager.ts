@@ -50,7 +50,7 @@ export interface ModuleInfo {
   belongs?: Array<string>;
   // 下层关联模块ID集合
   sideItems?: Array<string>;
-  // 下层功能模块ID集合
+  // 下层功能模块ID集合, 待移除
   featureItems?: Array<string>;
   // 模块路径
   baseDir?: string;
@@ -58,6 +58,10 @@ export interface ModuleInfo {
   sidePosition?: SidePosition;
   // 配置项
   configuration?: ModuleConfiguration;
+  // 功能点配置
+  features?: {
+    [index: string]: object
+  };
 }
 
 /**
@@ -107,4 +111,6 @@ export interface ModuleManagerInterface {
   getModules: (belongs?: boolean) => Map<string, ModuleInfo>;
   getAppModuleList: () => Array<ModuleInfo>;
   getSideModuleList: (moduleID: string) => Array<ModuleInfo>;
+  getFeature: (featureKey: string) => Map<string, object>;
+  getFeatures: () => Map<string, Map<string, object>>;
 }

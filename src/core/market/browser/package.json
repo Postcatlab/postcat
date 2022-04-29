@@ -12,22 +12,31 @@
   "moduleID": "default",
   "moduleName": "插件广场",
   "moduleType": "app",
-  "configuration": {
-    "title": "插件广场配置",
-    "properties": {
-      "core.market.url": {
-        "type": "string",
-        "required": true,
-        "default": "",
-        "label": "服务器地址",
-        "description": "插件安装来源的服务器地址"
-      },
-      "core.market.test": {
-        "type": "string",
-        "required": false,
-        "default": "",
-        "label": "测试配置",
-        "description": "这是另外一个测试的配置"
+  "features": {
+    "export": {
+      "action": "export_openapi",
+      "label": "OpenAPI",
+      "description": "Export data as OpenAPI format",
+      "icon": "./images/openapi.svg",
+      "extension": "json"
+    },
+    "configuration": {
+      "title": "插件广场配置",
+      "properties": {
+        "core.market.url": {
+          "type": "string",
+          "required": true,
+          "default": "",
+          "label": "服务器地址",
+          "description": "插件安装来源的服务器地址"
+        },
+        "core.market.test": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "label": "测试配置",
+          "description": "这是另外一个测试的配置"
+        }
       }
     }
   },

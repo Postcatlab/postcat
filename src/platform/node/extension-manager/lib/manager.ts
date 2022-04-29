@@ -16,9 +16,15 @@ export class ModuleManager implements ModuleManagerInterface {
    */
   private readonly modules: Map<string, ModuleInfo>;
 
+  /**
+   * 功能点集合
+   */
+  private readonly features: Map<string, Map<string, object>>;
+
   constructor() {
     this.moduleHandler = new ModuleHandler({ baseDir: baseDir });
     this.modules = new Map();
+    this.features = new Map();
     this.init();
   }
 
@@ -110,6 +116,14 @@ export class ModuleManager implements ModuleManagerInterface {
   }
 
   /**
+   * 获取所有功能点列表
+   * @returns 
+   */
+  getFeatures(): Map<string, Map<string, object>> {
+    return this.features;
+  }
+
+  /**
    * 获取某个模块信息
    * belongs为true，返回关联子模块集合
    * @param belongs
@@ -120,6 +134,15 @@ export class ModuleManager implements ModuleManagerInterface {
     }
     return this.modules.get(moduleID);
   }
+ 
+  /**
+   * 获取某个功能点的集合
+   * @param featureKey 
+   * @returns 
+   */
+  getFeature(featureKey: string): Map<string, object> {
+    return this.features.get(featureKey);
+  }
 
   /**
    * 设置模块信息到模块列表
@@ -128,6 +151,22 @@ export class ModuleManager implements ModuleManagerInterface {
   private set(moduleInfo: ModuleInfo) {
     // 避免重置
     this.modules.set(moduleInfo.moduleID, moduleInfo);
+    this.setFeatures(moduleInfo);
+  }
+
+  /**
+   * 解析模块的功能点加入功能点集合
+   * @param moduleInfo
+   */
+  private setFeatures(moduleInfo: ModuleInfo) {
+    if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
+      Object.entries(moduleInfo.features).forEach(([key, value]) => {
+        if (!this.features.has(key)) {
+          this.features.set(key, new Map());
+        }
+        this.features.get(key).set(moduleInfo.moduleID, value);
+      });
+    }
   }
 
   /**
@@ -137,11 +176,35 @@ export class ModuleManager implements ModuleManagerInterface {
   private delete(moduleInfo: ModuleInfo) {
     // 避免删除核心
     this.modules.delete(moduleInfo.moduleID);
+    this.deleteFeatures(moduleInfo);
+  }
+
+  /**
+   * 清除功能点集合中的模块功能点
+   * @param moduleInfo 
+   */
+  private deleteFeatures(moduleInfo: ModuleInfo) {
+    if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
+      for (const key in moduleInfo.features) {
+        if (this.features.has(key)) {
+          this.features.get(key).delete(moduleInfo.moduleID);
+        }
+      }
+    }
+  }
+
+  /**
+   * 加入模块管理
+   * @param moduleInfo
+   */
+  private setup(moduleInfo: ModuleInfo) {
+    if (isNotEmpty(moduleInfo.moduleID)) {
+      this.set(moduleInfo);
+    } 
   }
 
   /**
    * 读取本地package.json文件得到本地安装的模块列表，依次获取模块信息加入模块列表
-   * 待处理：在初始化时加入系统模块的加载
    */
   private init() {
     this.initCore();
@@ -149,9 +212,7 @@ export class ModuleManager implements ModuleManagerInterface {
     moduleNames.forEach((moduleName: string) => {
       // 这里要加上try catch，避免异常
       const moduleInfo: ModuleInfo = this.moduleHandler.info(moduleName);
-      if (isNotEmpty(moduleInfo.moduleID)) {
-        this.set(moduleInfo);
-      }
+      this.setup(moduleInfo);
     });
   }
 
@@ -164,9 +225,7 @@ export class ModuleManager implements ModuleManagerInterface {
     const moduleNames: string[] = coreHandler.list();
     moduleNames.forEach((moduleName: string) => {
       const moduleInfo: ModuleInfo = coreHandler.info(moduleName);
-      if (isNotEmpty(moduleInfo.moduleID)) {
-        this.set(moduleInfo);
-      }
+      this.setup(moduleInfo);
     });
   }
 
@@ -177,7 +236,6 @@ export class ModuleManager implements ModuleManagerInterface {
   private moduleBelongs(): Map<string, ModuleInfo> {
     const newModules: Map<string, ModuleInfo> = new Map();
     const sideItems = new Map();
-    const featureItems = new Map();
     this.modules?.forEach((module: ModuleInfo) => {
       // 如果包含自己则是主应用
       // 后期加入权限限制是否能成为顶层应用
@@ -185,13 +243,16 @@ export class ModuleManager implements ModuleManagerInterface {
       module.isApp = belongs.includes(module.moduleID);
       newModules.set(module.moduleID, module);
       belongs.forEach((belong: string) => {
-        let _modules: string[];
+        // let _modules: string[];
         if (module.moduleType === ModuleType.app) {
+          /*
           if (!sideItems.has(belong)) {
             _modules = [];
           } else {
             _modules = sideItems.get(belong);
           }
+          */
+          const _modules: string[] = sideItems.get(belong) || [];
           // 如果指定上层是自己，自己放最前面
           if (module.moduleID === belong) {
             _modules.unshift(module.moduleID);
@@ -199,28 +260,15 @@ export class ModuleManager implements ModuleManagerInterface {
             _modules.push(module.moduleID);
           }
           sideItems.set(belong, _modules);
-        } else if (module.moduleType === ModuleType.feature) {
-          if (!featureItems.has(belong)) {
-            _modules = [];
-          } else {
-            _modules = featureItems.get(belong);
-          }
-          _modules.push(module.moduleID);
-          featureItems.set(belong, _modules);
         }
       });
     });
     sideItems?.forEach((value: Array<string>, key: string) => {
       const _current: ModuleInfo = newModules.get(key);
-      if (_current&&_current.isApp) {
+      if (_current && _current.isApp) {
         _current.sideItems = value;
         newModules.set(key, _current);
       }
-    });
-    featureItems?.forEach((value: Array<string>, key: string) => {
-      const _current: ModuleInfo = newModules.get(key);
-      _current.featureItems = value;
-      newModules.set(key, _current);
     });
     return newModules;
   }
