@@ -9,7 +9,11 @@ import packageJson from '../../../../../../../../package.json';
 })
 export class ExportApiComponent implements OnInit {
   exportType: string = 'eoapi';
-  supportList: Array<object> = [
+  supportList: Array<{
+    key:string,
+    image:string,
+    title:string
+  }> = [
     {
       key: 'eoapi',
       image: '',
