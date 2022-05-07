@@ -3,7 +3,12 @@ import { formatDate } from '@angular/common';
 import { ApiTestService } from '../api-test.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageService } from '../../../../shared/services/storage';
-import { ApiTestHistory, ApiTestHistoryFrame, StorageHandleResult, StorageHandleStatus } from '../../../../../../../../platform/browser/IndexedDB';
+import {
+  ApiTestHistory,
+  ApiTestHistoryFrame,
+  StorageHandleResult,
+  StorageHandleStatus,
+} from '../../../../../../../../platform/browser/IndexedDB';
 
 @Component({
   selector: 'eo-api-test-history',
@@ -24,19 +29,25 @@ export class ApiTestHistoryComponent implements OnInit {
     this.initListConf();
   }
 
-  add(history: ApiTestHistoryFrame,apiID) {
-    this.storage.run('apiTestHistoryCreate', [{
-      projectID: 1,
-      apiDataID: apiID,
-      ...history,
-    }], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
-        this.parseItem(result.data);
-        this.model.unshift(result.data);
-      } else {
-        console.error(result.data);
+  add(history: ApiTestHistoryFrame, apiID) {
+    this.storage.run(
+      'apiTestHistoryCreate',
+      [
+        {
+          projectID: 1,
+          apiDataID: apiID,
+          ...history,
+        },
+      ],
+      (result: StorageHandleResult) => {
+        if (result.status === StorageHandleStatus.success) {
+          this.parseItem(result.data);
+          this.model.unshift(result.data);
+        } else {
+          console.error(result.data);
+        }
       }
-    });
+    );
   }
 
   deleteAll() {
@@ -123,23 +134,21 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   private getList() {
-    if (!this.apiID) {
-      return;
-    }
     this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
+        console.log(result.data)
         result.data.forEach((val: any) => {
           this.parseItem(val);
         });
         this.model = result.data || [];
       } else {
-        console.error(result.data); 
+        console.error(result.data);
       }
     });
   }
 
   private parseItem(item) {
     item.codeClass = this.apiTest.getHTTPStatus(item.response.statusCode).fontClass;
-    item.testTime = formatDate(item.createdAt||new Date(), 'YYYY-MM-dd HH:mm:ss', this.locale);
+    item.testTime = item.createdAt ? formatDate(item.createdAt, 'YYYY-MM-dd HH:mm:ss', this.locale) : null;
   }
 }

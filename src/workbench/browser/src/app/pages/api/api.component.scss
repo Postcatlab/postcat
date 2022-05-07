@@ -1,7 +1,3 @@
-.layout {
-  height: 100%;
-}
-
 nz-content {
   background-color:  var(--MAIN_BG);
 }
@@ -46,11 +42,11 @@ nz-sider {
   eo-api {
     router-outlet + * {
       display: block;
-      height: calc(100vh -  var(--NAVBAR_HEIGHT) - var(FOOTER_HEIGHT) - 45px);
+      height: calc(100vh -  var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 46px);
       overflow: auto;
     }
     .has_tab_page router-outlet + * {
-      height:  calc(100vh - var(--NAVBAR_HEIGHT) - var(FOOTER_HEIGHT) - 45px - 46px);
+      height:  calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 45px - 47px);
     }
   }
   .method_text_GET {
