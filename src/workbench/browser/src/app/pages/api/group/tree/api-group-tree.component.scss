@@ -15,7 +15,7 @@
 }
 .group_tree {
   overflow: auto;
-  height: calc(100vh - 129px);
+  height: calc(100vh - var(--NAVBAR_HEIGHT) - 88px);
   .ant-tree-switcher {
     width: 12px;
   }

@@ -1,6 +1,6 @@
 .home_container{
   margin-top: 50px;
-  height: calc(100vh - var(--NAVBAR_HEIGHT));
+  height: calc(100vh - var(--NAVBAR_HEIGHT) - 1px);
 }
 .home {
   background-color: var(--MAIN_BG);
