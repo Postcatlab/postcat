@@ -70,7 +70,8 @@ npm install -g @angular/cli
 | Command                  | Description                                                          |
 | ------------------------ | -------------------------------------------------------------------- |
 | `npm start`              | In development mode, running on browser and desktop at the same time |
-| `npm run electron:serve` | only runs in the desktop                                             |
+| `npm run serve:web` | only runs in the web |
+| `npm run electron:serve` | only runs in the desktop |
 
 ### Build
 
