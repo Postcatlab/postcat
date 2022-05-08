@@ -27,7 +27,7 @@ export class AppViews {
         if (main_node.module && typeof main_node.module === 'object') {
           const _fun = main_node.module;
           _fun.setup({
-            appView: this.view
+            appView: this.view,
           });
         }
       }
@@ -47,13 +47,19 @@ export class AppViews {
     this.view = undefined;
     this.mainModuleID = undefined;
   }
-  
+
   rebuildBounds(sideWidth?: number) {
     if (!this.view) {
       return;
     }
     const windBounds = this.win.getContentBounds();
-    const _bounds: ViewBounds = getViewBounds(ViewZone.main, windBounds.width, windBounds.height, this.sidePosition, sideWidth); 
+    const _bounds: ViewBounds = getViewBounds(
+      ViewZone.main,
+      windBounds.width,
+      windBounds.height,
+      this.sidePosition,
+      sideWidth
+    );
     this.view.setBounds(_bounds);
   }
 

@@ -43,7 +43,7 @@ function createWindow(): BrowserWindow {
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
-  if (['serve'].includes(processEnv) ) {
+  if (['serve'].includes(processEnv)) {
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '../node_modules/electron')),
     });
@@ -59,7 +59,7 @@ function createWindow(): BrowserWindow {
       mode: 'undocked',
     });
     UnitWorkerModule.setup({
-      view:win
+      view: win,
     });
   };
   win.webContents.on('did-fail-load', () => {
