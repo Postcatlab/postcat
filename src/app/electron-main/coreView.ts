@@ -9,7 +9,7 @@ export class CoreViews {
   constructor(private win: BrowserWindow) {
     this.triggleEvent = this.triggleEvent.bind(this);
   }
-  
+
   rebuildBounds() {
     if (!this.view) {
       return;
@@ -65,7 +65,7 @@ export class CoreViews {
    * @param window
    */
   remove() {
-    if(!this.view) return;
+    if (!this.view) return;
     this.win.removeBrowserView(this.view);
     this.view.webContents.closeDevTools();
     ipcMain.removeListener('message', this.triggleEvent);

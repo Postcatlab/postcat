@@ -11,7 +11,7 @@ ipcRenderer.on('storageCallback', (event, result) => {
       storageCallback.get(result.callback)(result);
       storageCallback.delete(result.callback);
     } catch (e) {
-      storageCallback.delete(result.callback); 
+      storageCallback.delete(result.callback);
     }
   }
 });
@@ -30,7 +30,7 @@ window.eo.getModules = () => {
 };
 // 获取某个模块
 window.eo.getModule = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID} });
+  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID } });
 };
 // 获取App应用列表
 window.eo.getAppModuleList = () => {
