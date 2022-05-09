@@ -69,7 +69,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     ];
     if (!this.electron.isElectron) {
       defaultModule.push({
-        moduleName: '插件广场',
+        moduleName: '拓展广场',
         moduleID: '@eo-core-extension',
         logo: 'icon-apps',
         activeRoute: 'home/preview',
