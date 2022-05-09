@@ -43,6 +43,7 @@ function createWindow(): BrowserWindow {
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
+  // main
   if (['serve'].includes(processEnv)) {
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '../node_modules/electron')),
