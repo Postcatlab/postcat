@@ -8,7 +8,7 @@ import { SidebarService } from '../shared/components/sidebar/sidebar.service';
 })
 export class PagesComponent implements OnInit {
   loadedIframe = false;
-  constructor(private cdRef: ChangeDetectorRef, private sidebar: SidebarService) {}
+  constructor(private cdRef: ChangeDetectorRef, public sidebar: SidebarService) {}
   ngOnInit(): void {
     this.watchSidebarItemChange();
   }

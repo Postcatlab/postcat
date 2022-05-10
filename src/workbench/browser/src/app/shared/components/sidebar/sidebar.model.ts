@@ -2,18 +2,28 @@
  * Sidebar offical module
  */
 export interface SidebarModuleInfo {
-  // app
-  name: string;
-  //icon or logo image 
-  logo:string;
-  // 模块ID，用于关联
+  /**
+   * icon or logo image
+   **/
+  logo: string;
+  /**
+   * unique extension id
+   **/
   moduleID: string;
-  // 模块名称，用于显示
+  /**
+   * showname
+   **/
   moduleName: string;
-  //is offcial app
+  /**
+   * is offcial app
+   **/
   isOffical: boolean;
-  // module route
+  /**
+   *  module route,click sidebar will navigate this route
+   **/
   route: string;
-  // route active when match string
+  /**
+   *  sidebar active when match activeRoute
+   **/
   activeRoute: string;
 }
