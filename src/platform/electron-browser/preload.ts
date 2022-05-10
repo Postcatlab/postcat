@@ -124,3 +124,23 @@ window.eo.storageRemote = (args) => {
   shareObject.storageResult = null;
   return output;
 };
+
+window.eo.saveSettings = (settings) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'saveSettings', data: { settings: settings } });
+};
+
+window.eo.saveModuleSettings = (moduleID, settings) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'saveModuleSettings', data: { moduleID: moduleID, settings: settings } });
+};
+
+window.eo.deleteModuleSettings = (moduleID) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'deleteModuleSettings', data: { moduleID: moduleID } });
+};
+
+window.eo.getSettings = (settings) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getSettings' });
+};
+
+window.eo.getModuleSettings = (moduleID) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });
+};

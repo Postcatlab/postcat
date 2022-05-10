@@ -26,7 +26,7 @@
         "core.market.url": {
           "type": "string",
           "required": true,
-          "default": "",
+          "default": "http://127.0.0.1",
           "label": "服务器地址",
           "description": "插件安装来源的服务器地址"
         },

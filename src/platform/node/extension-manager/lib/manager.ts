@@ -3,7 +3,7 @@ import { ModuleHandler } from './handler';
 import { CoreHandler } from './core';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
 import * as path from 'path';
-import { isNotEmpty } from '../../../..//shared/common/common';
+import { isNotEmpty } from '../../../../shared/common/common';
 
 export class ModuleManager implements ModuleManagerInterface {
   /**
