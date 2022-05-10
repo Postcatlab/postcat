@@ -5,5 +5,4 @@ import App from './App.vue';
 import router from './router.js';
 import 'windi.css';
 import { createPinia } from 'pinia';
-window.eo=window.parent.eo;
 createApp(App).use(router).use(Antd).use(createPinia()).mount('#app');

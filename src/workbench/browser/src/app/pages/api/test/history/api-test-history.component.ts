@@ -136,7 +136,6 @@ export class ApiTestHistoryComponent implements OnInit {
   private getList() {
     this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
-        console.log(result.data)
         result.data.forEach((val: any) => {
           this.parseItem(val);
         });

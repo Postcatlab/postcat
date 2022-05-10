@@ -5,7 +5,6 @@
     class="sidebar_item"
     nz-tooltip
     [nzTooltipTitle]="item.moduleName"
-    [routerLink]="item.route ? item.route : '/home/blank'"
     [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }"
   >
     <span *ngIf="item.logo.includes('icon-')" class="iconfont fs28" [ngClass]="item.logo"></span>
