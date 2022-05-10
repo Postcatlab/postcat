@@ -36,6 +36,10 @@ class Storage extends Dexie implements StorageInterface {
    * @param item
    */
   private create(table: Table, item: StorageItem): Observable<object> {
+    if (!item.createdAt) {
+      item.createdAt = new Date();
+    }
+    item.updatedAt = item.createdAt;
     return new Observable((obs) => {
       table
         .add(item)

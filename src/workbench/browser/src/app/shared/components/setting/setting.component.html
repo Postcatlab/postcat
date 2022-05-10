@@ -1,0 +1,24 @@
+<a class="sidebar_item sidebar_setting" title="设置" (click)="handleShowModal()" *ngIf="isVisible">
+  <i nz-icon nzType="setting"></i>
+</a>
+
+<nz-modal [(nzVisible)]="isVisible && isModal" nzWidth="70%" nzTitle="配置" (nzOnCancel)="handleCancel()">
+  <section *nzModalContent class="flex">
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="handleSave()">
+      <nz-tabset [nzTabPosition]="position">
+        <nz-tab *ngFor="let module of modules" [nzTitle]="module.title">
+          <nz-form-item nz-col class="fg1" *ngFor="let field of module.fields">
+            <nz-form-label nzFor="{{ field.name}}">{{ field.label }} </nz-form-label>
+            <nz-form-control nzErrorTip="请输入 {{ field.label }}">
+              <input type="text" nz-input id="{{ field.name }}" formControlName="{{ field.name }}" [(ngModel)]="settings[module.key][field.key]" />
+            </nz-form-control>
+          </nz-form-item>
+        </nz-tab>
+      </nz-tabset>
+    </form>
+  </section>
+  <div *nzModalFooter class="footer">
+    <button nz-button nzType="primary" (click)="handleSave()">保存</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </div>
+</nz-modal>

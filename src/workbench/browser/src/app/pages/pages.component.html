@@ -1,8 +1,17 @@
 <eo-navbar></eo-navbar>
 <div class="home_container f_row">
+  <eo-setting></eo-setting>
   <eo-sidebar></eo-sidebar>
   <div class="home fg1">
-    <router-outlet></router-outlet>
+    <router-outlet *ngIf="!loadedIframe"></router-outlet>
+    <iframe
+    *ngIf="!this.sidebar.currentModule.isOffical"
+    src="http://localhost:8080"
+    id="app_iframe"
+    frameborder="no"
+    border="0"
+    style="width: calc(100vw - 90px);height: calc(100vh - var(--NAVBAR_HEIGHT) - 4px);"
+  ></iframe>
   </div>
 </div>
-<!-- <eo-toolbar></eo-toolbar> -->
+<eo-toolbar></eo-toolbar>
