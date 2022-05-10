@@ -10,7 +10,7 @@
   "logo": "icon-apps",
   "main_debug": "http://localhost:8080",
   "moduleID": "default",
-  "moduleName": "插件广场",
+  "moduleName": "拓展广场",
   "moduleType": "app",
   "features": {
     "export": {
@@ -21,12 +21,12 @@
       "extension": "json"
     },
     "configuration": {
-      "title": "插件广场配置",
+      "title": "拓展广场配置",
       "properties": {
         "core.market.url": {
           "type": "string",
           "required": true,
-          "default": "",
+          "default": "http://127.0.0.1",
           "label": "服务器地址",
           "description": "插件安装来源的服务器地址"
         },

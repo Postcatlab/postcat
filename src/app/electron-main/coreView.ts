@@ -9,7 +9,7 @@ export class CoreViews {
   constructor(private win: BrowserWindow) {
     this.triggleEvent = this.triggleEvent.bind(this);
   }
-  
+
   rebuildBounds() {
     if (!this.view) {
       return;
@@ -43,16 +43,12 @@ export class CoreViews {
     this.watch();
   }
   watch() {
-    ipcMain.on('message', this.triggleEvent);
+    // ipcMain.on('message', this.triggleEvent);
   }
   triggleEvent(event, arg) {
     console.log(`core view ${event.frameId}: recieve render msg=>`, arg, arg.action);
     if (event.frameId !== 1) return;
     switch (arg.action) {
-      case 'connect-dropdown': {
-        this.win.setTopBrowserView((arg.data.action === 'show' ? subView.mainView : subView.appView).view);
-        break;
-      }
       case 'setBounds': {
         //sidebar shrink or expand
         break;
@@ -65,7 +61,7 @@ export class CoreViews {
    * @param window
    */
   remove() {
-    if(!this.view) return;
+    if (!this.view) return;
     this.win.removeBrowserView(this.view);
     this.view.webContents.closeDevTools();
     ipcMain.removeListener('message', this.triggleEvent);

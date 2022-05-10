@@ -13,7 +13,6 @@ import { EnvState } from './shared/store/env.state';
 
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +24,6 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     AppRoutingModule,
     HttpClientModule,
     UpgradeModule,
-    NzModalModule,
     NgxsModule.forRoot([EnvState]),
   ],
   providers: [
