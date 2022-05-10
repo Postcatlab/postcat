@@ -11,7 +11,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { ElectronService } from '../../core/services';
+import { ElectronService } from '../../../core/services';
 
 const ANTDMODULES = [
   NzModalModule,
