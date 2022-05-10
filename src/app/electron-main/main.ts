@@ -1,24 +1,26 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
-import * as os from 'os';
+import * as os from 'os'
 import ModuleManager from '../../platform/node/extension-manager/lib/manager';
 import { ModuleInfo, ModuleManagerInterface } from '../../platform/node/extension-manager';
 import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
 import { AppViews } from './appView';
-import { CoreViews } from './coreView';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
 import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
 import { UnitWorkerModule } from '../../workbench/node/unitWorker';
+import Configuration from '../../platform/node/configuration/lib';
+import { ConfigurationInterface } from 'src/platform/node/configuration';
 let win: BrowserWindow = null;
 export const subView = {
   appView: null,
   mainView: null,
 };
-const eoUpdater = new EoUpdater();
+const eoUpdater = new EoUpdater()
 const moduleManager: ModuleManagerInterface = ModuleManager();
+const configuration: ConfigurationInterface = Configuration();
 // Remote
 const mainRemote = require('@electron/remote/main');
 mainRemote.initialize();
@@ -216,6 +218,16 @@ try {
       returnValue = moduleManager.getFeatures();
     } else if (arg.action === 'getFeature') {
       returnValue = moduleManager.getFeature(arg.data.featureKey);
+    } else if (arg.action === 'saveSettings') {
+      returnValue = configuration.saveSettings(arg.data.settings);
+    } else if (arg.action === 'saveModuleSettings') {
+      returnValue = configuration.saveModuleSettings(arg.data.moduleID, arg.data.settings);
+    } else if (arg.action === 'deleteModuleSettings') {
+      returnValue = configuration.deleteModuleSettings(arg.data.moduleID);
+    } else if (arg.action === 'getSettings') {
+      returnValue = configuration.getSettings();
+    } else if (arg.action === 'getModuleSettings') {
+      returnValue = configuration.getModuleSettings(arg.data.moduleID);
     } else if (arg.action === 'getSidePosition') {
       returnValue = subView.appView?.sidePosition;
     } else if (arg.action === 'hook') {
