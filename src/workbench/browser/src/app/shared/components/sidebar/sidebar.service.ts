@@ -1,21 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ModuleInfo } from '../../../utils/module-loader';
+import { SidebarModuleInfo } from './sidebar.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SidebarService {
   collapsed = true;
-  private collapsedChange$ = new Subject();
+  currentModule: ModuleInfo | SidebarModuleInfo | any;
+  private collapsedChanged$: Subject<boolean> = new Subject();
+  public appChanged$: Subject<void> = new Subject();
   constructor() {}
   getCollapsed() {
     return this.collapsed;
   }
   toggleCollapsed() {
     this.collapsed = !this.collapsed;
-    this.collapsedChange$.next(this.collapsed);
+    this.collapsedChanged$.next(this.collapsed);
   }
-  onCollapsedChange = function() {
-    return this.collapsedChange$.pipe();
+  onCollapsedChanged = function () {
+    return this.collapsedChanged$.pipe();
   };
 }

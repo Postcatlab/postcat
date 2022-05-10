@@ -47,11 +47,6 @@ export class NavbarComponent implements OnInit {
         });
       });
   }
-  changeHelpVisible(visible) {
-    if(this.isElectron){
-      window.eo.toogleViewZIndex(visible);
-    }
-  }
   minimize() {
     this.electron.ipcRenderer.send('message', {
       action: 'minimize',
@@ -78,9 +73,5 @@ export class NavbarComponent implements OnInit {
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
-  }
-
-  openApp(moduleID: string) {
-    window.eo.openApp({ moduleID: moduleID });
   }
 }
