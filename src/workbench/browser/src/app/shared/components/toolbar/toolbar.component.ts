@@ -16,7 +16,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   constructor(private sidebar: SidebarService) {
     this.sideBarCollapsed = this.sidebar.getCollapsed();
     this.sidebar
-      .onCollapsedChange()
+      .onCollapsedChanged()
       .pipe(takeUntil(this.destroy$))
       .subscribe((isCollapsed) => {
         this.sideBarCollapsed = isCollapsed;
