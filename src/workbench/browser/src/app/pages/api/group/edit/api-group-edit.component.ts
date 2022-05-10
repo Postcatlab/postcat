@@ -67,7 +67,7 @@ export class ApiGroupEditComponent implements OnInit {
         this.modalRef.destroy();
         this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
-        console.log(result.data);
+        console.error(result.data);
       }
     });
   }
@@ -78,7 +78,7 @@ export class ApiGroupEditComponent implements OnInit {
         this.modalRef.destroy();
         this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
-        console.log(result.data);
+        console.error(result.data);
       }
     });
   }

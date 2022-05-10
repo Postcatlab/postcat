@@ -45,6 +45,7 @@ function createWindow(): BrowserWindow {
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
+  // main
   if (['serve'].includes(processEnv)) {
     require('electron-reload')(__dirname, {
       electron: require(path.join(__dirname, '../node_modules/electron')),
@@ -232,40 +233,24 @@ try {
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else if (arg.action === 'openApp') {
-      if (arg.data.moduleID && !arg.data.moduleID.includes('@eo-core')) {
-        // 如果要打开是同一app，忽略
-        if (subView.appView?.mainModuleID === arg.data.moduleID) {
-          return;
-        }
-        const module: ModuleInfo = moduleManager.getModule(arg.data.moduleID);
-        if (module) {
-          if (!subView.appView) subView.appView = new AppViews(win);
-          subView.appView.create(module);
-        }
-      } else {
-        if (subView.appView) {
-          subView.appView.remove();
-        }
-      }
-      returnValue = 'view id';
+      // if (arg.data.moduleID && !arg.data.moduleID.includes('@eo-core')) {
+      //   // 如果要打开是同一app，忽略
+      //   if (subView.appView?.mainModuleID === arg.data.moduleID) {
+      //     return;
+      //   }
+      //   const module: ModuleInfo = moduleManager.getModule(arg.data.moduleID);
+      //   if (module) {
+      //     if (!subView.appView) subView.appView = new AppViews(win);
+      //     subView.appView.create(module);
+      //   }
+      // } else {
+      //   if (subView.appView) {
+      //     subView.appView.remove();
+      //   }
+      // }
+      // returnValue = 'view id';
     } else if (arg.action === 'autoResize') {
       resize(arg.data.sideWidth);
-    } else if (arg.action === 'openModal') {
-      const background = arg.data.background || '#00000073';
-      subView.mainView.view.webContents.executeJavaScript(`
-        var mask = document.querySelector('#mask');
-        if (mask) {
-          mask.style.background = '${background}';
-          mask.style.display = 'block';
-        }
-      `);
-    } else if (arg.action === 'closeModal') {
-      subView.mainView.view.webContents.executeJavaScript(`
-        var mask = document.querySelector('#mask');
-        if (mask) {
-          mask.style.display = 'none';
-        }
-      `);
     } else {
       returnValue = 'Invalid data';
     }

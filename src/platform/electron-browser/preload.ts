@@ -75,21 +75,6 @@ if (apiAccessRules.includes('hook')) {
 window.eo.tempApi = (params) => {
   return ipcRenderer.sendSync('eo-sync', params);
 };
-window.eo.openModal = (background) => {
-  background = background || '#00000073';
-  return ipcRenderer.sendSync('eo-sync', { action: 'openModal', data: { background: background } });
-};
-window.eo.closeModal = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'closeModal' });
-};
-window.eo.toogleViewZIndex = (visible) => {
-  ipcRenderer.send('message', {
-    action: 'connect-dropdown',
-    data: {
-      action: visible ? 'show' : 'hide',
-    },
-  });
-};
 window.eo.autoResize = (sideWidth) => {
   ipcRenderer.send('eo-sync', { action: 'autoResize', data: { sideWidth: sideWidth } });
 };
