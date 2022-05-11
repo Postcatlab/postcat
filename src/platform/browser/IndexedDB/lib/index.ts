@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, StorageItem } from '../types';
 import { sampleApiData } from '../sample';
 
-class Storage extends Dexie implements StorageInterface {
+export class Storage extends Dexie implements StorageInterface {
   project!: Table<Project, number | string>;
   group!: Table<Group, number | string>;
   environment!: Table<Environment, number | string>;
@@ -672,4 +672,3 @@ class Storage extends Dexie implements StorageInterface {
   }
 }
 
-export const storage = new Storage();

@@ -4,6 +4,7 @@ import { CoreHandler } from './core';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
 import * as path from 'path';
 import { isNotEmpty } from '../../../../shared/common/common';
+import { processEnv } from '../../constant';
 
 export class ModuleManager implements ModuleManagerInterface {
   /**
@@ -83,6 +84,7 @@ export class ModuleManager implements ModuleManagerInterface {
     const modules: Map<string, ModuleInfo> = this.moduleBelongs();
     modules?.forEach((module: ModuleInfo) => {
       if (module.isApp) {
+        module.main= processEnv === 'development' && module.main_debug ? module.main_debug : module.main,
         output.push(module);
       }
     });

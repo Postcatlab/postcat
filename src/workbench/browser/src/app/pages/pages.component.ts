@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { SafeResourceUrl } from '@angular/platform-browser';
 import { SidebarService } from '../shared/components/sidebar/sidebar.service';
 
 @Component({
@@ -8,6 +9,7 @@ import { SidebarService } from '../shared/components/sidebar/sidebar.service';
 })
 export class PagesComponent implements OnInit {
   loadedIframe = false;
+  iframeSrc: SafeResourceUrl;
   constructor(private cdRef: ChangeDetectorRef, public sidebar: SidebarService) {}
   ngOnInit(): void {
     this.watchSidebarItemChange();
@@ -16,18 +18,16 @@ export class PagesComponent implements OnInit {
     this.sidebar.appChanged$.pipe().subscribe(() => {
       this.loadedIframe = false;
       if (!this.sidebar.currentModule.isOffical) {
-        //add loading
         setTimeout(() => {
+          //add loading
+          this.loadedIframe = false;
           let iframe = document.getElementById('app_iframe') as HTMLIFrameElement;
-          //add auto script
-          let iframeDocument = iframe.contentWindow.document;
-          var el = iframeDocument.createElement('script');
-          el.text = `window.eo=window.parent.eo;\n`;
-          iframeDocument.body.appendChild(el);
+          //load resource
+          iframe.src = this.sidebar.currentModule.main;
           //loading finish
           iframe.onload = () => {
             this.loadedIframe = true;
-            this.cdRef.detectChanges(); // solution
+            this.cdRef.detectChanges();
           };
         }, 0);
       }
