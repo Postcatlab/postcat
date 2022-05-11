@@ -130,7 +130,10 @@ window.eo.saveSettings = (settings) => {
 };
 
 window.eo.saveModuleSettings = (moduleID, settings) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'saveModuleSettings', data: { moduleID: moduleID, settings: settings } });
+  return ipcRenderer.sendSync('eo-sync', {
+    action: 'saveModuleSettings',
+    data: { moduleID: moduleID, settings: settings },
+  });
 };
 
 window.eo.deleteModuleSettings = (moduleID) => {
