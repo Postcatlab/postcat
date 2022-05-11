@@ -2,7 +2,7 @@ import { ipcRenderer, app } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import { StorageHandleResult, StorageHandleStatus, StorageHandleArgs, StorageProcessType } from '../../../../platform/browser/IndexedDB';
-import { storage } from '../../../../platform/browser/IndexedDB/lib';
+import { Storage} from '../../../../platform/browser/IndexedDB/lib';
 import { isNotEmpty } from '../../../../shared/common/common';
 class StorageService {
   private ipcRenderer: typeof ipcRenderer;
@@ -28,8 +28,8 @@ class StorageService {
       data: undefined,
       callback: args.callback || null
     };
-    if (storage && storage[action] && typeof storage[action] === 'function') {
-      storage[action](...args.params).subscribe((result: any) => {
+    if (Storage && Storage[action] && typeof Storage[action] === 'function') {
+      Storage[action](...args.params).subscribe((result: any) => {
         handleResult.data = result;
         if (isNotEmpty(result)) {
           handleResult.status = StorageHandleStatus.success;
@@ -78,5 +78,3 @@ class StorageService {
     return !!(window && window.process && window.process.type);
   }
 }
-
-new StorageService();

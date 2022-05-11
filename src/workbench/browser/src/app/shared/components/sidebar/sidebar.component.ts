@@ -41,8 +41,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebar.currentModule = module;
     this.sidebar.appChanged$.next();
     let nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
-    let route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    this.router.navigate([route]);
+    // let route = (nextApp as SidebarModuleInfo).route || '/home/blank';
+    // this.router.navigate([route]);
   }
   ngOnDestroy(): void {
     this.destroy = true;
@@ -83,11 +83,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!currentModule) {
       //route error
       this.clickModule(this.modules[0]);
-      // let route = (nextApp as SidebarModuleInfo).route;
-      // console.log(route)
-      // if (route) {
-      //   this.router.navigate([route]);
-      // }
       return;
     }
     this.sidebar.currentModule = currentModule;

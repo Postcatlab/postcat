@@ -1,11 +1,10 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
-import * as os from 'os'
+import * as os from 'os';
 import ModuleManager from '../../platform/node/extension-manager/lib/manager';
-import { ModuleInfo, ModuleManagerInterface } from '../../platform/node/extension-manager';
+import { ModuleManagerInterface } from '../../platform/node/extension-manager';
 import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
-import { AppViews } from './appView';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
@@ -18,7 +17,7 @@ export const subView = {
   appView: null,
   mainView: null,
 };
-const eoUpdater = new EoUpdater()
+const eoUpdater = new EoUpdater();
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 // Remote
@@ -36,7 +35,7 @@ function createWindow(): BrowserWindow {
     width: Math.round(size.width * 0.8),
     height: Math.round(size.height * 0.8),
     useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
-    frame: os.type() === 'Darwin' ? true : false, //mac use default frame
+    // frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
       webSecurity: false,
       preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
@@ -57,6 +56,7 @@ function createWindow(): BrowserWindow {
       processEnv === 'development'
         ? 'http://localhost:4200'
         : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
+    console.log('loadPage', file);
     win.loadURL(file);
     win.webContents.openDevTools({
       mode: 'undocked',
@@ -65,18 +65,12 @@ function createWindow(): BrowserWindow {
       view: win,
     });
   };
-  win.webContents.on('did-fail-load', () => {
+  win.webContents.on('did-fail-load', (event, errorCode) => {
+    console.error('did-fail-load', errorCode);
     loadPage();
   });
   win.webContents.on('did-finish-load', () => {
     mainRemote.enable(win.webContents);
-    //remove origin view
-    for (var i in subView) {
-      if (!subView[i]) {
-        continue;
-      }
-      subView[i].remove();
-    }
   });
   loadPage();
 
@@ -87,23 +81,7 @@ function createWindow(): BrowserWindow {
     // when you should delete the corresponding element.
     win = null;
   });
-
-  // resize 监听，改变bounds
-  win.on('resize', () => resize());
-
   return win;
-}
-
-/**
- * 重置View的Bounds
- */
-function resize(sideWidth?: number) {
-  for (var i in subView) {
-    if (!subView[i]) {
-      continue;
-    }
-    subView[i].rebuildBounds(sideWidth);
-  }
 }
 
 try {
@@ -232,25 +210,6 @@ try {
       returnValue = subView.appView?.sidePosition;
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
-    } else if (arg.action === 'openApp') {
-      // if (arg.data.moduleID && !arg.data.moduleID.includes('@eo-core')) {
-      //   // 如果要打开是同一app，忽略
-      //   if (subView.appView?.mainModuleID === arg.data.moduleID) {
-      //     return;
-      //   }
-      //   const module: ModuleInfo = moduleManager.getModule(arg.data.moduleID);
-      //   if (module) {
-      //     if (!subView.appView) subView.appView = new AppViews(win);
-      //     subView.appView.create(module);
-      //   }
-      // } else {
-      //   if (subView.appView) {
-      //     subView.appView.remove();
-      //   }
-      // }
-      // returnValue = 'view id';
-    } else if (arg.action === 'autoResize') {
-      resize(arg.data.sideWidth);
     } else {
       returnValue = 'Invalid data';
     }
