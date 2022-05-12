@@ -21,7 +21,7 @@
         "sync-eolink.push.switch": {
           "type": "boolean",
           "label": "开关",
-          "default": "",
+          "default": true,
           "placeholder": "请选择",
           "description": "二级说明"
         }

@@ -32,8 +32,24 @@
           <nz-form-item nz-col class="fg1" *ngFor="let item of module.properties | keyvalue">
             <nz-form-label nzFor="{{ item.key }}">{{ module.properties[item.key]?.label }} </nz-form-label>
             <nz-form-control nzErrorTip="请输入 {{  module.properties[item.key] }}">
-              <input type="text" nz-input id="{{ item.key }}" placeholder="{{module.properties[item.key]?.placeholder}}"
-                formControlName="{{ item.key }}" [(ngModel)]="settings[item.key]" />
+              <!-- 字符串类型 -->
+              <ng-container *ngIf="module.properties[item.key]?.type === 'string'">
+                <input type="text" nz-input id="{{ item.key }}"
+                  placeholder="{{module.properties[item.key]?.placeholder}}" formControlName="{{ item.key }}"
+                  [(ngModel)]="settings[item.key]" />
+              </ng-container>
+
+              <!-- 布尔类型 -->
+              <ng-container *ngIf="module.properties[item.key]?.type === 'boolean'">
+                <label nz-checkbox [(ngModel)]="settings[item.key]" id="{{ item.key }}"
+                  formControlName="{{ item.key }}">{{module.properties[item.key]?.description}}</label>
+              </ng-container>
+
+              <!-- 数字类型 -->
+              <ng-container *ngIf="module.properties[item.key]?.type === 'number'">
+                <nz-input-number [(ngModel)]="settings[item.key]" id="{{ item.key }}" formControlName="{{ item.key }}">
+                  {{module.properties[item.key]?.description}}</nz-input-number>
+              </ng-container>
             </nz-form-control>
           </nz-form-item>
         </div>

@@ -16,7 +16,7 @@
             "type": "boolean",
             "default": true,
             "label": "自动重定向",
-            "description": ""
+            "description": "自动重定向至redirect url"
           }
         }
       }

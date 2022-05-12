@@ -67,7 +67,6 @@ export class SettingComponent implements OnInit {
     // this.init();
     this.isVisible = true;
     this.parseSettings();
-    console.log('setings', this.settings);
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
@@ -145,8 +144,7 @@ export class SettingComponent implements OnInit {
       if (Array.isArray(item)) {
         item.forEach((n) => this.setSettingsModel(n.properties, controls));
       } else {
-        const properties = item.properties;
-        this.setSettingsModel(properties, controls);
+        this.setSettingsModel(item.properties, controls);
       }
     });
 
@@ -185,6 +183,8 @@ export class SettingComponent implements OnInit {
       return prev.concat(treeItem);
     }, []);
     console.log('treeData', treeData);
+    console.log('setings', this.settings);
+    console.log('controls', controls);
     this.modules = allSettings;
     this.dataSource.setData(treeData);
     this.treeControl.expandAll();

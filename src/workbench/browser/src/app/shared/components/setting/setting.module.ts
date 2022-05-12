@@ -7,6 +7,8 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -26,6 +28,8 @@ const ANTDMODULES = [
   NzDividerModule,
   NzTabsModule,
   NzTreeViewModule,
+  NzCheckboxModule,
+  NzInputNumberModule,
 ];
 @NgModule({
   declarations: [SettingComponent],
