@@ -3,18 +3,43 @@
 </a>
 
 <nz-modal [(nzVisible)]="isVisible && isModal" nzWidth="70%" nzTitle="配置" (nzOnCancel)="handleCancel()">
-  <section *nzModalContent class="flex">
-    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="handleSave()">
-      <nz-tabset [nzTabPosition]="position">
-        <nz-tab *ngFor="let module of modules" [nzTitle]="module.title">
-          <nz-form-item nz-col class="fg1" *ngFor="let field of module.fields">
-            <nz-form-label nzFor="{{ field.name}}">{{ field.label }} </nz-form-label>
-            <nz-form-control nzErrorTip="请输入 {{ field.label }}">
-              <input type="text" nz-input id="{{ field.name }}" formControlName="{{ field.name }}" [(ngModel)]="settings[module.key][field.key]" />
+  <section *nzModalContent>
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="handleSave()" class="flex">
+      <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" style="margin-right: 20px;">
+        <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
+          <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
+          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)">
+            {{ node.title }}
+          </nz-tree-node-option>
+        </nz-tree-node>
+
+        <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
+          <nz-tree-node-toggle>
+            <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
+          </nz-tree-node-toggle>
+          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)">
+            {{ node.title }}
+          </nz-tree-node-option>
+        </nz-tree-node>
+      </nz-tree-view>
+      <!-- <nz-tabset [nzTabPosition]="position">
+        <nz-tab *ngFor="let module of modules" [nzTitle]="getModuleTitle(module)"> -->
+      <div>
+        <div *ngFor="let module of currentConfiguration">
+          <h2 class="title">{{ module.title }}</h2>
+          <nz-form-item nz-col class="fg1" *ngFor="let item of module.properties | keyvalue">
+            <nz-form-label nzFor="{{ item.key }}">{{ module.properties[item.key]?.label }} </nz-form-label>
+            <nz-form-control nzErrorTip="请输入 {{  module.properties[item.key] }}">
+              <input type="text" nz-input id="{{ item.key }}" placeholder="{{module.properties[item.key]?.placeholder}}"
+                formControlName="{{ item.key }}" [(ngModel)]="settings[item.key]" />
             </nz-form-control>
           </nz-form-item>
-        </nz-tab>
-      </nz-tabset>
+        </div>
+      </div>
+      <!-- </nz-tab>
+      </nz-tabset> -->
     </form>
   </section>
   <div *nzModalFooter class="footer">

@@ -1,0 +1,91 @@
+{
+  "name": "market",
+  "version": "0.1.0",
+  "author": "Eolink",
+  "private": true,
+  "description": "API Toolkit Market",
+  "belongs": [
+    "default"
+  ],
+  "logo": "icon-apps",
+  "main_debug": "http://localhost:8080",
+  "moduleID": "default",
+  "moduleName": "拓展广场",
+  "moduleType": "app",
+  "features": {
+    "export": {
+      "action": "export_openapi",
+      "label": "OpenAPI",
+      "description": "Export data as OpenAPI format",
+      "icon": "./images/openapi.svg",
+      "extension": "json"
+    },
+    "configuration": {
+      "title": "测试拓展",
+      "properties": {
+        "core.market.url": {
+          "type": "string",
+          "required": true,
+          "default": "http://127.0.0.1",
+          "label": "服务器地址2",
+          "description": "插件安装7来源的服务器地址"
+        },
+        "core.market.test": {
+          "type": "string",
+          "required": false,
+          "default": "6667776",
+          "label": "测试配置3",
+          "description": "这是另外一个测试的配置"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "main": "dist/index.html",
+  "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
+    "ant-design-vue": "^2.2.8",
+    "core-js": "^3.8.3",
+    "ky": "^0.30.0",
+    "pinia": "^2.0.13",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "vue-cli-plugin-windicss": "~1.1.3",
+    "windicss": "^3.5.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}

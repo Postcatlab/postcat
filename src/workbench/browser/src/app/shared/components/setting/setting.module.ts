@@ -11,6 +11,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
+
 import { ElectronService } from '../../../core/services';
 
 const ANTDMODULES = [
@@ -23,6 +25,7 @@ const ANTDMODULES = [
   NzSelectModule,
   NzDividerModule,
   NzTabsModule,
+  NzTreeViewModule,
 ];
 @NgModule({
   declarations: [SettingComponent],

@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "Eoapi-Features",
+  "version": "0.0.1",
+  "displayName": "功能",
+  "author": "eoapi",
+  "publisher": "eoapi",
+  "contributes": {
+    "configuration": [
+      {
+        "type": "object",
+        "title": "API测试",
+        "order": 1,
+        "properties": {
+          "features.remoteServer.url": {
+            "type": "boolean",
+            "default": true,
+            "label": "自动重定向",
+            "description": ""
+          }
+        }
+      }
+    ]
+  }
+}

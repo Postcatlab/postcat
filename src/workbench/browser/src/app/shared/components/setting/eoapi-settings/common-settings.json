@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "Eoapi-Common",
+  "version": "0.0.1",
+  "displayName": "通用",
+  "author": "eoapi",
+  "publisher": "eoapi",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "通用",
+      "properties": {
+        "common.remoteServer.url": {
+          "type": "string",
+          "required": true,
+          "default": "http://127.0.0.1",
+          "label": "远程服务器地址",
+          "description": "从远程服务器存取数据，配置后支持多人协作"
+        },
+        "common.remoteServer.token": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "label": "Token",
+          "description": "远程服务器Token，配置后才可访问"
+        }
+      }
+    }
+  }
+}

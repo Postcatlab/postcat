@@ -1,0 +1,42 @@
+{
+  "extensions": [
+    {
+      "type": "object",
+      "title": "Sync Eolink",
+      "properties": {
+        "sync-eolink.secret.key": {
+          "type": "string",
+          "label": "eo-secret-key",
+          "default": "",
+          "placeholder": "单行输入",
+          "description": "空间秘钥"
+        },
+        "sync-eolink.push.way": {
+          "type": "string",
+          "label": "推送方式",
+          "default": "",
+          "placeholder": "请选择",
+          "description": "二级说明"
+        },
+        "sync-eolink.push.switch": {
+          "type": "boolean",
+          "label": "开关",
+          "default": "",
+          "placeholder": "请选择",
+          "description": "二级说明"
+        }
+      }
+    },
+    {
+      "title": "Sync Zion",
+      "properties": {
+        "sync-zion.server.port": {
+          "type": "number",
+          "default": "8080",
+          "label": "端口号",
+          "description": "服务端口号"
+        }
+      }
+    }
+  ]
+}
