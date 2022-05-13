@@ -121,7 +121,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   getApis() {
     this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+      const { success, empty } = StorageHandleStatus;
+      if ([success, empty].includes(result.status)) {
         let apiItems = {};
         result.data.forEach((item) => {
           delete item.updatedAt;
@@ -138,9 +139,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         this.apiDataItems = apiItems;
         this.generateGroupTreeData();
         this.restoreExpandStatus();
-      } else {
-        // * empty data
-        this.treeNodes = [];
       }
     });
   }
