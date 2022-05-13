@@ -57,6 +57,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/test',
       },
+      {
+        moduleName: '拓展广场',
+        moduleID: '@eo-core-extension',
+        isOffical: true,
+        logo: 'icon-apps',
+        activeRoute: 'home/preview',
+        route: 'home/preview',
+      }
     ];
     if (!this.electron.isElectron) {
       defaultModule.push({

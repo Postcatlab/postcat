@@ -606,7 +606,11 @@ export class Storage extends Dexie implements StorageInterface {
           tables = ['environment', 'group', 'project', 'apiData'];
         for (var i = 0; i < tables.length; i++) {
           let tableName = tables[i];
-          result[tableName] = await this[tableName].toArray();
+          if (tableName === 'project') {
+            result[tableName] = (await this[tableName].toArray())[0];
+          } else {
+            result[tableName] = await this[tableName].toArray();
+          }
         }
         obs.next(result);
         obs.complete();
@@ -671,4 +675,3 @@ export class Storage extends Dexie implements StorageInterface {
     return this.update(this.project, item, uuid);
   }
 }
-
