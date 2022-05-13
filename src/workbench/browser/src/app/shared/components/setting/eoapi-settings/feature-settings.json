@@ -19,6 +19,19 @@
             "description": "自动重定向至redirect url"
           }
         }
+      },
+      {
+        "type": "object",
+        "title": "扩展",
+        "order": 2,
+        "properties": {
+          "features.remoteServer.url": {
+            "type": "boolean",
+            "default": true,
+            "label": "自动更新",
+            "description": "勾选后，检测到拓展升级后自动从远程下载最新的插件更新"
+          }
+        }
       }
     ]
   }

@@ -32,7 +32,7 @@
       "properties": {
         "sync-zion.server.port": {
           "type": "number",
-          "default": "8080",
+          "default": 8080,
           "label": "端口号",
           "description": "服务端口号"
         }

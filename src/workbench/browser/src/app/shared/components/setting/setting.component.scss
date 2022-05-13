@@ -5,10 +5,13 @@
   bottom: 0;
 }
 
-.flex {
-  display: flex;
-  width: 100%;
+.container {
+  display: grid;
+  grid-template-columns: minmax(200px, min-content) 25px auto;
   height: 60vh;
+  .divider {
+    height: 100%;
+  }
 }
 
 .footer {
@@ -18,4 +21,11 @@
 .title {
   font-size: 20px;
   font-weight: 700;
+}
+.label {
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.9);
+}
+.description {
+  color: rgb(102, 102, 102);
 }
