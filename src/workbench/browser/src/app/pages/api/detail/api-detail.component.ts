@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiData, ApiBodyType, JsonRootType, StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import { ApiData, ApiBodyType, JsonRootType, StorageHandleResult, StorageHandleStatus } from '../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 import { StorageService } from '../../../shared/services/storage';

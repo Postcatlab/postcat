@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { ApiData, StorageHandleResult, StorageHandleStatus } from '../../../../../../platform/browser/IndexedDB';
+import { ApiData, StorageHandleResult, StorageHandleStatus } from '../../shared/services/storage/index.model';
 import { ExportApiComponent } from '../../shared/components/export-api/export-api.component';
 import { MessageService } from '../../shared/services/message';
 import { ModalService } from '../../shared/services/modal.service';

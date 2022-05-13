@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as os from 'os'
 import ModuleManager from '../../platform/node/extension-manager/lib/manager';
 import { ModuleInfo, ModuleManagerInterface } from '../../platform/node/extension-manager';
-import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
+import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/storage/index.model';
 import { AppViews } from './appView';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';

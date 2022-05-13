@@ -33,7 +33,6 @@
     "content-disposition": "^0.5.4",
     "cross-spawn": "^7.0.3",
     "crypto-js": "^4.1.1",
-    "dexie": "3.2.1",
     "electron-log": "^4.4.6",
     "electron-updater": "^4.6.5",
     "form-data": "^4.0.0",

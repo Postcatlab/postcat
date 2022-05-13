@@ -1,9 +1,13 @@
 import Dexie, { Table } from 'dexie';
 import { Observable } from 'rxjs';
-import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, StorageItem } from '../types';
+import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, StorageItem } from '../../index.model';
 import { sampleApiData } from '../sample';
 
-class Storage extends Dexie implements StorageInterface {
+/**
+ * @description
+ * A storage service with IndexedDB.
+ */
+export class IndexedDBStorage extends Dexie implements StorageInterface {
   project!: Table<Project, number | string>;
   group!: Table<Group, number | string>;
   environment!: Table<Environment, number | string>;
@@ -671,5 +675,3 @@ class Storage extends Dexie implements StorageInterface {
     return this.update(this.project, item, uuid);
   }
 }
-
-export const storage = new Storage();

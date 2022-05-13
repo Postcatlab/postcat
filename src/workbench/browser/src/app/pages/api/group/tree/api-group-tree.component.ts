@@ -6,7 +6,7 @@ import {
   ApiData,
   StorageHandleResult,
   StorageHandleStatus,
-} from '../../../../../../../../platform/browser/IndexedDB';
+} from '../../../../shared/services/storage/index.model';
 import { Message } from '../../../../shared/services/message/message.model';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';

@@ -1,7 +1,7 @@
 import { listToTreeHasLevel } from '../../../utils/tree/tree.utils';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-import { ApiBodyType, ApiTestResGeneral, ApiTestHistoryResponse } from '../../../../../../../platform/browser/IndexedDB';
+import { ApiBodyType, ApiTestResGeneral, ApiTestHistoryResponse } from '../storage/index.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
@@ -98,7 +98,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
   };
   return result;
 };
-export const eoFormatResponseData = ({type,report, history, id }) => {
+export const eoFormatResponseData = ({report, history, id }) => {
   let { httpCode, ...response } = history.resultInfo;
   response = {
     statusCode: httpCode,

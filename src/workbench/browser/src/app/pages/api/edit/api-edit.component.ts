@@ -18,7 +18,7 @@ import {
   ApiEditRest,
   StorageHandleResult,
   StorageHandleStatus,
-} from '../../../../../../../platform/browser/IndexedDB';
+} from '../../../shared/services/storage/index.model';
 import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';

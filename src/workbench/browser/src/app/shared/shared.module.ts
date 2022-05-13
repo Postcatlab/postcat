@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import {
   PageNotFoundComponent,
   SelectThemeComponent,
@@ -19,15 +20,17 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
+import { HttpStorage } from './services/storage/http/lib';
 import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
 import { ModalService } from './services/modal.service';
 import { PageBlankComponent } from './components/page-blank/page-blank.component';
 import { PageFeaturePreviewComponent } from './components/page-feature-preview/page-feature-preview.component';
 import { RouterModule } from '@angular/router';
 
-const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent,PageNotFoundComponent];
+const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent, PageNotFoundComponent];
 @NgModule({
   imports: [
+    HttpClientModule,
     CommonModule,
     FormsModule,
     RouterModule,
@@ -39,10 +42,10 @@ const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, Na
     NzToolTipModule,
     NzResultModule,
     NzDropDownModule,
-    NzSpinModule
+    NzSpinModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
-  providers: [ModalService],
+  providers: [ModalService,HttpStorage],
   exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
 })
 export class SharedModule {}

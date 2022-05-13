@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../../../../platform/browser/IndexedDB';
+import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../shared/services/storage/index.model';
 import { ApiDetailService } from '../api-detail.service';
 @Component({
   selector: 'eo-api-detail-body',
