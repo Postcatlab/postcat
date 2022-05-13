@@ -217,7 +217,7 @@ export class SettingComponent implements OnInit {
     this.dataSource.setData(treeData);
     this.treeControl.expandAll();
     this.validateForm = this.fb.group(controls);
-    this.validateForm.valueChanges.subscribe(debounce(this.handleSave.bind(this)));
+    this.validateForm.valueChanges.subscribe(debounce(this.handleSave.bind(this), 300));
     // 默认选中第一项
     this.selectModule(this.treeControl.dataNodes.at(0));
   }

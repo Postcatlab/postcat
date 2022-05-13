@@ -17,6 +17,11 @@
 .tree-view, .form {
   overflow: auto;
 }
+::ng-deep {
+  .tree-view .ant-tree-switcher {
+    width: 20px;
+  }
+}
 .form {
   padding-right: 10px;
 }
@@ -25,13 +30,15 @@
 }
 
 .title {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
 }
 .label {
+  padding: 0;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.9);
 }
 .description {
+  margin-bottom: 3px;
   color: rgb(102, 102, 102);
 }

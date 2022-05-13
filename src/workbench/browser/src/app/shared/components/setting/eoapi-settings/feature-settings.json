@@ -13,9 +13,9 @@
         "title": "API测试",
         "order": 1,
         "properties": {
-          "features.remoteServer.url": {
+          "features.remoteServer.redirctUrl": {
             "type": "boolean",
-            "default": true,
+            "default": false,
             "label": "自动重定向",
             "description": "自动重定向至redirect url"
           }
@@ -26,7 +26,7 @@
         "title": "扩展",
         "order": 2,
         "properties": {
-          "features.remoteServer.url": {
+          "features.remoteServer.autoUpdate": {
             "type": "boolean",
             "default": true,
             "label": "自动更新",
