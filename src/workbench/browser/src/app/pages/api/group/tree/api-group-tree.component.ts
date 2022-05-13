@@ -136,9 +136,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           });
         });
         this.apiDataItems = apiItems;
-        this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
         this.generateGroupTreeData();
         this.restoreExpandStatus();
+      } else {
+        // * empty data
+        this.treeNodes = [];
       }
     });
   }
