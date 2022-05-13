@@ -5,7 +5,7 @@ import { ApiRoutingModule } from './api-routing.module';
 import { ApiEditModule } from './edit/api-edit.module';
 import { ApiDetailModule } from './detail/api-detail.module';
 import { ApiTestModule } from './test/api-test.module';
-import { EnvModule } from '../env/env.module';
+import { EnvModule } from '../../shared/components/env/env.module';
 import { EouiModule } from '../../eoui/eoui.module';
 
 import { ApiComponent } from './api.component';
@@ -24,7 +24,6 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 
-
 import { MessageService } from '../../shared/services/message';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
@@ -32,8 +31,7 @@ import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
-
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent,SyncApiComponent];
+const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent, SyncApiComponent];
 @NgModule({
   imports: [
     FormsModule,
@@ -55,7 +53,7 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     NzDividerModule,
     EouiModule,
     EnvModule,
-    NzCardModule
+    NzCardModule,
   ],
   declarations: [...COMPONENTS, ApiTabComponent, ApiOverviewComponent],
   exports: [],

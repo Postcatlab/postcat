@@ -12,10 +12,10 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { EouiModule } from '../../eoui/eoui.module';
+import { EouiModule } from '../../../eoui/eoui.module';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { ElectronService } from '../../core/services';
-import { StorageService } from '../../shared/services/storage';
+import { ElectronService } from '../../../core/services';
+import { StorageService } from '../../services/storage';
 
 const ANTDMODULES = [
   NzModalModule,

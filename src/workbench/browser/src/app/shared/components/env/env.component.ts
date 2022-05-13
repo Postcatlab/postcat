@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { StorageHandleResult, StorageHandleStatus } from '../../../../../../platform/browser/IndexedDB';
+import { StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { EoTableComponent } from '../../eoui/table/eo-table/eo-table.component';
-import { Change } from '../../shared/store/env.state';
-import { StorageService } from '../../shared/services/storage';
+import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
+import { Change } from '../../store/env.state';
+import { StorageService } from '../../services/storage';
 
 import { Subject } from 'rxjs';
 
