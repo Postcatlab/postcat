@@ -4,7 +4,7 @@
 
 <nz-modal [(nzVisible)]="isVisible && isModal" nzWidth="70%" nzTitle="配置" (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="container">
-    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
+    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true" class="tree-view">
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
         <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
         <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
@@ -24,7 +24,7 @@
       </nz-tree-node>
     </nz-tree-view>
     <nz-divider nzType="vertical" class="divider"></nz-divider>
-    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="handleSave()">
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="handleSave()" class="form">
       <div *ngFor="let module of currentConfiguration">
         <h2 class="title">{{ module.title }}</h2>
         <nz-form-item nz-col class="fg1" *ngFor="let field of objectKeys(module.properties)">
@@ -54,6 +54,7 @@
               <nz-input-number [(ngModel)]="settings[field]" id="{{ field }}" formControlName="{{ field }}">
                 {{module.properties[field]?.description}}</nz-input-number>
             </ng-container>
+
           </nz-form-control>
         </nz-form-item>
       </div>
