@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
+import { debounce } from 'lodash';
 import { eoapiSettings } from './eoapi-settings/';
-import extensionsSettings from './extensions-setting.json';
 
 interface TreeNode {
   name: string;
@@ -59,6 +59,8 @@ export class SettingComponent implements OnInit {
   position: NzTabPosition = 'left';
   /** 所有配置 */
   settings = {};
+  /** 本地配置 */
+  localSettings = {};
   /** 深层嵌套的配置 */
   nestedSettings = {};
   validateForm!: FormGroup;
@@ -66,7 +68,6 @@ export class SettingComponent implements OnInit {
 
   ngOnInit(): void {
     // this.init();
-    this.isVisible = true;
     this.parseSettings();
   }
 
@@ -80,7 +81,7 @@ export class SettingComponent implements OnInit {
     //  平级配置对象
     Object.keys(properties).forEach((fieldKey) => {
       const props = properties[fieldKey];
-      this.settings[fieldKey] = props.default;
+      this.settings[fieldKey] = this.localSettings[fieldKey] ?? props.default;
       // 可扩展加入更多默认校验
       if (props.required) {
         controls[fieldKey] = [null, [Validators.required]];
@@ -94,7 +95,7 @@ export class SettingComponent implements OnInit {
       const keyArrL = keyArr.length - 1;
       keyArr.reduce((p, k, i) => {
         const isLast = i === keyArrL;
-        p[k] ??= isLast ? properties[fieldKey]?.default : {};
+        p[k] ??= isLast ? this.settings[fieldKey] : {};
         return p[k];
       }, this.nestedSettings);
       // 当settings变化时，将值同步到nestedSettings
@@ -124,7 +125,7 @@ export class SettingComponent implements OnInit {
    * @returns
    */
   getModuleTitle(module: any): string {
-    const title = module?.contributes?.title ?? module?.title;
+    const title = module?.moduleName ?? module?.contributes?.title ?? module?.title;
     return title;
   }
 
@@ -139,6 +140,15 @@ export class SettingComponent implements OnInit {
    * 解析所有模块的配置信息
    */
   private parseSettings() {
+    if (!window.eo && !window.eo.getFeature) return;
+    this.isVisible = true;
+    // 获取本地设置
+    this.localSettings = window.eo.getSettings();
+    // const featureList = window.eo.getFeature('configuration');
+    const modules = window.eo.getModules();
+    const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
+    console.log('localSettings', this.localSettings);
+    console.log('extensitonConfigurations', extensitonConfigurations);
     const controls = {};
     // 所有设置
     const allSettings = [
@@ -149,8 +159,12 @@ export class SettingComponent implements OnInit {
     // 所有配置
     const allConfiguration = allSettings.map((n) => n.contributes.configuration);
     // 第三方扩展
-    extensionsSettings.extensions.forEach((item) => {
-      eoapiSettings['Eoapi-Extensions'].contributes.configuration.push(item);
+    extensitonConfigurations.forEach((item) => {
+      const configuration = item?.contributes?.configuration;
+      if (configuration) {
+        configuration.title = item.moduleName ?? configuration.title;
+        eoapiSettings['Eoapi-Extensions'].contributes.configuration.push(configuration);
+      }
     });
     /** 根据configuration配置生成settings model */
     allConfiguration.forEach((item) => {
@@ -182,14 +196,14 @@ export class SettingComponent implements OnInit {
       if (Array.isArray(configuration)) {
         treeItem = {
           name: curr.name,
-          title: curr.displayName || curr.name,
+          title: curr.moduleName || curr.name,
           children: generateTreeData(configuration),
           configuration,
         };
       } else {
         treeItem = {
           name: curr.name,
-          title: curr.displayName || configuration.title || curr.name,
+          title: curr.moduleName || configuration.title || curr.name,
           configuration: [configuration],
         };
       }
@@ -203,6 +217,7 @@ export class SettingComponent implements OnInit {
     this.dataSource.setData(treeData);
     this.treeControl.expandAll();
     this.validateForm = this.fb.group(controls);
+    this.validateForm.valueChanges.subscribe(debounce(this.handleSave.bind(this)));
     // 默认选中第一项
     this.selectModule(this.treeControl.dataNodes.at(0));
   }
@@ -267,19 +282,19 @@ export class SettingComponent implements OnInit {
   }
 
   handleSave(): void {
-    for (const i in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(i)) {
-        this.validateForm.controls[i].markAsDirty();
-        this.validateForm.controls[i].updateValueAndValidity();
-      }
-    }
-    if (this.validateForm.status === 'INVALID') {
-      return;
-    }
+    // for (const i in this.validateForm.controls) {
+    //   if (this.validateForm.controls.hasOwnProperty(i)) {
+    //     this.validateForm.controls[i].markAsDirty();
+    //     this.validateForm.controls[i].updateValueAndValidity();
+    //   }
+    // }
+    // if (this.validateForm.status === 'INVALID') {
+    //   return;
+    // }
     // 加入根据返回显示提示消息
     const saved = window.eo.saveSettings(this.settings);
     if (saved) {
-      this.handleCancel();
+      // this.handleCancel();
     }
   }
 

@@ -2,7 +2,8 @@
   <i nz-icon nzType="setting"></i>
 </a>
 
-<nz-modal [(nzVisible)]="isVisible && isModal" nzWidth="70%" nzTitle="配置" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="isVisible && isModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置"
+  (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="container">
     <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true" class="tree-view">
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
@@ -60,8 +61,8 @@
       </div>
     </form>
   </section>
-  <div *nzModalFooter class="footer">
-    <button nz-button nzType="primary" (click)="handleSave()">保存</button>
-    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
-  </div>
+  <!-- <div *nzModalFooter class="footer"> -->
+  <!-- <button nz-button nzType="primary" (click)="handleSave()">保存</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button> -->
+  <!-- </div> -->
 </nz-modal>

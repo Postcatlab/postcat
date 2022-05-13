@@ -2,7 +2,8 @@
   "private": true,
   "name": "Eoapi-Extensions",
   "version": "0.0.1",
-  "displayName": "扩展",
+  "moduleName": "扩展",
+  "moduleID": "Eoapi-Extensions",
   "author": "eoapi",
   "publisher": "eoapi",
   "contributes": {

@@ -2,7 +2,8 @@
   "private": true,
   "name": "Eoapi-Common",
   "version": "0.0.1",
-  "displayName": "通用",
+  "moduleName": "通用",
+  "moduleID": "Eoapi-Common",
   "author": "eoapi",
   "publisher": "eoapi",
   "contributes": {

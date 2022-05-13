@@ -2,7 +2,8 @@
   "private": true,
   "name": "Eoapi-Features",
   "version": "0.0.1",
-  "displayName": "功能",
+  "moduleName": "功能",
+  "moduleID": "Eoapi-Features",
   "author": "eoapi",
   "publisher": "eoapi",
   "contributes": {
