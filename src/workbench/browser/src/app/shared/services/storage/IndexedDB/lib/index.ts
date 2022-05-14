@@ -278,67 +278,29 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         });
     });
   }
-
-  /**
-   * Bulk create apiData items.
-   * @param items
-   */
   apiDataBulkCreate(items: Array<ApiData>): Observable<object> {
     return this.bulkCreate(this.apiData, items);
   }
-
-  /**
-   * Bulk load apiData items.
-   * @param uuids
-   */
   apiDataBulkLoad(uuids: Array<number | string>): Observable<Array<object>> {
     return this.bulkLoad(this.apiData, uuids);
   }
-
-  /**
-   * Bulk delete apiData items.
-   * @param uuids
-   */
   apiDataBulkRemove(uuids: Array<number | string>): Observable<boolean> {
     return this.bulkRemove(this.apiData, uuids);
   }
-
-  /**
-   * Bulk update apiData items.
-   * @param items
-   */
   apiDataBulkUpdate(items: Array<ApiData>): Observable<object> {
     return this.bulkUpdate(this.apiData, items);
   }
-
-  /**
-   * Create apiData item.
-   * @param item
-   */
   apiDataCreate(item: ApiData): Observable<object> {
     return this.create(this.apiData, item);
   }
-
-  /**
-   * Load apiData item with primary key.
-   * @param uuid
-   */
   apiDataLoad(uuid: number | string): Observable<object> {
     return this.load(this.apiData, uuid);
   }
 
-  /**
-   * Load all apiData items by groupID.
-   * @param groupID
-   */
   apiDataLoadAllByGroupID(groupID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.apiData, { groupID: groupID });
   }
 
-  /**
-   * Load all apiData items by projectID.
-   * @param projectID
-   */
   apiDataLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.apiData, { projectID: projectID });
   }
@@ -571,10 +533,6 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return this.load(this.group, uuid);
   }
 
-  /**
-   * Load all group items by projectID.
-   * @param projectID
-   */
   groupLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
     return this.loadAllByConditions(this.group, { projectID: projectID });
   }
