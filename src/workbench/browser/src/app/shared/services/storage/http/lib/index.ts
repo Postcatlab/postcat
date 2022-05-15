@@ -6,7 +6,7 @@ import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface,
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const url = '';
+    const url = 'https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925/api/v1';
     req = req.clone({
       url: url + req.url,
     });
@@ -47,8 +47,11 @@ export class HttpStorage implements StorageInterface {
   groupBulkRemove: (uuids: Array<number | string>) => Observable<boolean>;
   groupLoad: (uuid: number | string) => Observable<object>;
   groupBulkLoad: (uuids: Array<number | string>) => Observable<Array<object>>;
-  groupLoadAllByProjectID:(projectID: number | string) => Observable<Array<object>>; 
-  //{ return this.http.get('/').pipe(val=>[val]);}
+  groupLoadAllByProjectID(projectID) {
+    return this.http.post('/group/loadAllByConditions', {
+      projectID,
+    }) as Observable<Array<object>>;
+  }
   // Api Data
   apiDataCreate: (item: ApiData) => Observable<object>;
   apiDataUpdate: (item: ApiData, uuid: number | string) => Observable<object>;
@@ -58,7 +61,11 @@ export class HttpStorage implements StorageInterface {
   apiDataBulkRemove: (uuids: Array<number | string>) => Observable<boolean>;
   apiDataLoad: (uuid: number | string) => Observable<object>;
   apiDataBulkLoad: (uuids: Array<number | string>) => Observable<Array<object>>;
-  apiDataLoadAllByProjectID: (projectID: number | string) => Observable<Array<object>>;
+  apiDataLoadAllByProjectID(projectID: number | string) {
+    return this.http.post('/apiData/loadAllByConditions', {
+      projectID,
+    }) as Observable<Array<object>>;
+  }
   apiDataLoadAllByGroupID: (groupID: number | string) => Observable<Array<object>>;
   apiDataLoadAllByProjectIDAndGroupID: (
     projectID: number | string,
