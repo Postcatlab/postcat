@@ -1,19 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExtensionComponent } from './extension/extension.component';
-import { ExtensionListComponent } from './extension-list/extension-list.component';
-import { ExtensionDetailComponent } from './extension-detail/extension-detail.component';
 
+import { ExtensionRoutingModule } from './extension-routing.module';
+import { ExtensionService } from './extension.service';
+import { ExtensionComponent } from './extension.component';
+import { ExtensionListComponent } from './list/extension-list.component';
+import { ExtensionDetailComponent } from './detail/extension-detail.component';
 
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @NgModule({
-  declarations: [
-    ExtensionComponent,
-    ExtensionListComponent,
-    ExtensionDetailComponent
-  ],
-  imports: [
-    CommonModule
-  ]
+  imports: [NzInputModule,NzIconModule,ExtensionRoutingModule, CommonModule],
+  providers:[ExtensionService],
+  declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent],
 })
-export class ExtensionModule { }
+export class ExtensionModule {}

@@ -41,32 +41,37 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebar.currentModule = module;
     this.sidebar.appChanged$.next();
     let nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
-    // let route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    // this.router.navigate([route]);
+    let route = (nextApp as SidebarModuleInfo).route || '/home/blank';
+    this.router.navigate([route]);
   }
   ngOnDestroy(): void {
     this.destroy = true;
   }
   private getModules() {
     let defaultModule = [
-      {
-        moduleName: 'API',
-        moduleID: '@eo-core-apimanger',
-        isOffical: true,
-        logo: 'icon-api',
-        activeRoute: 'home/api',
-        route: 'home/api/test',
-      },
+      // {
+      //   moduleName: 'API',
+      //   moduleID: '@eo-core-apimanger',
+      //   isOffical: true,
+      //   logo: 'icon-api',
+      //   activeRoute: 'home/api',
+      //   route: 'home/api/test',
+      // },
       {
         moduleName: '拓展广场',
         moduleID: '@eo-core-extension',
         isOffical: true,
         logo: 'icon-apps',
-        activeRoute: 'home/preview',
-        route: 'home/preview',
-      }
+        activeRoute: 'home/extension',
+        route: 'home/extension/list',
+      },
     ];
-    if (!this.electron.isElectron) {
+    if (this.electron.isElectron) {
+      this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
+      this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
+        this.modules = window.eo.getSideModuleList();
+      });
+    } else {
       defaultModule.push({
         moduleName: '拓展广场',
         moduleID: '@eo-core-extension',
@@ -75,14 +80,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/preview',
         route: 'home/preview',
       });
-    }
-    if (this.electron.isElectron) {
-      this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
-      this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
-        console.log('get moduleUpdate');
-        this.modules = window.eo.getSideModuleList();
-      });
-    } else {
       this.modules = [...defaultModule];
     }
   }

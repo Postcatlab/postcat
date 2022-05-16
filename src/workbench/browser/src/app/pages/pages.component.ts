@@ -15,7 +15,7 @@ export class PagesComponent implements OnInit {
     this.watchSidebarItemChange();
   }
   private watchSidebarItemChange() {
-    this.sidebar.appChanged$.pipe().subscribe(() => {
+    this.sidebar.appChanged$.subscribe(() => {
       this.loadedIframe = false;
       if (!this.sidebar.currentModule.isOffical) {
         setTimeout(() => {
