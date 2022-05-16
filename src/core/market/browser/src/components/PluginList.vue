@@ -1,5 +1,5 @@
 <template>
-  <div class="border-b px-3 py-4">
+  <div class="bdb px-3 py-4">
     <a-input v-model:value="search" @change="handleSearch(search)" placeholder="搜索关键字" class="w-60">
       <template #prefix>
         <search-outlined type="user" />

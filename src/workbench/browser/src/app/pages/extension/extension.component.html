@@ -1,1 +1,16 @@
-<p>extension works!</p>
+<section class="main">
+  <section class="left flex-shrink-0">
+    <div class="mb-2"><i class="mr-2" nz-icon nzType="appstore" nzTheme="fill"></i>插件分类</div>
+    <div
+      class="plugin-link px-1 py-2"
+      [ngClass]="{ active: selectGroup === item.id }"
+      *ngFor="let item of groups"
+      (click)="handleSelect(item.id)"
+    >
+      {{ item.title }}<span *ngIf="item.showNum"> （{{ item.num }}）</span>
+    </div>
+  </section>
+  <section class="right flex-1 px-4">
+    <router-outlet></router-outlet>
+  </section>
+</section>
