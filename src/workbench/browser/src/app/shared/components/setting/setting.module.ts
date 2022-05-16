@@ -12,6 +12,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 
@@ -30,6 +31,7 @@ const ANTDMODULES = [
   NzTreeViewModule,
   NzCheckboxModule,
   NzInputNumberModule,
+  NzEmptyModule,
 ];
 @NgModule({
   declarations: [SettingComponent],

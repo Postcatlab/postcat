@@ -154,7 +154,7 @@ export class SettingComponent implements OnInit {
     const allSettings = [
       eoapiSettings['Eoapi-Common'],
       eoapiSettings['Eoapi-Extensions'],
-      eoapiSettings['Eoapi-Features'],
+      // eoapiSettings['Eoapi-Features'],
     ];
     // 所有配置
     const allConfiguration = allSettings.map((n) => n.contributes.configuration);

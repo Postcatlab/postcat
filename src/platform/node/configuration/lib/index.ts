@@ -4,7 +4,6 @@ import * as path from 'path';
 import { fileExists, readJson, writeJson } from '../../../../shared/node/file';
 
 export class Configuration implements ConfigurationInterface {
-
   /**
    * 配置文件地址
    */
@@ -36,7 +35,7 @@ export class Configuration implements ConfigurationInterface {
    * 保存配置文件
    */
   private saveConfig(data: ConfigurationValueInterface): boolean {
-    return writeJson(this.configPath, data);
+    return writeJson(this.configPath, data, true);
   }
 
   /**
@@ -45,13 +44,13 @@ export class Configuration implements ConfigurationInterface {
   saveSettings(settings: ConfigurationValueInterface): boolean {
     let data = this.loadConfig();
     data.settings = settings;
-    return this.saveConfig(data); 
+    return this.saveConfig(data);
   }
 
   /**
    * 保存模块配置
-   * @param moduleID 
-   * @param settings 
+   * @param moduleID
+   * @param settings
    */
   saveModuleSettings(moduleID: string, settings: ConfigurationValueInterface): boolean {
     let data = this.loadConfig();
@@ -64,20 +63,20 @@ export class Configuration implements ConfigurationInterface {
 
   /**
    * 删除模块配置
-   * @param moduleID 
-   * @returns 
+   * @param moduleID
+   * @returns
    */
   deleteModuleSettings(moduleID: string): boolean {
     let data = this.loadConfig();
     if (data.settings && data.settings[moduleID]) {
-      delete(data.settings[moduleID]);
+      delete data.settings[moduleID];
       return this.saveConfig(data);
     }
     return false;
   }
-  
+
   /**
-   * 获取全局配置 
+   * 获取全局配置
    * @returns
    */
   getSettings(): ConfigurationValueInterface {
@@ -87,14 +86,13 @@ export class Configuration implements ConfigurationInterface {
 
   /**
    * 获取模块配置
-   * @param moduleID 
-   * @returns 
+   * @param moduleID
+   * @returns
    */
   getModuleSettings(moduleID: string): ConfigurationValueInterface {
     const settings = this.getSettings();
-    return settings[moduleID] || {}; 
-  } 
-  
+    return settings[moduleID] || {};
+  }
 }
 
 export default () => new Configuration();

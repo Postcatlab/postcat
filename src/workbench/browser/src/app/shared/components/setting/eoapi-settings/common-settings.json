@@ -10,20 +10,13 @@
     "configuration": {
       "type": "object",
       "title": "通用",
+      "order": 2,
       "properties": {
-        "common.remoteServer.url": {
-          "type": "string",
-          "required": true,
-          "default": "http://127.0.0.1",
-          "label": "远程服务器地址",
-          "description": "从远程服务器存取数据，配置后支持多人协作"
-        },
-        "common.remoteServer.token": {
-          "type": "string",
-          "required": false,
-          "default": "",
-          "label": "Token",
-          "description": "远程服务器Token，配置后才可访问"
+        "common.app.autoUpdate": {
+          "type": "boolean",
+          "default": true,
+          "label": "自动升级",
+          "description": "勾选后，检测到应用升级后自动从远程下载最新的应用更新"
         }
       }
     }
