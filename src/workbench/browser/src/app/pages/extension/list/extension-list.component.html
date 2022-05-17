@@ -1,25 +1,33 @@
-<div class="right flex-1 px-4">
-  <nz-input-group class="bbd px-3 py-4" [nzPrefix]="search">
-    <input class="w-60" type="text" nz-input placeholder="搜索关键字" />
-  </nz-input-group>
-  <div class="list-block grid gap-6 py-5 px-3 grid-cols-4">
+<div class="px-3">
+  <div class="py-4">
+    <nz-input-group class="w-60" [nzPrefix]="prefixTemplateSearch">
+      <input
+        type="text"
+        nz-input
+        [(ngModel)]="keyword"
+        (ngModelChange)="onSeachChange($event)"
+        placeholder="搜索关键字"
+      />
+    </nz-input-group>
+  </div>
+  <ng-template #prefixTemplateSearch><i nz-icon nzType="search"></i></ng-template>
+  <div class="bbd"></div>
+  <div class="list-block grid gap-6 py-5 grid-cols-4">
     <div
       class="bd_all w-full h-76 py-2 px-3 rounded-lg flex flex-col flex-wrap items-center plugin-block"
       *ngFor="let it of renderList"
-      (click)="handleClickPlugin(it)"
+      (click)="clickExtension(it)"
     >
       <span class="h-8 w-full flex justify-between items-center">
-        <span
-          *ngIf="extensionService.localModules.has(it.moduleID)"
-          class="text-xs bg-green-700 text-white p-1 rounded-sm"
-          >已安装</span
+        <nz-tag *ngIf="extensionService.localModules.has(it.moduleID)" [nzColor]="'var(--MAIN_THEME_COLOR)'"
+          >已安装</nz-tag
         >
         <span
           *ngIf="!extensionService.localModules.has(it.moduleID)"
           class="text-xs p-1 bd_all rounded-sm text-green-700 border-green-700"
           >未安装</span
         >
-        <i
+        <!-- <i
           nz-icon
           nzType="setting"
           (click)="handleSetingPlugin(it)"
@@ -28,7 +36,7 @@
             extensionService.localModules.get(it.moduleID).configuration
           "
           nzTheme="outline"
-        ></i>
+        ></i> -->
       </span>
       <i
         class="block w-20 h-20 my-3 rounded-lg bg-cover bg-center bg-no-repeat"

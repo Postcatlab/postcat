@@ -5,12 +5,12 @@
       class="plugin-link px-1 py-2"
       [ngClass]="{ active: selectGroup === item.id }"
       *ngFor="let item of groups"
-      (click)="handleSelect(item.id)"
+      (click)="clickGroup(item.id)"
     >
-      {{ item.title }}<span *ngIf="item.showNum"> （{{ item.num }}）</span>
+      {{ item.title }}<span *ngIf="item.showNum"> （{{ extensionService.extensionIDs.length }}）</span>
     </div>
   </section>
-  <section class="right flex-1 px-4">
+  <section class="right fg1 px-4">
     <router-outlet></router-outlet>
   </section>
 </section>
