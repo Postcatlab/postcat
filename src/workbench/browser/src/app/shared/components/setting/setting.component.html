@@ -1,7 +1,7 @@
 <ng-container *ngIf="isVisible">
-  <a class="sidebar_item sidebar_setting" title="设置" (click)="handleShowModal()">
+  <span class="sidebar_item sidebar_setting" title="设置" (click)="handleShowModal()">
     <i nz-icon nzType="setting"></i>
-  </a>
+  </span>
 
   <nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置" (nzOnCancel)="handleCancel()">
     <section *nzModalContent class="container">
@@ -28,11 +28,13 @@
       <form *ngIf="currentConfiguration.length" nz-form [nzLayout]="'vertical'" [formGroup]="validateForm"
         (ngSubmit)="handleSave()" class="form">
         <div *ngFor="let module of currentConfiguration">
-          <h2 class="title">{{ module.title }}</h2>
+          <h2 class="title" *ngIf="module.title">{{ module.title }}</h2>
           <nz-form-item nz-col class="fg1" *ngFor="let field of objectKeys(module.properties)">
-            <nz-form-label nzFor="{{ field }}" [nzRequired]="module.properties[field]?.required" class="label">
-              {{module.properties[field]?.label }}
-            </nz-form-label>
+            <ng-container *ngIf="module.properties[field]?.label">
+              <nz-form-label nzFor="{{ field }}" [nzRequired]="module.properties[field]?.required" class="label">
+                {{module.properties[field]?.label }}
+              </nz-form-label>
+            </ng-container>
             <!-- 二级说明 -->
             <div *ngIf="module.properties[field]?.type !== 'boolean'" class="description">
               {{module.properties[field]?.description }}

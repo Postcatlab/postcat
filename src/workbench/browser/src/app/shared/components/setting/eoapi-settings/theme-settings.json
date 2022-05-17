@@ -13,6 +13,7 @@
       "properties": {
         "select.theme": {
           "type": "component",
+          "label": "主题列表",
           "default": "eo-select-theme"
         }
       }
