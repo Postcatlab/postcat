@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
-import * as os from 'os'
+import * as os from 'os';
 import ModuleManager from '../../platform/node/extension-manager/lib/manager';
 import { ModuleInfo, ModuleManagerInterface } from '../../platform/node/extension-manager';
 import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
@@ -18,7 +18,7 @@ export const subView = {
   appView: null,
   mainView: null,
 };
-const eoUpdater = new EoUpdater()
+const eoUpdater = new EoUpdater();
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 // Remote
@@ -219,7 +219,7 @@ try {
     } else if (arg.action === 'getFeature') {
       returnValue = moduleManager.getFeature(arg.data.featureKey);
     } else if (arg.action === 'saveSettings') {
-      returnValue = configuration.saveSettings(arg.data.settings);
+      returnValue = configuration.saveSettings(arg.data);
     } else if (arg.action === 'saveModuleSettings') {
       returnValue = configuration.saveModuleSettings(arg.data.moduleID, arg.data.settings);
     } else if (arg.action === 'deleteModuleSettings') {

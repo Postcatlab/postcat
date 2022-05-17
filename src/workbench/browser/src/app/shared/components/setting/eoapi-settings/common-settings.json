@@ -3,7 +3,7 @@
   "name": "Eoapi-Common",
   "version": "0.0.1",
   "moduleName": "通用",
-  "moduleID": "Eoapi-Common",
+  "moduleID": "eoapi-common",
   "author": "eoapi",
   "publisher": "eoapi",
   "contributes": {

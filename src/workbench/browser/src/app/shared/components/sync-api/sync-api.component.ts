@@ -29,9 +29,11 @@ export class SyncApiComponent implements OnInit {
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.pushType);
     // TODO 临时取值方式需要修改
-    const url = window.eo.getModuleSettings('eolink.remoteServer.url');
-    const secretKey = window.eo.getModuleSettings('eolink.remoteServer.token');
-    const projectId = window.eo.getModuleSettings('eolink.remoteServer.projectId');
+    const {
+      url,
+      token: secretKey,
+      projectId,
+    } = window.eo.getModuleSettings('eoapi-feature-push-eolink.eolink.remoteServer');
     if (module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], async (result: StorageHandleResult) => {
         if (result.status === StorageHandleStatus.success) {

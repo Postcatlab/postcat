@@ -41,9 +41,10 @@ export class Configuration implements ConfigurationInterface {
   /**
    * 保存全局配置
    */
-  saveSettings(settings: ConfigurationValueInterface): boolean {
+  saveSettings({ settings = {}, nestedSettings = {} }): boolean {
     let data = this.loadConfig();
     data.settings = settings;
+    data.nestedSettings = nestedSettings;
     return this.saveConfig(data);
   }
 
@@ -54,10 +55,12 @@ export class Configuration implements ConfigurationInterface {
    */
   saveModuleSettings(moduleID: string, settings: ConfigurationValueInterface): boolean {
     let data = this.loadConfig();
-    if (!data.settings) {
-      data.settings = {};
-    }
+    data.settings ??= {};
+    data.nestedSettings ??= {};
     data.settings[moduleID] = settings;
+    const propArr = moduleID.split('.');
+    const target = propArr.slice(0, -1).reduce((p, k) => p[k], data.nestedSettings);
+    target[propArr.at(-1)] = settings;
     return this.saveConfig(data);
   }
 
@@ -81,17 +84,21 @@ export class Configuration implements ConfigurationInterface {
    */
   getSettings(): ConfigurationValueInterface {
     const data = this.loadConfig();
-    return data.settings;
+    return data;
   }
 
   /**
-   * 获取模块配置
-   * @param moduleID
+   * 获取模块配置, 以小数点分割的属性链，如：common.app.update
+   * @param section
    * @returns
    */
-  getModuleSettings(moduleID: string): ConfigurationValueInterface {
-    const settings = this.getSettings();
-    return settings[moduleID] || {};
+  getModuleSettings(section?: string): ConfigurationValueInterface {
+    const localSettings = this.getSettings();
+    localSettings.nestedSettings ??= {};
+    if (section) {
+      return section.split('.').reduce((p, k) => p[k], localSettings.nestedSettings);
+    }
+    return localSettings.nestedSettings;
   }
 }
 

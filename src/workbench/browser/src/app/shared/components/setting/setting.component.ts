@@ -10,6 +10,7 @@ import { eoapiSettings } from './eoapi-settings/';
 interface TreeNode {
   name: string;
   title: string;
+  moduleID?: string;
   disabled?: boolean;
   children?: TreeNode[];
   configuration?: any[];
@@ -60,7 +61,7 @@ export class SettingComponent implements OnInit {
   /** 所有配置 */
   settings = {};
   /** 本地配置 */
-  localSettings = {};
+  localSettings = { settings: {}, nestedSettings: {} };
   /** 深层嵌套的配置 */
   nestedSettings = {};
   validateForm!: FormGroup;
@@ -93,7 +94,7 @@ export class SettingComponent implements OnInit {
     //  平级配置对象
     Object.keys(properties).forEach((fieldKey) => {
       const props = properties[fieldKey];
-      this.settings[fieldKey] = this.localSettings?.[fieldKey] ?? props.default;
+      this.settings[fieldKey] = this.localSettings?.settings?.[fieldKey] ?? props.default;
       // 可扩展加入更多默认校验
       if (props.required) {
         controls[fieldKey] = [null, [Validators.required]];
@@ -171,21 +172,39 @@ export class SettingComponent implements OnInit {
       // eoapiSettings['Eoapi-Features'],
     ]);
     // 所有配置
-    const allConfiguration = allSettings.map((n) => n.contributes.configuration);
+    const allConfiguration = allSettings.map((n) => {
+      const configuration = n.contributes.configuration;
+      if (!Array.isArray(configuration)) {
+        configuration.moduleID ??= n.moduleID;
+      }
+      return configuration;
+    });
     // 第三方扩展
     const extensionsModule = allSettings.find((n) => n.moduleID === 'Eoapi-Extensions');
     extensitonConfigurations.forEach((item) => {
       const configuration = item?.contributes?.configuration;
       if (configuration) {
         configuration.title = item.moduleName ?? configuration.title;
+        configuration.moduleID = item.moduleID;
         extensionsModule.contributes.configuration.push(configuration);
       }
     });
+    // 给插件的属性前面追加模块ID
+    const appendModuleID = (properties, moduleID) => {
+      return Object.keys(properties).reduce((prev, key) => {
+        prev[`${moduleID}.${key}`] = properties[key];
+        return prev;
+      }, {});
+    };
     /** 根据configuration配置生成settings model */
     allConfiguration.forEach((item) => {
       if (Array.isArray(item)) {
-        item.forEach((n) => this.setSettingsModel(n.properties, controls));
+        item.forEach((n) => {
+          n.properties = appendModuleID(n.properties, n.moduleID);
+          this.setSettingsModel(n.properties, controls);
+        });
       } else {
+        item.properties = appendModuleID(item.properties, item.moduleID);
         this.setSettingsModel(item.properties, controls);
       }
     });
@@ -211,6 +230,7 @@ export class SettingComponent implements OnInit {
       if (Array.isArray(configuration)) {
         treeItem = {
           name: curr.name,
+          moduleID: curr.moduleID,
           title: curr.moduleName || curr.name,
           children: generateTreeData(configuration),
           configuration,
@@ -218,6 +238,7 @@ export class SettingComponent implements OnInit {
       } else {
         treeItem = {
           name: curr.name,
+          moduleID: curr.moduleID,
           title: curr.moduleName || configuration.title || curr.name,
           configuration: [configuration],
         };
@@ -307,7 +328,7 @@ export class SettingComponent implements OnInit {
     //   return;
     // }
     // 加入根据返回显示提示消息
-    const saved = window.eo.saveSettings(this.settings);
+    const saved = window.eo.saveSettings({ settings: this.settings, nestedSettings: this.nestedSettings });
     if (saved) {
       // this.handleCancel();
     }
