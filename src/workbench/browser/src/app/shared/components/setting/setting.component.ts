@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { debounce } from 'lodash';
+import { debounce, cloneDeep } from 'lodash';
 import { eoapiSettings } from './eoapi-settings/';
 
 interface TreeNode {
@@ -55,7 +55,7 @@ export class SettingComponent implements OnInit {
   /** 当前配置项 */
   currentConfiguration = [];
   isVisible = false;
-  isModal = false;
+  _isShowModal = false;
   position: NzTabPosition = 'left';
   /** 所有配置 */
   settings = {};
@@ -64,11 +64,23 @@ export class SettingComponent implements OnInit {
   /** 深层嵌套的配置 */
   nestedSettings = {};
   validateForm!: FormGroup;
+
+  get isShowModal() {
+    return this._isShowModal;
+  }
+
+  set isShowModal(val) {
+    this._isShowModal = val;
+    if (val) {
+      this.init();
+    }
+  }
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    // this.init();
-    this.parseSettings();
+    this.init();
+    // this.parseSettings();
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
@@ -139,9 +151,11 @@ export class SettingComponent implements OnInit {
   /**
    * 解析所有模块的配置信息
    */
-  private parseSettings() {
+  private init() {
     if (!window.eo && !window.eo.getFeature) return;
     this.isVisible = true;
+    this.settings = {};
+    this.nestedSettings = {};
     // 获取本地设置
     this.localSettings = window.eo.getSettings();
     // const featureList = window.eo.getFeature('configuration');
@@ -151,19 +165,20 @@ export class SettingComponent implements OnInit {
     console.log('extensitonConfigurations', extensitonConfigurations);
     const controls = {};
     // 所有设置
-    const allSettings = [
+    const allSettings = cloneDeep([
       eoapiSettings['Eoapi-Common'],
       eoapiSettings['Eoapi-Extensions'],
       // eoapiSettings['Eoapi-Features'],
-    ];
+    ]);
     // 所有配置
     const allConfiguration = allSettings.map((n) => n.contributes.configuration);
     // 第三方扩展
+    const extensionsModule = allSettings.find((n) => n.moduleID === 'Eoapi-Extensions');
     extensitonConfigurations.forEach((item) => {
       const configuration = item?.contributes?.configuration;
       if (configuration) {
         configuration.title = item.moduleName ?? configuration.title;
-        eoapiSettings['Eoapi-Extensions'].contributes.configuration.push(configuration);
+        extensionsModule.contributes.configuration.push(configuration);
       }
     });
     /** 根据configuration配置生成settings model */
@@ -278,7 +293,7 @@ export class SettingComponent implements OnInit {
   // }
 
   handleShowModal() {
-    this.isModal = true;
+    this.isShowModal = true;
   }
 
   handleSave(): void {
@@ -299,6 +314,6 @@ export class SettingComponent implements OnInit {
   }
 
   handleCancel(): void {
-    this.isModal = false;
+    this.isShowModal = false;
   }
 }

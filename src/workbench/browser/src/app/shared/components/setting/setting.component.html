@@ -3,7 +3,7 @@
     <i nz-icon nzType="setting"></i>
   </a>
 
-  <nz-modal [(nzVisible)]="isModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置" (nzOnCancel)="handleCancel()">
+  <nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置" (nzOnCancel)="handleCancel()">
     <section *nzModalContent class="container">
       <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true" class="tree-view">
         <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
