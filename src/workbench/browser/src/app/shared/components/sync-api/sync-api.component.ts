@@ -28,14 +28,19 @@ export class SyncApiComponent implements OnInit {
     const feature = this.featureList.get(this.pushType);
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.pushType);
+    // TODO 临时取值方式需要修改
+    const url = window.eo.getModuleSettings('eolink.remoteServer.url');
+    const secretKey = window.eo.getModuleSettings('eolink.remoteServer.token');
+    const projectId = window.eo.getModuleSettings('eolink.remoteServer.projectId');
     if (module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], async (result: StorageHandleResult) => {
         if (result.status === StorageHandleStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = await module[action](result.data, {
-              projectId: 'ZXXhzTG756db7e34a8d7c803f001edf1a1c545bcbf27719',
-              SecretKey: 'SgAZ5Lk60f776c1a235a3c3e62543c3793c36d6cc511db9',
+              url,
+              projectId,
+              secretKey,
             });
             console.log(output);
           } catch (e) {
