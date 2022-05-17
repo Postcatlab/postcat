@@ -93,7 +93,7 @@ export class SettingComponent implements OnInit {
     //  平级配置对象
     Object.keys(properties).forEach((fieldKey) => {
       const props = properties[fieldKey];
-      this.settings[fieldKey] = this.localSettings[fieldKey] ?? props.default;
+      this.settings[fieldKey] = this.localSettings?.[fieldKey] ?? props.default;
       // 可扩展加入更多默认校验
       if (props.required) {
         controls[fieldKey] = [null, [Validators.required]];
