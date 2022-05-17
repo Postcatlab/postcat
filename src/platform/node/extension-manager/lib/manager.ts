@@ -1,8 +1,6 @@
 import { MODULE_DIR as baseDir } from '../../../../shared/common/constant';
 import { ModuleHandler } from './handler';
-import { CoreHandler } from './core';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
-import * as path from 'path';
 import { isNotEmpty } from '../../../../shared/common/common';
 import { processEnv } from '../../constant';
 
@@ -209,24 +207,10 @@ export class ModuleManager implements ModuleManagerInterface {
    * 读取本地package.json文件得到本地安装的模块列表，依次获取模块信息加入模块列表
    */
   private init() {
-    this.initCore();
     const moduleNames: string[] = this.moduleHandler.list();
     moduleNames.forEach((moduleName: string) => {
       // 这里要加上try catch，避免异常
       const moduleInfo: ModuleInfo = this.moduleHandler.info(moduleName);
-      this.setup(moduleInfo);
-    });
-  }
-
-  /**
-   * 初始化核心模块的加载
-   */
-  private initCore() {
-    const coreDir = path.join(__dirname, '../../../../core');
-    const coreHandler = new CoreHandler({ baseDir: coreDir });
-    const moduleNames: string[] = coreHandler.list();
-    moduleNames.forEach((moduleName: string) => {
-      const moduleInfo: ModuleInfo = coreHandler.info(moduleName);
       this.setup(moduleInfo);
     });
   }

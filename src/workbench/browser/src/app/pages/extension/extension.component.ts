@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ExtensionGroupType } from './extension.model';
 import { ExtensionService } from './extension.service';
 
@@ -20,16 +21,19 @@ export class ExtensionComponent implements OnInit {
     {
       id: 'installed',
       title: '已安装',
-      showNum: true,
-      num: 0,
+      showNum: true
     },
   ];
-  selectGroup: ExtensionGroupType = ExtensionGroupType.all;
-  constructor(private extensionService: ExtensionService) {
-    this.groups[2].num = this.extensionService.pluginNames.length;
+  selectGroup: ExtensionGroupType|string = ExtensionGroupType.all;
+  constructor(public extensionService: ExtensionService, private router: Router) {
   }
-  handleSelect(id: ExtensionGroupType) {
+  clickGroup(id) {
     this.selectGroup = id;
+    this.router
+      .navigate(['home/extension/list'], {
+        queryParams: { type: id },
+      })
+      .finally();
   }
   ngOnInit(): void {}
 }

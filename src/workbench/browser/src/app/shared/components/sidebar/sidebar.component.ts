@@ -49,21 +49,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   private getModules() {
     let defaultModule = [
-      // {
-      //   moduleName: 'API',
-      //   moduleID: '@eo-core-apimanger',
-      //   isOffical: true,
-      //   logo: 'icon-api',
-      //   activeRoute: 'home/api',
-      //   route: 'home/api/test',
-      // },
+      {
+        moduleName: 'API',
+        moduleID: '@eo-core-apimanger',
+        isOffical: true,
+        logo: 'icon-api',
+        activeRoute: 'home/api',
+        route: 'home/api/test',
+      },
       {
         moduleName: '拓展广场',
         moduleID: '@eo-core-extension',
         isOffical: true,
         logo: 'icon-apps',
         activeRoute: 'home/extension',
-        route: 'home/extension/list',
+        route: this.electron.isElectron ? 'home/extension/list' : 'home/preview',
       },
     ];
     if (this.electron.isElectron) {
@@ -72,14 +72,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.modules = window.eo.getSideModuleList();
       });
     } else {
-      defaultModule.push({
-        moduleName: '拓展广场',
-        moduleID: '@eo-core-extension',
-        isOffical: true,
-        logo: 'icon-apps',
-        activeRoute: 'home/preview',
-        route: 'home/preview',
-      });
       this.modules = [...defaultModule];
     }
   }
