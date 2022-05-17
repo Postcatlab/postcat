@@ -57,6 +57,11 @@
                   {{module.properties[field]?.description}}</nz-input-number>
               </ng-container>
 
+              <!-- 组件类型 -->
+              <ng-container *ngIf="module.properties[field]?.type === 'component'">
+                <eo-select-theme *ngIf="settings[field] === 'eo-select-theme'"></eo-select-theme>
+              </ng-container>
+
             </nz-form-control>
           </nz-form-item>
         </div>

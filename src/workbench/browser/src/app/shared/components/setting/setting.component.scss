@@ -2,7 +2,7 @@
   font-size: 20px;
   position: absolute;
   padding: 15px;
-  bottom: 0;
+  bottom: var(--FOOTER_HEIGHT, 0);
 }
 
 .container {
@@ -16,11 +16,6 @@
 
 .tree-view, .form {
   overflow: auto;
-}
-::ng-deep {
-  .tree-view .ant-tree-switcher {
-    width: 20px;
-  }
 }
 .form {
   padding-right: 10px;

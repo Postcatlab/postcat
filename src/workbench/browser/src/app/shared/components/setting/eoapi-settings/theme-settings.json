@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "Eoapi-theme",
+  "version": "0.0.1",
+  "moduleName": "主题",
+  "moduleID": "eoapi-theme",
+  "author": "eoapi",
+  "publisher": "eoapi",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "order": 1,
+      "properties": {
+        "select.theme": {
+          "type": "component",
+          "default": "eo-select-theme"
+        }
+      }
+    }
+  }
+}

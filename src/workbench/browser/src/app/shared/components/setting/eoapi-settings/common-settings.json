@@ -10,7 +10,7 @@
     "configuration": {
       "type": "object",
       "title": "通用",
-      "order": 2,
+      "order": 1,
       "properties": {
         "common.app.autoUpdate": {
           "type": "boolean",

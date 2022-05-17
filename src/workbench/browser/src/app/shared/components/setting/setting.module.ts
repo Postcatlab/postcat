@@ -17,6 +17,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 
 import { ElectronService } from '../../../core/services';
+import { SharedModule } from '../../shared.module';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -35,7 +36,7 @@ const ANTDMODULES = [
 ];
 @NgModule({
   declarations: [SettingComponent],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, ...ANTDMODULES],
+  imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent],
   providers: [ElectronService],
 })

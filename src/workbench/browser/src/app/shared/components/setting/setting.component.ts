@@ -168,6 +168,7 @@ export class SettingComponent implements OnInit {
     // 所有设置
     const allSettings = cloneDeep([
       eoapiSettings['Eoapi-Common'],
+      eoapiSettings['Eoapi-theme'],
       eoapiSettings['Eoapi-Extensions'],
       // eoapiSettings['Eoapi-Features'],
     ]);
