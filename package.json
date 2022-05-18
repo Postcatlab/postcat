@@ -22,8 +22,7 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "electron:build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
-    "build": "electron-builder build",
+    "build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
     "release": "electron-builder",
     "test": "npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json"
