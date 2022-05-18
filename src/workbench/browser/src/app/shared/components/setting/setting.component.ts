@@ -6,6 +6,8 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { debounce, cloneDeep } from 'lodash';
 import { eoapiSettings } from './eoapi-settings/';
+import { Message, MessageService } from '../../../shared/services/message';
+import { Subject, takeUntil } from 'rxjs';
 
 interface TreeNode {
   name: string;
@@ -77,11 +79,23 @@ export class SettingComponent implements OnInit {
     }
   }
 
-  constructor(private fb: FormBuilder) {}
+  private destroy$: Subject<void> = new Subject<void>();
+  constructor(private fb: FormBuilder, private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.init();
     // this.parseSettings();
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'toggleSettingModalVisible': {
+            inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
+            break;
+          }
+        }
+      });
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;

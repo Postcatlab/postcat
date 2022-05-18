@@ -1,7 +1,15 @@
 <ng-container *ngIf="isVisible">
-  <span class="sidebar_item sidebar_setting" title="设置" (click)="handleShowModal()">
+  <span nz-popover [nzPopoverContent]="contentTemplate" nzPopoverOverlayClassName="sidebar_setting_popover"
+    nzPopoverPlacement="rightBottom" class="sidebar_item sidebar_setting" title="设置">
     <i nz-icon nzType="setting"></i>
   </span>
+
+  <ng-template #contentTemplate>
+    <ul nz-menu [nzSelectable]="false">
+      <li nz-menu-item (click)="handleShowModal()">设置</li>
+      <li nz-menu-item>切换到远程</li>
+    </ul>
+  </ng-template>
 
   <nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置" (nzOnCancel)="handleCancel()">
     <section *nzModalContent class="container">
