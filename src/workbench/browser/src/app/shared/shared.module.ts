@@ -24,7 +24,7 @@ import { PageBlankComponent } from './components/page-blank/page-blank.component
 import { PageFeaturePreviewComponent } from './components/page-feature-preview/page-feature-preview.component';
 import { RouterModule } from '@angular/router';
 
-const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent,PageNotFoundComponent];
+const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, NavbarComponent, PageNotFoundComponent];
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +38,7 @@ const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, Na
     NzToolTipModule,
     NzResultModule,
     NzDropDownModule,
-    NzSpinModule
+    NzSpinModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS,ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
   providers: [ModalService],

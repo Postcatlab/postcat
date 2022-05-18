@@ -197,7 +197,7 @@ try {
     } else if (arg.action === 'getFeature') {
       returnValue = moduleManager.getFeature(arg.data.featureKey);
     } else if (arg.action === 'saveSettings') {
-      returnValue = configuration.saveSettings(arg.data.settings);
+      returnValue = configuration.saveSettings(arg.data);
     } else if (arg.action === 'saveModuleSettings') {
       returnValue = configuration.saveModuleSettings(arg.data.moduleID, arg.data.settings);
     } else if (arg.action === 'deleteModuleSettings') {
