@@ -134,7 +134,7 @@ class Storage extends Dexie implements StorageInterface {
           }
         });
       table
-        .bulkGet(uuids)
+        .bulkGet(uuids.map(Number))
         .then((existItems) => {
           if (existItems) {
             let newItems: Array<StorageItem> = [];
@@ -146,7 +146,12 @@ class Storage extends Dexie implements StorageInterface {
               });
             // @ts-ignore
             table
-              .bulkPut(newItems)
+              .bulkPut(
+                newItems.map((n: any) => ({
+                  ...n,
+                  groupID: ~~n.groupID.replace('group-', ''),
+                }))
+              )
               .then((result) => {
                 obs.next({ number: result, items: newItems });
                 obs.complete();
