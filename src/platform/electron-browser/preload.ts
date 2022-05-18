@@ -125,8 +125,8 @@ window.eo.storageRemote = (args) => {
   return output;
 };
 
-window.eo.saveSettings = (settings) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'saveSettings', data: { settings: settings } });
+window.eo.saveSettings = ({ settings, nestedSettings }) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'saveSettings', data: { settings, nestedSettings } });
 };
 
 window.eo.saveModuleSettings = (moduleID, settings) => {
