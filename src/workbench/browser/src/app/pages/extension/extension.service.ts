@@ -18,12 +18,12 @@ export class ExtensionService {
   public async requestList() {
     return await lastValueFrom(this.http.get('http://106.12.149.147:3333/list'));
   }
-  async getDetail(id): Promise<any> {
+  async getDetail(id,name): Promise<any> {
     let result = {};
     if (this.localModules.has(id)) {
       Object.assign(result, this.localModules.get(id), { installed: true });
     }
-    let { code, data }: any = await this.requestDetail(id);
+    let { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
     return result;
   }

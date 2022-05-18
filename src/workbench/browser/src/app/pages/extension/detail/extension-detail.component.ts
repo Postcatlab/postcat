@@ -15,7 +15,7 @@ export class ExtensionDetailComponent implements OnInit {
     this.getDetail();
   }
   async getDetail() {
-    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id);
+    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id,this.route.snapshot.queryParams.name);
   }
   manageExtension(operate: string, id) {
     this.isOperating = true;
