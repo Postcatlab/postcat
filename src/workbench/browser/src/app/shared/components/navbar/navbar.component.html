@@ -24,7 +24,6 @@
       <img src="../../../../assets/images/offline.svg">
     </span>
     <nz-dropdown-menu #settingMenu="nzDropdownMenu">
-<<<<<<< HEAD
       <div nz-menu class="switch-data-source-box">
         <div>
           <img src="../../../../assets/images/offline.svg">
@@ -35,15 +34,6 @@
           <button nz-button nzType="default" nzSize="small" (click)="switchToStandAlone(standAloneTmpl)">切换</button>
         </div>
       </div>
-=======
-      <ul nz-menu nzSelectable>
-        <li (click)="openSettingModal()" nz-menu-item>设置</li>
-        <li nz-menu-divider></li>
-        <li nz-menu-item (click)="isRemote ? switchToStandAlone(standAloneTmpl) : switchToRemote()">
-          {{isRemote ? '切换到单机' : '切换到远程'}}
-        </li>
-      </ul>
->>>>>>> 212137f (fix: remove standAlone notification after switchToRemote)
     </nz-dropdown-menu>
     <span class="mr15" nz-dropdown [nzDropdownMenu]="menu">
       <i nz-icon nzType="question-circle" class="fs20" nzTheme="outline"></i>
