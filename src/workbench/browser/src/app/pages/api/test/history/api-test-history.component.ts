@@ -6,8 +6,8 @@ import { StorageService } from '../../../../shared/services/storage';
 import {
   ApiTestHistory,
   ApiTestHistoryFrame,
-  StorageHandleResult,
-  StorageHandleStatus,
+  StorageRes,
+  StorageResStatus,
 } from '../../../../shared/services/storage/index.model';
 
 @Component({
@@ -39,8 +39,8 @@ export class ApiTestHistoryComponent implements OnInit {
           ...history,
         },
       ],
-      (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.parseItem(result.data);
           this.model.unshift(result.data);
         } else {
@@ -51,8 +51,8 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   deleteAll() {
-    this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.model = [];
         this.nzMessageService.success('删除成功');
       } else {
@@ -122,8 +122,8 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   private delete(inArg) {
-    this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.model.splice(inArg.$index, 1);
         this.nzMessageService.success('删除成功');
       } else {
@@ -134,8 +134,8 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   private getList() {
-    this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         result.data.forEach((val: any) => {
           this.parseItem(val);
         });

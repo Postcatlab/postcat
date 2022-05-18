@@ -57,21 +57,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/test',
       },
-    ];
-    if (!this.electron.isElectron) {
-      defaultModule.push({
-        moduleName: '拓展广场',
+      {
+        moduleName: '插件广场',
         moduleID: '@eo-core-extension',
         isOffical: true,
         logo: 'icon-apps',
-        activeRoute: 'home/preview',
-        route: 'home/preview',
-      });
-    }
+        activeRoute: 'home/extension',
+        route: this.electron.isElectron ? 'home/extension/list' : 'home/preview',
+      },
+    ];
     if (this.electron.isElectron) {
       this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
       this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
-        console.log('get moduleUpdate');
         this.modules = window.eo.getSideModuleList();
       });
     } else {
@@ -83,11 +80,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!currentModule) {
       //route error
       this.clickModule(this.modules[0]);
-      // let route = (nextApp as SidebarModuleInfo).route;
-      // console.log(route)
-      // if (route) {
-      //   this.router.navigate([route]);
-      // }
       return;
     }
     this.sidebar.currentModule = currentModule;

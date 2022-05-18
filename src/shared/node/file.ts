@@ -6,15 +6,15 @@ import * as path from 'path';
  * @param file
  * @param data
  */
-export const writeJson = (file: string, data: object): boolean => {
-  return writeFile(file, JSON.stringify(data));
+export const writeJson = (file: string, data: object, formatted = false): boolean => {
+  return writeFile(file, formatted ? JSON.stringify(data, null, 2) : JSON.stringify(data));
 };
 
 /**
  * Read json file, then return object.
  * @param file
  */
-export const readJson = (file: string): (object | null) => {
+export const readJson = (file: string): object | null => {
   const data: string = readFile(file);
   if ('' === data) {
     return null;
@@ -37,7 +37,7 @@ export const readFile = (file: string): string => {
 /**
  * Delete file.
  * @param file string
- * @returns 
+ * @returns
  */
 export const deleteFile = (file: string): boolean => {
   try {
@@ -46,7 +46,7 @@ export const deleteFile = (file: string): boolean => {
   } catch (e) {
     return false;
   }
-}
+};
 
 /**
  * Write data into file.

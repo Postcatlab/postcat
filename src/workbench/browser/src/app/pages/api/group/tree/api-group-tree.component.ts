@@ -4,8 +4,8 @@ import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
 import {
   Group,
   ApiData,
-  StorageHandleResult,
-  StorageHandleStatus,
+  StorageRes,
+  StorageResStatus,
 } from '../../../../shared/services/storage/index.model';
 import { Message } from '../../../../shared/services/message/message.model';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -102,8 +102,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.getGroups();
   }
   getGroups() {
-    this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         result.data.forEach((item) => {
           delete item.updatedAt;
           this.groupByID[item.uuid] = item;
@@ -120,8 +120,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   getApis() {
-    this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
+      const { success, empty } = StorageResStatus;
+      if ([success, empty].includes(result.status)) {
         let apiItems = {};
         result.data.forEach((item) => {
           delete item.updatedAt;
@@ -136,7 +137,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           });
         });
         this.apiDataItems = apiItems;
-        this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
         this.generateGroupTreeData();
         this.restoreExpandStatus();
       }
@@ -314,10 +314,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0) {
-      this.storage.run('groupBulkUpdate', [data.group], (result: StorageHandleResult) => {});
+      this.storage.run('groupBulkUpdate', [data.group], (result: StorageRes) => {});
     }
     if (data.api.length > 0) {
-      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageHandleResult) => {});
+      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {});
     }
   }
   private watchRouterChange() {

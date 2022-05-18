@@ -16,8 +16,8 @@ import {
   RequestProtocol,
   RequestMethod,
   ApiEditRest,
-  StorageHandleResult,
-  StorageHandleStatus,
+  StorageRes,
+  StorageResStatus,
 } from '../../../shared/services/storage/index.model';
 import { ApiTabService } from '../tab/api-tab.service';
 
@@ -67,8 +67,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         isLeaf: false,
       },
     ];
-    this.storage.run('groupLoadAllByProjectID', [1], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('groupLoadAllByProjectID', [1], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         result.data.forEach((item: Group) => {
           delete item.updatedAt;
           treeItems.push({
@@ -86,8 +86,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   getApi(id) {
-    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         ['requestBody', 'responseBody'].forEach((tableName) => {
           if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
             result.data[tableName] = treeToListHasLevel(result.data[tableName]);
@@ -275,8 +275,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.storage.run(
       busEvent === 'editApi' ? 'apiDataUpdate' : 'apiDataCreate',
       [formData, this.apiData.uuid],
-      (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.message.success(title);
           this.messageService.send({ type: `${busEvent}Success`, data: result.data });
         } else {

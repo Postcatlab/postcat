@@ -1,9 +1,8 @@
 import { MODULE_DIR as baseDir } from '../../../../shared/common/constant';
 import { ModuleHandler } from './handler';
-import { CoreHandler } from './core';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
-import * as path from 'path';
 import { isNotEmpty } from '../../../../shared/common/common';
+import { processEnv } from '../../constant';
 
 export class ModuleManager implements ModuleManagerInterface {
   /**
@@ -83,6 +82,7 @@ export class ModuleManager implements ModuleManagerInterface {
     const modules: Map<string, ModuleInfo> = this.moduleBelongs();
     modules?.forEach((module: ModuleInfo) => {
       if (module.isApp) {
+        module.main= processEnv === 'development' && module.main_debug ? module.main_debug : module.main,
         output.push(module);
       }
     });
@@ -117,7 +117,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 获取所有功能点列表
-   * @returns 
+   * @returns
    */
   getFeatures(): Map<string, Map<string, object>> {
     return this.features;
@@ -134,11 +134,11 @@ export class ModuleManager implements ModuleManagerInterface {
     }
     return this.modules.get(moduleID);
   }
- 
+
   /**
    * 获取某个功能点的集合
-   * @param featureKey 
-   * @returns 
+   * @param featureKey
+   * @returns
    */
   getFeature(featureKey: string): Map<string, object> {
     return this.features.get(featureKey);
@@ -181,7 +181,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 清除功能点集合中的模块功能点
-   * @param moduleInfo 
+   * @param moduleInfo
    */
   private deleteFeatures(moduleInfo: ModuleInfo) {
     if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
@@ -200,31 +200,17 @@ export class ModuleManager implements ModuleManagerInterface {
   private setup(moduleInfo: ModuleInfo) {
     if (isNotEmpty(moduleInfo.moduleID)) {
       this.set(moduleInfo);
-    } 
+    }
   }
 
   /**
    * 读取本地package.json文件得到本地安装的模块列表，依次获取模块信息加入模块列表
    */
   private init() {
-    this.initCore();
     const moduleNames: string[] = this.moduleHandler.list();
     moduleNames.forEach((moduleName: string) => {
       // 这里要加上try catch，避免异常
       const moduleInfo: ModuleInfo = this.moduleHandler.info(moduleName);
-      this.setup(moduleInfo);
-    });
-  }
-
-  /**
-   * 初始化核心模块的加载
-   */
-  private initCore() {
-    const coreDir = path.join(__dirname, '../../../../core');
-    const coreHandler = new CoreHandler({ baseDir: coreDir });
-    const moduleNames: string[] = coreHandler.list();
-    moduleNames.forEach((moduleName: string) => {
-      const moduleInfo: ModuleInfo = coreHandler.info(moduleName);
       this.setup(moduleInfo);
     });
   }

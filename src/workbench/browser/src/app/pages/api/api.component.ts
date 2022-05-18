@@ -31,11 +31,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   ];
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private apiService: ApiService,
-    private messageService: MessageService
-  ) {}
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.watchChangeRouter();
@@ -60,10 +56,6 @@ export class ApiComponent implements OnInit, OnDestroy {
           case 'gotoBulkDeleteApi':
             this.apiService.bulkDelete(inArg.data.uuids);
             break;
-          case 'exportApi':{
-            this.apiService.export(inArg.data);
-            break;
-          }
         }
       });
   }

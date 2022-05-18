@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
-import { StorageHandleResult, StorageHandleStatus } from '../../services/storage/index.model';
+import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
 @Component({
   selector: 'eo-export-api',
@@ -50,8 +50,8 @@ export class ExportApiComponent implements OnInit {
    * @param callback 
    */
   private exportEoapi(callback) {
-    this.storage.run('projectExport', [], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('projectExport', [], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         result.data.version = packageJson.version;
         this.transferTextToFile('Eoapi-export.json', result.data);
         callback(true);
@@ -72,8 +72,8 @@ export class ExportApiComponent implements OnInit {
     const filename = feature.filename || null;
     const module = window.eo.loadFeatureModule(this.exportType);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
-      this.storage.run('projectExport', [], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('projectExport', [], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = module[action](result);

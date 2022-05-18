@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Group, StorageHandleResult, StorageHandleStatus } from '../../../../shared/services/storage/index.model';
+import { Group, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MessageService } from '../../../../shared/services/message';
@@ -62,8 +62,8 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   create(): void {
-    this.storage.run('groupCreate', [this.group], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('groupCreate', [this.group], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.modalRef.destroy();
         this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
@@ -73,8 +73,8 @@ export class ApiGroupEditComponent implements OnInit {
   }
 
   update(): void {
-    this.storage.run('groupUpdate', [this.group, this.group.uuid], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('groupUpdate', [this.group, this.group.uuid], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.modalRef.destroy();
         this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
@@ -109,8 +109,8 @@ export class ApiGroupEditComponent implements OnInit {
     const data: GroupApiDataModel = { group: [this.group.uuid], api: [] };
     this.getChildrenFromTree(this.treeItems, data, `group-${this.group.uuid}`);
     this.modalRef.destroy();
-    this.storage.run('groupBulkRemove', [data.group], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('groupBulkRemove', [data.group], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.messageService.send({ type: 'updateGroupSuccess', data: {} });
         //delete group api
         if (data.api.length > 0) {

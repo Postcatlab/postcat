@@ -40,7 +40,6 @@ import { ApiTestResultHeaderComponent } from './result-header/api-test-result-he
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ApiTestHistoryComponent } from './history/api-test-history.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
-
 const NZ_COMPONETS = [
   NzDropDownModule,
   NzModalModule,
@@ -80,7 +79,7 @@ const COMPONENTS = [
     ...NZ_COMPONETS,
     EouiModule,
     SharedModule,
-    ParamsImportModule,
+    ParamsImportModule
   ],
   providers: [ApiTestService, TestServerService, TestServerLocalNodeService,TestServerServerlessService],
 })

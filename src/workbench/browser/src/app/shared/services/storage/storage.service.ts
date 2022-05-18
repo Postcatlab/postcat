@@ -1,19 +1,17 @@
 import { Injectable, Injector } from '@angular/core';
-import { StorageHandleStatus } from './index.model';
+import { StorageResStatus } from './index.model';
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
-import { isNotEmpty } from '../../../../../../../shared/common/common';
 /**
  * @description
  * A storage service
  */
- @Injectable()
+@Injectable()
 export class StorageService {
   instance;
   constructor(private injector: Injector) {
     console.log('StorageService init');
-    // this.instance=new IndexedDBStorage();
-    this.instance = this.injector.get(HttpStorage);
+    this.setStorage();
   }
   /**
    * Handle data from IndexedDB
@@ -22,26 +20,34 @@ export class StorageService {
    */
   run(action: string, params: Array<any>, callback): void {
     const handleResult = {
-      status: StorageHandleStatus.invalid,
+      status: StorageResStatus.invalid,
       data: undefined,
       callback: callback,
     };
     this.instance[action](...params).subscribe(
-      (result: any) => {
-        console.log('success',action,result)
-        handleResult.data = result;
-        if (isNotEmpty(result)) {
-          handleResult.status = StorageHandleStatus.success;
-        } else {
-          handleResult.status = StorageHandleStatus.empty;
-        }
+      (res: any) => {
+        handleResult.status = res.status;
+        handleResult.data = res.data;
+        console.log(handleResult)
         callback(handleResult);
       },
       (error: any) => {
-        console.log('error',error)
-        handleResult.status = StorageHandleStatus.error;
+        console.log('error', error);
+        handleResult.status = StorageResStatus.error;
         callback(handleResult);
       }
     );
+  }
+  setStorage(type = 'local') {
+    switch (type) {
+      case 'local': {
+        this.instance = new IndexedDBStorage();
+        break;
+      }
+      case 'http': {
+        this.instance = this.injector.get(HttpStorage);
+        break;
+      }
+    }
   }
 }

@@ -7,8 +7,8 @@ import {
   ApiData,
   RequestMethod,
   RequestProtocol,
-  StorageHandleResult,
-  StorageHandleStatus,
+  StorageRes,
+  StorageResStatus,
 } from '../../../shared/services/storage/index.model';
 import { MessageService } from '../../../shared/services/message';
 
@@ -101,8 +101,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testResult = result.response;
   }
   getApi(id) {
-    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.apiData = this.apiTest.getTestDataFromApi(result.data);
         this.validateForm.patchValue(this.apiData);
       }

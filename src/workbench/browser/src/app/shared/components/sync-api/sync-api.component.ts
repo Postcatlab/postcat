@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { StorageHandleResult, StorageHandleStatus } from '../../services/storage/index.model';
+import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
 
@@ -28,14 +28,21 @@ export class SyncApiComponent implements OnInit {
     const feature = this.featureList.get(this.pushType);
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.pushType);
+    // TODO 临时取值方式需要修改
+    const {
+      url,
+      token: secretKey,
+      projectId,
+    } = window.eo.getModuleSettings('eoapi-feature-push-eolink.eolink.remoteServer');
     if (module && module[action] && typeof module[action] === 'function') {
-      this.storage.run('projectExport', [], async (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('projectExport', [], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = await module[action](result.data, {
-              projectId: 'ZXXhzTG756db7e34a8d7c803f001edf1a1c545bcbf27719',
-              SecretKey: 'SgAZ5Lk60f776c1a235a3c3e62543c3793c36d6cc511db9',
+              url,
+              projectId,
+              secretKey,
             });
             console.log(output);
           } catch (e) {

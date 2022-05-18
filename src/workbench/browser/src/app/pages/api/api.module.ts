@@ -1,17 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { HttpClientModule} from '@angular/common/http';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiEditModule } from './edit/api-edit.module';
 import { ApiDetailModule } from './detail/api-detail.module';
 import { ApiTestModule } from './test/api-test.module';
-import { EnvModule } from '../env/env.module';
+import { EnvModule } from '../../shared/components/env/env.module';
 import { EouiModule } from '../../eoui/eoui.module';
 
 import { ApiComponent } from './api.component';
 import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';
 import { ExportApiComponent } from '../../shared/components/export-api/export-api.component';
 import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.component';
+
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -24,7 +27,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 
-
+import { BaseUrlInterceptor, HttpStorage } from '../../shared/services/storage/http/lib';
 import { MessageService } from '../../shared/services/message';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
@@ -32,10 +35,11 @@ import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
-
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent,SyncApiComponent];
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent, SyncApiComponent];
 @NgModule({
   imports: [
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
@@ -55,10 +59,10 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     NzDividerModule,
     EouiModule,
     EnvModule,
-    NzCardModule
+    NzCardModule,
   ],
   declarations: [...COMPONENTS, ApiTabComponent, ApiOverviewComponent],
   exports: [],
-  providers: [ElectronService, MessageService, ApiService, StorageService],
+  providers: [ElectronService, MessageService, ApiService, StorageService, HttpStorage, { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true }],
 })
 export class ApiModule {}

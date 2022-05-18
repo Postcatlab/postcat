@@ -6,7 +6,6 @@
     <router-outlet *ngIf="!loadedIframe"></router-outlet>
     <iframe
     *ngIf="!this.sidebar.currentModule.isOffical"
-    src="http://localhost:8080"
     id="app_iframe"
     frameborder="no"
     border="0"
@@ -14,4 +13,4 @@
   ></iframe>
   </div>
 </div>
-<eo-toolbar></eo-toolbar>
+<!-- <eo-toolbar></eo-toolbar> -->

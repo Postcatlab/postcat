@@ -1,6 +1,16 @@
 import Dexie, { Table } from 'dexie';
 import { Observable } from 'rxjs';
-import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, StorageItem } from '../../index.model';
+import { isNotEmpty } from '../../../../../../../../../shared/common/common';
+import {
+  Project,
+  Environment,
+  Group,
+  ApiData,
+  ApiTestHistory,
+  StorageInterface,
+  StorageItem,
+  StorageResStatus,
+} from '../../index.model';
 import { sampleApiData } from '../sample';
 
 /**
@@ -33,7 +43,18 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     // @ts-ignore
     await this.apiData.bulkAdd(sampleApiData);
   }
-
+  private resProxy(data) {
+    let result = {
+      status: StorageResStatus.success,
+      data: data,
+    };
+    // if (isNotEmpty(data)) {
+    //   result.status = StorageResStatus.success;
+    // } else {
+    //   result.status = StorageResStatus.empty;
+    // }
+    return result;
+  }
   /**
    * Create item.
    * @param table
@@ -48,7 +69,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       table
         .add(item)
         .then((result) => {
-          obs.next(Object.assign(item, { uuid: result }));
+          obs.next(this.resProxy(Object.assign(item, { uuid: result })));
           obs.complete();
         })
         .catch((error) => {
@@ -75,7 +96,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       table
         .bulkAdd(items)
         .then((result) => {
-          obs.next({ number: result });
+          obs.next(this.resProxy({ number: result }));
           obs.complete();
         })
         .catch((error: any) => {
@@ -100,7 +121,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         .then(async (updated) => {
           if (updated) {
             let result = await table.get(uuid);
-            obs.next(result);
+            obs.next(this.resProxy(result));
             obs.complete();
           } else {
             // obs.error(`Nothing was updated [${table.name}] - there were no data with primary key: ${uuid}`);
@@ -138,7 +159,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
           }
         });
       table
-        .bulkGet(uuids)
+        .bulkGet(uuids.map(Number))
         .then((existItems) => {
           if (existItems) {
             let newItems: Array<StorageItem> = [];
@@ -150,9 +171,14 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
               });
             // @ts-ignore
             table
-              .bulkPut(newItems)
+              .bulkPut(
+                newItems.map((n: any) => ({
+                  ...n,
+                  groupID: ~~n.groupID.replace('group-', ''),
+                }))
+              )
               .then((result) => {
-                obs.next({ number: result, items: newItems });
+                obs.next(this.resProxy({ number: result, items: newItems }));
                 obs.complete();
               })
               .catch((error: any) => {
@@ -173,12 +199,12 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param uuid
    */
-  private remove(table: Table, uuid: number | string): Observable<boolean> {
+  private remove(table: Table, uuid: number | string): Observable<object> {
     return new Observable((obs) => {
       table
         .delete(uuid)
         .then(() => {
-          obs.next(true);
+          obs.next(this.resProxy(true));
           obs.complete();
         })
         .catch((error) => {
@@ -192,12 +218,12 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param uuids
    */
-  private bulkRemove(table: Table, uuids: Array<number | string>): Observable<boolean> {
+  private bulkRemove(table: Table, uuids: Array<number | string>): Observable<object> {
     return new Observable((obs) => {
       table
         .bulkDelete(uuids)
         .then(() => {
-          obs.next(true);
+          obs.next(this.resProxy(true));
           obs.complete();
         })
         .catch((error) => {
@@ -217,7 +243,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         .get(uuid)
         .then((result) => {
           if (result) {
-            obs.next(result);
+            obs.next(this.resProxy(result));
             obs.complete();
           } else {
             // obs.error(`Nothing found from table [${table.name}] with id [${uuid}].`);
@@ -234,13 +260,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param uuids
    */
-  private bulkLoad(table: Table, uuids: Array<number | string>): Observable<Array<object>> {
+  private bulkLoad(table: Table, uuids: Array<number | string>): Observable<object> {
     return new Observable((obs) => {
       table
         .bulkGet(uuids)
         .then((result) => {
           if (result) {
-            obs.next(result);
+            obs.next(this.resProxy(result));
             obs.complete();
           } else {
             // obs.error(`Nothing found from table [${table.name}] with uuids [${JSON.stringify(uuids)}].`);
@@ -260,14 +286,14 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   private loadAllByConditions(
     table: Table,
     where: { [key: string]: string | number | null }
-  ): Observable<Array<object>> {
+  ): Observable<object> {
     return new Observable((obs) => {
       table
         .where(where)
         .toArray()
         .then((result) => {
           if (result) {
-            obs.next(result);
+            obs.next(this.resProxy(result));
             obs.complete();
           } else {
             // obs.error(`Nothing found from table [${table.name}].`);
@@ -281,10 +307,10 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   apiDataBulkCreate(items: Array<ApiData>): Observable<object> {
     return this.bulkCreate(this.apiData, items);
   }
-  apiDataBulkLoad(uuids: Array<number | string>): Observable<Array<object>> {
+  apiDataBulkLoad(uuids: Array<number | string>): Observable<object> {
     return this.bulkLoad(this.apiData, uuids);
   }
-  apiDataBulkRemove(uuids: Array<number | string>): Observable<boolean> {
+  apiDataBulkRemove(uuids: Array<number | string>): Observable<object> {
     return this.bulkRemove(this.apiData, uuids);
   }
   apiDataBulkUpdate(items: Array<ApiData>): Observable<object> {
@@ -297,11 +323,11 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return this.load(this.apiData, uuid);
   }
 
-  apiDataLoadAllByGroupID(groupID: number | string): Observable<Array<object>> {
+  apiDataLoadAllByGroupID(groupID: number | string): Observable<object> {
     return this.loadAllByConditions(this.apiData, { groupID: groupID });
   }
 
-  apiDataLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
+  apiDataLoadAllByProjectID(projectID: number | string): Observable<object> {
     return this.loadAllByConditions(this.apiData, { projectID: projectID });
   }
 
@@ -310,7 +336,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param projectID
    * @param groupID
    */
-  apiDataLoadAllByProjectIDAndGroupID(projectID: number | string, groupID: number | string): Observable<Array<object>> {
+  apiDataLoadAllByProjectIDAndGroupID(projectID: number | string, groupID: number | string): Observable<object> {
     return this.loadAllByConditions(this.apiData, { projectID: projectID, groupID: groupID });
   }
 
@@ -318,7 +344,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Delete apiData item.
    * @param uuid
    */
-  apiDataRemove(uuid: number | string): Observable<boolean> {
+  apiDataRemove(uuid: number | string): Observable<object> {
     return this.remove(this.apiData, uuid);
   }
 
@@ -343,7 +369,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk load apiTestHistory items.
    * @param uuids
    */
-  apiTestHistoryBulkLoad(uuids: Array<number | string>): Observable<Array<object>> {
+  apiTestHistoryBulkLoad(uuids: Array<number | string>): Observable<object> {
     return this.bulkLoad(this.apiTestHistory, uuids);
   }
 
@@ -351,7 +377,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk remove apiTestHistory items.
    * @param uuids
    */
-  apiTestHistoryBulkRemove(uuids: Array<number | string>): Observable<boolean> {
+  apiTestHistoryBulkRemove(uuids: Array<number | string>): Observable<object> {
     return this.bulkRemove(this.apiTestHistory, uuids);
   }
 
@@ -383,7 +409,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Load all apiTestHistory items by apiDataID.
    * @param apiDataID
    */
-  apiTestHistoryLoadAllByApiDataID(apiDataID: number | string): Observable<Array<object>> {
+  apiTestHistoryLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
     return this.loadAllByConditions(this.apiTestHistory, { apiDataID: apiDataID });
   }
 
@@ -391,7 +417,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Load all apiTestHistory items by projectID.
    * @param projectID
    */
-  apiTestHistoryLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
+  apiTestHistoryLoadAllByProjectID(projectID: number | string): Observable<object> {
     return this.loadAllByConditions(this.apiTestHistory, { projectID: projectID });
   }
 
@@ -399,7 +425,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Delete apiTestHistory item.
    * @param uuid
    */
-  apiTestHistoryRemove(uuid: number | string): Observable<boolean> {
+  apiTestHistoryRemove(uuid: number | string): Observable<object> {
     return this.remove(this.apiTestHistory, uuid);
   }
 
@@ -424,7 +450,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk load environment items.
    * @param uuids
    */
-  environmentBulkLoad(uuids: Array<number | string>): Observable<Array<object>> {
+  environmentBulkLoad(uuids: Array<number | string>): Observable<object> {
     return this.bulkLoad(this.environment, uuids);
   }
 
@@ -432,7 +458,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk delete environment items.
    * @param uuids
    */
-  environmentBulkRemove(uuids: Array<number | string>): Observable<boolean> {
+  environmentBulkRemove(uuids: Array<number | string>): Observable<object> {
     return this.bulkRemove(this.environment, uuids);
   }
 
@@ -464,7 +490,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Load all environment items by projectID.
    * @param projectID
    */
-  environmentLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
+  environmentLoadAllByProjectID(projectID: number | string): Observable<object> {
     return this.loadAllByConditions(this.environment, { projectID: projectID });
   }
 
@@ -472,7 +498,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Delete environment item.
    * @param uuid
    */
-  environmentRemove(uuid: number | string): Observable<boolean> {
+  environmentRemove(uuid: number | string): Observable<object> {
     return this.remove(this.environment, uuid);
   }
 
@@ -497,7 +523,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk load group items.
    * @param uuids
    */
-  groupBulkLoad(uuids: Array<number | string>): Observable<Array<object>> {
+  groupBulkLoad(uuids: Array<number | string>): Observable<object> {
     return this.bulkLoad(this.group, uuids);
   }
 
@@ -505,7 +531,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk delete group items.
    * @param uuids
    */
-  groupBulkRemove(uuids: Array<number | string>): Observable<boolean> {
+  groupBulkRemove(uuids: Array<number | string>): Observable<object> {
     return this.bulkRemove(this.group, uuids);
   }
 
@@ -533,7 +559,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return this.load(this.group, uuid);
   }
 
-  groupLoadAllByProjectID(projectID: number | string): Observable<Array<object>> {
+  groupLoadAllByProjectID(projectID: number | string): Observable<object> {
     return this.loadAllByConditions(this.group, { projectID: projectID });
   }
 
@@ -541,7 +567,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Delete group item.
    * @param uuid
    */
-  groupRemove(uuid: number | string): Observable<boolean> {
+  groupRemove(uuid: number | string): Observable<object> {
     return this.remove(this.group, uuid);
   }
 
@@ -568,9 +594,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
           tables = ['environment', 'group', 'project', 'apiData'];
         for (var i = 0; i < tables.length; i++) {
           let tableName = tables[i];
-          result[tableName] = await this[tableName].toArray();
+          if (tableName === 'project') {
+            result[tableName] = (await this[tableName].toArray())[0];
+          } else {
+            result[tableName] = await this[tableName].toArray();
+          }
         }
-        obs.next(result);
+        obs.next(this.resProxy(result));
         obs.complete();
       };
       fun();
@@ -580,7 +610,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk load project items.
    * @param uuids
    */
-  projectBulkLoad(uuids: Array<number | string>): Observable<Array<object>> {
+  projectBulkLoad(uuids: Array<number | string>): Observable<object> {
     return this.bulkLoad(this.project, uuids);
   }
 
@@ -588,7 +618,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Bulk delete project items.
    * @param uuids
    */
-  projectBulkRemove(uuids: Array<number | string>): Observable<boolean> {
+  projectBulkRemove(uuids: Array<number | string>): Observable<object> {
     return this.bulkRemove(this.project, uuids);
   }
 
@@ -620,7 +650,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * Delete project item.
    * @param uuid
    */
-  projectRemove(uuid: number | string): Observable<boolean> {
+  projectRemove(uuid: number | string): Observable<object> {
     return this.remove(this.project, uuid);
   }
 

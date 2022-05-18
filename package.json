@@ -15,16 +15,12 @@
     "start:workbench": "cd src/workbench/browser&&npm start",
     "build:workbench": "cd src/workbench/browser&&npm run build",
     "test:workbench": "cd src/workbench/browser&&npm run test",
-    "install:market": "cd src/core/market/browser && npm install",
-    "start:market": "cd src/core/market/browser && npm run serve",
-    "build:market": "cd src/core/market/browser && npm run build",
     "install:node-electron": "electron-builder install-app-deps",
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "electron:build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
-    "build": "electron-builder build",
-    "release": "electron-builder",
+    "build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
+    "release": "npm run build && electron-builder --publish=always",
     "test": "npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json"
   },
@@ -33,8 +29,8 @@
     "content-disposition": "^0.5.4",
     "cross-spawn": "^7.0.3",
     "crypto-js": "^4.1.1",
-    "electron-log": "^4.4.6",
-    "electron-updater": "^4.6.5",
+    "electron-log": "^4.4.7",
+    "electron-updater": "^5.0.1",
     "form-data": "^4.0.0",
     "iconv-lite": "^0.6.3",
     "ky": "0.30.0",
@@ -44,20 +40,50 @@
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
-    "@types/node": "17.0.21",
-    "@typescript-eslint/eslint-plugin": "5.14.0",
-    "@typescript-eslint/parser": "5.14.0",
-    "electron": "17.1.2",
+    "@types/node": "17.0.32",
+    "@typescript-eslint/eslint-plugin": "5.23.0",
+    "@typescript-eslint/parser": "5.23.0",
+    "electron": "18.2.2",
     "electron-builder": "23.0.3",
     "electron-reload": "1.5.0",
-    "eslint": "8.10.0",
-    "eslint-plugin-import": "2.25.4",
-    "eslint-plugin-jsdoc": "37.9.7",
+    "eslint": "8.15.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jsdoc": "39.2.9",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "npm-run-all": "4.1.5",
     "ts-node": "10.7.0",
-    "typescript": "~4.6.2",
+    "typescript": "~4.6.4",
     "wait-on": "6.0.1"
   },
-  "__npminstall_done": false
+  "__npminstall_done": false,
+  "build": {
+    "appId": "com.foo.bar",
+    "productName": "Foo Bar",
+    "copyright": "Copyright © 2022 eolink",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/",
+      "index.html",
+      "main.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "resources/app.icns",
+      "artifactName": "eoapi_mac_${version}.${ext}",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "eolinker",
+        "repo": "eoapi"
+      }
+    ]
+  }
 }
