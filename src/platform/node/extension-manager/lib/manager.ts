@@ -117,7 +117,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 获取所有功能点列表
-   * @returns 
+   * @returns
    */
   getFeatures(): Map<string, Map<string, object>> {
     return this.features;
@@ -134,11 +134,11 @@ export class ModuleManager implements ModuleManagerInterface {
     }
     return this.modules.get(moduleID);
   }
- 
+
   /**
    * 获取某个功能点的集合
-   * @param featureKey 
-   * @returns 
+   * @param featureKey
+   * @returns
    */
   getFeature(featureKey: string): Map<string, object> {
     return this.features.get(featureKey);
@@ -181,7 +181,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 清除功能点集合中的模块功能点
-   * @param moduleInfo 
+   * @param moduleInfo
    */
   private deleteFeatures(moduleInfo: ModuleInfo) {
     if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
@@ -200,7 +200,7 @@ export class ModuleManager implements ModuleManagerInterface {
   private setup(moduleInfo: ModuleInfo) {
     if (isNotEmpty(moduleInfo.moduleID)) {
       this.set(moduleInfo);
-    } 
+    }
   }
 
   /**
