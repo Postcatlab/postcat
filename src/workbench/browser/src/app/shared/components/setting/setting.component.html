@@ -50,7 +50,7 @@
             <nz-form-control nzErrorTip="请输入{{ module.properties[field]?.label }}">
               <!-- 字符串类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'string'">
-                <input type="text" nz-input id="{{ field }}"
+                <input type="text" nz-input id="{{ field }}" [disabled]="module.properties[field]?.disabled"
                   placeholder="{{module.properties[field]?.placeholder ?? '请输入' + module.properties[field]?.label}}"
                   formControlName="{{ field }}" [(ngModel)]="settings[field]" />
               </ng-container>
@@ -58,12 +58,14 @@
               <!-- 布尔类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'boolean'">
                 <label nz-checkbox [(ngModel)]="settings[field]" id="{{ field }}"
+                  [nzDisabled]="module.properties[field]?.disabled"
                   formControlName="{{ field }}">{{module.properties[field]?.description}}</label>
               </ng-container>
 
               <!-- 数字类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'number'">
-                <nz-input-number [(ngModel)]="settings[field]" id="{{ field }}" formControlName="{{ field }}">
+                <nz-input-number [(ngModel)]="settings[field]" id="{{ field }}"
+                  [nzDisabled]="module.properties[field]?.disabled" formControlName="{{ field }}">
                   {{module.properties[field]?.description}}</nz-input-number>
               </ng-container>
 
