@@ -14,7 +14,7 @@ dist/
 !src/workbench/node/request/**/*.js
 !/api/*.js
 
-
+scripts/notarize.js
 # dependencies
 node_modules
 # package-lock.json
