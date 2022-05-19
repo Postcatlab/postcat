@@ -185,6 +185,7 @@ export class SettingComponent implements OnInit {
       eoapiSettings['Eoapi-theme'],
       eoapiSettings['Eoapi-Extensions'],
       // eoapiSettings['Eoapi-Features'],
+      eoapiSettings['Eoapi-about'],
     ]);
     // 所有配置
     const allConfiguration = allSettings.map((n) => {

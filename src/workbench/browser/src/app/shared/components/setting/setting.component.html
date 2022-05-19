@@ -69,7 +69,10 @@
 
               <!-- 组件类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'component'">
+                <!-- 默认主题组件 -->
                 <eo-select-theme *ngIf="settings[field] === 'eo-select-theme'"></eo-select-theme>
+                <!-- 关于eopai -->
+                <eo-about *ngIf="settings[field] === 'eo-about'"></eo-about>
               </ng-container>
 
             </nz-form-control>

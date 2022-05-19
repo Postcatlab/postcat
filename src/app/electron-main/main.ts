@@ -35,7 +35,7 @@ function createWindow(): BrowserWindow {
     width: Math.round(size.width * 0.8),
     height: Math.round(size.height * 0.8),
     useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
-    // frame: os.type() === 'Darwin' ? true : false, //mac use default frame
+    frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
       webSecurity: false,
       preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
@@ -214,6 +214,14 @@ try {
       returnValue = 'Invalid data';
     }
     event.returnValue = returnValue;
+  });
+  ipcMain.on('get-system-info', (event) => {
+    const systemInfo = {
+      homeDir: path.dirname(app.getPath('exe')),
+      ...process.versions,
+      os: `${os.type()} ${os.arch()} ${os.release()}`,
+    };
+    event.returnValue = systemInfo;
   });
 } catch (e) {
   // Catch Error
