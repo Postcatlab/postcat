@@ -77,6 +77,9 @@ export class SettingComponent implements OnInit {
     this._isShowModal = val;
     if (val) {
       this.init();
+      this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
+    } else {
+      this.pingRmoteServerUrl();
     }
   }
 
@@ -104,10 +107,19 @@ export class SettingComponent implements OnInit {
   /**
    * 测试远程服务器地址是否可用
    */
-  pingRmoteServerUrl() {
+  async pingRmoteServerUrl() {
+    const remoteUrl = this.settings['eoapi-common.remoteServer.url'];
     try {
-      fetch(this.remoteServerUrl);
+      const result = await fetch(remoteUrl);
+      if (result.status < 200 || result.status > 300) {
+        throw result;
+      }
+      await result.json();
+      if (remoteUrl !== this.remoteServerUrl) {
+        this.message.create('success', '远程服务器地址设置成功');
+      }
     } catch (error) {
+      console.error(error);
       // 远程服务地址不可用时，回退到上次的地址
       this.settings['eoapi-common.remoteServer.url'] = this.remoteServerUrl;
       this.message.create('error', '远程服务器地址不可用');
