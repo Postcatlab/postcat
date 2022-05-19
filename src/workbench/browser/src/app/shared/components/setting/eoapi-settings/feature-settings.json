@@ -23,14 +23,14 @@
       },
       {
         "type": "object",
-        "title": "扩展",
+        "title": "插件",
         "order": 2,
         "properties": {
           "features.remoteServer.autoUpdate": {
             "type": "boolean",
             "default": true,
             "label": "自动更新",
-            "description": "勾选后，检测到拓展升级后自动从远程下载最新的插件更新"
+            "description": "勾选后，检测到插件升级后自动从远程下载最新的插件更新"
           }
         }
       }
