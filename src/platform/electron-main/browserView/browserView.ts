@@ -1,6 +1,6 @@
 import { throws } from 'assert';
 import { BrowserWindow, BrowserView, session, BrowserViewConstructorOptions } from 'electron';
-import { ViewBounds } from '../../../shared/common/bounds';
+import { ViewBounds } from 'eo/shared/common/bounds';
 import { proxyOpenExternal } from '../../../shared/common/browserView';
 import { BrowserViewOpts } from './browserView.type';
 export class BrowserViewInstance {

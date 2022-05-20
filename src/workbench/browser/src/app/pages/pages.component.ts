@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
-import { SidebarService } from '../shared/components/sidebar/sidebar.service';
+import { SidebarService } from 'eo/workbench/browser/src/app/shared/components/sidebar/sidebar.service';
 
 @Component({
   selector: 'eo-pages',

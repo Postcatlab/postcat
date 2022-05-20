@@ -3,7 +3,12 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "",
-    "types": []
+    "types": [],
+    "paths": {
+      "eo/*": [
+        "../../../../src/*"
+      ]
+    }
   },
   "files": [
     "main.ts",
