@@ -12,10 +12,11 @@ import packageJson from '../../../../../../../../package.json';
 export class SyncApiComponent implements OnInit {
   pushType: '';
   supportList: any[] = [];
-  featureList = window.eo.getFeature('apimanager.sync');
+  featureList = window.eo.getFeature('apimanage.sync');
   constructor(private modalRef: NzModalRef, private storage: StorageService) {}
 
   ngOnInit(): void {
+    console.log('featureList', this.featureList);
     this.featureList?.forEach((feature: object, key: string) => {
       this.supportList.push({
         key: key,
