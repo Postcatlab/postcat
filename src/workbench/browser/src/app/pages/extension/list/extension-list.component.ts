@@ -32,7 +32,6 @@ export class ExtensionListComponent implements OnInit {
     this.type = this.route.snapshot.queryParams.type;
   }
   async ngOnInit() {
-    this.renderList = await this.searchPlugin();
     this.watchSearchConditionChange();
   }
   async searchPlugin(keyword = '') {

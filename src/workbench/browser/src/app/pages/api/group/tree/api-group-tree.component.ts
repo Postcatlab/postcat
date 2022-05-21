@@ -62,7 +62,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       isFixed: true,
     },
   ];
-  nzSelectedKeys: number[] = [];
+  nzSelectedKeys: string[] = [];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private router: Router,
@@ -90,7 +90,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     listToTree(this.treeItems, this.treeNodes, '0');
     setTimeout(() => {
       this.expandGroup();
-      this.setSelectedKeys();
     }, 0);
   }
   /**
@@ -137,6 +136,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           });
         });
         this.apiDataItems = apiItems;
+        this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
         this.generateGroupTreeData();
         this.restoreExpandStatus();
       }
