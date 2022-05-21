@@ -62,7 +62,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       isFixed: true,
     },
   ];
-  nzSelectedKeys: string[] = [];
+  nzSelectedKeys: number[] = [];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private router: Router,
@@ -137,6 +137,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         });
         this.apiDataItems = apiItems;
         this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+        this.setSelectedKeys();
         this.generateGroupTreeData();
         this.restoreExpandStatus();
       }
@@ -337,6 +338,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   private setSelectedKeys() {
+    console.log('setSelectedKeys',this.route.snapshot.queryParams.uuid,this.nzSelectedKeys)
     if (this.route.snapshot.queryParams.uuid) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];
     } else {

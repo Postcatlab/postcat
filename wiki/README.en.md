@@ -77,7 +77,7 @@ npm install -g @angular/cli
 
 | Command                  | Description                                       |
 | ------------------------ | ------------------------------------------------- |
-| `npm run electron:build` | Packaging Electron applications for each platform |
+| `npm run build` | Packaging Electron applications for each platform |
 
 ### Running the tests
 

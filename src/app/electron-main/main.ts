@@ -40,16 +40,10 @@ function createWindow(): BrowserWindow {
       webSecurity: false,
       preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
       nodeIntegration: true,
-      allowRunningInsecureContent: processEnv === 'serve' ? true : false,
+      allowRunningInsecureContent: processEnv === 'development' ? true : false,
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
-  // main
-  if (['serve'].includes(processEnv)) {
-    require('electron-reload')(__dirname, {
-      electron: require(path.join(__dirname, '../node_modules/electron')),
-    });
-  }
   proxyOpenExternal(win);
   let loadPage = () => {
     const file: string =
@@ -57,7 +51,8 @@ function createWindow(): BrowserWindow {
         ? 'http://localhost:4200'
         : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
     win.loadURL(file);
-    if (['serve'].includes(processEnv)) {
+    console.log('processEnv', processEnv);
+    if (['development'].includes(processEnv)) {
       win.webContents.openDevTools({
         mode: 'undocked',
       });
