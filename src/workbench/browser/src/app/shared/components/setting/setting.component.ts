@@ -162,8 +162,6 @@ export class SettingComponent implements OnInit {
     // const featureList = window.eo.getFeature('configuration');
     const modules = window.eo.getModules();
     const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
-    console.log('localSettings', this.localSettings);
-    console.log('extensitonConfigurations', extensitonConfigurations);
     const controls = {};
     // 所有设置
     const allSettings = cloneDeep([
@@ -246,11 +244,6 @@ export class SettingComponent implements OnInit {
       }
       return prev.concat(treeItem);
     }, []);
-    console.log('treeData', treeData);
-    console.log('setings', this.settings);
-    console.log('nestedSettings', this.nestedSettings);
-    console.log('controls', controls);
-
     this.dataSource.setData(treeData);
     this.treeControl.expandAll();
     this.validateForm = this.fb.group(controls);
