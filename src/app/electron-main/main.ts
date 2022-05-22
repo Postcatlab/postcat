@@ -1,3 +1,4 @@
+require('module-alias/register');
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
