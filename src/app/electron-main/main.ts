@@ -51,7 +51,6 @@ function createWindow(): BrowserWindow {
         ? 'http://localhost:4200'
         : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
     win.loadURL(file);
-    console.log('processEnv', processEnv);
     if (['development'].includes(processEnv)) {
       win.webContents.openDevTools({
         mode: 'undocked',
