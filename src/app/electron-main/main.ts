@@ -32,8 +32,8 @@ function createWindow(): BrowserWindow {
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
   // Create the browser window.
   win = new BrowserWindow({
-    width: Math.round(size.width * 0.8),
-    height: Math.round(size.height * 0.8),
+    width: Math.round(size.width * 0.85),
+    height: Math.round(size.height * 0.85),
     useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
     // frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {

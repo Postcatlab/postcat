@@ -11,7 +11,7 @@ export class StorageService {
   instance;
   constructor(private injector: Injector) {
     console.log('StorageService init');
-    this.setStorage();
+    this.setStorage('http');
   }
   /**
    * Handle data from IndexedDB
@@ -26,9 +26,9 @@ export class StorageService {
     };
     this.instance[action](...params).subscribe(
       (res: any) => {
+        console.log('res',res,handleResult)
         handleResult.status = res.status;
         handleResult.data = res.data;
-        console.log(handleResult)
         callback(handleResult);
       },
       (error: any) => {
