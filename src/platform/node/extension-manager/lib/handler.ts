@@ -1,3 +1,4 @@
+let fixPath=require('fix-path');
 import * as path from 'path';
 import { ModuleHandlerOptions, ModuleHandlerResult } from '../types';
 import { fileExists, writeJson } from '../../../../shared/node/file';
@@ -7,6 +8,7 @@ import * as spawn from 'cross-spawn';
  * 本地模块管理器
  * @class ModuleHandler
  */
+fixPath();
 export class ModuleHandler extends CoreHandler {
   /**
    * 模块安装源地址
@@ -80,8 +82,8 @@ export class ModuleHandler extends CoreHandler {
    * @param modules
    */
   private async execCommand(command: string, modules: string[]): Promise<ModuleHandlerResult> {
-    return await new Promise((resolve: any): void => {
-      let args = [command].concat(modules).concat('--color=always').concat('--save');
+    return await new Promise((resolve: any, reject: any): void => {
+      let args = [command].concat(modules).concat('--color=always', '--save');
       if (!['link', 'unlink', 'uninstall'].includes(command)) {
         if (this.registry) {
           args = args.concat(`--registry=${this.registry}`);
@@ -90,16 +92,13 @@ export class ModuleHandler extends CoreHandler {
           args = args.concat(`--proxy=${this.proxy}`);
         }
       }
-      console.log(args);
       const npm = spawn('npm', args, { cwd: this.baseDir });
       let output = '';
-      // @ts-ignore
       npm.stdout
         .on('data', (data: string) => {
           output += data;
         })
         .pipe(process.stdout);
-      // @ts-ignore
       npm.stderr
         .on('data', (data: string) => {
           output += data;
