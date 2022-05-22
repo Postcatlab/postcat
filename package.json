@@ -19,7 +19,8 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
+    "build": "npm-run-all -p build:* && npm run build:static",
+    "build:static": "npm run electron:tsc && electron-builder build",
     "release": "npm-run-all -p build:* && npm run electron:tsc && electron-builder --publish=always",
     "test": "npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json"
@@ -37,7 +38,8 @@
     "ky": "0.30.0",
     "resolve": "^1.22.0",
     "rxjs": "7.5.5",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "fix-path": "3.0.0"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",

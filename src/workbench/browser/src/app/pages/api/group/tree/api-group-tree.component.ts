@@ -90,7 +90,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     listToTree(this.treeItems, this.treeNodes, '0');
     setTimeout(() => {
       this.expandGroup();
-      this.setSelectedKeys();
     }, 0);
   }
   /**
@@ -137,6 +136,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           });
         });
         this.apiDataItems = apiItems;
+        this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+        this.setSelectedKeys();
         this.generateGroupTreeData();
         this.restoreExpandStatus();
       }
@@ -337,6 +338,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   private setSelectedKeys() {
+    console.log('setSelectedKeys',this.route.snapshot.queryParams.uuid,this.nzSelectedKeys)
     if (this.route.snapshot.queryParams.uuid) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];
     } else {
