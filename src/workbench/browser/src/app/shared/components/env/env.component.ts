@@ -119,11 +119,13 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run(
         'environmentUpdate',
         [{ ...other, name, parameters: data }, uuid],
-        (result: StorageHandleResult) => {
+        async (result: StorageHandleResult) => {
           if (result.status === StorageHandleStatus.success) {
             this.message.success('编辑成功');
-            this.getAllEnv(this.activeUuid);
-            this.changeStoreEnv(this.activeUuid);
+            await this.getAllEnv(this.activeUuid);
+            if (this.envUuid === Number(uuid)) {
+              this.envUuid = Number(uuid);
+            }
           } else {
             this.message.success('编辑失败');
           }
