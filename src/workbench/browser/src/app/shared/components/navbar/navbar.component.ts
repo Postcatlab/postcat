@@ -74,7 +74,6 @@ export class NavbarComponent implements OnInit {
               item
             );
           });
-          console.log(this.resourceInfo)
       });
   }
   minimize() {

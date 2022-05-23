@@ -1,12 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
-import {
-  Group,
-  ApiData,
-  StorageRes,
-  StorageResStatus,
-} from '../../../../shared/services/storage/index.model';
+import { Group, ApiData, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { Message } from '../../../../shared/services/message/message.model';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
@@ -103,6 +98,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   getGroups() {
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
+        console.log(result);
         result.data.forEach((item) => {
           delete item.updatedAt;
           this.groupByID[item.uuid] = item;
