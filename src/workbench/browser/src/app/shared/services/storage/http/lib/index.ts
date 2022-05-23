@@ -27,26 +27,38 @@ export class HttpStorage implements StorageInterface {
     return this.http.get('/system/status') as Observable<object>;
   }
   // Project
-  projectCreate: (item: Project) => Observable<object>;
-  projectUpdate: (item: Project, uuid: number | string) => Observable<object>;
+  projectCreate(item: Project) {
+    return this.http.post(`/project`, item) as Observable<object>;
+  }
+  projectUpdate(item: Project, uuid: number | string) {
+    return this.http.put(`/project/${uuid}`, item) as Observable<object>;
+  }
   projectBulkUpdate: (items: Array<Project>) => Observable<object>;
-  projectRemove: (uuid: number | string) => Observable<Object>;
+  projectRemove(uuid: number | string) {
+    return this.http.delete(`/project/${uuid}`) as Observable<object>;
+  }
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
   projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   projectExport: () => Observable<object>;
   // Environment
-  environmentCreate: (item: Environment) => Observable<object>;
-  environmentUpdate: (item: Environment, uuid: number | string) => Observable<object>;
+  environmentCreate(item: Environment) {
+    return this.http.post(`/environment`, item) as Observable<object>;
+  }
+  environmentUpdate(item: Environment, uuid: number | string) {
+    return this.http.put(`/environment/${uuid}`, item) as Observable<object>;
+  }
   environmentBulkCreate: (items: Array<Environment>) => Observable<object>;
   environmentBulkUpdate: (items: Array<Environment>) => Observable<object>;
-  environmentRemove: (uuid: number | string) => Observable<object>;
+  environmentRemove(uuid: number | string) {
+    return this.http.delete(`/environment/${uuid}`) as Observable<object>;
+  }
   environmentBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   environmentLoad: (uuid: number | string) => Observable<object>;
   environmentBulkLoad: (uuids: Array<number | string>) => Observable<object>;
-  environmentLoadAllByProjectID(projectID: number | string){
+  environmentLoadAllByProjectID(projectID: number | string) {
     return this.http.get(`/environment?projectID=${projectID}`) as Observable<object>;
-  };
+  }
   // Group
   groupCreate(item: Group) {
     return this.http.post(`/group`, item) as Observable<object>;
@@ -66,11 +78,17 @@ export class HttpStorage implements StorageInterface {
     return this.http.get(`/group?projectID=${projectID}`) as Observable<object>;
   }
   // Api Data
-  apiDataCreate: (item: ApiData) => Observable<object>;
-  apiDataUpdate: (item: ApiData, uuid: number | string) => Observable<object>;
+  apiDataCreate(item: ApiData) {
+    return this.http.post(`/api_data`, item) as Observable<object>;
+  }
+  apiDataUpdate(item: ApiData, uuid: number | string) {
+    return this.http.put(`/api_data/${uuid}`, item) as Observable<object>;
+  }
   apiDataBulkCreate: (items: Array<ApiData>) => Observable<object>;
   apiDataBulkUpdate: (items: Array<ApiData>) => Observable<object>;
-  apiDataRemove: (uuid: number | string) => Observable<object>;
+  apiDataRemove(uuid: number | string) {
+    return this.http.delete(`/api_data/${uuid}`) as Observable<object>;
+  }
   apiDataBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   apiDataLoad: (uuid: number | string) => Observable<object>;
   apiDataBulkLoad: (uuids: Array<number | string>) => Observable<object>;
@@ -80,14 +98,20 @@ export class HttpStorage implements StorageInterface {
   apiDataLoadAllByGroupID: (groupID: number | string) => Observable<object>;
   apiDataLoadAllByProjectIDAndGroupID: (projectID: number | string, groupID: number | string) => Observable<object>;
   // Api Test History
-  apiTestHistoryCreate: (item: ApiTestHistory) => Observable<object>;
+  apiTestHistoryCreate(item: ApiTestHistory) {
+    return this.http.post(`/api_test_history`, item) as Observable<object>;
+  }
   apiTestHistoryUpdate: (item: ApiTestHistory, uuid: number | string) => Observable<object>;
   apiTestHistoryBulkCreate: (items: Array<ApiTestHistory>) => Observable<object>;
   apiTestHistoryBulkUpdate: (items: Array<ApiTestHistory>) => Observable<object>;
-  apiTestHistoryRemove: (uuid: number | string) => Observable<object>;
+  apiTestHistoryRemove(uuid: number | string) {
+    return this.http.delete(`/api_data/${uuid}`) as Observable<object>;
+  }
   apiTestHistoryBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   apiTestHistoryLoad: (uuid: number | string) => Observable<object>;
   apiTestHistoryBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   apiTestHistoryLoadAllByProjectID: (projectID: number | string) => Observable<object>;
-  apiTestHistoryLoadAllByApiDataID: (apiDataID: number | string) => Observable<object>;
+  apiTestHistoryLoadAllByApiDataID(apiDataID: number | string) {
+    return this.http.get(`/api_test_history?apiID=${apiDataID}`) as Observable<object>;
+  }
 }
