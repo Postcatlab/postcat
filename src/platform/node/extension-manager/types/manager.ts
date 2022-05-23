@@ -1,4 +1,4 @@
-import { SidePosition } from '../../../../shared/common/bounds';
+import { SidePosition } from 'eo/shared/common/bounds';
 import { ModuleHandlerResult } from './handler';
 
 /**

@@ -1,7 +1,7 @@
-let fixPath=require('fix-path');
+let fixPath = require('fix-path');
 import * as path from 'path';
 import { ModuleHandlerOptions, ModuleHandlerResult } from '../types';
-import { fileExists, writeJson } from '../../../../shared/node/file';
+import { fileExists, writeJson } from 'eo/shared/node/file';
 import { CoreHandler } from './core';
 import * as spawn from 'cross-spawn';
 /**
