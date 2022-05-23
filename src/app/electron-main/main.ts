@@ -1,16 +1,17 @@
+require('@bqy/node-module-alias/register');
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
-import ModuleManager from '../../platform/node/extension-manager/lib/manager';
-import { ModuleManagerInterface } from '../../platform/node/extension-manager';
-import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
-import { processEnv } from '../../platform/node/constant';
-import { proxyOpenExternal } from '../../shared/common/browserView';
-import { deleteFile, readJson } from '../../shared/node/file';
-import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
-import { UnitWorkerModule } from '../../workbench/node/unitWorker';
-import Configuration from '../../platform/node/configuration/lib';
+import ModuleManager from 'eo/platform/node/extension-manager/lib/manager';
+import { ModuleManagerInterface } from 'eo/platform/node/extension-manager';
+import { StorageHandleStatus, StorageProcessType } from 'eo/platform/browser/IndexedDB';
+import { processEnv } from 'eo/platform/node/constant';
+import { proxyOpenExternal } from 'eo/shared/common/browserView';
+import { deleteFile, readJson } from 'eo/shared/node/file';
+import { STORAGE_TEMP as storageTemp } from 'eo/shared/common/constant';
+import { UnitWorkerModule } from 'eo/workbench/node/unitWorker';
+import Configuration from 'eo/platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
 let win: BrowserWindow = null;
 export const subView = {

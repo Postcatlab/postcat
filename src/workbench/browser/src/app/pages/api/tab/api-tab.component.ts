@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabItem } from './tab.model';
-import { ApiData } from '../../../../../../../platform/browser/IndexedDB';
+import { ApiData } from 'eo/platform/browser/IndexedDB';
 import { ApiTabService } from './api-tab.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../../shared/services/message';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
-  styleUrls: ['./api-tab.component.scss']
+  styleUrls: ['./api-tab.component.scss'],
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
   apiDataItems: { [key: number | string]: ApiData };

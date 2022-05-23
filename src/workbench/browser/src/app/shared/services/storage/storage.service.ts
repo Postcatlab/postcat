@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
-import { Storage as IndexedDBStorage } from '../../../../../../../platform/browser/IndexedDB/lib';
-import { isNotEmpty } from '../../../../../../../shared/common/common';
+import { StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
+import { Storage as IndexedDBStorage } from 'eo/platform/browser/IndexedDB/lib';
+import { isNotEmpty } from 'eo/shared/common/common';
 
 /**
  * @description

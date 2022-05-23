@@ -2,15 +2,19 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
-    "resolveJsonModule":true,
-    "allowSyntheticDefaultImports":true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "module": "es2020",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "baseUrl": "../../../",
     "paths": {
+      "eo/*": [
+        "./src/*"
+      ]
     },
     "allowJs": true,
     "target": "es5",

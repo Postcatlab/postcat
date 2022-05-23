@@ -3,8 +3,12 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
-import { ApiTestParamsTypeFormData, ApiTestParamsTypeJsonOrXml, ApiTestBody } from '../../../../shared/services/api-test/api-test-params.model';
-import { ApiBodyType, JsonRootType } from '../../../../../../../../platform/browser/IndexedDB';
+import {
+  ApiTestParamsTypeFormData,
+  ApiTestParamsTypeJsonOrXml,
+  ApiTestBody,
+} from '../../../../shared/services/api-test/api-test-params.model';
+import { ApiBodyType, JsonRootType } from 'eo/platform/browser/IndexedDB';
 import { ApiTestService } from '../api-test.service';
 import { Message, MessageService } from '../../../../shared/services/message';
 
@@ -77,7 +81,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if ((changes.model && !changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length===0) {
+    if (
+      (changes.model && !changes.model.previousValue && changes.model.currentValue) ||
+      changes.model.currentValue?.length === 0
+    ) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
