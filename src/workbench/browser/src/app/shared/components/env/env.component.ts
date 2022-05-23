@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
@@ -54,21 +54,28 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   getAllEnv(uuid?: number) {
     const projectID = 1;
-    this.storage.run('environmentLoadAllByProjectID', [projectID], (result: StorageHandleResult) => {
-      if (result.status !== StorageHandleStatus.success) {
-        this.envList = [];
-        this.handleAddEnv(projectID);
-        return;
-      }
-      this.envList = result.data;
-      this.handleSwitchEnv(uuid ?? result.data[0].uuid);
+    return new Promise((resolve) => {
+      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageHandleResult) => {
+        if (result.status !== StorageHandleStatus.success) {
+          this.envList = [];
+          await this.handleAddEnv(projectID);
+          resolve(true);
+          return;
+        }
+        this.envList = result.data;
+        await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
+        resolve(true);
+      });
     });
   }
 
   handleDeleteEnv(uuid: string) {
     // * delete env in menu on left sidebar
-    this.storage.run('environmentRemove', [uuid], (result: StorageHandleResult) => {
-      this.getAllEnv();
+    this.storage.run('environmentRemove', [uuid], async (result: StorageHandleResult) => {
+      await this.getAllEnv();
+      if (this.envUuid === Number(uuid)) {
+        this.envUuid = this.activeUuid;
+      }
     });
   }
   handleDeleteParams(index) {
@@ -78,11 +85,14 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
   handleSwitchEnv(uuid) {
     // * switch env in menu on left sidebar
-    this.storage.run('environmentLoad', [uuid], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
-        this.envInfo = result.data;
-      }
-      this.activeUuid = uuid;
+    return new Promise((resolve) => {
+      this.storage.run('environmentLoad', [uuid], (result: StorageHandleResult) => {
+        if (result.status === StorageHandleStatus.success) {
+          this.envInfo = result.data;
+        }
+        this.activeUuid = uuid;
+        resolve(true);
+      });
     });
   }
 
@@ -113,6 +123,7 @@ export class EnvComponent implements OnInit, OnDestroy {
           if (result.status === StorageHandleStatus.success) {
             this.message.success('编辑成功');
             this.getAllEnv(this.activeUuid);
+            this.changeStoreEnv(this.activeUuid);
           } else {
             this.message.success('编辑失败');
           }
@@ -143,7 +154,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.handleSwitchEnv(this.envUuid);
   }
 
-  handleEnvSelectStatus(event) {
+  handleEnvSelectStatus(event: boolean) {
     if (event) {
       this.activeUuid = this.envUuid;
       this.handleSwitchEnv(this.activeUuid);
