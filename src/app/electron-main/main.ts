@@ -35,32 +35,27 @@ function createWindow(): BrowserWindow {
     width: Math.round(size.width * 0.85),
     height: Math.round(size.height * 0.85),
     useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
-    // frame: os.type() === 'Darwin' ? true : false, //mac use default frame
+    frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
       webSecurity: false,
       preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
       nodeIntegration: true,
-      allowRunningInsecureContent: processEnv === 'serve' ? true : false,
+      allowRunningInsecureContent: processEnv === 'development' ? true : false,
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
-  // main
-  if (['serve'].includes(processEnv)) {
-    require('electron-reload')(__dirname, {
-      electron: require(path.join(__dirname, '../node_modules/electron')),
-    });
-  }
   proxyOpenExternal(win);
   let loadPage = () => {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
         : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
-    console.log('loadPage', file);
     win.loadURL(file);
-    win.webContents.openDevTools({
-      mode: 'undocked',
-    });
+    if (['development'].includes(processEnv)) {
+      win.webContents.openDevTools({
+        mode: 'undocked',
+      });
+    }
     UnitWorkerModule.setup({
       view: win,
     });

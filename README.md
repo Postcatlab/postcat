@@ -79,7 +79,7 @@ npm install -g @angular/cli
 
 | 命令                     | 描述                     |
 | ------------------------ | ------------------------ |
-| `npm run electron:build` | 各系统打包 Electron 应用 |
+| `npm run build` | 各系统打包 Electron 应用 |
 
 ### 运行测试
 

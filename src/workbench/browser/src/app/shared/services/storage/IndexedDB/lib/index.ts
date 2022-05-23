@@ -25,7 +25,6 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   apiTestHistory!: Table<ApiTestHistory, number | string>;
 
   constructor() {
-    console.log('eoapi indexedDB storage start');
     super('eoapi_core');
     this.version(1).stores({
       project: '++uuid, name',

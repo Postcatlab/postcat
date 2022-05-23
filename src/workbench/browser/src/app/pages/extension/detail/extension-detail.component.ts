@@ -19,6 +19,7 @@ export class ExtensionDetailComponent implements OnInit {
   }
   manageExtension(operate: string, id) {
     this.isOperating = true;
+    console.log(this.isOperating)
     /**
      * * WARNING:Sending a synchronous message will block the whole
      * renderer process until the reply is received, so use this method only as a last
@@ -35,7 +36,7 @@ export class ExtensionDetailComponent implements OnInit {
         }
       }
       this.isOperating = false;
-    }, 0);
+    }, 100);
   }
   ngOnInit(): void {}
 }

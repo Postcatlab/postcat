@@ -1,6 +1,6 @@
 {
   "name": "eoapi",
-  "version": "0.0.3-beta",
+  "version": "1.0.0",
   "main": "src/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/eolinker/eoapi.git",
@@ -19,8 +19,9 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "build": "npm-run-all -p build:* && npm run electron:tsc && electron-builder build",
-    "release": "npm run build && electron-builder --publish=always",
+    "build": "npm-run-all -p build:* && npm run build:static",
+    "build:static": "npm run electron:tsc && electron-builder build",
+    "release": "npm-run-all -p build:* && npm run electron:tsc && electron-builder --publish=always",
     "test": "npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json"
   },
@@ -36,7 +37,8 @@
     "ky": "0.30.0",
     "resolve": "^1.22.0",
     "rxjs": "7.5.5",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "fix-path": "3.0.0"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
@@ -44,7 +46,8 @@
     "@typescript-eslint/eslint-plugin": "5.23.0",
     "@typescript-eslint/parser": "5.23.0",
     "electron": "18.2.2",
-    "electron-builder": "23.0.3",
+    "electron-builder": "23.0.9",
+    "electron-notarize": "1.2.1",
     "electron-reload": "1.5.0",
     "eslint": "8.15.0",
     "eslint-plugin-import": "2.26.0",
@@ -55,35 +58,5 @@
     "typescript": "~4.6.4",
     "wait-on": "6.0.1"
   },
-  "__npminstall_done": false,
-  "build": {
-    "appId": "com.foo.bar",
-    "productName": "Foo Bar",
-    "copyright": "Copyright © 2022 eolink",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/",
-      "index.html",
-      "main.js",
-      "package.json"
-    ],
-    "mac": {
-      "category": "public.app-category.utilities",
-      "icon": "resources/app.icns",
-      "artifactName": "eoapi_mac_${version}.${ext}",
-      "target": [
-        "dmg",
-        "zip"
-      ]
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "eolinker",
-        "repo": "eoapi"
-      }
-    ]
-  }
+  "__npminstall_done": false
 }

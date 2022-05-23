@@ -20,7 +20,6 @@ export class ApiTabService {
     return this.currentTab.uuid;
   }
   constructor() {
-    console.log('init api tab service');
     this.saveTabData$.subscribe((inData) => {
       this.addData(inData);
     });

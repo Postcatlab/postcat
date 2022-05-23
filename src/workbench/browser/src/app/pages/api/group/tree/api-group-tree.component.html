@@ -126,7 +126,10 @@
               >
                 <a>复制</a>
               </li>
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
+              <li
+                nz-menu-item
+                (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })"
+              >
                 <a>删除</a>
               </li>
             </ul>

@@ -10,24 +10,24 @@ import packageJson from '../../../../../../../../package.json';
 export class ExportApiComponent implements OnInit {
   exportType: string = 'eoapi';
   supportList: Array<{
-    key:string,
-    image:string,
-    title:string
+    key: string;
+    image: string;
+    title: string;
   }> = [
     {
       key: 'eoapi',
       image: '',
-      title: 'Eoapi(.json)'
-    }
+      title: 'Eoapi(.json)',
+    },
   ];
-  featureList = window.eo.getFeature('apimanager.export');
+  featureList = window.eo.getFeature('apimanage.export');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
     this.featureList?.forEach((feature: object, key: string) => {
       this.supportList.push({
         key: key,
         image: feature['icon'],
-        title: feature['label']
+        title: feature['label'],
       });
     });
   }
@@ -47,7 +47,7 @@ export class ExportApiComponent implements OnInit {
 
   /**
    * Default export
-   * @param callback 
+   * @param callback
    */
   private exportEoapi(callback) {
     this.storage.run('projectExport', [], (result: StorageRes) => {
@@ -95,7 +95,7 @@ export class ExportApiComponent implements OnInit {
   submit(callback: () => boolean) {
     console.log(this.exportType);
     if ('eoapi' === this.exportType) {
-      this.exportEoapi(callback); 
+      this.exportEoapi(callback);
     } else {
       this.export(callback);
     }
