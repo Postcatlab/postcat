@@ -44,13 +44,21 @@ export class HttpStorage implements StorageInterface {
   environmentBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   environmentLoad: (uuid: number | string) => Observable<object>;
   environmentBulkLoad: (uuids: Array<number | string>) => Observable<object>;
-  environmentLoadAllByProjectID: (projectID: number | string) => Observable<object>;
+  environmentLoadAllByProjectID(projectID: number | string){
+    return this.http.get(`/environment?projectID=${projectID}`) as Observable<object>;
+  };
   // Group
-  groupCreate: (item: Group) => Observable<object>;
-  groupUpdate: (item: Group, uuid: number | string) => Observable<object>;
+  groupCreate(item: Group) {
+    return this.http.post(`/group`, item) as Observable<object>;
+  }
+  groupUpdate(item: Group, uuid: number | string) {
+    return this.http.put(`/group/${uuid}`, item) as Observable<object>;
+  }
   groupBulkCreate: (items: Array<Group>) => Observable<object>;
   groupBulkUpdate: (items: Array<Group>) => Observable<object>;
-  groupRemove: (uuid: number | string) => Observable<object>;
+  groupRemove(uuid: number | string) {
+    return this.http.delete(`/group/${uuid}`) as Observable<object>;
+  }
   groupBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   groupLoad: (uuid: number | string) => Observable<object>;
   groupBulkLoad: (uuids: Array<number | string>) => Observable<object>;
