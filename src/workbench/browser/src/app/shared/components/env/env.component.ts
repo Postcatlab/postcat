@@ -28,11 +28,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(
-    private storage: StorageService,
-    private message: NzMessageService,
-    private store: Store
-  ) {}
+  constructor(private storage: StorageService, private message: NzMessageService, private store: Store) {}
 
   get envUuid(): number {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -56,7 +52,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getAllEnv() {
+  getAllEnv(uuid?: number) {
     const projectID = 1;
     this.storage.run('environmentLoadAllByProjectID', [projectID], (result: StorageHandleResult) => {
       if (result.status !== StorageHandleStatus.success) {
@@ -65,7 +61,7 @@ export class EnvComponent implements OnInit, OnDestroy {
         return;
       }
       this.envList = result.data;
-      this.handleSwitchEnv(result.data[0].uuid);
+      this.handleSwitchEnv(uuid ?? result.data[0].uuid);
     });
   }
 
@@ -110,22 +106,25 @@ export class EnvComponent implements OnInit, OnDestroy {
     }
     const data = parameters.filter((it) => it.name && it.value);
     if (uuid) {
-      this.storage.run('environmentUpdate', [{ ...other, name, parameters: data }, uuid], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
-          this.message.success('编辑成功');
-          this.getAllEnv();
-        } else {
-          this.message.success('编辑失败');
+      this.storage.run(
+        'environmentUpdate',
+        [{ ...other, name, parameters: data }, uuid],
+        (result: StorageHandleResult) => {
+          if (result.status === StorageHandleStatus.success) {
+            this.message.success('编辑成功');
+            this.getAllEnv(this.activeUuid);
+          } else {
+            this.message.success('编辑失败');
+          }
         }
-      });
+      );
     } else {
       this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageHandleResult) => {
         if (result.status === StorageHandleStatus.success) {
           this.message.success('新增成功');
           this.envInfo = result.data;
           this.activeUuid = Number(result.data.uuid);
-          this.handleSwitchEnv(result.data.uuid);
-          this.getAllEnv();
+          this.getAllEnv(result.data.uuid);
         } else {
           this.message.success('新增失败');
         }
@@ -141,6 +140,7 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleShowModal() {
     this.isVisible = true;
+    this.handleSwitchEnv(this.envUuid);
   }
 
   handleEnvSelectStatus(event) {
