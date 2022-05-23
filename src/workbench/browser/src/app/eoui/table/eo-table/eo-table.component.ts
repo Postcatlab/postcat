@@ -48,7 +48,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
     return this.modelData;
   }
   @Input() set model(value) {
-    this.modelData = value.flat(Infinity);
+    this.modelData = (value ?? []).flat(Infinity);
     const emptyList = this.modelData.filter(isEmptyValue);
     if (emptyList.length === 0) {
       // * If has no empty line, then add a new line.
