@@ -1,12 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
-import {
-  Group,
-  ApiData,
-  StorageHandleResult,
-  StorageHandleStatus,
-} from '../../../../../../../../platform/browser/IndexedDB';
+import { Group, ApiData, StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import { Message } from '../../../../shared/services/message/message.model';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
@@ -338,7 +333,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   private setSelectedKeys() {
-    console.log('setSelectedKeys',this.route.snapshot.queryParams.uuid,this.nzSelectedKeys)
+    console.log('setSelectedKeys', this.route.snapshot.queryParams.uuid, this.nzSelectedKeys);
     if (this.route.snapshot.queryParams.uuid) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];
     } else {

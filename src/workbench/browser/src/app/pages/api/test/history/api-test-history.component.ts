@@ -8,7 +8,7 @@ import {
   ApiTestHistoryFrame,
   StorageHandleResult,
   StorageHandleStatus,
-} from '../../../../../../../../platform/browser/IndexedDB';
+} from 'eo/platform/browser/IndexedDB';
 
 @Component({
   selector: 'eo-api-test-history',

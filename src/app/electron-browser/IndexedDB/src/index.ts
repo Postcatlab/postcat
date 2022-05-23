@@ -7,8 +7,8 @@ import {
   StorageHandleStatus,
   StorageHandleArgs,
   StorageProcessType,
-} from '../../../../platform/browser/IndexedDB';
-import { Storage } from '../../../../platform/browser/IndexedDB/lib';
+} from 'eo/platform/browser/IndexedDB';
+import { Storage } from 'eo/platform/browser/IndexedDB/lib';
 
 class StorageService {
   private ipcRenderer: typeof ipcRenderer;

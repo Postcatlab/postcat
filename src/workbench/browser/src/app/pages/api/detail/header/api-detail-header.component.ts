@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { ApiEditHeaders } from '../../../../../../../../platform/browser/IndexedDB';
+import { ApiEditHeaders } from 'eo/platform/browser/IndexedDB';
 import { ApiDetailService } from '../api-detail.service';
 @Component({
   selector: 'eo-api-detail-header',
@@ -23,7 +23,7 @@ export class ApiDetailHeaderComponent implements OnInit, OnChanges {
     this.listConf = this.detailService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_EDIT_HEADER',
       title: '头部',
-      nameTitle: '标签'
+      nameTitle: '标签',
     });
   }
 }
