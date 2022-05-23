@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges } from '@angular/core';
-import { ApiEditHeaders } from '../../../../../../../../platform/browser/IndexedDB';
+import { ApiEditHeaders } from 'eo/platform/browser/IndexedDB';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-header',
@@ -25,7 +25,7 @@ export class ApiEditHeaderComponent implements OnInit, OnChanges, AfterViewCheck
     this.cdRef.detectChanges();
   }
   ngOnChanges(changes) {
-    if (changes.model&&!changes.model.previousValue&&changes.model.currentValue) {
+    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
       this.model.push(Object.assign({}, this.itemStructure));
     }
   }

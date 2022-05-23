@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { ModuleHandlerOptions, ModuleInfo } from '../types';
-import { fileExists, readJson } from '../../../../shared/node/file';
-import { isNotEmpty } from '../../../../shared/common/common';
+import { fileExists, readJson } from 'eo/shared/node/file';
+import { isNotEmpty } from 'eo/shared/common/common';
 
 /**
  * 核心模块管理器

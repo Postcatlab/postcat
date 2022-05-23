@@ -1,9 +1,9 @@
-import { ModuleInfo, ModuleType } from '../../platform/node/extension-manager/types';
-import { getViewBounds, SidePosition, ViewBounds, ViewZone } from '../../shared/common/bounds';
+import { ModuleInfo, ModuleType } from 'eo/platform/node/extension-manager/types';
+import { getViewBounds, SidePosition, ViewBounds, ViewZone } from 'eo/shared/common/bounds';
 import { BrowserView, BrowserWindow } from 'electron';
 import * as path from 'path';
-import { BrowserViewInstance } from '../../platform/electron-main/browserView/browserView';
-import { processEnv } from '../../platform/node/constant';
+import { BrowserViewInstance } from 'eo/platform/electron-main/browserView/browserView';
+import { processEnv } from 'eo/platform/node/constant';
 export class AppViews {
   mainModuleID: string;
   view: BrowserView;

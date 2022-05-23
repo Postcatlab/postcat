@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
-import { StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import packageJson from '../../../../../../../../package.json';
 @Component({
   selector: 'eo-export-api',

@@ -1,8 +1,7 @@
-import { BrowserView, screen, BrowserWindow, session, ipcMain } from 'electron';
-import { BrowserViewInstance } from '../../platform/electron-main/browserView/browserView';
+import { BrowserView, BrowserWindow, ipcMain } from 'electron';
+import { BrowserViewInstance } from 'eo/platform/electron-main/browserView/browserView';
 import * as path from 'path';
-import { subView } from './main';
-import { processEnv } from '../../platform/node/constant';
+import { processEnv } from 'eo/platform/node/constant';
 export class CoreViews {
   moduleID: string;
   view: BrowserView;

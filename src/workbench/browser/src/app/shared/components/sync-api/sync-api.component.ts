@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
 
