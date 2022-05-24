@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as os from 'os';
 import ModuleManager from '../../platform/node/extension-manager/lib/manager';
 import { ModuleManagerInterface } from '../../platform/node/extension-manager';
-import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
+import { StorageResStatus, StorageProcessType } from '../../workbench/browser/src/app/shared/services/storage/index.model';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
@@ -144,7 +144,7 @@ try {
       while (data === null) {
         if (count > 1500) {
           data = {
-            status: StorageHandleStatus.error,
+            status: StorageResStatus.error,
             data: 'storage sync load error',
           };
           break;

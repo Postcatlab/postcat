@@ -9,8 +9,6 @@ dist/
 *.js
 *.js.map
 *.webpack.js
-!src/core/market/browser/**/*.js
-!src/core/market/browser/dist/icon.png
 !src/workbench/node/request/**/*.js
 !/api/*.js
 
