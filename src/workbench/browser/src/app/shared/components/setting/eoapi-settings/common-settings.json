@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "Eoapi-Common",
+  "version": "0.0.1",
+  "moduleName": "通用",
+  "moduleID": "eoapi-common",
+  "author": "eoapi",
+  "publisher": "eoapi",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "通用",
+      "order": 1,
+      "properties": {
+        "common.app.autoUpdate": {
+          "type": "boolean",
+          "default": true,
+          "label": "自动升级",
+          "description": "勾选后，检测到应用升级后自动从远程下载最新的应用更新"
+        }
+      }
+    }
+  }
+}

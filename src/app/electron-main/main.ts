@@ -1,17 +1,18 @@
+require('@bqy/node-module-alias/register');
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
-import ModuleManager from '../../platform/node/extension-manager/lib/manager';
-import { ModuleInfo, ModuleManagerInterface } from '../../platform/node/extension-manager';
-import { StorageHandleStatus, StorageProcessType } from '../../platform/browser/IndexedDB';
-import { AppViews } from './appView';
-import { CoreViews } from './coreView';
-import { processEnv } from '../../platform/node/constant';
-import { proxyOpenExternal } from '../../shared/common/browserView';
-import { deleteFile, readJson } from '../../shared/node/file';
-import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
-import { UnitWorkerModule } from '../../workbench/node/unitWorker';
+import ModuleManager from 'eo/platform/node/extension-manager/lib/manager';
+import { ModuleManagerInterface } from 'eo/platform/node/extension-manager';
+import { StorageHandleStatus, StorageProcessType } from 'eo/platform/browser/IndexedDB';
+import { processEnv } from 'eo/platform/node/constant';
+import { proxyOpenExternal } from 'eo/shared/common/browserView';
+import { deleteFile, readJson } from 'eo/shared/node/file';
+import { STORAGE_TEMP as storageTemp } from 'eo/shared/common/constant';
+import { UnitWorkerModule } from 'eo/workbench/node/unitWorker';
+import Configuration from 'eo/platform/node/configuration/lib';
+import { ConfigurationInterface } from 'src/platform/node/configuration';
 let win: BrowserWindow = null;
 export const subView = {
   appView: null,
@@ -19,6 +20,7 @@ export const subView = {
 };
 const eoUpdater = new EoUpdater();
 const moduleManager: ModuleManagerInterface = ModuleManager();
+const configuration: ConfigurationInterface = Configuration();
 // Remote
 const mainRemote = require('@electron/remote/main');
 mainRemote.initialize();
@@ -39,15 +41,10 @@ function createWindow(): BrowserWindow {
       webSecurity: false,
       preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
       nodeIntegration: true,
-      allowRunningInsecureContent: processEnv === 'serve' ? true : false,
+      allowRunningInsecureContent: processEnv === 'development' ? true : false,
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
-  if (['serve'].includes(processEnv) ) {
-    require('electron-reload')(__dirname, {
-      electron: require(path.join(__dirname, '../node_modules/electron')),
-    });
-  }
   proxyOpenExternal(win);
   let loadPage = () => {
     const file: string =
@@ -55,25 +52,21 @@ function createWindow(): BrowserWindow {
         ? 'http://localhost:4200'
         : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
     win.loadURL(file);
-    win.webContents.openDevTools({
-      mode: 'undocked',
-    });
+    if (['development'].includes(processEnv)) {
+      win.webContents.openDevTools({
+        mode: 'undocked',
+      });
+    }
     UnitWorkerModule.setup({
-      view:win
+      view: win,
     });
   };
-  win.webContents.on('did-fail-load', () => {
+  win.webContents.on('did-fail-load', (event, errorCode) => {
+    console.error('did-fail-load', errorCode);
     loadPage();
   });
   win.webContents.on('did-finish-load', () => {
     mainRemote.enable(win.webContents);
-    //remove origin view
-    for (var i in subView) {
-      if (!subView[i]) {
-        continue;
-      }
-      subView[i].remove();
-    }
   });
   loadPage();
 
@@ -84,23 +77,7 @@ function createWindow(): BrowserWindow {
     // when you should delete the corresponding element.
     win = null;
   });
-
-  // resize 监听，改变bounds
-  win.on('resize', () => resize());
-
   return win;
-}
-
-/**
- * 重置View的Bounds
- */
-function resize(sideWidth?: number) {
-  for (var i in subView) {
-    if (!subView[i]) {
-      continue;
-    }
-    subView[i].rebuildBounds(sideWidth);
-  }
 }
 
 try {
@@ -215,45 +192,20 @@ try {
       returnValue = moduleManager.getFeatures();
     } else if (arg.action === 'getFeature') {
       returnValue = moduleManager.getFeature(arg.data.featureKey);
+    } else if (arg.action === 'saveSettings') {
+      returnValue = configuration.saveSettings(arg.data);
+    } else if (arg.action === 'saveModuleSettings') {
+      returnValue = configuration.saveModuleSettings(arg.data.moduleID, arg.data.settings);
+    } else if (arg.action === 'deleteModuleSettings') {
+      returnValue = configuration.deleteModuleSettings(arg.data.moduleID);
+    } else if (arg.action === 'getSettings') {
+      returnValue = configuration.getSettings();
+    } else if (arg.action === 'getModuleSettings') {
+      returnValue = configuration.getModuleSettings(arg.data.moduleID);
     } else if (arg.action === 'getSidePosition') {
       returnValue = subView.appView?.sidePosition;
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
-    } else if (arg.action === 'openApp') {
-      if (arg.data.moduleID && !arg.data.moduleID.includes('@eo-core')) {
-        // 如果要打开是同一app，忽略
-        if (subView.appView?.mainModuleID === arg.data.moduleID) {
-          return;
-        }
-        const module: ModuleInfo = moduleManager.getModule(arg.data.moduleID);
-        if (module) {
-          if (!subView.appView) subView.appView = new AppViews(win);
-          subView.appView.create(module);
-        }
-      } else {
-        if (subView.appView) {
-          subView.appView.remove();
-        }
-      }
-      returnValue = 'view id';
-    } else if (arg.action === 'autoResize') {
-      resize(arg.data.sideWidth);
-    } else if (arg.action === 'openModal') {
-      const background = arg.data.background || '#00000073';
-      subView.mainView.view.webContents.executeJavaScript(`
-        var mask = document.querySelector('#mask');
-        if (mask) {
-          mask.style.background = '${background}';
-          mask.style.display = 'block';
-        }
-      `);
-    } else if (arg.action === 'closeModal') {
-      subView.mainView.view.webContents.executeJavaScript(`
-        var mask = document.querySelector('#mask');
-        if (mask) {
-          mask.style.display = 'none';
-        }
-      `);
     } else {
       returnValue = 'Invalid data';
     }

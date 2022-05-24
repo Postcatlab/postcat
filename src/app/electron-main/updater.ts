@@ -5,6 +5,8 @@ const appVersion = require('../../../package.json').version;
 export class EoUpdater {
   constructor() {
     this.watchLog();
+    // 是否自动更新
+    // autoUpdater.autoDownload = window.eo.getModuleSettings('common.app.autoUpdate') !== false;
     if (appVersion.includes('beta')) autoUpdater.channel = 'beta';
     console.log('appVersion', appVersion, autoUpdater.channel);
   }

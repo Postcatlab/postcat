@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, StorageItem } from '../types';
 import { sampleApiData } from '../sample';
 
-class Storage extends Dexie implements StorageInterface {
+export class Storage extends Dexie implements StorageInterface {
   project!: Table<Project, number | string>;
   group!: Table<Group, number | string>;
   environment!: Table<Environment, number | string>;
@@ -11,7 +11,6 @@ class Storage extends Dexie implements StorageInterface {
   apiTestHistory!: Table<ApiTestHistory, number | string>;
 
   constructor() {
-    console.log('eoapi indexedDB storage start');
     super('eoapi_core');
     this.version(1).stores({
       project: '++uuid, name',
@@ -134,7 +133,7 @@ class Storage extends Dexie implements StorageInterface {
           }
         });
       table
-        .bulkGet(uuids)
+        .bulkGet(uuids.map(Number))
         .then((existItems) => {
           if (existItems) {
             let newItems: Array<StorageItem> = [];
@@ -146,7 +145,12 @@ class Storage extends Dexie implements StorageInterface {
               });
             // @ts-ignore
             table
-              .bulkPut(newItems)
+              .bulkPut(
+                newItems.map((n: any) => ({
+                  ...n,
+                  groupID: ~~n.groupID.replace('group-', ''),
+                }))
+              )
               .then((result) => {
                 obs.next({ number: result, items: newItems });
                 obs.complete();
@@ -606,7 +610,11 @@ class Storage extends Dexie implements StorageInterface {
           tables = ['environment', 'group', 'project', 'apiData'];
         for (var i = 0; i < tables.length; i++) {
           let tableName = tables[i];
-          result[tableName] = await this[tableName].toArray();
+          if (tableName === 'project') {
+            result[tableName] = (await this[tableName].toArray())[0];
+          } else {
+            result[tableName] = await this[tableName].toArray();
+          }
         }
         obs.next(result);
         obs.complete();
@@ -671,5 +679,3 @@ class Storage extends Dexie implements StorageInterface {
     return this.update(this.project, item, uuid);
   }
 }
-
-export const storage = new Storage();

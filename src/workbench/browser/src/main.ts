@@ -9,6 +9,5 @@ if (APP_CONFIG.production) {
 }
 
 platformBrowserDynamic()
-  .bootstrapModule(AppModule, {
-  })
-  .catch(err => console.error(err));
+  .bootstrapModule(AppModule, {})
+  .catch((err) => console.error(err));

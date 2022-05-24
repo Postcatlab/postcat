@@ -14,7 +14,7 @@ dist/
 !src/workbench/node/request/**/*.js
 !/api/*.js
 
-
+scripts/notarize.js
 # dependencies
 node_modules
 # package-lock.json
@@ -27,13 +27,6 @@ node_modules
 *.launch
 .settings/
 *.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 # misc
 /connect.lock

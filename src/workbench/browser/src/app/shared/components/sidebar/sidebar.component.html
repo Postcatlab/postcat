@@ -1,13 +1,11 @@
 <div class="eo_sidebar" [ngClass]="{ eo_sidebar_shrink: isCollapsed }">
   <a
-    (click)="openApp(item.moduleID)"
+    (click)="clickModule(item)"
     *ngFor="let item of this.modules"
     class="sidebar_item"
     nz-tooltip
-    (nzTooltipVisibleChange)="tooltipVisibleChange($event)"
     [nzTooltipTitle]="item.moduleName"
-    [routerLink]="item.route ? item.route : '/home/blank'"
-    [ngClass]="{ sidebar_item_active: item.moduleID === this.moduleID }"
+    [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }"
   >
     <span *ngIf="item.logo.includes('icon-')" class="iconfont fs28" [ngClass]="item.logo"></span>
     <img *ngIf="!item.logo.includes('icon-')" [src]="item.logo" />

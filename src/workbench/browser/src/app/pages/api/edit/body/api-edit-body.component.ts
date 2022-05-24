@@ -1,17 +1,14 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ChangeDetectorRef,
-  Output,
-  EventEmitter,
-  OnChanges,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
-import { ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../../../../platform/browser/IndexedDB';
+import {
+  ApiParamsTypeFormData,
+  ApiParamsTypeJsonOrXml,
+  ApiEditBody,
+  ApiBodyType,
+  JsonRootType,
+} from 'eo/platform/browser/IndexedDB';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-body',
@@ -53,7 +50,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiBodyType.Raw: { // case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        // case ApiBodyType.Binary:
         if (typeof this.model !== 'string') return;
         this.cache[type] = this.model || '';
         break;
@@ -72,7 +70,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.bodyTypeChange.emit(this.bodyType);
     this.setListConf();
     this.setModel();
-    if(type==='init') return;
+    if (type === 'init') return;
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
@@ -85,7 +83,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if ((changes.model && !changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length===0) {
+    if (
+      (changes.model && !changes.model.previousValue && changes.model.currentValue) ||
+      changes.model.currentValue?.length === 0
+    ) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }

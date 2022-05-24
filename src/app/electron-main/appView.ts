@@ -1,9 +1,9 @@
-import { ModuleInfo, ModuleType } from '../../platform/node/extension-manager/types';
-import { getViewBounds, SidePosition, ViewBounds, ViewZone } from '../../shared/common/bounds';
+import { ModuleInfo, ModuleType } from 'eo/platform/node/extension-manager/types';
+import { getViewBounds, SidePosition, ViewBounds, ViewZone } from 'eo/shared/common/bounds';
 import { BrowserView, BrowserWindow } from 'electron';
 import * as path from 'path';
-import { BrowserViewInstance } from '../../platform/electron-main/browserView/browserView';
-import { processEnv } from '../../platform/node/constant';
+import { BrowserViewInstance } from 'eo/platform/electron-main/browserView/browserView';
+import { processEnv } from 'eo/platform/node/constant';
 export class AppViews {
   mainModuleID: string;
   view: BrowserView;
@@ -27,7 +27,7 @@ export class AppViews {
         if (main_node.module && typeof main_node.module === 'object') {
           const _fun = main_node.module;
           _fun.setup({
-            appView: this.view
+            appView: this.view,
           });
         }
       }
@@ -47,13 +47,19 @@ export class AppViews {
     this.view = undefined;
     this.mainModuleID = undefined;
   }
-  
+
   rebuildBounds(sideWidth?: number) {
     if (!this.view) {
       return;
     }
     const windBounds = this.win.getContentBounds();
-    const _bounds: ViewBounds = getViewBounds(ViewZone.main, windBounds.width, windBounds.height, this.sidePosition, sideWidth); 
+    const _bounds: ViewBounds = getViewBounds(
+      ViewZone.main,
+      windBounds.width,
+      windBounds.height,
+      this.sidePosition,
+      sideWidth
+    );
     this.view.setBounds(_bounds);
   }
 
