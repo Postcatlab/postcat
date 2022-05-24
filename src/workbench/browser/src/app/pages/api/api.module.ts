@@ -31,7 +31,15 @@ import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent, SyncApiComponent];
+const COMPONENTS = [
+  ApiComponent,
+  ApiGroupEditComponent,
+  ApiGroupTreeComponent,
+  ApiTabComponent,
+  ApiOverviewComponent,
+  ExportApiComponent,
+  SyncApiComponent,
+];
 @NgModule({
   imports: [
     FormsModule,
@@ -55,7 +63,7 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     EnvModule,
     NzCardModule,
   ],
-  declarations: [...COMPONENTS, ApiTabComponent, ApiOverviewComponent],
+  declarations: [...COMPONENTS],
   exports: [],
   providers: [ElectronService, MessageService, ApiService, StorageService],
 })
