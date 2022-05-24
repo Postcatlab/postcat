@@ -8,7 +8,7 @@ import {
   ApiTestHistoryFrame,
   StorageHandleResult,
   StorageHandleStatus,
-} from '../../../../../../../../platform/browser/IndexedDB';
+} from 'eo/platform/browser/IndexedDB';
 
 @Component({
   selector: 'eo-api-test-history',
@@ -136,7 +136,6 @@ export class ApiTestHistoryComponent implements OnInit {
   private getList() {
     this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
-        console.log(result.data)
         result.data.forEach((val: any) => {
           this.parseItem(val);
         });

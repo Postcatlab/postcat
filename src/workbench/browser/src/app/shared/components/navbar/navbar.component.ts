@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../../../core/services';
-import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
+import { ModuleInfo } from 'eo/platform/node/extension-manager';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -22,9 +22,16 @@ export class NavbarComponent implements OnInit {
     },
     {
       id: 'mac',
-      name: 'macOS 客户端',
+      name: 'macOS(Intel) 客户端',
       icon: 'mac',
       suffix: 'dmg',
+      link: '',
+    },
+    {
+      id: 'mac',
+      name: 'macOS(M1) 客户端',
+      icon: 'mac',
+      suffix: 'arm64.dmg',
       link: '',
     },
   ];
@@ -33,24 +40,42 @@ export class NavbarComponent implements OnInit {
     this.isElectron = this.electron.isElectron;
     this.getInstaller();
   }
+  private findLinkInSingleAssets(assets, item) {
+    let result = '';
+    let assetIndex = assets.findIndex(
+      (asset) =>
+        new RegExp(`${item.suffix}$`, 'g').test(asset.browser_download_url) &&
+        (!item.keyword || asset.browser_download_url.includes(item.keyword))
+    );
+    if (assetIndex === -1) {
+      return result;
+    }
+    result = assets[assetIndex].browser_download_url;
+    assets.splice(assetIndex, 1);
+    return result;
+  }
+  private findLink(allAssets, item) {
+    let result = '';
+    allAssets.some((assets) => {
+      result = this.findLinkInSingleAssets(assets, item);
+      return result;
+    });
+    return result;
+  }
   getInstaller() {
     fetch('https://api.github.com/repos/eolinker/eoapi/releases')
       .then((response) => response.json())
       .then((data) => {
-        this.resourceInfo.forEach((item) => {
-          let assetItem = data[0].assets.find(
-            (asset) =>
-              asset.browser_download_url.slice(-item.suffix.length) === item.suffix &&
-              (!item.keyword || asset.browser_download_url.includes(item.keyword))
-          );
-          item.link = assetItem.browser_download_url;
-        });
+        [...this.resourceInfo]
+          .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
+          .forEach((item) => {
+            item.link = this.findLink(
+              data.map((val) => val.assets),
+              item
+            );
+          });
+        console.log(this.resourceInfo);
       });
-  }
-  changeHelpVisible(visible) {
-    if(this.isElectron){
-      window.eo.toogleViewZIndex(visible);
-    }
   }
   minimize() {
     this.electron.ipcRenderer.send('message', {
@@ -78,9 +103,5 @@ export class NavbarComponent implements OnInit {
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
-  }
-
-  openApp(moduleID: string) {
-    window.eo.openApp({ moduleID: moduleID });
   }
 }

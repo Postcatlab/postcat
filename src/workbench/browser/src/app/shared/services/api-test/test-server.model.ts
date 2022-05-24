@@ -1,4 +1,4 @@
-import { Environment, ApiTestHistoryFrame } from '../../../../../../../platform/browser/IndexedDB';
+import { Environment, ApiTestHistoryFrame } from 'eo/platform/browser/IndexedDB';
 export interface TestServer {
   init: (receiveMessage: (message: any) => void) => void;
   send: (action: string, message: any) => void;

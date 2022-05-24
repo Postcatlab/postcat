@@ -9,7 +9,7 @@ import {
   RequestProtocol,
   StorageHandleResult,
   StorageHandleStatus,
-} from '../../../../../../../platform/browser/IndexedDB';
+} from 'eo/platform/browser/IndexedDB';
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, of, Subject } from 'rxjs';

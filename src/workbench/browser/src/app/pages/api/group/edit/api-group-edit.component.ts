@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Group, StorageHandleResult, StorageHandleStatus } from '../../../../../../../../platform/browser/IndexedDB';
+import { Group, StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MessageService } from '../../../../shared/services/message';
@@ -24,7 +24,7 @@ export class ApiGroupEditComponent implements OnInit {
     private messageService: MessageService,
     private modalRef: NzModalRef,
     private storage: StorageService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';
@@ -67,7 +67,7 @@ export class ApiGroupEditComponent implements OnInit {
         this.modalRef.destroy();
         this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
-        console.log(result.data);
+        console.error(result.data);
       }
     });
   }
@@ -78,7 +78,7 @@ export class ApiGroupEditComponent implements OnInit {
         this.modalRef.destroy();
         this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
-        console.log(result.data);
+        console.error(result.data);
       }
     });
   }

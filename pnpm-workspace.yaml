@@ -1,0 +1,3 @@
+src:
+  - 'workbench/browser/**/*'
+  - 'app/electron-browser/IndexedDB/**/*'

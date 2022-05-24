@@ -1,8 +1,0 @@
-{
-    "name": "core-modules",
-    "description": "API toolkit core modules",
-    "dependencies": {
-      "market": "0.0.1"
-    }
-  }
-  

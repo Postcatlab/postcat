@@ -1,12 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
-import {
-  Group,
-  ApiData,
-  StorageHandleResult,
-  StorageHandleStatus,
-} from '../../../../../../../../platform/browser/IndexedDB';
+import { Group, ApiData, StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import { Message } from '../../../../shared/services/message/message.model';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
@@ -90,7 +85,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     listToTree(this.treeItems, this.treeNodes, '0');
     setTimeout(() => {
       this.expandGroup();
-      this.setSelectedKeys();
     }, 0);
   }
   /**
@@ -121,7 +115,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   getApis() {
     this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+      const { success, empty } = StorageHandleStatus;
+      if ([success, empty].includes(result.status)) {
         let apiItems = {};
         result.data.forEach((item) => {
           delete item.updatedAt;
@@ -137,6 +132,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         });
         this.apiDataItems = apiItems;
         this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+        this.setSelectedKeys();
         this.generateGroupTreeData();
         this.restoreExpandStatus();
       }
@@ -337,6 +333,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   private setSelectedKeys() {
+    console.log('setSelectedKeys', this.route.snapshot.queryParams.uuid, this.nzSelectedKeys);
     if (this.route.snapshot.queryParams.uuid) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];
     } else {

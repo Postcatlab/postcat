@@ -11,7 +11,7 @@ ipcRenderer.on('storageCallback', (event, result) => {
       storageCallback.get(result.callback)(result);
       storageCallback.delete(result.callback);
     } catch (e) {
-      storageCallback.delete(result.callback); 
+      storageCallback.delete(result.callback);
     }
   }
 });
@@ -30,7 +30,7 @@ window.eo.getModules = () => {
 };
 // 获取某个模块
 window.eo.getModule = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID} });
+  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID } });
 };
 // 获取App应用列表
 window.eo.getAppModuleList = () => {
@@ -74,21 +74,6 @@ if (apiAccessRules.includes('hook')) {
 // 临时测试用
 window.eo.tempApi = (params) => {
   return ipcRenderer.sendSync('eo-sync', params);
-};
-window.eo.openModal = (background) => {
-  background = background || '#00000073';
-  return ipcRenderer.sendSync('eo-sync', { action: 'openModal', data: { background: background } });
-};
-window.eo.closeModal = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'closeModal' });
-};
-window.eo.toogleViewZIndex = (visible) => {
-  ipcRenderer.send('message', {
-    action: 'connect-dropdown',
-    data: {
-      action: visible ? 'show' : 'hide',
-    },
-  });
 };
 window.eo.autoResize = (sideWidth) => {
   ipcRenderer.send('eo-sync', { action: 'autoResize', data: { sideWidth: sideWidth } });
@@ -138,4 +123,27 @@ window.eo.storageRemote = (args) => {
   }
   shareObject.storageResult = null;
   return output;
+};
+
+window.eo.saveSettings = ({ settings, nestedSettings }) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'saveSettings', data: { settings, nestedSettings } });
+};
+
+window.eo.saveModuleSettings = (moduleID, settings) => {
+  return ipcRenderer.sendSync('eo-sync', {
+    action: 'saveModuleSettings',
+    data: { moduleID: moduleID, settings: settings },
+  });
+};
+
+window.eo.deleteModuleSettings = (moduleID) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'deleteModuleSettings', data: { moduleID: moduleID } });
+};
+
+window.eo.getSettings = (settings) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getSettings' });
+};
+
+window.eo.getModuleSettings = (moduleID) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });
 };

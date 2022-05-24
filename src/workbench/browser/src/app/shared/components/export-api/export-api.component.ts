@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
-import { StorageHandleResult, StorageHandleStatus } from '../../../../../../../platform/browser/IndexedDB';
+import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import packageJson from '../../../../../../../../package.json';
 @Component({
   selector: 'eo-export-api',
@@ -10,24 +10,24 @@ import packageJson from '../../../../../../../../package.json';
 export class ExportApiComponent implements OnInit {
   exportType: string = 'eoapi';
   supportList: Array<{
-    key:string,
-    image:string,
-    title:string
+    key: string;
+    image: string;
+    title: string;
   }> = [
     {
       key: 'eoapi',
       image: '',
-      title: 'Eoapi(.json)'
-    }
+      title: 'Eoapi(.json)',
+    },
   ];
-  featureList = window.eo.getFeature('apimanager.export');
+  featureList = window.eo.getFeature('apimanage.export');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
     this.featureList?.forEach((feature: object, key: string) => {
       this.supportList.push({
         key: key,
         image: feature['icon'],
-        title: feature['label']
+        title: feature['label'],
       });
     });
   }
@@ -47,7 +47,7 @@ export class ExportApiComponent implements OnInit {
 
   /**
    * Default export
-   * @param callback 
+   * @param callback
    */
   private exportEoapi(callback) {
     this.storage.run('projectExport', [], (result: StorageHandleResult) => {
@@ -76,7 +76,7 @@ export class ExportApiComponent implements OnInit {
         if (result.status === StorageHandleStatus.success) {
           result.data.version = packageJson.version;
           try {
-            const output = module[action](result);
+            const output = module[action](result || {});
             this.transferTextToFile(filename, output);
             callback(true);
           } catch (e) {
@@ -95,7 +95,7 @@ export class ExportApiComponent implements OnInit {
   submit(callback: () => boolean) {
     console.log(this.exportType);
     if ('eoapi' === this.exportType) {
-      this.exportEoapi(callback); 
+      this.exportEoapi(callback);
     } else {
       this.export(callback);
     }

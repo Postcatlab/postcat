@@ -1,0 +1,40 @@
+.sidebar_setting {
+  font-size: 20px;
+  position: absolute;
+  padding: 15px;
+  cursor: pointer;
+  bottom: var(--FOOTER_HEIGHT, 0);
+}
+
+.container {
+  display: grid;
+  grid-template-columns: minmax(200px, min-content) 25px auto;
+  height: 60vh;
+  .divider {
+    height: 100%;
+  }
+}
+
+.tree-view, .form {
+  overflow: auto;
+}
+.form {
+  padding-right: 10px;
+}
+.footer {
+  text-align: right;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.label {
+  padding: 0;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.9);
+}
+.description {
+  margin-bottom: 3px;
+  color: rgb(102, 102, 102);
+}

@@ -2,8 +2,8 @@
   <h1 class="fs20 fwb">概况</h1>
   <nz-divider></nz-divider>
   <div class="r_row f_js">
-    <div class="f_row_ac">
-      <div>
+    <div class="card_container">
+      <div class="card_item">
         <nz-card [nzActions]="[exportButton]">
           <nz-card-meta nzTitle="导出" nzDescription="导出 API 数据"></nz-card-meta>
         </nz-card>
@@ -11,7 +11,7 @@
           <i (click)="export()" nz-icon nzType="export"></i>
         </ng-template>
       </div>
-      <div class="ml15">
+      <div class="card_item">
         <nz-card [nzActions]="[syncButton]">
           <nz-card-meta nzTitle="推送" nzDescription="将 API 推送/同步到其他平台"></nz-card-meta>
         </nz-card>

@@ -84,9 +84,6 @@
               <li nz-menu-item (click)="addSubGroup(node)">
                 <a>新建子分组</a>
               </li>
-              <!-- <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'exportApiGroup', node: node })">
-                <a>导出 API</a>
-              </li> -->
               <li nz-menu-item (click)="editGroup(node)">
                 <a>编辑</a>
               </li>
@@ -129,10 +126,10 @@
               >
                 <a>复制</a>
               </li>
-              <!-- <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'exportApi', node: apiDataItems[node.key] })">
-                <a>导出 API</a>
-              </li> -->
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
+              <li
+                nz-menu-item
+                (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })"
+              >
                 <a>删除</a>
               </li>
             </ul>

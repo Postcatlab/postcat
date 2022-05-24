@@ -1,0 +1,16 @@
+<section class="main">
+  <section class="left flex-shrink-0">
+    <div class="mb-2"><i class="mr-2" nz-icon nzType="appstore" nzTheme="fill"></i>插件分类</div>
+    <div
+      class="plugin-link px-1 py-2"
+      [ngClass]="{ active: selectGroup === item.id }"
+      *ngFor="let item of groups"
+      (click)="clickGroup(item.id)"
+    >
+      {{ item.title }}<span *ngIf="item.showNum"> （{{ extensionService.extensionIDs.length }}）</span>
+    </div>
+  </section>
+  <section class="right fg1 px-4">
+    <router-outlet></router-outlet>
+  </section>
+</section>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges } from '@angular/core';
-import { ApiEditRest } from '../../../../../../../../platform/browser/IndexedDB';
+import { ApiEditRest } from 'eo/platform/browser/IndexedDB';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-rest',
@@ -24,7 +24,7 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
     this.cdRef.detectChanges();
   }
   ngOnChanges(changes) {
-    if (changes.model&&!changes.model.previousValue&&changes.model.currentValue) {
+    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
       this.model.push(Object.assign({}, this.itemStructure));
     }
   }
@@ -34,7 +34,7 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
       itemStructure: this.itemStructure,
       nzOnOkMoreSetting: (inputArg) => {
         this.model[inputArg.$index] = inputArg.item;
-      }
+      },
     });
   }
 }

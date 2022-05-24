@@ -1,4 +1,4 @@
-import { SidePosition } from '../../../../shared/common/bounds';
+import { SidePosition } from 'eo/shared/common/bounds';
 import { ModuleHandlerResult } from './handler';
 
 /**
@@ -11,7 +11,7 @@ import { ModuleHandlerResult } from './handler';
 export enum ModuleType {
   system = 'system',
   app = 'app',
-  feature = 'feature'
+  feature = 'feature',
 }
 
 /**
@@ -58,11 +58,20 @@ export interface ModuleInfo {
   sidePosition?: SidePosition;
   // 配置项
   configuration?: ModuleConfiguration;
+  /** 贡献点 */
+  contributes: ModuleContributes;
   // 功能点配置
   features?: {
-    [index: string]: object
+    [index: string]: object;
   };
 }
+/**
+ * 贡献点
+ */
+
+export type ModuleContributes = {
+  configuration: ModuleConfiguration;
+};
 
 /**
  * 模块配置项接口
@@ -71,7 +80,7 @@ export interface ModuleConfiguration {
   title: string;
   properties: {
     [index: string]: ModuleConfigurationField;
-  }
+  };
 }
 
 /**

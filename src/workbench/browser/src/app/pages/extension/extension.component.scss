@@ -1,0 +1,45 @@
+.main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+
+  .left {
+    background: #f8f8f8;
+    width: 250px;
+    padding: 10px;
+
+    .plugin-link {
+      &:hover,
+      &.active {
+        color: var(--MAIN_THEME_COLOR);
+        cursor: pointer;
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .right {
+    height: 100%;
+  }
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  .py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .px-1 {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  .mr-2 {
+    margin-right: 0.5rem;
+}
+}
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
