@@ -16,7 +16,23 @@
           "type": "boolean",
           "default": true,
           "label": "自动升级",
+          "disabled": true,
           "description": "勾选后，检测到应用升级后自动从远程下载最新的应用更新"
+        },
+        "remoteServer.url": {
+          "type": "string",
+          "label": "远程服务器地址",
+          "required": true,
+          "default": "",
+          "placeholder": "数据源地址",
+          "description": "从远程服务器存取数据，配置后支持多人合作，配置文档请见：远程数据源"
+        },
+        "remoteServer.token": {
+          "type": "string",
+          "label": "Token",
+          "default": "",
+          "placeholder": "Token 凭证",
+          "description": "远程服务器Token，配置后才可访问"
         }
       }
     }

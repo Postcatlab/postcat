@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NzTabPosition } from 'ng-zorro-antd/tabs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { debounce, cloneDeep } from 'lodash';
 import { eoapiSettings } from './eoapi-settings/';
+import { Message, MessageService } from '../../../shared/services/message';
+import { Subject, takeUntil } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 interface TreeNode {
   name: string;
@@ -57,7 +59,6 @@ export class SettingComponent implements OnInit {
   currentConfiguration = [];
   isVisible = false;
   _isShowModal = false;
-  position: NzTabPosition = 'left';
   /** 所有配置 */
   settings = {};
   /** 本地配置 */
@@ -65,6 +66,8 @@ export class SettingComponent implements OnInit {
   /** 深层嵌套的配置 */
   nestedSettings = {};
   validateForm!: FormGroup;
+  /** 远程服务器地址 */
+  remoteServerUrl = '';
 
   get isShowModal() {
     return this._isShowModal;
@@ -74,17 +77,54 @@ export class SettingComponent implements OnInit {
     this._isShowModal = val;
     if (val) {
       this.init();
+      this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
+    } else {
+      this.pingRmoteServerUrl();
     }
   }
 
-  constructor(private fb: FormBuilder) {}
+  private destroy$: Subject<void> = new Subject<void>();
+  constructor(private fb: FormBuilder, private messageService: MessageService, private message: NzMessageService) {}
 
   ngOnInit(): void {
     this.init();
     // this.parseSettings();
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'toggleSettingModalVisible': {
+            inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
+            break;
+          }
+        }
+      });
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
+
+  /**
+   * 测试远程服务器地址是否可用
+   */
+  async pingRmoteServerUrl() {
+    const remoteUrl = this.settings['eoapi-common.remoteServer.url'];
+    try {
+      const result = await fetch(remoteUrl);
+      if (result.status < 200 || result.status > 300) {
+        throw result;
+      }
+      await result.json();
+      if (remoteUrl !== this.remoteServerUrl) {
+        this.message.create('success', '远程服务器地址设置成功');
+      }
+    } catch (error) {
+      console.error(error);
+      // 远程服务地址不可用时，回退到上次的地址
+      this.settings['eoapi-common.remoteServer.url'] = this.remoteServerUrl;
+      this.message.create('error', '远程服务器地址不可用');
+    }
+  }
 
   /**
    * 设置数据
@@ -169,6 +209,7 @@ export class SettingComponent implements OnInit {
       eoapiSettings['Eoapi-theme'],
       eoapiSettings['Eoapi-Extensions'],
       // eoapiSettings['Eoapi-Features'],
+      eoapiSettings['Eoapi-about'],
     ]);
     // 所有配置
     const allConfiguration = allSettings.map((n) => {

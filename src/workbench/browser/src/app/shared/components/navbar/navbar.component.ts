@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { MessageService } from '../../services/message';
+import { NzNotificationService, NzNotificationRef } from 'ng-zorro-antd/notification';
+import { NzMessageService } from 'ng-zorro-antd/message';
+
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -9,6 +13,9 @@ import { ModuleInfo } from 'eo/platform/node/extension-manager';
 export class NavbarComponent implements OnInit {
   isMaximized = false;
   isElectron: boolean = false;
+  /** 是否远程数据源 */
+  isRemote: boolean = false;
+  nzNotificationRef: NzNotificationRef;
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
   resourceInfo = [
@@ -36,7 +43,12 @@ export class NavbarComponent implements OnInit {
     },
   ];
 
-  constructor(private electron: ElectronService) {
+  constructor(
+    private electron: ElectronService,
+    private messageService: MessageService,
+    private notification: NzNotificationService,
+    private message: NzMessageService
+  ) {
     this.isElectron = this.electron.isElectron;
     this.getInstaller();
   }
@@ -102,5 +114,52 @@ export class NavbarComponent implements OnInit {
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
+  }
+
+  /**
+   * 打开系统设置
+   */
+  openSettingModal() {
+    console.log('this.messageService', this.messageService);
+    this.messageService.send({ type: 'toggleSettingModalVisible', data: { isShow: true } });
+  }
+  /**
+   * 移除消息通知
+   */
+  removeNotification() {
+    this.nzNotificationRef?.messageId && this.notification.remove(this.nzNotificationRef.messageId);
+  }
+
+  /**
+   * 切换到单机
+   */
+  switchToStandAlone(template: TemplateRef<{}>): void {
+    this.isRemote = false;
+    this.removeNotification();
+    this.nzNotificationRef = this.notification.template(template, {
+      nzStyle: {
+        position: 'fixed',
+        right: 0,
+        left: 0,
+        top: '50px',
+        minWidth: '100vw',
+        height: '50px',
+        padding: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgb(255, 219, 7)',
+      },
+      nzDuration: 0,
+    });
+  }
+
+  /**
+   * 切换到远程
+   */
+  switchToRemote() {
+    this.isRemote = true;
+    this.removeNotification();
+    this.message.create('success', '成功切换至远程数据源');
   }
 }

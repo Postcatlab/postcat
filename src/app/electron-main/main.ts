@@ -214,6 +214,14 @@ try {
     }
     event.returnValue = returnValue;
   });
+  ipcMain.on('get-system-info', (event) => {
+    const systemInfo = {
+      homeDir: path.dirname(app.getPath('exe')),
+      ...process.versions,
+      os: `${os.type()} ${os.arch()} ${os.release()}`,
+    };
+    event.returnValue = systemInfo;
+  });
 } catch (e) {
   // Catch Error
   // throw e;

@@ -4,7 +4,9 @@
     "dist/**/*",
     "release/**/*"
   ],
-  "parserOptions": {"ecmaVersion": "latest"},
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
   "overrides": [
     {
       "files": [
