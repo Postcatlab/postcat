@@ -53,6 +53,6 @@ export class ImportApiComponent implements OnInit {
     const filename = feature.filename || null;
     const module = window.eo.loadFeatureModule('eoapi-import-openapi');
     const data = module[action]();
-    console.log(data);
+    alert(JSON.stringify(data));
   }
 }
