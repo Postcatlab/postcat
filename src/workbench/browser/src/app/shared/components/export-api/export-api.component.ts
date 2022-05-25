@@ -84,6 +84,7 @@ export class ExportApiComponent implements OnInit {
         if (result.status === StorageHandleStatus.success) {
           result.data.version = packageJson.version;
           try {
+            console.log(JSON.stringify(result, null, 2));
             const output = module[action](result || {});
             this.transferTextToFile(filename, output);
             callback(true);
