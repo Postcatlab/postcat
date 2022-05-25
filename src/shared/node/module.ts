@@ -1,5 +1,5 @@
 import * as path from 'path';
-import resolve from 'resolve';
+import * as resolve from 'resolve';
 
 /**
  * 获取模块路径.
