@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { processEnv } from 'eo/platform/node/constant';
 import { StorageService } from '../../../shared/services/storage';
 
 type FeatureType = {
