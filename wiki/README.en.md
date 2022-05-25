@@ -28,9 +28,9 @@ English | [简体中文](README.md)
 - Various formats of request body: FormData, XML, JSON, Raw
 
 ⚡ API Test
+
 - Quickly test the API
 - Test local API
-
 
 🌐 Test environment management
 
@@ -48,43 +48,45 @@ English | [简体中文](README.md)
 
 ## Prerequisites
 
-- Node.js,version ^14.17
+- Node.js >= 14.17.x
+- pnpm >= 7.0.0
 
 ## Running the code
 
+We use pnpm as a package management tool for development and building, and it is highly recommended that you do the same, but if you want to use npm it's perfectly fine, it just might take a little more time to install dependencies.
+
 ```
-npm install
-npm start
+pnpm install
+pnpm start
 ```
 
 If you want to improve Angular development efficiency, you can install the command-line Angular-cli officially provided by Angular to quickly generate templates such as components and services.
 
 ```
-npm install -g @angular/cli
+pnpm add @angular/cli --global
 ```
 
 ## Command
 
 ### Run
 
-| Command                  | Description                                                          |
-| ------------------------ | -------------------------------------------------------------------- |
-| `npm start`              | In development mode, running on browser and desktop at the same time |
-| `npm run serve:web` | only runs in the web |
-| `npm run electron:serve` | only runs in the desktop |
+| Command               | Description                                                          |
+| --------------------- | -------------------------------------------------------------------- |
+| `pnpm start`          | In development mode, running on browser and desktop at the same time |
+| `pnpm serve:web`      | only runs in the web                                                 |
+| `pnpm electron:serve` | only runs in the desktop                                             |
 
 ### Build
 
-| Command                  | Description                                       |
-| ------------------------ | ------------------------------------------------- |
-| `npm run build` | Packaging Electron applications for each platform |
+| Command      | Description                                       |
+| ------------ | ------------------------------------------------- |
+| `pnpm build` | Packaging Electron applications for each platform |
 
 ### Running the tests
 
-| Command        | Description        |
-| -------------- | ------------------ | 
-| `npm run test` | Execute unit tests |
-
+| Command     | Description        |
+| ----------- | ------------------ |
+| `pnpm test` | Execute unit tests |
 
 # License
 
