@@ -90,6 +90,7 @@ export class EnvComponent implements OnInit, OnDestroy {
         if (result.status === StorageResStatus.success) {
           this.envInfo = result.data;
         }
+        console.log('result.data', result.data);
         this.activeUuid = uuid;
         resolve(true);
       });

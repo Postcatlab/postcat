@@ -282,10 +282,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param where
    */
-  private loadAllByConditions(
-    table: Table,
-    where: { [key: string]: string | number | null }
-  ): Observable<object> {
+  private loadAllByConditions(table: Table, where: { [key: string]: string | number | null }): Observable<object> {
     return new Observable((obs) => {
       table
         .where(where)

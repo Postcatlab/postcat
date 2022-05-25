@@ -54,7 +54,9 @@ export class HttpStorage implements StorageInterface {
     return this.http.delete(`/environment/${uuid}`) as Observable<object>;
   }
   environmentBulkRemove: (uuids: Array<number | string>) => Observable<object>;
-  environmentLoad: (uuid: number | string) => Observable<object>;
+  environmentLoad(uuid: number | string) {
+    return this.http.get(`/environment/${uuid}`) as Observable<object>;
+  }
   environmentBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   environmentLoadAllByProjectID(projectID: number | string) {
     return this.http.get(`/environment?projectID=${projectID}`) as Observable<object>;
@@ -90,7 +92,9 @@ export class HttpStorage implements StorageInterface {
     return this.http.delete(`/api_data/${uuid}`) as Observable<object>;
   }
   apiDataBulkRemove: (uuids: Array<number | string>) => Observable<object>;
-  apiDataLoad: (uuid: number | string) => Observable<object>;
+  apiDataLoad(uuid: number | string) {
+    return this.http.get(`/api_data/${uuid}`) as Observable<object>;
+  }
   apiDataBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   apiDataLoadAllByProjectID(projectID: number | string) {
     return this.http.get(`/api_data?projectID=${projectID}`) as Observable<object>;
