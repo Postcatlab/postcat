@@ -35,7 +35,11 @@ export class ImportApiComponent implements OnInit {
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
     // this.supportList = this.supportList.concat(
-    //   this.featureList.map((feature: FeatureType, key: string) => ({ key, image: feature.icon, title: feature.label }))
+    //   this.featureList.map(({ icon, label }: FeatureType, key: string) => ({
+    //     key,
+    //     image: icon,
+    //     title: label,
+    //   }))
     // );
     this.featureList?.forEach((feature: FeatureType, key: string) => {
       this.supportList.push({

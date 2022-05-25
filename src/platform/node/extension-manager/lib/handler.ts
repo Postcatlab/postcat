@@ -95,7 +95,7 @@ export class ModuleHandler extends CoreHandler {
         }
       }
       // console.log(npmCli.commands.run('version'));
-      console.log('command', [command].concat(modules), this.baseDir);
+      // console.log('command', [command].concat(modules), this.baseDir);
       npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
         if (command === 'install') {
           npmCli.commands.install(modules, (err, data) => {
