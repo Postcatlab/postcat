@@ -8,7 +8,7 @@ import { Message, MessageService } from '../../../shared/services/message';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
-  styleUrls: ['./api-tab.component.scss']
+  styleUrls: ['./api-tab.component.scss'],
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
   apiDataItems: { [key: number | string]: ApiData };

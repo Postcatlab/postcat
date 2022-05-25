@@ -24,7 +24,7 @@ export class ApiGroupEditComponent implements OnInit {
     private messageService: MessageService,
     private modalRef: NzModalRef,
     private storage: StorageService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.isDelete = this.action === 'delete';

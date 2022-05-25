@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../../../core/services';
-import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
+import { ModuleInfo } from 'eo/platform/node/extension-manager';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -44,7 +44,7 @@ export class NavbarComponent implements OnInit {
     let result = '';
     let assetIndex = assets.findIndex(
       (asset) =>
-        new RegExp(`${item.suffix}$`,'g').test(asset.browser_download_url)&&
+        new RegExp(`${item.suffix}$`, 'g').test(asset.browser_download_url) &&
         (!item.keyword || asset.browser_download_url.includes(item.keyword))
     );
     if (assetIndex === -1) {

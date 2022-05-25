@@ -23,7 +23,7 @@ export class ApiDetailHeaderComponent implements OnInit, OnChanges {
     this.listConf = this.detailService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_EDIT_HEADER',
       title: '头部',
-      nameTitle: '标签'
+      nameTitle: '标签',
     });
   }
 }

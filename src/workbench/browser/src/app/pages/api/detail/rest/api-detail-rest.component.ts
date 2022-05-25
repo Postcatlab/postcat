@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiEditRest } from '../../../../shared/services/storage/index.model';
 import { ApiDetailService } from '../api-detail.service';
 @Component({

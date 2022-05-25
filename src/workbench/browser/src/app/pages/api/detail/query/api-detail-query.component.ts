@@ -1,11 +1,11 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiEditQuery } from '../../../../shared/services/storage/index.model';
 import { ApiDetailService } from '../api-detail.service';
 
 @Component({
   selector: 'eo-api-detail-query',
   templateUrl: './api-detail-query.component.html',
-  styleUrls: ['./api-detail-query.component.scss']
+  styleUrls: ['./api-detail-query.component.scss'],
 })
 export class ApiDetailQueryComponent implements OnInit {
   @Input() model: ApiEditQuery[];
@@ -16,8 +16,8 @@ export class ApiDetailQueryComponent implements OnInit {
     this.initListConf();
   }
   private initListConf() {
-    this.listConf =this.detailService.initListConf({
-      dragCacheVar:'DRAG_VAR_API_EDIT_QUERY'
+    this.listConf = this.detailService.initListConf({
+      dragCacheVar: 'DRAG_VAR_API_EDIT_QUERY',
     });
   }
 }

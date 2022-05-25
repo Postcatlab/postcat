@@ -1,4 +1,5 @@
 import { ipcRenderer, app } from 'electron';
+import { isNotEmpty } from 'eo/shared/common/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import {
@@ -8,7 +9,7 @@ import {
   StorageProcessType,
 } from '../../../../workbench/browser/src/app/shared/services/storage/index.model';
 import { IndexedDBStorage } from '../../../../workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
-import { isNotEmpty } from '../../../../shared/common/common';
+
 class StorageService {
   private ipcRenderer: typeof ipcRenderer;
   private app: typeof app;

@@ -42,7 +42,7 @@ export class ApiTestHistoryComponent implements OnInit {
       (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.parseItem(result.data);
-          this.model=this.model||[];
+          this.model = this.model || [];
           this.model.unshift(result.data);
         } else {
           console.error(result.data);

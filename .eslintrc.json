@@ -11,15 +11,14 @@
       ],
       "parserOptions": {
         "project": [
-          "./tsconfig.serve.json"
+          // "./tsconfig.serve.json"
         ],
         "createDefaultProgram": true
       },
-      "extends": [
-      ],
+      "extends": [],
       "rules": {
         "prefer-arrow/prefer-arrow-functions": 0,
-        "@angular-eslint/directive-selector":  0,
+        "@angular-eslint/directive-selector": 0,
         "@angular-eslint/component-selector": [
           "error",
           {
@@ -34,10 +33,8 @@
       "files": [
         "*.html"
       ],
-      "extends": [
-      ],
-      "rules": {
-      }
+      "extends": [],
+      "rules": {}
     }
   ]
 }

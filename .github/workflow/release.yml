@@ -1,0 +1,79 @@
+# release.yml
+
+# workflow 's name
+name: Build electron App for Mac/Win
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+# Workflow's jobs
+jobs:
+  # job's id
+  release:
+    # job's name
+    name: build and release electron app
+    # the type of machine to run the job on
+    runs-on: ${{ matrix.os }}
+
+    # create a build matrix for jobs
+    strategy:
+      matrix:
+        os: [windows-2019, macos-10.15]
+
+    # create steps
+    steps:
+      # step1: check out repository
+      - name: Check out git repository
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v2
+      - with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+
+      # step2: pnpm install
+      - run: pnpm install
+
+      # step3: build app for mac/win
+      - name: build windows app
+        if: matrix.os == 'windows-2019'
+        run: |
+          pnpm electron:build-win
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build mac app
+        if: matrix.os == 'macos-10.15'
+        run: |
+          pnpm electron:build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # step4: cleanup artifacts in release
+      - name: cleanup artifacts for windows
+        if: matrix.os == 'windows-2019'
+        run: |
+          npx rimraf "release/!(*.exe)"
+
+      - name: cleanup artifacts for macos
+        if: matrix.os == 'macos-10.15'
+        run: |
+          npx rimraf "release/!(*.dmg)"
+
+      # step5: upload artifacts
+      - name: upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}
+          path: release
+
+      # step6: create release
+      - name: release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: 'release/**'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

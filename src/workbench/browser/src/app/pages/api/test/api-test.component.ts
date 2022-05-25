@@ -50,7 +50,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     response: {},
     request: {},
   };
-  testServer: TestServerLocalNodeService | TestServerServerlessService ;
+  testServer: TestServerLocalNodeService | TestServerServerlessService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
 

@@ -1,10 +1,14 @@
+require('@bqy/node-module-alias/register');
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
 import ModuleManager from '../../platform/node/extension-manager/lib/manager';
 import { ModuleManagerInterface } from '../../platform/node/extension-manager';
-import { StorageResStatus, StorageProcessType } from '../../workbench/browser/src/app/shared/services/storage/index.model';
+import {
+  StorageResStatus,
+  StorageProcessType,
+} from '../../workbench/browser/src/app/shared/services/storage/index.model';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';

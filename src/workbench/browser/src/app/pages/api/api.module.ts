@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiEditModule } from './edit/api-edit.module';
 import { ApiDetailModule } from './detail/api-detail.module';
@@ -36,7 +36,15 @@ import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ExportApiComponent, SyncApiComponent];
+const COMPONENTS = [
+  ApiComponent,
+  ApiGroupEditComponent,
+  ApiGroupTreeComponent,
+  ExportApiComponent,
+  SyncApiComponent,
+  ApiTabComponent,
+  ApiOverviewComponent,
+];
 @NgModule({
   imports: [
     HttpClientModule,
@@ -61,8 +69,15 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     EnvModule,
     NzCardModule,
   ],
-  declarations: [...COMPONENTS, ApiTabComponent, ApiOverviewComponent],
+  declarations: [...COMPONENTS],
   exports: [],
-  providers: [ElectronService, MessageService, ApiService, StorageService, HttpStorage, { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true }],
+  providers: [
+    ElectronService,
+    MessageService,
+    ApiService,
+    StorageService,
+    HttpStorage,
+    { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
+  ],
 })
 export class ApiModule {}

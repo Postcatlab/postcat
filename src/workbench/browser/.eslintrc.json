@@ -4,6 +4,7 @@
     "dist/**/*",
     "release/**/*"
   ],
+  "parserOptions": {"ecmaVersion": "latest"},
   "overrides": [
     {
       "files": [
@@ -11,10 +12,8 @@
       ],
       "parserOptions": {
         "project": [
-          "./tsconfig.serve.json",
           "./src/tsconfig.app.json",
-          "./src/tsconfig.spec.json",
-          "./e2e/tsconfig.e2e.json"
+          "./src/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },
@@ -25,7 +24,7 @@
       ],
       "rules": {
         "prefer-arrow/prefer-arrow-functions": 0,
-        "@angular-eslint/directive-selector":  0,
+        "@angular-eslint/directive-selector": 0,
         "@angular-eslint/component-selector": [
           "error",
           {
@@ -43,8 +42,7 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {
-      }
+      "rules": {}
     }
   ]
 }

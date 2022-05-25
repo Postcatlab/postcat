@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiData, ApiBodyType, JsonRootType, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+import {
+  ApiData,
+  ApiBodyType,
+  JsonRootType,
+  StorageRes,
+  StorageResStatus,
+} from '../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 import { StorageService } from '../../../shared/services/storage';
@@ -24,10 +30,9 @@ export class ApiDetailComponent implements OnInit {
   apiData: ApiData | any = {};
   CONST = {
     BODY_TYPE: reverseObj(ApiBodyType),
-    JSON_ROOT_TYPE: reverseObj(JsonRootType)
+    JSON_ROOT_TYPE: reverseObj(JsonRootType),
   };
-  constructor(private route: ActivatedRoute, private storage: StorageService) {
-  }
+  constructor(private route: ActivatedRoute, private storage: StorageService) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       if (params.uuid) {

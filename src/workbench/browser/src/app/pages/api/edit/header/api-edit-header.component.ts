@@ -25,7 +25,7 @@ export class ApiEditHeaderComponent implements OnInit, OnChanges, AfterViewCheck
     this.cdRef.detectChanges();
   }
   ngOnChanges(changes) {
-    if (changes.model&&!changes.model.previousValue&&changes.model.currentValue) {
+    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
       this.model.push(Object.assign({}, this.itemStructure));
     }
   }

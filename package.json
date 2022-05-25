@@ -1,50 +1,48 @@
 {
   "name": "eoapi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/eolinker/eoapi.git",
   "author": "eoapi",
   "private": true,
   "scripts": {
-    "postinstall": "npm-run-all --serial install:*",
-    "start": "npm-run-all -p startall electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "npm-run-all -p start:workbench electron:serve",
     "serve:web": "cd src/workbench/browser && npm run ng:serve",
-    "startall": "npm-run-all -p start:*",
-    "install:workbench": "cd src/workbench/browser&&npm install",
-    "start:workbench": "cd src/workbench/browser&&npm start",
-    "build:workbench": "cd src/workbench/browser&&npm run build",
-    "test:workbench": "cd src/workbench/browser&&npm run test",
-    "install:node-electron": "electron-builder install-app-deps",
+    "start:workbench": "cd src/workbench/browser && pnpm start",
+    "build:workbench": "cd src/workbench/browser && pnpm build",
+    "test:workbench": "cd src/workbench/browser && pnpm test",
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "build": "npm-run-all -p build:* && npm run build:static",
+    "build": "npm-run-all -s build:workbench electron:tsc && electron-builder build",
     "build:static": "npm run electron:tsc && electron-builder build",
-    "release": "npm-run-all -p build:* && npm run electron:tsc && electron-builder --publish=always",
+    "release": "npm-run-all -s build:workbench electron:tsc && electron-builder --publish=always",
     "test": "npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@bqy/node-module-alias": "^1.0.1",
     "@electron/remote": "2.0.8",
     "content-disposition": "^0.5.4",
     "cross-spawn": "^7.0.3",
     "crypto-js": "^4.1.1",
     "electron-log": "^4.4.7",
     "electron-updater": "^5.0.1",
+    "fix-path": "3.0.0",
     "form-data": "^4.0.0",
     "iconv-lite": "^0.6.3",
-    "ky": "0.30.0",
     "resolve": "^1.22.0",
     "rxjs": "7.5.5",
-    "xml2js": "^0.4.23",
-    "fix-path": "3.0.0"
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
     "@types/node": "17.0.32",
     "@typescript-eslint/eslint-plugin": "5.23.0",
     "@typescript-eslint/parser": "5.23.0",
+    "dmg-builder": "23.0.9",
     "electron": "18.2.2",
     "electron-builder": "23.0.9",
     "electron-notarize": "1.2.1",
@@ -58,5 +56,8 @@
     "typescript": "~4.6.4",
     "wait-on": "6.0.1"
   },
-  "__npminstall_done": false
+  "__npminstall_done": false,
+  "node-module-alias": {
+    "eo": "./src"
+  }
 }

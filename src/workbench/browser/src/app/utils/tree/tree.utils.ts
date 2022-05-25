@@ -13,7 +13,7 @@ export const listToTreeHasLevel = (
 ) => {
   const listDepths = [];
   //delete useless key
-  const uselessKeys = ['listDepth', 'isHide','isShrink'];
+  const uselessKeys = ['listDepth', 'isHide', 'isShrink'];
   list = list.map((item) => {
     listDepths.push(item.listDepth);
     return Object.keys(item).reduce(

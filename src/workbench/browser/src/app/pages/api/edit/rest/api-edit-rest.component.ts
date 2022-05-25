@@ -24,7 +24,7 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
     this.cdRef.detectChanges();
   }
   ngOnChanges(changes) {
-    if (changes.model&&!changes.model.previousValue&&changes.model.currentValue) {
+    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
       this.model.push(Object.assign({}, this.itemStructure));
     }
   }
@@ -34,7 +34,7 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
       itemStructure: this.itemStructure,
       nzOnOkMoreSetting: (inputArg) => {
         this.model[inputArg.$index] = inputArg.item;
-      }
+      },
     });
   }
 }

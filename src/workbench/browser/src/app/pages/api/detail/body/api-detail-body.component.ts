@@ -30,8 +30,8 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiBodyType.Raw: // case ApiBodyType.Binary:
-      {
+      case ApiBodyType.Raw: {
+        // case ApiBodyType.Binary:
         this.cache[type] = this.model || '';
         break;
       }

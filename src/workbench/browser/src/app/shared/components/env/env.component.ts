@@ -52,24 +52,30 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getAllEnv() {
+  getAllEnv(uuid?: number) {
     const projectID = 1;
-    this.storage.run('environmentLoadAllByProjectID', [projectID], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.envList = result.data || [];
-        if (!this.envList.length){
-          this.handleAddEnv(projectID);
-          return;
+    return new Promise((resolve) => {
+      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.envList = result.data || [];
+          if (!this.envList.length) {
+            await this.handleAddEnv(projectID);
+            resolve(true);
+            return;
+          }
+          await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
         }
-        this.handleSwitchEnv(result.data[0].uuid);
-      }
+      });
     });
   }
 
   handleDeleteEnv(uuid: string) {
     // * delete env in menu on left sidebar
-    this.storage.run('environmentRemove', [uuid], (result: StorageRes) => {
-      this.getAllEnv();
+    this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
+      await this.getAllEnv();
+      if (this.envUuid === Number(uuid)) {
+        this.envUuid = this.activeUuid;
+      }
     });
   }
   handleDeleteParams(index) {
@@ -79,11 +85,14 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
   handleSwitchEnv(uuid) {
     // * switch env in menu on left sidebar
-    this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.envInfo = result.data;
-      }
-      this.activeUuid = uuid;
+    return new Promise((resolve) => {
+      this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.envInfo = result.data;
+        }
+        this.activeUuid = uuid;
+        resolve(true);
+      });
     });
   }
 
@@ -107,22 +116,28 @@ export class EnvComponent implements OnInit, OnDestroy {
     }
     const data = parameters.filter((it) => it.name && it.value);
     if (uuid) {
-      this.storage.run('environmentUpdate', [{ ...other, name, parameters: data }, uuid], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.message.success('编辑成功');
-          this.getAllEnv();
-        } else {
-          this.message.success('编辑失败');
+      this.storage.run(
+        'environmentUpdate',
+        [{ ...other, name, parameters: data }, uuid],
+        async (result: StorageRes) => {
+          if (result.status === StorageResStatus.success) {
+            this.message.success('编辑成功');
+            await this.getAllEnv(this.activeUuid);
+            if (this.envUuid === Number(uuid)) {
+              this.envUuid = Number(uuid);
+            }
+          } else {
+            this.message.success('编辑失败');
+          }
         }
-      });
+      );
     } else {
       this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.message.success('新增成功');
           this.envInfo = result.data;
           this.activeUuid = Number(result.data.uuid);
-          this.handleSwitchEnv(result.data.uuid);
-          this.getAllEnv();
+          this.getAllEnv(result.data.uuid);
         } else {
           this.message.success('新增失败');
         }
@@ -138,9 +153,10 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleShowModal() {
     this.isVisible = true;
+    this.handleSwitchEnv(this.envUuid);
   }
 
-  handleEnvSelectStatus(event) {
+  handleEnvSelectStatus(event: boolean) {
     if (event) {
       this.activeUuid = this.envUuid;
       this.handleSwitchEnv(this.activeUuid);
