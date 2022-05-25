@@ -12,6 +12,7 @@ import { ApiComponent } from './api.component';
 import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';
 import { ExportApiComponent } from '../../shared/components/export-api/export-api.component';
 import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.component';
+import { ImportApiComponent } from '../../shared/components/import-api/import-api.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -39,6 +40,7 @@ const COMPONENTS = [
   ApiOverviewComponent,
   ExportApiComponent,
   SyncApiComponent,
+  ImportApiComponent,
 ];
 @NgModule({
   imports: [
