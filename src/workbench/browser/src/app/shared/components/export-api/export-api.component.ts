@@ -25,21 +25,29 @@ export class ExportApiComponent implements OnInit {
   ngOnInit(): void {
     this.featureList?.forEach((feature: object, key: string) => {
       this.supportList.push({
-        key: key,
+        key,
         image: feature['icon'],
         title: feature['label'],
       });
     });
   }
+  submit(callback: () => boolean) {
+    console.log(this.exportType);
+    if ('eoapi' === this.exportType) {
+      this.exportEoapi(callback);
+    } else {
+      this.export(callback);
+    }
+  }
   private transferTextToFile(fileName: string, exportData: any) {
-    let file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
-    let element = document.createElement('a'),
-      url = URL.createObjectURL(file);
+    const file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
+    const element = document.createElement('a');
+    const url = URL.createObjectURL(file);
     element.href = url;
     element.download = fileName;
     document.body.appendChild(element);
     element.click();
-    setTimeout(function () {
+    setTimeout(() => {
       document.body.removeChild(element);
       window.URL.revokeObjectURL(url);
     }, 0);
@@ -76,6 +84,7 @@ export class ExportApiComponent implements OnInit {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
+            console.log(JSON.stringify(result, null, 2));
             const output = module[action](result || {});
             this.transferTextToFile(filename, output);
             callback(true);
@@ -89,15 +98,6 @@ export class ExportApiComponent implements OnInit {
       });
     } else {
       callback(false);
-    }
-  }
-
-  submit(callback: () => boolean) {
-    console.log(this.exportType);
-    if ('eoapi' === this.exportType) {
-      this.exportEoapi(callback);
-    } else {
-      this.export(callback);
     }
   }
 }

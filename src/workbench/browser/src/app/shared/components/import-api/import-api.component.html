@@ -1,0 +1,8 @@
+<ng-container *ngIf="supportList.length; else empty">
+    <nz-radio-group [(ngModel)]="importType">
+        <label *ngFor="let item of supportList" nz-radio [nzValue]="item.key">{{ item.title }}</label>
+    </nz-radio-group>
+</ng-container>
+<ng-template #empty>
+    <span class="text">该功能需要插件支持，请移步至插件广场下载</span>
+</ng-template>

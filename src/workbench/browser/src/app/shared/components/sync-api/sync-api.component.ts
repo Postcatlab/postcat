@@ -19,7 +19,7 @@ export class SyncApiComponent implements OnInit {
     console.log('featureList', this.featureList);
     this.featureList?.forEach((feature: object, key: string) => {
       this.supportList.push({
-        key: key,
+        key,
         image: feature['icon'],
         title: feature['label'],
       });

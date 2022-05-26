@@ -1,6 +1,6 @@
 <ng-container *ngIf="supportList.length; else empty">
   <nz-radio-group [(ngModel)]="pushType">
-    <label *ngFor="let item of supportList" nz-radio-button [nzValue]="item.key">{{ item.title }}</label>
+    <label *ngFor="let item of supportList" nz-radio [nzValue]="item.key">{{ item.title }}</label>
   </nz-radio-group>
 </ng-container>
 <ng-template #empty>

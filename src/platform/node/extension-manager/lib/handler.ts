@@ -4,6 +4,8 @@ import { ModuleHandlerOptions, ModuleHandlerResult } from '../types';
 import { fileExists, writeJson } from 'eo/shared/node/file';
 import { CoreHandler } from './core';
 import * as spawn from 'cross-spawn';
+// import npmCli from 'npm';
+const npmCli = require('npm');
 /**
  * 本地模块管理器
  * @class ModuleHandler
@@ -92,25 +94,49 @@ export class ModuleHandler extends CoreHandler {
           args = args.concat(`--proxy=${this.proxy}`);
         }
       }
-      const npm = spawn('npm', args, { cwd: this.baseDir });
-      let output = '';
-      npm.stdout
-        .on('data', (data: string) => {
-          output += data;
-        })
-        .pipe(process.stdout);
-      npm.stderr
-        .on('data', (data: string) => {
-          output += data;
-        })
-        .pipe(process.stderr);
-      npm.on('close', (code: number) => {
-        if (!code) {
-          resolve({ code: 0, data: output });
-        } else {
-          resolve({ code: code, data: output });
+      // console.log(npmCli.commands.run('version'));
+      // console.log('command', [command].concat(modules), this.baseDir);
+      npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
+        if (command === 'install') {
+          npmCli.commands.install(modules, (err, data) => {
+            process.chdir(this.baseDir);
+            if (err) {
+              reject(err);
+            }
+            resolve({ code: 0, data });
+          });
+        }
+        if (command === 'uninstall') {
+          npmCli.commands.uninstall(modules, (err, data) => {
+            process.chdir(this.baseDir);
+            if (err) {
+              reject(err);
+            }
+            resolve({ code: 0, data });
+          });
         }
       });
+
+      // const npm = spawn('npm', args, { cwd: this.baseDir });
+      // // console.log('2==>', npm);
+      // let output = '';
+      // npm.stdout
+      //   .on('data', (data: string) => {
+      //     output += data;
+      //   })
+      //   .pipe(process.stdout);
+      // npm.stderr
+      //   .on('data', (data: string) => {
+      //     output += data;
+      //   })
+      //   .pipe(process.stderr);
+      // npm.on('close', (code: number) => {
+      //   if (!code) {
+      //     resolve({ code: 0, data: output });
+      //   } else {
+      //     resolve({ code: code, data: output });
+      //   }
+      // });
     });
   }
 }
