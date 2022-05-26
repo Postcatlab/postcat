@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Component, OnInit } from '@angular/core';
 import { NzTabPosition } from 'ng-zorro-antd/tabs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
