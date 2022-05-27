@@ -92,6 +92,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  beforeHandleImport(result) {
+    this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
+  }
+
   handleParamsImport(data) {
     this.model = data;
     this.modelChange.emit(data);
