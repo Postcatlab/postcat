@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "postinstall": "ng build",
     "start": "ng serve -c web",
     "build": "ng build --base-href ./",
     "build:dev": "npm run build -- -c dev",
