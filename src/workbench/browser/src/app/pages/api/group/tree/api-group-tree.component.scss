@@ -13,11 +13,12 @@
     }
   }
 }
-.group_tree {
+::ng-deep .group_tree {
   overflow: auto;
   height: calc(100vh - var(--NAVBAR_HEIGHT) - 88px);
   .ant-tree-switcher {
     width: 12px;
+    line-height: 24px;
   }
   .ant-tree-indent-unit {
     width: 8px;
@@ -26,6 +27,9 @@
     .ant-tree-node-content-wrapper {
       padding: 0 2px;
     }
+  }
+  .ng-star-inserted {
+    padding-left: 0;
   }
 }
 .ant-dropdown-menu {
@@ -39,6 +43,8 @@
 }
 .tree_node {
   font-size: 12px;
+  white-space: nowrap;
+
   .tree_node_operate {
     font-size: 14px;
     font-weight: bold;
