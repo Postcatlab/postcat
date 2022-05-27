@@ -1,8 +1,8 @@
-<nz-empty *ngIf="!model||!model.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+<nz-empty *ngIf="!model || !model.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
     <ng-template #contentTpl>
       <span>暂无头部</span>
     </ng-template>
   </nz-empty>
-<ul *ngIf="model&&model.length" class="p20">
+<ul *ngIf="model && model.length" class="p20">
     <li  *ngFor="let item of model"><span class="c6 fwb">{{item.name}}: </span><span>{{item.value}}</span></li>
 </ul>
