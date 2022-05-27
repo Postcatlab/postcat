@@ -15,6 +15,7 @@ export class ParamsImportComponent {
   @Input() baseData: object[] = [];
   @Input() modalTitle: string = '';
   @Output() baseDataChange = new EventEmitter<any>();
+  @Output() beforeHandleImport = new EventEmitter<any>();
   isVisible = false;
   paramCode = '';
   constructor(private message: NzMessageService) {}
@@ -55,6 +56,8 @@ export class ParamsImportComponent {
     if (this.contentType === 'json') {
       try {
         paramCode = JSON.parse(this.paramCode);
+        this.beforeHandleImport.emit(paramCode);
+        this.rootType = Array.isArray(paramCode) ? 'array' : 'object';
       } catch (error) {
         this.message.error('JSON格式不合法');
         return;
