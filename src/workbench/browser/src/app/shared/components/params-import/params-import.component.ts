@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { whatType } from '../../../utils';
 import { flatData } from '../../../utils/tree/tree.utils';
-import * as qs from 'qs';
+import qs from 'qs';
 import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-transfer/data-transfer.utils';
 @Component({
   selector: 'params-import',
