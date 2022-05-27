@@ -49,21 +49,21 @@ English | [简体中文](README.md)
 ## Prerequisites
 
 - Node.js >= 14.17.x
-- pnpm >= 7.0.0
+- yarn >= 7.0.0
 
 ## Running the code
 
-We use pnpm as a package management tool for development and building, and it is highly recommended that you do the same, but if you want to use npm it's perfectly fine, it just might take a little more time to install dependencies.
+We use yarn as a package management tool for development and building, and it is highly recommended that you do the same, but if you want to use npm it's perfectly fine, it just might take a little more time to install dependencies.
 
 ```
-pnpm install
-pnpm start
+yarn install
+yarn start
 ```
 
 If you want to improve Angular development efficiency, you can install the command-line Angular-cli officially provided by Angular to quickly generate templates such as components and services.
 
 ```
-pnpm add @angular/cli --global
+yarn add @angular/cli --global
 ```
 
 ## Command
@@ -72,21 +72,21 @@ pnpm add @angular/cli --global
 
 | Command               | Description                                                          |
 | --------------------- | -------------------------------------------------------------------- |
-| `pnpm start`          | In development mode, running on browser and desktop at the same time |
-| `pnpm serve:web`      | only runs in the web                                                 |
-| `pnpm electron:serve` | only runs in the desktop                                             |
+| `yarn start`          | In development mode, running on browser and desktop at the same time |
+| `yarn serve:web`      | only runs in the web                                                 |
+| `yarn electron:serve` | only runs in the desktop                                             |
 
 ### Build
 
 | Command      | Description                                       |
 | ------------ | ------------------------------------------------- |
-| `pnpm build` | Packaging Electron applications for each platform |
+| `yarn build` | Packaging Electron applications for each platform |
 
 ### Running the tests
 
 | Command     | Description        |
 | ----------- | ------------------ |
-| `pnpm test` | Execute unit tests |
+| `yarn test` | Execute unit tests |
 
 # License
 

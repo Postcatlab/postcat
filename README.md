@@ -51,21 +51,21 @@
 ## 环境
 
 - Node.js >= 14.17.x
-- pnpm >= 7.0.0
+- yarn >= 1.22.x
 
 ## 运行代码
 
-我们在开发和构建时使用 [pnpm](https://pnpm.io) 作为包管理工具，强烈建议你也这么做，但如果您希望使用 npm 也完全没问题，只是在安装依赖时可能需要多花一些时间。
+我们在开发和构建时使用 [yarn](https://yarnpkg.com/) 作为包管理工具，强烈建议你也这么做，但如果您希望使用 npm 也完全没问题，只是在安装依赖时可能需要多花一些时间。
 
 ```
-pnpm install
-pnpm start
+yarn install
+yarn start
 ```
 
 如果想提高开发效率，可以安装 Angular 官方提供的命令行 Angular-cli 快速生成组件、服务等模板。
 
 ```
-pnpm add @angular/cli --global
+yarn add @angular/cli --global
 ```
 
 ## 命令
@@ -74,21 +74,21 @@ pnpm add @angular/cli --global
 
 | 命令                  | 描述                                 |
 | --------------------- | ------------------------------------ |
-| `pnpm start`          | 开发模式下，同时运行在浏览器和桌面端 |
-| `pnpm serve:web`      | 仅运行在浏览器                       |
-| `pnpm electron:serve` | 仅运行在桌面端                       |
+| `yarn start`          | 开发模式下，同时运行在浏览器和桌面端 |
+| `yarn serve:web`      | 仅运行在浏览器                       |
+| `yarn electron:serve` | 仅运行在桌面端                       |
 
 ### 打包构建
 
 | 命令              | 描述                     |
 | ----------------- | ------------------------ |
-| `sudo pnpm build` | 各系统打包 Electron 应用 |
+| `sudo yarn build` | 各系统打包 Electron 应用 |
 
 ### 运行测试
 
 | 命令        | 描述         |
 | ----------- | ------------ |
-| `pnpm test` | 执行单元测试 |
+| `yarn test` | 执行单元测试 |
 
 # 协议
 
