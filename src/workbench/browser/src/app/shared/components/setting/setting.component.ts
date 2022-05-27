@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Component, OnInit } from '@angular/core';
 import { NzTabPosition } from 'ng-zorro-antd/tabs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -39,7 +40,7 @@ export class SettingComponent implements OnInit {
   });
   selectListSelection = new SelectionModel<FlatNode>();
 
-  treeControl = new FlatTreeControl<FlatNode>(
+  treeControl: any = new FlatTreeControl<FlatNode>(
     (node) => node.level,
     (node) => node.expandable
   );

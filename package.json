@@ -6,13 +6,17 @@
   "homepage": "https://github.com/eolinker/eoapi.git",
   "author": "eoapi",
   "private": true,
+  "workspaces": [
+    "src/workbench/browser",
+    "src/app/electron-browser/IndexedDB"
+  ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "npm-run-all -p start:workbench electron:serve",
     "serve:web": "cd src/workbench/browser && npm run ng:serve",
-    "start:workbench": "cd src/workbench/browser && pnpm start",
-    "build:workbench": "cd src/workbench/browser && pnpm build",
-    "test:workbench": "cd src/workbench/browser && pnpm test",
+    "start:workbench": "cd src/workbench/browser && yarn start",
+    "build:workbench": "cd src/workbench/browser && yarn build",
+    "test:workbench": "cd src/workbench/browser && yarn test",
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
