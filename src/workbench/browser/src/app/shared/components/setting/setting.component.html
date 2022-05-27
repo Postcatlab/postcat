@@ -7,7 +7,7 @@
   <ng-template #contentTemplate>
     <ul nz-menu [nzSelectable]="false">
       <li nz-menu-item (click)="handleShowModal()">设置</li>
-      <li nz-menu-item>切换到远程</li>
+      <li nz-menu-item (click)="switchDataSource()">切换到{{ dataSourceType === 'http' ? '本地' : '远程' }}</li>
     </ul>
   </ng-template>
 

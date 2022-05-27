@@ -29,7 +29,6 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 
 import { BaseUrlInterceptor, HttpStorage } from '../../shared/services/storage/http/lib';
-import { MessageService } from '../../shared/services/message';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { ApiService } from './api.service';
@@ -75,7 +74,6 @@ const COMPONENTS = [
   exports: [],
   providers: [
     ElectronService,
-    MessageService,
     ApiService,
     StorageService,
     HttpStorage,

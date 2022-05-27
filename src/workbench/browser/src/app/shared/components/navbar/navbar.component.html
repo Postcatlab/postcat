@@ -14,10 +14,10 @@
         </ul>
       </nz-dropdown-menu>
     </div>
-    <ng-template #standAloneTmpl let-notification>
+    <ng-template #notificationTemplate let-notification>
       <div>
-        <img src="../../../../assets/images/offline.svg"> 目前数据储存在本地，如需协作请切换
-        <a class="eo-blod" (click)="switchToRemote()">远程数据源</a>
+        <img src="../../../../assets/images/offline.svg"> 目前数据储存在{{dataSourceText}}，如需协作请切换
+        <a class="eo-blod" (click)="switchDataSource()">{{ isRemote ? '本地' : '远程' }}数据源</a>
       </div>
     </ng-template>
     <span class="mr15" nz-dropdown [nzDropdownMenu]="settingMenu" nzPlacement="bottomRight">
@@ -31,7 +31,7 @@
         <div>
           <h4 class="title">本地数据源</h4>
           <div class="desc"> 数据储存在本地，如需协作请切换到远程数据源</div>
-          <button nz-button nzType="default" nzSize="small" (click)="switchToStandAlone(standAloneTmpl)">切换</button>
+          <button nz-button nzType="default" nzSize="small" (click)="switchDataSource()">切换</button>
         </div>
       </div>
     </nz-dropdown-menu>

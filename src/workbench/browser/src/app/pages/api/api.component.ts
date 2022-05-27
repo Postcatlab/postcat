@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../shared/services/message';
 import { ApiService } from './api.service';
+import { StorageService } from '../../shared/services/storage';
 
 @Component({
   selector: 'eo-api',
@@ -31,11 +32,17 @@ export class ApiComponent implements OnInit, OnDestroy {
   ];
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private messageService: MessageService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private apiService: ApiService,
+    private messageService: MessageService,
+    private storage: StorageService
+  ) {}
 
   ngOnInit(): void {
     this.watchChangeRouter();
     this.watchApiAction();
+    this.watchDataSourceChange();
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -55,6 +62,19 @@ export class ApiComponent implements OnInit, OnDestroy {
             break;
           case 'gotoBulkDeleteApi':
             this.apiService.bulkDelete(inArg.data.uuids);
+            break;
+        }
+      });
+  }
+
+  watchDataSourceChange(): void {
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'switchDataSource':
+            this.storage.toggleDataSource(inArg.data);
             break;
         }
       });

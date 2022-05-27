@@ -32,6 +32,15 @@ interface FlatNode {
 })
 export class SettingComponent implements OnInit {
   objectKeys = Object.keys;
+  dataSourceType = 'http';
+  /** 是否远程数据源 */
+  get isRemote() {
+    return this.dataSourceType === 'http';
+  }
+  /** 当前数据源对应的文本 */
+  get dataSourceText() {
+    return this.isRemote ? '远程' : '本地';
+  }
   private transformer = (node: TreeNode, level: number): FlatNode => ({
     ...node,
     expandable: !!node.children && node.children.length > 0,
@@ -98,11 +107,25 @@ export class SettingComponent implements OnInit {
             inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
             break;
           }
+          case 'onDataSourceChange': {
+            console.log('onDataSourceChange', inArg.data);
+            this.dataSourceType = inArg.data.dataSourceType;
+            inArg.data.showWithSetting && this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+            break;
+          }
         }
       });
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
+
+  /**
+   * 切换数据源
+   */
+  switchDataSource() {
+    console.log('switchDataSource', this.messageService);
+    this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
+  }
 
   /**
    * 测试远程服务器地址是否可用
@@ -120,9 +143,11 @@ export class SettingComponent implements OnInit {
       }
     } catch (error) {
       console.error(error);
+      if (remoteUrl !== this.remoteServerUrl) {
+        this.message.create('error', '远程服务器地址不可用');
+      }
       // 远程服务地址不可用时，回退到上次的地址
       this.settings['eoapi-common.remoteServer.url'] = this.remoteServerUrl;
-      this.message.create('error', '远程服务器地址不可用');
     }
   }
 
