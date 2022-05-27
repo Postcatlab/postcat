@@ -5,7 +5,8 @@ name: Build electron App for Win
 
 on:
   push:
-    branches: ['main']
+    tags:
+      - 'v*.*.*'
 
 # Workflow's jobs
 jobs:
@@ -16,23 +17,30 @@ jobs:
     # the type of machine to run the job on
     runs-on: ${{ matrix.os }}
 
-    # create a build matrix for jobs
+    # Platforms to build on/for
     strategy:
       matrix:
-        os:
-          - windows-latest
+        os: [windows-latest]
 
-    # create steps
     steps:
-      # step1: check out repository
-      - name: Check out git repository
+      # check out repository
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - with:
+        with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
 
-      # step2: install & build app for win
-      - name: build windows app
+      # create electron-builder.json
+      - name: Create and populate electron-builer.json file
+        env:
+          ELE_BUILER_WIN: ${{ secrets.ELE_BUILER_WIN }}
+        shell: bash
+        run: |
+          echo $ELE_BUILER_WIN > electron-builer.json
+
+      # install & build app for win
       - run: yarn install --frozen-lockfile
+      - run: yarn global add @angular/cli
       - run: yarn release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
