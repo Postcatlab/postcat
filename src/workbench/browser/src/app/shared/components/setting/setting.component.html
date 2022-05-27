@@ -5,7 +5,7 @@
 
   <nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置" (nzOnCancel)="handleCancel()">
     <section *nzModalContent class="container">
-      <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true" class="tree-view">
+      <!-- <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true" class="tree-view">
         <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
           <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
           <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
@@ -23,7 +23,7 @@
             {{ node.title }}
           </nz-tree-node-option>
         </nz-tree-node>
-      </nz-tree-view>
+      </nz-tree-view> -->
       <nz-divider nzType="vertical" class="divider"></nz-divider>
       <form *ngIf="currentConfiguration.length" nz-form [nzLayout]="'vertical'" [formGroup]="validateForm"
         (ngSubmit)="handleSave()" class="form">
