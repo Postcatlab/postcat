@@ -27,27 +27,27 @@ jobs:
       # step1: check out repository
       - name: Check out git repository
       - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2
+      - uses: yarn/action-setup@v2
       - uses: actions/setup-node@v2
       - with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
 
-      # step2: pnpm install
-      - run: pnpm install
+      # step2: yarn install
+      - run: yarn install
 
       # step3: build app for mac/win
       - name: build windows app
         if: matrix.os == 'windows-2019'
         run: |
-          pnpm electron:build-win
+          yarn electron:build-win
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: build mac app
         if: matrix.os == 'macos-10.15'
         run: |
-          pnpm electron:build
+          yarn electron:build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
