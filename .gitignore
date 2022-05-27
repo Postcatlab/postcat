@@ -13,6 +13,7 @@ dist/
 !src/core/market/browser/dist/icon.png
 !src/workbench/node/request/**/*.js
 !/api/*.js
+!*.config.js
 
 scripts/notarize.js
 # dependencies

@@ -52,12 +52,13 @@ export class ParamsImportComponent {
       this.handleCancel();
       return;
     }
+    let rootType = this.rootType;
     let paramCode = null;
     if (this.contentType === 'json') {
       try {
         paramCode = JSON.parse(this.paramCode);
         this.beforeHandleImport.emit(paramCode);
-        this.rootType = Array.isArray(paramCode) ? 'array' : 'object';
+        rootType = Array.isArray(paramCode) ? 'array' : 'object';
       } catch (error) {
         this.message.error('JSON格式不合法');
         return;
@@ -90,14 +91,14 @@ export class ParamsImportComponent {
 
     const tailData = this.baseData.slice(-1);
     let resultData = JSON.parse(JSON.stringify(this.baseData.reverse().slice(1).reverse()));
-    if (this.rootType !== whatType(paramCode)) {
+    if (rootType !== whatType(paramCode)) {
       // TODO Perhaps should be handled about format compatibility later.
       console.warn('The code that you input is no-equal to the root type.');
     }
     // if (whatType(paramCode) === 'object') {
     // * transform to array of table format.
     // }
-    if (this.rootType === 'array' && whatType(paramCode) === 'array') {
+    if (rootType === 'array' && whatType(paramCode) === 'array') {
       // * only select first data
       const [data] = paramCode;
       paramCode = data || {};
