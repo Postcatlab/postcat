@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "ng": "ng",
     "start": "ng serve -c web",
     "build": "ng build --base-href ./",
     "build:dev": "yarn build -- -c dev",
