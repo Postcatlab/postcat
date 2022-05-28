@@ -16,9 +16,9 @@ export class ExtensionService {
     this.updateExtensionIDs();
   }
   public async requestList() {
-    return await lastValueFrom(this.http.get('http://106.12.149.147:3333/list'));
+    return await lastValueFrom(this.http.get('http://market.eoapi.io/list'));
   }
-  async getDetail(id,name): Promise<any> {
+  async getDetail(id, name): Promise<any> {
     let result = {};
     if (this.localModules.has(id)) {
       Object.assign(result, this.localModules.get(id), { installed: true });
@@ -55,7 +55,7 @@ export class ExtensionService {
     return false;
   }
   private async requestDetail(id) {
-    return await lastValueFrom(this.http.get(`http://106.12.149.147:3333/detail/${id}`));
+    return await lastValueFrom(this.http.get(`http://market.eoapi.io/detail/${id}`));
   }
   private updateExtensionIDs() {
     this.extensionIDs = Array.from(this.localModules.keys())
