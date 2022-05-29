@@ -11,6 +11,7 @@ dist/
 *.webpack.js
 !src/workbench/node/request/**/*.js
 !/api/*.js
+!*.config.js
 
 scripts/notarize.js
 # dependencies

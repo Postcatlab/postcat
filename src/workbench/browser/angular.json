@@ -30,7 +30,7 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "input": "../../../node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
               }
             ],
@@ -109,7 +109,7 @@
               "path": "./angular.webpack.js",
               "replaceDuplicatePlugins": true
             },
-            "allowedCommonJsDependencies": ["brace"]
+            "allowedCommonJsDependencies": ["brace", "qs", "rxjs"]
           },
           "configurations": {
             "dev": {

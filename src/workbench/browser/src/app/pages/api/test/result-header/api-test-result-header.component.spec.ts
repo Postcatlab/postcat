@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ApiTestResultHeaderComponent } from './api-test-result-header.component';
 
 describe('ApiTestResultHeaderComponent', () => {
@@ -8,9 +7,8 @@ describe('ApiTestResultHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiTestResultHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [ApiTestResultHeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
