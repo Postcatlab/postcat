@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
 import { StorageService } from '../../services/storage';
@@ -28,7 +28,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private storage: StorageService, private message: NzMessageService, private store: Store) {}
+  constructor(private storage: StorageService, private message: EoMessageService, private store: Store) {}
 
   get envUuid(): number {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -46,6 +46,8 @@ export class EnvComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getAllEnv();
     this.changeStoreEnv(localStorage.getItem('env:selected'));
+    this.message.success(`This is a message ofyoo`);
+    this.message.error(`This is a message ofyoo`);
   }
   ngOnDestroy() {
     this.destroy$.next();

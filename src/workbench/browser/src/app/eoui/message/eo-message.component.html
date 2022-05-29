@@ -1,0 +1,8 @@
+<div class="msg-content">
+  <div *ngFor="let data of msgList" class="message">
+    <div [class]="['msg', data.type]">
+      <i nz-icon [nzType]="data.icon" nzTheme="outline"></i>
+      <span class="content">{{ data.content }}</span>
+    </div>
+  </div>
+</div>

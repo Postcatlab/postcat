@@ -1,0 +1,35 @@
+.msg-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  .message {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    .msg {
+      height: 100%;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0,0,0,.2);
+      
+      &.success {
+        background-color: #00785a;
+        color: #fff;
+      }
+      &.error {
+        background-color: #780000;
+        color: #fff;
+      }
+      .content {
+        margin: 0 5px;
+      }
+    }
+  }
+}

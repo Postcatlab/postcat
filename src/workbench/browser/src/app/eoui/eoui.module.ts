@@ -15,6 +15,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 
 import { EoTableComponent } from './table/eo-table/eo-table.component';
 import { EoEditorComponent } from './editor/eo-editor/eo-editor.component';
+import { EoMessageComponent } from './message/eo-message.component';
 
 // ! Directive
 import { CellDirective } from './table/eo-table/cell.directive';
@@ -23,9 +24,9 @@ const antdModules = [NzTableModule, NzMessageModule, NzIconModule, NzButtonModul
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {};
 @NgModule({
-  declarations: [EoTableComponent, EoEditorComponent, CellDirective],
+  declarations: [EoTableComponent, EoEditorComponent, EoMessageComponent, CellDirective],
   imports: [CommonModule, FormsModule, AceModule, ...antdModules],
-  exports: [EoTableComponent, EoEditorComponent, CellDirective],
+  exports: [EoTableComponent, EoEditorComponent, EoMessageComponent, CellDirective],
   providers: [
     {
       provide: ACE_CONFIG,
