@@ -35,7 +35,9 @@
   min-width: 100px;
 }
 .method_text {
-  width: 32px;
+  max-width: 50px;
+  min-width: 32px;
+  font-size: 11px;
 }
 .node_title {
   max-width: 145px;
