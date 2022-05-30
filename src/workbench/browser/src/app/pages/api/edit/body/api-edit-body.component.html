@@ -1,5 +1,5 @@
 <div class="param_header">
-  <div class="f_row_ac">
+  <div class="h-9 f_row_ac">
     <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
       <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
     </nz-radio-group>
