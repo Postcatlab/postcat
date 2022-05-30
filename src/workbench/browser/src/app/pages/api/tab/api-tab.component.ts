@@ -109,15 +109,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       return;
     }
     this.appendTab(tab);
-
-    this.storage.run('apiDataCreate', [tabContent, tabContent.uuid], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
-        this.message.success('复制成功');
-        this.messageService.send({ type: `copyApiSuccess`, data: result.data });
-      } else {
-        this.message.success('失败');
-      }
-    });
   }
   private appendTab(tab) {
     if (this.tabSerive.tabs.length >= this.MAX_TAB_LIMIT) return;
@@ -250,6 +241,14 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             this.appendOrSwitchTab('edit', inArg.data.origin);
             break;
           case 'copyApi':
+            this.storage.run('apiDataCreate', [{ ...inArg.data }, inArg.data.uuid], (result: StorageHandleResult) => {
+              if (result.status === StorageHandleStatus.success) {
+                this.message.success('复制成功');
+                this.messageService.send({ type: `copyApiSuccess`, data: result.data });
+              } else {
+                this.message.success('失败');
+              }
+            });
           case 'gotoAddApi':
             this.appendOrSwitchTab('edit', inArg.data ?? {});
             break;
