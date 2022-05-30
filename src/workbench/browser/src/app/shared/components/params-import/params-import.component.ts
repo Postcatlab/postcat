@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { whatType } from '../../../utils';
 import { flatData } from '../../../utils/tree/tree.utils';
 import qs from 'qs';
@@ -18,7 +18,7 @@ export class ParamsImportComponent {
   @Output() beforeHandleImport = new EventEmitter<any>();
   isVisible = false;
   paramCode = '';
-  constructor(private message: NzMessageService) {}
+  constructor(private message: EoMessageService) {}
 
   get contentTypeTitle() {
     switch (this.contentType) {

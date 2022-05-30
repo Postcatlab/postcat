@@ -1,3 +1,4 @@
+<eo-message></eo-message>
 <div>
   <div class="button_list">
     <span *ngIf="eventList.includes('type') && !hiddenList.includes('type')">
@@ -13,7 +14,7 @@
   </div>
   <ace
     style="height: 200px; width: 100%"
-    [config]="config"
+    [config]="config" 
     [disabled]="false"
     [(value)]="code"
     [mode]="editorType"
