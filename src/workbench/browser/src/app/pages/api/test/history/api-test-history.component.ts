@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, LOCALE_ID, EventEmitter, Input, Output } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { ApiTestService } from '../api-test.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { StorageService } from '../../../../shared/services/storage';
 import {
   ApiTestHistory,
@@ -22,7 +22,7 @@ export class ApiTestHistoryComponent implements OnInit {
   @Output() clickItem: EventEmitter<any> = new EventEmitter();
   constructor(
     @Inject(LOCALE_ID) private locale: string,
-    private nzMessageService: NzMessageService,
+    private message: EoMessageService,
     private apiTest: ApiTestService,
     private storage: StorageService
   ) {
@@ -54,9 +54,9 @@ export class ApiTestHistoryComponent implements OnInit {
     this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
         this.model = [];
-        this.nzMessageService.success('删除成功');
+        this.message.success('删除成功');
       } else {
-        this.nzMessageService.success('删除失败');
+        this.message.success('删除失败');
         console.error(result.data);
       }
     });
@@ -125,9 +125,9 @@ export class ApiTestHistoryComponent implements OnInit {
     this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
         this.model.splice(inArg.$index, 1);
-        this.nzMessageService.success('删除成功');
+        this.message.success('删除成功');
       } else {
-        this.nzMessageService.success('删除失败');
+        this.message.success('删除失败');
         console.error(result.data);
       }
     });

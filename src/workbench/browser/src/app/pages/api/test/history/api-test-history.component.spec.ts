@@ -4,7 +4,6 @@ import { StorageService } from '../../../../modules/storage/storage.service';
 import { ApiTestHistoryService } from '../../../../shared/services/api-test-history/api-test-history.service';
 import { ApiTestHistoryComponent } from './api-test-history.component';
 import { storageSettingData } from '../../../../shared/models/storageSetting.model';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ApiTestService } from '../api-test.service';
 describe('ApiTestHistoryComponent', () => {
@@ -13,13 +12,8 @@ describe('ApiTestHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NzModalModule,StorageModule.forRoot({ setting: storageSettingData })],
-      providers: [
-        ApiTestHistoryService,
-        NzMessageService,
-        ApiTestService,
-        StorageService,
-      ],
+      imports: [NzModalModule, StorageModule.forRoot({ setting: storageSettingData })],
+      providers: [ApiTestHistoryService, ApiTestService, StorageService],
       declarations: [ApiTestHistoryComponent],
     }).compileComponents();
   });
