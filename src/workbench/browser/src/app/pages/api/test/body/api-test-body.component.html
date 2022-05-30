@@ -5,7 +5,8 @@
     </nz-radio-group>
     <nz-divider nzType="vertical"></nz-divider>
     <params-import *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [baseData]="model" [contentType]="bodyType"
-      (baseDataChange)="handleParamsImport($event)" [rootType]="jsonRootType"></params-import>
+      (baseDataChange)="handleParamsImport($event)" (beforeHandleImport)="beforeHandleImport($event)"
+      [rootType]="jsonRootType"></params-import>
   </div>
   <div *ngIf="bodyType === 'json'">
     <p class="fs12 c999 mb5">JSON 根类型：</p>

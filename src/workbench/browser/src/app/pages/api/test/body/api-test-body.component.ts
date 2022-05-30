@@ -94,6 +94,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.model = data;
     this.modelChange.emit(data);
   }
+
+  beforeHandleImport(result) {
+    this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
+  }
+
   rawDataChange() {
     this.rawChange$.next(this.model);
   }
