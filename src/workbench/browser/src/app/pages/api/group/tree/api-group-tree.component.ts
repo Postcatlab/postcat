@@ -184,7 +184,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
     inArg.event.stopPropagation();
-    console.log('operateApiEvent inArg', inArg);
     this.messageService.send({ type: inArg.eventName, data: inArg.node });
   }
   /**
