@@ -1,16 +1,11 @@
 <div class="param_header">
-  <div class="f_row_ac">
+  <div class="h-9 f_row_ac">
     <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
       <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
     </nz-radio-group>
     <nz-divider nzType="vertical"></nz-divider>
-    <params-import
-      *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-      [baseData]="model"
-      [contentType]="bodyType"
-      (baseDataChange)="handleParamsImport($event)"
-      [rootType]="jsonRootType"
-    ></params-import>
+    <params-import *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [baseData]="model" [contentType]="bodyType"
+      (baseDataChange)="handleParamsImport($event)" [rootType]="jsonRootType"></params-import>
   </div>
   <div *ngIf="bodyType === 'json'">
     <p class="fs12 c999 mb5">JSON 根类型：</p>
@@ -22,25 +17,11 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
-<list-block-common-component
-  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-  [mainObject]="listConf"
-  [(list)]="model"
-></list-block-common-component>
+<list-block-common-component *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [mainObject]="listConf"
+  [(list)]="model"></list-block-common-component>
 <!-- Raw -->
-<eo-editor
-  [(code)]="model"
-  (codeChange)="rawDataChange()"
-  *ngIf="bodyType === 'raw'"
-  [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"
-></eo-editor>
+<eo-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'"
+  [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"></eo-editor>
 <!-- Binary -->
-<textarea
-  class="btd"
-  rows="4"
-  *ngIf="bodyType === 'binary'"
-  nzBorderless
-  placeholder="参数描述"
-  nz-input
-  [(ngModel)]="model"
-></textarea>
+<textarea class="btd" rows="4" *ngIf="bodyType === 'binary'" nzBorderless placeholder="参数描述" nz-input
+  [(ngModel)]="model"></textarea>
