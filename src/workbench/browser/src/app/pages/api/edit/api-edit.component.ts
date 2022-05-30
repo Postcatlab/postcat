@@ -7,7 +7,7 @@ import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
 import { Subject } from 'rxjs';
 import { debounceTime, take, takeUntil, pairwise, filter } from 'rxjs/operators';
-import { Message, MessageService } from '../../../shared/services/message';
+import { MessageService } from '../../../shared/services/message';
 import { StorageService } from '../../../shared/services/storage';
 
 import {
@@ -137,7 +137,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.watchTabChange();
     this.watchGroupIDChange();
     this.watchUri();
-    this.watchApiAction();
   }
 
   ngOnDestroy() {
@@ -178,22 +177,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     } else {
       this.getApi(id);
     }
-  }
-
-  /**
-   * Api Operation triggle tab change
-   */
-  private watchApiAction() {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'saveApi':
-            // this.saveApi();
-            break;
-        }
-      });
   }
 
   private watchTabChange() {
