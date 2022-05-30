@@ -16,21 +16,21 @@
     </div>
     <ng-template #notificationTemplate let-notification>
       <div>
-        <img src="../../../../assets/images/offline.svg"> 目前数据储存在{{dataSourceText}}，如需协作请切换
+        <img [src]="icon"> 目前数据储存在{{dataSourceText}}，如需协作请切换
         <a class="eo-blod" (click)="switchDataSource()">{{ isRemote ? '本地' : '远程' }}数据源</a>
       </div>
     </ng-template>
     <span class="mr15" nz-dropdown [nzDropdownMenu]="settingMenu" nzPlacement="bottomRight">
-      <img src="../../../../assets/images/offline.svg">
+      <img [src]="icon">
     </span>
     <nz-dropdown-menu #settingMenu="nzDropdownMenu">
       <div nz-menu class="switch-data-source-box">
         <div>
-          <img src="../../../../assets/images/offline.svg">
+          <img [src]="icon">
         </div>
         <div>
-          <h4 class="title">本地数据源</h4>
-          <div class="desc"> 数据储存在本地，如需协作请切换到远程数据源</div>
+          <h4 class="title">{{ dataSourceText }}数据源</h4>
+          <div class="desc"> 数据储存在{{ dataSourceText }}，{{ isRemote ? '如不需协作，可以切换到本地数据源' : '如需协作请切换到远程数据源'}}</div>
           <button nz-button nzType="default" nzSize="small" (click)="switchDataSource()">切换</button>
         </div>
       </div>

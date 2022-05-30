@@ -27,6 +27,10 @@ export class NavbarComponent implements OnInit {
   get dataSourceText() {
     return this.isRemote ? '远程' : '本地';
   }
+  /** 在线或离线图标 */
+  get icon() {
+    return `../../../../assets/images/${this.isRemote ? 'online' : 'offline'}.svg`;
+  }
   nzNotificationRef: NzNotificationRef;
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
