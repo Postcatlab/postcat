@@ -16,6 +16,12 @@ body {
   --FOOTER_HEIGHT: 0px;
   // --FOOTER_HEIGHT: 30px;
 }
+
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: unset;
+  vertical-align: unset;
+}
+
 .api_test_history_list {
   .method_label {
     padding: 1px 3px;
