@@ -6,6 +6,7 @@ import { EoMessageService } from './eo-message.service';
 type msgType = {
   content: string;
   icon: string;
+  time: number;
   type: 'success' | 'error';
 };
 
@@ -26,5 +27,8 @@ export class EoMessageComponent implements OnInit {
   }
   pushData(data: msgType) {
     this.msgList.push(data);
+    setTimeout(() => {
+      this.msgList.splice(0, 1);
+    }, data.time);
   }
 }

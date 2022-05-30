@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, ViewChild, OnInit } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { AceConfigInterface, AceComponent, AceDirective } from 'ngx-ace-wrapper';
 import { whatTextType } from '../../../utils';
 import beautifier from 'js-beautify';
@@ -80,7 +80,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     tabSize: 4,
   };
 
-  constructor(private message: NzMessageService) {}
+  constructor(private message: EoMessageService) {}
 
   ngAfterViewInit(): void {}
   ngOnChanges() {

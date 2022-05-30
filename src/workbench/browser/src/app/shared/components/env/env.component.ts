@@ -46,8 +46,6 @@ export class EnvComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getAllEnv();
     this.changeStoreEnv(localStorage.getItem('env:selected'));
-    this.message.success(`This is a message ofyoo`);
-    this.message.error(`This is a message ofyoo`);
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -113,7 +111,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     // * update list after call save api
     const { parameters, name, ...other } = this.envInfo;
     if (!name) {
-      this.message.error('Name is not allowed to be empty.');
+      this.message.error('名称不允许为空');
       return;
     }
     const data = parameters.filter((it) => it.name && it.value);
@@ -129,7 +127,7 @@ export class EnvComponent implements OnInit, OnDestroy {
               this.envUuid = Number(uuid);
             }
           } else {
-            this.message.success('编辑失败');
+            this.message.error('编辑失败');
           }
         }
       );
@@ -141,7 +139,7 @@ export class EnvComponent implements OnInit, OnDestroy {
           this.activeUuid = Number(result.data.uuid);
           this.getAllEnv(result.data.uuid);
         } else {
-          this.message.success('新增失败');
+          this.message.error('新增失败');
         }
       });
     }

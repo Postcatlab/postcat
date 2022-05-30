@@ -1,8 +1,11 @@
 .msg-content {
   position: fixed;
+  padding: 30px 0;
   top: 0;
+  z-index: 9999;
   left: 0;
   right: 0;
+  pointer-events: none;
   .message {
     height: 40px;
     width: 100%;
@@ -12,7 +15,7 @@
     margin: 5px 0;
     .msg {
       height: 100%;
-      min-width: 200px;
+      padding: 0 20px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -24,7 +27,7 @@
         color: #fff;
       }
       &.error {
-        background-color: #780000;
+        background-color: #ff4d4f;
         color: #fff;
       }
       .content {

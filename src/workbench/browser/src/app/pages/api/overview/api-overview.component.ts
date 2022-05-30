@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { ExportApiComponent } from '../../../shared/components/export-api/export-api.component';
 import { SyncApiComponent } from '../../../shared/components/sync-api/sync-api.component';
@@ -12,7 +12,7 @@ import { ModalService } from '../../../shared/services/modal.service';
   styleUrls: ['./api-overview.component.scss'],
 })
 export class ApiOverviewComponent implements OnInit {
-  constructor(private modalService: ModalService, private message: NzMessageService) {}
+  constructor(private modalService: ModalService, private message: EoMessageService) {}
 
   ngOnInit(): void {}
   export() {
