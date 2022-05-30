@@ -167,6 +167,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         switch (inArg.type) {
           case 'addApiSuccess':
           case 'editApiSuccess':
+          case 'copyApiSuccess':
           case 'deleteApiSuccess':
           case 'bulkDeleteApiSuccess':
           case 'updateGroupSuccess': {
@@ -183,6 +184,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
     inArg.event.stopPropagation();
+    console.log('operateApiEvent inArg', inArg);
     this.messageService.send({ type: inArg.eventName, data: inArg.node });
   }
   /**
