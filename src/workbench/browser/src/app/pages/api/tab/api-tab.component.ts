@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabItem } from './tab.model';
-import { ApiData } from '../../../shared/services/storage/index.model';
+import { ApiData, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { ApiTabService } from './api-tab.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../../shared/services/message';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -16,7 +18,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   /**
    * Current selected tab index.
    */
-  selectedIndex: number = 0;
+  selectedIndex = 0;
   /**
    * Default tabs of api.
    */
@@ -33,7 +35,9 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     public tabSerive: ApiTabService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private message: EoMessageService,
+    private storage: StorageService
   ) {}
   ngOnInit(): void {
     this.watchApiAction();
@@ -237,9 +241,18 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             this.appendOrSwitchTab('edit', inArg.data.origin);
             break;
           case 'copyApi':
+            this.storage.run('apiDataCreate', [{ ...inArg.data }, inArg.data.uuid], (result: StorageRes) => {
+              if (result.status === StorageResStatus.success) {
+                this.message.success('复制成功');
+                this.appendOrSwitchTab('edit', { ...inArg.data, ...result.data, key: result.data.uuid });
+                this.messageService.send({ type: `copyApiSuccess`, data: result.data });
+              } else {
+                this.message.success('失败');
+              }
+            });
+            break;
           case 'gotoAddApi':
             this.appendOrSwitchTab('edit', inArg.data ?? {});
-            this.messageService.send({ type: 'saveApi', data: {} });
             break;
           case 'addApiSuccess':
           case 'editApiSuccess':

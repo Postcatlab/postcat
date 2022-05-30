@@ -1,7 +1,10 @@
-<div class="p15">
-  <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
+<eo-message></eo-message>
+<div class="!pt-0 p15">
+  <div class="sticky top-0 z-10 pt-6 bg-white">
     <button type="submit" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()">保存</button>
     <nz-divider></nz-divider>
+  </div>
+  <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
     <nz-form-label nzFor="uri">API Path</nz-form-label>
     <nz-input-group nzCompact>
       <nz-select class="w-24" [(ngModel)]="apiData.protocol" formControlName="protocol">

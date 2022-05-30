@@ -168,6 +168,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         switch (inArg.type) {
           case 'addApiSuccess':
           case 'editApiSuccess':
+          case 'copyApiSuccess':
           case 'deleteApiSuccess':
           case 'bulkDeleteApiSuccess':
           case 'updateGroupSuccess': {
