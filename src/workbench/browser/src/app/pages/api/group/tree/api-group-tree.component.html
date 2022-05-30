@@ -81,9 +81,9 @@
       </div>
       <!-- Leaf -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
-        <div class="f_row_ac text-ellipsis overflow-hidden">
+        <div class="overflow-hidden f_row_ac text-ellipsis">
           <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">{{
-            node.origin.method.slice(0, 4)
+            node.origin.method.length > 4 ? node.origin.method.slice(0, 3) : node.origin.method
             }}</b>
           <span class="text_omit node_title">{{ node.title }}</span>
         </div>
