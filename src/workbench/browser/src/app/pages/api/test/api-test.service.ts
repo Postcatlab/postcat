@@ -284,7 +284,7 @@ export class ApiTestService {
     let editToTestParams = (arr) => {
       arr.forEach((val) => {
         val.value = val.example;
-        delete val.__proto__.example;
+        delete val.example;
       });
     };
     ['queryParams', 'restParams', 'requestHeaders'].forEach((keyName) => {
