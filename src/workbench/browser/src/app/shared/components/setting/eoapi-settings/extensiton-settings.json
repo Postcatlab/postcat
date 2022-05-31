@@ -6,7 +6,7 @@
   "moduleID": "Eoapi-Extensions",
   "author": "eoapi",
   "publisher": "eoapi",
-  "contributes": {
+  "features": {
     "configuration": []
   }
 }
