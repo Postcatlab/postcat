@@ -1,0 +1,24 @@
+.text {
+    color: var(--TEXT_TITLE_SEC)
+}
+
+.extension {
+    background-repeat: no-repeat;
+    background-size: auto 90%;
+    background-position: center center;
+    cursor: pointer;
+    color: rgba(0,0,0,0.5);
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 0 5px rgba(0,0,0,.05);
+    &.active {
+        box-shadow: 0 0 10px rgba(0,0,0,.1);
+        background-color: #f8f8f8;
+        i {
+            color: #158565;
+            display: block;
+        }
+    }   
+    i {
+        display: none;
+    }
+}
