@@ -1,14 +1,8 @@
-<nz-tabset
-  [(nzSelectedIndex)]="selectedIndex"
-  nzType="editable-card"
-  nzHideAdd="true"
-  (nzClose)="closeTab($event)"
-  (nzSelectChange)="pickTab()"
-  [nzTabBarExtraContent]="extraTemplate"
->
+<nz-tabset [(nzSelectedIndex)]="selectedIndex" nzType="editable-card" nzHideAdd="true" (nzClose)="closeTab($event)"
+  (nzSelectChange)="pickTab()" [nzTabBarExtraContent]="extraTemplate">
   <nz-tab *ngFor="let tab of tabSerive.tabs; let i = index" nzClosable [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
-      <span class="mr5 method_text_{{ tab.method }}" *ngIf="tab.method">{{ tab.method.slice(0, 4) }}</span>
+      <span class="mr5 method_text method_text_{{ tab.method }}" *ngIf="tab.method">{{ tab.method }}</span>
       <span class="text_omit tab_text"> {{ tab.title }}</span>
     </ng-template>
   </nz-tab>

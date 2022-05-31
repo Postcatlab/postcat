@@ -244,7 +244,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             this.storage.run('apiDataCreate', [{ ...inArg.data }, inArg.data.uuid], (result: StorageHandleResult) => {
               if (result.status === StorageHandleStatus.success) {
                 this.message.success('复制成功');
-                this.appendOrSwitchTab('edit', { ...inArg.data, ...result.data, key: result.data.uuid });
+                this.appendOrSwitchTab('edit', {
+                  ...inArg.data,
+                  ...result.data,
+                  title: result.data.name,
+                  key: result.data.uuid + '',
+                });
                 this.messageService.send({ type: `copyApiSuccess`, data: result.data });
               } else {
                 this.message.success('失败');
