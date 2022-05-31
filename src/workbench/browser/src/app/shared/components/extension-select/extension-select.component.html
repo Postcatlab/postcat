@@ -1,19 +1,20 @@
 <ng-container *ngIf="extensionList.length; else empty">
-    <div class="flex">
-        <div *ngFor="let item of extensionList" class="px-2 w-1/4 h-14" (click)="selectExtension(item)" >
-            <div 
-                [class.active]="extension === item.key" 
-                class="extension relative h-full w-full border rounded-md flex items-center justify-center" 
-                [ngStyle]="{'background-image': 'url(' + item.icon + ')'}" 
-                nzTooltipPlacement="bottom" 
-                [nzTooltipTitle]="item.description" 
-                nz-tooltip>
-                <span *ngIf="!item.icon">{{ item.label }}</span>
-                <i class="absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
-            </div>
-        </div>
+  <div class="flex">
+    <div *ngFor="let item of extensionList" class="px-2 w-1/4 h-14" (click)="selectExtension(item)">
+      <div
+        [class.active]="extension === item.key"
+        class="extension relative h-full w-full border rounded-md flex items-center justify-center"
+        [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
+        nzTooltipPlacement="bottom"
+        [nzTooltipTitle]="item.description"
+        nz-tooltip
+      >
+        <span *ngIf="!item.icon">{{ item.label }}</span>
+        <i class="absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
+      </div>
     </div>
+  </div>
 </ng-container>
 <ng-template #empty>
-    <span class="text">该功能需要插件支持，请移步至插件广场下载</span>
+  <span class="text">该功能需要插件支持，请移步至插件广场下载</span>
 </ng-template>
