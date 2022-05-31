@@ -173,7 +173,7 @@ export class SettingComponent implements OnInit {
     ]);
     // 所有配置
     const allConfiguration = allSettings.map((n) => {
-      const configuration = n.contributes.configuration;
+      const configuration = n.features?.configuration || n.contributes?.configuration;
       if (!Array.isArray(configuration)) {
         configuration.moduleID ??= n.moduleID;
       }
@@ -182,11 +182,13 @@ export class SettingComponent implements OnInit {
     // 第三方扩展
     const extensionsModule = allSettings.find((n) => n.moduleID === 'Eoapi-Extensions');
     extensitonConfigurations.forEach((item) => {
-      const configuration = item?.contributes?.configuration;
+      const configuration = item?.features?.configuration || item?.contributes?.configuration;
       if (configuration) {
+        const extensionsConfiguration =
+          extensionsModule.features?.configuration || extensionsModule.contributes?.configuration;
         configuration.title = item.moduleName ?? configuration.title;
         configuration.moduleID = item.moduleID;
-        extensionsModule.contributes.configuration.push(configuration);
+        extensionsConfiguration.push(configuration);
       }
     });
     // 给插件的属性前面追加模块ID
@@ -226,7 +228,7 @@ export class SettingComponent implements OnInit {
     // 所有设置项
     const treeData = allSettings.reduce<TreeNode[]>((prev, curr) => {
       let treeItem: TreeNode;
-      const configuration = curr.contributes.configuration;
+      const configuration = curr.features?.configuration || curr.contributes?.configuration;
       if (Array.isArray(configuration)) {
         treeItem = {
           name: curr.name,
