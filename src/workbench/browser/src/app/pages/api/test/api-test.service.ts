@@ -235,7 +235,7 @@ export class ApiTestService {
           inData.request.requestBodyType === 'raw'
             ? inData.request.requestBody
             : inData.request.requestBody.map((val) => (val.required = true)),
-        requestHeaders: inData.request.requestHeaders.map((val) => (val.required = true)),
+        requestHeaders: inData.response.headers,
         ...inData.request,
       },
       response: JSON.parse(JSON.stringify(inData)),
@@ -284,7 +284,7 @@ export class ApiTestService {
     let editToTestParams = (arr) => {
       arr.forEach((val) => {
         val.value = val.example;
-        delete val.__proto__.example;
+        delete val.example;
       });
     };
     ['queryParams', 'restParams', 'requestHeaders'].forEach((keyName) => {

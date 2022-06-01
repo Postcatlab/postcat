@@ -53,7 +53,7 @@ export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (v
           listDepth: opts.listDepth + 1,
         })
       );
-      delete val.__proto__.children;
+      delete val.children;
     }
   });
   return result;

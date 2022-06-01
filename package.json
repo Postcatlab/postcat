@@ -49,7 +49,7 @@
     "@typescript-eslint/eslint-plugin": "5.23.0",
     "@typescript-eslint/parser": "5.23.0",
     "dmg-builder": "23.0.9",
-    "electron": "18.2.2",
+    "electron": "19.0.1",
     "electron-builder": "23.0.9",
     "electron-notarize": "1.2.1",
     "electron-reload": "1.5.0",
