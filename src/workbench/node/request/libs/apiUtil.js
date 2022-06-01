@@ -239,7 +239,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
   let tmpBasicEnv = inputData.env || _LibsCommon.parseEnv(),
     tmpApiType = inputOpts.type || 'http';
   inputData = JSON.parse(JSON.stringify(inputData));
-  
+
   let tmpReportList = [],
     tmpBinary = inputData.binary,
     tmpSanboxObj = {
@@ -296,7 +296,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
          * @desc 去除xml自动补全额外参数功能
          */
 
-        tmpParams = _Xml_Class.jsonToXml()(tmpTargetTypeData.bodyParseParam, inputData.xmlAttrObj);
+        tmpParams = _Xml_Class.jsonToXml()(JSON.parse(tmpTargetTypeData.bodyParam), inputData.xmlAttrObj);
         break;
       }
       case '1': {

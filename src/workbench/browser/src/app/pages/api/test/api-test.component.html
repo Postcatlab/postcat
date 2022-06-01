@@ -115,14 +115,14 @@
       </nz-tab>
       <div>
         <nz-tab nzTitle="返回头部">
-          <eo-api-test-result-header [model]="testResult.response.headers"></eo-api-test-result-header>
+          <eo-api-test-result-header [model]="testResult.response?.headers"></eo-api-test-result-header>
         </nz-tab>
       </div>
       <nz-tab nzTitle="请求内容">
-        <eo-api-test-result-request-body [model]="testResult.request.requestBody"></eo-api-test-result-request-body>
+        <eo-api-test-result-request-body [model]="testResult.request?.requestBody"></eo-api-test-result-request-body>
       </nz-tab>
       <nz-tab nzTitle="请求头部">
-        <eo-api-test-result-header [model]="testResult.request.requestHeaders"></eo-api-test-result-header>
+        <eo-api-test-result-header [model]="testResult.request?.requestHeaders"></eo-api-test-result-header>
       </nz-tab>
       <nz-tab nzTitle="测试历史">
         <eo-api-test-history [apiID]="apiData.uuid" (clickItem)="restoreHistory($event)" #historyComponent>

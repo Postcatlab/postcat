@@ -39,10 +39,6 @@ angular.module('eolinker').component('listBlockCommonComponent', {
               </tr>
           </table>
       </div>
-      <p class="f_row" {eoData}-if="item.example">
-          <span class="title-span mw_100">参数示例：</span>
-          <span  class="wb_all" {eoData}-class="{'eo-status-warning':item.mark.value}">-{-item.example-}-</span>
-      </p>
   </div>
 </script>
 <div class="wrap_lbcc"
