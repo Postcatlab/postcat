@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { ModuleInfo } from '../../utils/module-loader';
 import { EoExtensionInfo } from './extension.model';
+
+const HOST = 'http://106.12.149.147';
 @Injectable()
 export class ExtensionService {
   ignoreList = ['default'];
@@ -16,7 +18,7 @@ export class ExtensionService {
     this.updateExtensionIDs();
   }
   public async requestList() {
-    return await lastValueFrom(this.http.get('http://market.eoapi.io/list'));
+    return await lastValueFrom(this.http.get(`${HOST}/list`));
   }
   async getDetail(id, name): Promise<any> {
     let result = {};
@@ -55,7 +57,7 @@ export class ExtensionService {
     return false;
   }
   private async requestDetail(id) {
-    return await lastValueFrom(this.http.get(`http://market.eoapi.io/detail/${id}`));
+    return await lastValueFrom(this.http.get(`${HOST}/detail/${id}`));
   }
   private updateExtensionIDs() {
     this.extensionIDs = Array.from(this.localModules.keys())
