@@ -114,9 +114,7 @@ export class SettingComponent implements OnInit {
       }, this.nestedSettings);
       // 当settings变化时，将值同步到nestedSettings
       Object.defineProperty(this.settings, fieldKey, {
-        get: () => {
-          return this.getConfiguration(fieldKey);
-        },
+        get: () => this.getConfiguration(fieldKey),
         set: (newVal) => {
           const target = keyArr.slice(0, -1).reduce((p, k) => p[k], this.nestedSettings);
           target[keyArr[keyArrL]] = newVal;
@@ -162,7 +160,8 @@ export class SettingComponent implements OnInit {
     this.localSettings = window.eo.getSettings();
     // const featureList = window.eo.getFeature('configuration');
     const modules = window.eo.getModules();
-    const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
+    // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
+    const extensitonConfigurations = [...modules.values()].filter((n) => n.features?.configuration);
     const controls = {};
     // 所有设置
     const allSettings = cloneDeep([
@@ -192,12 +191,12 @@ export class SettingComponent implements OnInit {
       }
     });
     // 给插件的属性前面追加模块ID
-    const appendModuleID = (properties, moduleID) => {
-      return Object.keys(properties).reduce((prev, key) => {
+    const appendModuleID = (properties, moduleID) =>
+      Object.keys(properties).reduce((prev, key) => {
         prev[`${moduleID}.${key}`] = properties[key];
         return prev;
       }, {});
-    };
+
     /** 根据configuration配置生成settings model */
     allConfiguration.forEach((item) => {
       if (Array.isArray(item)) {
@@ -212,8 +211,8 @@ export class SettingComponent implements OnInit {
     });
     type Configuration = typeof allConfiguration[number] | Array<typeof allConfiguration[number]>;
     // 递归生成设置树
-    const generateTreeData = (configurations: Configuration = []) => {
-      return [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
+    const generateTreeData = (configurations: Configuration = []) =>
+      [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
         if (Array.isArray(curr)) {
           return prev.concat(generateTreeData(curr));
         }
@@ -224,7 +223,6 @@ export class SettingComponent implements OnInit {
         };
         return prev.concat(treeItem);
       }, []);
-    };
     // 所有设置项
     const treeData = allSettings.reduce<TreeNode[]>((prev, curr) => {
       let treeItem: TreeNode;
