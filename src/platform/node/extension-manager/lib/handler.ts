@@ -97,8 +97,9 @@ export class ModuleHandler extends CoreHandler {
       // console.log(npmCli.commands.run('version'));
       // console.log('command', [command].concat(modules), this.baseDir);
       npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
+        const moduleList = modules.map((it) => it + '@latest');
         if (command === 'install') {
-          npmCli.commands.install(modules, (err, data) => {
+          npmCli.commands.install(moduleList, (err, data) => {
             process.chdir(this.baseDir);
             if (err) {
               reject(err);
@@ -107,7 +108,7 @@ export class ModuleHandler extends CoreHandler {
           });
         }
         if (command === 'uninstall') {
-          npmCli.commands.uninstall(modules, (err, data) => {
+          npmCli.commands.uninstall(moduleList, (err, data) => {
             process.chdir(this.baseDir);
             if (err) {
               reject(err);

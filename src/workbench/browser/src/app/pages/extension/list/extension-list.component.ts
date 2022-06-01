@@ -44,7 +44,7 @@ export class ExtensionListComponent implements OnInit {
     }
     const res: any = await this.extensionService.requestList();
     if (this.type === 'official') {
-      return new ExtensionList(res.data.filter((it) => it.author === 'Eolink')).search(keyword);
+      return new ExtensionList(res.data.filter((it) => it.author === 'Eoapi')).search(keyword);
     }
     return new ExtensionList(res.data).search(keyword);
   }
