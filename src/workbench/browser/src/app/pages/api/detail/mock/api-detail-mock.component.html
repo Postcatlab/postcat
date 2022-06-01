@@ -1,0 +1,13 @@
+<eo-table [(model)]="mockList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
+  <ng-template cell="url" let-scope="scope" let-index="index">
+    <span>{{ scope.url }}</span>
+  </ng-template>
+  <ng-template cell="action" let-scope="scope" let-index="index">
+    <div class="flex justify-evenly">
+      <span (click)="handleEditMockItem(index)" *ngIf="scope.name || scope.value || scope.description"
+        nzTheme="fill">编辑</span>
+      <span (click)="handleDeleteMockItem(index)" *ngIf="scope.name || scope.value || scope.description"
+        nzTheme="fill">删除</span>
+    </div>
+  </ng-template>
+</eo-table>
