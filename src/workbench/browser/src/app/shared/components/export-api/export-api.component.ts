@@ -3,6 +3,7 @@ import { StorageService } from '../../../shared/services/storage';
 import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
+
 @Component({
   selector: 'eo-export-api',
   template: ` <extension-select [(extension)]="exportType" [extensionList]="supportList"></extension-select> `,
@@ -12,7 +13,7 @@ export class ExportApiComponent implements OnInit {
   supportList: Array<FeatureType> = [
     {
       key: 'eoapi',
-      icon: '',
+      icon: 'assets/images/logo.svg',
       label: 'Eoapi',
       description: '',
     },

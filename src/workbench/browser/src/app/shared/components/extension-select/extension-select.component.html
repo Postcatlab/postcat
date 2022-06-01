@@ -4,13 +4,16 @@
       <div
         [class.active]="extension === item.key"
         class="extension relative h-full w-full border rounded-md flex items-center justify-center"
-        [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
         nzTooltipPlacement="bottom"
         [nzTooltipTitle]="item.description"
         nz-tooltip
       >
         <span *ngIf="!item.icon">{{ item.label }}</span>
-        <i class="absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
+        <i
+          class="logobg absolute left-1.5 right-1.5 top-0 bottom-0"
+          [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
+        ></i>
+        <i class="check absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
       </div>
     </div>
   </div>
