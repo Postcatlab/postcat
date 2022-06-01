@@ -110,7 +110,9 @@
               "replaceDuplicatePlugins": true
             },
             "allowedCommonJsDependencies": [
-              "brace"
+              "brace",
+              "qs",
+              "rxjs"
             ]
           },
           "configurations": {

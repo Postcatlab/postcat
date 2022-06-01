@@ -13,9 +13,11 @@ import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';
 import { ExportApiComponent } from '../../shared/components/export-api/export-api.component';
 import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.component';
 import { ImportApiComponent } from '../../shared/components/import-api/import-api.component';
+import { ExtensionSelectComponent } from '../../shared/components/extension-select/extension-select.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
@@ -41,6 +43,7 @@ const COMPONENTS = [
   ExportApiComponent,
   SyncApiComponent,
   ImportApiComponent,
+  ExtensionSelectComponent,
 ];
 @NgModule({
   imports: [
@@ -61,6 +64,7 @@ const COMPONENTS = [
     NzRadioModule,
     NzDropDownModule,
     NzDividerModule,
+    NzToolTipModule,
     EouiModule,
     EnvModule,
     NzCardModule,

@@ -1,46 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
-
-type FeatureType = {
-  icon: string;
-  label: string;
-  description: string;
-};
+import { FeatureType } from '../../types';
 
 @Component({
   selector: 'eo-import-api',
-  templateUrl: './import-api.component.html',
-  styleUrls: ['./import-api.component.scss'],
+  template: `<extension-select [(extension)]="importType" [extensionList]="supportList"></extension-select>`,
 })
 export class ImportApiComponent implements OnInit {
-  supportList: Array<{
-    key: string;
-    image: string;
-    title: string;
-  }> = [];
+  supportList: Array<FeatureType> = [];
   importType = 'postman';
-  featureList = window.eo.getFeature('apimanage.import');
+  featureMap = window.eo.getFeature('apimanage.import');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
-    // this.supportList = this.supportList.concat(
-    //   this.featureList.map(({ icon, label }: FeatureType, key: string) => ({
-    //     key,
-    //     image: icon,
-    //     title: label,
-    //   }))
-    // );
-    this.featureList?.forEach((feature: FeatureType, key: string) => {
+    this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
         key,
-        image: feature.icon,
-        title: feature.label,
+        ...data,
       });
     });
   }
   submit() {
     // console.log('import');
-    // console.log(this.featureList);
-    const feature = this.featureList.get('eoapi-import-openapi');
+    // console.log(this.featureMap);
+    const feature = this.featureMap.get('eoapi-import-openapi');
     const action = feature.action || null;
     // const filename = feature.filename || null;
     const module = window.eo.loadFeatureModule('eoapi-import-openapi');

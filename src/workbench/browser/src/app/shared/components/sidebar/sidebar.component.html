@@ -4,6 +4,7 @@
     *ngFor="let item of this.modules"
     class="sidebar_item"
     nz-tooltip
+    nzTooltipPlacement="right"
     [nzTooltipTitle]="item.moduleName"
     [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }"
   >

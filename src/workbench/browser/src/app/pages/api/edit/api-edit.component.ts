@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
 import { Subject } from 'rxjs';
@@ -50,7 +50,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private message: NzMessageService,
+    private message: EoMessageService,
     private messageService: MessageService,
     private apiTab: ApiTabService,
     private storage: StorageService
@@ -178,6 +178,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       this.getApi(id);
     }
   }
+
   private watchTabChange() {
     this.apiTab.tabChange$
       .pipe(

@@ -1,32 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { NzModalRef } from 'ng-zorro-antd/modal';
 import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
+import { FeatureType } from '../../types';
 
 @Component({
   selector: 'eo-sync-api',
-  templateUrl: './sync-api.component.html',
-  styleUrls: ['./sync-api.component.scss'],
+  template: `<extension-select [(extension)]="pushType" [extensionList]="supportList"></extension-select>`,
 })
 export class SyncApiComponent implements OnInit {
-  pushType: '';
+  pushType = '';
   supportList: any[] = [];
-  featureList = window.eo.getFeature('apimanage.sync');
-  constructor(private modalRef: NzModalRef, private storage: StorageService) {}
+  featureMap = window.eo.getFeature('apimanage.sync');
+  constructor(private storage: StorageService) {}
 
   ngOnInit(): void {
-    console.log('featureList', this.featureList);
-    this.featureList?.forEach((feature: object, key: string) => {
+    this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
         key,
-        image: feature['icon'],
-        title: feature['label'],
+        ...data,
       });
     });
   }
   async submit() {
-    const feature = this.featureList.get(this.pushType);
+    const feature = this.featureMap.get(this.pushType);
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.pushType);
     // TODO 临时取值方式需要修改
