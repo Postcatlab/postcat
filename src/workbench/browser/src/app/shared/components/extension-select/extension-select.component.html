@@ -5,7 +5,7 @@
         [class.active]="extension === item.key"
         class="extension relative h-full w-full border rounded-md flex items-center justify-center"
         nzTooltipPlacement="bottom"
-        [nzTooltipTitle]="item.description"
+        [nzTooltipTitle]="item.label"
         nz-tooltip
       >
         <span *ngIf="!item.icon">{{ item.label }}</span>
