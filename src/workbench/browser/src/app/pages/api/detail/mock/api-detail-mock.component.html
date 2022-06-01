@@ -11,3 +11,38 @@
     </div>
   </ng-template>
 </eo-table>
+
+<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="添加mock">
+  <section *nzModalContent class="flex">
+    <div class="main-content">
+      <form nz-form nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label nzFor="envInfo.name">mock名称</nz-form-label>
+          <nz-form-control>
+            <!-- <input nz-input name="name" type="text" [(ngModel)]="envInfo.name" /> -->
+          </nz-form-control>
+        </nz-form-item>
+        <p class="b-2">返回值</p>
+        <!-- <eo-table
+          [(model)]="envInfo.parameters"
+          [columns]="envListColumns"
+          [dataModel]="{ name: '', value: '', description: '' }"
+        >
+          <ng-template cell="action" let-scope="scope" let-index="index">
+            <i
+              (click)="handleDeleteParams(index)"
+              nz-icon
+              nzType="delete"
+              *ngIf="scope.name || scope.value || scope.description"
+              nzTheme="fill"
+            ></i>
+          </ng-template>
+        </eo-table> -->
+      </form>
+    </div>
+  </section>
+  <div *nzModalFooter class="footer">
+    <!-- <button nz-button nzType="primary" (click)="handleSaveEnv(activeUuid)">保存</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button> -->
+  </div>
+</nz-modal>

@@ -9,6 +9,7 @@ import { ApiDetailService } from '../api-detail.service';
 export class ApiDetailMockComponent implements OnInit, OnChanges {
   @Input() model: ApiEditMock[];
   listConf: object = {};
+  isVisible = false;
   mockListColumns = [
     { title: '名称', key: 'name' },
     { title: 'URL', slot: 'url' },
