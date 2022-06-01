@@ -62,7 +62,9 @@ export class ApiOverviewComponent implements OnDestroy {
     });
   }
   ngOnDestroy() {
-    //TODO router change manual close modal
-    this.modal.destroy();
+      //TODO router change manual close modal
+    if (this.modal) {
+      this.modal.destroy();
+    }
   }
 }
