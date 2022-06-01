@@ -453,8 +453,8 @@ export interface ParamsEnum {
 export type ApiEditMock = {
   /** mock名称 */
   name: string;
-  /** mock地址 */
-  url: string;
+  /** mock返回值 */
+  response: string;
 };
 
 export interface BasiApiEditParams {
