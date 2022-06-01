@@ -21,24 +21,23 @@ export class SyncApiComponent implements OnInit {
         ...data,
       });
     });
+    const { key } = this.supportList.at(0);
+    this.pushType = key;
   }
   async submit() {
     const feature = this.featureMap.get(this.pushType);
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.pushType);
     // TODO 临时取值方式需要修改
-    const {
-      url,
-      token: secretKey,
-      projectId,
-    } = window.eo.getModuleSettings('eoapi-feature-push-eolink.eolink.remoteServer');
+    const { token: secretKey, projectId } = window.eo.getModuleSettings(
+      'eoapi-feature-push-eolink.eolink.remoteServer'
+    );
     if (module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], async (result: StorageHandleResult) => {
         if (result.status === StorageHandleStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = await module[action](result.data, {
-              url,
               projectId,
               secretKey,
             });
