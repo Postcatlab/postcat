@@ -2,6 +2,7 @@
 
 # compiled output
 dist/
+out/
 /tmp
 /out-tsc
 /app-builds

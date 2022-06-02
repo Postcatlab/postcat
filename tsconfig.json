@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "module": "commonjs",
+    "outDir": "./out",
     "target": "es5",
     "types": [
       "node"

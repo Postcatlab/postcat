@@ -12,7 +12,7 @@ import { deleteFile, readJson } from 'eo/shared/node/file';
 import { STORAGE_TEMP as storageTemp } from 'eo/shared/common/constant';
 import { UnitWorkerModule } from 'eo/workbench/node/unitWorker';
 import Configuration from 'eo/platform/node/configuration/lib';
-import { ConfigurationInterface } from 'src/platform/node/configuration';
+import { ConfigurationInterface } from 'eo/platform/node/configuration';
 let win: BrowserWindow = null;
 export const subView = {
   appView: null,
@@ -50,13 +50,13 @@ function createWindow(): BrowserWindow {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
+        : `file://${path.join(__dirname, '../../../src/workbench/browser/dist/index.html')}`;
     win.loadURL(file);
-    if (['development'].includes(processEnv)) {
-      win.webContents.openDevTools({
-        mode: 'undocked',
-      });
-    }
+    // if (['development'].includes(processEnv)) {
+    win.webContents.openDevTools({
+      mode: 'undocked',
+    });
+    // }
     UnitWorkerModule.setup({
       view: win,
     });
