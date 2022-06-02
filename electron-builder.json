@@ -5,19 +5,17 @@
     "output": "release/"
   },
   "files": [
-    "src/app/**/*.js*",
-    "src/platform/**/*.js*",
-    "src/shared/**/*.js*",
+    "out/app/**/*.js*",
+    "out/platform/**/*.js*",
+    "out/shared/**/*.js*",
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
-    "src/workbench/node/",
-    "src/core/**/package.json",
-    "src/app/common/**/*",
+    "out/workbench/node/",
+    "out/core/**/package.json",
+    "out/app/common/**/*",
     "!**/*.ts"
   ],
-  "publish": [
-    "github"
-  ],
+  "publish": ["github"],
   "generateUpdatesFilesForAllChannels": true,
   "nsis": {
     "oneClick": false,
@@ -40,18 +38,13 @@
     "icon": "src/app/common/images/512x512.png",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
-    "target": [
-      "dmg",
-      "zip"
-    ]
+    "target": ["dmg", "zip"]
   },
   "dmg": {
     "sign": false
   },
   "linux": {
     "icon": "src/app/common/images/",
-    "target": [
-      "AppImage"
-    ]
+    "target": ["AppImage"]
   }
 }
