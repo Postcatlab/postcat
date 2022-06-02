@@ -1,6 +1,6 @@
 {
   "name": "eoapi",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "src/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/eolinker/eoapi.git",

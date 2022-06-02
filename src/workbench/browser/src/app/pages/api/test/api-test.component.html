@@ -6,40 +6,21 @@
           <nz-select class="w_100" [(ngModel)]="apiData.protocol" formControlName="protocol">
             <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
           </nz-select>
-          <nz-select class="w_100" [(ngModel)]="apiData.method" formControlName="method">
+          <nz-select class="!w-[106px] flex-none" [(ngModel)]="apiData.method" formControlName="method">
             <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
           </nz-select>
-          <div
-            *ngIf="env.hostUri"
-            nz-typography
-            nzEllipsis
-            class="env_front_uri"
-            nzTooltipTitle="{{ env.hostUri }}"
-            nzTooltipPlacement="bottom"
-            nz-tooltip
-          >
+          <div *ngIf="env.hostUri" nz-typography nzEllipsis class="env_front_uri" nzTooltipTitle="{{ env.hostUri }}"
+            nzTooltipPlacement="bottom" nz-tooltip>
             {{ env.hostUri }}
           </div>
-          <input
-            type="text"
-            name="uri"
-            nz-input
-            formControlName="uri"
-            [(ngModel)]="apiData.uri"
-            (change)="changeUri()"
-          />
+          <input type="text" name="uri" nz-input formControlName="uri" [(ngModel)]="apiData.uri"
+            (change)="changeUri()" />
           <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()">
             {{ status === 'testing' ? '终止' : '发送' }}
             <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
           </button>
-          <button
-            type="button"
-            *ngIf="!apiData.uuid"
-            nz-button
-            nzType="default"
-            (click)="saveTestDataToApi()"
-            class="ml10"
-          >
+          <button type="button" *ngIf="!apiData.uuid" nz-button nzType="default" (click)="saveTestDataToApi()"
+            class="ml10">
             保存为新 API
           </button>
         </nz-input-group>
@@ -55,7 +36,7 @@
           请求头部
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.requestHeaders)">{{
             apiData.requestHeaders | apiParamsNum
-          }}</span>
+            }}</span>
         </ng-template>
         <eo-api-test-header class="eo_theme_iblock bbd" [(model)]="apiData.requestHeaders"></eo-api-test-header>
       </nz-tab>
@@ -63,53 +44,39 @@
       <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
         <ng-template #bodyTitleTmp>
           请求体
-          <span
-            class="iconfont icon-circle eo-tab-theme-icon"
-            *ngIf="
+          <span class="iconfont icon-circle eo-tab-theme-icon" *ngIf="
               ['formData', 'json', 'xml'].includes(apiData.requestBodyType)
                 ? bindGetApiParamNum(apiData.requestBody)
                 : apiData.requestBody?.length
-            "
-          ></span>
+            "></span>
         </ng-template>
-        <eo-api-test-body
-          class="eo_theme_iblock bbd"
-          [(bodyType)]="apiData.requestBodyType"
-          [(model)]="apiData.requestBody"
-          [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
-          [(jsonRootType)]="apiData.requestBodyJsonType"
-        ></eo-api-test-body>
+        <eo-api-test-body class="eo_theme_iblock bbd" [(bodyType)]="apiData.requestBodyType"
+          [(model)]="apiData.requestBody" [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
+          [(jsonRootType)]="apiData.requestBodyJsonType"></eo-api-test-body>
       </nz-tab>
       <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
         <ng-template #queryTitleTmp>
           Query 参数
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.queryParams)">{{
             apiData.queryParams | apiParamsNum
-          }}</span>
+            }}</span>
         </ng-template>
-        <eo-api-test-query
-          class="eo_theme_iblock bbd"
-          [model]="apiData.queryParams"
-          (modelChange)="changeQuery($event)"
-        ></eo-api-test-query>
+        <eo-api-test-query class="eo_theme_iblock bbd" [model]="apiData.queryParams"
+          (modelChange)="changeQuery($event)"></eo-api-test-query>
       </nz-tab>
       <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
         <ng-template #restTitleTmp>
           REST 参数
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
             apiData.restParams | apiParamsNum
-          }}</span>
+            }}</span>
         </ng-template>
         <eo-api-test-rest class="eo_theme_iblock bbd" [model]="apiData.restParams"></eo-api-test-rest>
       </nz-tab>
     </nz-tabset>
     <!-- 响应信息 -->
-    <nz-tabset
-      [nzTabBarStyle]="{ 'padding-left': '10px' }"
-      [(nzSelectedIndex)]="tabIndexRes"
-      [nzAnimated]="false"
-      class="mt10"
-    >
+    <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [(nzSelectedIndex)]="tabIndexRes" [nzAnimated]="false"
+      class="mt10">
       <nz-tab nzTitle="返回结果">
         <eo-api-test-result-response [model]="testResult.response"></eo-api-test-result-response>
       </nz-tab>
