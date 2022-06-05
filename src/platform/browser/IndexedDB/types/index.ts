@@ -390,6 +390,10 @@ export interface ApiData extends StorageModel {
    * @type {JsonRootType|string}
    */
   responseBodyJsonType?: JsonRootType | string;
+  /**
+   * mock列表
+   */
+  mockList?: ApiEditMock[];
 }
 
 /**
@@ -453,6 +457,8 @@ export interface ParamsEnum {
 export type ApiEditMock = {
   /** mock名称 */
   name: string;
+  /** mock地址 */
+  url: string;
   /** mock返回值 */
   response: string;
 };

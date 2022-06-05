@@ -146,6 +146,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         env: this.env,
       }),
     });
+    console.log(
+      'fff',
+      this.testServer.formatRequestData(this.apiData, {
+        env: this.env,
+      })
+    );
     this.status$.next('testing');
   }
   private abort() {

@@ -34,6 +34,7 @@ class StorageService {
       data: undefined,
       callback: args.callback || null,
     };
+    console.log('args', args);
     if (Storage && Storage[action] && typeof Storage[action] === 'function') {
       Storage[action](...args.params).subscribe(
         (result: any) => {

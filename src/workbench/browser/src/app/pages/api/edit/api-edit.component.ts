@@ -94,6 +94,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
           }
         });
         this.apiData = result.data;
+        console.log('this.apiData', this.apiData.responseBody);
         this.changeGroupID$.next(this.apiData.groupID);
         this.validateForm.patchValue(this.apiData);
       }

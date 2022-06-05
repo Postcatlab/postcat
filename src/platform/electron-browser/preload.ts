@@ -147,3 +147,17 @@ window.eo.getSettings = (settings) => {
 window.eo.getModuleSettings = (moduleID) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });
 };
+
+// 注册单个mock路由
+window.eo.registerMockRoute = ({ method, path, data }) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'registerMockRoute', data: { method, path, data } });
+};
+
+// 注销mock路由
+window.eo.unRegisterMockRoute = ({ method, path }) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'unRegisterMockRoute', data: { method, path } });
+};
+// 获取mock服务地址
+window.eo.getMockUrl = () => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getMockUrl' });
+};

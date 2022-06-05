@@ -1,0 +1,38 @@
+<eo-table [(model)]="mockList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
+  <ng-template cell="url" let-scope="scope" let-index="index">
+    <span>{{ scope.url }}</span>
+  </ng-template>
+  <ng-template cell="action" let-scope="scope" let-index="index">
+    <div class="flex justify-evenly">
+      <span (click)="handleEditMockItem(scope)" *ngIf="scope.name || scope.value || scope.description"
+        nzTheme="fill">编辑</span>
+      <span (click)="handleDeleteMockItem(index)" *ngIf="scope.name || scope.value || scope.description"
+        nzTheme="fill">删除</span>
+    </div>
+  </ng-template>
+</eo-table>
+
+<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="添加mock">
+  <section *nzModalContent class="flex">
+    <div class="main-content">
+      <form nz-form nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label nzFor="currentEditMock.name">mock名称</nz-form-label>
+          <nz-form-control>
+            <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzFor="currentEditMock.response">返回值</nz-form-label>
+          <nz-form-control>
+            <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.response" />
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </section>
+  <div *nzModalFooter class="footer">
+    <button nz-button nzType="primary" (click)="handleSave()">保存</button>
+    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+  </div>
+</nz-modal>

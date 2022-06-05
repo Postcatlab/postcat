@@ -27,6 +27,7 @@ import { ApiEditBodyComponent } from './body/api-edit-body.component';
 import { ApiEditQueryComponent } from './query/api-edit-query.component';
 import { ApiEditRestComponent } from './rest/api-edit-rest.component';
 import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra-setting.component';
+import { ApiEditMockComponent } from './mock/api-edit-mock.component';
 
 import { ApiEditService } from './api-edit.service';
 
@@ -52,6 +53,7 @@ const COMPONENTS = [
   ApiEditQueryComponent,
   ApiEditRestComponent,
   ApiParamsExtraSettingComponent,
+  ApiEditMockComponent,
 ];
 @NgModule({
   declarations: [...COMPONENTS],
@@ -65,6 +67,6 @@ const COMPONENTS = [
     SharedModule,
     ParamsImportModule,
   ],
-  providers:[ApiEditService]
+  providers: [ApiEditService],
 })
 export class ApiEditModule {}
