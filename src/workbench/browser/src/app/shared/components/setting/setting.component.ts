@@ -152,7 +152,7 @@ export class SettingComponent implements OnInit {
    * 解析所有模块的配置信息
    */
   private init() {
-    if (!window.eo && !window.eo.getFeature) return;
+    if (!window.eo && !window.eo?.getFeature) return;
     this.isVisible = true;
     this.settings = {};
     this.nestedSettings = {};

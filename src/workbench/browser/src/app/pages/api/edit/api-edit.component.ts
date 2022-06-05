@@ -30,6 +30,10 @@ import {
   getExpandGroupByKey,
 } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
+import { tree2obj } from '../../../utils/tree/tree.utils';
+import { ApiEditMockComponent } from './mock/api-edit-mock.component';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
+
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -37,6 +41,7 @@ import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
+  @ViewChild(ApiEditMockComponent) apiEditMockComp: ApiEditMockComponent;
   validateForm!: FormGroup;
   apiData: ApiData;
   groups: any[];
@@ -53,7 +58,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private message: EoMessageService,
     private messageService: MessageService,
     private apiTab: ApiTabService,
-    private storage: StorageService
+    private storage: StorageService,
+    public electron: ElectronService
   ) {}
   getApiGroup() {
     this.groups = [];
@@ -88,12 +94,26 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   getApi(id) {
     this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
+        this.apiData = result.data;
+        // 如果没有mock，则生成系统默认mock
+        if ((window.eo?.getMockUrl && !Array.isArray(this.apiData.mockList)) || this.apiData.mockList?.length === 0) {
+          const url = new URL(this.apiData.uri, window.eo.getMockUrl());
+          this.apiData.mockList = [
+            {
+              name: '系统默认期望',
+              url: url.toString(),
+              response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
+              isDefault: true,
+            },
+          ];
+        }
+
         ['requestBody', 'responseBody'].forEach((tableName) => {
           if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
             result.data[tableName] = treeToListHasLevel(result.data[tableName]);
           }
         });
-        this.apiData = result.data;
+
         this.changeGroupID$.next(this.apiData.groupID);
         this.validateForm.patchValue(this.apiData);
       }
@@ -112,19 +132,26 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     }
     const formData: any = Object.assign({}, this.apiData, this.validateForm.value);
     formData.groupID = Number(formData.groupID === '-1' ? '0' : formData.groupID);
-    ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(
-      (tableName) => {
-        if (typeof this.apiData[tableName] !== 'object') {
-          return;
-        }
-        formData[tableName] = this.apiData[tableName].filter((val) => val.name);
-        if (['requestBody', 'responseBody'].includes(tableName)) {
-          if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
-            formData[tableName] = listToTreeHasLevel(formData[tableName]);
-          }
+    [
+      'requestBody',
+      'queryParams',
+      'restParams',
+      'requestHeaders',
+      'responseHeaders',
+      'responseBody',
+      'mockList',
+    ].forEach((tableName) => {
+      if (typeof this.apiData[tableName] !== 'object') {
+        return;
+      }
+      formData[tableName] = this.apiData[tableName].filter((val) => val.name);
+      if (['requestBody', 'responseBody'].includes(tableName)) {
+        if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
+          formData[tableName] = listToTreeHasLevel(formData[tableName]);
         }
       }
-    );
+    });
+
     this.editApi(formData);
   }
   bindGetApiParamNum(params) {
@@ -142,6 +169,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  /**
+   * 打开添加mock弹窗
+   */
+  openAddMockModal() {
+    this.apiEditMockComp.openAddModal();
+  }
+
   private initApi(id) {
     this.resetForm();
     this.initBasicForm();
@@ -149,7 +183,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
       let tabData = this.apiTab.tabCache[this.apiTab.tabID];
       this.apiData = tabData.apiData;
-      this.validateForm.patchValue(this.apiData);
       return;
     }
     if (!id) {
