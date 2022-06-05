@@ -1,12 +1,18 @@
 {
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
+    "skipLibCheck": true,
     "module": "commonjs",
     "outDir": "./out",
+    "rootDir": "./src",
     "target": "es5",
     "types": [
       "node"
@@ -25,12 +31,15 @@
     }
   },
   "include": [
-    "**/**.ts",
+    "./src/**/**.ts",
+    "./src/**/**.js",
   ],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "**/browser/**/*.ts"
+    "**/browser/**/*.ts",
+    "**/browser/**/*.js",
+    "out"
   ],
   "angularCompilerOptions": {
     "enableIvy": true

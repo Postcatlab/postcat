@@ -12,13 +12,16 @@ import { deleteFile, readJson } from 'eo/shared/node/file';
 import { STORAGE_TEMP as storageTemp } from 'eo/shared/common/constant';
 import { UnitWorkerModule } from 'eo/workbench/node/unitWorker';
 import Configuration from 'eo/platform/node/configuration/lib';
-import { ConfigurationInterface } from 'eo/platform/node/configuration';
+import { ConfigurationInterface } from 'src/platform/node/configuration';
+import { MockServer } from 'eo/platform/node/mock-server';
+
 let win: BrowserWindow = null;
 export const subView = {
   appView: null,
   mainView: null,
 };
 const eoUpdater = new EoUpdater();
+const mockServer = new MockServer();
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 // Remote
@@ -85,9 +88,11 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-  app.on('ready', () => {
+  app.on('ready', async () => {
     setTimeout(createWindow, 400);
     eoUpdater.check();
+    // 启动mock服务
+    await mockServer.start();
   });
   //!TODO only api manage app need this
   // setupUnit(subView.appView);
@@ -99,6 +104,7 @@ try {
     if (process.platform !== 'darwin') {
       app.quit();
     }
+    mockServer.stop();
   });
 
   app.on('activate', () => {
@@ -204,6 +210,20 @@ try {
       returnValue = configuration.getModuleSettings(arg.data.moduleID);
     } else if (arg.action === 'getSidePosition') {
       returnValue = subView.appView?.sidePosition;
+      // 注册单个mock路由
+    } else if (arg.action === 'registerMockRoute') {
+      const { method, path, data } = arg.data;
+      returnValue = mockServer.registerRoute(method, path, data);
+      // 注销mock路由
+    } else if (arg.action === 'unRegisterMockRoute') {
+      const { method, path } = arg.data;
+      returnValue = mockServer.unRegisterRoute(method, path);
+      // 获取mock服务地址
+    } else if (arg.action === 'getMockUrl') {
+      returnValue = mockServer.getMockUrl();
+      // 重置并初始化mock路由
+    } else if (arg.action === 'resetAndInitRoutes') {
+      returnValue = mockServer.resetAndInitRoutes();
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else {

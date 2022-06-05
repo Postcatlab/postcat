@@ -1,5 +1,5 @@
 <eo-message></eo-message>
-<div class="!pt-0 p15">
+<nz-collapse class="!pt-0 p15">
   <div class="sticky top-0 z-10 pt-6 bg-white">
     <button type="submit" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()">保存</button>
     <nz-divider></nz-divider>
@@ -122,4 +122,8 @@
       </nz-tabset>
     </nz-collapse-panel>
   </nz-collapse>
-</div>
+  <!-- mock -->
+  <nz-collapse class="eo_collapse mt40" [nzGhost]="true" *ngIf="electron.isElectron">
+    <p class="api_line">MOCK <a class="text-xs text-blue-500" (click)="openAddMockModal()">+添加</a></p>
+    <eo-api-edit-mock [model]="apiData.mockList"></eo-api-edit-mock>
+  </nz-collapse>

@@ -20,6 +20,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { ApiEditComponent } from './api-edit.component';
 import { ApiEditHeaderComponent } from './header/api-edit-header.component';
@@ -27,6 +28,7 @@ import { ApiEditBodyComponent } from './body/api-edit-body.component';
 import { ApiEditQueryComponent } from './query/api-edit-query.component';
 import { ApiEditRestComponent } from './rest/api-edit-rest.component';
 import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra-setting.component';
+import { ApiEditMockComponent } from './mock/api-edit-mock.component';
 
 import { ApiEditService } from './api-edit.service';
 
@@ -44,6 +46,7 @@ const NZ_COMPONETS = [
   NzRadioModule,
   NzDividerModule,
   NzAffixModule,
+  NzPopconfirmModule,
 ];
 const COMPONENTS = [
   ApiEditComponent,
@@ -52,6 +55,7 @@ const COMPONENTS = [
   ApiEditQueryComponent,
   ApiEditRestComponent,
   ApiParamsExtraSettingComponent,
+  ApiEditMockComponent,
 ];
 @NgModule({
   declarations: [...COMPONENTS],
@@ -65,6 +69,6 @@ const COMPONENTS = [
     SharedModule,
     ParamsImportModule,
   ],
-  providers:[ApiEditService]
+  providers: [ApiEditService],
 })
 export class ApiEditModule {}
