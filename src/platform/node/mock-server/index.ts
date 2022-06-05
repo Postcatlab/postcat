@@ -61,6 +61,12 @@ export class MockServer {
   getMockUrl() {
     return this.mockUrl;
   }
+  /**
+   * 重置\清空 路由
+   */
+  resetRoutes() {
+    this.router.stack = [];
+  }
 
   /**
    * 注册路由
@@ -69,8 +75,21 @@ export class MockServer {
    * @param data 响应的数据
    */
   registerRoute(method: string, path: string, data = {}) {
-    this.router[method.toLocaleLowerCase()](path, async (ctx, next) => {
-      ctx.body = mockjs.mock(data);
+    const { pathname, search } = new URL(path, this.mockUrl);
+    // Object.fromEntries(searchParams.entries())
+    // console.log('registerRoute', method.toLocaleLowerCase(), pathname + search);
+    this.router[method.toLocaleLowerCase()](pathname + search, async (ctx, next) => {
+      try {
+        const mockData = typeof data === 'string' ? JSON.parse(data) : data;
+        ctx.body = mockjs.mock(mockData);
+      } catch (e) {
+        ctx.body = {
+          tips: '返回数据格式有误，请检查！',
+          errorMsg: e.message,
+          originData: data,
+        };
+        ctx.status = 500;
+      }
       await next();
     });
   }
@@ -111,8 +130,9 @@ export class MockServer {
       await next();
     });
 
-    this.router.get('/test', async (ctx, next) => {
+    this.router.get('/mock_stack', async (ctx, next) => {
       ctx.body = this.router;
+      await next();
     });
   }
 }

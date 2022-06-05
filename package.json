@@ -19,12 +19,13 @@
     "test:workbench": "cd src/workbench/browser && yarn test",
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
-    "electron:dev": "npm run electron:tsc && electron . --development",
+    "electron:dev": "npm run electron:tsc && npm run copyfile:out && electron . --development",
     "build": "npm-run-all -s build:workbench electron:tsc && electron-builder build",
     "build:static": "npm run electron:tsc && electron-builder build",
     "release": "npm-run-all -s build:workbench electron:tsc && electron-builder --publish=always",
     "test": "npm-run-all --serial test:*",
-    "electron:tsc": "tsc -p tsconfig.json"
+    "electron:tsc": "tsc -p tsconfig.json",
+    "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out"
   },
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",
@@ -33,6 +34,7 @@
     "@koa/router": "10.1.1",
     "@types/koa__router": "8.0.11",
     "content-disposition": "^0.5.4",
+    "copyfiles": "2.4.1",
     "cross-spawn": "^7.0.3",
     "crypto-js": "^4.1.1",
     "dexie": "3.2.2",

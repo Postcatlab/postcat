@@ -13,6 +13,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
+import { tree2obj } from '../../../../utils/tree/tree.utils';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -118,7 +119,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       const { success, empty } = StorageHandleStatus;
       if ([success, empty].includes(result.status)) {
         let apiItems = {};
-        result.data.forEach((item) => {
+        result.data.forEach((item: ApiData) => {
           delete item.updatedAt;
           apiItems[item.uuid] = item;
           this.treeItems.push({
@@ -129,6 +130,18 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             method: item.method,
             isLeaf: true,
           });
+          if (Array.isArray(item.mockList) && item.mockList.length > 0) {
+            item.mockList.forEach((n) => {
+              window.eo.registerMockRoute({ method: item.method, path: n.url, data: n.response });
+            });
+          } else {
+            window.eo.registerMockRoute({
+              method: item.method,
+              path: item.uri,
+              data: tree2obj(item.responseBody as any[]),
+            });
+          }
+          // console.log('registerMockRoute', { method: item.method, path: item.uri, data: tree2obj(item.responseBody) });
         });
         this.apiDataItems = apiItems;
         this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
@@ -136,6 +149,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         this.generateGroupTreeData();
         this.restoreExpandStatus();
       }
+      console.log('result', result.data);
     });
   }
   restoreExpandStatus() {

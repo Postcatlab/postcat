@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ApiEditMock } from 'eo/platform/browser/IndexedDB';
 import { ApiDetailService } from '../api-detail.service';
 @Component({
@@ -6,7 +6,7 @@ import { ApiDetailService } from '../api-detail.service';
   templateUrl: './api-detail-mock.component.html',
   styleUrls: ['./api-detail-mock.component.scss'],
 })
-export class ApiDetailMockComponent implements OnInit, OnChanges {
+export class ApiDetailMockComponent implements OnChanges {
   @Input() model: ApiEditMock[] = [];
   @Input() mockList = [];
   listConf: object = {};
@@ -18,18 +18,6 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   ];
   constructor(private detailService: ApiDetailService) {}
 
-  ngOnInit(): void {
-    this.mockList = [
-      {
-        name: '默认mock',
-        url: 'http://localhost:3040/weather/cloud',
-      },
-      {
-        name: '自定义mock',
-        url: 'http://localhost:3040/weather/windcss',
-      },
-    ];
-  }
   ngOnChanges(changes) {
     // if (changes.model&&!changes.model.previousValue&&changes.model.currentValue) {
     //   this.model.push(Object.assign({}, this.itemStructure));

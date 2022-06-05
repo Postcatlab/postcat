@@ -1,14 +1,16 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { ApiEditBody, ApiEditMock } from 'eo/platform/browser/IndexedDB';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ApiEditMock } from 'eo/platform/browser/IndexedDB';
+import { Subject } from 'rxjs';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-api-edit-mock',
   templateUrl: './api-edit-mock.component.html',
   styleUrls: ['./api-edit-mock.component.scss'],
 })
-export class ApiEditMockComponent implements OnInit, OnChanges {
-  @Input() mockList: ApiEditMock[];
-  listConf: object = {};
+export class ApiEditMockComponent {
+  @Input() model: ApiEditMock[];
+  @Output() modelChange: EventEmitter<any> = new EventEmitter();
   isVisible = false;
   mockListColumns = [
     { title: '名称', key: 'name' },
@@ -17,26 +19,16 @@ export class ApiEditMockComponent implements OnInit, OnChanges {
   ];
   /** 当前被编辑的mock */
   currentEditMock: ApiEditMock;
-  constructor() {}
-
-  ngOnInit(): void {
-    this.mockList = [
-      {
-        name: '默认mock',
-        url: 'http://localhost:3040/weather/cloud',
-        response: '{}',
-      },
-      {
-        name: '自定义mock',
-        url: 'http://localhost:3040/weather/windcss',
-        response: '{}',
-      },
-    ];
+  private destroy$: Subject<void> = new Subject<void>();
+  private rawChange$: Subject<string> = new Subject<string>();
+  constructor() {
+    this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {
+      this.modelChange.emit(this.model);
+    });
   }
-  ngOnChanges(changes) {
-    // if (changes.model&&!changes.model.previousValue&&changes.model.currentValue) {
-    //   this.model.push(Object.assign({}, this.itemStructure));
-    // }
+
+  rawDataChange() {
+    this.rawChange$.next(this.currentEditMock.response);
   }
 
   handleEditMockItem(mock: ApiEditMock) {

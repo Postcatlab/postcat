@@ -30,6 +30,8 @@ import {
   getExpandGroupByKey,
 } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
+import { tree2obj } from '../../../utils/tree/tree.utils';
+
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -94,7 +96,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
           }
         });
         this.apiData = result.data;
-        console.log('this.apiData', this.apiData.responseBody);
+        if (!Array.isArray(this.apiData.mockList)) {
+          const url = new URL(this.apiData.uri, window.eo.getMockUrl());
+          this.apiData.mockList = [
+            { name: '系统默认期望', url: url.toString(), response: tree2obj([].concat(this.apiData.responseBody)) },
+          ];
+        }
+        console.log('this.apiData', this.apiData);
         this.changeGroupID$.next(this.apiData.groupID);
         this.validateForm.patchValue(this.apiData);
       }
@@ -113,19 +121,26 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     }
     const formData: any = Object.assign({}, this.apiData, this.validateForm.value);
     formData.groupID = Number(formData.groupID === '-1' ? '0' : formData.groupID);
-    ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(
-      (tableName) => {
-        if (typeof this.apiData[tableName] !== 'object') {
-          return;
-        }
-        formData[tableName] = this.apiData[tableName].filter((val) => val.name);
-        if (['requestBody', 'responseBody'].includes(tableName)) {
-          if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
-            formData[tableName] = listToTreeHasLevel(formData[tableName]);
-          }
+    [
+      'requestBody',
+      'queryParams',
+      'restParams',
+      'requestHeaders',
+      'responseHeaders',
+      'responseBody',
+      'mockList',
+    ].forEach((tableName) => {
+      if (typeof this.apiData[tableName] !== 'object') {
+        return;
+      }
+      formData[tableName] = this.apiData[tableName].filter((val) => val.name);
+      if (['requestBody', 'responseBody'].includes(tableName)) {
+        if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
+          formData[tableName] = listToTreeHasLevel(formData[tableName]);
         }
       }
-    );
+    });
+
     this.editApi(formData);
   }
   bindGetApiParamNum(params) {
@@ -150,7 +165,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
       let tabData = this.apiTab.tabCache[this.apiTab.tabID];
       this.apiData = tabData.apiData;
-      this.validateForm.patchValue(this.apiData);
       return;
     }
     if (!id) {

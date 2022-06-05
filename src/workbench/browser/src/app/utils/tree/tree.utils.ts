@@ -1,4 +1,11 @@
 import { GroupTreeItem } from '../../shared/models';
+
+export type TreeToObjOpts = {
+  key?: string;
+  valueKey?: string;
+  childKey?: string;
+};
+
 /**
  * Convert old component listBlock array items has level without  parent id to  tree nodes
  * @param list Array<GroupTreeItem>
@@ -13,7 +20,7 @@ export const listToTreeHasLevel = (
 ) => {
   const listDepths = [];
   //delete useless key
-  const uselessKeys = ['listDepth', 'isHide','isShrink'];
+  const uselessKeys = ['listDepth', 'isHide', 'isShrink'];
   list = list.map((item) => {
     listDepths.push(item.listDepth);
     return Object.keys(item).reduce(
@@ -145,4 +152,23 @@ export const getExpandGroupByKey = (component, key) => {
     treeNode = treeNode.parentNode;
   }
   return expandKeys;
+};
+
+/**
+ * 将树形数据转成 key => value 对象
+ *
+ * @param list
+ * @param opts
+ * @returns
+ */
+export const tree2obj = (list: any[], opts: TreeToObjOpts = {}, initObj = {}) => {
+  const { key = 'name', valueKey = 'description', childKey = 'children' } = opts;
+
+  return list.reduce((prev, curr) => {
+    prev[curr[key]] = curr[valueKey];
+    if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
+      tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
+    }
+    return prev;
+  }, initObj);
 };
