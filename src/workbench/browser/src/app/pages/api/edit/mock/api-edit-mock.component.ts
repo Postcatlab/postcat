@@ -17,14 +17,14 @@ export class ApiEditMockComponent {
     { title: 'URL', slot: 'url' },
     { title: '', slot: 'action', width: '15%' },
   ];
+  /** 是否为编辑 */
+  isEdit = true;
   /** 当前被编辑的mock */
   currentEditMock: ApiEditMock;
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   constructor() {
-    this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {
-      this.modelChange.emit(this.model);
-    });
+    this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});
   }
 
   rawDataChange() {
@@ -33,13 +33,28 @@ export class ApiEditMockComponent {
 
   handleEditMockItem(mock: ApiEditMock) {
     this.currentEditMock = mock;
+    this.isEdit = true;
     this.isVisible = true;
   }
-  handleDeleteMockItem(index: number) {}
+  handleDeleteMockItem(index: number) {
+    this.model.splice(index, 1);
+    this.model = [...this.model];
+  }
   handleSave() {
     this.isVisible = false;
+    this.model = [...this.model, this.currentEditMock];
+    this.modelChange.emit(this.model);
   }
   handleCancel() {
     this.isVisible = false;
+  }
+  openAddModal() {
+    this.isEdit = false;
+    this.isVisible = true;
+    this.currentEditMock = {
+      url: this.model.at(0).url,
+      name: '',
+      response: '',
+    };
   }
 }

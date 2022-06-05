@@ -461,6 +461,8 @@ export type ApiEditMock = {
   url: string;
   /** mock返回值 */
   response: string;
+  /** 是否系统默认mock */
+  isDefault?: boolean;
 };
 
 export interface BasiApiEditParams {

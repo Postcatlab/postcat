@@ -31,6 +31,7 @@ import {
 } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { tree2obj } from '../../../utils/tree/tree.utils';
+import { ApiEditMockComponent } from './mock/api-edit-mock.component';
 
 @Component({
   selector: 'eo-api-edit-edit',
@@ -39,6 +40,7 @@ import { tree2obj } from '../../../utils/tree/tree.utils';
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
+  @ViewChild(ApiEditMockComponent) apiEditMockComp: ApiEditMockComponent;
   validateForm!: FormGroup;
   apiData: ApiData;
   groups: any[];
@@ -90,19 +92,26 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   getApi(id) {
     this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
       if (result.status === StorageHandleStatus.success) {
+        this.apiData = result.data;
+        // 如果没有mock，则生成系统默认mock
+        if (!Array.isArray(this.apiData.mockList) || this.apiData.mockList.length === 0) {
+          const url = new URL(this.apiData.uri, window.eo.getMockUrl());
+          this.apiData.mockList = [
+            {
+              name: '系统默认期望',
+              url: url.toString(),
+              response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
+              isDefault: true,
+            },
+          ];
+        }
+
         ['requestBody', 'responseBody'].forEach((tableName) => {
           if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
             result.data[tableName] = treeToListHasLevel(result.data[tableName]);
           }
         });
-        this.apiData = result.data;
-        if (!Array.isArray(this.apiData.mockList)) {
-          const url = new URL(this.apiData.uri, window.eo.getMockUrl());
-          this.apiData.mockList = [
-            { name: '系统默认期望', url: url.toString(), response: tree2obj([].concat(this.apiData.responseBody)) },
-          ];
-        }
-        console.log('this.apiData', this.apiData);
+
         this.changeGroupID$.next(this.apiData.groupID);
         this.validateForm.patchValue(this.apiData);
       }
@@ -158,6 +167,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  /**
+   * 打开添加mock弹窗
+   */
+  openAddMockModal() {
+    this.apiEditMockComp.openAddModal();
+  }
+
   private initApi(id) {
     this.resetForm();
     this.initBasicForm();

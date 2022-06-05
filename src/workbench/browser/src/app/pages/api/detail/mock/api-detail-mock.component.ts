@@ -8,13 +8,11 @@ import { ApiDetailService } from '../api-detail.service';
 })
 export class ApiDetailMockComponent implements OnChanges {
   @Input() model: ApiEditMock[] = [];
-  @Input() mockList = [];
   listConf: object = {};
   isVisible = false;
   mockListColumns = [
     { title: '名称', key: 'name' },
     { title: 'URL', slot: 'url' },
-    { title: '', slot: 'action', width: '15%' },
   ];
   constructor(private detailService: ApiDetailService) {}
 

@@ -161,3 +161,8 @@ window.eo.unRegisterMockRoute = ({ method, path }) => {
 window.eo.getMockUrl = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getMockUrl' });
 };
+
+// 重置并初始化路由
+window.eo.resetAndInitRoutes = () => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'resetAndInitRoutes' });
+};

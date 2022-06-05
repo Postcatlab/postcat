@@ -4,15 +4,14 @@
   </ng-template>
   <ng-template cell="action" let-scope="scope" let-index="index">
     <div class="flex justify-evenly">
-      <span (click)="handleEditMockItem(scope)" *ngIf="scope.name || scope.value || scope.description"
-        nzTheme="fill">编辑</span>
-      <span (click)="handleDeleteMockItem(index)" *ngIf="scope.name || scope.value || scope.description"
-        nzTheme="fill">删除</span>
+      <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="handleEditMockItem(scope)">编辑</a>
+      <a nz-button nzType="link" *ngIf="scope.name || scope.url" nz-popconfirm nzPopconfirmTitle="您确定要删除此mock吗?"
+        nzPopconfirmPlacement="topRight" (nzOnConfirm)="handleDeleteMockItem(index)" [disabled]="scope.isDefault">删除</a>
     </div>
   </ng-template>
 </eo-table>
 
-<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="添加mock">
+<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="{{isEdit ? '编辑' : '添加' }}mock">
   <section *nzModalContent class="flex">
     <div class="main-content">
       <form nz-form nzLayout="vertical">

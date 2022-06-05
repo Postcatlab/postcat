@@ -69,6 +69,14 @@ export class MockServer {
   }
 
   /**
+   * 重置\清空 并初始化路由
+   */
+  resetAndInitRoutes() {
+    this.resetRoutes();
+    this.initRoutes();
+  }
+
+  /**
    * 注册路由
    * @param method 请求方法
    * @param path 请求路径

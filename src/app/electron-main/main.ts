@@ -221,6 +221,9 @@ try {
       // 获取mock服务地址
     } else if (arg.action === 'getMockUrl') {
       returnValue = mockServer.getMockUrl();
+      // 重置并初始化mock路由
+    } else if (arg.action === 'resetAndInitRoutes') {
+      returnValue = mockServer.resetAndInitRoutes();
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else {

@@ -115,6 +115,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   getApis() {
+    // 注册mock路由
+    const registerMockRoute = window.eo.registerMockRoute;
+    // 重置并初始化路由
+    window.eo.resetAndInitRoutes();
     this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
       const { success, empty } = StorageHandleStatus;
       if ([success, empty].includes(result.status)) {
@@ -130,12 +134,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             method: item.method,
             isLeaf: true,
           });
+
           if (Array.isArray(item.mockList) && item.mockList.length > 0) {
             item.mockList.forEach((n) => {
-              window.eo.registerMockRoute({ method: item.method, path: n.url, data: n.response });
+              registerMockRoute({ method: item.method, path: n.url, data: n.response });
             });
           } else {
-            window.eo.registerMockRoute({
+            registerMockRoute({
               method: item.method,
               path: item.uri,
               data: tree2obj(item.responseBody as any[]),
