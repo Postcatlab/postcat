@@ -34,7 +34,6 @@
           "error",
           {
             "type": "element",
-            "prefix": "eo",
             "style": "kebab-case"
           }
         ]

@@ -1,0 +1,23 @@
+<ng-container *ngIf="extensionList.length; else empty">
+  <div class="flex">
+    <div *ngFor="let item of extensionList" class="px-2 w-1/4 h-14" (click)="selectExtension(item)">
+      <div
+        [class.active]="extension === item.key"
+        class="extension relative h-full w-full border rounded-md flex items-center justify-center"
+        nzTooltipPlacement="bottom"
+        [nzTooltipTitle]="item.label"
+        nz-tooltip
+      >
+        <span *ngIf="!item.icon">{{ item.label }}</span>
+        <i
+          class="logobg absolute left-1.5 right-1.5 top-0 bottom-0"
+          [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
+        ></i>
+        <i class="check absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #empty>
+  <span class="text">该功能需要插件支持，请移步至<a class="eo_link" routerLink="/home/extension/list">插件广场</a>下载</span>
+</ng-template>

@@ -24,12 +24,11 @@ export class ExtensionListComponent implements OnInit {
   keyword = '';
   renderList = [];
   seachChanged$: Subject<string> = new Subject<string>();
-  constructor(
-    public extensionService: ExtensionService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {
+  constructor(public extensionService: ExtensionService, private route: ActivatedRoute, private router: Router) {
     this.type = this.route.snapshot.queryParams.type;
+    this.seachChanged$.pipe(debounceTime(500), distinctUntilChanged()).subscribe(async (keyword) => {
+      this.renderList = await this.searchPlugin(keyword);
+    });
   }
   async ngOnInit() {
     this.watchSearchConditionChange();
@@ -45,20 +44,17 @@ export class ExtensionListComponent implements OnInit {
     }
     const res: any = await this.extensionService.requestList();
     if (this.type === 'official') {
-      return new ExtensionList(res.data.filter((it) => it.author === 'Eolink')).search(keyword);
+      return new ExtensionList(res.data.filter((it) => it.author === 'Eoapi')).search(keyword);
     }
     return new ExtensionList(res.data).search(keyword);
   }
   onSeachChange(keyword) {
-    this.seachChanged$.pipe(debounceTime(1000), distinctUntilChanged()).subscribe(async () => {
-      this.renderList = await this.searchPlugin(keyword);
-    });
     this.seachChanged$.next(keyword);
   }
   clickExtension(item) {
     this.router
       .navigate(['home/extension/detail'], {
-        queryParams: { id: item.moduleID,name:item.name, jump: 'setting' },
+        queryParams: { id: item.moduleID, name: item.name, jump: 'setting' },
       })
       .finally();
   }

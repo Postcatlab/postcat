@@ -126,7 +126,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         }
       }
     );
-
     this.editApi(formData);
   }
   bindGetApiParamNum(params) {
@@ -151,6 +150,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
       let tabData = this.apiTab.tabCache[this.apiTab.tabID];
       this.apiData = tabData.apiData;
+      this.validateForm.patchValue(this.apiData);
       return;
     }
     if (!id) {

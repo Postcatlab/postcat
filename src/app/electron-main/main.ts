@@ -53,7 +53,7 @@ function createWindow(): BrowserWindow {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(__dirname, '../../workbench/browser/dist/index.html')}`;
+        : `file://${path.join(__dirname, '../../../src/workbench/browser/dist/index.html')}`;
     win.loadURL(file);
     if (['development'].includes(processEnv)) {
       win.webContents.openDevTools({

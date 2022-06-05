@@ -11,6 +11,7 @@ import { WebviewDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -39,9 +40,10 @@ const COMPONENTS = [ToolbarComponent, SelectThemeComponent, SidebarComponent, Na
     NzResultModule,
     NzDropDownModule,
     NzSpinModule,
+    NzModalModule,
   ],
-  declarations: [WebviewDirective, ...COMPONENTS,ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
+  declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
   providers: [ModalService],
-  exports: [WebviewDirective, ...COMPONENTS,ApiParamsNumPipe],
+  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
 })
 export class SharedModule {}

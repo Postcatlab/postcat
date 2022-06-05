@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ModuleHandlerOptions, ModuleHandlerResult } from '../types';
 import { fileExists, writeJson } from 'eo/shared/node/file';
 import { CoreHandler } from './core';
-import * as spawn from 'cross-spawn';
+import * as fs from 'fs';
 // import npmCli from 'npm';
 const npmCli = require('npm');
 /**
@@ -79,6 +79,34 @@ export class ModuleHandler extends CoreHandler {
   }
 
   /**
+   * 手动操作package.json
+   * @param result npm install安装成功回调的结果
+   * @param moduleList 所有的模块列表
+   */
+  private operatePackage(result: any[], moduleList: string[], action: 'uninstall' | 'install') {
+    if (Array.isArray(result)) {
+      const moduleNames = moduleList.map((n) => n.split('@')[0]);
+      const packagePath = path.join(this.baseDir, 'package.json');
+      result.forEach(([name]) => {
+        const [pkgName, pkgVersion] = name.split('@');
+        if (moduleNames.includes(pkgName)) {
+          const packageJSON = fs.readFileSync(packagePath);
+          const packageObj = JSON.parse(packageJSON.toString());
+          const dependencieKeys = Object.keys(packageObj.dependencies);
+          if (!dependencieKeys.includes(pkgName)) {
+            if (action === 'install') {
+              packageObj.dependencies[pkgName] = pkgVersion;
+            } else {
+              delete packageObj.dependencies[pkgName];
+            }
+          }
+          fs.writeFileSync(packagePath, JSON.stringify(packageObj));
+        }
+      });
+    }
+  }
+
+  /**
    * 运行模块管理器
    * @param command
    * @param modules
@@ -97,21 +125,24 @@ export class ModuleHandler extends CoreHandler {
       // console.log(npmCli.commands.run('version'));
       // console.log('command', [command].concat(modules), this.baseDir);
       npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
+        const moduleList = modules.map((it) => it + '@latest');
         if (command === 'install') {
-          npmCli.commands.install(modules, (err, data) => {
+          npmCli.commands.install(moduleList, (err, data) => {
             process.chdir(this.baseDir);
             if (err) {
               reject(err);
             }
+            this.operatePackage(data, moduleList, 'install');
             resolve({ code: 0, data });
           });
         }
         if (command === 'uninstall') {
-          npmCli.commands.uninstall(modules, (err, data) => {
+          npmCli.commands.uninstall(moduleList, (err, data) => {
             process.chdir(this.baseDir);
             if (err) {
               reject(err);
             }
+            this.operatePackage(data, moduleList, 'uninstall');
             resolve({ code: 0, data });
           });
         }

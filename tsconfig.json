@@ -8,7 +8,8 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "module": "commonjs",
-    "target": "esnext",
+    "outDir": "./out",
+    "target": "es5",
     "types": [
       "node"
     ],

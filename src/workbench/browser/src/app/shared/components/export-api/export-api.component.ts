@@ -2,37 +2,33 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
 import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
 import packageJson from '../../../../../../../../package.json';
+import { FeatureType } from '../../types';
+
 @Component({
   selector: 'eo-export-api',
-  templateUrl: './export-api.component.html',
-  styleUrls: ['./export-api.component.scss'],
+  template: ` <extension-select [(extension)]="exportType" [extensionList]="supportList"></extension-select> `,
 })
 export class ExportApiComponent implements OnInit {
-  exportType: string = 'eoapi';
-  supportList: Array<{
-    key: string;
-    image: string;
-    title: string;
-  }> = [
+  exportType = 'eoapi';
+  supportList: Array<FeatureType> = [
     {
       key: 'eoapi',
-      image: '',
-      title: 'Eoapi(.json)',
+      icon: 'assets/images/logo.svg',
+      label: 'Eoapi',
+      description: '',
     },
   ];
-  featureList = window.eo.getFeature('apimanage.export');
+  featureMap = window.eo.getFeature('apimanage.export');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
-    this.featureList?.forEach((feature: object, key: string) => {
+    this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
         key,
-        image: feature['icon'],
-        title: feature['label'],
+        ...data,
       });
     });
   }
   submit(callback: () => boolean) {
-    console.log(this.exportType);
     if ('eoapi' === this.exportType) {
       this.exportEoapi(callback);
     } else {
@@ -75,7 +71,7 @@ export class ExportApiComponent implements OnInit {
    * @param callback
    */
   private export(callback) {
-    const feature = this.featureList.get(this.exportType);
+    const feature = this.featureMap.get(this.exportType);
     const action = feature.action || null;
     const filename = feature.filename || null;
     const module = window.eo.loadFeatureModule(this.exportType);
@@ -84,7 +80,6 @@ export class ExportApiComponent implements OnInit {
         if (result.status === StorageHandleStatus.success) {
           result.data.version = packageJson.version;
           try {
-            console.log(JSON.stringify(result, null, 2));
             const output = module[action](result || {});
             this.transferTextToFile(filename, output);
             callback(true);
