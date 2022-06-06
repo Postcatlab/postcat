@@ -1,5 +1,5 @@
 <eo-message></eo-message>
-<div class="!pt-0 p15">
+<nz-collapse class="!pt-0 p15">
   <div class="sticky top-0 z-10 pt-6 bg-white">
     <button type="submit" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()">保存</button>
     <nz-divider></nz-divider>
@@ -7,10 +7,10 @@
   <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
     <nz-form-label nzFor="uri">API Path</nz-form-label>
     <nz-input-group nzCompact>
-      <nz-select class="w-24" [(ngModel)]="apiData.protocol" formControlName="protocol">
+      <nz-select [(ngModel)]="apiData.protocol" formControlName="protocol">
         <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
       </nz-select>
-      <nz-select class="w-28" [(ngModel)]="apiData.method" formControlName="method">
+      <nz-select class="w-[106px]" [(ngModel)]="apiData.method" formControlName="method">
         <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
       </nz-select>
       <nz-form-item nz-col class="fg1">
@@ -122,4 +122,8 @@
       </nz-tabset>
     </nz-collapse-panel>
   </nz-collapse>
-</div>
+  <!-- mock -->
+  <nz-collapse class="eo_collapse mt40" [nzGhost]="true" *ngIf="electron.isElectron">
+    <p class="api_line">MOCK <a class="text-xs text-blue-500" (click)="openAddMockModal()">+添加</a></p>
+    <eo-api-edit-mock [model]="apiData.mockList"></eo-api-edit-mock>
+  </nz-collapse>

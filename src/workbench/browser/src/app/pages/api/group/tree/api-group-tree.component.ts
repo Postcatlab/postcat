@@ -13,6 +13,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
+import { tree2obj } from '../../../../utils/tree/tree.utils';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -115,11 +116,16 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   getApis() {
+    // 注册mock路由
+    const registerMockRoute = window.eo?.registerMockRoute;
+    // 重置并初始化路由
+    window.eo?.resetAndInitRoutes?.();
+
     this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
       const { success, empty } = StorageResStatus;
       if ([success, empty].includes(result.status)) {
         let apiItems = {};
-        result.data.forEach((item) => {
+        result.data.forEach((item: ApiData) => {
           delete item.updatedAt;
           apiItems[item.uuid] = item;
           this.treeItems.push({
@@ -130,6 +136,21 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             method: item.method,
             isLeaf: true,
           });
+
+          if (this.electron.isElectron && registerMockRoute) {
+            if (Array.isArray(item.mockList) && item.mockList.length > 0) {
+              item.mockList.forEach((n) => {
+                registerMockRoute({ method: item.method, path: n.url, data: n.response });
+              });
+            } else {
+              registerMockRoute({
+                method: item.method,
+                path: item.uri,
+                data: tree2obj(item.responseBody as any[]),
+              });
+            }
+            // console.log('registerMockRoute', { method: item.method, path: item.uri, data: tree2obj(item.responseBody) });
+          }
         });
         this.apiDataItems = apiItems;
         this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
@@ -137,6 +158,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         this.generateGroupTreeData();
         this.restoreExpandStatus();
       }
+      console.log('result', result.data);
     });
   }
   restoreExpandStatus() {

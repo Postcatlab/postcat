@@ -390,6 +390,10 @@ export interface ApiData extends StorageModel {
    * @type {JsonRootType|string}
    */
   responseBodyJsonType?: JsonRootType | string;
+  /**
+   * mock列表
+   */
+  mockList?: ApiEditMock[];
 }
 
 /**
@@ -449,6 +453,18 @@ export interface ParamsEnum {
    */
   description: string;
 }
+
+export type ApiEditMock = {
+  /** mock名称 */
+  name: string;
+  /** mock地址 */
+  url: string;
+  /** mock返回值 */
+  response: string;
+  /** 是否系统默认mock */
+  isDefault?: boolean;
+};
+
 export interface BasiApiEditParams {
   /**
    * 参数名
@@ -595,10 +611,7 @@ export interface StorageInterface {
    */
 
   apiDataLoadAllByGroupID: (groupID: number | string) => Observable<object>;
-  apiDataLoadAllByProjectIDAndGroupID: (
-    projectID: number | string,
-    groupID: number | string
-  ) => Observable<object>;
+  apiDataLoadAllByProjectIDAndGroupID: (projectID: number | string, groupID: number | string) => Observable<object>;
   // Api Test History
   apiTestHistoryCreate: (item: ApiTestHistory) => Observable<object>;
   apiTestHistoryUpdate: (item: ApiTestHistory, uuid: number | string) => Observable<object>;
@@ -639,7 +652,7 @@ export enum StorageResStatus {
   success = 200,
   empty = 201,
   unAuthorize = 401,
-  notFind=404,
+  notFind = 404,
   error = 500,
   invalid = 'not connect',
 }

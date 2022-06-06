@@ -2,6 +2,7 @@
 
 # compiled output
 dist/
+out/
 /tmp
 /out-tsc
 /app-builds
@@ -46,3 +47,4 @@ testem.log
 .DS_Store
 Thumbs.db
 # *-lock.json
+.vercel

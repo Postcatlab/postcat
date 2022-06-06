@@ -93,6 +93,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   restoreHistory(item) {
     let result = this.apiTest.getTestDataFromHistory(item);
+    console.log('restoreHistory', result);
     //restore request
     this.apiData = result.testData;
     this.changeUri();
@@ -175,7 +176,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Receive Test Server Message
    */
   private receiveMessage(message) {
-    console.log(message);
+    console.log('receiveMessage', message);
     let tmpHistory = {
       general: message.general,
       request: message.report.request,

@@ -12,6 +12,7 @@ import { WebviewDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';

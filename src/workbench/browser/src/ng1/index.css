@@ -11867,7 +11867,7 @@ list-block-common-component .eo-textarea:read-only {
   white-space: nowrap;
 }
 list-block-common-component .sort-handle-td {
-  padding-top: 11px;
+  padding-top: 10px;
 }
 list-block-common-component .sort-handle-td span {
   width: 23px;

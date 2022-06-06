@@ -6,7 +6,7 @@
   "moduleID": "eoapi-common",
   "author": "eoapi",
   "publisher": "eoapi",
-  "contributes": {
+  "features": {
     "configuration": {
       "type": "object",
       "title": "通用",

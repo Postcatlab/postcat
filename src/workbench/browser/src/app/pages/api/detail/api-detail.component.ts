@@ -7,7 +7,7 @@ import {
   StorageRes,
   StorageResStatus,
 } from '../../../shared/services/storage/index.model';
-import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
+import { tree2obj, treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 import { StorageService } from '../../../shared/services/storage';
 
@@ -44,13 +44,26 @@ export class ApiDetailComponent implements OnInit {
   }
   getApiByUuid(id: number) {
     this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+      this.apiData = result.data;
       if (result.status === StorageResStatus.success) {
+        // 如果没有mock，则生成系统默认mock
+        if ((window.eo?.getMockUrl && !Array.isArray(this.apiData.mockList)) || this.apiData.mockList?.length === 0) {
+          const url = new URL(this.apiData.uri, window.eo.getMockUrl());
+          this.apiData.mockList = [
+            {
+              name: '系统默认期望',
+              url: url.toString(),
+              response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
+              isDefault: true,
+            },
+          ];
+        }
+
         ['requestBody', 'responseBody'].forEach((tableName) => {
-          if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
-            result.data[tableName] = treeToListHasLevel(result.data[tableName]);
+          if (['xml', 'json'].includes(this.apiData[`${tableName}Type`])) {
+            this.apiData[tableName] = treeToListHasLevel(this.apiData[tableName]);
           }
         });
-        this.apiData = result.data;
       }
     });
   }
