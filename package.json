@@ -34,7 +34,6 @@
     "@koa/router": "10.1.1",
     "content-disposition": "^0.5.4",
     "copyfiles": "2.4.1",
-    "cross-spawn": "^7.0.3",
     "crypto-js": "^4.1.1",
     "electron-log": "^4.4.7",
     "electron-updater": "^5.0.1",
@@ -51,7 +50,6 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "@types/cross-spawn": "6.0.2",
     "@types/koa": "2.13.4",
     "@types/koa__router": "8.0.11",
     "@types/node": "17.0.32",
