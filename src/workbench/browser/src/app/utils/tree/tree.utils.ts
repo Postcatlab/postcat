@@ -161,10 +161,10 @@ export const getExpandGroupByKey = (component, key) => {
  * @param opts
  * @returns
  */
-export const tree2obj = (list: any[], opts: TreeToObjOpts = {}, initObj = {}) => {
+export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {}) => {
   const { key = 'name', valueKey = 'description', childKey = 'children' } = opts;
 
-  return list.reduce((prev, curr) => {
+  return list?.reduce?.((prev, curr) => {
     prev[curr[key]] = curr[valueKey];
     if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
       tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
