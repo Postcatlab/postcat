@@ -1,12 +1,12 @@
 import Dexie, { Table } from 'dexie';
 import { Observable } from 'rxjs';
-import { isNotEmpty } from '../../../../../../../../../shared/common/common';
 import {
   Project,
   Environment,
   Group,
   ApiData,
   ApiTestHistory,
+  ApiMockEntity,
   StorageInterface,
   StorageItem,
   StorageResStatus,
@@ -23,15 +23,17 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   environment!: Table<Environment, number | string>;
   apiData!: Table<ApiData, number | string>;
   apiTestHistory!: Table<ApiTestHistory, number | string>;
+  mock!: Table<ApiMockEntity, number | string>;
 
   constructor() {
     super('eoapi_core');
-    this.version(1).stores({
+    this.version(2).stores({
       project: '++uuid, name',
       environment: '++uuid, name, projectID',
       group: '++uuid, name, projectID, parentID',
       apiData: '++uuid, name, projectID, groupID',
       apiTestHistory: '++uuid, projectID, apiDataID',
+      mock: '++uuid, name, apiDataID, projectID',
     });
     this.open();
     this.on('populate', () => this.populate());

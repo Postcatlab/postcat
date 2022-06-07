@@ -29,6 +29,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 import { BaseUrlInterceptor, HttpStorage } from '../../shared/services/storage/http/lib';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
@@ -37,6 +38,7 @@ import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
+import { ApiMockComponent } from './mock/api-mock.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 const COMPONENTS = [
   ApiComponent,
@@ -48,6 +50,7 @@ const COMPONENTS = [
   ApiOverviewComponent,
   ImportApiComponent,
   ExtensionSelectComponent,
+  ApiMockComponent,
 ];
 @NgModule({
   imports: [
@@ -73,6 +76,7 @@ const COMPONENTS = [
     EouiModule,
     EnvModule,
     NzCardModule,
+    NzModalModule,
   ],
   declarations: [...COMPONENTS],
   exports: [],

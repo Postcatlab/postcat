@@ -239,6 +239,23 @@ export interface ApiTestHistory extends ApiTestHistoryFrame, StorageModel {
   apiDataID: string | number;
 }
 
+export type ApiMockEntity = {
+  /** mock name */
+  name: string;
+
+  /**
+   * Project primary key ID
+   * @type {string|number}
+   */
+  projectID: string | number;
+
+  /**
+   * Bind API primary key ID
+   * @type {string|number}
+   */
+  apiDataID: string | number;
+};
+
 export enum ApiBodyType {
   'Form-data' = 'formData',
   JSON = 'json',

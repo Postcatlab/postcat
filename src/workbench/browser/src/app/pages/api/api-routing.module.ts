@@ -6,6 +6,7 @@ import { ApiDetailComponent } from './detail/api-detail.component';
 import { ApiEditComponent } from './edit/api-edit.component';
 import { ApiOverviewComponent } from './overview/api-overview.component';
 import { ApiTestComponent } from './test/api-test.component';
+import { ApiMockComponent } from './mock/api-mock.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
       {
         path: 'test',
         component: ApiTestComponent,
+      },
+      {
+        path: 'mock',
+        component: ApiMockComponent,
       },
     ],
   },
