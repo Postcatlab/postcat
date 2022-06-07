@@ -11,6 +11,7 @@
 </div>
 
 ![](./wiki/images/preview_1.png)
+![](assets/2022-06-07-19-03-39.png)
 
 [English](wiki/README.en.md)｜简体中文
 
