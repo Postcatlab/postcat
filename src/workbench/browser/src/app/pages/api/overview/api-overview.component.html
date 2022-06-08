@@ -2,16 +2,14 @@
 <div class="overview_container">
   <h1 class="fs20 fwb">概况</h1>
   <nz-divider></nz-divider>
-  <div class="r_row f_js">
-    <div class="card_container">
-      <div class="card_item" *ngFor="let item of overviewList">
-        <nz-card [nzActions]="[card]">
-          <nz-card-meta [nzTitle]="item.title" [nzDescription]="item.desc"></nz-card-meta>
-        </nz-card>
-        <ng-template #card>
-          <i (click)="clickCard(item)" nz-icon [nzType]="item.icon"></i>
-        </ng-template>
-      </div>
+  <section class="grid gap-6 grid-cols-2 xl:grid-cols-3">
+    <div class="card_item" *ngFor="let item of overviewList">
+      <nz-card class="h-full" [nzActions]="[card]" [nzHoverable]="true">
+        <nz-card-meta [nzTitle]="item.title" [nzDescription]="item.desc"></nz-card-meta>
+      </nz-card>
+      <ng-template #card>
+        <i (click)="clickCard(item)" nz-icon [nzType]="item.icon"></i>
+      </ng-template>
     </div>
-  </div>
+  </section>
 </div>
