@@ -122,8 +122,3 @@
       </nz-tabset>
     </nz-collapse-panel>
   </nz-collapse>
-  <!-- mock -->
-  <nz-collapse class="eo_collapse mt40" [nzGhost]="true" *ngIf="electron.isElectron">
-    <p class="api_line">MOCK <a class="text-xs text-blue-500" (click)="openAddMockModal()">+添加</a></p>
-    <eo-api-edit-mock [model]="apiData.mockList"></eo-api-edit-mock>
-  </nz-collapse>

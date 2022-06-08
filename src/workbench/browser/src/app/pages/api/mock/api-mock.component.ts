@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiEditMock, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ActivatedRoute } from '@angular/router';
+import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -12,17 +13,22 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ApiMockComponent implements OnInit {
   isVisible = false;
-  mockUrl = window.eo?.getMockUrl?.();
-  private mocklList: ApiEditMock[] = [];
+  mockUrl = window.eo?.getMockUrl?.() || location.origin;
+  mocklList: ApiMockEntity[] = [];
+  apiData: ApiData;
   mockListColumns = [
     { title: '名称', key: 'name' },
     { title: 'URL', slot: 'url' },
     { title: '', slot: 'action', width: '15%' },
   ];
   /** 当前被编辑的mock */
-  currentEditMock: ApiEditMock;
+  currentEditMock: ApiMockEntity;
   /** 当前被编辑的mock索引 */
   currentEditMockIndex = -1;
+  /** 当前是否处于编辑状态 */
+  get isEdit() {
+    return this.currentEditMock?.uuid;
+  }
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   constructor(private storageService: StorageService, private route: ActivatedRoute) {
@@ -32,76 +38,161 @@ export class ApiMockComponent implements OnInit {
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
   }
 
-  initMockList(apiDataID: number) {
-    this.storageService.run('apiMockLoadAllByApiDataID', [apiDataID], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        if (Array.isArray(result.data) && result.data.length === 0) {
-          const mock = {
-            apiDataID,
-            name: '系统默认期望',
-            projectID: 1,
-            response: '',
-            url: '',
-          };
-          this.storageService.run('mockCreate', [mock], (res: StorageRes) => {
-            if (result.status === StorageResStatus.success) {
-              console.log(res);
-            } else {
-            }
-            this.mocklList = [mock];
-          });
+  async initMockList(apiDataID: number) {
+    const mockRes = await this.getMockByApiDataID(apiDataID);
+    this.apiData = await this.getApiData(apiDataID);
+    console.log('apiDataRes', this.apiData, mockRes);
+    if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
+      const mock = this.createMockObj({ name: '系统默认期望', isDefault: true });
+      await this.createMock(mock);
+      this.mocklList = [mock];
+    } else {
+      console.log('result.data', mockRes);
+      this.mocklList = mockRes;
+    }
+  }
+  getApiUrl() {
+    const url = new URL(this.apiData.uri, this.mockUrl);
+    this.isEdit && url.searchParams.set('mockID', this.currentEditMock.uuid + '');
+    return url.toString();
+  }
+
+  /**
+   * create mock
+   * @param mock
+   * @returns
+   */
+  createMock(mock): Promise<StorageRes> {
+    return new Promise((resolve, reject) => {
+      this.storageService.run('mockCreate', [mock], (res: StorageRes) => {
+        if (res.status === StorageResStatus.success) {
+          resolve(res);
         } else {
-          console.log('result.data', result.data);
-          this.mocklList = result.data;
+          reject(res);
         }
-      }
+      });
+    });
+  }
+  /**
+   * update mock
+   * @param mock
+   * @returns
+   */
+  updateMock(mock, uuid: number) {
+    return new Promise((resolve, reject) => {
+      this.storageService.run('mockUpdate', [mock, uuid], (res: StorageRes) => {
+        if (res.status === StorageResStatus.success) {
+          resolve(res);
+        } else {
+          reject(res);
+        }
+      });
     });
   }
 
-  // getMockByApiDataID() {}
+  /**
+   * remove mock
+   * @param mock
+   * @returns
+   */
+  removeMock(uuid: number) {
+    return new Promise((resolve, reject) => {
+      this.storageService.run('mockRemove', [uuid], (res: StorageRes) => {
+        if (res.status === StorageResStatus.success) {
+          resolve(res);
+        } else {
+          reject(res);
+        }
+      });
+    });
+  }
 
-  // getApiData(id: number) {
-  //   return new Promise((resolve, reject) => {
-  //     this.storageService.run('apiDataLoad', [id], (result: StorageRes) => {
-  //       if (result.status === StorageResStatus.success) {
-  //         resolve(result.data)
-  //       } else {
-  //         reject(result)
-  //       }
-  //     }
-  //   })
-  // }
+  /**
+   * create mock object data
+   * @param options
+   * @returns
+   */
+  createMockObj(options: Record<string, any> = {}) {
+    const { name = '', isDefault = false, ...rest } = options;
+    return {
+      name,
+      url: this.getApiUrl(),
+      apiDataID: this.apiData.uuid,
+      projectID: 1,
+      isDefault,
+      response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
+      ...rest,
+    };
+  }
+  /**
+   * get mock list
+   *
+   * @param apiDataID
+   * @returns
+   */
+  getMockByApiDataID(apiDataID: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storageService.run('apiMockLoadAllByApiDataID', [apiDataID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        } else {
+          reject(result);
+        }
+      });
+    });
+  }
+  /**
+   * get current api data
+   *
+   * @param apiDataID
+   * @returns
+   */
+  getApiData(apiDataID: number): Promise<ApiData> {
+    return new Promise((resolve, reject) => {
+      this.storageService.run('apiDataLoad', [apiDataID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        } else {
+          reject(result);
+        }
+      });
+    });
+  }
 
   rawDataChange() {
     this.rawChange$.next(this.currentEditMock.response);
   }
 
-  handleEditMockItem(index: number) {
-    this.currentEditMock = { ...this.mocklList[index] };
-    this.currentEditMockIndex = index;
-    this.isVisible = true;
-  }
   handleDeleteMockItem(index: number) {
-    this.mocklList.splice(index, 1);
+    const target = this.mocklList.splice(index, 1)[0];
     this.mocklList = [...this.mocklList];
+    this.removeMock(Number(target.uuid));
   }
-  handleSave() {
+  async handleSave() {
     this.isVisible = false;
-    this.currentEditMockIndex === -1
-      ? this.mocklList.push(this.currentEditMock)
-      : (this.mocklList[this.currentEditMockIndex] = this.currentEditMock);
+    this.isEdit
+      ? (this.mocklList[this.currentEditMockIndex] = this.currentEditMock)
+      : this.mocklList.push(this.currentEditMock);
+
     this.mocklList = [...this.mocklList];
+    if (this.isEdit) {
+      await this.updateMock(this.currentEditMock, Number(this.currentEditMock.uuid));
+    } else {
+      const result = await this.createMock(this.currentEditMock);
+      Object.assign(this.currentEditMock, result.data);
+    }
+    this.currentEditMock.url = this.getApiUrl();
   }
   handleCancel() {
     this.isVisible = false;
   }
-  openAddModal() {
-    this.currentEditMockIndex = -1;
+  addOrEditModal(editIndex = -1) {
+    this.currentEditMockIndex = editIndex;
     this.isVisible = true;
-    this.currentEditMock = {
-      url: this.mocklList.at(0).url,
-      name: '',
-      response: '',
-    };
+    if (this.currentEditMockIndex === -1) {
+      this.currentEditMock = this.createMockObj();
+    } else {
+      this.currentEditMock = { ...this.mocklList[this.currentEditMockIndex] };
+    }
   }
 }

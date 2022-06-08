@@ -239,10 +239,11 @@ export interface ApiTestHistory extends ApiTestHistoryFrame, StorageModel {
   apiDataID: string | number;
 }
 
-export type ApiMockEntity = {
+export type ApiMockEntity = StorageModel & {
   /** mock name */
   name: string;
-
+  /** mock url */
+  url: string;
   /**
    * Project primary key ID
    * @type {string|number}

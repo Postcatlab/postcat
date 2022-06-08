@@ -30,6 +30,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { BaseUrlInterceptor, HttpStorage } from '../../shared/services/storage/http/lib';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
@@ -77,6 +78,7 @@ const COMPONENTS = [
     EnvModule,
     NzCardModule,
     NzModalModule,
+    NzPopconfirmModule,
   ],
   declarations: [...COMPONENTS],
   exports: [],

@@ -1,5 +1,5 @@
 <div class="p-[18px]">
-  <button nz-button nzType="primary">添加mock</button>
+  <button nz-button nzType="primary" (click)="addOrEditModal()">添加mock</button>
 
   <div class="mt-[20px]">
     <eo-table [(model)]="mocklList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
@@ -8,7 +8,7 @@
       </ng-template>
       <ng-template cell="action" let-scope="scope" let-index="index">
         <div class="flex justify-evenly">
-          <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="handleEditMockItem(index)">编辑</a>
+          <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="addOrEditModal(index)">编辑</a>
           <a nz-button nzType="link" *ngIf="scope.name || scope.url" nz-popconfirm nzPopconfirmTitle="您确定要删除此mock吗?"
             nzPopconfirmPlacement="topRight" (nzOnConfirm)="handleDeleteMockItem(index)"
             [disabled]="scope.isDefault">删除</a>
@@ -18,7 +18,8 @@
   </div>
 </div>
 
-<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="{{this.currentEditMockIndex === -1 ? '添加' : '编辑' }}mock">
+<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="{{this.currentEditMockIndex === -1 ? '添加' : '编辑' }}mock"
+  (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="flex">
     <div class="main-content">
       <form nz-form nzLayout="vertical">
