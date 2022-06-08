@@ -5,6 +5,7 @@ import { HttpStorage } from './http/lib';
 import { MessageService } from '../../../shared/services/message';
 
 export type DataSourceType = 'local' | 'http';
+export const DATA_SOURCE_TYPE_KEY = 'DATA_SOURCE_TYPE_KEY';
 
 /**
  * @description
@@ -13,7 +14,7 @@ export type DataSourceType = 'local' | 'http';
 @Injectable()
 export class StorageService {
   instance;
-  dataSourceType: DataSourceType = 'http';
+  dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'http';
   constructor(private injector: Injector, private messageService: MessageService) {
     console.log('StorageService init');
     this.setStorage(this.dataSourceType);
@@ -54,6 +55,7 @@ export class StorageService {
         break;
       }
     }
+    localStorage.setItem(DATA_SOURCE_TYPE_KEY, type);
     this.messageService.send({ type: 'onDataSourceChange', data: { ...options, dataSourceType: this.dataSourceType } });
   }
   toggleDataSource(options = {}) {
