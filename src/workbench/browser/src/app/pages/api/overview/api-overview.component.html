@@ -2,7 +2,7 @@
 <div class="overview_container">
   <h1 class="fs20 fwb">概况</h1>
   <nz-divider></nz-divider>
-  <section class="grid gap-6 grid-cols-2 xl:grid-cols-3">
+  <section class="grid gap-8 grid-cols-2 xl:grid-cols-3">
     <div class="card_item" *ngFor="let item of overviewList">
       <nz-card class="h-full" [nzActions]="[card]" [nzHoverable]="true">
         <nz-card-meta [nzTitle]="item.title" [nzDescription]="item.desc"></nz-card-meta>
