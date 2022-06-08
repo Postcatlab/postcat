@@ -412,6 +412,14 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   /**
+   * Load all mock items by apiDataID.
+   * @param apiDataID
+   */
+  apiMockLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
+    return this.loadAllByConditions(this.mock, { apiDataID });
+  }
+
+  /**
    * Load all apiTestHistory items by projectID.
    * @param projectID
    */
@@ -659,5 +667,38 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    */
   projectUpdate(item: Project, uuid: number | string): Observable<object> {
     return this.update(this.project, item, uuid);
+  }
+
+  /**
+   * Create mock item.
+   * @param item
+   */
+  mockCreate(item: ApiMockEntity): Observable<object> {
+    return this.create(this.mock, item);
+  }
+
+  /**
+   * Load mock item.
+   * @param uuid
+   */
+  mockLoad(uuid: number | string): Observable<object> {
+    return this.load(this.mock, uuid);
+  }
+
+  /**
+   * Delete mock item.
+   * @param uuid
+   */
+  mockRemove(uuid: number | string): Observable<object> {
+    return this.remove(this.mock, uuid);
+  }
+
+  /**
+   * Update mock item.
+   * @param item
+   * @param uuid
+   */
+  mockUpdate(item: ApiMockEntity, uuid: number | string): Observable<object> {
+    return this.update(this.mock, item, uuid);
   }
 }

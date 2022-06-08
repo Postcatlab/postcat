@@ -254,6 +254,12 @@ export type ApiMockEntity = {
    * @type {string|number}
    */
   apiDataID: string | number;
+
+  /** Whether it is the system default expectation */
+  isDefault: boolean;
+
+  /** mock response data */
+  response: string;
 };
 
 export enum ApiBodyType {

@@ -186,7 +186,7 @@ export class NavbarComponent implements OnInit {
           alignItems: 'center',
           backgroundColor: 'rgb(255, 219, 7)',
         },
-        nzDuration: 0,
+        nzDuration: 10000,
       });
     }
   }
