@@ -13,4 +13,15 @@ export class ExtensionSelectComponent {
   selectExtension({ key }) {
     this.extensionChange.emit(key);
   }
+
+  parserFile(file) {
+    const reader = new FileReader();
+    reader.readAsText(file, 'UTF-8');
+    reader.onload = (ev) => {
+      const fileString: string = ev.target.result as string;
+      const json = JSON.parse(fileString);
+      console.log(json);
+    };
+    return false;
+  }
 }
