@@ -19,21 +19,21 @@
   </div>
 </ng-container>
 <ng-template #empty>
-  <div class="text mb-4">该功能需要插件支持，请移步至<a class="eo_link" routerLink="/home/extension/list">插件广场</a>下载</div>
+  <div class="text mb-4">
+    该功能需要插件支持，请移步至<a class="eo_link" routerLink="/home/extension/list">插件广场</a>下载
+  </div>
 </ng-template>
 
 <nz-upload
-      *ngIf="!extensionList.length"
-      nzType="drag"
-      nzAction=""
-      [nzBeforeUpload]="parserFile"
-      [nzShowUploadList]="false"
-    >
-      <p class="ant-upload-drag-icon">
-        <i nz-icon nzType="inbox"></i>
-      </p>
-      <p class="ant-upload-text">点击或直接拖拽文件至此区域</p>
-      <p class="ant-upload-hint">
-        仅支持JSON格式的单个文件导入
-      </p>
-    </nz-upload>
+  *ngIf="!extensionList.length"
+  nzType="drag"
+  nzAction=""
+  [nzBeforeUpload]="parserFile"
+  [nzShowUploadList]="false"
+>
+  <p class="ant-upload-drag-icon">
+    <i nz-icon nzType="inbox"></i>
+  </p>
+  <p class="ant-upload-text">点击或直接拖拽文件至此区域</p>
+  <p class="ant-upload-hint">仅支持JSON格式的单个文件导入</p>
+</nz-upload>

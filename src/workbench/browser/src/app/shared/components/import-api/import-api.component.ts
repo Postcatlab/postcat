@@ -8,7 +8,7 @@ import { FeatureType } from '../../types';
 })
 export class ImportApiComponent implements OnInit {
   supportList: Array<FeatureType> = [];
-  importType = 'postman';
+  importType = 'openapi';
   featureMap = window.eo.getFeature('apimanage.import');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {

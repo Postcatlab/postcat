@@ -123,7 +123,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageHandleResult) => {
       const { success, empty } = StorageHandleStatus;
       if ([success, empty].includes(result.status)) {
-        let apiItems = {};
+        const apiItems = {};
         result.data.forEach((item: ApiData) => {
           delete item.updatedAt;
           apiItems[item.uuid] = item;
@@ -161,7 +161,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   restoreExpandStatus() {
-    let key = this.expandKeys.slice(0);
+    const key = this.expandKeys.slice(0);
     this.expandKeys = [];
     this.expandKeys = key;
   }
@@ -172,7 +172,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Expand Select Group
    */
   private expandGroup() {
-    if (!this.route.snapshot.queryParams.uuid) return;
+    if (!this.route.snapshot.queryParams.uuid) {
+      return;
+    }
     this.expandKeys = [
       ...this.expandKeys,
       ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
@@ -214,7 +216,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param event
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
-    let eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
+    const eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
     switch (eventName) {
       case 'clickFolder': {
         event.node.isExpanded = !event.node.isExpanded;
