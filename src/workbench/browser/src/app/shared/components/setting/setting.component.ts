@@ -111,7 +111,10 @@ export class SettingComponent implements OnInit {
           case 'onDataSourceChange': {
             console.log('onDataSourceChange', inArg.data);
             this.dataSourceType = inArg.data.dataSourceType;
-            inArg.data.showWithSetting && this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+            if (inArg.data.showWithSetting) {
+              location.reload();
+              this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+            }
             break;
           }
         }

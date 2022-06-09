@@ -6,12 +6,12 @@ import type { Server } from 'http';
 import type { AddressInfo } from 'net';
 
 const protocolReg = new RegExp('^/(http|https)://');
-
+// 解决对象循环引用问题
 const jsonStringify = (obj) => {
-  var cache = [];
-  var str = JSON.stringify(obj, function (key, value) {
+  let cache = [];
+  const str = JSON.stringify(obj, (key, value) => {
     if (typeof value === 'object' && value !== null) {
-      if (cache.indexOf(value) !== -1) {
+      if (cache.includes(value)) {
         // 移除
         return;
       }
@@ -43,10 +43,9 @@ export class MockServer {
     this.apiProxy = createProxyMiddleware({
       target: 'http://www.example.org',
       changeOrigin: true,
-      // @ts-ignore
-      pathFilter: (path, req) => {
+      pathFilter: (path) => {
         // console.log('pathFilter path', path, path.match('^/(http|https)://'));
-        return path.match('^/(http|https)://');
+        return Boolean(path.match('^/(http|https)://'));
       },
       pathRewrite: (path, req) => {
         // console.log('pathRewrite', path, req.url);
@@ -63,8 +62,8 @@ export class MockServer {
     this.app.all('*', (req, res, next) => {
       if (!protocolReg.test(req.url)) {
         if (req.query.mockID) {
-          this.view.webContents.send('getMockApiList', req.query);
-          ipcMain.once('getMockApiList', function (event, message) {
+          this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+          ipcMain.once('getMockApiList', (event, message) => {
             console.log('getMockApiList message', message);
             const { response = {} } = message;
             res.send(response);

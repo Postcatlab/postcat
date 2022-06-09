@@ -192,6 +192,7 @@ export class NavbarComponent implements OnInit {
   }
 
   showMessage() {
+    location.reload();
     this.messageId ?? this.message.remove(this.messageId);
 
     const message = this.message.create('success', `成功切换到${this.dataSourceText}数据源`);

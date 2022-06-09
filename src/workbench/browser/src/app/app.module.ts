@@ -15,6 +15,7 @@ import { EnvState } from './shared/store/env.state';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { MessageService } from './shared/services/message';
 import { StorageService } from './shared/services/storage/storage.service';
+import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { StorageService } from './shared/services/storage/storage.service';
   providers: [
     MessageService,
     StorageService,
+    HttpStorage,
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),
