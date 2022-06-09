@@ -4,11 +4,11 @@ import { FeatureType } from '../../types';
 
 @Component({
   selector: 'eo-import-api',
-  template: `<extension-select [(extension)]="importType" [extensionList]="supportList"></extension-select>`,
+  template: ` <extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select>`,
 })
 export class ImportApiComponent implements OnInit {
   supportList: Array<FeatureType> = [];
-  importType = 'openapi';
+  currentExtension = '';
   featureMap = window.eo.getFeature('apimanage.import');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
@@ -22,10 +22,10 @@ export class ImportApiComponent implements OnInit {
   submit() {
     // console.log('import');
     // console.log(this.featureMap);
-    const feature = this.featureMap.get('eoapi-import-openapi');
+    const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     // const filename = feature.filename || null;
-    const module = window.eo.loadFeatureModule('eoapi-import-openapi');
+    const module = window.eo.loadFeatureModule(this.currentExtension);
     const data = module[action]();
     alert(JSON.stringify(data));
   }
