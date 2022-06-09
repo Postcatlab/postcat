@@ -10,14 +10,7 @@ export class ThemeService {
   currentTheme = 'classic_forest';
   private ipcRenderer = window.require?.('electron')?.ipcRenderer;
   private themeChanges$ = new ReplaySubject(1);
-  constructor(@Inject(DOCUMENT) private document: Document) {
-    if (this.ipcRenderer) {
-      this.ipcRenderer.on('getMockApiList', (event, message) => {
-        console.log('接收到了哇', event, message);
-        this.ipcRenderer.send('getMockApiList', 12);
-      });
-    }
-  }
+  constructor(@Inject(DOCUMENT) private document: Document) {}
   changeTheme(name?: string): void {
     if (name) {
       this.themeChanges$.next({ name, previous: this.currentTheme });

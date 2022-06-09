@@ -13,7 +13,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
       if (!val.required || !val.name) {
         return acc;
       }
-      return { ...acc, [val.name]: val.value };
+      return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
     }, {});
     Object.keys(restByName).forEach((restName) => {
       result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
@@ -59,7 +59,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
             listDepth: val.listDepth || 0,
             paramKey: val.name,
             paramType: typeMUI[val.type],
-            paramInfo: val.value,
+            paramInfo: val.value === undefined ? val.example : val.value,
           });
         });
         result = listToTreeHasLevel(result, {

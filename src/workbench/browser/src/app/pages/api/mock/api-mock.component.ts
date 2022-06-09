@@ -5,6 +5,8 @@ import { takeUntil, debounceTime } from 'rxjs/operators';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -31,7 +33,7 @@ export class ApiMockComponent implements OnInit {
   }
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private storageService: StorageService, private route: ActivatedRoute) {
+  constructor(private storageService: StorageService, private apiTest: ApiTestService, private route: ActivatedRoute) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});
   }
   ngOnInit() {
@@ -55,11 +57,16 @@ export class ApiMockComponent implements OnInit {
     }
   }
   getApiUrl(apiData?: ApiData) {
-    const url = new URL(this.apiData.uri, this.mockUrl);
+    const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
+    const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
+      base: 'query',
+      replaceType: 'replace',
+    }).url;
+    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'));
     if (apiData || this.isEdit) {
       url.searchParams.set('mockID', (apiData || this.currentEditMock).uuid + '');
     }
-    return url.toString();
+    return decodeURIComponent(url.toString());
   }
 
   /**

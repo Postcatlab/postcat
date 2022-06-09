@@ -181,7 +181,7 @@ export class ApiTestService {
     let search = '';
     result.forEach((val) => {
       if (!val.name || !val.required) return;
-      search += `${val.name}=${val.value}&`;
+      search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
     });
     search = search ? `?${search.slice(0, -1)}` : '';
     url = `${url.split('?')[0]}${search}`;

@@ -5,7 +5,7 @@ import { BrowserView, ipcMain } from 'electron';
 import type { Server } from 'http';
 import type { AddressInfo } from 'net';
 
-const reg = new RegExp('^/(http|https)://');
+const protocolReg = new RegExp('^/(http|https)://');
 
 const jsonStringify = (obj) => {
   var cache = [];
@@ -58,21 +58,26 @@ export class MockServer {
       },
     });
 
+    this.app.use(this.apiProxy);
+
     this.app.all('*', (req, res, next) => {
-      if (!reg.test(req.url)) {
+      if (!protocolReg.test(req.url)) {
         if (req.query.mockID) {
-          this.view.webContents.send('getMockApiList', jsonStringify(req));
+          this.view.webContents.send('getMockApiList', req.query);
           ipcMain.once('getMockApiList', function (event, message) {
             console.log('getMockApiList message', message);
+            const { response = {} } = message;
+            res.send(response);
+            next();
           });
         } else {
-          res.json('缺少mockID');
+          res.send('缺少mockID');
+          next();
         }
+      } else {
+        next();
       }
-      next();
     });
-
-    this.app.use(this.apiProxy);
   }
 
   /**
@@ -88,8 +93,8 @@ export class MockServer {
     return new Promise((resolve, reject) => {
       this.server = this.app
         .listen(_port, () => {
-          const { address, port } = this.server.address() as AddressInfo;
-          this.mockUrl = `http://${address}:${port}`;
+          const { port } = this.server.address() as AddressInfo;
+          this.mockUrl = `http://127.0.0.1:${port}`;
           console.log(`mock服务已启动：${this.mockUrl}`);
           resolve(this.mockUrl);
         })

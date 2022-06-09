@@ -14,6 +14,7 @@ import { EnvState } from './shared/store/env.state';
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
 import { MessageService } from './shared/services/message';
+import { StorageService } from './shared/services/storage/storage.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +30,7 @@ import { MessageService } from './shared/services/message';
   ],
   providers: [
     MessageService,
+    StorageService,
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),

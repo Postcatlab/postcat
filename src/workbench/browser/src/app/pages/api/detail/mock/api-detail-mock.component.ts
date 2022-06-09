@@ -1,5 +1,7 @@
 import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
+import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
@@ -19,7 +21,7 @@ export class ApiDetailMockComponent implements OnChanges {
     { title: '名称', key: 'name' },
     { title: 'URL', slot: 'url' },
   ];
-  constructor(private storageService: StorageService, private route: ActivatedRoute) {}
+  constructor(private storageService: StorageService, private apiTest: ApiTestService, private route: ActivatedRoute) {}
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     const { apiData } = changes;
@@ -41,9 +43,14 @@ export class ApiDetailMockComponent implements OnChanges {
     }
   }
   getApiUrl(uuid?: number) {
-    const url = new URL(this.apiData.uri, this.mockUrl);
+    const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
+    const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
+      base: 'query',
+      replaceType: 'replace',
+    }).url;
+    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'));
     uuid && url.searchParams.set('mockID', uuid + '');
-    return url.toString();
+    return decodeURIComponent(url.toString());
   }
   /**
    * get mock list
