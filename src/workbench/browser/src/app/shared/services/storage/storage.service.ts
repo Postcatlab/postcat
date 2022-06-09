@@ -32,7 +32,6 @@ export class StorageService {
     };
     this.instance[action](...params).subscribe(
       (res: any) => {
-        console.log('res', res, handleResult);
         handleResult.status = res.status;
         handleResult.data = res.data;
         callback(handleResult);

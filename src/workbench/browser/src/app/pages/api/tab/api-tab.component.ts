@@ -27,6 +27,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     test: { path: '/home/api/test', title: '新 API' },
     detail: { path: '/home/api/detail', title: 'API 详情' },
     overview: { path: '/home/api/overview', title: '概况', key: 'overview' },
+    mock: { path: '/home/api/mock', title: 'mock', key: 'mock' },
   };
   MAX_TAB_LIMIT = 15;
 

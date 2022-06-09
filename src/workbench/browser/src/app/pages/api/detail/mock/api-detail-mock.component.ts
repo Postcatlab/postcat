@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -9,10 +9,10 @@ import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../.
   templateUrl: './api-detail-mock.component.html',
   styleUrls: ['./api-detail-mock.component.scss'],
 })
-export class ApiDetailMockComponent implements OnInit {
+export class ApiDetailMockComponent implements OnChanges {
+  @Input() apiData: ApiData;
   mockUrl = window.eo?.getMockUrl?.() || location.origin;
   mocklList: ApiMockEntity[] = [];
-  apiData: ApiData;
   listConf: object = {};
   isVisible = false;
   mockListColumns = [
@@ -21,19 +21,20 @@ export class ApiDetailMockComponent implements OnInit {
   ];
   constructor(private storageService: StorageService, private route: ActivatedRoute) {}
 
-  async ngOnInit(): Promise<void> {
-    console.log('单打独斗');
-    const apiDataID = Number(this.route.snapshot.queryParams.uuid);
-    const mockRes = await this.getMockByApiDataID(apiDataID);
-    this.apiData = await this.getApiData(apiDataID);
-    if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-      const mock = this.createMockObj({ name: '系统默认期望', isDefault: true });
-      const res = await this.createMock(mock);
-      res.data.url = this.getApiUrl(res.data.uuid);
-      this.mocklList = [res.data];
-    } else {
-      console.log('result.data', mockRes);
-      this.mocklList = mockRes;
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    const { apiData } = changes;
+    if (apiData.currentValue?.uuid) {
+      const apiDataID = Number(this.apiData.uuid);
+      console.log('apiDataID', this.apiData, apiDataID);
+      const mockRes = await this.getMockByApiDataID(apiDataID);
+      if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
+        const mock = this.createMockObj({ name: '系统默认期望', isDefault: true });
+        const res = await this.createMock(mock);
+        res.data.url = this.getApiUrl(res.data.uuid);
+        this.mocklList = [res.data];
+      } else {
+        this.mocklList = mockRes;
+      }
     }
   }
   getApiUrl(uuid?: number) {
@@ -92,23 +93,5 @@ export class ApiDetailMockComponent implements OnInit {
       response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
       ...rest,
     };
-  }
-
-  /**
-   * get current api data
-   *
-   * @param apiDataID
-   * @returns
-   */
-  getApiData(apiDataID: number): Promise<ApiData> {
-    return new Promise((resolve, reject) => {
-      this.storageService.run('apiDataLoad', [apiDataID], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          reject(result);
-        }
-      });
-    });
   }
 }
