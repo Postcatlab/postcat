@@ -8,11 +8,18 @@ import { THEMES } from './theme.model';
 })
 export class ThemeService {
   currentTheme = 'classic_forest';
+  private ipcRenderer = window.require?.('electron')?.ipcRenderer;
   private themeChanges$ = new ReplaySubject(1);
   constructor(@Inject(DOCUMENT) private document: Document) {
+    if (this.ipcRenderer) {
+      this.ipcRenderer.on('getMockApiList', (event, message) => {
+        console.log('接收到了哇', event, message);
+        this.ipcRenderer.send('getMockApiList', 12);
+      });
+    }
   }
   changeTheme(name?: string): void {
-    if(name){
+    if (name) {
       this.themeChanges$.next({ name, previous: this.currentTheme });
       this.currentTheme = name;
     }
@@ -21,7 +28,7 @@ export class ThemeService {
   getThemes() {
     return THEMES;
   }
-  onThemeChange = function() {
+  onThemeChange = function () {
     return this.themeChanges$.pipe(share());
   };
 

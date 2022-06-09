@@ -33,7 +33,10 @@ export class ApiDetailMockComponent implements OnChanges {
         res.data.url = this.getApiUrl(res.data.uuid);
         this.mocklList = [res.data];
       } else {
-        this.mocklList = mockRes;
+        this.mocklList = mockRes.map((item) => {
+          item.url = this.getApiUrl(item.uuid);
+          return item;
+        });
       }
     }
   }

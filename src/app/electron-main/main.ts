@@ -52,7 +52,7 @@ function createWindow(): BrowserWindow {
     },
   });
   proxyOpenExternal(win);
-  let loadPage = () => {
+  let loadPage = async () => {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
@@ -66,6 +66,8 @@ function createWindow(): BrowserWindow {
     UnitWorkerModule.setup({
       view: win,
     });
+    // 启动mock服务
+    await mockServer.start(win as any);
   };
   win.webContents.on('did-fail-load', (event, errorCode) => {
     console.error('did-fail-load', errorCode);
@@ -94,8 +96,6 @@ try {
   app.on('ready', async () => {
     setTimeout(createWindow, 400);
     eoUpdater.check();
-    // 启动mock服务
-    await mockServer.start();
   });
   //!TODO only api manage app need this
   // setupUnit(subView.appView);
@@ -213,20 +213,10 @@ try {
       returnValue = configuration.getModuleSettings(arg.data.moduleID);
     } else if (arg.action === 'getSidePosition') {
       returnValue = subView.appView?.sidePosition;
-      // 注册单个mock路由
-    } else if (arg.action === 'registerMockRoute') {
-      const { method, path, data } = arg.data;
-      returnValue = mockServer.registerRoute(method, path, data);
-      // 注销mock路由
-    } else if (arg.action === 'unRegisterMockRoute') {
-      const { method, path } = arg.data;
-      returnValue = mockServer.unRegisterRoute(method, path);
       // 获取mock服务地址
     } else if (arg.action === 'getMockUrl') {
       returnValue = mockServer.getMockUrl();
       // 重置并初始化mock路由
-    } else if (arg.action === 'resetAndInitRoutes') {
-      returnValue = mockServer.resetAndInitRoutes();
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else {

@@ -48,12 +48,17 @@ export class ApiMockComponent implements OnInit {
       this.mocklList = [mock];
     } else {
       console.log('result.data', mockRes);
-      this.mocklList = mockRes;
+      this.mocklList = mockRes.map((item) => {
+        item.url = this.getApiUrl(item);
+        return item;
+      });
     }
   }
-  getApiUrl() {
+  getApiUrl(apiData?: ApiData) {
     const url = new URL(this.apiData.uri, this.mockUrl);
-    this.isEdit && url.searchParams.set('mockID', this.currentEditMock.uuid + '');
+    if (apiData || this.isEdit) {
+      url.searchParams.set('mockID', (apiData || this.currentEditMock).uuid + '');
+    }
     return url.toString();
   }
 
