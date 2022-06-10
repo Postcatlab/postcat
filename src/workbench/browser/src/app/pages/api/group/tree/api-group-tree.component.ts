@@ -198,6 +198,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             this.buildGroupTreeData();
             break;
           }
+          case 'importSuccess': {
+            console.log('importSuccess', inArg);
+          }
         }
       });
   }

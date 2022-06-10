@@ -4,6 +4,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { StorageService } from '../../../shared/services/storage';
 import { FeatureType } from '../../types';
 import { parserProperties, getDefaultValue } from '../../../utils';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 
 @Component({
   selector: 'eo-import-api',
@@ -23,7 +24,11 @@ export class ImportApiComponent implements OnInit {
   optionList = [];
   uploadData = null;
   featureMap = window.eo.getFeature('apimanage.import');
-  constructor(private storage: StorageService, private message: EoMessageService) {}
+  constructor(
+    private storage: StorageService,
+    private message: EoMessageService,
+    private messageService: MessageService
+  ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
@@ -66,6 +71,10 @@ export class ImportApiComponent implements OnInit {
     //   console.log('=!!>', result);
     // });
     this.message.success('导入成功');
+    this.messageService.send({
+      type: 'importSuccess',
+      data: JSON.stringify(data),
+    });
     console.log(JSON.stringify(data));
   }
 }
