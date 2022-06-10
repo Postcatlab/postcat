@@ -1,4 +1,6 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
+import { parserJsonFile } from '../../../utils';
 
 type optionType = {
   label: string;
@@ -9,45 +11,34 @@ type optionType = {
   templateUrl: './extension-select.component.html',
   styleUrls: ['./extension-select.component.scss'],
 })
-export class ExtensionSelectComponent implements OnInit {
+export class ExtensionSelectComponent {
   @Input() extensionList: any = [];
   @Input() extension = '';
+  @Input() allowDrag = false;
+  @Input() currentOption = '';
+  @Input() optionList: optionType[] = [];
   @Output() extensionChange = new EventEmitter<string>();
-
-  // * select the first in init
-  radioValue = '';
-  optionList: optionType[] = [];
-
-  ngOnInit() {
-    const [target] = this.extensionList;
-    Promise.resolve().then(() => {
-      this.selectExtension(target);
-    });
-  }
-
-  getDefaultValue(list: any[], key) {
-    if (list.length === 0) {
-      return '';
-    }
-    const [target] = list.filter((it) => it.default);
-    return target[key] || '';
-  }
+  @Output() currentOptionChange = new EventEmitter<string>();
+  @Output() uploadChange = new EventEmitter<any>();
 
   selectExtension({ key, properties }) {
     this.extensionChange.emit(key);
+    if (!properties) {
+      return;
+    }
     // * update optionList
-    this.optionList = Object.keys(properties).map((it) => ({ value: it, ...properties[it] }));
-    this.radioValue = this.getDefaultValue(this.optionList, 'value');
+    this.currentOptionChange.emit(this.currentOption);
   }
 
-  parserFile(file) {
-    const reader = new FileReader();
-    reader.readAsText(file, 'UTF-8');
-    reader.onload = (ev) => {
-      const fileString: string = ev.target.result as string;
-      const json = JSON.parse(fileString);
-      console.log(json);
-    };
-    return false;
+  selectOption(data) {
+    this.currentOptionChange.emit(this.currentOption);
   }
+
+  parserFile = (file) =>
+    new Observable((observer: Observer<boolean>) => {
+      parserJsonFile(file).then((result) => {
+        this.uploadChange.emit(result);
+        observer.complete();
+      });
+    });
 }

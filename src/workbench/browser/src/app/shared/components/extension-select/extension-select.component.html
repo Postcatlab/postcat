@@ -27,14 +27,14 @@
 </ng-template>
 
 <div class="py-2 my-2 border-y-2 border-dotted" *ngIf="optionList.length">
-  <nz-radio-group [(ngModel)]="radioValue" class="w-full">
+  <nz-radio-group [ngModel]="currentOption" (ngModelChange)="selectOption($event)" class="w-full">
     <div class="grid gap-2 grid-cols-3">
       <label class="text" nz-radio [nzValue]="item.value" *ngFor="let item of optionList">{{ item.label }}</label>
     </div>
   </nz-radio-group>
 </div>
 
-<div class="mt-4">
+<div class="mt-4" *ngIf="allowDrag">
   <nz-upload *ngIf="extensionList.length" nzType="drag" [nzBeforeUpload]="parserFile" [nzShowUploadList]="false">
     <p class="ant-upload-drag-icon">
       <i nz-icon nzType="inbox"></i>
