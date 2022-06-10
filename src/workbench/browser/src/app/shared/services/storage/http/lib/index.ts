@@ -2,7 +2,16 @@ import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpR
 import { Injectable } from '@angular/core';
 import { env } from 'process';
 import { Observable, map, filter } from 'rxjs';
-import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, StorageItem } from '../../index.model';
+import {
+  Project,
+  Environment,
+  Group,
+  ApiData,
+  ApiTestHistory,
+  StorageInterface,
+  StorageItem,
+  ApiMockEntity,
+} from '../../index.model';
 // implements StorageInterface
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
@@ -117,5 +126,20 @@ export class HttpStorage implements StorageInterface {
   apiTestHistoryLoadAllByProjectID: (projectID: number | string) => Observable<object>;
   apiTestHistoryLoadAllByApiDataID(apiDataID: number | string) {
     return this.http.get(`/api_test_history?apiID=${apiDataID}`) as Observable<object>;
+  }
+  mockCreate(item: ApiMockEntity) {
+    return this.http.post('/mock', item) as Observable<object>;
+  }
+  mockLoad(uuid: number | string): Observable<object> {
+    return this.http.get(`/mock/${uuid}`) as Observable<object>;
+  }
+  mockRemove(uuid: number | string): Observable<object> {
+    return this.http.delete(`/mock/${uuid}`);
+  }
+  mockUpdate(item: ApiMockEntity, uuid: number | string): Observable<object> {
+    return this.http.put(`/mock/${uuid}`, item);
+  }
+  apiMockLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
+    return this.http.get(`/mock/list?apiDataID=${apiDataID}`);
   }
 }

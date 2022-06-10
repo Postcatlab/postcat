@@ -8,7 +8,6 @@ import { THEMES } from './theme.model';
 })
 export class ThemeService {
   currentTheme = 'classic_forest';
-  private ipcRenderer = window.require?.('electron')?.ipcRenderer;
   private themeChanges$ = new ReplaySubject(1);
   constructor(@Inject(DOCUMENT) private document: Document) {}
   changeTheme(name?: string): void {
