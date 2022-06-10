@@ -14,6 +14,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
 import { tree2obj } from '../../../../utils/tree/tree.utils';
+import { Storage } from 'eo/platform/browser/IndexedDB/lib/index';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -66,7 +67,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private messageService: MessageService,
     private storage: StorageService,
-    public electron: ElectronService
+    public electron: ElectronService,
+    public storageInstance: Storage
   ) {}
   ngOnInit(): void {
     this.buildGroupTreeData();
@@ -180,6 +182,33 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
     ];
   }
+  // 重新构建整个group
+  async rebuildGroupTree(result) {
+    this.storageInstance.apiData.clear();
+    this.storageInstance.group.clear();
+    // @ts-ignore
+    await this.storageInstance.apiData.bulkAdd(result);
+    const apiItems = {};
+    this.treeItems = [];
+    result.forEach((item: ApiData) => {
+      delete item.updatedAt;
+      apiItems[item.uuid] = item;
+      this.treeItems.push({
+        title: item.name,
+        key: item.uuid.toString(),
+        weight: item.weight || 0,
+        parentID: item.groupID ? `group-${item.groupID}` : '0',
+        method: item.method,
+        isLeaf: true,
+      });
+    });
+    this.apiDataItems = apiItems;
+    this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+    this.setSelectedKeys();
+    this.generateGroupTreeData();
+    this.restoreExpandStatus();
+  }
+
   /**
    * Watch  apiData change event.
    */
@@ -200,6 +229,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           }
           case 'importSuccess': {
             console.log('importSuccess', inArg);
+            this.rebuildGroupTree(require('./tepl.json'));
           }
         }
       });

@@ -35,6 +35,8 @@ import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
+import { Storage } from 'eo/platform/browser/IndexedDB/lib/index';
+
 const COMPONENTS = [
   ApiComponent,
   ApiGroupEditComponent,
@@ -73,6 +75,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [ElectronService, MessageService, ApiService, StorageService],
+  providers: [ElectronService, MessageService, ApiService, StorageService, Storage],
 })
 export class ApiModule {}
