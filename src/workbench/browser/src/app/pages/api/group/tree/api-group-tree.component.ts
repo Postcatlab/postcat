@@ -228,8 +228,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             break;
           }
           case 'importSuccess': {
-            console.log('importSuccess', inArg);
-            this.rebuildGroupTree(require('./tepl.json'));
+            const { apiData } = JSON.parse(inArg.data);
+            this.rebuildGroupTree(apiData);
           }
         }
       });
