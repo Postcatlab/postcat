@@ -69,7 +69,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     ];
     this.storage.run('groupLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        result.data.forEach((item: Group) => {
+        [].concat(result.data).forEach((item: Group) => {
           delete item.updatedAt;
           treeItems.push({
             title: item.name,

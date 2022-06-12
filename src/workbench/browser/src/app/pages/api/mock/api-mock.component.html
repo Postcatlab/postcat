@@ -32,7 +32,7 @@
         <nz-form-item>
           <nz-form-label nzFor="currentEditMock.response">返回值</nz-form-label>
           <nz-form-control>
-            <eo-editor [(code)]="currentEditMock.response" (codeChange)="rawDataChange()"
+            <eo-editor [(code)]="responseStr" (codeChange)="rawDataChange()"
               [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"></eo-editor>
           </nz-form-control>
         </nz-form-item>

@@ -31,6 +31,14 @@ export class ApiMockComponent implements OnInit {
   get isEdit() {
     return this.currentEditMock?.uuid;
   }
+  /** 响应内容 */
+  get responseStr() {
+    const response = this.currentEditMock.response;
+    return typeof response === 'string' ? response : JSON.stringify(response, null, 2);
+  }
+  set responseStr(val) {
+    this.currentEditMock.response = JSON.parse(val);
+  }
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   constructor(private storageService: StorageService, private apiTest: ApiTestService, private route: ActivatedRoute) {

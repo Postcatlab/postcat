@@ -137,7 +137,7 @@ export class ApiTestHistoryComponent implements OnInit {
   private getList() {
     this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        result.data.forEach((val: any) => {
+        [].concat(result.data).forEach((val: any) => {
           this.parseItem(val);
         });
         this.model = result.data || [];

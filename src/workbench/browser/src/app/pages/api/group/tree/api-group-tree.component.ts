@@ -119,7 +119,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       const { success, empty } = StorageResStatus;
       if ([success, empty].includes(result.status)) {
         let apiItems = {};
-        result.data.forEach((item: ApiData) => {
+        [].concat(result.data).forEach((item: ApiData) => {
           delete item.updatedAt;
           apiItems[item.uuid] = item;
           this.treeItems.push({
