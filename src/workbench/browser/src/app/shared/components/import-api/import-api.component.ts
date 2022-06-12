@@ -52,7 +52,7 @@ export class ImportApiComponent implements OnInit {
   uploadChange(data) {
     this.uploadData = data;
   }
-  async submit() {
+  async submit(callback) {
     const [eoapiData, err]: any = await this.getEoapiData();
     if (err) {
       this.message.error('获取本地数据失败');
@@ -70,11 +70,11 @@ export class ImportApiComponent implements OnInit {
     // this.storage.run('apiDataBulkRemove', [[60, 61]], (result: StorageHandleResult) => {
     //   console.log('=!!>', result);
     // });
-    this.message.success('导入成功');
     this.messageService.send({
       type: 'importSuccess',
       data: JSON.stringify(data),
     });
     console.log(JSON.stringify(data));
+    callback(true);
   }
 }
