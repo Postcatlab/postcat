@@ -1,9 +1,11 @@
 import express from 'express';
+import type { Response } from 'express';
 import portfinder from 'portfinder';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { BrowserView, ipcMain } from 'electron';
 import type { Server } from 'http';
 import type { AddressInfo } from 'net';
+import { Configuration } from 'eo/platform/node/configuration/lib';
 
 const protocolReg = new RegExp('^/(http|https)://');
 // 解决对象循环引用问题
@@ -27,6 +29,7 @@ export class MockServer {
   private app: ReturnType<typeof express>;
   private server: Server;
   view: BrowserView;
+  private configuration = new Configuration();
   private apiProxy: ReturnType<typeof createProxyMiddleware>;
   /** mock服务地址 */
   private mockUrl = '';
@@ -61,16 +64,23 @@ export class MockServer {
 
     this.app.all('*', (req, res, next) => {
       if (!protocolReg.test(req.url)) {
-        if (req.query.mockID) {
+        // 匹配请求方式
+        const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
+        if (req.query.mockID || isMatchType) {
           this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
           ipcMain.once('getMockApiList', (event, message) => {
             console.log('getMockApiList message', message);
-            const { response = {} } = message;
-            res.send(response);
+            const { response = {}, statusCode = 200 } = message;
+            res.statusCode = statusCode;
+            if (res.statusCode === 404) {
+              this.send404(res, isMatchType);
+            } else {
+              res.send(response);
+            }
             next();
           });
         } else {
-          res.send('缺少mockID');
+          this.send404(res, isMatchType);
           next();
         }
       } else {
@@ -117,5 +127,19 @@ export class MockServer {
    */
   getMockUrl() {
     return this.mockUrl;
+  }
+
+  /**
+   * 响应404
+   */
+  send404(res: Response, isMatchType = false) {
+    res.statusCode = 404;
+    res.send({
+      code: 404,
+      message: '没有该API或缺少mockID',
+      tips: isMatchType
+        ? '未匹配到文档中的API，请检查请求方式和请求URL是否正确'
+        : '当前未开启匹配请求方式, 开启后，系统会匹配和 API 文档请求方式（GET、POST...）一致的 Mock',
+    });
   }
 }

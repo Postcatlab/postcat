@@ -256,8 +256,8 @@ export type ApiMockEntity = StorageModel & {
    */
   apiDataID: string | number;
 
-  /** Whether it is the system default expectation */
-  isDefault: boolean;
+  /** 0 is system default mock; 1 is user custom mock */
+  createType: 0 | 1;
 
   /** mock response data */
   response: string;
@@ -485,8 +485,8 @@ export type ApiEditMock = {
   url: string;
   /** mock返回值 */
   response: string;
-  /** 是否系统默认mock */
-  isDefault?: boolean;
+  /** 0 is system default mock; 1 is user custom mock */
+  createType: 0 | 1;
 };
 
 export interface BasiApiEditParams {

@@ -68,7 +68,7 @@ export class SettingComponent implements OnInit {
   /** 当前配置项 */
   currentConfiguration = [];
   isVisible = false;
-  _isShowModal = false;
+  $isShowModal = false;
   /** 所有配置 */
   settings = {};
   /** 本地配置 */
@@ -80,11 +80,11 @@ export class SettingComponent implements OnInit {
   remoteServerUrl = '';
 
   get isShowModal() {
-    return this._isShowModal;
+    return this.$isShowModal;
   }
 
   set isShowModal(val) {
-    this._isShowModal = val;
+    this.$isShowModal = val;
     if (val) {
       this.init();
       this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
@@ -141,7 +141,7 @@ export class SettingComponent implements OnInit {
       if (result.status < 200 || result.status > 300) {
         throw result;
       }
-      await result.json();
+      // await result.json();
       if (remoteUrl !== this.remoteServerUrl) {
         this.message.create('success', '远程服务器地址设置成功');
       }
@@ -157,6 +157,7 @@ export class SettingComponent implements OnInit {
 
   /**
    * 设置数据
+   *
    * @param properties
    */
   private setSettingsModel(properties, controls) {
@@ -193,6 +194,7 @@ export class SettingComponent implements OnInit {
 
   /**
    * 根据key路径获取对应的配置的值
+   *
    * @param key
    * @returns
    */
@@ -201,6 +203,7 @@ export class SettingComponent implements OnInit {
   }
   /**
    * 获取模块的标题
+   *
    * @param module
    * @returns
    */
@@ -220,7 +223,9 @@ export class SettingComponent implements OnInit {
    * 解析所有模块的配置信息
    */
   private init() {
-    if (!window.eo && !window.eo?.getFeature) return;
+    if (!window.eo && !window.eo?.getFeature) {
+      return;
+    }
     this.isVisible = true;
     this.settings = {};
     this.nestedSettings = {};
@@ -233,22 +238,24 @@ export class SettingComponent implements OnInit {
     const controls = {};
     // 所有设置
     const allSettings = cloneDeep([
-      eoapiSettings['Eoapi-Common'],
-      eoapiSettings['Eoapi-theme'],
-      eoapiSettings['Eoapi-Extensions'],
-      // eoapiSettings['Eoapi-Features'],
-      eoapiSettings['Eoapi-about'],
+      eoapiSettings['eoapi-common'],
+      eoapiSettings['eoapi-theme'],
+      eoapiSettings['eoapi-extensions'],
+      eoapiSettings['eoapi-features'],
+      eoapiSettings['eoapi-about'],
     ]);
     // 所有配置
     const allConfiguration = allSettings.map((n) => {
       const configuration = n.features?.configuration || n.contributes?.configuration;
-      if (!Array.isArray(configuration)) {
+      if (Array.isArray(configuration)) {
+        configuration.forEach((m) => (m.moduleID ??= n.moduleID));
+      } else {
         configuration.moduleID ??= n.moduleID;
       }
       return configuration;
     });
     // 第三方扩展
-    const extensionsModule = allSettings.find((n) => n.moduleID === 'Eoapi-Extensions');
+    const extensionsModule = allSettings.find((n) => n.moduleID === 'eoapi-extensions');
     extensitonConfigurations.forEach((item) => {
       const configuration = item?.features?.configuration || item?.contributes?.configuration;
       if (configuration) {

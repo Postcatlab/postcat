@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "Eoapi-Features",
+  "name": "eoapi-features",
   "version": "0.0.1",
   "moduleName": "功能",
-  "moduleID": "Eoapi-Features",
+  "moduleID": "eoapi-features",
   "author": "eoapi",
   "publisher": "eoapi",
   "features": {
@@ -13,7 +13,7 @@
         "title": "API测试",
         "order": 1,
         "properties": {
-          "features.remoteServer.redirctUrl": {
+          "api.test": {
             "type": "boolean",
             "default": false,
             "label": "自动重定向",
@@ -23,10 +23,23 @@
       },
       {
         "type": "object",
-        "title": "插件",
+        "title": "Mock",
+        "order": 1,
+        "properties": {
+          "mock.matchType": {
+            "type": "boolean",
+            "default": false,
+            "label": "匹配请求方式",
+            "description": " 开启后，系统会匹配和 API 文档请求方式（GET、POST...）一致的 Mock"
+          }
+        }
+      },
+      {
+        "type": "object",
+        "title": "扩展",
         "order": 2,
         "properties": {
-          "features.remoteServer.autoUpdate": {
+          "extension.autoupdate": {
             "type": "boolean",
             "default": true,
             "label": "自动更新",

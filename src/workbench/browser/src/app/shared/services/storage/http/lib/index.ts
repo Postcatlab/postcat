@@ -16,7 +16,8 @@ import {
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const url = 'https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925';
+    const url = window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url');
+    // 'https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925';
     req = req.clone({
       url: url + req.url,
     });

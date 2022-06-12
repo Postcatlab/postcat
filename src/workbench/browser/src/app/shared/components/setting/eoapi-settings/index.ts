@@ -8,15 +8,15 @@ export type eoapiSettingsKey = keyof typeof eoapiSettings;
 
 export const eoapiSettings = {
   /** 通用设置 */
-  'Eoapi-Common': commonSettings,
+  'eoapi-common': commonSettings,
   /** 功能设置 */
-  'Eoapi-Extensions': extensitonSettings,
+  'eoapi-extensions': extensitonSettings,
   /** 扩展配置 */
-  'Eoapi-Features': featureSettings,
+  'eoapi-features': featureSettings,
   /** 主题配置 */
-  'Eoapi-theme': themeSettings,
+  'eoapi-theme': themeSettings,
   /** 关于 */
-  'Eoapi-about': about,
+  'eoapi-about': about,
 } as const;
 
 export default eoapiSettings;

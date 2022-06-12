@@ -11,7 +11,7 @@
           <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="addOrEditModal(index)">编辑</a>
           <a nz-button nzType="link" *ngIf="scope.name || scope.url" nz-popconfirm nzPopconfirmTitle="您确定要删除此mock吗?"
             nzPopconfirmPlacement="topRight" (nzOnConfirm)="handleDeleteMockItem(index)"
-            [disabled]="scope.isDefault">删除</a>
+            [disabled]="scope.createType === 0">删除</a>
         </div>
       </ng-template>
     </eo-table>

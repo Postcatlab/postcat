@@ -247,7 +247,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             obs.next(this.resProxy(result));
             obs.complete();
           } else {
-            // obs.error(`Nothing found from table [${table.name}] with id [${uuid}].`);
+            obs.error(`Nothing found from table [${table.name}] with id [${uuid}].`);
           }
         })
         .catch((error) => {
@@ -294,7 +294,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             obs.next(this.resProxy(result));
             obs.complete();
           } else {
-            // obs.error(`Nothing found from table [${table.name}].`);
+            obs.error(`Nothing found from table [${table.name}].`);
           }
         })
         .catch((error) => {

@@ -53,7 +53,7 @@ export class ApiMockComponent implements OnInit {
     this.apiData = await this.getApiData(apiDataID);
     console.log('apiDataRes', this.apiData, mockRes);
     if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-      const mock = this.createMockObj({ name: '系统默认期望', isDefault: true });
+      const mock = this.createMockObj({ name: '系统默认期望', createType: 0 });
       await this.createMock(mock);
       this.mocklList = [mock];
     } else {
@@ -133,13 +133,13 @@ export class ApiMockComponent implements OnInit {
    * @returns
    */
   createMockObj(options: Record<string, any> = {}) {
-    const { name = '', isDefault = false, ...rest } = options;
+    const { name = '', createType = 1, ...rest } = options;
     return {
       name,
       url: this.getApiUrl(),
       apiDataID: this.apiData.uuid,
       projectID: 1,
-      isDefault,
+      createType,
       response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
       ...rest,
     };

@@ -14,7 +14,7 @@ import { EnvState } from './shared/store/env.state';
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
 import { MessageService } from './shared/services/message';
-import { StorageService } from './shared/services/storage/storage.service';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 
 @NgModule({
@@ -31,7 +31,7 @@ import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storag
   ],
   providers: [
     MessageService,
-    StorageService,
+    IndexedDBStorage,
     HttpStorage,
     {
       provide: '$scope',
