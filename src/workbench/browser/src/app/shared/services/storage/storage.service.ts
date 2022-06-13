@@ -30,6 +30,9 @@ export class StorageService {
       data: undefined,
       callback: callback,
     };
+    if(!this.instance[action]){
+      throw Error(`Lack request API: ${action}`)
+    }
     this.instance[action](...params).subscribe(
       (res: any) => {
         handleResult.status = res.status;

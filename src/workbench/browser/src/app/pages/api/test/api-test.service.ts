@@ -282,6 +282,7 @@ export class ApiTestService {
   }
   getTestDataFromApi(inData) {
     let editToTestParams = (arr) => {
+      arr=arr||[];
       arr.forEach((val) => {
         val.value = val.example;
         delete val.example;

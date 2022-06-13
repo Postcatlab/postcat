@@ -7,7 +7,7 @@ const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
 
 export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
-  const formatUri = (uri, rest) => {
+  const formatUri = (uri, rest=[]) => {
     let result = uri;
     const restByName = rest.reduce((acc, val) => {
       if (!val.required || !val.name) {

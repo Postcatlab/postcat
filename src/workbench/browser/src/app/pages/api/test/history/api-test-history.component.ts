@@ -57,7 +57,7 @@ export class ApiTestHistoryComponent implements OnInit {
         this.model = [];
         this.message.success('删除成功');
       } else {
-        this.message.success('删除失败');
+        this.message.error('删除失败');
         console.error(result.data);
       }
     });

@@ -27,7 +27,7 @@ export class BaseUrlInterceptor implements HttpInterceptor {
     });
 
     return next.handle(req).pipe(
-      filter((event) => event instanceof HttpResponse && [200,201].includes(event.status)),
+      filter((event) => event instanceof HttpResponse && [200, 201].includes(event.status)),
       map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data } }))
     );
   }
@@ -85,9 +85,11 @@ export class HttpStorage implements StorageInterface {
   groupBulkCreate: (items: Array<Group>) => Observable<object>;
   groupBulkUpdate: (items: Array<Group>) => Observable<object>;
   groupRemove(uuid: number | string) {
-    return this.http.delete(`/group/${uuid}`) as Observable<object>;
+    return this.http.delete(`/group?uuids=[${uuid}]`) as Observable<object>;
   }
-  groupBulkRemove: (uuids: Array<number | string>) => Observable<object>;
+  groupBulkRemove(uuids: Array<number | string>) {
+      return this.http.delete(`/group?uuids=[${uuids}]`) as Observable<object>;
+  }
   groupLoad: (uuid: number | string) => Observable<object>;
   groupBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   groupLoadAllByProjectID(projectID) {
@@ -103,9 +105,11 @@ export class HttpStorage implements StorageInterface {
   apiDataBulkCreate: (items: Array<ApiData>) => Observable<object>;
   apiDataBulkUpdate: (items: Array<ApiData>) => Observable<object>;
   apiDataRemove(uuid: number | string) {
-    return this.http.delete(`/api_data/${uuid}`) as Observable<object>;
+    return this.http.delete(`/api_data?uuids=[${uuid}]`) as Observable<object>;
   }
-  apiDataBulkRemove: (uuids: Array<number | string>) => Observable<object>;
+  apiDataBulkRemove(uuids: Array<number | string>) {
+    return this.http.delete(`/api_data?uuids=[${uuids}]`) as Observable<object>;
+  }
   apiDataLoad(uuid: number | string) {
     return this.http.get(`/api_data/${uuid}`) as Observable<object>;
   }
@@ -123,14 +127,16 @@ export class HttpStorage implements StorageInterface {
   apiTestHistoryBulkCreate: (items: Array<ApiTestHistory>) => Observable<object>;
   apiTestHistoryBulkUpdate: (items: Array<ApiTestHistory>) => Observable<object>;
   apiTestHistoryRemove(uuid: number | string) {
-    return this.http.delete(`/api_data/${uuid}`) as Observable<object>;
+    return this.http.delete(`/api_test_history?uuids=[${uuid}]`) as Observable<object>;
   }
-  apiTestHistoryBulkRemove: (uuids: Array<number | string>) => Observable<object>;
+  apiTestHistoryBulkRemove(uuids: Array<number | string>) {
+    return this.http.delete(`/api_test_history?uuids=[${uuids}]`) as Observable<object>;
+  }
   apiTestHistoryLoad: (uuid: number | string) => Observable<object>;
   apiTestHistoryBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   apiTestHistoryLoadAllByProjectID: (projectID: number | string) => Observable<object>;
   apiTestHistoryLoadAllByApiDataID(apiDataID: number | string) {
-    return this.http.get(`/api_test_history?apiID=${apiDataID}`) as Observable<object>;
+    return this.http.get(`/api_test_history?apiDataID=${apiDataID}`) as Observable<object>;
   }
   mockCreate(item: ApiMockEntity) {
     return this.http.post('/mock', item) as Observable<object>;
