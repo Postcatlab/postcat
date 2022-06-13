@@ -24,7 +24,7 @@ export class BaseUrlInterceptor implements HttpInterceptor {
     });
 
     return next.handle(req).pipe(
-      filter((event) => event instanceof HttpResponse && event.status === 200),
+      filter((event) => event instanceof HttpResponse && [200,201].includes(event.status)),
       map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data } }))
     );
   }

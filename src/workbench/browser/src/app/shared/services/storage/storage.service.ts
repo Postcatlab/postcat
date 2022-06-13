@@ -34,6 +34,7 @@ export class StorageService {
       (res: any) => {
         handleResult.status = res.status;
         handleResult.data = res.data;
+        console.log(handleResult)
         callback(handleResult);
       },
       (error: any) => {
