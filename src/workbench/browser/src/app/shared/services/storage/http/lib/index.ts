@@ -19,8 +19,8 @@ const protocolReg = new RegExp('^(http|https)://');
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // 'https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925';
-    const { url, token } = window.eo?.getModuleSettings?.('eoapi-common.remoteServer') || {};
+    const defaultUrl = 'https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925';
+    const { url = defaultUrl, token = '' } = window.eo?.getModuleSettings?.('eoapi-common.remoteServer') || {};
     req = req.clone({
       url: protocolReg.test(req.url) ? req.url : url + req.url,
       headers: req.headers.append('x-api-key', token),
