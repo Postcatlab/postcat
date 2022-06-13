@@ -36,12 +36,12 @@ const descriptions: DescriptionsItem[] = [
   },
   {
     id: 'chrome',
-    label: 'Chrome',
+    label: 'Chromium',
     value: '',
   },
   {
     id: 'node',
-    label: 'Node',
+    label: 'Node.js',
     value: '',
   },
   {

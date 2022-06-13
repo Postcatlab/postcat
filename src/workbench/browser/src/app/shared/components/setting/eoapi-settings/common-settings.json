@@ -32,7 +32,7 @@
           "label": "Token",
           "default": "",
           "placeholder": "Token 凭证",
-          "description": "远程服务器Token，配置后才可访问"
+          "description": "远程服务器 Token，配置后才可访问"
         }
       }
     }

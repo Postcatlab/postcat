@@ -16,10 +16,11 @@ import {
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const url = window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url');
     // 'https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925';
+    const url = window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url'),token=window.eo?.getModuleSettings?.('eoapi-common.remoteServer.token');
     req = req.clone({
       url: url + req.url,
+      headers: req.headers.append('x-api-key', token)
     });
 
     return next.handle(req).pipe(

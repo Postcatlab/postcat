@@ -10,14 +10,14 @@
     "configuration": [
       {
         "type": "object",
-        "title": "API测试",
+        "title": "API 测试",
         "order": 1,
         "properties": {
           "api.test": {
             "type": "boolean",
-            "default": false,
+            "default": true,
             "label": "自动重定向",
-            "description": "自动重定向至redirect url"
+            "description": "勾选后自动跟随请求重定向"
           }
         }
       },
