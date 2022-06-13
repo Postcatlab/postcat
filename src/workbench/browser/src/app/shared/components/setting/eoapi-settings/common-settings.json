@@ -30,6 +30,7 @@
         "remoteServer.token": {
           "type": "string",
           "label": "Token",
+          "required": true,
           "default": "",
           "placeholder": "Token 凭证",
           "description": "远程服务器 Token，配置后才可访问"

@@ -29,10 +29,10 @@ export class ApiComponent implements OnInit, OnDestroy {
       routerLink: 'test',
       title: '测试',
     },
-    {
-      routerLink: 'mock',
-      title: '高级Mock',
-    },
+    // {
+    //   routerLink: 'mock',
+    //   title: '高级Mock',
+    // },
   ];
   private destroy$: Subject<void> = new Subject<void>();
 
