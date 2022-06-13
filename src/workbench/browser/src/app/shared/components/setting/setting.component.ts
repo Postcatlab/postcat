@@ -137,6 +137,13 @@ export class SettingComponent implements OnInit {
    */
   async pingRmoteServerUrl() {
     const { url: remoteUrl, token } = this.getConfiguration('eoapi-common.remoteServer');
+    // 是否更新了远程服务地址或token
+    const isUpdateRemoteServerInfo = remoteUrl !== this.remoteServerUrl || token !== this.remoteServerToken;
+    let messageId;
+    if (isUpdateRemoteServerInfo) {
+      messageId = this.message.loading('远程服务器连接中...', { nzDuration: 0 }).messageId;
+    }
+
     try {
       const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
       const response = await fetch(url, {
@@ -150,7 +157,7 @@ export class SettingComponent implements OnInit {
         throw result;
       }
       // await result.json();
-      if (remoteUrl !== this.remoteServerUrl || token !== this.remoteServerToken) {
+      if (isUpdateRemoteServerInfo) {
         this.message.create('success', '远程服务器地址设置成功');
         return Promise.resolve(true);
       }
@@ -162,6 +169,8 @@ export class SettingComponent implements OnInit {
       // 远程服务地址不可用时，回退到上次的地址
       this.settings['eoapi-common.remoteServer.url'] = this.remoteServerUrl;
       this.settings['eoapi-common.remoteServer.token'] = this.remoteServerToken;
+    } finally {
+      setTimeout(() => this.message.remove(messageId), 500);
     }
   }
 
@@ -372,7 +381,9 @@ export class SettingComponent implements OnInit {
           });
         }, 2000);
       }
-    } catch (error) {}
-    this.isShowModal = false;
+    } catch (error) {
+    } finally {
+      this.isShowModal = false;
+    }
   }
 }

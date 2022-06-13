@@ -4,13 +4,8 @@
   <eo-sidebar></eo-sidebar>
   <div class="home fg1">
     <router-outlet *ngIf="!loadedIframe"></router-outlet>
-    <iframe
-    *ngIf="!this.sidebar.currentModule.isOffical"
-    id="app_iframe"
-    frameborder="no"
-    border="0"
-    style="width: calc(100vw - 90px);height: calc(100vh - var(--NAVBAR_HEIGHT) - 4px);"
-  ></iframe>
+    <iframe *ngIf="!this.sidebar.currentModule.isOffical" id="app_iframe" frameborder="no" border="0"
+      style="width: calc(100vw - 90px);height: calc(100vh - var(--NAVBAR_HEIGHT) - 4px);"></iframe>
   </div>
 </div>
 <!-- <eo-toolbar></eo-toolbar> -->
