@@ -23,19 +23,6 @@
       },
       {
         "type": "object",
-        "title": "Mock",
-        "order": 1,
-        "properties": {
-          "mock.matchType": {
-            "type": "boolean",
-            "default": false,
-            "label": "匹配请求方式",
-            "description": " 开启后，系统会匹配和 API 文档请求方式（GET、POST...）一致的 Mock"
-          }
-        }
-      },
-      {
-        "type": "object",
         "title": "扩展",
         "order": 2,
         "properties": {

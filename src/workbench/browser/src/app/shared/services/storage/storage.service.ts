@@ -58,8 +58,9 @@ export class StorageService {
     localStorage.setItem(DATA_SOURCE_TYPE_KEY, type);
     this.messageService.send({ type: 'onDataSourceChange', data: { ...options, dataSourceType: this.dataSourceType } });
   }
-  toggleDataSource(options = {}) {
-    this.dataSourceType = this.dataSourceType === 'http' ? 'local' : 'http';
+  toggleDataSource(options: any = {}) {
+    const { dataSourceType } = options;
+    this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
     this.setStorage(this.dataSourceType, options);
     console.log('this.dataSourceType', this.dataSourceType);
     console.log('this.instance', this.instance);

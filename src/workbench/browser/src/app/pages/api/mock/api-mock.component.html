@@ -1,5 +1,5 @@
 <div class="p-[18px]">
-  <button nz-button nzType="primary" (click)="addOrEditModal()">添加mock</button>
+  <button nz-button nzType="primary" (click)="addOrEditModal()">添加Mock</button>
 
   <div class="mt-[20px]">
     <eo-table [(model)]="mocklList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
@@ -9,7 +9,7 @@
       <ng-template cell="action" let-scope="scope" let-index="index">
         <div class="flex justify-evenly">
           <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="addOrEditModal(index)">编辑</a>
-          <a nz-button nzType="link" *ngIf="scope.name || scope.url" nz-popconfirm nzPopconfirmTitle="您确定要删除此mock吗?"
+          <a nz-button nzType="link" *ngIf="scope.name || scope.url" nz-popconfirm nzPopconfirmTitle="您确定要删除此Mock吗?"
             nzPopconfirmPlacement="topRight" (nzOnConfirm)="handleDeleteMockItem(index)"
             [disabled]="scope.createType === 0">删除</a>
         </div>
@@ -18,13 +18,13 @@
   </div>
 </div>
 
-<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="{{this.currentEditMockIndex === -1 ? '添加' : '编辑' }}mock"
+<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="{{this.currentEditMockIndex === -1 ? '添加' : '编辑' }}Mock"
   (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="flex">
-    <div class="main-content">
+    <div class="w-full main-content">
       <form nz-form nzLayout="vertical">
         <nz-form-item>
-          <nz-form-label nzFor="currentEditMock.name">mock名称</nz-form-label>
+          <nz-form-label nzFor="currentEditMock.name">Mock名称</nz-form-label>
           <nz-form-control>
             <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name" />
           </nz-form-control>

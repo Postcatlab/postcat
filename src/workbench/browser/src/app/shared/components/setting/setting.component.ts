@@ -78,6 +78,8 @@ export class SettingComponent implements OnInit {
   validateForm!: FormGroup;
   /** 远程服务器地址 */
   remoteServerUrl = '';
+  /** 远程服务器token */
+  remoteServerToken = '';
 
   get isShowModal() {
     return this.$isShowModal;
@@ -88,8 +90,7 @@ export class SettingComponent implements OnInit {
     if (val) {
       this.init();
       this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
-    } else {
-      this.pingRmoteServerUrl();
+      this.remoteServerToken = this.settings['eoapi-common.remoteServer.token'];
     }
   }
 
@@ -135,23 +136,32 @@ export class SettingComponent implements OnInit {
    * 测试远程服务器地址是否可用
    */
   async pingRmoteServerUrl() {
-    const remoteUrl = this.settings['eoapi-common.remoteServer.url'];
+    const { url: remoteUrl, token } = this.getConfiguration('eoapi-common.remoteServer');
     try {
-      const result = await fetch(remoteUrl);
-      if (result.status < 200 || result.status > 300) {
+      const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
+      const response = await fetch(url, {
+        headers: {
+          'x-api-key': token,
+        },
+      });
+      const result = await response.json();
+      console.log('result', result);
+      if (result.statusCode !== 200) {
         throw result;
       }
       // await result.json();
-      if (remoteUrl !== this.remoteServerUrl) {
+      if (remoteUrl !== this.remoteServerUrl || token !== this.remoteServerToken) {
         this.message.create('success', '远程服务器地址设置成功');
+        return Promise.resolve(true);
       }
     } catch (error) {
       console.error(error);
-      if (remoteUrl !== this.remoteServerUrl) {
-        this.message.create('error', '远程服务器地址不可用');
-      }
+      // if (remoteUrl !== this.remoteServerUrl) {
+      this.message.create('error', '远程服务器地址/token不可用');
+      // }
       // 远程服务地址不可用时，回退到上次的地址
       this.settings['eoapi-common.remoteServer.url'] = this.remoteServerUrl;
+      this.settings['eoapi-common.remoteServer.token'] = this.remoteServerToken;
     }
   }
 
@@ -329,61 +339,6 @@ export class SettingComponent implements OnInit {
     this.selectModule(this.treeControl.dataNodes.at(0));
   }
 
-  // private init() {
-  //   if (window.eo && window.eo.getFeature) {
-  //     this.isVisible = true;
-  //     this.settings = window.eo.getSettings();
-  //     const featureList = window.eo.getFeature('configuration');
-  //     const controls = {};
-  //     featureList?.forEach((feature: object, key: string) => {
-  //       if (!feature['title'] || !feature['properties'] || typeof feature['properties'] !== 'object') {
-  //         return true;
-  //       }
-  //       if (!this.settings[key] || typeof this.settings[key] !== 'object') {
-  //         this.settings[key] = {};
-  //       }
-  //       const fields = [];
-  //       for (let field_key in feature['properties']) {
-  //         let field = feature['properties'][field_key];
-  //         // 加入允许的type限制
-  //         if (!field['type'] || !field['label']) {
-  //           continue;
-  //         }
-  //         if ('select' === field['type'] && !field['options']) {
-  //           continue;
-  //         }
-  //         const name = key + '_' + field_key;
-  //         field = Object.assign(
-  //           {
-  //             name: name,
-  //             key: field_key,
-  //             required: false,
-  //             default: '',
-  //             description: '',
-  //           },
-  //           field
-  //         );
-  //         fields.push(field);
-  //         if (!this.settings[key][field_key]) {
-  //           this.settings[key][field_key] = field['default'];
-  //         }
-  //         // 可扩展加入更多默认校验
-  //         if (field.required) {
-  //           controls[name] = [null, [Validators.required]];
-  //         } else {
-  //           controls[name] = [null];
-  //         }
-  //       }
-  //       // this.modules.push({
-  //       //   key: key,
-  //       //   title: feature['title'],
-  //       //   fields: fields,
-  //       // });
-  //     });
-  //     this.validateForm = this.fb.group(controls);
-  //   }
-  // }
-
   handleShowModal() {
     this.isShowModal = true;
   }
@@ -405,7 +360,19 @@ export class SettingComponent implements OnInit {
     }
   }
 
-  handleCancel(): void {
+  async handleCancel() {
+    try {
+      const result = await this.pingRmoteServerUrl();
+      if (Object.is(result, true)) {
+        this.message.success('远程数据源连接成功，关闭弹框后将重新刷新界面');
+        setTimeout(() => {
+          this.messageService.send({
+            type: 'switchDataSource',
+            data: { dataSourceType: 'http', showWithSetting: true },
+          });
+        }, 2000);
+      }
+    } catch (error) {}
     this.isShowModal = false;
   }
 }
