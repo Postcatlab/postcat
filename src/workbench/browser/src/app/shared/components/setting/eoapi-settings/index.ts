@@ -11,7 +11,7 @@ export const eoapiSettings = {
   'eoapi-common': commonSettings,
   /** 功能设置 */
   'eoapi-extensions': extensitonSettings,
-  /** 扩展配置 */
+  /** 插件配置 */
   'eoapi-features': featureSettings,
   /** 主题配置 */
   'eoapi-theme': themeSettings,

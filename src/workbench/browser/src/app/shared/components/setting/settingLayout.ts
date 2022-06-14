@@ -14,7 +14,7 @@ export const tocData: TOCEntry<string>[] = [
   },
   {
     id: 'extension',
-    label: '扩展',
+    label: '插件',
     settings: ['extension.*'],
   },
 ];
