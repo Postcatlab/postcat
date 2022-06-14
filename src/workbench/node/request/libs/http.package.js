@@ -7,7 +7,7 @@
     const _LibsEncrypt = require("./encrypt").core;
     global.PROXY_OBJ = {};
     const SOCKET_HANG_UP_TIP_TEXT_OBJ={
-        SAAS_SERVER:"无法访问目标地址，请检查接口是否能被正常访问，如果您使用的是服务器方式测试，请检查测试服务器能否访问目标地址，是否存在网络隔离或防火墙，您可以尝试切换到 PC 客户端。",
+        SAAS_SERVER:"无法访问目标地址，请检查接口是否能被正常访问",
     }
     class mainClass {
         constructor() {}
