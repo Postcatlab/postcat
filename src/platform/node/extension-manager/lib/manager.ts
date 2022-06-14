@@ -5,7 +5,8 @@ import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
 
 // * npm pkg name
-const installExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
+// const installExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
+const installExtension = [{ name: 'eoapi-export-openapi' }];
 
 export class ModuleManager implements ModuleManagerInterface {
   /**
