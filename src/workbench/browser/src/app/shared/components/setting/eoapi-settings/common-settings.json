@@ -25,7 +25,7 @@
           "required": true,
           "default": "https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925",
           "placeholder": "数据源地址",
-          "description": "从远程服务器存取数据，配置后支持多人合作，配置文档请见：远程数据源"
+          "description": "从远程服务器存取数据，配置后支持多人合作，配置文档请见：[远程数据源](https://eoapi.io/docs/storage.html)"
         },
         "remoteServer.token": {
           "type": "string",
