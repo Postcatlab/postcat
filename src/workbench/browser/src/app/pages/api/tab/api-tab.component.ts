@@ -183,8 +183,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param action closeOther|closeAll|closeLeft|closeRight
    */
   oeprateCloseTab(action) {
-    let closeTabs = [...new Array(this.tabSerive.tabs.length).keys()],
-      tmpSelectIndex = 0;
+    let closeTabs = [...new Array(this.tabSerive.tabs.length).keys()];
+    let tmpSelectIndex = 0;
     switch (action) {
       case 'closeOther':
         closeTabs.splice(this.selectedIndex, 1);

@@ -1,6 +1,6 @@
 {
   "appId": ".eolinker.com",
-  "asar": false,
+  "asar": true,
   "directories": {
     "output": "release/"
   },

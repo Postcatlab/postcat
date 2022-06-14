@@ -5,10 +5,11 @@ import * as path from 'path';
 import * as os from 'os';
 import ModuleManager from '../../platform/node/extension-manager/lib/manager';
 import { ModuleManagerInterface } from '../../platform/node/extension-manager';
-import {
-  StorageResStatus,
-  StorageProcessType,
-} from '../../workbench/browser/src/app/shared/services/storage/index.model';
+// TODO 引入问题
+// import {
+//   StorageResStatus,
+//   StorageProcessType,
+// } from '../../workbench/browser/src/app/shared/services/storage/index.model';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
@@ -143,10 +144,10 @@ try {
 
   ipcMain.on('eo-storage', (event, args) => {
     let returnValue: any;
-    if (args.type === StorageProcessType.default || args.type === StorageProcessType.remote) {
+    if (args.type === 'default' || args.type === 'remote') {
       win.webContents.send('eo-storage', args);
       returnValue = null;
-    } else if (args.type === StorageProcessType.sync) {
+    } else if (args.type === 'sync') {
       deleteFile(storageTemp);
       win.webContents.send('eo-storage', args);
       let data = readJson(storageTemp);
@@ -154,7 +155,8 @@ try {
       while (data === null) {
         if (count > 1500) {
           data = {
-            status: StorageResStatus.error,
+            // status: StorageResStatus.error,
+            status: 500,
             data: 'storage sync load error',
           };
           break;
