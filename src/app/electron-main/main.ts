@@ -17,7 +17,7 @@ import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
 import { UnitWorkerModule } from '../../workbench/node/unitWorker';
 import Configuration from '../../platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
-import { MockServer } from 'eo/platform/node/mock-server';
+// import { MockServer } from 'eo/platform/node/mock-server';
 
 let win: BrowserWindow = null;
 export const subView = {
@@ -25,7 +25,7 @@ export const subView = {
   mainView: null,
 };
 const eoUpdater = new EoUpdater();
-const mockServer = new MockServer();
+// const mockServer = new MockServer();
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 // Remote
@@ -68,7 +68,7 @@ function createWindow(): BrowserWindow {
       view: win,
     });
     // 启动mock服务
-    await mockServer.start(win as any);
+    // await mockServer.start(win as any);
   };
   win.webContents.on('did-fail-load', (event, errorCode) => {
     console.error('did-fail-load', errorCode);
@@ -108,7 +108,7 @@ try {
     if (process.platform !== 'darwin') {
       app.quit();
     }
-    mockServer.stop();
+    // mockServer.stop();
   });
 
   app.on('activate', () => {
@@ -217,7 +217,7 @@ try {
       returnValue = subView.appView?.sidePosition;
       // 获取mock服务地址
     } else if (arg.action === 'getMockUrl') {
-      returnValue = mockServer.getMockUrl();
+      // returnValue = mockServer.getMockUrl();
       // 重置并初始化mock路由
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
