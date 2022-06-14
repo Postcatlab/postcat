@@ -9,11 +9,12 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "module": "commonjs",
     "outDir": "./out",
     "rootDir": "./src",
-    "target": "es5",
+    "target": "es6",
     "types": [
       "node"
     ],
@@ -37,8 +38,8 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "**/browser/**/*.ts",
     "**/browser/**/*.js",
+    "**/browser/**/*.ts",
     "out"
   ],
   "angularCompilerOptions": {

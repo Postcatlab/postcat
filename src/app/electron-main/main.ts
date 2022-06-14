@@ -3,17 +3,21 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
-import ModuleManager from 'eo/platform/node/extension-manager/lib/manager';
-import { ModuleManagerInterface } from 'eo/platform/node/extension-manager';
-import { StorageHandleStatus, StorageProcessType } from 'eo/platform/browser/IndexedDB';
-import { processEnv } from 'eo/platform/node/constant';
-import { proxyOpenExternal } from 'eo/shared/common/browserView';
-import { deleteFile, readJson } from 'eo/shared/node/file';
-import { STORAGE_TEMP as storageTemp } from 'eo/shared/common/constant';
-import { UnitWorkerModule } from 'eo/workbench/node/unitWorker';
-import Configuration from 'eo/platform/node/configuration/lib';
+import ModuleManager from '../../platform/node/extension-manager/lib/manager';
+import { ModuleManagerInterface } from '../../platform/node/extension-manager';
+// TODO 引入问题
+// import {
+//   StorageResStatus,
+//   StorageProcessType,
+// } from '../../workbench/browser/src/app/shared/services/storage/index.model';
+import { processEnv } from '../../platform/node/constant';
+import { proxyOpenExternal } from '../../shared/common/browserView';
+import { deleteFile, readJson } from '../../shared/node/file';
+import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
+import { UnitWorkerModule } from '../../workbench/node/unitWorker';
+import Configuration from '../../platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
-import { MockServer } from 'eo/platform/node/mock-server';
+// import { MockServer } from 'eo/platform/node/mock-server';
 
 let win: BrowserWindow = null;
 export const subView = {
@@ -21,7 +25,7 @@ export const subView = {
   mainView: null,
 };
 const eoUpdater = new EoUpdater();
-const mockServer = new MockServer();
+// const mockServer = new MockServer();
 const moduleManager: ModuleManagerInterface = ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 // Remote
@@ -36,8 +40,8 @@ function createWindow(): BrowserWindow {
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
   // Create the browser window.
   win = new BrowserWindow({
-    width: Math.round(size.width * 0.8),
-    height: Math.round(size.height * 0.8),
+    width: Math.round(size.width * 0.85),
+    height: Math.round(size.height * 0.85),
     useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
     frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {
@@ -49,7 +53,7 @@ function createWindow(): BrowserWindow {
     },
   });
   proxyOpenExternal(win);
-  let loadPage = () => {
+  let loadPage = async () => {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
@@ -63,6 +67,8 @@ function createWindow(): BrowserWindow {
     UnitWorkerModule.setup({
       view: win,
     });
+    // 启动mock服务
+    // await mockServer.start(win as any);
   };
   win.webContents.on('did-fail-load', (event, errorCode) => {
     console.error('did-fail-load', errorCode);
@@ -91,8 +97,6 @@ try {
   app.on('ready', async () => {
     setTimeout(createWindow, 400);
     eoUpdater.check();
-    // 启动mock服务
-    await mockServer.start();
   });
   //!TODO only api manage app need this
   // setupUnit(subView.appView);
@@ -104,7 +108,7 @@ try {
     if (process.platform !== 'darwin') {
       app.quit();
     }
-    mockServer.stop();
+    // mockServer.stop();
   });
 
   app.on('activate', () => {
@@ -140,10 +144,10 @@ try {
 
   ipcMain.on('eo-storage', (event, args) => {
     let returnValue: any;
-    if (args.type === StorageProcessType.default || args.type === StorageProcessType.remote) {
+    if (args.type === 'default' || args.type === 'remote') {
       win.webContents.send('eo-storage', args);
       returnValue = null;
-    } else if (args.type === StorageProcessType.sync) {
+    } else if (args.type === 'sync') {
       deleteFile(storageTemp);
       win.webContents.send('eo-storage', args);
       let data = readJson(storageTemp);
@@ -151,7 +155,8 @@ try {
       while (data === null) {
         if (count > 1500) {
           data = {
-            status: StorageHandleStatus.error,
+            // status: StorageResStatus.error,
+            status: 500,
             data: 'storage sync load error',
           };
           break;
@@ -210,26 +215,24 @@ try {
       returnValue = configuration.getModuleSettings(arg.data.moduleID);
     } else if (arg.action === 'getSidePosition') {
       returnValue = subView.appView?.sidePosition;
-      // 注册单个mock路由
-    } else if (arg.action === 'registerMockRoute') {
-      const { method, path, data } = arg.data;
-      returnValue = mockServer.registerRoute(method, path, data);
-      // 注销mock路由
-    } else if (arg.action === 'unRegisterMockRoute') {
-      const { method, path } = arg.data;
-      returnValue = mockServer.unRegisterRoute(method, path);
       // 获取mock服务地址
     } else if (arg.action === 'getMockUrl') {
-      returnValue = mockServer.getMockUrl();
+      // returnValue = mockServer.getMockUrl();
       // 重置并初始化mock路由
-    } else if (arg.action === 'resetAndInitRoutes') {
-      returnValue = mockServer.resetAndInitRoutes();
     } else if (arg.action === 'hook') {
       returnValue = 'hook返回';
     } else {
       returnValue = 'Invalid data';
     }
     event.returnValue = returnValue;
+  });
+  ipcMain.on('get-system-info', (event) => {
+    const systemInfo = {
+      homeDir: path.dirname(app.getPath('exe')),
+      ...process.versions,
+      os: `${os.type()} ${os.arch()} ${os.release()}`,
+    };
+    event.returnValue = systemInfo;
   });
 } catch (e) {
   // Catch Error

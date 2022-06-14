@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { HttpClientModule } from '@angular/common/http';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiEditModule } from './edit/api-edit.module';
 import { ApiDetailModule } from './detail/api-detail.module';
@@ -12,6 +14,7 @@ import { ApiComponent } from './api.component';
 import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';
 import { ExportApiComponent } from '../../shared/components/export-api/export-api.component';
 import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.component';
+
 import { ImportApiComponent } from '../../shared/components/import-api/import-api.component';
 import { ExtensionSelectComponent } from '../../shared/components/extension-select/extension-select.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
@@ -27,29 +30,35 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
-import { MessageService } from '../../shared/services/message';
+import { BaseUrlInterceptor, HttpStorage } from '../../shared/services/storage/http/lib';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
-import { Storage } from 'eo/platform/browser/IndexedDB/lib/index';
+import { ApiMockComponent } from './mock/api-mock.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 
 const COMPONENTS = [
   ApiComponent,
   ApiGroupEditComponent,
   ApiGroupTreeComponent,
-  ApiTabComponent,
-  ApiOverviewComponent,
   ExportApiComponent,
   SyncApiComponent,
+  ApiTabComponent,
+  ApiOverviewComponent,
   ImportApiComponent,
   ExtensionSelectComponent,
+  ApiMockComponent,
 ];
 @NgModule({
   imports: [
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
@@ -72,9 +81,18 @@ const COMPONENTS = [
     EouiModule,
     EnvModule,
     NzCardModule,
+    NzModalModule,
+    NzPopconfirmModule,
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [ElectronService, MessageService, ApiService, StorageService, Storage],
+  providers: [
+    ElectronService,
+    ApiService,
+    StorageService,
+    HttpStorage,
+    IndexedDBStorage,
+    { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
+  ],
 })
 export class ApiModule {}

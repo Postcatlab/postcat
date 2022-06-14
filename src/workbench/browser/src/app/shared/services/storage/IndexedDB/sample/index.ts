@@ -1,4 +1,4 @@
-import { ApiData } from '../types';
+import { ApiData } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [
   {

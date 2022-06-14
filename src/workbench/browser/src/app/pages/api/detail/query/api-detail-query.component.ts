@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ApiEditQuery } from 'eo/platform/browser/IndexedDB';
+import { ApiEditQuery } from '../../../../shared/services/storage/index.model';
 import { ApiDetailService } from '../api-detail.service';
 
 @Component({

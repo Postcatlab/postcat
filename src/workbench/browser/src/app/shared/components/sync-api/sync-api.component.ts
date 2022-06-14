@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
+import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
@@ -35,8 +35,8 @@ export class SyncApiComponent implements OnInit {
       'eoapi-feature-push-eolink.eolink.remoteServer'
     );
     if (module && module[action] && typeof module[action] === 'function') {
-      this.storage.run('projectExport', [], async (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('projectExport', [], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = await module[action](result.data, {

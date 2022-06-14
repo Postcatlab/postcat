@@ -92,11 +92,11 @@ export class Configuration implements ConfigurationInterface {
    * @param section
    * @returns
    */
-  getModuleSettings(section?: string): ConfigurationValueInterface {
+  getModuleSettings<T = any>(section?: string): T {
     const localSettings = this.getSettings();
     localSettings.nestedSettings ??= {};
     if (section) {
-      return section.split('.').reduce((p, k) => p[k], localSettings.nestedSettings);
+      return section.split('.')?.reduce((p, k) => p?.[k], localSettings.nestedSettings);
     }
     return localSettings.nestedSettings;
   }

@@ -8,7 +8,7 @@ import {
   ApiEditBody,
   ApiBodyType,
   JsonRootType,
-} from 'eo/platform/browser/IndexedDB';
+} from '../../../../shared/services/storage/index.model';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-body',
