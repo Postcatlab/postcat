@@ -1,9 +1,16 @@
 .home_container{
-  margin-top: 50px;
-  height: calc(100vh - var(--NAVBAR_HEIGHT) - 1px);
+  height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--remote-notification-height, 0px) - 1px);
 }
 .home {
   background-color: var(--MAIN_BG);
   color: var(--MAIN_TEXT);
   overflow: auto;
+}
+.remote-notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--remote-notification-height, 0px);
+  background-color: rgb(255, 219, 7);
+  overflow: hidden;
 }

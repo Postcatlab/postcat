@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { SidebarService } from 'eo/workbench/browser/src/app/shared/components/sidebar/sidebar.service';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'eo-pages',
@@ -10,9 +13,27 @@ import { SidebarService } from 'eo/workbench/browser/src/app/shared/components/s
 export class PagesComponent implements OnInit {
   loadedIframe = false;
   iframeSrc: SafeResourceUrl;
-  constructor(private cdRef: ChangeDetectorRef, public sidebar: SidebarService) {}
+  isRemote = true;
+  isClose = true;
+  dataSourceText = '';
+  switchDataSource = () => ({});
+  private destroy$: Subject<void> = new Subject<void>();
+  /** 在线或离线图标 */
+  get icon() {
+    return `../../../../assets/images/${this.isRemote ? 'online' : 'offline'}.svg`;
+  }
+  get isShowNotification() {
+    return !this.isRemote && !this.isClose;
+  }
+
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    public sidebar: SidebarService,
+    private messageService: MessageService
+  ) {}
   ngOnInit(): void {
     this.watchSidebarItemChange();
+    this.watchRemoteServerChange();
   }
   private watchSidebarItemChange() {
     this.sidebar.appChanged$.subscribe(() => {
@@ -32,5 +53,32 @@ export class PagesComponent implements OnInit {
         }, 0);
       }
     });
+  }
+
+  private watchRemoteServerChange() {
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'remoteServerUpdate': {
+            const { isRemote, switchDataSource, dataSourceText } = inArg.data;
+            setTimeout(() => {
+              this.isRemote = isRemote;
+              this.dataSourceText = dataSourceText;
+              this.switchDataSource = switchDataSource;
+              if (!isRemote) {
+                this.isClose = false;
+              }
+              console.log('this.isClose', this.isClose, isRemote);
+            });
+            break;
+          }
+        }
+      });
+  }
+
+  closeNotification() {
+    this.isClose = true;
   }
 }

@@ -138,6 +138,7 @@ export class NavbarComponent implements OnInit {
             this.dataSourceType = inArg.data.dataSourceType;
             this.showNotification();
             inArg.data?.callback?.();
+            this.messageService.send({ type: 'remoteServerUpdate', data: this });
             break;
           }
         }
@@ -147,9 +148,9 @@ export class NavbarComponent implements OnInit {
   /**
    * 切换数据源
    */
-  switchDataSource(): void {
+  switchDataSource = () => {
     this.messageService.send({ type: 'switchDataSource', data: { callback: () => this.showMessage() } });
-  }
+  };
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
