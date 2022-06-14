@@ -4,6 +4,7 @@ import { SidebarService } from 'eo/workbench/browser/src/app/shared/components/s
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Subject, takeUntil } from 'rxjs';
+import { isElectron } from 'eo/shared/common/common';
 
 @Component({
   selector: 'eo-pages',
@@ -14,14 +15,11 @@ export class PagesComponent implements OnInit {
   loadedIframe = false;
   iframeSrc: SafeResourceUrl;
   isRemote = true;
+  isElectron = isElectron();
   isClose = true;
   dataSourceText = '';
   switchDataSource = () => ({});
   private destroy$: Subject<void> = new Subject<void>();
-  /** 在线或离线图标 */
-  get icon() {
-    return `../../../../assets/images/${this.isRemote ? 'online' : 'offline'}.svg`;
-  }
   get isShowNotification() {
     return !this.isRemote && !this.isClose && localStorage.getItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION') !== 'false';
   }

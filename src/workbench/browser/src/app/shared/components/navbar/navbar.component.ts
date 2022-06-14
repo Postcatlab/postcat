@@ -6,6 +6,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
+
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -26,10 +27,6 @@ export class NavbarComponent implements OnInit {
   /** 当前数据源对应的文本 */
   get dataSourceText() {
     return this.isRemote ? '远程' : '本地';
-  }
-  /** 在线或离线图标 */
-  get icon() {
-    return `../../../../assets/images/${this.isRemote ? 'online' : 'offline'}.svg`;
   }
   nzNotificationRef: NzNotificationRef;
   OS_TYPE = navigator.platform.toLowerCase();

@@ -1,7 +1,8 @@
 <eo-navbar></eo-navbar>
-<div [style.--remote-notification-height]="isShowNotification ? '50px' : '0px'">
-  <div *ngIf="isShowNotification" class="remote-notification">
-    <img [src]="icon" class="h-[16px] mr-[1px]" /> 目前数据储存在{{dataSourceText}}，如需协作请切换
+<div [style.--remote-notification-height]="isShowNotification && isElectron ? '50px' : '0px'">
+  <div *ngIf="isShowNotification && isElectron" class="remote-notification">
+    <i nz-icon [nzType]="isRemote ? 'cloud' : 'exclamation-circle'" nzTheme="outline" class="text-[15px] mr-[1px]"></i>
+    目前数据储存在{{dataSourceText}}，如需协作请切换
     <a class="eo-blod" (click)="switchDataSource()">{{ isRemote ? '本地' : '远程' }}数据源</a>
     <i nz-icon nzType="close" nzTheme="outline" class="absolute right-[20px] cursor-pointer"
       (click)="closeNotification()"></i>
