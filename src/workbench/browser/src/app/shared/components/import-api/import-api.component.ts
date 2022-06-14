@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { StorageService } from '../../../shared/services/storage';
 import { FeatureType } from '../../types';
@@ -45,8 +45,8 @@ export class ImportApiComponent implements OnInit {
   }
   getEoapiData() {
     return new Promise((resolve) => {
-      this.storage.run('projectExport', [], (result: StorageHandleResult) => {
-        const isOk = result.status === StorageHandleStatus.success;
+      this.storage.run('projectExport', [], (result: StorageRes) => {
+        const isOk = result.status === StorageResStatus.success;
         resolve(isOk ? [result.data, null] : [null, true]);
       });
     });
