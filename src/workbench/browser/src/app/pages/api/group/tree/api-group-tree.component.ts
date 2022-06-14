@@ -312,7 +312,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0) {
-      this.storage.run('groupBulkUpdate', [data.group], (result: StorageRes) => {});
+      this.storage.run(
+        'groupBulkUpdate',
+        [
+          data.group.map((val) => {
+            return { ...val, uuid: val.uuid.replace('group-',''), parentID: val.parentID.replace('group-','') };
+          }),
+        ],
+        (result: StorageRes) => {}
+      );
     }
     if (data.api.length > 0) {
       this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {});

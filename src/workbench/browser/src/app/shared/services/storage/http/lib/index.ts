@@ -19,8 +19,7 @@ const protocolReg = new RegExp('^(http|https)://');
 @Injectable()
 export class BaseUrlInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const defaultUrl = 'https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925';
-    const { url = defaultUrl, token = '' } = window.eo?.getModuleSettings?.('eoapi-common.remoteServer') || {};
+    const { url = '', token = '' } = window.eo?.getModuleSettings?.('eoapi-common.remoteServer') || {};
     req = req.clone({
       url: protocolReg.test(req.url) ? req.url : url + req.url,
       headers: req.headers.append('x-api-key', token),
@@ -54,7 +53,9 @@ export class HttpStorage implements StorageInterface {
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
   projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
-  projectExport: () => Observable<object>;
+  projectExport(){
+    return this.http.get(`/project/export`) as Observable<object>;
+  }
   // Environment
   environmentCreate(item: Environment) {
     return this.http.post(`/environment`, item) as Observable<object>;
@@ -83,12 +84,14 @@ export class HttpStorage implements StorageInterface {
     return this.http.put(`/group/${uuid}`, item) as Observable<object>;
   }
   groupBulkCreate: (items: Array<Group>) => Observable<object>;
-  groupBulkUpdate: (items: Array<Group>) => Observable<object>;
+  groupBulkUpdate(items: Array<Group>) {
+    return this.http.put(`/group/batch`, items) as Observable<object>;
+  }
   groupRemove(uuid: number | string) {
     return this.http.delete(`/group?uuids=[${uuid}]`) as Observable<object>;
   }
   groupBulkRemove(uuids: Array<number | string>) {
-      return this.http.delete(`/group?uuids=[${uuids}]`) as Observable<object>;
+    return this.http.delete(`/group?uuids=[${uuids}]`) as Observable<object>;
   }
   groupLoad: (uuid: number | string) => Observable<object>;
   groupBulkLoad: (uuids: Array<number | string>) => Observable<object>;
@@ -103,7 +106,9 @@ export class HttpStorage implements StorageInterface {
     return this.http.put(`/api_data/${uuid}`, item) as Observable<object>;
   }
   apiDataBulkCreate: (items: Array<ApiData>) => Observable<object>;
-  apiDataBulkUpdate: (items: Array<ApiData>) => Observable<object>;
+  apiDataBulkUpdate(items: Array<ApiData>) {
+    return this.http.put(`/api_data/batch`, items) as Observable<object>;
+  }
   apiDataRemove(uuid: number | string) {
     return this.http.delete(`/api_data?uuids=[${uuid}]`) as Observable<object>;
   }

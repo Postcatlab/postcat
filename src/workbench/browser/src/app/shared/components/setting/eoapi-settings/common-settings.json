@@ -17,7 +17,7 @@
           "default": true,
           "label": "自动升级",
           "disabled": true,
-          "description": "勾选后，检测到应用升级后自动从远程下载最新的应用更新"
+          "description": "检测到应用升级后，后台将下载最新的安装包在下次启动时更新"
         },
         "remoteServer.url": {
           "type": "string",
