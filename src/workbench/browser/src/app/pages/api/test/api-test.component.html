@@ -76,7 +76,7 @@
     </nz-tabset>
     <!-- 响应信息 -->
     <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [(nzSelectedIndex)]="tabIndexRes" [nzAnimated]="false"
-      class="mt10">
+      class="mt10 response_container">
       <nz-tab nzTitle="返回结果">
         <eo-api-test-result-response [model]="testResult.response"></eo-api-test-result-response>
       </nz-tab>

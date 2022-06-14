@@ -14,7 +14,7 @@ export const DATA_SOURCE_TYPE_KEY = 'DATA_SOURCE_TYPE_KEY';
 @Injectable()
 export class StorageService {
   instance;
-  dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'http';
+  dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
   constructor(private injector: Injector, private messageService: MessageService) {
     console.log('StorageService init');
     this.setStorage(this.dataSourceType);
