@@ -26,7 +26,7 @@
   </div>
 </ng-template>
 
-<div class="py-2 my-2 border-y-2 border-dotted" *ngIf="optionList.length">
+<div class="py-2 my-2" *ngIf="optionList.length">
   <nz-radio-group [ngModel]="currentOption" (ngModelChange)="selectOption($event)" class="w-full">
     <div class="grid gap-2 grid-cols-3">
       <label class="text" nz-radio [nzValue]="item.value" *ngFor="let item of optionList">{{ item.label }}</label>
