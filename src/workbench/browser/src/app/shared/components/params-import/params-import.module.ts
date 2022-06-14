@@ -8,11 +8,10 @@ import { EouiModule } from '../../../eoui/eoui.module';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzMessageModule } from 'ng-zorro-antd/message';
 
 @NgModule({
   declarations: [ParamsImportComponent],
-  imports: [FormsModule, NzDropDownModule, NzModalModule, NzButtonModule, NzMessageModule, EouiModule],
+  imports: [FormsModule, NzDropDownModule, NzModalModule, NzButtonModule, EouiModule],
   exports: [ParamsImportComponent],
 })
 export class ParamsImportModule {}

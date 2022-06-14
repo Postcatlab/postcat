@@ -15,6 +15,7 @@ import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.comp
 import { ImportApiComponent } from '../../shared/components/import-api/import-api.component';
 import { ExtensionSelectComponent } from '../../shared/components/extension-select/extension-select.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
@@ -34,6 +35,8 @@ import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
+import { Storage } from 'eo/platform/browser/IndexedDB/lib/index';
+
 const COMPONENTS = [
   ApiComponent,
   ApiGroupEditComponent,
@@ -62,6 +65,7 @@ const COMPONENTS = [
     NzFormModule,
     NzInputModule,
     NzRadioModule,
+    NzUploadModule,
     NzDropDownModule,
     NzDividerModule,
     NzToolTipModule,
@@ -71,6 +75,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [ElectronService, MessageService, ApiService, StorageService],
+  providers: [ElectronService, MessageService, ApiService, StorageService, Storage],
 })
 export class ApiModule {}
