@@ -83,7 +83,7 @@ export class ModuleHandler extends CoreHandler {
    * @param result npm install安装成功回调的结果
    * @param moduleList 所有的模块列表
    */
-  private operatePackage(result: any[], moduleList: string[], action: 'uninstall' | 'install') {
+  private operatePackage(result: any[], moduleList: string[], action: 'uninstall' | 'install' | 'update') {
     if (Array.isArray(result)) {
       const moduleNames = moduleList.map((n) => n.split('@')[0]);
       const packagePath = path.join(this.baseDir, 'package.json');
@@ -114,7 +114,7 @@ export class ModuleHandler extends CoreHandler {
   private async execCommand(command: string, modules: string[]): Promise<ModuleHandlerResult> {
     return await new Promise((resolve: any, reject: any): void => {
       let args = [command].concat(modules).concat('--color=always', '--save');
-      if (!['link', 'unlink', 'uninstall'].includes(command)) {
+      if (!['link', 'unlink', 'uninstall', 'update'].includes(command)) {
         if (this.registry) {
           args = args.concat(`--registry=${this.registry}`);
         }
@@ -126,6 +126,16 @@ export class ModuleHandler extends CoreHandler {
       // console.log('command', [command].concat(modules), this.baseDir);
       npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
         const moduleList = modules.map((it) => it + '@latest');
+        if (command === 'update') {
+          npmCli.commands.update(moduleList, (err, data) => {
+            process.chdir(this.baseDir);
+            if (err) {
+              reject(err);
+            }
+            this.operatePackage(data, moduleList, 'update');
+            resolve({ code: 0, data });
+          });
+        }
         if (command === 'install') {
           npmCli.commands.install(moduleList, (err, data) => {
             process.chdir(this.baseDir);
