@@ -16,7 +16,6 @@ export class ApiTabService {
   tabChange$: ReplaySubject<TabItem> = new ReplaySubject(1);
   saveTabData$: Subject<{ tab: TabItem; data: any }> = new Subject();
   get tabID(): number {
-    console.log('tab change', this);
     return this.currentTab.uuid;
   }
   constructor() {

@@ -93,6 +93,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Load all group and apiData items.
    */
   buildGroupTreeData(): void {
+    console.log('buildGroupTreeData')
     this.groupByID = {};
     this.treeItems = [];
     this.getGroups();
@@ -377,7 +378,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   private setSelectedKeys() {
-    console.log('setSelectedKeys', this.route.snapshot.queryParams.uuid, this.nzSelectedKeys);
     if (this.route.snapshot.queryParams.uuid) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];
     } else {
