@@ -6,10 +6,10 @@ import { FeatureType } from '../../types';
 
 @Component({
   selector: 'eo-sync-api',
-  template: `<extension-select [(extension)]="pushType" [extensionList]="supportList"></extension-select>`,
+  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select>`,
 })
 export class SyncApiComponent implements OnInit {
-  pushType = '';
+  currentExtension = '';
   supportList: any[] = [];
   featureMap = window.eo.getFeature('apimanage.sync');
   constructor(private storage: StorageService) {}
@@ -21,13 +21,15 @@ export class SyncApiComponent implements OnInit {
         ...data,
       });
     });
-    const { key } = this.supportList.at(0);
-    this.pushType = key;
+    {
+      const { key } = this.supportList.at(0);
+      this.currentExtension = key || '';
+    }
   }
   async submit() {
-    const feature = this.featureMap.get(this.pushType);
+    const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.pushType);
+    const module = window.eo.loadFeatureModule(this.currentExtension);
     // TODO 临时取值方式需要修改
     const { token: secretKey, projectId } = window.eo.getModuleSettings(
       'eoapi-feature-push-eolink.eolink.remoteServer'

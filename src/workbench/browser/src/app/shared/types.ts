@@ -3,4 +3,5 @@ export type FeatureType = {
   label: string;
   description: string;
   key?: string;
+  properties?: object;
 };

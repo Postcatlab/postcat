@@ -23,7 +23,7 @@ export class PagesComponent implements OnInit {
     return `../../../../assets/images/${this.isRemote ? 'online' : 'offline'}.svg`;
   }
   get isShowNotification() {
-    return !this.isRemote && !this.isClose;
+    return !this.isRemote && !this.isClose && localStorage.getItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION') !== 'false';
   }
 
   constructor(
@@ -80,5 +80,6 @@ export class PagesComponent implements OnInit {
 
   closeNotification() {
     this.isClose = true;
+    localStorage.setItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION', 'false');
   }
 }

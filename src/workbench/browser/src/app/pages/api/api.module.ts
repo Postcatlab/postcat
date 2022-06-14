@@ -18,6 +18,7 @@ import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.comp
 import { ImportApiComponent } from '../../shared/components/import-api/import-api.component';
 import { ExtensionSelectComponent } from '../../shared/components/extension-select/extension-select.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
@@ -41,6 +42,8 @@ import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
 import { ApiMockComponent } from './mock/api-mock.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
+
 const COMPONENTS = [
   ApiComponent,
   ApiGroupEditComponent,
@@ -71,6 +74,7 @@ const COMPONENTS = [
     NzFormModule,
     NzInputModule,
     NzRadioModule,
+    NzUploadModule,
     NzDropDownModule,
     NzDividerModule,
     NzToolTipModule,
@@ -87,6 +91,7 @@ const COMPONENTS = [
     ApiService,
     StorageService,
     HttpStorage,
+    IndexedDBStorage,
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
   ],
 })

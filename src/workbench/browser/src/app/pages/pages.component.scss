@@ -4,7 +4,7 @@
 .home {
   background-color: var(--MAIN_BG);
   color: var(--MAIN_TEXT);
-  overflow: auto;
+  overflow: hidden;
 }
 .remote-notification {
   display: flex;

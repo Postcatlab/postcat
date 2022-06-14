@@ -17,6 +17,8 @@ export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
   varName = `{{变量名}}`;
   isVisible = false;
+  /** 是否打开下拉菜单 */
+  isOpen = false;
   envInfo: any = {};
   envList: any[] = [];
   activeUuid = 0;
@@ -154,6 +156,7 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleShowModal() {
     this.isVisible = true;
+    this.isOpen = false;
     this.handleSwitchEnv(this.envUuid);
   }
 

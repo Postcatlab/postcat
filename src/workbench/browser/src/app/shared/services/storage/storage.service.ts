@@ -30,14 +30,14 @@ export class StorageService {
       data: undefined,
       callback: callback,
     };
-    if(!this.instance[action]){
-      throw Error(`Lack request API: ${action}`)
+    if (!this.instance[action]) {
+      throw Error(`Lack request API: ${action}`);
     }
     this.instance[action](...params).subscribe(
       (res: any) => {
         handleResult.status = res.status;
         handleResult.data = res.data;
-        console.log(handleResult)
+        console.log(handleResult);
         callback(handleResult);
       },
       (error: any) => {
@@ -65,6 +65,7 @@ export class StorageService {
     const { dataSourceType } = options;
     this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
     this.setStorage(this.dataSourceType, options);
+    localStorage.setItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION', this.dataSourceType === 'local' ? 'true' : 'false');
     console.log('this.dataSourceType', this.dataSourceType);
     console.log('this.instance', this.instance);
   }

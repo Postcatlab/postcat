@@ -23,12 +23,12 @@ export class ApiOverviewComponent implements OnDestroy {
   modal: NzModalRef;
   constructor(private modalService: ModalService, private router: Router, private message: EoMessageService) {}
   overviewList = [
-    // {
-    //   title: '导入',
-    //   icon: 'import',
-    //   desc: '导入 API 数据',
-    //   type: 'import',
-    // },
+    {
+      title: '导入',
+      icon: 'import',
+      desc: '导入 API 数据',
+      type: 'import',
+    },
     {
       title: '导出',
       icon: 'export',
@@ -62,7 +62,7 @@ export class ApiOverviewComponent implements OnDestroy {
     });
   }
   ngOnDestroy() {
-      //TODO router change manual close modal
+    //TODO router change manual close modal
     if (this.modal) {
       this.modal.destroy();
     }

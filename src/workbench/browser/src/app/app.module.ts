@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -27,6 +28,7 @@ import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storag
     AppRoutingModule,
     HttpClientModule,
     UpgradeModule,
+    EouiModule,
     NgxsModule.forRoot([EnvState]),
   ],
   providers: [

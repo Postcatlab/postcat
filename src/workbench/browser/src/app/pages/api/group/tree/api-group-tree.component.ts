@@ -13,6 +13,7 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -65,7 +66,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private messageService: MessageService,
     private storage: StorageService,
-    public electron: ElectronService
+    public electron: ElectronService,
+    public storageInstance: IndexedDBStorage
   ) {}
   ngOnInit(): void {
     this.buildGroupTreeData();
@@ -140,7 +142,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   restoreExpandStatus() {
-    let key = this.expandKeys.slice(0);
+    const key = this.expandKeys.slice(0);
     this.expandKeys = [];
     this.expandKeys = key;
   }
@@ -151,12 +153,40 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Expand Select Group
    */
   private expandGroup() {
-    if (!this.route.snapshot.queryParams.uuid) return;
+    if (!this.route.snapshot.queryParams.uuid) {
+      return;
+    }
     this.expandKeys = [
       ...this.expandKeys,
       ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
     ];
   }
+  // 重新构建整个group
+  async rebuildGroupTree(result) {
+    this.storageInstance.apiData.clear();
+    this.storageInstance.group.clear();
+    await this.storageInstance.apiData.bulkAdd(result);
+    const apiItems = {};
+    this.treeItems = [];
+    result.forEach((item: ApiData) => {
+      delete item.updatedAt;
+      apiItems[item.uuid] = item;
+      this.treeItems.push({
+        title: item.name,
+        key: item.uuid.toString(),
+        weight: item.weight || 0,
+        parentID: item.groupID ? `group-${item.groupID}` : '0',
+        method: item.method,
+        isLeaf: true,
+      });
+    });
+    this.apiDataItems = apiItems;
+    this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+    this.setSelectedKeys();
+    this.generateGroupTreeData();
+    this.restoreExpandStatus();
+  }
+
   /**
    * Watch  apiData change event.
    */
@@ -174,6 +204,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'updateGroupSuccess': {
             this.buildGroupTreeData();
             break;
+          }
+          case 'importSuccess': {
+            const { apiData } = JSON.parse(inArg.data);
+            this.rebuildGroupTree(apiData);
           }
         }
       });
@@ -193,7 +227,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param event
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
-    let eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
+    const eventName = !event.node.isLeaf ? 'clickFolder' : event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
     switch (eventName) {
       case 'clickFolder': {
         event.node.isExpanded = !event.node.isExpanded;

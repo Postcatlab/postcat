@@ -1,11 +1,8 @@
 .overview_container{
-    width: 70%;
-    margin-left: 30px;
-    padding: 20px 0;
+    padding: 20px 30px;
 }
-.card_container{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 250px);
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
+
+.card_item {
+    box-shadow: 0 0 8px rgba(0,0,0,.1);
 }
+
