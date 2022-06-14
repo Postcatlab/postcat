@@ -186,7 +186,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   async rebuildGroupTree(result) {
     this.storageInstance.apiData.clear();
     this.storageInstance.group.clear();
-    // @ts-ignore
     await this.storageInstance.apiData.bulkAdd(result);
     const apiItems = {};
     this.treeItems = [];
