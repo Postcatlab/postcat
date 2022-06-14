@@ -6,18 +6,11 @@ import { FeatureType } from '../../types';
 
 @Component({
   selector: 'eo-export-api',
-  template: ` <extension-select [(extension)]="exportType" [extensionList]="supportList"></extension-select> `,
+  template: ` <extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
 })
 export class ExportApiComponent implements OnInit {
-  exportType = 'eoapi';
-  supportList: Array<FeatureType> = [
-    {
-      key: 'eoapi',
-      icon: 'assets/images/logo.svg',
-      label: 'Eoapi',
-      description: '',
-    },
-  ];
+  currentExtension = 'eoapi';
+  supportList: Array<FeatureType> = [];
   featureMap = window.eo.getFeature('apimanage.export');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
@@ -27,13 +20,13 @@ export class ExportApiComponent implements OnInit {
         ...data,
       });
     });
+    {
+      const { key } = this.supportList.at(0);
+      this.currentExtension = key || '';
+    }
   }
   submit(callback: () => boolean) {
-    if ('eoapi' === this.exportType) {
-      this.exportEoapi(callback);
-    } else {
-      this.export(callback);
-    }
+    this.export(callback);
   }
   private transferTextToFile(fileName: string, exportData: any) {
     const file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
@@ -71,10 +64,10 @@ export class ExportApiComponent implements OnInit {
    * @param callback
    */
   private export(callback) {
-    const feature = this.featureMap.get(this.exportType);
+    const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module = window.eo.loadFeatureModule(this.exportType);
+    const module = window.eo.loadFeatureModule(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {

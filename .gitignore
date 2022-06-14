@@ -12,6 +12,7 @@ out/
 *.webpack.js
 !src/workbench/node/request/**/*.js
 !/api/*.js
+!/build/*.js
 !*.config.js
 
 scripts/notarize.js
