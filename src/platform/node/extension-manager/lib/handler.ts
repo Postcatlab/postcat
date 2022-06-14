@@ -130,30 +130,30 @@ export class ModuleHandler extends CoreHandler {
           npmCli.commands.update(moduleList, (err, data) => {
             process.chdir(this.baseDir);
             if (err) {
-              reject(err);
+              return reject(err);
             }
             this.operatePackage(data, moduleList, 'update');
-            resolve({ code: 0, data });
+            return resolve({ code: 0, data });
           });
         }
         if (command === 'install') {
           npmCli.commands.install(moduleList, (err, data) => {
             process.chdir(this.baseDir);
             if (err) {
-              reject(err);
+              return reject(err);
             }
             this.operatePackage(data, moduleList, 'install');
-            resolve({ code: 0, data });
+            return resolve({ code: 0, data });
           });
         }
         if (command === 'uninstall') {
           npmCli.commands.uninstall(moduleList, (err, data) => {
             process.chdir(this.baseDir);
             if (err) {
-              reject(err);
+              return reject(err);
             }
             this.operatePackage(data, moduleList, 'uninstall');
-            resolve({ code: 0, data });
+            return resolve({ code: 0, data });
           });
         }
       });
