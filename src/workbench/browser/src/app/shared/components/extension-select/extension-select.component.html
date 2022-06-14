@@ -1,23 +1,45 @@
-<ng-container *ngIf="extensionList.length; else empty">
-  <div class="flex">
-    <div *ngFor="let item of extensionList" class="px-2 w-1/4 h-14" (click)="selectExtension(item)">
-      <div
-        [class.active]="extension === item.key"
-        class="extension relative h-full w-full border rounded-md flex items-center justify-center"
-        nzTooltipPlacement="bottom"
-        [nzTooltipTitle]="item.label"
-        nz-tooltip
-      >
-        <span *ngIf="!item.icon">{{ item.label }}</span>
-        <i
-          class="logobg absolute left-1.5 right-1.5 top-0 bottom-0"
-          [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
-        ></i>
-        <i class="check absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
+<div class="mb-4">
+  <ng-container *ngIf="extensionList.length; else empty">
+    <div class="grid gap-4 grid-cols-4">
+      <div *ngFor="let item of extensionList" class="w-full h-14" (click)="selectExtension(item)">
+        <div
+          [class.active]="extension === item.key"
+          class="extension relative h-full w-full border rounded-md flex items-center justify-center"
+          nzTooltipPlacement="bottom"
+          [nzTooltipTitle]="item.label"
+          nz-tooltip
+        >
+          <span *ngIf="!item.icon">{{ item.label }}</span>
+          <i
+            class="logobg absolute left-1.5 right-1.5 top-0 bottom-0"
+            [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
+          ></i>
+          <i class="check absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
+        </div>
       </div>
     </div>
-  </div>
-</ng-container>
+  </ng-container>
+</div>
 <ng-template #empty>
-  <span class="text">该功能需要插件支持，请移步至<a class="eo_link" routerLink="/home/extension/list">插件广场</a>下载</span>
+  <div class="text mb-4">
+    该功能需要插件支持，请移步至<a class="eo_link" routerLink="/home/extension/list">插件广场</a>下载
+  </div>
 </ng-template>
+
+<div class="py-2 my-2 border-y-2 border-dotted" *ngIf="optionList.length">
+  <nz-radio-group [ngModel]="currentOption" (ngModelChange)="selectOption($event)" class="w-full">
+    <div class="grid gap-2 grid-cols-3">
+      <label class="text" nz-radio [nzValue]="item.value" *ngFor="let item of optionList">{{ item.label }}</label>
+    </div>
+  </nz-radio-group>
+</div>
+
+<div class="mt-4" *ngIf="allowDrag">
+  <nz-upload *ngIf="extensionList.length" nzType="drag" [nzBeforeUpload]="parserFile" [nzShowUploadList]="false">
+    <p class="ant-upload-drag-icon">
+      <i nz-icon nzType="inbox"></i>
+    </p>
+    <p class="ant-upload-text">点击或直接拖拽文件至此区域</p>
+    <p class="ant-upload-hint">仅支持JSON格式的单个文件导入</p>
+  </nz-upload>
+</div>

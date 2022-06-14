@@ -74,3 +74,24 @@ export const isEmptyValue = (obj) => {
   // * If they length are equal, means each value of obj is empty. like { name: '', value: '' }
   return emptyList.length === list.length;
 };
+
+export const parserJsonFile = (file, type = 'UTF-8') =>
+  new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsText(file, type);
+    reader.onload = (ev) => {
+      const fileString: string = ev.target.result as string;
+      const json = JSON.parse(fileString);
+      resolve(json);
+    };
+  });
+
+export const getDefaultValue = (list: any[], key) => {
+  if (list.length === 0) {
+    return '';
+  }
+  const [target] = list.filter((it) => it.default);
+  return target[key] || '';
+};
+
+export const parserProperties = (properties) => Object.keys(properties).map((it) => ({ value: it, ...properties[it] }));
