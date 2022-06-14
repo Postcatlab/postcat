@@ -1,6 +1,6 @@
 .eo_navbar {
   -webkit-app-region: drag;
-  position: fixed;
+  position: sticky;
   width: 100%;
   z-index: 11;
   left: 0;
@@ -27,4 +27,20 @@
 
 .can_be_click {
   -webkit-app-region: no-drag;
+}
+.switch-data-source-box {
+  width: 200px;
+  display: grid;
+  padding: 10px 14px;
+  grid-template-columns: 34px auto;
+  background-color: white;
+  .title {
+    margin-bottom: 0;
+    color: black;
+    font-weight: 700;
+  }
+  .desc {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabItem } from './tab.model';
-import { ApiData, StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
+import { ApiData, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { ApiTabService } from './api-tab.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../../shared/services/message';
@@ -27,6 +27,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     test: { path: '/home/api/test', title: '新 API' },
     detail: { path: '/home/api/detail', title: 'API 详情' },
     overview: { path: '/home/api/overview', title: '概况', key: 'overview' },
+    mock: { path: '/home/api/mock', title: 'mock', key: 'mock' },
   };
   MAX_TAB_LIMIT = 15;
 
@@ -182,8 +183,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param action closeOther|closeAll|closeLeft|closeRight
    */
   oeprateCloseTab(action) {
-    let closeTabs = [...new Array(this.tabSerive.tabs.length).keys()],
-      tmpSelectIndex = 0;
+    let closeTabs = [...new Array(this.tabSerive.tabs.length).keys()];
+    let tmpSelectIndex = 0;
     switch (action) {
       case 'closeOther':
         closeTabs.splice(this.selectedIndex, 1);
@@ -241,8 +242,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             this.appendOrSwitchTab('edit', inArg.data.origin);
             break;
           case 'copyApi':
-            this.storage.run('apiDataCreate', [{ ...inArg.data }, inArg.data.uuid], (result: StorageHandleResult) => {
-              if (result.status === StorageHandleStatus.success) {
+            this.storage.run('apiDataCreate', [{ ...inArg.data }, inArg.data.uuid], (result: StorageRes) => {
+              if (result.status === StorageResStatus.success) {
                 this.message.success('复制成功');
                 this.appendOrSwitchTab('edit', {
                   ...inArg.data,

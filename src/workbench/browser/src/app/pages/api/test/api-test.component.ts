@@ -7,9 +7,9 @@ import {
   ApiData,
   RequestMethod,
   RequestProtocol,
-  StorageHandleResult,
-  StorageHandleStatus,
-} from 'eo/platform/browser/IndexedDB';
+  StorageRes,
+  StorageResStatus,
+} from '../../../shared/services/storage/index.model';
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, of, Subject } from 'rxjs';
@@ -25,6 +25,9 @@ import { objectToArray } from '../../../utils';
 import { EnvState } from '../../../shared/store/env.state';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { StorageService } from '../../../shared/services/storage';
+import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
+import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
+import { TestServerAPIKitService } from '../../../shared/services/api-test/apikit-node/test-connect.service';
 
 @Component({
   selector: 'eo-api-test',
@@ -47,7 +50,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     response: {},
     request: {},
   };
-  testServer;
+  testServer: TestServerLocalNodeService | TestServerServerlessService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
 
@@ -64,7 +67,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService
   ) {
-    this.testServer = this.testServerService.getService();
+    this.testServer = this.testServerService.instance;
     this.testServer.init((message) => {
       this.receiveMessage(message);
     });
@@ -99,8 +102,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testResult = result.response;
   }
   getApi(id) {
-    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.apiData = this.apiTest.getTestDataFromApi(result.data);
         this.validateForm.patchValue(this.apiData);
       }

@@ -2,11 +2,11 @@
   <img class="logo" src="assets/images/logo.svg" />
   <div class="can_be_click f_row_ac right_btn_container">
     <div class="mr10" *ngIf="!isElectron">
-      <span  nz-dropdown [nzDropdownMenu]="download">
+      <span nz-dropdown [nzDropdownMenu]="download">
         <i nz-icon nzType="cloud-download" class="fs24" nzTheme="outline"></i>
       </span>
       <nz-dropdown-menu #download="nzDropdownMenu">
-        <ul nz-menu nzSelectable>
+        <ul nz-menu>
           <ng-container *ngFor="let item of resourceInfo; let index = index">
             <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
             <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
@@ -14,8 +14,25 @@
         </ul>
       </nz-dropdown-menu>
     </div>
+    <ng-container *ngIf="isElectron">
+      <span class="mr15" nz-dropdown [nzDropdownMenu]="settingMenu" nzPlacement="bottomRight">
+        <i nz-icon [nzType]="isRemote ? 'cloud' : 'exclamation-circle'" nzTheme="outline" class="fs20"></i>
+      </span>
+      <nz-dropdown-menu #settingMenu="nzDropdownMenu">
+        <div nz-menu class="switch-data-source-box">
+          <div>
+            <i nz-icon [nzType]="isRemote ? 'cloud' : 'exclamation-circle'" nzTheme="outline" class="fs20"></i>
+          </div>
+          <div>
+            <h4 class="title">{{ dataSourceText }}数据源</h4>
+            <div class="desc"> 数据储存在{{ dataSourceText }}，{{ isRemote ? '如不需协作，可以切换到本地数据源' : '如需协作请切换到远程数据源'}}</div>
+            <button nz-button nzType="default" nzSize="small" (click)="switchDataSource()">切换</button>
+          </div>
+        </div>
+      </nz-dropdown-menu>
+    </ng-container>
     <span class="mr15" nz-dropdown [nzDropdownMenu]="menu">
-      <i nz-icon nzType="question-circle" class="fs24" nzTheme="outline"></i>
+      <i nz-icon nzType="question-circle" class="fs20" nzTheme="outline"></i>
     </span>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
@@ -25,29 +42,15 @@
       </ul>
     </nz-dropdown-menu>
     <div *ngIf="!OS_TYPE.includes('mac') && isElectron">
-      <span
-        nz-tooltip
-        nzTooltipTitle="最小化"
-        nzTooltipPlacement="left"
-        class="iconfont icon-jianhao mr10 fs24 cp"
-        (click)="minimize()"
-      >
+      <span nz-tooltip nzTooltipTitle="最小化" nzTooltipPlacement="left" class="iconfont icon-jianhao mr10 fs24 cp"
+        (click)="minimize()">
       </span>
-      <span
-        nz-tooltip
-        [nzTooltipTitle]="isMaximized ? '向下还原' : '最大化'"
-        nzTooltipPlacement="left"
+      <span nz-tooltip [nzTooltipTitle]="isMaximized ? '向下还原' : '最大化'" nzTooltipPlacement="left"
         class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
-        (click)="toggleMaximize()"
-      >
+        (click)="toggleMaximize()">
       </span>
-      <span
-        nz-tooltip
-        nzTooltipTitle="关闭"
-        nzTooltipPlacement="left"
-        class="iconfont icon-guanbi pr15 fs24 cp"
-        (click)="close()"
-      >
+      <span nz-tooltip nzTooltipTitle="关闭" nzTooltipPlacement="left" class="iconfont icon-guanbi pr15 fs24 cp"
+        (click)="close()">
       </span>
     </div>
   </div>

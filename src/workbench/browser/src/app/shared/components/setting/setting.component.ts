@@ -1,12 +1,15 @@
 // @ts-nocheck
 import { Component, OnInit } from '@angular/core';
-import { NzTabPosition } from 'ng-zorro-antd/tabs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { debounce, cloneDeep } from 'lodash';
 import { eoapiSettings } from './eoapi-settings/';
+import { Message, MessageService } from '../../../shared/services/message';
+import { Subject, takeUntil } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import MarkdownIt from 'markdown-it';
 
 interface TreeNode {
   name: string;
@@ -31,6 +34,15 @@ interface FlatNode {
 })
 export class SettingComponent implements OnInit {
   objectKeys = Object.keys;
+  dataSourceType = 'http';
+  /** 是否远程数据源 */
+  get isRemote() {
+    return this.dataSourceType === 'http';
+  }
+  /** 当前数据源对应的文本 */
+  get dataSourceText() {
+    return this.isRemote ? '远程' : '本地';
+  }
   private transformer = (node: TreeNode, level: number): FlatNode => ({
     ...node,
     expandable: !!node.children && node.children.length > 0,
@@ -39,7 +51,7 @@ export class SettingComponent implements OnInit {
     disabled: !!node.disabled,
   });
   selectListSelection = new SelectionModel<FlatNode>();
-
+  md = new MarkdownIt();
   treeControl: any = new FlatTreeControl<FlatNode>(
     (node) => node.level,
     (node) => node.expandable
@@ -57,8 +69,7 @@ export class SettingComponent implements OnInit {
   /** 当前配置项 */
   currentConfiguration = [];
   isVisible = false;
-  _isShowModal = false;
-  position: NzTabPosition = 'left';
+  $isShowModal = false;
   /** 所有配置 */
   settings = {};
   /** 本地配置 */
@@ -66,29 +77,131 @@ export class SettingComponent implements OnInit {
   /** 深层嵌套的配置 */
   nestedSettings = {};
   validateForm!: FormGroup;
+  /** 远程服务器地址 */
+  remoteServerUrl = '';
+  /** 远程服务器token */
+  remoteServerToken = '';
 
   get isShowModal() {
-    return this._isShowModal;
+    return this.$isShowModal;
   }
 
   set isShowModal(val) {
-    this._isShowModal = val;
+    this.$isShowModal = val;
     if (val) {
       this.init();
+      this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
+      this.remoteServerToken = this.settings['eoapi-common.remoteServer.token'];
     }
   }
 
-  constructor(private fb: FormBuilder) {}
+  private destroy$: Subject<void> = new Subject<void>();
+  constructor(private fb: FormBuilder, private messageService: MessageService, private message: NzMessageService) {
+    this.customLinkRender();
+  }
 
   ngOnInit(): void {
     this.init();
     // this.parseSettings();
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'toggleSettingModalVisible': {
+            inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
+            break;
+          }
+          case 'onDataSourceChange': {
+            console.log('onDataSourceChange', inArg.data);
+            this.dataSourceType = inArg.data.dataSourceType;
+            if (inArg.data.showWithSetting) {
+              location.reload();
+              this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+            }
+            break;
+          }
+        }
+      });
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
+  customLinkRender() {
+    const defaultRender =
+      this.md.renderer.rules.link_open ||
+      function (tokens, idx, options, env, self) {
+        return self.renderToken(tokens, idx, options);
+      };
+
+    this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+      // If you are sure other plugins can't add `target` - drop check below
+      const aIndex = tokens[idx].attrIndex('target');
+
+      if (aIndex < 0) {
+        tokens[idx].attrPush(['target', '_blank']); // add new attribute
+      } else {
+        tokens[idx].attrs[aIndex][1] = '_blank'; // replace value of existing attr
+      }
+
+      // pass token to default renderer.
+      return defaultRender(tokens, idx, options, env, self);
+    };
+  }
+
+  /**
+   * 切换数据源
+   */
+  switchDataSource() {
+    console.log('switchDataSource', this.messageService);
+    this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
+  }
+
+  /**
+   * 测试远程服务器地址是否可用
+   */
+  async pingRmoteServerUrl() {
+    const { url: remoteUrl, token } = this.getConfiguration('eoapi-common.remoteServer');
+    // 是否更新了远程服务地址或token
+    const isUpdateRemoteServerInfo = remoteUrl !== this.remoteServerUrl || token !== this.remoteServerToken;
+    let messageId;
+    if (isUpdateRemoteServerInfo) {
+      messageId = this.message.loading('远程服务器连接中...', { nzDuration: 0 }).messageId;
+    }
+
+    try {
+      const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
+      const response = await fetch(url, {
+        headers: {
+          'x-api-key': token,
+        },
+      });
+      const result = await response.json();
+      console.log('result', result);
+      if (result.statusCode !== 200) {
+        throw result;
+      }
+      // await result.json();
+      if (isUpdateRemoteServerInfo) {
+        this.message.create('success', '远程服务器地址设置成功');
+        return Promise.resolve(true);
+      }
+    } catch (error) {
+      console.error(error);
+      // if (remoteUrl !== this.remoteServerUrl) {
+      this.message.create('error', '远程服务器地址/token不可用');
+      // }
+      // 远程服务地址不可用时，回退到上次的地址
+      this.settings['eoapi-common.remoteServer.url'] = this.remoteServerUrl;
+      this.settings['eoapi-common.remoteServer.token'] = this.remoteServerToken;
+    } finally {
+      setTimeout(() => this.message.remove(messageId), 500);
+    }
+  }
+
   /**
    * 设置数据
+   *
    * @param properties
    */
   private setSettingsModel(properties, controls) {
@@ -125,6 +238,7 @@ export class SettingComponent implements OnInit {
 
   /**
    * 根据key路径获取对应的配置的值
+   *
    * @param key
    * @returns
    */
@@ -133,6 +247,7 @@ export class SettingComponent implements OnInit {
   }
   /**
    * 获取模块的标题
+   *
    * @param module
    * @returns
    */
@@ -152,7 +267,9 @@ export class SettingComponent implements OnInit {
    * 解析所有模块的配置信息
    */
   private init() {
-    if (!window.eo && !window.eo?.getFeature) return;
+    if (!window.eo && !window.eo?.getFeature) {
+      return;
+    }
     this.isVisible = true;
     this.settings = {};
     this.nestedSettings = {};
@@ -165,21 +282,24 @@ export class SettingComponent implements OnInit {
     const controls = {};
     // 所有设置
     const allSettings = cloneDeep([
-      eoapiSettings['Eoapi-Common'],
-      eoapiSettings['Eoapi-theme'],
-      eoapiSettings['Eoapi-Extensions'],
-      // eoapiSettings['Eoapi-Features'],
+      eoapiSettings['eoapi-common'],
+      eoapiSettings['eoapi-theme'],
+      eoapiSettings['eoapi-extensions'],
+      eoapiSettings['eoapi-features'],
+      eoapiSettings['eoapi-about'],
     ]);
     // 所有配置
     const allConfiguration = allSettings.map((n) => {
       const configuration = n.features?.configuration || n.contributes?.configuration;
-      if (!Array.isArray(configuration)) {
+      if (Array.isArray(configuration)) {
+        configuration.forEach((m) => (m.moduleID ??= n.moduleID));
+      } else {
         configuration.moduleID ??= n.moduleID;
       }
       return configuration;
     });
     // 第三方扩展
-    const extensionsModule = allSettings.find((n) => n.moduleID === 'Eoapi-Extensions');
+    const extensionsModule = allSettings.find((n) => n.moduleID === 'eoapi-extensions');
     extensitonConfigurations.forEach((item) => {
       const configuration = item?.features?.configuration || item?.contributes?.configuration;
       if (configuration) {
@@ -253,61 +373,6 @@ export class SettingComponent implements OnInit {
     this.selectModule(this.treeControl.dataNodes.at(0));
   }
 
-  // private init() {
-  //   if (window.eo && window.eo.getFeature) {
-  //     this.isVisible = true;
-  //     this.settings = window.eo.getSettings();
-  //     const featureList = window.eo.getFeature('configuration');
-  //     const controls = {};
-  //     featureList?.forEach((feature: object, key: string) => {
-  //       if (!feature['title'] || !feature['properties'] || typeof feature['properties'] !== 'object') {
-  //         return true;
-  //       }
-  //       if (!this.settings[key] || typeof this.settings[key] !== 'object') {
-  //         this.settings[key] = {};
-  //       }
-  //       const fields = [];
-  //       for (let field_key in feature['properties']) {
-  //         let field = feature['properties'][field_key];
-  //         // 加入允许的type限制
-  //         if (!field['type'] || !field['label']) {
-  //           continue;
-  //         }
-  //         if ('select' === field['type'] && !field['options']) {
-  //           continue;
-  //         }
-  //         const name = key + '_' + field_key;
-  //         field = Object.assign(
-  //           {
-  //             name: name,
-  //             key: field_key,
-  //             required: false,
-  //             default: '',
-  //             description: '',
-  //           },
-  //           field
-  //         );
-  //         fields.push(field);
-  //         if (!this.settings[key][field_key]) {
-  //           this.settings[key][field_key] = field['default'];
-  //         }
-  //         // 可扩展加入更多默认校验
-  //         if (field.required) {
-  //           controls[name] = [null, [Validators.required]];
-  //         } else {
-  //           controls[name] = [null];
-  //         }
-  //       }
-  //       // this.modules.push({
-  //       //   key: key,
-  //       //   title: feature['title'],
-  //       //   fields: fields,
-  //       // });
-  //     });
-  //     this.validateForm = this.fb.group(controls);
-  //   }
-  // }
-
   handleShowModal() {
     this.isShowModal = true;
   }
@@ -329,7 +394,21 @@ export class SettingComponent implements OnInit {
     }
   }
 
-  handleCancel(): void {
-    this.isShowModal = false;
+  async handleCancel() {
+    try {
+      const result = await this.pingRmoteServerUrl();
+      if (Object.is(result, true)) {
+        this.message.success('远程数据源连接成功，关闭弹框后将重新刷新界面');
+        setTimeout(() => {
+          this.messageService.send({
+            type: 'switchDataSource',
+            data: { dataSourceType: 'http', showWithSetting: true },
+          });
+        }, 2000);
+      }
+    } catch (error) {
+    } finally {
+      this.isShowModal = false;
+    }
   }
 }

@@ -1,43 +1,110 @@
-import Koa from 'koa';
-import Router from '@koa/router';
-import cors from '@koa/cors';
-import bodyParser from 'koa-bodyparser';
+import express from 'express';
+import type { Response } from 'express';
 import portfinder from 'portfinder';
-import mockjs from 'mockjs';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { BrowserView, ipcMain } from 'electron';
+import type { Server } from 'http';
+import type { AddressInfo } from 'net';
+import { Configuration } from 'eo/platform/node/configuration/lib';
 
+const protocolReg = new RegExp('^/(http|https)://');
+// 解决对象循环引用问题
+const jsonStringify = (obj) => {
+  let cache = [];
+  const str = JSON.stringify(obj, (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.includes(value)) {
+        // 移除
+        return;
+      }
+      // 收集所有的值
+      cache.push(value);
+    }
+    return value;
+  });
+  cache = null; // 清空变量，便于垃圾回收机制回收
+  return str;
+};
 export class MockServer {
-  private app: Koa;
-  private router: Router;
+  private app: ReturnType<typeof express>;
+  private server: Server;
+  view: BrowserView;
+  private configuration = new Configuration();
+  private apiProxy: ReturnType<typeof createProxyMiddleware>;
   /** mock服务地址 */
   private mockUrl = '';
 
-  constructor(prefix = '') {
-    this.app = new Koa();
-    this.router = new Router({ prefix });
+  constructor() {
+    this.app = express();
+    this.createProxyServer();
+  }
 
-    // 使用ctx.body解析中间件
-    this.app.use(bodyParser());
-    // 加载路由中间件
-    this.app.use(this.router.routes()).use(this.router.allowedMethods());
-    // 允许跨域请求
-    this.app.use(cors());
-    this.initRoutes();
+  /**
+   * 创建代理服务器
+   */
+  private createProxyServer() {
+    this.apiProxy = createProxyMiddleware({
+      target: 'http://www.example.org',
+      changeOrigin: true,
+      pathFilter: (path) => {
+        // console.log('pathFilter path', path, path.match('^/(http|https)://'));
+        return Boolean(path.match('^/(http|https)://'));
+      },
+      pathRewrite: (path, req) => {
+        // console.log('pathRewrite', path, req.url);
+        return path.replace(req.url, '');
+      },
+      router: (req) => {
+        console.log('router req', req.url);
+        return req.url.slice(1);
+      },
+    });
+
+    this.app.use(this.apiProxy);
+
+    this.app.all('*', (req, res, next) => {
+      if (!protocolReg.test(req.url)) {
+        // 匹配请求方式
+        const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
+        if (req.query.mockID || isMatchType) {
+          this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+          ipcMain.once('getMockApiList', (event, message) => {
+            console.log('getMockApiList message', message);
+            const { response = {}, statusCode = 200 } = message;
+            res.statusCode = statusCode;
+            if (res.statusCode === 404) {
+              this.send404(res, isMatchType);
+            } else {
+              res.send(response);
+            }
+            next();
+          });
+        } else {
+          this.send404(res, isMatchType);
+          next();
+        }
+      } else {
+        next();
+      }
+    });
   }
 
   /**
    * 启动mock服务
    * @param port mock服务端口号
    */
-  async start(port = 3040) {
+  async start(view: BrowserView, port = 3040) {
+    this.view = view;
     portfinder.basePort = port;
     // 使用 portfinder 做端口检测，若发现端口被占用则端口自增1
     const _port = await portfinder.getPortPromise();
 
     return new Promise((resolve, reject) => {
-      this.app
+      this.server = this.app
         .listen(_port, () => {
-          this.mockUrl = `http://localhost:${_port}`;
-          console.log(`mock服务已启动: ${this.mockUrl}`);
+          const { port } = this.server.address() as AddressInfo;
+          this.mockUrl = `http://127.0.0.1:${port}`;
+          console.log(`mock服务已启动：${this.mockUrl}`);
           resolve(this.mockUrl);
         })
         .on('error', (error) => {
@@ -61,86 +128,18 @@ export class MockServer {
   getMockUrl() {
     return this.mockUrl;
   }
-  /**
-   * 重置\清空 路由
-   */
-  resetRoutes() {
-    this.router.stack = [];
-  }
 
   /**
-   * 重置\清空 并初始化路由
+   * 响应404
    */
-  resetAndInitRoutes() {
-    this.resetRoutes();
-    this.initRoutes();
-  }
-
-  /**
-   * 注册路由
-   * @param method 请求方法
-   * @param path 请求路径
-   * @param data 响应的数据
-   */
-  registerRoute(method: string, path: string, data = {}) {
-    const { pathname, search } = new URL(path, this.mockUrl);
-    // Object.fromEntries(searchParams.entries())
-    // console.log('registerRoute', method.toLocaleLowerCase(), pathname + search);
-    this.router[method.toLocaleLowerCase()](pathname + search, async (ctx, next) => {
-      try {
-        const mockData = typeof data === 'string' ? JSON.parse(data) : data;
-        ctx.body = mockjs.mock(mockData);
-      } catch (e) {
-        ctx.body = {
-          tips: '返回数据格式有误，请检查！',
-          errorMsg: e.message,
-          originData: data,
-        };
-        ctx.status = 500;
-      }
-      await next();
-    });
-  }
-
-  /**
-   * 注销路由
-   * @param methods 请求方法
-   * @param path 请求路径
-   */
-  unRegisterRoute(methods: string[], path: string) {
-    const _methods = methods.map((n) => n.toLocaleUpperCase());
-    // 将匹配到的路由注销掉
-    this.router.stack = this.router.stack.filter((item) => {
-      const isMatch = item.methods.some((n) => _methods.includes(n)) && item.path === path;
-      return !isMatch;
-    });
-  }
-
-  /**
-   * 初始化默认路由
-   */
-  initRoutes() {
-    this.router.get('/', async (ctx, next) => {
-      const mockPeople = mockjs.mock({
-        'peoples|10': [
-          {
-            'id|+1': 1,
-            guid: '@guid',
-            name: '@cname',
-            age: '@integer(20, 50)',
-            birthday: '@date("MM-dd")',
-            address: '@county(true)',
-            email: '@email',
-          },
-        ],
-      });
-      ctx.body = mockPeople;
-      await next();
-    });
-
-    this.router.get('/mock_stack', async (ctx, next) => {
-      ctx.body = this.router;
-      await next();
+  send404(res: Response, isMatchType = false) {
+    res.statusCode = 404;
+    res.send({
+      code: 404,
+      message: '没有该API或缺少mockID',
+      tips: isMatchType
+        ? '未匹配到文档中的API，请检查请求方式和请求URL是否正确'
+        : '当前未开启匹配请求方式, 开启后，系统会匹配和 API 文档请求方式（GET、POST...）一致的 Mock',
     });
   }
 }

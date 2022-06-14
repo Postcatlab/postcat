@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
+import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
@@ -57,23 +57,23 @@ export class EnvComponent implements OnInit, OnDestroy {
   getAllEnv(uuid?: number) {
     const projectID = 1;
     return new Promise((resolve) => {
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageHandleResult) => {
-        if (result.status !== StorageHandleStatus.success) {
-          this.envList = [];
-          await this.handleAddEnv(projectID);
-          resolve(true);
-          return;
+      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.envList = result.data || [];
+          if (!this.envList.length) {
+            await this.handleAddEnv(projectID);
+            resolve(true);
+            return;
+          }
+          await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
         }
-        this.envList = result.data;
-        await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
-        resolve(true);
       });
     });
   }
 
   handleDeleteEnv(uuid: string) {
     // * delete env in menu on left sidebar
-    this.storage.run('environmentRemove', [uuid], async (result: StorageHandleResult) => {
+    this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
       await this.getAllEnv();
       if (this.envUuid === Number(uuid)) {
         this.envUuid = this.activeUuid;
@@ -88,11 +88,12 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleSwitchEnv(uuid) {
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
-      this.storage.run('environmentLoad', [uuid], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.envInfo = result.data;
         }
-        this.activeUuid = uuid;
+        console.log('result.data', result.data, uuid);
+        this.activeUuid = result.data?.uuid ?? null;
         resolve(true);
       });
     });
@@ -121,8 +122,8 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run(
         'environmentUpdate',
         [{ ...other, name, parameters: data }, uuid],
-        async (result: StorageHandleResult) => {
-          if (result.status === StorageHandleStatus.success) {
+        async (result: StorageRes) => {
+          if (result.status === StorageResStatus.success) {
             this.message.success('编辑成功');
             await this.getAllEnv(this.activeUuid);
             if (this.envUuid === Number(uuid)) {
@@ -134,8 +135,8 @@ export class EnvComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.message.success('新增成功');
           this.envInfo = result.data;
           this.activeUuid = Number(result.data.uuid);
@@ -172,8 +173,8 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.store.dispatch(new Change(null));
       return;
     }
-    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
         this.store.dispatch(new Change(data));
       }

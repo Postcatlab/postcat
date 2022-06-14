@@ -6,9 +6,9 @@ import { StorageService } from '../../../../shared/services/storage';
 import {
   ApiTestHistory,
   ApiTestHistoryFrame,
-  StorageHandleResult,
-  StorageHandleStatus,
-} from 'eo/platform/browser/IndexedDB';
+  StorageRes,
+  StorageResStatus,
+} from '../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-test-history',
@@ -39,9 +39,10 @@ export class ApiTestHistoryComponent implements OnInit {
           ...history,
         },
       ],
-      (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.parseItem(result.data);
+          this.model = this.model || [];
           this.model.unshift(result.data);
         } else {
           console.error(result.data);
@@ -51,12 +52,12 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   deleteAll() {
-    this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.model = [];
         this.message.success('删除成功');
       } else {
-        this.message.success('删除失败');
+        this.message.error('删除失败');
         console.error(result.data);
       }
     });
@@ -122,8 +123,8 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   private delete(inArg) {
-    this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.model.splice(inArg.$index, 1);
         this.message.success('删除成功');
       } else {
@@ -134,9 +135,9 @@ export class ApiTestHistoryComponent implements OnInit {
   }
 
   private getList() {
-    this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
-        result.data.forEach((val: any) => {
+    this.storage.run('apiTestHistoryLoadAllByApiDataID', [this.apiID], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
+        [].concat(result.data).forEach((val: any) => {
           this.parseItem(val);
         });
         this.model = result.data || [];

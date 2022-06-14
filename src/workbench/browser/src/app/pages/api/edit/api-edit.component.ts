@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
 import { Subject } from 'rxjs';
@@ -16,9 +16,9 @@ import {
   RequestProtocol,
   RequestMethod,
   ApiEditRest,
-  StorageHandleResult,
-  StorageHandleStatus,
-} from 'eo/platform/browser/IndexedDB';
+  StorageRes,
+  StorageResStatus,
+} from '../../../shared/services/storage/index.model';
 import { ApiTabService } from '../tab/api-tab.service';
 
 import { objectToArray } from '../../../utils';
@@ -30,10 +30,6 @@ import {
   getExpandGroupByKey,
 } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
-import { tree2obj } from '../../../utils/tree/tree.utils';
-import { ApiEditMockComponent } from './mock/api-edit-mock.component';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
-
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -41,7 +37,6 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services/elec
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
-  @ViewChild(ApiEditMockComponent) apiEditMockComp: ApiEditMockComponent;
   validateForm!: FormGroup;
   apiData: ApiData;
   groups: any[];
@@ -55,11 +50,10 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private message: EoMessageService,
+    private message: NzMessageService,
     private messageService: MessageService,
     private apiTab: ApiTabService,
-    private storage: StorageService,
-    public electron: ElectronService
+    private storage: StorageService
   ) {}
   getApiGroup() {
     this.groups = [];
@@ -73,9 +67,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         isLeaf: false,
       },
     ];
-    this.storage.run('groupLoadAllByProjectID', [1], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
-        result.data.forEach((item: Group) => {
+    this.storage.run('groupLoadAllByProjectID', [1], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
+        [].concat(result.data).forEach((item: Group) => {
           delete item.updatedAt;
           treeItems.push({
             title: item.name,
@@ -92,28 +86,14 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   getApi(id) {
-    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
-        this.apiData = result.data;
-        // 如果没有mock，则生成系统默认mock
-        if ((window.eo?.getMockUrl && !Array.isArray(this.apiData.mockList)) || this.apiData.mockList?.length === 0) {
-          const url = new URL(this.apiData.uri, window.eo.getMockUrl());
-          this.apiData.mockList = [
-            {
-              name: '系统默认期望',
-              url: url.toString(),
-              response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
-              isDefault: true,
-            },
-          ];
-        }
-
+    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         ['requestBody', 'responseBody'].forEach((tableName) => {
           if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
             result.data[tableName] = treeToListHasLevel(result.data[tableName]);
           }
         });
-
+        this.apiData = result.data;
         this.changeGroupID$.next(this.apiData.groupID);
         this.validateForm.patchValue(this.apiData);
       }
@@ -132,26 +112,19 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     }
     const formData: any = Object.assign({}, this.apiData, this.validateForm.value);
     formData.groupID = Number(formData.groupID === '-1' ? '0' : formData.groupID);
-    [
-      'requestBody',
-      'queryParams',
-      'restParams',
-      'requestHeaders',
-      'responseHeaders',
-      'responseBody',
-      'mockList',
-    ].forEach((tableName) => {
-      if (typeof this.apiData[tableName] !== 'object') {
-        return;
-      }
-      formData[tableName] = this.apiData[tableName].filter((val) => val.name);
-      if (['requestBody', 'responseBody'].includes(tableName)) {
-        if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
-          formData[tableName] = listToTreeHasLevel(formData[tableName]);
+    ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(
+      (tableName) => {
+        if (typeof this.apiData[tableName] !== 'object') {
+          return;
+        }
+        formData[tableName] = (this.apiData[tableName]||[]).filter((val) => val.name);
+        if (['requestBody', 'responseBody'].includes(tableName)) {
+          if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
+            formData[tableName] = listToTreeHasLevel(formData[tableName]);
+          }
         }
       }
-    });
-
+    );
     this.editApi(formData);
   }
   bindGetApiParamNum(params) {
@@ -169,13 +142,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  /**
-   * 打开添加mock弹窗
-   */
-  openAddMockModal() {
-    this.apiEditMockComp.openAddModal();
-  }
-
   private initApi(id) {
     this.resetForm();
     this.initBasicForm();
@@ -211,7 +177,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       this.getApi(id);
     }
   }
-
   private watchTabChange() {
     this.apiTab.tabChange$
       .pipe(
@@ -309,8 +274,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.storage.run(
       busEvent === 'editApi' ? 'apiDataUpdate' : 'apiDataCreate',
       [formData, this.apiData.uuid],
-      (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.message.success(title);
           this.messageService.send({ type: `${busEvent}Success`, data: result.data });
         } else {

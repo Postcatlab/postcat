@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiTestQuery } from '../../../shared/services/api-test/api-test-params.model';
-import { ApiTestHistory } from 'eo/platform/browser/IndexedDB';
+import { ApiTestHistory } from '../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
 
@@ -181,7 +181,7 @@ export class ApiTestService {
     let search = '';
     result.forEach((val) => {
       if (!val.name || !val.required) return;
-      search += `${val.name}=${val.value}&`;
+      search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
     });
     search = search ? `?${search.slice(0, -1)}` : '';
     url = `${url.split('?')[0]}${search}`;
@@ -282,6 +282,7 @@ export class ApiTestService {
   }
   getTestDataFromApi(inData) {
     let editToTestParams = (arr) => {
+      arr=arr||[];
       arr.forEach((val) => {
         val.value = val.example;
         delete val.example;

@@ -4,10 +4,10 @@ import {
   ApiData,
   ApiBodyType,
   JsonRootType,
-  StorageHandleResult,
-  StorageHandleStatus,
-} from 'eo/platform/browser/IndexedDB';
-import { tree2obj, treeToListHasLevel } from '../../../utils/tree/tree.utils';
+  StorageRes,
+  StorageResStatus,
+} from '../../../shared/services/storage/index.model';
+import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 import { StorageService } from '../../../shared/services/storage';
 
@@ -43,27 +43,14 @@ export class ApiDetailComponent implements OnInit {
     });
   }
   getApiByUuid(id: number) {
-    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
-      this.apiData = result.data;
-      if (result.status === StorageHandleStatus.success) {
-        // 如果没有mock，则生成系统默认mock
-        if ((window.eo?.getMockUrl && !Array.isArray(this.apiData.mockList)) || this.apiData.mockList?.length === 0) {
-          const url = new URL(this.apiData.uri, window.eo.getMockUrl());
-          this.apiData.mockList = [
-            {
-              name: '系统默认期望',
-              url: url.toString(),
-              response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
-              isDefault: true,
-            },
-          ];
-        }
-
+    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         ['requestBody', 'responseBody'].forEach((tableName) => {
-          if (['xml', 'json'].includes(this.apiData[`${tableName}Type`])) {
-            this.apiData[tableName] = treeToListHasLevel(this.apiData[tableName]);
+          if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
+            result.data[tableName] = treeToListHasLevel(result.data[tableName]);
           }
         });
+        this.apiData = result.data;
       }
     });
   }
