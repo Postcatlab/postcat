@@ -36,10 +36,12 @@ export class ImportApiComponent implements OnInit {
         ...data,
       });
     });
-    const [target] = this.supportList;
-    this.currentExtension = target.key;
-    this.optionList = parserProperties(target.properties);
-    this.currentOption = getDefaultValue(this.optionList, 'value');
+    {
+      const { key, properties } = this.supportList.at(0);
+      this.currentExtension = key || '';
+      this.optionList = parserProperties(properties || '');
+      this.currentOption = getDefaultValue(this.optionList, 'value');
+    }
   }
   getEoapiData() {
     return new Promise((resolve) => {
@@ -61,20 +63,13 @@ export class ImportApiComponent implements OnInit {
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    // const filename = feature.filename || null;
     const module = window.eo.loadFeatureModule(this.currentExtension);
     const data = module[action](eoapiData, this.uploadData, this.currentOption);
-    // this.storage.run('groupBulkRemove', [[9]], (result: StorageHandleResult) => {
-    //   console.log('=>', result);
-    // });
-    // this.storage.run('apiDataBulkRemove', [[60, 61]], (result: StorageHandleResult) => {
-    //   console.log('=!!>', result);
-    // });
     this.messageService.send({
       type: 'importSuccess',
       data: JSON.stringify(data),
     });
-    console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data));
     callback(true);
   }
 }
