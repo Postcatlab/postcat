@@ -258,7 +258,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             });
             break;
           case 'gotoAddApi':
-            this.appendOrSwitchTab('edit', inArg.data ?? {});
+            this.appendOrSwitchTab('edit', inArg.data ? { groupID: inArg.data.key.replace('group-', '') } : {});
             break;
           case 'addApiSuccess':
           case 'editApiSuccess':

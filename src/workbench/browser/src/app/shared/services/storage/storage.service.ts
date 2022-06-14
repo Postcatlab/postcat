@@ -37,7 +37,6 @@ export class StorageService {
       (res: any) => {
         handleResult.status = res.status;
         handleResult.data = res.data;
-        console.log(handleResult);
         callback(handleResult);
       },
       (error: any) => {
@@ -66,7 +65,5 @@ export class StorageService {
     this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
     this.setStorage(this.dataSourceType, options);
     localStorage.setItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION', this.dataSourceType === 'local' ? 'true' : 'false');
-    console.log('this.dataSourceType', this.dataSourceType);
-    console.log('this.instance', this.instance);
   }
 }
