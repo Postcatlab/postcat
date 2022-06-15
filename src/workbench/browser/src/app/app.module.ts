@@ -17,6 +17,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { MessageService } from './shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,6 +34,7 @@ import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storag
   ],
   providers: [
     MessageService,
+    StorageService,
     IndexedDBStorage,
     HttpStorage,
     {

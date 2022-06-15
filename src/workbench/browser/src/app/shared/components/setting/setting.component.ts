@@ -10,6 +10,7 @@ import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import MarkdownIt from 'markdown-it';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 interface TreeNode {
   name: string;
@@ -96,7 +97,12 @@ export class SettingComponent implements OnInit {
   }
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private fb: FormBuilder, private messageService: MessageService, private message: NzMessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private message: NzMessageService,
+    private remoteService: RemoteService
+  ) {
     this.customLinkRender();
   }
 
@@ -117,7 +123,6 @@ export class SettingComponent implements OnInit {
             this.dataSourceType = inArg.data.dataSourceType;
             if (inArg.data.showWithSetting) {
               location.reload();
-              this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
             }
             break;
           }
@@ -153,8 +158,8 @@ export class SettingComponent implements OnInit {
    * 切换数据源
    */
   switchDataSource() {
-    console.log('switchDataSource', this.messageService);
-    this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
+    this.remoteService.switchDataSource();
+    // this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
   }
 
   /**
@@ -404,7 +409,7 @@ export class SettingComponent implements OnInit {
             type: 'switchDataSource',
             data: { dataSourceType: 'http', showWithSetting: true },
           });
-        }, 2000);
+        }, 2500);
       }
     } catch (error) {
     } finally {

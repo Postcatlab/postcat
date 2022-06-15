@@ -1,11 +1,14 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
-import { NzNotificationService, NzNotificationRef } from 'ng-zorro-antd/notification';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
+import {
+  RemoteService,
+  IS_SHOW_DATA_SOURCE_TIP,
+} from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 @Component({
   selector: 'eo-navbar',
@@ -15,7 +18,6 @@ import { NzConfigService } from 'ng-zorro-antd/core/config';
 export class NavbarComponent implements OnInit {
   isMaximized = false;
   isElectron = false;
-  messageId;
   messageTop;
   @ViewChild('notificationTemplate', { static: true })
   notificationTemplate!: TemplateRef<{}>;
@@ -28,7 +30,6 @@ export class NavbarComponent implements OnInit {
   get dataSourceText() {
     return this.isRemote ? '远程' : '本地';
   }
-  nzNotificationRef: NzNotificationRef;
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
   resourceInfo = [
@@ -60,9 +61,9 @@ export class NavbarComponent implements OnInit {
   constructor(
     private electron: ElectronService,
     private messageService: MessageService,
-    private notification: NzNotificationService,
     private message: NzMessageService,
-    private nzConfigService: NzConfigService
+    private nzConfigService: NzConfigService,
+    private remoteService: RemoteService
   ) {
     this.isElectron = this.electron.isElectron;
     this.messageTop = this.nzConfigService.getConfig()?.message?.nzTop;
@@ -133,8 +134,9 @@ export class NavbarComponent implements OnInit {
         switch (inArg.type) {
           case 'onDataSourceChange': {
             this.dataSourceType = inArg.data.dataSourceType;
-            this.showNotification();
-            inArg.data?.callback?.();
+            if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
+              this.showMessage();
+            }
             this.messageService.send({ type: 'remoteServerUpdate', data: this });
             break;
           }
@@ -143,10 +145,10 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * 切换数据源
+   * switch data
    */
-  switchDataSource = () => {
-    this.messageService.send({ type: 'switchDataSource', data: { callback: () => this.showMessage() } });
+  switchDataSource = async () => {
+    this.remoteService.switchDataSource();
   };
 
   getModules(): Array<ModuleInfo> {
@@ -159,45 +161,9 @@ export class NavbarComponent implements OnInit {
   openSettingModal() {
     this.messageService.send({ type: 'toggleSettingModalVisible', data: { isShow: true } });
   }
-  /**
-   * 移除消息通知
-   */
-  removeNotification() {
-    this.nzNotificationRef?.messageId && this.notification.remove(this.nzNotificationRef.messageId);
-  }
-
-  showNotification() {
-    this.removeNotification();
-    if (this.notificationTemplate && !this.isRemote) {
-      this.nzConfigService.set('message', { nzTop: 24 * 5 });
-      this.nzNotificationRef = this.notification.template(this.notificationTemplate, {
-        nzStyle: {
-          position: 'fixed',
-          right: 0,
-          left: 0,
-          top: '50px',
-          minWidth: '100vw',
-          height: '50px',
-          padding: 0,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'rgb(255, 219, 7)',
-        },
-        nzDuration: 10000,
-      });
-    }
-  }
 
   showMessage() {
-    location.reload();
-    this.messageId ?? this.message.remove(this.messageId);
-
-    const message = this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
-    this.messageId = message.messageId;
-    message.onClose.subscribe(() => {
-      // 还原message组件默认设置
-      this.nzConfigService.set('message', { nzTop: this.messageTop });
-    });
+    this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+    localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

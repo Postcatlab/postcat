@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import {
   DataSourceType,
   DATA_SOURCE_TYPE_KEY,
+  StorageService,
 } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
+
+export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
 /**
  * @description
@@ -13,6 +18,7 @@ import {
   providedIn: 'root',
 })
 export class RemoteService {
+  private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
   /** Is it a remote data source */
@@ -25,7 +31,19 @@ export class RemoteService {
   }
   private subject = new Subject<any>();
 
-  constructor() {}
+  constructor(private storageService: StorageService, private messageService: MessageService) {
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'onDataSourceChange': {
+            this.dataSourceType = inArg.data.dataSourceType;
+            break;
+          }
+        }
+      });
+  }
 
   /**
    * send message
@@ -48,7 +66,7 @@ export class RemoteService {
   /**
    * 测试远程服务器地址是否可用
    */
-  async pingRmoteServerUrl() {
+  async pingRmoteServerUrl(): Promise<[boolean, any]> {
     const { url: remoteUrl, token } = window.eo.getModuleSettings('eoapi-common.remoteServer');
 
     const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
@@ -60,9 +78,37 @@ export class RemoteService {
     const result = await response.json();
 
     if (result.statusCode !== 200) {
-      return Promise.reject(result);
+      return [false, result];
     }
 
-    return result;
+    return [true, result];
   }
+
+  switchToLocal() {
+    this.storageService.toggleDataSource({ dataSourceType: 'local' });
+  }
+
+  switchToHttp() {
+    this.storageService.toggleDataSource({ dataSourceType: 'http' });
+  }
+
+  /**
+   * switch data
+   */
+  switchDataSource = async () => {
+    if (this.isRemote) {
+      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+      this.switchToLocal();
+      location.reload();
+    } else {
+      const [isSuccess] = await this.pingRmoteServerUrl();
+      if (isSuccess) {
+        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+        this.switchToHttp();
+        location.reload();
+      } else {
+        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+      }
+    }
+  };
 }
