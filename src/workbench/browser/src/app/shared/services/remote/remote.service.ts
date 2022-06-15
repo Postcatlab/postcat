@@ -46,13 +46,9 @@ export class RemoteService {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'onDataSourceChange': {
-            setTimeout(() => {
-              this.dataSourceType = inArg.data.dataSourceType;
-            });
+            this.dataSourceType = inArg.data.dataSourceType;
             if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
-              setTimeout(() => {
-                requestIdleCallback(() => this.showMessage());
-              }, 1200);
+              this.showMessage();
             }
             break;
           }

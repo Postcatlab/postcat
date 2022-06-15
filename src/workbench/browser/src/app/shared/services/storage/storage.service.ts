@@ -57,12 +57,11 @@ export class StorageService {
         break;
       }
     }
+    console.log('instance', this.instance);
     localStorage.setItem(DATA_SOURCE_TYPE_KEY, type);
-    requestIdleCallback(() => {
-      this.messageService.send({
-        type: 'onDataSourceChange',
-        data: { ...options, dataSourceType: this.dataSourceType },
-      });
+    this.messageService.send({
+      type: 'onDataSourceChange',
+      data: { ...options, dataSourceType: this.dataSourceType },
     });
   }
   toggleDataSource(options: any = {}) {

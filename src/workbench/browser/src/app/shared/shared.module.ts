@@ -29,7 +29,6 @@ import { ModalService } from './services/modal.service';
 import { PageBlankComponent } from './components/page-blank/page-blank.component';
 import { PageFeaturePreviewComponent } from './components/page-feature-preview/page-feature-preview.component';
 import { RouterModule } from '@angular/router';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -58,7 +57,7 @@ const COMPONENTS = [
     NzDescriptionsModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
-  providers: [ModalService, StorageService],
+  providers: [ModalService],
   exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
 })
 export class SharedModule {}

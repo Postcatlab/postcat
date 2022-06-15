@@ -38,7 +38,6 @@ import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
-import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
 import { ApiMockComponent } from './mock/api-mock.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -89,7 +88,6 @@ const COMPONENTS = [
   providers: [
     ElectronService,
     ApiService,
-    StorageService,
     HttpStorage,
     IndexedDBStorage,
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
