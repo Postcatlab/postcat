@@ -58,7 +58,7 @@ export class StorageService {
       }
     }
     localStorage.setItem(DATA_SOURCE_TYPE_KEY, type);
-    setTimeout(() => {
+    requestIdleCallback(() => {
       this.messageService.send({
         type: 'onDataSourceChange',
         data: { ...options, dataSourceType: this.dataSourceType },

@@ -78,12 +78,16 @@ export class RemoteService {
         'x-api-key': token,
       },
     });
-    const result = await response.json();
+    let result;
+    try {
+      result = await response.json();
 
-    if (result.statusCode !== 200) {
-      return [false, result];
+      if (result.statusCode !== 200) {
+        return [false, result];
+      }
+    } catch (e) {
+      return [false, e];
     }
-
     return [true, result];
   }
 
@@ -111,6 +115,7 @@ export class RemoteService {
         this.refreshComponent();
       } else {
         console.log('切换失败');
+        this.message.create('error', `远程数据源不可用`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     }
