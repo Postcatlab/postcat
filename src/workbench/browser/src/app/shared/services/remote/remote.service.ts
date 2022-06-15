@@ -61,9 +61,9 @@ export class RemoteService {
   }
 
   refreshComponent() {
-    // this.router.navigate([this.router.url]);
-    // console.log('this.router.url', this.router.url);
-    location.reload();
+    this.router.navigate(['home/blank']).then(() => {
+      this.router.navigate(['home']);
+    });
   }
 
   /**
