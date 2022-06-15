@@ -56,10 +56,11 @@ export class RemoteService {
       });
   }
 
-  refreshComponent() {
-    this.router.navigate(['home/blank']).then(() => {
-      this.router.navigate(['home']);
-    });
+  async refreshComponent() {
+    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
+    // console.log('this.router', pathname, Object.fromEntries(searchParams.entries()));
+    await this.router.navigate(['**']);
+    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
   }
 
   /**

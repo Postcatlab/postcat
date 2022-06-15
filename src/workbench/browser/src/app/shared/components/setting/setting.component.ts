@@ -9,7 +9,7 @@ import { eoapiSettings } from './eoapi-settings/';
 import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it/dist/markdown-it';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 interface TreeNode {
@@ -403,15 +403,9 @@ export class SettingComponent implements OnInit {
     try {
       const result = await this.pingRmoteServerUrl();
       if (Object.is(result, true)) {
-        this.message.success('远程数据源连接成功，关闭弹框后将重新刷新界面');
-        setTimeout(() => {
-          this.remoteService.switchToHttp();
-          location.reload();
-          // this.messageService.send({
-          //   type: 'switchDataSource',
-          //   data: { dataSourceType: 'http', showWithSetting: true },
-          // });
-        }, 2500);
+        this.message.success('远程数据源连接成功');
+        this.remoteService.switchToHttp();
+        this.remoteService.refreshComponent();
       }
     } catch (error) {
     } finally {

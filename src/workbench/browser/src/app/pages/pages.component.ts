@@ -6,9 +6,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { Subject, takeUntil } from 'rxjs';
 import { isElectron } from 'eo/shared/common/common';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
-/** is show local data source tips */
-export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 @Component({
   selector: 'eo-pages',
   templateUrl: './pages.component.html',
