@@ -1,14 +1,9 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { Message, MessageService } from '../../../shared/services/message';
-import { Subject, takeUntil } from 'rxjs';
+import { MessageService } from '../../../shared/services/message';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
-import {
-  RemoteService,
-  IS_SHOW_DATA_SOURCE_TIP,
-} from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 @Component({
   selector: 'eo-navbar',
@@ -21,14 +16,16 @@ export class NavbarComponent implements OnInit {
   messageTop;
   @ViewChild('notificationTemplate', { static: true })
   notificationTemplate!: TemplateRef<{}>;
-  dataSourceType = 'http';
+  get dataSourceType() {
+    return this.remoteService.dataSourceType;
+  }
   /** 是否远程数据源 */
   get isRemote() {
-    return this.dataSourceType === 'http';
+    return this.remoteService.isRemote;
   }
   /** 当前数据源对应的文本 */
   get dataSourceText() {
-    return this.isRemote ? '远程' : '本地';
+    return this.remoteService.dataSourceText;
   }
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
@@ -56,12 +53,10 @@ export class NavbarComponent implements OnInit {
       link: '',
     },
   ];
-  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private electron: ElectronService,
     private messageService: MessageService,
-    private message: NzMessageService,
     private nzConfigService: NzConfigService,
     private remoteService: RemoteService
   ) {
@@ -127,21 +122,6 @@ export class NavbarComponent implements OnInit {
     } else {
       this.modules = new Map();
     }
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'onDataSourceChange': {
-            this.dataSourceType = inArg.data.dataSourceType;
-            if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
-              this.showMessage();
-            }
-            this.messageService.send({ type: 'remoteServerUpdate', data: this });
-            break;
-          }
-        }
-      });
   }
 
   /**
@@ -160,10 +140,5 @@ export class NavbarComponent implements OnInit {
    */
   openSettingModal() {
     this.messageService.send({ type: 'toggleSettingModalVisible', data: { isShow: true } });
-  }
-
-  showMessage() {
-    this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
-    localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

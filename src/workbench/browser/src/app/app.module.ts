@@ -18,6 +18,8 @@ import { MessageService } from './shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,8 +37,10 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
   providers: [
     MessageService,
     StorageService,
+    RemoteService,
     IndexedDBStorage,
     HttpStorage,
+    NzMessageService,
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),

@@ -7,7 +7,9 @@ import {
 } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
+/** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
 /**
@@ -21,6 +23,7 @@ export class RemoteService {
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
+
   /** Is it a remote data source */
   get isRemote() {
     return this.dataSourceType === 'http';
@@ -31,7 +34,11 @@ export class RemoteService {
   }
   private subject = new Subject<any>();
 
-  constructor(private storageService: StorageService, private messageService: MessageService) {
+  constructor(
+    private storageService: StorageService,
+    private messageService: MessageService,
+    private message: NzMessageService
+  ) {
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -39,6 +46,11 @@ export class RemoteService {
         switch (inArg.type) {
           case 'onDataSourceChange': {
             this.dataSourceType = inArg.data.dataSourceType;
+            if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
+              setTimeout(() => {
+                requestIdleCallback(() => this.showMessage());
+              }, 1200);
+            }
             break;
           }
         }
@@ -107,8 +119,14 @@ export class RemoteService {
         this.switchToHttp();
         location.reload();
       } else {
+        console.log('切换失败');
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     }
   };
+
+  showMessage() {
+    this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+    localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
+  }
 }

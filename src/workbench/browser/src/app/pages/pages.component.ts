@@ -5,7 +5,10 @@ import { Message } from 'eo/workbench/browser/src/app/shared/services/message/me
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Subject, takeUntil } from 'rxjs';
 import { isElectron } from 'eo/shared/common/common';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
+/** is show local data source tips */
+export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 @Component({
   selector: 'eo-pages',
   templateUrl: './pages.component.html',
@@ -14,20 +17,24 @@ import { isElectron } from 'eo/shared/common/common';
 export class PagesComponent implements OnInit {
   loadedIframe = false;
   iframeSrc: SafeResourceUrl;
-  isRemote = true;
+  get isRemote() {
+    return this.remoteService.isRemote;
+  }
   isElectron = isElectron();
   isClose = true;
-  dataSourceText = '';
-  switchDataSource = () => ({});
+  get dataSourceText() {
+    return this.remoteService.dataSourceText;
+  }
   private destroy$: Subject<void> = new Subject<void>();
   get isShowNotification() {
-    return !this.isRemote && !this.isClose && localStorage.getItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION') !== 'false';
+    return !this.isRemote && !this.isClose && localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
   }
 
   constructor(
     private cdRef: ChangeDetectorRef,
     public sidebar: SidebarService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private remoteService: RemoteService
   ) {}
   ngOnInit(): void {
     this.watchSidebarItemChange();
@@ -53,22 +60,21 @@ export class PagesComponent implements OnInit {
     });
   }
 
+  switchDataSource = () => {
+    this.remoteService.switchDataSource();
+  };
+
   private watchRemoteServerChange() {
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
-          case 'remoteServerUpdate': {
-            const { isRemote, switchDataSource, dataSourceText } = inArg.data;
+          case 'onDataSourceChange': {
             setTimeout(() => {
-              this.isRemote = isRemote;
-              this.dataSourceText = dataSourceText;
-              this.switchDataSource = switchDataSource;
-              if (!isRemote) {
+              if (!this.remoteService.isRemote) {
                 this.isClose = false;
               }
-              console.log('this.isClose', this.isClose, isRemote);
             });
             break;
           }
@@ -78,6 +84,6 @@ export class PagesComponent implements OnInit {
 
   closeNotification() {
     this.isClose = true;
-    localStorage.setItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION', 'false');
+    localStorage.setItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION, 'false');
   }
 }
