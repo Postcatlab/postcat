@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import {
   DataSourceType,
   DATA_SOURCE_TYPE_KEY,
@@ -8,6 +8,7 @@ import {
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Router } from '@angular/router';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -32,12 +33,12 @@ export class RemoteService {
   get dataSourceText() {
     return this.isRemote ? '远程' : '本地';
   }
-  private subject = new Subject<any>();
 
   constructor(
     private storageService: StorageService,
     private messageService: MessageService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private router: Router
   ) {
     this.messageService
       .get()
@@ -45,7 +46,9 @@ export class RemoteService {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'onDataSourceChange': {
-            this.dataSourceType = inArg.data.dataSourceType;
+            setTimeout(() => {
+              this.dataSourceType = inArg.data.dataSourceType;
+            });
             if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
               setTimeout(() => {
                 requestIdleCallback(() => this.showMessage());
@@ -57,22 +60,10 @@ export class RemoteService {
       });
   }
 
-  /**
-   * send message
-   *
-   * @param message
-   */
-  send(message: any): void {
-    this.subject.next(message);
-  }
-
-  /**
-   * get message
-   *
-   * @returns message mutation observer
-   */
-  get(): Observable<any> {
-    return this.subject.asObservable();
+  refreshComponent() {
+    // this.router.navigate([this.router.url]);
+    // console.log('this.router.url', this.router.url);
+    location.reload();
   }
 
   /**
@@ -111,13 +102,13 @@ export class RemoteService {
     if (this.isRemote) {
       localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
       this.switchToLocal();
-      location.reload();
+      this.refreshComponent();
     } else {
       const [isSuccess] = await this.pingRmoteServerUrl();
       if (isSuccess) {
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
         this.switchToHttp();
-        location.reload();
+        this.refreshComponent();
       } else {
         console.log('切换失败');
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');

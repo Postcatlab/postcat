@@ -405,10 +405,12 @@ export class SettingComponent implements OnInit {
       if (Object.is(result, true)) {
         this.message.success('远程数据源连接成功，关闭弹框后将重新刷新界面');
         setTimeout(() => {
-          this.messageService.send({
-            type: 'switchDataSource',
-            data: { dataSourceType: 'http', showWithSetting: true },
-          });
+          this.remoteService.switchToHttp();
+          location.reload();
+          // this.messageService.send({
+          //   type: 'switchDataSource',
+          //   data: { dataSourceType: 'http', showWithSetting: true },
+          // });
         }, 2500);
       }
     } catch (error) {
