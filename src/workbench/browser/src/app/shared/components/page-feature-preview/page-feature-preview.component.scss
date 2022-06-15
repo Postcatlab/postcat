@@ -1,0 +1,27 @@
+.card {
+    width: 200px;
+    height: 200px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    color: #00785a;
+    i {
+        &.relative {
+            transition: all 0.3s ease;
+            z-index: 10;
+            opacity: 1;
+        }
+        &.absolute {
+            opacity: 0;
+        }
+        
+    }
+    &:hover {
+        i.relative {
+            opacity: 0;
+        }
+        i.absolute {
+            opacity: 1;
+        }
+    }
+}
