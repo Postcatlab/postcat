@@ -20,6 +20,7 @@ import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storag
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +42,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     IndexedDBStorage,
     HttpStorage,
     NzMessageService,
+    NzModalService,
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),
