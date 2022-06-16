@@ -3,8 +3,39 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { StorageService } from '../../../shared/services/storage';
 import { FeatureType } from '../../types';
-import { parserProperties, getDefaultValue } from '../../../utils';
+import { getDefaultValue, updateStrategy } from '../../../utils';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+
+const optionList = [
+  {
+    value: 'import',
+    type: 'string',
+    default: '',
+    label: '直接导入',
+    description: '直接导入',
+  },
+  {
+    value: 'add',
+    type: 'string',
+    default: true,
+    label: '增量更新[推荐]',
+    description: '增量更新',
+  },
+  {
+    value: 'all',
+    type: 'string',
+    default: '',
+    label: '全量更新[慎用]',
+    description: '全量更新',
+  },
+  {
+    value: 'new',
+    type: 'string',
+    default: '',
+    label: '仅添加新 API',
+    description: '仅添加新 API',
+  },
+];
 
 @Component({
   selector: 'eo-import-api',
@@ -21,7 +52,7 @@ export class ImportApiComponent implements OnInit {
   supportList: Array<FeatureType> = [];
   currentExtension = '';
   currentOption = '';
-  optionList = [];
+  optionList = optionList;
   uploadData = null;
   featureMap = window.eo.getFeature('apimanage.import');
   constructor(
@@ -37,11 +68,13 @@ export class ImportApiComponent implements OnInit {
       });
     });
     {
-      const { key, properties } = this.supportList.at(0);
+      const { key } = this.supportList.at(0);
       this.currentExtension = key || '';
-      this.optionList = parserProperties(properties || '');
       this.currentOption = getDefaultValue(this.optionList, 'value');
     }
+  }
+  uploadChange(data) {
+    this.uploadData = data;
   }
   getEoapiData() {
     return new Promise((resolve) => {
@@ -51,25 +84,22 @@ export class ImportApiComponent implements OnInit {
       });
     });
   }
-  uploadChange(data) {
-    this.uploadData = data;
-  }
   async submit(callback) {
-    const [eoapiData, err]: any = await this.getEoapiData();
-    if (err) {
-      this.message.error('获取本地数据失败');
-      return;
-    }
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.currentExtension);
-    const data = module[action](eoapiData, this.uploadData, this.currentOption);
-    this.messageService.send({
-      type: 'importSuccess',
-      data: JSON.stringify(data),
-    });
-    // console.log(JSON.stringify(data));
+    const data = module[action](this.uploadData);
+    const [oldData, err] = await this.getEoapiData();
+    if (err) {
+      return;
+    }
+    const result = updateStrategy(oldData, data, this.currentOption);
+    // this.messageService.send({
+    //   type: 'importSuccess',
+    //   data: JSON.stringify(data),
+    // });
+    console.log(JSON.stringify(result, null, 2));
     callback(true);
   }
 }
