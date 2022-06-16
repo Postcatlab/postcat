@@ -1,6 +1,6 @@
 export enum ApiTestParamsTypeFormData {
   text = 'string',
-  // file = 'file',
+  file = 'file',
 }
 export enum ApiTestParamsTypeJsonOrXml {
   string = 'string',

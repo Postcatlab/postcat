@@ -88,7 +88,6 @@ function selectDefaultController($scope, $element) {
 
     if (vm.mainObject && vm.mainObject.isNeedToResetPosition) {
       let tmpObj = vm.data.inputElem[0].getBoundingClientRect();
-      console.log(tmpObj);
       vm.data.inputX = tmpObj.x;
       vm.data.inputY = tmpObj.y + 30;
     }

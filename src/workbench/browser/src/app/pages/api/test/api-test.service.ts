@@ -81,6 +81,9 @@ export class ApiTestService {
       baseFun: {
         reduceItemWhenAddChildItem: reduceItemWhenIsOprDepth,
         watchCheckboxChange: opts.watchFormLastChange,
+        importFile: (inputArg, inputFileList, inputParams, inputPlugStatus, inputCallback) => {
+          console.log(inputArg);
+        },
       },
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
@@ -114,8 +117,10 @@ export class ApiTestService {
 
         {
           thKey: '参数值',
-          type: 'input',
+          type: 'autoCompleteAndFile',
           modelKey: 'value',
+          switchVar: 'type',
+          swicthFile: 'file',
           placeholder: '参数值',
           width: 300,
           mark: 'value',
@@ -282,7 +287,7 @@ export class ApiTestService {
   }
   getTestDataFromApi(inData) {
     let editToTestParams = (arr) => {
-      arr=arr||[];
+      arr = arr || [];
       arr.forEach((val) => {
         val.value = val.example;
         delete val.example;
@@ -334,7 +339,7 @@ export class ApiTestService {
       case 'formData': {
         inData.requestBody.forEach((val) => {
           val.value = val.example;
-          val.type = 'string';
+          val.type = val.type === 'file' ? 'file' : 'string';
           delete val.example;
         });
         break;
