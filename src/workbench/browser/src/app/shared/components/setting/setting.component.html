@@ -1,5 +1,5 @@
 <ng-container *ngIf="isVisible">
-  <span nz-popover [nzPopoverContent]="contentTemplate" [nzPopoverOverlayStyle]="{left: '-12px'}"
+  <span nz-popover [nzPopoverContent]="contentTemplate" [nzPopoverOverlayStyle]="{left: '-12px', marginBottom: '8px'}"
     nzPopoverOverlayClassName="sidebar_setting_popover" nzPopoverPlacement="rightBottom"
     class="sidebar_item sidebar_setting" title="设置">
     <i nz-icon nzType="setting"></i>
@@ -8,7 +8,7 @@
   <ng-template #contentTemplate>
     <ul nz-menu [nzSelectable]="false">
       <li nz-menu-item (click)="handleShowModal()">设置</li>
-      <li nz-menu-item (click)="switchDataSource()">切换到{{ dataSourceType === 'http' ? '本地' : '远程' }}</li>
+      <li nz-menu-item (click)="switchDataSource()">切换到{{ isRemote ? '本地' : '远程' }}</li>
     </ul>
   </ng-template>
 

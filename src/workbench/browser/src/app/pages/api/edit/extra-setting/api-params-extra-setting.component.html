@@ -6,6 +6,7 @@
 ></list-block-common-component>
 <!-- 最大/最小长度 -->
 <list-block-common-component
+  *ngIf="['string'].includes(model.type)"
   class="eo-block-container mt20"
   [list]="[model]"
   [mainObject]="listConfLenthInterval"

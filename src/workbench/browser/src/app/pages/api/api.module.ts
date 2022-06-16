@@ -33,15 +33,12 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
-import { BaseUrlInterceptor, HttpStorage } from '../../shared/services/storage/http/lib';
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
-import { StorageService } from '../../shared/services/storage';
 import { ApiOverviewComponent } from './overview/api-overview.component';
 import { ApiMockComponent } from './mock/api-mock.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 
 const COMPONENTS = [
@@ -86,13 +83,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [
-    ElectronService,
-    ApiService,
-    StorageService,
-    HttpStorage,
-    IndexedDBStorage,
-    { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
-  ],
+  providers: [ElectronService, ApiService, IndexedDBStorage],
 })
 export class ApiModule {}

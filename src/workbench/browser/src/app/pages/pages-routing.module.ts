@@ -16,11 +16,11 @@ const routes: Routes = [
       },
       {
         path: 'blank',
-        component:PageBlankComponent
+        component: PageBlankComponent,
       },
       {
         path: 'preview',
-        component:PageFeaturePreviewComponent
+        component: PageFeaturePreviewComponent,
       },
       {
         path: 'api',

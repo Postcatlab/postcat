@@ -6,15 +6,17 @@ import { MessageService } from '../../../shared/services/message';
 
 export type DataSourceType = 'local' | 'http';
 export const DATA_SOURCE_TYPE_KEY = 'DATA_SOURCE_TYPE_KEY';
+/** is show local data source tips */
+export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 
 /**
  * @description
  * A storage service
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class StorageService {
-  instance;
-  dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'http';
+  private instance;
+  private dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
   constructor(private injector: Injector, private messageService: MessageService) {
     console.log('StorageService init');
     this.setStorage(this.dataSourceType);
@@ -24,7 +26,7 @@ export class StorageService {
    *
    * @param args
    */
-  run(action: string, params: Array<any>, callback): void {
+  run = (action: string, params: Array<any>, callback) => {
     const handleResult = {
       status: StorageResStatus.invalid,
       data: undefined,
@@ -45,8 +47,8 @@ export class StorageService {
         callback(handleResult);
       }
     );
-  }
-  setStorage(type: DataSourceType = 'local', options = {}) {
+  };
+  setStorage = (type: DataSourceType = 'local', options = {}) => {
     switch (type) {
       case 'local': {
         this.instance = new IndexedDBStorage();
@@ -57,13 +59,16 @@ export class StorageService {
         break;
       }
     }
+
     localStorage.setItem(DATA_SOURCE_TYPE_KEY, type);
-    this.messageService.send({ type: 'onDataSourceChange', data: { ...options, dataSourceType: this.dataSourceType } });
-  }
-  toggleDataSource(options: any = {}) {
+    this.messageService.send({
+      type: 'onDataSourceChange',
+      data: { ...options, dataSourceType: this.dataSourceType },
+    });
+  };
+  toggleDataSource = (options: any = {}) => {
     const { dataSourceType } = options;
     this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
     this.setStorage(this.dataSourceType, options);
-    localStorage.setItem('IS_SHOW_REMOTE_SERVER_NOTIFICATION', this.dataSourceType === 'local' ? 'true' : 'false');
-  }
+  };
 }

@@ -27,7 +27,6 @@ import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { StorageService } from '../../../shared/services/storage';
 import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
-import { TestServerAPIKitService } from '../../../shared/services/api-test/apikit-node/test-connect.service';
 
 @Component({
   selector: 'eo-api-test',

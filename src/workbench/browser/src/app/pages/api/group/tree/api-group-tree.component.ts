@@ -93,7 +93,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Load all group and apiData items.
    */
   buildGroupTreeData(): void {
-    console.log('buildGroupTreeData')
     this.groupByID = {};
     this.treeItems = [];
     this.getGroups();
@@ -101,7 +100,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   getGroups() {
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        console.log(result);
         result.data.forEach((item) => {
           delete item.updatedAt;
           this.groupByID[item.uuid] = item;

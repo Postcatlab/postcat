@@ -53,7 +53,7 @@ export class HttpStorage implements StorageInterface {
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
   projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
-  projectExport(){
+  projectExport() {
     return this.http.get(`/project/export`) as Observable<object>;
   }
   // Environment

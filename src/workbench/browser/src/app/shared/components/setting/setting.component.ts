@@ -9,7 +9,8 @@ import { eoapiSettings } from './eoapi-settings/';
 import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it/dist/markdown-it';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 interface TreeNode {
   name: string;
@@ -34,14 +35,13 @@ interface FlatNode {
 })
 export class SettingComponent implements OnInit {
   objectKeys = Object.keys;
-  dataSourceType = 'http';
   /** 是否远程数据源 */
   get isRemote() {
-    return this.dataSourceType === 'http';
+    return this.remoteService.isRemote;
   }
   /** 当前数据源对应的文本 */
   get dataSourceText() {
-    return this.isRemote ? '远程' : '本地';
+    return this.remoteService.dataSourceText;
   }
   private transformer = (node: TreeNode, level: number): FlatNode => ({
     ...node,
@@ -66,20 +66,20 @@ export class SettingComponent implements OnInit {
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  /** 当前配置项 */
+  /** current configuration */
   currentConfiguration = [];
   isVisible = false;
   $isShowModal = false;
-  /** 所有配置 */
+  /** all configure */
   settings = {};
-  /** 本地配置 */
+  /** local configure */
   localSettings = { settings: {}, nestedSettings: {} };
-  /** 深层嵌套的配置 */
+  /** nested settings */
   nestedSettings = {};
   validateForm!: FormGroup;
-  /** 远程服务器地址 */
+  /** remote server url */
   remoteServerUrl = '';
-  /** 远程服务器token */
+  /** remote server token */
   remoteServerToken = '';
 
   get isShowModal() {
@@ -96,7 +96,12 @@ export class SettingComponent implements OnInit {
   }
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private fb: FormBuilder, private messageService: MessageService, private message: NzMessageService) {
+  constructor(
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private message: NzMessageService,
+    private remoteService: RemoteService
+  ) {
     this.customLinkRender();
   }
 
@@ -114,10 +119,8 @@ export class SettingComponent implements OnInit {
           }
           case 'onDataSourceChange': {
             console.log('onDataSourceChange', inArg.data);
-            this.dataSourceType = inArg.data.dataSourceType;
             if (inArg.data.showWithSetting) {
-              location.reload();
-              this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+              this.remoteService.refreshComponent();
             }
             break;
           }
@@ -153,8 +156,8 @@ export class SettingComponent implements OnInit {
    * 切换数据源
    */
   switchDataSource() {
-    console.log('switchDataSource', this.messageService);
-    this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
+    this.remoteService.switchDataSource();
+    // this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
   }
 
   /**
@@ -398,13 +401,9 @@ export class SettingComponent implements OnInit {
     try {
       const result = await this.pingRmoteServerUrl();
       if (Object.is(result, true)) {
-        this.message.success('远程数据源连接成功，关闭弹框后将重新刷新界面');
-        setTimeout(() => {
-          this.messageService.send({
-            type: 'switchDataSource',
-            data: { dataSourceType: 'http', showWithSetting: true },
-          });
-        }, 2000);
+        this.message.success('远程数据源连接成功');
+        this.remoteService.switchToHttp();
+        this.remoteService.refreshComponent();
       }
     } catch (error) {
     } finally {
