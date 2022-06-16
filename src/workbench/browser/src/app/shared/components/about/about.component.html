@@ -1,0 +1,5 @@
+<div class="about">
+  <nz-descriptions nzTitle="关于" [nzColumn]="1">
+    <nz-descriptions-item *ngFor="let item of list" [nzTitle]="item.label">{{item.value}}</nz-descriptions-item>
+  </nz-descriptions>
+</div>

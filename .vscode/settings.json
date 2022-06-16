@@ -5,10 +5,16 @@
       "mode": "auto"
     }
   ],
-  "files.exclude": {
-    "**/*.js": {
-      "when": "$(basename).ts"
-    },
-    "**/*.js.map": true,
+  // "files.exclude": {
+  //   "**/*.js": {
+  //     "when": "$(basename).ts"
+  //   },
+  //   "**/*.js.map": true,
+  // }
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/*.lock": true,
   }
 }

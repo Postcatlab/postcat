@@ -9,38 +9,30 @@ import { SharedModule } from '../../../shared/shared.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 import { ApiDetailComponent } from './api-detail.component';
 import { ApiDetailHeaderComponent } from './header/api-detail-header.component';
 import { ApiDetailBodyComponent } from './body/api-detail-body.component';
 import { ApiDetailQueryComponent } from './query/api-detail-query.component';
 import { ApiDetailRestComponent } from './rest/api-detail-rest.component';
+import { ApiDetailMockComponent } from './mock/api-detail-mock.component';
 
 import { ApiDetailService } from './api-detail.service';
 
-const NZ_COMPONETS = [
-  NzButtonModule,
-  NzIconModule,
-  NzTagModule
-];
+const NZ_COMPONETS = [NzButtonModule, NzIconModule, NzTagModule, NzModalModule, NzFormModule];
 const COMPONENTS = [
   ApiDetailComponent,
   ApiDetailHeaderComponent,
   ApiDetailBodyComponent,
   ApiDetailQueryComponent,
-  ApiDetailRestComponent
+  ApiDetailRestComponent,
+  ApiDetailMockComponent,
 ];
 @NgModule({
   declarations: [...COMPONENTS],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    Ng1Module,
-    CommonModule,
-    ...NZ_COMPONETS,
-    EouiModule,
-    SharedModule,
-  ],
-  providers:[ApiDetailService]
+  imports: [FormsModule, ReactiveFormsModule, Ng1Module, CommonModule, ...NZ_COMPONETS, EouiModule, SharedModule],
+  providers: [ApiDetailService],
 })
 export class ApiDetailModule {}

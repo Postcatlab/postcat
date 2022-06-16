@@ -4,6 +4,9 @@
     "dist/**/*",
     "release/**/*"
   ],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
   "overrides": [
     {
       "files": [
@@ -23,12 +26,14 @@
       ],
       "rules": {
         "prefer-arrow/prefer-arrow-functions": 0,
+        "@typescript-eslint/member-ordering": 0,
+        "@typescript-eslint/no-unused-expressions": 0,
+        "@typescript-eslint/naming-convention": 0,
         "@angular-eslint/directive-selector": 0,
         "@angular-eslint/component-selector": [
           "error",
           {
             "type": "element",
-            "prefix": "eo",
             "style": "kebab-case"
           }
         ]

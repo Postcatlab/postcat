@@ -1,45 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
-import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
+import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
+import { FeatureType } from '../../types';
+
 @Component({
   selector: 'eo-export-api',
-  templateUrl: './export-api.component.html',
-  styleUrls: ['./export-api.component.scss'],
+  template: ` <extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
 })
 export class ExportApiComponent implements OnInit {
-  exportType: string = 'eoapi';
-  supportList: Array<{
-    key: string;
-    image: string;
-    title: string;
-  }> = [
-    {
-      key: 'eoapi',
-      image: '',
-      title: 'Eoapi(.json)',
-    },
-  ];
-  featureList = window.eo.getFeature('apimanage.export');
+  currentExtension = 'eoapi';
+  supportList: Array<FeatureType> = [];
+  featureMap = window.eo.getFeature('apimanage.export');
   constructor(private storage: StorageService) {}
   ngOnInit(): void {
-    this.featureList?.forEach((feature: object, key: string) => {
+    this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
-        key: key,
-        image: feature['icon'],
-        title: feature['label'],
+        key,
+        ...data,
       });
     });
+    {
+      const { key } = this.supportList.at(0);
+      this.currentExtension = key || '';
+    }
+  }
+  submit(callback: () => boolean) {
+    this.export(callback);
   }
   private transferTextToFile(fileName: string, exportData: any) {
-    let file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
-    let element = document.createElement('a'),
-      url = URL.createObjectURL(file);
+    const file = new Blob([JSON.stringify(exportData)], { type: 'data:text/plain;charset=utf-8' });
+    const element = document.createElement('a');
+    const url = URL.createObjectURL(file);
     element.href = url;
     element.download = fileName;
     document.body.appendChild(element);
     element.click();
-    setTimeout(function () {
+    setTimeout(() => {
       document.body.removeChild(element);
       window.URL.revokeObjectURL(url);
     }, 0);
@@ -50,8 +47,8 @@ export class ExportApiComponent implements OnInit {
    * @param callback
    */
   private exportEoapi(callback) {
-    this.storage.run('projectExport', [], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('projectExport', [], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         result.data.version = packageJson.version;
         this.transferTextToFile('Eoapi-export.json', result.data);
         callback(true);
@@ -67,13 +64,13 @@ export class ExportApiComponent implements OnInit {
    * @param callback
    */
   private export(callback) {
-    const feature = this.featureList.get(this.exportType);
+    const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module = window.eo.loadFeatureModule(this.exportType);
+    const module = window.eo.loadFeatureModule(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
-      this.storage.run('projectExport', [], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('projectExport', [], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = module[action](result || {});
@@ -89,15 +86,6 @@ export class ExportApiComponent implements OnInit {
       });
     } else {
       callback(false);
-    }
-  }
-
-  submit(callback: () => boolean) {
-    console.log(this.exportType);
-    if ('eoapi' === this.exportType) {
-      this.exportEoapi(callback);
-    } else {
-      this.export(callback);
     }
   }
 }

@@ -9,10 +9,9 @@ import { THEMES } from './theme.model';
 export class ThemeService {
   currentTheme = 'classic_forest';
   private themeChanges$ = new ReplaySubject(1);
-  constructor(@Inject(DOCUMENT) private document: Document) {
-  }
+  constructor(@Inject(DOCUMENT) private document: Document) {}
   changeTheme(name?: string): void {
-    if(name){
+    if (name) {
       this.themeChanges$.next({ name, previous: this.currentTheme });
       this.currentTheme = name;
     }
@@ -21,7 +20,7 @@ export class ThemeService {
   getThemes() {
     return THEMES;
   }
-  onThemeChange = function() {
+  onThemeChange = function () {
     return this.themeChanges$.pipe(share());
   };
 

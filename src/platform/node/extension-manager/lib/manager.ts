@@ -4,11 +4,20 @@ import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterf
 import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
 
+// * npm pkg name
+// const installExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
+const installExtension = [{ name: 'eoapi-export-openapi' }];
+
 export class ModuleManager implements ModuleManagerInterface {
   /**
    * 模块管理器
    */
   private readonly moduleHandler: ModuleHandler;
+
+  /**
+   * extension list
+   */
+  private readonly installExtension = installExtension;
 
   /**
    * 模块集合
@@ -25,6 +34,20 @@ export class ModuleManager implements ModuleManagerInterface {
     this.modules = new Map();
     this.features = new Map();
     this.init();
+    // * ModuleManager will be new only one while app run start, so it should be here upgrade & install extension
+    // * upgrade
+    const list = Array.from(this.getModules().keys());
+    list.forEach((item) => {
+      this.update({ name: item });
+    });
+    // * install
+    // console.log('install');
+    this.installExtension.forEach((item) => {
+      // * If the extension already in local extension list, then do not repeat installation
+      if (!list.includes(item.name)) {
+        this.install(item);
+      }
+    });
   }
 
   /**

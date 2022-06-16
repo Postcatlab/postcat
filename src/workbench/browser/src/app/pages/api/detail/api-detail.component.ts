@@ -4,9 +4,9 @@ import {
   ApiData,
   ApiBodyType,
   JsonRootType,
-  StorageHandleResult,
-  StorageHandleStatus,
-} from 'eo/platform/browser/IndexedDB';
+  StorageRes,
+  StorageResStatus,
+} from '../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 import { StorageService } from '../../../shared/services/storage';
@@ -43,8 +43,8 @@ export class ApiDetailComponent implements OnInit {
     });
   }
   getApiByUuid(id: number) {
-    this.storage.run('apiDataLoad', [id], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         ['requestBody', 'responseBody'].forEach((tableName) => {
           if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
             result.data[tableName] = treeToListHasLevel(result.data[tableName]);

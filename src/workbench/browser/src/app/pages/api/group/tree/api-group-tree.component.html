@@ -31,13 +31,8 @@
 </header>
 <!-- Fixed Group -->
 <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron">
-  <nz-tree
-    [nzData]="fixedTreeNode"
-    [nzSelectedKeys]="nzSelectedKeys"
-    nzBlockNode
-    (nzClick)="clickTreeItem($event)"
-    [nzTreeTemplate]="nzFixedTreeTemplate"
-  ></nz-tree>
+  <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
+    [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
     <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
       <div class="f_row_ac">
@@ -50,20 +45,10 @@
 <div class="bbd" *ngIf="electron.isElectron"></div>
 <!-- Custom Group -->
 <div class="group_container group_tree pt10">
-  <nz-tree
-    [nzData]="treeNodes"
-    [nzSelectedKeys]="nzSelectedKeys"
-    #apiGroup
-    [nzSearchValue]="searchValue"
-    [nzHideUnMatched]="true"
-    [nzExpandedKeys]="expandKeys"
-    (nzClick)="clickTreeItem($event)"
-    (nzExpandChange)="toggleExpand()"
-    nzDraggable
-    nzBlockNode
-    (nzOnDrop)="treeItemDrop($event)"
-    [nzTreeTemplate]="nzTreeTemplate"
-  ></nz-tree>
+  <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzSearchValue]="searchValue"
+    [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys" (nzClick)="clickTreeItem($event)"
+    (nzExpandChange)="toggleExpand()" nzDraggable nzBlockNode (nzOnDrop)="treeItemDrop($event)"
+    [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
     <div class="pl5">
       <!-- Folder -->
@@ -96,21 +81,16 @@
       </div>
       <!-- Leaf -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
-        <div class="f_row_ac">
+        <div class="overflow-hidden f_row_ac text-ellipsis">
           <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">{{
-            node.origin.method.slice(0, 4)
-          }}</b>
+            node.origin.method
+            }}</b>
           <span class="text_omit node_title">{{ node.title }}</span>
         </div>
         <span class="tree_node_operate">
           <button>
-            <i
-              class="mr5"
-              nz-icon
-              nzType="thunderbolt"
-              nzTheme="outline"
-              (click)="operateApiEvent({ event: $event, eventName: 'testApi', node: node })"
-            ></i>
+            <i class="mr5" nz-icon nzType="thunderbolt" nzTheme="outline"
+              (click)="operateApiEvent({ event: $event, eventName: 'testApi', node: node })"></i>
           </button>
           <button nz-dropdown [nzDropdownMenu]="apiDataMenu">
             <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
@@ -120,16 +100,12 @@
               <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoEditApi', node: node })">
                 <a>编辑</a>
               </li>
-              <li
-                nz-menu-item
-                (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })"
-              >
+              <li nz-menu-item
+                (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })">
                 <a>复制</a>
               </li>
-              <li
-                nz-menu-item
-                (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })"
-              >
+              <li nz-menu-item
+                (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
                 <a>删除</a>
               </li>
             </ul>

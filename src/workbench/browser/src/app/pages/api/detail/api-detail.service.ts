@@ -32,7 +32,6 @@ export class ApiDetailService {
       inputItem.isClick = !inputItem.isClick;
     }
     if (
-      inputItem.example ||
       inputItem.minimum ||
       inputItem.maximum ||
       inputItem.minLength ||
@@ -155,8 +154,7 @@ export class ApiDetailService {
         {
           thKey: `<button type="button" class="eo-operate-btn" ng-click="$ctrl.data.isSpreedBtnClick=!$ctrl.data.isSpreedBtnClick;$ctrl.data.isSpreed=true;$ctrl.mainObject.baseFun.spreedAll($event);$ctrl.data.isSpreed=false;">{{$ctrl.data.isSpreedBtnClick?"全部收缩":"全部展开"}}</button>`,
           type: 'html',
-          html: `<span class="eo-operate-btn fs12" ng-show="item.example ||
-          item.minimum ||
+          html: `<span class="eo-operate-btn fs12" ng-show="item.minimum ||
           item.maximum ||
           item.minLength ||
           item.maxLength ||

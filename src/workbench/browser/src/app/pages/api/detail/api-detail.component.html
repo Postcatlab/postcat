@@ -20,13 +20,11 @@
   <div *ngIf="apiData.requestBody?.length">
     <div class="api_line">
       Body 请求参数<nz-tag class="ml10" nzColor="default">{{ CONST.BODY_TYPE[apiData.requestBodyType] }}</nz-tag>
-      <nz-tag *ngIf="apiData.requestBodyType==='json'" nzColor="default">最外层结构为：{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}</nz-tag>
+      <nz-tag *ngIf="apiData.requestBodyType==='json'" nzColor="default">最外层结构为：{{
+        CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}</nz-tag>
     </div>
-    <eo-api-detail-body
-      [bodyType]="apiData.requestBodyType"
-      [model]="apiData.requestBody"
-      [jsonRootType]="apiData.requestBodyJsonType"
-    ></eo-api-detail-body>
+    <eo-api-detail-body [bodyType]="apiData.requestBodyType" [model]="apiData.requestBody"
+      [jsonRootType]="apiData.requestBodyJsonType"></eo-api-detail-body>
   </div>
   <div *ngIf="apiData.responseHeaders && apiData.responseHeaders.length">
     <p class="api_line">返回头部</p>
@@ -34,10 +32,11 @@
   </div>
   <div *ngIf="apiData.responseBody && apiData.responseBody.length">
     <p class="api_line">返回参数</p>
-    <eo-api-detail-body
-      [bodyType]="apiData.responseBodyType"
-      [model]="apiData.responseBody"
-      [jsonRootType]="apiData.responseBodyJsonType"
-    ></eo-api-detail-body>
+    <eo-api-detail-body [bodyType]="apiData.responseBodyType" [model]="apiData.responseBody"
+      [jsonRootType]="apiData.responseBodyJsonType"></eo-api-detail-body>
   </div>
+  <!-- <div>
+    <p class="api_line">MOCK </p>
+    <eo-api-detail-mock [apiData]="apiData"></eo-api-detail-mock>
+  </div> -->
 </section>

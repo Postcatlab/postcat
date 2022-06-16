@@ -1,0 +1,28 @@
+.text {
+    color: var(--TEXT_TITLE_SEC)
+}
+
+.extension {
+    cursor: pointer;
+    color: rgba(0,0,0,0.5);
+    border-color: rgba(0,0,0,0.1);
+    box-shadow: 0 0 3px rgba(0,0,0,.05);
+    transition: all 0.3s ease;
+    .logobg {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center;
+    }
+    &.active {
+        box-shadow: 0 0 10px rgba(0,0,0,.2);
+        background-color: #fff;
+        
+        i.check {
+            color: #158565;
+            display: block;
+        }
+    }   
+    i.check {
+        display: none;
+    }
+}

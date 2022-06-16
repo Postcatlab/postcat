@@ -1,6 +1,6 @@
 ::ng-deep {
   .ant-tree-node-selected * {
-    color: var(--TEXT_ACTIVE);
+    // color: var(--TEXT_ACTIVE);
   }
   .ant-tree-list-holder-inner {
     .nz-tree-node:first {
@@ -8,12 +8,13 @@
     }
   }
   .fixed_group_tree {
+    padding-top: 4px;
     nz-tree-node-switcher {
       display: none;
     }
   }
 }
-.group_tree {
+::ng-deep .group_tree {
   overflow: auto;
   height: calc(100vh - var(--NAVBAR_HEIGHT) - 88px);
   .ant-tree-switcher {
@@ -27,18 +28,25 @@
       padding: 0 2px;
     }
   }
+  .ng-star-inserted {
+    padding-left: 0;
+  }
 }
 .ant-dropdown-menu {
   min-width: 100px;
 }
 .method_text {
-  width: 32px;
+  max-width: 50px;
+  min-width: 32px;
+  font-size: 11px;
 }
 .node_title {
   max-width: 145px;
 }
 .tree_node {
   font-size: 12px;
+  white-space: nowrap;
+  padding-left: 5px;
   .tree_node_operate {
     font-size: 14px;
     font-weight: bold;

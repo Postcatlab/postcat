@@ -1,14 +1,11 @@
 nz-content {
-  background-color:  var(--MAIN_BG);
+  background-color: var(--MAIN_BG);
 }
 
 nz-sider {
   width: 250px;
   background-color: #fff;
 }
-
-
-
 
 ::ng-deep {
   .ant-layout-sider-children {
@@ -21,7 +18,7 @@ nz-sider {
   }
   .tabs-bar {
     background-color: var(--SEC_BG);
-        padding: 5px 10px 0 15px;
+    padding: 5px 10px 0 15px;
     display: flex;
     margin-bottom: -1px;
     align-items: center;
@@ -42,11 +39,13 @@ nz-sider {
   eo-api {
     router-outlet + * {
       display: block;
-      height: calc(100vh -  var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 46px);
+      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 46px);
       overflow: auto;
     }
     .has_tab_page router-outlet + * {
-      height:  calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 45px - 47px);
+      height: calc(
+        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 45px - 47px
+      );
     }
   }
   .method_text_GET {

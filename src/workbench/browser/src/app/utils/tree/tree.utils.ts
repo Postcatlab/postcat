@@ -1,4 +1,11 @@
 import { GroupTreeItem } from '../../shared/models';
+
+export type TreeToObjOpts = {
+  key?: string;
+  valueKey?: string;
+  childKey?: string;
+};
+
 /**
  * Convert old component listBlock array items has level without  parent id to  tree nodes
  * @param list Array<GroupTreeItem>
@@ -13,7 +20,7 @@ export const listToTreeHasLevel = (
 ) => {
   const listDepths = [];
   //delete useless key
-  const uselessKeys = ['listDepth', 'isHide','isShrink'];
+  const uselessKeys = ['listDepth', 'isHide', 'isShrink'];
   list = list.map((item) => {
     listDepths.push(item.listDepth);
     return Object.keys(item).reduce(
@@ -53,7 +60,7 @@ export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (v
           listDepth: opts.listDepth + 1,
         })
       );
-      delete val.__proto__.children;
+      delete val.children;
     }
   });
   return result;
@@ -146,3 +153,31 @@ export const getExpandGroupByKey = (component, key) => {
   }
   return expandKeys;
 };
+
+/**
+ * 将树形数据转成 key => value 对象
+ *
+ * @param list
+ * @param opts
+ * @returns
+ */
+export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {}) => {
+  const { key = 'name', valueKey = 'description', childKey = 'children' } = opts;
+
+  return list?.reduce?.((prev, curr) => {
+    prev[curr[key]] = curr[valueKey] || fieldTypeMap.get(curr.type);
+    if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
+      tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
+    }
+    return prev;
+  }, initObj);
+};
+
+export const fieldTypeMap = new Map<string, any>([
+  ['boolean', false],
+  ['array', []],
+  ['object', {}],
+  ['number', 0],
+  ['null', null],
+  ['string', 'default_value'],
+]);

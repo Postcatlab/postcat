@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ApiParamsTypeJsonOrXml, ParamsEnum, BasiApiEditParams } from 'eo/platform/browser/IndexedDB';
+import { ApiParamsTypeJsonOrXml, ParamsEnum, BasiApiEditParams } from '../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',

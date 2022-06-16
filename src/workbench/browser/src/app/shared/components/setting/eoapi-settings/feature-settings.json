@@ -1,36 +1,36 @@
 {
   "private": true,
-  "name": "Eoapi-Features",
+  "name": "eoapi-features",
   "version": "0.0.1",
   "moduleName": "功能",
-  "moduleID": "Eoapi-Features",
+  "moduleID": "eoapi-features",
   "author": "eoapi",
   "publisher": "eoapi",
-  "contributes": {
+  "features": {
     "configuration": [
       {
         "type": "object",
-        "title": "API测试",
+        "title": "API 测试",
         "order": 1,
         "properties": {
-          "features.remoteServer.redirctUrl": {
+          "api.test": {
             "type": "boolean",
-            "default": false,
+            "default": true,
             "label": "自动重定向",
-            "description": "自动重定向至redirect url"
+            "description": "勾选后自动跟随请求重定向"
           }
         }
       },
       {
         "type": "object",
-        "title": "插件",
+        "title": "扩展",
         "order": 2,
         "properties": {
-          "features.remoteServer.autoUpdate": {
+          "extension.autoupdate": {
             "type": "boolean",
             "default": true,
             "label": "自动更新",
-            "description": "勾选后，检测到插件升级后自动从远程下载最新的插件更新"
+            "description": "检测到最新的安装包后自动更新"
           }
         }
       }

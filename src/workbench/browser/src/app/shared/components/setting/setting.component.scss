@@ -3,7 +3,7 @@
   position: absolute;
   padding: 15px;
   cursor: pointer;
-  bottom: var(--FOOTER_HEIGHT, 0);
+  bottom: 0;
 }
 
 .container {
@@ -34,7 +34,18 @@
   font-weight: 700;
   color: rgba(0, 0, 0, 0.9);
 }
+.form-control  * {
+  font-size: 12px;
+}
 .description {
   margin-bottom: 3px;
-  color: rgb(102, 102, 102);
+  color: var(--TEXT_TITLE_SEC);
+  font-size: 12px;
+}
+
+::ng-deep .sidebar_setting_popover{
+  padding: 0;
+  .ant-popover-inner-content {
+    padding: 0;
+  }
 }
