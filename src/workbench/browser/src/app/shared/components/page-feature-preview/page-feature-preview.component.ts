@@ -13,14 +13,14 @@ export class PageFeaturePreviewComponent implements OnInit {
       icon: 'windows',
       keyword: 'Setup',
       suffix: 'exe',
-      link: '',
+      link: ''
     },
     {
       id: 'mac',
       name: 'macOS(Intel) 客户端',
       icon: 'apple',
       suffix: 'dmg',
-      link: '',
+      link: ''
     },
     {
       id: 'mac',
