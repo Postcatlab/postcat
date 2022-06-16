@@ -94,4 +94,4 @@ export const getDefaultValue = (list: any[], key) => {
   return target[key] || '';
 };
 
-export const parserProperties = (properties) => Object.keys(properties).map((it) => ({ value: it, ...properties[it] }));
+export const updateStrategy = (oldData, newData, type = 'all') => {};
