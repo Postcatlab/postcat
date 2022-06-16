@@ -7,6 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { isElectron } from 'eo/shared/common/common';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { debounce } from 'lodash';
 
 @Component({
   selector: 'eo-pages',
@@ -21,12 +22,26 @@ export class PagesComponent implements OnInit {
   }
   isElectron = isElectron();
   isClose = true;
+  /** is connect remote server */
+  isConnected = false;
   get dataSourceText() {
     return this.remoteService.dataSourceText;
   }
   private destroy$: Subject<void> = new Subject<void>();
   get isShowNotification() {
-    return !this.isRemote && !this.isClose && localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
+    console.log('this', this);
+    console.log(
+      !this.isRemote,
+      !this.isClose,
+      this.isConnected,
+      localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false'
+    );
+    return (
+      !this.isRemote &&
+      !this.isClose &&
+      this.isConnected &&
+      localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false'
+    );
   }
 
   constructor(
@@ -63,6 +78,14 @@ export class PagesComponent implements OnInit {
     this.remoteService.switchDataSource();
   };
 
+  updateState = debounce(async () => {
+    if (!this.isRemote) {
+      this.isClose = false;
+      const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
+      this.isConnected = isSuccess;
+    }
+  }, 500);
+
   private watchRemoteServerChange() {
     this.messageService
       .get()
@@ -70,11 +93,7 @@ export class PagesComponent implements OnInit {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'onDataSourceChange': {
-            setTimeout(() => {
-              if (!this.remoteService.isRemote) {
-                this.isClose = false;
-              }
-            });
+            this.updateState();
             break;
           }
         }

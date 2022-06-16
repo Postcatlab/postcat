@@ -35,14 +35,13 @@ interface FlatNode {
 })
 export class SettingComponent implements OnInit {
   objectKeys = Object.keys;
-  dataSourceType = 'http';
   /** 是否远程数据源 */
   get isRemote() {
-    return this.dataSourceType === 'http';
+    return this.remoteService.isRemote;
   }
   /** 当前数据源对应的文本 */
   get dataSourceText() {
-    return this.isRemote ? '远程' : '本地';
+    return this.remoteService.dataSourceText;
   }
   private transformer = (node: TreeNode, level: number): FlatNode => ({
     ...node,
@@ -67,20 +66,20 @@ export class SettingComponent implements OnInit {
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  /** 当前配置项 */
+  /** current configuration */
   currentConfiguration = [];
   isVisible = false;
   $isShowModal = false;
-  /** 所有配置 */
+  /** all configure */
   settings = {};
-  /** 本地配置 */
+  /** local configure */
   localSettings = { settings: {}, nestedSettings: {} };
-  /** 深层嵌套的配置 */
+  /** nested settings */
   nestedSettings = {};
   validateForm!: FormGroup;
-  /** 远程服务器地址 */
+  /** remote server url */
   remoteServerUrl = '';
-  /** 远程服务器token */
+  /** remote server token */
   remoteServerToken = '';
 
   get isShowModal() {
@@ -120,9 +119,8 @@ export class SettingComponent implements OnInit {
           }
           case 'onDataSourceChange': {
             console.log('onDataSourceChange', inArg.data);
-            this.dataSourceType = inArg.data.dataSourceType;
             if (inArg.data.showWithSetting) {
-              location.reload();
+              this.remoteService.refreshComponent();
             }
             break;
           }
