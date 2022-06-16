@@ -21,15 +21,13 @@ export class PagesComponent implements OnInit {
     return this.remoteService.isRemote;
   }
   isElectron = isElectron();
-  isClose = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'false';
-  /** is connect remote server */
-  isConnected = false;
+  isShow = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true';
   get dataSourceText() {
     return this.remoteService.dataSourceText;
   }
   private destroy$: Subject<void> = new Subject<void>();
   get isShowNotification() {
-    return !this.isRemote && !this.isClose && this.isConnected;
+    return !this.isRemote && this.isShow;
   }
 
   constructor(
@@ -68,11 +66,11 @@ export class PagesComponent implements OnInit {
   };
 
   updateState = debounce(async () => {
-    if (!this.isRemote) {
+    if (!this.isRemote && localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false') {
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
-      this.isConnected = isSuccess;
+      this.isShow = isSuccess;
     }
-    // if (!localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION)) {
+    // if (!) {
     //   this.isClose = false;
     // }
   }, 500);
@@ -92,7 +90,7 @@ export class PagesComponent implements OnInit {
   }
 
   closeNotification() {
-    this.isClose = true;
+    this.isShow = false;
     localStorage.setItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION, 'false');
   }
 }
