@@ -29,7 +29,6 @@ export class PagesComponent implements OnInit {
   }
   private destroy$: Subject<void> = new Subject<void>();
   get isShowNotification() {
-    console.log('this', this);
     console.log(
       !this.isRemote,
       !this.isClose,
@@ -83,6 +82,7 @@ export class PagesComponent implements OnInit {
       this.isClose = false;
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
       this.isConnected = isSuccess;
+      console.log('this', this);
     }
   }, 500);
 
