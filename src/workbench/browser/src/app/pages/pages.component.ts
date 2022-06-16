@@ -21,7 +21,7 @@ export class PagesComponent implements OnInit {
     return this.remoteService.isRemote;
   }
   isElectron = isElectron();
-  isClose = true;
+  isClose = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true';
   /** is connect remote server */
   isConnected = false;
   get dataSourceText() {
@@ -29,18 +29,7 @@ export class PagesComponent implements OnInit {
   }
   private destroy$: Subject<void> = new Subject<void>();
   get isShowNotification() {
-    console.log(
-      !this.isRemote,
-      !this.isClose,
-      this.isConnected,
-      localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false'
-    );
-    return (
-      !this.isRemote &&
-      !this.isClose &&
-      this.isConnected &&
-      localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false'
-    );
+    return !this.isRemote && !this.isClose && this.isConnected;
   }
 
   constructor(
@@ -52,6 +41,7 @@ export class PagesComponent implements OnInit {
   ngOnInit(): void {
     this.watchSidebarItemChange();
     this.watchRemoteServerChange();
+    this.updateState();
   }
   private watchSidebarItemChange() {
     this.sidebar.appChanged$.subscribe(() => {
@@ -78,11 +68,10 @@ export class PagesComponent implements OnInit {
   };
 
   updateState = debounce(async () => {
-    if (!this.isRemote) {
+    if (!this.isRemote && localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true') {
       this.isClose = false;
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
       this.isConnected = isSuccess;
-      console.log('this', this);
     }
   }, 500);
 
