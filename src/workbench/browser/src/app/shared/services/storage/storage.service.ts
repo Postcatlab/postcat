@@ -70,6 +70,5 @@ export class StorageService {
     const { dataSourceType } = options;
     this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
     this.setStorage(this.dataSourceType, options);
-    localStorage.setItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION, this.dataSourceType === 'local' ? 'true' : 'false');
   };
 }

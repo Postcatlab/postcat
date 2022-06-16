@@ -21,7 +21,7 @@ export class PagesComponent implements OnInit {
     return this.remoteService.isRemote;
   }
   isElectron = isElectron();
-  isClose = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true';
+  isClose = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'false';
   /** is connect remote server */
   isConnected = false;
   get dataSourceText() {
@@ -68,11 +68,13 @@ export class PagesComponent implements OnInit {
   };
 
   updateState = debounce(async () => {
-    if (!this.isRemote && localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true') {
-      this.isClose = false;
+    if (!this.isRemote) {
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
       this.isConnected = isSuccess;
     }
+    // if (!localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION)) {
+    //   this.isClose = false;
+    // }
   }, 500);
 
   private watchRemoteServerChange() {
