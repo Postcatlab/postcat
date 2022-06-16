@@ -90,7 +90,7 @@ export class ImportApiComponent implements OnInit {
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.currentExtension);
     const data = module[action](this.uploadData);
-    const [oldData, err] = await this.getEoapiData();
+    const [oldData, err]: any = await this.getEoapiData();
     if (err) {
       return;
     }

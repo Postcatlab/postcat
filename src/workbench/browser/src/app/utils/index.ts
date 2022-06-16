@@ -94,4 +94,8 @@ export const getDefaultValue = (list: any[], key) => {
   return target[key] || '';
 };
 
-export const updateStrategy = (oldData, newData, type = 'all') => {};
+export const updateStrategy = (oldData, newData, type = 'all') => {
+  console.log('oldData', oldData);
+  console.log('newData', newData);
+  return {};
+};

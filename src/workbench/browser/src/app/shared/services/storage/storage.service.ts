@@ -25,6 +25,7 @@ export class StorageService {
    * @param args
    */
   run(action: string, params: Array<any>, callback): void {
+    console.log('koko');
     const handleResult = {
       status: StorageResStatus.invalid,
       data: undefined,
