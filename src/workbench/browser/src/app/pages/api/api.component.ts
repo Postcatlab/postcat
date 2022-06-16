@@ -47,7 +47,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchChangeRouter();
     this.watchApiAction();
     this.watchDataSourceChange();
-    console.log('route', this.route);
   }
   ngOnDestroy() {
     this.destroy$.next();

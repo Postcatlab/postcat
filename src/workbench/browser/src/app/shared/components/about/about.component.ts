@@ -70,20 +70,24 @@ export class AboutComponent implements OnInit {
     fetch('https://api.github.com/repos/eolinker/eoapi/releases')
       .then((response) => response.json())
       .then((data) => {
-        const publishTime = data.find((n) => n.tag_name.slice(1) === pkg.version)?.published_at || '未知';
+        const publishTime = data.find((n) => n.tag_name.slice(1) === pkg.version)?.published_at;
         const publishObj = this.list.find((n) => n.id === 'publishTime');
-        publishObj.value = new Intl.DateTimeFormat('zh-CN', {
-          year: 'numeric',
-          month: '2-digit',
-          weekday: 'long',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-        })
-          .format(new Date(publishTime))
-          .replace(/星期[^]?/, '');
+        if (publishTime) {
+          publishObj.value = new Intl.DateTimeFormat('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            weekday: 'long',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+          })
+            .format(new Date(publishTime))
+            .replace(/星期[^]?/, '');
+        } else {
+          publishObj.value = `当前版本(v${pkg.version})尚未发布`;
+        }
       });
     const systemInfo = this.getSystemInfo();
     this.list.forEach((item) => {

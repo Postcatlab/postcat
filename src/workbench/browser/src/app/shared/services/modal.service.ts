@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ModalButtonOptions } from 'ng-zorro-antd/modal';
+
+export type ModalOptions = {
+  nzTitle: string;
+  nzContent: any;
+  nzFooter?: null | ModalButtonOptions[];
+  [propName: string]: any;
+};
 @Injectable()
 export class ModalService {
   constructor(private modalService: NzModalService) {}
   create(inOpts) {
-    const modalOpts: {
-      [propName: string]: any;
-      nzTitle: string;
-      nzContent: any;
-      nzFooter?: null | ModalButtonOptions[];
-    } = {
+    const modalOpts: ModalOptions = {
       nzTitle: 'modal title',
       nzContent: inOpts.nzContent,
       nzClosable: 'nzClosable' in inOpts ? inOpts.nzClosable : true,
@@ -32,9 +34,9 @@ export class ModalService {
         },
         {
           label: '取消',
-          onClick: () =>{
+          onClick: () => {
             modal.destroy();
-          } 
+          },
         },
       ],
     };

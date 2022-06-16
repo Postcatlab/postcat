@@ -5,7 +5,7 @@ import { Message } from './message.model';
  * @description
  * A message queue global send and get message
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MessageService {
   private subject = new Subject<Message>();
 

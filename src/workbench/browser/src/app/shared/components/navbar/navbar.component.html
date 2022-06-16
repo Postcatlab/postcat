@@ -15,13 +15,14 @@
       </nz-dropdown-menu>
     </div>
     <ng-container *ngIf="isElectron">
-      <span class="mr15" nz-dropdown [nzDropdownMenu]="settingMenu" nzPlacement="bottomRight">
-        <i nz-icon [nzType]="isRemote ? 'cloud' : 'exclamation-circle'" nzTheme="outline" class="fs20"></i>
+      <span class="mr15" title="{{ dataSourceText }}数据源" nz-dropdown [nzDropdownMenu]="settingMenu"
+        nzPlacement="bottomRight" [nzDisabled]="isRemote" (click)="isRemote && switchDataSource()">
+        <i nz-icon [nzType]="isRemote ? 'cloud' : 'cloud-sync'" nzTheme="outline" class="fs20"></i>
       </span>
       <nz-dropdown-menu #settingMenu="nzDropdownMenu">
         <div nz-menu class="switch-data-source-box">
           <div>
-            <i nz-icon [nzType]="isRemote ? 'cloud' : 'exclamation-circle'" nzTheme="outline" class="fs20"></i>
+            <i nz-icon [nzType]="isRemote ? 'cloud' : 'cloud-sync'" nzTheme="outline" class="fs20"></i>
           </div>
           <div>
             <h4 class="title">{{ dataSourceText }}数据源</h4>
