@@ -3,7 +3,9 @@ import * as path from 'path';
 import { ModuleHandlerOptions, ModuleHandlerResult } from '../types';
 import { fileExists, writeJson } from 'eo/shared/node/file';
 import { CoreHandler } from './core';
-import * as spawn from 'cross-spawn';
+import * as fs from 'fs';
+// import npmCli from 'npm';
+const npmCli = require('npm');
 /**
  * 本地模块管理器
  * @class ModuleHandler
@@ -77,6 +79,34 @@ export class ModuleHandler extends CoreHandler {
   }
 
   /**
+   * 手动操作package.json
+   * @param result npm install安装成功回调的结果
+   * @param moduleList 所有的模块列表
+   */
+  private operatePackage(result: any[], moduleList: string[], action: 'uninstall' | 'install' | 'update') {
+    if (Array.isArray(result)) {
+      const moduleNames = moduleList.map((n) => n.split('@')[0]);
+      const packagePath = path.join(this.baseDir, 'package.json');
+      result.forEach(([name]) => {
+        const [pkgName, pkgVersion] = name.split('@');
+        if (moduleNames.includes(pkgName)) {
+          const packageJSON = fs.readFileSync(packagePath);
+          const packageObj = JSON.parse(packageJSON.toString());
+          const dependencieKeys = Object.keys(packageObj.dependencies);
+          if (!dependencieKeys.includes(pkgName)) {
+            if (action === 'install') {
+              packageObj.dependencies[pkgName] = pkgVersion;
+            } else {
+              delete packageObj.dependencies[pkgName];
+            }
+          }
+          fs.writeFileSync(packagePath, JSON.stringify(packageObj));
+        }
+      });
+    }
+  }
+
+  /**
    * 运行模块管理器
    * @param command
    * @param modules
@@ -84,7 +114,7 @@ export class ModuleHandler extends CoreHandler {
   private async execCommand(command: string, modules: string[]): Promise<ModuleHandlerResult> {
     return await new Promise((resolve: any, reject: any): void => {
       let args = [command].concat(modules).concat('--color=always', '--save');
-      if (!['link', 'unlink', 'uninstall'].includes(command)) {
+      if (!['link', 'unlink', 'uninstall', 'update'].includes(command)) {
         if (this.registry) {
           args = args.concat(`--registry=${this.registry}`);
         }
@@ -92,25 +122,62 @@ export class ModuleHandler extends CoreHandler {
           args = args.concat(`--proxy=${this.proxy}`);
         }
       }
-      const npm = spawn('npm', args, { cwd: this.baseDir });
-      let output = '';
-      npm.stdout
-        .on('data', (data: string) => {
-          output += data;
-        })
-        .pipe(process.stdout);
-      npm.stderr
-        .on('data', (data: string) => {
-          output += data;
-        })
-        .pipe(process.stderr);
-      npm.on('close', (code: number) => {
-        if (!code) {
-          resolve({ code: 0, data: output });
-        } else {
-          resolve({ code: code, data: output });
+      // console.log(npmCli.commands.run('version'));
+      // console.log('command', [command].concat(modules), this.baseDir);
+      npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
+        const moduleList = modules.map((it) => it + '@latest');
+        if (command === 'update') {
+          npmCli.commands.update(moduleList, (err, data) => {
+            process.chdir(this.baseDir);
+            if (err) {
+              return reject(err);
+            }
+            this.operatePackage(data, moduleList, 'update');
+            return resolve({ code: 0, data });
+          });
+        }
+        if (command === 'install') {
+          npmCli.commands.install(moduleList, (err, data) => {
+            process.chdir(this.baseDir);
+            if (err) {
+              return reject(err);
+            }
+            this.operatePackage(data, moduleList, 'install');
+            return resolve({ code: 0, data });
+          });
+        }
+        if (command === 'uninstall') {
+          npmCli.commands.uninstall(moduleList, (err, data) => {
+            process.chdir(this.baseDir);
+            if (err) {
+              return reject(err);
+            }
+            this.operatePackage(data, moduleList, 'uninstall');
+            return resolve({ code: 0, data });
+          });
         }
       });
+
+      // const npm = spawn('npm', args, { cwd: this.baseDir });
+      // // console.log('2==>', npm);
+      // let output = '';
+      // npm.stdout
+      //   .on('data', (data: string) => {
+      //     output += data;
+      //   })
+      //   .pipe(process.stdout);
+      // npm.stderr
+      //   .on('data', (data: string) => {
+      //     output += data;
+      //   })
+      //   .pipe(process.stderr);
+      // npm.on('close', (code: number) => {
+      //   if (!code) {
+      //     resolve({ code: 0, data: output });
+      //   } else {
+      //     resolve({ code: code, data: output });
+      //   }
+      // });
     });
   }
 }

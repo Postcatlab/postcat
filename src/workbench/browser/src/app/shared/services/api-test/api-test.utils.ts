@@ -1,19 +1,19 @@
 import { listToTreeHasLevel } from '../../../utils/tree/tree.utils';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-import { ApiBodyType, ApiTestResGeneral, ApiTestHistoryResponse } from 'eo/platform/browser/IndexedDB';
+import { ApiBodyType, ApiTestResGeneral, ApiTestHistoryResponse } from '../storage/index.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
 
 export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
-  const formatUri = (uri, rest) => {
+  const formatUri = (uri, rest=[]) => {
     let result = uri;
     const restByName = rest.reduce((acc, val) => {
       if (!val.required || !val.name) {
         return acc;
       }
-      return { ...acc, [val.name]: val.value };
+      return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
     }, {});
     Object.keys(restByName).forEach((restName) => {
       result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
@@ -59,7 +59,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
             listDepth: val.listDepth || 0,
             paramKey: val.name,
             paramType: typeMUI[val.type],
-            paramInfo: val.value,
+            paramInfo: val.value === undefined ? val.example : val.value,
           });
         });
         result = listToTreeHasLevel(result, {
@@ -98,7 +98,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
   };
   return result;
 };
-export const eoFormatResponseData = ({ type, report, history, id }) => {
+export const eoFormatResponseData = ({ report, history, id }) => {
   let { httpCode, ...response } = history.resultInfo;
   response = {
     statusCode: httpCode,

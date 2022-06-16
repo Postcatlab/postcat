@@ -1,7 +1,16 @@
 <ng-container *ngIf="isVisible">
-  <span class="sidebar_item sidebar_setting" title="设置" (click)="handleShowModal()">
+  <span nz-popover [nzPopoverContent]="contentTemplate" [nzPopoverOverlayStyle]="{left: '-12px', marginBottom: '8px'}"
+    nzPopoverOverlayClassName="sidebar_setting_popover" nzPopoverPlacement="rightBottom"
+    class="sidebar_item sidebar_setting" title="设置">
     <i nz-icon nzType="setting"></i>
   </span>
+
+  <ng-template #contentTemplate>
+    <ul nz-menu [nzSelectable]="false">
+      <li nz-menu-item (click)="handleShowModal()">设置</li>
+      <li nz-menu-item (click)="switchDataSource()">切换到{{ isRemote ? '本地' : '远程' }}</li>
+    </ul>
+  </ng-template>
 
   <nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置" (nzOnCancel)="handleCancel()">
     <section *nzModalContent class="container">
@@ -36,13 +45,13 @@
               </nz-form-label>
             </ng-container>
             <!-- 二级说明 -->
-            <div *ngIf="module.properties[field]?.type !== 'boolean'" class="description">
-              {{module.properties[field]?.description }}
+            <div *ngIf="module.properties[field]?.type !== 'boolean' && module.properties[field]?.description"
+              class="description" [innerHTML]="md.render(module.properties[field]?.description)">
             </div>
-            <nz-form-control nzErrorTip="请输入{{ module.properties[field]?.label }}">
+            <nz-form-control nzErrorTip="请输入{{ module.properties[field]?.label }}" class="form-control">
               <!-- 字符串类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'string'">
-                <input type="text" nz-input id="{{ field }}"
+                <input type="text" nz-input id="{{ field }}" [disabled]="module.properties[field]?.disabled"
                   placeholder="{{module.properties[field]?.placeholder ?? '请输入' + module.properties[field]?.label}}"
                   formControlName="{{ field }}" [(ngModel)]="settings[field]" />
               </ng-container>
@@ -50,18 +59,23 @@
               <!-- 布尔类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'boolean'">
                 <label nz-checkbox [(ngModel)]="settings[field]" id="{{ field }}"
+                  [nzDisabled]="module.properties[field]?.disabled"
                   formControlName="{{ field }}">{{module.properties[field]?.description}}</label>
               </ng-container>
 
               <!-- 数字类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'number'">
-                <nz-input-number [(ngModel)]="settings[field]" id="{{ field }}" formControlName="{{ field }}">
+                <nz-input-number [(ngModel)]="settings[field]" id="{{ field }}"
+                  [nzDisabled]="module.properties[field]?.disabled" formControlName="{{ field }}">
                   {{module.properties[field]?.description}}</nz-input-number>
               </ng-container>
 
               <!-- 组件类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'component'">
+                <!-- 默认主题组件 -->
                 <eo-select-theme *ngIf="settings[field] === 'eo-select-theme'"></eo-select-theme>
+                <!-- 关于eopai -->
+                <eo-about *ngIf="settings[field] === 'eo-about'"></eo-about>
               </ng-container>
 
             </nz-form-control>

@@ -8,7 +8,7 @@ export class TestServerService {
   constructor(private electron: ElectronService, private localNode: TestServerLocalNodeService,private sassNode:TestServerServerlessService) {
     this.isElectron = this.electron.isElectron;
   }
-  getService() {
+  get instance() {
     if (this.isElectron) {
       return this.localNode;
     } else {

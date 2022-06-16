@@ -8,7 +8,7 @@ import {
   ApiEditBody,
   ApiBodyType,
   JsonRootType,
-} from 'eo/platform/browser/IndexedDB';
+} from '../../../../shared/services/storage/index.model';
 import { ApiEditService } from '../api-edit.service';
 @Component({
   selector: 'eo-api-edit-body',
@@ -90,6 +90,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
+  }
+
+  beforeHandleImport(result) {
+    this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
   }
 
   handleParamsImport(data) {

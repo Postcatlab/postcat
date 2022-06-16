@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { MessageService } from '../../../shared/services/message';
+import { NzConfigService } from 'ng-zorro-antd/core/config';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -8,7 +12,21 @@ import { ModuleInfo } from 'eo/platform/node/extension-manager';
 })
 export class NavbarComponent implements OnInit {
   isMaximized = false;
-  isElectron: boolean = false;
+  isElectron = false;
+  messageTop;
+  @ViewChild('notificationTemplate', { static: true })
+  notificationTemplate!: TemplateRef<{}>;
+  get dataSourceType() {
+    return this.remoteService.dataSourceType;
+  }
+  /** 是否远程数据源 */
+  get isRemote() {
+    return this.remoteService.isRemote;
+  }
+  /** 当前数据源对应的文本 */
+  get dataSourceText() {
+    return this.remoteService.dataSourceText;
+  }
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
   resourceInfo = [
@@ -36,13 +54,19 @@ export class NavbarComponent implements OnInit {
     },
   ];
 
-  constructor(private electron: ElectronService) {
+  constructor(
+    private electron: ElectronService,
+    private messageService: MessageService,
+    private nzConfigService: NzConfigService,
+    private remoteService: RemoteService
+  ) {
     this.isElectron = this.electron.isElectron;
+    this.messageTop = this.nzConfigService.getConfig()?.message?.nzTop;
     this.getInstaller();
   }
   private findLinkInSingleAssets(assets, item) {
     let result = '';
-    let assetIndex = assets.findIndex(
+    const assetIndex = assets.findIndex(
       (asset) =>
         new RegExp(`${item.suffix}$`, 'g').test(asset.browser_download_url) &&
         (!item.keyword || asset.browser_download_url.includes(item.keyword))
@@ -74,7 +98,6 @@ export class NavbarComponent implements OnInit {
               item
             );
           });
-        console.log(this.resourceInfo);
       });
   }
   minimize() {
@@ -101,7 +124,21 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  /**
+   * switch data
+   */
+  switchDataSource = async () => {
+    this.remoteService.switchDataSource();
+  };
+
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
+  }
+
+  /**
+   * 打开系统设置
+   */
+  openSettingModal() {
+    this.messageService.send({ type: 'toggleSettingModalVisible', data: { isShow: true } });
   }
 }

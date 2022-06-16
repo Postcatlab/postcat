@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
 import { StorageService } from '../../services/storage';
@@ -17,6 +17,8 @@ export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
   varName = `{{变量名}}`;
   isVisible = false;
+  /** 是否打开下拉菜单 */
+  isOpen = false;
   envInfo: any = {};
   envList: any[] = [];
   activeUuid = 0;
@@ -28,7 +30,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private storage: StorageService, private message: NzMessageService, private store: Store) {}
+  constructor(private storage: StorageService, private message: EoMessageService, private store: Store) {}
 
   get envUuid(): number {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -55,23 +57,23 @@ export class EnvComponent implements OnInit, OnDestroy {
   getAllEnv(uuid?: number) {
     const projectID = 1;
     return new Promise((resolve) => {
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageHandleResult) => {
-        if (result.status !== StorageHandleStatus.success) {
-          this.envList = [];
-          await this.handleAddEnv(projectID);
-          resolve(true);
-          return;
+      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.envList = result.data || [];
+          if (!this.envList.length) {
+            await this.handleAddEnv(projectID);
+            resolve(true);
+            return;
+          }
+          await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
         }
-        this.envList = result.data;
-        await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
-        resolve(true);
       });
     });
   }
 
   handleDeleteEnv(uuid: string) {
     // * delete env in menu on left sidebar
-    this.storage.run('environmentRemove', [uuid], async (result: StorageHandleResult) => {
+    this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
       await this.getAllEnv();
       if (this.envUuid === Number(uuid)) {
         this.envUuid = this.activeUuid;
@@ -86,11 +88,12 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleSwitchEnv(uuid) {
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
-      this.storage.run('environmentLoad', [uuid], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.envInfo = result.data;
         }
-        this.activeUuid = uuid;
+        console.log('result.data', result.data, uuid);
+        this.activeUuid = result.data?.uuid ?? null;
         resolve(true);
       });
     });
@@ -111,7 +114,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     // * update list after call save api
     const { parameters, name, ...other } = this.envInfo;
     if (!name) {
-      this.message.error('Name is not allowed to be empty.');
+      this.message.error('名称不允许为空');
       return;
     }
     const data = parameters.filter((it) => it.name && it.value);
@@ -119,27 +122,27 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run(
         'environmentUpdate',
         [{ ...other, name, parameters: data }, uuid],
-        async (result: StorageHandleResult) => {
-          if (result.status === StorageHandleStatus.success) {
+        async (result: StorageRes) => {
+          if (result.status === StorageResStatus.success) {
             this.message.success('编辑成功');
             await this.getAllEnv(this.activeUuid);
             if (this.envUuid === Number(uuid)) {
               this.envUuid = Number(uuid);
             }
           } else {
-            this.message.success('编辑失败');
+            this.message.error('编辑失败');
           }
         }
       );
     } else {
-      this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           this.message.success('新增成功');
           this.envInfo = result.data;
           this.activeUuid = Number(result.data.uuid);
           this.getAllEnv(result.data.uuid);
         } else {
-          this.message.success('新增失败');
+          this.message.error('新增失败');
         }
       });
     }
@@ -153,6 +156,7 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleShowModal() {
     this.isVisible = true;
+    this.isOpen = false;
     this.handleSwitchEnv(this.envUuid);
   }
 
@@ -169,8 +173,8 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.store.dispatch(new Change(null));
       return;
     }
-    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageHandleResult) => {
-      if (result.status === StorageHandleStatus.success) {
+    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
         this.store.dispatch(new Change(data));
       }

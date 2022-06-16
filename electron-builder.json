@@ -5,14 +5,14 @@
     "output": "release/"
   },
   "files": [
-    "src/app/**/*.js*",
-    "src/platform/**/*.js*",
-    "src/shared/**/*.js*",
+    "out/app/**/*.js*",
+    "out/platform/**/*.js*",
+    "out/shared/**/*.js*",
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
-    "src/workbench/node/",
-    "src/core/**/package.json",
-    "src/app/common/**/*",
+    "out/workbench/node/",
+    "out/core/**/package.json",
+    "out/app/common/**/*",
     "!**/*.ts"
   ],
   "afterSign": "builder/notarize.js",
@@ -41,10 +41,7 @@
     "icon": "src/app/common/images/512x512.png",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
-    "target": [
-      "dmg",
-      "zip"
-    ]
+    "target": ["dmg", "zip"]
   },
   "dmg": {
     "sign": false

@@ -25,6 +25,7 @@ eo-api-test-rest {
     overflow-y: auto;
   }
 }
+
 .env_front_uri {
   max-width: 240px;
   height: 32px;
@@ -43,5 +44,10 @@ div.ant-typography{
   }
   .param_header + list-block-common-component .wrap_lbcc {
     border-top: 1px solid var(--BORDER);
+  }
+  .response_container{
+    .ant-tabs-tabpane{
+      min-height: 208px;
+    }
   }
 }

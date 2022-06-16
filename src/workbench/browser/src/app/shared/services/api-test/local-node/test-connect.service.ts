@@ -11,6 +11,7 @@ export class TestServerLocalNodeService implements TestServer {
     });
   }
   send(module, message) {
+    console.log('send message', message);
     this.electron.ipcRenderer.send(module, message);
   }
   close() {

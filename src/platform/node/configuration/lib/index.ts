@@ -59,7 +59,7 @@ export class Configuration implements ConfigurationInterface {
     data.nestedSettings ??= {};
     data.settings[moduleID] = settings;
     const propArr = moduleID.split('.');
-    const target = propArr.slice(0, -1).reduce((p, k) => p[k], data.nestedSettings);
+    const target = propArr.slice(0, -1).reduce((p, k) => p?.[k], data.nestedSettings);
     target[propArr.at(-1)] = settings;
     return this.saveConfig(data);
   }
@@ -92,11 +92,11 @@ export class Configuration implements ConfigurationInterface {
    * @param section
    * @returns
    */
-  getModuleSettings(section?: string): ConfigurationValueInterface {
+  getModuleSettings<T = any>(section?: string): T {
     const localSettings = this.getSettings();
     localSettings.nestedSettings ??= {};
     if (section) {
-      return section.split('.').reduce((p, k) => p[k], localSettings.nestedSettings);
+      return section.split('.')?.reduce((p, k) => p?.[k], localSettings.nestedSettings);
     }
     return localSettings.nestedSettings;
   }

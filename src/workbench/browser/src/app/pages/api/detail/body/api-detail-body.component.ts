@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ApiEditBody, ApiBodyType, JsonRootType } from 'eo/platform/browser/IndexedDB';
+import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../shared/services/storage/index.model';
 import { ApiDetailService } from '../api-detail.service';
 @Component({
   selector: 'eo-api-detail-body',
@@ -30,7 +30,8 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   beforeChangeBodyByType(type) {
     switch (type) {
-      case ApiBodyType.Raw: { // case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        // case ApiBodyType.Binary:
         this.cache[type] = this.model || '';
         break;
       }

@@ -1,4 +1,4 @@
-import { ApiData } from '../types';
+import { ApiData } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [
   {
@@ -136,69 +136,21 @@ export const sampleApiData: ApiData[] = [
             required: true,
             example: '',
             type: 'object',
-            description: '',
-            children: [
-              { name: 'confirm', description: '', type: 'number', required: true, example: '139641' },
-              { name: 'heal', description: '', type: 'number', required: true, example: '126827' },
-              { name: 'dead', description: '', type: 'number', required: true, example: '5700' },
-              { name: 'nowConfirm', description: '', type: 'number', required: true, example: '7114' },
-              { name: 'suspect', description: '', type: 'number', required: true, example: '2' },
-              { name: 'nowSevere', description: '', type: 'number', required: true, example: '6' },
-              { name: 'importedCase', description: '', type: 'number', required: true, example: '12684' },
-              { name: 'noInfect', description: '', type: 'number', required: true, example: '887' },
-              { name: 'showLocalConfirm', description: '', type: 'number', required: true, example: '1' },
-              { name: 'showlocalinfeciton', description: '', type: 'number', required: true, example: '1' },
-              { name: 'localConfirm', description: '', type: 'number', required: true, example: '851' },
-              { name: 'noInfectH5', description: '', type: 'number', required: true, example: '109' },
-              { name: 'localConfirmH5', description: '', type: 'number', required: true, example: '850' },
-              {
-                name: 'local_acc_confirm',
-                description: '',
-                type: 'number',
-                required: true,
-                example: '106297',
-              },
-            ],
+            description: ''
           },
           {
             name: 'chinaAdd',
             required: true,
             example: '',
             type: 'object',
-            description: '',
-            children: [
-              { name: 'confirm', description: '', type: 'number', required: true, example: ' 321' },
-              { name: 'heal', description: '', type: 'number', required: true, example: ' 165' },
-              { name: 'dead', description: '', type: 'number', required: true, example: '' },
-              { name: 'nowConfirm', description: '', type: 'number', required: true, example: ' 156' },
-              { name: 'suspect', description: '', type: 'number', required: true, example: ' -2' },
-              { name: 'nowSevere', description: '', type: 'number', required: true, example: '' },
-              { name: 'importedCase', description: '', type: 'number', required: true, example: '18' },
-              { name: 'noInfect', description: '', type: 'number', required: true, example: '60' },
-              { name: 'localConfirm', description: '', type: 'number', required: true, example: '-67' },
-              { name: 'noInfectH5', description: '', type: 'number', required: true, example: '' },
-              { name: 'localConfirmH5', description: '', type: 'number', required: true, example: '9' },
-            ],
+            description: ''
           },
           {
             name: 'showAddSwitch',
             required: true,
             example: '',
             type: 'object',
-            description: '',
-            children: [
-              { name: 'all', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'confirm', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'suspect', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'dead', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'heal', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'nowConfirm', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'nowSevere', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'importedCase', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'noInfect', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'localConfirm', description: '', type: 'boolean', required: true, example: 'true' },
-              { name: 'localinfeciton', description: '', type: 'boolean', required: true, example: 'true' },
-            ],
+            description: ''
           },
           {
             name: 'lastUpdateTime',

@@ -1,0 +1,5 @@
+<eo-table [(model)]="mocklList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
+  <ng-template cell="url" let-scope="scope" let-index="index">
+    <span>{{ scope.url }}</span>
+  </ng-template>
+</eo-table>

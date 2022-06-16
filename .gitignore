@@ -2,6 +2,7 @@
 
 # compiled output
 dist/
+out/
 /tmp
 /out-tsc
 /app-builds
@@ -9,10 +10,10 @@ dist/
 *.js
 *.js.map
 *.webpack.js
-!src/core/market/browser/**/*.js
-!src/core/market/browser/dist/icon.png
 !src/workbench/node/request/**/*.js
 !/api/*.js
+!/build/*.js
+!*.config.js
 
 scripts/notarize.js
 # dependencies
@@ -47,3 +48,4 @@ testem.log
 .DS_Store
 Thumbs.db
 # *-lock.json
+.vercel

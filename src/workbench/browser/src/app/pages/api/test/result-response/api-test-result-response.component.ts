@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { ApiTestHistoryResponse } from 'eo/platform/browser/IndexedDB';
+import { ApiTestHistoryResponse } from '../../../../shared/services/storage/index.model';
 import { ApiTestService } from '../api-test.service';
 @Component({
   selector: 'eo-api-test-result-response',

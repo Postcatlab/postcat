@@ -30,7 +30,7 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "input": "../../../node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
               }
             ],
@@ -109,7 +109,11 @@
               "path": "./angular.webpack.js",
               "replaceDuplicatePlugins": true
             },
-            "allowedCommonJsDependencies": ["brace"]
+            "allowedCommonJsDependencies": [
+              "brace",
+              "qs",
+              "rxjs"
+            ]
           },
           "configurations": {
             "dev": {
@@ -212,8 +216,12 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "scripts": [],
-            "styles": ["src/styles.scss"],
-            "assets": ["src/assets"],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "assets": [
+              "src/assets"
+            ],
             "customWebpackConfig": {
               "path": "./angular.webpack.js",
               "replaceDuplicatePlugins": true
@@ -223,7 +231,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
@@ -235,7 +246,9 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["e2e/**/*.ts"]
+            "lintFilePatterns": [
+              "e2e/**/*.ts"
+            ]
           }
         }
       }

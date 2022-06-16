@@ -1,47 +1,45 @@
 import { Component, OnInit } from '@angular/core';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { StorageHandleResult, StorageHandleStatus } from 'eo/platform/browser/IndexedDB';
+import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
+import { FeatureType } from '../../types';
 
 @Component({
   selector: 'eo-sync-api',
-  templateUrl: './sync-api.component.html',
-  styleUrls: ['./sync-api.component.scss'],
+  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select>`,
 })
 export class SyncApiComponent implements OnInit {
-  pushType: '';
+  currentExtension = '';
   supportList: any[] = [];
-  featureList = window.eo.getFeature('apimanage.sync');
-  constructor(private modalRef: NzModalRef, private storage: StorageService) {}
+  featureMap = window.eo.getFeature('apimanage.sync');
+  constructor(private storage: StorageService) {}
 
   ngOnInit(): void {
-    console.log('featureList', this.featureList);
-    this.featureList?.forEach((feature: object, key: string) => {
+    this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
-        key: key,
-        image: feature['icon'],
-        title: feature['label'],
+        key,
+        ...data,
       });
     });
+    {
+      const { key } = this.supportList.at(0);
+      this.currentExtension = key || '';
+    }
   }
   async submit() {
-    const feature = this.featureList.get(this.pushType);
+    const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.pushType);
+    const module = window.eo.loadFeatureModule(this.currentExtension);
     // TODO 临时取值方式需要修改
-    const {
-      url,
-      token: secretKey,
-      projectId,
-    } = window.eo.getModuleSettings('eoapi-feature-push-eolink.eolink.remoteServer');
+    const { token: secretKey, projectId } = window.eo.getModuleSettings(
+      'eoapi-feature-push-eolink.eolink.remoteServer'
+    );
     if (module && module[action] && typeof module[action] === 'function') {
-      this.storage.run('projectExport', [], async (result: StorageHandleResult) => {
-        if (result.status === StorageHandleStatus.success) {
+      this.storage.run('projectExport', [], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = await module[action](result.data, {
-              url,
               projectId,
               secretKey,
             });

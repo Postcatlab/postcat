@@ -3,12 +3,12 @@ import { isNotEmpty } from 'eo/shared/common/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import {
-  StorageHandleResult,
-  StorageHandleStatus,
+  StorageRes,
+  StorageResStatus,
   StorageHandleArgs,
   StorageProcessType,
-} from 'eo/platform/browser/IndexedDB';
-import { Storage } from 'eo/platform/browser/IndexedDB/lib';
+} from '../../../../workbench/browser/src/app/shared/services/storage/index.model';
+import { IndexedDBStorage } from '../../../../workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
 
 class StorageService {
   private ipcRenderer: typeof ipcRenderer;
@@ -29,24 +29,24 @@ class StorageService {
    */
   private storageListenHandle(args: StorageHandleArgs): void {
     const action: string = args.action || undefined;
-    const handleResult: StorageHandleResult = {
-      status: StorageHandleStatus.invalid,
+    const handleResult: StorageRes = {
+      status: StorageResStatus.invalid,
       data: undefined,
       callback: args.callback || null,
     };
-    if (Storage && Storage[action] && typeof Storage[action] === 'function') {
-      Storage[action](...args.params).subscribe(
+    if (IndexedDBStorage && IndexedDBStorage[action] && typeof IndexedDBStorage[action] === 'function') {
+      IndexedDBStorage[action](...args.params).subscribe(
         (result: any) => {
           handleResult.data = result;
           if (isNotEmpty(result)) {
-            handleResult.status = StorageHandleStatus.success;
+            handleResult.status = StorageResStatus.success;
           } else {
-            handleResult.status = StorageHandleStatus.empty;
+            handleResult.status = StorageResStatus.empty;
           }
           this.storageListenHandleNotify(args.type, handleResult);
         },
         (error: any) => {
-          handleResult.status = StorageHandleStatus.error;
+          handleResult.status = StorageResStatus.error;
           this.storageListenHandleNotify(args.type, handleResult);
         }
       );
@@ -60,7 +60,7 @@ class StorageService {
    * @param type
    * @param result
    */
-  private storageListenHandleNotify(type: string, result: StorageHandleResult): void {
+  private storageListenHandleNotify(type: string, result: StorageRes): void {
     try {
       if (StorageProcessType.default === type) {
         this.ipcRenderer.send('eo-storage', { type: 'result', result: result });
