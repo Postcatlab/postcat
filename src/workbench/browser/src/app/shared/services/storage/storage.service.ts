@@ -9,14 +9,13 @@ export const DATA_SOURCE_TYPE_KEY = 'DATA_SOURCE_TYPE_KEY';
 /** is show local data source tips */
 export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 
-let instance;
-
 /**
  * @description
  * A storage service
  */
 @Injectable({ providedIn: 'root' })
 export class StorageService {
+  private instance;
   private dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'http';
   constructor(private injector: Injector, private messageService: MessageService) {
     console.log('StorageService init');
@@ -33,10 +32,10 @@ export class StorageService {
       data: undefined,
       callback: callback,
     };
-    if (!instance[action]) {
+    if (!this.instance[action]) {
       throw Error(`Lack request API: ${action}`);
     }
-    instance[action](...params).subscribe(
+    this.instance[action](...params).subscribe(
       (res: any) => {
         handleResult.status = res.status;
         handleResult.data = res.data;
@@ -52,11 +51,11 @@ export class StorageService {
   setStorage = (type: DataSourceType = 'local', options = {}) => {
     switch (type) {
       case 'local': {
-        instance = new IndexedDBStorage();
+        this.instance = new IndexedDBStorage();
         break;
       }
       case 'http': {
-        instance = this.injector.get(HttpStorage);
+        this.instance = this.injector.get(HttpStorage);
         break;
       }
     }
