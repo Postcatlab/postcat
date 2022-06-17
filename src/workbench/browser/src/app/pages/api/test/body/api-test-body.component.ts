@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import {
 } from '../../../../shared/services/api-test/api-test-params.model';
 import { ApiBodyType, JsonRootType } from '../../../../shared/services/storage/index.model';
 import { ApiTestService } from '../api-test.service';
-import { Message, MessageService } from '../../../../shared/services/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 
 @Component({
   selector: 'eo-api-test-body',
@@ -40,7 +40,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private apiTest: ApiTestService, private messageService: MessageService) {
+  constructor(
+    private apiTest: ApiTestService,
+    private cdRef: ChangeDetectorRef,
+    private message: EoMessageService
+  ) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
       this.beforeChangeBodyByType(val[0]);
     });
@@ -166,6 +170,33 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       title: '参数',
       itemStructure: this.itemStructure,
       watchFormLastChange: () => {
+        this.modelChange.emit(this.model);
+      },
+      importFile: (inputArg) => {
+        if (inputArg.file.length === 0) return;
+        inputArg.item.value = '';
+        inputArg.item.files = [];
+        for (var i = 0; i < inputArg.file.length; i++) {
+          var val = inputArg.file[i];
+          if (val.size > 2 * 1024 * 1024) {
+            inputArg.item.value = '';
+            this.message.error('文件大小均需小于2M');
+            return;
+          }
+        }
+        for (var i = 0; i < inputArg.file.length; i++) {
+          var val = inputArg.file[i];
+          inputArg.item.value = val.name + ',' + inputArg.item.value;
+          let tmpReader = new FileReader();
+          tmpReader.readAsDataURL(val);
+          tmpReader.onload = function (_default) {
+            inputArg.item.files.splice(0, 0, {
+              name: val.name,
+              dataUrl: this.result,
+            });
+          };
+        }
+        inputArg.item.value = inputArg.item.value.slice(0, inputArg.item.value.length - 1);
         this.modelChange.emit(this.model);
       },
     });

@@ -322,11 +322,11 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   apiDataLoadAllByGroupID(groupID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiData, { groupID: groupID });
+    return this.loadAllByConditions(this.apiData, { groupID });
   }
 
   apiDataLoadAllByProjectID(projectID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiData, { projectID: projectID });
+    return this.loadAllByConditions(this.apiData, { projectID });
   }
 
   /**
@@ -335,7 +335,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param groupID
    */
   apiDataLoadAllByProjectIDAndGroupID(projectID: number | string, groupID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiData, { projectID: projectID, groupID: groupID });
+    return this.loadAllByConditions(this.apiData, { projectID, groupID });
   }
 
   /**

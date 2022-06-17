@@ -58,6 +58,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
             checkbox: val.required,
             listDepth: val.listDepth || 0,
             paramKey: val.name,
+            files:val.files?.map(val=>val.dataUrl),
             paramType: typeMUI[val.type],
             paramInfo: val.value === undefined ? val.example : val.value,
           });
@@ -100,6 +101,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
 };
 export const eoFormatResponseData = ({ report, history, id }) => {
   let { httpCode, ...response } = history.resultInfo;
+  console.log(report, history, id)
   response = {
     statusCode: httpCode,
     ...response,
@@ -115,7 +117,7 @@ export const eoFormatResponseData = ({ report, history, id }) => {
   } = {
     id: id,
     general: report.general,
-    response: response,
+    response: {blobFileName:report.blobFileName,...response},
     report: {
       request: {
         requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),

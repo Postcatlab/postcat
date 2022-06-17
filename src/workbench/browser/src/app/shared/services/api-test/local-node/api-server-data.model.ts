@@ -42,6 +42,9 @@ export interface TestLocalNodeData {
     checkbox: boolean;
     paramKey: string;
     paramType: string;
+    /**
+     * value
+     */
     paramInfo: string;
     childList: object[];
   }[];
