@@ -33,6 +33,12 @@ export class RemoteService {
   get dataSourceText() {
     return this.isRemote ? '远程' : '本地';
   }
+  /** get mock url */
+  get mockUrl() {
+    return this.isRemote
+      ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
+      : window.eo?.getMockUrl?.();
+  }
 
   constructor(
     private storageService: StorageService,
@@ -70,13 +76,14 @@ export class RemoteService {
     const { url: remoteUrl, token } = window.eo.getModuleSettings('eoapi-common.remoteServer') || {};
 
     const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
-    const response = await fetch(url, {
-      headers: {
-        'x-api-key': token,
-      },
-    });
+
     let result;
     try {
+      const response = await fetch(url, {
+        headers: {
+          'x-api-key': token,
+        },
+      });
       result = await response.json();
 
       if (result.statusCode !== 200) {
