@@ -38,6 +38,7 @@ export const parseTree = (key, value, level = 0) => {
       return {
         name: key,
         required: true,
+        value: JSON.stringify(value),
         example: JSON.stringify(value),
         type: 'array',
         description: '',

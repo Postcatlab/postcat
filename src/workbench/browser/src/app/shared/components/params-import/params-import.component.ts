@@ -83,7 +83,7 @@ export class ParamsImportComponent {
         return;
       }
       paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
-      console.log('-->', paramCode);
+      // console.log('-->', paramCode);
     }
     if (this.contentType === 'raw') {
       paramCode = this.paramCode;
@@ -115,6 +115,7 @@ export class ParamsImportComponent {
         break;
       }
       case 'overwrite': {
+        console.log(cacheData);
         resultData = cacheData;
         break;
       }
