@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, ViewC
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { AceConfigInterface, AceComponent, AceDirective } from 'ngx-ace-wrapper';
 import { whatTextType } from '../../../utils';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import beautifier from 'js-beautify';
 import 'brace';
 import 'brace/theme/tomorrow_night_eighties';
@@ -83,7 +84,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
 
   };
 
-  constructor(private message: EoMessageService) {}
+  constructor(private message: EoMessageService, private electron: ElectronService) {}
 
   ngAfterViewInit(): void {}
   ngOnChanges() {
@@ -97,13 +98,21 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     }
   }
   ngOnInit() {
+    console.log(this.eventList);
     // To get the Ace instance:
-    this.buttonList = this.eventList
-      .filter((it) => it !== 'type')
-      .map((it) => ({
-        event: it,
-        ...eventHash.get(it),
-      }));
+    this.buttonList = this.electron.isElectron
+      ? this.eventList
+          .filter((it) => !['newTab', 'type'].includes(it))
+          .map((it) => ({
+            event: it,
+            ...eventHash.get(it),
+          }))
+      : this.eventList
+          .filter((it) => it !== 'type')
+          .map((it) => ({
+            event: it,
+            ...eventHash.get(it),
+          }));
   }
   log(event, txt) {
     console.log('ace event', event, txt);

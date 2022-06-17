@@ -82,7 +82,7 @@ export const parserJsonFile = (file, type = 'UTF-8') =>
     reader.onload = (ev) => {
       const fileString: string = ev.target.result as string;
       const json = JSON.parse(fileString);
-      resolve(json);
+      resolve({ name: file.name, content: json });
     };
   });
 
@@ -116,7 +116,8 @@ export const getBlobUrl = (inputStream, inputFileType) => {
       });
     } else {
       //@ts-ignore
-      const tmpBlobBuilder = window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder;
+      const tmpBlobBuilder =
+        window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder;
       const tmpBlobClass = new tmpBlobBuilder();
       tmpBlobClass.append(inputStream);
       tmpBlob = tmpBlobClass.getBlob(inputFileType);
