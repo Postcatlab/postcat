@@ -33,6 +33,10 @@ export interface ApiTestBody extends BasiApiTestParams {
    */
   type: string;
   /**
+   * If value is file,value is base64 string
+   */
+  files?:string;
+  /**
    * XML attribute
    */
   attribute?: string;

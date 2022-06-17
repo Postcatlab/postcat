@@ -58,6 +58,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
             checkbox: val.required,
             listDepth: val.listDepth || 0,
             paramKey: val.name,
+            files:val.files?.map(val=>val.dataUrl),
             paramType: typeMUI[val.type],
             paramInfo: val.value === undefined ? val.example : val.value,
           });

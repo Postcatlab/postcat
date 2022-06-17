@@ -81,9 +81,7 @@ export class ApiTestService {
       baseFun: {
         reduceItemWhenAddChildItem: reduceItemWhenIsOprDepth,
         watchCheckboxChange: opts.watchFormLastChange,
-        importFile: (inputArg, inputFileList, inputParams, inputPlugStatus, inputCallback) => {
-          console.log(inputArg);
-        },
+        importFile: opts.importFile
       },
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
@@ -278,7 +276,6 @@ export class ApiTestService {
     });
     if (inData.history.response.responseType === 'text') {
       let bodyInfo = text2UiData(inData.history.response.body);
-      console.log(bodyInfo);
       result.responseBody = bodyInfo.data;
       result.responseBodyType = bodyInfo.textType;
       result.responseBodyJsonType = bodyInfo.rootType;

@@ -295,51 +295,51 @@ export enum RequestProtocol {
 }
 
 /**
- * API数据对象接口
+ * API Data
  */
 export interface ApiData extends StorageModel {
   /**
-   * 名称
+   * name
    * @type {string}
    */
   name: string;
 
   /**
-   * 文档所属项目主键ID
+   * Belongs to which project
    *
    * @type {string|number}
    */
   projectID?: string | number;
 
   /**
-   * 文档所属分组主键ID
+   * Belongs to which group
    *
    * @type {string|number}
    */
   groupID: string | number;
 
   /**
-   * 请求地址
+   * Request url,Usually value is path
    *
    * @type {string}
    */
   uri: string;
   /**
-   * API协议 [http, https, ...]
+   * API protocol [http, https, ...]
    *
    * @type {RequestProtocol|string}
    */
   protocol: RequestProtocol | string;
 
   /**
-   * 请求方法 [POST, GET, PUT, ...]
+   * Request method [POST, GET, PUT, ...]
    *
    * @type {RequestMethod|string}
    */
   method: RequestMethod | string;
 
   /**
-   * 分组排序号
+   * api show order
    *
    * @type {number}
    */

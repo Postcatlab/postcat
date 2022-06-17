@@ -1252,8 +1252,10 @@ function listBlockController($rootScope, $element, $scope) {
   };
   $scope.importFile = function (inputArg, inputEvent) {
     inputArg.$index = this.$parent.$index;
+    inputArg.item=vm.list[inputArg.$index];
     vm.mainObject.baseFun.importFile(inputArg);
-    if (inputEvent) inputEvent.value = '';
+    // if (inputEvent) inputEvent.value = '';
+    ($scope.$root && $scope.$root.$$phase) || $scope.$apply();
   };
   /**
    * @desc 过滤列表函数
