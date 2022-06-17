@@ -41,7 +41,7 @@ export class ApiDetailMockComponent implements OnChanges {
       console.log('apiDataID', this.apiData, apiDataID);
       const mockRes = await this.getMockByApiDataID(apiDataID);
       if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-        const mock = this.createMockObj({ name: '系统默认期望', createType: 0 });
+        const mock = this.createMockObj({ name: '系统默认期望', createWay: 'system' });
         const res = await this.createMock(mock);
         res.data.url = this.getApiUrl(res.data.uuid);
         this.mocklList = [res.data];
@@ -104,13 +104,13 @@ export class ApiDetailMockComponent implements OnChanges {
    * @returns
    */
   createMockObj(options: Record<string, any> = {}) {
-    const { name = '', createType = 1, ...rest } = options;
+    const { name = '', createWay = 'custom', ...rest } = options;
     return {
       name,
       url: this.getApiUrl(),
       apiDataID: this.apiData.uuid,
       projectID: 1,
-      createType,
+      createWay,
       response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
       ...rest,
     };
