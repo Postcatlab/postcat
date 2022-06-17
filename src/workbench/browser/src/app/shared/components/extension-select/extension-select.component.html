@@ -34,8 +34,8 @@
   </nz-radio-group>
 </div>
 
-<div class="mt-4" *ngIf="allowDrag">
-  <nz-upload *ngIf="extensionList.length" nzType="drag" [nzBeforeUpload]="parserFile">
+<div class="mt-4" *ngIf="allowDrag && extensionList.length">
+  <nz-upload nzType="drag" [nzBeforeUpload]="parserFile">
     <p class="ant-upload-drag-icon">
       <i nz-icon nzType="inbox"></i>
     </p>
