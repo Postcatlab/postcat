@@ -115,9 +115,7 @@ export const getBlobUrl = (inputStream, inputFileType) => {
         type: inputFileType,
       });
     } else {
-      //@ts-ignore
-      const tmpBlobBuilder =
-        window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder;
+      const tmpBlobBuilder =window["BlobBuilder"] || window["MozBlobBuilder"] || window["WebKitBlobBuilder"] || window["MSBlobBuilder"];
       const tmpBlobClass = new tmpBlobBuilder();
       tmpBlobClass.append(inputStream);
       tmpBlob = tmpBlobClass.getBlob(inputFileType);
