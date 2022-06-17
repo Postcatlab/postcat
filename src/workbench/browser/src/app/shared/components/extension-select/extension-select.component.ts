@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { parserJsonFile } from '../../../utils';
+import { EoMessageService } from '../../../eoui/message/eo-message.service';
 
 type optionType = {
   label: string;
@@ -22,6 +23,8 @@ export class ExtensionSelectComponent {
   @Output() uploadChange = new EventEmitter<any>();
   filename = '';
 
+  constructor(private message: EoMessageService) {}
+
   selectExtension({ key, properties }) {
     this.extensionChange.emit(key);
     if (!properties) {
@@ -37,6 +40,10 @@ export class ExtensionSelectComponent {
 
   parserFile = (file) =>
     new Observable((observer: Observer<boolean>) => {
+      if (file.type !== 'application/json') {
+        this.message.error('仅支持上传 JSON 格式的文件');
+        observer.complete();
+      }
       parserJsonFile(file).then((result: { name: string }) => {
         this.filename = result.name;
         this.uploadChange.emit(result);
