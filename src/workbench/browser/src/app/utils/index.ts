@@ -82,7 +82,7 @@ export const parserJsonFile = (file, type = 'UTF-8') =>
     reader.onload = (ev) => {
       const fileString: string = ev.target.result as string;
       const json = JSON.parse(fileString);
-      resolve(json);
+      resolve({ name: file.name, content: json });
     };
   });
 
@@ -93,5 +93,3 @@ export const getDefaultValue = (list: any[], key) => {
   const [target] = list.filter((it) => it.default);
   return target[key] || '';
 };
-
-export const parserProperties = (properties) => Object.keys(properties).map((it) => ({ value: it, ...properties[it] }));

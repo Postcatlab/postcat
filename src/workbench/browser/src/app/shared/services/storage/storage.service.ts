@@ -26,7 +26,8 @@ export class StorageService {
    *
    * @param args
    */
-  run = (action: string, params: Array<any>, callback) => {
+  run(action: string, params: Array<any>, callback): void {
+    console.log('koko');
     const handleResult = {
       status: StorageResStatus.invalid,
       data: undefined,
@@ -47,7 +48,7 @@ export class StorageService {
         callback(handleResult);
       }
     );
-  };
+  }
   setStorage = (type: DataSourceType = 'local', options = {}) => {
     switch (type) {
       case 'local': {
