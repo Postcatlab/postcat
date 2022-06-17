@@ -1,6 +1,6 @@
 export enum ApiTestParamsTypeFormData {
   text = 'string',
-  // file = 'file',
+  file = 'file',
 }
 export enum ApiTestParamsTypeJsonOrXml {
   string = 'string',
@@ -32,6 +32,10 @@ export interface ApiTestBody extends BasiApiTestParams {
    * param type
    */
   type: string;
+  /**
+   * If value is file,value is base64 string
+   */
+  files?:string;
   /**
    * XML attribute
    */

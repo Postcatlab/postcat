@@ -36,18 +36,6 @@ nz-sider {
     }
   }
 
-  eo-api {
-    router-outlet + * {
-      display: block;
-      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 46px);
-      overflow: auto;
-    }
-    .has_tab_page router-outlet + * {
-      height: calc(
-        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 45px - 47px
-      );
-    }
-  }
   .method_text_GET {
     color: var(--BLUE_TAG_BG);
   }

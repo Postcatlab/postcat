@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
 
 import {
-  ApiData,
   RequestMethod,
   RequestProtocol,
   StorageRes,

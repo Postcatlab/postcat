@@ -111,7 +111,6 @@ export class ApiGroupEditComponent implements OnInit {
     this.modalRef.destroy();
     this.storage.run('groupBulkRemove', [data.group], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'updateGroupSuccess', data: {} });
         //delete group api
         if (data.api.length > 0) {
           this.messageService.send({ type: 'gotoBulkDeleteApi', data: { uuids: data.api } });
