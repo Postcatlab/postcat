@@ -67,7 +67,7 @@ export class RemoteService {
    * 测试远程服务器地址是否可用
    */
   async pingRmoteServerUrl(): Promise<[boolean, any]> {
-    const { url: remoteUrl, token } = window.eo.getModuleSettings('eoapi-common.remoteServer');
+    const { url: remoteUrl, token } = window.eo.getModuleSettings('eoapi-common.remoteServer') || {};
 
     const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
     const response = await fetch(url, {
