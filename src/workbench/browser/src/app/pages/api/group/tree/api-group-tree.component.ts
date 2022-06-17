@@ -160,30 +160,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
     ];
   }
-  // 重新构建整个group
-  async rebuildGroupTree(result) {
-    this.storageInstance.apiData.clear();
-    this.storageInstance.group.clear();
+  async createGroup({ name, projectID, content }) {
+    const groupID = await this.storageInstance.group.add({ name, projectID });
+    const result = content.apiData.map((it, index) => ({ ...it, groupID, uuid: Date.now() + index }));
     await this.storageInstance.apiData.bulkAdd(result);
-    const apiItems = {};
-    this.treeItems = [];
-    result.forEach((item: ApiData) => {
-      delete item.updatedAt;
-      apiItems[item.uuid] = item;
-      this.treeItems.push({
-        title: item.name,
-        key: item.uuid.toString(),
-        weight: item.weight || 0,
-        parentID: item.groupID ? `group-${item.groupID}` : '0',
-        method: item.method,
-        isLeaf: true,
-      });
-    });
-    this.apiDataItems = apiItems;
-    this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
-    this.setSelectedKeys();
-    this.generateGroupTreeData();
-    this.restoreExpandStatus();
+    this.buildGroupTreeData();
   }
 
   /**
@@ -205,8 +186,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             break;
           }
           case 'importSuccess': {
-            const { apiData } = JSON.parse(inArg.data);
-            this.rebuildGroupTree(apiData);
+            this.createGroup({ projectID: 1, ...inArg.data });
           }
         }
       });
@@ -349,7 +329,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         'groupBulkUpdate',
         [
           data.group.map((val) => {
-            return { ...val, uuid: val.uuid.replace('group-',''), parentID: val.parentID.replace('group-','') };
+            return { ...val, uuid: val.uuid.replace('group-', ''), parentID: val.parentID.replace('group-', '') };
           }),
         ],
         (result: StorageRes) => {}
