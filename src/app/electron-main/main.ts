@@ -42,6 +42,8 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     width: Math.round(size.width * 0.85),
     height: Math.round(size.height * 0.85),
+    minWidth: 1280,
+    minHeight: 720,
     useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
     frame: os.type() === 'Darwin' ? true : false, //mac use default frame
     webPreferences: {

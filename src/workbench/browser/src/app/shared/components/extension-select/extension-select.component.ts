@@ -20,6 +20,7 @@ export class ExtensionSelectComponent {
   @Output() extensionChange = new EventEmitter<string>();
   @Output() currentOptionChange = new EventEmitter<string>();
   @Output() uploadChange = new EventEmitter<any>();
+  filename = '';
 
   selectExtension({ key, properties }) {
     this.extensionChange.emit(key);
@@ -36,7 +37,8 @@ export class ExtensionSelectComponent {
 
   parserFile = (file) =>
     new Observable((observer: Observer<boolean>) => {
-      parserJsonFile(file).then((result) => {
+      parserJsonFile(file).then((result: { name: string }) => {
+        this.filename = result.name;
         this.uploadChange.emit(result);
         observer.complete();
       });
