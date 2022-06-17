@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -15,11 +16,18 @@ import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-
 })
 export class ApiMockComponent implements OnInit {
   isVisible = false;
-  mockUrl = window.eo?.getMockUrl?.() || location.origin;
+  get mockUrl() {
+    return this.remoteService.mockUrl;
+  }
   mocklList: ApiMockEntity[] = [];
   apiData: ApiData;
+  createWayMap = {
+    system: '系统自动创建',
+    custom: '手动创建',
+  };
   mockListColumns = [
     { title: '名称', key: 'name' },
+    { title: '创建方式', slot: 'createWay' },
     { title: 'URL', slot: 'url' },
     { title: '', slot: 'action', width: '15%' },
   ];
@@ -41,9 +49,16 @@ export class ApiMockComponent implements OnInit {
   }
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private storageService: StorageService, private apiTest: ApiTestService, private route: ActivatedRoute) {
+
+  constructor(
+    private storageService: StorageService,
+    private apiTest: ApiTestService,
+    private route: ActivatedRoute,
+    private remoteService: RemoteService
+  ) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});
   }
+
   ngOnInit() {
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
   }
@@ -70,6 +85,7 @@ export class ApiMockComponent implements OnInit {
       base: 'query',
       replaceType: 'replace',
     }).url;
+    console.log('this.mockUrl', this.mockUrl);
     const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'));
     if (apiData || this.isEdit) {
       url.searchParams.set('mockID', (apiData || this.currentEditMock).uuid + '');

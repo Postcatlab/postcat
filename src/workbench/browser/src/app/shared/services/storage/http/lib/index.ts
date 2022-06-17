@@ -144,7 +144,12 @@ export class HttpStorage implements StorageInterface {
     return this.http.get(`/api_test_history?apiDataID=${apiDataID}`) as Observable<object>;
   }
   mockCreate(item: ApiMockEntity) {
-    return this.http.post('/mock', item) as Observable<object>;
+    if (typeof item.response !== 'string') {
+      item.response = JSON.stringify(item.response);
+    }
+    const obj = { ...item };
+    delete obj.url;
+    return this.http.post('/mock', obj) as Observable<object>;
   }
   mockLoad(uuid: number | string): Observable<object> {
     return this.http.get(`/mock/${uuid}`) as Observable<object>;
@@ -153,9 +158,14 @@ export class HttpStorage implements StorageInterface {
     return this.http.delete(`/mock/${uuid}`);
   }
   mockUpdate(item: ApiMockEntity, uuid: number | string): Observable<object> {
-    return this.http.put(`/mock/${uuid}`, item);
+    if (typeof item.response !== 'string') {
+      item.response = JSON.stringify(item.response);
+    }
+    const obj = { ...item };
+    delete obj.url;
+    return this.http.put(`/mock/${uuid}`, obj);
   }
   apiMockLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
-    return this.http.get(`/mock/list?apiDataID=${apiDataID}`);
+    return this.http.get(`/mock?apiDataID=${apiDataID}`);
   }
 }

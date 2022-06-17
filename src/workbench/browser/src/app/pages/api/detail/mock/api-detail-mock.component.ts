@@ -1,7 +1,7 @@
 import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
@@ -13,15 +13,26 @@ import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../.
 })
 export class ApiDetailMockComponent implements OnChanges {
   @Input() apiData: ApiData;
-  mockUrl = window.eo?.getMockUrl?.() || location.origin;
+  get mockUrl() {
+    return this.remoteService.mockUrl;
+  }
   mocklList: ApiMockEntity[] = [];
   listConf: object = {};
   isVisible = false;
+  createWayMap = {
+    system: '系统自动创建',
+    custom: '手动创建',
+  };
   mockListColumns = [
     { title: '名称', key: 'name' },
+    { title: '创建方式', slot: 'createWay' },
     { title: 'URL', slot: 'url' },
   ];
-  constructor(private storageService: StorageService, private apiTest: ApiTestService, private route: ActivatedRoute) {}
+  constructor(
+    private storageService: StorageService,
+    private apiTest: ApiTestService,
+    private remoteService: RemoteService
+  ) {}
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     const { apiData } = changes;
