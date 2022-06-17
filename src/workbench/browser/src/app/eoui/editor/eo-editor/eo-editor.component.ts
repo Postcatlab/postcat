@@ -78,6 +78,9 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     theme: 'tomorrow_night_eighties',
     readOnly: false,
     tabSize: 4,
+    minLines:5,
+    maxLines: 20
+
   };
 
   constructor(private message: EoMessageService) {}

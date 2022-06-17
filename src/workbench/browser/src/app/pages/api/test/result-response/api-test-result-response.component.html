@@ -5,7 +5,7 @@
     </ng-template>
   </nz-empty>
 </div>
-<div class="p15" *ngIf="model.responseType">
+<div class="p15" *ngIf="model.responseType" [ngSwitch]="model.responseType">
   <div class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
     <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
     <div class="f_row_ac fs12">
@@ -13,7 +13,25 @@
       <span id="time">Time: {{ model.testDeny }}ms</span>
     </div>
   </div>
+  <div class="text-center" *ngSwitchCase="'stream'">
+    <div *ngIf="!responseIsImg">
+      无法预览非文本类型的数据，您可以
+      <button class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()">下载返回结果</button>
+      ，并用其他程序打开。
+    </div>
+    <!-- <div class="mt20" *ngIf="responseIsImg">
+      <img class="maw_100percent" [src]="model.blobUrl" />
+    </div> -->
+  </div>
+  <div class="text-center" *ngSwitchCase="'longText'">
+    响应结果超出可预览的大小，您可以
+    <button class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()">下载返回结果</button>
+    <!-- 或者
+    <button class="eo_theme_btn_default" type="button" (click)="newTabResponseText()">在新标签页中显示返回结果</button>
+    并用其他程序打开。 -->
+  </div>
   <eo-editor
+    *ngSwitchDefault
     class="mt20"
     [autoFormat]="true"
     [(code)]="model.body"
