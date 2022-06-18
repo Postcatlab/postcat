@@ -162,6 +162,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   async createGroup({ name, projectID, content }) {
     const groupID = await this.storageInstance.group.add({ name: name.replace(/\.json$/, ''), projectID });
+    // console.log('==>', content);
     const result = content.apiData.map((it, index) => ({ ...it, groupID, uuid: Date.now() + index }));
     await this.storageInstance.apiData.bulkAdd(result);
     this.buildGroupTreeData();
