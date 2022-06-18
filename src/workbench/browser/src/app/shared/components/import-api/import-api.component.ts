@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FeatureType } from '../../types';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 
 // const optionList = [
@@ -47,7 +48,7 @@ export class ImportApiComponent implements OnInit {
   currentExtension = '';
   uploadData = null;
   featureMap = window.eo.getFeature('apimanage.import');
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private eoMessage: EoMessageService) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
@@ -69,7 +70,12 @@ export class ImportApiComponent implements OnInit {
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.currentExtension);
     const { name, content } = this.uploadData;
-    const data = module[action](content);
+    const [data, err] = module[action](content);
+    if (err) {
+      console.error(err.msg);
+      callback(false);
+      return;
+    }
     // console.log(JSON.stringify(data, null, 2));
     this.messageService.send({
       type: 'importSuccess',
