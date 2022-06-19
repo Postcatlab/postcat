@@ -33,7 +33,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       group: '++uuid, name, projectID, parentID',
       apiData: '++uuid, name, projectID, groupID',
       apiTestHistory: '++uuid, projectID, apiDataID',
-      mock: '++uuid, name, apiDataID, projectID',
+      mock: '++uuid, name, apiDataID, projectID, createWay',
     });
     this.open();
     this.on('populate', () => this.populate());
