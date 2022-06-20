@@ -1,4 +1,5 @@
 import Dexie, { Table } from 'dexie';
+import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import {
   DataSourceType,
   DATA_SOURCE_TYPE_KEY,
@@ -378,6 +379,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
 
         await this.mock.bulkAdd(noHasDefaultMockApiDatas);
       }
+      messageService.send({ type: 'mockAutoSyncSuccess', data: {} });
       return Promise.resolve(true);
     };
     const result = this.loadAllByConditions(this.apiData, { projectID }, callback);

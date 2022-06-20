@@ -7,6 +7,9 @@ import { copyText } from 'eo/workbench/browser/src/app/utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-api-detail-mock',
@@ -30,16 +33,28 @@ export class ApiDetailMockComponent implements OnChanges {
     { title: '创建方式', slot: 'createWay' },
     { title: 'URL', slot: 'url' },
   ];
+  private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private storageService: StorageService,
     private apiTest: ApiTestService,
     private remoteService: RemoteService,
     private message: NzMessageService
-  ) {}
+  ) {
+    messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.initMockList(this.apiData);
+      });
+  }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     const { apiData } = changes;
-    if (apiData.currentValue?.uuid) {
+    this.initMockList(apiData.currentValue);
+  }
+
+  async initMockList(apiData: ApiData) {
+    if (apiData?.uuid) {
       const apiDataID = Number(this.apiData.uuid);
       console.log('apiDataID', this.apiData, apiDataID);
       const mockRes = await this.getMockByApiDataID(apiDataID);
@@ -49,6 +64,7 @@ export class ApiDetailMockComponent implements OnChanges {
       });
     }
   }
+
   getApiUrl(uuid?: number) {
     const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
     const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {

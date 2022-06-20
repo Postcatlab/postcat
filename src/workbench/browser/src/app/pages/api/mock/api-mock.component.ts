@@ -10,6 +10,7 @@ import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
+import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -68,7 +69,12 @@ export class ApiMockComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+    messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+      });
   }
 
   async initMockList(apiDataID: number) {
