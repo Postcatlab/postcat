@@ -51,6 +51,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() code: string;
   @Input() editorType = 'json';
   @Input() autoFormat = false;
+  @Input() disabled = false;
   @Output() codeChange = new EventEmitter<string>();
   @ViewChild(AceComponent, { static: false }) aceRef?: AceComponent;
   @ViewChild(AceDirective, { static: false }) directiveRef?: AceDirective;
@@ -79,9 +80,8 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     theme: 'tomorrow_night_eighties',
     readOnly: false,
     tabSize: 4,
-    minLines:5,
-    maxLines: 20
-
+    minLines: 5,
+    maxLines: 20,
   };
 
   constructor(private message: EoMessageService, private electron: ElectronService) {}

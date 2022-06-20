@@ -21,6 +21,11 @@ export class ApiMockComponent implements OnInit {
   get mockUrl() {
     return this.remoteService.mockUrl;
   }
+  get modalTitle() {
+    return `${
+      this.currentEditMockIndex === -1 ? '添加' : this.currentEditMock.createWay === 'system' ? '预览' : '编辑'
+    } Mock`;
+  }
   mocklList: ApiMockEntity[] = [];
   apiData: ApiData;
   createWayMap = {
