@@ -18,7 +18,7 @@ export class AppService {
         if (Number.isInteger(Number(mockID))) {
           try {
             const mock = await this.getMockByMockID(Number(mockID));
-            if (mock.createType === 0 && mock.apiDataID) {
+            if (mock.createWay === 'system' && mock.apiDataID) {
               const apiData = await this.getApiData(Number(mock.apiDataID));
               mock.response =
                 tree2obj([].concat(apiData.responseBody), { key: 'name', valueKey: 'description' }) || mock.response;

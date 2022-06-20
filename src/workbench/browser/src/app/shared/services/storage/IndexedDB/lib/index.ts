@@ -27,13 +27,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
 
   constructor() {
     super('eoapi_core');
-    this.version(1).stores({
+    this.version(2).stores({
       project: '++uuid, name',
       environment: '++uuid, name, projectID',
       group: '++uuid, name, projectID, parentID',
       apiData: '++uuid, name, projectID, groupID',
       apiTestHistory: '++uuid, projectID, apiDataID',
-      mock: '++uuid, name, apiDataID, projectID',
+      mock: '++uuid, name, apiDataID, projectID, createWay',
     });
     this.open();
     this.on('populate', () => this.populate());
