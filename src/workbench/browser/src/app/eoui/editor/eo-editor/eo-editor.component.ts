@@ -51,6 +51,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() code: string;
   @Input() editorType = 'json';
   @Input() autoFormat = false;
+  @Input() disabled = false;
   @Output() codeChange = new EventEmitter<string>();
   @ViewChild(AceComponent, { static: false }) aceRef?: AceComponent;
   @ViewChild(AceDirective, { static: false }) directiveRef?: AceDirective;

@@ -1,10 +1,12 @@
 import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { copyText } from 'eo/workbench/browser/src/app/utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'eo-api-detail-mock',
@@ -13,15 +15,27 @@ import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../.
 })
 export class ApiDetailMockComponent implements OnChanges {
   @Input() apiData: ApiData;
-  mockUrl = window.eo?.getMockUrl?.() || location.origin;
+  get mockUrl() {
+    return this.remoteService.mockUrl;
+  }
   mocklList: ApiMockEntity[] = [];
   listConf: object = {};
   isVisible = false;
+  createWayMap = {
+    system: '系统自动创建',
+    custom: '手动创建',
+  };
   mockListColumns = [
     { title: '名称', key: 'name' },
+    { title: '创建方式', slot: 'createWay' },
     { title: 'URL', slot: 'url' },
   ];
-  constructor(private storageService: StorageService, private apiTest: ApiTestService, private route: ActivatedRoute) {}
+  constructor(
+    private storageService: StorageService,
+    private apiTest: ApiTestService,
+    private remoteService: RemoteService,
+    private message: NzMessageService
+  ) {}
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     const { apiData } = changes;
@@ -30,7 +44,7 @@ export class ApiDetailMockComponent implements OnChanges {
       console.log('apiDataID', this.apiData, apiDataID);
       const mockRes = await this.getMockByApiDataID(apiDataID);
       if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-        const mock = this.createMockObj({ name: '系统默认期望', createType: 0 });
+        const mock = this.createMockObj({ name: '默认 Mock', createWay: 'system' });
         const res = await this.createMock(mock);
         res.data.url = this.getApiUrl(res.data.uuid);
         this.mocklList = [res.data];
@@ -93,15 +107,20 @@ export class ApiDetailMockComponent implements OnChanges {
    * @returns
    */
   createMockObj(options: Record<string, any> = {}) {
-    const { name = '', createType = 1, ...rest } = options;
+    const { name = '', createWay = 'custom', ...rest } = options;
     return {
       name,
       url: this.getApiUrl(),
       apiDataID: this.apiData.uuid,
       projectID: 1,
-      createType,
+      createWay,
       response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
       ...rest,
     };
+  }
+
+  async copyText(text: string) {
+    await copyText(text);
+    this.message.success('复制成功');
   }
 }

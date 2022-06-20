@@ -300,10 +300,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   treeItemDrop(event: NzFormatEmitEvent): void {
     const dragNode = event.dragNode;
+    const children = dragNode.parentNode?.getChildren();
     const groupApiData: GroupApiDataModel = { group: [], api: [] };
-    if (dragNode.parentNode) {
+    if (children?.length) {
+      const targetIndex = children.findIndex((n) => n.key === dragNode.key);
+      if (targetIndex === dragNode.origin.weight) {
+        return;
+      }
       const parentNode = dragNode.parentNode;
-      parentNode.getChildren().forEach((item: NzTreeNode, index: number) => {
+      children.forEach((item: NzTreeNode, index: number) => {
         if (item.isLeaf) {
           groupApiData.api.push({ uuid: item.key, weight: index, groupID: parentNode.key });
         } else {
@@ -311,11 +316,18 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      if (dragNode.isLeaf) {
-        groupApiData.api.push({ uuid: dragNode.key, weight: 0, groupID: '0' });
-      } else {
-        groupApiData.group.push({ uuid: dragNode.key, weight: 0, parentID: '0' });
+      const treeNodes = this.apiGroup.getTreeNodes();
+      const targetIndex = treeNodes.findIndex((n) => n.key === dragNode.key);
+      if (targetIndex === dragNode.origin.weight) {
+        return;
       }
+      treeNodes.forEach((item, index) => {
+        if (dragNode.isLeaf) {
+          groupApiData.api.push({ uuid: item.key, weight: index, groupID: '0' });
+        } else {
+          groupApiData.group.push({ uuid: item.key.replace('group-', ''), weight: index, parentID: '0' });
+        }
+      });
     }
     this.updateoperateApiEvent(groupApiData);
   }
@@ -333,11 +345,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             return { ...val, uuid: val.uuid.replace('group-', ''), parentID: val.parentID.replace('group-', '') };
           }),
         ],
-        (result: StorageRes) => {}
+        (result: StorageRes) => {
+          this.buildGroupTreeData();
+        }
       );
     }
     if (data.api.length > 0) {
-      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {});
+      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {
+        this.buildGroupTreeData();
+      });
     }
   }
   private watchRouterChange() {

@@ -118,7 +118,6 @@ export class SettingComponent implements OnInit {
             break;
           }
           case 'onDataSourceChange': {
-            console.log('onDataSourceChange', inArg.data);
             if (inArg.data.showWithSetting) {
               this.remoteService.refreshComponent();
             }
