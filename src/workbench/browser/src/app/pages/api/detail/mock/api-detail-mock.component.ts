@@ -43,17 +43,10 @@ export class ApiDetailMockComponent implements OnChanges {
       const apiDataID = Number(this.apiData.uuid);
       console.log('apiDataID', this.apiData, apiDataID);
       const mockRes = await this.getMockByApiDataID(apiDataID);
-      if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-        const mock = this.createMockObj({ name: '默认 Mock', createWay: 'system' });
-        const res = await this.createMock(mock);
-        res.data.url = this.getApiUrl(res.data.uuid);
-        this.mocklList = [res.data];
-      } else {
-        this.mocklList = mockRes.map((item) => {
-          item.url = this.getApiUrl(item.uuid);
-          return item;
-        });
-      }
+      this.mocklList = mockRes.map((item) => {
+        item.url = this.getApiUrl(item.uuid);
+        return item;
+      });
     }
   }
   getApiUrl(uuid?: number) {

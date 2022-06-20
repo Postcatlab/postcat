@@ -1,4 +1,9 @@
 import Dexie, { Table } from 'dexie';
+import {
+  DataSourceType,
+  DATA_SOURCE_TYPE_KEY,
+} from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { Observable } from 'rxjs';
 import {
   Project,
@@ -44,6 +49,39 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     // @ts-ignore
     await this.apiData.bulkAdd(sampleApiData);
   }
+
+  getApiUrl(apiData: ApiData) {
+    const dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
+
+    /** Is it a remote data source */
+    const isRemote = dataSourceType === 'http';
+
+    /** get mock url */
+    const mockUrl = isRemote
+      ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
+      : window.eo?.getMockUrl?.();
+
+    const url = new URL(`${mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'));
+    if (apiData) {
+      url.searchParams.set('mockID', apiData.uuid + '');
+    }
+    console.log('getApiUrl', decodeURIComponent(url.toString()));
+    return decodeURIComponent(url.toString());
+  }
+
+  private createMockObj = (apiData: ApiData, options: Record<string, any> = {}) => {
+    const { name = '', createWay = 'custom', ...rest } = options;
+    return {
+      name,
+      url: this.getApiUrl(apiData),
+      apiDataID: apiData.uuid,
+      projectID: 1,
+      createWay,
+      response: JSON.stringify(tree2obj([].concat(apiData.responseBody))),
+      ...rest,
+    };
+  };
+
   private resProxy(data) {
     let result = {
       status: StorageResStatus.success,
@@ -284,13 +322,18 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param where
    */
-  private loadAllByConditions(table: Table, where: { [key: string]: string | number | null }): Observable<object> {
+  private loadAllByConditions(
+    table: Table,
+    where: { [key: string]: string | number | null },
+    callback?
+  ): Observable<object> {
     return new Observable((obs) => {
       table
         .where(where)
         .toArray()
-        .then((result) => {
+        .then(async (result) => {
           if (result) {
+            await callback?.(result);
             obs.next(this.resProxy(result));
             obs.complete();
           } else {
@@ -326,7 +369,20 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   apiDataLoadAllByProjectID(projectID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiData, { projectID });
+    const callback = async (data: ApiData) => {
+      if (Array.isArray(data)) {
+        const mockList = await this.mock.where('uuid').above(0).toArray();
+        const noHasDefaultMockApiDatas = data
+          .filter((item) => !mockList.some((m) => Number(m.apiDataID) === item.uuid))
+          .map((item) => this.createMockObj(item, { name: '默认 Mock', createWay: 'system' }));
+
+        await this.mock.bulkAdd(noHasDefaultMockApiDatas);
+      }
+      return Promise.resolve(true);
+    };
+    const result = this.loadAllByConditions(this.apiData, { projectID }, callback);
+
+    return result;
   }
 
   /**

@@ -33,10 +33,10 @@ export class ApiMockComponent implements OnInit {
     custom: '手动创建',
   };
   mockListColumns = [
-    { title: '名称', key: 'name' },
-    { title: '创建方式', slot: 'createWay' },
-    { title: 'URL', slot: 'url' },
-    { title: '', slot: 'action', width: '15%' },
+    { title: '名称', slot: 'name', width: '20%' },
+    { title: '创建方式', slot: 'createWay', width: '15%' },
+    { title: 'URL', slot: 'url', width: '50%' },
+    { title: '', slot: 'action', width: '15%', fixed: true },
   ];
   /** 当前被编辑的mock */
   currentEditMock: ApiMockEntity;
@@ -75,17 +75,10 @@ export class ApiMockComponent implements OnInit {
     const mockRes = await this.getMockByApiDataID(apiDataID);
     this.apiData = await this.getApiData(apiDataID);
     console.log('apiDataRes', this.apiData, mockRes);
-    if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-      const mock = this.createMockObj({ name: '默认 Mock', createWay: 'system' });
-      await this.createMock(mock);
-      this.mocklList = [mock];
-    } else {
-      console.log('result.data', mockRes);
-      this.mocklList = mockRes.map((item) => {
-        item.url = this.getApiUrl(item);
-        return item;
-      });
-    }
+    this.mocklList = mockRes.map((item) => {
+      item.url = this.getApiUrl(item);
+      return item;
+    });
   }
   getApiUrl(apiData?: ApiData) {
     const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
