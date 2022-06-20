@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { takeWhile } from 'rxjs/operators';
+import { filter, takeWhile } from 'rxjs/operators';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 import { SidebarService } from './sidebar.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
 
 @Component({
@@ -35,8 +35,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getModules();
     this.getModuleIDFromRoute();
+    this.watchRouterChange();
   }
 
+  watchRouterChange(){
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
+      this.getModuleIDFromRoute();
+    });
+  }
   clickModule(module) {
     this.sidebar.currentModule = module;
     this.sidebar.appChanged$.next();

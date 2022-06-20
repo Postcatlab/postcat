@@ -23,7 +23,7 @@
           "type": "string",
           "label": "远程服务器地址",
           "required": true,
-          "default": "https://mockapi.eolink.com/sP1lMiZf774b0e7e107c6ac3cd8607c14318770dbfed925",
+          "default": "http://localhost:3000",
           "placeholder": "数据源地址",
           "description": "从远程服务器存取数据，配置后支持多人合作，配置文档请见：[远程数据源](https://eoapi.io/docs/storage.html)"
         },
@@ -31,7 +31,7 @@
           "type": "string",
           "label": "Token",
           "required": true,
-          "default": "",
+          "default": "1ab2c3d4e5f61ab2c3d4e5f6",
           "placeholder": "Token 凭证",
           "description": "远程服务器 Token，配置后才可访问"
         }

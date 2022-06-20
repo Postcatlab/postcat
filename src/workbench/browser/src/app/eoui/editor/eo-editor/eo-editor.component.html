@@ -11,15 +11,7 @@
       <span>{{ item.label }}</span>
     </span>
   </div>
-  <ace
-    [config]="config"
-    [disabled]="false"
-    [(value)]="code"
-    [mode]="editorType"
-    (blur)="log($event, 'blur')"
-    (focus)="log($event, 'focus')"
-    (copy)="log($event, 'copy')"
-    (paste)="log($event, 'paste')"
-    (change)="handleChange()"
-  ></ace>
+  <ace [config]="config" [disabled]="disabled" [(value)]="code" [mode]="editorType" (blur)="log($event, 'blur')"
+    (focus)="log($event, 'focus')" (copy)="log($event, 'copy')" (paste)="log($event, 'paste')"
+    (change)="handleChange()"></ace>
 </div>

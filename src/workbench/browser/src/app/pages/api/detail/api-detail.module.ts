@@ -11,6 +11,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { ApiDetailComponent } from './api-detail.component';
 import { ApiDetailHeaderComponent } from './header/api-detail-header.component';
@@ -21,7 +22,7 @@ import { ApiDetailMockComponent } from './mock/api-detail-mock.component';
 
 import { ApiDetailService } from './api-detail.service';
 
-const NZ_COMPONETS = [NzButtonModule, NzIconModule, NzTagModule, NzModalModule, NzFormModule];
+const NZ_COMPONETS = [NzButtonModule, NzIconModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
 const COMPONENTS = [
   ApiDetailComponent,
   ApiDetailHeaderComponent,

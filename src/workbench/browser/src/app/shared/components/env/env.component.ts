@@ -66,6 +66,7 @@ export class EnvComponent implements OnInit, OnDestroy {
             return;
           }
           await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
+          resolve(true);
         }
       });
     });
@@ -74,9 +75,11 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleDeleteEnv(uuid: string) {
     // * delete env in menu on left sidebar
     this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
-      await this.getAllEnv();
-      if (this.envUuid === Number(uuid)) {
-        this.envUuid = this.activeUuid;
+      if (result.status === StorageResStatus.success) {
+        await this.getAllEnv();
+        if (this.envUuid === Number(uuid)) {
+          this.envUuid = this.activeUuid;
+        }
       }
     });
   }
@@ -90,11 +93,12 @@ export class EnvComponent implements OnInit, OnDestroy {
     return new Promise((resolve) => {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.envInfo = result.data;
+          this.envInfo = result.data ?? {};
+          console.log('result.data', result.data, uuid);
+          this.activeUuid = result.data?.uuid ?? null;
+          resolve(true);
         }
-        console.log('result.data', result.data, uuid);
-        this.activeUuid = result.data?.uuid ?? null;
-        resolve(true);
+        resolve(false);
       });
     });
   }
@@ -157,7 +161,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleShowModal() {
     this.isVisible = true;
     this.isOpen = false;
-    this.handleSwitchEnv(this.envUuid);
+    this.getAllEnv(this.envUuid);
   }
 
   handleEnvSelectStatus(event: boolean) {
