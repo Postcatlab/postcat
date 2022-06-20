@@ -17,7 +17,11 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
 export class StorageService {
   private instance;
   private dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
-  constructor(private injector: Injector, private messageService: MessageService) {
+  constructor(
+    private injector: Injector,
+    private messageService: MessageService,
+    private indexedDBStorage: IndexedDBStorage
+  ) {
     console.log('StorageService init');
     this.setStorage(this.dataSourceType);
   }
@@ -51,7 +55,7 @@ export class StorageService {
   setStorage = (type: DataSourceType = 'local', options = {}) => {
     switch (type) {
       case 'local': {
-        this.instance = new IndexedDBStorage();
+        this.instance = this.indexedDBStorage;
         break;
       }
       case 'http': {

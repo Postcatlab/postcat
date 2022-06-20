@@ -9,6 +9,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -24,7 +26,9 @@ export class RemoteService {
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
-
+  get isElectron() {
+    return this.electronService.isElectron;
+  }
   /** Is it a remote data source */
   get isRemote() {
     return this.dataSourceType === 'http';
@@ -44,6 +48,7 @@ export class RemoteService {
     private storageService: StorageService,
     private messageService: MessageService,
     private message: NzMessageService,
+    public electronService: ElectronService,
     private router: Router
   ) {
     this.messageService
@@ -60,6 +65,15 @@ export class RemoteService {
           }
         }
       });
+  }
+
+  getApiUrl(apiData: ApiData) {
+    const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    if (apiData) {
+      url.searchParams.set('mockID', apiData.uuid + '');
+    }
+    console.log('getApiUrl', decodeURIComponent(url.toString()));
+    return decodeURIComponent(url.toString());
   }
 
   async refreshComponent() {
