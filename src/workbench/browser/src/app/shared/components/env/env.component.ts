@@ -93,7 +93,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     return new Promise((resolve) => {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.envInfo = result.data;
+          this.envInfo = result.data ?? {};
           console.log('result.data', result.data, uuid);
           this.activeUuid = result.data?.uuid ?? null;
           resolve(true);
@@ -121,7 +121,6 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.message.error('名称不允许为空');
       return;
     }
-    console.log('this.envInfo', this.envInfo);
     const data = parameters.filter((it) => it.name && it.value);
     if (uuid) {
       this.storage.run(

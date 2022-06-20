@@ -31,7 +31,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     },
     {
       routerLink: 'mock',
-      title: '高级Mock',
+      title: '高级 Mock',
     },
   ];
   private destroy$: Subject<void> = new Subject<void>();

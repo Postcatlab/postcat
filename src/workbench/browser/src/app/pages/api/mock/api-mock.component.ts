@@ -9,6 +9,7 @@ import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/service
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { copyText } from 'eo/workbench/browser/src/app/utils';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -70,7 +71,7 @@ export class ApiMockComponent implements OnInit {
     this.apiData = await this.getApiData(apiDataID);
     console.log('apiDataRes', this.apiData, mockRes);
     if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-      const mock = this.createMockObj({ name: '系统默认期望', createWay: 'system' });
+      const mock = this.createMockObj({ name: '默认 Mock', createWay: 'system' });
       await this.createMock(mock);
       this.mocklList = [mock];
     } else {
@@ -238,5 +239,10 @@ export class ApiMockComponent implements OnInit {
     } else {
       this.currentEditMock = { ...this.mocklList[this.currentEditMockIndex] };
     }
+  }
+
+  async copyText(text: string) {
+    await copyText(text);
+    this.message.success('复制成功');
   }
 }

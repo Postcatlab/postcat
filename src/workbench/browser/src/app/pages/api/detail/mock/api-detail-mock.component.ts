@@ -3,8 +3,10 @@ import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-
 import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { copyText } from 'eo/workbench/browser/src/app/utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'eo-api-detail-mock',
@@ -31,7 +33,8 @@ export class ApiDetailMockComponent implements OnChanges {
   constructor(
     private storageService: StorageService,
     private apiTest: ApiTestService,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    private message: NzMessageService
   ) {}
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
@@ -41,7 +44,7 @@ export class ApiDetailMockComponent implements OnChanges {
       console.log('apiDataID', this.apiData, apiDataID);
       const mockRes = await this.getMockByApiDataID(apiDataID);
       if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-        const mock = this.createMockObj({ name: '系统默认期望', createWay: 'system' });
+        const mock = this.createMockObj({ name: '默认 Mock', createWay: 'system' });
         const res = await this.createMock(mock);
         res.data.url = this.getApiUrl(res.data.uuid);
         this.mocklList = [res.data];
@@ -114,5 +117,10 @@ export class ApiDetailMockComponent implements OnChanges {
       response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
       ...rest,
     };
+  }
+
+  async copyText(text: string) {
+    await copyText(text);
+    this.message.success('复制成功');
   }
 }
