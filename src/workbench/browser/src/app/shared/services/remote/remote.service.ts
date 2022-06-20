@@ -64,7 +64,7 @@ export class RemoteService {
   }
 
   getApiUrl(apiData: ApiData) {
-    const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'));
+    const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (apiData) {
       url.searchParams.set('mockID', apiData.uuid + '');
     }

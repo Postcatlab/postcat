@@ -62,7 +62,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
       : window.eo?.getMockUrl?.();
 
-    const url = new URL(`${mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'));
+    const url = new URL(`${mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (apiData) {
       url.searchParams.set('mockID', apiData.uuid + '');
     }
