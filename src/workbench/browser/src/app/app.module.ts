@@ -37,9 +37,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     NgxsModule.forRoot([EnvState]),
   ],
   providers: [
-    RemoteService,
     MessageService,
     StorageService,
+    RemoteService,
     IndexedDBStorage,
     HttpStorage,
     NzMessageService,

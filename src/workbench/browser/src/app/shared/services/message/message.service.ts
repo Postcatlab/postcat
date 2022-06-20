@@ -29,5 +29,3 @@ export class MessageService {
     return this.subject.asObservable();
   }
 }
-
-export const messageService = new MessageService();

@@ -3,11 +3,8 @@
 
   <div class="mt-[20px]">
     <eo-table [(model)]="mocklList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
-      <ng-template cell="name" let-scope="scope" let-index="index">
-        <div class="truncate w-[120px]">{{scope.name}}</div>
-      </ng-template>
       <ng-template cell="url" let-scope="scope" let-index="index">
-        <span nzTooltipTitle="点击复制" nzTooltipPlacement="top" nz-tooltip (click)="copyText(scope.url )" class="truncate">
+        <span nzTooltipTitle="点击复制" nzTooltipPlacement="top" nz-tooltip (click)="copyText(scope.url )">
           {{ scope.url }}
         </span>
       </ng-template>
@@ -32,7 +29,7 @@
     <div class="w-full main-content">
       <form nz-form nzLayout="vertical">
         <nz-form-item>
-          <nz-form-label nzFor="currentEditMock.name">Mock 名称</nz-form-label>
+          <nz-form-label nzFor="currentEditMock.name">Mock名称</nz-form-label>
           <nz-form-control>
             <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name"
               [readonly]="currentEditMock.createWay=== 'system'" />
