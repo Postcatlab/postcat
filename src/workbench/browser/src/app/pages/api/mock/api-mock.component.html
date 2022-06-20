@@ -1,38 +1,45 @@
 <div class="p-[18px]">
-  <button nz-button nzType="primary" (click)="addOrEditModal()">添加Mock</button>
+  <button nz-button nzType="primary" (click)="addOrEditModal()">添加 Mock</button>
 
   <div class="mt-[20px]">
     <eo-table [(model)]="mocklList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
       <ng-template cell="url" let-scope="scope" let-index="index">
-        <span>{{ scope.url }}</span>
+        <span nzTooltipTitle="点击复制" nzTooltipPlacement="top" nz-tooltip (click)="copyText(scope.url )">
+          {{ scope.url }}
+        </span>
+      </ng-template>
+      <ng-template cell="createWay" let-scope="scope" let-index="index">
+        <span>{{ createWayMap[scope.createWay] }}</span>
       </ng-template>
       <ng-template cell="action" let-scope="scope" let-index="index">
         <div class="flex justify-evenly">
-          <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="addOrEditModal(index)">编辑</a>
-          <a nz-button nzType="link" *ngIf="scope.name || scope.url" nz-popconfirm nzPopconfirmTitle="您确定要删除此Mock吗?"
-            nzPopconfirmPlacement="topRight" (nzOnConfirm)="handleDeleteMockItem(index)"
-            [disabled]="scope.createType === 0">删除</a>
+          <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="addOrEditModal(index)">
+            {{ scope.createWay === 'system' ? '预览' : '编辑' }}</a>
+          <a nz-button nzType="link" *ngIf="(scope.name || scope.url) && scope.createWay !== 'system'" nz-popconfirm
+            nzPopconfirmTitle="您确定要删除此Mock吗?" nzPopconfirmPlacement="topRight"
+            (nzOnConfirm)="handleDeleteMockItem(index)">删除</a>
         </div>
       </ng-template>
     </eo-table>
   </div>
 </div>
 
-<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" nzTitle="{{this.currentEditMockIndex === -1 ? '添加' : '编辑' }}Mock"
-  (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="flex">
     <div class="w-full main-content">
       <form nz-form nzLayout="vertical">
         <nz-form-item>
           <nz-form-label nzFor="currentEditMock.name">Mock名称</nz-form-label>
           <nz-form-control>
-            <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name" />
+            <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name"
+              [readonly]="currentEditMock.createWay=== 'system'" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzFor="currentEditMock.response">返回值</nz-form-label>
           <nz-form-control>
             <eo-editor [(code)]="responseStr" (codeChange)="rawDataChange()"
+              [disabled]="currentEditMock.createWay=== 'system'"
               [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"></eo-editor>
           </nz-form-control>
         </nz-form-item>
