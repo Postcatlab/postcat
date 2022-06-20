@@ -10,6 +10,7 @@ import {
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../utils';
 import { StorageService } from '../../../shared/services/storage';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 export interface TreeNodeInterface {
   key?: string;
@@ -28,11 +29,14 @@ export interface TreeNodeInterface {
 })
 export class ApiDetailComponent implements OnInit {
   apiData: ApiData | any = {};
+  get isElectron() {
+    return this.remoteService.isElectron;
+  }
   CONST = {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType),
   };
-  constructor(private route: ActivatedRoute, private storage: StorageService) {}
+  constructor(private route: ActivatedRoute, private storage: StorageService, private remoteService: RemoteService) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       if (params.uuid) {

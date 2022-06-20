@@ -1,7 +1,7 @@
 import express from 'express';
 import type { Response } from 'express';
 import portfinder from 'portfinder';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+// import { createProxyMiddleware } from 'http-proxy-middleware';
 import { BrowserView, ipcMain } from 'electron';
 import type { Server } from 'http';
 import type { AddressInfo } from 'net';
@@ -30,7 +30,7 @@ export class MockServer {
   private server: Server;
   private view: BrowserView;
   private configuration = new Configuration();
-  private apiProxy: ReturnType<typeof createProxyMiddleware>;
+  // private apiProxy: ReturnType<typeof createProxyMiddleware>;
   /** mock server url */
   private mockUrl = '';
 
@@ -43,49 +43,49 @@ export class MockServer {
    * create proxy server
    */
   private createProxyServer() {
-    this.apiProxy = createProxyMiddleware({
-      target: 'http://www.example.org',
-      changeOrigin: true,
-      pathFilter: (path) => {
-        // console.log('pathFilter path', path, path.match('^/(http|https)://'));
-        return Boolean(path.match('^/(http|https)://'));
-      },
-      pathRewrite: (path, req) => {
-        // console.log('pathRewrite', path, req.url);
-        return path.replace(req.url, '');
-      },
-      router: (req) => {
-        console.log('router req', req.url);
-        return req.url.slice(1);
-      },
-    });
+    // this.apiProxy = createProxyMiddleware({
+    //   target: 'http://www.example.org',
+    //   changeOrigin: true,
+    //   pathFilter: (path) => {
+    //     // console.log('pathFilter path', path, path.match('^/(http|https)://'));
+    //     return Boolean(path.match('^/(http|https)://'));
+    //   },
+    //   pathRewrite: (path, req) => {
+    //     // console.log('pathRewrite', path, req.url);
+    //     return path.replace(req.url, '');
+    //   },
+    //   router: (req) => {
+    //     console.log('router req', req.url);
+    //     return req.url.slice(1);
+    //   },
+    // });
 
-    this.app.use(this.apiProxy);
+    // this.app.use(this.apiProxy);
 
     this.app.all('*', (req, res, next) => {
-      if (!protocolReg.test(req.url)) {
-        // match request type
-        const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
-        if (req.query.mockID || isMatchType) {
-          this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
-          ipcMain.once('getMockApiList', (event, message) => {
-            console.log('getMockApiList message', message);
-            const { response = {}, statusCode = 200 } = message;
-            res.statusCode = statusCode;
-            if (res.statusCode === 404) {
-              this.send404(res, isMatchType);
-            } else {
-              res.send(response);
-            }
-            next();
-          });
-        } else {
-          this.send404(res, isMatchType);
+      // if (!protocolReg.test(req.url)) {
+      // match request type
+      const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
+      if (req.query.mockID || isMatchType) {
+        this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+        ipcMain.once('getMockApiList', (event, message) => {
+          console.log('getMockApiList message', message);
+          const { response = {}, statusCode = 200 } = message;
+          res.statusCode = statusCode;
+          if (res.statusCode === 404) {
+            this.send404(res, isMatchType);
+          } else {
+            res.send(response);
+          }
           next();
-        }
+        });
       } else {
+        this.send404(res, isMatchType);
         next();
       }
+      // } else {
+      //   next();
+      // }
     });
   }
 

@@ -10,6 +10,7 @@ import { Message } from 'eo/workbench/browser/src/app/shared/services/message/me
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -25,7 +26,9 @@ export class RemoteService {
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
-
+  get isElectron() {
+    return this.electronService.isElectron;
+  }
   /** Is it a remote data source */
   get isRemote() {
     return this.dataSourceType === 'http';
@@ -45,6 +48,7 @@ export class RemoteService {
     private storageService: StorageService,
     private messageService: MessageService,
     private message: NzMessageService,
+    public electronService: ElectronService,
     private router: Router
   ) {
     this.messageService

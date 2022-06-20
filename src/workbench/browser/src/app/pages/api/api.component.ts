@@ -4,6 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../shared/services/message';
 import { ApiService } from './api.service';
 import { StorageService } from '../../shared/services/storage';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 @Component({
   selector: 'eo-api',
@@ -29,10 +30,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       routerLink: 'test',
       title: '测试',
     },
-    {
-      routerLink: 'mock',
-      title: 'Mock',
-    },
   ];
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -40,13 +37,20 @@ export class ApiComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiService: ApiService,
     private messageService: MessageService,
-    private storage: StorageService
+    private storage: StorageService,
+    private remoteService: RemoteService
   ) {}
 
   ngOnInit(): void {
     this.watchChangeRouter();
     this.watchApiAction();
     this.watchDataSourceChange();
+    if (this.remoteService.isElectron) {
+      this.TABS.push({
+        routerLink: 'mock',
+        title: 'Mock',
+      });
+    }
   }
   ngOnDestroy() {
     this.destroy$.next();

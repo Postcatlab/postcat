@@ -103,7 +103,7 @@ export class ApiMockComponent implements OnInit, OnChanges {
       replaceType: 'replace',
     }).url;
     console.log('this.mockUrl', this.mockUrl);
-    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'));
+    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (apiData || this.isEdit) {
       url.searchParams.set('mockID', (apiData || this.currentEditMock).uuid + '');
     }
