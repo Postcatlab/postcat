@@ -9,6 +9,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -60,6 +61,15 @@ export class RemoteService {
           }
         }
       });
+  }
+
+  getApiUrl(apiData: ApiData) {
+    const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    if (apiData) {
+      url.searchParams.set('mockID', apiData.uuid + '');
+    }
+    console.log('getApiUrl', decodeURIComponent(url.toString()));
+    return decodeURIComponent(url.toString());
   }
 
   async refreshComponent() {

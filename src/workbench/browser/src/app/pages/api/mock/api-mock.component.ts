@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
@@ -10,13 +10,15 @@ import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
+import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-api-edit-mock',
   templateUrl: './api-mock.component.html',
   styleUrls: ['./api-mock.component.scss'],
 })
-export class ApiMockComponent implements OnInit {
+export class ApiMockComponent implements OnInit, OnChanges {
   isVisible = false;
   get mockUrl() {
     return this.remoteService.mockUrl;
@@ -33,10 +35,10 @@ export class ApiMockComponent implements OnInit {
     custom: '手动创建',
   };
   mockListColumns = [
-    { title: '名称', key: 'name' },
-    { title: '创建方式', slot: 'createWay' },
-    { title: 'URL', slot: 'url' },
-    { title: '', slot: 'action', width: '15%' },
+    { title: '名称', slot: 'name', width: '20%' },
+    { title: '创建方式', slot: 'createWay', width: '15%' },
+    { title: 'URL', slot: 'url', width: '50%' },
+    { title: '', slot: 'action', width: '15%', fixed: true },
   ];
   /** 当前被编辑的mock */
   currentEditMock: ApiMockEntity;
@@ -68,24 +70,31 @@ export class ApiMockComponent implements OnInit {
   }
 
   ngOnInit() {
+    messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'mockAutoSyncSuccess':
+            this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+        }
+      });
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+  }
+
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    const { apiData } = changes;
+    this.initMockList(apiData.currentValue.uuid);
   }
 
   async initMockList(apiDataID: number) {
     const mockRes = await this.getMockByApiDataID(apiDataID);
     this.apiData = await this.getApiData(apiDataID);
     console.log('apiDataRes', this.apiData, mockRes);
-    if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-      const mock = this.createMockObj({ name: '默认 Mock', createWay: 'system' });
-      await this.createMock(mock);
-      this.mocklList = [mock];
-    } else {
-      console.log('result.data', mockRes);
-      this.mocklList = mockRes.map((item) => {
-        item.url = this.getApiUrl(item);
-        return item;
-      });
-    }
+    this.mocklList = mockRes.map((item) => {
+      item.url = this.getApiUrl(item);
+      return item;
+    });
   }
   getApiUrl(apiData?: ApiData) {
     const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
