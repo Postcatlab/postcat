@@ -21,6 +21,7 @@
   (nzOnCancel)="handleCancel()"
 >
   <div *nzModalContent>
+    <pre class="eg">导入形如：<br />{{ eg }}</pre>
     <eo-editor
       [(code)]="paramCode"
       [editorType]="contenTypeEditor"
