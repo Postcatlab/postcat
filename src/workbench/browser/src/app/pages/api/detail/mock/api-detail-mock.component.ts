@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
@@ -10,13 +10,14 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-api-detail-mock',
   templateUrl: './api-detail-mock.component.html',
   styleUrls: ['./api-detail-mock.component.scss'],
 })
-export class ApiDetailMockComponent implements OnChanges {
+export class ApiDetailMockComponent implements OnInit, OnChanges {
   @Input() apiData: ApiData;
   get mockUrl() {
     return this.remoteService.mockUrl;
@@ -39,12 +40,17 @@ export class ApiDetailMockComponent implements OnChanges {
     private apiTest: ApiTestService,
     private remoteService: RemoteService,
     private message: NzMessageService
-  ) {
+  ) {}
+
+  async ngOnInit() {
     messageService
       .get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.initMockList(this.apiData);
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'mockAutoSyncSuccess':
+            this.initMockList(this.apiData);
+        }
       });
   }
 

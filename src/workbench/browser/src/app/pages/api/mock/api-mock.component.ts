@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
@@ -11,13 +11,14 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remo
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
 import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-api-edit-mock',
   templateUrl: './api-mock.component.html',
   styleUrls: ['./api-mock.component.scss'],
 })
-export class ApiMockComponent implements OnInit {
+export class ApiMockComponent implements OnInit, OnChanges {
   isVisible = false;
   get mockUrl() {
     return this.remoteService.mockUrl;
@@ -72,9 +73,18 @@ export class ApiMockComponent implements OnInit {
     messageService
       .get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'mockAutoSyncSuccess':
+            this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+        }
       });
+    this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+  }
+
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    const { apiData } = changes;
+    this.initMockList(apiData.currentValue.uuid);
   }
 
   async initMockList(apiDataID: number) {
