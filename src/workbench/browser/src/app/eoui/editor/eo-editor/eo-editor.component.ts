@@ -98,7 +98,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     }
   }
   ngOnInit() {
-    console.log(this.eventList);
+    // console.log(this.eventList);
     // To get the Ace instance:
     this.buttonList = this.electron.isElectron
       ? this.eventList
