@@ -56,7 +56,9 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     const { apiData } = changes;
-    this.initMockList(apiData.currentValue);
+    if (apiData.currentValue !== apiData.previousValue) {
+      this.initMockList(apiData.currentValue);
+    }
   }
 
   async initMockList(apiData: ApiData) {
