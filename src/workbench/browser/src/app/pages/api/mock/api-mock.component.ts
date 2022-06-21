@@ -98,16 +98,16 @@ export class ApiMockComponent implements OnInit, OnChanges {
       return item;
     });
   }
-  getApiUrl(apiData?: ApiData) {
+
+  getApiUrl(mock?: ApiMockEntity) {
     const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
     const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
-    console.log('this.mockUrl', this.mockUrl);
     const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
-    if (apiData || this.isEdit) {
-      url.searchParams.set('mockID', (apiData || this.currentEditMock).uuid + '');
+    if (mock?.createWay === 'custom' && mock.uuid) {
+      url.searchParams.set('mockID', mock.uuid + '');
     }
     return decodeURIComponent(url.toString());
   }
@@ -227,22 +227,21 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
   async handleSave() {
     this.isVisible = false;
-    this.isEdit
-      ? (this.mocklList[this.currentEditMockIndex] = this.currentEditMock)
-      : this.mocklList.push(this.currentEditMock);
 
     if (this.currentEditMock.createWay === 'system') return;
 
-    this.mocklList = [...this.mocklList];
     if (this.isEdit) {
       await this.updateMock(this.currentEditMock, Number(this.currentEditMock.uuid));
       this.message.success('修改成功');
+      this.mocklList[this.currentEditMockIndex] = this.currentEditMock;
     } else {
       const result = await this.createMock(this.currentEditMock);
       Object.assign(this.currentEditMock, result.data);
       this.message.success('新增成功');
+      this.mocklList.push(this.currentEditMock);
     }
-    this.currentEditMock.url = this.getApiUrl();
+    this.currentEditMock.url = this.getApiUrl(this.currentEditMock);
+    this.mocklList = [...this.mocklList];
   }
   handleCancel() {
     this.isVisible = false;

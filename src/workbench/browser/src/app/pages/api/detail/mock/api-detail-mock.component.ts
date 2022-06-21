@@ -67,20 +67,22 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
       console.log('apiDataID', this.apiData, apiDataID);
       const mockRes = await this.getMockByApiDataID(apiDataID);
       this.mocklList = mockRes.map((item) => {
-        item.url = this.getApiUrl(item.uuid);
+        item.url = this.getApiUrl(item);
         return item;
       });
     }
   }
 
-  getApiUrl(uuid?: number) {
+  getApiUrl(mock?: ApiMockEntity) {
     const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
     const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
     const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
-    uuid && url.searchParams.set('mockID', uuid + '');
+    if (mock?.createWay === 'custom' && mock.uuid) {
+      url.searchParams.set('mockID', mock.uuid + '');
+    }
     return decodeURIComponent(url.toString());
   }
   /**

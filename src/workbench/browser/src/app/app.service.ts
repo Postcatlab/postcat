@@ -22,14 +22,12 @@ export class AppService {
         if (Number.isInteger(Number(mockID))) {
           try {
             const mock = await this.getMockByMockID(Number(mockID));
-            if (mock.createWay === 'system') {
-              const apiData = await this.getApiData(Number(mock.apiDataID));
-              if (isEnabledMatchType) {
-                const result = await this.matchApiData(1, req);
-                return sender.send('getMockApiList', result);
-              } else {
-                mock.response = this.generateResponse(apiData.responseBody) || mock.response;
-              }
+            const apiData = await this.getApiData(Number(mock.apiDataID));
+            if (isEnabledMatchType) {
+              const result = await this.matchApiData(1, req);
+              return sender.send('getMockApiList', result);
+            } else {
+              mock.response = this.generateResponse(apiData.responseBody) || mock.response;
             }
             sender.send('getMockApiList', mock);
           } catch (error) {

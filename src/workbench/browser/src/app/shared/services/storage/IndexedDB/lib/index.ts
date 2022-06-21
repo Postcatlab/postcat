@@ -1,5 +1,4 @@
 import Dexie, { Table } from 'dexie';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import {
   DataSourceType,
@@ -39,10 +38,9 @@ const getApiUrl = (apiData: ApiData) => {
     : window.eo?.getMockUrl?.();
 
   const url = new URL(`${mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
-  if (apiData) {
-    url.searchParams.set('mockID', apiData.uuid + '');
-  }
-  console.log('getApiUrl', decodeURIComponent(url.toString()));
+  // if (apiData) {
+  //   url.searchParams.set('mockID', apiData.uuid + '');
+  // }
   return decodeURIComponent(url.toString());
 };
 
@@ -59,7 +57,7 @@ const createMockObj = (apiData: ApiData, options: Record<string, any> = {}) => {
   };
 };
 
-const batchCreateMock = async (mock: Table<ApiMockEntity, number | string>, data: ApiData) => {
+const batchCreateMock = async (mock: Table<ApiMockEntity, number | string>, data: ApiData[]) => {
   try {
     if (Array.isArray(data)) {
       isFirstLoad = false;
@@ -107,9 +105,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   private resProxy(data): ResultType {
-    let result = {
+    const result = {
       status: StorageResStatus.success,
-      data: data,
+      data,
     };
     // if (isNotEmpty(data)) {
     //   result.status = StorageResStatus.success;
@@ -208,8 +206,8 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       return item;
     });
     return new Observable((obs) => {
-      let uuids: Array<number | string> = [];
-      let updateData = {};
+      const uuids: Array<number | string> = [];
+      const updateData = {};
       items
         .filter((item: StorageItem) => item.uuid)
         .forEach((item: StorageItem) => {
@@ -223,7 +221,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         .bulkGet(uuids.map(Number))
         .then((existItems) => {
           if (existItems) {
-            let newItems: Array<StorageItem> = [];
+            const newItems: Array<StorageItem> = [];
             existItems
               .filter((x) => x)
               .forEach((item: StorageItem) => {
@@ -393,7 +391,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
 
   apiDataLoadAllByProjectID(projectID: number | string): Observable<object> {
     const result = this.loadAllByConditions(this.apiData, { projectID });
-    result.subscribe(({ status, data }: any) => {
+    result.subscribe(({ status, data }: ResultType<ApiData[]>) => {
       if (isFirstLoad && status === 200 && data) {
         batchCreateMock(this.mock, data);
       }
@@ -415,7 +413,17 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param uuid
    */
   apiDataRemove(uuid: number | string): Observable<object> {
-    return this.remove(this.apiData, uuid);
+    const result = this.remove(this.apiData, uuid);
+
+    result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
+      if (status === 200 && data) {
+        const mockList = await this.mock.where('apiDataID').equals(uuid).toArray();
+        console.log('uuids', mockList);
+        this.mock.bulkDelete(mockList.map((n) => n.uuid));
+      }
+    });
+
+    return result;
   }
 
   /**

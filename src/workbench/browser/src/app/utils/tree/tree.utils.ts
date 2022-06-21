@@ -47,6 +47,9 @@ export const listToTreeHasLevel = (
   return result;
 };
 export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (val) => object } = { listDepth: 0 }) => {
+  if (!Array.isArray(tree)) {
+    return [];
+  }
   let result = [];
   tree.forEach((val) => {
     val.listDepth = opts.listDepth;
