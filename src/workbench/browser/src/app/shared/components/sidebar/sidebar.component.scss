@@ -1,11 +1,9 @@
 .eo_sidebar {
-  background-color: var(--SIDEBAR_BG);
   border-right: 1px solid var(--BORDER);
   overflow: auto;
   width: 90px;
   height: 100%;
   transition: width .3s cubic-bezier(.2,0,0,1) 0s;
-
 }
 .eo_sidebar_shrink {
   width: 50px;
