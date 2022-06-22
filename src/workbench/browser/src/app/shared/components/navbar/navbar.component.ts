@@ -13,6 +13,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remo
 export class NavbarComponent implements OnInit {
   isMaximized = false;
   isElectron = false;
+  isSettingVisible = false;
   messageTop;
   @ViewChild('notificationTemplate', { static: true })
   notificationTemplate!: TemplateRef<{}>;
@@ -122,6 +123,10 @@ export class NavbarComponent implements OnInit {
     } else {
       this.modules = new Map();
     }
+  }
+
+  handleShowModal() {
+    this.isSettingVisible = true;
   }
 
   /**
