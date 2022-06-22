@@ -20,7 +20,7 @@
   color: var(--SIDEBAR_TEXT);
   transform: scale(0.8);
   border-radius: 3px;
-  font-size: rgba(0,0,0,0.5);
+  color: rgba(0,0,0,0.5);
   &:hover {
     background-color: var(--SEC_BG);
     // background-color: var(--SIDEBAR_BG_HOVER);
@@ -34,6 +34,9 @@
     color: #00785a;
     i.icon {
       color: #00785a;
+    }
+    .label {
+      color: rgba(0,0,0,0.8);
     }
   }
 }
