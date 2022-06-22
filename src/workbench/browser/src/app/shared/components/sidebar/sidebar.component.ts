@@ -48,6 +48,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebar.appChanged$.next();
     const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
+    console.log('route', route);
     this.router.navigate([route]);
   }
   ngOnDestroy(): void {
@@ -68,7 +69,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         moduleID: '@eo-core-extension',
         isOffical: true,
         icon: 'puzzle',
-        activeRoute: 'home/extension',
+        activeRoute: this.electron.isElectron ? 'home/extension' : 'home/preview',
         route: this.electron.isElectron ? 'home/extension/list' : 'home/preview',
       },
     ];
@@ -86,6 +87,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!currentModule) {
       //route error
       this.clickModule(this.modules[0]);
+      console.error('route error: currentModule is undefind', currentModule);
       return;
     }
     this.sidebar.currentModule = currentModule;
