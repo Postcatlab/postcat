@@ -1,8 +1,20 @@
 ::ng-deep {
-  eo-extension-detail .ant-tabs-content-holder {
-    padding-top: 20px;
+  eo-extension-detail {
+    .ant-tabs-content-holder {
+      padding-top: 20px;
+    }
   }
 }
-.extension-detail {
-  height: calc(100% - 60px);
+::ng-deep  .extension-detail {
+
+.markdown-desc {
+  overflow: auto;
+}
+
+.ant-descriptions-row > td {
+  padding-bottom: 8px;
+}
+  .ant-descriptions-item-content,.ant-descriptions-item-label {
+    color: #999;
+  }
 }
