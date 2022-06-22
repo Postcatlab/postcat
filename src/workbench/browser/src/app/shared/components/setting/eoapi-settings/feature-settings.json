@@ -23,7 +23,20 @@
       },
       {
         "type": "object",
-        "title": "扩展",
+        "title": "Mock",
+        "order": 2,
+        "properties": {
+          "mock.matchType": {
+            "type": "boolean",
+            "default": true,
+            "label": "匹配请求方式",
+            "description": "开启后，系统会匹配和API文档请求方式（GET、POST...）一致的 Mock"
+          }
+        }
+      },
+      {
+        "type": "object",
+        "title": "插件",
         "order": 2,
         "properties": {
           "extension.autoupdate": {
