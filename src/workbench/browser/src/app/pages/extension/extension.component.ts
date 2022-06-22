@@ -14,7 +14,7 @@ import { ExtensionService } from './extension.service';
 })
 export class ExtensionComponent implements OnInit {
   keyword = '';
-  nzSelectedKeys: number[] = [];
+  nzSelectedKeys: (number | string)[] = [];
   treeNodes: NzTreeNodeOptions[] = [
     {
       key: 'official',
@@ -51,6 +51,7 @@ export class ExtensionComponent implements OnInit {
   }
   ngOnInit(): void {
     this.watchRouterChange();
+    this.setSelectedKeys();
   }
 
   onSeachChange(keyword) {
@@ -87,7 +88,7 @@ export class ExtensionComponent implements OnInit {
     if (this.route.snapshot.queryParams.type) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.type];
     } else {
-      this.nzSelectedKeys = [];
+      this.nzSelectedKeys = [this.fixedTreeNode[0].key];
     }
   }
 }
