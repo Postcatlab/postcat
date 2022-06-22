@@ -1,14 +1,19 @@
 <ng-container *ngIf="isVisible">
-  <span nz-popover [nzPopoverContent]="contentTemplate" [nzPopoverOverlayStyle]="{left: '-12px', marginBottom: '8px'}"
-    nzPopoverOverlayClassName="sidebar_setting_popover" nzPopoverPlacement="rightBottom"
-    class="sidebar_item sidebar_setting" title="设置">
+  <span
+    nz-popover
+    [nzPopoverContent]="contentTemplate"
+    [nzPopoverOverlayStyle]="{ left: '-12px', marginBottom: '8px' }"
+    nzPopoverOverlayClassName="sidebar_setting_popover"
+    nzPopoverPlacement="rightBottom"
+    class="sidebar_item sidebar_setting"
+  >
     <i nz-icon nzType="setting"></i>
   </span>
 
   <ng-template #contentTemplate>
     <ul nz-menu [nzSelectable]="false">
       <li nz-menu-item (click)="handleShowModal()">设置</li>
-      <li nz-menu-item (click)="switchDataSource()">切换到{{ isRemote ? '本地' : '远程' }}</li>
+      <li nz-menu-item (click)="switchDataSource()">{{ isRemote ? '切换到本地' : '切换到远程' }}</li>
     </ul>
   </ng-template>
 
@@ -17,8 +22,11 @@
       <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true" class="tree-view">
         <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
           <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
-          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-            (nzClick)="selectModule(node)">
+          <nz-tree-node-option
+            [nzDisabled]="node.disabled"
+            [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)"
+          >
             {{ node.title }}
           </nz-tree-node-option>
         </nz-tree-node>
@@ -27,47 +35,76 @@
           <nz-tree-node-toggle>
             <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
           </nz-tree-node-toggle>
-          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-            (nzClick)="selectModule(node)">
+          <nz-tree-node-option
+            [nzDisabled]="node.disabled"
+            [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)"
+          >
             {{ node.title }}
           </nz-tree-node-option>
         </nz-tree-node>
       </nz-tree-view>
       <nz-divider nzType="vertical" class="divider"></nz-divider>
-      <form *ngIf="currentConfiguration.length" nz-form [nzLayout]="'vertical'" [formGroup]="validateForm"
-        (ngSubmit)="handleSave()" class="form">
+      <form
+        *ngIf="currentConfiguration.length"
+        nz-form
+        [nzLayout]="'vertical'"
+        [formGroup]="validateForm"
+        (ngSubmit)="handleSave()"
+        class="form"
+      >
         <div *ngFor="let module of currentConfiguration">
           <h2 class="title" *ngIf="module.title">{{ module.title }}</h2>
           <nz-form-item nz-col class="fg1" *ngFor="let field of objectKeys(module.properties)">
             <ng-container *ngIf="module.properties[field]?.label">
               <nz-form-label nzFor="{{ field }}" [nzRequired]="module.properties[field]?.required" class="label">
-                {{module.properties[field]?.label }}
+                {{ module.properties[field]?.label }}
               </nz-form-label>
             </ng-container>
             <!-- 二级说明 -->
-            <div *ngIf="module.properties[field]?.type !== 'boolean' && module.properties[field]?.description"
-              class="description" [innerHTML]="md.render(module.properties[field]?.description)">
-            </div>
+            <div
+              *ngIf="module.properties[field]?.type !== 'boolean' && module.properties[field]?.description"
+              class="description"
+              [innerHTML]="md.render(module.properties[field]?.description)"
+            ></div>
             <nz-form-control nzErrorTip="请输入{{ module.properties[field]?.label }}" class="form-control">
               <!-- 字符串类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'string'">
-                <input type="text" nz-input id="{{ field }}" [disabled]="module.properties[field]?.disabled"
-                  placeholder="{{module.properties[field]?.placeholder ?? '请输入' + module.properties[field]?.label}}"
-                  formControlName="{{ field }}" [(ngModel)]="settings[field]" />
+                <input
+                  type="text"
+                  nz-input
+                  id="{{ field }}"
+                  [disabled]="module.properties[field]?.disabled"
+                  placeholder="{{
+                    module.properties[field]?.placeholder ?? '请输入' + module.properties[field]?.label
+                  }}"
+                  formControlName="{{ field }}"
+                  [(ngModel)]="settings[field]"
+                />
               </ng-container>
 
               <!-- 布尔类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'boolean'">
-                <label nz-checkbox [(ngModel)]="settings[field]" id="{{ field }}"
+                <label
+                  nz-checkbox
+                  [(ngModel)]="settings[field]"
+                  id="{{ field }}"
                   [nzDisabled]="module.properties[field]?.disabled"
-                  formControlName="{{ field }}">{{module.properties[field]?.description}}</label>
+                  formControlName="{{ field }}"
+                  >{{ module.properties[field]?.description }}</label
+                >
               </ng-container>
 
               <!-- 数字类型 -->
               <ng-container *ngIf="module.properties[field]?.type === 'number'">
-                <nz-input-number [(ngModel)]="settings[field]" id="{{ field }}"
-                  [nzDisabled]="module.properties[field]?.disabled" formControlName="{{ field }}">
-                  {{module.properties[field]?.description}}</nz-input-number>
+                <nz-input-number
+                  [(ngModel)]="settings[field]"
+                  id="{{ field }}"
+                  [nzDisabled]="module.properties[field]?.disabled"
+                  formControlName="{{ field }}"
+                >
+                  {{ module.properties[field]?.description }}</nz-input-number
+                >
               </ng-container>
 
               <!-- 组件类型 -->
@@ -77,7 +114,6 @@
                 <!-- 关于eopai -->
                 <eo-about *ngIf="settings[field] === 'eo-about'"></eo-about>
               </ng-container>
-
             </nz-form-control>
           </nz-form-item>
         </div>

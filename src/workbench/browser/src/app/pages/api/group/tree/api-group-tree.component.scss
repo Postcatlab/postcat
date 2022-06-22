@@ -1,3 +1,20 @@
+.input {
+  height: 30px;
+  border: none;
+  background-color: rgba(0,0,0,0.05);
+  border-radius: 3px;
+  &::placeholder {
+    color: rgba(0,0,0,0.5);
+    font-size: 0.9em;
+  }
+}
+.btn {
+  width: 40px;
+  background-color: var(--BTN_PRIMARY_BG);
+  color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+}
 ::ng-deep {
   .ant-tree-node-selected * {
     // color: var(--TEXT_ACTIVE);
