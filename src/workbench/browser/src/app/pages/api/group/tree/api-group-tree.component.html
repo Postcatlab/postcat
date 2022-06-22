@@ -1,7 +1,7 @@
 <header class="flex p-2">
   <input type="text" class="input flex-1 px-3" placeholder="search" [(ngModel)]="searchValue" />
   <div
-    class="btn ml-3 flex items-center justify-center"
+    class="btn ml-3 text-base flex items-center justify-center"
     nzType="primary"
     nz-button
     nz-dropdown
@@ -29,8 +29,10 @@
   ></nz-tree>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
     <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
-      <div class="f_row_ac">
-        <i class="mr10" nz-icon nzType="home" nzTheme="outline"></i>
+      <div class="flex items-center">
+        <span class="mr-2 text-sm">
+          <iconpark-icon name="home"></iconpark-icon>
+        </span>
         <span class="text_omit node_title">{{ node.title }}</span>
       </div>
     </div>
@@ -58,7 +60,6 @@
       <!-- Folder -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
         <div class="f_row_ac">
-          <span class="iconfont icon-folder-outline fs16 mr5"></span>
           <span class="text_omit node_title">{{ node.title }}</span>
         </div>
         <span class="tree_node_operate">
