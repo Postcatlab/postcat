@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -51,6 +51,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })
 export class AppModule {
