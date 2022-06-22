@@ -51,7 +51,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent],
 })
 export class AppModule {
