@@ -5,6 +5,7 @@
   width: 90px;
   height: 100%;
   transition: width .3s cubic-bezier(.2,0,0,1) 0s;
+
 }
 .eo_sidebar_shrink {
   width: 50px;
@@ -19,15 +20,21 @@
   color: var(--SIDEBAR_TEXT);
   transform: scale(0.8);
   border-radius: 3px;
+  font-size: rgba(0,0,0,0.5);
   &:hover {
     background-color: var(--SEC_BG);
     // background-color: var(--SIDEBAR_BG_HOVER);
     // color: var(--TEXT_ACTIVE);
   }
-  img {
-    width: 25px;
+  i.icon {
+    font-size: 1.6em;
+  }
+  &.sidebar_item_active {
+    background-color: var(--SEC_BG);
+    color: #00785a;
+    i.icon {
+      color: #00785a;
+    }
   }
 }
-.sidebar_item_active {
-  background-color: var(--SEC_BG);
-}
+
