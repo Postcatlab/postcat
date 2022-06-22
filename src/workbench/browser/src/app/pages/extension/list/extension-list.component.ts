@@ -54,7 +54,12 @@ export class ExtensionListComponent implements OnInit {
   clickExtension(item) {
     this.router
       .navigate(['home/extension/detail'], {
-        queryParams: { id: item.moduleID, name: item.name, jump: 'setting' },
+        queryParams: {
+          type: this.route.snapshot.queryParams.type,
+          id: item.moduleID,
+          name: item.name,
+          jump: 'setting',
+        },
       })
       .finally();
   }

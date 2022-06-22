@@ -1,5 +1,5 @@
 <section class="main">
-  <section class="left flex-shrink-0">
+  <section class="flex-shrink-0 left">
     <input type="text" nz-input [(ngModel)]="keyword" (ngModelChange)="onSeachChange($event)" placeholder="search" />
     <!-- Fixed Group -->
     <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron">
@@ -14,7 +14,7 @@
         </div>
       </ng-template>
     </div>
-    <div class="bbd" *ngIf="electron.isElectron"></div>
+    <nz-divider *ngIf="electron.isElectron" class="!mt-[1px] !mb-[4px]"></nz-divider>
     <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzHideUnMatched]="true"
       (nzClick)="clickTreeItem($event)" nzBlockNode [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
     <ng-template #nzTreeTemplate let-node let-origin="origin">
@@ -32,7 +32,7 @@
       style="bottom: -3px; left: 4px; right: 0px;"></div> -->
     </ng-template>
   </section>
-  <section class="right fg1 px-4">
+  <section class="px-4 right fg1">
     <router-outlet></router-outlet>
   </section>
 </section>

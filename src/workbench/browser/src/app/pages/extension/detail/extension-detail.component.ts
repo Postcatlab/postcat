@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EoExtensionInfo } from '../extension.model';
 import { ExtensionService } from '../extension.service';
 
@@ -12,7 +12,7 @@ export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   extensionDetail: EoExtensionInfo;
 
-  constructor(private extensionService: ExtensionService, private route: ActivatedRoute) {
+  constructor(private extensionService: ExtensionService, private route: ActivatedRoute, private router: Router) {
     this.getDetail();
   }
   async getDetail() {
@@ -44,4 +44,12 @@ export class ExtensionDetailComponent implements OnInit {
     }, 100);
   }
   ngOnInit(): void {}
+
+  backToList() {
+    this.router.navigate(['/home/extension/list'], {
+      queryParams: {
+        type: this.route.snapshot.queryParams.type,
+      },
+    });
+  }
 }
