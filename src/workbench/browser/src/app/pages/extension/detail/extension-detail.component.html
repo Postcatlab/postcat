@@ -1,51 +1,51 @@
-<div class="py-3">
+<div class="extension-detail py-3">
   <div class="py-4">
     <a nz-button [routerLink]="['/home/extension/list']" nzType="link">
-      <i nz-icon nzType="left" nzTheme="outline"></i>返回列表
+      <i nz-icon nzType="left" nzTheme="outline"></i>Back
     </a>
   </div>
   <div class="bbd"></div>
-  <section class="">
-    <div class="flex p-8">
-      <i
-        class="bd_all block border rounded-lg h-40 w-40 bg-cover bg-center bg-no-repeat mr-8"
-        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"
-      ></i>
+  <section class="h-full p-4 max-w-[80vw] mx-auto">
+    <div class="flex">
+      <i class="bd_all block border rounded-lg h-24 w-24 bg-cover bg-center bg-no-repeat mr-8"
+        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"></i>
       <div class="flex flex-col flex-1">
         <div class="flex flex-col">
           <span class="text-xl mb-2 font-bold">{{ extensionDetail?.moduleName }}</span>
-          <span>作者: {{ extensionDetail?.author }}</span>
+          <!-- <span>作者: {{ extensionDetail?.author }}</span> -->
           <!-- <span class="mb-4">Tags: {{ extensionDetail?.keywords }}</span> -->
-          <span class="mb-2">版本: {{ extensionDetail?.version }}</span>
+          <!-- <span class="mb-2">版本: {{ extensionDetail?.version }}</span> -->
           <p class="w-full h-20">{{ extensionDetail?.description }}</p>
         </div>
         <div class="flex">
-          <div class="flex items-center" *ngIf="!extensionDetail?.installed">
-            <button
-              nz-button
-              nzType="primary"
-              [nzLoading]="isOperating"
-              (click)="manageExtension('install', extensionDetail?.name)"
-            >
-              安装
-            </button>
-            <!-- <span class="text-gray-500">安装完成后需要重启</span> -->
-          </div>
-          <button
-            *ngIf="extensionDetail?.installed"
-            nz-button
-            nzType="primary"
-            nzDanger
-            [nzLoading]="isOperating"
-            (click)="manageExtension('uninstall', extensionDetail?.name)"
-          >
-            卸载
-          </button>
+
         </div>
       </div>
     </div>
-    <div>
-      <nz-tabset [nzAnimated]="false">
+    <div class="flex w-full mt-6">
+      <div class="flex-auto">
+        <h2 class="text-lg font-bold">Intro</h2>
+        <div class="markdown-desc">
+          <eo-shadow-dom [html]="extensionDetail?.introduction"></eo-shadow-dom>
+        </div>
+      </div>
+      <nz-divider nzType=" vertical">
+      </nz-divider>
+      <div class="w-[200px] 2xl:w-[250px]">
+        <h2 class="text-lg font-bold">Install</h2>
+        <div class="flex items-center" *ngIf="!extensionDetail?.installed">
+          <button nz-button nzType="primary" [nzLoading]="isOperating"
+            (click)="manageExtension('install', extensionDetail?.name)">
+            安装
+          </button>
+          <span class="text-gray-500">安装完成后需要重启</span>
+        </div>
+        <button *ngIf="extensionDetail?.installed" nz-button nzBlock nzType="primary" nzDanger [nzLoading]="isOperating"
+          (click)="manageExtension('uninstall', extensionDetail?.name)">
+          卸载
+        </button>
+      </div>
+      <!-- <nz-tabset [nzAnimated]="false">
         <nz-tab nzTitle="概述"> {{ extensionDetail?.description }} </nz-tab>
         <nz-tab nzTitle="更多信息">
           <nz-descriptions [nzColumn]="1" nzTitle="">
@@ -55,9 +55,9 @@
               <a class="eo_link" target="_blank" [href]="extensionDetail?.bugs?.url">Issue</a>
             </nz-descriptions-item>
           </nz-descriptions>
-        </nz-tab>
-        <!-- <nz-tab nzTitle="设置" *ngIf="extensionDetail?.configuration && extensionDetail?.configuration.properties">Content of Tab Pane 3</nz-tab> -->
-      </nz-tabset>
+        </nz-tab> -->
+      <!-- <nz-tab nzTitle="设置" *ngIf="extensionDetail?.configuration && extensionDetail?.configuration.properties">Content of Tab Pane 3</nz-tab> -->
+      <!-- </nz-tabset> -->
     </div>
   </section>
 </div>

@@ -12,7 +12,7 @@ export interface ModuleLoaderInterface {
 export enum ModuleRuntime {
   main = 'main',
   render = 'render',
-  web = 'web'
+  web = 'web',
 }
 
 /**
@@ -26,7 +26,7 @@ export enum ModuleType {
   system = 'system',
   app = 'app',
   ui = 'ui',
-  feature = 'feature'
+  feature = 'feature',
 }
 
 /**
@@ -41,6 +41,8 @@ export interface ModuleInfo {
   version: string;
   // 模块描述
   description: string;
+  // 详细信息
+  introduction: string;
   // 模块ID，用于关联
   moduleID: string;
   // 模块名称，用于显示

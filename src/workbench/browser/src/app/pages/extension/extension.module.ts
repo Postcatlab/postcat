@@ -14,11 +14,25 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
 
 @NgModule({
-  imports: [FormsModule,NzTabsModule,NzTagModule,NzDescriptionsModule,NzInputModule,NzButtonModule,NzIconModule,ExtensionRoutingModule, CommonModule],
-  providers:[ExtensionService],
-  declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent],
+  imports: [
+    FormsModule,
+    NzTabsModule,
+    NzTagModule,
+    NzDescriptionsModule,
+    NzInputModule,
+    NzButtonModule,
+    NzIconModule,
+    ExtensionRoutingModule,
+    CommonModule,
+    NzDividerModule,
+    NzTreeModule,
+  ],
+  providers: [ExtensionService],
+  declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent, ShadowDomEncapsulationComponent],
 })
 export class ExtensionModule {}

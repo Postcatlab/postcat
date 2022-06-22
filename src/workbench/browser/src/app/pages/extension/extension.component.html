@@ -1,14 +1,36 @@
 <section class="main">
   <section class="left flex-shrink-0">
-    <div class="mb-2"><i class="mr-2" nz-icon nzType="appstore" nzTheme="fill"></i>插件分类</div>
-    <div
-      class="plugin-link px-1 py-2"
-      [ngClass]="{ active: selectGroup === item.id }"
-      *ngFor="let item of groups"
-      (click)="clickGroup(item.id)"
-    >
-      {{ item.title }}<span *ngIf="item.showNum"> （{{ extensionService.extensionIDs.length }}）</span>
+    <input type="text" nz-input [(ngModel)]="keyword" (ngModelChange)="onSeachChange($event)" placeholder="search" />
+    <!-- Fixed Group -->
+    <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron">
+      <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
+        [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
+      <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
+        <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
+          <div class="f_row_ac">
+            <i class="mr10" nz-icon nzType="home" nzTheme="outline"></i>
+            <span class="text_omit node_title">{{ node.title }}</span>
+          </div>
+        </div>
+      </ng-template>
     </div>
+    <div class="bbd" *ngIf="electron.isElectron"></div>
+    <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzHideUnMatched]="true"
+      (nzClick)="clickTreeItem($event)" nzBlockNode [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
+    <ng-template #nzTreeTemplate let-node let-origin="origin">
+      <div class="pl5">
+        <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
+          <div class="overflow-hidden f_row_ac text-ellipsis">
+            <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">
+              {{ node.origin.method }}
+            </b>
+            <span class="text_omit node_title">{{ node.title }}</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div *ngIf="node.component?.showIndicator" class="ant-tree-drop-indicator ng-star-inserted"
+      style="bottom: -3px; left: 4px; right: 0px;"></div> -->
+    </ng-template>
   </section>
   <section class="right fg1 px-4">
     <router-outlet></router-outlet>

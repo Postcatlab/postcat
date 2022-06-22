@@ -2,7 +2,7 @@ import * as path from 'path';
 import { ModuleHandlerOptions, ModuleInfo } from '../types';
 import { fileExists, readJson } from 'eo/shared/node/file';
 import { isNotEmpty } from 'eo/shared/common/common';
-
+import { readFileSync } from 'node:fs';
 /**
  * 核心模块管理器
  * @class CoreHandler
@@ -37,6 +37,7 @@ export class CoreHandler {
     try {
       const baseDir: string = this.getModuleDir(name);
       moduleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
+      moduleInfo.introduction = readFileSync(path.join(baseDir, 'README.md')).toString();
       moduleInfo.baseDir = baseDir;
       moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
       if (moduleInfo.preload?.length > 0) {

@@ -11,15 +11,20 @@ import { ExtensionService } from '../extension.service';
 export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   extensionDetail: EoExtensionInfo;
+
   constructor(private extensionService: ExtensionService, private route: ActivatedRoute) {
     this.getDetail();
   }
   async getDetail() {
-    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id,this.route.snapshot.queryParams.name);
+    this.extensionDetail = await this.extensionService.getDetail(
+      this.route.snapshot.queryParams.id,
+      this.route.snapshot.queryParams.name
+    );
+    console.log(' this.extensionDetail', this.extensionDetail);
   }
   manageExtension(operate: string, id) {
     this.isOperating = true;
-    console.log(this.isOperating)
+    console.log(this.isOperating);
     /**
      * * WARNING:Sending a synchronous message will block the whole
      * renderer process until the reply is received, so use this method only as a last
