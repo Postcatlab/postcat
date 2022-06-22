@@ -7,7 +7,10 @@ const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
 
 export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
-  const formatUri = (uri, rest=[]) => {
+  const formatUri = (uri, rest = []) => {
+    if (!Array.isArray(rest)) {
+      return uri;
+    }
     let result = uri;
     const restByName = rest.reduce((acc, val) => {
       if (!val.required || !val.name) {
@@ -21,6 +24,9 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
     return result;
   };
   const formatList = (inArr) => {
+    if (!Array.isArray(inArr)) {
+      return [];
+    }
     const result = [];
     inArr.forEach((val) => {
       if (!val.name) {
@@ -58,7 +64,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
             checkbox: val.required,
             listDepth: val.listDepth || 0,
             paramKey: val.name,
-            files:val.files?.map(val=>val.dataUrl),
+            files: val.files?.map((val) => val.dataUrl),
             paramType: typeMUI[val.type],
             paramInfo: val.value === undefined ? val.example : val.value,
           });
@@ -101,7 +107,7 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
 };
 export const eoFormatResponseData = ({ report, history, id }) => {
   let { httpCode, ...response } = history.resultInfo;
-  console.log(report, history, id)
+  console.log(report, history, id);
   response = {
     statusCode: httpCode,
     ...response,
@@ -117,7 +123,7 @@ export const eoFormatResponseData = ({ report, history, id }) => {
   } = {
     id: id,
     general: report.general,
-    response: {blobFileName:report.blobFileName,...response},
+    response: { blobFileName: report.blobFileName, ...response },
     report: {
       request: {
         requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
