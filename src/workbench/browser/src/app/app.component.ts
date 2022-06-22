@@ -14,9 +14,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 export class AppComponent {
   constructor(
     private theme: ThemeService,
-    private app: AppService,
     private remoteService: RemoteService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private appService: AppService
   ) {
     this.theme.changeTheme();
     this.checkRemoteServerConnect();
@@ -37,7 +37,7 @@ export class AppComponent {
           nzClosable: false,
           nzOnOk: () => {
             clearTimeout(timer);
-            this.remoteService.switchDataSource();
+            timer && this.remoteService.switchDataSource();
           },
         });
       }
