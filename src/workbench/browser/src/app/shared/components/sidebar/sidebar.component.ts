@@ -69,8 +69,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
         moduleID: '@eo-core-extension',
         isOffical: true,
         icon: 'puzzle',
-        activeRoute: this.electron.isElectron ? 'home/extension' : 'home/preview',
-        route: this.electron.isElectron ? 'home/extension/list' : 'home/preview',
+        activeRoute: 'home/extension',
+        route: 'home/extension/list',
+        // activeRoute: this.electron.isElectron ? 'home/extension' : 'home/preview',
+        // route: this.electron.isElectron ? 'home/extension/list' : 'home/preview',
       },
     ];
     if (this.electron.isElectron) {

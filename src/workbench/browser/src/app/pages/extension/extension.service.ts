@@ -14,7 +14,7 @@ export class ExtensionService {
     this.getInstalledList();
   }
   getInstalledList() {
-    this.localModules = window.eo.getModules();
+    this.localModules = window.eo?.getModules()||new Map();
     this.updateExtensionIDs();
   }
   public async requestList() {

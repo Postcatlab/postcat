@@ -278,7 +278,7 @@ export class SettingComponent implements OnInit {
     // 获取本地设置
     this.localSettings = window.eo.getSettings();
     // const featureList = window.eo.getFeature('configuration');
-    const modules = window.eo.getModules();
+    const modules = window.eo?.getModules();
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
     const extensitonConfigurations = [...modules.values()].filter((n) => n.features?.configuration);
     const controls = {};
