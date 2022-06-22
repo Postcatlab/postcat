@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   PageNotFoundComponent,
@@ -58,6 +58,7 @@ const COMPONENTS = [
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
   providers: [ModalService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
 })
 export class SharedModule {}
