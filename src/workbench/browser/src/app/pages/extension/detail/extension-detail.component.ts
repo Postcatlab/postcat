@@ -20,8 +20,21 @@ export class ExtensionDetailComponent implements OnInit {
       this.route.snapshot.queryParams.id,
       this.route.snapshot.queryParams.name
     );
+    if (!this.extensionDetail?.introduction && !this.extensionDetail?.installed) {
+      await this.fetchReadme();
+    }
     this.extensionDetail.introduction ||= 'This plugin has no documentation yet.';
   }
+
+  async fetchReadme() {
+    try {
+      const htmlText = await (await fetch(`https://www.npmjs.com/package/${this.extensionDetail.name}`)).text();
+      const domParser = new DOMParser();
+      const html = domParser.parseFromString(htmlText, 'text/html');
+      this.extensionDetail.introduction = html.querySelector('#readme').innerHTML;
+    } catch (error) {}
+  }
+
   manageExtension(operate: string, id) {
     this.isOperating = true;
     console.log(this.isOperating);
@@ -34,10 +47,13 @@ export class ExtensionDetailComponent implements OnInit {
       switch (operate) {
         case 'install': {
           this.extensionDetail.installed = this.extensionService.install(id);
+          this.getDetail();
           break;
         }
         case 'uninstall': {
           this.extensionDetail.installed = !this.extensionService.uninstall(id);
+          this.fetchReadme();
+          break;
         }
       }
       this.isOperating = false;
