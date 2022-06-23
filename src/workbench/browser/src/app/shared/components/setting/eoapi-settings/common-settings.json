@@ -19,6 +19,12 @@
           "disabled": true,
           "description": "检测到应用升级后，后台将下载最新的安装包在下次启动时更新"
         },
+        "common.dataSource": {
+          "type": "component",
+          "default": "swtich-dataSource-btn",
+          "label": "数据源切换",
+          "description": ""
+        },
         "remoteServer.url": {
           "type": "string",
           "label": "远程服务器地址",
