@@ -1,4 +1,3 @@
-
 <header>
   <button
     nz-popconfirm
@@ -13,5 +12,6 @@
   </button>
 </header>
 <nz-divider></nz-divider>
-<list-block-common-component class="api_test_history_list" [(list)]="model" [mainObject]="listConf"> </list-block-common-component>
-<nz-empty class="pb20" *ngIf="!model||!model.length" nzNotFoundImage="simple"></nz-empty>
+<list-block-common-component class="api_test_history_list" [(list)]="model" [mainObject]="listConf">
+</list-block-common-component>
+<nz-empty class="pb20" *ngIf="!model || !model.length" nzNotFoundImage="simple"></nz-empty>

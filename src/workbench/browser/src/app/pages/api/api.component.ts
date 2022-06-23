@@ -20,7 +20,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   TABS = [
     {
       routerLink: 'detail',
-      title: '文档',
+      title: `文档`,
     },
     {
       routerLink: 'edit',

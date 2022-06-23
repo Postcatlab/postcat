@@ -9,6 +9,9 @@
   "projects": {
     "eoapi": {
       "root": "",
+      "i18n":{
+        "sourceLocale": "zh-Hans"
+      },
       "sourceRoot": "src",
       "projectType": "application",
       "schematics": {
