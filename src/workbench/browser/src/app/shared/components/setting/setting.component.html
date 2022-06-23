@@ -83,6 +83,11 @@
               <eo-select-theme *ngIf="settings[field] === 'eo-select-theme'"></eo-select-theme>
               <!-- 关于eopai -->
               <eo-about *ngIf="settings[field] === 'eo-about'"></eo-about>
+              <!-- 数据源切换 -->
+              <button *ngIf="settings[field] === 'swtich-dataSource-btn'" nz-button nzType="primary" nzSize="small"
+                [nzLoading]="switchDataSourceLoading" (click)="switchDataSource()">
+                切换到{{ isRemote ? '本地' : '远程'}}
+              </button>
             </ng-container>
           </nz-form-control>
         </nz-form-item>

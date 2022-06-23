@@ -63,7 +63,7 @@ export class SettingComponent implements OnInit {
   );
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
+  switchDataSourceLoading = false;
   /** current configuration */
   currentConfiguration = [];
   // ! isVisible = false;
@@ -129,7 +129,10 @@ export class SettingComponent implements OnInit {
    * 切换数据源
    */
   switchDataSource() {
-    this.remoteService.switchDataSource();
+    this.switchDataSourceLoading = true;
+    this.remoteService.switchDataSource().finally(() => {
+      this.switchDataSourceLoading = false;
+    });
     // this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
   }
 
