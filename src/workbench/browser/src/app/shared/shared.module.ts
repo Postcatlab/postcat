@@ -2,7 +2,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   PageNotFoundComponent,
-  SelectThemeComponent,
   ToolbarComponent,
   SidebarComponent,
   NavbarComponent,
@@ -29,17 +28,12 @@ import { ModalService } from './services/modal.service';
 import { PageBlankComponent } from './components/page-blank/page-blank.component';
 import { PageFeaturePreviewComponent } from './components/page-feature-preview/page-feature-preview.component';
 import { RouterModule } from '@angular/router';
+import { SettingModule } from 'eo/workbench/browser/src/app/shared/components/setting/setting.module';
 
-const COMPONENTS = [
-  ToolbarComponent,
-  SelectThemeComponent,
-  SidebarComponent,
-  NavbarComponent,
-  PageNotFoundComponent,
-  AboutComponent,
-];
+const COMPONENTS = [ToolbarComponent, SidebarComponent, NavbarComponent, PageNotFoundComponent, AboutComponent];
 @NgModule({
   imports: [
+    SettingModule,
     CommonModule,
     FormsModule,
     RouterModule,
@@ -58,7 +52,7 @@ const COMPONENTS = [
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
   providers: [ModalService],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
 })
 export class SharedModule {}
