@@ -3,25 +3,41 @@ import MarkdownIt from 'markdown-it/dist/markdown-it';
 
 @Component({
   selector: 'eo-shadow-dom',
-  template: ` <div [innerHTML]="md.render(html || '')"></div> `,
-  styles: ['h2, .shadow-message { color: blue; }'],
+  template: ` <div [innerHTML]="content"></div> `,
+  styles: [],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class ShadowDomEncapsulationComponent implements OnInit {
-  md = new MarkdownIt();
+  md: MarkdownIt;
 
-  @Input() html = '';
+  @Input() text = '';
+  @Input() options = {
+    html: false,
+  };
+
+  get content() {
+    const html = this.md.render(this.text || '');
+    if (html && this.options.html) {
+      const domParser = new DOMParser();
+      const doc = domParser.parseFromString(html, 'text/html');
+      const a = doc.querySelectorAll('a');
+      a.forEach((n) => n.setAttribute('target', '_blank'));
+      return doc.body.innerHTML;
+    } else {
+      return html;
+    }
+  }
+
+  constructor() {}
 
   ngOnInit() {
+    this.md = new MarkdownIt(this.options);
     this.customLinkRender();
   }
 
   customLinkRender() {
     const defaultRender =
-      this.md.renderer.rules.link_open ||
-      function (tokens, idx, options, env, self) {
-        return self.renderToken(tokens, idx, options);
-      };
+      this.md.renderer.rules.link_open || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
 
     this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
       // If you are sure other plugins can't add `target` - drop check below

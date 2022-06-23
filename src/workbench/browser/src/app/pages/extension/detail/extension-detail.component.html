@@ -1,5 +1,5 @@
 <div class="py-3 extension-detail">
-  <div class="sticky top-0 bg-white z-50">
+  <div class="sticky top-0 z-50 bg-white">
     <div class="py-4 ">
       <a nz-button nzType="link" (click)="backToList()">
         <i nz-icon nzType="left" nzTheme="outline"></i>Back
@@ -29,8 +29,7 @@
         <h2 class="text-lg font-bold">Intro</h2>
         <!-- <nz-divider></nz-divider> -->
         <div class="h-full overflow-auto markdown-desc">
-          <eo-shadow-dom [html]="extensionDetail?.introduction">
-          </eo-shadow-dom>
+          <eo-shadow-dom [text]="extensionDetail?.introduction" [options]="{ html: true }"> </eo-shadow-dom>
         </div>
       </div>
       <div class="w-[1px] bg-[#f2f2f2] mx-[10px]"></div>

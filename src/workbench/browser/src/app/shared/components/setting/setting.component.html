@@ -53,7 +53,7 @@
           <!-- 二级说明 -->
           <div *ngIf="module.properties[field]?.type !== 'boolean' && module.properties[field]?.description"
             class="description">
-            <eo-shadow-dom [html]="module.properties[field]?.description || ''"></eo-shadow-dom>
+            <eo-shadow-dom [text]="module.properties[field]?.description || ''"></eo-shadow-dom>
           </div>
           <nz-form-control nzErrorTip="请输入{{ module.properties[field]?.label }}" class="form-control">
             <!-- 字符串类型 -->
