@@ -3,7 +3,7 @@
     <!-- <input type="text" nz-input [(ngModel)]="keyword" (ngModelChange)="onSeachChange($event)" placeholder="search" /> -->
     <input type="text" class="flex-1 w-full px-3 input" placeholder="search" [(ngModel)]="keyword" />
     <!-- Fixed Group -->
-    <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron">
+    <div class="group_container fixed_group_tree pt10">
       <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
         [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
       <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
@@ -15,7 +15,7 @@
         </div>
       </ng-template>
     </div>
-    <nz-divider *ngIf="electron.isElectron" class="!mt-[1px] !mb-[4px]"></nz-divider>
+    <nz-divider class="!mt-[1px] !mb-[4px]"></nz-divider>
     <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzHideUnMatched]="true"
       (nzClick)="clickTreeItem($event)" nzBlockNode [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
     <ng-template #nzTreeTemplate let-node let-origin="origin">
