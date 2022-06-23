@@ -12,7 +12,7 @@ class ExtensionList {
   }
   search(keyword: string) {
     return this.list.filter(
-      (it) => it.moduleID.includes(keyword) || it.name.includes(keyword) || it.keywords.includes(keyword)
+      (it) => it.moduleID.includes(keyword) || it.name.includes(keyword) || it.keywords?.includes(keyword)
     );
   }
 }
@@ -86,7 +86,6 @@ export class ExtensionListComponent implements OnInit {
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
-        console.log('inArg', inArg.data);
         switch (inArg.type) {
           case 'searchPluginByKeyword': {
             this.onSeachChange(inArg.data);

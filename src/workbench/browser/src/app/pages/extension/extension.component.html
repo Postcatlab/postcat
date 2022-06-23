@@ -1,7 +1,8 @@
 <section class="main">
   <section class="flex-shrink-0 p-2 left">
     <!-- <input type="text" nz-input [(ngModel)]="keyword" (ngModelChange)="onSeachChange($event)" placeholder="search" /> -->
-    <input type="text" class="flex-1 w-full px-3 input" placeholder="search" [(ngModel)]="keyword" />
+    <input type="text" class="flex-1 w-full px-3 input" placeholder="search" [(ngModel)]="keyword"
+      (ngModelChange)="onSeachChange($event)" />
     <!-- Fixed Group -->
     <div class="group_container fixed_group_tree pt10">
       <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
