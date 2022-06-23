@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { isElectron } from 'eo/shared/common/common';
 import { lastValueFrom } from 'rxjs';
 import { ModuleInfo } from '../../utils/module-loader';
 import { EoExtensionInfo } from './extension.model';
 
-const HOST = 'http://106.12.149.147';
+const HOST = isElectron()
+  ? 'http://106.12.149.147'
+  : 'https://mockapi.eolink.com/ztBFKai20ee60c12871881565b5a6ddd718337df0e30979';
 @Injectable()
 export class ExtensionService {
   ignoreList = ['default'];
@@ -14,7 +17,7 @@ export class ExtensionService {
     this.getInstalledList();
   }
   getInstalledList() {
-    this.localModules = window.eo?.getModules()||new Map();
+    this.localModules = window.eo?.getModules() || new Map();
     this.updateExtensionIDs();
   }
   public async requestList() {
