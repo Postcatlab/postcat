@@ -18,9 +18,11 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 import { ElectronService } from '../../../core/services';
 import { SelectThemeComponent } from 'eo/workbench/browser/src/app/shared/components/toolbar/select-theme/select-theme.component';
+import { AboutComponent } from 'eo/workbench/browser/src/app/shared/components/about/about.component';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -39,9 +41,10 @@ const ANTDMODULES = [
   NzDropDownModule,
   NzPopoverModule,
   NzRadioModule,
+  NzDescriptionsModule,
 ];
 @NgModule({
-  declarations: [SettingComponent, SelectThemeComponent],
+  declarations: [SettingComponent, SelectThemeComponent, AboutComponent],
   imports: [FormsModule, ReactiveFormsModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent, SelectThemeComponent],
   providers: [ElectronService],
