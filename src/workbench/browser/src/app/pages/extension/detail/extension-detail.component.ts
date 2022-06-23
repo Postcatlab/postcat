@@ -20,7 +20,7 @@ export class ExtensionDetailComponent implements OnInit {
       this.route.snapshot.queryParams.id,
       this.route.snapshot.queryParams.name
     );
-    console.log(' this.extensionDetail', JSON.stringify(this.extensionDetail));
+    this.extensionDetail.introduction ||= 'This plugin has no documentation yet.';
   }
   manageExtension(operate: string, id) {
     this.isOperating = true;
