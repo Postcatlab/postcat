@@ -243,16 +243,16 @@ export class SettingComponent implements OnInit {
    * 解析所有模块的配置信息
    */
   private init() {
-    if (!window.eo && !window.eo?.getFeature) {
-      return;
-    }
+    // if (!window.eo && !window.eo?.getFeature) {
+    //   return;
+    // }
     // ! this.isVisible = true;
     this.settings = {};
     this.nestedSettings = {};
     // 获取本地设置
-    this.localSettings = window.eo.getSettings();
+    this.localSettings = window.eo?.getSettings?.() || JSON.stringify(localStorage.getItem('localSettings') || '{}');
     // const featureList = window.eo.getFeature('configuration');
-    const modules = window.eo?.getModules();
+    const modules = window.eo?.getModules() || new Map([]);
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
     const extensitonConfigurations = [...modules.values()].filter((n) => n.features?.configuration);
     const controls = {};
@@ -364,8 +364,11 @@ export class SettingComponent implements OnInit {
     // if (this.validateForm.status === 'INVALID') {
     //   return;
     // }
+    const data = { settings: this.settings, nestedSettings: this.nestedSettings };
     // 加入根据返回显示提示消息
-    const saved = window.eo.saveSettings({ settings: this.settings, nestedSettings: this.nestedSettings });
+    const saved = window.eo?.saveSettings
+      ? window.eo.saveSettings(data)
+      : localStorage.setItem('localSettings', JSON.stringify(data));
     if (saved) {
       // this.handleCancel();
     }
