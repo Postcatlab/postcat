@@ -52,7 +52,7 @@ const COMPONENTS = [ToolbarComponent, SidebarComponent, NavbarComponent, PageNot
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
   providers: [ModalService],
-  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
 })
 export class SharedModule {}
