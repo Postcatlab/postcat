@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -9,7 +8,6 @@ import { eoapiSettings } from './eoapi-settings/';
 import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import MarkdownIt from 'markdown-it/dist/markdown-it';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 interface TreeNode {
@@ -52,7 +50,6 @@ export class SettingComponent implements OnInit {
     disabled: !!node.disabled,
   });
   selectListSelection = new SelectionModel<FlatNode>();
-  md = new MarkdownIt();
   treeControl: any = new FlatTreeControl<FlatNode>(
     (node) => node.level,
     (node) => node.expandable
@@ -102,9 +99,7 @@ export class SettingComponent implements OnInit {
     private messageService: MessageService,
     private message: NzMessageService,
     private remoteService: RemoteService
-  ) {
-    this.customLinkRender();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.init();
@@ -129,28 +124,6 @@ export class SettingComponent implements OnInit {
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
-
-  customLinkRender() {
-    const defaultRender =
-      this.md.renderer.rules.link_open ||
-      function (tokens, idx, options, env, self) {
-        return self.renderToken(tokens, idx, options);
-      };
-
-    this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-      // If you are sure other plugins can't add `target` - drop check below
-      const aIndex = tokens[idx].attrIndex('target');
-
-      if (aIndex < 0) {
-        tokens[idx].attrPush(['target', '_blank']); // add new attribute
-      } else {
-        tokens[idx].attrs[aIndex][1] = '_blank'; // replace value of existing attr
-      }
-
-      // pass token to default renderer.
-      return defaultRender(tokens, idx, options, env, self);
-    };
-  }
 
   /**
    * 切换数据源
