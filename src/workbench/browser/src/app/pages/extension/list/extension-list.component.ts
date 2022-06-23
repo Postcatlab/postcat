@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { isElectron } from 'eo/shared/common/common';
 import { debounceTime, distinctUntilChanged, lastValueFrom, Subject } from 'rxjs';
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
@@ -23,6 +24,7 @@ export class ExtensionListComponent implements OnInit {
   type: ExtensionGroupType = ExtensionGroupType.all;
   keyword = '';
   renderList = [];
+  isElectron = isElectron();
   seachChanged$: Subject<string> = new Subject<string>();
   constructor(public extensionService: ExtensionService, private route: ActivatedRoute, private router: Router) {
     this.type = this.route.snapshot.queryParams.type;
