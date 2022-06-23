@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -34,6 +34,7 @@ interface FlatNode {
   styleUrls: ['./setting.component.scss'],
 })
 export class SettingComponent implements OnInit {
+  @Output() isShowModalChange = new EventEmitter<any>();
   objectKeys = Object.keys;
   /** 是否远程数据源 */
   get isRemote() {
@@ -68,7 +69,7 @@ export class SettingComponent implements OnInit {
 
   /** current configuration */
   currentConfiguration = [];
-  isVisible = false;
+  // ! isVisible = false;
   $isShowModal = false;
   /** all configure */
   settings = {};
@@ -86,7 +87,7 @@ export class SettingComponent implements OnInit {
     return this.$isShowModal;
   }
 
-  set isShowModal(val) {
+  @Input() set isShowModal(val) {
     this.$isShowModal = val;
     if (val) {
       this.init();
@@ -272,7 +273,7 @@ export class SettingComponent implements OnInit {
     if (!window.eo && !window.eo?.getFeature) {
       return;
     }
-    this.isVisible = true;
+    // ! this.isVisible = true;
     this.settings = {};
     this.nestedSettings = {};
     // 获取本地设置
@@ -408,6 +409,7 @@ export class SettingComponent implements OnInit {
     } catch (error) {
     } finally {
       this.isShowModal = false;
+      this.isShowModalChange.emit(false);
     }
   }
 }
