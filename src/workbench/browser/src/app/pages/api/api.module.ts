@@ -30,6 +30,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
@@ -81,6 +82,7 @@ const COMPONENTS = [
     EnvModule,
     NzCardModule,
     NzModalModule,
+    NzSelectModule,
     NzPopconfirmModule,
   ],
   declarations: [...COMPONENTS],
