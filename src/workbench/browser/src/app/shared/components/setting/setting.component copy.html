@@ -28,7 +28,7 @@
           <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
           <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
             (nzClick)="selectModule(node)">
-            {{ node.name }}
+            {{ node.title }}
           </nz-tree-node-option>
         </nz-tree-node>
 
@@ -38,15 +38,12 @@
           </nz-tree-node-toggle>
           <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
             (nzClick)="selectModule(node)">
-            {{ node.name }}
+            {{ node.title }}
           </nz-tree-node-option>
         </nz-tree-node>
       </nz-tree-view>
     </div>
     <nz-divider nzType="vertical" class="divider"></nz-divider>
-    <eo-data-storage *ngIf="selected === 'eoapi-common'" [(model)]="settings['eoapi-common']"></eo-data-storage>
-    <eo-language-switcher *ngIf="selected === 'eoapi-language'" [(model)]="settings['eoapi-language']">
-    </eo-language-switcher>
     <form *ngIf="currentConfiguration.length" nz-form [nzLayout]="'vertical'" [formGroup]="validateForm"
       (ngSubmit)="handleSave()" class="form">
       <div *ngFor="let module of currentConfiguration">
@@ -100,12 +97,11 @@
         </nz-form-item>
       </div>
     </form>
-    <eo-about *ngIf="selected === 'eoapi-about'"></eo-about>
-    <!-- <nz-empty *ngIf="!currentConfiguration.length " nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+    <nz-empty *ngIf="!currentConfiguration.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
       <ng-template #contentTpl>
         <span>暂无配置项</span>
       </ng-template>
-    </nz-empty> -->
+    </nz-empty>
   </section>
   <!-- <div *nzModalFooter class="footer"> -->
   <!-- <button nz-button nzType="primary" (click)="handleSave()">保存</button>

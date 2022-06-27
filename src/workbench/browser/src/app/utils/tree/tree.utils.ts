@@ -167,9 +167,16 @@ export const getExpandGroupByKey = (component, key) => {
 export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {}) => {
   const { key = 'name', valueKey = 'description', childKey = 'children' } = opts;
   return list?.reduce?.((prev, curr) => {
-    prev[curr[key]] = curr[valueKey] || fieldTypeMap.get(curr.type);
-    if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
-      tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
+    try {
+      curr = typeof curr === 'string' ? JSON.parse(curr) : curr;
+      prev[curr[key]] = curr[valueKey] || fieldTypeMap.get(curr.type);
+      if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
+        console.log(`prev: ${prev} == curr: ${curr} == key: ${key}`);
+        tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
+      }
+    } catch (error) {
+      console.error(error);
+      console.log('error==>', `prev: ${prev} == curr: ${curr} == key: ${key}`);
     }
     return prev;
   }, initObj);
