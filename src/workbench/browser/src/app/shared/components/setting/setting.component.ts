@@ -162,48 +162,6 @@ export class SettingComponent implements OnInit {
   }
 
   /**
-   * 测试远程服务器地址是否可用
-   */
-  async pingRmoteServerUrl() {
-    const { url: remoteUrl, token } = this.getConfiguration('eoapi-common.remoteServer');
-    // 是否更新了远程服务地址或token
-    const isUpdateRemoteServerInfo = remoteUrl !== this.remoteServerUrl || token !== this.remoteServerToken;
-    let messageId;
-    if (isUpdateRemoteServerInfo) {
-      messageId = this.message.loading('远程服务器连接中...', { nzDuration: 0 }).messageId;
-    }
-
-    try {
-      const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
-      const response = await fetch(url, {
-        headers: {
-          'x-api-key': token,
-        },
-      });
-      const result = await response.json();
-      console.log('result', result);
-      if (result.statusCode !== 200) {
-        throw result;
-      }
-      // await result.json();
-      if (isUpdateRemoteServerInfo) {
-        this.message.create('success', '远程服务器地址设置成功');
-        return Promise.resolve(true);
-      }
-    } catch (error) {
-      console.error(error);
-      // if (remoteUrl !== this.remoteServerUrl) {
-      this.message.create('error', '远程服务器地址/token不可用');
-      // }
-      // 远程服务地址不可用时，回退到上次的地址
-      this.settings['eoapi-common.remoteServer.url'] = this.remoteServerUrl;
-      this.settings['eoapi-common.remoteServer.token'] = this.remoteServerToken;
-    } finally {
-      setTimeout(() => this.message.remove(messageId), 500);
-    }
-  }
-
-  /**
    * 设置数据
    *
    * @param properties
@@ -381,11 +339,15 @@ export class SettingComponent implements OnInit {
 
   async handleCancel() {
     try {
-      const result = await this.pingRmoteServerUrl();
-      if (Object.is(result, true)) {
-        this.message.success('远程数据源连接成功');
-        this.remoteService.switchToHttp();
-        this.remoteService.refreshComponent();
+      const isUpdateRemoteInfo =
+        this.remoteServerUrl !== this.settings['eoapi-common.remoteServer.url'] ||
+        this.remoteServerToken !== this.settings['eoapi-common.remoteServer.token'];
+      if (isUpdateRemoteInfo && this.isRemote) {
+        this.message.success('你已修改远程服务相关信息，页面即将刷新');
+        setTimeout(() => {
+          this.remoteService.switchToHttp();
+          this.remoteService.refreshComponent();
+        }, 2000);
       }
     } catch (error) {
     } finally {
