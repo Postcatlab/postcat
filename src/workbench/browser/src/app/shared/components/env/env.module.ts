@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -32,6 +32,7 @@ const ANTDMODULES = [
 @NgModule({
   declarations: [EnvComponent],
   imports: [FormsModule, CommonModule, EouiModule, ...ANTDMODULES],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [EnvComponent],
   providers: [ElectronService],
 })
