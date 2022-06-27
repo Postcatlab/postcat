@@ -488,7 +488,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param apiDataID
    */
   apiTestHistoryLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiTestHistory, { apiDataID: apiDataID });
+    return this.loadAllByConditions(this.apiTestHistory, { apiDataID });
   }
 
   /**
@@ -504,7 +504,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param projectID
    */
   apiTestHistoryLoadAllByProjectID(projectID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiTestHistory, { projectID: projectID });
+    return this.loadAllByConditions(this.apiTestHistory, { projectID });
   }
 
   /**

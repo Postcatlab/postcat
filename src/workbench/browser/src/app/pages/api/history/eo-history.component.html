@@ -1,0 +1,29 @@
+<div>
+  <div class="history-title flex px-2 items-center justify-between h-10">
+    <span class="font-bold">History</span>
+    <div
+      class="icon flex shrink-0 items-center justify-center h-7 text-ms cursor-pointer"
+      nzTooltipTitle="Clear All"
+      nz-tooltip
+      nz-popconfirm
+      nzPopconfirmTitle="Are you sure delete this task?"
+      (nzOnConfirm)="clearAllHistory()"
+      (nzOnCancel)="cancel()"
+      nzOkText="Yes"
+      nzCancelText="No"
+      nzPopconfirmPlacement="topRight"
+    >
+      <iconpark-icon name="delete"></iconpark-icon>
+    </div>
+  </div>
+  <div
+    *ngFor="let item of historyList"
+    class="p-2 h-8 flex items-center text-xs hover:bg-gray-100 cursor-pointer"
+    (click)="gotoTestHistory(item)"
+  >
+    <span class="method_type font-light block w-12" [ngClass]="methodColor(item.request.method)">{{
+      item.request.method
+    }}</span>
+    <span class="flex-1 text-gray-600 truncate overflow-hidden">{{ item.request.uri }}</span>
+  </div>
+</div>
