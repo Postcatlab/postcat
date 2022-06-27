@@ -1,25 +1,52 @@
 <nz-layout class="layout">
   <nz-sider nzTheme="light" nzWidth="250">
+    <!-- <div class="side-container"> -->
     <nz-content>
-      <div class="inner-content">
-        <eo-api-group-tree></eo-api-group-tree>
-      </div>
+      <nz-tabset nzCentered>
+        <nz-tab [nzTitle]="apiTitle">
+          <ng-template #apiTitle>
+            <iconpark-icon name="folder-open"></iconpark-icon>
+          </ng-template>
+          <div class="inner-content">
+            <eo-api-group-tree></eo-api-group-tree>
+          </div>
+        </nz-tab>
+        <nz-tab [nzTitle]="historyTitle">
+          <ng-template #historyTitle>
+            <iconpark-icon name="history"></iconpark-icon>
+          </ng-template>
+          <div>kkkk</div>
+        </nz-tab>
+        <nz-tab [nzTitle]="envTitle">
+          <ng-template #envTitle>
+            <iconpark-icon name="instruction"></iconpark-icon>
+          </ng-template>
+          <eo-env></eo-env>
+        </nz-tab>
+      </nz-tabset>
     </nz-content>
+    <!-- </div> -->
   </nz-sider>
   <nz-layout class="right-layout">
     <nz-content>
       <div class="inner-content">
         <div class="tabs-bar f_row">
           <eo-api-tab class="fg1"></eo-api-tab>
-          <div class="env">
+          <!-- <div class="env">
             <eo-env></eo-env>
-          </div>
+          </div> -->
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <nz-tabset class="inside_page_tab" [nzAnimated]="false" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
-              <a *nzTabLink nz-tab-link (click)="clickContentMenu(tab)" [routerLink]="[tab.routerLink]"
-                queryParamsHandling="merge">{{ tab.title }}</a>
+              <a
+                *nzTabLink
+                nz-tab-link
+                (click)="clickContentMenu(tab)"
+                [routerLink]="[tab.routerLink]"
+                queryParamsHandling="merge"
+                >{{ tab.title }}</a
+              >
             </nz-tab>
           </nz-tabset>
           <router-outlet></router-outlet>

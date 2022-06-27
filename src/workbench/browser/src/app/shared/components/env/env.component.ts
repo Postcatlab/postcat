@@ -65,7 +65,7 @@ export class EnvComponent implements OnInit, OnDestroy {
             resolve(true);
             return;
           }
-          await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
+          // await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
           resolve(true);
         }
       });
@@ -89,6 +89,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
   handleSwitchEnv(uuid) {
+    this.handleShowModal();
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
@@ -112,6 +113,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       parameters: [],
     };
     this.activeUuid = null;
+    this.handleShowModal();
   }
 
   handleSaveEnv(uuid: string | number | undefined = undefined) {
@@ -154,14 +156,15 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleCancel(): void {
     this.isVisible = false;
-    this.envList = [];
+    // this.envList = [];
     this.envInfo = {};
   }
 
   handleShowModal() {
+    // this.handleAddEnv(null);
     this.isVisible = true;
     this.isOpen = false;
-    this.getAllEnv(this.envUuid);
+    // this.getAllEnv(this.envUuid);
   }
 
   handleEnvSelectStatus(event: boolean) {
