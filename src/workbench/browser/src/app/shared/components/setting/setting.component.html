@@ -101,11 +101,15 @@
       </div>
     </form>
     <eo-about *ngIf="selected === 'eoapi-about'"></eo-about>
-    <!-- <nz-empty *ngIf="!currentConfiguration.length " nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+    <nz-empty *ngIf="!currentConfiguration.length && selected === 'eoapi-extensions'" nzNotFoundImage="simple"
+      [nzNotFoundContent]="contentTpl">
       <ng-template #contentTpl>
-        <span>暂无配置项</span>
+        <span>No plugins are currently installed,
+          <a class="eo_link" routerLink="['/home/extension/list']">go to
+            install</a>
+        </span>
       </ng-template>
-    </nz-empty> -->
+    </nz-empty>
   </section>
   <!-- <div *nzModalFooter class="footer"> -->
   <!-- <button nz-button nzType="primary" (click)="handleSave()">保存</button>
