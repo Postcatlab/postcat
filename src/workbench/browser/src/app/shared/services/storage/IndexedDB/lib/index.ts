@@ -393,7 +393,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     const result = this.loadAllByConditions(this.apiData, { projectID });
     result.subscribe(({ status, data }: ResultType<ApiData[]>) => {
       if (isFirstLoad && status === 200 && data) {
-        batchCreateMock(this.mock, data);
+        requestIdleCallback(() => batchCreateMock(this.mock, data));
       }
     });
     return result;
