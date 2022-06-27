@@ -56,3 +56,11 @@ nz-sider {
     color: var(--BLACK_TAG_BG);
   }
 }
+
+.side-container {
+  ::ng-deep .ant-tabs-nav-list {
+    width: 100%;
+    border: 1px solid red;
+  }
+}
+
