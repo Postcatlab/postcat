@@ -32,11 +32,15 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
     `,
   ],
 })
-export class LanguageSwticherComponent {
+export class LanguageSwticherComponent implements OnInit {
   @Input() model: object = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {}
+
+  ngOnInit(): void {
+    this.model['eoapi-language'] ??= navigator.language === 'zh-CN' ? 'zh-CN' : 'en';
+  }
 
   handleChange(data) {
     console.log('data', data);
