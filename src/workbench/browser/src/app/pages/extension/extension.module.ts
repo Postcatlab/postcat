@@ -17,6 +17,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
     NzDividerModule,
     NzTreeModule,
     NzDropDownModule,
+    NzSkeletonModule,
   ],
   providers: [ExtensionService],
   declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent],

@@ -41,10 +41,10 @@ export class Configuration implements ConfigurationInterface {
   /**
    * 保存全局配置
    */
-  saveSettings({ settings = {}, nestedSettings = {} }): boolean {
+  saveSettings({ settings = {} }): boolean {
+    console.log('settings', settings);
     let data = this.loadConfig();
     data.settings = settings;
-    data.nestedSettings = nestedSettings;
     return this.saveConfig(data);
   }
 
@@ -56,11 +56,7 @@ export class Configuration implements ConfigurationInterface {
   saveModuleSettings(moduleID: string, settings: ConfigurationValueInterface): boolean {
     let data = this.loadConfig();
     data.settings ??= {};
-    data.nestedSettings ??= {};
     data.settings[moduleID] = settings;
-    const propArr = moduleID.split('.');
-    const target = propArr.slice(0, -1).reduce((p, k) => p?.[k], data.nestedSettings);
-    target[propArr.at(-1)] = settings;
     return this.saveConfig(data);
   }
 
@@ -93,13 +89,38 @@ export class Configuration implements ConfigurationInterface {
    * @returns
    */
   getModuleSettings<T = any>(section?: string): T {
-    const localSettings = this.getSettings();
-    localSettings.nestedSettings ??= {};
-    if (section) {
-      return section.split('.')?.reduce((p, k) => p?.[k], localSettings.nestedSettings);
-    }
-    return localSettings.nestedSettings;
+    return this.getConfiguration(section);
   }
+
+  /**
+   * 根据key路径获取对应的配置的值
+   *
+   * @param key
+   * @returns
+   */
+  getConfiguration = (keyPath: string) => {
+    const localSettings = this.getSettings()?.settings || {};
+
+    if (Reflect.has(localSettings, keyPath)) {
+      return Reflect.get(localSettings, keyPath);
+    }
+
+    const keys = Object.keys(localSettings);
+    const filterKeys = keys.filter((n) => n.startsWith(keyPath));
+    if (filterKeys.length) {
+      return filterKeys.reduce((pb, ck) => {
+        const keyArr = ck.replace(`${keyPath}.`, '').split('.');
+        const targetKey = keyArr.pop();
+        const target = keyArr.reduce((p, v) => {
+          p[v] ??= {};
+          return p[v];
+        }, pb);
+        target[targetKey] = localSettings[ck];
+        return pb;
+      }, {});
+    }
+    return undefined;
+  };
 }
 
 export default () => new Configuration();

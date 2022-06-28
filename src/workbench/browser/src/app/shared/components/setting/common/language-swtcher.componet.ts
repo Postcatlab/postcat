@@ -1,10 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 
 @Component({
   selector: 'eo-language-switcher',
   template: `
     <div class="font-bold text-lg mb-2">Language</div>
-    <nz-select nzPlaceHolder="Language" (ngModelChange)="(handleChange)" [nzCustomTemplate]="defaultTemplate">
+    <nz-select
+      nzPlaceHolder="Language"
+      [ngModel]="model['eoapi-language']"
+      (ngModelChange)="handleChange($event)"
+      [nzCustomTemplate]="defaultTemplate"
+    >
       <nz-option nzCustomContent nzValue="en" nzLabel="English">
         <iconpark-icon name="language"></iconpark-icon>
         English
@@ -28,13 +33,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   ],
 })
 export class LanguageSwticherComponent {
-  @Input() model: object;
+  @Input() model: object = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {}
 
   handleChange(data) {
-    this.model = data;
-    this.modelChange.emit(data);
+    console.log('data', data);
+    this.model['eoapi-language'] = data;
+    this.modelChange.emit(this.model);
   }
 }

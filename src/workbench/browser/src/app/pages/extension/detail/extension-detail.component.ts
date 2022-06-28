@@ -11,6 +11,7 @@ import { ExtensionService } from '../extension.service';
 })
 export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
+  introLoading = false;
   extensionDetail: EoExtensionInfo;
   resourceInfo = [
     {
@@ -61,11 +62,15 @@ export class ExtensionDetailComponent implements OnInit {
 
   async fetchReadme() {
     try {
+      this.introLoading = true;
       const htmlText = await (await fetch(`https://www.npmjs.com/package/${this.extensionDetail.name}`)).text();
       const domParser = new DOMParser();
       const html = domParser.parseFromString(htmlText, 'text/html');
       this.extensionDetail.introduction = html.querySelector('#readme').innerHTML;
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      this.introLoading = false;
+    }
   }
 
   private findLinkInSingleAssets(assets, item) {

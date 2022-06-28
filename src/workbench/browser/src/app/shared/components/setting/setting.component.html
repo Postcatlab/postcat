@@ -44,8 +44,8 @@
       </nz-tree-view>
     </div>
     <nz-divider nzType="vertical" class="divider"></nz-divider>
-    <eo-data-storage *ngIf="selected === 'eoapi-common'" [(model)]="settings['eoapi-common']"></eo-data-storage>
-    <eo-language-switcher *ngIf="selected === 'eoapi-language'" [(model)]="settings['eoapi-language']">
+    <eo-data-storage *ngIf="selected === 'eoapi-common'" [(model)]="settings"></eo-data-storage>
+    <eo-language-switcher *ngIf="selected === 'eoapi-language'" [(model)]="settings">
     </eo-language-switcher>
     <form *ngIf="currentConfiguration.length" nz-form [nzLayout]="'vertical'" [formGroup]="validateForm"
       (ngSubmit)="handleSave()" class="form">

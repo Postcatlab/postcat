@@ -9,9 +9,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control>
-          <nz-select formControlName="dataStorage" nzPlaceHolder="Data Storage">
-            <nz-option nzValue="remote-server" nzLabel="Remote Server"></nz-option>
-            <nz-option nzValue="localhost" nzLabel="Localhost"></nz-option>
+          <nz-select formControlName="eoapi-common.dataStorage" nzPlaceHolder="Data Storage">
+            <nz-option nzValue="http" nzLabel="Remote Server"></nz-option>
+            <nz-option nzValue="local" nzLabel="Localhost"></nz-option>
           </nz-select>
         </nz-form-control>
         <div class="text-[12px] mt-[8px] text-gray-400">
@@ -22,17 +22,17 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           </p>
         </div>
       </nz-form-item>
-      <ng-container *ngIf="validateForm.value.dataStorage === 'remote-server'">
+      <ng-container *ngIf="validateForm.value['eoapi-common.dataStorage'] === 'http'">
         <nz-form-item>
           <nz-form-label>Host</nz-form-label>
           <nz-form-control nzErrorTip="Please input your Host">
-            <input nz-input formControlName="remoteServer.url" placeholder="your host" />
+            <input nz-input formControlName="eoapi-common.remoteServer.url" placeholder="your host" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label>Security Token</nz-form-label>
           <nz-form-control nzErrorTip="Please input your Security Token">
-            <input nz-input formControlName="remoteServer.token" placeholder="your security token" />
+            <input nz-input formControlName="eoapi-common.remoteServer.token" placeholder="your security token" />
           </nz-form-control>
         </nz-form-item>
       </ng-container>
@@ -61,9 +61,15 @@ export class DataStorageComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      dataStorage: this.model.dataStorage ?? 'remote-server',
-      'remoteServer.url': [this.model['remoteServer.url'], [Validators.required]],
-      'remoteServer.token': [this.model['remoteServer.token'], [Validators.required]],
+      'eoapi-common.dataStorage': this.model['eoapi-common.dataStorage'] ?? 'local',
+      'eoapi-common.remoteServer.url': [
+        this.model['eoapi-common.remoteServer.url'] || 'http://localhost:3000',
+        [Validators.required],
+      ],
+      'eoapi-common.remoteServer.token': [
+        this.model['eoapi-common.remoteServer.token'] || '1ab2c3d4e5f61ab2c3d4e5f6',
+        [Validators.required],
+      ],
     });
   }
 
@@ -79,12 +85,12 @@ export class DataStorageComponent implements OnInit, OnChanges {
    * 测试远程服务器地址是否可用
    */
   async pingRmoteServerUrl() {
-    const dataStorage = this.validateForm.value.dataStorage;
-    const remoteUrl = this.validateForm.value['remoteServer.url'];
-    const token = this.validateForm.value['remoteServer.token'];
+    const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
+    const remoteUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
+    const token = this.validateForm.value['eoapi-common.remoteServer.token'];
 
-    if (dataStorage !== 'remote-server') {
-      return Promise.reject(false);
+    if (dataStorage !== 'http') {
+      return Promise.resolve(false);
     }
 
     try {
@@ -100,11 +106,11 @@ export class DataStorageComponent implements OnInit, OnChanges {
         throw result;
       }
       // await result.json();
-      this.message.create('success', '远程服务器地址设置成功！');
+      // this.message.create('success', 'Remote server address set successfully!');
       return Promise.resolve(true);
     } catch (error) {
       console.error(error);
-      this.message.create('error', '远程服务器连接失败！');
+      this.message.create('error', 'Remote server connection failed!');
       return Promise.reject(false);
     }
   }
@@ -115,10 +121,13 @@ export class DataStorageComponent implements OnInit, OnChanges {
       this.loading = true;
       const result = await this.pingRmoteServerUrl().finally(() => (this.loading = false));
       if (Object.is(result, true)) {
-        this.message.success('远程数据源连接成功');
+        this.message.success('The remote data source connection is successful!');
       }
-      this.model = this.validateForm.value;
-      this.modelChange.emit(this.validateForm.value);
+      this.model = {
+        ...this.model,
+        ...this.validateForm.value,
+      };
+      this.modelChange.emit(this.model);
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {

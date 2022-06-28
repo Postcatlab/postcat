@@ -1,9 +1,6 @@
 import Dexie, { Table } from 'dexie';
 import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import {
-  DataSourceType,
-  DATA_SOURCE_TYPE_KEY,
-} from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { Observable } from 'rxjs';
 import {
@@ -26,8 +23,16 @@ export type ResultType<T = any> = {
 
 let isFirstLoad = true;
 
+const getSettings = () => {
+  try {
+    return JSON.parse(localStorage.getItem('localSettings') || '{}');
+  } catch (error) {
+    return {};
+  }
+};
+
 const getApiUrl = (apiData: ApiData) => {
-  const dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
+  const dataSourceType: DataSourceType = getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
 
   /** Is it a remote data source */
   const isRemote = dataSourceType === 'http';

@@ -20,6 +20,9 @@ const descriptions: DescriptionsItem[] = [
   //   label: '发布日期',
   //   value: '',
   // },
+];
+
+const electronDetails: DescriptionsItem[] = [
   {
     id: 'homeDir',
     label: 'Install Location',
@@ -51,7 +54,6 @@ const descriptions: DescriptionsItem[] = [
     value: '',
   },
 ];
-
 @Component({
   selector: 'eo-about',
   template: `
@@ -65,7 +67,7 @@ const descriptions: DescriptionsItem[] = [
   styles: [
     `
       .about ::ng-deep .ant-descriptions-item-label {
-        width: 110px;
+        width: 112px;
         position: relative;
         padding-right: 16px;
         justify-content: flex-end;
@@ -83,6 +85,7 @@ export class AboutComponent implements OnInit {
   constructor(private electron: ElectronService) {}
 
   ngOnInit(): void {
+    this.appendDetailWithElectron();
     // fetch('https://api.github.com/repos/eolinker/eoapi/releases')
     //   .then((response) => response.json())
     //   .then((data) => {
@@ -111,6 +114,15 @@ export class AboutComponent implements OnInit {
         item.value = systemInfo[item.id];
       }
     });
+  }
+
+  appendDetailWithElectron() {
+    if (!this.electron.isElectron) {
+      return;
+    }
+
+    // this.list = [...this.list, ...electronDetails];
+    this.list.push(...electronDetails);
   }
 
   getSystemInfo() {

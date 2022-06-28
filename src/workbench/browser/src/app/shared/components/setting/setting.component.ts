@@ -37,6 +37,9 @@ export class SettingComponent implements OnInit {
       this.init();
       this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
       this.remoteServerToken = this.settings['eoapi-common.remoteServer.token'];
+      this.oldDataStorage = this.settings['eoapi-common.dataStorage'];
+    } else {
+      // this.handleSave();
     }
   }
   get isShowModal() {
@@ -80,12 +83,7 @@ export class SettingComponent implements OnInit {
   $isShowModal = false;
   /** current active configure */
   /** all configure */
-  settings = {
-    'eoapi-common': {},
-    'eoapi-theme': {},
-    'eoapi-features': {},
-    'eoapi-about': {},
-  };
+  settings = {};
   treeNodes = [
     {
       name: 'Data Storage',
@@ -105,14 +103,13 @@ export class SettingComponent implements OnInit {
     },
   ];
   /** local configure */
-  localSettings = { settings: {}, nestedSettings: {} };
-  /** nested settings */
-  nestedSettings = {};
+  localSettings = {};
   validateForm!: FormGroup;
   /** remote server url */
   remoteServerUrl = '';
   /** remote server token */
   remoteServerToken = '';
+  oldDataStorage = '';
 
   get selected() {
     return this.selectListSelection.selected.at(0)?.moduleID;
@@ -170,7 +167,7 @@ export class SettingComponent implements OnInit {
     //  平级配置对象
     Object.keys(properties).forEach((fieldKey) => {
       const props = properties[fieldKey];
-      this.settings[fieldKey] = this.localSettings?.settings?.[fieldKey] ?? props.default;
+      this.settings[fieldKey] = this.localSettings?.[fieldKey] ?? props.default;
       // 可扩展加入更多默认校验
       if (props.required) {
         controls[fieldKey] = [null, [Validators.required]];
@@ -205,7 +202,7 @@ export class SettingComponent implements OnInit {
    * @returns
    */
   getConfiguration(key: string) {
-    return key.split('.').reduce((p, k) => p[k], this.nestedSettings);
+    // return key.split('.').reduce((p, k) => p?.[k], this.nestedSettings);
   }
   /**
    * 获取模块的标题
@@ -233,9 +230,11 @@ export class SettingComponent implements OnInit {
     //   return;
     // }
     // ! this.isVisible = true;
-    this.nestedSettings = {};
     // 获取本地设置
-    this.localSettings = window.eo?.getSettings?.() || JSON.stringify(localStorage.getItem('localSettings') || '{}');
+    this.settings = this.localSettings = JSON.parse(localStorage.getItem('localSettings') || '{}');
+    // @ts-ignore
+    window.getConfiguration = this.remoteService.getConfiguration;
+    console.log('localSettings', this.localSettings);
     // const featureList = window.eo.getFeature('configuration');
     const modules = window.eo?.getModules() || new Map([]);
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
@@ -309,7 +308,6 @@ export class SettingComponent implements OnInit {
     this.validateForm.valueChanges.subscribe(debounce(this.handleSave.bind(this), 300));
     // 默认选中第一项
     this.selectModule(this.treeControl.dataNodes.at(0));
-    this.handleSave();
   }
 
   handleShowModal() {
@@ -326,31 +324,34 @@ export class SettingComponent implements OnInit {
     // if (this.validateForm.status === 'INVALID') {
     //   return;
     // }
-    const data = { settings: this.settings, nestedSettings: this.nestedSettings };
-    // 加入根据返回显示提示消息
-    const saved = window.eo?.saveSettings
-      ? window.eo.saveSettings(data)
-      : localStorage.setItem('localSettings', JSON.stringify(data));
-    if (saved) {
-      // this.handleCancel();
-    }
-    console.log('localSettings', data);
+    localStorage.setItem('localSettings', JSON.stringify(this.settings));
+    window.eo?.saveSettings?.({ ...this.settings });
   }
 
   async handleCancel() {
     try {
       const isUpdateRemoteInfo =
         this.remoteServerUrl !== this.settings['eoapi-common.remoteServer.url'] ||
-        this.remoteServerToken !== this.settings['eoapi-common.remoteServer.token'];
-      if (isUpdateRemoteInfo && this.isRemote) {
-        this.message.success('你已修改远程服务相关信息，页面即将刷新');
+        this.remoteServerToken !== this.settings['eoapi-common.remoteServer.token'] ||
+        this.oldDataStorage !== this.settings['eoapi-common.dataStorage'];
+      console.log(
+        'isUpdateRemoteInfo',
+        isUpdateRemoteInfo,
+        this.settings,
+        this.remoteServerUrl,
+        this.remoteServerToken
+      );
+      if (isUpdateRemoteInfo) {
+        this.message.success('你已修改数据源相关信息，页面将在2秒后刷新...');
         setTimeout(() => {
-          this.remoteService.switchToHttp();
+          this.remoteService.switchDataSource();
           this.remoteService.refreshComponent();
         }, 2000);
       }
     } catch (error) {
     } finally {
+      this.handleSave();
+
       this.isShowModal = false;
       this.isShowModalChange.emit(false);
     }
