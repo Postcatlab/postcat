@@ -1,6 +1,5 @@
 <div class="px-3">
-  <ng-template #prefixTemplateSearch><i nz-icon nzType="search"></i></ng-template>
-  <div class="bbd"></div>
+
   <div class="grid grid-cols-2 gap-6 py-5 list-block">
     <div
       class="bd_all w-full min-h-[140px] p-5 rounded-lg flex flex-col flex-wrap items-center plugin-block hover:border-green-700 hover:shadow-lg transition-shadow duration-300"
@@ -18,8 +17,8 @@
         <!-- <nz-tag *ngIf="extensionService.localModules.has(it.moduleID)" [nzColor]="'var(--MAIN_THEME_COLOR)'">已安装
         </nz-tag> -->
         <div>
-          <span *ngIf="extensionService.localModules.has(it.moduleID)"
-            class="p-1 text-xs text-green-700 border-green-700 rounded-sm bd_all">installed</span>
+          <span *ngIf="isElectron ? extensionService.localModules.has(it.moduleID) : it.installed"
+            class=" p-1 text-xs text-green-700 border-green-700 rounded-sm bd_all">installed</span>
         </div>
         <!-- <i
           nz-icon

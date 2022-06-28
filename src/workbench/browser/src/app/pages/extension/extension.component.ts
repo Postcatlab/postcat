@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { GroupTreeItem } from 'eo/workbench/browser/src/app/shared/models';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { filter, Subject } from 'rxjs';
 import { ExtensionGroupType } from './extension.model';
@@ -33,13 +34,13 @@ export class ExtensionComponent implements OnInit {
     },
   ];
   selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
-  seachChanged$: Subject<string> = new Subject<string>();
 
   constructor(
     public extensionService: ExtensionService,
     private router: Router,
     public electron: ElectronService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {}
   clickGroup(id) {
     this.selectGroup = id;
@@ -55,7 +56,7 @@ export class ExtensionComponent implements OnInit {
   }
 
   onSeachChange(keyword) {
-    this.seachChanged$.next(keyword);
+    this.messageService.send({ type: 'searchPluginByKeyword', data: keyword });
   }
 
   private watchRouterChange() {

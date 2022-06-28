@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, lastValueFrom, Subject } from 'rxjs';
+import { isElectron } from 'eo/shared/common/common';
+import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
 class ExtensionList {
@@ -10,7 +12,7 @@ class ExtensionList {
   }
   search(keyword: string) {
     return this.list.filter(
-      (it) => it.moduleID.includes(keyword) || it.name.includes(keyword) || it.keywords.includes(keyword)
+      (it) => it.moduleID.includes(keyword) || it.name.includes(keyword) || it.keywords?.includes(keyword)
     );
   }
 }
@@ -23,8 +25,16 @@ export class ExtensionListComponent implements OnInit {
   type: ExtensionGroupType = ExtensionGroupType.all;
   keyword = '';
   renderList = [];
+  isElectron = isElectron();
   seachChanged$: Subject<string> = new Subject<string>();
-  constructor(public extensionService: ExtensionService, private route: ActivatedRoute, private router: Router) {
+  private destroy$: Subject<void> = new Subject<void>();
+
+  constructor(
+    public extensionService: ExtensionService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private messageService: MessageService
+  ) {
     this.type = this.route.snapshot.queryParams.type;
     this.seachChanged$.pipe(debounceTime(500), distinctUntilChanged()).subscribe(async (keyword) => {
       this.renderList = await this.searchPlugin(keyword);
@@ -32,6 +42,7 @@ export class ExtensionListComponent implements OnInit {
   }
   async ngOnInit() {
     this.watchSearchConditionChange();
+    this.watchSearchKeywordChange();
   }
   async searchPlugin(keyword = '') {
     if (this.type === 'installed') {
@@ -68,5 +79,19 @@ export class ExtensionListComponent implements OnInit {
       this.type = this.route.snapshot.queryParams.type;
       this.renderList = await this.searchPlugin();
     });
+  }
+
+  private watchSearchKeywordChange() {
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'searchPluginByKeyword': {
+            this.onSeachChange(inArg.data);
+            break;
+          }
+        }
+      });
   }
 }

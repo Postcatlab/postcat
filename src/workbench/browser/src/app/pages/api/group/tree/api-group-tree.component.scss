@@ -1,4 +1,5 @@
 .input {
+  width: 0px;
   height: 30px;
   border: none;
   background-color: rgba(0,0,0,0.05);
@@ -9,7 +10,7 @@
   }
 }
 .btn {
-  width: 40px;
+  width: 32px;
   background-color: var(--BTN_PRIMARY_BG);
   color: #fff;
   border-radius: 3px;

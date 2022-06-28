@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -9,7 +8,6 @@ import { eoapiSettings } from './eoapi-settings/';
 import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import MarkdownIt from 'markdown-it/dist/markdown-it';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 interface TreeNode {
@@ -34,6 +32,7 @@ interface FlatNode {
   styleUrls: ['./setting.component.scss'],
 })
 export class SettingComponent implements OnInit {
+  @Output() isShowModalChange = new EventEmitter<any>();
   objectKeys = Object.keys;
   /** 是否远程数据源 */
   get isRemote() {
@@ -51,7 +50,6 @@ export class SettingComponent implements OnInit {
     disabled: !!node.disabled,
   });
   selectListSelection = new SelectionModel<FlatNode>();
-  md = new MarkdownIt();
   treeControl: any = new FlatTreeControl<FlatNode>(
     (node) => node.level,
     (node) => node.expandable
@@ -65,10 +63,10 @@ export class SettingComponent implements OnInit {
   );
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
+  switchDataSourceLoading = false;
   /** current configuration */
   currentConfiguration = [];
-  isVisible = false;
+  // ! isVisible = false;
   $isShowModal = false;
   /** all configure */
   settings = {};
@@ -86,7 +84,7 @@ export class SettingComponent implements OnInit {
     return this.$isShowModal;
   }
 
-  set isShowModal(val) {
+  @Input() set isShowModal(val) {
     this.$isShowModal = val;
     if (val) {
       this.init();
@@ -101,9 +99,7 @@ export class SettingComponent implements OnInit {
     private messageService: MessageService,
     private message: NzMessageService,
     private remoteService: RemoteService
-  ) {
-    this.customLinkRender();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.init();
@@ -129,33 +125,14 @@ export class SettingComponent implements OnInit {
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
-  customLinkRender() {
-    const defaultRender =
-      this.md.renderer.rules.link_open ||
-      function (tokens, idx, options, env, self) {
-        return self.renderToken(tokens, idx, options);
-      };
-
-    this.md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-      // If you are sure other plugins can't add `target` - drop check below
-      const aIndex = tokens[idx].attrIndex('target');
-
-      if (aIndex < 0) {
-        tokens[idx].attrPush(['target', '_blank']); // add new attribute
-      } else {
-        tokens[idx].attrs[aIndex][1] = '_blank'; // replace value of existing attr
-      }
-
-      // pass token to default renderer.
-      return defaultRender(tokens, idx, options, env, self);
-    };
-  }
-
   /**
    * 切换数据源
    */
   switchDataSource() {
-    this.remoteService.switchDataSource();
+    this.switchDataSourceLoading = true;
+    this.remoteService.switchDataSource().finally(() => {
+      this.switchDataSourceLoading = false;
+    });
     // this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
   }
 
@@ -269,16 +246,16 @@ export class SettingComponent implements OnInit {
    * 解析所有模块的配置信息
    */
   private init() {
-    if (!window.eo && !window.eo?.getFeature) {
-      return;
-    }
-    this.isVisible = true;
+    // if (!window.eo && !window.eo?.getFeature) {
+    //   return;
+    // }
+    // ! this.isVisible = true;
     this.settings = {};
     this.nestedSettings = {};
     // 获取本地设置
-    this.localSettings = window.eo.getSettings();
+    this.localSettings = window.eo?.getSettings?.() || JSON.stringify(localStorage.getItem('localSettings') || '{}');
     // const featureList = window.eo.getFeature('configuration');
-    const modules = window.eo?.getModules();
+    const modules = window.eo?.getModules() || new Map([]);
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
     const extensitonConfigurations = [...modules.values()].filter((n) => n.features?.configuration);
     const controls = {};
@@ -390,8 +367,11 @@ export class SettingComponent implements OnInit {
     // if (this.validateForm.status === 'INVALID') {
     //   return;
     // }
+    const data = { settings: this.settings, nestedSettings: this.nestedSettings };
     // 加入根据返回显示提示消息
-    const saved = window.eo.saveSettings({ settings: this.settings, nestedSettings: this.nestedSettings });
+    const saved = window.eo?.saveSettings
+      ? window.eo.saveSettings(data)
+      : localStorage.setItem('localSettings', JSON.stringify(data));
     if (saved) {
       // this.handleCancel();
     }
@@ -408,6 +388,7 @@ export class SettingComponent implements OnInit {
     } catch (error) {
     } finally {
       this.isShowModal = false;
+      this.isShowModalChange.emit(false);
     }
   }
 }

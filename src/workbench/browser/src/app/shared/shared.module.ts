@@ -1,18 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  PageNotFoundComponent,
-  SelectThemeComponent,
-  ToolbarComponent,
-  SidebarComponent,
-  NavbarComponent,
-  AboutComponent,
-} from './components';
+import { PageNotFoundComponent, ToolbarComponent, SidebarComponent } from './components';
 import { WebviewDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -29,15 +21,8 @@ import { ModalService } from './services/modal.service';
 import { PageBlankComponent } from './components/page-blank/page-blank.component';
 import { PageFeaturePreviewComponent } from './components/page-feature-preview/page-feature-preview.component';
 import { RouterModule } from '@angular/router';
-
-const COMPONENTS = [
-  ToolbarComponent,
-  SelectThemeComponent,
-  SidebarComponent,
-  NavbarComponent,
-  PageNotFoundComponent,
-  AboutComponent,
-];
+import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
+const COMPONENTS = [ToolbarComponent, ShadowDomEncapsulationComponent, SidebarComponent, PageNotFoundComponent];
 @NgModule({
   imports: [
     CommonModule,

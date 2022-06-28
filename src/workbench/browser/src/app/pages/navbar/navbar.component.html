@@ -1,50 +1,21 @@
 <div class="eo_navbar f_row f_js_ac">
   <div>
     <img class="logo" src="assets/images/logo.svg" />
-    <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
+    <a href="https://github.com/eolinker/eoapi" target="_blank">
+      <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
+    </a>
   </div>
   <div class="flex items-center">
-    <span
-      nzPlacement="bottomRight"
-      class="icon mx-1 flex items-center justify-center"
-      nz-dropdown
-      [nzDropdownMenu]="contentTemplate"
-    >
+    <span class="icon mx-1 flex items-center justify-center" title="打开设置项" (click)="handleShowModal()">
       <iconpark-icon name="setting-two"></iconpark-icon>
     </span>
-    <nz-dropdown-menu #contentTemplate="nzDropdownMenu">
-      <ul nz-menu [nzSelectable]="false">
-        <li nz-menu-item (click)="handleShowModal()">设置</li>
-        <li nz-menu-item (click)="switchDataSource()">{{ isRemote ? '切换到本地' : '切换到远程' }}</li>
-      </ul>
-    </nz-dropdown-menu>
-    <span
+    <!-- <span
       class="icon mx-1 flex items-center justify-center"
       title="{{ dataSourceText }}数据源"
-      nz-dropdown
-      [nzDropdownMenu]="settingMenu"
-      nzPlacement="bottomRight"
-      [nzDisabled]="isRemote"
-      (click)="isRemote && switchDataSource()"
+      (click)="switchDataSource()"
     >
       <iconpark-icon [name]="isRemote ? 'link-cloud-sucess' : 'link-cloud-faild'"></iconpark-icon>
-    </span>
-    <nz-dropdown-menu #settingMenu="nzDropdownMenu">
-      <div nz-menu class="switch-data-source-box">
-        <div>
-          <i nz-icon [nzType]="isRemote ? 'cloud' : 'cloud-sync'" nzTheme="outline" class="fs20"></i>
-        </div>
-        <div>
-          <h4 class="title">{{ dataSourceText }}数据源</h4>
-          <div class="desc">
-            数据储存在{{ dataSourceText }}，{{
-              isRemote ? '如不需协作，可以切换到本地数据源' : '如需协作请切换到远程数据源'
-            }}
-          </div>
-          <button nz-button nzType="default" nzSize="small" (click)="switchDataSource()">切换</button>
-        </div>
-      </div>
-    </nz-dropdown-menu>
+    </span> -->
     <span class="icon mx-1 flex items-center justify-center" nz-dropdown [nzDropdownMenu]="menu">
       <iconpark-icon name="help"></iconpark-icon>
     </span>
@@ -94,5 +65,4 @@
     </div>
   </div>
 </div>
-
-<!-- <eo-setting [(isVisible)]="isSettingVisible"></eo-setting> -->
+<eo-setting [(isShowModal)]="isSettingVisible"></eo-setting>
