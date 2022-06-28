@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import {
-  DataSourceType,
-  DATA_SOURCE_TYPE_KEY,
-  StorageService,
-} from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -25,7 +21,7 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 export class RemoteService {
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
-  dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
+  dataSourceType: DataSourceType = this.getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
   get isElectron() {
     return this.electronService.isElectron;
   }
@@ -120,6 +116,44 @@ export class RemoteService {
   switchToHttp() {
     this.storageService.toggleDataSource({ dataSourceType: 'http' });
   }
+
+  getSettings() {
+    try {
+      return JSON.parse(localStorage.getItem('localSettings') || '{}');
+    } catch (error) {
+      return {};
+    }
+  }
+
+  /**
+   * 根据key路径获取对应的配置的值
+   *
+   * @param key
+   * @returns
+   */
+  getConfiguration = (keyPath: string) => {
+    const localSettings = this.getSettings();
+
+    if (Reflect.has(localSettings, keyPath)) {
+      return Reflect.get(localSettings, keyPath);
+    }
+
+    const keys = Object.keys(localSettings);
+    const filterKeys = keys.filter((n) => n.startsWith(keyPath));
+    if (filterKeys.length) {
+      return filterKeys.reduce((pb, ck) => {
+        const keyArr = ck.replace(`${keyPath}.`, '').split('.');
+        const targetKey = keyArr.pop();
+        const target = keyArr.reduce((p, v) => {
+          p[v] ??= {};
+          return p[v];
+        }, pb);
+        target[targetKey] = localSettings[ck];
+        return pb;
+      }, {});
+    }
+    return undefined;
+  };
 
   /**
    * switch data

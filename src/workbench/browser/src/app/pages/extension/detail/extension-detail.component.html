@@ -29,7 +29,10 @@
         <h2 class="text-lg font-bold">Intro</h2>
         <!-- <nz-divider></nz-divider> -->
         <div class="h-full overflow-auto markdown-desc">
-          <eo-shadow-dom [text]="extensionDetail?.introduction" [options]="{ html: true }"> </eo-shadow-dom>
+          <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
+            <eo-shadow-dom [text]="extensionDetail?.introduction" [options]="{ html: true }">
+            </eo-shadow-dom>
+          </nz-skeleton>
         </div>
       </div>
       <div class="w-[1px] bg-[#f2f2f2] mx-[10px]"></div>

@@ -5,7 +5,6 @@ import { HttpStorage } from './http/lib';
 import { MessageService } from '../../../shared/services/message';
 
 export type DataSourceType = 'local' | 'http';
-export const DATA_SOURCE_TYPE_KEY = 'DATA_SOURCE_TYPE_KEY';
 /** is show local data source tips */
 export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 
@@ -16,7 +15,7 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
 @Injectable({ providedIn: 'root' })
 export class StorageService {
   private instance;
-  private dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
+  private dataSourceType: DataSourceType = this.getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
   constructor(
     private injector: Injector,
     private messageService: MessageService,
@@ -64,7 +63,7 @@ export class StorageService {
       }
     }
 
-    localStorage.setItem(DATA_SOURCE_TYPE_KEY, type);
+    this.setDataStorage(type);
     this.messageService.send({
       type: 'onDataSourceChange',
       data: { ...options, dataSourceType: this.dataSourceType },
@@ -75,4 +74,16 @@ export class StorageService {
     this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
     this.setStorage(this.dataSourceType, options);
   };
+  getSettings() {
+    try {
+      return JSON.parse(localStorage.getItem('localSettings') || '{}');
+    } catch (error) {
+      return {};
+    }
+  }
+  setDataStorage(value) {
+    const settings = this.getSettings();
+    settings['eoapi-common.dataStorage'] = value;
+    localStorage.setItem('localSettings', JSON.stringify(settings));
+  }
 }
