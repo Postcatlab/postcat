@@ -1,11 +1,13 @@
 <nz-layout class="layout">
   <nz-sider nzTheme="light" nzWidth="250">
     <!-- <div class="side-container"> -->
-    <nz-content class="api-tabs">
-      <nz-tabset nzCentered [nzAnimated]="false">
+    <nz-content>
+      <nz-tabset nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
-            <iconpark-icon name="folder-open"></iconpark-icon>
+            <span nzTooltipTitle="Collections" nz-tooltip>
+              <iconpark-icon name="folder-open"></iconpark-icon>
+            </span>
           </ng-template>
           <div class="inner-content">
             <eo-api-group-tree></eo-api-group-tree>
@@ -13,13 +15,17 @@
         </nz-tab>
         <nz-tab [nzTitle]="historyTitle">
           <ng-template #historyTitle>
-            <iconpark-icon name="history"></iconpark-icon>
+            <span nzTooltipTitle="History" nz-tooltip>
+              <iconpark-icon name="history"></iconpark-icon>
+            </span>
           </ng-template>
           <eo-history></eo-history>
         </nz-tab>
         <nz-tab [nzTitle]="envTitle">
           <ng-template #envTitle>
-            <iconpark-icon name="instruction"></iconpark-icon>
+            <span nzTooltipTitle="Environment" nz-tooltip>
+              <iconpark-icon name="instruction"></iconpark-icon>
+            </span>
           </ng-template>
           <eo-env></eo-env>
         </nz-tab>
@@ -32,16 +38,34 @@
       <div class="inner-content">
         <div class="tabs-bar f_row">
           <eo-api-tab class="fg1"></eo-api-tab>
-          <nz-select [(ngModel)]="envUuid" [(nzOpen)]="isOpen" (nzOpenChange)="handleEnvSelectStatus($event)"
-            nzAllowClear nzPlaceHolder="Environment">
-            <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
-          </nz-select>
+          <div class="flex items-center">
+            <nz-select
+              [(ngModel)]="envUuid"
+              [(nzOpen)]="isOpen"
+              (nzOpenChange)="handleEnvSelectStatus($event)"
+              [nzDropdownRender]="renderTemplate"
+              nzAllowClear
+              nzPlaceHolder="Environment"
+            >
+              <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
+            </nz-select>
+            <ng-template #renderTemplate>
+              <nz-divider></nz-divider>
+              <a class="manager-env" nz-button nzType="link" (click)="gotoEnvManager()">管理环境</a>
+            </ng-template>
+          </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <nz-tabset class="inside_page_tab" [nzAnimated]="false" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
-              <a *nzTabLink nz-tab-link (click)="clickContentMenu(tab)" [routerLink]="[tab.routerLink]"
-                queryParamsHandling="merge">{{ tab.title }}</a>
+              <a
+                *nzTabLink
+                nz-tab-link
+                (click)="clickContentMenu(tab)"
+                [routerLink]="[tab.routerLink]"
+                queryParamsHandling="merge"
+                >{{ tab.title }}</a
+              >
             </nz-tab>
           </nz-tabset>
           <router-outlet></router-outlet>
