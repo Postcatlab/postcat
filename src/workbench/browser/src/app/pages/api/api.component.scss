@@ -36,9 +36,6 @@ nz-sider {
     margin-bottom: -1px;
     align-items: center;
     justify-content: space-between;
-    .env {
-      height: 36px;
-    }
   }
   .content_container {
     border-top: 1px solid var(--BORDER);
@@ -75,6 +72,10 @@ nz-sider {
     width: 100%;
     border: 1px solid red;
   }
+}
+
+.fix-mt {
+  margin-top: -6px;
 }
 
 nz-divider {
