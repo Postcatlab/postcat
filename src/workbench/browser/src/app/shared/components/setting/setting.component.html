@@ -18,7 +18,7 @@
   </ng-template>
 </ng-container> -->
 
-<nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" [nzClosable]="false"
+<nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" [nzBodyStyle]="{paddingLeft: '6px'}"
   (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="container">
     <div class="tree-view">

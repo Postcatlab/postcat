@@ -14,7 +14,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
         <iconpark-icon name="language"></iconpark-icon>
         English
       </nz-option>
-      <nz-option nzCustomContent nzValue="zh-cn" nzLabel="简体中文">
+      <nz-option nzCustomContent nzValue="zh-CN" nzLabel="简体中文">
         <iconpark-icon name="language"></iconpark-icon>
         简体中文
       </nz-option>
