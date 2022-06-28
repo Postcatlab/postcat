@@ -1,6 +1,0 @@
-{
-  "redirects": [
-    { "source": "/:path*", "destination": "/zh-Hans/:path" },
-    { "source": "/zh-Hans/:path*", "destination":"/zh-Hans/:path*" }
-  ]
-}
