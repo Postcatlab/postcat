@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ElectronService } from '../../../core/services';
+import { ElectronService } from '../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
-import { MessageService } from '../../../shared/services/message';
+import { MessageService } from '../../shared/services/message';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 

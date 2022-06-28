@@ -65,7 +65,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/api/test',
       },
       {
-        moduleName: '插件广场',
+        moduleName: 'Extensions',
         moduleID: '@eo-core-extension',
         isOffical: true,
         icon: 'puzzle',
