@@ -9,6 +9,7 @@ import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { Router } from '@angular/router';
 
 interface TreeNode {
   name: string;
@@ -120,7 +121,8 @@ export class SettingComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private message: NzMessageService,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -308,6 +310,13 @@ export class SettingComponent implements OnInit {
     this.validateForm.valueChanges.subscribe(debounce(this.handleSave.bind(this), 300));
     // 默认选中第一项
     this.selectModule(this.treeControl.dataNodes.at(0));
+  }
+
+  navToExtensionList() {
+    this.router.navigate(['home/extension/list'], {
+      queryParams: { type: 'all' },
+    });
+    this.handleCancel();
   }
 
   handleShowModal() {

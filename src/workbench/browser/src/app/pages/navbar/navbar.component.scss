@@ -19,6 +19,9 @@
     background-color: rgba(0,0,0,0.05);
   }
 }
+ .iconfont{
+  -webkit-app-region: no-drag;
+}
 .eo_navbar {
   -webkit-app-region: drag;
   position: sticky;
