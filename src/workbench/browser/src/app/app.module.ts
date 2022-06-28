@@ -45,7 +45,7 @@ import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services
     HttpStorage,
     NzMessageService,
     NzModalService,
-    { provide: LOCALE_ID, useValue: 'en' },
+    { provide: LOCALE_ID, useValue: 'zh-ch' },
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),

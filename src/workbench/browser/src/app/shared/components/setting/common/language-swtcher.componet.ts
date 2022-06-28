@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'eo-language-switcher',
@@ -10,13 +12,9 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
       (ngModelChange)="handleChange($event)"
       [nzCustomTemplate]="defaultTemplate"
     >
-      <nz-option nzCustomContent nzValue="en" nzLabel="English">
+      <nz-option *ngFor="let item of languages" nzCustomContent [nzValue]="item.value" [nzLabel]="item.name">
         <iconpark-icon name="language"></iconpark-icon>
-        English
-      </nz-option>
-      <nz-option nzCustomContent nzValue="zh-CN" nzLabel="简体中文">
-        <iconpark-icon name="language"></iconpark-icon>
-        简体中文
+        {{ item.name }}
       </nz-option>
     </nz-select>
     <ng-template #defaultTemplate let-selected>
@@ -35,16 +33,38 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 export class LanguageSwticherComponent implements OnInit {
   @Input() model: object = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-
-  constructor() {}
+  languages = [
+    {
+      name: 'English',
+      value: 'en-US',
+    },
+    {
+      name: '简体中文',
+      value: 'zh-Hans',
+    },
+  ];
+  constructor(private modal: NzModalService, private electron: ElectronService) {}
 
   ngOnInit(): void {
-    this.model['eoapi-language'] ??= navigator.language === 'zh-CN' ? 'zh-CN' : 'en';
+    this.model['eoapi-language'] ??= navigator.language.includes('zh') ? 'zh-Hans' : 'en-US';
   }
 
-  handleChange(data) {
-    console.log('data', data);
-    this.model['eoapi-language'] = data;
-    this.modelChange.emit(this.model);
+  handleChange(inputLocaleID) {
+    let changeCallback = (localeID) => {
+      this.model['eoapi-language'] = localeID;
+      this.modelChange.emit(this.model);
+      window.location.href = `/${localeID}`;
+    };
+    // if (this.electron.isElectron) {
+    //   this.modal.warning({
+    //     nzTitle: ``,
+    //     nzContent:`Eoapi will need to restart after you switch the app language to ${this.languages.find(val=>val.value===inputLocaleID).name}`,
+    //     nzOnOk: () => {
+    //       changeCallback(inputLocaleID);
+    //     },
+    //   });
+    // } else {
+      changeCallback(inputLocaleID);
+    // }
   }
 }
