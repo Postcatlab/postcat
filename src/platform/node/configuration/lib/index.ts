@@ -42,7 +42,7 @@ export class Configuration implements ConfigurationInterface {
    * 保存全局配置
    */
   saveSettings({ settings = {} }): boolean {
-    console.log('settings', settings);
+    // console.log('settings', settings);
     let data = this.loadConfig();
     data.settings = settings;
     return this.saveConfig(data);
