@@ -1,14 +1,16 @@
 <section class="main">
-  <section class="flex-shrink-0 p-2 left">
+  <section class="flex-shrink-0 p-0 left">
     <!-- <input type="text" nz-input [(ngModel)]="keyword" (ngModelChange)="onSeachChange($event)" placeholder="search" /> -->
-    <input type="text" class="flex-1 w-full px-3 input" placeholder="search" [(ngModel)]="keyword"
-      (ngModelChange)="onSeachChange($event)" />
+    <div class="p-[10px]">
+      <input type="text" class="flex-1 w-full px-3 input " placeholder="search" [(ngModel)]="keyword"
+        (ngModelChange)="onSeachChange($event)" />
+    </div>
     <!-- Fixed Group -->
-    <div class="group_container fixed_group_tree pt10">
+    <div class="group_container fixed_group_tree ">
       <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
         [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
       <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-        <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
+        <div class="pl-[18px] tree_node" *ngIf="node.origin?.isFixed">
           <div class="f_row_ac">
             <i class="mr10" nz-icon nzType="home" nzTheme="outline"></i>
             <span class="text_omit node_title">{{ node.title }}</span>
@@ -16,11 +18,11 @@
         </div>
       </ng-template>
     </div>
-    <nz-divider class="!mt-[1px] !mb-[4px]"></nz-divider>
+    <nz-divider class="!mt-[5px] !mb-[7px]"></nz-divider>
     <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzHideUnMatched]="true"
       (nzClick)="clickTreeItem($event)" nzBlockNode [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
     <ng-template #nzTreeTemplate let-node let-origin="origin">
-      <div class="pl5">
+      <div class="pl-[18px]">
         <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
           <div class="overflow-hidden f_row_ac text-ellipsis">
             <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">

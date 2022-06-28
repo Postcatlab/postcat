@@ -51,7 +51,7 @@ import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services
       useFactory: (i) => i.get('$rootScope'),
       deps: ['$injector'],
     },
-    { provide: HTTP_INTERCEPTORS, useClass:BaseUrlInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent],

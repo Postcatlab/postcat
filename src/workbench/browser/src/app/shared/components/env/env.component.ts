@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
 import { StorageService } from '../../services/storage';
@@ -30,7 +31,12 @@ export class EnvComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private storage: StorageService, private message: EoMessageService, private store: Store) {}
+  constructor(
+    private storage: StorageService,
+    private messageService: MessageService,
+    private message: EoMessageService,
+    private store: Store
+  ) {}
 
   get envUuid(): number {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -60,14 +66,9 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.envList = result.data || [];
-          if (!this.envList.length) {
-            await this.handleAddEnv(projectID);
-            resolve(true);
-            return;
-          }
-          await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
-          resolve(true);
+          return resolve(result.data || []);
         }
+        return resolve([]);
       });
     });
   }
@@ -89,12 +90,12 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
   handleSwitchEnv(uuid) {
+    this.handleShowModal();
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.envInfo = result.data ?? {};
-          console.log('result.data', result.data, uuid);
           this.activeUuid = result.data?.uuid ?? null;
           resolve(true);
         }
@@ -103,15 +104,16 @@ export class EnvComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleAddEnv(pid) {
+  handleAddEnv(pid = 1) {
     // * init form of env, create new env-id
     this.envInfo = {
-      projectID: pid || 1,
+      projectID: pid,
       name: '',
       hostUri: '',
       parameters: [],
     };
     this.activeUuid = null;
+    this.handleShowModal();
   }
 
   handleSaveEnv(uuid: string | number | undefined = undefined) {
@@ -121,8 +123,8 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.message.error('名称不允许为空');
       return;
     }
-    const data = parameters.filter((it) => it.name && it.value);
-    if (uuid) {
+    const data = parameters?.filter((it) => it.name && it.value);
+    if (uuid != null) {
       this.storage.run(
         'environmentUpdate',
         [{ ...other, name, parameters: data }, uuid],
@@ -133,18 +135,19 @@ export class EnvComponent implements OnInit, OnDestroy {
             if (this.envUuid === Number(uuid)) {
               this.envUuid = Number(uuid);
             }
+            this.handleCancel();
           } else {
             this.message.error('编辑失败');
           }
         }
       );
     } else {
-      this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageRes) => {
+      this.storage.run('environmentCreate', [this.envInfo], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.message.success('新增成功');
-          this.envInfo = result.data;
           this.activeUuid = Number(result.data.uuid);
-          this.getAllEnv(result.data.uuid);
+          await this.getAllEnv();
+          this.handleCancel();
         } else {
           this.message.error('新增失败');
         }
@@ -154,14 +157,16 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleCancel(): void {
     this.isVisible = false;
-    this.envList = [];
+    // this.envList = [];
     this.envInfo = {};
+    this.messageService.send({ type: 'updateEnv', data: {} });
   }
 
   handleShowModal() {
+    // this.handleAddEnv(null);
     this.isVisible = true;
     this.isOpen = false;
-    this.getAllEnv(this.envUuid);
+    // this.getAllEnv(this.envUuid);
   }
 
   handleEnvSelectStatus(event: boolean) {

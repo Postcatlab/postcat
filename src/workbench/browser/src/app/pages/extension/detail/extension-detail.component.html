@@ -29,17 +29,36 @@
         <h2 class="text-lg font-bold">Intro</h2>
         <!-- <nz-divider></nz-divider> -->
         <div class="h-full overflow-auto markdown-desc">
-          <eo-shadow-dom [text]="extensionDetail?.introduction" [options]="{ html: true }"> </eo-shadow-dom>
+          <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
+            <eo-shadow-dom [text]="extensionDetail?.introduction" [options]="{ html: true }">
+            </eo-shadow-dom>
+          </nz-skeleton>
         </div>
       </div>
       <div class="w-[1px] bg-[#f2f2f2] mx-[10px]"></div>
       <div class="w-[200px] 2xl:w-[250px] overflow-auto h-full">
         <h2 class="text-lg font-bold">Install</h2>
         <div class="flex items-center mt-[22px]" *ngIf="!extensionDetail?.installed">
-          <button nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="isOperating"
+          <button *ngIf="isElectron" nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="isOperating"
             (click)="manageExtension('install', extensionDetail?.name)">
             Install
           </button>
+          <div *ngIf="!isElectron">
+            <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full">Download Client
+            </button>
+            <nz-dropdown-menu #download="nzDropdownMenu">
+              <ul nz-menu>
+                <ng-container *ngFor="let item of resourceInfo; let index = index">
+                  <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+                  <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
+                </ng-container>
+              </ul>
+            </nz-dropdown-menu>
+            <div class="bg-[#FF1744] p-[6px] mt-[14px] rounded-[3px] text-white">
+              The extensions can only be installed on the client at present. Please download the client first~
+            </div>
+          </div>
+
           <!-- <span class="text-gray-500">安装完成后需要重启</span> -->
         </div>
         <button *ngIf="extensionDetail?.installed" nz-button nzBlock nzType="primary" nzDanger nzSize="large"

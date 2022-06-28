@@ -54,6 +54,8 @@ function createWindow(): BrowserWindow {
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
+  // 启动mock服务
+  mockServer.start(win as any);
   proxyOpenExternal(win);
   let loadPage = async () => {
     const file: string =
@@ -69,8 +71,6 @@ function createWindow(): BrowserWindow {
     UnitWorkerModule.setup({
       view: win,
     });
-    // 启动mock服务
-    await mockServer.start(win as any);
   };
   win.webContents.on('did-fail-load', (event, errorCode) => {
     console.error('did-fail-load', errorCode);
