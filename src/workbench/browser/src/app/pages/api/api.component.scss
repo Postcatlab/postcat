@@ -11,7 +11,7 @@ nz-sider {
   background-color: #fff;
 }
 
-::ng-deep {
+ ::ng-deep {
   .ant-layout-sider-children {
     border-right: 1px solid #f0f0f0;
     padding: 5px;
@@ -20,7 +20,7 @@ nz-sider {
       margin-bottom: 12px;
     }
   }
-  .ant-tabs-nav-list {
+  .api-tabs .ant-tabs-nav-list {
     width: 100%;
     justify-content: space-evenly;
     .ant-tabs-tab {
