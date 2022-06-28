@@ -20,6 +20,14 @@ nz-sider {
       margin-bottom: 12px;
     }
   }
+  .ant-tabs-nav-list {
+    width: 100%;
+    justify-content: space-evenly;
+    .ant-tabs-tab {
+      flex: 1;
+      justify-content: center;
+    }
+  }
   .tabs-bar {
     background-color: var(--SEC_BG);
     padding: 5px 10px 0 15px;
