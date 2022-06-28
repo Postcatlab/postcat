@@ -35,7 +35,7 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(data) {
-    this.message.send({ type: 'gotoAPiTest', data });
+    this.message.send({ type: 'gotoApiTest', data });
   }
 
   clearAllHistory() {

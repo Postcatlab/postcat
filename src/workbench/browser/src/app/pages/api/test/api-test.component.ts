@@ -135,7 +135,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.watchTabChange();
     this.watchEnvChange();
     this.messageService.get().subscribe(({ type, data }) => {
-      if (type === 'gotoAPiTest') {
+      if (type === 'gotoApiTest') {
         this.restoreHistory(data);
       }
     });
