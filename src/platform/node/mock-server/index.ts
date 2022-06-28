@@ -35,7 +35,7 @@ export class MockServer {
   private mockUrl = '';
 
   constructor() {
-    this.app = express();
+    this.app ??= express();
     this.createProxyServer();
   }
 
@@ -66,7 +66,7 @@ export class MockServer {
       // if (!protocolReg.test(req.url)) {
       // match request type
       const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
-      if (req.query.mockID || isMatchType) {
+      if (req.query.mockID || isMatchType !== false) {
         this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
         ipcMain.once('getMockApiList', (event, message) => {
           console.log('getMockApiList message', message);
