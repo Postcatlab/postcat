@@ -11,13 +11,21 @@ nz-sider {
   background-color: #fff;
 }
 
-::ng-deep {
+ ::ng-deep {
   .ant-layout-sider-children {
     border-right: 1px solid #f0f0f0;
     padding: 5px;
     .group-btn-add,
     .group-search {
       margin-bottom: 12px;
+    }
+  }
+  .api-tabs .ant-tabs-nav-list {
+    width: 100%;
+    justify-content: space-evenly;
+    .ant-tabs-tab {
+      flex: 1;
+      justify-content: center;
     }
   }
   .tabs-bar {

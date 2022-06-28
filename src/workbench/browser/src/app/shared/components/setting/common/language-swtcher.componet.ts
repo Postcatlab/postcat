@@ -14,7 +14,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
         <iconpark-icon name="language"></iconpark-icon>
         English
       </nz-option>
-      <nz-option nzCustomContent nzValue="zh-cn" nzLabel="简体中文">
+      <nz-option nzCustomContent nzValue="zh-CN" nzLabel="简体中文">
         <iconpark-icon name="language"></iconpark-icon>
         简体中文
       </nz-option>
@@ -32,11 +32,15 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
     `,
   ],
 })
-export class LanguageSwticherComponent {
+export class LanguageSwticherComponent implements OnInit {
   @Input() model: object = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {}
+
+  ngOnInit(): void {
+    this.model['eoapi-language'] ??= navigator.language === 'zh-CN' ? 'zh-CN' : 'en';
+  }
 
   handleChange(data) {
     console.log('data', data);
