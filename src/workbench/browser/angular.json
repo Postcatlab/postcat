@@ -10,9 +10,15 @@
     "eoapi": {
       "root": "",
       "i18n": {
-        "sourceLocale": "zh-Hans",
+        "sourceLocale": {
+          "code": "zh-Hans",
+          "baseHref": ""
+        },
         "locales": {
-          "en-US": "src/locale/messages.en-US.xlf"
+          "en-US": {
+            "baseHref": "",
+            "translation": "src/locale/messages.en-US.xlf"
+          }
         }
       },
       "sourceRoot": "src",
@@ -26,7 +32,7 @@
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "localize":true,
+            "localize": true,
             "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
