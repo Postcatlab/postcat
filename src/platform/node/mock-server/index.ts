@@ -104,11 +104,11 @@ export class MockServer {
         .listen(_port, () => {
           const { port } = this.server.address() as AddressInfo;
           this.mockUrl = `http://127.0.0.1:${port}`;
-          console.log(`mock服务已启动：${this.mockUrl}`);
+          console.log(`mock service is started：${this.mockUrl}`);
           resolve(this.mockUrl);
         })
         .on('error', (error) => {
-          console.error('mock服务启动失败: ' + error);
+          console.error('mock is failed to start: ' + error);
           reject(error);
         });
     });
