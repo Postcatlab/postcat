@@ -57,7 +57,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private getModules() {
     const defaultModule = [
       {
-        moduleName: 'API',
+        moduleName: 'REST',
         moduleID: '@eo-core-apimanger',
         isOffical: true,
         icon: 'api',
