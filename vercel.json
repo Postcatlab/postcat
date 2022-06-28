@@ -1,0 +1,3 @@
+{
+  "redirects": [{ "source": "/:path*", "destination": "/zh-hans/:path" }]
+}
