@@ -67,10 +67,9 @@ nz-sider {
   }
 }
 
-.side-container {
-  ::ng-deep .ant-tabs-nav-list {
-    width: 100%;
-    border: 1px solid red;
+.api-tabs {
+  ::ng-deep .ant-tabs-tab {
+    padding: 0.2em 0;
   }
 }
 
@@ -79,8 +78,7 @@ nz-sider {
 }
 
 nz-divider {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin: 0.1em 0;
 }
 
 .manager-env {
