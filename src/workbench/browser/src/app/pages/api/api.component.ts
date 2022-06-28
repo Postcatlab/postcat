@@ -38,6 +38,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   envInfo: any = {};
   envList: Array<any> = [];
   activeUuid: number | string = 0;
+  tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
@@ -125,6 +126,11 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   clickContentMenu(data) {
     this.messageService.send({ type: 'beforeChangeRouter', data });
+  }
+
+  gotoEnvManager() {
+    // * switch to env
+    this.tabsIndex = 2;
   }
 
   getAllEnv(uuid?: number) {
