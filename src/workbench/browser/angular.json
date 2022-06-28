@@ -13,7 +13,6 @@
         "sourceLocale": "zh-Hans",
         "locales": {
           "en-US": {
-            "baseHref": "",
             "translation": "src/locale/messages.en-US.xlf"
           }
         }
