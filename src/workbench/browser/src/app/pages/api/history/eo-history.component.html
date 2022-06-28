@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between h-10 px-2 history-title">
     <span class="font-bold">History</span>
     <div
-      class="flex items-center justify-center cursor-pointer icon shrink-0 h-7 text-ms"
+      class="flex items-center justify-center cursor-pointer shrink-0 h-7"
       nzTooltipTitle="Clear All"
       nz-tooltip
       nz-popconfirm
@@ -13,7 +13,9 @@
       nzCancelText="No"
       nzPopconfirmPlacement="topRight"
     >
-      <iconpark-icon name="delete"></iconpark-icon>
+      <span class="flex items-center justify-center icon">
+        <iconpark-icon name="delete"></iconpark-icon>
+      </span>
     </div>
   </div>
   <div
