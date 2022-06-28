@@ -59,15 +59,9 @@ export class EnvComponent implements OnInit, OnDestroy {
     return new Promise((resolve) => {
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.envList = result.data || [];
-          if (!this.envList.length) {
-            await this.handleAddEnv(projectID);
-            resolve(true);
-            return;
-          }
-          // await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
-          resolve(true);
+          return resolve(result.data || []);
         }
+        return resolve([]);
       });
     });
   }
@@ -162,6 +156,7 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleShowModal() {
     // this.handleAddEnv(null);
+    console.log('==>>', new Error());
     this.isVisible = true;
     this.isOpen = false;
     // this.getAllEnv(this.envUuid);
