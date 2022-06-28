@@ -16,9 +16,12 @@
   .tree_node {
     font-size: 12px;
   }
-  .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
-   opacity: .8;
-}
+  .ant-tree .ant-tree-node-content-wrapper{
+    border-radius: 0;
+    &.ant-tree-node-selected {
+      opacity: .8;
+   }
+  }
 
   .ant-tree-switcher {
     width: 0;
@@ -27,7 +30,6 @@
   .left {
     border-right: 1px solid #f8f8f8;
     width: 250px;
-    padding: 13px;
 
     .plugin-link {
       &:hover,
