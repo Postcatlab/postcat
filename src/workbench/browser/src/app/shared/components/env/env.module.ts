@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -8,6 +8,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
@@ -26,10 +27,12 @@ const ANTDMODULES = [
   NzSelectModule,
   NzDividerModule,
   NzPopconfirmModule,
+  NzToolTipModule,
 ];
 @NgModule({
   declarations: [EnvComponent],
   imports: [FormsModule, CommonModule, EouiModule, ...ANTDMODULES],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [EnvComponent],
   providers: [ElectronService],
 })

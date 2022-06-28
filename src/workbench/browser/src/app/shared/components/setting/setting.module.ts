@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SettingComponent } from './setting.component';
@@ -22,8 +22,12 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 import { ElectronService } from '../../../core/services';
 import { SelectThemeComponent } from 'eo/workbench/browser/src/app/shared/components/toolbar/select-theme/select-theme.component';
-import { AboutComponent } from 'eo/workbench/browser/src/app/shared/components/about/about.component';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import {
+  DataStorageComponent,
+  LanguageSwticherComponent,
+  AboutComponent,
+} from 'eo/workbench/browser/src/app/shared/components/setting/common';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -45,8 +49,15 @@ const ANTDMODULES = [
   NzDescriptionsModule,
 ];
 @NgModule({
-  declarations: [SettingComponent, SelectThemeComponent, AboutComponent],
-  imports: [FormsModule, ReactiveFormsModule,SharedModule, CommonModule, ...ANTDMODULES],
+  declarations: [
+    SettingComponent,
+    SelectThemeComponent,
+    DataStorageComponent,
+    LanguageSwticherComponent,
+    AboutComponent,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent, SelectThemeComponent],
   providers: [ElectronService],
 })

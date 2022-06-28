@@ -18,28 +18,35 @@
   </ng-template>
 </ng-container> -->
 
-<nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" nzTitle="配置" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" [nzBodyStyle]="{paddingLeft: '6px'}"
+  (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="container">
-    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true" class="tree-view">
-      <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
-        <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
-        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)">
-          {{ node.title }}
-        </nz-tree-node-option>
-      </nz-tree-node>
+    <div class="tree-view">
+      <img src="assets/images/logo-text.svg" class="mb-[10px] h-[40px]" />
+      <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
+        <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
+          <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
+          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)">
+            {{ node.name }}
+          </nz-tree-node-option>
+        </nz-tree-node>
 
-      <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
-        <nz-tree-node-toggle>
-          <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
-        </nz-tree-node-toggle>
-        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)">
-          {{ node.title }}
-        </nz-tree-node-option>
-      </nz-tree-node>
-    </nz-tree-view>
+        <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
+          <nz-tree-node-toggle>
+            <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
+          </nz-tree-node-toggle>
+          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)">
+            {{ node.name }}
+          </nz-tree-node-option>
+        </nz-tree-node>
+      </nz-tree-view>
+    </div>
     <nz-divider nzType="vertical" class="divider"></nz-divider>
+    <eo-data-storage *ngIf="selected === 'eoapi-common'" [(model)]="settings"></eo-data-storage>
+    <eo-language-switcher *ngIf="selected === 'eoapi-language'" [(model)]="settings">
+    </eo-language-switcher>
     <form *ngIf="currentConfiguration.length" nz-form [nzLayout]="'vertical'" [formGroup]="validateForm"
       (ngSubmit)="handleSave()" class="form">
       <div *ngFor="let module of currentConfiguration">
@@ -93,9 +100,15 @@
         </nz-form-item>
       </div>
     </form>
-    <nz-empty *ngIf="!currentConfiguration.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+    <eo-about *ngIf="selected === 'eoapi-about'"></eo-about>
+    <nz-empty *ngIf="!currentConfiguration.length && selected === 'eoapi-extensions'" nzNotFoundImage="simple"
+      [nzNotFoundContent]="contentTpl">
       <ng-template #contentTpl>
-        <span>暂无配置项</span>
+        <span>No plugins are currently installed,
+          <a class="eo_link" (click)="navToExtensionList()">
+            go to install
+          </a>
+        </span>
       </ng-template>
     </nz-empty>
   </section>
