@@ -236,7 +236,7 @@ export class SettingComponent implements OnInit {
     this.settings = this.localSettings = JSON.parse(localStorage.getItem('localSettings') || '{}');
     // @ts-ignore
     window.getConfiguration = this.remoteService.getConfiguration;
-    console.log('localSettings', this.localSettings);
+    // console.log('localSettings', this.localSettings);
     // const featureList = window.eo.getFeature('configuration');
     const modules = window.eo?.getModules() || new Map([]);
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
