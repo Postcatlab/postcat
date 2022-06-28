@@ -78,6 +78,13 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.getAllEnv().then((result: any[]) => {
       this.envList = result || [];
     });
+    this.messageService.get().subscribe(({ type }) => {
+      if (type === 'updateEnv') {
+        this.getAllEnv().then((result: any[]) => {
+          this.envList = result || [];
+        });
+      }
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();
