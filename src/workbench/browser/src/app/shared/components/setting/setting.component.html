@@ -105,7 +105,7 @@
       [nzNotFoundContent]="contentTpl">
       <ng-template #contentTpl>
         <span>No plugins are currently installed,
-          <a class="eo_link" routerLink="['/home/extension/list']">
+          <a class="eo_link" (click)="navToExtensionList()">
             go to install
           </a>
         </span>
