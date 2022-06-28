@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -c web -o",
-    "build": "ng build --base-href ./",
+    "build": "ng build  --base-href ./",
     "build:dev": "yarn build -- -c dev",
     "build:prod": "yarn build -- -c production",
     "build:web": "ng build -c production",
