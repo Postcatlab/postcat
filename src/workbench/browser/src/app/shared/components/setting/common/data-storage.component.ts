@@ -18,7 +18,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           <p>Localhost: Store the data locally. You can only use the product on the current computer.</p>
           <p>
             Remote Server: Store data on a remote server to facilitate cross device use of the product.
-            <a href="" class="text-blue-400">Learn more...</a>
+            <a href="https://eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more...</a>
           </p>
         </div>
       </nz-form-item>
