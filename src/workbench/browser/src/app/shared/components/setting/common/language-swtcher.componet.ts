@@ -11,16 +11,16 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
       [nzCustomTemplate]="defaultTemplate"
     >
       <nz-option nzCustomContent nzValue="en" nzLabel="English">
-        <iconpark-icon name="language"></iconpark-icon>
+        <eo-iconpark-icon name="language"></eo-iconpark-icon>
         English
       </nz-option>
       <nz-option nzCustomContent nzValue="zh-CN" nzLabel="简体中文">
-        <iconpark-icon name="language"></iconpark-icon>
+        <eo-iconpark-icon name="language"></eo-iconpark-icon>
         简体中文
       </nz-option>
     </nz-select>
     <ng-template #defaultTemplate let-selected>
-      <iconpark-icon name="language"></iconpark-icon>
+      <eo-iconpark-icon name="language"></eo-iconpark-icon>
       {{ selected.nzLabel }}
     </ng-template>
   `,

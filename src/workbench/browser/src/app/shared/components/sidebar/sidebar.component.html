@@ -1,15 +1,10 @@
 <div class="eo_sidebar" [ngClass]="{ eo_sidebar_shrink: isCollapsed }">
-  <a
-    (click)="clickModule(item)"
-    *ngFor="let item of this.modules"
-    class="sidebar_item"
-    nz-tooltip
-    nzTooltipPlacement="right"
-    [nzTooltipTitle]="item.moduleName"
-    [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }"
-  >
+  <a (click)="clickModule(item)" *ngFor="let item of this.modules" class="sidebar_item" nz-tooltip
+    nzTooltipPlacement="right" [nzTooltipTitle]="item.moduleName"
+    [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }">
     <i class="icon">
-      <iconpark-icon [name]="item.icon"></iconpark-icon>
+      <eo-iconpark-icon [name]="item.icon">
+      </eo-iconpark-icon>
     </i>
     <span class="label mt-1" *ngIf="!sidebar.collapsed">{{ item.moduleName }}</span>
   </a>

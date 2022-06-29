@@ -6,7 +6,8 @@
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
             <span nzTooltipTitle="Collections" nz-tooltip class="text-lg">
-              <iconpark-icon name="folder-open"></iconpark-icon>
+              <eo-iconpark-icon name="folder-open">
+              </eo-iconpark-icon>
             </span>
           </ng-template>
           <div class="inner-content">
@@ -16,7 +17,8 @@
         <nz-tab [nzTitle]="historyTitle">
           <ng-template #historyTitle>
             <span nzTooltipTitle="History" nz-tooltip class="text-lg">
-              <iconpark-icon name="history"></iconpark-icon>
+              <eo-iconpark-icon name="history">
+              </eo-iconpark-icon>
             </span>
           </ng-template>
           <eo-history></eo-history>
@@ -24,7 +26,8 @@
         <nz-tab [nzTitle]="envTitle">
           <ng-template #envTitle>
             <span nzTooltipTitle="Environment" nz-tooltip class="text-lg">
-              <iconpark-icon name="instruction"></iconpark-icon>
+              <eo-iconpark-icon name="instruction">
+              </eo-iconpark-icon>
             </span>
           </ng-template>
           <eo-env></eo-env>
@@ -39,14 +42,8 @@
         <div class="flex items-center tabs-bar">
           <eo-api-tab class="fg1"></eo-api-tab>
           <div class="flex items-center fix-mt">
-            <nz-select
-              [(ngModel)]="envUuid"
-              [(nzOpen)]="isOpen"
-              (nzOpenChange)="handleEnvSelectStatus($event)"
-              [nzDropdownRender]="renderTemplate"
-              nzAllowClear
-              nzPlaceHolder="Environment"
-            >
+            <nz-select [(ngModel)]="envUuid" [(nzOpen)]="isOpen" (nzOpenChange)="handleEnvSelectStatus($event)"
+              [nzDropdownRender]="renderTemplate" nzAllowClear nzPlaceHolder="Environment">
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
             </nz-select>
             <ng-template #renderTemplate>
@@ -58,14 +55,8 @@
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <nz-tabset class="inside_page_tab" [nzAnimated]="false" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
-              <a
-                *nzTabLink
-                nz-tab-link
-                (click)="clickContentMenu(tab)"
-                [routerLink]="[tab.routerLink]"
-                queryParamsHandling="merge"
-                >{{ tab.title }}</a
-              >
+              <a *nzTabLink nz-tab-link (click)="clickContentMenu(tab)" [routerLink]="[tab.routerLink]"
+                queryParamsHandling="merge">{{ tab.title }}</a>
             </nz-tab>
           </nz-tabset>
           <router-outlet></router-outlet>
