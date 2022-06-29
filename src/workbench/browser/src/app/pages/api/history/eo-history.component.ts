@@ -38,7 +38,10 @@ export class HistoryComponent implements OnInit {
     // this.message.send({ type: 'gotoApiTest', data });
     this.message.send({
       type: 'gotoApiTest',
-      data: { ...data, origin: { method: data.request.method.toUpperCase(), title: '测试历史' } },
+      data: {
+        ...data,
+        origin: { method: data.request.method.toUpperCase(), title: '测试历史', key: `history_${data.uuid}` },
+      },
     });
   }
 
