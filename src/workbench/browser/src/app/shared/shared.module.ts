@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponent, ToolbarComponent, SidebarComponent } from './components';
 import { WebviewDirective } from './directives';
@@ -22,6 +22,8 @@ import { PageBlankComponent } from './components/page-blank/page-blank.component
 import { PageFeaturePreviewComponent } from './components/page-feature-preview/page-feature-preview.component';
 import { RouterModule } from '@angular/router';
 import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
+import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
+
 const COMPONENTS = [ToolbarComponent, ShadowDomEncapsulationComponent, SidebarComponent, PageNotFoundComponent];
 @NgModule({
   imports: [
@@ -40,10 +42,10 @@ const COMPONENTS = [ToolbarComponent, ShadowDomEncapsulationComponent, SidebarCo
     NzNotificationModule,
     NzMessageModule,
     NzDescriptionsModule,
+    EoIconparkIconModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, PageFeaturePreviewComponent],
   providers: [ModalService],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe],
+  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, EoIconparkIconModule],
 })
 export class SharedModule {}

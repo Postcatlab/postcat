@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SettingComponent } from './setting.component';
@@ -56,7 +56,6 @@ const ANTDMODULES = [
     LanguageSwticherComponent,
     AboutComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent, SelectThemeComponent],
   providers: [ElectronService],

@@ -3,7 +3,8 @@
   <div class="btn ml-3 text-base flex shrink-0 items-center justify-center" nzType="primary" nz-button nz-dropdown
     [nzDropdownMenu]="menu" nzPlacement="bottomRight"
     (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })">
-    <iconpark-icon name="plus"></iconpark-icon>
+    <eo-iconpark-icon name="plus">
+    </eo-iconpark-icon>
   </div>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
@@ -21,7 +22,8 @@
     <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
       <div class="flex items-center">
         <span class="mr-2 text-sm">
-          <iconpark-icon name="home"></iconpark-icon>
+          <eo-iconpark-icon name="home">
+          </eo-iconpark-icon>
         </span>
         <span class="text_omit node_title">{{ node.title }}</span>
       </div>
