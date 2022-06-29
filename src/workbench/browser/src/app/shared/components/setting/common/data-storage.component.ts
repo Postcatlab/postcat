@@ -10,29 +10,39 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       <nz-form-item>
         <nz-form-control>
           <nz-select formControlName="eoapi-common.dataStorage" i18n-nzPlaceHolder nzPlaceHolder="数据源">
-            <nz-option nzValue="http" nzLabel="Remote Server"></nz-option>
+            <nz-option nzValue="http" i18n-nzLabel nzLabel="远程数据源"></nz-option>
             <nz-option nzValue="local" nzLabel="Localhost"></nz-option>
           </nz-select>
         </nz-form-control>
         <div class="text-[12px] mt-[8px] text-gray-400">
-          <p>Localhost: Store the data locally. You can only use the product on the current computer.</p>
-          <p>
-            Remote Server: Store data on a remote server to facilitate cross device use of the product.
-            <a href="https://eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more...</a>
+          <p i18n>本地数据源：将数据存储在本地，你只能在当前计算机使用产品数据。</p>
+          <p i18n>
+            远程服务器：将数据存储在远程服务器上，方便跨设备使用产品。
+            <a href="https://eoapi.io/docs/storage.html" target="_blank" class="eo_link"> 了解更多...</a>
           </p>
         </div>
       </nz-form-item>
       <ng-container *ngIf="validateForm.value['eoapi-common.dataStorage'] === 'http'">
         <nz-form-item>
-          <nz-form-label>Host</nz-form-label>
-          <nz-form-control nzErrorTip="Please input your Host">
-            <input nz-input formControlName="eoapi-common.remoteServer.url" placeholder="your host" />
+          <nz-form-label i18n>远程服务器地址</nz-form-label>
+          <nz-form-control i18n-nzErrorTip nzErrorTip="请输入你的远程服务器地址">
+            <input
+              nz-input
+              formControlName="eoapi-common.remoteServer.url"
+              i18n-placeholder
+              placeholder="你的远程服务器地址"
+            />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label>Security Token</nz-form-label>
-          <nz-form-control nzErrorTip="Please input your Security Token">
-            <input nz-input formControlName="eoapi-common.remoteServer.token" placeholder="your security token" />
+          <nz-form-label>Token</nz-form-label>
+          <nz-form-control i18n-nzErrorTip nzErrorTip="请输入你的 Token">
+            <input
+              nz-input
+              formControlName="eoapi-common.remoteServer.token"
+              i18n-placeholder
+              placeholder="你的认证 Token"
+            />
           </nz-form-control>
         </nz-form-item>
       </ng-container>
@@ -106,11 +116,11 @@ export class DataStorageComponent implements OnInit, OnChanges {
         throw result;
       }
       // await result.json();
-      // this.message.create('success', 'Remote server address set successfully!');
+      // this.message.create('success', $localize`连接远程数据源成功!`);
       return Promise.resolve(true);
     } catch (error) {
       console.error(error);
-      this.message.create('error', 'Remote server connection failed!');
+      this.message.create('error', $localize`连接远程数据源失败!`);
       return Promise.reject(false);
     }
   }
@@ -121,7 +131,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       this.loading = true;
       const result = await this.pingRmoteServerUrl().finally(() => (this.loading = false));
       if (Object.is(result, true)) {
-        this.message.success('The remote data source connection is successful!');
+        this.message.success($localize`连接远程数据源成功！`);
       }
       this.model = {
         ...this.model,

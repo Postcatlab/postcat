@@ -14,12 +14,12 @@ const isElectron = !!(window && window.process && window.process.type);
 const descriptions: DescriptionsItem[] = [
   {
     id: 'version',
-    label: 'Version',
+    label: $localize`版本`,
     value: pkg.version,
   },
   // {
   //   id: 'publishTime',
-  //   label: '发布日期',
+  //   label: $localize`发布日期`,
   //   value: '',
   // },
 ];
@@ -63,7 +63,7 @@ if (isElectron) {
 @Component({
   selector: 'eo-about',
   template: `
-    <div class="font-bold text-lg mb-2">About</div>
+    <div class="font-bold text-lg mb-2" i18n>关于</div>
     <div class="about">
       <nz-descriptions [nzColumn]="1">
         <nz-descriptions-item *ngFor="let item of list" [nzTitle]="item.label">{{ item.value }}</nz-descriptions-item>

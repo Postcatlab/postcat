@@ -91,15 +91,15 @@ export class SettingComponent implements OnInit {
       moduleID: 'eoapi-common',
     },
     {
-      name: 'Language',
+      name:  $localize`语言`,
       moduleID: 'eoapi-language',
     },
     {
-      name: 'Extensions',
+      name:  $localize`拓展`,
       moduleID: 'eoapi-extensions',
     },
     {
-      name: 'About',
+      name:  $localize`关于`,
       moduleID: 'eoapi-about',
     },
   ];
