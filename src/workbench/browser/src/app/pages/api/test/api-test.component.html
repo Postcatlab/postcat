@@ -29,7 +29,7 @@
             (change)="changeUri()"
           />
           <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()" i18n>
-            {{ status === 'testing' ? '终止' : '发送' }}
+            {{ status === 'testing' ? 'Abort' : 'Send' }}
             <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
           </button>
           <button
@@ -63,7 +63,7 @@
       <!--Request Info -->
       <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
         <ng-template #bodyTitleTmp>
-          <span i18n>请求体</span>
+          <span i18n>Body</span>
           <span
             class="iconfont icon-circle eo-tab-theme-icon"
             *ngIf="
