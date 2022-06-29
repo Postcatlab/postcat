@@ -163,7 +163,7 @@ function listBlockController($rootScope, $element, $scope) {
           activeValue: 1,
         },
         {
-          thKey: $localize `列表项`,
+          thKey: `列表项`,
           type: 'html',
           html: '<inner-html-common-directive html="item.key"></inner-html-common-directive>',
         },
