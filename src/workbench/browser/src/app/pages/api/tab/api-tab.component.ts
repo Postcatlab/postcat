@@ -234,10 +234,17 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             this.appendOrSwitchTab('detail', inArg.data.origin);
             break;
           case 'detailOverview': {
-            console.log(inArg.data.origin);
+            // console.log(inArg.data.origin);
             this.appendOrSwitchTab('overview', inArg.data.origin);
             break;
           }
+          case 'gotoApiTest':
+            this.appendOrSwitchTab('test', inArg.data.origin);
+            // ! It is bad way for delay render detail of api history.
+            setTimeout(() => {
+              this.messageService.send({ type: 'renderHistory', data: inArg.data });
+            }, 20);
+            break;
           case 'gotoEditApi':
             this.appendOrSwitchTab('edit', inArg.data.origin);
             break;
