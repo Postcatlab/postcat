@@ -76,7 +76,20 @@
               "outputHashing": "none",
               "sourceMap": true,
               "namedChunks": false,
-              "localize": ["zh-Hans"],
+              "localize": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "fileReplacements": [
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.web.ts" }
+              ]
+            },
+            "webEn": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": false,
+              "localize": ["en-US"],
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": false,
@@ -104,6 +117,7 @@
           "configurations": {
             "dev": { "browserTarget": "eoapi:build:dev" },
             "web": { "browserTarget": "eoapi:build:web" },
+            "webEn": { "browserTarget": "eoapi:build:webEn" },
             "production": { "browserTarget": "eoapi:build:production" }
           }
         },

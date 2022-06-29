@@ -1,6 +1,6 @@
 <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="submit()" *ngIf="!isDelete">
   <nz-form-item nz-col class="fg1">
-    <nz-form-label nzFor="name" i18n>分组名称 </nz-form-label>
+    <nz-form-label nzFor="name" i18n>分组名称</nz-form-label>
     <nz-form-control i18n-nzErrorTip nzErrorTip="请输入分组名称">
       <input type="text" autofocus nz-input id="name" formControlName="name" [(ngModel)]="group.name" />
     </nz-form-control>

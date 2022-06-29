@@ -5,11 +5,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'eo-data-storage',
   template: `
-    <div class="font-bold text-lg mb-2" i18n>Data Storage</div>
+    <div class="font-bold text-lg mb-2" i18n>数据源</div>
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control>
-          <nz-select formControlName="eoapi-common.dataStorage" nzPlaceHolder="Data Storage">
+          <nz-select formControlName="eoapi-common.dataStorage" i18n-nzPlaceHolder nzPlaceHolder="数据源">
             <nz-option nzValue="http" nzLabel="Remote Server"></nz-option>
             <nz-option nzValue="local" nzLabel="Localhost"></nz-option>
           </nz-select>
@@ -38,7 +38,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       </ng-container>
       <nz-form-item>
         <nz-form-control>
-          <button nz-button nzType="primary" [nzLoading]="loading">Change Data Storage</button>
+          <button nz-button nzType="primary" [nzLoading]="loading" i18n>修改数据源</button>
         </nz-form-control>
       </nz-form-item>
     </form>

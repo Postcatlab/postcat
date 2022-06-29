@@ -17,7 +17,7 @@ import { Subject } from 'rxjs';
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
   varName = $localize`{{变量名}}`;
-  modalTitle = $localize`New Environment`;
+  modalTitle = $localize`新建环境`;
   isVisible = false;
   /** 是否打开下拉菜单 */
   isOpen = false;
@@ -92,7 +92,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
   handleEditEnv(uuid) {
-    this.modalTitle = $localize`Edit Environment`;
+    this.modalTitle = $localize`编辑环境`;
     this.handleShowModal();
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
@@ -115,7 +115,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       hostUri: '',
       parameters: [],
     };
-    this.modalTitle = 'New Environment';
+    this.modalTitle = $localize`新建环境`;
     this.activeUuid = null;
     this.handleShowModal();
   }

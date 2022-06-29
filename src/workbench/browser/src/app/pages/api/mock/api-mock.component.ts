@@ -37,7 +37,7 @@ export class ApiMockComponent implements OnInit, OnChanges {
   mockListColumns = [
     { title: $localize`名称`, slot: 'name', width: '20%' },
     { title: $localize`创建方式`, slot: 'createWay', width: '15%' },
-    { title: $localize`URL`, slot: 'url', width: '50%' },
+    { title: 'URL', slot: 'url', width: '50%' },
     { title: '', slot: 'action', width: '15%', fixed: true },
   ];
   /** 当前被编辑的mock */
