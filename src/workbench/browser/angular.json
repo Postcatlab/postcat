@@ -10,7 +10,9 @@
     "eoapi": {
       "root": "",
       "i18n": {
-        "sourceLocale": "zh-Hans",
+        "sourceLocale": {
+          "code": "zh-Hans"
+        },
         "locales": {
           "en-US": {
             "translation": "src/locale/messages.en-US.xlf"

@@ -5,9 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -c web -o",
-    "build": "ng build  --base-href ./",
-    "build:dev": "yarn build -- -c dev",
-    "build:prod": "yarn build -- -c production",
+    "beforeBuild": "node ./build.js",
+    "build": "npm run beforeBuild&&ng build --base-href ./",
     "build:web": "ng build -c production",
     "ng:serve": "ng serve -c web -o",
     "i18n:gen": "ng extract-i18n --output-path src/locale",
@@ -19,6 +18,7 @@
     "lint": "ng lint"
   },
   "dependencies": {
+    "@angular-cli/base-href-webpack": "1.0.16",
     "@angular/animations": "14.0.3",
     "@angular/cdk": "14.0.3",
     "@angular/common": "14.0.3",
