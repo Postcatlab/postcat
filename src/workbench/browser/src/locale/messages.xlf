@@ -2,11 +2,1117 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="zh-Hans" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="3f9dfbf09b5c536da84d43bf777fd2c757716c35" datatype="html">
-        <source>你好，世界</source>
+      <trans-unit id="8992834024601101964" datatype="html">
+        <source>无法连接到远程数据源，请检查后重新连接，为了不影响使用，程序将帮您跳转到本地</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <note priority="1" from="description">{can not connect}</note>
+      </trans-unit>
+      <trans-unit id="7884481224802087572" datatype="html">
+        <source>没有找到ID为<x id="PH" equiv-text="mockID"/>的mock！</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.service.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4971113743595107474" datatype="html">
+        <source>经典</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/theme/theme.model.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="587128833387866843" datatype="html">
+        <source>森林</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/theme/theme.model.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ee475fe6a975a1b344622dec6a7503527ad3bd1" datatype="html">
+        <source> 内容类型 <x id="START_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;nz-select [(ngModel)]=&quot;editorType&quot;&gt;"/><x id="START_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;nz-option *ngFor=&quot;let item of typeList&quot; [nzValue]=&quot;item.value&quot; [nzLabel]=&quot;item.label&quot;&gt;"/><x id="CLOSE_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;/nz-option&gt;"/><x id="CLOSE_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;/nz-select&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.html</context>
+          <context context-type="linenumber">3,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6028368701114034577" datatype="html">
+        <source>整理格式</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7733598902834788488" datatype="html">
+        <source>复制</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5265392794883762314" datatype="html">
+        <source>搜索</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5274782702841254401" datatype="html">
+        <source>下载</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7036072545824919580" datatype="html">
+        <source>新开标签</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6852490713593880468" datatype="html">
+        <source>替换</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="manageEnv" datatype="html">
+        <source>管理环境</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/api.component.html</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5663341488582522474" datatype="html">
+        <source>文档</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/api.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6441654809894181260" datatype="html">
+        <source>编辑</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/api.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">28,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2641904634440349356" datatype="html">
+        <source>测试</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/api.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4783164415272690262" datatype="html">
+        <source>删除确认?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/api.service.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5792375760602640530" datatype="html">
+        <source>确认要删除数据 &lt;strong title=&quot;<x id="PH" equiv-text="name"/>&quot;&gt;<x id="PH_1" equiv-text="name.length &gt; 50 ? name.slice(0, 50) + &apos;...&apos; : name"/>&lt;/strong&gt; 吗？删除后不可恢复！</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/api.service.ts</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d34a58e4ce2c530ccb632d38c48b88437d368b4d" datatype="html">
+        <source>请求头部</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2b906bd1d2a959b320e0d02fabdb8718a4d12ac9" datatype="html">
+        <source>Query 参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="96c5d95b7a0dbe33a81e68b19a4119ea860ea096" datatype="html">
+        <source>Rest 参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4ca19b6f5d08a569c973e62a82672655ea008dcf" datatype="html">
+        <source>Body 请求参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="75307517eb651cc90c105bcd39c7655fb420454f" datatype="html">
+        <source>最外层结构为：<x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9c4d504845fc19e6c431bb7325bf9611a3b9dd8d" datatype="html">
+        <source>返回头部</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="600e7d137716010e434616f5176711ed45ed507e" datatype="html">
+        <source>返回参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4695571024614529168" datatype="html">
+        <source>参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/body/api-test-body.component.ts</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8891706335952617006" datatype="html">
+        <source><x id="PH" equiv-text="opts.title"/>名</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4013539241429312291" datatype="html">
+        <source>必填</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5403930329397944141" datatype="html">
+        <source>{{item.required?&quot;是&quot;:&quot;&quot;}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7585745163475783554" datatype="html">
+        <source>说明</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3910211093824238340" datatype="html">
+        <source>示例</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">148</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2312625263785858083" datatype="html">
+        <source>参数名</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8503537271966715252" datatype="html">
+        <source>类型</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="676477435220690960" datatype="html">
+        <source>&lt;span class=&quot;eo-operate-btn fs12&quot; ng-show=&quot;item.minimum ||
+          item.maximum ||
+          item.minLength ||
+          item.maxLength ||
+          (item.enum &amp;&amp; item.enum.length &gt; 0 &amp;&amp; item.enum[0].value)&quot;&gt;{{item.isClick?&quot;收缩&quot;:&quot;展开&quot;}}&lt;/span&gt;</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
+          <context context-type="linenumber">157,161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2231857750768796446" datatype="html">
+        <source>头部</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/header/api-detail-header.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/header/api-edit-header.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/header/api-test-header.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4708450800335597019" datatype="html">
+        <source>标签</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/header/api-detail-header.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/header/api-edit-header.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/header/api-test-header.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fe87241fd31a46be4fca03c539db8ee6ef870ccd" datatype="html">
+        <source>点击复制</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2646028358654993031" datatype="html">
+        <source>系统自动创建</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="436179348266768631" datatype="html">
+        <source>手动创建</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6673753548733826795" datatype="html">
+        <source>名称</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7347181976606850203" datatype="html">
+        <source>创建方式</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="148159185113467246" datatype="html">
+        <source>复制成功</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">261</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="16634873661dc2c5280fb8887d2139bae3d9ab73" datatype="html">
+        <source>保存</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2472012cfad4bd12a4bc3ed14621f4c6c9675014" datatype="html">
+        <source>请输入 API Path</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71d87540ef0c630dd637720ec005ae280fd62fc2" datatype="html">
+        <source>分组 / API 名称 </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="798ad343422f7f97e22dfe39c90b2cfb7c01f26d" datatype="html">
+        <source>请选择 API 分组</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="87d6e78bf08671a0dd2dd8bb595403a2d499793a" datatype="html">
+        <source>请输入 API 名称</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d5b8d5ac25d9d30dd3d21340dcfd740270856ea8" datatype="html">
+        <source>请求参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="05f4190561c858966b6a27eecc77b9c1497ac601" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ panel.nzActive ? &apos;收缩&apos; : &apos;展开&apos; }}"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;iconfont icon-chevron-{{ panel.nzActive ? &apos;up&apos; : &apos;down&apos; }}&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">56,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1a9a3bdba3ddaabe3ff89eb6f1a883e049fed794" datatype="html">
+        <source>请求体</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f91961f3db724fe1ee768b06f9af22c080feb838" datatype="html">
+        <source> REST 参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6177855cebca39ce76a31e31be14dc6b66028bbf" datatype="html">
+        <source>响应内容</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53b5ec8daddb292bbd318fa6c119c76340813c52" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ panelRes.nzActive ? &apos;收缩&apos; : &apos;展开&apos; }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b453bca42a48b15dda43a47a975888332e66f081" datatype="html">
+        <source>返回结果</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bf879d8a4604f63d4724a17e1352a6b0f92ea1b6" datatype="html">
+        <source>头部</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/edit/header/api-edit-header.component.html</context>
           <context context-type="linenumber">2</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/header/api-test-header.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="33388ead89b3f49f79fa234bb2db413b47291e7a" datatype="html">
+        <source>分组名称 </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/edit/api-group-edit.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="771073ffd2a66bfb7d8b12775e282f20cd8c21f7" datatype="html">
+        <source>请输入分组名称</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/edit/api-group-edit.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bbcaf6bdbaf11b3a35abcfd61e41c68b26348c7a" datatype="html">
+        <source> 删除 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong title=&quot;{{ group.name }}&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ group.name.length &gt; 50 ? group.name.slice(0, 50) + &apos;...&apos; : group.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 后，该分组下的数据都会删除。该操作无法撤销，确认删除吗？
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/edit/api-group-edit.component.html</context>
+          <context context-type="linenumber">9,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="59169b4ac16c23d5c8a48b55ae7cc668923d2a14" datatype="html">
+        <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>新建API<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="40fbb738863e18ca4be05fd1106cd83acd553935" datatype="html">
+        <source>新建分组</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8e0645d0e3b4683e4724bc486c09ec0aee44bc1d" datatype="html">
+        <source>添加 API</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b42edf9c94ae30595645d496f6364063996eee07" datatype="html">
+        <source>新建子分组</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a842d4536fdee499a55c753c50810254347ced32" datatype="html">
+        <source>编辑</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="08254f4ac965519b9a0befb43fd82bd6fa72a7af" datatype="html">
+        <source>删除</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5eadb60473a54773298ee679a4ce6a19d9c2f31c" datatype="html">
+        <source>复制</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7701804097015450967" datatype="html">
+        <source>添加分组</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
+          <context context-type="linenumber">249</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8399437088450211262" datatype="html">
+        <source>添加子分组</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
+          <context context-type="linenumber">258</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4530041616516936622" datatype="html">
+        <source>编辑分组</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
+          <context context-type="linenumber">267</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2056515708490842985" datatype="html">
+        <source>删除分组</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
+          <context context-type="linenumber">276</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f69a64c3f1ac83489d67e90ab4b19e1e17935bbb" datatype="html">
+        <source>添加 Mock</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="58869be0ea5e921c124484762a57958a52024b81" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ scope.createWay === &apos;system&apos; ? &apos;预览&apos; : &apos;编辑&apos; }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82ba6c535733e6d4df4188c7177b32c96d4ae95f" datatype="html">
+        <source>您确定要删除此Mock吗?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c1cc128c6a6dea3dc21d5d04978e311f1c8e1b73" datatype="html">
+        <source>Mock 名称</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5fb2e0639d82909336a999e78cb02c8f7490ae7b" datatype="html">
+        <source>返回值</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f6f3be110e7043e3cfe71a7bd75b8b3be79bff5d" datatype="html">
+        <source>取消</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="662727637384257976" datatype="html">
+        <source>添加</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9082781386050595065" datatype="html">
+        <source>预览</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2375260419993138758" datatype="html">
+        <source>URL</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8771970074304147431" datatype="html">
+        <source>删除成功</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">226</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1252737366462064807" datatype="html">
+        <source>修改成功</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">235</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8281577859025836413" datatype="html">
+        <source>新增成功</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">240</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0a4ed25e0e136cc64fb9c53862d38015f564b925" datatype="html">
+        <source>概况</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="415845270675092715" datatype="html">
+        <source>导入</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8276863169039911185" datatype="html">
+        <source>导入 API 数据</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4657700623318690546" datatype="html">
+        <source>导出</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2979050992114293476" datatype="html">
+        <source>导出 API 数据</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5328519309545096099" datatype="html">
+        <source>推送</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="462532714414150987" datatype="html">
+        <source>将 API 推送/同步到其他平台</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="12713226884847218" datatype="html">
+        <source><x id="PH" equiv-text="title"/>成功</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8621940625750218588" datatype="html">
+        <source><x id="PH" equiv-text="title"/>失败</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad2823fed6f1f289ccf0d801e8475ea83d38dfa0" datatype="html">
+        <source>关闭所有标签（当前标签除外）</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="67d3854a98f61ca8f14b23703a745ffbadd753ae" datatype="html">
+        <source>关闭所有标签</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5a62989ca21f59d55dc26381bf3dff6281a23025" datatype="html">
+        <source>关闭左侧标签页</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a1a7950967c594a0128b83e2e50bf659bf2bb6a" datatype="html">
+        <source>关闭右侧标签页</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5634711494147945782" datatype="html">
+        <source>新 API</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5630068317391240037" datatype="html">
+        <source>API 详情</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="165799861458482634" datatype="html">
+        <source>概况</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7831702009544386781" datatype="html">
+        <source>失败</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
+          <context context-type="linenumber">256</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad0b5250bf5006c65885e88eb87d42853c50acba" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ status === &apos;testing&apos; ? &apos;终止&apos; : &apos;发送&apos; }}"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;status === &apos;testing&apos; &amp;&amp; waitSeconds&quot; class=&quot;ml5&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ waitSeconds }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">31,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a66f000feeea270e7f4f50688ca8bb53cd82bc0" datatype="html">
+        <source> 保存为新 API </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1797c7a1cee36326be64a205697e40eed926f4a2" datatype="html">
+        <source>REST 参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d79168515e5ec919c07469b52ee45b6984bd22ea" datatype="html">
+        <source>请求内容</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4394567138429386618" datatype="html">
+        <source><x id="PH" equiv-text="opts.title"/>值</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1329392431125715413" datatype="html">
+        <source>删除</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">136</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6599041067830208467" datatype="html">
+        <source>参数值</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5282439344031879500" datatype="html">
+        <source>添加子字段</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="75234bb545fc3f203995d0bdec10e1099156a304" datatype="html">
+        <source>JSON 根类型：</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/body/api-test-body.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="89bdde6fa7cd9436081217869dba07c857f7e7a6" datatype="html">
+        <source>参数描述</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/body/api-test-body.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="488038906983082772" datatype="html">
+        <source>文件大小均需小于 2M</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/body/api-test-body.component.ts</context>
+          <context context-type="linenumber">183</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8628005441198202117" datatype="html">
+        <source>内容</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/header/api-test-header.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0133e1b38def336d9a225c9e3eec97697cdd7673" datatype="html">
+        <source>此操作无法恢复，确认操作？</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ce5ff8c48ce91638c5d8cc5b47c889e896d0010d" datatype="html">
+        <source> 清空测试历史 </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.html</context>
+          <context context-type="linenumber">12,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4404381903728123504" datatype="html">
+        <source>删除失败</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6559948970846776108" datatype="html">
+        <source>测试时间</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7135774272511289508" datatype="html">
+        <source>请求地址</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6974588275655593933" datatype="html">
+        <source>返回状态</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4305116249025158144" datatype="html">
+        <source>请求时长(ms)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5ca23ddd7a35023421cc16bc4257ca74a5638849" datatype="html">
+        <source>Query参数</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/query/api-test-query.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="309ac7324b969b213e5db665327aba3a93627ea9" datatype="html">
+        <source>暂无头部</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/result-header/api-test-result-header.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ff5a087577fcd2d3019d948967b502342e8eb8d5" datatype="html">
+        <source>暂无请求体</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/result-request-body/api-test-result-request-body.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1212bc3cd5a990d9c917cf000f0c66af90c51848" datatype="html">
+        <source> 点击发送按钮获取测试报告 </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/result-response/api-test-result-response.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="91379bbd091f1fa3588e0182313a8301fd9f7b88" datatype="html">
+        <source> 无法预览非文本类型的数据，您可以 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot; (click)=&quot;downloadResponseText()&quot;&gt;"/>下载返回结果<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/> ，并用其他程序打开。 </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/result-response/api-test-result-response.component.html</context>
+          <context context-type="linenumber">17,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cdc275b0bf28680167623c9abbcfd1ea67061bd1" datatype="html">
+        <source> 响应结果超出可预览的大小，您可以 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot; (click)=&quot;downloadResponseText()&quot;&gt;"/>下载返回结果<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/result-response/api-test-result-response.component.html</context>
+          <context context-type="linenumber">26,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9150947044312889055" datatype="html">
+        <source>Windows 客户端</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1886381220728973937" datatype="html">
+        <source>macOS(Intel) 客户端</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8065689803372888383" datatype="html">
+        <source>macOS(M1) 客户端</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8afaa8f1ab2dfffabbcaaf731a954809ee291762" datatype="html">
+        <source>打开设置项</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a10656bea53d6721e3dff0b5f76b51346d9d483d" datatype="html">
+        <source>产品文档</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="80f829ab1c2213fb0ca2def44514055be9455c55" datatype="html">
+        <source>问题反馈</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ef65da47763167a418e811d9007c53b896b50479" datatype="html">
+        <source>最小化</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="065034046fe7863f3fe1a1f68e5767cf58bed3c1" datatype="html">
+        <source>关闭</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d9729431865f8849b04a6c3612a8c38cc814b08" datatype="html">
+        <source>下载</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7461eae1ecf76f1d344795124c46bbf22a279507" datatype="html">
+        <source>目前数据储存在<x id="INTERPOLATION" equiv-text="{{ dataSourceText }}"/>，如需协作请切换</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pages.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="543e192d5c09ebeb6ec7562d7c55ec873ab5a762" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ isRemote ? &apos;本地&apos; : &apos;远程&apos; }}"/>数据源</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pages.component.html</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
     </body>

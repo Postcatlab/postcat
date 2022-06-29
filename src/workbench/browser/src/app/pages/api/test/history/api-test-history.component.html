@@ -1,12 +1,14 @@
 <header>
   <button
     nz-popconfirm
+    i18n-nzPopconfirmTitle
     nzPopconfirmTitle="此操作无法恢复，确认操作？"
     (nzOnConfirm)="deleteAll()"
     nzPopconfirmPlacement="topLeft"
     nz-button
     nzType="primary"
     nzDanger
+    i18n
   >
     清空测试历史
   </button>

@@ -21,7 +21,7 @@
   </ng-container>
 </div>
 <ng-template #empty>
-  <div class="text mb-4">
+  <div class="text mb-4" i18n>
     该功能需要插件支持，请移步至<a class="eo_link" routerLink="/home/extension/list">插件广场</a>下载
   </div>
 </ng-template>
@@ -39,8 +39,8 @@
     <p class="ant-upload-drag-icon">
       <i nz-icon nzType="inbox"></i>
     </p>
-    <p class="ant-upload-text">点击或直接拖拽文件至此区域</p>
-    <p class="ant-upload-hint">仅支持JSON格式的单个文件导入</p>
+    <p class="ant-upload-text" i18n>点击或直接拖拽文件至此区域</p>
+    <p class="ant-upload-hint" i18n>仅支持JSON格式的单个文件导入</p>
   </nz-upload>
   <div class="text h-4 my-2">{{ filename }}</div>
 </div>

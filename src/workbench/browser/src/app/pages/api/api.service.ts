@@ -20,8 +20,8 @@ export class ApiService {
 
   delete({ name, uuid }: ApiData): void {
     this.nzModalService.confirm({
-      nzTitle: '删除确认?',
-      nzContent: `确认要删除数据 <strong title="${name}">${
+      nzTitle: $localize`删除确认?`,
+      nzContent: $localize`确认要删除数据 <strong title="${name}">${
         name.length > 50 ? name.slice(0, 50) + '...' : name
       }</strong> 吗？删除后不可恢复！`,
       nzOnOk: () => {

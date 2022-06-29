@@ -55,9 +55,9 @@ export class ApiTestHistoryComponent implements OnInit {
     this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.model = [];
-        this.message.success('删除成功');
+        this.message.success($localize`删除成功`);
       } else {
-        this.message.error('删除失败');
+        this.message.error($localize`删除失败`);
         console.error(result.data);
       }
     });
@@ -83,24 +83,24 @@ export class ApiTestHistoryComponent implements OnInit {
       },
       tdList: [
         {
-          thKey: '测试时间',
+          thKey: $localize`测试时间`,
           type: 'text',
           modelKey: 'testTime',
           class: 'pl20 w_180',
         },
         {
-          thKey: '请求地址',
+          thKey: $localize`请求地址`,
           type: 'html',
           html: '<span class="method_text_{{item.request.method}} method_label mr5">{{item.request.method}}</span>{{item.request.uri}}',
         },
         {
-          thKey: '返回状态',
+          thKey: $localize`返回状态`,
           type: 'html',
           class: 'w_100',
           html: `<span class="{{item.codeClass}}">{{item.response.statusCode}}</span>`,
         },
         {
-          thKey: '请求时长(ms)',
+          thKey: $localize`请求时长(ms)`,
           type: 'html',
           html: '{{item.response.testDeny}}',
           class: 'w_120',
@@ -110,7 +110,7 @@ export class ApiTestHistoryComponent implements OnInit {
           class: 'w_100',
           btnList: [
             {
-              key: '删除',
+              key: $localize`删除`,
               operateName: 'delete',
               fun: (inArg) => {
                 this.delete(inArg);
@@ -126,9 +126,9 @@ export class ApiTestHistoryComponent implements OnInit {
     this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.model.splice(inArg.$index, 1);
-        this.message.success('删除成功');
+        this.message.success($localize`删除成功`);
       } else {
-        this.message.success('删除失败');
+        this.message.success($localize`删除失败`);
         console.error(result.data);
       }
     });

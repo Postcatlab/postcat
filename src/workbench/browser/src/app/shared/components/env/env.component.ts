@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 })
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
-  varName = `{{变量名}}`;
+  varName = $localize`{{变量名}}`;
   isVisible = false;
   /** 是否打开下拉菜单 */
   isOpen = false;
@@ -24,10 +24,10 @@ export class EnvComponent implements OnInit, OnDestroy {
   envList: any[] = [];
   activeUuid = 0;
   envListColumns = [
-    { title: '变量名', key: 'name', isEdit: true },
-    { title: '变量值', key: 'value', isEdit: true },
-    { title: '参数说明', key: 'description', isEdit: true },
-    { title: '操作', slot: 'action', width: '15%' },
+    { title: $localize`变量名`, key: 'name', isEdit: true },
+    { title: $localize`变量值`, key: 'value', isEdit: true },
+    { title: $localize`参数说明`, key: 'description', isEdit: true },
+    { title: $localize`操作`, slot: 'action', width: '15%' },
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -120,7 +120,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     // * update list after call save api
     const { parameters, name, ...other } = this.envInfo;
     if (!name) {
-      this.message.error('名称不允许为空');
+      this.message.error($localize`名称不允许为空`);
       return;
     }
     const data = parameters?.filter((it) => it.name && it.value);
@@ -130,26 +130,26 @@ export class EnvComponent implements OnInit, OnDestroy {
         [{ ...other, name, parameters: data }, uuid],
         async (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
-            this.message.success('编辑成功');
+            this.message.success($localize`编辑成功`);
             await this.getAllEnv(this.activeUuid);
             if (this.envUuid === Number(uuid)) {
               this.envUuid = Number(uuid);
             }
             this.handleCancel();
           } else {
-            this.message.error('编辑失败');
+            this.message.error($localize`编辑失败`);
           }
         }
       );
     } else {
       this.storage.run('environmentCreate', [this.envInfo], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.message.success('新增成功');
+          this.message.success($localize`新增成功`);
           this.activeUuid = Number(result.data.uuid);
           await this.getAllEnv();
           this.handleCancel();
         } else {
-          this.message.error('新增失败');
+          this.message.error($localize`新增失败`);
         }
       });
     }

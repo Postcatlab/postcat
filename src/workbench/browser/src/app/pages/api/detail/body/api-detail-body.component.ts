@@ -54,7 +54,6 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   private initListConf() {
     this.listConf = this.apiDetail.initBodyListConf({
-      title: '参数',
       itemStructure: this.itemStructure,
     });
   }

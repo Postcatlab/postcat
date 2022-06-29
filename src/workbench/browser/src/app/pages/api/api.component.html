@@ -1,6 +1,3 @@
-<div>
-  <h1 i18n>你好，世界</h1>
-</div>
 <nz-layout class="layout">
   <nz-sider nzTheme="light" nzWidth="250">
     <!-- <div class="side-container"> -->
@@ -54,7 +51,7 @@
             </nz-select>
             <ng-template #renderTemplate>
               <nz-divider></nz-divider>
-              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()">管理环境</a>
+              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n="@@manageEnv">管理环境</a>
             </ng-template>
           </div>
         </div>

@@ -42,7 +42,7 @@ export class AppService {
           const response = await this.matchApiData(1, req);
           sender.send('getMockApiList', response);
         } else {
-          sender.send('getMockApiList', { response: { message: `没有找到ID为${mockID}的mock！` }, url: req.url });
+          sender.send('getMockApiList', { response: { message: $localize `没有找到ID为${mockID}的mock！` }, url: req.url });
         }
       });
     }

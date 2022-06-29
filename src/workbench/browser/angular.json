@@ -1,31 +1,18 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
-  },
+  "cli": { "analytics": false, "defaultCollection": "@angular-eslint/schematics" },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "eoapi": {
       "root": "",
       "i18n": {
-        "sourceLocale": {
-          "code": "zh-Hans"
-        },
-        "locales": {
-          "en-US": {
-            "translation": "src/locale/messages.en-US.xlf"
-          }
-        }
+        "sourceLocale": { "code": "zh-Hans" },
+        "locales": { "en-US": { "translation": "src/locale/messages.en-US.xlf" } }
       },
       "sourceRoot": "src",
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
+      "schematics": { "@schematics/angular:application": { "strict": true } },
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
@@ -47,11 +34,7 @@
               }
             ],
             "styles": [
-              {
-                "input": "src/assets/theme/classic_forest.scss",
-                "bundleName": "classic_forest",
-                "inject": false
-              },
+              { "input": "src/assets/theme/classic_forest.scss", "bundleName": "classic_forest", "inject": false },
               "src/styles.scss",
               "src/assets/theme/antd.less",
               "src/assets/font/iconfont.css",
@@ -72,10 +55,7 @@
               "src/ng1/directive/insert-html.directive.js",
               "src/ng1/directive/copy-common.directive.js"
             ],
-            "customWebpackConfig": {
-              "path": "./angular.webpack.js",
-              "replaceDuplicatePlugins": true
-            },
+            "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true },
             "allowedCommonJsDependencies": ["brace", "qs", "rxjs"]
           },
           "configurations": {
@@ -88,10 +68,7 @@
               "vendorChunk": false,
               "buildOptimizer": false,
               "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
-                }
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.dev.ts" }
               ]
             },
             "web": {
@@ -104,10 +81,7 @@
               "vendorChunk": false,
               "buildOptimizer": false,
               "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.web.ts"
-                }
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.web.ts" }
               ]
             },
             "production": {
@@ -119,36 +93,23 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.prod.ts" }
               ]
             }
           }
         },
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
-          "options": {
-            "browserTarget": "eoapi:build"
-          },
+          "options": { "browserTarget": "eoapi:build" },
           "configurations": {
-            "dev": {
-              "browserTarget": "eoapi:build:dev"
-            },
-            "web": {
-              "browserTarget": "eoapi:build:web"
-            },
-            "production": {
-              "browserTarget": "eoapi:build:production"
-            }
+            "dev": { "browserTarget": "eoapi:build:dev" },
+            "web": { "browserTarget": "eoapi:build:web" },
+            "production": { "browserTarget": "eoapi:build:production" }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "eoapi:build"
-          }
+          "options": { "browserTarget": "eoapi:build" }
         },
         "test": {
           "builder": "@angular-builders/custom-webpack:karma",
@@ -160,17 +121,12 @@
             "scripts": [],
             "styles": ["src/styles.scss"],
             "assets": ["src/assets"],
-            "customWebpackConfig": {
-              "path": "./angular.webpack.js",
-              "replaceDuplicatePlugins": true
-            }
+            "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true }
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
-          }
+          "options": { "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"] }
         }
       }
     },
@@ -178,23 +134,13 @@
       "root": "e2e",
       "projectType": "application",
       "architect": {
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": ["e2e/**/*.ts"]
-          }
-        }
+        "lint": { "builder": "@angular-eslint/builder:lint", "options": { "lintFilePatterns": ["e2e/**/*.ts"] } }
       }
     }
   },
   "defaultProject": "eoapi",
   "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "eo",
-      "style": "scss"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "eo"
-    }
+    "@schematics/angular:component": { "prefix": "eo", "style": "scss" },
+    "@schematics/angular:directive": { "prefix": "eo" }
   }
 }

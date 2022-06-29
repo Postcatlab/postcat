@@ -246,7 +246,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Create group.
    */
   addGroup() {
-    this.groupModal('添加分组', { group: this.buildGroupModel(), action: 'new' });
+    this.groupModal($localize`添加分组`, { group: this.buildGroupModel(), action: 'new' });
   }
 
   /**
@@ -255,7 +255,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   addSubGroup(node: NzTreeNode) {
-    this.groupModal('添加子分组', { group: this.buildGroupModel(node.key), action: 'sub' });
+    this.groupModal($localize`添加子分组`, { group: this.buildGroupModel(node.key), action: 'sub' });
   }
 
   /**
@@ -264,7 +264,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   editGroup(node: NzTreeNode) {
-    this.groupModal('编辑分组', { group: this.nodeToGroup(node), action: 'edit' });
+    this.groupModal($localize`编辑分组`, { group: this.nodeToGroup(node), action: 'edit' });
   }
 
   /**
@@ -273,7 +273,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   deleteGroup(node: NzTreeNode) {
-    this.groupModal('删除分组', { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
+    this.groupModal($localize`删除分组`, { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
   }
 
   /**

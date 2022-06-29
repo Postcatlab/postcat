@@ -8,9 +8,9 @@ import { text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
 export class ApiTestService {
   constructor() {}
   initListConf(opts) {
-    opts.title = opts.title || '参数';
-    opts.nameTitle = opts.nameTitle || `${opts.title}名`;
-    opts.valueTitle = opts.valueTitle || `${opts.title}值`;
+    opts.title = opts.title || $localize`参数`;
+    opts.nameTitle = opts.nameTitle || $localize`${opts.title}名`;
+    opts.valueTitle = opts.valueTitle || $localize`${opts.title}值`;
     return {
       setting: {
         // draggable: true,
@@ -50,7 +50,7 @@ export class ApiTestService {
           class: 'w_250',
           btnList: [
             {
-              key: '删除',
+              key: $localize`删除`,
               operateName: 'delete',
             },
           ],
@@ -93,15 +93,15 @@ export class ApiTestService {
           mark: 'require',
         },
         {
-          thKey: '参数名',
+          thKey: $localize`参数名`,
           type: 'depthInput',
           modelKey: 'name',
-          placeholder: '参数名',
+          placeholder: $localize`参数名`,
           width: 300,
           mark: 'name',
         },
         {
-          thKey: '类型',
+          thKey: $localize`类型`,
           type: 'select',
           key: 'key',
           value: 'value',
@@ -114,12 +114,12 @@ export class ApiTestService {
         },
 
         {
-          thKey: '参数值',
+          thKey: $localize`参数值`,
           type: 'autoCompleteAndFile',
           modelKey: 'value',
           switchVar: 'type',
           swicthFile: 'file',
-          placeholder: '参数值',
+          placeholder: $localize`参数值`,
           width: 300,
           mark: 'value',
         },
@@ -128,12 +128,12 @@ export class ApiTestService {
           class: 'w_250',
           btnList: [
             {
-              key: '添加子字段',
+              key: $localize`添加子字段`,
               operateName: 'addChild',
               itemExpression: `eo-attr-tip-placeholder="add_child_btn" ng-if="$ctrl.mainObject.setting.isLevel"`,
             },
             {
-              key: '删除',
+              key: $localize`删除`,
               operateName: 'delete',
               itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
             },
