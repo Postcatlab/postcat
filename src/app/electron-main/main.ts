@@ -58,10 +58,15 @@ function createWindow(): BrowserWindow {
   mockServer.start(win as any);
   proxyOpenExternal(win);
   let loadPage = async () => {
+    let currentUrl = win.webContents.getURL();
+    let locale = ['zh-Hans', 'en-US'].find((val) => currentUrl.includes(val));
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(__dirname, '../../../src/workbench/browser/dist/en-US/index.html')}`;
+        : `file://${path.join(
+            __dirname,
+            `../../../src/workbench/browser/dist/${locale || app.getLocale()}/index.html`
+          )}`;
     win.loadURL(file);
     if (['development'].includes(processEnv)) {
       win.webContents.openDevTools({

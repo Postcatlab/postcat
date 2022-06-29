@@ -64,7 +64,7 @@ export class LanguageSwticherComponent implements OnInit {
     //     },
     //   });
     // } else {
-      changeCallback(inputLocaleID);
+    changeCallback(inputLocaleID);
     // }
   }
 }
