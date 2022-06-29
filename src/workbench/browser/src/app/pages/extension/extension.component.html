@@ -6,7 +6,7 @@
         (ngModelChange)="onSeachChange($event)" />
     </div>
     <!-- Fixed Group -->
-    <div class="group_container fixed_group_tree ">
+    <div class="group_container ">
       <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
         [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
       <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
