@@ -1,9 +1,9 @@
 export const THEMES = [
   {
-    title: '经典',
+    title: $localize`经典`,
     lists: [
       {
-        key: '森林',
+        key: $localize`森林`,
         value: 'classic_forest',
       },
       // {

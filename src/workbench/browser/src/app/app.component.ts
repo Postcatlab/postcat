@@ -31,7 +31,7 @@ export class AppComponent {
           this.remoteService.switchDataSource();
         }, 5000);
         this.modal.info({
-          nzContent: '无法连接到远程数据源，请检查后重新连接，为了不影响使用，程序将帮您跳转到本地',
+          nzContent: $localize `:{can not connect}:无法连接到远程数据源，请检查后重新连接，为了不影响使用，程序将帮您跳转到本地`,
           nzFooter: null,
           nzCentered: true,
           nzClosable: false,

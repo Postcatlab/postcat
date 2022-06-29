@@ -14,9 +14,6 @@
       <div class="flex flex-col flex-1">
         <div class="flex flex-col">
           <span class="mb-2 text-xl font-bold">{{ extensionDetail?.moduleName }}</span>
-          <!-- <span>作者: {{ extensionDetail?.author }}</span> -->
-          <!-- <span class="mb-4">Tags: {{ extensionDetail?.keywords }}</span> -->
-          <!-- <span class="mb-2">版本: {{ extensionDetail?.version }}</span> -->
           <p class="w-full h-20">{{ extensionDetail?.description }}</p>
         </div>
         <div class="flex">
@@ -58,8 +55,6 @@
               The extensions can only be installed on the client at present. Please download the client first~
             </div>
           </div>
-
-          <!-- <span class="text-gray-500">安装完成后需要重启</span> -->
         </div>
         <button *ngIf="extensionDetail?.installed" nz-button nzBlock nzType="primary" nzDanger nzSize="large"
           [nzLoading]="isOperating" class="mt-[12px]" (click)="manageExtension('uninstall', extensionDetail?.name)">
@@ -73,19 +68,6 @@
           </nz-descriptions-item>
         </nz-descriptions>
       </div>
-      <!-- <nz-tabset [nzAnimated]="false">
-        <nz-tab nzTitle="概述"> {{ extensionDetail?.description }} </nz-tab>
-        <nz-tab nzTitle="更多信息">
-          <nz-descriptions [nzColumn]="1" nzTitle="">
-            <nz-descriptions-item nzTitle="作者">{{ extensionDetail?.author }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="版本">{{ extensionDetail?.version }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="反馈">
-              <a class="eo_link" target="_blank" [href]="extensionDetail?.bugs?.url">Issue</a>
-            </nz-descriptions-item>
-          </nz-descriptions>
-        </nz-tab> -->
-      <!-- <nz-tab nzTitle="设置" *ngIf="extensionDetail?.configuration && extensionDetail?.configuration.properties">Content of Tab Pane 3</nz-tab> -->
-      <!-- </nz-tabset> -->
     </div>
   </section>
 </div>

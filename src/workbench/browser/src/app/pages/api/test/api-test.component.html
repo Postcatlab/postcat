@@ -28,7 +28,7 @@
             [(ngModel)]="apiData.uri"
             (change)="changeUri()"
           />
-          <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()">
+          <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()" i18n>
             {{ status === 'testing' ? '终止' : '发送' }}
             <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
           </button>
@@ -39,6 +39,7 @@
             nzType="default"
             (click)="saveTestDataToApi()"
             class="ml10"
+            i18n
           >
             保存为新 API
           </button>
@@ -52,7 +53,7 @@
       <!-- 请求头部 -->
       <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
         <ng-template #headerTitleTmp>
-          请求头部
+          <span i18n>请求头部</span>
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.requestHeaders)">{{
             apiData.requestHeaders | apiParamsNum
           }}</span>
@@ -62,7 +63,7 @@
       <!-- 请求信息 -->
       <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
         <ng-template #bodyTitleTmp>
-          请求体
+          <span i18n>请求体</span>
           <span
             class="iconfont icon-circle eo-tab-theme-icon"
             *ngIf="
@@ -82,7 +83,7 @@
       </nz-tab>
       <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
         <ng-template #queryTitleTmp>
-          Query 参数
+          <span i18n>Query 参数</span>
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.queryParams)">{{
             apiData.queryParams | apiParamsNum
           }}</span>
@@ -95,7 +96,7 @@
       </nz-tab>
       <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
         <ng-template #restTitleTmp>
-          REST 参数
+          <span i18n>REST 参数</span>
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
             apiData.restParams | apiParamsNum
           }}</span>
@@ -110,18 +111,18 @@
       [nzAnimated]="false"
       class="mt10 response_container"
     >
-      <nz-tab nzTitle="返回结果">
+      <nz-tab i18n-nzTitle nzTitle="返回结果">
         <eo-api-test-result-response [model]="testResult.response"></eo-api-test-result-response>
       </nz-tab>
       <div>
-        <nz-tab nzTitle="返回头部">
+        <nz-tab i18n-nzTitle nzTitle="返回头部">
           <eo-api-test-result-header [model]="testResult.response?.headers"></eo-api-test-result-header>
         </nz-tab>
       </div>
-      <nz-tab nzTitle="请求内容">
+      <nz-tab i18n-nzTitle nzTitle="请求内容">
         <eo-api-test-result-request-body [model]="testResult.request?.requestBody"></eo-api-test-result-request-body>
       </nz-tab>
-      <nz-tab nzTitle="请求头部">
+      <nz-tab i18n-nzTitle nzTitle="请求头部">
         <eo-api-test-result-header [model]="testResult.request?.requestHeaders"></eo-api-test-result-header>
       </nz-tab>
     </nz-tabset>

@@ -1,13 +1,20 @@
 <div class="p-[18px]">
-  <button nz-button nzType="primary" (click)="addOrEditModal()">添加 Mock</button>
+  <button nz-button nzType="primary" (click)="addOrEditModal()" i18n>添加 Mock</button>
 
   <div class="mt-[20px]">
     <eo-table [(model)]="mocklList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
       <ng-template cell="name" let-scope="scope" let-index="index">
-        <div class="truncate w-[120px]">{{scope.name}}</div>
+        <div class="truncate w-[120px]">{{ scope.name }}</div>
       </ng-template>
       <ng-template cell="url" let-scope="scope" let-index="index">
-        <span nzTooltipTitle="点击复制" nzTooltipPlacement="top" nz-tooltip (click)="copyText(scope.url )" class="truncate">
+        <span
+          i18n-nzTooltipTitle
+          nzTooltipTitle="点击复制"
+          nzTooltipPlacement="top"
+          nz-tooltip
+          (click)="copyText(scope.url)"
+          class="truncate"
+        >
           {{ scope.url }}
         </span>
       </ng-template>
@@ -16,11 +23,21 @@
       </ng-template>
       <ng-template cell="action" let-scope="scope" let-index="index">
         <div class="flex justify-evenly">
-          <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="addOrEditModal(index)">
-            {{ scope.createWay === 'system' ? '预览' : '编辑' }}</a>
-          <a nz-button nzType="link" *ngIf="(scope.name || scope.url) && scope.createWay !== 'system'" nz-popconfirm
-            nzPopconfirmTitle="您确定要删除此Mock吗?" nzPopconfirmPlacement="topRight"
-            (nzOnConfirm)="handleDeleteMockItem(index)">删除</a>
+          <a nz-button nzType="link" *ngIf="scope.name || scope.url" (click)="addOrEditModal(index)" i18n>
+            {{ scope.createWay === 'system' ? '预览' : '编辑' }}</a
+          >
+          <a
+            nz-button
+            nzType="link"
+            *ngIf="(scope.name || scope.url) && scope.createWay !== 'system'"
+            nz-popconfirm
+            i18n-nzPopconfirmTitle
+            nzPopconfirmTitle="您确定要删除此Mock吗?"
+            nzPopconfirmPlacement="topRight"
+            (nzOnConfirm)="handleDeleteMockItem(index)"
+            i18n
+            >删除</a
+          >
         </div>
       </ng-template>
     </eo-table>
@@ -32,25 +49,33 @@
     <div class="w-full main-content">
       <form nz-form nzLayout="vertical">
         <nz-form-item>
-          <nz-form-label nzFor="currentEditMock.name">Mock 名称</nz-form-label>
+          <nz-form-label i18n nzFor="currentEditMock.name">Mock 名称</nz-form-label>
           <nz-form-control>
-            <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name"
-              [readonly]="currentEditMock.createWay=== 'system'" />
+            <input
+              nz-input
+              name="name"
+              type="text"
+              [(ngModel)]="currentEditMock.name"
+              [readonly]="currentEditMock.createWay === 'system'"
+            />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label nzFor="currentEditMock.response">返回值</nz-form-label>
+          <nz-form-label i18n nzFor="currentEditMock.response">返回值</nz-form-label>
           <nz-form-control>
-            <eo-editor [(code)]="responseStr" (codeChange)="rawDataChange()"
-              [disabled]="currentEditMock.createWay=== 'system'"
-              [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"></eo-editor>
+            <eo-editor
+              [(code)]="responseStr"
+              (codeChange)="rawDataChange()"
+              [disabled]="currentEditMock.createWay === 'system'"
+              [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"
+            ></eo-editor>
           </nz-form-control>
         </nz-form-item>
       </form>
     </div>
   </section>
   <div *nzModalFooter class="footer">
-    <button nz-button nzType="primary" (click)="handleSave()">保存</button>
-    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="primary" i18n (click)="handleSave()">保存</button>
+    <button nz-button nzType="default" i18n (click)="handleCancel()">取消</button>
   </div>
 </nz-modal>

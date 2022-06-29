@@ -69,7 +69,7 @@ const batchCreateMock = async (mock: Table<ApiMockEntity, number | string>, data
       const mockList = await mock.where('uuid').above(0).toArray();
       const noHasDefaultMockApiDatas = data
         .filter((item) => !mockList.some((m) => Number(m.apiDataID) === item.uuid))
-        .map((item) => createMockObj(item, { name: '默认 Mock', createWay: 'system' }));
+        .map((item) => createMockObj(item, { name: $localize`默认 Mock`, createWay: 'system' }));
 
       await mock.bulkAdd(noHasDefaultMockApiDatas);
     }

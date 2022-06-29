@@ -2,7 +2,7 @@ import { ApiData } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [
   {
-    name: '获取城市今日天气',
+    name: $localize`获取城市今日天气`,
     projectID: 1,
     uri: 'http://www.weather.com.cn/data/cityinfo/{cityCode}.html',
     groupID: 0,

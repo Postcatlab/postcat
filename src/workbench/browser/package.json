@@ -5,9 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -c web -o",
-    "beforeBuild": "node ./build.js",
-    "build": "npm run beforeBuild&&ng build --base-href ./",
-    "build:web": "ng build -c production",
+    "build": "node ./build/build.js",
+    "build:web": "node ./build/build.js web",
     "ng:serve": "ng serve -c web -o",
     "i18n:gen": "ng extract-i18n --output-path src/locale",
     "test": "ng test --watch=false",

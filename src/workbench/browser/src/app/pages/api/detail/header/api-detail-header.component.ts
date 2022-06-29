@@ -22,8 +22,8 @@ export class ApiDetailHeaderComponent implements OnInit, OnChanges {
   private initListConf() {
     this.listConf = this.detailService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_EDIT_HEADER',
-      title: '头部',
-      nameTitle: '标签',
+      title: $localize`头部`,
+      nameTitle: $localize`标签`,
     });
   }
 }

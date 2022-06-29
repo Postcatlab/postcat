@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { EoExtensionInfo } from '../extension.model';
+import { ResourceInfo } from '../../../shared/models/client.model';
 import { ExtensionService } from '../extension.service';
 
 @Component({
@@ -13,30 +14,7 @@ export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   introLoading = false;
   extensionDetail: EoExtensionInfo;
-  resourceInfo = [
-    {
-      id: 'win',
-      name: 'Windows 客户端',
-      icon: 'windows',
-      keyword: 'Setup',
-      suffix: 'exe',
-      link: '',
-    },
-    {
-      id: 'mac',
-      name: 'macOS(Intel) 客户端',
-      icon: 'mac',
-      suffix: 'dmg',
-      link: '',
-    },
-    {
-      id: 'mac',
-      name: 'macOS(M1) 客户端',
-      icon: 'mac',
-      suffix: 'arm64.dmg',
-      link: '',
-    },
-  ];
+  resourceInfo = ResourceInfo;
   get isElectron() {
     return this.electronService.isElectron;
   }

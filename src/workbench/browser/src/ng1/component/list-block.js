@@ -2,7 +2,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
   template: `<script type="text/ng-template" id="paramDetail_Template_js">
   <div class="container_pdtj" style="padding-left: -{-(item.listDepth||0)*29+20-}-px" {eoData}-show="item.isClick">
       <p class="f_row" {eoData}-if="item.minLength">
-          <span class="title-span mw_100">最小长度：</span>
+          <span class="title-span mw_100" i18n>最小长度：</span>
           <span  class="wb_all">-{-item.minLength-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.maxLength">
@@ -163,7 +163,7 @@ function listBlockController($rootScope, $element, $scope) {
           activeValue: 1,
         },
         {
-          thKey: '列表项',
+          thKey: $localize `列表项`,
           type: 'html',
           html: '<inner-html-common-directive html="item.key"></inner-html-common-directive>',
         },

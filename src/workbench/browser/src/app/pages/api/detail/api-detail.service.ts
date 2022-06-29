@@ -57,7 +57,7 @@ export class ApiDetailService {
     }
   }
   initListConf(opts) {
-    opts.title = opts.title || '参数';
+    opts.title = opts.title || $localize`参数`;
     return {
       setting: {
         draggable: true,
@@ -66,22 +66,22 @@ export class ApiDetailService {
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
         {
-          thKey: opts.nameTitle || `${opts.title}名`,
+          thKey: opts.nameTitle || $localize`${opts.title}名`,
           type: 'text',
           modelKey: 'name',
-          placeholder: opts.nameTitle || `${opts.title}名`,
+          placeholder: opts.nameTitle || $localize`${opts.title}名`,
           width: 250,
           mark: 'name',
         },
         {
-          thKey: '必填',
+          thKey: $localize`必填`,
           type: 'html',
-          html: '{{item.required?"是":""}}',
+          html: $localize`{{item.required?"是":""}}`,
           width: 80,
           mark: 'require',
         },
         {
-          thKey: '说明',
+          thKey: $localize`说明`,
           type: 'text',
           modelKey: 'description',
           width: 250,
@@ -89,7 +89,7 @@ export class ApiDetailService {
         },
 
         {
-          thKey: '示例',
+          thKey: $localize`示例`,
           type: 'text',
           modelKey: 'example',
           width: 200,
@@ -116,28 +116,28 @@ export class ApiDetailService {
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
         {
-          thKey: '参数名',
+          thKey: $localize`参数名`,
           type: 'depthHtml',
           html: '<span class="param-name-span">{{item.name}}</span>',
           width: 260,
           mark: 'name',
         },
         {
-          thKey: '类型',
+          thKey: $localize`类型`,
           type: 'text',
           modelKey: 'type',
           mark: 'type',
           width: 80,
         },
         {
-          thKey: '必填',
+          thKey: $localize`必填`,
           type: 'html',
-          html: '{{item.required?"是":""}}',
+          html: $localize`{{item.required?"是":""}}`,
           width: 60,
           mark: 'require',
         },
         {
-          thKey: '说明',
+          thKey: $localize`说明`,
           type: 'text',
           modelKey: 'description',
           width: 260,
@@ -145,7 +145,7 @@ export class ApiDetailService {
         },
 
         {
-          thKey: '示例',
+          thKey: $localize`示例`,
           type: 'text',
           modelKey: 'example',
           width: 200,
@@ -154,7 +154,7 @@ export class ApiDetailService {
         {
           thKey: `<button type="button" class="eo-operate-btn" ng-click="$ctrl.data.isSpreedBtnClick=!$ctrl.data.isSpreedBtnClick;$ctrl.data.isSpreed=true;$ctrl.mainObject.baseFun.spreedAll($event);$ctrl.data.isSpreed=false;">{{$ctrl.data.isSpreedBtnClick?"全部收缩":"全部展开"}}</button>`,
           type: 'html',
-          html: `<span class="eo-operate-btn fs12" ng-show="item.minimum ||
+          html: $localize`<span class="eo-operate-btn fs12" ng-show="item.minimum ||
           item.maximum ||
           item.minLength ||
           item.maxLength ||
