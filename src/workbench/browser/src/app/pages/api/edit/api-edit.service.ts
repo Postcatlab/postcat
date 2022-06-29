@@ -6,7 +6,7 @@ export class ApiEditService {
   constructor(private modalService: ModalService) {}
   showMore(inputArg, opts: { nzOnOk: (result: any) => void; title: string }) {
     const modal = this.modalService.create({
-      nzTitle: $localize `${opts.title} Detail`,
+      nzTitle: $localize`${opts.title} Detail`,
       nzContent: ApiParamsExtraSettingComponent,
       nzClosable: false,
       nzWidth: '60%',
@@ -147,7 +147,7 @@ export class ApiEditService {
           thKey: $localize`Param Name`,
           type: 'depthInput',
           modelKey: 'name',
-          placeholder:  $localize`Param Name`,
+          placeholder: $localize`Param Name`,
           width: 300,
           mark: 'name',
         },
@@ -164,26 +164,26 @@ export class ApiEditService {
           width: 100,
         },
         {
-          thKey: '必填',
+          thKey: $localize`Required`,
           type: 'checkbox',
           modelKey: 'required',
           width: 80,
           mark: 'require',
         },
         {
-          thKey: '说明',
+          thKey: $localize`Description`,
           type: 'input',
           modelKey: 'description',
-          placeholder: '参数说明',
+          placeholder: $localize`Param Description`,
           width: 300,
           mark: 'description',
         },
 
         {
-          thKey: '示例',
+          thKey: $localize`Example`,
           type: 'input',
           modelKey: 'example',
-          placeholder: '参数示例',
+          placeholder: $localize`Param Example`,
           width: 200,
           hide: 1,
           mark: 'example',
@@ -193,12 +193,12 @@ export class ApiEditService {
           class: 'w_250',
           btnList: [
             {
-              key: '添加子字段',
+              key: $localize`Add Child`,
               operateName: 'addChild',
               itemExpression: `ng-if="$ctrl.mainObject.setting.isLevel"`,
             },
             {
-              key: '更多设置',
+              key: $localize`More Settings`,
               operateName: 'more',
               fun: (inputArg) => {
                 this.showMore(inputArg, {
@@ -210,14 +210,14 @@ export class ApiEditService {
               itemExpression: `eo-attr-tip-placeholder="more_setting_btn" `,
             },
             {
-              key: '插入',
+              key: $localize`Insert`,
               operateName: 'insert',
-              itemExpression: `ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"`
+              itemExpression: `ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"`,
             },
             {
-              key: '删除',
+              key: $localize`Delete`,
               operateName: 'delete',
-              itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"'
+              itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
             },
           ],
         },
