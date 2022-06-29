@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
   varName = $localize`{{变量名}}`;
+  modalTitle = $localize`New Environment`;
   isVisible = false;
   /** 是否打开下拉菜单 */
   isOpen = false;
@@ -73,7 +74,8 @@ export class EnvComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleDeleteEnv(uuid: string) {
+  handleDeleteEnv($event, uuid: string) {
+    $event.stopPropagation();
     // * delete env in menu on left sidebar
     this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
@@ -89,7 +91,8 @@ export class EnvComponent implements OnInit, OnDestroy {
     const data = JSON.parse(JSON.stringify(this.envInfo.parameters));
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
-  handleSwitchEnv(uuid) {
+  handleEditEnv(uuid) {
+    this.modalTitle = $localize`Edit Environment`;
     this.handleShowModal();
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
@@ -112,6 +115,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       hostUri: '',
       parameters: [],
     };
+    this.modalTitle = 'New Environment';
     this.activeUuid = null;
     this.handleShowModal();
   }
@@ -172,7 +176,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleEnvSelectStatus(event: boolean) {
     if (event) {
       this.activeUuid = this.envUuid;
-      this.handleSwitchEnv(this.activeUuid);
+      this.handleEditEnv(this.activeUuid);
       this.getAllEnv();
     }
   }

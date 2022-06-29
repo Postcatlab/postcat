@@ -1,0 +1,28 @@
+{
+    "Print to console": {
+        "scope": "typescript",
+        "prefix": "log",
+        "body": [
+            "console.log('111$1');"
+        ],
+        "description": "Log output to console"
+    },
+    "Create a Angular Component": {
+        "scope": "typescript",
+        "prefix": "comp",
+        "body": [
+            "import { Component, OnInit } from '@angular/core';",
+            "@Component({",
+            "// standalone: true,",
+            "selector: '$1',",
+            "template: `<div></div>`,",
+            "styleUrls: []",
+            "})",
+            "export class $2Component implements OnInit {",
+            "constructor() {}",
+            "ngOnInit() {}",
+            "}"
+        ],
+        "description": "Create a new Angular Component"
+    }
+}
