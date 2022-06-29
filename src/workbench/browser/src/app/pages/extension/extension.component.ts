@@ -19,13 +19,13 @@ export class ExtensionComponent implements OnInit {
   treeNodes: NzTreeNodeOptions[] = [
     {
       key: 'official',
-      title: 'Official',
+      title: $localize`Official`,
       isLeaf: true,
     },
   ];
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
-      title: 'All',
+      title: $localize`All`,
       key: 'all',
       weight: 0,
       parentID: '0',

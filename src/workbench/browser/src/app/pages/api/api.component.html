@@ -5,7 +5,7 @@
       <nz-tabset nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
-            <span i18n-nzTooltipTitle nzTooltipTitle="API 集合" nz-tooltip class="text-lg">
+            <span i18n-nzTooltipTitle nzTooltipTitle="Collections" nz-tooltip class="text-lg">
               <iconpark-icon name="folder-open"></iconpark-icon>
             </span>
           </ng-template>
@@ -15,7 +15,7 @@
         </nz-tab>
         <nz-tab [nzTitle]="historyTitle">
           <ng-template #historyTitle>
-            <span i18n-nzTooltipTitle nzTooltipTitle="测试历史" nz-tooltip class="text-lg">
+            <span i18n-nzTooltipTitle nzTooltipTitle="History" nz-tooltip class="text-lg">
               <iconpark-icon name="history"></iconpark-icon>
             </span>
           </ng-template>
@@ -23,7 +23,7 @@
         </nz-tab>
         <nz-tab [nzTitle]="envTitle">
           <ng-template #envTitle>
-            <span i18n-nzTooltipTitle nzTooltipTitle="环境" nz-tooltip class="text-lg">
+            <span i18n-nzTooltipTitle nzTooltipTitle="Environment" nz-tooltip class="text-lg">
               <iconpark-icon name="instruction"></iconpark-icon>
             </span>
           </ng-template>
@@ -45,14 +45,14 @@
               (nzOpenChange)="handleEnvSelectStatus($event)"
               [nzDropdownRender]="renderTemplate"
               nzAllowClear
-              i18n-nzPlaceHolder
-              nzPlaceHolder="选择环境"
+              i18n-nzPlaceHolder="Environment Dropdown placeholder"
+              nzPlaceHolder="Environment"
             >
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
             </nz-select>
             <ng-template #renderTemplate>
               <nz-divider></nz-divider>
-              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n="@@manageEnv">管理环境</a>
+              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()">Manage Environment</a>
             </ng-template>
           </div>
         </div>

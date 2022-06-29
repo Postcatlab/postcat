@@ -23,15 +23,15 @@ export class ApiComponent implements OnInit, OnDestroy {
   TABS = [
     {
       routerLink: 'detail',
-      title: $localize`文档`,
+      title: $localize`Preview`,
     },
     {
       routerLink: 'edit',
-      title: $localize`编辑`,
+      title: $localize`Edit`,
     },
     {
       routerLink: 'test',
-      title: $localize`测试`,
+      title: $localize`Test`,
     },
   ];
   isOpen = false;

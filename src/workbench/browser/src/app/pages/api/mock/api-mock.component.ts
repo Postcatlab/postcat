@@ -25,18 +25,18 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
   get modalTitle() {
     return `${
-      this.currentEditMockIndex === -1 ? $localize`添加` : this.currentEditMock.createWay === 'system' ? $localize`预览` : $localize`编辑`
+      this.currentEditMockIndex === -1 ? $localize`Add` : this.currentEditMock.createWay === 'system' ? $localize`Preview` : $localize`Edit`
     } Mock`;
   }
   mocklList: ApiMockEntity[] = [];
   apiData: ApiData;
   createWayMap = {
-    system: $localize`系统自动创建`,
-    custom: $localize`手动创建`,
+    system: $localize `System creation`,
+    custom: $localize `Manual creation`,
   };
   mockListColumns = [
-    { title: $localize`名称`, slot: 'name', width: '20%' },
-    { title: $localize`创建方式`, slot: 'createWay', width: '15%' },
+    { title: $localize`Name`, slot: 'name', width: '20%' },
+    { title: $localize`Created Type`, slot: 'createWay', width: '15%' },
     { title: 'URL', slot: 'url', width: '50%' },
     { title: '', slot: 'action', width: '15%', fixed: true },
   ];
@@ -223,7 +223,7 @@ export class ApiMockComponent implements OnInit, OnChanges {
     await this.removeMock(Number(target.uuid));
     this.mocklList.splice(index, 1)[0];
     this.mocklList = [...this.mocklList];
-    this.message.success($localize`删除成功`);
+    this.message.success($localize`Delete Succeeded`);
   }
   async handleSave() {
     this.isVisible = false;
@@ -232,12 +232,12 @@ export class ApiMockComponent implements OnInit, OnChanges {
 
     if (this.isEdit) {
       await this.updateMock(this.currentEditMock, Number(this.currentEditMock.uuid));
-      this.message.success($localize`修改成功`);
+      this.message.success($localize`Edited successfully`);
       this.mocklList[this.currentEditMockIndex] = this.currentEditMock;
     } else {
       const result = await this.createMock(this.currentEditMock);
       Object.assign(this.currentEditMock, result.data);
-      this.message.success($localize`新增成功`);
+      this.message.success($localize`Added successfully`);
       this.mocklList.push(this.currentEditMock);
     }
     this.currentEditMock.url = this.getApiUrl(this.currentEditMock);
@@ -258,6 +258,6 @@ export class ApiMockComponent implements OnInit, OnChanges {
 
   async copyText(text: string) {
     await copyText(text);
-    this.message.success($localize`复制成功`);
+    this.message.success($localize`Copied`);
   }
 }

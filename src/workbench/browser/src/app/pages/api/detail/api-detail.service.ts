@@ -57,7 +57,7 @@ export class ApiDetailService {
     }
   }
   initListConf(opts) {
-    opts.title = opts.title || $localize`参数`;
+    opts.title = opts.title || $localize`Param`;
     return {
       setting: {
         draggable: true,
@@ -66,22 +66,22 @@ export class ApiDetailService {
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
         {
-          thKey: opts.nameTitle || $localize`${opts.title}名`,
+          thKey: opts.nameTitle || $localize`${opts.title} Name`,
           type: 'text',
           modelKey: 'name',
-          placeholder: opts.nameTitle || $localize`${opts.title}名`,
+          placeholder: opts.nameTitle || $localize`${opts.title} Name`,
           width: 250,
           mark: 'name',
         },
         {
-          thKey: $localize`必填`,
+          thKey: $localize`Required`,
           type: 'html',
-          html: $localize`{{item.required?"是":""}}`,
+          html: $localize`{{item.required?"True":""}}`,
           width: 80,
           mark: 'require',
         },
         {
-          thKey: $localize`说明`,
+          thKey: $localize`Description`,
           type: 'text',
           modelKey: 'description',
           width: 250,
@@ -89,7 +89,7 @@ export class ApiDetailService {
         },
 
         {
-          thKey: $localize`示例`,
+          thKey: $localize`Example`,
           type: 'text',
           modelKey: 'example',
           width: 200,
@@ -116,28 +116,28 @@ export class ApiDetailService {
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
         {
-          thKey: $localize`参数名`,
+          thKey: $localize`Param Name`,
           type: 'depthHtml',
           html: '<span class="param-name-span">{{item.name}}</span>',
           width: 260,
           mark: 'name',
         },
         {
-          thKey: $localize`类型`,
+          thKey: $localize`Type`,
           type: 'text',
           modelKey: 'type',
           mark: 'type',
           width: 80,
         },
         {
-          thKey: $localize`必填`,
+          thKey: $localize`Required`,
           type: 'html',
-          html: $localize`{{item.required?"是":""}}`,
+          html: $localize`{{item.required?"True":""}}`,
           width: 60,
           mark: 'require',
         },
         {
-          thKey: $localize`说明`,
+          thKey: $localize`Description`,
           type: 'text',
           modelKey: 'description',
           width: 260,
@@ -145,7 +145,7 @@ export class ApiDetailService {
         },
 
         {
-          thKey: $localize`示例`,
+          thKey: $localize`Example`,
           type: 'text',
           modelKey: 'example',
           width: 200,
@@ -158,7 +158,7 @@ export class ApiDetailService {
           item.maximum ||
           item.minLength ||
           item.maxLength ||
-          (item.enum && item.enum.length > 0 && item.enum[0].value)">{{item.isClick?"收缩":"展开"}}</span>`,
+          (item.enum && item.enum.length > 0 && item.enum[0].value)">{{item.isClick?"Shrink":"Expand"}}</span>`,
           mark: 'fn_btn',
           width: '100px',
           class: 'undivide_line_lbcc',

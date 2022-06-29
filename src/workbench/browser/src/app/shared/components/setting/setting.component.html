@@ -132,8 +132,9 @@
                 nzSize="small"
                 [nzLoading]="switchDataSourceLoading"
                 (click)="switchDataSource()"
+                i18n
               >
-                切换到{{ isRemote ? '本地' : '远程' }}
+                Switched to {{ isRemote ? 'Localhost' : 'Remote Server' }}
               </button>
             </ng-container>
           </nz-form-control>
@@ -148,7 +149,7 @@
     >
       <ng-template #contentTpl>
         <span i18n
-          >目前还没有安装插件，<a class="eo_link" (click)="navToExtensionList()"> 去插件广场逛逛吧～ </a>
+          >No plugins are currently installed,<a class="eo_link" (click)="navToExtensionList()"> go to install </a>
         </span>
       </ng-template>
     </nz-empty>

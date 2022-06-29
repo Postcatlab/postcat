@@ -55,9 +55,9 @@ export class ApiTestHistoryComponent implements OnInit {
     this.storage.run('apiTestHistoryBulkRemove', [this.model.map((val) => val.uuid)], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.model = [];
-        this.message.success($localize`删除成功`);
+        this.message.success($localize`Delete Succeeded`);
       } else {
-        this.message.error($localize`删除失败`);
+        this.message.error($localize`Fail to delete`);
         console.error(result.data);
       }
     });
@@ -83,24 +83,24 @@ export class ApiTestHistoryComponent implements OnInit {
       },
       tdList: [
         {
-          thKey: $localize`测试时间`,
+          thKey: $localize`Test Time`,
           type: 'text',
           modelKey: 'testTime',
           class: 'pl20 w_180',
         },
         {
-          thKey: $localize`请求地址`,
+          thKey: $localize`URL`,
           type: 'html',
           html: '<span class="method_text_{{item.request.method}} method_label mr5">{{item.request.method}}</span>{{item.request.uri}}',
         },
         {
-          thKey: $localize`返回状态`,
+          thKey: $localize`Status Code`,
           type: 'html',
           class: 'w_100',
           html: `<span class="{{item.codeClass}}">{{item.response.statusCode}}</span>`,
         },
         {
-          thKey: $localize`请求时长(ms)`,
+          thKey: $localize`Request Time(ms)`,
           type: 'html',
           html: '{{item.response.testDeny}}',
           class: 'w_120',
@@ -110,7 +110,7 @@ export class ApiTestHistoryComponent implements OnInit {
           class: 'w_100',
           btnList: [
             {
-              key: $localize`删除`,
+              key: $localize`Delete`,
               operateName: 'delete',
               fun: (inArg) => {
                 this.delete(inArg);
@@ -126,9 +126,9 @@ export class ApiTestHistoryComponent implements OnInit {
     this.storage.run('apiTestHistoryRemove', [inArg.item.uuid], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.model.splice(inArg.$index, 1);
-        this.message.success($localize`删除成功`);
+        this.message.success($localize`Delete Succeeded`);
       } else {
-        this.message.success($localize`删除失败`);
+        this.message.success($localize`Fail to delete`);
         console.error(result.data);
       }
     });

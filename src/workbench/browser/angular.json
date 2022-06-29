@@ -7,8 +7,8 @@
     "eoapi": {
       "root": "",
       "i18n": {
-        "sourceLocale": { "code": "zh-Hans" },
-        "locales": { "en-US": { "translation": "src/locale/messages.en-US.xlf" } }
+        "sourceLocale": { "code": "en-US" },
+        "locales": { "zh-Hans": { "translation": "src/locale/messages.zh-Hans.xlf" } }
       },
       "sourceRoot": "src",
       "projectType": "application",
@@ -84,12 +84,12 @@
                 { "replace": "src/environments/environment.ts", "with": "src/environments/environment.web.ts" }
               ]
             },
-            "webEn": {
+            "webCn": {
               "optimization": false,
               "outputHashing": "none",
               "sourceMap": true,
               "namedChunks": false,
-              "localize": ["en-US"],
+              "localize": ["zh-Hans"],
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": false,
@@ -117,7 +117,7 @@
           "configurations": {
             "dev": { "browserTarget": "eoapi:build:dev" },
             "web": { "browserTarget": "eoapi:build:web" },
-            "webEn": { "browserTarget": "eoapi:build:webEn" },
+            "webCn": { "browserTarget": "eoapi:build:webCn" },
             "production": { "browserTarget": "eoapi:build:production" }
           }
         },
