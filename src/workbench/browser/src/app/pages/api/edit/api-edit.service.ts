@@ -6,7 +6,7 @@ export class ApiEditService {
   constructor(private modalService: ModalService) {}
   showMore(inputArg, opts: { nzOnOk: (result: any) => void; title: string }) {
     const modal = this.modalService.create({
-      nzTitle: `${opts.title}详情`,
+      nzTitle: $localize `${opts.title} Detail`,
       nzContent: ApiParamsExtraSettingComponent,
       nzClosable: false,
       nzWidth: '60%',

@@ -16,27 +16,27 @@ type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' 
 
 const eventHash = new Map()
   .set('format', {
-    label: $localize `整理格式`,
+    label: $localize`Format`,
     icon: 'deployment-unit',
   })
   .set('copy', {
-    label: $localize `复制`,
+    label: $localize`Copy`,
     icon: 'copy',
   })
   .set('search', {
-    label: $localize `搜索`,
+    label: $localize`Search`,
     icon: 'search',
   })
   .set('download', {
-    label: $localize `下载`,
+    label: $localize`Download`,
     icon: 'download',
   })
   .set('newTab', {
-    label: $localize `新开标签`,
+    label: $localize`New Tab`,
     icon: 'file-text',
   })
   .set('replace', {
-    label: $localize `替换`,
+    label: $localize`Replace`,
     icon: 'security-scan',
   });
 

@@ -41,7 +41,7 @@ export class ExtensionSelectComponent {
   parserFile = (file) =>
     new Observable((observer: Observer<boolean>) => {
       if (file.type !== 'application/json') {
-        this.message.error($localize `仅支持上传 JSON 格式的文件`);
+        this.message.error($localize `Only files in JSON format are supported`);
         observer.complete();
       }
       parserJsonFile(file).then((result: { name: string }) => {

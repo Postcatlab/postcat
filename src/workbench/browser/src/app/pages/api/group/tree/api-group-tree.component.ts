@@ -50,7 +50,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
-      title: $localize `概况`,
+      title: $localize `Index`,
       key: 'overview',
       weight: 0,
       parentID: '0',
@@ -246,7 +246,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Create group.
    */
   addGroup() {
-    this.groupModal($localize`添加分组`, { group: this.buildGroupModel(), action: 'new' });
+    this.groupModal($localize`Add Group`, { group: this.buildGroupModel(), action: 'new' });
   }
 
   /**
@@ -255,7 +255,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   addSubGroup(node: NzTreeNode) {
-    this.groupModal($localize`添加子分组`, { group: this.buildGroupModel(node.key), action: 'sub' });
+    this.groupModal($localize`Add Subgroup`, { group: this.buildGroupModel(node.key), action: 'sub' });
   }
 
   /**
@@ -264,7 +264,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   editGroup(node: NzTreeNode) {
-    this.groupModal($localize`编辑分组`, { group: this.nodeToGroup(node), action: 'edit' });
+    this.groupModal($localize`Edit Group`, { group: this.nodeToGroup(node), action: 'edit' });
   }
 
   /**
@@ -273,7 +273,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   deleteGroup(node: NzTreeNode) {
-    this.groupModal($localize`删除分组`, { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
+    this.groupModal($localize`Delete Group`, { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
   }
 
   /**

@@ -16,8 +16,8 @@ import { Subject } from 'rxjs';
 })
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
-  varName = $localize`{{变量名}}`;
-  modalTitle = $localize`新建环境`;
+  varName = $localize`{{Variable Name}}`;
+  modalTitle = $localize`New Environment`;
   isVisible = false;
   /** 是否打开下拉菜单 */
   isOpen = false;
@@ -25,10 +25,10 @@ export class EnvComponent implements OnInit, OnDestroy {
   envList: any[] = [];
   activeUuid = 0;
   envListColumns = [
-    { title: $localize`变量名`, key: 'name', isEdit: true },
-    { title: $localize`变量值`, key: 'value', isEdit: true },
-    { title: $localize`参数说明`, key: 'description', isEdit: true },
-    { title: $localize`操作`, slot: 'action', width: '15%' },
+    { title: $localize`Name`, key: 'name', isEdit: true },
+    { title: $localize`Value`, key: 'value', isEdit: true },
+    { title: $localize`Description`, key: 'description', isEdit: true },
+    { title: $localize`Operate`, slot: 'action', width: '15%' },
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -92,7 +92,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
   handleEditEnv(uuid) {
-    this.modalTitle = $localize`编辑环境`;
+    this.modalTitle = $localize`Edit Environment`;
     this.handleShowModal();
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
@@ -115,7 +115,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       hostUri: '',
       parameters: [],
     };
-    this.modalTitle = $localize`新建环境`;
+    this.modalTitle = $localize`New Environment`;
     this.activeUuid = null;
     this.handleShowModal();
   }
@@ -124,7 +124,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     // * update list after call save api
     const { parameters, name, ...other } = this.envInfo;
     if (!name) {
-      this.message.error($localize`名称不允许为空`);
+      this.message.error($localize`Name is not allowed to be empty`);
       return;
     }
     const data = parameters?.filter((it) => it.name && it.value);
@@ -134,26 +134,26 @@ export class EnvComponent implements OnInit, OnDestroy {
         [{ ...other, name, parameters: data }, uuid],
         async (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
-            this.message.success($localize`编辑成功`);
+            this.message.success($localize`Edited Successfully`);
             await this.getAllEnv(this.activeUuid);
             if (this.envUuid === Number(uuid)) {
               this.envUuid = Number(uuid);
             }
             this.handleCancel();
           } else {
-            this.message.error($localize`编辑失败`);
+            this.message.error($localize`Fail to Edit`);
           }
         }
       );
     } else {
       this.storage.run('environmentCreate', [this.envInfo], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.message.success($localize`新增成功`);
+          this.message.success($localize`Added successfully`);
           this.activeUuid = Number(result.data.uuid);
           await this.getAllEnv();
           this.handleCancel();
         } else {
-          this.message.error($localize`新增失败`);
+          this.message.error($localize`Failed to add`);
         }
       });
     }

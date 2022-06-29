@@ -1,7 +1,7 @@
 <eo-message></eo-message>
 <div class="!pt-0 p15">
   <div class="sticky top-0 z-10 pt-6 bg-white">
-    <button type="submit" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()" i18n>保存</button>
+    <button type="submit" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()" i18n>Save</button>
     <nz-divider></nz-divider>
   </div>
   <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
@@ -14,15 +14,15 @@
         <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
       </nz-select>
       <nz-form-item nz-col class="fg1">
-        <nz-form-control i18n-nzErrorTip nzErrorTip="请输入 API Path">
+        <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
           <input type="text" [(ngModel)]="apiData.uri" name="uri" id="uri" nz-input formControlName="uri" />
         </nz-form-control>
       </nz-form-item>
     </nz-input-group>
-    <nz-form-label nzFor="name" i18n>分组 / API 名称 </nz-form-label>
+    <nz-form-label nzFor="name" i18n>Group / API Name</nz-form-label>
     <nz-input-group nzCompact>
       <nz-form-item nz-col>
-        <nz-form-control class="w_250" i18n-nzErrorTip nzErrorTip="请选择 API 分组">
+        <nz-form-control class="w_250" i18n-nzErrorTip nzErrorTip="Please select an API group">
           <nz-tree-select
             nzAllowClear="false"
             [nzExpandedKeys]="expandKeys"
@@ -37,7 +37,7 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item nz-col class="fg1">
-        <nz-form-control i18n-nzErrorTip nzErrorTip="请输入 API 名称">
+        <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API name">
           <input type="text" name="name" id="name" nz-input formControlName="name" />
         </nz-form-control>
       </nz-form-item>
@@ -45,23 +45,16 @@
   </form>
   <!-- 请求参数 -->
   <nz-collapse class="eo_collapse mt20" [nzGhost]="true">
-    <nz-collapse-panel
-      #panel
-      [nzActive]="true"
-      i18n-nzHeader
-      nzHeader="请求参数"
-      nzShowArrow="false"
-      [nzExtra]="extraTpl"
-    >
-      <ng-template #extraTpl i18n>
-        {{ panel.nzActive ? '收缩' : '展开' }}
+    <nz-collapse-panel #panel [nzActive]="true" i18n-nzHeader nzHeader="Request" nzShowArrow="false" [nzExtra]="extraTpl">
+      <ng-template #extraTpl>
+        <span i18n>{{ panel.nzActive ? 'Shrink' : 'Expand' }}</span>
         <span class="iconfont icon-chevron-{{ panel.nzActive ? 'up' : 'down' }}"></span>
       </ng-template>
       <nz-tabset [nzAnimated]="false" [nzSelectedIndex]="1" class="mt10">
-        <!-- 请求头部 -->
+        <!-- Request Headers -->
         <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
           <ng-template #headerTitleTmp>
-            <span i18n>请求头部</span>
+            <span i18n>Request Headers</span>
             <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.requestHeaders)">{{
               apiData.requestHeaders | apiParamsNum
             }}</span>
@@ -70,8 +63,8 @@
         </nz-tab>
         <!-- 请求体 -->
         <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
-          <ng-template #bodyTitleTmp >
-            <span i18n>请求体</span>
+          <ng-template #bodyTitleTmp>
+            <span i18n>Body</span>
             <span
               class="iconfont icon-circle eo-tab-theme-icon"
               *ngIf="
@@ -91,7 +84,7 @@
         </nz-tab>
         <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
-            <span i18n>Query 参数</span>
+            <span i18n>Query</span>
             <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.queryParams)">{{
               apiData.queryParams | apiParamsNum
             }}</span>
@@ -100,7 +93,7 @@
         </nz-tab>
         <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
           <ng-template #restTitleTmp>
-            <span i18n>REST 参数</span>
+            <span i18n>REST</span>
             <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
               apiData.restParams | apiParamsNum
             }}</span>
@@ -112,15 +105,22 @@
   </nz-collapse>
   <!-- 响应内容 -->
   <nz-collapse class="eo_collapse mt40" [nzGhost]="true">
-    <nz-collapse-panel #panelRes [nzActive]="true" i18n-nzHeader nzHeader="响应内容" nzShowArrow="false" [nzExtra]="extraTplRes">
+    <nz-collapse-panel
+      #panelRes
+      [nzActive]="true"
+      i18n-nzHeader
+      nzHeader="响应内容"
+      nzShowArrow="false"
+      [nzExtra]="extraTplRes"
+    >
       <ng-template #extraTplRes>
-        <span i18n>{{ panelRes.nzActive ? '收缩' : '展开' }}</span>
+        <span i18n>{{ panelRes.nzActive ? 'Shrink' : 'Expand' }}</span>
         <span class="iconfont icon-chevron-{{ panelRes.nzActive ? 'up' : 'down' }}"></span>
       </ng-template>
       <nz-tabset [nzAnimated]="false" [nzSelectedIndex]="1" class="mt10">
         <nz-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">
           <ng-template #responseHeaderTitleTmp>
-            <span i18n>返回头部</span>
+            <span i18n>Response Headers</span>
             <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.responseHeaders)">{{
               apiData.responseHeaders | apiParamsNum
             }}</span>
@@ -130,7 +130,7 @@
         </nz-tab>
         <nz-tab [nzTitle]="responseTitleTmp" [nzForceRender]="true">
           <ng-template #responseTitleTmp>
-            <span i18n>返回结果</span>
+            <span i18n>Response</span>
             <span
               class="iconfont icon-circle eo-tab-theme-icon"
               *ngIf="

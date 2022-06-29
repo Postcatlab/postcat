@@ -6,7 +6,7 @@
     </a>
   </div>
   <div class="flex items-center">
-    <span class="icon mx-1 flex items-center justify-center" i18n-title title="打开设置项" (click)="handleShowModal()">
+    <span class="icon mx-1 flex items-center justify-center" i18n-title title="Open Settings" (click)="handleShowModal()">
       <iconpark-icon name="setting-two"></iconpark-icon>
     </span>
     <!-- <span
@@ -22,9 +22,9 @@
     </span>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
-        <a href="https://eoapi.io/" target="_blank" nz-menu-item i18n>产品文档</a>
+        <a href="https://eoapi.io/" target="_blank" nz-menu-item i18n>Document</a>
         <li nz-menu-divider></li>
-        <a href="https://github.com/eolinker/eoapi/issues/new" target="_blank" nz-menu-item i18n>问题反馈</a>
+        <a href="https://github.com/eolinker/eoapi/issues/new" target="_blank" nz-menu-item i18n>Bug Issue</a>
       </ul>
     </nz-dropdown-menu>
     <div *ngIf="!OS_TYPE.includes('mac') && isElectron">
@@ -57,7 +57,7 @@
       </span>
     </div>
     <div *ngIf="!isElectron">
-      <div class="btn py-1.5 px-2 mx-1 flex items-center" nz-dropdown i18n [nzDropdownMenu]="download">下载</div>
+      <div class="btn py-1.5 px-2 mx-1 flex items-center" nz-dropdown i18n [nzDropdownMenu]="download">Download</div>
       <nz-dropdown-menu #download="nzDropdownMenu">
         <ul nz-menu>
           <ng-container *ngFor="let item of resourceInfo; let index = index">

@@ -1,7 +1,7 @@
 export const ResourceInfo = [
   {
     id: 'win',
-    name: $localize`Windows 客户端`,
+    name: $localize`Windows Client`,
     icon: 'windows',
     keyword: 'Setup',
     suffix: 'exe',
@@ -9,14 +9,14 @@ export const ResourceInfo = [
   },
   {
     id: 'mac',
-    name: $localize`macOS(Intel) 客户端`,
+    name: $localize`MacOS(Intel) Client`,
     icon: 'mac',
     suffix: 'dmg',
     link: '',
   },
   {
     id: 'mac',
-    name: $localize`macOS(M1) 客户端`,
+    name: $localize`MacOS(M1) Client`,
     icon: 'mac',
     suffix: 'arm64.dmg',
     link: '',

@@ -42,7 +42,7 @@ export class TestServerServerlessService implements TestServer {
               responseLength: 0,
               responseType: 'text',
               reportList: [],
-              body: $localize`测试服务连接失败，请提交 Issue 联系社区`,
+              body: $localize`Test service connection failed, please submit Issue contact community`,
             },
             report: {
               request: {

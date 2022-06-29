@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -c web -o",
-    "start:en":"ng serve -c webEn -o",
+    "start:cn":"ng serve -c webCn -o",
     "build": "node ./build/build.js",
     "build:web": "node ./build/build.js web",
     "ng:serve": "ng serve -c web -o",

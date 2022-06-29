@@ -35,7 +35,7 @@ export class ExtensionDetailComponent implements OnInit {
     if (!this.extensionDetail?.introduction && !this.extensionDetail?.installed) {
       await this.fetchReadme();
     }
-    this.extensionDetail.introduction ||= 'This plugin has no documentation yet.';
+    this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
   }
 
   async fetchReadme() {

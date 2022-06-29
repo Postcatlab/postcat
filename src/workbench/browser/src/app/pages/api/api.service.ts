@@ -20,10 +20,10 @@ export class ApiService {
 
   delete({ name, uuid }: ApiData): void {
     this.nzModalService.confirm({
-      nzTitle: $localize`删除确认?`,
-      nzContent: $localize`确认要删除数据 <strong title="${name}">${
+      nzTitle: $localize`Deletion Confirmation?`,
+      nzContent: $localize`Are you sure you want to delete the data <strong title="${name}">${
         name.length > 50 ? name.slice(0, 50) + '...' : name
-      }</strong> 吗？删除后不可恢复！`,
+      }</strong> ? You cannot restore it once deleted!`,
       nzOnOk: () => {
         this.storage.run('apiDataRemove', [uuid], (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {

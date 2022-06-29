@@ -22,7 +22,7 @@ export class ModalService {
       },
       nzFooter: [
         {
-          label: $localize`确认`,
+          label: $localize`Confirm`,
           type: 'primary',
           onClick: () => {
             if (inOpts.nzOnOk) {
@@ -33,7 +33,7 @@ export class ModalService {
           },
         },
         {
-          label: $localize`取消`,
+          label: $localize`Cancel`,
           onClick: () => {
             modal.destroy();
           },

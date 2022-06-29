@@ -8,9 +8,9 @@ import { text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
 export class ApiTestService {
   constructor() {}
   initListConf(opts) {
-    opts.title = opts.title || $localize`参数`;
-    opts.nameTitle = opts.nameTitle || $localize`${opts.title}名`;
-    opts.valueTitle = opts.valueTitle || $localize`${opts.title}值`;
+    opts.title = opts.title || $localize`Param`;
+    opts.nameTitle = opts.nameTitle || $localize`${opts.title} Name`;
+    opts.valueTitle = opts.valueTitle || $localize`${opts.title} Value`;
     return {
       setting: {
         // draggable: true,
@@ -50,7 +50,7 @@ export class ApiTestService {
           class: 'w_250',
           btnList: [
             {
-              key: $localize`删除`,
+              key: $localize`Delete`,
               operateName: 'delete',
             },
           ],
@@ -93,15 +93,15 @@ export class ApiTestService {
           mark: 'require',
         },
         {
-          thKey: $localize`参数名`,
+          thKey: $localize`Param Name`,
           type: 'depthInput',
           modelKey: 'name',
-          placeholder: $localize`参数名`,
+          placeholder: $localize`Param Name`,
           width: 300,
           mark: 'name',
         },
         {
-          thKey: $localize`类型`,
+          thKey: $localize`Type`,
           type: 'select',
           key: 'key',
           value: 'value',
@@ -114,12 +114,12 @@ export class ApiTestService {
         },
 
         {
-          thKey: $localize`参数值`,
+          thKey: $localize`Value`,
           type: 'autoCompleteAndFile',
           modelKey: 'value',
           switchVar: 'type',
           swicthFile: 'file',
-          placeholder: $localize`参数值`,
+          placeholder: $localize`Value`,
           width: 300,
           mark: 'value',
         },
@@ -128,12 +128,12 @@ export class ApiTestService {
           class: 'w_250',
           btnList: [
             {
-              key: $localize`添加子字段`,
+              key: $localize`Add Child`,
               operateName: 'addChild',
               itemExpression: `eo-attr-tip-placeholder="add_child_btn" ng-if="$ctrl.mainObject.setting.isLevel"`,
             },
             {
-              key: $localize`删除`,
+              key: $localize`Delete`,
               operateName: 'delete',
               itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
             },

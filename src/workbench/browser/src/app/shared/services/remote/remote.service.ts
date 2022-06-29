@@ -31,7 +31,7 @@ export class RemoteService {
   }
   /** Text corresponding to the current data source */
   get dataSourceText() {
-    return this.isRemote ? $localize`远程` : $localize`本地`;
+    return this.isRemote ? $localize`Remote Server` : $localize`Localhost`;
   }
   /** get mock url */
   get mockUrl() {
@@ -170,15 +170,14 @@ export class RemoteService {
         this.switchToHttp();
         this.refreshComponent();
       } else {
-        console.log('切换失败');
-        this.message.create('error', $localize`远程数据源不可用`);
+        this.message.create('error', $localize`Remote data source not available`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     }
   };
 
   showMessage() {
-    this.message.create('success', $localize`成功切换到${this.dataSourceText}数据源`);
+    this.message.create('success', $localize`Successfully switched to ${this.dataSourceText} data source`);
     localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }
