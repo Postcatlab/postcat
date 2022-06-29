@@ -144,15 +144,15 @@ export class ApiEditService {
           itemExpression: 'ng-if="$index+1!==$ctrl.list.length"',
         },
         {
-          thKey: '参数名',
+          thKey: $localize`Param Name`,
           type: 'depthInput',
           modelKey: 'name',
-          placeholder: '参数名',
+          placeholder:  $localize`Param Name`,
           width: 300,
           mark: 'name',
         },
         {
-          thKey: '类型',
+          thKey: $localize`Type`,
           type: 'select',
           key: 'key',
           value: 'value',

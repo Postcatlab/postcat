@@ -58,7 +58,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
                   other-obj="{isXml:$ctrl.otherObject.isXml,list:$ctrl.data.TAB_BLOCK_LIST_ARR,active:$ctrl.data.bodyTabBlockObj,conf:$ctrl.component.tabBlockListObj}"
                   eo-drop-elem text-arr="$ctrl.data.tabBlockListHtml">
                   <span class="iconfont icon-table-column-width"></span>
-                  <span>列表项</span>
+                  <span>Column</span>
               </button>
               <button ng-if="$ctrl.mainObject.setting.ableToCopy" copy-common-directive fn-prefix="$ctrl.fun.copy()"
                   text="复制内容可用于导入平台专属格式" eo-attr-tip-placeholder="eo_custom_text" type="button"
@@ -1771,7 +1771,7 @@ function listBlockController($rootScope, $element, $scope) {
         }
         tmpThHtml += `<div ${inputVal.itemExpression || ''}   class="{{class}} plr5" ${
           inputVal.authority ? `ng-if="$ctrl.authorityObject.${inputVal.authority}"` : ''
-        }>${inputVal.thKey || '操作'}</div>`;
+        }>${inputVal.thKey || 'Operation'}</div>`;
         tmpHtml += `<div ${inputVal.itemExpression || ''} class="${
           inputVal.isDropMenu ? 'drop_menu_opr_td_tbd' : 'operate-td-tbd'
         } va-top-td-tbd td-tbd {{class}} plr5" ${
