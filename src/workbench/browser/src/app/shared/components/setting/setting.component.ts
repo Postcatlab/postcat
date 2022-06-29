@@ -87,7 +87,7 @@ export class SettingComponent implements OnInit {
   settings = {};
   treeNodes = [
     {
-      name: 'Data Storage',
+      name: $localize`Data Storage`,
       moduleID: 'eoapi-common',
     },
     {

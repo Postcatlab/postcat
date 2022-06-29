@@ -5,7 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'eo-data-storage',
   template: `
-    <div class="font-bold text-lg mb-2">Data Storage</div>
+    <div class="font-bold text-lg mb-2" i18n>Data Storage</div>
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control>
