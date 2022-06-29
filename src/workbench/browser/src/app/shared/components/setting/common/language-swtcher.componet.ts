@@ -5,9 +5,10 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 @Component({
   selector: 'eo-language-switcher',
   template: `
-    <div class="font-bold text-lg mb-2">Language</div>
+    <div class="font-bold text-lg mb-2" i18n>语言</div>
     <nz-select
-      nzPlaceHolder="Language"
+      i18n-nzPlaceHolder
+      nzPlaceHolder="语言"
       [ngModel]="model['eoapi-language']"
       (ngModelChange)="handleChange($event)"
       [nzCustomTemplate]="defaultTemplate"
