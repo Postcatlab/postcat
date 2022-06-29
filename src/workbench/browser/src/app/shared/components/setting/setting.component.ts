@@ -9,7 +9,6 @@ import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { Router } from '@angular/router';
 
 interface TreeNode {
   name: string;
@@ -84,7 +83,16 @@ export class SettingComponent implements OnInit {
   $isShowModal = false;
   /** current active configure */
   /** all configure */
-  settings = {};
+  $settings = {};
+
+  set settings(val) {
+    this.$settings = val;
+    this.handleSave();
+  }
+
+  get settings() {
+    return this.$settings;
+  }
   treeNodes = [
     {
       name: 'Data Storage',
@@ -121,8 +129,7 @@ export class SettingComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private message: NzMessageService,
-    private remoteService: RemoteService,
-    private router: Router
+    private remoteService: RemoteService
   ) {}
 
   ngOnInit(): void {
@@ -236,7 +243,7 @@ export class SettingComponent implements OnInit {
     this.settings = this.localSettings = JSON.parse(localStorage.getItem('localSettings') || '{}');
     // @ts-ignore
     window.getConfiguration = this.remoteService.getConfiguration;
-    // console.log('localSettings', this.localSettings);
+    console.log('localSettings', this.localSettings);
     // const featureList = window.eo.getFeature('configuration');
     const modules = window.eo?.getModules() || new Map([]);
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
@@ -310,13 +317,6 @@ export class SettingComponent implements OnInit {
     this.validateForm.valueChanges.subscribe(debounce(this.handleSave.bind(this), 300));
     // 默认选中第一项
     this.selectModule(this.treeControl.dataNodes.at(0));
-  }
-
-  navToExtensionList() {
-    this.router.navigate(['home/extension/list'], {
-      queryParams: { type: 'all' },
-    });
-    this.handleCancel();
   }
 
   handleShowModal() {
