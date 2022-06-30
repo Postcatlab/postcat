@@ -1,31 +1,20 @@
 <div>
   <div class="flex items-center justify-between h-10 px-2 history-title">
     <span class="font-bold">History</span>
-    <div
-      class="flex items-center justify-center cursor-pointer shrink-0 h-7"
-      nzTooltipTitle="Clear All"
-      nz-tooltip
-      nz-popconfirm
-      nzPopconfirmTitle="Are you sure delete all history?"
-      (nzOnConfirm)="clearAllHistory()"
-      (nzOnCancel)="cancel()"
-      nzOkText="Yes"
-      nzCancelText="No"
-      nzPopconfirmPlacement="topRight"
-    >
+    <div class="flex items-center justify-center cursor-pointer shrink-0 h-7" nzTooltipTitle="Clear All" nz-tooltip
+      nz-popconfirm nzPopconfirmTitle="Are you sure delete all history?" (nzOnConfirm)="clearAllHistory()"
+      (nzOnCancel)="cancel()" nzOkText="Yes" nzCancelText="No" nzPopconfirmPlacement="topRight">
       <span class="flex items-center justify-center icon">
-        <iconpark-icon name="delete"></iconpark-icon>
+        <eo-iconpark-icon name="delete">
+        </eo-iconpark-icon>
       </span>
     </div>
   </div>
-  <div
-    *ngFor="let item of historyList"
-    class="flex items-center h-8 p-2 text-xs cursor-pointer hover:bg-gray-100"
-    (click)="gotoTestHistory(item)"
-  >
+  <div *ngFor="let item of historyList" class="flex items-center h-8 p-2 text-xs cursor-pointer hover:bg-gray-100"
+    (click)="gotoTestHistory(item)">
     <span class="block w-12 font-light method_type" [ngClass]="methodColor(item.request.method)">{{
       item.request.method
-    }}</span>
+      }}</span>
     <span class="flex-1 overflow-hidden text-gray-600 truncate">{{ item.request.uri }}</span>
   </div>
 </div>

@@ -1,0 +1,15 @@
+{
+  "rewrites": [
+    {
+      "source": "/:path((?!uk/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-vercel-ip-country",
+          "value": "GB"
+        }
+      ],
+      "destination": "/uk/:path*"
+    }
+  ]
+}
