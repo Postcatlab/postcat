@@ -6,6 +6,13 @@
   "redirects": [
     {
       "source": "/:path((?!en/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "en+"
+        }
+      ],
       "destination": "/en/:path*",
       "permanent": false
     },
@@ -15,7 +22,7 @@
         {
           "type": "header",
           "key": "accept-language",
-          "value": "zh"
+          "value": "zh+"
         }
       ],
       "destination": "/zh/:path*",
