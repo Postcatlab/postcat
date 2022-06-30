@@ -1,5 +1,6 @@
 {
   "name": "eoapi",
+  "souceLocale":"zh-Hans",
   "version": "1.2.0",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
