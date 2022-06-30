@@ -22,7 +22,7 @@ export class ApiDetailHeaderComponent implements OnInit, OnChanges {
   private initListConf() {
     this.listConf = this.detailService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_EDIT_HEADER',
-      title: $localize`Header`,
+      title: $localize`:@@Header:Header`,
       nameTitle: $localize`Key`,
     });
   }

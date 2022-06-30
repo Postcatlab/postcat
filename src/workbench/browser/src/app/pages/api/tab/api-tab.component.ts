@@ -25,8 +25,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   defaultTabs = {
     edit: { path: '/home/api/edit', title: $localize`New API` },
     test: { path: '/home/api/test', title: $localize`New API` },
-    detail: { path: '/home/api/detail', title: $localize`Preview` },
-    overview: { path: '/home/api/overview', title: $localize`Index`, key: 'overview' },
+    detail: { path: '/home/api/detail', title: $localize`:@@API Detail:Preview` },
+    overview: { path: '/home/api/overview', title: $localize`:@@API Index:Index`, key: 'overview' },
     mock: { path: '/home/api/mock', title: 'Mock', key: 'mock' },
   };
   MAX_TAB_LIMIT = 15;
@@ -251,7 +251,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
           case 'copyApi':
             this.storage.run('apiDataCreate', [{ ...inArg.data }, inArg.data.uuid], (result: StorageRes) => {
               if (result.status === StorageResStatus.success) {
-                this.message.success($localize`Copied Successfully`);
+                this.message.success($localize`Copied successfully`);
                 this.appendOrSwitchTab('edit', {
                   ...inArg.data,
                   ...result.data,
@@ -260,7 +260,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
                 });
                 this.messageService.send({ type: `copyApiSuccess`, data: result.data });
               } else {
-                this.message.success($localize`Fail to Copy`);
+                this.message.success($localize`Failed to copy`);
               }
             });
             break;

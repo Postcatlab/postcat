@@ -33,7 +33,7 @@ export class ApiEditHeaderComponent implements OnInit, OnChanges, AfterViewCheck
     this.listConf = this.editService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_EDIT_HEADER',
       itemStructure: this.itemStructure,
-      title: $localize`Header`,
+      title: $localize`:@@Header:Header`,
       nameTitle: $localize`Key`,
       nzOnOkMoreSetting: (inputArg) => {
         this.model[inputArg.$index] = inputArg.item;

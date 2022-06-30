@@ -5,12 +5,12 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 @Component({
   selector: 'eo-data-storage',
   template: `
-    <div class="font-bold text-lg mb-2" i18n>Data Storage</div>
+    <div class="font-bold text-lg mb-2" i18n="@@DataSource">Data Storage</div>
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control>
-          <nz-select formControlName="eoapi-common.dataStorage" i18n-nzPlaceHolder nzPlaceHolder="Data Storage">
-            <nz-option nzValue="http" i18n-nzLabel nzLabel="Remote Server"></nz-option>
+          <nz-select formControlName="eoapi-common.dataStorage" i18n-nzPlaceHolder="@@DataSource" nzPlaceHolder="Data Storage">
+            <nz-option nzValue="http" i18n-nzLabel="@@Remote Server" nzLabel="Remote Server"></nz-option>
             <nz-option nzValue="local" nzLabel="Localhost"></nz-option>
           </nz-select>
         </nz-form-control>

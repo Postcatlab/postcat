@@ -32,11 +32,11 @@
             *ngIf="(scope.name || scope.url) && scope.createWay !== 'system'"
             nz-popconfirm
             i18n-nzPopconfirmTitle
-            nzPopconfirmTitle="您确定要删除此Mock吗?"
+            nzPopconfirmTitle="Are you sure you want to delete this Mock?"
             nzPopconfirmPlacement="topRight"
             (nzOnConfirm)="handleDeleteMockItem(index)"
-            i18n
-            >删除</a
+            i18n="@@Delete"
+            >Delete</a
           >
         </div>
       </ng-template>

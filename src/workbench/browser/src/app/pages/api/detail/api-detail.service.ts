@@ -81,7 +81,7 @@ export class ApiDetailService {
           mark: 'require',
         },
         {
-          thKey: $localize`Description`,
+          thKey: $localize`:@@Description:Description`,
           type: 'text',
           modelKey: 'description',
           width: 250,
@@ -137,7 +137,7 @@ export class ApiDetailService {
           mark: 'require',
         },
         {
-          thKey: $localize`Description`,
+          thKey: $localize`:@@Description:Description`,
           type: 'text',
           modelKey: 'description',
           width: 260,

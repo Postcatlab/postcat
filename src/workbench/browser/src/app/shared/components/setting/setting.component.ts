@@ -96,11 +96,11 @@ export class SettingComponent implements OnInit {
   }
   treeNodes = [
     {
-      name: $localize`Data Storage`,
+      name: $localize`:@@DataSource:Data Storage`,
       moduleID: 'eoapi-common',
     },
     {
-      name: $localize`Language`,
+      name: $localize`:@@Language:Language`,
       moduleID: 'eoapi-language',
     },
     {

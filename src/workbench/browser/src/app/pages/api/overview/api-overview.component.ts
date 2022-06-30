@@ -52,10 +52,10 @@ export class ApiOverviewComponent implements OnDestroy {
       nzOnOk: () => {
         this.modal.componentInstance.submit((status) => {
           if (status) {
-            this.message.success($localize`${title} Successfully`);
+            this.message.success($localize`${title} successfully`);
             this.modal.destroy();
           } else {
-            this.message.error($localize`Fail to ${title}`);
+            this.message.error($localize`Failed to ${title}`);
           }
         });
       },

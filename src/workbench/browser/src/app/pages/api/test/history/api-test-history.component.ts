@@ -57,7 +57,7 @@ export class ApiTestHistoryComponent implements OnInit {
         this.model = [];
         this.message.success($localize`Delete Succeeded`);
       } else {
-        this.message.error($localize`Fail to delete`);
+        this.message.error($localize`Failed to delete`);
         console.error(result.data);
       }
     });
@@ -110,7 +110,7 @@ export class ApiTestHistoryComponent implements OnInit {
           class: 'w_100',
           btnList: [
             {
-              key: $localize`Delete`,
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
               fun: (inArg) => {
                 this.delete(inArg);
@@ -128,7 +128,7 @@ export class ApiTestHistoryComponent implements OnInit {
         this.model.splice(inArg.$index, 1);
         this.message.success($localize`Delete Succeeded`);
       } else {
-        this.message.success($localize`Fail to delete`);
+        this.message.success($localize`Failed to delete`);
         console.error(result.data);
       }
     });
