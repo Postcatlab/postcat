@@ -110,7 +110,7 @@ export interface ApiTestHistoryResponse {
   body: string;
   contentType: string;
   responseType: 'text' | 'longText' | 'stream';
-  blobFileName?:string;
+  blobFileName?: string;
   responseLength: number;
   testDeny: string;
   /**

@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -c web -o",
-    "start:cn":"ng serve -c webCn -o",
+    "start:cn": "ng serve -c webCn -o",
     "build": "node ./build/build.js",
     "build:web": "node ./build/build.js web",
     "ng:serve": "ng serve -c web -o",
@@ -76,7 +76,6 @@
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.0.0",
-    "lodash": "4.17.21",
     "node-polyfill-webpack-plugin": "2.0.0",
     "postcss": "8.4.14",
     "tailwindcss": "3.1.4",
