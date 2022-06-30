@@ -17,7 +17,7 @@ export const sampleApiData: ApiData[] = [
         name: 'cityCode',
         required: true,
         example: '101010100',
-        description: '城市代码 : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html',
+        description: $localize`City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html`,
         enum: [
           { default: true, value: '110000', description: 'Beijing' },
           { default: false, value: '440000', description: 'Guangdong' },
@@ -39,8 +39,8 @@ export const sampleApiData: ApiData[] = [
         children: [
           { name: 'city', description: '', type: 'string', required: true, example: '北京' },
           { name: 'cityid', description: '', type: 'string', required: true, example: '101010100' },
-          { name: 'temp1', description: '最低温度', type: 'string', required: true, example: '18℃' },
-          { name: 'temp2', description: '当日最高温度', type: 'string', required: true, example: '31℃' },
+          { name: 'temp1', description: $localize`minimum temperature`, type: 'string', required: true, example: '18℃' },
+          { name: 'temp2', description:  $localize`maximun temperature`, type: 'string', required: true, example: '31℃' },
           { name: 'weather', description: '', type: 'string', required: true, example: '多云转阴' },
           { name: 'img1', description: '', type: 'string', required: true, example: 'n1.gif' },
           { name: 'img2', description: '', type: 'string', required: true, example: 'd2.gif' },
@@ -51,7 +51,7 @@ export const sampleApiData: ApiData[] = [
     weight: 0,
   },
   {
-    name: '新冠全国疫情',
+    name: $localize`COVID-19 national epidemic`,
     projectID: 1,
     uri: 'https://view.inews.qq.com/g2/getOnsInfo',
     groupID: 0,
@@ -76,10 +76,10 @@ export const sampleApiData: ApiData[] = [
     responseBodyType: 'json',
     responseBodyJsonType: 'object',
     responseBody: [
-      { name: 'ret',  description: '', type: 'number', required: true, example: '' },
+      { name: 'ret', description: '', type: 'number', required: true, example: '' },
       {
         name: 'data',
-        description: '实际参数是 string，为了展示文档展开显示',
+        description: $localize`The actual parameter is string, in order to show the document expansion display`,
         type: 'object',
         required: true,
         example:
@@ -136,21 +136,21 @@ export const sampleApiData: ApiData[] = [
             required: true,
             example: '',
             type: 'object',
-            description: ''
+            description: '',
           },
           {
             name: 'chinaAdd',
             required: true,
             example: '',
             type: 'object',
-            description: ''
+            description: '',
           },
           {
             name: 'showAddSwitch',
             required: true,
             example: '',
             type: 'object',
-            description: ''
+            description: '',
           },
           {
             name: 'lastUpdateTime',

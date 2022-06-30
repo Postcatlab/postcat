@@ -155,7 +155,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
         const value = session.getValue();
         if (navigator.clipboard) {
           navigator.clipboard.writeText(value);
-          this.message.success('复制成功');
+          this.message.success($localize`Copied`);
           return;
         }
         break;

@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
-import {
-  ListBlockCommonComponent,
-} from './component.ajs';
-const declarations: Array<any> = [
-  ListBlockCommonComponent
-];
+import { ListBlockCommonComponent } from './component.ajs';
+const declarations: Array<any> = [ListBlockCommonComponent];
 @NgModule({
   declarations: declarations,
   imports: [],

@@ -92,6 +92,25 @@
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2115592966120408375" datatype="html">
+        <source>Copied</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
+          <context context-type="linenumber">158</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
+          <context context-type="linenumber">261</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/index.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d14d93e7ed17daa7a6b4238a3413056df11e1acb" datatype="html">
         <source>Collections</source>
         <context-group purpose="location">
@@ -187,11 +206,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d9f726c70aeba7fa6d3d68bff718abe78b1e50ac" datatype="html">
@@ -206,7 +225,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">87</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/query/api-test-query.component.html</context>
@@ -225,7 +244,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db43e3e3a76a0aa08894372030a2c21b7b5acbc7" datatype="html">
@@ -240,11 +259,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3182a31bb4b49db86613cf11e52c4b3ff62246bd" datatype="html">
@@ -266,7 +285,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4edb71f23e3ff228dbabd05e8ffc364fae8ae467" datatype="html">
@@ -289,7 +308,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3954794666010631211" datatype="html">
@@ -553,21 +572,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
           <context context-type="linenumber">39</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2115592966120408375" datatype="html">
-        <source>Copied</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
-          <context context-type="linenumber">143</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.ts</context>
-          <context context-type="linenumber">261</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/utils/index.ts</context>
-          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
@@ -1038,18 +1042,25 @@
           <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a4917acba5a8ed69c69fea23729f0ff3af2b0f37" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ status === &apos;testing&apos; ? &apos;Abort&apos; : &apos;Send&apos; }}"/></source>
+      <trans-unit id="896458a165a1aede12e3b6ce0db7a9f0274b2f55" datatype="html">
+        <source>Abort</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
           <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2c5ff8fa9c9aaec93f97e37c9a0edcd797194573" datatype="html">
+        <source>Send</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3b23e95d711e74df57c6316a98a63562d811fd7a" datatype="html">
         <source> Save as API </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">43,45</context>
+          <context context-type="linenumber">44,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="798489073422308582" datatype="html">
@@ -1517,6 +1528,13 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6a96d2888bbf261c7f34171e1bb53ec0e84533e4" datatype="html">
+        <source>Localhost</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="77dfedcac0b672d41ad0471e28815943fc8c1146" datatype="html">
         <source>Localhost: Store the data locally. You can only use the product on the current computer.</source>
         <context-group purpose="location">
@@ -1702,6 +1720,41 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/sample/index.ts</context>
           <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2290605059653855867" datatype="html">
+        <source>City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/sample/index.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7782559081118681676" datatype="html">
+        <source>minimum temperature</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/sample/index.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4661147653025473439" datatype="html">
+        <source>maximun temperature</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/sample/index.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8259972015663673459" datatype="html">
+        <source>COVID-19 national epidemic</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/sample/index.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3950552443739162649" datatype="html">
+        <source>The actual parameter is string, in order to show the document expansion display</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/sample/index.ts</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
     </body>
