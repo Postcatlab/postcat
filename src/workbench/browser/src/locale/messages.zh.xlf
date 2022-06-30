@@ -12,12 +12,19 @@
         <target state="translated">无法连接到远程数据源，请检查后重新连接，为了不影响使用，程序将帮您跳转到本地</target>
       </trans-unit>
       <trans-unit id="6255525300449581201" datatype="html">
-        <source>No mock found with ID <x id="PH" equiv-text="mockID"/></source>
+        <source>
+          No mock found with ID
+          <x id="PH" equiv-text="mockID" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.service.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target state="translated">没有找到 ID 为<x id="PH" equiv-text="mockID"/>的 Mock！</target>
+        <target state="translated">
+          没有找到 ID 为
+          <x id="PH" equiv-text="mockID" />
+          的 Mock！
+        </target>
       </trans-unit>
       <trans-unit id="4580786032076405950" datatype="html">
         <source>Classic</source>
@@ -36,12 +43,24 @@
         <target state="translated">森林</target>
       </trans-unit>
       <trans-unit id="a74bb20e2e17301e4cf0eef4746d021f55c2d561" datatype="html">
-        <source> Content Type <x id="START_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;nz-select [(ngModel)]=&quot;editorType&quot;&gt;"/><x id="START_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;nz-option *ngFor=&quot;let item of typeList&quot; [nzValue]=&quot;item.value&quot; [nzLabel]=&quot;item.label&quot;&gt;"/><x id="CLOSE_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;/nz-option&gt;"/><x id="CLOSE_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;/nz-select&gt;"/></source>
+        <source>
+          Content Type
+          <x id="START_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;nz-select [(ngModel)]=&quot;editorType&quot;&gt;" />
+          <x id="START_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;nz-option *ngFor=&quot;let item of typeList&quot; [nzValue]=&quot;item.value&quot; [nzLabel]=&quot;item.label&quot;&gt;" />
+          <x id="CLOSE_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;/nz-option&gt;" />
+          <x id="CLOSE_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;/nz-select&gt;" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.html</context>
           <context context-type="linenumber">3,7</context>
         </context-group>
-        <target state="translated"> 内容类型 <x id="START_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;nz-select [(ngModel)]=&quot;editorType&quot;&gt;"/><x id="START_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;nz-option *ngFor=&quot;let item of typeList&quot; [nzValue]=&quot;item.value&quot; [nzLabel]=&quot;item.label&quot;&gt;"/><x id="CLOSE_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;/nz-option&gt;"/><x id="CLOSE_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;/nz-select&gt;"/></target>
+        <target state="translated">
+          内容类型
+          <x id="START_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;nz-select [(ngModel)]=&quot;editorType&quot;&gt;" />
+          <x id="START_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;nz-option *ngFor=&quot;let item of typeList&quot; [nzValue]=&quot;item.value&quot; [nzLabel]=&quot;item.label&quot;&gt;" />
+          <x id="CLOSE_TAG_NZ_OPTION" ctype="x-nz_option" equiv-text="&lt;/nz-option&gt;" />
+          <x id="CLOSE_TAG_NZ_SELECT" ctype="x-nz_select" equiv-text="&lt;/nz-select&gt;" />
+        </target>
       </trans-unit>
       <trans-unit id="7513076467032912668" datatype="html">
         <source>Format</source>
@@ -117,6 +136,10 @@
           <context context-type="sourcefile">src/app/pages/api/api.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/history/eo-history.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
         <target state="translated">历史</target>
       </trans-unit>
       <trans-unit id="056d358b2b067307621203bdf9681a048041ad49" datatype="html">
@@ -129,7 +152,19 @@
           <context context-type="sourcefile">src/app/pages/api/api.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
         <target state="translated">环境</target>
+      </trans-unit>
+      <trans-unit id="48c0cf180dd17ed2d28a9531cb31d74f7b760251" datatype="html">
+        <source>Manage Environment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/api.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <target state="translated">管理环境</target>
       </trans-unit>
       <trans-unit id="API Detail" datatype="html">
         <source>Preview</source>
@@ -172,12 +207,24 @@
         <target state="translated">确认删除？</target>
       </trans-unit>
       <trans-unit id="9142685431369791033" datatype="html">
-        <source>Are you sure you want to delete the data &lt;strong title=&quot;<x id="PH" equiv-text="name"/>&quot;&gt;<x id="PH_1" equiv-text="name.length &gt; 50 ? name.slice(0, 50) + &apos;...&apos; : name"/>&lt;/strong&gt; ? You cannot restore it once deleted!</source>
+        <source>
+          Are you sure you want to delete the data &lt;strong title=&quot;
+          <x id="PH" equiv-text="name" />
+          &quot;&gt;
+          <x id="PH_1" equiv-text="name.length &gt; 50 ? name.slice(0, 50) + &apos;...&apos; : name" />
+          &lt;/strong&gt; ? You cannot restore it once deleted!
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/api.service.ts</context>
           <context context-type="linenumber">24,26</context>
         </context-group>
-        <target state="translated">确认要删除数据 &lt;strong title="<x id="PH" equiv-text="name"/>"&gt;<x id="PH_1" equiv-text="name.length &gt; 50 ? name.slice(0, 50) + '...' : name"/>&lt;/strong&gt; 吗？删除后不可恢复！</target>
+        <target state="translated">
+          确认要删除数据 &lt;strong title="
+          <x id="PH" equiv-text="name" />
+          "&gt;
+          <x id="PH_1" equiv-text="name.length &gt; 50 ? name.slice(0, 50) + '...' : name" />
+          &lt;/strong&gt; 吗？删除后不可恢复！
+        </target>
       </trans-unit>
       <trans-unit id="9b985691961fb794ada1fb16421cc0c677c6480a" datatype="html">
         <source>Request Headers</source>
@@ -256,12 +303,18 @@
         <target state="translated">请求体</target>
       </trans-unit>
       <trans-unit id="3182a31bb4b49db86613cf11e52c4b3ff62246bd" datatype="html">
-        <source>The outermost structure is: <x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}"/></source>
+        <source>
+          The outermost structure is:
+          <x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target state="translated">最外层结构为：<x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}"/></target>
+        <target state="translated">
+          最外层结构为：
+          <x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}" />
+        </target>
       </trans-unit>
       <trans-unit id="a0b40184f4ad0e2da08dabf8c5209d23f02513b7" datatype="html">
         <source>Response Headers</source>
@@ -320,7 +373,10 @@
         <target state="translated">参数</target>
       </trans-unit>
       <trans-unit id="4371671590563889686" datatype="html">
-        <source><x id="PH" equiv-text="opts.title"/> Name</source>
+        <source>
+          <x id="PH" equiv-text="opts.title" />
+          Name
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/detail/api-detail.service.ts</context>
           <context context-type="linenumber">69</context>
@@ -333,7 +389,10 @@
           <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target state="translated"><x id="PH" equiv-text="opts.title"/>名</target>
+        <target state="translated">
+          <x id="PH" equiv-text="opts.title" />
+          名
+        </target>
       </trans-unit>
       <trans-unit id="7045123878111147511" datatype="html">
         <source>Required</source>
@@ -661,23 +720,27 @@
       </trans-unit>
       <trans-unit id="cde7db225793b0e3c4260b42fbf03c4a86d82050" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{ panel.nzActive ? &apos;Shrink&apos; : &apos;Expand&apos; }}"/>
+          <x id="INTERPOLATION" equiv-text="{{ panel.nzActive ? &apos;Shrink&apos; : &apos;Expand&apos; }}" />
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ panel.nzActive ? '展开' : '收缩' }}"/></target>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{ panel.nzActive ? '展开' : '收缩' }}" />
+        </target>
       </trans-unit>
       <trans-unit id="324b8d32b066433f137c7e28390d4d380e5836e3" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{ panelRes.nzActive ? &apos;Shrink&apos; : &apos;Expand&apos; }}"/>
+          <x id="INTERPOLATION" equiv-text="{{ panelRes.nzActive ? &apos;Shrink&apos; : &apos;Expand&apos; }}" />
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ panelRes.nzActive ? '收缩' : '展开' }}"/></target>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{ panelRes.nzActive ? '收缩' : '展开' }}" />
+        </target>
       </trans-unit>
       <trans-unit id="4926605800185679045" datatype="html">
         <source>Root directory</source>
@@ -688,12 +751,18 @@
         <target state="translated">根目录</target>
       </trans-unit>
       <trans-unit id="5057571330615812244" datatype="html">
-        <source><x id="PH" equiv-text="opts.title"/> Detail</source>
+        <source>
+          <x id="PH" equiv-text="opts.title" />
+          Detail
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.service.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
-        <target state="translated"><x id="PH" equiv-text="opts.title"/>详情</target>
+        <target state="translated">
+          <x id="PH" equiv-text="opts.title" />
+          详情
+        </target>
       </trans-unit>
       <trans-unit id="3098390606978669021" datatype="html">
         <source>Param Description</source>
@@ -800,22 +869,40 @@
         <target state="translated">请输入分组名称</target>
       </trans-unit>
       <trans-unit id="84fc07f763e77354c79c9f8bd931cc6058da69a1" datatype="html">
-        <source> Data from<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong title=&quot;{{ group.name }}&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{     group.name.length &gt; 50 ? group.name.slice(0, 50) + &apos;...&apos; : group.name   }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> will be deleted. This cannot be undone. Are you sure you want to delete?
-</source>
+        <source>
+          Data from
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong title=&quot;{{ group.name }}&quot;&gt;" />
+          <x id="INTERPOLATION" equiv-text="{{     group.name.length &gt; 50 ? group.name.slice(0, 50) + &apos;...&apos; : group.name   }}" />
+          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          will be deleted. This cannot be undone. Are you sure you want to delete?
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/edit/api-group-edit.component.html</context>
           <context context-type="linenumber">9,14</context>
         </context-group>
-        <target state="translated"> 删除<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong title=&quot;{{ group.name }}&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{     group.name.length &gt; 50 ? group.name.slice(0, 50) + '...' : group.name   }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 后，该分组下的数据都会删除。该操作无法撤销，确认删除吗？
-</target>
+        <target state="translated">
+          删除
+          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong title=&quot;{{ group.name }}&quot;&gt;" />
+          <x id="INTERPOLATION" equiv-text="{{     group.name.length &gt; 50 ? group.name.slice(0, 50) + '...' : group.name   }}" />
+          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;" />
+          后，该分组下的数据都会删除。该操作无法撤销，确认删除吗？
+        </target>
       </trans-unit>
       <trans-unit id="2cfcb7763f88319852eccc23561f10f03833f161" datatype="html">
-        <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>New API<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <source>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;" />
+          New API
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>添加 API<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;" />
+          添加 API
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+        </target>
       </trans-unit>
       <trans-unit id="653539a38f21a5bf189859ce97c43e722585bcc9" datatype="html">
         <source>New Group</source>
@@ -911,13 +998,15 @@
       </trans-unit>
       <trans-unit id="ffd42d926de35f89e568b489cbb7e246a21dc6aa" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{ scope.createWay === &apos;system&apos; ? &apos;Preview&apos; : &apos;Edit&apos; }}"/>
+          <x id="INTERPOLATION" equiv-text="{{ scope.createWay === &apos;system&apos; ? &apos;Preview&apos; : &apos;Edit&apos; }}" />
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
           <context context-type="linenumber">26,27</context>
         </context-group>
-        <target state="translated"> <x id="INTERPOLATION" equiv-text="{{ scope.createWay === 'system' ? '预览' : '编辑' }}"/></target>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{ scope.createWay === 'system' ? '预览' : '编辑' }}" />
+        </target>
       </trans-unit>
       <trans-unit id="feacc7017fd641efba1aeb4883e42a352d9d5b6c" datatype="html">
         <source>Are you sure you want to delete this Mock?</source>
@@ -1056,20 +1145,32 @@
         <target state="translated">将 API 推送/同步到其他平台</target>
       </trans-unit>
       <trans-unit id="4119063233600427742" datatype="html">
-        <source><x id="PH" equiv-text="title"/> successfully</source>
+        <source>
+          <x id="PH" equiv-text="title" />
+          successfully
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
-        <target state="translated"><x id="PH" equiv-text="title"/>成功</target>
+        <target state="translated">
+          <x id="PH" equiv-text="title" />
+          成功
+        </target>
       </trans-unit>
       <trans-unit id="6449024135489859683" datatype="html">
-        <source>Failed to <x id="PH" equiv-text="title"/></source>
+        <source>
+          Failed to
+          <x id="PH" equiv-text="title" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target state="translated"><x id="PH" equiv-text="title"/>失败</target>
+        <target state="translated">
+          <x id="PH" equiv-text="title" />
+          失败
+        </target>
       </trans-unit>
       <trans-unit id="058124055e56eebbd20c743499a6843f5da65e9c" datatype="html">
         <source>Close All Tags (excluding current tabs)</source>
@@ -1131,18 +1232,17 @@
         </context-group>
         <target state="translated">复制失败</target>
       </trans-unit>
-      <trans-unit id="8f36c1fb4be4a827235fabc122b0c2f6807ec6a0" datatype="html">
+      <trans-unit id="a4917acba5a8ed69c69fea23729f0ff3af2b0f37" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{ status === &apos;testing&apos; ? &apos;Abort&apos; : &apos;Send&apos; }}"/>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;status === &apos;testing&apos; &amp;&amp; waitSeconds&quot; class=&quot;ml5&quot;&gt;"/>
-          <x id="INTERPOLATION_1" equiv-text="{{ waitSeconds }}"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+          <x id="INTERPOLATION" equiv-text="{{ status === &apos;testing&apos; ? &apos;Abort&apos; : &apos;Send&apos; }}" />
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
-          <context context-type="linenumber">31,33</context>
+          <context context-type="linenumber">32</context>
         </context-group>
-        <target state="translated"> <x id="INTERPOLATION" equiv-text="{{ status === 'testing' ? '终止' : '发送' }}"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;status === 'testing' &amp;&amp; waitSeconds&quot; class=&quot;ml5&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ waitSeconds }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{ status === &apos;testing&apos; ? &apos;终止&apos; : &apos;发送&apos; }}" />
+        </target>
       </trans-unit>
       <trans-unit id="3b23e95d711e74df57c6316a98a63562d811fd7a" datatype="html">
         <source> Save as API </source>
@@ -1153,12 +1253,18 @@
         <target state="translated"> 保存为新 API </target>
       </trans-unit>
       <trans-unit id="798489073422308582" datatype="html">
-        <source><x id="PH" equiv-text="opts.title"/> Value</source>
+        <source>
+          <x id="PH" equiv-text="opts.title" />
+          Value
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.service.ts</context>
           <context context-type="linenumber">13</context>
         </context-group>
-        <target state="translated"><x id="PH" equiv-text="opts.title"/>值</target>
+        <target state="translated">
+          <x id="PH" equiv-text="opts.title" />
+          值
+        </target>
       </trans-unit>
       <trans-unit id="6555318547274416232" datatype="html">
         <source>Value</source>
@@ -1273,20 +1379,42 @@
         <target state="translated">点击发送按钮获取测试报告</target>
       </trans-unit>
       <trans-unit id="08a1f90894376c032d6f0d8c72c8dab7d92c1b95" datatype="html">
-        <source> Unable to preview non-text type data, you can<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button         class=&quot;eo_theme_btn_default mlr5&quot;         type=&quot;button&quot;         (click)=&quot;downloadResponseText()&quot;       &gt;"/> download back result<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button       &gt;"/>and open it with other programs. </source>
+        <source>
+          Unable to preview non-text type data, you can
+          <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button         class=&quot;eo_theme_btn_default mlr5&quot;         type=&quot;button&quot;         (click)=&quot;downloadResponseText()&quot;       &gt;" />
+          download back result
+          <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button       &gt;" />
+          and open it with other programs.
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/result-response/api-test-result-response.component.html</context>
           <context context-type="linenumber">17,25</context>
         </context-group>
-        <target state="translated"> 无法预览非文本类型的数据，您可以 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button         class=&quot;eo_theme_btn_default mlr5&quot;         type=&quot;button&quot;         (click)=&quot;downloadResponseText()&quot;       &gt;"/>下载返回结果<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button       &gt;"/> ，并用其他程序打开。 </target>
+        <target state="translated">
+          无法预览非文本类型的数据，您可以
+          <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button         class=&quot;eo_theme_btn_default mlr5&quot;         type=&quot;button&quot;         (click)=&quot;downloadResponseText()&quot;       &gt;" />
+          下载返回结果
+          <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button       &gt;" />
+          ，并用其他程序打开。
+        </target>
       </trans-unit>
       <trans-unit id="26290046bab292b1e92f49f4d9a90fa38ab4df19" datatype="html">
-        <source> Unable to preview non-text type data, you can <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot; (click)=&quot;downloadResponseText()&quot;&gt;"/>download back result<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
+        <source>
+          Unable to preview non-text type data, you can
+          <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot; (click)=&quot;downloadResponseText()&quot;&gt;" />
+          download back result
+          <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/result-response/api-test-result-response.component.html</context>
           <context context-type="linenumber">30,32</context>
         </context-group>
-        <target state="translated"> 响应结果超出可预览的大小，您可以 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot; (click)=&quot;downloadResponseText()&quot;&gt;"/>下载返回结果<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></target>
+        <target state="translated">
+          响应结果超出可预览的大小，您可以
+          <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot; (click)=&quot;downloadResponseText()&quot;&gt;" />
+          下载返回结果
+          <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;" />
+        </target>
       </trans-unit>
       <trans-unit id="cda31dbd724cf5f4fa7a4274d9120651490c8a8c" datatype="html">
         <source>Back</source>
@@ -1441,20 +1569,34 @@
         <target state="translated">下载</target>
       </trans-unit>
       <trans-unit id="d09850d82a18a9f685aa351663a129bf41c11954" datatype="html">
-        <source>Current data storage exists<x id="INTERPOLATION" equiv-text="{{ dataSourceText }}"/>,please switch if you want to collaborate</source>
+        <source>
+          Current data storage exists
+          <x id="INTERPOLATION" equiv-text="{{ dataSourceText }}" />
+          ,please switch if you want to collaborate
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pages.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
-        <target state="translated">目前数据储存在<x id="INTERPOLATION" equiv-text="{{ dataSourceText }}"/>，如需协作请切换到</target>
+        <target state="translated">
+          目前数据储存在
+          <x id="INTERPOLATION" equiv-text="{{ dataSourceText }}" />
+          ，如需协作请切换到
+        </target>
       </trans-unit>
       <trans-unit id="f01c135ce82fb49d58cce304bd766bce04059eb0" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ isRemote ? &apos;Remote Server&apos; : &apos;Localhost&apos; }}"/> Data Storage</source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ isRemote ? &apos;Remote Server&apos; : &apos;Localhost&apos; }}" />
+          Data Storage
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pages.component.html</context>
           <context context-type="linenumber">6</context>
         </context-group>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ isRemote ? '远程服务器' : '本地' }}"/>数据源</target>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{ isRemote ? '远程服务器' : '本地' }}" />
+          数据源
+        </target>
       </trans-unit>
       <trans-unit id="New Environment" datatype="html">
         <source>New Environment</source>
@@ -1501,12 +1643,20 @@
         <target state="translated">Host</target>
       </trans-unit>
       <trans-unit id="3f1eeb54017aceaa8f374a1c7c6b5e64cef7af4c" datatype="html">
-        <source>Environment variable：can be referenced by using <x id="INTERPOLATION" equiv-text="{{ varName }}"/> in Document or Test</source>
+        <source>
+          Environment variable：can be referenced by using
+          <x id="INTERPOLATION" equiv-text="{{ varName }}" />
+          in Document or Test
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target state="translated">环境变量：在接口文档或测试的过程中，使用<x id="INTERPOLATION" equiv-text="{{ varName }}"/>即可引用该环境变量</target>
+        <target state="translated">
+          环境变量：在接口文档或测试的过程中，使用
+          <x id="INTERPOLATION" equiv-text="{{ varName }}" />
+          即可引用该环境变量
+        </target>
       </trans-unit>
       <trans-unit id="6022921320148690021" datatype="html">
         <source>{{Variable Name}}</source>
@@ -1557,12 +1707,24 @@
         <target state="translated">添加失败</target>
       </trans-unit>
       <trans-unit id="8f1bdc2f56449dc22eb3c73d8786d70b83c1a729" datatype="html">
-        <source> This feature requires plugin support, please move to<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; routerLink=&quot;/home/extension/list&quot;&gt;"/> extensions <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> download </source>
+        <source>
+          This feature requires plugin support, please move to
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; routerLink=&quot;/home/extension/list&quot;&gt;" />
+          extensions
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+          download
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/extension-select/extension-select.component.html</context>
           <context context-type="linenumber">24,26</context>
         </context-group>
-        <target state="translated"> 该功能需要插件支持，请移步至<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; routerLink=&quot;/home/extension/list&quot;&gt;"/>插件广场<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>下载 </target>
+        <target state="translated">
+          该功能需要插件支持，请移步至
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; routerLink=&quot;/home/extension/list&quot;&gt;" />
+          插件广场
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+          下载
+        </target>
       </trans-unit>
       <trans-unit id="dea39d64fc1db8e019f6bdfc109ce7bc381f8d16" datatype="html">
         <source>Tap or drag files directly to this area</source>
@@ -1597,12 +1759,20 @@
         <target state="translated">导入</target>
       </trans-unit>
       <trans-unit id="a0cb90c3698202b0678947b08f7153a2f76969b9" datatype="html">
-        <source>Import like this:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="INTERPOLATION" equiv-text="{{ eg }}"/></source>
+        <source>
+          Import like this:
+          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />
+          <x id="INTERPOLATION" equiv-text="{{ eg }}" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/params-import/params-import.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target state="translated">导入格式：<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="INTERPOLATION" equiv-text="{{ eg }}"/></target>
+        <target state="translated">
+          导入格式：
+          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;" />
+          <x id="INTERPOLATION" equiv-text="{{ eg }}" />
+        </target>
       </trans-unit>
       <trans-unit id="0ebf24febeb263d1f45ea596e8ba6622283e41bd" datatype="html">
         <source>Replace Changed</source>
@@ -1656,7 +1826,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">98</context>
         </context-group>
         <target state="translated">数据源</target>
       </trans-unit>
@@ -1681,12 +1851,22 @@
         <target state="translated">本地数据源：将数据存储在本地，你只能在当前计算机使用产品数据。</target>
       </trans-unit>
       <trans-unit id="9ba12c8d29c115fbc18ff5b07e8fddf73c2e270b" datatype="html">
-        <source> Remote Server: Store data on a remote server to facilitate cross device use of the product. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> Learn more..<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <source>
+          Remote Server: Store data on a remote server to facilitate cross device use of the product.
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;" />
+          Learn more..
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
           <context context-type="linenumber">19,21</context>
         </context-group>
-        <target state="translated"> 远程服务器：将数据存储在远程服务器上，方便跨设备使用产品。<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> 了解更多...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">
+          远程服务器：将数据存储在远程服务器上，方便跨设备使用产品。
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;" />
+          了解更多...
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+        </target>
       </trans-unit>
       <trans-unit id="acedf8fa9132c616c31c3bec3143dd57f587e5f8" datatype="html">
         <source>Please input your Host</source>
@@ -1747,40 +1927,57 @@
       <trans-unit id="Language" datatype="html">
         <source>Language</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/setting/common/language-swtcher.componet.ts</context>
+          <context context-type="sourcefile">src/app/shared/components/setting/common/language-swtcher.component.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/setting/common/language-swtcher.componet.ts</context>
+          <context context-type="sourcefile">src/app/shared/components/setting/common/language-swtcher.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">102</context>
         </context-group>
         <target state="translated">语言</target>
       </trans-unit>
       <trans-unit id="0153ca63af84192825f056daf8503077a518d413" datatype="html">
-        <source> Switched to <x id="INTERPOLATION" equiv-text="{{ isRemote ? &apos;Localhost&apos; : &apos;Remote Server&apos; }}"/> </source>
+        <source>
+          Switched to
+          <x id="INTERPOLATION" equiv-text="{{ isRemote ? &apos;Localhost&apos; : &apos;Remote Server&apos; }}" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.html</context>
           <context context-type="linenumber">136,138</context>
         </context-group>
-        <target state="translated"> 切换到 <x id="INTERPOLATION" equiv-text="{{ isRemote ? '本地' : '远程服务器' }}"/> </target>
+        <target state="translated">
+          切换到
+          <x id="INTERPOLATION" equiv-text="{{ isRemote ? '本地' : '远程服务器' }}" />
+        </target>
       </trans-unit>
       <trans-unit id="e0d1ece694da029a20f5a97fbf3302f6213da891" datatype="html">
-        <source>No plugins are currently installed,<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;"/> go to install <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <source>
+          No plugins are currently installed,
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;" />
+          go to install
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.html</context>
           <context context-type="linenumber">152</context>
         </context-group>
-        <target state="translated">该功能需要插件支持，请移步至<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;"/>插件广场<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>下载</target>
+        <target state="translated">
+          该功能需要插件支持，请移步至
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;" />
+          插件广场
+          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;" />
+          下载
+        </target>
       </trans-unit>
       <trans-unit id="3139147897029202869" datatype="html">
         <source>Extensions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
@@ -1792,7 +1989,7 @@
         <source>About</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">110</context>
         </context-group>
         <target state="translated">关于</target>
       </trans-unit>
@@ -1861,12 +2058,20 @@
         <target state="translated">远程数据源不可用</target>
       </trans-unit>
       <trans-unit id="9118557877038948299" datatype="html">
-        <source>successfully switched to <x id="PH" equiv-text="this.dataSourceText"/> data source</source>
+        <source>
+          successfully switched to
+          <x id="PH" equiv-text="this.dataSourceText" />
+          data source
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/remote/remote.service.ts</context>
           <context context-type="linenumber">180</context>
         </context-group>
-        <target state="translated">成功切换到<x id="PH" equiv-text="this.dataSourceText"/>数据源</target>
+        <target state="translated">
+          成功切换到
+          <x id="PH" equiv-text="this.dataSourceText" />
+          数据源
+        </target>
       </trans-unit>
       <trans-unit id="7245969617352349881" datatype="html">
         <source>Default Mock</source>
