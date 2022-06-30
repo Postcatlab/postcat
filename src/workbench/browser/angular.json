@@ -7,8 +7,8 @@
     "eoapi": {
       "root": "",
       "i18n": {
-        "sourceLocale": { "code": "en", "baseHref": "" },
-        "locales": { "zh": { "translation": "src/locale/messages.zh-Hans.xlf", "baseHref": "" } }
+        "sourceLocale": { "code": "en" },
+        "locales": { "zh": { "translation": "src/locale/messages.zh.xlf" } }
       },
       "sourceRoot": "src",
       "projectType": "application",
