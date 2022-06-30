@@ -28,8 +28,8 @@
             [(ngModel)]="apiData.uri"
             (change)="changeUri()"
           />
-          <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()" i18n>
-            {{ status === 'testing' ? 'Abort' : 'Send' }}
+          <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()">
+            <span i18n>{{ status === 'testing' ? 'Abort' : 'Send' }}</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
           </button>
           <button
