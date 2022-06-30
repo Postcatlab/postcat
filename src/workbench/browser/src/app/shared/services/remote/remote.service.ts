@@ -80,7 +80,7 @@ export class RemoteService {
   }
 
   /**
-   * 测试远程服务器地址是否可用
+   * Test if remote server address is available
    */
   async pingRmoteServerUrl(): Promise<[boolean, any]> {
     const { url: remoteUrl, token } = window.eo?.getModuleSettings('eoapi-common.remoteServer') || {};
@@ -126,7 +126,7 @@ export class RemoteService {
   }
 
   /**
-   * 根据key路径获取对应的配置的值
+   * Get the value of the corresponding configuration according to the key path
    *
    * @param key
    * @returns
