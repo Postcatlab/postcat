@@ -3,7 +3,7 @@
     {
       "source": "/:path((?!en/).*)",
       "destination": "/en/:path*",
-      "permanent": false
+      "permanent": true
     },
     {
       "source": "/:path((?!zh/).*)",
