@@ -1,7 +1,7 @@
 {
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/:path((?!en-US/).*)",
+      "source": "/:path((?!en/).*)",
       "has": [
         {
           "type": "header",
@@ -9,10 +9,10 @@
           "value": "en"
         }
       ],
-      "destination": "/en-US/:path*"
+      "destination": "/en/:path*"
     },
     {
-      "source": "/:path((?!zh-Hans/).*)",
+      "source": "/:path((?!zh/).*)",
       "has": [
         {
           "type": "header",
@@ -20,7 +20,7 @@
           "value": "zh"
         }
       ],
-      "destination": "/zh-Hans/:path*"
+      "destination": "/zh/:path*"
     }
   ]
 }
