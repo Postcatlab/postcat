@@ -59,7 +59,7 @@ function createWindow(): BrowserWindow {
   proxyOpenExternal(win);
   let loadPage = async () => {
     let currentUrl = win.webContents.getURL();
-    let locale = ['zh-Hans', 'en-US'].find((val) => currentUrl.includes(val));
+    let locale = ['zh', 'en'].find((val) => currentUrl.includes(val));
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'

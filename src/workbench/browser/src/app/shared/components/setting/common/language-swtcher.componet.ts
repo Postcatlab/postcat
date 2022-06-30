@@ -38,10 +38,12 @@ export class LanguageSwticherComponent implements OnInit {
     {
       name: 'English',
       value: 'en-US',
+      path: 'en',
     },
     {
       name: '简体中文',
       value: 'zh-Hans',
+      path: 'zh',
     },
   ];
   constructor(private modal: NzModalService, private electron: ElectronService) {}
@@ -54,7 +56,7 @@ export class LanguageSwticherComponent implements OnInit {
     let changeCallback = (localeID) => {
       this.model['eoapi-language'] = localeID;
       this.modelChange.emit(this.model);
-      window.location.href = `/${localeID}`;
+      window.location.href = `/${(this.languages.find((val) => val.value === localeID) || this.languages[0]).path}`;
     };
     // if (this.electron.isElectron) {
     //   this.modal.warning({
