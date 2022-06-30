@@ -4,7 +4,7 @@ import { AppModule } from '../../../app.module';
 import { TabItem } from './tab.model';
 
 @Injectable({
-  providedIn:AppModule
+  providedIn: AppModule,
 })
 export class ApiTabService {
   tabs: Array<TabItem> = [];
@@ -30,13 +30,15 @@ export class ApiTabService {
     this.tabCache[inData.tab.uuid] = inData.data;
   }
   removeData(tabID) {
-    if (!this.tabCache.hasOwnProperty(tabID)) return;
+    if (!this.tabCache.hasOwnProperty(tabID)) {
+      return;
+    }
     delete this.tabCache[tabID];
   }
-  destroy(){
+  destroy() {
     this.saveTabData$.complete();
     this.tabChange$.complete();
-    this.tabs=[];
-    this.tabCache={};
+    this.tabs = [];
+    this.tabCache = {};
   }
 }

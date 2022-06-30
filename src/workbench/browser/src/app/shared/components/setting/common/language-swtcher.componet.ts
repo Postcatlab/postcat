@@ -14,12 +14,12 @@ import { NzModalService } from 'ng-zorro-antd/modal';
       [nzCustomTemplate]="defaultTemplate"
     >
       <nz-option *ngFor="let item of languages" nzCustomContent [nzValue]="item.value" [nzLabel]="item.name">
-        <iconpark-icon name="language"></iconpark-icon>
+        <eo-iconpark-icon name="language"></eo-iconpark-icon>
         {{ item.name }}
       </nz-option>
     </nz-select>
     <ng-template #defaultTemplate let-selected>
-      <iconpark-icon name="language"></iconpark-icon>
+      <eo-iconpark-icon name="language"></eo-iconpark-icon>
       {{ selected.nzLabel }}
     </ng-template>
   `,

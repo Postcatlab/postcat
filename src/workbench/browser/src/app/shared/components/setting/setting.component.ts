@@ -84,22 +84,31 @@ export class SettingComponent implements OnInit {
   $isShowModal = false;
   /** current active configure */
   /** all configure */
-  settings = {};
+  $settings = {};
+
+  set settings(val) {
+    this.$settings = val;
+    this.handleSave();
+  }
+
+  get settings() {
+    return this.$settings;
+  }
   treeNodes = [
     {
       name: $localize`Data Storage`,
       moduleID: 'eoapi-common',
     },
     {
-      name:  $localize`Language`,
+      name: $localize`Language`,
       moduleID: 'eoapi-language',
     },
     {
-      name:  $localize`Extensions`,
+      name: $localize`Extensions`,
       moduleID: 'eoapi-extensions',
     },
     {
-      name:  $localize`About`,
+      name: $localize`About`,
       moduleID: 'eoapi-about',
     },
   ];
@@ -236,7 +245,7 @@ export class SettingComponent implements OnInit {
     this.settings = this.localSettings = JSON.parse(localStorage.getItem('localSettings') || '{}');
     // @ts-ignore
     window.getConfiguration = this.remoteService.getConfiguration;
-    // console.log('localSettings', this.localSettings);
+    console.log('localSettings', this.localSettings);
     // const featureList = window.eo.getFeature('configuration');
     const modules = window.eo?.getModules() || new Map([]);
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
@@ -318,7 +327,6 @@ export class SettingComponent implements OnInit {
     });
     this.handleCancel();
   }
-
   handleShowModal() {
     this.isShowModal = true;
   }

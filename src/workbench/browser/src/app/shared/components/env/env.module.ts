@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -16,6 +16,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { EouiModule } from '../../../eoui/eoui.module';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { ElectronService } from '../../../core/services';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -31,8 +32,7 @@ const ANTDMODULES = [
 ];
 @NgModule({
   declarations: [EnvComponent],
-  imports: [FormsModule, CommonModule, EouiModule, ...ANTDMODULES],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [FormsModule, CommonModule, EouiModule, SharedModule, ...ANTDMODULES],
   exports: [EnvComponent],
   providers: [ElectronService],
 })

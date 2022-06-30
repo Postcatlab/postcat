@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -42,6 +42,7 @@ import { ApiOverviewComponent } from './overview/api-overview.component';
 import { HistoryComponent } from './history/eo-history.component';
 import { ApiMockComponent } from './mock/api-mock.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 const COMPONENTS = [
   ApiComponent,
@@ -84,9 +85,9 @@ const COMPONENTS = [
     NzModalModule,
     NzSelectModule,
     NzPopconfirmModule,
+    SharedModule,
   ],
   declarations: [...COMPONENTS],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [],
   providers: [ElectronService, ApiService, IndexedDBStorage],
 })
