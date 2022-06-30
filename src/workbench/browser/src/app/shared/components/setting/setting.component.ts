@@ -3,10 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { debounce, cloneDeep } from 'lodash';
 import { eoapiSettings } from './eoapi-settings/';
 import { Message, MessageService } from '../../../shared/services/message';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { Router } from '@angular/router';
@@ -48,11 +47,11 @@ export class SettingComponent implements OnInit {
   }
   @Output() isShowModalChange = new EventEmitter<any>();
   objectKeys = Object.keys;
-  /** 是否远程数据源 */
+  /** Whether the remote data source */
   get isRemote() {
     return this.remoteService.isRemote;
   }
-  /** 当前数据源对应的文本 */
+  /** The text corresponding to the current data source */
   get dataSourceText() {
     return this.remoteService.dataSourceText;
   }
@@ -94,7 +93,7 @@ export class SettingComponent implements OnInit {
   get settings() {
     return this.$settings;
   }
-  treeNodes = [
+  readonly treeNodes = [
     {
       name: $localize`Data Storage`,
       moduleID: 'eoapi-common',
@@ -159,7 +158,7 @@ export class SettingComponent implements OnInit {
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
   /**
-   * 切换数据源
+   * switch data source
    */
   switchDataSource() {
     this.switchDataSourceLoading = true;
@@ -170,16 +169,16 @@ export class SettingComponent implements OnInit {
   }
 
   /**
-   * 设置数据
+   * set data
    *
    * @param properties
    */
   private setSettingsModel(properties, controls) {
-    //  平级配置对象
+    //  Flat configuration object
     Object.keys(properties).forEach((fieldKey) => {
       const props = properties[fieldKey];
       this.settings[fieldKey] = this.localSettings?.[fieldKey] ?? props.default;
-      // 可扩展加入更多默认校验
+      // Extensible to add more default checks
       if (props.required) {
         controls[fieldKey] = [null, [Validators.required]];
       } else {
@@ -207,7 +206,7 @@ export class SettingComponent implements OnInit {
   }
 
   /**
-   * 根据key路径获取对应的配置的值
+   * Get the value of the corresponding configuration according to the key path
    *
    * @param key
    * @returns
@@ -216,7 +215,7 @@ export class SettingComponent implements OnInit {
     // return key.split('.').reduce((p, k) => p?.[k], this.nestedSettings);
   }
   /**
-   * 获取模块的标题
+   * Get the title of the module
    *
    * @param module
    * @returns
@@ -234,15 +233,15 @@ export class SettingComponent implements OnInit {
   }
 
   /**
-   * 解析所有模块的配置信息
+   * Parse the configuration information of all modules
    */
   private init() {
     // if (!window.eo && !window.eo?.getFeature) {
     //   return;
     // }
     // ! this.isVisible = true;
-    // 获取本地设置
-    this.settings = this.localSettings = JSON.parse(localStorage.getItem('localSettings') || '{}');
+    // Get local settings
+    this.settings = this.localSettings = this.remoteService.getSettings();
     // @ts-ignore
     window.getConfiguration = this.remoteService.getConfiguration;
     console.log('localSettings', this.localSettings);
@@ -251,9 +250,9 @@ export class SettingComponent implements OnInit {
     // const extensitonConfigurations = [...modules.values()].filter((n) => n.contributes?.configuration);
     const extensitonConfigurations = [...modules.values()].filter((n) => n.features?.configuration);
     const controls = {};
-    // 所有设置
-    const allSettings = cloneDeep([eoapiSettings['eoapi-extensions']]);
-    // 所有配置
+    // All settings
+    const allSettings = structuredClone([eoapiSettings['eoapi-extensions']]);
+    // All configure
     const allConfiguration = allSettings.map((n) => {
       const configuration = n.features?.configuration || n.contributes?.configuration;
       if (Array.isArray(configuration)) {
@@ -275,14 +274,14 @@ export class SettingComponent implements OnInit {
         extensionsConfiguration.push(configuration);
       }
     });
-    // 给插件的属性前面追加模块ID
+    // Appends the module ID to the plug-in property
     const appendModuleID = (properties, moduleID) =>
       Object.keys(properties).reduce((prev, key) => {
         prev[`${moduleID}.${key}`] = properties[key];
         return prev;
       }, {});
 
-    /** 根据configuration配置生成settings model */
+    /** Generate settings model based on configuration configuration */
     allConfiguration.forEach((item) => {
       if (Array.isArray(item)) {
         item.forEach((n) => {
@@ -295,7 +294,7 @@ export class SettingComponent implements OnInit {
       }
     });
     type Configuration = typeof allConfiguration[number] | Array<typeof allConfiguration[number]>;
-    // 递归生成设置树
+    // Recursively generate the setup tree
     const generateTreeData = (configurations: Configuration = []) =>
       [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
         if (Array.isArray(curr)) {
@@ -307,8 +306,8 @@ export class SettingComponent implements OnInit {
         };
         return prev.concat(treeItem);
       }, []);
-    // 所有设置项
-    const treeData = cloneDeep(this.treeNodes);
+    // All settings
+    const treeData = structuredClone(this.treeNodes);
     const extensions = treeData.find((n) => n.moduleID === 'eoapi-extensions');
     const extensionConfiguration = allSettings[0].features?.configuration || allSettings[0].contributes?.configuration;
     extensions.children = generateTreeData(extensionConfiguration);
@@ -316,8 +315,8 @@ export class SettingComponent implements OnInit {
     this.dataSource.setData(treeData);
     this.treeControl.expandAll();
     this.validateForm = this.fb.group(controls);
-    this.validateForm.valueChanges.subscribe(debounce(this.handleSave.bind(this), 300));
-    // 默认选中第一项
+    this.validateForm.valueChanges.pipe(debounceTime(300)).subscribe(this.handleSave);
+    // The first item is selected by default
     this.selectModule(this.treeControl.dataNodes.at(0));
   }
 
@@ -331,7 +330,7 @@ export class SettingComponent implements OnInit {
     this.isShowModal = true;
   }
 
-  handleSave(): void {
+  handleSave = () => {
     // for (const i in this.validateForm.controls) {
     //   if (this.validateForm.controls.hasOwnProperty(i)) {
     //     this.validateForm.controls[i].markAsDirty();
@@ -343,7 +342,7 @@ export class SettingComponent implements OnInit {
     // }
     localStorage.setItem('localSettings', JSON.stringify(this.settings));
     window.eo?.saveSettings?.({ ...this.settings });
-  }
+  };
 
   async handleCancel() {
     try {
@@ -351,15 +350,11 @@ export class SettingComponent implements OnInit {
         this.remoteServerUrl !== this.settings['eoapi-common.remoteServer.url'] ||
         this.remoteServerToken !== this.settings['eoapi-common.remoteServer.token'] ||
         this.oldDataStorage !== this.settings['eoapi-common.dataStorage'];
-      console.log(
-        'isUpdateRemoteInfo',
-        isUpdateRemoteInfo,
-        this.settings,
-        this.remoteServerUrl,
-        this.remoteServerToken
-      );
+
       if (isUpdateRemoteInfo) {
-        this.message.success('你已修改数据源相关信息，页面将在2秒后刷新...');
+        this.message.success(
+          'You have modified the data source related information, the page will refresh in 2 seconds...'
+        );
         setTimeout(() => {
           this.remoteService.switchDataSource();
           this.remoteService.refreshComponent();
