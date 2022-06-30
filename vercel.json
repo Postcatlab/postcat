@@ -1,8 +1,4 @@
 {
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/.*", "dest": "/en/index.html" }
-  ],
   "redirects": [
     {
       "source": "/:path((?!en/).*)",
