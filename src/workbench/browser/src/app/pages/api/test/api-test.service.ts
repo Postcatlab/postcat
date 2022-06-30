@@ -50,7 +50,7 @@ export class ApiTestService {
           class: 'w_250',
           btnList: [
             {
-              key: $localize`Delete`,
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
             },
           ],
@@ -133,7 +133,7 @@ export class ApiTestService {
               itemExpression: `eo-attr-tip-placeholder="add_child_btn" ng-if="$ctrl.mainObject.setting.isLevel"`,
             },
             {
-              key: $localize`Delete`,
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
               itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
             },

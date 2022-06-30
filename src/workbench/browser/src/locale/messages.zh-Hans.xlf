@@ -955,14 +955,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1205615742045874576" datatype="html">
-        <source><x id="PH" equiv-text="title"/> Successfully</source>
+        <source><x id="PH" equiv-text="title"/> successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7151048763437792475" datatype="html">
-        <source>Fail to <x id="PH" equiv-text="title"/></source>
+        <source>Failed to <x id="PH" equiv-text="title"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -1008,14 +1008,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="4907078814051755011" datatype="html">
-        <source>Copied Successfully</source>
+        <source>Copied successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7692894809481743955" datatype="html">
-        <source>Fail to Copy</source>
+        <source>Failed to Copy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
           <context context-type="linenumber">263</context>
@@ -1104,7 +1104,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1649261429156309361" datatype="html">
-        <source>Fail to delete</source>
+        <source>Failed to delete</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/history/api-test-history.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -1411,14 +1411,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2952346632292825392" datatype="html">
-        <source>Edited Successfully</source>
+        <source>Edited successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.ts</context>
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9181127106692245123" datatype="html">
-        <source>Fail to Edit</source>
+        <source>Failed to Edit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.ts</context>
           <context context-type="linenumber">144</context>
@@ -1717,7 +1717,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="6493317474275837530" datatype="html">
-        <source>Successfully switched to <x id="PH" equiv-text="this.dataSourceText"/> data source</source>
+        <source>successfully switched to <x id="PH" equiv-text="this.dataSourceText"/> data source</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/remote/remote.service.ts</context>
           <context context-type="linenumber">180</context>

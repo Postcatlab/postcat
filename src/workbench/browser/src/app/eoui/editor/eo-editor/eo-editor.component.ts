@@ -20,11 +20,11 @@ const eventHash = new Map()
     icon: 'deployment-unit',
   })
   .set('copy', {
-    label: $localize`Copy`,
+    label: $localize`:@@Copy:Copy`,
     icon: 'copy',
   })
   .set('search', {
-    label: $localize`Search`,
+    label: $localize`:@@Search:Search`,
     icon: 'search',
   })
   .set('download', {

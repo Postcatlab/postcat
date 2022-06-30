@@ -171,7 +171,7 @@ export class ApiEditService {
           mark: 'require',
         },
         {
-          thKey: $localize`Description`,
+          thKey: $localize`:@@Description:Description`,
           type: 'input',
           modelKey: 'description',
           placeholder: $localize`Param Description`,
@@ -215,7 +215,7 @@ export class ApiEditService {
               itemExpression: `ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"`,
             },
             {
-              key: $localize`Delete`,
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
               itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
             },

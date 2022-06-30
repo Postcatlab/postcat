@@ -1,5 +1,5 @@
 <header class="flex p-2">
-  <input type="text" class="input flex-1 px-3" i18n-placeholder placeholder="Search" [(ngModel)]="searchValue" />
+  <input type="text" class="input flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="searchValue" />
   <div class="btn ml-3 text-base flex shrink-0 items-center justify-center" nzType="primary" nz-button nz-dropdown
     [nzDropdownMenu]="menu" nzPlacement="bottomRight"
     (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })">
@@ -61,7 +61,7 @@
                 <a i18n>Edit</a>
               </li>
               <li nz-menu-item (click)="deleteGroup(node)">
-                <a i18n>Delete</a>
+                <a i18n="@@Delete">Delete</a>
               </li>
             </ul>
           </nz-dropdown-menu>
@@ -90,11 +90,11 @@
               </li>
               <li nz-menu-item
                 (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })">
-                <a i18n>Copy</a>
+                <a i18n="@@Copy">Copy</a>
               </li>
               <li nz-menu-item
                 (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
-                <a i18n>Delete</a>
+                <a i18n="@@Delete">Delete</a>
               </li>
             </ul>
           </nz-dropdown-menu>

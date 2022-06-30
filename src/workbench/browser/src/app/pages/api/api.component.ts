@@ -23,7 +23,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   TABS = [
     {
       routerLink: 'detail',
-      title: $localize`Preview`,
+      title: $localize`:@@API Detail:Preview`,
     },
     {
       routerLink: 'edit',

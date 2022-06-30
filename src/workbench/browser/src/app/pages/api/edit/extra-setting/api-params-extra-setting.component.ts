@@ -25,7 +25,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
         class: 'w_100',
       },
       {
-        thKey: $localize`Description`,
+        thKey: $localize`:@@Description:Description`,
         type: 'text',
         modelKey: 'description',
       },

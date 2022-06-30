@@ -1773,7 +1773,7 @@
      * @param {angular.Module} ngApp an optional application
      *   {@link angular.module module} name to load.
      * @param {boolean=} ngStrictDi if this attribute is present on the app element, the injector will be
-     *   created in "strict-di" mode. This means that the application will fail to invoke functions which
+     *   created in "strict-di" mode. This means that the application will Failed to invoke functions which
      *   do not use explicit function annotation (and are thus unsuitable for minification), as described
      *   in {@link guide/di the Dependency Injection guide}, and useful debugging info will assist in
      *   tracking down the root of these bugs.
@@ -1837,7 +1837,7 @@
            <div ng-controller="GoodController1">
                I can add: {{a}} + {{b}} =  {{ a+b }}
 
-               <p>This renders because the controller does not fail to
+               <p>This renders because the controller does not Failed to
                   instantiate, by using explicit annotation style (see
                   script.js for details)
                </p>
@@ -1847,7 +1847,7 @@
                Name: <input ng-model="name"><br />
                Hello, {{name}}!
 
-               <p>This renders because the controller does not fail to
+               <p>This renders because the controller does not Failed to
                   instantiate, by using explicit annotation style
                   (see script.js for details)
                </p>
@@ -1866,13 +1866,13 @@
        </file>
        <file name="script.js">
        angular.module('ngAppStrictDemo', [])
-         // BadController will fail to instantiate, due to relying on automatic function annotation,
+         // BadController will Failed to instantiate, due to relying on automatic function annotation,
          // rather than an explicit annotation
          .controller('BadController', function($scope) {
            $scope.a = 1;
            $scope.b = 2;
          })
-         // Unlike BadController, GoodController1 and GoodController2 will not fail to be instantiated,
+         // Unlike BadController, GoodController1 and GoodController2 will not Failed to be instantiated,
          // due to using explicit annotations using the array style and $inject property, respectively.
          .controller('GoodController1', ['$scope', function($scope) {
            $scope.a = 1;
@@ -8095,7 +8095,7 @@
      * #### Pre-linking function
      *
      * Executed before the child elements are linked. Not safe to do DOM transformation since the
-     * compiler linking function will fail to locate the correct elements for linking.
+     * compiler linking function will Failed to locate the correct elements for linking.
      *
      * #### Post-linking function
      *

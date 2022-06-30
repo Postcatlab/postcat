@@ -17,7 +17,7 @@ import { Subject } from 'rxjs';
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
   varName = $localize`{{Variable Name}}`;
-  modalTitle = $localize`New Environment`;
+  modalTitle = $localize`:@@New Environment:New Environment`;
   isVisible = false;
   /** 是否打开下拉菜单 */
   isOpen = false;
@@ -27,7 +27,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   envListColumns = [
     { title: $localize`Name`, key: 'name', isEdit: true },
     { title: $localize`Value`, key: 'value', isEdit: true },
-    { title: $localize`Description`, key: 'description', isEdit: true },
+    { title: $localize`:@@Description:Description`, key: 'description', isEdit: true },
     { title: $localize`Operate`, slot: 'action', width: '15%' },
   ];
 
@@ -115,7 +115,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       hostUri: '',
       parameters: [],
     };
-    this.modalTitle = $localize`New Environment`;
+    this.modalTitle = $localize`:@@New Environment:New Environment`;
     this.activeUuid = null;
     this.handleShowModal();
   }
@@ -134,14 +134,14 @@ export class EnvComponent implements OnInit, OnDestroy {
         [{ ...other, name, parameters: data }, uuid],
         async (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
-            this.message.success($localize`Edited Successfully`);
+            this.message.success($localize`Edited successfully`);
             await this.getAllEnv(this.activeUuid);
             if (this.envUuid === Number(uuid)) {
               this.envUuid = Number(uuid);
             }
             this.handleCancel();
           } else {
-            this.message.error($localize`Fail to Edit`);
+            this.message.error($localize`Failed to edit`);
           }
         }
       );
