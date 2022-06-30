@@ -1,15 +1,26 @@
 {
   "rewrites": [
     {
-      "source": "/:path((?!uk/).*)",
+      "source": "/:path((?!en-US/).*)",
       "has": [
         {
           "type": "header",
-          "key": "x-vercel-ip-country",
-          "value": "GB"
+          "key": "accept-language",
+          "value": "en"
         }
       ],
-      "destination": "/uk/:path*"
+      "destination": "/en-US/:path*"
+    },
+    {
+      "source": "/:path((?!zh-Hans/).*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "zh"
+        }
+      ],
+      "destination": "/zh-Hans/:path*"
     }
   ]
 }
