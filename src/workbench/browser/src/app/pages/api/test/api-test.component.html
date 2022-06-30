@@ -29,7 +29,8 @@
             (change)="changeUri()"
           />
           <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()">
-            <span i18n>{{ status === 'testing' ? 'Abort' : 'Send' }}</span>
+            <span *ngIf="status === 'testing'" i18n>Abort</span>
+            <span *ngIf="status !== 'testing'" i18n>Send</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
           </button>
           <button

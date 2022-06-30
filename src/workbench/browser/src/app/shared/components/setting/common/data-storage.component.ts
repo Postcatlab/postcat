@@ -11,7 +11,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
         <nz-form-control>
           <nz-select formControlName="eoapi-common.dataStorage" i18n-nzPlaceHolder="@@DataSource" nzPlaceHolder="Data Storage">
             <nz-option nzValue="http" i18n-nzLabel="@@Remote Server" nzLabel="Remote Server"></nz-option>
-            <nz-option nzValue="local" nzLabel="Localhost"></nz-option>
+            <nz-option nzValue="local" i18n-nzLabel nzLabel="Localhost"></nz-option>
           </nz-select>
         </nz-form-control>
         <div class="text-[12px] mt-[8px] text-gray-400">
