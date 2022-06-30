@@ -1,9 +1,13 @@
 {
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/en/index.html" }
+  ],
   "redirects": [
     {
       "source": "/:path((?!en/).*)",
       "destination": "/en/:path*",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/:path((?!zh/).*)",
