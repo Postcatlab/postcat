@@ -23,16 +23,8 @@
     <nz-input-group nzCompact>
       <nz-form-item nz-col>
         <nz-form-control class="w_250" i18n-nzErrorTip nzErrorTip="Please select an API group">
-          <nz-tree-select
-            nzAllowClear="false"
-            [nzExpandedKeys]="expandKeys"
-            [nzDropdownMatchSelectWidth]="false"
-            [nzNodes]="groups"
-            [(ngModel)]="apiData.groupID"
-            [nzShowSearch]="true"
-            #apiGroup
-            formControlName="groupID"
-          >
+          <nz-tree-select nzAllowClear="false" [nzExpandedKeys]="expandKeys" [nzDropdownMatchSelectWidth]="false"
+            [nzNodes]="groups" [(ngModel)]="apiData.groupID" [nzShowSearch]="true" #apiGroup formControlName="groupID">
           </nz-tree-select>
         </nz-form-control>
       </nz-form-item>
@@ -45,7 +37,8 @@
   </form>
   <!-- 请求参数 -->
   <nz-collapse class="eo_collapse mt20" [nzGhost]="true">
-    <nz-collapse-panel #panel [nzActive]="true" i18n-nzHeader nzHeader="Request" nzShowArrow="false" [nzExtra]="extraTpl">
+    <nz-collapse-panel #panel [nzActive]="true" i18n-nzHeader nzHeader="Request" nzShowArrow="false"
+      [nzExtra]="extraTpl">
       <ng-template #extraTpl>
         <span i18n>{{ panel.nzActive ? 'Shrink' : 'Expand' }}</span>
         <span class="iconfont icon-chevron-{{ panel.nzActive ? 'up' : 'down' }}"></span>
@@ -55,9 +48,9 @@
         <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
           <ng-template #headerTitleTmp>
             <span i18n>Request Headers</span>
-            <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.requestHeaders)">{{
+            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(apiData.requestHeaders)">{{
               apiData.requestHeaders | apiParamsNum
-            }}</span>
+              }}</span>
           </ng-template>
           <eo-api-edit-header class="eo_theme_iblock bbd bld brd" [model]="apiData.requestHeaders"></eo-api-edit-header>
         </nz-tab>
@@ -65,38 +58,31 @@
         <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
           <ng-template #bodyTitleTmp>
             <span i18n>Body</span>
-            <span
-              class="iconfont icon-circle eo-tab-theme-icon"
-              *ngIf="
+            <span class="iconfont icon-circle eo-tab-theme-icon" *ngIf="
                 ['formData', 'json', 'xml'].includes(apiData.requestBodyType)
                   ? bindGetApiParamNum(apiData.requestBody)
                   : apiData.requestBody?.length
-              "
-            ></span>
+              "></span>
           </ng-template>
-          <eo-api-edit-body
-            class="eo_theme_iblock bbd bld brd"
-            [(bodyType)]="apiData.requestBodyType"
-            [(model)]="apiData.requestBody"
-            [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
-            [(jsonRootType)]="apiData.requestBodyJsonType"
-          ></eo-api-edit-body>
+          <eo-api-edit-body class="eo_theme_iblock bbd bld brd" [(bodyType)]="apiData.requestBodyType"
+            [(model)]="apiData.requestBody" [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
+            [(jsonRootType)]="apiData.requestBodyJsonType"></eo-api-edit-body>
         </nz-tab>
         <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
             <span i18n>Query</span>
-            <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.queryParams)">{{
+            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(apiData.queryParams)">{{
               apiData.queryParams | apiParamsNum
-            }}</span>
+              }}</span>
           </ng-template>
           <eo-api-edit-query class="eo_theme_iblock bbd bld brd" [model]="apiData.queryParams"></eo-api-edit-query>
         </nz-tab>
         <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
           <ng-template #restTitleTmp>
             <span i18n>REST</span>
-            <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
+            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
               apiData.restParams | apiParamsNum
-            }}</span>
+              }}</span>
           </ng-template>
           <eo-api-edit-rest class="eo_theme_iblock bbd bld brd" [model]="apiData.restParams"></eo-api-edit-rest>
         </nz-tab>
@@ -105,14 +91,8 @@
   </nz-collapse>
   <!-- 响应内容 -->
   <nz-collapse class="eo_collapse mt40" [nzGhost]="true">
-    <nz-collapse-panel
-      #panelRes
-      [nzActive]="true"
-      i18n-nzHeader
-      nzHeader="Response"
-      nzShowArrow="false"
-      [nzExtra]="extraTplRes"
-    >
+    <nz-collapse-panel #panelRes [nzActive]="true" i18n-nzHeader nzHeader="Response" nzShowArrow="false"
+      [nzExtra]="extraTplRes">
       <ng-template #extraTplRes>
         <span i18n>{{ panelRes.nzActive ? 'Shrink' : 'Expand' }}</span>
         <span class="iconfont icon-chevron-{{ panelRes.nzActive ? 'up' : 'down' }}"></span>
@@ -121,9 +101,9 @@
         <nz-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">
           <ng-template #responseHeaderTitleTmp>
             <span i18n>Response Headers</span>
-            <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.responseHeaders)">{{
+            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(apiData.responseHeaders)">{{
               apiData.responseHeaders | apiParamsNum
-            }}</span>
+              }}</span>
           </ng-template>
           <eo-api-edit-header class="eo_theme_iblock bbd bld brd" [model]="apiData.responseHeaders">
           </eo-api-edit-header>
@@ -131,22 +111,15 @@
         <nz-tab [nzTitle]="responseTitleTmp" [nzForceRender]="true">
           <ng-template #responseTitleTmp>
             <span i18n>Response</span>
-            <span
-              class="iconfont icon-circle eo-tab-theme-icon"
-              *ngIf="
+            <span class="iconfont icon-circle eo-tab-theme-icon" *ngIf="
                 ['formData', 'json', 'xml'].includes(apiData.responseBodyType)
                   ? bindGetApiParamNum(apiData.responseBody)
                   : apiData.responseBody?.length
-              "
-            ></span>
+              "></span>
           </ng-template>
-          <eo-api-edit-body
-            class="eo_theme_iblock bbd bld brd"
-            [(bodyType)]="apiData.responseBodyType"
-            [(model)]="apiData.responseBody"
-            [supportType]="['json', 'xml', 'raw', 'binary']"
-            [(jsonRootType)]="apiData.responseBodyJsonType"
-          ></eo-api-edit-body>
+          <eo-api-edit-body class="eo_theme_iblock bbd bld brd" [(bodyType)]="apiData.responseBodyType"
+            [(model)]="apiData.responseBody" [supportType]="['json', 'xml', 'raw', 'binary']"
+            [(jsonRootType)]="apiData.responseBodyJsonType"></eo-api-edit-body>
         </nz-tab>
       </nz-tabset>
     </nz-collapse-panel>

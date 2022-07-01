@@ -2,8 +2,16 @@ nz-content {
   background-color: var(--MAIN_BG);
 }
 
-nz-select {
-  width: 126px;
+:lang(zh) {
+  nz-select {
+    width: 132px;
+  }
+}
+
+:lang(en) {
+  nz-select {
+    width: 162px;
+  }
 }
 
 nz-sider {
