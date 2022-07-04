@@ -18,10 +18,9 @@ export class LanguageService {
       path: 'zh',
     },
   ];
-  constructor(private remote: RemoteService) {
-  }
-  init(){
-    const configLanguage = this.remote.getSettings()?.['eoapi-language'];
+  constructor(private remote: RemoteService) {}
+  init() {
+    const configLanguage = this.remote.getSettings()?.['eoapi-language'] || this.currentLanguage;
     this.changeLanguage(configLanguage);
   }
   changeLanguage(localeID) {
