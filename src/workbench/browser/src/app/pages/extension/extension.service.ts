@@ -5,9 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { ModuleInfo } from '../../utils/module-loader';
 import { EoExtensionInfo } from './extension.model';
 
-const HOST = isElectron()
-  ? 'http://106.12.149.147'
-  : 'https://mockapi.eolink.com/ztBFKai20ee60c12871881565b5a6ddd718337df0e30979';
+const HOST = 'http://106.12.149.147';
 @Injectable()
 export class ExtensionService {
   ignoreList = ['default'];
