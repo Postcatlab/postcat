@@ -19,7 +19,6 @@ export class LanguageService {
     },
   ];
   constructor(private remote: RemoteService) {
-    console.log('LanguageService')
   }
   init(){
     const configLanguage = this.remote.getSettings()?.['eoapi-language'];
