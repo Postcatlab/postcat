@@ -1,6 +1,7 @@
-<header class="flex p-2">
-  <input type="text" class="input flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="searchValue" />
-  <div class="btn ml-3 text-base flex shrink-0 items-center justify-center" nzType="primary" nz-button nz-dropdown
+<header class="flex py-2">
+  <input type="text" class="flex-1 px-3 input" i18n-placeholder="@@Search" placeholder="Search"
+    [(ngModel)]="searchValue" />
+  <div class="flex items-center justify-center ml-3 text-base btn shrink-0" nzType="primary" nz-button nz-dropdown
     [nzDropdownMenu]="menu" nzPlacement="bottomRight"
     (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })">
     <eo-iconpark-icon name="plus"></eo-iconpark-icon>
@@ -18,7 +19,7 @@
   <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
     [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-    <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
+    <div class="tree_node" *ngIf="node.origin?.isFixed">
       <div class="flex items-center">
         <span class="mr-2 text-sm">
           <eo-iconpark-icon name="home">
@@ -39,7 +40,7 @@
     (nzExpandChange)="toggleExpand()" nzDraggable nzBlockNode (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
-    <div class="pl5">
+    <div>
       <!-- Folder -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
         <div class="f_row_ac">
