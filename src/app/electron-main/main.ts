@@ -18,6 +18,7 @@ import { UnitWorkerModule } from '../../workbench/node/unitWorker';
 import Configuration from '../../platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
 import { MockServer } from 'eo/platform/node/mock-server';
+import { LanguageService } from 'eo/app/electron-main/language';
 
 let win: BrowserWindow = null;
 export const subView = {
@@ -58,14 +59,12 @@ function createWindow(): BrowserWindow {
   mockServer.start(win as any);
   proxyOpenExternal(win);
   let loadPage = async () => {
-    let currentUrl = win.webContents.getURL();
-    let locale = ['zh', 'en'].find((val) => currentUrl.includes(val));
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
         : `file://${path.join(
             __dirname,
-            `../../../src/workbench/browser/dist/${locale || app.getLocale()}/index.html`
+            `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`
           )}`;
     win.loadURL(file);
     if (['development'].includes(processEnv)) {
@@ -146,9 +145,12 @@ try {
         win.close();
         break;
       }
+      case 'changeLanguage': {
+        LanguageService.set(arg.data);
+        break;
+      }
     }
   });
-
   ipcMain.on('eo-storage', (event, args) => {
     let returnValue: any;
     if (args.type === 'default' || args.type === 'remote') {

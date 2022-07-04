@@ -1,6 +1,6 @@
 {
   "name": "eoapi",
-  "souceLocale":"zh-Hans",
+  "souceLocale": "zh-Hans",
   "version": "1.2.0",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
@@ -35,6 +35,7 @@
     "copyfiles": "2.4.1",
     "crypto-js": "^4.1.1",
     "electron-log": "^4.4.8",
+    "electron-store": "8.0.2",
     "electron-updater": "^5.0.5",
     "express": "4.18.1",
     "fix-path": "3.0.0",

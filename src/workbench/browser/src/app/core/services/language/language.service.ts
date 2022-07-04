@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LanguageService {
-  currentLanguage = navigator.language.includes('zh') ? 'zh-Hans' : 'en-US';
   languages = [
     {
       name: 'English',
@@ -18,9 +18,13 @@ export class LanguageService {
       path: 'zh',
     },
   ];
-  constructor(private remote: RemoteService) {}
+  currentLanguage =
+    this.languages.find((val) => window.location.href.includes(`/${val.path}`))?.value ||
+    (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
+  constructor(private remote: RemoteService, private electron: ElectronService) {}
   init() {
     const configLanguage = this.remote.getSettings()?.['eoapi-language'] || this.currentLanguage;
+    console.log('configLanguage', configLanguage, this.currentLanguage);
     this.changeLanguage(configLanguage);
   }
   changeLanguage(localeID) {
@@ -29,6 +33,14 @@ export class LanguageService {
       return;
     }
     this.currentLanguage = localeID;
-    window.location.href = `/${(this.languages.find((val) => val.value === localeID) || this.languages[0]).path}`;
+    const localePath = (this.languages.find((val) => val.value === localeID) || this.languages[0]).path;
+    if (this.electron.isElectron) {
+      this.electron.ipcRenderer.send('message', {
+        action: 'changeLanguage',
+        data: this.currentLanguage,
+      });
+    } else {
+      window.location.href = `/${localePath}`;
+    }
   }
 }
