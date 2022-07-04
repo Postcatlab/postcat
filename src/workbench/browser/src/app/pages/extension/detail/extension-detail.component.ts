@@ -41,8 +41,10 @@ export class ExtensionDetailComponent implements OnInit {
   async fetchReadme() {
     try {
       this.introLoading = true;
-      const htmlText = await (await fetch(`https://unpkg.com/${this.extensionDetail.name}/README.md`)).text();
-      this.extensionDetail.introduction = htmlText;
+      const response = await fetch(`https://unpkg.com/${this.extensionDetail.name}/README.md`);
+      if (response.status === 200) {
+        this.extensionDetail.introduction = await response.text();
+      }
     } catch (error) {
     } finally {
       this.introLoading = false;
