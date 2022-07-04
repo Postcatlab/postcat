@@ -32,7 +32,7 @@ export class ExtensionDetailComponent implements OnInit {
       this.route.snapshot.queryParams.id,
       this.route.snapshot.queryParams.name
     );
-    if (!this.extensionDetail?.introduction && !this.extensionDetail?.installed) {
+    if (!this.extensionDetail?.installed) {
       await this.fetchReadme();
     }
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
@@ -41,10 +41,8 @@ export class ExtensionDetailComponent implements OnInit {
   async fetchReadme() {
     try {
       this.introLoading = true;
-      const htmlText = await (await fetch(`https://www.npmjs.com/package/${this.extensionDetail.name}`)).text();
-      const domParser = new DOMParser();
-      const html = domParser.parseFromString(htmlText, 'text/html');
-      this.extensionDetail.introduction = html.querySelector('#readme').innerHTML;
+      const htmlText = await (await fetch(`https://unpkg.com/${this.extensionDetail.name}/README.md`)).text();
+      this.extensionDetail.introduction = htmlText;
     } catch (error) {
     } finally {
       this.introLoading = false;
