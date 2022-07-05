@@ -19,10 +19,6 @@ jobs:
       - name: Check out git repository
         uses: actions/checkout@v3.0.0
 
-      # 设置服务器时区为东八区
-      - name: Set time zone
-        run: sudo timedatectl set-timezone 'Asia/Shanghai'
-
       - name: Install Node.js
         uses: actions/setup-node@v3.0.0
         with:
@@ -63,6 +59,9 @@ jobs:
           # BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
+          # 设置服务器时区为东八区
+          sudo timedatectl set-timezone 'Asia/Shanghai'
+
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           # PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
