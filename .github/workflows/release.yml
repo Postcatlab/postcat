@@ -38,11 +38,6 @@ jobs:
       - name: Install
         run: yarn install --frozen-lockfile
 
-      - name: Build Electron App
-        run: yarn build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
       - name: Release for Windows
         if: matrix.os == 'windows-latest'
         run: |
