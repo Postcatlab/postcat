@@ -19,6 +19,10 @@ jobs:
       - name: Check out git repository
         uses: actions/checkout@v3.0.0
 
+      # 设置服务器时区为东八区
+      - name: Set time zone
+        run: sudo timedatectl set-timezone 'Asia/Shanghai'
+
       - name: Install Node.js
         uses: actions/setup-node@v3.0.0
         with:
@@ -80,8 +84,8 @@ jobs:
           # apply provisioning profile
           # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-          yarn release
           yarn release:m1
+          yarn release
 
           # clean up keychain and provisioning profile
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
