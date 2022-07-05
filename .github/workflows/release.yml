@@ -1,9 +1,9 @@
-name: Build
+name: Release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - feat/preview
 
 jobs:
   release:
