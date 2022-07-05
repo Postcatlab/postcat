@@ -18,17 +18,20 @@ export class LanguageService {
       path: 'zh',
     },
   ];
-  currentLanguage =
-    this.languages.find((val) => window.location.href.includes(`/${val.path}`))?.value ||
-    (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
+  //If the user does not set it, the system default language is used
+  // Web from nginx setting and App from computer system setting
+  currentLanguage =(this.languages.find((val) => window.location.href.includes(`/${val.path}`))?.value) ||(navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
+
   constructor(private remote: RemoteService, private electron: ElectronService) {}
+
   init() {
-    const configLanguage = this.remote.getSettings()?.['eoapi-language'] || this.currentLanguage;
-    console.log('configLanguage', configLanguage, this.currentLanguage);
-    this.changeLanguage(configLanguage);
+    console.log(
+      `currentLangaue:${this.currentLanguage},systemLangaue:${this.remote.getSettings()?.['eoapi-language']}`
+    );
+    this.changeLanguage(this.remote.getSettings()?.['eoapi-language']);
   }
   changeLanguage(localeID) {
-    if (localeID === this.currentLanguage) {
+    if (!localeID || localeID === this.currentLanguage) {
       console.warn(`current language has already ${localeID}`);
       return;
     }

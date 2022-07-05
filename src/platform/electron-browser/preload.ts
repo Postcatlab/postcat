@@ -102,28 +102,28 @@ window.eo.storageSync = (args) => {
   args.type = 'sync';
   return ipcRenderer.sendSync('eo-storage', args);
 };
-window.eo.storageRemote = (args) => {
-  console.log('run preload storageRemote');
-  args.type = 'remote';
-  const shareObject = window.require('@electron/remote').getGlobal('shareObject');
-  shareObject.storageResult = null;
-  ipcRenderer.send('eo-storage', args);
-  let output: any = shareObject.storageResult;
-  let count: number = 0;
-  while (output === null) {
-    if (count > 1500) {
-      output = {
-        status: 'error',
-        data: 'storage remote load error',
-      };
-      break;
-    }
-    output = shareObject.storageResult;
-    ++count;
-  }
-  shareObject.storageResult = null;
-  return output;
-};
+// window.eo.storageRemote = (args) => {
+//   console.log('run preload storageRemote');
+//   args.type = 'remote';
+//   const shareObject = window.require('@electron/remote').getGlobal('shareObject');
+//   shareObject.storageResult = null;
+//   ipcRenderer.send('eo-storage', args);
+//   let output: any = shareObject.storageResult;
+//   let count: number = 0;
+//   while (output === null) {
+//     if (count > 1500) {
+//       output = {
+//         status: 'error',
+//         data: 'storage remote load error',
+//       };
+//       break;
+//     }
+//     output = shareObject.storageResult;
+//     ++count;
+//   }
+//   shareObject.storageResult = null;
+//   return output;
+// };
 
 window.eo.saveSettings = (settings) => {
   // console.log('window.eo.saveSettings', settings);

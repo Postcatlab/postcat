@@ -1,11 +1,9 @@
 import { app } from 'electron';
-
-const Store = require('electron-store');
+import Store from 'electron-store';
 const store = new Store();
-store.delete('language');
 class LanguageInstance {
   private static _instance: LanguageInstance;
-  language= [
+  language = [
     {
       name: 'English',
       value: 'en-US',
@@ -24,16 +22,12 @@ class LanguageInstance {
   get() {
     return store.get('language') || (app.getLocale().includes('zh') ? 'zh-Hans' : 'en-US');
   }
-  getPath(){
-    const currentLanguage=this.get();
-    this.language.find(val=>val.value===currentLanguage).path;
+  getPath() {
+    const currentLanguage = this.get();
+    return this.language.find((val) => val.value === currentLanguage).path;
   }
   set(localeID) {
-    store.set('language',localeID);
-    this.reloadWin();
-  }
-  reloadWin() {
-    
+    store.set('language', localeID);
   }
 }
 export const LanguageService = LanguageInstance.Instance;
