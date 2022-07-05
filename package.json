@@ -1,6 +1,6 @@
 {
   "name": "eoapi",
-  "souceLocale":"zh-Hans",
+  "souceLocale": "zh-Hans",
   "version": "1.2.0",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
@@ -21,9 +21,10 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "build": "npm-run-all -s build:workbench electron:tsc && electron-builder build",
-    "build:static": "npm run electron:tsc && electron-builder build",
-    "release": "npm-run-all -s build:workbench electron:tsc && electron-builder --publish=always",
+    "build": "npm-run-all -s build:workbench electron:tsc",
+    "build:static": "npm-run-all -s build:workbench electron:tsc && electron-builder build",
+    "release": "electron-builder --publish=always",
+    "release:m1": "electron-builder -m=dmg --arm64 -p onTagOrDraft",
     "test": "npm-run-all --serial test:*",
     "electron:tsc": "tsc -p tsconfig.json",
     "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out"
