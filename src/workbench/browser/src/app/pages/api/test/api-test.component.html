@@ -79,11 +79,11 @@
     <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [(nzSelectedIndex)]="tabIndexRes" [nzAnimated]="false"
       class="mt10 response_container">
       <nz-tab i18n-nzTitle nzTitle="Response">
-        <eo-api-test-result-response [model]="testResult.response"></eo-api-test-result-response>
+        <eo-api-test-result-response [model]="testResult?.response"></eo-api-test-result-response>
       </nz-tab>
       <div>
         <nz-tab i18n-nzTitle nzTitle="Response Headers">
-          <eo-api-test-result-header [model]="testResult.response?.headers"></eo-api-test-result-header>
+          <eo-api-test-result-header [model]="testResult?.response?.headers"></eo-api-test-result-header>
         </nz-tab>
       </div>
       <nz-tab i18n-nzTitle nzTitle="Body">
