@@ -3,9 +3,8 @@ const package = require('./package.json');
 
 //需要填写你的 Access Key 和 Secret Key
 
-
 //要上传的空间
-const bucket = 'eoapi-database';
+// const bucket = 'eoapi';
 //上传到七牛后保存的文件名
 // const key = "latest/logo675.png";
 //要上传文件的本地路径
