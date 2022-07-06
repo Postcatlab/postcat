@@ -2,8 +2,7 @@ const qiniu = require('qiniu');
 const package = require('./package.json');
 
 //需要填写你的 Access Key 和 Secret Key
-qiniu.conf.ACCESS_KEY = 'Q0fr4zgFbp58VmA-vK6PXDVf56c-zCPzJVPTFjiH';
-qiniu.conf.SECRET_KEY = 'W2Ju6kTzrHtM4Vq3Vs0aDsrazacPDLWwvAH1cdvQ';
+
 
 //要上传的空间
 const bucket = 'eoapi-database';
