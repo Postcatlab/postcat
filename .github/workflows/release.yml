@@ -75,6 +75,7 @@ jobs:
           # apply provisioning profile
           # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.NOTARIZE_JS }}" > build/notarize.js
           yarn release:m1
           yarn release
 
