@@ -1,22 +1,17 @@
 const qiniu = require('qiniu');
+const { AK, SK, bucket } = require('./qiniu_env.js');
 const package = require('./package.json');
 
-//需要填写你的 Access Key 和 Secret Key
+qiniu.conf.ACCESS_KEY = AK;
+qiniu.conf.SECRET_KEY = SK;
 
-//要上传的空间
-// const bucket = 'eoapi';
-//上传到七牛后保存的文件名
-// const key = "latest/logo675.png";
-//要上传文件的本地路径
-// const filePath = "./dist/mac-1.0.0.png";
-
-//构建上传策略函数
+// * 构建上传策略函数
 const uptoken = (bucket, key) => new qiniu.rs.PutPolicy(bucket + ':' + key).token();
 
 const toLatest = (name) => name.replace(/\d+\.\d+\.\d+/, 'latest');
 const onlyName = (name) => name.replace(/dist\//, '');
 
-// 构建客户端实例
+// * 构建客户端实例
 const client = new qiniu.rs.Client();
 
 // * 上传单个文件
@@ -45,7 +40,7 @@ const cpFile = (fromFile, toFile) =>
   });
 
 const version = package.version;
-const fileList = ['release/eoapi.Setup.?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
+const fileList = ['release/eoapi-Setup-?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
   it.replace(/\?/, `${version}`)
 );
 
@@ -69,19 +64,10 @@ const app = async () => {
   const copyResult = await Promise.all(
     fileList.map(async (it) => {
       const isOK = await cpFile(`${version}/${onlyName(it)}`, `latest/${toLatest(onlyName(it))}`);
-      Promise.resolve(!!isOK);
+      Promise.resolve(isOK || false);
     })
   );
   console.log('拷贝结果', copyResult);
 };
 
 app();
-
-// 调用 uploadFile 上传
-// uploadFile(
-//   uptoken(bucket, "latest/logo675.png"),
-//   "latest/logo675.png",
-//   filePath
-// );
-// removeFile(bucket, "latest/logo675.png");
-// cpFile("logo.png", "latest/logo.png");
