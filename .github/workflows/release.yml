@@ -22,7 +22,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3.0.0
         with:
-          node-version: "16"
+          node-version: '16'
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -41,6 +41,7 @@ jobs:
       - name: Release for Windows
         if: matrix.os == 'windows-latest'
         run: |
+          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
           yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -76,6 +77,7 @@ jobs:
           # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.NOTARIZE_JS }}" > build/notarize.js
+          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
           yarn release:m1
           yarn release
 
@@ -88,5 +90,3 @@ jobs:
           yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-
