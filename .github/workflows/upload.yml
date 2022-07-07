@@ -27,6 +27,7 @@ jobs:
       - name: Release for Linux
         if: matrix.os == 'ubuntu-latest'
         run: |
+          npm i qiniu
           echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
           node upload.js
         env:
