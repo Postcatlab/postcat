@@ -16,13 +16,13 @@ export class ExtensionDetailComponent implements OnInit {
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
   get isElectron() {
-    return this.electronService.isElectron;
+    return this.electron.isElectron;
   }
   constructor(
     private extensionService: ExtensionService,
     private route: ActivatedRoute,
     private router: Router,
-    private electronService: ElectronService
+    private electron: ElectronService
   ) {
     this.getDetail();
     this.getInstaller();
@@ -92,7 +92,6 @@ export class ExtensionDetailComponent implements OnInit {
 
   manageExtension(operate: string, id) {
     this.isOperating = true;
-    console.log(this.isOperating);
     /**
      * * WARNING:Sending a synchronous message will block the whole
      * renderer process until the reply is received, so use this method only as a last

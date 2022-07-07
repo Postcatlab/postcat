@@ -1,12 +1,12 @@
-import { MODULE_DIR as baseDir } from 'eo/shared/common/constant';
+import { MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
 import { ModuleHandler } from './handler';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
+import * as https from 'https';
 
 // * npm pkg name
 const installExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
-
 export class ModuleManager implements ModuleManagerInterface {
   /**
    * 模块管理器
@@ -33,20 +33,7 @@ export class ModuleManager implements ModuleManagerInterface {
     this.modules = new Map();
     this.features = new Map();
     this.init();
-    // * ModuleManager will be new only one while app run start, so it should be here upgrade & install extension
-    // * upgrade
-    const list = Array.from(this.getModules().keys());
-    list.forEach((item) => {
-      this.update({ name: item });
-    });
-    // * install
-    // console.log('install');
-    this.installExtension.forEach((item) => {
-      // * If the extension already in local extension list, then do not repeat installation
-      if (!list.includes(item.name)) {
-        this.install(item);
-      }
-    });
+    this.updateAll();
   }
 
   /**
@@ -73,7 +60,22 @@ export class ModuleManager implements ModuleManagerInterface {
     }
     return result;
   }
-
+  updateAll() {
+    // * ModuleManager will be new only one while app run start, so it should be here upgrade & install extension
+    // * Upgrade
+    const list = Array.from(this.getModules().values()).map((val) => val.name);
+    list.forEach((item) => {
+      //!Warn this is bug,it did't work @kungfuboy
+      this.update({ name: item });
+    });
+    // * Install default extension
+    this.installExtension.forEach((item) => {
+      // * If the extension already in local extension list, then do not repeat installation
+      if (list.includes(item.name)) return;
+      //!TODO  this will reinstall all package, npm link(debug) package will be remove after npm install command,
+      // this.install(item);
+    });
+  }
   /**
    * 删除模块，调用npm uninstall | unlink
    * @param module

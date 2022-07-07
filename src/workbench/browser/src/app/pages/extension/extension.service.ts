@@ -1,32 +1,45 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { isElectron } from 'eo/shared/common/common';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { lastValueFrom } from 'rxjs';
 import { ModuleInfo } from '../../utils/module-loader';
-import { EoExtensionInfo } from './extension.model';
 
-const HOST = isElectron()
-  ? 'http://106.12.149.147'
-  : 'https://mockapi.eolink.com/ztBFKai20ee60c12871881565b5a6ddd718337df0e30979';
 @Injectable()
 export class ExtensionService {
   ignoreList = ['default'];
   extensionIDs: Array<string> = [];
-  localModules: Map<string, ModuleInfo>;
-  constructor(private http: HttpClient) {
-    this.getInstalledList();
+  HOST = '';
+  localExtensions: Map<string, ModuleInfo>;
+  constructor(private http: HttpClient, private electron: ElectronService) {
+    this.localExtensions = this.getExtensions();
+    this.extensionIDs = this.updateExtensionIDs();
+    this.HOST = this.electron.isElectron
+      ? 'http://106.12.149.147'
+      : 'https://mockapi.eolink.com/ztBFKai20ee60c12871881565b5a6ddd718337df0e30979';
+  }
+  private getExtensions() {
+    // Local extension
+    return window.eo?.getModules() || new Map();
   }
   getInstalledList() {
-    this.localModules = window.eo?.getModules() || new Map();
-    this.updateExtensionIDs();
+    // Local extension exception for ignore list
+    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.moduleID));
   }
   public async requestList() {
-    return await lastValueFrom(this.http.get(`${HOST}/list`));
+    let result: any = await lastValueFrom(this.http.get(`${this.HOST}/list`));
+    console.log(this.getInstalledList());
+    result.data = [
+      ...result.data,
+      //local debug package
+      ...this.getInstalledList().filter((val) => result.data.every((childVal) => childVal.name !== val.name)),
+    ];
+    console.log(result, result.data);
+    return result;
   }
   async getDetail(id, name): Promise<any> {
     let result = {};
-    if (this.localModules.has(id)) {
-      Object.assign(result, this.localModules.get(id), { installed: true });
+    if (this.localExtensions.has(id)) {
+      Object.assign(result, this.localExtensions.get(id), { installed: true });
     }
     let { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
@@ -41,7 +54,7 @@ export class ExtensionService {
     console.log('Install module:', id);
     const { code, data, modules } = window.eo.installModule(id);
     if (code === 0) {
-      this.localModules = modules;
+      this.localExtensions = modules;
       this.updateExtensionIDs();
       return true;
     }
@@ -52,7 +65,7 @@ export class ExtensionService {
     console.log('Install module:', id);
     const { code, data, modules } = window.eo.uninstallModule(id);
     if (code === 0) {
-      this.localModules = modules;
+      this.localExtensions = modules;
       this.updateExtensionIDs();
       return true;
     }
@@ -60,10 +73,10 @@ export class ExtensionService {
     return false;
   }
   private async requestDetail(id) {
-    return await lastValueFrom(this.http.get(`${HOST}/detail/${id}`));
+    return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}`)).catch(err=>[0,err]);
   }
   private updateExtensionIDs() {
-    this.extensionIDs = Array.from(this.localModules.keys())
+    return Array.from(this.localExtensions.keys())
       .filter((it) => it)
       .filter((it) => !this.ignoreList.includes(it));
   }

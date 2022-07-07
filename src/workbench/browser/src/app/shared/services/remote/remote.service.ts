@@ -133,7 +133,6 @@ export class RemoteService {
    */
   getConfiguration = (keyPath: string) => {
     const localSettings = this.getSettings();
-
     if (Reflect.has(localSettings, keyPath)) {
       return Reflect.get(localSettings, keyPath);
     }

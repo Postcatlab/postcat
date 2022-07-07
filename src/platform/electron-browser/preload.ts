@@ -1,5 +1,5 @@
+import * as I18N from './i18n';
 const { ipcRenderer } = require('electron');
-console.log('eoapi public api load');
 // 可以加上条件判断，根据不同模块id哪些允许放出
 const apiAccessRules = ipcRenderer.sendSync('eo-sync', { action: 'getApiAccessRules' }) || [];
 
@@ -141,14 +141,18 @@ window.eo.deleteModuleSettings = (moduleID) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'deleteModuleSettings', data: { moduleID: moduleID } });
 };
 
-window.eo.getSettings = (settings) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getSettings' });
+window.eo.getSettings = () => {
+  try {
+    return JSON.parse(localStorage.getItem('localSettings') || '{}');
+  } catch (error) {
+    return {};
+  }
 };
+window.eo.i18n = I18N;
 
 window.eo.getModuleSettings = (moduleID) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });
 };
-
 // 注册单个mock路由
 window.eo.registerMockRoute = ({ method, path, data }) => {
   return ipcRenderer.send('eo-sync', { action: 'registerMockRoute', data: { method, path, data } });

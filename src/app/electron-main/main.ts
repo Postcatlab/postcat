@@ -13,7 +13,7 @@ import { ModuleManagerInterface } from '../../platform/node/extension-manager';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
-import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
+import { STORAGE_TEMP as storageTemp } from '../../shared/electron-main/constant';
 import { UnitWorkerModule } from '../../workbench/node/unitWorker';
 import Configuration from '../../platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
