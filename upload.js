@@ -2,8 +2,6 @@ const qiniu = require('qiniu');
 const { AK, SK, bucket } = require('./qiniu_env.js');
 const package = require('./package.json');
 
-console.log('AK, SK, bucket', AK, SK, bucket);
-
 qiniu.conf.ACCESS_KEY = AK;
 qiniu.conf.SECRET_KEY = SK;
 
@@ -43,12 +41,12 @@ const cpFile = (fromFile, toFile) =>
   });
 
 const version = package.version;
-// const fileList = ['release/eoapi-Setup-?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
-//   it.replace(/\?/, `${version}`)
-// );
-const fileList = ['releass/eoapi-Setup-?.png', 'releass/eoapi-?.png', 'releass/eoapi-?-arm64.png'].map((it) =>
+const fileList = ['release/eoapi-Setup-?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
   it.replace(/\?/, `${version}`)
 );
+// const fileList = ['releass/eoapi-Setup-?.png', 'releass/eoapi-?.png', 'releass/eoapi-?-arm64.png'].map((it) =>
+//   it.replace(/\?/, `${version}`)
+// );
 
 const app = async () => {
   const uploadResult = await Promise.all(

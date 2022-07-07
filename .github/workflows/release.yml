@@ -43,6 +43,7 @@ jobs:
         run: |
           echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
           yarn release
+          dir ./release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -80,6 +81,7 @@ jobs:
           echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
           yarn release:m1
           yarn release
+          ls ./release
 
           # clean up keychain and provisioning profile
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
