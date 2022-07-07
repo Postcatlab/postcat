@@ -36,12 +36,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install
-        run: yarn install --frozen-lockfile
+        run: |
+          yarn install --frozen-lockfile
+          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
 
       - name: Release for Windows
         if: matrix.os == 'windows-latest'
         run: |
-          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
           yarn release
           dir ./release
         env:
@@ -78,7 +79,6 @@ jobs:
           # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           echo "${{ secrets.NOTARIZE_JS }}" > build/notarize.js
-          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
           yarn release:m1
           yarn release
           ls ./release
