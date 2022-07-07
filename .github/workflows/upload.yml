@@ -1,4 +1,4 @@
-name: Release
+name: Upload
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    name: build and release electron app
+    name: Upload qiniu
     runs-on: ${{ matrix.os }}
 
     strategy:
