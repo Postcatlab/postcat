@@ -8,6 +8,7 @@ import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { Router } from '@angular/router';
 
 interface TreeNode {
@@ -130,6 +131,7 @@ export class SettingComponent implements OnInit {
     private messageService: MessageService,
     private message: NzMessageService,
     private remoteService: RemoteService,
+    private settingService: SettingService,
     private router: Router
   ) {}
 
@@ -241,9 +243,7 @@ export class SettingComponent implements OnInit {
     // }
     // ! this.isVisible = true;
     // Get local settings
-    this.settings = this.localSettings = this.remoteService.getSettings();
-    // @ts-ignore
-    window.getConfiguration = this.remoteService.getConfiguration;
+    this.settings = this.localSettings = this.settingService.getSettings();
     console.log('localSettings', this.localSettings);
     // const featureList = window.eo.getFeature('configuration');
     const modules = window.eo?.getModules() || new Map([]);
@@ -340,7 +340,7 @@ export class SettingComponent implements OnInit {
     // if (this.validateForm.status === 'INVALID') {
     //   return;
     // }
-    localStorage.setItem('localSettings', JSON.stringify(this.settings));
+    this.settingService.saveSetting(this.settings);
     window.eo?.saveSettings?.({ ...this.settings });
   };
 
