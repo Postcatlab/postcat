@@ -9,7 +9,7 @@ qiniu.conf.SECRET_KEY = SK;
 const uptoken = (bucket, key) => new qiniu.rs.PutPolicy(bucket + ':' + key).token();
 
 const toLatest = (name) => name.replace(/\d+\.\d+\.\d+/, 'latest');
-const onlyName = (name) => name.replace(/dist\//, '');
+const onlyName = (name) => name.replace(/release\//, '');
 
 // * 构建客户端实例
 const client = new qiniu.rs.Client();
@@ -19,6 +19,7 @@ const uploadFile = (token, file, localFile) =>
   new Promise((resolve) => {
     const extra = new qiniu.io.PutExtra();
     qiniu.io.putFile(token, file, localFile, extra, (err) => {
+      console.log(err ? err : 'success');
       return err ? resolve(false) : resolve(true);
     });
   });
@@ -40,16 +41,17 @@ const cpFile = (fromFile, toFile) =>
   });
 
 const version = package.version;
-const fileList = ['release/eoapi-Setup-?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
-  it.replace(/\?/, `${version}`)
-);
+// const fileList = ['release/eoapi-Setup-?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
+//   it.replace(/\?/, `${version}`)
+// );
+const fileList = ['src/'];
 
 const app = async () => {
   const uploadResult = await Promise.all(
     fileList.map(async (it) => {
       // * 生成上传 Token
-      const token = uptoken(bucket, `${version}/${it.replace(/dist\//, '')}`);
-      const isOK = await uploadFile(token, `${version}/${it.replace(/dist\//, '')}`, it);
+      const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
+      const isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
       return Promise.resolve(isOK || false);
     })
   );
