@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - feat/preview
+
+jobs:
+  release:
+    name: build and release electron app
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Check out git repository
+        uses: actions/checkout@v3.0.0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3.0.0
+        with:
+          node-version: '16'
+
+      - name: Release for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          echo "${{ secrets.QINIU_ENV_JS }}" > qiniu_env.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
