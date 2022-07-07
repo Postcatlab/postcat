@@ -46,7 +46,7 @@ const version = package.version;
 // const fileList = ['release/eoapi-Setup-?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
 //   it.replace(/\?/, `${version}`)
 // );
-const fileList = ['src/'];
+const fileList = ['releass/eoapi-Setup-?.png', 'releass/eoapi-?.png', 'releass/eoapi-?-arm64.png'];
 
 const app = async () => {
   const uploadResult = await Promise.all(
