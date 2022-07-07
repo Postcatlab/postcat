@@ -7,6 +7,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -21,7 +22,7 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 export class RemoteService {
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
-  dataSourceType: DataSourceType = this.getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
+  dataSourceType: DataSourceType = 'local';
   get isElectron() {
     return this.electronService.isElectron;
   }
@@ -44,9 +45,11 @@ export class RemoteService {
     private storageService: StorageService,
     private messageService: MessageService,
     private message: NzMessageService,
-    public electronService: ElectronService,
+    private electronService: ElectronService,
+    private settingService: SettingService,
     private router: Router
   ) {
+    this.dataSourceType = this.settingService.settings['eoapi-common.dataStorage'] ?? this.dataSourceType;
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -116,44 +119,6 @@ export class RemoteService {
   switchToHttp() {
     this.storageService.toggleDataSource({ dataSourceType: 'http' });
   }
-
-  getSettings() {
-    try {
-      return JSON.parse(localStorage.getItem('localSettings') || '{}');
-    } catch (error) {
-      return {};
-    }
-  }
-
-  /**
-   * Get the value of the corresponding configuration according to the key path
-   *
-   * @param key
-   * @returns
-   */
-  getConfiguration = (keyPath: string) => {
-    const localSettings = this.getSettings();
-
-    if (Reflect.has(localSettings, keyPath)) {
-      return Reflect.get(localSettings, keyPath);
-    }
-
-    const keys = Object.keys(localSettings);
-    const filterKeys = keys.filter((n) => n.startsWith(keyPath));
-    if (filterKeys.length) {
-      return filterKeys.reduce((pb, ck) => {
-        const keyArr = ck.replace(`${keyPath}.`, '').split('.');
-        const targetKey = keyArr.pop();
-        const target = keyArr.reduce((p, v) => {
-          p[v] ??= {};
-          return p[v];
-        }, pb);
-        target[targetKey] = localSettings[ck];
-        return pb;
-      }, {});
-    }
-    return undefined;
-  };
 
   /**
    * switch data
