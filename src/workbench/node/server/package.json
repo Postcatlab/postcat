@@ -2,10 +2,16 @@
   "name": "eo-test-server",
   "version": "1.0.0",
   "description": "Recieve eoapi tes config and response http result",
-  "main": "nodeServer.js",
+  "main": "main.js",
   "scripts": {
+    "start": "node main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "eoapi",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "3.3.0",
+    "koa": "2.13.4",
+    "koa-body": "5.0.0"
+  }
 }

@@ -8,9 +8,7 @@
   "author": "eoapi",
   "private": true,
   "workspaces": [
-    "src/workbench/browser",
-    "src/workbench/node/server/browser"
-  ],
+    "src/workbench/browser"  ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "npm-run-all -p start:workbench electron:serve",
