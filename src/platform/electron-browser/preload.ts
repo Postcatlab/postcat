@@ -1,4 +1,4 @@
-import * as I18N from './i18n';
+import { I18N } from './i18n';
 const { ipcRenderer } = require('electron');
 // 可以加上条件判断，根据不同模块id哪些允许放出
 const apiAccessRules = ipcRenderer.sendSync('eo-sync', { action: 'getApiAccessRules' }) || [];

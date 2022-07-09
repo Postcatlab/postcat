@@ -3,6 +3,8 @@ import { StorageService } from '../../../shared/services/storage';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
+import { ProxySandbox } from 'eo/workbench/browser/src/app/utils/proxySandbox';
+import { ModuleInfo } from 'eo/platform/node/extension-manager';
 
 @Component({
   selector: 'eo-export-api',
@@ -67,15 +69,26 @@ export class ExportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension);
+    const module: ModuleInfo = window.eo.loadFeatureModule(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
-            const output = module[action](result || {});
-            this.transferTextToFile(filename, output);
-            callback(true);
+            let proxy1 = new ProxySandbox();
+            ((window) => {
+              proxy1.active();
+              console.log(module)
+              //Proxy try error,because export function context in outside
+              window._currentExtensionID=1;
+              const output = module[action](result || {}).bind({
+                eo:{_currentExtensionID:1}
+              });
+              this.transferTextToFile(filename, output);
+              callback(true);
+              proxy1.inactive();
+            })(proxy1.proxy);
+            console.log('after', window['_currentExtensionID']);
           } catch (e) {
             console.log(e);
             callback(false);

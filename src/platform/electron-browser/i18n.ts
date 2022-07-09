@@ -6,7 +6,8 @@ export const I18N = {
       (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
     return window.eo.getSettings()['eoapi-language'] || deafultLanguage;
   },
-  locale(id: string, originText: string, ...args) {
+  localize(id: string, originText: string, ...args) {
+    console.log(window,window['_currentExtensionID'],this)
     try{
       throw new Error();
     }catch(e){
