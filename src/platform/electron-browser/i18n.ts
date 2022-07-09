@@ -7,6 +7,11 @@ export const I18N = {
     return window.eo.getSettings()['eoapi-language'] || deafultLanguage;
   },
   locale(id: string, originText: string, ...args) {
+    try{
+      throw new Error();
+    }catch(e){
+      console.log(e)
+    }
     console.log('i18n locale:', arguments);
   },
 };

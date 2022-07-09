@@ -1,7 +1,7 @@
 import * as child_process from 'child_process';
-import { BrowserView, ipcMain } from 'electron';
+import { BrowserView } from 'electron';
 
-class UnitWorker {
+export class UnitWorker {
   instance: child_process.ChildProcess;
   view: BrowserView;
   constructor(view: BrowserView) {
@@ -31,23 +31,4 @@ class UnitWorker {
   }
 }
 
-export const UnitWorkerModule = {
-  works: {},
-  setup(eo: any) {
-    ipcMain.removeAllListeners('unitTest');
-    ipcMain.on('unitTest', function (event, message) {
-      const id = message.id;
-      switch (message.action) {
-        case 'ajax': {
-          UnitWorkerModule.works[id] = new UnitWorker(eo.view);
-          UnitWorkerModule.works[id].start(message);
-          break;
-        }
-        case 'abort': {
-          UnitWorkerModule.works[id].kill();
-          break;
-        }
-      }
-    });
-  }
-};
+

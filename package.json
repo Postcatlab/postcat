@@ -9,7 +9,7 @@
   "private": true,
   "workspaces": [
     "src/workbench/browser",
-    "src/app/electron-browser/IndexedDB"
+    "src/workbench/node/server/browser"
   ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps",

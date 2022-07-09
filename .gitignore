@@ -11,6 +11,7 @@ out/
 *.js.map
 *.webpack.js
 !src/workbench/node/request/**/*.js
+!src/workbench/node/server/**/*.js
 !/api/*.js
 !/build/*.js
 !*.config.js
