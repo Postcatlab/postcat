@@ -3,7 +3,6 @@ import { ModuleHandler } from './handler';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
-import * as https from 'https';
 
 // * npm pkg name
 const installExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
@@ -97,7 +96,16 @@ export class ModuleManager implements ModuleManagerInterface {
     const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
     this.set(moduleInfo);
   }
-
+  /**
+   * 读取本地package.json更新模块信息
+   * @param module
+   */
+  refreshAll(): void {
+    const list = Array.from(this.getModules().values());
+    list.forEach((module) => {
+      this.refresh(module);
+    });
+  }
   /**
    * 获取应用级app列表
    */
@@ -283,5 +291,3 @@ export class ModuleManager implements ModuleManagerInterface {
     return newModules;
   }
 }
-
-export default () => new ModuleManager();

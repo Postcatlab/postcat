@@ -3,13 +3,8 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
-import ModuleManager from '../../platform/node/extension-manager/lib/manager';
+import {ModuleManager} from '../../platform/node/extension-manager/lib/manager';
 import { ModuleManagerInterface } from '../../platform/node/extension-manager';
-// TODO 引入问题
-// import {
-//   StorageResStatus,
-//   StorageProcessType,
-// } from '../../workbench/browser/src/app/shared/services/storage/index.model';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
@@ -26,7 +21,7 @@ export const subView = {
 };
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
-const moduleManager: ModuleManagerInterface = ModuleManager();
+const moduleManager: ModuleManagerInterface = new ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 global.shareObject = {
   storageResult: null,
@@ -158,6 +153,7 @@ try {
       case 'changeLanguage': {
         LanguageService.set(arg.data);
         eoBrowserWindow.loadURL();
+        moduleManager.refreshAll();
         break;
       }
     }

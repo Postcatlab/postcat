@@ -64,7 +64,7 @@ export interface ModuleInfo {
   contributes: ModuleContributes;
   // 功能点配置
   features?: {
-    [index: string]: object;
+    [index: string]: any;
   };
 }
 /**
@@ -118,6 +118,7 @@ export interface ModuleManagerInterface {
   update: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   uninstall: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   refresh: (module: ModuleManagerInfo) => void;
+  refreshAll:()=>void;
   getModule: (moduleID: string, belongs?: boolean) => ModuleInfo;
   getModules: (belongs?: boolean) => Map<string, ModuleInfo>;
   getAppModuleList: () => Array<ModuleInfo>;

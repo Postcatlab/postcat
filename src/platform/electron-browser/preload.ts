@@ -53,6 +53,7 @@ window.eo.loadFeatureModule = (moduleID) => {
   if (!featureModules.has(moduleID)) {
     try {
       const module = window.eo.getModule(moduleID);
+      window.eo._currentExtensionID=moduleID;
       const _module = window.require(module.baseDir);
       featureModules.set(moduleID, _module);
     } catch (e) {
@@ -148,7 +149,7 @@ window.eo.getSettings = () => {
     return {};
   }
 };
-window.eo.i18n = I18N;
+window.eo.i18n = new I18N();
 
 window.eo.getModuleSettings = (moduleID) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });

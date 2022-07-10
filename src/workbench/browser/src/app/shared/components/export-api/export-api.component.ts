@@ -3,7 +3,6 @@ import { StorageService } from '../../../shared/services/storage';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
-import { ProxySandbox } from 'eo/workbench/browser/src/app/utils/proxySandbox';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
 
 @Component({
@@ -74,25 +73,9 @@ export class ExportApiComponent implements OnInit {
       this.storage.run('projectExport', [], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
-          try {
-            let proxy1 = new ProxySandbox();
-            ((window) => {
-              proxy1.active();
-              console.log(module)
-              //Proxy try error,because export function context in outside
-              window._currentExtensionID=1;
-              const output = module[action](result || {}).bind({
-                eo:{_currentExtensionID:1}
-              });
-              this.transferTextToFile(filename, output);
-              callback(true);
-              proxy1.inactive();
-            })(proxy1.proxy);
-            console.log('after', window['_currentExtensionID']);
-          } catch (e) {
-            console.log(e);
-            callback(false);
-          }
+          const output = module[action](result || {});
+          this.transferTextToFile(filename, output);
+          callback(true);
         } else {
           callback(false);
         }

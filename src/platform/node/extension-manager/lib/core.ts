@@ -3,6 +3,9 @@ import { ModuleHandlerOptions, ModuleInfo } from '../types';
 import { fileExists, readJson } from 'eo/shared/node/file';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { readFileSync } from 'node:fs';
+import { LanguageService } from 'eo/app/electron-main/language.service';
+import { TranslateService } from 'eo/platform/common/i18n';
+import { getLocaleData } from 'eo/platform/node/i18n';
 /**
  * 核心模块管理器
  * @class CoreHandler
@@ -39,6 +42,13 @@ export class CoreHandler {
       moduleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
       moduleInfo.introduction = readFileSync(path.join(baseDir, 'README.md')).toString();
       moduleInfo.baseDir = baseDir;
+
+      let locale = getLocaleData(moduleInfo, LanguageService.get());
+      if (locale) {
+        let translateService = new TranslateService(moduleInfo, locale);
+        moduleInfo = translateService.translate();
+      }
+      
       moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
       if (moduleInfo.preload?.length > 0) {
         moduleInfo.preload = path.join(moduleInfo.baseDir, moduleInfo.preload);
@@ -58,7 +68,6 @@ export class CoreHandler {
     } catch (e) {
       moduleInfo = {} as ModuleInfo;
     }
-
     return moduleInfo;
   }
 
