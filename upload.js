@@ -1,4 +1,6 @@
 const qiniu = require('qiniu');
+const YAML = require('yaml');
+const fs = require('fs');
 const { AK, SK, bucket } = require('./qiniu_env.js');
 const package = require('./package.json');
 
@@ -41,9 +43,14 @@ const cpFile = (fromFile, toFile) =>
   });
 
 const version = package.version;
-const fileList = ['release/eoapi Setup ?.exe', 'release/eoapi-?.dmg', 'release/eoapi-?-arm64.dmg'].map((it) =>
-  it.replace(/\?/, `${version}`)
-);
+const fileList = [
+  'release/eoapi Setup ?.exe',
+  'release/eoapi-?.dmg',
+  'release/eoapi-?-arm64.dmg',
+  'release/eoapi-?.zip',
+  'release/latest.yml',
+  'release/latest-mac.yml',
+].map((it) => it.replace(/\?/, `${version}`));
 // const fileList = ['releass/eoapi-Setup-?.png', 'releass/eoapi-?.png', 'releass/eoapi-?-arm64.png'].map((it) =>
 //   it.replace(/\?/, `${version}`)
 // );
@@ -51,9 +58,23 @@ const fileList = ['release/eoapi Setup ?.exe', 'release/eoapi-?.dmg', 'release/e
 const app = async () => {
   const uploadResult = await Promise.all(
     fileList.map(async (it) => {
+      let isOK;
       // * 生成上传 Token
-      const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
-      const isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
+      try {
+        if (it.endsWith('.yml')) {
+          const ymlObj = YAML.parse(fs.readFileSync(it, 'utf8'));
+          ymlObj.files.forEach((n) => (n.url = `${ymlObj.version}/${n.url}`));
+          ymlObj.path = `${ymlObj.version}/${ymlObj.path}`;
+          fs.writeFileSync(it, YAML.stringify(ymlObj));
+          const token = uptoken(bucket, it.replace(/release\//, ''));
+          isOK = await uploadFile(token, it.replace(/release\//, ''), it);
+        } else {
+          const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
+          isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
       return Promise.resolve(isOK || false);
     })
   );
