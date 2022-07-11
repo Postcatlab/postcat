@@ -8,7 +8,8 @@
   "author": "eoapi",
   "private": true,
   "workspaces": [
-    "src/workbench/browser"  ],
+    "src/workbench/browser"
+  ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "npm-run-all -p start:workbench electron:serve",
@@ -19,10 +20,11 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "build": "npm-run-all -s build:workbench electron:tsc && electron-builder build",
-    "build:static": "npm run electron:tsc && electron-builder build",
+    "build": "npm-run-all -s build:workbench clear:electron:tsc electron:tsc && electron-builder build",
+    "build:static": "npm run clear:electron:tsc&&npm run electron:tsc && electron-builder build",
     "release": "npm-run-all -s build:workbench electron:tsc && electron-builder --publish=always",
     "test": "npm-run-all --serial test:*",
+    "clear:electron:tsc": "tsc --build --clean",
     "electron:tsc": "tsc -p tsconfig.json",
     "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out"
   },

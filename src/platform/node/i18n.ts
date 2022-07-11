@@ -1,4 +1,4 @@
-import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { I18nLocale, ModuleInfo } from 'eo/platform/node/extension-manager';
 
 interface LooseObject {
   [key: string]: any;
@@ -16,12 +16,15 @@ function getLocaleFile(module: ModuleInfo, lang): Object {
   } catch (e) {}
   return result;
 }
+function getSupportLang(module: ModuleInfo) {
+  return [module.features.i18n.sourceLocale, ...module.features.i18n.locales].filter((val) => val);
+}
 /**
  * Get locale data from storage  or file
  * @returns json
  */
 export function getLocaleData(module: ModuleInfo, lang): Object | null {
-  let supportLang = [module.features.i18n.sourceLocale, ...module.features.i18n.locales];
+  let supportLang = getSupportLang(module);
   if (!supportLang.includes(lang)) {
     console.log(`Error: extenaion ${module.moduleID} can't find the i18n package ${lang}`);
     return null;

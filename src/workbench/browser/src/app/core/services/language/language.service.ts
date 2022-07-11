@@ -10,7 +10,7 @@ export class LanguageService {
   languages = LANGUAGES;
   //If the user does not set it, the system default language is used
   // Web from nginx setting and App from computer system setting
-  currentLanguage =
+  systemLanguage =
     this.languages.find((val) => window.location.href.includes(`/${val.path}`))?.value ||
     (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
 
@@ -20,16 +20,16 @@ export class LanguageService {
     this.changeLanguage(this.remote.getSettings()?.['eoapi-language']);
   }
   changeLanguage(localeID) {
-    if (!localeID || localeID === this.currentLanguage) {
+    if (!localeID || localeID === this.systemLanguage) {
       console.warn(`current language has already ${localeID}`);
       return;
     }
-    this.currentLanguage = localeID;
+    this.systemLanguage = localeID;
     const localePath = (this.languages.find((val) => val.value === localeID) || this.languages[0]).path;
     if (this.electron.isElectron) {
       this.electron.ipcRenderer.send('message', {
         action: 'changeLanguage',
-        data: this.currentLanguage,
+        data: this.systemLanguage,
       });
     } else {
       window.location.href = `/${localePath}`;

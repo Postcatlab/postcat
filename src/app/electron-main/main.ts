@@ -57,6 +57,7 @@ class EoBrowserWindow {
     });
   }
   public loadURL() {
+    console.log('loadURL')
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'

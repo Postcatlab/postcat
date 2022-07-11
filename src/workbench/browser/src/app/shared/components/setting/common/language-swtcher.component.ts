@@ -41,7 +41,7 @@ export class LanguageSwticherComponent implements OnInit {
   constructor(public languageService: LanguageService) {}
 
   ngOnInit(): void {
-    this.model['eoapi-language'] = this.languageService.currentLanguage;
+    this.model['eoapi-language'] = this.languageService.systemLanguage;
   }
 
   handleChange(localeID) {

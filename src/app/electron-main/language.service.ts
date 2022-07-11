@@ -8,12 +8,13 @@ class LanguageInstance {
   public static get Instance(): LanguageInstance {
     return this._instance || (this._instance = new this());
   }
-  get() {
-    return store.get('language') || (app.getLocale().includes('zh') ? 'zh-Hans' : 'en-US');
+  get(): string {
+    let lang = store.get('language') || (app.getLocale().includes('zh') ? 'zh-Hans' : 'en-US');
+    return lang as string;
   }
   getPath() {
-    const currentLanguage = this.get();
-    return LANGUAGES.find((val) => val.value === currentLanguage).path;
+    const systemLanguage = this.get();
+    return LANGUAGES.find((val) => val.value === systemLanguage).path;
   }
   set(localeID) {
     store.set('language', localeID);

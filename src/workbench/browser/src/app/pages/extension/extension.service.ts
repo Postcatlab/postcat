@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { lastValueFrom } from 'rxjs';
-import { ModuleInfo } from '../../utils/module-loader';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
+import { TranslateService } from 'eo/platform/common/i18n';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 
 @Injectable()
 export class ExtensionService {
@@ -10,7 +12,7 @@ export class ExtensionService {
   extensionIDs: Array<string> = [];
   HOST = '';
   localExtensions: Map<string, ModuleInfo>;
-  constructor(private http: HttpClient, private electron: ElectronService) {
+  constructor(private http: HttpClient, private electron: ElectronService, private language: LanguageService) {
     this.localExtensions = this.getExtensions();
     this.extensionIDs = this.updateExtensionIDs();
     this.HOST = this.electron.isElectron
@@ -25,15 +27,22 @@ export class ExtensionService {
     // Local extension exception for ignore list
     return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.moduleID));
   }
+  private translateModule(module: ModuleInfo) {
+    const lang = this.language.systemLanguage;
+    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
+    console.log(locale, module);
+    if (!locale) return module;
+    module = new TranslateService(module, locale).translate();
+    return module;
+  }
   public async requestList() {
-    let result: any = await lastValueFrom(this.http.get(`${this.HOST}/list`));
-    console.log(this.getInstalledList());
+    let result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
     result.data = [
       ...result.data,
-      //local debug package
+      //Local debug package
       ...this.getInstalledList().filter((val) => result.data.every((childVal) => childVal.name !== val.name)),
     ];
-    console.log(result, result.data);
+    result.data = result.data.map((module) => this.translateModule(module));
     return result;
   }
   async getDetail(id, name): Promise<any> {
@@ -73,7 +82,9 @@ export class ExtensionService {
     return false;
   }
   private async requestDetail(id) {
-    return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}`)).catch(err=>[0,err]);
+    return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}?locale=${this.language.systemLanguage}`)).catch(
+      (err) => [0, err]
+    );
   }
   private updateExtensionIDs() {
     return Array.from(this.localExtensions.keys())

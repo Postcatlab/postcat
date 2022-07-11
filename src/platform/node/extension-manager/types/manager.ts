@@ -13,7 +13,9 @@ export enum ModuleType {
   app = 'app',
   feature = 'feature',
 }
-
+export interface I18nLocale{
+   locale: string; package: any 
+}
 /**
  * 模块信息接口
  */
@@ -66,6 +68,7 @@ export interface ModuleInfo {
   features?: {
     [index: string]: any;
   };
+  i18n?:I18nLocale[]
 }
 /**
  * 贡献点
