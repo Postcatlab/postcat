@@ -18,7 +18,7 @@
   "publish": [
     {
       "provider": "generic",
-      "url": "https://packages.eoapi.io/latest"
+      "url": "https://packages.eoapi.io"
     },
     "github"
   ],
