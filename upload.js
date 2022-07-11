@@ -27,9 +27,9 @@ const uploadFile = (token, file, localFile) =>
   });
 
 // * 删除单个文件
-const removeFile = (file) =>
+const removeFile = (spaceName, file) =>
   new Promise((resolve) => {
-    client.remove(bucket, file, (err, ret) => {
+    client.remove(spaceName, file, (err, ret) => {
       return err ? resolve(false) : resolve(true);
     });
   });
