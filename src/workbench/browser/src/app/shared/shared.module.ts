@@ -22,8 +22,17 @@ import { PageBlankComponent } from './components/page-blank/page-blank.component
 import { RouterModule } from '@angular/router';
 import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
+import { ApiScriptComponent } from './components/api-script/api-script.component';
+import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
+import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 
-const COMPONENTS = [ToolbarComponent, ShadowDomEncapsulationComponent, SidebarComponent, PageNotFoundComponent];
+const COMPONENTS = [
+  ToolbarComponent,
+  ShadowDomEncapsulationComponent,
+  SidebarComponent,
+  PageNotFoundComponent,
+  ApiScriptComponent,
+];
 @NgModule({
   imports: [
     CommonModule,
@@ -42,6 +51,8 @@ const COMPONENTS = [ToolbarComponent, ShadowDomEncapsulationComponent, SidebarCo
     NzMessageModule,
     NzDescriptionsModule,
     EoIconparkIconModule,
+    EouiModule,
+    NzTreeViewModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent],
   providers: [ModalService],

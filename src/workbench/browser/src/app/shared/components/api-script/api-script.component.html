@@ -1,0 +1,25 @@
+<div class="flex eo-api-script">
+  <div class="w-[240px]  h-[300px]">
+    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
+      <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
+        <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
+        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="false" (nzClick)="insertCode(node)">
+          {{ node.name }}
+        </nz-tree-node-option>
+      </nz-tree-node>
+
+      <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
+        <nz-tree-node-toggle>
+          <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
+        </nz-tree-node-toggle>
+        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="false">
+          {{ node.name }}
+        </nz-tree-node-option>
+      </nz-tree-node>
+    </nz-tree-view>
+  </div>
+  <div class="flex-1  h-[300px]">
+    <eo-editor [(code)]="model" editorType="javascript" [eventList]="[ 'format', 'copy',  'search', 'replace']">
+    </eo-editor>
+  </div>
+</div>

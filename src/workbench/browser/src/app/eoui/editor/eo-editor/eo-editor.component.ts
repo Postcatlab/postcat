@@ -5,12 +5,14 @@ import { whatTextType } from '../../../utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import beautifier from 'js-beautify';
 import 'brace';
+import 'brace/ext/language_tools';
 import 'brace/theme/tomorrow_night_eighties';
 import 'brace/mode/json';
 import 'brace/mode/text';
 import 'brace/mode/html';
 import 'brace/mode/xml';
 import 'brace/ext/searchbox';
+import ace from 'brace';
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
@@ -113,6 +115,8 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
             event: it,
             ...eventHash.get(it),
           }));
+
+    this.setCompleteData([]);
   }
   log(event, txt) {
     console.log('ace event', event, txt);
@@ -194,8 +198,34 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
           document.body.removeChild(a);
         }
         break;
-      default:
-        break;
     }
+  }
+
+  setCompleteData = (data) => {
+    // const meta = [{meta: "abcdefg", caption: "sonic", value: "sonic", score:1}]
+    console.log('ace', ace);
+    const langTools = ace.acequire('ace/ext/language_tools');
+    console.log('langTools', langTools);
+    langTools.addCompleter({
+      // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
+      getCompletions: (editor, session, pos, prefix, callback) =>
+        callback(null, [{ meta: 'abcdefg', caption: 'sonic', value: 'sonic', score: 1 }]),
+
+      // langTools.addCompleter({
+      //   getCompletions: function (editor, session, pos, prefix, callback) {
+      //     if (prefix.length === 0) {
+      //       return callback(null, []);
+      //     } else {
+      //       return callback(null, data);
+      //     }
+      //   },
+      // });
+    });
+  };
+
+  handleInsert(code) {
+    const ace = this.aceRef.directiveRef.ace();
+    const cursorPos = ace.getCursorPosition();
+    ace.session.insert(cursorPos, code);
   }
 }

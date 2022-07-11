@@ -74,6 +74,24 @@
         </ng-template>
         <eo-api-test-rest class="eo_theme_iblock bbd" [model]="apiData.restParams"></eo-api-test-rest>
       </nz-tab>
+      <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
+        <ng-template #preScriptTitleTmp>
+          前置脚本
+          <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
+            apiData.restParams | apiParamsNum
+            }}</span>
+        </ng-template>
+        <eo-api-script class="eo_theme_iblock bbd"></eo-api-script>
+      </nz-tab>
+      <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
+        <ng-template #suffixScriptTitleTmp>
+          后置脚本
+          <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
+            apiData.restParams | apiParamsNum
+            }}</span>
+        </ng-template>
+        <eo-api-test-rest class="eo_theme_iblock bbd" [model]="apiData.restParams"></eo-api-test-rest>
+      </nz-tab>
     </nz-tabset>
     <!-- Response -->
     <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [(nzSelectedIndex)]="tabIndexRes" [nzAnimated]="false"

@@ -56,7 +56,7 @@ const NZ_COMPONETS = [
   NzEmptyModule,
   NzPopconfirmModule,
   NzToolTipModule,
-  NzTypographyModule
+  NzTypographyModule,
 ];
 const COMPONENTS = [
   ApiTestComponent,
@@ -79,8 +79,8 @@ const COMPONENTS = [
     ...NZ_COMPONETS,
     EouiModule,
     SharedModule,
-    ParamsImportModule
+    ParamsImportModule,
   ],
-  providers: [ApiTestService, TestServerService, TestServerLocalNodeService,TestServerServerlessService],
+  providers: [ApiTestService, TestServerService, TestServerLocalNodeService, TestServerServerlessService],
 })
 export class ApiTestModule {}
