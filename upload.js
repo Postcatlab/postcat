@@ -66,9 +66,13 @@ const app = async () => {
           ymlObj.files.forEach((n) => (n.url = `${ymlObj.version}/${n.url}`));
           ymlObj.path = `${ymlObj.version}/${ymlObj.path}`;
           fs.writeFileSync(it, YAML.stringify(ymlObj));
+          await removeFile(bucket, onlyName(it));
+          const token = uptoken(bucket, onlyName(it));
+          isOK = await uploadFile(token, onlyName(it), it);
+        } else {
+          const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
+          isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
         }
-        const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
-        isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
       } catch (error) {
         console.log('error', error);
       }
