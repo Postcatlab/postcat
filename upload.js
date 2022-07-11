@@ -1,4 +1,6 @@
 const qiniu = require('qiniu');
+const YAML = require('yaml');
+const fs = require('fs');
 const { AK, SK, bucket } = require('./qiniu_env.js');
 const package = require('./package.json');
 
@@ -59,6 +61,12 @@ const app = async () => {
       let isOK;
       // * 生成上传 Token
       try {
+        if (it.endsWith('.yml')) {
+          const ymlObj = YAML.parse(fs.readFileSync(it, 'utf8'));
+          ymlObj.files.forEach((n) => (n.url = `${ymlObj.version}/${n.url}`));
+          ymlObj.path = `${ymlObj.version}/${ymlObj.path}`;
+          fs.writeFileSync(it, YAML.stringify(ymlObj));
+        }
         const token = uptoken(bucket, `${version}/${it.replace(/release\//, '')}`);
         isOK = await uploadFile(token, `${version}/${it.replace(/release\//, '')}`, it);
       } catch (error) {
