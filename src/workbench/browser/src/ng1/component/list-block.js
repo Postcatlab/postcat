@@ -2,7 +2,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
   template: `<script type="text/ng-template" id="paramDetail_Template_js">
   <div class="container_pdtj" style="padding-left: -{-(item.listDepth||0)*29+20-}-px" {eoData}-show="item.isClick">
       <p class="f_row" {eoData}-if="item.minLength">
-          <span class="title-span mw_100">最小长度：</span>
+          <span class="title-span mw_100" i18n>最小长度：</span>
           <span  class="wb_all">-{-item.minLength-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.maxLength">
@@ -58,7 +58,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
                   other-obj="{isXml:$ctrl.otherObject.isXml,list:$ctrl.data.TAB_BLOCK_LIST_ARR,active:$ctrl.data.bodyTabBlockObj,conf:$ctrl.component.tabBlockListObj}"
                   eo-drop-elem text-arr="$ctrl.data.tabBlockListHtml">
                   <span class="iconfont icon-table-column-width"></span>
-                  <span>列表项</span>
+                  <span>{{$ctrl.listBlockVarible.column}}</span>
               </button>
               <button ng-if="$ctrl.mainObject.setting.ableToCopy" copy-common-directive fn-prefix="$ctrl.fun.copy()"
                   text="复制内容可用于导入平台专属格式" eo-attr-tip-placeholder="eo_custom_text" type="button"
@@ -128,6 +128,12 @@ listBlockController.$inject = ['$rootScope', '$element', '$scope'];
 
 function listBlockController($rootScope, $element, $scope) {
   let vm = this;
+  let locale = window.location.href.includes('zh') ? 'zh' : 'en';
+  vm.listBlockVarible = {
+    operate: locale === 'zh' ? '操作' : 'Operation',
+    column: locale === 'zh' ? '列表项' : 'Column',
+  };
+
   const fun = {};
   const privateFun = {};
   privateFun.setTabListStorage = (inputStorageName, inputCheckboxObject, inputList) => {
@@ -163,7 +169,7 @@ function listBlockController($rootScope, $element, $scope) {
           activeValue: 1,
         },
         {
-          thKey: '列表项',
+          thKey: `列表项`,
           type: 'html',
           html: '<inner-html-common-directive html="item.key"></inner-html-common-directive>',
         },
@@ -1252,7 +1258,7 @@ function listBlockController($rootScope, $element, $scope) {
   };
   $scope.importFile = function (inputArg, inputEvent) {
     inputArg.$index = this.$parent.$index;
-    inputArg.item=vm.list[inputArg.$index];
+    inputArg.item = vm.list[inputArg.$index];
     vm.mainObject.baseFun.importFile(inputArg);
     // if (inputEvent) inputEvent.value = '';
     ($scope.$root && $scope.$root.$$phase) || $scope.$apply();
@@ -1771,7 +1777,7 @@ function listBlockController($rootScope, $element, $scope) {
         }
         tmpThHtml += `<div ${inputVal.itemExpression || ''}   class="{{class}} plr5" ${
           inputVal.authority ? `ng-if="$ctrl.authorityObject.${inputVal.authority}"` : ''
-        }>${inputVal.thKey || '操作'}</div>`;
+        }>${inputVal.thKey || vm.listBlockVarible.operate}</div>`;
         tmpHtml += `<div ${inputVal.itemExpression || ''} class="${
           inputVal.isDropMenu ? 'drop_menu_opr_td_tbd' : 'operate-td-tbd'
         } va-top-td-tbd td-tbd {{class}} plr5" ${
@@ -2011,7 +2017,7 @@ function listBlockController($rootScope, $element, $scope) {
       tmp.thHtml += tmpHtmlObject.thHtml.replace('{{class}}', val.blockDefinedClass || '');
       tmpStaticHtml += tmpHtmlObject.tdHtml
         .replace('{{class}}', val.blockDefinedClass || '')
-        .replace('{{placeholder}}', val.placeholder ? `placeholder="${val.placeholder}"` : '');
+        .replace('{{placeholder}}', val.placeholder ? `placeholder="${val.placeholder.trim()}"` : '');
     }
     tmp.html = `${
       vm.mainObject.setting.isForm
@@ -2030,11 +2036,7 @@ function listBlockController($rootScope, $element, $scope) {
         ? '$ctrl.list'
         : `$ctrl.list.slice(0,${vm.data.MAX_OMIT_LIST_LENTH}*$ctrl.data.listPartIndex)`
     } track by $index" 
-                ${
-                  vm.data.isDepth
-                    ? `ng-hide="item.isHide" ng-if="!item.isHide"`
-                    : ''
-                } 
+                ${vm.data.isDepth ? `ng-hide="item.isHide" ng-if="!item.isHide"` : ''} 
                 sv-group-element="$ctrl.data.sortForm" eo-attr-index="{{$index}}" eo-attr-depth="{{item.listDepth}}"  {{trExpression}}>`;
     try {
       tmp.html = tmp.html.replace('{{trExpression}}', vm.mainObject.setting.trExpression || '');

@@ -1,6 +1,6 @@
 <nz-empty *ngIf="!model || !model.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
     <ng-template #contentTpl>
-      <span>暂无头部</span>
+      <span i18n>No Headers</span>
     </ng-template>
   </nz-empty>
 <ul *ngIf="model && model.length" class="p20">

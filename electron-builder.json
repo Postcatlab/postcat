@@ -15,7 +15,13 @@
     "out/app/common/**/*",
     "!**/*.ts"
   ],
-  "publish": ["github"],
+  "publish": [
+    {
+      "provider": "generic",
+      "url": "https://packages.eoapi.io"
+    },
+    "github"
+  ],
   "generateUpdatesFilesForAllChannels": true,
   "nsis": {
     "oneClick": false,
@@ -38,11 +44,14 @@
     "icon": "src/app/common/images/512x512.png",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist",
     "target": ["dmg", "zip"]
   },
   "dmg": {
     "sign": false
   },
+  "afterSign": "build/notarize.js",
   "linux": {
     "icon": "src/app/common/images/",
     "target": ["AppImage"]

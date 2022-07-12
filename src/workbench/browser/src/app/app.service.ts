@@ -16,18 +16,18 @@ export class AppService {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
         const sender = event.sender;
         console.log('req', req);
-        const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType');
+        const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType') !== false;
         // console.log('wo接收到了哇', event, message);
         const { mockID } = req.query;
         if (Number.isInteger(Number(mockID))) {
           try {
             const mock = await this.getMockByMockID(Number(mockID));
             const apiData = await this.getApiData(Number(mock.apiDataID));
-            if (isEnabledMatchType) {
+            if (!mock && isEnabledMatchType) {
               const result = await this.matchApiData(1, req);
               return sender.send('getMockApiList', result);
             } else {
-              mock.response = this.generateResponse(apiData.responseBody) || mock.response;
+              mock.response = mock?.response ?? this.generateResponse(apiData.responseBody);
             }
             sender.send('getMockApiList', mock);
           } catch (error) {
@@ -42,7 +42,7 @@ export class AppService {
           const response = await this.matchApiData(1, req);
           sender.send('getMockApiList', response);
         } else {
-          sender.send('getMockApiList', { response: { message: `没有找到ID为${mockID}的mock！` }, url: req.url });
+          sender.send('getMockApiList', { response: { message: $localize `No mock found with ID ${mockID}` }, url: req.url });
         }
       });
     }

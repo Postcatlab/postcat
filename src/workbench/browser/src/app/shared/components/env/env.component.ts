@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
 import { StorageService } from '../../services/storage';
@@ -15,7 +16,8 @@ import { Subject } from 'rxjs';
 })
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
-  varName = `{{变量名}}`;
+  varName = $localize`{{Variable Name}}`;
+  modalTitle = $localize`:@@New Environment:New Environment`;
   isVisible = false;
   /** 是否打开下拉菜单 */
   isOpen = false;
@@ -23,14 +25,19 @@ export class EnvComponent implements OnInit, OnDestroy {
   envList: any[] = [];
   activeUuid = 0;
   envListColumns = [
-    { title: '变量名', key: 'name', isEdit: true },
-    { title: '变量值', key: 'value', isEdit: true },
-    { title: '参数说明', key: 'description', isEdit: true },
-    { title: '操作', slot: 'action', width: '15%' },
+    { title: $localize`Name`, key: 'name', isEdit: true },
+    { title: $localize`Value`, key: 'value', isEdit: true },
+    { title: $localize`:@@Description:Description`, key: 'description', isEdit: true },
+    { title: $localize`Operate`, slot: 'action', width: '15%' },
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private storage: StorageService, private message: EoMessageService, private store: Store) {}
+  constructor(
+    private storage: StorageService,
+    private messageService: MessageService,
+    private message: EoMessageService,
+    private store: Store
+  ) {}
 
   get envUuid(): number {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -60,19 +67,15 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.envList = result.data || [];
-          if (!this.envList.length) {
-            await this.handleAddEnv(projectID);
-            resolve(true);
-            return;
-          }
-          await this.handleSwitchEnv(uuid ?? result.data[0].uuid);
-          resolve(true);
+          return resolve(result.data || []);
         }
+        return resolve([]);
       });
     });
   }
 
-  handleDeleteEnv(uuid: string) {
+  handleDeleteEnv($event, uuid: string) {
+    $event?.stopPropagation();
     // * delete env in menu on left sidebar
     this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
@@ -88,13 +91,14 @@ export class EnvComponent implements OnInit, OnDestroy {
     const data = JSON.parse(JSON.stringify(this.envInfo.parameters));
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
-  handleSwitchEnv(uuid) {
+  handleEditEnv(uuid) {
+    this.modalTitle = $localize`Edit Environment`;
+    this.handleShowModal();
     // * switch env in menu on left sidebar
     return new Promise((resolve) => {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.envInfo = result.data ?? {};
-          console.log('result.data', result.data, uuid);
           this.activeUuid = result.data?.uuid ?? null;
           resolve(true);
         }
@@ -103,50 +107,53 @@ export class EnvComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleAddEnv(pid) {
+  handleAddEnv(pid = 1) {
     // * init form of env, create new env-id
     this.envInfo = {
-      projectID: pid || 1,
+      projectID: pid,
       name: '',
       hostUri: '',
       parameters: [],
     };
+    this.modalTitle = $localize`:@@New Environment:New Environment`;
     this.activeUuid = null;
+    this.handleShowModal();
   }
 
   handleSaveEnv(uuid: string | number | undefined = undefined) {
     // * update list after call save api
     const { parameters, name, ...other } = this.envInfo;
     if (!name) {
-      this.message.error('名称不允许为空');
+      this.message.error($localize`Name is not allowed to be empty`);
       return;
     }
-    const data = parameters.filter((it) => it.name && it.value);
-    if (uuid) {
+    const data = parameters?.filter((it) => it.name && it.value);
+    if (uuid != null) {
       this.storage.run(
         'environmentUpdate',
         [{ ...other, name, parameters: data }, uuid],
         async (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
-            this.message.success('编辑成功');
+            this.message.success($localize`Edited successfully`);
             await this.getAllEnv(this.activeUuid);
             if (this.envUuid === Number(uuid)) {
               this.envUuid = Number(uuid);
             }
+            this.handleCancel();
           } else {
-            this.message.error('编辑失败');
+            this.message.error($localize`Failed to edit`);
           }
         }
       );
     } else {
-      this.storage.run('environmentCreate', [{ ...other, name, parameters: data }], (result: StorageRes) => {
+      this.storage.run('environmentCreate', [this.envInfo], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.message.success('新增成功');
-          this.envInfo = result.data;
+          this.message.success($localize`Added successfully`);
           this.activeUuid = Number(result.data.uuid);
-          this.getAllEnv(result.data.uuid);
+          await this.getAllEnv();
+          this.handleCancel();
         } else {
-          this.message.error('新增失败');
+          this.message.error($localize`Failed to add`);
         }
       });
     }
@@ -154,20 +161,22 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleCancel(): void {
     this.isVisible = false;
-    this.envList = [];
+    // this.envList = [];
     this.envInfo = {};
+    this.messageService.send({ type: 'updateEnv', data: {} });
   }
 
   handleShowModal() {
+    // this.handleAddEnv(null);
     this.isVisible = true;
     this.isOpen = false;
-    this.getAllEnv(this.envUuid);
+    // this.getAllEnv(this.envUuid);
   }
 
   handleEnvSelectStatus(event: boolean) {
     if (event) {
       this.activeUuid = this.envUuid;
-      this.handleSwitchEnv(this.activeUuid);
+      this.handleEditEnv(this.activeUuid);
       this.getAllEnv();
     }
   }

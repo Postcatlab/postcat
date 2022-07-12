@@ -6,37 +6,45 @@
   </div>
   <p class="api_name text_omit">{{ apiData.name }}</p>
   <div *ngIf="apiData.requestHeaders && apiData.requestHeaders.length">
-    <p class="api_line">请求头部</p>
+    <p class="api_line" i18n>Request Headers</p>
     <eo-api-detail-header [model]="apiData.requestHeaders"></eo-api-detail-header>
   </div>
   <div *ngIf="apiData.queryParams && apiData.queryParams.length">
-    <p class="api_line">Query 参数</p>
+    <p class="api_line" i18n>Query</p>
     <eo-api-detail-query [model]="apiData.queryParams"></eo-api-detail-query>
   </div>
   <div *ngIf="apiData.restParams && apiData.restParams.length">
-    <p class="api_line">Rest 参数</p>
+    <p class="api_line" i18n>REST</p>
     <eo-api-detail-rest [model]="apiData.restParams"></eo-api-detail-rest>
   </div>
   <div *ngIf="apiData.requestBody?.length">
     <div class="api_line">
-      Body 请求参数<nz-tag class="ml10" nzColor="default">{{ CONST.BODY_TYPE[apiData.requestBodyType] }}</nz-tag>
-      <nz-tag *ngIf="apiData.requestBodyType==='json'" nzColor="default">最外层结构为：{{
-        CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}</nz-tag>
+      <span i18n>Body</span>
+      <nz-tag class="ml10" nzColor="default">{{ CONST.BODY_TYPE[apiData.requestBodyType] }}</nz-tag>
+      <nz-tag *ngIf="apiData.requestBodyType === 'json'" nzColor="default" i18n
+        >The outermost structure is: {{ CONST.JSON_ROOT_TYPE[apiData.requestBodyJsonType] }}</nz-tag
+      >
     </div>
-    <eo-api-detail-body [bodyType]="apiData.requestBodyType" [model]="apiData.requestBody"
-      [jsonRootType]="apiData.requestBodyJsonType"></eo-api-detail-body>
+    <eo-api-detail-body
+      [bodyType]="apiData.requestBodyType"
+      [model]="apiData.requestBody"
+      [jsonRootType]="apiData.requestBodyJsonType"
+    ></eo-api-detail-body>
   </div>
   <div *ngIf="apiData.responseHeaders && apiData.responseHeaders.length">
-    <p class="api_line">返回头部</p>
+    <p class="api_line" i18n>Response Headers</p>
     <eo-api-detail-header [model]="apiData.responseHeaders"></eo-api-detail-header>
   </div>
   <div *ngIf="apiData.responseBody && apiData.responseBody.length">
-    <p class="api_line">返回参数</p>
-    <eo-api-detail-body [bodyType]="apiData.responseBodyType" [model]="apiData.responseBody"
-      [jsonRootType]="apiData.responseBodyJsonType"></eo-api-detail-body>
+    <p class="api_line" i18n>Response</p>
+    <eo-api-detail-body
+      [bodyType]="apiData.responseBodyType"
+      [model]="apiData.responseBody"
+      [jsonRootType]="apiData.responseBodyJsonType"
+    ></eo-api-detail-body>
   </div>
   <div *ngIf="isElectron">
-    <p class="api_line">MOCK </p>
+    <p class="api_line">MOCK</p>
     <eo-api-detail-mock [apiData]="apiData"></eo-api-detail-mock>
   </div>
 </section>

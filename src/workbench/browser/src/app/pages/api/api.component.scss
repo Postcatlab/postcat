@@ -2,18 +2,39 @@ nz-content {
   background-color: var(--MAIN_BG);
 }
 
+:lang(zh) {
+  nz-select {
+    width: 132px;
+  }
+}
+
+:lang(en) {
+  nz-select {
+    width: 162px;
+  }
+}
+
 nz-sider {
   width: 250px;
   background-color: #fff;
 }
 
-::ng-deep {
+ ::ng-deep {
   .ant-layout-sider-children {
     border-right: 1px solid #f0f0f0;
-    padding: 5px;
+    padding: 0 10px;
     .group-btn-add,
     .group-search {
       margin-bottom: 12px;
+    }
+  }
+  .api-tabs .ant-tabs-nav-list {
+    width: 100%;
+    justify-content: space-evenly;
+    .ant-tabs-tab {
+      flex: 1;
+      justify-content: center;
+      margin: 0;
     }
   }
   .tabs-bar {
@@ -23,9 +44,6 @@ nz-sider {
     margin-bottom: -1px;
     align-items: center;
     justify-content: space-between;
-    .env {
-      height: 36px;
-    }
   }
   .content_container {
     border-top: 1px solid var(--BORDER);
@@ -56,3 +74,22 @@ nz-sider {
     color: var(--BLACK_TAG_BG);
   }
 }
+
+.api-tabs {
+  ::ng-deep .ant-tabs-tab {
+    padding: 0.2em 0;
+  }
+}
+
+.fix-mt {
+  margin-top: -6px;
+}
+
+nz-divider {
+  margin: 0.1em 0;
+}
+
+.manager-env {
+  color: #00785a;
+}
+

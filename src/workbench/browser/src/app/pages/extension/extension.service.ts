@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { isElectron } from 'eo/shared/common/common';
 import { lastValueFrom } from 'rxjs';
 import { ModuleInfo } from '../../utils/module-loader';
 import { EoExtensionInfo } from './extension.model';
@@ -14,7 +15,7 @@ export class ExtensionService {
     this.getInstalledList();
   }
   getInstalledList() {
-    this.localModules = window.eo.getModules();
+    this.localModules = window.eo?.getModules() || new Map();
     this.updateExtensionIDs();
   }
   public async requestList() {

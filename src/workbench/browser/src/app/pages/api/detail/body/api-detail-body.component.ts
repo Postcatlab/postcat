@@ -4,8 +4,7 @@ import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../shared/servi
 import { ApiDetailService } from '../api-detail.service';
 @Component({
   selector: 'eo-api-detail-body',
-  templateUrl: './api-detail-body.component.html',
-  styleUrls: ['./api-detail-body.component.scss'],
+  templateUrl: './api-detail-body.component.html'
 })
 export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | ApiEditBody[] | any;
@@ -55,7 +54,6 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   private initListConf() {
     this.listConf = this.apiDetail.initBodyListConf({
-      title: '参数',
       itemStructure: this.itemStructure,
     });
   }

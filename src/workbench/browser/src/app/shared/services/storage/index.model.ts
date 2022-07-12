@@ -110,7 +110,7 @@ export interface ApiTestHistoryResponse {
   body: string;
   contentType: string;
   responseType: 'text' | 'longText' | 'stream';
-  blobFileName?:string;
+  blobFileName?: string;
   responseLength: number;
   testDeny: string;
   /**
@@ -396,7 +396,7 @@ export interface ApiData extends StorageModel {
   responseHeaders?: ApiEditHeaders[];
 
   /**
-   * 返回参数(多层结构)，数据用json存储
+   * Response(多层结构)，数据用json存储
    *
    * @type {ApiEditBody[] | string}
    */
@@ -410,7 +410,7 @@ export interface ApiData extends StorageModel {
   responseBodyType?: ApiBodyType | string;
 
   /**
-   * 返回参数json根类型
+   * Responsejson根类型
    *
    * @type {JsonRootType|string}
    */

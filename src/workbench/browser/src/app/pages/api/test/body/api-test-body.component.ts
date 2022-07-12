@@ -167,7 +167,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   private initListConf() {
     this.listConf = this.apiTest.initBodyListConf({
-      title: '参数',
+      title: $localize`Param`,
       itemStructure: this.itemStructure,
       watchFormLastChange: () => {
         this.modelChange.emit(this.model);
@@ -180,7 +180,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
           var val = inputArg.file[i];
           if (val.size > 2 * 1024 * 1024) {
             inputArg.item.value = '';
-            this.message.error('文件大小均需小于2M');
+            this.message.error($localize`File size must be less than 2M`);
             return;
           }
         }

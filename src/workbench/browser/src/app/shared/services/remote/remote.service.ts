@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import {
-  DataSourceType,
-  DATA_SOURCE_TYPE_KEY,
-  StorageService,
-} from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -25,7 +22,7 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 export class RemoteService {
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
-  dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
+  dataSourceType: DataSourceType = 'local';
   get isElectron() {
     return this.electronService.isElectron;
   }
@@ -35,7 +32,7 @@ export class RemoteService {
   }
   /** Text corresponding to the current data source */
   get dataSourceText() {
-    return this.isRemote ? '远程' : '本地';
+    return this.isRemote ? $localize`:@@Remote Server:Remote Server` : $localize`Localhost`;
   }
   /** get mock url */
   get mockUrl() {
@@ -48,9 +45,11 @@ export class RemoteService {
     private storageService: StorageService,
     private messageService: MessageService,
     private message: NzMessageService,
-    public electronService: ElectronService,
+    private electronService: ElectronService,
+    private settingService: SettingService,
     private router: Router
   ) {
+    this.dataSourceType = this.settingService.settings['eoapi-common.dataStorage'] ?? this.dataSourceType;
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -84,7 +83,7 @@ export class RemoteService {
   }
 
   /**
-   * 测试远程服务器地址是否可用
+   * Test if remote server address is available
    */
   async pingRmoteServerUrl(): Promise<[boolean, any]> {
     const { url: remoteUrl, token } = window.eo?.getModuleSettings('eoapi-common.remoteServer') || {};
@@ -136,15 +135,14 @@ export class RemoteService {
         this.switchToHttp();
         this.refreshComponent();
       } else {
-        console.log('切换失败');
-        this.message.create('error', `远程数据源不可用`);
+        this.message.create('error', $localize`Remote data source not available`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     }
   };
 
   showMessage() {
-    this.message.create('success', `成功切换到${this.dataSourceText}数据源`);
+    this.message.create('success', $localize`successfully switched to ${this.dataSourceText} data source`);
     localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

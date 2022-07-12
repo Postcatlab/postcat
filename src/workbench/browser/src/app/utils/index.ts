@@ -140,7 +140,7 @@ export const copyText = async (text: string) => {
     input.setSelectionRange(0, 9999);
     if (document.execCommand('copy')) {
       document.execCommand('copy');
-      console.log('复制成功');
+      console.log($localize`Copied`);
     }
     document.body.removeChild(input);
     return Promise.resolve(text);

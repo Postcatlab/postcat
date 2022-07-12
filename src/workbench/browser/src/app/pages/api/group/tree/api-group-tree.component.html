@@ -1,48 +1,38 @@
-<header class="group_header">
-  <nz-input-group>
-    <div nz-row [nzGutter]="8">
-      <div nz-col nzFlex="4">
-        <nz-input-group [nzPrefix]="prefixIcon" nzCompact>
-          <input type="text" nz-input placeholder="搜索" [(ngModel)]="searchValue" />
-        </nz-input-group>
-        <ng-template #prefixIcon>
-          <i nz-icon nzType="search"></i>
-        </ng-template>
-      </div>
-      <div nz-col nzFlex="2">
-        <nz-button-group>
-          <button nzType="primary" nz-button (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })">
-            <i nz-icon nzType="plus"></i>
-            API
-          </button>
-          <button nzType="primary" nz-button nz-dropdown [nzDropdownMenu]="menu" nzPlacement="bottomRight">
-            <i nz-icon nzType="caret-down" nzTheme="outline"></i>
-          </button>
-        </nz-button-group>
-        <nz-dropdown-menu #menu="nzDropdownMenu">
-          <ul nz-menu>
-            <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })"><a>新建API</a></li>
-            <li nz-menu-item (click)="addGroup()"><a>新建分组</a></li>
-          </ul>
-        </nz-dropdown-menu>
-      </div>
-    </div>
-  </nz-input-group>
+<header class="flex py-2">
+  <input type="text" class="flex-1 px-3 input" i18n-placeholder="@@Search" placeholder="Search"
+    [(ngModel)]="searchValue" />
+  <div class="flex items-center justify-center ml-3 text-base btn shrink-0" nzType="primary" nz-button nz-dropdown
+    [nzDropdownMenu]="menu" nzPlacement="bottomRight"
+    (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })">
+    <eo-iconpark-icon name="plus"></eo-iconpark-icon>
+  </div>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })" i18n><a>New API</a></li>
+      <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
+    </ul>
+  </nz-dropdown-menu>
 </header>
 <!-- Fixed Group -->
-<div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron">
+<div class="group_container fixed_group_tree pt10">
+  <!-- <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron"> -->
   <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
     [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-    <div class="pl5 tree_node" *ngIf="node.origin?.isFixed">
-      <div class="f_row_ac">
-        <i class="mr10" nz-icon nzType="home" nzTheme="outline"></i>
+    <div class="tree_node" *ngIf="node.origin?.isFixed">
+      <div class="flex items-center">
+        <span class="mr-2 text-sm">
+          <eo-iconpark-icon name="home">
+          </eo-iconpark-icon>
+        </span>
         <span class="text_omit node_title">{{ node.title }}</span>
       </div>
     </div>
   </ng-template>
 </div>
-<div class="bbd" *ngIf="electron.isElectron"></div>
+<div class="bbd"></div>
+<!-- <div class="bbd" *ngIf="electron.isElectron"></div> -->
+
 <!-- Custom Group -->
 <div class="group_container group_tree pt10">
   <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzSearchValue]="searchValue"
@@ -50,11 +40,10 @@
     (nzExpandChange)="toggleExpand()" nzDraggable nzBlockNode (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
-    <div class="pl5">
+    <div>
       <!-- Folder -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
         <div class="f_row_ac">
-          <span class="iconfont icon-folder-outline fs16 mr5"></span>
           <span class="text_omit node_title">{{ node.title }}</span>
         </div>
         <span class="tree_node_operate">
@@ -64,16 +53,16 @@
           <nz-dropdown-menu #groupMenu="nzDropdownMenu">
             <ul nz-menu>
               <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi', node: node })">
-                <a>添加 API</a>
+                <a i18n>Add API</a>
               </li>
               <li nz-menu-item (click)="addSubGroup(node)">
-                <a>新建子分组</a>
+                <a i18n>Add Subgroup</a>
               </li>
               <li nz-menu-item (click)="editGroup(node)">
-                <a>编辑</a>
+                <a i18n>Edit</a>
               </li>
               <li nz-menu-item (click)="deleteGroup(node)">
-                <a>删除</a>
+                <a i18n="@@Delete">Delete</a>
               </li>
             </ul>
           </nz-dropdown-menu>
@@ -98,15 +87,15 @@
           <nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
             <ul nz-menu>
               <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoEditApi', node: node })">
-                <a>编辑</a>
+                <a i18n>Edit</a>
               </li>
               <li nz-menu-item
                 (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })">
-                <a>复制</a>
+                <a i18n="@@Copy">Copy</a>
               </li>
               <li nz-menu-item
                 (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
-                <a>删除</a>
+                <a i18n="@@Delete">Delete</a>
               </li>
             </ul>
           </nz-dropdown-menu>
