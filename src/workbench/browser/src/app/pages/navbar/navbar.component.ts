@@ -1,10 +1,10 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ElectronService } from '../../../core/services';
+import { ElectronService } from '../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
-import { MessageService } from '../../../shared/services/message';
+import { MessageService } from '../../shared/services/message';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-
+import { ResourceInfo } from '../../shared/models/client.model';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -13,6 +13,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remo
 export class NavbarComponent implements OnInit {
   isMaximized = false;
   isElectron = false;
+  isSettingVisible = false;
   messageTop;
   @ViewChild('notificationTemplate', { static: true })
   notificationTemplate!: TemplateRef<{}>;
@@ -29,30 +30,7 @@ export class NavbarComponent implements OnInit {
   }
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
-  resourceInfo = [
-    {
-      id: 'win',
-      name: 'Windows 客户端',
-      icon: 'windows',
-      keyword: 'Setup',
-      suffix: 'exe',
-      link: '',
-    },
-    {
-      id: 'mac',
-      name: 'macOS(Intel) 客户端',
-      icon: 'mac',
-      suffix: 'dmg',
-      link: '',
-    },
-    {
-      id: 'mac',
-      name: 'macOS(M1) 客户端',
-      icon: 'mac',
-      suffix: 'arm64.dmg',
-      link: '',
-    },
-  ];
+  resourceInfo = ResourceInfo;
 
   constructor(
     private electron: ElectronService,
@@ -122,6 +100,10 @@ export class NavbarComponent implements OnInit {
     } else {
       this.modules = new Map();
     }
+  }
+
+  handleShowModal() {
+    this.isSettingVisible = true;
   }
 
   /**

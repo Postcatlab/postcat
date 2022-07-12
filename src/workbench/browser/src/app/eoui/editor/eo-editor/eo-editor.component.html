@@ -1,7 +1,7 @@
 <div>
   <div class="button_list">
-    <span *ngIf="eventList.includes('type') && !hiddenList.includes('type')">
-      内容类型
+    <span *ngIf="eventList.includes('type') && !hiddenList.includes('type')" i18n>
+      Content Type
       <nz-select [(ngModel)]="editorType">
         <nz-option *ngFor="let item of typeList" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
       </nz-select>

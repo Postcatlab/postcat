@@ -9,7 +9,7 @@
       [rootType]="jsonRootType"></params-import>
   </div>
   <div *ngIf="bodyType === 'json'">
-    <p class="fs12 c999 mb5">JSON 根类型：</p>
+    <p class="fs12 c999 mb5" i18n>JSON Root Type:</p>
     <nz-select class="w_100 mb10" [(ngModel)]="jsonRootType">
       <nz-option *ngFor="let item of CONST.JSON_ROOT_TYPE" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
     </nz-select>
@@ -24,5 +24,5 @@
 <eo-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'"
   [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"></eo-editor>
 <!-- Binary -->
-<textarea class="btd" rows="4" *ngIf="bodyType === 'binary'" nzBorderless placeholder="参数描述" nz-input
+<textarea class="btd" rows="4" *ngIf="bodyType === 'binary'" nzBorderless i18n-placeholder="@@Description" placeholder="Description" nz-input
   [(ngModel)]="model"></textarea>

@@ -1,9 +1,7 @@
 import Dexie, { Table } from 'dexie';
+import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import {
-  DataSourceType,
-  DATA_SOURCE_TYPE_KEY,
-} from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { Observable } from 'rxjs';
 import {
@@ -27,7 +25,7 @@ export type ResultType<T = any> = {
 let isFirstLoad = true;
 
 const getApiUrl = (apiData: ApiData) => {
-  const dataSourceType: DataSourceType = (localStorage.getItem(DATA_SOURCE_TYPE_KEY) as DataSourceType) || 'local';
+  const dataSourceType: DataSourceType = getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
 
   /** Is it a remote data source */
   const isRemote = dataSourceType === 'http';
@@ -64,7 +62,7 @@ const batchCreateMock = async (mock: Table<ApiMockEntity, number | string>, data
       const mockList = await mock.where('uuid').above(0).toArray();
       const noHasDefaultMockApiDatas = data
         .filter((item) => !mockList.some((m) => Number(m.apiDataID) === item.uuid))
-        .map((item) => createMockObj(item, { name: '默认 Mock', createWay: 'system' }));
+        .map((item) => createMockObj(item, { name: $localize`Default Mock`, createWay: 'system' }));
 
       await mock.bulkAdd(noHasDefaultMockApiDatas);
     }
@@ -393,7 +391,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     const result = this.loadAllByConditions(this.apiData, { projectID });
     result.subscribe(({ status, data }: ResultType<ApiData[]>) => {
       if (isFirstLoad && status === 200 && data) {
-        batchCreateMock(this.mock, data);
+        requestIdleCallback(() => batchCreateMock(this.mock, data));
       }
     });
     return result;
@@ -488,7 +486,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param apiDataID
    */
   apiTestHistoryLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiTestHistory, { apiDataID: apiDataID });
+    return this.loadAllByConditions(this.apiTestHistory, { apiDataID });
   }
 
   /**
@@ -504,7 +502,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param projectID
    */
   apiTestHistoryLoadAllByProjectID(projectID: number | string): Observable<object> {
-    return this.loadAllByConditions(this.apiTestHistory, { projectID: projectID });
+    return this.loadAllByConditions(this.apiTestHistory, { projectID });
   }
 
   /**

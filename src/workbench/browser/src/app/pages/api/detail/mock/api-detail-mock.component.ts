@@ -26,12 +26,12 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   listConf: object = {};
   isVisible = false;
   createWayMap = {
-    system: '系统自动创建',
-    custom: '手动创建',
+    system: $localize `System creation`,
+    custom: $localize `Manual creation`,
   };
   mockListColumns = [
-    { title: '名称', key: 'name' },
-    { title: '创建方式', slot: 'createWay' },
+    { title: $localize`Name`, key: 'name' },
+    { title: $localize`Created Type`, slot: 'createWay' },
     { title: 'URL', slot: 'url' },
   ];
   private destroy$: Subject<void> = new Subject<void>();
@@ -140,6 +140,6 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
 
   async copyText(text: string) {
     await copyText(text);
-    this.message.success('复制成功');
+    this.message.success($localize`Copied`);
   }
 }

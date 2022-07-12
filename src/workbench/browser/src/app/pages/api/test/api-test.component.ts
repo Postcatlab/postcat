@@ -43,7 +43,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   };
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
-  tabIndexRes: number = 0;
+  tabIndexRes = 0;
   testResult: any = {
     response: {},
     request: {},
@@ -90,7 +90,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * @param item  test history data
    */
   restoreHistory(item) {
-    let result = this.apiTest.getTestDataFromHistory(item);
+    const result = this.apiTest.getTestDataFromHistory(item);
     console.log('restoreHistory', result);
     //restore request
     this.apiData = result.testData;
@@ -108,7 +108,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   saveTestDataToApi() {
-    let apiData = this.apiTest.getApiFromTestData({
+    const apiData = this.apiTest.getApiFromTestData({
       history: this.testResult,
       testData: this.apiData,
     });
@@ -134,6 +134,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.initApi(Number(this.route.snapshot.queryParams.uuid));
     this.watchTabChange();
     this.watchEnvChange();
+    this.messageService.get().subscribe(({ type, data }) => {
+      if (type === 'renderHistory') {
+        this.restoreHistory(data);
+      }
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -168,6 +173,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         },
         id
       );
+      // console.log('test');
+      this.messageService.send({ type: 'updateHistory', data: {} });
     }
   }
   /**
@@ -175,7 +182,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   private receiveMessage(message) {
     console.log('receiveMessage', message);
-    let tmpHistory = {
+    const tmpHistory = {
       general: message.general,
       request: message.report.request,
       response: message.response,
@@ -183,7 +190,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     // other tab test finish,support multiple tab test same time
     if (message.id && this.apiTab.tabID !== message.id) {
       this.apiTab.tabCache[message.id].testResult = tmpHistory;
-      let tab = this.apiTab.tabs.find((val) => val.uuid === message.id);
+      const tab = this.apiTab.tabs.find((val) => val.uuid === message.id);
       if (tab) {
         this.addHistory(message, tab.key);
       }
@@ -199,7 +206,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   private changeStatus(status) {
     this.status = status;
-    let that = this;
+    const that = this;
     switch (status) {
       case 'testing': {
         this.timer$ = interval(1000)
@@ -229,7 +236,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.initBasicForm();
     //recovery from tab
     if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
-      let tabData = this.apiTab.tabCache[this.apiTab.tabID];
+      const tabData = this.apiTab.tabCache[this.apiTab.tabID];
       this.apiData = tabData.apiData;
       this.testResult = tabData.testResult;
       return;
@@ -290,7 +297,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       request: {},
     };
     this.status$.next('start');
-    if (this.timer$) this.timer$.unsubscribe();
+    if (this.timer$) {
+      this.timer$.unsubscribe();
+    }
     this.waitSeconds = 0;
     this.tabIndexRes = 0;
   }

@@ -16,27 +16,27 @@ type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' 
 
 const eventHash = new Map()
   .set('format', {
-    label: '整理格式',
+    label: $localize`Format`,
     icon: 'deployment-unit',
   })
   .set('copy', {
-    label: '复制',
+    label: $localize`:@@Copy:Copy`,
     icon: 'copy',
   })
   .set('search', {
-    label: '搜索',
+    label: $localize`:@@Search:Search`,
     icon: 'search',
   })
   .set('download', {
-    label: '下载',
+    label: $localize`Download`,
     icon: 'download',
   })
   .set('newTab', {
-    label: '新开标签',
+    label: $localize`New Tab`,
     icon: 'file-text',
   })
   .set('replace', {
-    label: '替换',
+    label: $localize`Replace`,
     icon: 'security-scan',
   });
 
@@ -155,7 +155,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
         const value = session.getValue();
         if (navigator.clipboard) {
           navigator.clipboard.writeText(value);
-          this.message.success('复制成功');
+          this.message.success($localize`Copied`);
           return;
         }
         break;

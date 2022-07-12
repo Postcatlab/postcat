@@ -1,63 +1,73 @@
-<div class="py-3">
-  <div class="py-4">
-    <a nz-button [routerLink]="['/home/extension/list']" nzType="link">
-      <i nz-icon nzType="left" nzTheme="outline"></i>返回列表
-    </a>
+<div class="py-3 extension-detail">
+  <div class="sticky top-0 z-50 bg-white">
+    <div class="pb-3">
+      <a nz-button nzType="link" (click)="backToList()">
+        <i nz-icon nzType="left" nzTheme="outline"></i><span i18n>Back</span>
+      </a>
+    </div>
+    <div class="bbd"></div>
   </div>
-  <div class="bbd"></div>
-  <section class="">
-    <div class="flex p-8">
-      <i
-        class="bd_all block border rounded-lg h-40 w-40 bg-cover bg-center bg-no-repeat mr-8"
-        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"
-      ></i>
+  <section class="h-full p-4 max-w-[80vw] mx-auto">
+    <div class="flex">
+      <i class="block w-24 h-24 mr-8 bg-center bg-no-repeat bg-cover border rounded-lg bd_all"
+        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"></i>
       <div class="flex flex-col flex-1">
         <div class="flex flex-col">
-          <span class="text-xl mb-2 font-bold">{{ extensionDetail?.moduleName }}</span>
-          <span>作者: {{ extensionDetail?.author }}</span>
-          <!-- <span class="mb-4">Tags: {{ extensionDetail?.keywords }}</span> -->
-          <span class="mb-2">版本: {{ extensionDetail?.version }}</span>
+          <span class="mb-2 text-xl font-bold">{{ extensionDetail?.moduleName }}</span>
           <p class="w-full h-20">{{ extensionDetail?.description }}</p>
         </div>
         <div class="flex">
-          <div class="flex items-center" *ngIf="!extensionDetail?.installed">
-            <button
-              nz-button
-              nzType="primary"
-              [nzLoading]="isOperating"
-              (click)="manageExtension('install', extensionDetail?.name)"
-            >
-              安装
-            </button>
-            <!-- <span class="text-gray-500">安装完成后需要重启</span> -->
-          </div>
-          <button
-            *ngIf="extensionDetail?.installed"
-            nz-button
-            nzType="primary"
-            nzDanger
-            [nzLoading]="isOperating"
-            (click)="manageExtension('uninstall', extensionDetail?.name)"
-          >
-            卸载
-          </button>
+
         </div>
       </div>
     </div>
-    <div>
-      <nz-tabset [nzAnimated]="false">
-        <nz-tab nzTitle="概述"> {{ extensionDetail?.description }} </nz-tab>
-        <nz-tab nzTitle="更多信息">
-          <nz-descriptions [nzColumn]="1" nzTitle="">
-            <nz-descriptions-item nzTitle="作者">{{ extensionDetail?.author }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="版本">{{ extensionDetail?.version }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="反馈">
-              <a class="eo_link" target="_blank" [href]="extensionDetail?.bugs?.url">Issue</a>
-            </nz-descriptions-item>
-          </nz-descriptions>
-        </nz-tab>
-        <!-- <nz-tab nzTitle="设置" *ngIf="extensionDetail?.configuration && extensionDetail?.configuration.properties">Content of Tab Pane 3</nz-tab> -->
-      </nz-tabset>
+    <div class="flex w-full mt-6 h-[calc(100vh-350px)]">
+      <div class="flex-auto">
+        <h2 class="text-lg font-bold" i18n>Intro</h2>
+        <!-- <nz-divider></nz-divider> -->
+        <div class="h-full overflow-auto markdown-desc">
+          <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
+            <eo-shadow-dom [text]="extensionDetail?.introduction" [options]="{ html: true }">
+            </eo-shadow-dom>
+          </nz-skeleton>
+        </div>
+      </div>
+      <div class="w-[1px] bg-[#f2f2f2] mx-[10px]"></div>
+      <div class="w-[200px] 2xl:w-[250px] overflow-auto h-full">
+        <h2 class="text-lg font-bold" i18n>Install</h2>
+        <div class="flex items-center mt-[22px]" *ngIf="!extensionDetail?.installed">
+          <button *ngIf="isElectron" nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="isOperating"
+            (click)="manageExtension('install', extensionDetail?.name)">
+            Install
+          </button>
+          <div *ngIf="!isElectron">
+            <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full" i18n>Download Client
+            </button>
+            <nz-dropdown-menu #download="nzDropdownMenu">
+              <ul nz-menu>
+                <ng-container *ngFor="let item of resourceInfo; let index = index">
+                  <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+                  <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
+                </ng-container>
+              </ul>
+            </nz-dropdown-menu>
+            <div class="bg-[#FF1744] p-[6px] mt-[14px] rounded-[3px] text-white" i18n>
+              The extensions can only be installed on the client at present. Please download the client first~
+            </div>
+          </div>
+        </div>
+        <button *ngIf="extensionDetail?.installed" nz-button nzBlock nzType="primary" nzDanger nzSize="large"
+          [nzLoading]="isOperating" class="mt-[12px]" (click)="manageExtension('uninstall', extensionDetail?.name)" i18n>
+          Uninstall
+        </button>
+
+        <h2 class="text-lg font-bold mt-[30px]" i18n>Support</h2>
+        <nz-descriptions [nzColumn]="1" nzTitle="">
+          <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail?.author }}</nz-descriptions-item>
+          <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail?.version }}
+          </nz-descriptions-item>
+        </nz-descriptions>
+      </div>
     </div>
   </section>
 </div>

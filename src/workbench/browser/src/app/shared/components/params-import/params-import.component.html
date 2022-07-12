@@ -1,11 +1,11 @@
 <span class="menu" (click)="showModal('json')">
   <i class="fs24 iconfont icon-daoru"></i>
-  导入
+  <span i18n>Import</span>
 </span>
 
 <!-- <span class="menu" nz-dropdown [nzDropdownMenu]="menu">
   <i class="fs24 iconfont icon-daoru"></i>
-  导入
+    <span i18n>Import</span>
 </span>
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu nzSelectable>
@@ -21,7 +21,7 @@
   (nzOnCancel)="handleCancel()"
 >
   <div *nzModalContent>
-    <pre class="eg">导入形如：<br />{{ eg }}</pre>
+    <pre class="eg" i18n>Import like this:<br />{{ eg }}</pre>
     <eo-editor
       [(code)]="paramCode"
       [editorType]="contenTypeEditor"
@@ -30,9 +30,9 @@
     ></eo-editor>
   </div>
   <div *nzModalFooter style="text-align: left">
-    <button nz-button nzType="default" (click)="handleImport('mixin')">增量更新</button>
-    <button nz-button nzType="default" (click)="handleImport('overwrite')">全量替换</button>
-    <button nz-button nzType="default" (click)="handleImport('append')">在末端插入</button>
-    <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+    <button nz-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
+    <button nz-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
+    <button nz-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
+    <button nz-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
   </div>
 </nz-modal>

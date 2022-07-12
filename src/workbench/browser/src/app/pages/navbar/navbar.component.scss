@@ -1,3 +1,27 @@
+.btn {
+  border-radius: 3px;
+  background-color: var(--BTN_PRIMARY_BG);
+  color: #fff;
+  font-size: 0.9em;
+  height: 30px;
+  cursor: pointer;
+}
+.icon {
+  -webkit-app-region: no-drag;
+  width: 30px;
+  height: 30px;
+  font-size: 1.5em;
+  color: rgba(0,0,0,0.5);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all .4s ease;
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+}
+ .iconfont{
+  -webkit-app-region: no-drag;
+}
 .eo_navbar {
   -webkit-app-region: drag;
   position: sticky;
@@ -5,6 +29,7 @@
   z-index: 11;
   left: 0;
   top: 0;
+  padding: 0 8px;
   // background-color: var(--NAVBAR_BG);
   // color: var(--NAVBAR_TEXT);
   // border-bottom: 1px solid var(--NAVBAR_BORDER_BOTTOM);

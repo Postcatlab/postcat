@@ -16,13 +16,14 @@ import { EoMessageComponent } from './message/eo-message.component';
 
 // ! Directive
 import { CellDirective } from './table/eo-table/cell.directive';
+import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
 
 const antdModules = [NzTableModule, NzIconModule, NzButtonModule, NzInputModule, NzSelectModule];
 
 const DEFAULT_ACE_CONFIG: AceConfigInterface = {};
 @NgModule({
   declarations: [EoTableComponent, EoEditorComponent, EoMessageComponent, CellDirective],
-  imports: [CommonModule, FormsModule, AceModule, ...antdModules],
+  imports: [CommonModule, FormsModule, AceModule, EoIconparkIconModule, ...antdModules],
   exports: [EoTableComponent, EoEditorComponent, EoMessageComponent, CellDirective],
   providers: [
     {

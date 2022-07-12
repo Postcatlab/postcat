@@ -1,51 +1,24 @@
 <div class="px-3">
-  <div class="py-4">
-    <nz-input-group class="w-60" [nzPrefix]="prefixTemplateSearch">
-      <input
-        type="text"
-        nz-input
-        [(ngModel)]="keyword"
-        (ngModelChange)="onSeachChange($event)"
-        placeholder="搜索关键字"
-      />
-    </nz-input-group>
-  </div>
-  <ng-template #prefixTemplateSearch><i nz-icon nzType="search"></i></ng-template>
-  <div class="bbd"></div>
-  <div class="list-block grid gap-6 py-5 grid-cols-4">
+
+  <div class="grid grid-cols-2 gap-6 py-5 list-block">
     <div
-      class="bd_all w-full h-76 py-2 px-3 rounded-lg flex flex-col flex-wrap items-center plugin-block"
-      *ngFor="let it of renderList"
-      (click)="clickExtension(it)"
-    >
-      <span class="h-8 w-full flex justify-between items-center">
-        <nz-tag *ngIf="extensionService.localModules.has(it.moduleID)" [nzColor]="'var(--MAIN_THEME_COLOR)'"
-          >已安装</nz-tag
-        >
-        <span
-          *ngIf="!extensionService.localModules.has(it.moduleID)"
-          class="text-xs p-1 bd_all rounded-sm text-green-700 border-green-700"
-          >未安装</span
-        >
-        <!-- <i
-          nz-icon
-          nzType="setting"
-          (click)="handleSetingPlugin(it)"
-          *ngIf="
-            extensionService.localModules.has(it.moduleID) &&
-            extensionService.localModules.get(it.moduleID).configuration
-          "
-          nzTheme="outline"
-        ></i> -->
-      </span>
-      <i
-        class="block w-20 h-20 my-3 rounded-lg bg-cover bg-center bg-no-repeat"
-        [ngClass]="{ 'bg-gray-100': it.logo }"
-        [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
-      ></i>
-      <span class="text-lg font-bold">{{ it.moduleName }}</span>
-      <span class="text-gray-400 my-2">{{ it.author }}</span>
-      <span class="text-gray-500 my-1 desc">{{ it.description }}</span>
+      class="bd_all w-full min-h-[140px] p-5 rounded-lg flex flex-col flex-wrap items-center plugin-block hover:border-green-700 hover:shadow-lg transition-shadow duration-300"
+      *ngFor="let it of renderList" (click)="clickExtension(it)">
+      <div class="flex w-full">
+        <div class=" block w-[40px] h-[40px] rounded-lg bg-cover bg-center bg-no-repeat mr-[20px]"
+          [ngClass]="{ 'bg-gray-100': it.logo }" [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }">
+        </div>
+
+        <div class="flex flex-col flex-auto">
+          <span class="text-lg font-bold">{{ it.moduleName }}</span>
+          <span class="my-2 text-gray-400">{{ it.author }}</span>
+          <span class="my-1 text-gray-500 desc">{{ it.description }}</span>
+        </div>
+        <div>
+          <span *ngIf="isElectron ? extensionService.localModules.has(it.moduleID) : it.installed"
+            class="p-1 text-xs text-green-700 border-green-700 rounded-sm  bd_all" i18n>Installed</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

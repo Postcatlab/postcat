@@ -47,9 +47,9 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges {
     this.listConf = this.editService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_HEADER',
       itemStructure: this.itemStructure,
-      title: '头部',
-      nameTitle: '标签',
-      valueTitle: '内容',
+      title: $localize`:@@Header:Header`,
+      nameTitle: $localize`Key`,
+      valueTitle: $localize`Value`,
       watchFormLastChange: () => {
         this.modelChange$.next();
       },

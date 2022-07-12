@@ -54,12 +54,19 @@ function createWindow(): BrowserWindow {
       contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
+  // 启动mock服务
+  mockServer.start(win as any);
   proxyOpenExternal(win);
   let loadPage = async () => {
+    let currentUrl = win.webContents.getURL();
+    let locale = ['zh', 'en'].find((val) => currentUrl.includes(val));
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(__dirname, '../../../src/workbench/browser/dist/index.html')}`;
+        : `file://${path.join(
+            __dirname,
+            `../../../src/workbench/browser/dist/${locale || app.getLocale()}/index.html`
+          )}`;
     win.loadURL(file);
     if (['development'].includes(processEnv)) {
       win.webContents.openDevTools({
@@ -69,8 +76,6 @@ function createWindow(): BrowserWindow {
     UnitWorkerModule.setup({
       view: win,
     });
-    // 启动mock服务
-    await mockServer.start(win as any);
   };
   win.webContents.on('did-fail-load', (event, errorCode) => {
     console.error('did-fail-load', errorCode);
@@ -123,7 +128,7 @@ try {
   ipcMain.on('message', function (event, arg) {
     console.log('recieve render msg=>', arg, arg.action);
     //only action from mainView can be executed
-    if (event.frameId !== 1) return;
+    // if (event.frameId !== 1) return;
     switch (arg.action) {
       case 'minimize': {
         win.minimize();

@@ -1,5 +1,26 @@
 ::ng-deep {
-  eo-extension-detail .ant-tabs-content-holder {
-    padding-top: 20px;
+  eo-extension-detail {
+    .ant-tabs-content-holder {
+      padding-top: 20px;
+    }
+  }
+}
+::ng-deep  .extension-detail {
+
+.markdown-desc {
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width:0;
+ }
+ &:hover::-webkit-scrollbar {
+    width:8px;
+  }
+}
+
+.ant-descriptions-row > td {
+  padding-bottom: 8px;
+}
+  .ant-descriptions-item-content,.ant-descriptions-item-label {
+    color: #999;
   }
 }

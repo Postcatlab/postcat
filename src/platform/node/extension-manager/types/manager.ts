@@ -26,6 +26,8 @@ export interface ModuleInfo {
   version: string;
   // 模块描述
   description: string;
+  // 详细说明
+  introduction: string;
   // 模块ID，用于关联
   moduleID: string;
   // 模块名称，用于显示
