@@ -13,6 +13,7 @@ import 'brace/mode/html';
 import 'brace/mode/xml';
 import 'brace/ext/searchbox';
 import ace from 'brace';
+import { completions } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
@@ -204,16 +205,12 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   setCompleteData = (data) => {
-    const meta = [
-      { caption: 'eo.http.response.get', value: 'eo.http.response.get()' },
-      { caption: 'eo.http.response.set', value: 'eo.http.response.set("response_value")' },
-    ];
     console.log('ace', ace);
     const langTools = ace.acequire('ace/ext/language_tools');
     console.log('langTools', langTools);
     langTools.addCompleter({
       // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
-      getCompletions: (editor, session, pos, prefix, callback) => callback(null, meta),
+      getCompletions: (editor, session, pos, prefix, callback) => callback(null, completions),
 
       // langTools.addCompleter({
       //   getCompletions: function (editor, session, pos, prefix, callback) {
