@@ -79,6 +79,8 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   ];
 
   public config: AceConfigInterface = {
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
     theme: 'tomorrow_night_eighties',
     readOnly: false,
     tabSize: 4,
@@ -202,14 +204,13 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   setCompleteData = (data) => {
-    // const meta = [{meta: "abcdefg", caption: "sonic", value: "sonic", score:1}]
+    const meta = [{ meta: 'abcdefg', caption: 'sonic', value: 'sonic', score: 1 }];
     console.log('ace', ace);
     const langTools = ace.acequire('ace/ext/language_tools');
     console.log('langTools', langTools);
     langTools.addCompleter({
       // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
-      getCompletions: (editor, session, pos, prefix, callback) =>
-        callback(null, [{ meta: 'abcdefg', caption: 'sonic', value: 'sonic', score: 1 }]),
+      getCompletions: (editor, session, pos, prefix, callback) => callback(null, meta),
 
       // langTools.addCompleter({
       //   getCompletions: function (editor, session, pos, prefix, callback) {
