@@ -48,7 +48,8 @@
     </nz-tree-view>
   </div>
   <div class="flex-1 ">
-    <eo-editor [(code)]="model" editorType="javascript" [eventList]="[ 'format', 'copy',  'search', 'replace']">
+    <eo-editor [(code)]="model" editorType="javascript" [eventList]="[ 'format', 'copy',  'search', 'replace']"
+      (codeChange)="handleChange($event)">
     </eo-editor>
   </div>
 </div>
