@@ -1,10 +1,39 @@
 <div class="flex eo-api-script">
-  <div class="w-[240px]  h-[300px]">
+  <div class="w-[240px] h-[400px] overflow-auto">
+    <div class="flex justify-between p-3">
+      <div>快捷方式</div>
+      <div>
+        <a href="https://help.eolink.com/#/tutorial/?groupID=c-709&productID=13" class="text-blue-400" target="_blank"
+          rel="noopener noreferrer">内置函数手册</a>
+      </div>
+    </div>
     <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
         <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
         <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="false" (nzClick)="insertCode(node)">
-          {{ node.name }}
+          <span class="text-blue-400"> {{ node.name }}</span>
+          <ng-container *ngIf="node.note">
+            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
+              nz-tooltip>
+              [?]
+            </span>
+            <ng-template #titleTemplate let-thing>
+              <p style="color:#99c6da" *ngIf="node.note.code">{{ node.note.code }}</p>
+              <p *ngIf="node.note.desc">{{node.note.desc}}</p>
+              <ng-container *ngIf="node.note.input">
+                <br />
+                <p style="color:#999">---入参---</p>
+                <p *ngFor="let item of node.note.input">
+                  <span style="color:#ff9800">{{item.key}}：</span>{{item.value}}
+                </p>
+              </ng-container>
+              <ng-container *ngIf="node.note.output">
+                <br />
+                <p style="color:#999">---返回---</p>
+                <p>全局变量值</p>`
+              </ng-container>
+            </ng-template>
+          </ng-container>
         </nz-tree-node-option>
       </nz-tree-node>
 
@@ -18,8 +47,9 @@
       </nz-tree-node>
     </nz-tree-view>
   </div>
-  <div class="flex-1  h-[300px]">
-    <eo-editor [(code)]="model" editorType="javascript" [eventList]="[ 'format', 'copy',  'search', 'replace']">
+  <div class="flex-1 ">
+    <eo-editor [(code)]="model" editorType="javascript" [eventList]="[ 'format', 'copy',  'search', 'replace']"
+      class="h-[500px]">
     </eo-editor>
   </div>
 </div>

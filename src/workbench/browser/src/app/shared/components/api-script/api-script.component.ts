@@ -6,35 +6,8 @@ import { EoEditorComponent } from 'eo/workbench/browser/src/app/eoui/editor/eo-e
 
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 
-interface TreeNode {
-  name: string;
-  code?: string;
-  children?: TreeNode[];
-}
-
-const TREE_DATA: TreeNode[] = [
-  {
-    name: 'HTTP API 请求',
-    children: [
-      {
-        name: '获取响应结果',
-        code: 'eo.http.response.get();',
-      },
-      {
-        name: '设置响应结果',
-        code: 'eo.http.response.set("response_value");',
-      },
-    ],
-  },
-];
-
-interface FlatNode extends TreeNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-  disabled: boolean;
-}
-
+import type { TreeNode, FlatNode } from './constant';
+import { TREE_DATA } from './constant';
 @Component({
   selector: 'eo-api-script',
   templateUrl: './api-script.component.html',
@@ -78,6 +51,6 @@ export class ApiScriptComponent implements OnInit {
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
   insertCode = (node: FlatNode) => {
-    this.eoEditor.handleInsert(node.code);
+    this.eoEditor.handleInsert(node.value);
   };
 }
