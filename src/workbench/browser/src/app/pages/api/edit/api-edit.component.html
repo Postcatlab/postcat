@@ -86,6 +86,24 @@
           </ng-template>
           <eo-api-edit-rest class="eo_theme_iblock bbd bld brd" [model]="apiData.restParams"></eo-api-edit-rest>
         </nz-tab>
+        <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
+          <ng-template #preScriptTitleTmp>
+            Prescript
+            <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
+              apiData.restParams | apiParamsNum
+              }}</span>
+          </ng-template>
+          <eo-api-script class="eo_theme_iblock bbd"></eo-api-script>
+        </nz-tab>
+        <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
+          <ng-template #suffixScriptTitleTmp>
+            Post script
+            <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
+              apiData.restParams | apiParamsNum
+              }}</span>
+          </ng-template>
+          <eo-api-script class="eo_theme_iblock bbd"></eo-api-script>
+        </nz-tab>
       </nz-tabset>
     </nz-collapse-panel>
   </nz-collapse>

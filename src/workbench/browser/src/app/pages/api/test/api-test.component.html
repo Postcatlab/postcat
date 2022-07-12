@@ -76,7 +76,7 @@
       </nz-tab>
       <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
         <ng-template #preScriptTitleTmp>
-          前置脚本
+          Prescript
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
             apiData.restParams | apiParamsNum
             }}</span>
@@ -85,7 +85,7 @@
       </nz-tab>
       <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
         <ng-template #suffixScriptTitleTmp>
-          后置脚本
+          Post script
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
             apiData.restParams | apiParamsNum
             }}</span>
