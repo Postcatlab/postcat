@@ -204,7 +204,10 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   setCompleteData = (data) => {
-    const meta = [{ meta: 'abcdefg', caption: 'sonic', value: 'sonic', score: 1 }];
+    const meta = [
+      { caption: 'eo.http.response.get', value: 'eo.http.response.get()' },
+      { caption: 'eo.http.response.set', value: 'eo.http.response.set("response_value")' },
+    ];
     console.log('ace', ace);
     const langTools = ace.acequire('ace/ext/language_tools');
     console.log('langTools', langTools);
