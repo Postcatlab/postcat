@@ -15,6 +15,13 @@ import 'brace/ext/searchbox';
 import ace from 'brace';
 import { completions } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 
+const langTools = ace.acequire('ace/ext/language_tools');
+console.log('langTools', langTools);
+langTools.addCompleter({
+  // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
+  getCompletions: (editor, session, pos, prefix, callback) => callback(null, completions),
+});
+
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
 const eventHash = new Map()
@@ -118,8 +125,6 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
             event: it,
             ...eventHash.get(it),
           }));
-
-    this.setCompleteData([]);
   }
   log(event, txt) {
     console.log('ace event', event, txt);
@@ -203,26 +208,6 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
         break;
     }
   }
-
-  setCompleteData = (data) => {
-    console.log('ace', ace);
-    const langTools = ace.acequire('ace/ext/language_tools');
-    console.log('langTools', langTools);
-    langTools.addCompleter({
-      // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
-      getCompletions: (editor, session, pos, prefix, callback) => callback(null, completions),
-
-      // langTools.addCompleter({
-      //   getCompletions: function (editor, session, pos, prefix, callback) {
-      //     if (prefix.length === 0) {
-      //       return callback(null, []);
-      //     } else {
-      //       return callback(null, data);
-      //     }
-      //   },
-      // });
-    });
-  };
 
   handleInsert(code) {
     const ace = this.aceRef.directiveRef.ace();
