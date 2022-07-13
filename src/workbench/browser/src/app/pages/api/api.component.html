@@ -60,13 +60,14 @@
               class="flex items-center justify-center mx-1 icon"
               i18n-title
               title="Quick look"
-              nz-dropdown
-              nzTrigger="click"
-              [nzDropdownMenu]="envParams"
+              nz-popover
+              [nzPopoverContent]="envParams"
+              nzPopoverPlacement="bottomRight"
+              nzPopoverTrigger="click"
             >
               <eo-iconpark-icon name="eyes"></eo-iconpark-icon>
             </span>
-            <nz-dropdown-menu #envParams="nzDropdownMenu"> <env-list></env-list> </nz-dropdown-menu>
+            <ng-template #envParams> <env-list></env-list> </ng-template>
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
