@@ -52,8 +52,18 @@
             </nz-select>
             <ng-template #renderTemplate>
               <nz-divider></nz-divider>
-              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n>Manage Environment</a>
+              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n
+                >Manage Environment</a
+              >
             </ng-template>
+            <span
+              class="flex items-center justify-center mx-1 icon"
+              i18n-title
+              title="Quick look"
+              (click)="handleShowEnv()"
+            >
+              <eo-iconpark-icon name="eyes"></eo-iconpark-icon>
+            </span>
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
