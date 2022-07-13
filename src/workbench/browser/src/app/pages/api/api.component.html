@@ -60,10 +60,13 @@
               class="flex items-center justify-center mx-1 icon"
               i18n-title
               title="Quick look"
-              (click)="handleShowEnv()"
+              nz-dropdown
+              nzTrigger="click"
+              [nzDropdownMenu]="envParams"
             >
               <eo-iconpark-icon name="eyes"></eo-iconpark-icon>
             </span>
+            <nz-dropdown-menu #envParams="nzDropdownMenu"> <env-list></env-list> </nz-dropdown-menu>
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
