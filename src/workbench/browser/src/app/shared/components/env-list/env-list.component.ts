@@ -9,8 +9,8 @@ import { StorageService } from '../../services/storage';
     <span class="text-gray-400">Environment variable</span>
     <!-- <span class="my-2">{{ item.name }}</span> -->
     <div *ngFor="let it of envParams" class="flex items-center justify-between h-8">
-      <span class="w-1/3 text-gray-500">{{ it.name }}</span>
-      <span class="w-2/3 text-gray-500">{{ it.description }}</span>
+      <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden">{{ it.name }}</span>
+      <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden">{{ it.value }}</span>
     </div>
   </div>`,
   styleUrls: [],
@@ -27,7 +27,7 @@ export class EnvListComponent implements OnInit {
     const envList = (await this.getAllEnv()) as [];
     const [env]: any[] = envList.filter((it: any) => it.uuid === uuid);
     console.log(env, envList);
-    this.envParams = env.parameters.filter((it: any) => it.name && it.value);
+    this.envParams = env.parameters;
   }
   getAllEnv(uuid?: number) {
     const projectID = 1;
