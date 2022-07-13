@@ -6,20 +6,24 @@
     </a>
   </div>
   <div class="flex items-center">
-    <span class="icon mx-1 flex items-center justify-center" i18n-title title="Open Settings" (click)="handleShowModal()">
+    <span
+      class="flex items-center justify-center mx-1 icon"
+      i18n-title
+      title="Open Settings"
+      (click)="handleShowModal()"
+    >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </span>
     <!-- <span
       i18n-title
-      class="icon mx-1 flex items-center justify-center"
+      class="flex items-center justify-center mx-1 icon"
       title="{{ dataSourceText }}数据源"
       (click)="switchDataSource()"
     >
       <eo-iconpark-icon [name]="isRemote ? 'link-cloud-sucess' : 'link-cloud-faild'"></eo-iconpark-icon>
     </span> -->
-    <span class="icon mx-1 flex items-center justify-center" nz-dropdown [nzDropdownMenu]="menu">
-      <eo-iconpark-icon name="help">
-      </eo-iconpark-icon>
+    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="menu">
+      <eo-iconpark-icon name="help"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
@@ -29,15 +33,32 @@
       </ul>
     </nz-dropdown-menu>
     <div *ngIf="!OS_TYPE.includes('mac') && isElectron">
-      <span nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="Minimize" nzTooltipPlacement="left" class="iconfont icon-jianhao mr10 fs24 cp"
-        (click)="minimize()">
+      <span
+        nz-tooltip
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Minimize"
+        nzTooltipPlacement="left"
+        class="iconfont icon-jianhao mr10 fs24 cp"
+        (click)="minimize()"
+      >
       </span>
-      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipTitle]="isMaximized ? 'Restore' : 'Maximize'" nzTooltipPlacement="left"
+      <span
+        nz-tooltip
+        i18n-nzTooltipTitle
+        [nzTooltipTitle]="isMaximized ? 'Restore' : 'Maximize'"
+        nzTooltipPlacement="left"
         class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
-        (click)="toggleMaximize()">
+        (click)="toggleMaximize()"
+      >
       </span>
-      <span nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="Close" nzTooltipPlacement="left" class="iconfont icon-guanbi pr15 fs24 cp"
-        (click)="close()">
+      <span
+        nz-tooltip
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Close"
+        nzTooltipPlacement="left"
+        class="iconfont icon-guanbi pr15 fs24 cp"
+        (click)="close()"
+      >
       </span>
     </div>
     <div *ngIf="!isElectron">

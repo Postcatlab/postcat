@@ -93,3 +93,16 @@ nz-divider {
   color: #00785a;
 }
 
+.icon {
+  -webkit-app-region: no-drag;
+  width: 30px;
+  height: 30px;
+  font-size: 1.5em;
+  color: rgba(0,0,0,0.5);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all .4s ease;
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+}

@@ -25,6 +25,7 @@ import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark
 import { ApiScriptComponent } from './components/api-script/api-script.component';
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
+import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -54,7 +55,7 @@ const COMPONENTS = [
     EouiModule,
     NzTreeViewModule,
   ],
-  declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent],
+  declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
   exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, EoIconparkIconModule],
 })
