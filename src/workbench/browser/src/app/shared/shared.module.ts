@@ -13,6 +13,7 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -48,6 +49,7 @@ const COMPONENTS = [
     NzResultModule,
     NzDropDownModule,
     NzSpinModule,
+    NzCardModule,
     NzNotificationModule,
     NzMessageModule,
     NzDescriptionsModule,
@@ -57,6 +59,6 @@ const COMPONENTS = [
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
-  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, EoIconparkIconModule],
+  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, EoIconparkIconModule, EnvListComponent],
 })
 export class SharedModule {}

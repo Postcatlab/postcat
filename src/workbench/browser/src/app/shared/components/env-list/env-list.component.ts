@@ -4,13 +4,15 @@ import { StorageRes, StorageResStatus } from '../../../shared/services/storage/i
 import { StorageService } from '../../services/storage';
 
 @Component({
-  selector: '',
-  template: ` <span class="text-gray-400">Environment variable</span>
+  selector: 'env-list',
+  template: ` <nz-card style="width:300px">
+    <span class="text-gray-400">Environment variable</span>
     <!-- <span class="my-2">{{ item.name }}</span> -->
     <div *ngFor="let it of envParams" class="flex items-center justify-between h-8">
       <span class="w-1/3 text-gray-500">{{ it.name }}</span>
       <span class="w-2/3 text-gray-500">{{ it.description }}</span>
-    </div>`,
+    </div>
+  </nz-card>`,
   styleUrls: [],
 })
 export class EnvListComponent implements OnInit {

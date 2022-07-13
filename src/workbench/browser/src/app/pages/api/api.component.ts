@@ -7,10 +7,7 @@ import { Message, MessageService } from '../../shared/services/message';
 import { ApiService } from './api.service';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { ModalService } from '../../shared/services/modal.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
 
 @Component({
   selector: 'eo-api',
@@ -50,7 +47,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     private remoteService: RemoteService,
-    private modalService: ModalService,
     private store: Store
   ) {}
 
@@ -166,15 +162,6 @@ export class ApiComponent implements OnInit, OnDestroy {
         const data = result.data.find((val) => val.uuid === Number(uuid));
         this.store.dispatch(new Change(data));
       }
-    });
-  }
-
-  handleShowEnv() {
-    const modal: NzModalRef = this.modalService.create({
-      nzTitle: 'Environment',
-      nzContent: EnvListComponent,
-      nzClosable: true,
-      nzFooter: null,
     });
   }
   handleEnvSelectStatus(event: boolean) {}
