@@ -14,6 +14,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -56,9 +57,10 @@ const COMPONENTS = [
     EoIconparkIconModule,
     EouiModule,
     NzTreeViewModule,
+    NzPopoverModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
-  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, EoIconparkIconModule, EnvListComponent],
+  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, NzPopoverModule, EoIconparkIconModule, EnvListComponent],
 })
 export class SharedModule {}

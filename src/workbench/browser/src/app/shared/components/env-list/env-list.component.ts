@@ -5,14 +5,14 @@ import { StorageService } from '../../services/storage';
 
 @Component({
   selector: 'env-list',
-  template: ` <nz-card style="width:300px">
+  template: ` <div style="width:300px">
     <span class="text-gray-400">Environment variable</span>
     <!-- <span class="my-2">{{ item.name }}</span> -->
     <div *ngFor="let it of envParams" class="flex items-center justify-between h-8">
       <span class="w-1/3 text-gray-500">{{ it.name }}</span>
       <span class="w-2/3 text-gray-500">{{ it.description }}</span>
     </div>
-  </nz-card>`,
+  </div>`,
   styleUrls: [],
 })
 export class EnvListComponent implements OnInit {
