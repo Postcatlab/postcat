@@ -1,12 +1,13 @@
 {
-  "rewrites": [
-    {
-      "source": "/:path((?!en/).*)",
-      "destination": "/en/:path*"
-    },
-    {
-      "source": "/:path((?!zh/).*)",
-      "destination": "/zh/:path*"
-    }
-  ]
-}
+    "rewrites": [
+      {
+        "source": "/:path((?!en/).*)",
+        "destination": "/en/:path*"
+      },
+      {
+        "source": "/:path((?!zh/).*)",
+        "destination": "/zh/:path*"
+      }
+    ]
+  }
+  

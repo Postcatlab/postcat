@@ -17,6 +17,3 @@ export const isNotEmpty = (value: any) => {
   }
 };
 
-export const isElectron = () => {
-  return !!(window && window.process && window.process.type);
-};
