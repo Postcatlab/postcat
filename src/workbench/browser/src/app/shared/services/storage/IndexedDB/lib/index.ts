@@ -23,7 +23,6 @@ export type ResultType<T = any> = {
 };
 
 let isFirstLoad = true;
-
 const getApiUrl = (apiData: ApiData) => {
   const dataSourceType: DataSourceType = getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
 

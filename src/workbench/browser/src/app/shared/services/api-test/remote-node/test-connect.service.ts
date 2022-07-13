@@ -3,10 +3,7 @@ import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { TestServer } from '../test-server.model';
 import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
 @Injectable()
-/**
- * Vercel serverless api
- */
-export class TestServerServerlessService implements TestServer {
+export class TestServerRemoteService implements TestServer {
   receiveMessage: (message) => void;
   xhrByTabID = {};
   constructor(@Inject(LOCALE_ID) private locale: string) {}
@@ -27,7 +24,8 @@ export class TestServerServerlessService implements TestServer {
   }
   ajax(message) {
     const xhr = new XMLHttpRequest();
-    const url = '/api/unit';
+    const url = `${window.location.protocol}//${window.location.hostname}:4201/api/unit`;
+    console.log(url)
     xhr.open('POST', url);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.onreadystatechange = (e) => {

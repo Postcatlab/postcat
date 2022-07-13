@@ -10,7 +10,8 @@
     "out/shared/**/*.js*",
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
-    "out/workbench/node/",
+    "out/workbench/browser/src/**/*.js*",
+    "out/workbench/node/**/*.js*",
     "out/core/**/package.json",
     "out/app/common/**/*",
     "!**/*.ts"
