@@ -22,7 +22,7 @@ eo-api-test-rest {
   height: 100%;
   .scroll_container {
     height: calc(100% - 52px);
-    overflow-y: auto;
+    // overflow-y: auto;
   }
 }
 
