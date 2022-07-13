@@ -24,3 +24,13 @@
     }
   }
 }
+
+ ::ng-deep eo-editor {
+  height: 100%;
+  & > div {
+    height: 100%;
+  }
+  .ace_editor {
+    height: 100% !important;
+  }
+}
