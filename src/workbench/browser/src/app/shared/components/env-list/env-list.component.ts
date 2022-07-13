@@ -9,8 +9,8 @@ import { StorageService } from '../../services/storage';
     <span class="text-gray-400">Environment variable</span>
     <!-- <span class="my-2">{{ item.name }}</span> -->
     <div *ngFor="let it of envParams" class="flex items-center justify-between h-8">
-      <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden">{{ it.name }}</span>
-      <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden">{{ it.value }}</span>
+      <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
+      <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
   </div>`,
   styleUrls: [],
