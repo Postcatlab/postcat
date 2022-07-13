@@ -1,7 +1,7 @@
 {
   "name": "eoapi",
   "souceLocale": "zh-Hans",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/eolinker/eoapi.git",
@@ -23,6 +23,7 @@
     "build": "npm-run-all -s build:workbench clear:electron:tsc electron:tsc && electron-builder build",
     "build:static": "npm run clear:electron:tsc&&npm run electron:tsc && electron-builder build",
     "release": "npm-run-all -s build:workbench electron:tsc && electron-builder --publish=always",
+    "release:m1": "npm-run-all -s build:workbench electron:tsc && electron-builder -m=dmg --arm64 -p onTagOrDraft",
     "test": "npm-run-all --serial test:*",
     "clear:electron:tsc": "tsc --build --clean",
     "electron:tsc": "tsc -p tsconfig.json",

@@ -1,12 +1,12 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { filter, map, Observable } from 'rxjs';
 const protocolReg = new RegExp('^(http|https)://');
 
 // implements StorageInterface
 @Injectable()
-export class BaseUrlInterceptor extends RemoteService implements HttpInterceptor {
+export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { url = '', token = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
     req = req.clone({

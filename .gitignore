@@ -15,6 +15,7 @@ out/
 !/api/*.js
 !/build/*.js
 !*.config.js
+!upload.js
 
 scripts/notarize.js
 # dependencies

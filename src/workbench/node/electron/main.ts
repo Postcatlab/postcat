@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron';
-import { UnitWorker } from 'eo/workbench/node/unitWorker';
+import { UnitWorker } from 'eo/workbench/node/electron/unitWorker';
 /**
  * Electron Test use Ipc to communicate
  */
@@ -23,3 +23,5 @@ export const UnitWorkerModule = {
     });
   },
 };
+
+

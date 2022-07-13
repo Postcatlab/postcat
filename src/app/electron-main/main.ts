@@ -9,7 +9,7 @@ import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
 import { STORAGE_TEMP as storageTemp } from '../../shared/electron-main/constant';
-import { UnitWorkerModule } from '../../workbench/node/electron-main/main';
+import { UnitWorkerModule } from '../../workbench/node/electron/main';
 import Configuration from '../../platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
 import { MockServer } from 'eo/platform/node/mock-server';
@@ -133,7 +133,7 @@ try {
   ipcMain.on('message', function (event, arg) {
     console.log('recieve render msg=>', arg, arg.action);
     //only action from mainView can be executed
-    if (event.frameId !== 1) return;
+    // if (event.frameId !== 1) return;
     switch (arg.action) {
       case 'minimize': {
         eoBrowserWindow.win.minimize();

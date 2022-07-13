@@ -1,4 +1,5 @@
 import Dexie, { Table } from 'dexie';
+import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -22,15 +23,6 @@ export type ResultType<T = any> = {
 };
 
 let isFirstLoad = true;
-
-const getSettings = () => {
-  try {
-    return JSON.parse(localStorage.getItem('localSettings') || '{}');
-  } catch (error) {
-    return {};
-  }
-};
-
 const getApiUrl = (apiData: ApiData) => {
   const dataSourceType: DataSourceType = getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
 

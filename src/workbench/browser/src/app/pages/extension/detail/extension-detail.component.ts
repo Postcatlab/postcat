@@ -16,13 +16,13 @@ export class ExtensionDetailComponent implements OnInit {
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
   get isElectron() {
-    return this.electron.isElectron;
+    return this.electronService.isElectron;
   }
   constructor(
     private extensionService: ExtensionService,
     private route: ActivatedRoute,
     private router: Router,
-    private electron: ElectronService
+    private electronService: ElectronService
   ) {
     this.getDetail();
     this.getInstaller();
@@ -32,7 +32,7 @@ export class ExtensionDetailComponent implements OnInit {
       this.route.snapshot.queryParams.id,
       this.route.snapshot.queryParams.name
     );
-    if (!this.extensionDetail?.introduction && !this.extensionDetail?.installed) {
+    if (!this.extensionDetail?.installed) {
       await this.fetchReadme();
     }
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
@@ -41,10 +41,10 @@ export class ExtensionDetailComponent implements OnInit {
   async fetchReadme() {
     try {
       this.introLoading = true;
-      const htmlText = await (await fetch(`https://www.npmjs.com/package/${this.extensionDetail.name}`)).text();
-      const domParser = new DOMParser();
-      const html = domParser.parseFromString(htmlText, 'text/html');
-      this.extensionDetail.introduction = html.querySelector('#readme').innerHTML;
+      const response = await fetch(`https://unpkg.com/${this.extensionDetail.name}/README.md`);
+      if (response.status === 200) {
+        this.extensionDetail.introduction = await response.text();
+      }
     } catch (error) {
     } finally {
       this.introLoading = false;
@@ -92,6 +92,7 @@ export class ExtensionDetailComponent implements OnInit {
 
   manageExtension(operate: string, id) {
     this.isOperating = true;
+    console.log(this.isOperating);
     /**
      * * WARNING:Sending a synchronous message will block the whole
      * renderer process until the reply is received, so use this method only as a last

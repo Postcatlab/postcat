@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
+import { IndexedDBStorage } from '../../../../../../../workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
 import { MessageService } from '../../../shared/services/message';
 
 @Component({
