@@ -59,12 +59,12 @@ export interface TestLocalNodeData {
    * execute script before test
    * @type {string}
    */
-  beforeScript?: string;
+  beforeInject?: string;
   /**
    * execute script after response
    * @type {string}
    */
-  afterScript?: string;
+  afterInject?: string;
 
   /**
    * advanced http setting

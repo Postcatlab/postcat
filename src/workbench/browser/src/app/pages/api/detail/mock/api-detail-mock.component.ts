@@ -26,8 +26,8 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   listConf: object = {};
   isVisible = false;
   createWayMap = {
-    system: $localize `System creation`,
-    custom: $localize `Manual creation`,
+    system: $localize`System creation`,
+    custom: $localize`Manual creation`,
   };
   mockListColumns = [
     { title: $localize`Name`, key: 'name' },
@@ -74,7 +74,7 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
+    const data = eoFormatRequestData(this.apiData, { env: {}, beforeScript: '', afterScript: '' }, 'en-US');
     const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
       base: 'query',
       replaceType: 'replace',

@@ -101,8 +101,8 @@ export const eoFormatRequestData = (data, opts = { env: {}, beforeScript: '', af
     auth: { status: '0' },
     advancedSetting: { requestRedirect: 1, checkSSL: 0, sendEoToken: 1, sendNocacheToken: 0 },
     env: formatEnv(opts.env),
-    beforeScript: opts.beforeScript,
-    afterScript: opts.afterScript,
+    beforeInject: opts.beforeScript,
+    afterInject: opts.afterScript,
     testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', locale),
   };
   return result;
