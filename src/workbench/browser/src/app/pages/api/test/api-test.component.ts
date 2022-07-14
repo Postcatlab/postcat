@@ -51,6 +51,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     response: {},
     request: {},
   };
+  scriptCache = {};
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
@@ -149,6 +150,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.close();
   }
   private test() {
+    this.scriptCache = {
+      beforeScript: this.beforeScript,
+      afterScript: this.afterScript,
+    };
     this.testServer.send('unitTest', {
       id: this.apiTab.tabID,
       action: 'ajax',
@@ -178,7 +183,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         },
         id
       );
-      // console.log('test');
       this.messageService.send({ type: 'updateHistory', data: {} });
     }
   }
