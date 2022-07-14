@@ -22,7 +22,11 @@ export interface FlatNode extends TreeNode {
 
 export type Completion = { caption: string; value: string };
 
-export const TREE_DATA: TreeNode[] = [
+const COMMON_DATA: TreeNode[] = [];
+
+export const BEFORE_DATA: TreeNode[] = [];
+
+export const AFTER_DATA: TreeNode[] = [
   {
     name: $localize`HTTP API request`,
     children: [
@@ -100,7 +104,7 @@ export const TREE_DATA: TreeNode[] = [
   },
 ];
 
-export const completions: Completion[] = TREE_DATA.flatMap((n) => n.children).reduce((prev, curr) => {
+export const completions: Completion[] = AFTER_DATA.flatMap((n) => n.children).reduce((prev, curr) => {
   const { caption, value } = curr;
   if (caption) {
     prev.push({ caption, value });
