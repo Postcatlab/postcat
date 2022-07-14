@@ -7,7 +7,7 @@ import { EoEditorComponent } from 'eo/workbench/browser/src/app/eoui/editor/eo-e
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 
 import type { TreeNode, FlatNode } from './constant';
-import { TREE_DATA } from './constant';
+import { BEFORE_DATA } from './constant';
 @Component({
   selector: 'eo-api-script',
   templateUrl: './api-script.component.html',
@@ -43,7 +43,7 @@ export class ApiScriptComponent implements OnInit {
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor() {
-    this.dataSource.setData(TREE_DATA);
+    this.dataSource.setData(BEFORE_DATA);
     this.treeControl.expandAll();
   }
 
