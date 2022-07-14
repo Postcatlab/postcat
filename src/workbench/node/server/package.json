@@ -1,5 +1,5 @@
 {
-  "name": "eoapi-node",
+  "name": "eo-test-server",
   "version": "1.0.0",
   "description": "Recieve eoapi tes config and response http result",
   "main": "main.js",
@@ -13,6 +13,5 @@
     "@koa/cors": "3.3.0",
     "koa": "2.13.4",
     "koa-body": "5.0.0"
-  },
-  "devDependencies": {}
+  }
 }
