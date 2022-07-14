@@ -33,7 +33,6 @@
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",
     "@electron/remote": "2.0.8",
-    "content-disposition": "^0.5.4",
     "copyfiles": "2.4.1",
     "electron-log": "^4.4.8",
     "electron-store": "8.0.2",
@@ -43,7 +42,14 @@
     "npm": "6.14.17",
     "portfinder": "1.0.28",
     "resolve": "^1.22.1",
-    "rxjs": "7.5.5"
+    "rxjs": "7.5.5",
+    "jquery": "^3.3.0",
+    "jsdom": "^11.5.1",
+    "content-disposition": "^0.5.4",
+    "crypto-js": "^4.1.1",
+    "form-data": "^4.0.0",
+    "iconv-lite": "^0.6.3",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
