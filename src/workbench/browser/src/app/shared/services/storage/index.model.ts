@@ -116,7 +116,7 @@ export interface ApiTestHistoryResponse {
   /**
    * Inject Code println
    */
-  reportList: string[] | object[];
+  reportList: string[] | {type:'throw'|'interrupt',content:string}[];
 }
 
 /**
