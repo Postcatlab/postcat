@@ -538,7 +538,6 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       }
       tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
     } catch (Err) {
-      console.log(Err);
       switch (Err) {
         case 'info':
         case 'interrupt':
@@ -583,7 +582,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       return {
         status: tmpStatus,
         content: tmpErrorContent,
-        url: tmpTargetTypeData.apiUrl,
+        url: tmpTargetTypeData.url.parse(),
         headers: tmpTargetTypeData.headerParam,
         params: tmpTargetTypeData.bodyParseParam || tmpTargetTypeData.bodyParam,
         env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),

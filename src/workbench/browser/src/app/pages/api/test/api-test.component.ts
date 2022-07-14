@@ -27,6 +27,7 @@ import { StorageService } from '../../../shared/services/storage';
 import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
+import { ApiTestRes } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
 
 @Component({
   selector: 'eo-api-test',
@@ -189,13 +190,17 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   /**
    * Receive Test Server Message
    */
-  private receiveMessage(message) {
+  private receiveMessage(message: ApiTestRes) {
     console.log('receiveMessage', message);
     const tmpHistory = {
       general: message.general,
-      request: message.report.request,
+      request: message.report?.request,
       response: message.response,
     };
+    this.testResult = tmpHistory;
+    this.status$.next('tested');
+    if (message.status === 'error') return;
+    //If test sucess,addHistory
     // other tab test finish,support multiple tab test same time
     if (message.id && this.apiTab.tabID !== message.id) {
       this.apiTab.tabCache[message.id].testResult = tmpHistory;
@@ -205,9 +210,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       }
       return;
     }
-    this.testResult = tmpHistory;
     this.addHistory(message, this.apiData.uuid);
-    this.status$.next('tested');
   }
   /**
    * Change test status

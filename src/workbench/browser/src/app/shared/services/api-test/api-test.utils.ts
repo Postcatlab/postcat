@@ -2,6 +2,7 @@ import { listToTreeHasLevel } from '../../../utils/tree/tree.utils';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 import { ApiBodyType, ApiTestResGeneral, ApiTestHistoryResponse } from '../storage/index.model';
+import { ApiTestRes } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
@@ -108,21 +109,33 @@ export const eoFormatRequestData = (data, opts = { env: {}, beforeScript: '', af
   return result;
 };
 export const eoFormatResponseData = ({ report, history, id }) => {
-  let { httpCode, ...response } = history.resultInfo;
   console.log(report, history, id);
+  let result: ApiTestRes;
+  if (['error'].includes(report.status)) {
+    result = {
+      status: 'error',
+      id,
+      response: {
+        reportList: [
+          {
+            type: 'interrupt',
+            content: report.errorReason,
+          },
+          ...report.reportList,
+        ],
+      },
+    };
+    return result;
+  }
+  let { httpCode, ...response } = history.resultInfo;
   response = {
     statusCode: httpCode,
     ...response,
     body: response.body || '',
     headers: response.headers.map((val) => ({ name: val.key, value: val.value })),
   };
-  let result: {
-    report: any;
-    general: ApiTestResGeneral;
-    response: ApiTestHistoryResponse;
-    history: any;
-    id: number;
-  } = {
+  result = {
+    status: 'finish',
     id: id,
     general: report.general,
     response: { blobFileName: report.blobFileName, ...response },
