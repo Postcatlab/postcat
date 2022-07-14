@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * Use electron-notarize to notarize app
  *
@@ -9,8 +8,6 @@
  * @link https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
  */
 
-=======
->>>>>>> main
 exports.default = function notarizing(context) {
   return context;
 };
