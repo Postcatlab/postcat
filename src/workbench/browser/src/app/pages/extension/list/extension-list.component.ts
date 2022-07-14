@@ -25,7 +25,6 @@ export class ExtensionListComponent implements OnInit {
   type: ExtensionGroupType = ExtensionGroupType.all;
   keyword = '';
   renderList = [];
-  isElectron = isElectron();
   seachChanged$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
 

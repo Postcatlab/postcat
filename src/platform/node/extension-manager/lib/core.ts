@@ -2,13 +2,9 @@ import * as path from 'path';
 import { ModuleHandlerOptions, ModuleInfo } from '../types';
 import { fileExists, readFile, readJson } from 'eo/shared/node/file';
 import { isNotEmpty } from 'eo/shared/common/common';
-<<<<<<< HEAD
-import { readFileSync } from 'node:fs';
-=======
 import { getLocaleData } from 'eo/platform/node/i18n';
 import { LanguageService } from 'eo/app/electron-main/language.service';
 import { TranslateService } from 'eo/platform/common/i18n';
->>>>>>> main
 /**
  * 核心模块管理器
  * @class CoreHandler
@@ -43,7 +39,6 @@ export class CoreHandler {
     try {
       const baseDir: string = this.getModuleDir(name);
       moduleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
-      moduleInfo.introduction = readFileSync(path.join(baseDir, 'README.md')).toString();
       moduleInfo.baseDir = baseDir;
       // Get language locale
       //!Warn:baseDir must be set before get locale file

@@ -28,15 +28,9 @@ export interface ModuleInfo {
   version: string;
   // extension description
   description: string;
-<<<<<<< HEAD
-  // 详细说明
-  introduction: string;
-  // 模块ID，用于关联
-=======
   // extension intro,from README.md
   introduction: string;
   // extension ID
->>>>>>> main
   moduleID: string;
   // extension name
   moduleName: string;

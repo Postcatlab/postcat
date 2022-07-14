@@ -239,7 +239,8 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
   let tmpBasicEnv = inputData.env || _LibsCommon.parseEnv(),
     tmpApiType = inputOpts.type || 'http';
   inputData = JSON.parse(JSON.stringify(inputData));
-
+  //!Can't delete,for eval warning tips
+  let tmpTitle = inputData.title || (inputData.isReturnSoonWhenExecCode ? '环境-API 前置脚本' : '前置脚本');
   let tmpReportList = [],
     tmpBinary = inputData.binary,
     tmpSanboxObj = {
@@ -250,7 +251,66 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       responseHeaders: inputData.responseHeaders || {},
       response: inputData.response || {},
       CryptoJS: CryptoJS,
-      eo: {},
+      $: $,
+      window: window,
+      document: document,
+      eo: {
+        info: (tmpInputMsg, tmpInputType) => {
+          let tmpInputMsgType = ['[object Date]'].includes(Object.prototype.toString.call(tmpInputMsg));
+
+          let tmpText;
+          try {
+            tmpText = tmpInputMsgType
+              ? tmpInputMsg.toString()
+              : typeof tmpInputMsg === 'object'
+              ? JSON.stringify(tmpInputMsg)
+              : tmpInputMsg;
+          } catch (JSON_STRINGIFY_ERROR) {
+            tmpText = tmpInputMsg.toString();
+          }
+          tmpReportList.push({
+            content: tmpText,
+            type: tmpInputType || 'throw',
+          });
+        },
+        error: (tmpInputMsg) => {
+          let tmpInputMsgType = ['[object Date]'].includes(Object.prototype.toString.call(tmpInputMsg));
+          let tmpText;
+          try {
+            tmpText = tmpInputMsgType
+              ? tmpInputMsg.toString()
+              : typeof tmpInputMsg === 'object'
+              ? JSON.stringify(tmpInputMsg)
+              : tmpInputMsg;
+          } catch (JSON_STRINGIFY_ERROR) {
+            tmpText = tmpInputMsg.toString();
+          }
+          tmpReportList.push({
+            content: tmpText,
+            type: 'assert_error',
+          });
+          tmpErrorContent = eval(global.eoLang['assertError']);
+          tmpStatus = 'assertError';
+        },
+        stop: (tmpInputMsg) => {
+          let tmpInputMsgType = ['[object Date]'].includes(Object.prototype.toString.call(tmpInputMsg));
+          let tmpText;
+          try {
+            tmpText = tmpInputMsgType
+              ? tmpInputMsg.toString()
+              : typeof tmpInputMsg === 'object'
+              ? JSON.stringify(tmpInputMsg)
+              : tmpInputMsg;
+          } catch (JSON_STRINGIFY_ERROR) {
+            tmpText = tmpInputMsg.toString();
+          }
+          tmpReportList.push({
+            content: tmpText,
+            type: 'interrupt',
+          });
+          throw 'interrupt';
+        },
+      },
     };
   const tmpVm = new NodeVM({
       sandbox: tmpSanboxObj,
@@ -264,6 +324,71 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
   privateFun.setTypesRefFns(tmpCodeEvalObj.eo, inputData);
   let tmpTargetTypeData = tmpCodeEvalObj.eo[tmpApiType],
     tmpTargetTypeEnv = tmpCodeEvalObj.eo.env[tmpApiType];
+  if (inputScript || tmpNeedToExecRequestScript) {
+    try {
+      if (inputOpts) {
+        _LibsCommon.execFnDefine(inputOpts.functionCode || [], tmpVm, tmpCodeEvalObj.eo);
+      }
+      if (!inputData.isReturnSoonWhenExecCode && tmpNeedToExecRequestScript) {
+        tmpNowIsExecuteEnvScript = true;
+        tmpVm.run(
+          _LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.requestScript || '', 'eo.infiniteLoopDetector')
+        );
+      }
+      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
+    } catch (Err) {
+      switch (Err) {
+        case 'info':
+        case 'interrupt':
+        case 'illegal':
+        case 'localhost':
+        case 'timeout': {
+          tmpStatus = 'terminateRequest';
+          switch (Err) {
+            case 'info': {
+              tmpStatus = 'info';
+              tmpErrorContent = 'eo.info 触发中断';
+              break;
+            }
+            case 'interrupt': {
+              tmpErrorContent = eval(global.eoLang['42c487b2-4b68-4dd1-834e-e1c978c8ea51']);
+              break;
+            }
+            default: {
+              tmpErrorContent = global.eoLang['d6fa1d73-6a43-477f-a6df-6752661c9df3'];
+              break;
+            }
+          }
+          break;
+        }
+        default: {
+          tmpStatus = 'beforeCodeError';
+          if (/^codeError_/.test(Err)) {
+            tmpErrorContent = Err.split('codeError_')[1];
+          } else {
+            let tmpErrParseObj = _LibsCommon.execCodeErrWarning(Err);
+            let tmpErrorLine = tmpErrParseObj.row,
+              tmpErrorColumn = tmpErrParseObj.col,
+              tmpFnName = tmpErrParseObj.fn; //不能删，错误信息的时候需要
+            tmpErrorContent = tmpFnName
+              ? eval(`\`${global.eoLang['publicFnExecuteErrMsg']}\``)
+              : eval(`\`${global.eoLang['requestPreReduceErrMsg']}\``);
+          }
+        }
+      }
+    }
+    if (tmpStatus) {
+      return {
+        status: tmpStatus,
+        content: tmpErrorContent,
+        url: tmpTargetTypeData.url.parse(),
+        headers: tmpTargetTypeData.headerParam,
+        params: tmpTargetTypeData.bodyParseParam || tmpTargetTypeData.bodyParam,
+        env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
+        reportList: tmpReportList,
+      };
+    }
+  }
   let tmpOutput = {
       status: 'finish',
       url: tmpTargetTypeData.apiUrl,
