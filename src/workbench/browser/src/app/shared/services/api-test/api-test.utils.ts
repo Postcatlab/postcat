@@ -1,13 +1,17 @@
 import { listToTreeHasLevel } from '../../../utils/tree/tree.utils';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-import { ApiBodyType, ApiTestResGeneral, ApiTestHistoryResponse } from '../storage/index.model';
+import { ApiBodyType } from '../storage/index.model';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
 
-export const eoFormatRequestData = (data, opts = { env: {}, beforeScript: '', afterScript: '' }, locale) => {
+export const eoFormatRequestData = (
+  data,
+  opts = { env: {}, beforeScript: '', afterScript: '', lang: 'en' },
+  locale
+) => {
   const formatUri = (uri, rest = []) => {
     if (!Array.isArray(rest)) {
       return uri;
@@ -91,6 +95,7 @@ export const eoFormatRequestData = (data, opts = { env: {}, beforeScript: '', af
     return result;
   };
   const result: TestLocalNodeData = {
+    lang:opts.lang,
     URL: formatUri(data.uri, data.restParams),
     method: data.method,
     methodType: METHOD.indexOf(data.method).toString(),
@@ -109,20 +114,28 @@ export const eoFormatRequestData = (data, opts = { env: {}, beforeScript: '', af
   return result;
 };
 export const eoFormatResponseData = ({ report, history, id }) => {
-  console.log(report, history, id);
   let result: ApiTestRes;
+  let reportList = report.reportList || [];
+  //preScript code tips
+  if (report.errorReason) {
+    reportList.unshift({
+      type: 'interrupt',
+      content: report.errorReason,
+    });
+  }
+  //afterScript code tips
+  if (report.response?.errorReason) {
+    reportList.push({
+      type: 'interrupt',
+      content: report.response?.errorReason,
+    });
+  }
   if (['error'].includes(report.status)) {
     result = {
       status: 'error',
       id,
       response: {
-        reportList: [
-          {
-            type: 'interrupt',
-            content: report.errorReason,
-          },
-          ...report.reportList,
-        ],
+        reportList: reportList,
       },
     };
     return result;
@@ -131,6 +144,7 @@ export const eoFormatResponseData = ({ report, history, id }) => {
   response = {
     statusCode: httpCode,
     ...response,
+    reportList,
     body: response.body || '',
     headers: response.headers.map((val) => ({ name: val.key, value: val.value })),
   };

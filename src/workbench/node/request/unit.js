@@ -18,7 +18,7 @@ const { resolve } = require('path');
 
   const _EO_LANG_OBJ = require('./lang.json');
   var iconv = require('iconv-lite');
-  global.eoLang = _EO_LANG_OBJ['cn'];
+  global.eoLang = _EO_LANG_OBJ['en'];
   /**
    * 解析uri信息
    * @param  {number} protocol 请求协议
@@ -495,10 +495,10 @@ const { resolve } = require('path');
                           : JSON.stringify(tmpReportData.response.body);
                     }
                   } else {
-                    tmpReportData.response.body = tmpAfterCodeObj.errorReason;
-                    delete tmpReportData.response.responseType;
-                    delete tmpReportData.blobFileName;
-                    delete tmpReportData.response.contentType;
+                    tmpReportData.response.errorReason = tmpAfterCodeObj.errorReason;
+                    // delete tmpReportData.response.responseType;
+                    // delete tmpReportData.blobFileName;
+                    // delete tmpReportData.response.contentType;
                   }
                   for (let key in inputRes.headers) {
                     tmpReportData.response.headers.push({
@@ -506,7 +506,6 @@ const { resolve } = require('path');
                       value: inputRes.headers[key],
                     });
                   }
-
                   tmpReportData.response.testDeny = tmpInputResponseObj.totalTime.toFixed(2);
                   if (callback) callback(tmpReportData);
                   resolve('success');
@@ -684,6 +683,7 @@ const { resolve } = require('path');
       });
     }
     main(inputTestData) {
+      global.eoLang = _EO_LANG_OBJ[inputTestData.lang||'en'];
       let unitCommonClass = this;
       return new Promise((resolve, reject) => {
         async function main() {

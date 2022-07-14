@@ -34,6 +34,7 @@ import {
   beforeScriptCompletions,
   afterScriptCompletions,
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 
 @Component({
   selector: 'eo-api-test',
@@ -78,7 +79,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private apiTab: ApiTabService,
     private testServerService: TestServerService,
     private messageService: MessageService,
-    private storage: StorageService
+    private storage: StorageService,
+    private lang:LanguageService
   ) {
     this.testServer = this.testServerService.instance;
     this.testServer.init((message) => {
@@ -191,6 +193,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         env: this.env,
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
+        lang:this.lang.systemLanguage==='zh-Hans'?'cn':'en'
       }),
     });
     this.status$.next('testing');
