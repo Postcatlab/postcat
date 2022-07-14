@@ -1,6 +1,6 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 
-import { TestServer } from '../test-server.model';
+import { requestDataOpts, TestServer } from '../test-server.model';
 import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
 @Injectable()
 /**
@@ -78,7 +78,7 @@ export class TestServerServerlessService implements TestServer {
    *
    * @param input
    */
-  formatRequestData(data, opts = { env: {}, beforeScript: '', afterScript: '' }) {
+  formatRequestData(data, opts: requestDataOpts) {
     return eoFormatRequestData(data, opts, this.locale);
   }
   /**

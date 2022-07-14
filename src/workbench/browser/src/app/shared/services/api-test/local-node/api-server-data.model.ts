@@ -80,4 +80,8 @@ export interface TestLocalNodeData {
   testTime: string;
   globals?: object;
   globalHeader?: object;
+  /**
+   * System language
+   */
+  lang:string;
 }

@@ -438,7 +438,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
     tmpApiType = inputOpts.type || 'http';
   inputData = JSON.parse(JSON.stringify(inputData));
   //!Can't delete,for eval warning tips
-  let tmpTitle = inputData.title || (inputData.isReturnSoonWhenExecCode ? '环境-API 前置脚本' : '前置脚本');
+  let tmpTitle = inputData.title || (inputData.isReturnSoonWhenExecCode ? '环境-API 前置脚本' : '');
   let tmpErrorContent, tmpStatus;
   let tmpReportList = [],
     tmpBinary = inputData.binary,
@@ -779,43 +779,140 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
  */
 privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpts = {}) {
   let tmpReportList = [],
-    tmpApiType = inputOpts.type || 'http',
-    tmpBasicEnv = inputEnv || _LibsCommon.parseEnv();
-  let tmpStatus, tmpErrorContent; //不可删，与提示预警有关
-  let tmpBindObj = (inputOpts || {}).bindObj || {};
-  const tmpVm = new NodeVM({
-      sandbox: {
-        CryptoJS: CryptoJS,
-        db_result: inputOpts.dbResult || {},
-        eo: {},
-        requestBody: tmpBindObj.requestBody || {},
-        requestHeaders: tmpBindObj.requestHeaders || {},
-        restParams: tmpBindObj.restParams || {},
-        queryParams: tmpBindObj.queryParams || {},
-        response: tmpBindObj.response || {},
-        responseHeaders: (inputOpts || {}).responseHeaders,
+  tmpApiType = inputOpts.type || "http",
+  tmpNowIsExecuteEnvScript, tmpBasicEnv = inputEnv || _LibsCommon.parseEnv();
+let tmpTitle = tmpNowIsExecuteEnvScript ? "环境-API 后置脚本" : (inputOpts.title),
+  tmpStatus, tmpErrorContent; //不可删，与提示预警有关
+let tmpBindObj = (inputOpts || {}).bindObj || {};
+const tmpVm = new NodeVM({
+  sandbox: {
+      CryptoJS: CryptoJS,
+      $: $,
+      window: window,
+      document: document,
+      eo: {
+          info: (tmpInputMsg, tmpInputType) => {
+              let tmpText;
+              try {
+                  tmpText = (typeof tmpInputMsg === "object") ? JSON.stringify(tmpInputMsg) : tmpInputMsg
+              } catch (JSON_STRINGIFY_ERROR) {
+                  tmpText = tmpInputMsg.toString();
+              }
+              tmpReportList.push({
+                  content: tmpText,
+                  type: tmpInputType || 'throw'
+              })
+          },
+          error: (tmpInputMsg) => {
+              let tmpText;
+              try {
+                  tmpText = (typeof tmpInputMsg === "object") ? JSON.stringify(tmpInputMsg) : tmpInputMsg
+              } catch (JSON_STRINGIFY_ERROR) {
+                  tmpText = tmpInputMsg.toString();
+              }
+              tmpReportList.push({
+                  content: tmpText,
+                  type: 'assert_error'
+              })
+              tmpErrorContent = eval(global.eoLang["assertError"]);
+              tmpStatus = "assertError";
+          },
+          stop: (tmpInputMsg) => {
+              let tmpText;
+              try {
+                  tmpText = (typeof tmpInputMsg === "object") ? JSON.stringify(tmpInputMsg) : tmpInputMsg
+              } catch (JSON_STRINGIFY_ERROR) {
+                  tmpText = tmpInputMsg.toString();
+              }
+              tmpReportList.push({
+                  content: tmpText,
+                  type: 'interrupt'
+              })
+              throw "interrupt";
+          }
       },
-      require: {
-        external: true,
-        builtin: ['crypto'],
-      },
-    }),
-    tmpCodeEvalObj = tmpVm._context;
-  tmpCodeEvalObj.eo = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
-  privateFun.setTypesRefFns(
-    tmpCodeEvalObj.eo,
-    Object.assign({}, inputOpts, {
-      response: inputData,
-    }),
-    true
-  );
-  let tmpTargetTypeData = tmpCodeEvalObj.eo[tmpApiType];
-  return {
-    status: 'finish',
-    content: tmpTargetTypeData.responseParam,
-    env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
-    reportList: tmpReportList,
-  };
+      requestBody: tmpBindObj.requestBody || {},
+      requestHeaders: tmpBindObj.requestHeaders || {},
+      restParams: tmpBindObj.restParams || {},
+      queryParams: tmpBindObj.queryParams || {},
+      response: tmpBindObj.response || {},
+      responseHeaders: (inputOpts || {}).responseHeaders
+  },
+  require: {
+      external: true,
+      builtin: ['crypto']
+  }
+}),
+  tmpCodeEvalObj = tmpVm._context;
+tmpCodeEvalObj.eo = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
+privateFun.setTypesRefFns(tmpCodeEvalObj.eo, Object.assign({}, inputOpts, {
+  response: inputData
+}), true);
+let tmpTargetTypeData = tmpCodeEvalObj.eo[tmpApiType],
+  tmpTargetTypeEnv = tmpBasicEnv[tmpApiType];
+if (inputScript || tmpTargetTypeEnv.responseScript) {
+  try {
+      _LibsCommon.execFnDefine(inputOpts.functionCode || [], tmpVm, tmpCodeEvalObj.eo);
+      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
+      if (!inputOpts.isReturnSoonWhenExecCode) {
+          tmpNowIsExecuteEnvScript = true;
+          tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.responseScript || '', 'eo.infiniteLoopDetector'));
+      }
+  } catch (Err) {
+      switch (Err) {
+          case "info":
+          case "interrupt":
+          case 'illegal':
+          case 'localhost':
+          case 'timeout': {
+              tmpStatus = 'terminateRequest';
+              switch (Err) {
+                  case "info": {
+                      tmpStatus = "info";
+                      tmpErrorContent = "eo.info 触发中断";
+                      break;
+                  }
+                  case "interrupt": {
+                      tmpErrorContent = eval(global.eoLang["a589da5d-3c96-487c-8aaa-645acb3bd8f6"]);
+                      break;
+                  }
+                  default: {
+                      tmpErrorContent = global.eoLang["d6fa1d73-6a43-477f-a6df-6752661c9df3"];
+                      break;
+                  }
+              }
+              break;
+          }
+          default: {
+              tmpStatus = 'afterCodeError';
+              if (/^codeError_/.test(Err)) {
+                  tmpErrorContent = Err.split("codeError_")[1];
+              } else {
+                  let tmpErrParseObj = _LibsCommon.execCodeErrWarning(Err);
+                  let tmpErrorLine = tmpErrParseObj.row,
+                      tmpErrorColumn = tmpErrParseObj.col,
+                      tmpFnName = tmpErrParseObj.fn; //不能删，错误信息的时候需要
+                  tmpErrorContent = tmpFnName ? eval(`\`${global.eoLang["publicFnExecuteErrMsg"]}\``) : eval(`\`${global.eoLang["responsePreReduceErrMsg"]}\``);
+              }
+          }
+      }
+  }
+  if (tmpStatus) {
+      return {
+          status: tmpStatus,
+          errorReason: tmpErrorContent,
+          env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
+          reportList: tmpReportList
+      };
+  }
+}
+
+return {
+  status: "finish",
+  content: tmpTargetTypeData.responseParam,
+  env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
+  reportList: tmpReportList
+};
 };
 privateFun.requestPreReduceByPromise = (inputData, inputCode, inputOptions) => {
   return new Promise((resolve) => {

@@ -104,7 +104,7 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const data = eoFormatRequestData(this.apiData, { env: {}, beforeScript: '', afterScript: '' }, 'en-US');
+    const data = eoFormatRequestData(this.apiData, { env: {}, beforeScript: '', afterScript: '', lang: 'en' }, 'en-US');
     const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
       base: 'query',
       replaceType: 'replace',
