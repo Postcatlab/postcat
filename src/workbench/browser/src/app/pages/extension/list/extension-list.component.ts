@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { isElectron } from 'eo/shared/common/common';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
 import { ExtensionGroupType } from '../extension.model';
@@ -31,6 +31,7 @@ export class ExtensionListComponent implements OnInit {
 
   constructor(
     public extensionService: ExtensionService,
+    public electron:ElectronService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService
@@ -46,11 +47,7 @@ export class ExtensionListComponent implements OnInit {
   }
   async searchPlugin(keyword = '') {
     if (this.type === 'installed') {
-      const installedList = new ExtensionList(
-        [...window.eo.getModules()]
-          .map((it) => it[1])
-          .filter((it) => this.extensionService.extensionIDs.includes(it.moduleID))
-      );
+      const installedList = new ExtensionList(this.extensionService.getInstalledList());
       return installedList.search(keyword);
     }
     const res: any = await this.extensionService.requestList();
