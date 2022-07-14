@@ -54,9 +54,7 @@ export class ApiScriptComponent implements OnInit {
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
   handleChange(code) {
-    setTimeout(() => {
-      this.codeChange.emit(code);
-    }, 0);
+    this.codeChange.emit(code);
   }
 
   insertCode = (node: FlatNode) => {
