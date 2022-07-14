@@ -10,6 +10,7 @@ out/
 *.js
 *.js.map
 *.webpack.js
+!src/workbench/node/electron/**/*.js
 !src/workbench/node/request/**/*.js
 !src/workbench/node/server/**/*.js
 !/api/*.js
@@ -36,6 +37,7 @@ node_modules
 /coverage
 /libpeerconnection.log
 npm-debug.log
+*-error.log
 testem.log
 /typings
 
