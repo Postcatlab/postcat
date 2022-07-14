@@ -1,36 +1,47 @@
 <div class="flex eo-api-script">
-  <div class="w-[240px] h-[322px] overflow-auto">
+  <div class="w-[340px] h-[322px] overflow-auto">
     <div class="flex justify-between p-3">
       <div i18n>Shortcut</div>
       <div>
-        <a href="https://help.eolink.com/#/tutorial/?groupID=c-709&productID=13" class="text-blue-400" target="_blank"
-          rel="noopener noreferrer" i18n>Built-in function manual</a>
+        <a
+          href="https://help.eolink.com/#/tutorial/?groupID=c-709&productID=13"
+          class="text-blue-400"
+          target="_blank"
+          rel="noopener noreferrer"
+          i18n
+          >Built-in function manual</a
+        >
       </div>
     </div>
     <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
         <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
         <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="false" (nzClick)="insertCode(node)">
-          <span class="text-blue-400"> {{ node.name }}</span>
+          <span class="text-sm text-blue-400"> {{ node.name }}</span>
           <ng-container *ngIf="node.note">
-            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
-              nzTooltipColor="black" nz-tooltip>
+            <span
+              [nzTooltipTitle]="titleTemplate"
+              [nzTooltipPlacement]="['topLeft', 'leftTop']"
+              class="text-blue-400"
+              nzTooltipColor="black"
+              nz-tooltip
+            >
               [?]
             </span>
             <ng-template #titleTemplate let-thing>
-              <p style="color:#99c6da" *ngIf="node.note.code">{{ node.note.code }}</p>
-              <p *ngIf="node.note.desc">{{node.note.desc}}</p>
+              <p style="color: #99c6da" *ngIf="node.note.code">{{ node.note.code }}</p>
+              <p *ngIf="node.note.desc">{{ node.note.desc }}</p>
               <ng-container *ngIf="node.note.input">
                 <br />
-                <p style="color:#999" i18n>---input---</p>
+                <p style="color: #999" i18n>---input---</p>
                 <p *ngFor="let item of node.note.input">
-                  <span style="color:#ff9800">{{item.key}}：</span>{{item.value}}
+                  <span style="color: #ff9800">{{ item.key }}：</span>{{ item.value }}
                 </p>
               </ng-container>
               <ng-container *ngIf="node.note.output">
                 <br />
-                <p style="color:#999" i18n>---return---</p>
-                <p>{{node.note.output}}</p>
+                <p style="color: #999" i18n>---return---</p>
+                <p>{{ node.note.output }}</p>
               </ng-container>
             </ng-template>
           </ng-container>
@@ -47,9 +58,13 @@
       </nz-tree-node>
     </nz-tree-view>
   </div>
-  <div class="flex-1 ">
-    <eo-editor [(code)]="code" editorType="javascript" [eventList]="[ 'format', 'copy',  'search', 'replace']"
-      (codeChange)="handleChange($event)">
+  <div class="flex-1">
+    <eo-editor
+      [(code)]="code"
+      editorType="javascript"
+      [eventList]="['format', 'copy', 'search', 'replace']"
+      (codeChange)="handleChange($event)"
+    >
     </eo-editor>
   </div>
 </div>
