@@ -41,6 +41,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     parameters: [],
     hostUri: '',
   };
+  beforeScript = '';
+  afterScript = '';
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   tabIndexRes = 0;
@@ -149,9 +151,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.send('unitTest', {
       id: this.apiTab.tabID,
       action: 'ajax',
-      data: this.testServer.formatRequestData(this.apiData, {
-        env: this.env,
-      }),
+      data: {
+        beforeScript: this.beforeScript,
+        afterScript: this.afterScript,
+        ...this.testServer.formatRequestData(this.apiData, {
+          env: this.env,
+        }),
+      },
     });
     this.status$.next('testing');
   }

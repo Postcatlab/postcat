@@ -76,21 +76,21 @@
       </nz-tab>
       <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
         <ng-template #preScriptTitleTmp>
-          Prescript
+          Before script
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
             apiData.restParams | apiParamsNum
             }}</span>
         </ng-template>
-        <eo-api-script class="eo_theme_iblock bbd"></eo-api-script>
+        <eo-api-script [(code)]="beforeScript" class="eo_theme_iblock bbd"></eo-api-script>
       </nz-tab>
       <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
         <ng-template #suffixScriptTitleTmp>
-          Post script
+          After Script
           <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
             apiData.restParams | apiParamsNum
             }}</span>
         </ng-template>
-        <eo-api-script class="eo_theme_iblock bbd"></eo-api-script>
+        <eo-api-script [(code)]="afterScript" class="eo_theme_iblock bbd"></eo-api-script>
       </nz-tab>
     </nz-tabset>
     <!-- Response -->
