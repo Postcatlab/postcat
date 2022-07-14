@@ -6,7 +6,7 @@ let _LIB_WORKER_THREAD = require('./exec_worker_thread');
 let CryptoJS = require('crypto-js');
 let privateFun = {},
   _LibsCommon = require('./common'),
-  _LibsZlib = require('./zlib'),
+  // _LibsZlib = require('./zlib'),
   _LibsEncrypt = require('./encrypt').core,
   _Xml_Class = new (require('./xml').core)();
 const DOMAIN_CONSTANT = require('../domain.json');
@@ -243,14 +243,14 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
       } catch (PARSE_ERR) {}
       return privateFun.filePath(inputFilePath, inputFileName);
     },
-    gzip: {
-      zip: _LibsZlib.fnGzip,
-      unzip: _LibsZlib.fnGunzip,
-    },
-    deflate: {
-      zip: _LibsZlib.fnDeflate,
-      unzip: _LibsZlib.fnInflate,
-    },
+    // gzip: {
+    //   zip: _LibsZlib.fnGzip,
+    //   unzip: _LibsZlib.fnGunzip,
+    // },
+    // deflate: {
+    //   zip: _LibsZlib.fnDeflate,
+    //   unzip: _LibsZlib.fnInflate,
+    // },
   };
   ['http'].map((val) => {
     tmpResult.env[val] = _LibsCommon.deepCopy(inputEnv[val]) || {};
