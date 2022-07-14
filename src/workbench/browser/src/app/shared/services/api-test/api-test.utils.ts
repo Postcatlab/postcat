@@ -6,7 +6,7 @@ const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
 
-export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
+export const eoFormatRequestData = (data, opts = { env: {}, beforeScript: '', afterScript: '' }, locale) => {
   const formatUri = (uri, rest = []) => {
     if (!Array.isArray(rest)) {
       return uri;
@@ -101,6 +101,8 @@ export const eoFormatRequestData = (data, opts = { env: {} }, locale) => {
     auth: { status: '0' },
     advancedSetting: { requestRedirect: 1, checkSSL: 0, sendEoToken: 1, sendNocacheToken: 0 },
     env: formatEnv(opts.env),
+    beforeScript: opts.beforeScript,
+    afterScript: opts.afterScript,
     testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', locale),
   };
   return result;
