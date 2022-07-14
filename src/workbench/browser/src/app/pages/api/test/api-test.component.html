@@ -77,20 +77,16 @@
       <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
         <ng-template #preScriptTitleTmp>
           Pre-request Script
-          <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
-            apiData.restParams | apiParamsNum
-            }}</span>
         </ng-template>
-        <eo-api-script [(code)]="beforeScript" class="eo_theme_iblock bbd"></eo-api-script>
+        <eo-api-script [(code)]="beforeScript" [treeData]="BEFORE_DATA" [completions]="beforeScriptCompletions"
+          class="eo_theme_iblock bbd"></eo-api-script>
       </nz-tab>
       <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
         <ng-template #suffixScriptTitleTmp>
           After-response Script
-          <span class="eo-tab-icon" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
-            apiData.restParams | apiParamsNum
-            }}</span>
         </ng-template>
-        <eo-api-script [(code)]="afterScript" class="eo_theme_iblock bbd"></eo-api-script>
+        <eo-api-script [(code)]="afterScript" [treeData]="AFTER_DATA" [completions]="afterScriptCompletions"
+          class="eo_theme_iblock bbd"></eo-api-script>
       </nz-tab>
     </nz-tabset>
     <!-- Response -->
@@ -113,7 +109,7 @@
     </nz-tabset>
   </div>
 </div>
-<div class="invisible">
+<div class="invisible" hidden>
   <eo-api-test-history [apiID]="apiData.uuid" (clickItem)="restoreHistory($event)" #historyComponent>
   </eo-api-test-history>
 </div>
