@@ -40,6 +40,7 @@ import { ApiTestResultHeaderComponent } from './result-header/api-test-result-he
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ApiTestHistoryComponent } from './history/api-test-history.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
+import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 const NZ_COMPONETS = [
   NzDropDownModule,
   NzModalModule,
@@ -81,6 +82,6 @@ const COMPONENTS = [
     SharedModule,
     ParamsImportModule,
   ],
-  providers: [ApiTestService, TestServerService, TestServerLocalNodeService, TestServerServerlessService],
+  providers: [ApiTestService, TestServerService, TestServerLocalNodeService,TestServerServerlessService,TestServerRemoteService],
 })
 export class ApiTestModule {}

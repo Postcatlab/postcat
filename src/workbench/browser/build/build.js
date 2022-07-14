@@ -1,7 +1,5 @@
-//change angular.json
 const fs = require('fs');
 const { execSync } = require('child_process');
-
 class webPlatformBuilder {
   resetBuildConfig(json) {
     delete json.projects.eoapi.i18n.sourceLocale.baseHref;
@@ -23,7 +21,7 @@ class appPlatformBuilder {
     return json;
   }
   executeBuild() {
-    execSync('ng build  --base-href ./', { stdio: 'inherit' });
+    execSync('ng build  -c production --base-href ./', { stdio: 'inherit' });
   }
 }
 class PlatformBuilder {
@@ -40,9 +38,10 @@ class PlatformBuilder {
     }
   }
   build() {
-    let buildConfigJson = require( '../angular.json');
+    //Because of i18n,we should change angular.json for generate different base-href html tag
+    let buildConfigJson = require('../angular.json');
     buildConfigJson = this.instance.resetBuildConfig(buildConfigJson);
-    let that=this;
+    let that = this;
     fs.writeFile('./angular.json', JSON.stringify(buildConfigJson), function (err) {
       if (err) {
         console.error('build/beforeBuild.js:', err);

@@ -24,6 +24,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -58,7 +60,10 @@ import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(private upgrade: UpgradeModule) {
+  constructor(private upgrade: UpgradeModule, private lang: LanguageService) {
+    if (APP_CONFIG.production) {
+      this.lang.init();
+    }
     this.upgrade.bootstrap(document.body, ['eolinker']);
   }
 }

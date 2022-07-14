@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 
 @Component({
   selector: 'eo-language-switcher',
@@ -13,7 +12,12 @@ import { NzModalService } from 'ng-zorro-antd/modal';
       (ngModelChange)="handleChange($event)"
       [nzCustomTemplate]="defaultTemplate"
     >
-      <nz-option *ngFor="let item of languages" nzCustomContent [nzValue]="item.value" [nzLabel]="item.name">
+      <nz-option
+        *ngFor="let item of languageService.languages"
+        nzCustomContent
+        [nzValue]="item.value"
+        [nzLabel]="item.name"
+      >
         <eo-iconpark-icon name="language"></eo-iconpark-icon>
         {{ item.name }}
       </nz-option>
@@ -34,40 +38,15 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 export class LanguageSwticherComponent implements OnInit {
   @Input() model: object = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  languages = [
-    {
-      name: 'English',
-      value: 'en-US',
-      path: 'en',
-    },
-    {
-      name: '简体中文',
-      value: 'zh-Hans',
-      path: 'zh',
-    },
-  ];
-  constructor(private modal: NzModalService, private electron: ElectronService) {}
+  constructor(public languageService: LanguageService) {}
 
   ngOnInit(): void {
-    this.model['eoapi-language'] ??= navigator.language.includes('zh') ? 'zh-Hans' : 'en-US';
+    this.model['eoapi-language'] = this.languageService.systemLanguage;
   }
 
-  handleChange(inputLocaleID) {
-    let changeCallback = (localeID) => {
-      this.model['eoapi-language'] = localeID;
-      this.modelChange.emit(this.model);
-      window.location.href = `/${(this.languages.find((val) => val.value === localeID) || this.languages[0]).path}`;
-    };
-    // if (this.electron.isElectron) {
-    //   this.modal.warning({
-    //     nzTitle: ``,
-    //     nzContent:`Eoapi will need to restart after you switch the app language to ${this.languages.find(val=>val.value===inputLocaleID).name}`,
-    //     nzOnOk: () => {
-    //       changeCallback(inputLocaleID);
-    //     },
-    //   });
-    // } else {
-    changeCallback(inputLocaleID);
-    // }
+  handleChange(localeID) {
+    this.model['eoapi-language'] = localeID;
+    this.modelChange.emit(this.model);
+    this.languageService.changeLanguage(localeID);
   }
 }

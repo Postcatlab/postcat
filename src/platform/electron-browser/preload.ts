@@ -1,5 +1,5 @@
+import { I18N } from './i18n';
 const { ipcRenderer } = require('electron');
-console.log('eoapi public api load');
 // 可以加上条件判断，根据不同模块id哪些允许放出
 const apiAccessRules = ipcRenderer.sendSync('eo-sync', { action: 'getApiAccessRules' }) || [];
 
@@ -53,6 +53,7 @@ window.eo.loadFeatureModule = (moduleID) => {
   if (!featureModules.has(moduleID)) {
     try {
       const module = window.eo.getModule(moduleID);
+      window.eo._currentExtensionID=moduleID;
       const _module = window.require(module.baseDir);
       featureModules.set(moduleID, _module);
     } catch (e) {
@@ -102,28 +103,28 @@ window.eo.storageSync = (args) => {
   args.type = 'sync';
   return ipcRenderer.sendSync('eo-storage', args);
 };
-window.eo.storageRemote = (args) => {
-  console.log('run preload storageRemote');
-  args.type = 'remote';
-  const shareObject = window.require('@electron/remote').getGlobal('shareObject');
-  shareObject.storageResult = null;
-  ipcRenderer.send('eo-storage', args);
-  let output: any = shareObject.storageResult;
-  let count: number = 0;
-  while (output === null) {
-    if (count > 1500) {
-      output = {
-        status: 'error',
-        data: 'storage remote load error',
-      };
-      break;
-    }
-    output = shareObject.storageResult;
-    ++count;
-  }
-  shareObject.storageResult = null;
-  return output;
-};
+// window.eo.storageRemote = (args) => {
+//   console.log('run preload storageRemote');
+//   args.type = 'remote';
+//   const shareObject = window.require('@electron/remote').getGlobal('shareObject');
+//   shareObject.storageResult = null;
+//   ipcRenderer.send('eo-storage', args);
+//   let output: any = shareObject.storageResult;
+//   let count: number = 0;
+//   while (output === null) {
+//     if (count > 1500) {
+//       output = {
+//         status: 'error',
+//         data: 'storage remote load error',
+//       };
+//       break;
+//     }
+//     output = shareObject.storageResult;
+//     ++count;
+//   }
+//   shareObject.storageResult = null;
+//   return output;
+// };
 
 window.eo.saveSettings = (settings) => {
   // console.log('window.eo.saveSettings', settings);
@@ -141,14 +142,18 @@ window.eo.deleteModuleSettings = (moduleID) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'deleteModuleSettings', data: { moduleID: moduleID } });
 };
 
-window.eo.getSettings = (settings) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getSettings' });
+window.eo.getSettings = () => {
+  try {
+    return JSON.parse(localStorage.getItem('localSettings') || '{}');
+  } catch (error) {
+    return {};
+  }
 };
+window.eo.i18n = new I18N();
 
 window.eo.getModuleSettings = (moduleID) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });
 };
-
 // 注册单个mock路由
 window.eo.registerMockRoute = ({ method, path, data }) => {
   return ipcRenderer.send('eo-sync', { action: 'registerMockRoute', data: { method, path, data } });
