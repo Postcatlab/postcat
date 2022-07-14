@@ -31,7 +31,7 @@
     router-outlet + * {
       display: block;
       height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height));
-      overflow: auto;
+      // overflow: auto;
     }
   }
 }

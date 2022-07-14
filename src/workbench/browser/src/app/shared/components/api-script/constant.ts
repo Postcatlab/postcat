@@ -573,7 +573,6 @@ const COMMON_DATA: TreeNode[] = [
 ];
 
 export const BEFORE_DATA: TreeNode[] = [
-  ...COMMON_DATA,
   {
     name: $localize`HTTP API request`,
     children: [
@@ -753,10 +752,10 @@ if (raw_api_demo_1_result.response !== "") {
       },
     ],
   },
+  ...COMMON_DATA,
 ];
 
 export const AFTER_DATA: TreeNode[] = [
-  ...COMMON_DATA,
   {
     name: $localize`HTTP API request`,
     children: [
@@ -781,60 +780,18 @@ export const AFTER_DATA: TreeNode[] = [
       },
     ],
   },
-  {
-    name: $localize`Custom Global Variable`,
-    children: [
-      {
-        name: $localize`Set Global Variable`,
-        caption: 'eo.globals.set',
-        value: 'eo.globals.set("param_key","param_value")',
-        note: {
-          code: 'eo.globals.set("param_key","param_value")',
-          desc: $localize`Set Global Variable`,
-          input: [
-            { key: 'param_key', value: $localize`parameter name` },
-            { key: 'param_value', value: $localize`parameter value` },
-          ],
-        },
-      },
-      {
-        name: $localize`Get global variable value`,
-        caption: 'eo.globals.get',
-        value: 'eo.globals.get("param_key")',
-        note: {
-          code: 'eo.globals.set("param_key","param_value")',
-          desc: $localize`Get global variable value`,
-          input: [
-            { key: 'param_key', value: $localize`parameter name` },
-            { key: 'param_value', value: $localize`parameter value` },
-          ],
-          output: $localize`Global Variable Value`,
-        },
-      },
-      {
-        name: $localize`Delete Global Variable`,
-        caption: 'eo.globals.unset',
-        value: 'eo.globals.unset("param_key")',
-        note: {
-          code: 'eo.globals.unset("param_key")',
-          desc: $localize`Delete Global Variable`,
-          input: [{ key: 'param_key', value: $localize`parameter name` }],
-        },
-      },
-      {
-        name: $localize`Clear All Global Variables`,
-        caption: 'eo.globals.clear',
-        value: 'eo.globals.clear()',
-        note: {
-          code: 'eo.globals.clear()',
-          desc: $localize`Clear All Global Variables`,
-        },
-      },
-    ],
-  },
+  ...COMMON_DATA,
 ];
 
-export const completions: Completion[] = AFTER_DATA.flatMap((n) => n.children).reduce((prev, curr) => {
+export const beforeScriptCompletions: Completion[] = BEFORE_DATA.flatMap((n) => n.children).reduce((prev, curr) => {
+  const { caption, value } = curr;
+  if (caption) {
+    prev.push({ caption, value });
+  }
+  return prev;
+}, []);
+
+export const afterScriptCompletions: Completion[] = AFTER_DATA.flatMap((n) => n.children).reduce((prev, curr) => {
   const { caption, value } = curr;
   if (caption) {
     prev.push({ caption, value });
