@@ -22,7 +22,92 @@ export interface FlatNode extends TreeNode {
 
 export type Completion = { caption: string; value: string };
 
+const commonInputs = [
+  { key: 'param_key', value: $localize`Param Name` },
+  { key: 'param_value：', value: $localize`Param Value` },
+] as const;
+
 const COMMON_DATA: TreeNode[] = [
+  {
+    name: $localize`Custom Global Variable`, // 自定义全局变量
+    children: [
+      {
+        name: $localize`Set Global Variable`, // 设置全局变量
+        caption: 'eo.globals.set',
+        value: 'eo.globals.set("param_key","param_value");',
+        note: {
+          code: 'eo.http.response.get()',
+          desc: $localize`Set Global Variable`,
+          input: [...commonInputs],
+        },
+      },
+      {
+        name: $localize`Get Global Variable`, // 获取全局变量值
+        caption: 'eo.globals.get',
+        value: 'eo.globals.get("param_key");',
+        note: {
+          code: 'eo.globals.get("param_key")',
+          desc: $localize`Get Global Variable`,
+          input: [commonInputs[0]],
+          output: $localize`Global Varibale Value`,
+        },
+      },
+      {
+        name: $localize`Unset Global Variable`, // 删除全局变量
+        caption: 'eo.globals.unset',
+        value: 'eo.globals.unset("param_key");',
+        note: {
+          code: 'eo.globals.unset("param_key")',
+          desc: $localize`Unset Global Variable`,
+          input: [commonInputs[0]],
+        },
+      },
+      {
+        name: $localize`Clear Global Variable`, // 清空所有全局变量
+        caption: 'eo.globals.clear',
+        value: 'eo.globals.clear()',
+        note: {
+          code: 'eo.globals.clear()',
+          desc: $localize`Clear Global Variable`,
+        },
+      },
+    ],
+  },
+  {
+    name: $localize`Project Environment`, // 项目环境
+    children: [
+      {
+        name: $localize`Get Request Address Prefix`, // 获取请求地址前缀
+        caption: 'http.baseUrl.get',
+        value: 'http.baseUrl.get()',
+        note: {
+          code: 'http.baseUrl.get()',
+          desc: $localize`Get Request Address Prefix`,
+          output: $localize`The request address prefix set in the environment`,
+        },
+      },
+      {
+        name: $localize`Get Environment Variables`, // 获取环境变量
+        caption: 'eo.env.param.get',
+        value: 'eo.env.param.get("param_key")',
+        note: {
+          code: 'eo.env.param.get("param_key")',
+          desc: $localize`Get Environment Variables`,
+          input: [commonInputs[0]],
+        },
+      },
+      {
+        name: $localize`Set Environment Variables`, // 设置环境变量
+        caption: 'eo.env.param.set',
+        value: 'eo.env.param.set("param_key","param_value")',
+        note: {
+          code: 'eo.env.param.set("param_key","param_value")',
+          desc: $localize`Set Environment Variables`,
+          input: [...commonInputs],
+        },
+      },
+    ],
+  },
   {
     name: $localize`Encode & Decode`, // 编解码
     children: [
@@ -160,6 +245,331 @@ const COMMON_DATA: TreeNode[] = [
       },
     ],
   },
+  {
+    name: $localize`Encryption And Decryption`, // 加解密
+    children: [
+      {
+        name: $localize`MD5`, // MD5
+        caption: 'eo.crypt.md5',
+        value: 'eo.crypt.md5(data)',
+        note: {
+          code: 'eo.crypt.md5(data)',
+          desc: $localize`MD5 Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+          ],
+          output: $localize`Encrypted Content`,
+        },
+      },
+      {
+        name: $localize`SHA1 Encryption`, // SHA1 加密
+        caption: 'eo.crypt.sha1',
+        value: 'eo.crypt.sha1(data)',
+        note: {
+          code: 'eo.crypt.sha1(data)',
+          desc: $localize`SHA1 Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+          ],
+          output: $localize`Encrypted Content`,
+        },
+      },
+      {
+        name: $localize`SHA256 Encryption`, // SHA256 加密
+        caption: 'eo.crypt.sha256',
+        value: 'eo.crypt.sha256(data)',
+        note: {
+          code: 'eo.crypt.sha256(data)',
+          desc: $localize`SHA256 Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+          ],
+          output: $localize`Encrypted Content`,
+        },
+      },
+      {
+        name: $localize`RSA-SHA1 Signature`, // RSA-SHA1 签名
+        caption: 'eo.crypt.rsaSHA1',
+        value: 'eo.crypt.rsaSHA1(data,privateKey,"base64")',
+        note: {
+          code: 'eo.crypt.rsaSHA1(data,privateKey,"base64")',
+          desc: $localize`RSA-SHA1 Signature`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'privateKey',
+              value: $localize`key`,
+            },
+            {
+              key: 'outputEncoding',
+              value: $localize`The encoding format of the result, base64 (default)`,
+            },
+          ],
+          output: $localize`Content After Signing`,
+        },
+      },
+      {
+        name: $localize`RSA-SHA256 Signature`, // RSA-SHA256 签名
+        caption: 'eo.crypt.rsaSHA256',
+        value: 'eo.crypt.rsaSHA256(data,privateKey,"base64")',
+        note: {
+          code: 'eo.crypt.rsaSHA256(data,privateKey,"base64")',
+          desc: $localize`RSA-SHA256 Signature`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'privateKey',
+              value: $localize`key`,
+            },
+            {
+              key: 'outputEncoding',
+              value: $localize`The encoding format of the result, base64 (default)`,
+            },
+          ],
+          output: $localize`Content After Signing`,
+        },
+      },
+      {
+        name: $localize`RSA Public Key Encryption`, // RSA 公钥加密
+        caption: 'eo.crypt.rsaPublicEncrypt',
+        value: 'eo.crypt.rsaPublicEncrypt(data,publicKey,"base64")',
+        note: {
+          code: 'eo.crypt.rsaPublicEncrypt(data,publicKey,"base64")',
+          desc: $localize`RSA Public Key Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'publicKey',
+              value: $localize`publicKey`,
+            },
+            {
+              key: 'outputEncoding',
+              value: $localize`The encoding format of the result, base64 (default)`,
+            },
+          ],
+          output: $localize`Content After Signing`,
+        },
+      },
+      {
+        name: $localize`RSA Public Key Dencryption`, // RSA 公钥解密
+        caption: 'eo.crypt.rsaPublicDecrypt',
+        value: 'eo.crypt.rsaPublicDecrypt(data,publicKey,"base64")',
+        note: {
+          code: 'eo.crypt.rsaPublicDecrypt(data,publicKey,"base64")',
+          desc: $localize`RSA Public Key Dencryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'publicKey',
+              value: $localize`publicKey`,
+            },
+            {
+              key: 'inputEncoding',
+              value: $localize`The encoding format of the content to be decrypted, base64 (default)`,
+            },
+          ],
+          output: $localize`Decrypted content`,
+        },
+      },
+      {
+        name: $localize`RSA Private Key Encryption`, // RSA 私钥加密
+        caption: 'eo.crypt.rsaPrivateEncrypt',
+        value: 'eo.crypt.rsaPrivateEncrypt(data,privateKey,"base64")',
+        note: {
+          code: 'eo.crypt.rsaPrivateEncrypt(data,privateKey,"base64")',
+          desc: $localize`RSA Private Key Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'privateKey',
+              value: $localize`privateKey`,
+            },
+            {
+              key: 'outputEncoding',
+              value: $localize`The encoding format of the result, base64 (default)`,
+            },
+          ],
+          output: $localize`Encrypted Content`,
+        },
+      },
+      {
+        name: $localize`RSA Private Key Encryption`, // RSA 私钥解密
+        caption: 'eo.crypt.rsaPrivateDecrypt',
+        value: 'eo.crypt.rsaPrivateDecrypt(data,privateKey,"base64")',
+        note: {
+          code: 'eo.crypt.rsaPrivateDecrypt(data,privateKey,"base64")',
+          desc: $localize`RSA Private Key Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be decrypted`,
+            },
+            {
+              key: 'privateKey',
+              value: $localize`privateKey`,
+            },
+            {
+              key: 'outputEncoding',
+              value: $localize`The encoding format of the content to be decrypted, base64 (default)`,
+            },
+          ],
+          output: $localize`Decrypted Content`,
+        },
+      },
+      {
+        name: $localize`AES Encryption`, // AES 加密
+        caption: 'eo.crypt.aesEncrypt',
+        value: 'eo.crypt.aesEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        note: {
+          code: 'eo.crypt.aesEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          desc: $localize`AES Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'password',
+              value: $localize`password`,
+            },
+            {
+              key: 'padding',
+              value: $localize`Padding mode, Pkcs7 (default)/NoPadding/ZeroPadding`,
+            },
+            {
+              key: 'mode',
+              value: $localize`Mode, CBC (default)/ECB/CTR/OFB/CFB`,
+            },
+            {
+              key: 'iv',
+              value: $localize`offset vector`,
+            },
+          ],
+          output: $localize`encrypted content`,
+        },
+      },
+      {
+        name: $localize`AES Dencryption`, // AES 解密
+        caption: 'eo.crypt.aesDecrypt',
+        value: 'eo.crypt.aesDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        note: {
+          code: 'eo.crypt.aesDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          desc: $localize`AES Dencryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be dencrypted`,
+            },
+            {
+              key: 'password',
+              value: $localize`password`,
+            },
+            {
+              key: 'padding',
+              value: $localize`Padding mode, Pkcs7 (default)/NoPadding/ZeroPadding`,
+            },
+            {
+              key: 'mode',
+              value: $localize`Mode, CBC (default)/ECB/CTR/OFB/CFB`,
+            },
+            {
+              key: 'iv',
+              value: $localize`offset vector`,
+            },
+          ],
+          output: $localize`dencrypted content`,
+        },
+      },
+      {
+        name: $localize`DES Encryption`, // DES 加密
+        caption: 'eo.crypt.desEncrypt',
+        value: 'eo.crypt.desEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        note: {
+          code: 'eo.crypt.desEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          desc: $localize`DES Encryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'password',
+              value: $localize`password`,
+            },
+            {
+              key: 'padding',
+              value: $localize`Padding mode, Pkcs7 (default)/NoPadding/ZeroPadding`,
+            },
+            {
+              key: 'mode',
+              value: $localize`Mode, CBC (default)/ECB/CTR/OFB/CFB`,
+            },
+            {
+              key: 'iv',
+              value: $localize`offset vector`,
+            },
+          ],
+          output: $localize`Encrypted Content`,
+        },
+      },
+      {
+        name: $localize`DES Dencryption`, // DES 解密
+        caption: 'eo.crypt.desDecrypt',
+        value: 'eo.crypt.desDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        note: {
+          code: 'eo.crypt.desDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          desc: $localize`DES Dencryption`,
+          input: [
+            {
+              key: 'data',
+              value: $localize`Content to be encrypted`,
+            },
+            {
+              key: 'password',
+              value: $localize`password`,
+            },
+            {
+              key: 'padding',
+              value: $localize`Padding mode, Pkcs7 (default)/NoPadding/ZeroPadding`,
+            },
+            {
+              key: 'mode',
+              value: $localize`Mode, CBC (default)/ECB/CTR/OFB/CFB`,
+            },
+            {
+              key: 'iv',
+              value: $localize`offset vector`,
+            },
+          ],
+          output: $localize`Encrypted Content`,
+        },
+      },
+    ],
+  },
 ];
 
 export const BEFORE_DATA: TreeNode[] = [
@@ -243,7 +653,7 @@ var formdata_api_demo_1 = {
     "body": { //[选填][object],请求参数
         "param_1": "value_1",
         "param_2": "value_2"
-    },    
+    },
     "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
 };
 //执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
@@ -270,7 +680,7 @@ var json_api_demo_1 = {
     "body": { //[选填][object],请求参数
         "param_1": "value_1",
         "param_2": "value_2"
-    },    
+    },
     "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
 };
 //执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
@@ -305,7 +715,7 @@ var xml_api_demo_1 = {
                 }
             ]
         }
-    },    
+    },
     "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
 };
 //执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
@@ -329,7 +739,7 @@ var raw_api_demo_1 = {
         "Content-Type": "text/plain"
     }, //[选填][object],请求头部
     "bodyType": "raw", //[选填][string],请求体类型
-    "body": "hello world",    
+    "body": "hello world",
     "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
 };
 //执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
