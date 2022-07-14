@@ -8,7 +8,8 @@
   "author": "eoapi",
   "private": true,
   "workspaces": [
-    "src/workbench/browser"
+    "src/workbench/browser",
+    "src/workbench/node/request"
   ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
@@ -34,20 +35,16 @@
     "@electron/remote": "2.0.8",
     "content-disposition": "^0.5.4",
     "copyfiles": "2.4.1",
-    "crypto-js": "^4.1.1",
     "electron-log": "^4.4.8",
     "electron-store": "8.0.2",
     "electron-updater": "^5.0.5",
     "express": "4.18.1",
     "fix-path": "3.0.0",
-    "form-data": "^4.0.0",
     "http-proxy-middleware": "3.0.0-beta.0",
-    "iconv-lite": "^0.6.3",
     "npm": "6.14.17",
     "portfinder": "1.0.28",
     "resolve": "^1.22.1",
-    "rxjs": "7.5.5",
-    "xml2js": "^0.4.23"
+    "rxjs": "7.5.5"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
