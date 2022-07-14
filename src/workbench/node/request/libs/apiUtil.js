@@ -6,6 +6,7 @@ let _LIB_WORKER_THREAD = require('./exec_worker_thread');
 let CryptoJS = require('crypto-js');
 let privateFun = {},
   _LibsCommon = require('./common'),
+  _LibsZlib = require('./zlib'),
   _LibsEncrypt = require('./encrypt').core,
   _Xml_Class = new (require('./xml').core)();
 const DOMAIN_CONSTANT = require('../domain.json');
@@ -18,7 +19,12 @@ const TIMINGSUMMARY = {
   MS_PER_NS: 1e6,
 };
 const { NodeVM } = require('./vm2/index');
-let querystring = require('querystring');
+const querystring = require('querystring');
+
+const { JSDOM } = require('jsdom');
+const { document } = new JSDOM('<!doctype html><html><body></body></html>').window;
+const window = document.defaultView,
+  $ = require('jquery')(window);
 /**
  * @desc 重置env
  * @param {object} inputSanboxVar 沙箱中的env变量
@@ -41,6 +47,15 @@ privateFun.resetEnv = (inputBaiscEnv, inputSanboxVar) => {
   });
   return tmpResult;
 };
+privateFun.replaceRestParam = (inputParamKey, inputParamInfo, inputUrl) => {
+  let tmpUrl = inputUrl.split(`{{${inputParamKey}}}`).join('eoGlobal#');
+  if (inputParamInfo && (tmpUrl.indexOf(`:${inputParamKey}`) > -1 || tmpUrl.indexOf(`{${inputParamKey}}`) > -1)) {
+    tmpUrl = _LibsCommon.replaceAll(`:${inputParamKey}`, inputParamInfo, tmpUrl);
+    tmpUrl = _LibsCommon.replaceAll(`{${inputParamKey}}`, inputParamInfo, tmpUrl);
+  }
+  return _LibsCommon.replaceAll('eoGlobal#', `{{${inputParamKey}}}`, tmpUrl);
+};
+
 privateFun.getMicrosToMs = (inputStartTime, inputEndTime) => {
   if (inputStartTime === undefined || inputEndTime === undefined) return 0.0;
   let tmpSecondDiff = inputEndTime[0] - inputStartTime[0];
@@ -69,12 +84,184 @@ privateFun.getHttpTiming = (timingSummary) => {
 };
 privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
   let tmpResult = {
+    md5: _LibsEncrypt.md5,
+    sha1: _LibsEncrypt.sha1,
+    sha224: _LibsEncrypt.sha224,
+    sha256: _LibsEncrypt.sha256,
+    sha384: _LibsEncrypt.sha384,
+    sha512: _LibsEncrypt.sha512,
+    HmacSHA1: _LibsEncrypt.HmacSHA1,
+    HmacSHA224: _LibsEncrypt.HmacSHA224,
+    HmacSHA256: _LibsEncrypt.HmacSHA256,
+    HmacSHA384: _LibsEncrypt.HmacSHA384,
+    HmacSHA512: _LibsEncrypt.HmacSHA512,
+    rsaSHA1: _LibsEncrypt.RS1,
+    rsaSHA256: _LibsEncrypt.RS256,
+    rsaPublicEncrypt: _LibsEncrypt.rsaPublicEncrypt,
+    rsaPrivateDecrypt: _LibsEncrypt.rsaPrivateDecrypt,
+    rsaPrivateEncrypt: _LibsEncrypt.rsaPrivateEncrypt,
+    rsaPublicDecrypt: _LibsEncrypt.rsaPublicDecrypt,
+    aesEncrypt: _LibsEncrypt.aesEncrypt,
+    aesDecrypt: _LibsEncrypt.aesDecrypt,
+    desEncrypt: _LibsEncrypt.desEncrypt,
+    desDecrypt: _LibsEncrypt.desDecrypt,
+    userFunction: {},
+    typeof: _LibsCommon.getTypeOfVar,
+    globalFunction: {},
+    spaceFunction: {},
+    jsonpath: _LibsCommon.jsonpath,
+    xpath: _LibsCommon.xpath,
+    xmlParse: _LibsCommon.xmlParse,
+    jsonParse: _LibsCommon.jsonParse,
+    infiniteLoopDetector: _LibsCommon.infiniteLoopDetector,
+    /**
+     * 输出错误信息并停止继续执行任何代码
+     * @param {string} info 输出信息体
+     */
+    throw_err: (tmpInputMsg) => {
+      throw `codeError_${tmpInputMsg}`;
+    },
+    globals: {
+      get: (inputKey) => {
+        return global.eoTestGlobals[inputKey];
+      },
+      set: (inputKey, inputVal) => {
+        let tmpType = _LibsCommon.getTypeOfVar(inputVal);
+        switch (tmpType) {
+          case 'String':
+          case 'Boolean':
+          case 'Number':
+          case 'Int':
+          case 'Float': {
+            global.eoTestGlobals[inputKey] = inputVal;
+            break;
+          }
+          default: {
+            throw `codeError_自定义全局变量 ${inputKey} 仅支持储存 string、number、bool 类型数据，您试图为其赋值为 ${tmpType.toLowerCase()} 类型`;
+          }
+        }
+        if (inputSanboxVar.eo.env.envParam.hasOwnProperty(inputKey)) {
+          inputSanboxVar.eo.info(
+            `温馨提示：当前已存在同名环境变量 ${inputKey}，eo.globals.set 可能无法达到预期效果`,
+            'warning'
+          );
+        }
+      },
+      unset: (inputKey) => {
+        delete global.eoTestGlobals[inputKey];
+      },
+      clear: () => {
+        global.eoTestGlobals = {};
+      },
+      all: () => {
+        return global.eoTestGlobals || '';
+      },
+    },
     env: {
       envParam: inputEnv.envParam,
+      param: {
+        get: (inputKey) => {
+          return inputSanboxVar.eo.env.envParam[inputKey];
+        },
+        set: (inputKey, inputVal) => {
+          inputSanboxVar.eo.env.envParam[inputKey] = inputVal;
+        },
+        unset: (inputKey) => {
+          delete inputSanboxVar.eo.env.envParam[inputKey];
+        },
+        clear: () => {
+          inputSanboxVar.eo.env.envParam = {};
+        },
+      },
+    },
+    crypt: {
+      md5: _LibsEncrypt.md5,
+      sha1: _LibsEncrypt.sha1,
+      sha256: _LibsEncrypt.sha256,
+      rsaSHA1: _LibsEncrypt.RS1,
+      rsaSHA256: _LibsEncrypt.RS256,
+      rsaPublicEncrypt: (tmpInputMsg, tmpInputKey, tmpInputEncoding) => {
+        return _LibsEncrypt.rsaPublicEncrypt(tmpInputKey, tmpInputMsg, tmpInputEncoding);
+      },
+      rsaPrivateDecrypt: (tmpInputMsg, tmpInputKey, tmpInputEncoding) => {
+        return _LibsEncrypt.rsaPrivateDecrypt(tmpInputKey, tmpInputMsg, tmpInputEncoding);
+      },
+      rsaPrivateEncrypt: (tmpInputMsg, tmpInputKey, tmpInputEncoding) => {
+        return _LibsEncrypt.rsaPrivateEncrypt(tmpInputKey, tmpInputMsg, tmpInputEncoding);
+      },
+      rsaPublicDecrypt: (tmpInputMsg, tmpInputKey, tmpInputEncoding) => {
+        return _LibsEncrypt.rsaPublicDecrypt(tmpInputKey, tmpInputMsg, tmpInputEncoding);
+      },
+      aesEncrypt: _LibsEncrypt.aesEncrypt,
+      aesDecrypt: _LibsEncrypt.aesDecrypt,
+      desEncrypt: _LibsEncrypt.desEncrypt,
+      desDecrypt: _LibsEncrypt.desDecrypt,
+    },
+    json: {
+      encode(inputObj) {
+        return JSON.stringify(inputObj);
+      },
+      decode(inputStr) {
+        try {
+          return JSON.parse(inputStr);
+        } catch (JSON_PARSE_ERR) {
+          throw `codeError_${JSON_PARSE_ERR.stack}`;
+        }
+      },
+    },
+    xml: {
+      encode(inputObj) {
+        return new xml2json.Builder().buildObject(inputObj);
+      },
+      decode: _LibsCommon.xmlParse,
+    },
+    base64: {
+      encode(inputData) {
+        return Buffer.from(inputData).toString('base64');
+      },
+      decode(inputData) {
+        return Buffer.from(inputData, 'base64').toString();
+      },
+    },
+    urlEncode(inputData) {
+      return encodeURIComponent(inputData);
+    },
+    urlDecode(inputData) {
+      return decodeURIComponent(inputData);
+    },
+    filePath: (inputFilePath, inputFileName) => {
+      let tmpLastIndex = inputFilePath.lastIndexOf('/'),
+        tmpFileUUID;
+      if (tmpLastIndex === -1) {
+        tmpFileUUID = inputFilePath;
+      } else {
+        tmpFileUUID = inputFilePath.substr(tmpLastIndex + 1, inputFilePath.length);
+      }
+      try {
+        inputFilePath = global._FILEOBJ[tmpFileUUID].filePath;
+        inputFileName = global._FILEOBJ[tmpFileUUID].fileName || tmpFileUUID;
+      } catch (PARSE_ERR) {}
+      return privateFun.filePath(inputFilePath, inputFileName);
+    },
+    gzip: {
+      zip: _LibsZlib.fnGzip,
+      unzip: _LibsZlib.fnGunzip,
+    },
+    deflate: {
+      zip: _LibsZlib.fnDeflate,
+      unzip: _LibsZlib.fnInflate,
     },
   };
-  ['http', 'websocket', 'socket', 'rpc'].map((val) => {
+  ['http'].map((val) => {
     tmpResult.env[val] = _LibsCommon.deepCopy(inputEnv[val]) || {};
+    tmpResult.env[val].baseUrl = {
+      get: () => {
+        return inputSanboxVar.eo.env[val].baseUrlParam;
+      },
+      set: (inputVal) => {
+        inputSanboxVar.eo.env[val].baseUrlParam = inputVal;
+      },
+    };
   });
   return tmpResult;
 };
@@ -91,10 +278,43 @@ privateFun.setExecWorkerThread = (inputPostMsg, inputMsgCallback) => {
 privateFun.constructUiCodeBasicFn = (inputSanboxVar, inputEnv, inputOpts = {}) => {
   inputOpts = inputOpts || {};
   let tmpResult = Object.assign({}, inputSanboxVar.eo, privateFun.getBaiscEoFn(inputSanboxVar, inputEnv));
-  tmpResult.env['http'] = _LibsCommon.deepCopy(inputEnv['http']) || {};
+  tmpResult.execute = (tmpInputTestData) => {
+    return privateFun.setExecWorkerThread({
+      opr: 'exec_http',
+      data: tmpInputTestData,
+      env: Object.assign({}, inputSanboxVar.eo.env, {
+        envAuth: inputEnv.envAuth,
+        http: Object.assign({}, inputSanboxVar.eo.env.http, {
+          requestScript: '',
+          responseScript: '',
+        }),
+      }),
+      opts: {
+        globalHeader: inputOpts.globalHeader,
+      },
+    });
+  };
   return tmpResult;
 };
-
+privateFun.parseRealSendUrl = (inputBasicData, inputEnv) => {
+  let tmpQueryParam = JSON.stringify(Object.assign({}, inputEnv.queryParam, inputBasicData.queryParam));
+  let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, inputEnv.envParam || {}),
+    tmpResult = inputBasicData.apiUrl;
+  for (let key in tmpEnvGlobals) {
+    let val = tmpEnvGlobals[key];
+    tmpQueryParam = _LibsCommon.replaceAll('{{' + key + '}}', val, tmpQueryParam);
+    tmpResult = _LibsCommon.replaceAll('{{' + key + '}}', val, tmpResult);
+  }
+  tmpQueryParam = querystring.stringify(JSON.parse(tmpQueryParam));
+  tmpResult += tmpQueryParam ? '?' + tmpQueryParam : '';
+  if (!new RegExp(_LibsCommon.DOMAIN_REGEX).test(tmpResult)) {
+    tmpResult = (inputEnv.baseUrlParam || '') + tmpResult;
+  }
+  for (let key in inputBasicData.restParam) {
+    tmpResult = privateFun.replaceRestParam(key, inputBasicData.restParam[key], tmpResult);
+  }
+  return tmpResult;
+};
 /**
  * @desc 构造各种类型的sanbox结构
  * @param {object} inputSanboxVar 沙箱中的变量
@@ -102,7 +322,7 @@ privateFun.constructUiCodeBasicFn = (inputSanboxVar, inputEnv, inputOpts = {}) =
  * @param {boolean} inputIsResponse 是否为返回信息
  */
 privateFun.setTypesRefFns = (inputSanboxVar, inputInitialData, inputIsResponse) => {
-  let tmpTypes = ['http', 'socket', 'rpc', 'websocket'],
+  let tmpTypes = ['http'],
     tmpBasicConf = {
       apiUrl: (inputInitialData.url || '').split('?')[0],
       bodyParam: inputInitialData.raw || '',
@@ -207,28 +427,6 @@ privateFun.setTypesRefFns = (inputSanboxVar, inputInitialData, inputIsResponse) 
   });
 };
 /**
- * @desc 构造各种类型的sanbox结构
- * @param {object} inputSanboxVar 沙箱中的变量
- * @param {object} inputInitialData 初始化的变量集合
- * @param {boolean} inputIsResponse 是否为返回信息
- */
-privateFun.setTypesRefFns = (inputSanboxVar, inputInitialData, inputIsResponse) => {
-  let tmpTypes = ['http'],
-    tmpBasicConf = {
-      apiUrl: (inputInitialData.url || '').split('?')[0],
-      bodyParam: inputInitialData.raw || '',
-      bodyParseParam: inputInitialData.params || {},
-      queryParam: inputInitialData.query || {},
-      headerParam: inputInitialData.headers || {},
-      restParam: inputInitialData.rest || {},
-      responseParam: inputInitialData.response || '',
-      responseHeaderParam: inputInitialData.responseHeaders || {},
-    };
-  tmpTypes.map((val) => {
-    inputSanboxVar[val] = _LibsCommon.deepCopy(tmpBasicConf);
-  });
-};
-/**
  * 前置脚本代码
  * @param {string} inputData 请求可分别赋值信息
  * @param {string} inputScript 前置脚本代码
@@ -241,6 +439,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
   inputData = JSON.parse(JSON.stringify(inputData));
   //!Can't delete,for eval warning tips
   let tmpTitle = inputData.title || (inputData.isReturnSoonWhenExecCode ? '环境-API 前置脚本' : '前置脚本');
+  let tmpErrorContent, tmpStatus;
   let tmpReportList = [],
     tmpBinary = inputData.binary,
     tmpSanboxObj = {
@@ -323,12 +522,14 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
   tmpCodeEvalObj.eo = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
   privateFun.setTypesRefFns(tmpCodeEvalObj.eo, inputData);
   let tmpTargetTypeData = tmpCodeEvalObj.eo[tmpApiType],
-    tmpTargetTypeEnv = tmpCodeEvalObj.eo.env[tmpApiType];
+    tmpTargetTypeEnv = tmpCodeEvalObj.eo.env[tmpApiType],
+    tmpNeedToExecRequestScript = tmpTargetTypeEnv.requestScript && !inputData.ingnoreRequestScript;
   if (inputScript || tmpNeedToExecRequestScript) {
     try {
-      if (inputOpts) {
-        _LibsCommon.execFnDefine(inputOpts.functionCode || [], tmpVm, tmpCodeEvalObj.eo);
-      }
+      // // execute common function
+      // if (inputOpts) {
+      //   _LibsCommon.execFnDefine(inputOpts.functionCode || [], tmpVm, tmpCodeEvalObj.eo);
+      // }
       if (!inputData.isReturnSoonWhenExecCode && tmpNeedToExecRequestScript) {
         tmpNowIsExecuteEnvScript = true;
         tmpVm.run(
@@ -337,6 +538,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       }
       tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
     } catch (Err) {
+      console.log(Err);
       switch (Err) {
         case 'info':
         case 'interrupt':
@@ -381,7 +583,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       return {
         status: tmpStatus,
         content: tmpErrorContent,
-        url: tmpTargetTypeData.url.parse(),
+        url: tmpTargetTypeData.apiUrl,
         headers: tmpTargetTypeData.headerParam,
         params: tmpTargetTypeData.bodyParseParam || tmpTargetTypeData.bodyParam,
         env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),

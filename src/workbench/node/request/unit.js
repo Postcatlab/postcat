@@ -15,6 +15,7 @@ const { resolve } = require('path');
     _GetFileClass = new (require('./libs/getFile.package').core)(),
     _LibsMineType = require('./libs/mineType.package');
   let CONFIG = require('./config.json');
+
   const _EO_LANG_OBJ = require('./lang.json');
   var iconv = require('iconv-lite');
   global.eoLang = _EO_LANG_OBJ['cn'];
