@@ -22,7 +22,145 @@ export interface FlatNode extends TreeNode {
 
 export type Completion = { caption: string; value: string };
 
-const COMMON_DATA: TreeNode[] = [];
+const COMMON_DATA: TreeNode[] = [
+  {
+    name: $localize`Encode & Decode`, // 编解码
+    children: [
+      {
+        name: $localize`JSON Encode`, // JSON 编码
+        caption: 'eo.json.encode',
+        value: 'eo.json.encode(json_object)',
+        note: {
+          code: 'eo.json.encode(json_object)',
+          desc: $localize`JSON Encode`, // JSON 编码
+          input: [{ key: 'json_object', value: $localize`JSON object` }], // 待 JSON 序列化处理的对象
+          output: $localize`JSON string`, // JSON字符串
+        },
+      },
+      {
+        name: $localize`JSON Decode`, // JSON 解码
+        caption: 'json.decode',
+        value: 'json.decode(json)',
+        note: {
+          code: 'json.decode(json)',
+          desc: $localize`JSON Decode`, // JSON 解码
+          input: [{ key: 'json', value: $localize`JSON string` }], // JSON 字符串
+          output: $localize`JSON object`, // JSON 反序列化处理后的对象
+        },
+      },
+      {
+        name: $localize`XML Encode`, // XML 编码
+        caption: 'xml.encode',
+        value: 'xml.encode(xml_object)',
+        note: {
+          code: 'xml.encode(xml_object)',
+          desc: $localize`XML code`, // XML 编码
+          input: [{ key: 'xml_object', value: $localize`XML code` }], // 待XML序列化处理的对象
+          output: $localize`XML string`, // XML 字符串
+        },
+      },
+      {
+        name: $localize`XML Decode`, // XML 解码
+        caption: 'xml.decode',
+        value: 'xml.decode(xml)',
+        note: {
+          code: 'xml.decode(xml)',
+          desc: $localize`XML code`, // XML 解码
+          input: [{ key: 'xml', value: $localize`XML string` }], // XML字符串
+          output: $localize`XML code`, // XML反序列化处理后的对象
+        },
+      },
+      {
+        name: $localize`Base64 Encode`, // Base64 编码
+        caption: 'base64.encode',
+        value: 'base64.encode(data)',
+        note: {
+          code: 'base64.encode(data)',
+          desc: $localize`Base64 Encode`, // Base64 编码
+          input: [{ key: 'data', value: $localize`string of wait for encode` }], // 待编码字符串
+          output: $localize`string after encode`, // 编码后字符串
+        },
+      },
+      {
+        name: $localize`Base64 Decode`, // Base64 解码
+        caption: 'base64.decode',
+        value: 'base64.decode(data)',
+        note: {
+          code: 'base64.decode(data)',
+          desc: $localize`Base64 Decode`, // Base64 解码
+          input: [{ key: 'data', value: $localize`string of wait for decode` }], // 待解码字符串
+          output: $localize`string after decode`, // 解码后字符串
+        },
+      },
+      {
+        name: $localize`UrlEncode Encode`, // UrlEncode 编码
+        caption: 'eo.urlEncode',
+        value: 'eo.urlEncode(data)',
+        note: {
+          code: 'eo.urlEncode(data)',
+          desc: $localize`UrlEncode Encode`, // UrlEncode 编码
+          input: [{ key: 'data', value: $localize`string of wait for encode` }], // 待编码字符串
+          output: $localize`string after encode`, // 编码后字符串
+        },
+      },
+      {
+        name: $localize`UrlEncode Decode`, // UrlEncode 解码
+        caption: 'eo.urlDecode',
+        value: 'eo.urlDecode(data)',
+        note: {
+          code: 'eo.urlDecode(data)',
+          desc: $localize`UrlEncode Decode`, // UrlEncode 解码
+          input: [{ key: 'data', value: $localize`string of wait for decode` }], // 待解码字符串
+          output: $localize`string after decode`, // 解码后字符串
+        },
+      },
+      {
+        name: $localize`Gzip zip`, // gzip 压缩
+        caption: 'eo.gzip.zip',
+        value: 'eo.gzip.zip(data)',
+        note: {
+          code: 'eo.gzip.zip(data)',
+          desc: $localize`Gzip zip`, // gzip 压缩
+          input: [{ key: 'data', value: $localize`string of wait for zip` }], // 待压缩字符串
+          output: $localize`string after zip`, // 压缩后字符串
+        },
+      },
+      {
+        name: $localize`Gzip unzip`, // gzip 解压
+        caption: 'eo.gzip.unzip',
+        value: 'eo.gzip.unzip(data)',
+        note: {
+          code: 'eo.gzip.unzip(data)',
+          desc: $localize`Gzip unzip`, // gzip 解压缩
+          input: [{ key: 'data', value: $localize`string of wait for unzip` }], // 待解压字符串
+          output: $localize`string after unzip`, // 解压后字符串
+        },
+      },
+      {
+        name: $localize`Deflate zip`, // deflate 压缩
+        caption: 'eo.deflate.zip',
+        value: 'eo.deflate.zip(data)',
+        note: {
+          code: 'eo.deflate.zip(data)',
+          desc: $localize`Deflate zip`, // deflate 压缩
+          input: [{ key: 'data', value: $localize`string of wait for zip` }], // 待压缩字符串
+          output: $localize`string after zip`, // 压缩后字符串
+        },
+      },
+      {
+        name: $localize`Deflate unzip`, // deflate 解压
+        caption: 'eo.deflate.unzip',
+        value: 'eo.deflate.unzip(data)',
+        note: {
+          code: 'eo.deflate.unzip(data)',
+          desc: $localize`Deflate unzip`, // deflate 解压缩
+          input: [{ key: 'data', value: $localize`string of wait for unzip` }], // 待解压字符串
+          output: $localize`string after unzip`, // 解压后字符串
+        },
+      },
+    ],
+  },
+];
 
 export const BEFORE_DATA: TreeNode[] = [
   ...COMMON_DATA,
@@ -202,16 +340,6 @@ if (raw_api_demo_1_result.response !== "") {
 } else {
     eo.info("info_2"); //输出信息
 }`,
-      },
-      {
-        name: $localize``, //
-        caption: '',
-        value: '',
-        note: {
-          code: '',
-          desc: $localize``, //
-          input: [{ key: 'param_key', value: $localize`参数名` }], //
-        },
       },
     ],
   },
