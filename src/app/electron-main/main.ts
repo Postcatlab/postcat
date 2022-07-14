@@ -26,34 +26,6 @@ const configuration: ConfigurationInterface = Configuration();
 global.shareObject = {
   storageResult: null,
 };
-<<<<<<< HEAD
-
-function createWindow(): BrowserWindow {
-  const electronScreen = screen;
-  const size = electronScreen.getPrimaryDisplay().workAreaSize;
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: Math.round(size.width * 0.85),
-    height: Math.round(size.height * 0.85),
-    minWidth: 1280,
-    minHeight: 720,
-    useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
-    frame: os.type() === 'Darwin' ? true : false, //mac use default frame
-    webPreferences: {
-      webSecurity: false,
-      preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
-      nodeIntegration: true,
-      allowRunningInsecureContent: processEnv === 'development' ? true : false,
-      contextIsolation: false, // false if you want to run e2e test with Spectron
-    },
-  });
-  // 启动mock服务
-  mockServer.start(win as any);
-  proxyOpenExternal(win);
-  let loadPage = async () => {
-    let currentUrl = win.webContents.getURL();
-    let locale = ['zh', 'en'].find((val) => currentUrl.includes(val));
-=======
 let eoBrowserWindow: EoBrowserWindow = null;
 class EoBrowserWindow {
   // Start mock server when app inital
@@ -86,21 +58,14 @@ class EoBrowserWindow {
   }
   public loadURL() {
     console.log('loadURL')
->>>>>>> main
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
         : `file://${path.join(
             __dirname,
-<<<<<<< HEAD
-            `../../../src/workbench/browser/dist/${locale || app.getLocale()}/index.html`
-          )}`;
-    win.loadURL(file);
-=======
             `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`
           )}`;
     this.win.loadURL(file);
->>>>>>> main
     if (['development'].includes(processEnv)) {
       this.win.webContents.openDevTools({
         mode: 'undocked',
@@ -125,26 +90,6 @@ class EoBrowserWindow {
         contextIsolation: false, // false if you want to run e2e test with Spectron
       },
     });
-<<<<<<< HEAD
-  };
-  win.webContents.on('did-fail-load', (event, errorCode) => {
-    console.error('did-fail-load', errorCode);
-    loadPage();
-  });
-  win.webContents.on('did-finish-load', () => {
-    mainRemote.enable(win.webContents);
-  });
-  loadPage();
-
-  // Emitted when the window is closed.
-  win.on('closed', () => {
-    // Dereference the window object, usually you would store window
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    win = null;
-  });
-  return win;
-=======
     proxyOpenExternal(this.win);
     this.loadURL();
     this.startMock();
@@ -152,7 +97,6 @@ class EoBrowserWindow {
     this.watch();
     return this.win;
   }
->>>>>>> main
 }
 
 try {
