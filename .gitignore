@@ -36,6 +36,7 @@ node_modules
 /coverage
 /libpeerconnection.log
 npm-debug.log
+*-error.log
 testem.log
 /typings
 
