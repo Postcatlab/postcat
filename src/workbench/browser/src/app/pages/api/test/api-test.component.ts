@@ -28,6 +28,12 @@ import { TestServerLocalNodeService } from '../../../shared/services/api-test/lo
 import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
+import {
+  BEFORE_DATA,
+  AFTER_DATA,
+  beforeScriptCompletions,
+  afterScriptCompletions,
+} from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 
 @Component({
   selector: 'eo-api-test',
@@ -43,6 +49,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     parameters: [],
     hostUri: '',
   };
+  BEFORE_DATA = BEFORE_DATA;
+  AFTER_DATA = AFTER_DATA;
+  beforeScriptCompletions = beforeScriptCompletions;
+  afterScriptCompletions = afterScriptCompletions;
   beforeScript = '';
   afterScript = '';
   status: 'start' | 'testing' | 'tested' = 'start';
@@ -99,6 +109,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     console.log('restoreHistory', result);
     //restore request
     this.apiData = result.testData;
+    this.beforeScript = result.response?.beforeScript;
+    this.afterScript = result.response?.afterScript;
     this.changeUri();
     //restore response
     this.tabIndexRes = 0;
@@ -110,6 +122,23 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         this.apiData = this.apiTest.getTestDataFromApi(result.data);
         this.validateForm.patchValue(this.apiData);
       }
+    });
+  }
+  loadTestHistory(id) {
+    this.beforeScript = '';
+    this.afterScript = '';
+    console.log('loadTestHistory', this);
+    if (!id) {
+      return;
+    }
+    this.storage.run('apiTestHistoryLoadAllByApiDataID', [id], (result: StorageRes) => {
+      let history = {} as any;
+      if (result.status === StorageResStatus.success) {
+        history = result.data.reduce((prev, curr) => (prev.updatedAt > curr.updatedAt ? prev : curr), {});
+      }
+      console.log('history', history);
+      this.beforeScript = history.beforeScript || '';
+      this.afterScript = history.afterScript || '';
     });
   }
   saveTestDataToApi() {
@@ -136,7 +165,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     return new ApiParamsNumPipe().transform(params);
   }
   ngOnInit(): void {
-    this.initApi(Number(this.route.snapshot.queryParams.uuid));
+    const apiDataId = Number(this.route.snapshot.queryParams.uuid);
+    this.initApi(apiDataId);
+    this.loadTestHistory(apiDataId);
     this.watchTabChange();
     this.watchEnvChange();
     this.messageService.get().subscribe(({ type, data }) => {
@@ -293,6 +324,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
           },
         });
         this.initApi(nextTab.key);
+        this.loadTestHistory(nextTab.key);
       });
   }
   /**

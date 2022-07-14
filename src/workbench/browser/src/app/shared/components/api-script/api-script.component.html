@@ -3,8 +3,8 @@
     <div class="flex justify-between p-3">
       <div i18n>Snippets</div>
       <div>
-        <a href="https://eoapi.io/docs/script-function" class="text-blue-400" target="_blank"
-          rel="noopener noreferrer" i18n>Learn more</a>
+        <a href="https://eoapi.io/docs/script-function" class="text-blue-400" target="_blank" rel="noopener noreferrer"
+          i18n>Learn more</a>
       </div>
     </div>
     <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
@@ -13,13 +13,8 @@
         <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="false" (nzClick)="insertCode(node)">
           <span class="text-sm text-blue-400"> {{ node.name }}</span>
           <ng-container *ngIf="node.note">
-            <span
-              [nzTooltipTitle]="titleTemplate"
-              [nzTooltipPlacement]="['topLeft', 'leftTop']"
-              class="text-blue-400"
-              nzTooltipColor="black"
-              nz-tooltip
-            >
+            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
+              nzTooltipColor="black" nz-tooltip>
               [?]
             </span>
             <ng-template #titleTemplate let-thing>
@@ -53,12 +48,8 @@
     </nz-tree-view>
   </div>
   <div class="flex-1">
-    <eo-editor
-      [(code)]="code"
-      editorType="javascript"
-      [eventList]="['format', 'copy', 'search', 'replace']"
-      (codeChange)="handleChange($event)"
-    >
+    <eo-editor [(code)]="code" editorType="javascript" [eventList]="['format', 'copy', 'search', 'replace']"
+      (codeChange)="handleChange($event)" [completions]="completions">
     </eo-editor>
   </div>
 </div>

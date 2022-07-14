@@ -7,7 +7,7 @@ import { EoEditorComponent } from 'eo/workbench/browser/src/app/eoui/editor/eo-e
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 
 import type { TreeNode, FlatNode } from './constant';
-import { BEFORE_DATA } from './constant';
+
 @Component({
   selector: 'eo-api-script',
   templateUrl: './api-script.component.html',
@@ -15,6 +15,8 @@ import { BEFORE_DATA } from './constant';
 })
 export class ApiScriptComponent implements OnInit {
   @Input() code = '';
+  @Input() treeData = [];
+  @Input() completions = [];
   @Output() codeChange: EventEmitter<any> = new EventEmitter();
   @ViewChild(EoEditorComponent, { static: false }) eoEditor?: EoEditorComponent;
 
@@ -42,19 +44,17 @@ export class ApiScriptComponent implements OnInit {
   // @ts-ignore
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  constructor() {
-    this.dataSource.setData(BEFORE_DATA);
+  constructor() {}
+
+  ngOnInit(): void {
+    this.dataSource.setData(this.treeData);
     this.treeControl.expandAll();
   }
-
-  ngOnInit(): void {}
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
   handleChange(code) {
-    setTimeout(() => {
-      this.codeChange.emit(code);
-    }, 0);
+    this.codeChange.emit(code);
   }
 
   insertCode = (node: FlatNode) => {
