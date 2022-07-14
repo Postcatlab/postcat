@@ -23,6 +23,8 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+
 
 import { ByteToStringPipe } from './result-response/get-size.pipe';
 
@@ -57,6 +59,7 @@ const NZ_COMPONETS = [
   NzEmptyModule,
   NzPopconfirmModule,
   NzToolTipModule,
+  NzAlertModule,
   NzTypographyModule,
 ];
 const COMPONENTS = [
