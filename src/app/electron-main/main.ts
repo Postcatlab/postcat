@@ -3,37 +3,30 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
-import ModuleManager from '../../platform/node/extension-manager/lib/manager';
+import {ModuleManager} from '../../platform/node/extension-manager/lib/manager';
 import { ModuleManagerInterface } from '../../platform/node/extension-manager';
-// TODO 引入问题
-// import {
-//   StorageResStatus,
-//   StorageProcessType,
-// } from '../../workbench/browser/src/app/shared/services/storage/index.model';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { deleteFile, readJson } from '../../shared/node/file';
-import { STORAGE_TEMP as storageTemp } from '../../shared/common/constant';
-import { UnitWorkerModule } from '../../workbench/node/unitWorker';
+import { STORAGE_TEMP as storageTemp } from '../../shared/electron-main/constant';
+import { UnitWorkerModule } from '../../workbench/node/electron/main';
 import Configuration from '../../platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
 import { MockServer } from 'eo/platform/node/mock-server';
+import { LanguageService } from 'eo/app/electron-main/language.service';
 
-let win: BrowserWindow = null;
 export const subView = {
   appView: null,
   mainView: null,
 };
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
-const moduleManager: ModuleManagerInterface = ModuleManager();
+const moduleManager: ModuleManagerInterface = new ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
-// Remote
-const mainRemote = require('@electron/remote/main');
-mainRemote.initialize();
 global.shareObject = {
   storageResult: null,
 };
+<<<<<<< HEAD
 
 function createWindow(): BrowserWindow {
   const electronScreen = screen;
@@ -60,22 +53,79 @@ function createWindow(): BrowserWindow {
   let loadPage = async () => {
     let currentUrl = win.webContents.getURL();
     let locale = ['zh', 'en'].find((val) => currentUrl.includes(val));
+=======
+let eoBrowserWindow: EoBrowserWindow = null;
+class EoBrowserWindow {
+  // Start mock server when app inital
+  win: BrowserWindow;
+  constructor() {
+    this.create();
+  }
+  private startMock() {
+    mockServer.start(this.win as any);
+  }
+  // Start unit test function
+  private startUnitTest() {
+    UnitWorkerModule.setup({
+      view: this.win,
+    });
+  }
+  //Watch win event
+  private watch() {
+    // Reload page when load page url error
+    this.win.webContents.on('did-fail-load', (event, errorCode) => {
+      console.error('did-fail-load', errorCode);
+      this.loadURL();
+    });
+    this.win.on('closed', () => {
+      // Dereference the window object, usually you would store window
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      this.win = null;
+    });
+  }
+  public loadURL() {
+    console.log('loadURL')
+>>>>>>> main
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
         : `file://${path.join(
             __dirname,
+<<<<<<< HEAD
             `../../../src/workbench/browser/dist/${locale || app.getLocale()}/index.html`
           )}`;
     win.loadURL(file);
+=======
+            `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`
+          )}`;
+    this.win.loadURL(file);
+>>>>>>> main
     if (['development'].includes(processEnv)) {
-      win.webContents.openDevTools({
+      this.win.webContents.openDevTools({
         mode: 'undocked',
       });
     }
-    UnitWorkerModule.setup({
-      view: win,
+  }
+  public create(): BrowserWindow {
+    const size = screen.getPrimaryDisplay().workAreaSize;
+    // Create the browser window.
+    this.win = new BrowserWindow({
+      width: Math.round(size.width * 0.85),
+      height: Math.round(size.height * 0.85),
+      minWidth: 1280,
+      minHeight: 720,
+      useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
+      frame: os.type() === 'Darwin' ? true : false, //mac use default frame
+      webPreferences: {
+        webSecurity: false,
+        preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
+        nodeIntegration: true,
+        allowRunningInsecureContent: processEnv === 'development' ? true : false,
+        contextIsolation: false, // false if you want to run e2e test with Spectron
+      },
     });
+<<<<<<< HEAD
   };
   win.webContents.on('did-fail-load', (event, errorCode) => {
     console.error('did-fail-load', errorCode);
@@ -94,6 +144,15 @@ function createWindow(): BrowserWindow {
     win = null;
   });
   return win;
+=======
+    proxyOpenExternal(this.win);
+    this.loadURL();
+    this.startMock();
+    this.startUnitTest();
+    this.watch();
+    return this.win;
+  }
+>>>>>>> main
 }
 
 try {
@@ -102,7 +161,9 @@ try {
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
   app.on('ready', async () => {
-    setTimeout(createWindow, 400);
+    setTimeout(() => {
+      eoBrowserWindow = new EoBrowserWindow();
+    }, 400);
     eoUpdater.check();
   });
   //!TODO only api manage app need this
@@ -121,8 +182,8 @@ try {
   app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (win === null) {
-      createWindow();
+    if (eoBrowserWindow.win === null) {
+      eoBrowserWindow.create();
     }
   });
   ipcMain.on('message', function (event, arg) {
@@ -131,32 +192,37 @@ try {
     // if (event.frameId !== 1) return;
     switch (arg.action) {
       case 'minimize': {
-        win.minimize();
+        eoBrowserWindow.win.minimize();
         break;
       }
       case 'restore': {
-        win.restore();
+        eoBrowserWindow.win.restore();
         break;
       }
       case 'maximize': {
-        win.maximize();
+        eoBrowserWindow.win.maximize();
         break;
       }
       case 'close': {
-        win.close();
+        eoBrowserWindow.win.close();
+        break;
+      }
+      case 'changeLanguage': {
+        LanguageService.set(arg.data);
+        eoBrowserWindow.loadURL();
+        moduleManager.refreshAll();
         break;
       }
     }
   });
-
   ipcMain.on('eo-storage', (event, args) => {
     let returnValue: any;
     if (args.type === 'default' || args.type === 'remote') {
-      win.webContents.send('eo-storage', args);
+      eoBrowserWindow.win.webContents.send('eo-storage', args);
       returnValue = null;
     } else if (args.type === 'sync') {
       deleteFile(storageTemp);
-      win.webContents.send('eo-storage', args);
+      eoBrowserWindow.win.webContents.send('eo-storage', args);
       let data = readJson(storageTemp);
       let count: number = 0;
       while (data === null) {
@@ -174,7 +240,7 @@ try {
       deleteFile(storageTemp);
       returnValue = data;
     } else if (args.type === 'result') {
-      let view = subView.appView ? subView.appView?.view.webContents : win.webContents;
+      let view = subView.appView ? subView.appView?.view.webContents : eoBrowserWindow.win.webContents;
       view.send('storageCallback', args.result);
     }
   });

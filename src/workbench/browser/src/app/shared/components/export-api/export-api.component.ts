@@ -3,6 +3,7 @@ import { StorageService } from '../../../shared/services/storage';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
+import { ModuleInfo } from 'eo/platform/node/extension-manager';
 
 @Component({
   selector: 'eo-export-api',
@@ -67,19 +68,14 @@ export class ExportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension);
+    const module: ModuleInfo = window.eo.loadFeatureModule(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
-          try {
-            const output = module[action](result || {});
-            this.transferTextToFile(filename, output);
-            callback(true);
-          } catch (e) {
-            console.log(e);
-            callback(false);
-          }
+          const output = module[action](result || {});
+          this.transferTextToFile(filename, output);
+          callback(true);
         } else {
           callback(false);
         }

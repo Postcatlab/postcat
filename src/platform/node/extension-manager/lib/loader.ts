@@ -39,7 +39,6 @@ export class ModuleLoader implements ModuleLoaderInterface {
    * @param module ModuleInfo
    */
   loadModule(module: ModuleInfo): void {
-    console.log(module);
     if ((this.runtime === ModuleRuntime.main && ![ModuleType.system, ModuleType.app].indexOf(module.moduleType))
       || (this.runtime === ModuleRuntime.render && ![ModuleType.feature].indexOf(module.moduleType))
       || (this.runtime === ModuleRuntime.web && !module.web)) {
