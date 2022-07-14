@@ -181,6 +181,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
           general: message.general,
           request: message.history.request,
           response: message.response,
+          ...this.scriptCache,
         },
         id
       );
