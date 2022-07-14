@@ -25,7 +25,7 @@ export class TestServerRemoteService implements TestServer {
   ajax(message) {
     const xhr = new XMLHttpRequest();
     const url = `${window.location.protocol}//${window.location.hostname}:4201/api/unit`;
-    console.log(url)
+    console.log(url);
     xhr.open('POST', url);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.onreadystatechange = (e) => {

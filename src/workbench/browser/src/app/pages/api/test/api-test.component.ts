@@ -152,13 +152,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.send('unitTest', {
       id: this.apiTab.tabID,
       action: 'ajax',
-      data: {
+      data: this.testServer.formatRequestData(this.apiData, {
+        env: this.env,
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
-        ...this.testServer.formatRequestData(this.apiData, {
-          env: this.env,
-        }),
-      },
+      }),
     });
     this.status$.next('testing');
   }
