@@ -1,4 +1,4 @@
-import { DATA_DIR as dataDir } from 'eo/shared/common/constant';
+import { DATA_DIR as dataDir } from 'eo/shared/electron-main/constant';
 import { ConfigurationInterface, ConfigurationValueInterface } from '../types';
 import * as path from 'path';
 import { fileExists, readJson, writeJson } from 'eo/shared/node/file';

@@ -4,9 +4,9 @@ import { SidebarService } from 'eo/workbench/browser/src/app/shared/components/s
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
-import { isElectron } from 'eo/shared/common/common';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 
 @Component({
   selector: 'eo-pages',
@@ -19,7 +19,6 @@ export class PagesComponent implements OnInit {
   get isRemote() {
     return this.remoteService.isRemote;
   }
-  isElectron = isElectron();
   isShow = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true';
   get dataSourceText() {
     return this.remoteService.dataSourceText;
@@ -34,7 +33,8 @@ export class PagesComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     public sidebar: SidebarService,
     private messageService: MessageService,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    public electron:ElectronService
   ) {
     this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
       this.updateState();
