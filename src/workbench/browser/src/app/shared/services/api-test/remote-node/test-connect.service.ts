@@ -76,7 +76,7 @@ export class TestServerRemoteService implements TestServer {
    *
    * @param input
    */
-  formatRequestData(data, opts = { env: {} }) {
+  formatRequestData(data, opts = { env: {}, beforeScript: '', afterScript: '' }) {
     return eoFormatRequestData(data, opts, this.locale);
   }
   /**

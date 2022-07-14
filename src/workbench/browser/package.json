@@ -20,7 +20,7 @@
   "dependencies": {
     "@angular-cli/base-href-webpack": "1.0.16",
     "@angular/animations": "14.0.3",
-    "@angular/cdk": "14.0.3",
+    "@angular/cdk": "13.3.9",
     "@angular/common": "14.0.3",
     "@angular/compiler": "14.0.3",
     "@angular/core": "14.0.3",

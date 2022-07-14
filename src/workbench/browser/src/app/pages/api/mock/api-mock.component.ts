@@ -25,14 +25,18 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
   get modalTitle() {
     return `${
-      this.currentEditMockIndex === -1 ? $localize`Add` : this.currentEditMock.createWay === 'system' ? $localize`Preview` : $localize`Edit`
+      this.currentEditMockIndex === -1
+        ? $localize`Add`
+        : this.currentEditMock.createWay === 'system'
+        ? $localize`Preview`
+        : $localize`Edit`
     } Mock`;
   }
   mocklList: ApiMockEntity[] = [];
   apiData: ApiData;
   createWayMap = {
-    system: $localize `System creation`,
-    custom: $localize `Manual creation`,
+    system: $localize`System creation`,
+    custom: $localize`Manual creation`,
   };
   mockListColumns = [
     { title: $localize`Name`, slot: 'name', width: '20%' },
@@ -100,7 +104,7 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
+    const data = eoFormatRequestData(this.apiData, { env: {}, beforeScript: '', afterScript: '' }, 'en-US');
     const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
       base: 'query',
       replaceType: 'replace',
