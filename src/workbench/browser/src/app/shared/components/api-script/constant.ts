@@ -24,9 +24,40 @@ export type Completion = { caption: string; value: string };
 
 const COMMON_DATA: TreeNode[] = [];
 
-export const BEFORE_DATA: TreeNode[] = [];
+export const BEFORE_DATA: TreeNode[] = [
+  ...COMMON_DATA,
+  {
+    name: $localize`HTTP API request`,
+    children: [
+      {
+        name: $localize`Set Request URL`,
+        caption: 'eo.http.url.set',
+        value: 'eo.http.url.set("new_url")',
+        note: {
+          code: 'eo.http.url.set("new_url")',
+          desc: $localize`设置 HTTP API 的请求路径`,
+          input: [{ key: 'new_url', value: `新的请求路径` }],
+        },
+      },
+      {
+        name: $localize`Set Header`, // 设置 Header 参数
+        caption: 'eo.http.header.set',
+        value: 'eo.http.header.set("param_key","param_value")',
+        note: {
+          code: 'eo.http.header.set("param_key","param_value")',
+          desc: $localize`设置 HTTP API 的请求头部参数`,
+          input: [
+            { key: 'param_key', value: `参数名` },
+            { key: 'param_value', value: `参数值` },
+          ],
+        },
+      },
+    ],
+  },
+];
 
 export const AFTER_DATA: TreeNode[] = [
+  ...COMMON_DATA,
   {
     name: $localize`HTTP API request`,
     children: [
@@ -46,7 +77,7 @@ export const AFTER_DATA: TreeNode[] = [
         note: {
           code: 'eo.http.response.set("response_value")',
           desc: $localize`Set the response result of the HTTP API`,
-          input: [{ key: 'response_value：', value: $localize`response result` }],
+          input: [{ key: 'response_value', value: $localize`response result` }],
         },
       },
     ],
