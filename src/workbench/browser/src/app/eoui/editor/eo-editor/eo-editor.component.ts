@@ -13,14 +13,6 @@ import 'brace/mode/html';
 import 'brace/mode/xml';
 import 'brace/ext/searchbox';
 import ace from 'brace';
-import { completions } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
-
-const langTools = ace.acequire('ace/ext/language_tools');
-console.log('langTools', langTools);
-langTools.addCompleter({
-  // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
-  getCompletions: (editor, session, pos, prefix, callback) => callback(null, completions),
-});
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
@@ -62,6 +54,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() editorType = 'json';
   @Input() autoFormat = false;
   @Input() disabled = false;
+  @Input() completions = [];
   @Output() codeChange = new EventEmitter<string>();
   @ViewChild(AceComponent, { static: false }) aceRef?: AceComponent;
   @ViewChild(AceDirective, { static: false }) directiveRef?: AceDirective;
@@ -125,6 +118,12 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
             event: it,
             ...eventHash.get(it),
           }));
+    const langTools = ace.acequire('ace/ext/language_tools');
+    langTools.setCompleters([]);
+    langTools.addCompleter({
+      // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
+      getCompletions: (editor, session, pos, prefix, callback) => callback(null, this.completions),
+    });
   }
   log(event, txt) {
     console.log('ace event', event, txt);
