@@ -12,13 +12,20 @@ import { StorageService } from '../../services/storage';
       <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
       <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
+    <span class="text-gray-400">Global variable</span>
+    <div *ngFor="let it of gloablParams" class="flex items-center justify-between h-8">
+      <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
+      <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
+    </div>
   </div>`,
   styleUrls: [],
 })
 export class EnvListComponent implements OnInit {
   envParams: any = [];
+  gloablParams: any = [];
   constructor(private storage: StorageService) {}
   async ngOnInit() {
+    this.gloablParams = this.getGlobalParams();
     const uuid = Number(localStorage.getItem('env:selected')) || null;
     if (uuid == null) {
       this.envParams = [];
@@ -26,7 +33,6 @@ export class EnvListComponent implements OnInit {
     }
     const envList = (await this.getAllEnv()) as [];
     const [env]: any[] = envList.filter((it: any) => it.uuid === uuid);
-    console.log(env, envList);
     this.envParams = env.parameters;
   }
   getAllEnv(uuid?: number) {
@@ -38,6 +44,13 @@ export class EnvListComponent implements OnInit {
         }
         return resolve([]);
       });
+    });
+  }
+  getGlobalParams() {
+    const global = localStorage.getItem('EO_TEST_VAR_GLOBALS');
+    return Object.entries(JSON.parse(global)).map((it) => {
+      const [key, value] = it;
+      return { name: key, value };
     });
   }
 }
