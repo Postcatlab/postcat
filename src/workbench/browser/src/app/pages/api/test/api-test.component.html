@@ -30,7 +30,7 @@
   </form>
   <div class="scroll_container">
     <!-- Request Info -->
-    <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [nzAnimated]="false" [nzSelectedIndex]="1">
+    <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
       <!-- Request Headers -->
       <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
         <ng-template #headerTitleTmp>
@@ -68,7 +68,7 @@
       <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
         <ng-template #restTitleTmp>
           <span i18n>REST</span>
-          <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(apiData.restParams)">{{
+          <span class="eo-tab-icon ml-[4px] " *ngIf="bindGetApiParamNum(apiData.restParams)">{{
             apiData.restParams | apiParamsNum
             }}</span>
         </ng-template>
@@ -76,17 +76,19 @@
       </nz-tab>
       <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
         <ng-template #preScriptTitleTmp>
-          Pre-request Script
+          <span i18n>Pre-request Script</span>
+          <span class="iconfont icon-circle eo-tab-theme-icon" *ngIf="beforeScript?.trim()"></span>
         </ng-template>
-        <eo-api-script [(code)]="beforeScript" [treeData]="BEFORE_DATA" [completions]="beforeScriptCompletions"
-          class="eo_theme_iblock bbd"></eo-api-script>
+        <eo-api-script *ngIf="nzSelectedIndex === 4" [(code)]="beforeScript" [treeData]="BEFORE_DATA"
+          [completions]="beforeScriptCompletions" class="eo_theme_iblock bbd"></eo-api-script>
       </nz-tab>
       <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
         <ng-template #suffixScriptTitleTmp>
-          After-response Script
+          <span i18n>After-response Script</span>
+          <span class="iconfont icon-circle eo-tab-theme-icon" *ngIf="afterScript?.trim()"></span>
         </ng-template>
-        <eo-api-script [(code)]="afterScript" [treeData]="AFTER_DATA" [completions]="afterScriptCompletions"
-          class="eo_theme_iblock bbd"></eo-api-script>
+        <eo-api-script *ngIf="nzSelectedIndex === 5" [(code)]="afterScript" [treeData]="AFTER_DATA"
+          [completions]="afterScriptCompletions" class="eo_theme_iblock bbd"></eo-api-script>
       </nz-tab>
     </nz-tabset>
     <!-- Response -->

@@ -56,6 +56,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   afterScriptCompletions = afterScriptCompletions;
   beforeScript = '';
   afterScript = '';
+  nzSelectedIndex = 1;
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   tabIndexRes = 0;
@@ -106,8 +107,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     console.log('restoreHistory', result);
     //restore request
     this.apiData = result.testData;
-    this.beforeScript = result.response?.beforeScript;
-    this.afterScript = result.response?.afterScript;
+    this.setScriptsByHistory(result.response);
     this.changeUri();
     //restore response
     this.tabIndexRes = 0;
@@ -120,6 +120,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         this.validateForm.patchValue(this.apiData);
       }
     });
+  }
+  setScriptsByHistory(response) {
+    this.beforeScript = response?.beforeScript || '';
+    this.afterScript = response?.afterScript || '';
   }
   loadTestHistory(id) {
     if (!id) {
@@ -278,6 +282,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       const tabData = this.apiTab.tabCache[this.apiTab.tabID];
       this.apiData = tabData.apiData;
       this.testResult = tabData.testResult;
+      this.setScriptsByHistory(tabData.testResult);
       return;
     }
     if (!id) {
