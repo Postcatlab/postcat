@@ -1,10 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { FlatTreeControl } from '@angular/cdk/tree';
-// import { FlatTreeControl } from 'ng-zorro-antd/node_modules/@angular/cdk/tree';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { EoEditorComponent } from 'eo/workbench/browser/src/app/eoui/editor/eo-editor/eo-editor.component';
 
-import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
+import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 import type { TreeNode, FlatNode } from './constant';
 
@@ -19,46 +17,53 @@ export class ApiScriptComponent implements OnInit {
   @Input() completions = [];
   @Output() codeChange: EventEmitter<any> = new EventEmitter();
   @ViewChild(EoEditorComponent, { static: false }) eoEditor?: EoEditorComponent;
+  @ViewChild('nzTreeComponent', { static: false }) nzTreeComponent!: NzTreeComponent;
 
-  private transformer = (node: TreeNode, level: number): FlatNode => ({
-    ...node,
-    expandable: !!node.children && node.children.length > 0,
-    name: node.name,
-    level,
-    disabled: false,
-  });
   selectListSelection = new SelectionModel<FlatNode>(true);
 
-  treeControl = new FlatTreeControl<FlatNode, any>(
-    (node) => node.level,
-    (node) => node.expandable
-  );
-
-  treeFlattener = new NzTreeFlattener(
-    this.transformer,
-    (node) => node.level,
-    (node) => node.expandable,
-    (node) => node.children
-  );
-
-  // @ts-ignore
-  dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  dataSource: NzTreeNodeOptions[] = [];
+  expandedKeys = [];
 
   constructor() {}
 
-  ngOnInit(): void {
-    this.dataSource.setData(this.treeData);
-    this.treeControl.expandAll();
+  nzClick($event) {
+    const { node } = $event;
+    if (node.isLeaf) {
+      // * insert code
+      return;
+    }
+    // *  expand node
+    if (this.expandedKeys.includes(node.key)) {
+      this.expandedKeys = this.expandedKeys.filter((it) => it !== node.key);
+      node.isExpanded = false;
+      return;
+    }
+    this.expandedKeys = [...this.expandedKeys, node.key];
   }
-
-  hasChild = (_: number, node: FlatNode): boolean => node.expandable;
+  ngOnInit(): void {
+    this.dataSource = this.treeData.map(({ name, children, ...it }, index) => ({
+      title: name,
+      key: index,
+      name,
+      children: children.map(({ caption, ...child }) => ({
+        title: child.name,
+        key: caption,
+        caption,
+        ...child,
+        isLeaf: true,
+      })),
+      ...it,
+    }));
+    console.log(this.dataSource);
+  }
 
   handleChange(code) {
     this.codeChange.emit(code);
   }
 
-  insertCode = (node: FlatNode) => {
-    this.eoEditor.handleInsert(node.value);
+  insertCode = (event) => {
+    const { value } = event.origin;
+    this.eoEditor.handleInsert(value);
   };
 
   getCode = () => this.code;
