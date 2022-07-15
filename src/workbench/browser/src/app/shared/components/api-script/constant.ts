@@ -109,7 +109,7 @@ const COMMON_DATA: TreeNode[] = [
     ],
   },
   {
-    name: $localize`Encode & Decode`, // 编解码
+    name: $localize`Encode and Decode`, // 编解码
     children: [
       {
         name: $localize`JSON Encode`, // JSON 编码
@@ -246,7 +246,7 @@ const COMMON_DATA: TreeNode[] = [
     ],
   },
   {
-    name: $localize`Encryption And Decryption`, // 加解密
+    name: $localize`Encryption and Decryption`, // 加解密
     children: [
       {
         name: $localize`MD5`, // MD5

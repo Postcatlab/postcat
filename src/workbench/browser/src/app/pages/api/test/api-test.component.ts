@@ -80,7 +80,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private testServerService: TestServerService,
     private messageService: MessageService,
     private storage: StorageService,
-    private lang:LanguageService
+    private lang: LanguageService
   ) {
     this.testServer = this.testServerService.instance;
     this.testServer.init((message) => {
@@ -91,16 +91,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   clickTest() {
-    switch (this.status) {
-      case 'testing': {
-        this.abort();
-        break;
-      }
-      default: {
-        this.test();
-        break;
-      }
+    if (this.status === 'testing') {
+      this.abort();
+      return;
     }
+    this.test();
   }
   /**
    * click history to restore data from history
@@ -193,7 +188,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         env: this.env,
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
-        lang:this.lang.systemLanguage==='zh-Hans'?'cn':'en'
+        lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
       }),
     });
     this.status$.next('testing');
