@@ -45,9 +45,9 @@ export class ApiScriptComponent implements OnInit {
       title: name,
       key: index,
       name,
-      children: children.map(({ caption, ...child }) => ({
+      children: children.map(({ caption, ...child }, i) => ({
         title: child.name,
-        key: caption,
+        key: caption + i,
         caption,
         ...child,
         isLeaf: true,

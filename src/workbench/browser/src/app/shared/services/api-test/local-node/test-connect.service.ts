@@ -7,11 +7,12 @@ export class TestServerLocalNodeService implements TestServer {
   constructor(private electron: ElectronService, @Inject(LOCALE_ID) private locale: string) {}
   init(receiveMessage: (message) => void) {
     this.electron.ipcRenderer.on('unitTest', (event, args) => {
+      console.log('[localNode]receiveMessage', args);
       receiveMessage(this.formatResponseData(args));
     });
   }
   send(module, message) {
-    console.log('send message', message);
+    console.log('[localNode]send message', message);
     this.electron.ipcRenderer.send(module, message);
   }
   close() {
