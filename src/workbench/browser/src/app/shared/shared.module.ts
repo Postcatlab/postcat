@@ -26,7 +26,7 @@ import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/sh
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
 import { ApiScriptComponent } from './components/api-script/api-script.component';
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
-import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
 
 const COMPONENTS = [
@@ -56,7 +56,7 @@ const COMPONENTS = [
     NzDescriptionsModule,
     EoIconparkIconModule,
     EouiModule,
-    NzTreeViewModule,
+    NzTreeModule,
     NzPopoverModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],

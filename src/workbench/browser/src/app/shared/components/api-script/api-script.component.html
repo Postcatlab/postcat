@@ -13,7 +13,50 @@
         >
       </div>
     </div>
-    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" nzBlockNode>
+    <nz-tree
+      #nzTreeComponent
+      [nzData]="dataSource"
+      [nzExpandedKeys]="expandedKeys"
+      (nzClick)="nzClick($event)"
+      [nzTreeTemplate]="nzTreeTemplate"
+    ></nz-tree>
+    <ng-template #nzTreeTemplate let-node>
+      <ng-template [ngIf]="!node.isLeaf">
+        <span class="text-sm"> {{ node.title }}</span>
+      </ng-template>
+      <ng-template [ngIf]="node.isLeaf">
+        <span class="text-sm text-blue-400" (click)="insertCode(node)"> {{ node.title }}</span>
+        <ng-container *ngIf="node.origin.note">
+          <span
+            [nzTooltipTitle]="titleTemplate"
+            [nzTooltipPlacement]="['topLeft', 'leftTop']"
+            class="text-blue-400"
+            nzTooltipColor="black"
+            (click)="insertCode(node)"
+            nz-tooltip
+          >
+            [?]
+          </span>
+          <ng-template #titleTemplate let-thing>
+            <p style="color: #99c6da" *ngIf="node.origin.note.code">{{ node.origin.note.code }}</p>
+            <p *ngIf="node.origin.note.desc">{{ node.origin.note.desc }}</p>
+            <ng-container *ngIf="node.origin.note.input">
+              <br />
+              <p style="color: #999" i18n>---input---</p>
+              <p *ngFor="let item of node.origin.note.input">
+                <span style="color: #ff9800">{{ item.key }}：</span>{{ item.value }}
+              </p>
+            </ng-container>
+            <ng-container *ngIf="node.origin.note.output">
+              <br />
+              <p style="color: #999" i18n>---return---</p>
+              <p>{{ node.origin.note.output }}</p>
+            </ng-container>
+          </ng-template>
+        </ng-container>
+      </ng-template>
+    </ng-template>
+    <!-- <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" nzBlockNode>
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
         <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
         <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="false" (nzClick)="insertCode(node)">
@@ -55,7 +98,7 @@
           {{ node.name }}
         </nz-tree-node-option>
       </nz-tree-node>
-    </nz-tree-view>
+    </nz-tree-view> -->
   </div>
   <div class="flex-1">
     <eo-editor
