@@ -43,6 +43,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   expandKeys: string[];
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
+  nzSelectedIndex = 1;
 
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
@@ -117,7 +118,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         if (typeof this.apiData[tableName] !== 'object') {
           return;
         }
-        formData[tableName] = (this.apiData[tableName]||[]).filter((val) => val.name);
+        formData[tableName] = (this.apiData[tableName] || []).filter((val) => val.name);
         if (['requestBody', 'responseBody'].includes(tableName)) {
           if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
             formData[tableName] = listToTreeHasLevel(formData[tableName]);
