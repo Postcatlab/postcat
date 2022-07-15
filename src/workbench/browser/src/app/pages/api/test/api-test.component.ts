@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
 
@@ -35,6 +35,7 @@ import {
   afterScriptCompletions,
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'eo-api-test',
@@ -73,6 +74,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private timer$: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
+    // private scroller: ViewportScroller,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef,
@@ -189,6 +191,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       action: 'ajax',
       data: this.testServer.formatRequestData(this.apiData, {
         env: this.env,
+        globals:this.apiTest.getGlobals(),
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
@@ -222,15 +225,20 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Receive Test Server Message
    */
   private receiveMessage(message: ApiTestRes) {
-    console.log('receiveMessage', message);
+    console.log('[api test componnet]receiveMessage', message);
     const tmpHistory = {
       general: message.general,
       request: message.report?.request,
       response: message.response,
     };
     this.testResult = tmpHistory;
+    // this.scroller.scrollToAnchor("test-response")
     this.status$.next('tested');
     if (message.status === 'error') return;
+
+    //set globals
+    this.apiTest.setGlobals(message.globals);
+
     //If test sucess,addHistory
     // other tab test finish,support multiple tab test same time
     if (message.id && this.apiTab.tabID !== message.id) {
