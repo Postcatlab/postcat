@@ -1,3 +1,5 @@
+import { assert } from 'console';
+
 export type Note = {
   code?: string;
   desc?: string;
@@ -19,7 +21,92 @@ export interface FlatNode extends TreeNode {
   level: number;
   disabled: boolean;
 }
+const generateEoExcuteSnippet = (bodyType) => {
+  let variableByBodyType = {
+    formdata: {
+      id: 'formdata',
+      name: 'FORM-DATA',
+      contentType: 'application/x-www-form-urlencoded',
+      bodyType: 'form-data',
+      body: `{ 
+     "param_1": "value_1",
+     "param_2": "value_2"
+     }`,
+    },
+    json: {
+      id: 'json',
+      name: 'JSON',
+      contentType: 'application/json',
+      bodyType: 'json',
+      body: `{ 
+     "param_1": "value_1",
+     "param_2": "value_2"
+     }`,
+    },
+    xml: {
+      id: 'xml',
+      name: 'XML',
+      contentType: 'application/xml',
+      bodyType: 'xml',
+      body: `{
+      "root": {
+          "book":[
+              {
+                  "name":"eolinker_book_1"
+              },
+              {
+                  "name":"eolinker_book_2"
+              }
+          ]
+      }
+  }`,
+    },
+    raw: {
+      id: 'raw',
+      name: 'RAW',
+      contentType: 'text/plain',
+      bodyType: 'raw',
+      body: `"hello world"`,
+    },
+  };
 
+  let variables = variableByBodyType[bodyType];
+  // Because i18n compile complex line error,safe way
+  let localizes = {
+    apidefind: $localize`API Definite`,
+    url: $localize`[Required][string] Request url`,
+    name: $localize`[Required][string] API name,for report detail`,
+    header: $localize`[Not Required][object] Request headers`,
+    bodyType: $localize`[Not Required][string] Body type，formdata|json|xml|raw`,
+    body: $localize`[Not Required][object] Request Body`,
+    timelimit: $localize`[Not Required]If it exceeds the judgment, the request fails, and the default is 1000ms`,
+    execute: $localize`Execute request,${variables.id}_api_demo_1_result={time:"Test time",code:"HTTP status code",response:"API response",header:"response headers"}，`,
+    assert: $localize`Assert response`,
+    info: $localize`Print info`,
+    infoError: $localize`Print error info`,
+  };
+  let result = `//${localizes.apidefind}
+  var ${variables.id}_api_demo_1 = {
+      "url": "https://api.eolink.com", //${localizes.url}
+      "name": "${variables.name} API Demo", //${localizes.name}
+      "method": "POST", 
+      "headers": {
+          "Content-Type": "${variables.contentType}"
+      }, //${localizes.header}
+      "bodyType": " ${variables.bodyType}", //${localizes.bodyType}
+      "body": ${variables.body},//${localizes.body}
+      "timelimit": 1000 //${localizes.timelimit}
+  };
+  //${localizes.execute}
+  var ${variables.id}_api_demo_1_result = eo.execute(${variables.id}_api_demo_1);
+  //${localizes.assert}
+  if (${variables.id}_api_demo_1_result.response !== "") {
+      eo.info("info_1"); //${localizes.info}
+  } else {
+      eo.stop("info_2"); //${localizes.infoError}
+  }`;
+  return result;
+};
 export type Completion = { caption: string; value: string };
 
 const commonInputs = [
@@ -29,227 +116,227 @@ const commonInputs = [
 
 const COMMON_DATA: TreeNode[] = [
   {
-    name: $localize`Custom Global Variable`, // 自定义全局变量
+    name: $localize`Custom Global Variable`,
     children: [
       {
-        name: $localize`Set Global Variable`, // 设置全局变量
+        name: $localize`Set an global variable`,
         caption: 'eo.globals.set',
         value: 'eo.globals.set("param_key","param_value");',
         note: {
           code: 'eo.http.response.get()',
-          desc: $localize`Set Global Variable`,
+          desc: $localize`Set an global variable`,
           input: [...commonInputs],
         },
       },
       {
-        name: $localize`Get Global Variable`, // 获取全局变量值
+        name: $localize`Get an global variable`,
         caption: 'eo.globals.get',
         value: 'eo.globals.get("param_key");',
         note: {
           code: 'eo.globals.get("param_key")',
-          desc: $localize`Get Global Variable`,
+          desc: $localize`Get an global variable`,
           input: [commonInputs[0]],
           output: $localize`Global Varibale Value`,
         },
       },
       {
-        name: $localize`Unset Global Variable`, // 删除全局变量
+        name: $localize`Clear an global variable`,
         caption: 'eo.globals.unset',
         value: 'eo.globals.unset("param_key");',
         note: {
           code: 'eo.globals.unset("param_key")',
-          desc: $localize`Unset Global Variable`,
+          desc: $localize`Clear an global variable`,
           input: [commonInputs[0]],
         },
       },
       {
-        name: $localize`Clear Global Variable`, // 清空所有全局变量
+        name: $localize`Clear all global variable`,
         caption: 'eo.globals.clear',
         value: 'eo.globals.clear()',
         note: {
           code: 'eo.globals.clear()',
-          desc: $localize`Clear Global Variable`,
+          desc: $localize`Clear all global variable`,
         },
       },
     ],
   },
   {
-    name: $localize`Project Environment`, // 项目环境
+    name: $localize`Environment Management`,
     children: [
       {
-        name: $localize`Get Request Address Prefix`, // 获取请求地址前缀
+        name: $localize`Get enviroment host`,
         caption: 'http.baseUrl.get',
         value: 'http.baseUrl.get()',
         note: {
           code: 'http.baseUrl.get()',
-          desc: $localize`Get Request Address Prefix`,
-          output: $localize`The request address prefix set in the environment`,
+          desc: $localize`Get enviroment host`,
+          output: $localize`The host prefix set in the environment`,
         },
       },
       {
-        name: $localize`Get Environment Variables`, // 获取环境变量
+        name: $localize`Get an environment variables`,
         caption: 'eo.env.param.get',
         value: 'eo.env.param.get("param_key")',
         note: {
           code: 'eo.env.param.get("param_key")',
-          desc: $localize`Get Environment Variables`,
+          desc: $localize`Get an environment variables`,
           input: [commonInputs[0]],
         },
       },
       {
-        name: $localize`Set Environment Variables`, // 设置环境变量
+        name: $localize`Set an environment variables`,
         caption: 'eo.env.param.set',
         value: 'eo.env.param.set("param_key","param_value")',
         note: {
           code: 'eo.env.param.set("param_key","param_value")',
-          desc: $localize`Set Environment Variables`,
+          desc: $localize`Set an environment variables`,
           input: [...commonInputs],
         },
       },
     ],
   },
   {
-    name: $localize`Encode and Decode`, // 编解码
+    name: $localize`Encode and Decode`,
     children: [
       {
-        name: $localize`JSON Encode`, // JSON 编码
+        name: $localize`JSON Encode`,
         caption: 'eo.json.encode',
         value: 'eo.json.encode(json_object)',
         note: {
           code: 'eo.json.encode(json_object)',
-          desc: $localize`JSON Encode`, // JSON 编码
-          input: [{ key: 'json_object', value: $localize`JSON object` }], // 待 JSON 序列化处理的对象
-          output: $localize`JSON string`, // JSON字符串
+          desc: $localize`JSON Encode`,
+          input: [{ key: 'json_object', value: $localize`JSON object` }],
+          output: $localize`JSON string`,
         },
       },
       {
-        name: $localize`JSON Decode`, // JSON 解码
+        name: $localize`JSON Decode`,
         caption: 'json.decode',
         value: 'json.decode(json)',
         note: {
           code: 'json.decode(json)',
-          desc: $localize`JSON Decode`, // JSON 解码
-          input: [{ key: 'json', value: $localize`JSON string` }], // JSON 字符串
-          output: $localize`JSON object`, // JSON 反序列化处理后的对象
+          desc: $localize`JSON Decode`,
+          input: [{ key: 'json', value: $localize`JSON string` }],
+          output: $localize`JSON object`,
         },
       },
       {
-        name: $localize`XML Encode`, // XML 编码
+        name: $localize`XML Encode`,
         caption: 'xml.encode',
         value: 'xml.encode(xml_object)',
         note: {
           code: 'xml.encode(xml_object)',
-          desc: $localize`XML code`, // XML 编码
-          input: [{ key: 'xml_object', value: $localize`XML code` }], // 待XML序列化处理的对象
-          output: $localize`XML string`, // XML 字符串
+          desc: $localize`XML Encode`,
+          input: [{ key: 'xml_object', value: $localize`XML object` }],
+          output: $localize`XML string`,
         },
       },
       {
-        name: $localize`XML Decode`, // XML 解码
+        name: $localize`XML Decode`,
         caption: 'xml.decode',
         value: 'xml.decode(xml)',
         note: {
           code: 'xml.decode(xml)',
-          desc: $localize`XML code`, // XML 解码
-          input: [{ key: 'xml', value: $localize`XML string` }], // XML字符串
-          output: $localize`XML code`, // XML反序列化处理后的对象
+          desc: $localize`XML Decode`,
+          input: [{ key: 'xml', value: $localize`XML string` }],
+          output: $localize`XML code`,
         },
       },
       {
-        name: $localize`Base64 Encode`, // Base64 编码
+        name: $localize`Base64 Encode`,
         caption: 'base64.encode',
         value: 'base64.encode(data)',
         note: {
           code: 'base64.encode(data)',
-          desc: $localize`Base64 Encode`, // Base64 编码
-          input: [{ key: 'data', value: $localize`string of wait for encode` }], // 待编码字符串
-          output: $localize`string after encode`, // 编码后字符串
+          desc: $localize`Base64 Encode`,
+          input: [{ key: 'data', value: $localize`string of wait for encode` }],
+          output: $localize`string after encode`,
         },
       },
       {
-        name: $localize`Base64 Decode`, // Base64 解码
+        name: $localize`Base64 Decode`,
         caption: 'base64.decode',
         value: 'base64.decode(data)',
         note: {
           code: 'base64.decode(data)',
-          desc: $localize`Base64 Decode`, // Base64 解码
-          input: [{ key: 'data', value: $localize`string of wait for decode` }], // 待解码字符串
-          output: $localize`string after decode`, // 解码后字符串
+          desc: $localize`Base64 Decode`,
+          input: [{ key: 'data', value: $localize`string of wait for decode` }],
+          output: $localize`string after decode`,
         },
       },
       {
-        name: $localize`UrlEncode Encode`, // UrlEncode 编码
+        name: $localize`UrlEncode Encode`,
         caption: 'eo.urlEncode',
         value: 'eo.urlEncode(data)',
         note: {
           code: 'eo.urlEncode(data)',
-          desc: $localize`UrlEncode Encode`, // UrlEncode 编码
-          input: [{ key: 'data', value: $localize`string of wait for encode` }], // 待编码字符串
-          output: $localize`string after encode`, // 编码后字符串
+          desc: $localize`UrlEncode Encode`,
+          input: [{ key: 'data', value: $localize`string of wait for encode` }],
+          output: $localize`string after encode`,
         },
       },
       {
-        name: $localize`UrlEncode Decode`, // UrlEncode 解码
+        name: $localize`UrlEncode Decode`,
         caption: 'eo.urlDecode',
         value: 'eo.urlDecode(data)',
         note: {
           code: 'eo.urlDecode(data)',
-          desc: $localize`UrlEncode Decode`, // UrlEncode 解码
-          input: [{ key: 'data', value: $localize`string of wait for decode` }], // 待解码字符串
-          output: $localize`string after decode`, // 解码后字符串
+          desc: $localize`UrlEncode Decode`,
+          input: [{ key: 'data', value: $localize`string of wait for decode` }],
+          output: $localize`string after decode`,
         },
       },
       {
-        name: $localize`Gzip zip`, // gzip 压缩
+        name: $localize`Gzip zip`,
         caption: 'eo.gzip.zip',
         value: 'eo.gzip.zip(data)',
         note: {
           code: 'eo.gzip.zip(data)',
-          desc: $localize`Gzip zip`, // gzip 压缩
-          input: [{ key: 'data', value: $localize`string of wait for zip` }], // 待压缩字符串
-          output: $localize`string after zip`, // 压缩后字符串
+          desc: $localize`Gzip zip`,
+          input: [{ key: 'data', value: $localize`string of wait for zip` }],
+          output: $localize`string after zip`,
         },
       },
       {
-        name: $localize`Gzip unzip`, // gzip 解压
+        name: $localize`Gzip unzip`,
         caption: 'eo.gzip.unzip',
         value: 'eo.gzip.unzip(data)',
         note: {
           code: 'eo.gzip.unzip(data)',
-          desc: $localize`Gzip unzip`, // gzip 解压缩
-          input: [{ key: 'data', value: $localize`string of wait for unzip` }], // 待解压字符串
-          output: $localize`string after unzip`, // 解压后字符串
+          desc: $localize`Gzip unzip`,
+          input: [{ key: 'data', value: $localize`string of wait for unzip` }],
+          output: $localize`string after unzip`,
         },
       },
       {
-        name: $localize`Deflate zip`, // deflate 压缩
+        name: $localize`Deflate zip`,
         caption: 'eo.deflate.zip',
         value: 'eo.deflate.zip(data)',
         note: {
           code: 'eo.deflate.zip(data)',
-          desc: $localize`Deflate zip`, // deflate 压缩
-          input: [{ key: 'data', value: $localize`string of wait for zip` }], // 待压缩字符串
-          output: $localize`string after zip`, // 压缩后字符串
+          desc: $localize`Deflate zip`,
+          input: [{ key: 'data', value: $localize`string of wait for zip` }],
+          output: $localize`string after zip`,
         },
       },
       {
-        name: $localize`Deflate unzip`, // deflate 解压
+        name: $localize`Deflate unzip`,
         caption: 'eo.deflate.unzip',
         value: 'eo.deflate.unzip(data)',
         note: {
           code: 'eo.deflate.unzip(data)',
-          desc: $localize`Deflate unzip`, // deflate 解压缩
-          input: [{ key: 'data', value: $localize`string of wait for unzip` }], // 待解压字符串
-          output: $localize`string after unzip`, // 解压后字符串
+          desc: $localize`Deflate unzip`,
+          input: [{ key: 'data', value: $localize`string of wait for unzip` }],
+          output: $localize`string after unzip`,
         },
       },
     ],
   },
   {
-    name: $localize`Encryption and Decryption`, // 加解密
+    name: $localize`Encryption and Decryption`,
     children: [
       {
-        name: $localize`MD5`, // MD5
+        name: $localize`MD5`,
         caption: 'eo.crypt.md5',
         value: 'eo.crypt.md5(data)',
         note: {
@@ -261,11 +348,11 @@ const COMMON_DATA: TreeNode[] = [
               value: $localize`Content to be encrypted`,
             },
           ],
-          output: $localize`Encrypted Content`,
+          output: $localize`Encrypted result`,
         },
       },
       {
-        name: $localize`SHA1 Encryption`, // SHA1 加密
+        name: $localize`SHA1 Encryption`,
         caption: 'eo.crypt.sha1',
         value: 'eo.crypt.sha1(data)',
         note: {
@@ -277,7 +364,7 @@ const COMMON_DATA: TreeNode[] = [
               value: $localize`Content to be encrypted`,
             },
           ],
-          output: $localize`Encrypted Content`,
+          output: $localize`Encrypted result`,
         },
       },
       {
@@ -293,11 +380,11 @@ const COMMON_DATA: TreeNode[] = [
               value: $localize`Content to be encrypted`,
             },
           ],
-          output: $localize`Encrypted Content`,
+          output: $localize`Encrypted result`,
         },
       },
       {
-        name: $localize`RSA-SHA1 Signature`, // RSA-SHA1 签名
+        name: $localize`RSA-SHA1 Signature`,
         caption: 'eo.crypt.rsaSHA1',
         value: 'eo.crypt.rsaSHA1(data,privateKey,"base64")',
         note: {
@@ -310,7 +397,7 @@ const COMMON_DATA: TreeNode[] = [
             },
             {
               key: 'privateKey',
-              value: $localize`key`,
+              value: $localize`private key`,
             },
             {
               key: 'outputEncoding',
@@ -334,7 +421,7 @@ const COMMON_DATA: TreeNode[] = [
             },
             {
               key: 'privateKey',
-              value: $localize`key`,
+              value: $localize`private key`,
             },
             {
               key: 'outputEncoding',
@@ -358,7 +445,7 @@ const COMMON_DATA: TreeNode[] = [
             },
             {
               key: 'publicKey',
-              value: $localize`publicKey`,
+              value: $localize`public key`,
             },
             {
               key: 'outputEncoding',
@@ -382,7 +469,7 @@ const COMMON_DATA: TreeNode[] = [
             },
             {
               key: 'publicKey',
-              value: $localize`publicKey`,
+              value: $localize`public key`,
             },
             {
               key: 'inputEncoding',
@@ -406,14 +493,14 @@ const COMMON_DATA: TreeNode[] = [
             },
             {
               key: 'privateKey',
-              value: $localize`privateKey`,
+              value: $localize`private key`,
             },
             {
               key: 'outputEncoding',
               value: $localize`The encoding format of the result, base64 (default)`,
             },
           ],
-          output: $localize`Encrypted Content`,
+          output: $localize`Encrypted result`,
         },
       },
       {
@@ -430,7 +517,7 @@ const COMMON_DATA: TreeNode[] = [
             },
             {
               key: 'privateKey',
-              value: $localize`privateKey`,
+              value: $localize`private key`,
             },
             {
               key: 'outputEncoding',
@@ -469,7 +556,7 @@ const COMMON_DATA: TreeNode[] = [
               value: $localize`offset vector`,
             },
           ],
-          output: $localize`encrypted content`,
+          output: $localize`Encrypted result`,
         },
       },
       {
@@ -482,7 +569,7 @@ const COMMON_DATA: TreeNode[] = [
           input: [
             {
               key: 'data',
-              value: $localize`Content to be dencrypted`,
+              value: $localize`Content to be encrypted`,
             },
             {
               key: 'password',
@@ -501,7 +588,7 @@ const COMMON_DATA: TreeNode[] = [
               value: $localize`offset vector`,
             },
           ],
-          output: $localize`dencrypted content`,
+          output: $localize`Encrypted result`,
         },
       },
       {
@@ -533,7 +620,7 @@ const COMMON_DATA: TreeNode[] = [
               value: $localize`offset vector`,
             },
           ],
-          output: $localize`Encrypted Content`,
+          output: $localize`Encrypted result`,
         },
       },
       {
@@ -565,7 +652,7 @@ const COMMON_DATA: TreeNode[] = [
               value: $localize`offset vector`,
             },
           ],
-          output: $localize`Encrypted Content`,
+          output: $localize`Encrypted result`,
         },
       },
     ],
@@ -577,178 +664,85 @@ export const BEFORE_DATA: TreeNode[] = [
     name: $localize`HTTP API request`,
     children: [
       {
-        name: $localize`Set Request URL`, // 设置请求地址
+        name: $localize`Set Request URL`,
         caption: 'eo.http.url.set',
         value: 'eo.http.url.set("new_url")',
         note: {
           code: 'eo.http.url.set("new_url")',
-          desc: $localize`Set HTTP API request path`, // 设置 HTTP API 的请求路径
-          input: [{ key: 'new_url', value: $localize`new url` }], // 新的请求路径
+          desc: $localize`Set HTTP API request path`,
+          input: [{ key: 'new_url', value: $localize`new url` }],
         },
       },
       {
-        name: $localize`Set Header`, // 设置 Header 参数
+        name: $localize`Set Header`,
         caption: 'eo.http.header.set',
         value: 'eo.http.header.set("param_key","param_value")',
         note: {
           code: 'eo.http.header.set("param_key","param_value")',
-          desc: $localize`Set HTTP API request header params`, // 设置 HTTP API 的请求头部参数
+          desc: $localize`Set HTTP API request header params`,
           input: [
-            { key: 'param_key', value: $localize`params name` }, // 参数名
-            { key: 'param_value', value: $localize`params value` }, // 参数值
+            { key: 'param_key', value: $localize`params name` },
+            { key: 'param_value', value: $localize`params value` },
           ],
         },
       },
 
       {
-        name: $localize`Request body variable[Form-data/JSON/XML]`, //请求体变量[对象：表单/JSON/XML]
+        name: $localize`Request body[Form-data/JSON/XML]`,
         caption: 'eo.http.bodyParseParam',
         value: 'eo.http.bodyParseParam',
       },
 
       {
-        name: $localize`Request body variable[Raw]`, //请求体变量[文本：Raw]
+        name: $localize`Request body[Raw]`,
         caption: 'eo.http.bodyParam',
         value: 'eo.http.bodyParam',
       },
       {
-        name: $localize`Set REST params`, //设置 REST 参数
+        name: $localize`Set REST params`,
         caption: 'eo.http.rest.set',
         value: 'eo.http.rest.set("param_key","param_value")',
         note: {
           code: 'eo.http.rest.set("param_key","param_value")',
-          desc: $localize`Set HTTP API REST params`, // 设置 HTTP API 的 REST 参数
+          desc: $localize`Set HTTP API REST params`,
           input: [
-            { key: 'param_key', value: $localize`params name` }, //参数名
-            { key: 'param_value', value: $localize`params value` }, // 参数值
+            { key: 'param_key', value: $localize`params name` },
+            { key: 'param_value', value: $localize`params value` },
           ],
         },
       },
       {
-        name: $localize`Set Query params`, // 设置 Query 参数
+        name: $localize`Set Query params`,
         caption: 'eo.http.query.set',
         value: 'eo.http.query.set("param_key","param_value")',
         note: {
           code: 'eo.http.query.set("param_key","param_value")',
-          desc: $localize`Set HTTP API Query params`, //设置 HTTP API 的 Query 参数
+          desc: $localize`Set HTTP API Query params`,
           input: [
-            { key: 'param_key', value: $localize`params name` }, //参数名
-            { key: 'param_value', value: $localize`params value` }, // 参数值
+            { key: 'param_key', value: $localize`params name` },
+            { key: 'param_value', value: $localize`params value` },
           ],
         },
       },
       {
-        name: $localize`Insert new API test[Form-data]`, //插入新 API 测试[Form-data]
+        name: $localize`Insert new API test[Form-data]`,
         caption: '',
-        value: $localize`//定义需要测试的API
-var formdata_api_demo_1 = {
-    "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
-    "name": "FORM-DATA API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号
-    "method": "POST", //[选填][string],请求方式,可能值有[GET/POST/PUT/PATCH/DELETE/HEAD/OPTION],兼容大小写,默认为GET
-    "headers": {
-        "Content-Type": "application/x-www-form-urlencoded"
-    }, //[选填][object],请求头部
-    "bodyType": "form-data", //[选填][string],请求体类型
-    "body": { //[选填][object],请求参数
-        "param_1": "value_1",
-        "param_2": "value_2"
-    },
-    "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
-};
-//执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
-var formdata_api_demo_1_result = eo.execute(formdata_api_demo_1);
-//判断返回结果
-if (formdata_api_demo_1_result.response !== "") {
-    eo.info("info_1"); //输出信息
-} else {
-    eo.info("info_2"); //输出信息
-}`,
+        value: generateEoExcuteSnippet('formdata'),
       },
       {
-        name: $localize`Insert new API test[JSON]`, // 插入新 API 测试[JSON]
+        name: $localize`Insert new API test[JSON]`,
         caption: '',
-        value: $localize`//定义需要测试的API
-var json_api_demo_1 = {
-    "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
-    "name": "JSON API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号
-    "method": "POST", //[选填][string],请求方式,可能值有[GET/POST/PUT/PATCH/DELETE/HEAD/OPTION],兼容大小写,默认为GET
-    "headers": {
-        "Content-Type": "application/json"
-    }, //[选填][object],请求头部
-    "bodyType": "json", //[选填][string],请求体类型
-    "body": { //[选填][object],请求参数
-        "param_1": "value_1",
-        "param_2": "value_2"
-    },
-    "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
-};
-//执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
-var json_api_demo_1_result = eo.execute(json_api_demo_1);
-//判断返回结果
-if (json_api_demo_1_result.response !== "") {
-    eo.info("info_1"); //输出信息
-} else {
-    eo.info("info_2"); //输出信息
-}`,
+        value: generateEoExcuteSnippet('json'),
       },
       {
-        name: $localize`Insert new API test[XML]`, //插入新 API 测试[XML]
+        name: $localize`Insert new API test[XML]`,
         caption: '',
-        value: $localize`//定义需要测试的API
-var xml_api_demo_1 = {
-    "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
-    "name": "XML API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号
-    "method": "POST", //[选填][string],请求方式,可能值有[GET/POST/PUT/PATCH/DELETE/HEAD/OPTION],兼容大小写,默认为GET
-    "headers": {
-        "Content-Type": "application/xml"
-    }, //[选填][object],请求头部
-    "bodyType": "xml", //[选填][string],请求体类型
-    "body": { //[选填][object],请求参数
-        "root": {
-            "book":[
-                {
-                    "name":"eolinker_book_1"
-                },
-                {
-                    "name":"eolinker_book_2"
-                }
-            ]
-        }
-    },
-    "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
-};
-//执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
-var xml_api_demo_1_result = eo.execute(xml_api_demo_1);
-//判断返回结果
-if (xml_api_demo_1_result.response !== "") {
-    eo.info("info_1"); //输出信息
-} else {
-    eo.info("info_2"); //输出信息
-}`,
+        value: generateEoExcuteSnippet('xml'),
       },
       {
-        name: $localize`Insert new API test[Raw]`, //插入新 API 测试[Raw]
+        name: $localize`Insert new API test[Raw]`,
         caption: '',
-        value: $localize`//定义需要测试的API
-var raw_api_demo_1 = {
-    "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
-    "name": "RAW API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号
-    "method": "POST", //[选填][string],请求方式,可能值有[GET/POST/PUT/PATCH/DELETE/HEAD/OPTION],兼容大小写,默认为GET
-    "headers": {
-        "Content-Type": "text/plain"
-    }, //[选填][object],请求头部
-    "bodyType": "raw", //[选填][string],请求体类型
-    "body": "hello world",
-    "timelimit": 1000 //[选填],超时限制,单位为ms,超过时间则判断为请求失败，默认为1000ms
-};
-//执行请求，返回格式为{time:"请求时间",code:"HTTP状态码",response:"返回结果",header:"返回头部"}，
-var raw_api_demo_1_result = eo.execute(raw_api_demo_1);
-//判断返回结果
-if (raw_api_demo_1_result.response !== "") {
-    eo.info("info_1"); //输出信息
-} else {
-    eo.info("info_2"); //输出信息
-}`,
+        value: generateEoExcuteSnippet('raw'),
       },
     ],
   },

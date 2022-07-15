@@ -11,7 +11,7 @@
       (nzClick)="nzClick($event)" [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
     <ng-template #nzTreeTemplate let-node>
       <ng-template [ngIf]="!node.isLeaf">
-        <span class="text-sm">{{ node.title }}</span>
+        <span class="text-xs">{{ node.title }}</span>
       </ng-template>
       <ng-template [ngIf]="node.isLeaf">
         <div (click)="insertCode(node)">

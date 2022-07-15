@@ -25,7 +25,7 @@ export class ApiEditService {
     });
   }
   initListConf(opts) {
-    opts.title = opts.title || $localize`参数`;
+    opts.title = opts.title || $localize`Param`;
     return {
       setting: {
         draggable: true,
@@ -45,33 +45,33 @@ export class ApiEditService {
           itemExpression: 'ng-if="$index+1!==$ctrl.list.length"',
         },
         {
-          thKey: opts.nameTitle || $localize`${opts.title}名`,
+          thKey: opts.nameTitle || $localize`${opts.title} Name`,
           type: 'input',
           modelKey: 'name',
-          placeholder: opts.nameTitle || $localize`${opts.title}名`,
+          placeholder: opts.nameTitle || $localize`${opts.title} Name`,
           width: 300,
           mark: 'name',
         },
         {
-          thKey: $localize`必填`,
+          thKey: $localize`Required`,
           type: 'checkbox',
           modelKey: 'required',
           mark: 'require',
-          width: 90,
+          width: 100,
         },
         {
-          thKey: $localize`说明`,
+          thKey: $localize`:@@Description:Description`,
           type: 'input',
           modelKey: 'description',
-          placeholder: $localize`${opts.title}说明`,
+          placeholder: $localize`${opts.title} Description`,
           width: 200,
           mark: 'description',
         },
         {
-          thKey: $localize`示例`,
+          thKey: $localize`Example`,
           type: 'input',
           modelKey: 'example',
-          placeholder: $localize`${opts.title}示例`,
+          placeholder: $localize`${opts.title} Example`,
           width: 200,
           mark: 'example',
         },
@@ -80,7 +80,7 @@ export class ApiEditService {
           class: 'w_250',
           btnList: [
             {
-              key: $localize`更多设置`,
+              key: $localize`More Settings`,
               operateName: 'more',
               param: `inputArg`,
               itemExpression: `eo-attr-tip-placeholder="more_setting_btn" `,
@@ -92,12 +92,12 @@ export class ApiEditService {
               },
             },
             {
-              key: $localize`插入`,
+              key: $localize`Insert`,
               operateName: 'insert',
               itemExpression: `eo-attr-tip-placeholder="insert_param_btn"`,
             },
             {
-              key: $localize`删除`,
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
             },
           ],
@@ -167,7 +167,7 @@ export class ApiEditService {
           thKey: $localize`Required`,
           type: 'checkbox',
           modelKey: 'required',
-          width: 90,
+          width: 100,
           mark: 'require',
         },
         {
