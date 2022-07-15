@@ -1,8 +1,24 @@
 .eo-api-script {
- ::ng-deep .ant-tree-indent {
+  ::ng-deep .ant-tree-indent {
     width: 20px;
   }
- ::ng-deep .ant-tree-switcher {
-    // width: 0;
+  ::ng-deep .ant-tree-switcher {
+    width: 0;
+  }
+  ::ng-deep .ant-tree-treenode-switcher-open {
+    .ant-tree-indent {
+      width: 0;
+    }
+    .ant-tree-switcher {
+      width: 20px;
+    }
+  }
+  ::ng-deep .ant-tree-treenode-switcher-close {
+    .ant-tree-indent {
+      width: 0;
+    }
+    .ant-tree-switcher {
+      width: 20px;
+    }
   }
 }
