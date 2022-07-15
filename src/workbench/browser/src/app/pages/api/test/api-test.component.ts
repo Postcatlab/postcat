@@ -191,7 +191,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       action: 'ajax',
       data: this.testServer.formatRequestData(this.apiData, {
         env: this.env,
-        globals:this.apiTest.getGlobals(),
+        globals: this.apiTest.getGlobals(),
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
@@ -290,6 +290,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       const tabData = this.apiTab.tabCache[this.apiTab.tabID];
       this.apiData = tabData.apiData;
       this.testResult = tabData.testResult;
+      this.validateForm.patchValue(this.apiData);
       this.setScriptsByHistory(tabData.testResult);
       return;
     }
@@ -344,6 +345,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       protocol: RequestProtocol.HTTP,
       method: RequestMethod.POST,
     };
+
     this.testResult = {
       response: {},
       request: {},
