@@ -129,10 +129,14 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     console.log('ace event', event, txt);
   }
   handleBlur() {
-    this.codeChange.emit(this.code);
+    setTimeout(() => {
+      this.codeChange.emit(this.code);
+    }, 0);
   }
   handleChange() {
-    this.codeChange.emit(this.code);
+    setTimeout(() => {
+      this.codeChange.emit(this.code);
+    }, 0);
   }
   formatCode(code, type) {
     if (type === 'json') {
