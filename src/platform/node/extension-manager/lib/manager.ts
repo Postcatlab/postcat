@@ -72,7 +72,7 @@ export class ModuleManager implements ModuleManagerInterface {
       // * If the extension already in local extension list, then do not repeat installation
       if (list.includes(item.name)) return;
       //!TODO  this will reinstall all package, npm link(debug) package will be remove after npm install command,
-      // this.install(item);
+      this.install(item);
     });
   }
   /**
