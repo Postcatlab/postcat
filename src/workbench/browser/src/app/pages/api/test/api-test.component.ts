@@ -80,7 +80,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private testServerService: TestServerService,
     private messageService: MessageService,
     private storage: StorageService,
-    private lang:LanguageService
+    private lang: LanguageService
   ) {
     this.testServer = this.testServerService.instance;
     this.testServer.init((message) => {
@@ -167,7 +167,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const apiDataId = Number(this.route.snapshot.queryParams.uuid);
     this.initApi(apiDataId);
-    this.loadTestHistory(apiDataId);
     this.watchTabChange();
     this.watchEnvChange();
     this.messageService.get().subscribe(({ type, data }) => {
@@ -193,7 +192,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         env: this.env,
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
-        lang:this.lang.systemLanguage==='zh-Hans'?'cn':'en'
+        lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
       }),
     });
     this.status$.next('testing');
@@ -325,7 +324,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
           },
         });
         this.initApi(nextTab.key);
-        this.loadTestHistory(nextTab.key);
       });
   }
   /**
