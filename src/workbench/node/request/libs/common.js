@@ -71,54 +71,75 @@ privateFun.execCodeErrWarning = (input_err) => {
     fn: tmp_fn_name,
   };
 };
- /**
-   * 截断死循环
-   * @return {class}   截断类
-   */
-  privateFun.infiniteLoopDetector = function () {
-    let map = {};
-    // define an InfiniteLoopError class
-    function InfiniteLoopError(msg, type) {
-      Error.call(this, msg);
-      this.type = "InfiniteLoopError";
-    }
+/**
+ * 截断死循环
+ * @return {class}   截断类
+ */
+privateFun.infiniteLoopDetector = function () {
+  let map = {};
+  // define an InfiniteLoopError class
+  function InfiniteLoopError(msg, type) {
+    Error.call(this, msg);
+    this.type = 'InfiniteLoopError';
+  }
 
-    function infiniteLoopDetector(id) {
-      if (id in map) {
-        // 非首次执行，此处可以优化，性能太低
-        if (Date.now() - map[id] > CONFIG.MAX_TIME_LOOP) {
-          delete map[id];
-          throw new Error("Loop runing too long!", "InfiniteLoopError");
-        }
-      } else {
-        // 首次运行，记录循环开始的时间。之所有把非首次运行的判断写在前面的if里是因为上面会执行更多次
-        map[id] = Date.now();
+  function infiniteLoopDetector(id) {
+    if (id in map) {
+      // 非首次执行，此处可以优化，性能太低
+      if (Date.now() - map[id] > CONFIG.MAX_TIME_LOOP) {
+        delete map[id];
+        throw new Error('Loop runing too long!', 'InfiniteLoopError');
       }
+    } else {
+      // 首次运行，记录循环开始的时间。之所有把非首次运行的判断写在前面的if里是因为上面会执行更多次
+      map[id] = Date.now();
     }
+  }
 
-    infiniteLoopDetector.wrap = function (codeStr, key) {
-      if (typeof codeStr !== "string") {
-        throw new Error(
-          "Can only wrap code represented by string, not any other thing at the time! If you want to wrap a function, convert it to string first."
-        );
-      }
-      if (codeStr.indexOf("eo.execBsh") > -1) return codeStr;
-      // this is not a strong regex, but enough to use at the time
-      return codeStr.replace(
-        /for *\(.*\{|while *\(.*\{|do *\{/g,
-        function (loopHead) {
-          let id = parseInt(Math.random() * Number.MAX_SAFE_INTEGER);
-          return (
-            (key || `infiniteLoopDetector`) +
-            `(${id});${loopHead}` +
-            (key || `infiniteLoopDetector`) +
-            `(${id});`
-          );
-        }
+  infiniteLoopDetector.wrap = function (codeStr, key) {
+    if (typeof codeStr !== 'string') {
+      throw new Error(
+        'Can only wrap code represented by string, not any other thing at the time! If you want to wrap a function, convert it to string first.'
       );
-    };
-    return infiniteLoopDetector;
+    }
+    if (codeStr.indexOf('eo.execBsh') > -1) return codeStr;
+    // this is not a strong regex, but enough to use at the time
+    return codeStr.replace(/for *\(.*\{|while *\(.*\{|do *\{/g, function (loopHead) {
+      let id = parseInt(Math.random() * Number.MAX_SAFE_INTEGER);
+      return (key || `infiniteLoopDetector`) + `(${id});${loopHead}` + (key || `infiniteLoopDetector`) + `(${id});`;
+    });
   };
+  return infiniteLoopDetector;
+};
+/**
+ * 解析结果类型
+ * @param {any} object
+ */
+privateFun.typeof = function (object) {
+  var tf = typeof object,
+    ts = Object.prototype.toString.call(object);
+  return null === object
+    ? 'Null'
+    : 'undefined' == tf
+    ? 'Undefined'
+    : 'boolean' == tf
+    ? 'Boolean'
+    : 'number' == tf
+    ? Number.isInteger(object)
+      ? 'Int'
+      : /^(-?\d+)(\.\d+)?$/.test(object)
+      ? 'Float'
+      : 'Number'
+    : 'string' == tf
+    ? 'String'
+    : '[object Function]' == ts
+    ? 'Function'
+    : '[object Array]' == ts
+    ? 'Array'
+    : '[object Date]' == ts
+    ? 'Date'
+    : 'Object';
+};
 privateFun.deepCopy = (inputObject) => {
   try {
     return JSON.parse(JSON.stringify(inputObject));
@@ -290,6 +311,7 @@ privateFun.mergeObj = (inputTargetItem, inputSourceItem) => {
 exports.mergeObj = privateFun.mergeObj;
 exports.parseEnv = privateFun.parseEnv;
 exports.deepCopy = privateFun.deepCopy;
+exports.getTypeOfVar = privateFun.typeof;
 exports.parseRequestDataToObj = privateFun.parseRequestDataToObj;
 exports.bodyQueryToJson = privateFun.bodyQueryToJson;
 exports.LOCAL_REGEXP_CONST = LOCAL_REGEXP_CONST;

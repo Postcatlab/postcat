@@ -14,11 +14,13 @@ const { resolve } = require('path');
     _HttpPackageClass = new (require('./libs/http.package').core)(),
     _GetFileClass = new (require('./libs/getFile.package').core)(),
     _LibsMineType = require('./libs/mineType.package');
+    
   let CONFIG = require('./config.json');
 
   const _EO_LANG_OBJ = require('./lang.json');
   var iconv = require('iconv-lite');
   global.eoLang = _EO_LANG_OBJ['en'];
+  global.eoTestGlobals = {};
   /**
    * 解析uri信息
    * @param  {number} protocol 请求协议
@@ -816,11 +818,13 @@ const { resolve } = require('path');
             resolve({
               report: template.ajax,
               history: tmpReportData,
+              globals: global.eoTestGlobals,
             });
           } catch (e) {
             resolve({
               report: template.ajax,
               history: tmpReportData,
+              globals: global.eoTestGlobals,
             });
             console.error(new Date() + '：unit/common.js 336：', e);
           }

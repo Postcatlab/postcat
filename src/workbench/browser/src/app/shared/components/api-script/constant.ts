@@ -640,7 +640,7 @@ export const BEFORE_DATA: TreeNode[] = [
       {
         name: $localize`Insert new API test[Form-data]`, //插入新 API 测试[Form-data]
         caption: '',
-        value: `//定义需要测试的API
+        value: $localize`//定义需要测试的API
 var formdata_api_demo_1 = {
     "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
     "name": "FORM-DATA API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号
@@ -667,7 +667,7 @@ if (formdata_api_demo_1_result.response !== "") {
       {
         name: $localize`Insert new API test[JSON]`, // 插入新 API 测试[JSON]
         caption: '',
-        value: `//定义需要测试的API
+        value: $localize`//定义需要测试的API
 var json_api_demo_1 = {
     "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
     "name": "JSON API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号
@@ -694,7 +694,7 @@ if (json_api_demo_1_result.response !== "") {
       {
         name: $localize`Insert new API test[XML]`, //插入新 API 测试[XML]
         caption: '',
-        value: `//定义需要测试的API
+        value: $localize`//定义需要测试的API
 var xml_api_demo_1 = {
     "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
     "name": "XML API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号
@@ -729,7 +729,7 @@ if (xml_api_demo_1_result.response !== "") {
       {
         name: $localize`Insert new API test[Raw]`, //插入新 API 测试[Raw]
         caption: '',
-        value: `//定义需要测试的API
+        value: $localize`//定义需要测试的API
 var raw_api_demo_1 = {
     "url": "https://api.eolink.com", //[必填][string]请求地址,若不存在请求协议，默认http
     "name": "RAW API Demo", //[选填][string]，API名称，方便检索，不填则默认为系统生成API编号

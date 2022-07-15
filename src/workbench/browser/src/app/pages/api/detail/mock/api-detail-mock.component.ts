@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
-import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { eoFormatRequestData, formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
@@ -74,11 +74,14 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const data = eoFormatRequestData(this.apiData, { env: {}, beforeScript: '', afterScript: '',lang:'en' }, 'en-US');
-    const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
-      base: 'query',
-      replaceType: 'replace',
-    }).url;
+    const uri = this.apiTest.transferUrlAndQuery(
+      formatUri(this.apiData.uri, this.apiData.queryParams),
+      this.apiData.queryParams,
+      {
+        base: 'query',
+        replaceType: 'replace',
+      }
+    ).url;
     const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (mock?.createWay === 'custom' && mock.uuid) {
       url.searchParams.set('mockID', mock.uuid + '');
