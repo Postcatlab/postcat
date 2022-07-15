@@ -263,7 +263,7 @@ export class ApiTestService {
     };
     let result = {
       ...inData.testData,
-      responseHeaders: inData.history.response.headers,
+      responseHeaders: inData.history.response.headers||[],
       responseBodyType: 'json',
       responseBodyJsonType: 'object',
       responseBody: [],

@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
-import { eoFormatRequestData, formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import {  formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { copyText } from 'eo/workbench/browser/src/app/utils';

@@ -5,7 +5,7 @@ import { takeUntil, debounceTime } from 'rxjs/operators';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { eoFormatRequestData, formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import {  formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';

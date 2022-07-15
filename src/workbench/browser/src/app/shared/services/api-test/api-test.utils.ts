@@ -102,6 +102,7 @@ export const eoFormatRequestData = (
   };
   const result: TestLocalNodeData = {
     lang: opts.lang,
+    globals:opts.globals,
     URL: formatUri(data.uri, data.restParams),
     method: data.method,
     methodType: METHOD.indexOf(data.method).toString(),

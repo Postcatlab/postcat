@@ -28,6 +28,7 @@ import { ApiScriptComponent } from './components/api-script/api-script.component
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -52,6 +53,7 @@ const COMPONENTS = [
     NzSpinModule,
     NzCardModule,
     NzNotificationModule,
+    NzEmptyModule,
     NzMessageModule,
     NzDescriptionsModule,
     EoIconparkIconModule,

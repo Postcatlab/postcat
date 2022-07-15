@@ -122,6 +122,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     if (!item.createdAt) {
       item.createdAt = new Date();
     }
+    delete item.uuid;
     item.updatedAt = item.createdAt;
     const result = table.add(item);
     return new Observable((obs) => {
