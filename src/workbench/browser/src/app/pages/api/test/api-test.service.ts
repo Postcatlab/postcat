@@ -6,6 +6,7 @@ import { text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
 export class ApiTestService {
+  globalStorageKey= 'EO_TEST_VAR_GLOBALS';
   constructor() {}
   initListConf(opts) {
     opts.title = opts.title || $localize`Param`;
@@ -26,7 +27,6 @@ export class ApiTestService {
           type: 'checkbox',
           modelKey: 'required',
           mark: 'require',
-          width: 80,
         },
         {
           thKey: opts.nameTitle,
@@ -81,7 +81,7 @@ export class ApiTestService {
       baseFun: {
         reduceItemWhenAddChildItem: reduceItemWhenIsOprDepth,
         watchCheckboxChange: opts.watchFormLastChange,
-        importFile: opts.importFile
+        importFile: opts.importFile,
       },
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
@@ -89,7 +89,6 @@ export class ApiTestService {
           thKey: '',
           type: 'checkbox',
           modelKey: 'required',
-          width: 80,
           mark: 'require',
         },
         {
@@ -343,5 +342,17 @@ export class ApiTestService {
       }
     }
     return inData;
+  }
+  getGlobals() {
+    let result = '{}';
+    const global = localStorage.getItem(this.globalStorageKey);
+    try {
+      result = JSON.parse(global);
+    } catch (e) {}
+    return result;
+  }
+  setGlobals(globals) {
+    if(!globals) return;
+    localStorage.setItem(this.globalStorageKey, JSON.stringify(globals));
   }
 }

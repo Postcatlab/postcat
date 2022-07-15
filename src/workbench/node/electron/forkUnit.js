@@ -4,7 +4,7 @@ process.on('message', async (message) => {
   switch (message.action) {
     case 'ajax': {
       message.data.env = _LibsCommon.parseEnv(message.data.env);
-      await  new _LibsFlowCommon.core().main(message.data).then(({ report, history }) => {
+      await  new _LibsFlowCommon.core().main(message.data).then(({globals,report, history }) => {
         ['general', 'requestInfo', 'resultInfo'].forEach((keyName) => {
           if (typeof history[keyName] === 'string') history[keyName] = JSON.parse(history[keyName]);
         });
@@ -14,6 +14,7 @@ process.on('message', async (message) => {
             id: message.id,
             report: report,
             history: history,
+            globals:globals
           }
         });
       });
