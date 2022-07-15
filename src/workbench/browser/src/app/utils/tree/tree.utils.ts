@@ -175,7 +175,6 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
         tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
       }
     } catch (error) {
-      console.error(error);
       console.log('error==>', `prev: ${prev} == curr: ${curr} == key: ${key}`);
     }
     return prev;

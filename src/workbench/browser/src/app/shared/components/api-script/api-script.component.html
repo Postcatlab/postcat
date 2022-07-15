@@ -11,14 +11,14 @@
       (nzClick)="nzClick($event)" [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
     <ng-template #nzTreeTemplate let-node>
       <ng-template [ngIf]="!node.isLeaf">
-        <span class="text-xs">{{ node.title }}</span>
+        <span class="text-sm">{{ node.title }}</span>
       </ng-template>
       <ng-template [ngIf]="node.isLeaf">
         <div (click)="insertCode(node)">
-          <span class="text-sm text-blue-400">{{ node.title }}</span>
+          <span class="text-xs text-blue-400">{{ node.title }}</span>
           <ng-container *ngIf="node.origin.note">
             <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
-              nzTooltipColor="black" (click)="insertCode(node)" nz-tooltip>
+              nzTooltipColor="black" nz-tooltip>
               [?]
             </span>
             <ng-template #titleTemplate let-thing>

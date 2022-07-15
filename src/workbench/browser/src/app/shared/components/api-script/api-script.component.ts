@@ -61,6 +61,7 @@ export class ApiScriptComponent implements OnInit {
   }
 
   insertCode = (event) => {
+    console.log('isertCode',event)
     const { value } = event.origin;
     this.eoEditor.handleInsert(value);
   };

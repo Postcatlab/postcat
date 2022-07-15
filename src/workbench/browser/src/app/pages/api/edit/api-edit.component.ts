@@ -158,6 +158,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         //Add From Test|Copy Api
         window.sessionStorage.removeItem('apiDataWillbeSave');
         Object.assign(this.apiData, JSON.parse(tmpApiData));
+        console.log(this.apiData)
         this.validateForm.patchValue(this.apiData);
       } else {
         //Add directly
