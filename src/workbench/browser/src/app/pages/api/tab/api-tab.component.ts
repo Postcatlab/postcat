@@ -214,7 +214,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param inArg.index
    */
   pickTab() {
-    let tab = this.tabSerive.tabs[this.selectedIndex];
+    const tab = this.tabSerive.tabs[this.selectedIndex];
     this.tabSerive.tabChange$.next(tab);
     this.activeRoute(tab);
   }
