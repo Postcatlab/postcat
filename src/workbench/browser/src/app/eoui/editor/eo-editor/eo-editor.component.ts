@@ -215,5 +215,6 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     const ace = this.aceRef.directiveRef.ace();
     const cursorPos = ace.getCursorPosition();
     ace.session.insert(cursorPos, code);
+    ace.focus();
   }
 }
