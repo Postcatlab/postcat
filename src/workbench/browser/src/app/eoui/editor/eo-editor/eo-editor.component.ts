@@ -143,7 +143,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     this.aceRef.directiveRef.ace().renderer.updateFull(true);
   }
   formatCode(code, type) {
-    if (type === 'json') {
+    if (['json', 'javascript'].includes(type)) {
       return beautifier.js(code, {
         indent_size: 2,
         space_in_empty_paren: true,
