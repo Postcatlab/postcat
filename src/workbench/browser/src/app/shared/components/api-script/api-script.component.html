@@ -3,24 +3,12 @@
     <div class="flex justify-between p-3">
       <div i18n>Snippets</div>
       <div>
-        <a
-          href="https://eoapi.io/docs/script-function"
-          class="text-blue-400"
-          target="_blank"
-          rel="noopener noreferrer"
-          i18n
-          >Learn more</a
-        >
+        <a href="https://eoapi.io/docs/script-function" class="text-blue-400" target="_blank" rel="noopener noreferrer"
+          i18n>Learn more</a>
       </div>
     </div>
-    <nz-tree
-      #nzTreeComponent
-      nzBlockNode
-      [nzData]="dataSource"
-      [nzExpandedKeys]="expandedKeys"
-      (nzClick)="nzClick($event)"
-      [nzTreeTemplate]="nzTreeTemplate"
-    ></nz-tree>
+    <nz-tree #nzTreeComponent nzBlockNode [nzData]="dataSource" [nzExpandedKeys]="expandedKeys"
+      (nzClick)="nzClick($event)" [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
     <ng-template #nzTreeTemplate let-node>
       <ng-template [ngIf]="!node.isLeaf">
         <span class="text-sm">{{ node.title }}</span>
@@ -29,14 +17,8 @@
         <div (click)="insertCode(node)">
           <span class="text-sm text-blue-400">{{ node.title }}</span>
           <ng-container *ngIf="node.origin.note">
-            <span
-              [nzTooltipTitle]="titleTemplate"
-              [nzTooltipPlacement]="['topLeft', 'leftTop']"
-              class="text-blue-400"
-              nzTooltipColor="black"
-              (click)="insertCode(node)"
-              nz-tooltip
-            >
+            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
+              nzTooltipColor="black" (click)="insertCode(node)" nz-tooltip>
               [?]
             </span>
             <ng-template #titleTemplate let-thing>
@@ -61,13 +43,8 @@
     </ng-template>
   </div>
   <div class="flex-1 h-[322px]">
-    <eo-editor
-      [(code)]="code"
-      editorType="javascript"
-      [eventList]="['format', 'copy', 'search', 'replace']"
-      (codeChange)="handleChange($event)"
-      [completions]="completions"
-    >
+    <eo-editor [(code)]="code" editorType="javascript" [eventList]="['format', 'copy', 'search', 'replace']"
+      (codeChange)="handleChange($event)" [completions]="completions" [minHeight]="270">
     </eo-editor>
   </div>
 </div>
