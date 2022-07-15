@@ -22,7 +22,7 @@ export class ApiScriptComponent implements OnInit {
   selectListSelection = new SelectionModel<FlatNode>(true);
 
   dataSource: NzTreeNodeOptions[] = [];
-  expandedKeys = [];
+  expandedKeys = [0];
 
   constructor() {}
 
@@ -54,7 +54,6 @@ export class ApiScriptComponent implements OnInit {
       })),
       ...it,
     }));
-    console.log(this.dataSource);
   }
 
   handleChange(code) {
