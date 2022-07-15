@@ -17,11 +17,11 @@
     "!**/*.ts"
   ],
   "publish": [
+    "github",
     {
       "provider": "generic",
       "url": "https://packages.eoapi.io"
-    },
-    "github"
+    }
   ],
   "generateUpdatesFilesForAllChannels": true,
   "nsis": {
