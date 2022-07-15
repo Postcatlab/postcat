@@ -1,3 +1,7 @@
+.eo-editor {
+  min-height: var(--eo-editor-height, 200px);
+}
+
 .button_list {
   border: 1px solid var(--BORDER);
   border-top-left-radius: 3px;
@@ -32,6 +36,14 @@
     height: 100%;
   }
   .ace_editor {
-    min-height: 200px;
+    min-height: inherit !important;
+  }
+  .ace-editor {
+    height: calc(100% - 52px);
+    min-height:inherit;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 }

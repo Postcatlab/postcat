@@ -1,4 +1,4 @@
-<div>
+<div class="eo-editor" [style.--eo-editor-height]="minHeight + 'px'">
   <div class="button_list">
     <span *ngIf="eventList.includes('type') && !hiddenList.includes('type')" i18n>
       Content Type
@@ -11,7 +11,7 @@
       <span>{{ item.label }}</span>
     </span>
   </div>
-  <ace [config]="config" [disabled]="disabled" [(value)]="code" [mode]="editorType" (blur)="log($event, 'blur')"
-    (focus)="log($event, 'focus')" (copy)="log($event, 'copy')" (paste)="log($event, 'paste')"
-    (change)="handleChange()"></ace>
+  <ace class="ace-editor" [config]="config" [disabled]="disabled" [(value)]="code" [mode]="editorType"
+    (blur)="log($event, 'blur')" (focus)="log($event, 'focus')" (copy)="log($event, 'copy')"
+    (paste)="log($event, 'paste')" (change)="handleChange()"></ace>
 </div>
