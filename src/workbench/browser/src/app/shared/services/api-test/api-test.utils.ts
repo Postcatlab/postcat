@@ -1,33 +1,39 @@
 import { listToTreeHasLevel } from '../../../utils/tree/tree.utils';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
-import { ApiBodyType } from '../storage/index.model';
-import { ApiTestRes } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
+import { ApiBodyType, ApiData } from '../storage/index.model';
+import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
   PROTOCOL = ['http', 'https'],
   REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
+/**
+ * Handle Test url,such as replace rest
+ * @param uri
+ * @param rest
+ * @returns
+ */
+export const formatUri = (uri, rest = []) => {
+  if (!Array.isArray(rest)) {
+    return uri;
+  }
+  let result = uri;
+  const restByName = rest.reduce((acc, val) => {
+    if (!val.required || !val.name) {
+      return acc;
+    }
+    return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
+  }, {});
+  Object.keys(restByName).forEach((restName) => {
+    result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
+  });
+  return result;
+};
 
 export const eoFormatRequestData = (
-  data,
-  opts = { env: {}, beforeScript: '', afterScript: '', lang: 'en' },
+  data: ApiData,
+  opts: requestDataOpts = { env: {}, beforeScript: '', afterScript: '', lang: 'en', globals: {} },
   locale
 ) => {
-  const formatUri = (uri, rest = []) => {
-    if (!Array.isArray(rest)) {
-      return uri;
-    }
-    let result = uri;
-    const restByName = rest.reduce((acc, val) => {
-      if (!val.required || !val.name) {
-        return acc;
-      }
-      return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
-    }, {});
-    Object.keys(restByName).forEach((restName) => {
-      result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
-    });
-    return result;
-  };
   const formatList = (inArr) => {
     if (!Array.isArray(inArr)) {
       return [];
@@ -95,7 +101,7 @@ export const eoFormatRequestData = (
     return result;
   };
   const result: TestLocalNodeData = {
-    lang:opts.lang,
+    lang: opts.lang,
     URL: formatUri(data.uri, data.restParams),
     method: data.method,
     methodType: METHOD.indexOf(data.method).toString(),
@@ -113,7 +119,7 @@ export const eoFormatRequestData = (
   };
   return result;
 };
-export const eoFormatResponseData = ({ report, history, id }) => {
+export const eoFormatResponseData = ({ globals, report, history, id }) => {
   let result: ApiTestRes;
   let reportList = report.reportList || [];
   //preScript code tips
@@ -133,6 +139,7 @@ export const eoFormatResponseData = ({ report, history, id }) => {
   if (['error'].includes(report.status)) {
     result = {
       status: 'error',
+      globals,
       id,
       response: {
         reportList: reportList,
@@ -151,6 +158,7 @@ export const eoFormatResponseData = ({ report, history, id }) => {
   result = {
     status: 'finish',
     id: id,
+    globals,
     general: report.general,
     response: { blobFileName: report.blobFileName, ...response },
     report: {
