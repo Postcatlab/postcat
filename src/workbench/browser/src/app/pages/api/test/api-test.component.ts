@@ -162,7 +162,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const apiDataId = Number(this.route.snapshot.queryParams.uuid);
     this.initApi(apiDataId);
-    this.loadTestHistory(apiDataId);
     this.watchTabChange();
     this.watchEnvChange();
     this.messageService.get().subscribe(({ type, data }) => {
@@ -320,7 +319,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
           },
         });
         this.initApi(nextTab.key);
-        this.loadTestHistory(nextTab.key);
       });
   }
   /**
