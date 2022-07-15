@@ -91,16 +91,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   clickTest() {
-    switch (this.status) {
-      case 'testing': {
-        this.abort();
-        break;
-      }
-      default: {
-        this.test();
-        break;
-      }
+    if (this.status === 'testing') {
+      this.abort();
+      return;
     }
+    this.test();
   }
   /**
    * click history to restore data from history

@@ -1,20 +1,31 @@
 <div class="flex eo-api-script">
-  <div class="w-[340px] h-[322px] overflow-auto">
+  <div class="w-[300px] h-[322px] overflow-auto">
     <div class="flex justify-between p-3">
       <div i18n>Snippets</div>
       <div>
-        <a href="https://eoapi.io/docs/script-function" class="text-blue-400" target="_blank" rel="noopener noreferrer"
-          i18n>Learn more</a>
+        <a
+          href="https://eoapi.io/docs/script-function"
+          class="text-blue-400"
+          target="_blank"
+          rel="noopener noreferrer"
+          i18n
+          >Learn more</a
+        >
       </div>
     </div>
-    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
+    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" nzBlockNode>
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
         <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
         <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="false" (nzClick)="insertCode(node)">
           <span class="text-sm text-blue-400"> {{ node.name }}</span>
           <ng-container *ngIf="node.note">
-            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
-              nzTooltipColor="black" nz-tooltip>
+            <span
+              [nzTooltipTitle]="titleTemplate"
+              [nzTooltipPlacement]="['topLeft', 'leftTop']"
+              class="text-blue-400"
+              nzTooltipColor="black"
+              nz-tooltip
+            >
               [?]
             </span>
             <ng-template #titleTemplate let-thing>
@@ -36,7 +47,6 @@
           </ng-container>
         </nz-tree-node-option>
       </nz-tree-node>
-
       <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
         <nz-tree-node-toggle>
           <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
@@ -48,8 +58,13 @@
     </nz-tree-view>
   </div>
   <div class="flex-1">
-    <eo-editor [(code)]="code" editorType="javascript" [eventList]="['format', 'copy', 'search', 'replace']"
-      (codeChange)="handleChange($event)" [completions]="completions">
+    <eo-editor
+      [(code)]="code"
+      editorType="javascript"
+      [eventList]="['format', 'copy', 'search', 'replace']"
+      (codeChange)="handleChange($event)"
+      [completions]="completions"
+    >
     </eo-editor>
   </div>
 </div>
