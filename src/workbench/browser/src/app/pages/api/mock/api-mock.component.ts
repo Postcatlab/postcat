@@ -5,7 +5,7 @@ import { takeUntil, debounceTime } from 'rxjs/operators';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { eoFormatRequestData, formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -40,7 +40,7 @@ export class ApiMockComponent implements OnInit, OnChanges {
   };
   mockListColumns = [
     { title: $localize`Name`, slot: 'name', width: '20%' },
-    { title: $localize`Created Type`, slot: 'createWay', width: '15%' },
+    { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
     { title: 'URL', slot: 'url', width: '50%' },
     { title: '', slot: 'action', width: '15%', fixed: true },
   ];
@@ -104,11 +104,14 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const data = eoFormatRequestData(this.apiData, { env: {}, beforeScript: '', afterScript: '', lang: 'en' }, 'en-US');
-    const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
-      base: 'query',
-      replaceType: 'replace',
-    }).url;
+    const uri = this.apiTest.transferUrlAndQuery(
+      formatUri(this.apiData.uri, this.apiData.restParams),
+      this.apiData.queryParams,
+      {
+        base: 'query',
+        replaceType: 'replace',
+      }
+    ).url;
     const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (mock?.createWay === 'custom' && mock.uuid) {
       url.searchParams.set('mockID', mock.uuid + '');

@@ -6,7 +6,7 @@ module.exports = (req, res) => {
   try {
     let reqJSON = req.body.data;
     reqJSON.env = _LibsCommon.parseEnv(reqJSON.env);
-    new _LibsFlowCommon.core().main(reqJSON).then(({ report, history }) => {
+    new _LibsFlowCommon.core().main(reqJSON).then(({ globals,report, history }) => {
       ['general', 'requestInfo', 'resultInfo'].forEach((keyName) => {
         if (typeof history[keyName] === 'string') history[keyName] = JSON.parse(history[keyName]);
       });
@@ -15,6 +15,7 @@ module.exports = (req, res) => {
           action: 'finish',
           data: {
             id: ctx.request.body.id,
+            globals:globals,
             report: report,
             history: history,
           },

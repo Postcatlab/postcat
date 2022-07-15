@@ -24,7 +24,7 @@ app.use(async (ctx, next) => {
     case '/api/unit': {
       let reqJSON = ctx.request.body.data;
       reqJSON.env = _LibsCommon.parseEnv(reqJSON.env);
-      await new _LibsFlowCommon.core().main(reqJSON).then(({ report, history }) => {
+      await new _LibsFlowCommon.core().main(reqJSON).then(({ globals,report, history }) => {
         ['general', 'requestInfo', 'resultInfo'].forEach((keyName) => {
           if (typeof history[keyName] === 'string') history[keyName] = JSON.parse(history[keyName]);
         });
@@ -34,6 +34,7 @@ app.use(async (ctx, next) => {
             id: ctx.request.body.id,
             report: report,
             history: history,
+            globals:globals
           },
         });
       });

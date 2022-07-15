@@ -27,6 +27,13 @@ import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
+//I18n
+import { registerLocaleData } from '@angular/common';
+import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
+import en from '@angular/common/locales/en';
+import zh from '@angular/common/locales/zh';
+registerLocaleData(en);
+registerLocaleData(zh);
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -55,6 +62,18 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
       deps: ['$injector'],
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
+    {
+      provide: NZ_I18N,
+      useFactory: (localId: string) => {
+        switch (localId) {
+          case 'zh-Hans':
+            return zh_CN;
+          default:
+            return en_US;
+        }
+      },
+      deps: [LOCALE_ID],
+    },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent],
