@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="zh">
+  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="zh-CN">
     <body>
       <trans-unit id="6030666752196813247" datatype="html">
         <source>Unable to connect to remote data sources, please check and reconnect. In order not to affect use, the app will help you jump to local</source>
