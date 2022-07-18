@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ExtensionRoutingModule } from './extension-routing.module';
-import { ExtensionService } from './extension.service';
 import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
 import { ExtensionDetailComponent } from './detail/extension-detail.component';
@@ -37,7 +36,6 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
     NzDropDownModule,
     NzSkeletonModule,
   ],
-  providers: [ExtensionService],
   declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent],
 })
 export class ExtensionModule {}

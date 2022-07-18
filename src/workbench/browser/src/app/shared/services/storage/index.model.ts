@@ -116,7 +116,7 @@ export interface ApiTestHistoryResponse {
   /**
    * Inject Code println
    */
-  reportList: string[] | {type:'throw'|'interrupt',content:string}[];
+  reportList: string[] | { type: 'throw' | 'interrupt'; content: string }[];
 }
 
 /**
@@ -386,7 +386,7 @@ export interface ApiData extends StorageModel {
    *
    * @type {object[]}
    */
-  restParams?: object[];
+  restParams?: Record<string, any>[];
 
   /**
    * 返回头数据，数据用json存储
