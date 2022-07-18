@@ -1,13 +1,11 @@
 name: Crowdin Action
 
-on:
-  push:
-    branches: [feat/crowdin]
+on: [push]
 
 jobs:
   synchronize-with-crowdin:
+    if: !startsWith(github.event.head_commit.message , 'i18n')
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
