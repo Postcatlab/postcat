@@ -1908,13 +1908,6 @@
           <context context-type="linenumber">336</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2577607098255136498" datatype="html">
-        <source>MD5</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
-          <context context-type="linenumber">339</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8679786040131005859" datatype="html">
         <source>MD5 Encryption</source>
         <context-group purpose="location">
@@ -2547,17 +2540,6 @@
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767" datatype="html">
-        <source>Host</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3f1eeb54017aceaa8f374a1c7c6b5e64cef7af4c" datatype="html">
         <source>Environment variable：can be referenced by using <x id="INTERPOLATION" equiv-text="{{ varName }}"/> in Document or Test</source>
         <context-group purpose="location">
@@ -2729,6 +2711,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
           <context context-type="linenumber">19,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767" datatype="html">
+        <source>Host</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="acedf8fa9132c616c31c3bec3143dd57f587e5f8" datatype="html">
