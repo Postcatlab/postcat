@@ -96,7 +96,7 @@
         <source>Copied</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
-          <context context-type="linenumber">172</context>
+          <context context-type="linenumber">178</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
@@ -414,7 +414,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/body/api-test-body.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.ts</context>
@@ -1249,22 +1249,18 @@
         </context-group>
       </trans-unit>
       <trans-unit id="483a85a2496292b77ae6bd52736ed1aafae5685c" datatype="html">
-        <source> Unable to preview non-text type data, you can<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button
-          class=&quot;eo_theme_btn_default mlr5&quot;
-          type=&quot;button&quot;
-          (click)=&quot;downloadResponseText()&quot;
-        &gt;"/> download back result<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button
-        &gt;"/>and open it with other programs. </source>
+        <source> Unable to preview non-text type data, you can<x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot;
+          (click)=&quot;downloadResponseText()&quot;&gt;"/> download back result<x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/>and open it with other programs. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/result-response/api-test-result-response.component.html</context>
-          <context context-type="linenumber">31,39</context>
+          <context context-type="linenumber">24,28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5810c9239d2f5def25fecc5464ea916375a2702e" datatype="html">
         <source> Unable to preview non-text type data, you can <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;eo_theme_btn_default mlr5&quot; type=&quot;button&quot; (click)=&quot;downloadResponseText()&quot;&gt;"/> download back result <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/result-response/api-test-result-response.component.html</context>
-          <context context-type="linenumber">44,48</context>
+          <context context-type="linenumber">33,37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cda31dbd724cf5f4fa7a4274d9120651490c8a8c" datatype="html">
@@ -1425,21 +1421,21 @@
         <source>Learn more</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/api-script/api-script.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5d22836064f36038c8a3f6131d862b7a998816e1" datatype="html">
         <source>---input---</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/api-script/api-script.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="84e42e6b0bf679dab7aef733c7a17d85a2d10233" datatype="html">
         <source>---return---</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/api-script/api-script.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4593473044750833977" datatype="html">
@@ -2492,6 +2488,34 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
           <context context-type="linenumber">772</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f9b70c4aa3fb279b5fbc05ef2708f8ffba2c8d0c" datatype="html">
+        <source>Global variable</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/env-list/env-list.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8b65a169b80cd983505e4eac0550ee974e40af63" datatype="html">
+        <source>No Global variables</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/env-list/env-list.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="57c18160c05233541659d573cf9a8e2d09eebda8" datatype="html">
+        <source>Environment Host</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/env-list/env-list.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bec9c0614c0c31fb6917b7f465e27399090b050e" datatype="html">
+        <source>Environment variable</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/env-list/env-list.component.ts</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="New Environment" datatype="html">
