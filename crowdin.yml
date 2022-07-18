@@ -1,0 +1,3 @@
+files:
+  - source: /src/workbench/browser/src/locale/messages.xlf
+    translation: '%original_path%'
