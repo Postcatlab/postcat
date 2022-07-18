@@ -2121,7 +2121,7 @@
           <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
           <context context-type="linenumber">339</context>
         </context-group>
-        <target state="translated">MD5</target>
+        <target state="needs-translation">MD5</target>
       </trans-unit>
       <trans-unit id="8679786040131005859" datatype="html">
         <source>MD5 Encryption</source>
@@ -2821,7 +2821,7 @@
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target state="translated">Host</target>
+        <target state="needs-translation">Host</target>
       </trans-unit>
       <trans-unit id="3f1eeb54017aceaa8f374a1c7c6b5e64cef7af4c" datatype="html">
         <source>Environment variable：can be referenced by using <x id="INTERPOLATION" equiv-text="{{ varName }}"/> in Document or Test</source>
