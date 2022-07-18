@@ -1,0 +1,3 @@
+files:
+  - source: /src/workbench/browser/src/locale/messages.xlf
+    translation: /src/workbench/browser/src/locale/messages.%two_letters_code%.xlf
