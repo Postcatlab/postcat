@@ -110,7 +110,7 @@ export class ModuleHandler extends CoreHandler {
     // https://www.npmjs.com/package/bin-links
     npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
       const moduleList = modules.map((it) => it + '@latest');
-      console.log('moduleList',command, moduleList);
+      console.log('moduleList', command, moduleList);
       let executeCommand = ['update', 'install', 'uninstall'];
       if (!executeCommand.includes(command)) return;
       npmCli.commands[command](moduleList, (err, data) => {
@@ -133,7 +133,7 @@ export class ModuleHandler extends CoreHandler {
         args = args.concat(`--proxy=${this.proxy}`);
       }
     }
-    console.log(args)
+    console.log(args);
     const npm = spawn('npm', args, { cwd: this.baseDir });
     // console.log('2==>', npm);
     let output = '';

@@ -32,6 +32,7 @@ import { registerLocaleData } from '@angular/common';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 registerLocaleData(en);
 registerLocaleData(zh);
 @NgModule({
@@ -49,6 +50,7 @@ registerLocaleData(zh);
   ],
   providers: [
     SettingService,
+    ExtensionService,
     StorageService,
     RemoteService,
     MessageService,

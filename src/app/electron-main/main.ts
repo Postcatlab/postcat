@@ -1,9 +1,10 @@
 require('@bqy/node-module-alias/register');
+require('dotenv').config();
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';
 import * as os from 'os';
-import {ModuleManager} from '../../platform/node/extension-manager/lib/manager';
+import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
 import { ModuleManagerInterface } from '../../platform/node/extension-manager';
 import { processEnv } from '../../platform/node/constant';
 import { proxyOpenExternal } from '../../shared/common/browserView';
@@ -57,7 +58,7 @@ class EoBrowserWindow {
     });
   }
   public loadURL() {
-    console.log('loadURL')
+    console.log('loadURL');
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'

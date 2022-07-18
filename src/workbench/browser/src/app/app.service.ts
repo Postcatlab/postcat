@@ -42,7 +42,10 @@ export class AppService {
           const response = await this.matchApiData(1, req);
           sender.send('getMockApiList', response);
         } else {
-          sender.send('getMockApiList', { response: { message: $localize `No mock found with ID ${mockID}` }, url: req.url });
+          sender.send('getMockApiList', {
+            response: { message: $localize`No mock found with ID ${mockID}` },
+            url: req.url,
+          });
         }
       });
     }
@@ -65,8 +68,14 @@ export class AppService {
     const apiList = await this.getAllApi(projectID);
     const { pathname } = new URL(req.url, this.remoteService.mockUrl);
     const apiData = apiList.find((n) => {
-      const uri = n.uri.trim().startsWith('/') ? n.uri.trim() : `/${n.uri.trim()}`;
-      return n.method === req.method && uri === pathname;
+      let uri = n.uri.trim();
+      if (Array.isArray(n.restParams) && n.restParams.length > 0) {
+        const restMap = n.restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
+        uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
+        // console.log('restMap', restMap, n.uri, uri);
+      }
+      const uriReg = new RegExp(`/?${uri}/?`);
+      return n.method === req.method && uriReg.test(pathname);
     });
     return apiData ? { response: this.generateResponse(apiData.responseBody) } : { statusCode: 404 };
   }

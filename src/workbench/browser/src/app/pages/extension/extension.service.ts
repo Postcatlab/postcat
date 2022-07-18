@@ -6,7 +6,9 @@ import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ExtensionService {
   ignoreList = ['default'];
   extensionIDs: Array<string> = [];
@@ -15,9 +17,7 @@ export class ExtensionService {
   constructor(private http: HttpClient, private electron: ElectronService, private language: LanguageService) {
     this.localExtensions = this.getExtensions();
     this.extensionIDs = this.updateExtensionIDs();
-    this.HOST = this.electron.isElectron
-      ? 'http://106.12.149.147'
-      : 'https://mockapi.eolink.com/ztBFKai20ee60c12871881565b5a6ddd718337df0e30979';
+    this.HOST = this.electron.isElectron ? process.env.EXTENSION_URL : process.env.MOCK_URL;
   }
   private getExtensions() {
     // Local extension
