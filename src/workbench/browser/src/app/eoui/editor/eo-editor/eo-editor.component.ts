@@ -51,11 +51,12 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
   @Input() code: string;
-  @Input() minHeight = 200;
+  @Input() minHeight = 70;
   @Input() editorType = 'json';
   @Input() autoFormat = false;
   @Input() disabled = false;
   @Input() completions = [];
+  @Input() config: AceConfigInterface = {};
   @Output() codeChange = new EventEmitter<string>();
   @ViewChild(AceComponent, { static: false }) aceRef?: AceComponent;
   @ViewChild(AceDirective, { static: false }) directiveRef?: AceDirective;
@@ -80,7 +81,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     },
   ];
 
-  public config: AceConfigInterface = {
+  public $config: AceConfigInterface = {
     enableBasicAutocompletion: true,
     enableLiveAutocompletion: true,
     theme: 'tomorrow_night_eighties',
@@ -89,6 +90,10 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     minLines: 5,
     maxLines: 20,
   };
+
+  get aceConfig() {
+    return { ...this.$config, ...this.config };
+  }
 
   constructor(private message: EoMessageService, private electron: ElectronService) {}
 
