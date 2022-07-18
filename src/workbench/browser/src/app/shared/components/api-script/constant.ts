@@ -336,7 +336,7 @@ const COMMON_DATA: TreeNode[] = [
     name: $localize`Encryption and Decryption`,
     children: [
       {
-        name: $localize`MD5`,
+        name:`MD5`,
         caption: 'eo.crypt.md5',
         value: 'eo.crypt.md5(data)',
         note: {
