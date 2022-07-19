@@ -59,15 +59,15 @@ export class ModuleHandler extends CoreHandler {
    * @param modules 模块名称数组
    * @param isLocal 本地安装用link
    */
-  async install(modules: string[], isLocal: boolean): Promise<ModuleHandlerResult> {
+  async install(modules: any[], isLocal: boolean): Promise<ModuleHandlerResult> {
     return await this.execCommand(isLocal ? 'link' : 'install', modules);
   }
   /**
    * 更新模块
-   * @param {...string[]} modules 模块名称数组
+   * @param [{ name:string, version:string }]
    */
-  async update(...modules: string[]): Promise<ModuleHandlerResult> {
-    return await this.execCommand('update', modules);
+  async update(modules: any[]): Promise<ModuleHandlerResult> {
+    return await this.execCommand('install', modules);
   }
 
   /**
@@ -75,7 +75,7 @@ export class ModuleHandler extends CoreHandler {
    * @param {string[]} modules 模块名称数组
    * @param isLocal 本地卸载用unlink
    */
-  async uninstall(modules: string[], isLocal: boolean): Promise<ModuleHandlerResult> {
+  async uninstall(modules: any[], isLocal: boolean): Promise<ModuleHandlerResult> {
     return await this.execCommand(isLocal ? 'unlink' : 'uninstall', modules);
   }
 
@@ -106,14 +106,16 @@ export class ModuleHandler extends CoreHandler {
       });
     }
   }
-  private executeByAppNpm(command: string, modules: string[], resolve, reject) {
+  private executeByAppNpm(command: string, modules: any[], resolve, reject) {
     // https://www.npmjs.com/package/bin-links
     npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
-      const moduleList = modules.map((it) => it + '@latest');
-      console.log('moduleList', command, moduleList);
+      const moduleList = modules.map(({ name, version }) => (version ? `${name}@${version}` : name));
       let executeCommand = ['update', 'install', 'uninstall'];
-      if (!executeCommand.includes(command)) return;
+      if (!executeCommand.includes(command)) {
+        return;
+      }
       npmCli.commands[command](moduleList, (err, data) => {
+        console.log('command', command);
         process.chdir(this.baseDir);
         if (err) {
           return reject(err);
@@ -160,7 +162,7 @@ export class ModuleHandler extends CoreHandler {
    * @param command
    * @param modules
    */
-  private async execCommand(command: string, modules: string[]): Promise<ModuleHandlerResult> {
+  private async execCommand(command: string, modules: any[]): Promise<ModuleHandlerResult> {
     return await new Promise((resolve: any, reject: any): void => {
       // this.executeBySystemNpm(command, modules, resolve)
       this.executeByAppNpm(command, modules, resolve, reject);
