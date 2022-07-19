@@ -13,8 +13,9 @@ export enum ModuleType {
   app = 'app',
   feature = 'feature',
 }
-export interface I18nLocale{
-   locale: string; package: any 
+export interface I18nLocale {
+  locale: string;
+  package: any;
 }
 /**
  * 模块信息接口
@@ -68,7 +69,7 @@ export interface ModuleInfo {
   features?: {
     [index: string]: any;
   };
-  i18n?:I18nLocale[]
+  i18n?: I18nLocale[];
 }
 /**
  * 贡献点
@@ -117,11 +118,11 @@ export interface ModuleManagerInfo {
  * getModules 获取所有模块列表，或返回有模块关联子模块的信息
  */
 export interface ModuleManagerInterface {
+  installExt: any;
   install: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
-  update: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   uninstall: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   refresh: (module: ModuleManagerInfo) => void;
-  refreshAll:()=>void;
+  refreshAll: () => void;
   getModule: (moduleID: string, belongs?: boolean) => ModuleInfo;
   getModules: (belongs?: boolean) => Map<string, ModuleInfo>;
   getAppModuleList: () => Array<ModuleInfo>;
