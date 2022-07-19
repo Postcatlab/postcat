@@ -5,7 +5,7 @@
       class="bd_all w-full min-h-[140px] p-5 rounded-lg flex flex-col flex-wrap items-center plugin-block hover:border-green-700 hover:shadow-lg transition-shadow duration-300"
       *ngFor="let it of renderList" (click)="clickExtension(it)">
       <div class="flex w-full">
-        <div class=" block w-[40px] h-[40px] rounded-lg bg-cover bg-center bg-no-repeat mr-[20px]"
+        <div class="shrink-0 block w-[40px] h-[40px] rounded-lg bg-cover bg-center bg-no-repeat mr-[20px]"
           [ngClass]="{ 'bg-gray-100': it.logo }" [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }">
         </div>
 

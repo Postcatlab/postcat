@@ -23,18 +23,39 @@ export class TranslateService {
    * Transalte package.json variable ${} to locale text
    */
   translateVariableKey() {
-    let that = this;
-    Object.keys(this.module.features).forEach((name) => {
-      let feature = that.module.features[name];
-      Object.keys(feature).forEach((childName) => {
-        if (typeof feature[childName] !== 'string') return;
-        that.module.features[name][childName] = feature[childName].replace(/\$\{(.+)\}/g, (match, rest) => {
-          let replacement = match;
-          replacement = that.locale[rest] || replacement;
-          return replacement;
-        });
-      });
+    this.translateObject(this.locale, this.module.features, {
+      currentLevel: 0,
+      maxLevel: 4,
     });
     return this;
+  }
+  /**
+   * Loop translate object
+   * @param locale
+   * @param origin
+   * @param opts.maxLevel loop object level
+   */
+  private translateObject(locale, origin, opts) {
+    if (opts.currentLevel >= opts.maxLevel) return;
+    Object.keys(origin).forEach((name) => {
+      if (typeof origin[name] !== 'string') {
+        let newOpts = { maxLevel: opts.maxLevel, currentLevel: opts.currentLevel + 1 };
+        this.translateObject(locale, origin[name], newOpts);
+        return;
+      }
+      origin[name] = this.translateString(locale, origin[name]);
+    });
+  }
+  /**
+   * Translate primitive data types(string/numebr/..)
+   * @param locale
+   * @param variable
+   */
+  private translateString(locale, variable) {
+    return variable.replace(/\$\{(.+)\}/g, (match, rest) => {
+      let replacement = match;
+      replacement = locale[rest] || replacement;
+      return replacement;
+    });
   }
 }

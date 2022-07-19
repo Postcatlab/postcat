@@ -30,28 +30,29 @@ export class ExtensionService {
   private translateModule(module: ModuleInfo) {
     const lang = this.language.systemLanguage;
     const locale = module.i18n?.find((val) => val.locale === lang)?.package;
-    console.log(locale, module);
     if (!locale) return module;
     module = new TranslateService(module, locale).translate();
     return module;
   }
   public async requestList() {
     let result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
+    let installList = this.getInstalledList();
     result.data = [
-      ...result.data,
+      ...result.data.filter((val) => installList.every((childVal) => childVal.name !== val.name)),
       //Local debug package
-      ...this.getInstalledList().filter((val) => result.data.every((childVal) => childVal.name !== val.name)),
+      ...installList,
     ];
+    console.log(result.data)
     result.data = result.data.map((module) => this.translateModule(module));
     return result;
   }
   async getDetail(id, name): Promise<any> {
     let result = {};
+    let { code, data }: any = await this.requestDetail(name);
+    Object.assign(result, data);
     if (this.localExtensions.has(id)) {
       Object.assign(result, this.localExtensions.get(id), { installed: true });
     }
-    let { code, data }: any = await this.requestDetail(name);
-    Object.assign(result, data);
     return result;
   }
   /**
