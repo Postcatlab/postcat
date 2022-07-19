@@ -33,6 +33,7 @@
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",
     "@electron/remote": "2.0.8",
+    "axios": "0.27.2",
     "content-disposition": "^0.5.4",
     "copyfiles": "2.4.1",
     "crypto-js": "^4.1.1",
