@@ -52,4 +52,5 @@ testem.log
 .DS_Store
 Thumbs.db
 # *-lock.json
+-error.log
 .vercel

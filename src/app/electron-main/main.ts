@@ -206,7 +206,7 @@ try {
     } else if (arg.action === 'getAppModuleList') {
       returnValue = moduleManager.getAppModuleList();
     } else if (arg.action === 'installModule') {
-      const data = await moduleManager.install(arg.data);
+      const data = await moduleManager.installExt(arg.data);
       if (data.code === 0) {
         //subView.mainView.view.webContents.send('moduleUpdate');
       }
