@@ -341,7 +341,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private resetForm() {
     this.apiData = {
       projectID: 1,
-      uri: '/',
+      uri: '',
       protocol: RequestProtocol.HTTP,
       method: RequestMethod.POST,
     };

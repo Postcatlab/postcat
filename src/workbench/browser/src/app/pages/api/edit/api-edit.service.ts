@@ -190,7 +190,7 @@ export class ApiEditService {
         },
         {
           type: 'btn',
-          class: 'w_250',
+          class: 'w_300',
           btnList: [
             {
               key: $localize`Add Child`,
