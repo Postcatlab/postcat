@@ -9,39 +9,48 @@
   </div>
   <section class="h-full p-4 max-w-[80vw] mx-auto">
     <div class="flex">
-      <i class="block w-24 h-24 mr-8 bg-center bg-no-repeat bg-cover border rounded-lg bd_all"
-        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"></i>
+      <i
+        class="block w-24 h-24 mr-8 bg-center bg-no-repeat bg-cover border rounded-lg bd_all"
+        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"
+      ></i>
       <div class="flex flex-col flex-1">
         <div class="flex flex-col">
           <span class="mb-2 text-xl font-bold">{{ extensionDetail?.moduleName }}</span>
           <p class="w-full h-20">{{ extensionDetail?.description }}</p>
         </div>
-        <div class="flex">
-
-        </div>
+        <div class="flex"></div>
       </div>
     </div>
     <div class="flex w-full mt-6 h-[calc(100vh-350px)]">
-      <div class="flex-auto">
+      <div class="flex-auto min-w-0">
         <h2 class="text-lg font-bold" i18n>Intro</h2>
         <!-- <nz-divider></nz-divider> -->
         <div class="h-full overflow-auto markdown-desc">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
-            <eo-shadow-dom [text]="extensionDetail?.introduction" [options]="{ html: true }">
+            <eo-shadow-dom class="md-preview" [text]="extensionDetail?.introduction" [options]="{ html: true }">
             </eo-shadow-dom>
           </nz-skeleton>
         </div>
       </div>
       <div class="w-[1px] bg-[#f2f2f2] mx-[10px]"></div>
-      <div class="w-[200px] 2xl:w-[250px] overflow-auto h-full">
+      <div class="shrink-0 w-[200px] 2xl:w-[250px] overflow-auto h-full">
         <h2 class="text-lg font-bold" i18n>Install</h2>
         <div class="flex items-center mt-[22px]" *ngIf="!extensionDetail?.installed">
-          <button *ngIf="isElectron" nz-button nzType="primary" nzBlock nzSize="large" [nzLoading]="isOperating"
-            (click)="manageExtension('install', extensionDetail?.name)">
+          <button
+            *ngIf="isElectron"
+            nz-button
+            nzType="primary"
+            nzBlock
+            nzSize="large"
+            [nzLoading]="isOperating"
+            (click)="manageExtension('install', extensionDetail?.name)"
+            i18n
+          >
             Install
           </button>
           <div *ngIf="!isElectron">
-            <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full" i18n>Download Client
+            <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full" i18n>
+              Download Client
             </button>
             <nz-dropdown-menu #download="nzDropdownMenu">
               <ul nz-menu>
@@ -56,16 +65,25 @@
             </div>
           </div>
         </div>
-        <button *ngIf="extensionDetail?.installed" nz-button nzBlock nzType="primary" nzDanger nzSize="large"
-          [nzLoading]="isOperating" class="mt-[12px]" (click)="manageExtension('uninstall', extensionDetail?.name)" i18n>
+        <button
+          *ngIf="extensionDetail?.installed"
+          nz-button
+          nzBlock
+          nzType="primary"
+          nzDanger
+          nzSize="large"
+          [nzLoading]="isOperating"
+          class="mt-[12px]"
+          (click)="manageExtension('uninstall', extensionDetail?.name)"
+          i18n
+        >
           Uninstall
         </button>
 
         <h2 class="text-lg font-bold mt-[30px]" i18n>Support</h2>
         <nz-descriptions [nzColumn]="1" nzTitle="">
-          <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail?.author}}</nz-descriptions-item>
-          <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail?.version }}
-          </nz-descriptions-item>
+          <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail?.author }}</nz-descriptions-item>
+          <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail?.version }} </nz-descriptions-item>
         </nz-descriptions>
       </div>
     </div>

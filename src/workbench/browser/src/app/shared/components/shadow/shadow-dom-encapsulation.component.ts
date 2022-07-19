@@ -4,7 +4,13 @@ import MarkdownIt from 'markdown-it/dist/markdown-it';
 @Component({
   selector: 'eo-shadow-dom',
   template: ` <div [innerHTML]="content"></div> `,
-  styles: [],
+  styles: [
+    `
+      img {
+        max-width: 600px;
+      }
+    `,
+  ],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class ShadowDomEncapsulationComponent implements OnInit {

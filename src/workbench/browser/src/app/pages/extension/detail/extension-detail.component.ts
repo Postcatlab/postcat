@@ -4,6 +4,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { EoExtensionInfo } from '../extension.model';
 import { ResourceInfo } from '../../../shared/models/client.model';
 import { ExtensionService } from '../extension.service';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 
 @Component({
   selector: 'eo-extension-detail',
@@ -22,7 +23,8 @@ export class ExtensionDetailComponent implements OnInit {
     private extensionService: ExtensionService,
     private route: ActivatedRoute,
     private router: Router,
-    private electronService: ElectronService
+    private electronService: ElectronService,
+    private language: LanguageService
   ) {
     this.getDetail();
     this.getInstaller();
@@ -33,17 +35,26 @@ export class ExtensionDetailComponent implements OnInit {
       this.route.snapshot.queryParams.name
     );
     if (!this.extensionDetail?.installed) {
-      await this.fetchReadme();
+      await this.fetchReadme(this.language.systemLanguage);
     }
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
   }
 
-  async fetchReadme() {
+  async fetchReadme(locale = '') {
+    //Default locale en-US
+    if (locale === 'en-US') locale = '';
     try {
       this.introLoading = true;
-      const response = await fetch(`https://unpkg.com/${this.extensionDetail.name}/README.md`);
+      const response = await fetch(
+        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/README.${
+          locale ? locale + '.' : ''
+        }md`
+      );
       if (response.status === 200) {
         this.extensionDetail.introduction = await response.text();
+      } else if (locale) {
+        //If locale README not find,fetch default locale(en-US)
+        this.fetchReadme();
       }
     } catch (error) {
     } finally {
@@ -92,7 +103,6 @@ export class ExtensionDetailComponent implements OnInit {
 
   manageExtension(operate: string, id) {
     this.isOperating = true;
-    console.log(this.isOperating);
     /**
      * * WARNING:Sending a synchronous message will block the whole
      * renderer process until the reply is received, so use this method only as a last
@@ -107,7 +117,7 @@ export class ExtensionDetailComponent implements OnInit {
         }
         case 'uninstall': {
           this.extensionDetail.installed = !this.extensionService.uninstall(id);
-          this.fetchReadme();
+          this.fetchReadme(this.language.systemLanguage);
           break;
         }
       }
