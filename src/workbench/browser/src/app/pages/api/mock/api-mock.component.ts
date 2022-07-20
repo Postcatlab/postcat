@@ -1,27 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { eoFormatRequestData } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import {  formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { copyText } from 'eo/workbench/browser/src/app/utils';
+import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-api-edit-mock',
   templateUrl: './api-mock.component.html',
   styleUrls: ['./api-mock.component.scss'],
 })
-export class ApiMockComponent implements OnInit {
+export class ApiMockComponent implements OnInit, OnChanges {
   isVisible = false;
-  mockUrl = window.eo?.getMockUrl?.() || location.origin;
+  get mockUrl() {
+    return this.remoteService.mockUrl;
+  }
+  get modalTitle() {
+    return `${
+      this.currentEditMockIndex === -1
+        ? $localize`Add`
+        : this.currentEditMock.createWay === 'system'
+        ? $localize`Preview`
+        : $localize`Edit`
+    } Mock`;
+  }
   mocklList: ApiMockEntity[] = [];
   apiData: ApiData;
+  createWayMap = {
+    system: $localize`System creation`,
+    custom: $localize`Manual creation`,
+  };
   mockListColumns = [
-    { title: '名称', key: 'name' },
-    { title: 'URL', slot: 'url' },
-    { title: '', slot: 'action', width: '15%' },
+    { title: $localize`Name`, slot: 'name', width: '20%' },
+    { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
+    { title: 'URL', slot: 'url', width: '50%' },
+    { title: '', slot: 'action', width: '15%', fixed: true },
   ];
   /** 当前被编辑的mock */
   currentEditMock: ApiMockEntity;
@@ -41,38 +62,59 @@ export class ApiMockComponent implements OnInit {
   }
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private storageService: StorageService, private apiTest: ApiTestService, private route: ActivatedRoute) {
+
+  constructor(
+    private storageService: StorageService,
+    private apiTest: ApiTestService,
+    private route: ActivatedRoute,
+    private remoteService: RemoteService,
+    private message: NzMessageService
+  ) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});
   }
+
   ngOnInit() {
+    messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((inArg: Message) => {
+        switch (inArg.type) {
+          case 'mockAutoSyncSuccess':
+            this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+        }
+      });
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+  }
+
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    const { apiData } = changes;
+    if (apiData.currentValue.uuid !== apiData.previousValue?.uuid) {
+      this.initMockList(apiData.currentValue.uuid);
+    }
   }
 
   async initMockList(apiDataID: number) {
     const mockRes = await this.getMockByApiDataID(apiDataID);
     this.apiData = await this.getApiData(apiDataID);
     console.log('apiDataRes', this.apiData, mockRes);
-    if (window.eo?.getMockUrl && Array.isArray(mockRes) && mockRes.length === 0) {
-      const mock = this.createMockObj({ name: '系统默认期望', createType: 0 });
-      await this.createMock(mock);
-      this.mocklList = [mock];
-    } else {
-      console.log('result.data', mockRes);
-      this.mocklList = mockRes.map((item) => {
-        item.url = this.getApiUrl(item);
-        return item;
-      });
-    }
+    this.mocklList = mockRes.map((item) => {
+      item.url = this.getApiUrl(item);
+      return item;
+    });
   }
-  getApiUrl(apiData?: ApiData) {
-    const data = eoFormatRequestData(this.apiData, { env: {} }, 'en-US');
-    const uri = this.apiTest.transferUrlAndQuery(data.URL, this.apiData.queryParams, {
-      base: 'query',
-      replaceType: 'replace',
-    }).url;
-    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'));
-    if (apiData || this.isEdit) {
-      url.searchParams.set('mockID', (apiData || this.currentEditMock).uuid + '');
+
+  getApiUrl(mock?: ApiMockEntity) {
+    const uri = this.apiTest.transferUrlAndQuery(
+      formatUri(this.apiData.uri, this.apiData.restParams),
+      this.apiData.queryParams,
+      {
+        base: 'query',
+        replaceType: 'replace',
+      }
+    ).url;
+    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    if (mock?.createWay === 'custom' && mock.uuid) {
+      url.searchParams.set('mockID', mock.uuid + '');
     }
     return decodeURIComponent(url.toString());
   }
@@ -133,13 +175,13 @@ export class ApiMockComponent implements OnInit {
    * @returns
    */
   createMockObj(options: Record<string, any> = {}) {
-    const { name = '', createType = 1, ...rest } = options;
+    const { name = '', createWay = 'custom', ...rest } = options;
     return {
       name,
       url: this.getApiUrl(),
       apiDataID: this.apiData.uuid,
       projectID: 1,
-      createType,
+      createWay,
       response: JSON.stringify(tree2obj([].concat(this.apiData.responseBody))),
       ...rest,
     };
@@ -183,25 +225,30 @@ export class ApiMockComponent implements OnInit {
     this.rawChange$.next(this.currentEditMock.response);
   }
 
-  handleDeleteMockItem(index: number) {
-    const target = this.mocklList.splice(index, 1)[0];
+  async handleDeleteMockItem(index: number) {
+    const target = this.mocklList[index];
+    await this.removeMock(Number(target.uuid));
+    this.mocklList.splice(index, 1)[0];
     this.mocklList = [...this.mocklList];
-    this.removeMock(Number(target.uuid));
+    this.message.success($localize`Delete Succeeded`);
   }
   async handleSave() {
     this.isVisible = false;
-    this.isEdit
-      ? (this.mocklList[this.currentEditMockIndex] = this.currentEditMock)
-      : this.mocklList.push(this.currentEditMock);
 
-    this.mocklList = [...this.mocklList];
+    if (this.currentEditMock.createWay === 'system') return;
+
     if (this.isEdit) {
       await this.updateMock(this.currentEditMock, Number(this.currentEditMock.uuid));
+      this.message.success($localize`Edited successfully`);
+      this.mocklList[this.currentEditMockIndex] = this.currentEditMock;
     } else {
       const result = await this.createMock(this.currentEditMock);
       Object.assign(this.currentEditMock, result.data);
+      this.message.success($localize`Added successfully`);
+      this.mocklList.push(this.currentEditMock);
     }
-    this.currentEditMock.url = this.getApiUrl();
+    this.currentEditMock.url = this.getApiUrl(this.currentEditMock);
+    this.mocklList = [...this.mocklList];
   }
   handleCancel() {
     this.isVisible = false;
@@ -214,5 +261,10 @@ export class ApiMockComponent implements OnInit {
     } else {
       this.currentEditMock = { ...this.mocklList[this.currentEditMockIndex] };
     }
+  }
+
+  async copyText(text: string) {
+    await copyText(text);
+    this.message.success($localize`Copied`);
   }
 }

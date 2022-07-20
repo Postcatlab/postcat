@@ -82,7 +82,7 @@ export const parserJsonFile = (file, type = 'UTF-8') =>
     reader.onload = (ev) => {
       const fileString: string = ev.target.result as string;
       const json = JSON.parse(fileString);
-      resolve(json);
+      resolve({ name: file.name, content: json });
     };
   });
 
@@ -95,3 +95,54 @@ export const getDefaultValue = (list: any[], key) => {
 };
 
 export const parserProperties = (properties) => Object.keys(properties).map((it) => ({ value: it, ...properties[it] }));
+const base64ToUint8Array = (inputBase64String) => {
+  const tmpPadding = '='.repeat((4 - (inputBase64String.length % 4)) % 4);
+  const tmpBase64 = (inputBase64String + tmpPadding).replace(/\-/g, '+').replace(/_/g, '/');
+
+  const tmpRawData = window.atob(tmpBase64);
+  const tmpOutputArray = new Uint8Array(tmpRawData.length);
+  for (let i = 0; i < tmpRawData.length; ++i) {
+    tmpOutputArray[i] = tmpRawData.charCodeAt(i);
+  }
+  return tmpOutputArray;
+};
+export const getBlobUrl = (inputStream, inputFileType) => {
+  let tmpBlob;
+  try {
+    inputStream = base64ToUint8Array(inputStream);
+    if (typeof window.Blob === 'function') {
+      tmpBlob = new Blob([inputStream], {
+        type: inputFileType,
+      });
+    } else {
+      const tmpBlobBuilder =
+        window['BlobBuilder'] || window['MozBlobBuilder'] || window['WebKitBlobBuilder'] || window['MSBlobBuilder'];
+      const tmpBlobClass = new tmpBlobBuilder();
+      tmpBlobClass.append(inputStream);
+      tmpBlob = tmpBlobClass.getBlob(inputFileType);
+    }
+  } catch (GET_BLOB_ERR) {
+    tmpBlob = inputStream;
+  }
+  const tmpUrlObj = window.URL || window.webkitURL;
+  return tmpUrlObj.createObjectURL(tmpBlob);
+};
+
+export const copyText = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    return Promise.resolve(text);
+  } catch (e) {
+    const input = document.createElement('input');
+    input.setAttribute('readonly', 'readonly');
+    input.setAttribute('value', text);
+    document.body.appendChild(input);
+    input.setSelectionRange(0, 9999);
+    if (document.execCommand('copy')) {
+      document.execCommand('copy');
+      console.log($localize`Copied`);
+    }
+    document.body.removeChild(input);
+    return Promise.resolve(text);
+  }
+};

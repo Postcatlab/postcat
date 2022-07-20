@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { takeWhile } from 'rxjs/operators';
+import { filter, takeWhile } from 'rxjs/operators';
 import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 import { SidebarService } from './sidebar.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
 
 @Component({
@@ -35,35 +35,42 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getModules();
     this.getModuleIDFromRoute();
+    this.watchRouterChange();
   }
 
+  watchRouterChange() {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
+      this.getModuleIDFromRoute();
+    });
+  }
   clickModule(module) {
     this.sidebar.currentModule = module;
     this.sidebar.appChanged$.next();
-    let nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
-    let route = (nextApp as SidebarModuleInfo).route || '/home/blank';
+    const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
+    const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
+    console.log('route', route);
     this.router.navigate([route]);
   }
   ngOnDestroy(): void {
     this.destroy = true;
   }
   private getModules() {
-    let defaultModule = [
+    const defaultModule = [
       {
-        moduleName: 'API',
+        moduleName: 'REST',
         moduleID: '@eo-core-apimanger',
         isOffical: true,
-        logo: 'icon-api',
+        icon: 'api',
         activeRoute: 'home/api',
         route: 'home/api/test',
       },
       {
-        moduleName: '插件广场',
+        moduleName: $localize`Extensions`,
         moduleID: '@eo-core-extension',
         isOffical: true,
-        logo: 'icon-apps',
+        icon: 'puzzle',
         activeRoute: 'home/extension',
-        route: this.electron.isElectron ? 'home/extension/list' : 'home/preview',
+        route: 'home/extension/list',
       },
     ];
     if (this.electron.isElectron) {
@@ -76,10 +83,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
   private getModuleIDFromRoute() {
-    let currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
+    const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
     if (!currentModule) {
       //route error
       this.clickModule(this.modules[0]);
+      console.error('route error: currentModule is undefind', currentModule);
       return;
     }
     this.sidebar.currentModule = currentModule;

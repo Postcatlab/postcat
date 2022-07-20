@@ -21,8 +21,8 @@
   </ng-container>
 </div>
 <ng-template #empty>
-  <div class="text mb-4">
-    该功能需要插件支持，请移步至<a class="eo_link" routerLink="/home/extension/list">插件广场</a>下载
+  <div class="text mb-4" i18n>
+    This feature requires plugin support, please move to<a class="eo_link" routerLink="/home/extension/list"> extensions </a> download
   </div>
 </ng-template>
 
@@ -34,12 +34,13 @@
   </nz-radio-group>
 </div>
 
-<div class="mt-4" *ngIf="allowDrag">
-  <nz-upload *ngIf="extensionList.length" nzType="drag" [nzBeforeUpload]="parserFile" [nzShowUploadList]="false">
+<div class="mt-4" *ngIf="allowDrag && extensionList.length">
+  <nz-upload nzType="drag" [nzBeforeUpload]="parserFile">
     <p class="ant-upload-drag-icon">
       <i nz-icon nzType="inbox"></i>
     </p>
-    <p class="ant-upload-text">点击或直接拖拽文件至此区域</p>
-    <p class="ant-upload-hint">仅支持JSON格式的单个文件导入</p>
+    <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
+    <p class="ant-upload-hint" i18n>Only individual files in Json format are supported</p>
   </nz-upload>
+  <div class="text h-4 my-2">{{ filename }}</div>
 </div>

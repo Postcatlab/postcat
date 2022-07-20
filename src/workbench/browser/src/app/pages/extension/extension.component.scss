@@ -1,10 +1,50 @@
-.main {
+::ng-deep .main {
   height: 100%;
   width: 100%;
   display: flex;
 
+  .input {
+    height: 30px;
+    border: none;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 3px;
+    &::placeholder {
+      color: rgba(0,0,0,0.5);
+      font-size: 0.9em;
+    }
+  }
+  .tree_node {
+    font-size: 12px;
+  }
+    .ant-tree .ant-tree-treenode {
+      padding: 0;
+      margin: 2px 0;
+      border-radius: 3px;
+      transition: all 0.3s, border 0s, line-height 0s, box-shadow 0s;
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+    .ant-tree-treenode-selected {
+      background-color: var(--NAVBAR_BTN_BG);
+    }
+    .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+      background-color: transparent;
+      transition: none;
+    }
+  .ant-tree .ant-tree-node-content-wrapper{
+    border-radius: 0;
+    &.ant-tree-node-selected {
+      opacity: .8;
+   }
+  }
+
+  .ant-tree-switcher {
+    width: 0;
+  }
+
   .left {
-    background: #f8f8f8;
+    border-right: 1px solid #f8f8f8;
     width: 250px;
     padding: 10px;
 
@@ -24,22 +64,4 @@
   .right {
     height: 100%;
   }
-  .mb-2 {
-    margin-bottom: 0.5rem;
-  }
-  .py-2 {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-  .px-1 {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-  }
-  .mr-2 {
-    margin-right: 0.5rem;
-}
-}
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
 }

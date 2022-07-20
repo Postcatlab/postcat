@@ -43,6 +43,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   expandKeys: string[];
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
+  nzSelectedIndex = 1;
 
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
@@ -59,7 +60,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.groups = [];
     const treeItems: any = [
       {
-        title: '根目录',
+        title: $localize`Root directory`,
         //!actually is 0,but 0 will hidden in nz component,so use -1 replace 0
         key: '-1',
         weight: 0,
@@ -117,7 +118,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         if (typeof this.apiData[tableName] !== 'object') {
           return;
         }
-        formData[tableName] = (this.apiData[tableName]||[]).filter((val) => val.name);
+        formData[tableName] = (this.apiData[tableName] || []).filter((val) => val.name);
         if (['requestBody', 'responseBody'].includes(tableName)) {
           if (['xml', 'json'].includes(formData[`${tableName}Type`])) {
             formData[tableName] = listToTreeHasLevel(formData[tableName]);
@@ -157,6 +158,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         //Add From Test|Copy Api
         window.sessionStorage.removeItem('apiDataWillbeSave');
         Object.assign(this.apiData, JSON.parse(tmpApiData));
+        console.log(this.apiData)
         this.validateForm.patchValue(this.apiData);
       } else {
         //Add directly

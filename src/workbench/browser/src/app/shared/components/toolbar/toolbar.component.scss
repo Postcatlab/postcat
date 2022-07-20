@@ -9,6 +9,10 @@
   width: 100%;
   z-index: 2;
   color: var(--FOOTER_TEXT);
+  i {
+    font-size: 24px;
+    color: rgba(0,0,0,.5);
+  }
 }
 .iconfont{
   line-height: 22px;

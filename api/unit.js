@@ -4,20 +4,20 @@ let _LibsCommon = require('../src/workbench/node/request/libs/common.js');
 module.exports = (req, res) => {
   console.log('unit.js', req.body);
   try {
-    let data = req.body.data;
-    data.env = _LibsCommon.parseEnv(data.env);
-    new _LibsFlowCommon.core().main(data, (tmpInputReport, tmpInputHistory) => {
+    let reqJSON = req.body.data;
+    reqJSON.env = _LibsCommon.parseEnv(reqJSON.env);
+    new _LibsFlowCommon.core().main(reqJSON).then(({ globals,report, history }) => {
       ['general', 'requestInfo', 'resultInfo'].forEach((keyName) => {
-        if (typeof tmpInputHistory[keyName] === 'string')
-          tmpInputHistory[keyName] = JSON.parse(tmpInputHistory[keyName]);
+        if (typeof history[keyName] === 'string') history[keyName] = JSON.parse(history[keyName]);
       });
       res.send(
         JSON.stringify({
           action: 'finish',
           data: {
             id: req.body.id,
-            report: tmpInputReport,
-            history: tmpInputHistory,
+            globals:globals,
+            report: report,
+            history: history,
           },
         })
       );

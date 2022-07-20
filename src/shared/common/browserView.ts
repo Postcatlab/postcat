@@ -1,5 +1,5 @@
 import { shell } from 'electron';
-//open link through default browser not electron
+//Open link through system default browser not Electron browserwin
 export function proxyOpenExternal(view) {
   view.webContents.setWindowOpenHandler(({ url }) => {
     setImmediate(() => {

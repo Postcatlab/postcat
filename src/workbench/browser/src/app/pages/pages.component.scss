@@ -1,4 +1,4 @@
-.home_container{
+.home_container {
   height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--remote-notification-height, 0px) - 1px);
 }
 .home {
@@ -13,4 +13,25 @@
   height: var(--remote-notification-height, 0px);
   background-color: rgb(255, 219, 7);
   overflow: hidden;
+}
+::ng-deep {
+  eo-api {
+    router-outlet + * {
+      display: block;
+      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 46px);
+      overflow: auto;
+    }
+    .has_tab_page router-outlet + * {
+      height: calc(
+        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 45px - 47px
+      );
+    }
+  }
+  eo-extension {
+    router-outlet + * {
+      display: block;
+      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height));
+      // overflow: auto;
+    }
+  }
 }

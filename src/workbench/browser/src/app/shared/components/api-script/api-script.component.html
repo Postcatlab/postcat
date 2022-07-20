@@ -1,0 +1,50 @@
+<div class="flex eo-api-script">
+  <div class="w-[300px] h-[322px] overflow-auto">
+    <div class="flex justify-between p-3">
+      <div i18n>Snippets</div>
+      <div>
+        <a href="https://eoapi.io/docs/script-function" class="text-blue-400" target="_blank" rel="noopener noreferrer"
+          i18n>Learn more</a>
+      </div>
+    </div>
+    <nz-tree #nzTreeComponent nzBlockNode [nzData]="dataSource" [nzExpandedKeys]="expandedKeys"
+      (nzClick)="nzClick($event)" [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
+    <ng-template #nzTreeTemplate let-node>
+      <ng-template [ngIf]="!node.isLeaf">
+        <span class="text-sm">{{ node.title }}</span>
+      </ng-template>
+      <ng-template [ngIf]="node.isLeaf">
+        <div (click)="insertCode(node)">
+          <span class="text-xs text-blue-400">{{ node.title }}</span>
+          <ng-container *ngIf="node.origin.note">
+            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
+              nzTooltipColor="black" nz-tooltip>
+              [?]
+            </span>
+            <ng-template #titleTemplate let-thing>
+              <p style="color: #99c6da" *ngIf="node.origin.note.code">{{ node.origin.note.code }}</p>
+              <p *ngIf="node.origin.note.desc">{{ node.origin.note.desc }}</p>
+              <ng-container *ngIf="node.origin.note.input">
+                <br />
+                <p style="color: #999" i18n>---input---</p>
+                <p *ngFor="let item of node.origin.note.input">
+                  <span style="color: #ff9800">{{ item.key }}：</span>{{ item.value }}
+                </p>
+              </ng-container>
+              <ng-container *ngIf="node.origin.note.output">
+                <br />
+                <p style="color: #999" i18n>---return---</p>
+                <p>{{ node.origin.note.output }}</p>
+              </ng-container>
+            </ng-template>
+          </ng-container>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+  <div class="flex-1 h-[322px]">
+    <eo-editor [(code)]="code" editorType="javascript" [eventList]="['format', 'copy', 'search', 'replace']"
+      (codeChange)="handleChange($event)" [completions]="completions" [minHeight]="270">
+    </eo-editor>
+  </div>
+</div>

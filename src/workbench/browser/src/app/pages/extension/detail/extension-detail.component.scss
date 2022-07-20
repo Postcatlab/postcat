@@ -1,68 +1,31 @@
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-.w-40 {
-  width: 10rem;
-}
-.mr-8 {
-  margin-right: 2rem;
-}
-.h-40 {
-  height: 10rem;
-}
-.block {
-  display: block;
-}
-.border {
-  border-width: 1px;
-}
-.rounded-lg {
-  border-radius: 0.5rem;
-}
-.bg-cover {
-  background-size: cover;
-}
-.bg-no-repeat {
-  background-repeat: no-repeat;
-}
-.bg-center {
-  background-position: center;
-}
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
-.font-bold {
-  font-weight: 700;
-}
-.flex-1 {
-  flex: 1 1 0%;
-}
-.flex-col {
-  flex-direction: column;
-}
-.flex {
-  display: flex;
-}
-.w-full {
-  width: 100%;
-}
-.h-20 {
-  height: 5rem;
-}
-.p-8 {
-  padding: 2rem;
-}
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 ::ng-deep {
-  eo-extension-detail .ant-tabs-content-holder {
-    padding-top: 20px;
+  eo-extension-detail {
+    .ant-tabs-content-holder {
+      padding-top: 20px;
+    }
+  }
+  .md-preview {
+    img {
+      max-width: 800px;
+    }
+  }
+  .extension-detail {
+    .markdown-desc {
+      overflow: auto;
+      &::-webkit-scrollbar {
+        width: 0;
+      }
+      &:hover::-webkit-scrollbar {
+        width: 8px;
+      }
+    }
+  
+    .ant-descriptions-row > td {
+      padding-bottom: 8px;
+    }
+    .ant-descriptions-item-content,
+    .ant-descriptions-item-label {
+      color: #999;
+    }
   }
 }

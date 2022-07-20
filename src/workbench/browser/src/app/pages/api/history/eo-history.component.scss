@@ -1,0 +1,30 @@
+.method_type {
+  &.green {
+    color: green
+  }
+  &.red {
+    color: red
+  }
+  &.blue {
+    color: blue
+  }
+  &.pink {
+    color: pink
+  }
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  color: rgba(0,0,0,0.5);
+  border-radius: 3px;
+  font-size: 1.3em;
+  transition: all .4s ease;
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+}
+
+.history-title {
+  border-bottom: 1px solid #eee;
+}

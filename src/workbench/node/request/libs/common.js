@@ -7,6 +7,139 @@ let _LibsDataConstructor = new (require('./data_constructor').core)();
 let xml2json = require('xml2js');
 let privateFun = {};
 const LOCAL_REGEXP_CONST = 'eoundefined$';
+/**
+ * @desc 处理用户脚本允许错误时返回的内容
+ * @param {object} input_err 错误对象
+ */
+privateFun.execCodeErrWarning = (input_err) => {
+  let tmp_error_row, tmp_error_col, tmp_fn_name;
+  if (/<anonymous>:(.*):(.*)\)/.test(input_err.stack)) {
+    tmp_error_row = RegExp.$1;
+    tmp_error_col = RegExp.$2;
+  }
+  if (!/ is not a function/.test(input_err.stack)) {
+    if (/eo\.userFunction\.(.+) \(vm\.js:(.*):(.*)\)/.test(input_err.stack)) {
+      let tmp_stack_text = input_err.stack.substr(input_err.stack.indexOf('eo.userFunction.'), input_err.stack.length);
+      tmp_fn_name = tmp_stack_text.substr(0, tmp_stack_text.indexOf(' '));
+      tmp_error_row = RegExp.$2;
+      tmp_error_col = RegExp.$3;
+      tmp_error_row--;
+    } else if (/eo\.globalFunction\.(.+) \(vm\.js:(.*):(.*)\)/.test(input_err.stack)) {
+      let tmp_stack_text = input_err.stack.substr(
+        input_err.stack.indexOf('eo.globalFunction.'),
+        input_err.stack.length
+      );
+      tmp_fn_name = tmp_stack_text.substr(0, tmp_stack_text.indexOf(' '));
+      tmp_error_row = RegExp.$2;
+      tmp_error_col = RegExp.$3;
+      if (tmp_error_row === '1') {
+        tmp_error_col = tmp_error_col - 101;
+      }
+      tmp_error_row--;
+    } else if (/eo\.spaceFunction\.(.+) \(vm\.js:(.*):(.*)\)/.test(input_err.stack)) {
+      let tmp_stack_text = input_err.stack.substr(input_err.stack.indexOf('eo.spaceFunction.'), input_err.stack.length);
+      tmp_fn_name = tmp_stack_text.substr(0, tmp_stack_text.indexOf(' '));
+      tmp_error_row = RegExp.$2;
+      tmp_error_col = RegExp.$3;
+      if (tmp_error_row === '1') {
+        tmp_error_col = tmp_error_col - 101;
+      }
+      tmp_error_row--;
+    } else {
+      if (input_err.stack.indexOf('^') > -1) {
+        if (/vm\.js:(.*)\n/.test(input_err.stack)) {
+          tmp_error_row = RegExp.$1;
+          tmp_error_col = RegExp.$2;
+        }
+        let tmp_last_index = input_err.stack.indexOf('^');
+        let tmp_first_index = input_err.stack.substr(0, tmp_last_index).lastIndexOf('\n');
+        tmp_error_col = tmp_last_index - tmp_first_index;
+      } else {
+        if (/vm\.js:(.*):(.*)\)/.test(input_err.stack)) {
+          tmp_error_row = RegExp.$1;
+          tmp_error_col = RegExp.$2;
+        }
+      }
+      if (tmp_error_row === '1') {
+        tmp_error_col = tmp_error_col - 62;
+      }
+    }
+  }
+  return {
+    row: tmp_error_row,
+    col: tmp_error_col,
+    fn: tmp_fn_name,
+  };
+};
+/**
+ * 截断死循环
+ * @return {class}   截断类
+ */
+privateFun.infiniteLoopDetector = function () {
+  let map = {};
+  // define an InfiniteLoopError class
+  function InfiniteLoopError(msg, type) {
+    Error.call(this, msg);
+    this.type = 'InfiniteLoopError';
+  }
+
+  function infiniteLoopDetector(id) {
+    if (id in map) {
+      // 非首次执行，此处可以优化，性能太低
+      if (Date.now() - map[id] > CONFIG.MAX_TIME_LOOP) {
+        delete map[id];
+        throw new Error('Loop runing too long!', 'InfiniteLoopError');
+      }
+    } else {
+      // 首次运行，记录循环开始的时间。之所有把非首次运行的判断写在前面的if里是因为上面会执行更多次
+      map[id] = Date.now();
+    }
+  }
+
+  infiniteLoopDetector.wrap = function (codeStr, key) {
+    if (typeof codeStr !== 'string') {
+      throw new Error(
+        'Can only wrap code represented by string, not any other thing at the time! If you want to wrap a function, convert it to string first.'
+      );
+    }
+    if (codeStr.indexOf('eo.execBsh') > -1) return codeStr;
+    // this is not a strong regex, but enough to use at the time
+    return codeStr.replace(/for *\(.*\{|while *\(.*\{|do *\{/g, function (loopHead) {
+      let id = parseInt(Math.random() * Number.MAX_SAFE_INTEGER);
+      return (key || `infiniteLoopDetector`) + `(${id});${loopHead}` + (key || `infiniteLoopDetector`) + `(${id});`;
+    });
+  };
+  return infiniteLoopDetector;
+};
+/**
+ * 解析结果类型
+ * @param {any} object
+ */
+privateFun.typeof = function (object) {
+  var tf = typeof object,
+    ts = Object.prototype.toString.call(object);
+  return null === object
+    ? 'Null'
+    : 'undefined' == tf
+    ? 'Undefined'
+    : 'boolean' == tf
+    ? 'Boolean'
+    : 'number' == tf
+    ? Number.isInteger(object)
+      ? 'Int'
+      : /^(-?\d+)(\.\d+)?$/.test(object)
+      ? 'Float'
+      : 'Number'
+    : 'string' == tf
+    ? 'String'
+    : '[object Function]' == ts
+    ? 'Function'
+    : '[object Array]' == ts
+    ? 'Array'
+    : '[object Date]' == ts
+    ? 'Date'
+    : 'Object';
+};
 privateFun.deepCopy = (inputObject) => {
   try {
     return JSON.parse(JSON.stringify(inputObject));
@@ -70,23 +203,22 @@ privateFun.parseRequestDataToObj = (inputData) => {
 };
 privateFun.bodyQueryToJson = function (inputArray, inputOptions) {
   inputOptions = inputOptions || {
-      apiRequestParamJsonType: 0
-  }
-  let tmpXmlAttrObj={};
-  let tmpJsonObj=_LibsDataConstructor.eo_define_arr_to_json(inputArray, {},inputOptions,tmpXmlAttrObj);
-  if(inputOptions.isXml){
-      return {
-          value:JSON.stringify(tmpJsonObj),
-          attr:tmpXmlAttrObj
-      }
+    apiRequestParamJsonType: 0,
+  };
+  let tmpXmlAttrObj = {};
+  let tmpJsonObj = _LibsDataConstructor.eo_define_arr_to_json(inputArray, {}, inputOptions, tmpXmlAttrObj);
+  if (inputOptions.isXml) {
+    return {
+      value: JSON.stringify(tmpJsonObj),
+      attr: tmpXmlAttrObj,
+    };
   }
   if ((inputOptions.apiRequestParamJsonType || 0).toString() == '1') {
-      return JSON.stringify([tmpJsonObj]).replace(/("eo_big_int_)(((?!").)*)(")/g,"$2");
+    return JSON.stringify([tmpJsonObj]).replace(/("eo_big_int_)(((?!").)*)(")/g, '$2');
   } else {
-      return JSON.stringify(tmpJsonObj).replace(/("eo_big_int_)(((?!").)*)(")/g,"$2");
+    return JSON.stringify(tmpJsonObj).replace(/("eo_big_int_)(((?!").)*)(")/g, '$2');
   }
-
-}
+};
 /**
  * 解析环境变量
  * @param  {array} env 环境变量
@@ -179,9 +311,12 @@ privateFun.mergeObj = (inputTargetItem, inputSourceItem) => {
 exports.mergeObj = privateFun.mergeObj;
 exports.parseEnv = privateFun.parseEnv;
 exports.deepCopy = privateFun.deepCopy;
+exports.getTypeOfVar = privateFun.typeof;
 exports.parseRequestDataToObj = privateFun.parseRequestDataToObj;
 exports.bodyQueryToJson = privateFun.bodyQueryToJson;
-exports.LOCAL_REGEXP_CONST=LOCAL_REGEXP_CONST;
+exports.LOCAL_REGEXP_CONST = LOCAL_REGEXP_CONST;
 exports.replaceAll = function () {
   return _LibsDataConstructor.text_replace_all(...arguments);
 };
+exports.execCodeErrWarning = privateFun.execCodeErrWarning;
+exports.infiniteLoopDetector = privateFun.infiniteLoopDetector();

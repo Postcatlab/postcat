@@ -33,6 +33,21 @@ export class ParamsImportComponent {
     }
   }
 
+  get eg() {
+    switch (this.contentType) {
+      // case 'xml':
+      //   return `<name>Jack</name><age>12</age>`;
+      // case 'json':
+      //   return `{ "name": "Jack", "age": 12 }`;
+      case 'formData':
+        return `name: Jack\nage: 12`;
+      case 'query':
+        return `/api?name=Jack&age=12`;
+      default:
+        return `/api?name=Jack&age=12`;
+    }
+  }
+
   get contenTypeEditor() {
     switch (this.contentType) {
       case 'formData':
@@ -83,7 +98,7 @@ export class ParamsImportComponent {
         return;
       }
       paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
-      console.log('-->', paramCode);
+      // console.log('-->', paramCode);
     }
     if (this.contentType === 'raw') {
       paramCode = this.paramCode;
@@ -115,6 +130,7 @@ export class ParamsImportComponent {
         break;
       }
       case 'overwrite': {
+        console.log(cacheData);
         resultData = cacheData;
         break;
       }

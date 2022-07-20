@@ -23,6 +23,8 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+
 
 import { ByteToStringPipe } from './result-response/get-size.pipe';
 
@@ -40,6 +42,7 @@ import { ApiTestResultHeaderComponent } from './result-header/api-test-result-he
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ApiTestHistoryComponent } from './history/api-test-history.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
+import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 const NZ_COMPONETS = [
   NzDropDownModule,
   NzModalModule,
@@ -56,7 +59,8 @@ const NZ_COMPONETS = [
   NzEmptyModule,
   NzPopconfirmModule,
   NzToolTipModule,
-  NzTypographyModule
+  NzAlertModule,
+  NzTypographyModule,
 ];
 const COMPONENTS = [
   ApiTestComponent,
@@ -79,8 +83,8 @@ const COMPONENTS = [
     ...NZ_COMPONETS,
     EouiModule,
     SharedModule,
-    ParamsImportModule
+    ParamsImportModule,
   ],
-  providers: [ApiTestService, TestServerService, TestServerLocalNodeService,TestServerServerlessService],
+  providers: [ApiTestService, TestServerService, TestServerLocalNodeService,TestServerServerlessService,TestServerRemoteService],
 })
 export class ApiTestModule {}

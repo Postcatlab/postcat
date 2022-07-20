@@ -1,8 +1,11 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 
-import { TestServer } from '../test-server.model';
+import { requestDataOpts, TestServer } from '../test-server.model';
 import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
 @Injectable()
+/**
+ * Vercel serverless api
+ */
 export class TestServerServerlessService implements TestServer {
   receiveMessage: (message) => void;
   xhrByTabID = {};
@@ -42,7 +45,7 @@ export class TestServerServerlessService implements TestServer {
               responseLength: 0,
               responseType: 'text',
               reportList: [],
-              body: '测试服务连接失败，请提交 Issue 联系社区',
+              body: $localize`Test service connection failed, please submit Issue contact community`,
             },
             report: {
               request: {
@@ -75,7 +78,7 @@ export class TestServerServerlessService implements TestServer {
    *
    * @param input
    */
-  formatRequestData(data, opts = { env: {} }) {
+  formatRequestData(data, opts: requestDataOpts) {
     return eoFormatRequestData(data, opts, this.locale);
   }
   /**

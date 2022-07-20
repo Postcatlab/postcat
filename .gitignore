@@ -10,10 +10,13 @@ out/
 *.js
 *.js.map
 *.webpack.js
+!src/workbench/node/electron/**/*.js
 !src/workbench/node/request/**/*.js
+!src/workbench/node/server/**/*.js
 !/api/*.js
 !/build/*.js
 !*.config.js
+!upload.js
 
 scripts/notarize.js
 # dependencies
@@ -34,6 +37,7 @@ node_modules
 /coverage
 /libpeerconnection.log
 npm-debug.log
+*-error.log
 testem.log
 /typings
 
@@ -48,4 +52,5 @@ testem.log
 .DS_Store
 Thumbs.db
 # *-lock.json
+-error.log
 .vercel

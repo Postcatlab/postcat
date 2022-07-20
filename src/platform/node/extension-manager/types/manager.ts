@@ -13,34 +13,39 @@ export enum ModuleType {
   app = 'app',
   feature = 'feature',
 }
-
+export interface I18nLocale {
+  locale: string;
+  package: any;
+}
 /**
  * 模块信息接口
  */
 export interface ModuleInfo {
-  // 模块名称, npm包名
+  // npm package name
   name: string;
-  // 作者
+  // author
   author: string;
-  // 版本
+  // extension version
   version: string;
-  // 模块描述
+  // extension description
   description: string;
-  // 模块ID，用于关联
+  // extension intro,from README.md
+  introduction: string;
+  // extension ID
   moduleID: string;
-  // 模块名称，用于显示
+  // extension name
   moduleName: string;
-  // 模块类型
+  // extension type
   moduleType: ModuleType;
-  // 模块Logo
+  // extension logo
   logo: string;
-  // 入口文件
+  // manifest code file
   main: string;
-  // main端运行脚本
+  // main node script
   main_node?: string;
   // 入口开发调试
   main_debug?: string;
-  // 预加载js文件
+  // inject script before start app
   preload?: string;
   // 判断是不是顶层App
   isApp?: boolean;
@@ -62,8 +67,9 @@ export interface ModuleInfo {
   contributes: ModuleContributes;
   // 功能点配置
   features?: {
-    [index: string]: object;
+    [index: string]: any;
   };
+  i18n?: I18nLocale[];
 }
 /**
  * 贡献点
@@ -112,10 +118,11 @@ export interface ModuleManagerInfo {
  * getModules 获取所有模块列表，或返回有模块关联子模块的信息
  */
 export interface ModuleManagerInterface {
+  installExt: any;
   install: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
-  update: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   uninstall: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   refresh: (module: ModuleManagerInfo) => void;
+  refreshAll: () => void;
   getModule: (moduleID: string, belongs?: boolean) => ModuleInfo;
   getModules: (belongs?: boolean) => Map<string, ModuleInfo>;
   getAppModuleList: () => Array<ModuleInfo>;

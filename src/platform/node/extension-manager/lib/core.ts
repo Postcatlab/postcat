@@ -1,8 +1,10 @@
 import * as path from 'path';
 import { ModuleHandlerOptions, ModuleInfo } from '../types';
-import { fileExists, readJson } from 'eo/shared/node/file';
+import { fileExists, readFile, readJson } from 'eo/shared/node/file';
 import { isNotEmpty } from 'eo/shared/common/common';
-
+import { getLocaleData } from 'eo/platform/node/i18n';
+import { LanguageService } from 'eo/app/electron-main/language.service';
+import { TranslateService } from 'eo/platform/common/i18n';
 /**
  * 核心模块管理器
  * @class CoreHandler
@@ -38,6 +40,19 @@ export class CoreHandler {
       const baseDir: string = this.getModuleDir(name);
       moduleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
       moduleInfo.baseDir = baseDir;
+      // Get language locale
+      //!Warn:baseDir must be set before get locale file
+      const lang = LanguageService.get();
+      if (moduleInfo.features?.i18n) {
+        const locale = getLocaleData(moduleInfo, lang);
+        if (locale) {
+          let translateService = new TranslateService(moduleInfo, locale);
+          moduleInfo = translateService.translate();
+        }
+      }
+      // Check that the file exists locally
+      moduleInfo.introduction =
+        readFile(path.join(baseDir, `README.${lang}.md`)) || readFile(path.join(baseDir, `README.md`));
       moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
       if (moduleInfo.preload?.length > 0) {
         moduleInfo.preload = path.join(moduleInfo.baseDir, moduleInfo.preload);
@@ -55,9 +70,9 @@ export class CoreHandler {
         moduleInfo.author = moduleInfo.author['name'] || '';
       }
     } catch (e) {
+      console.log(`get module ${moduleInfo.moduleID} error:${e}`);
       moduleInfo = {} as ModuleInfo;
     }
-
     return moduleInfo;
   }
 

@@ -50,7 +50,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
-      title: '概况',
+      title: $localize `:@@API Index:Index`,
       key: 'overview',
       weight: 0,
       parentID: '0',
@@ -160,30 +160,12 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
     ];
   }
-  // 重新构建整个group
-  async rebuildGroupTree(result) {
-    this.storageInstance.apiData.clear();
-    this.storageInstance.group.clear();
+  async createGroup({ name, projectID, content }) {
+    const groupID = await this.storageInstance.group.add({ name: name.replace(/\.json$/, ''), projectID });
+    // console.log('==>', content);
+    const result = content.apiData.map((it, index) => ({ ...it, groupID, uuid: Date.now() + index }));
     await this.storageInstance.apiData.bulkAdd(result);
-    const apiItems = {};
-    this.treeItems = [];
-    result.forEach((item: ApiData) => {
-      delete item.updatedAt;
-      apiItems[item.uuid] = item;
-      this.treeItems.push({
-        title: item.name,
-        key: item.uuid.toString(),
-        weight: item.weight || 0,
-        parentID: item.groupID ? `group-${item.groupID}` : '0',
-        method: item.method,
-        isLeaf: true,
-      });
-    });
-    this.apiDataItems = apiItems;
-    this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
-    this.setSelectedKeys();
-    this.generateGroupTreeData();
-    this.restoreExpandStatus();
+    this.buildGroupTreeData();
   }
 
   /**
@@ -205,8 +187,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             break;
           }
           case 'importSuccess': {
-            const { apiData } = JSON.parse(inArg.data);
-            this.rebuildGroupTree(apiData);
+            this.createGroup({ projectID: 1, ...inArg.data });
           }
         }
       });
@@ -265,7 +246,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Create group.
    */
   addGroup() {
-    this.groupModal('添加分组', { group: this.buildGroupModel(), action: 'new' });
+    this.groupModal($localize`Add Group`, { group: this.buildGroupModel(), action: 'new' });
   }
 
   /**
@@ -274,7 +255,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   addSubGroup(node: NzTreeNode) {
-    this.groupModal('添加子分组', { group: this.buildGroupModel(node.key), action: 'sub' });
+    this.groupModal($localize`Add Subgroup`, { group: this.buildGroupModel(node.key), action: 'sub' });
   }
 
   /**
@@ -283,7 +264,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   editGroup(node: NzTreeNode) {
-    this.groupModal('编辑分组', { group: this.nodeToGroup(node), action: 'edit' });
+    this.groupModal($localize`Edit Group`, { group: this.nodeToGroup(node), action: 'edit' });
   }
 
   /**
@@ -292,7 +273,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   deleteGroup(node: NzTreeNode) {
-    this.groupModal('删除分组', { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
+    this.groupModal($localize`Delete Group`, { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
   }
 
   /**
@@ -319,10 +300,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   treeItemDrop(event: NzFormatEmitEvent): void {
     const dragNode = event.dragNode;
+    const children = dragNode.parentNode?.getChildren();
     const groupApiData: GroupApiDataModel = { group: [], api: [] };
-    if (dragNode.parentNode) {
+    if (children?.length) {
+      const targetIndex = children.findIndex((n) => n.key === dragNode.key);
+      if (targetIndex === dragNode.origin.weight) {
+        return;
+      }
       const parentNode = dragNode.parentNode;
-      parentNode.getChildren().forEach((item: NzTreeNode, index: number) => {
+      children.forEach((item: NzTreeNode, index: number) => {
         if (item.isLeaf) {
           groupApiData.api.push({ uuid: item.key, weight: index, groupID: parentNode.key });
         } else {
@@ -330,11 +316,18 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      if (dragNode.isLeaf) {
-        groupApiData.api.push({ uuid: dragNode.key, weight: 0, groupID: '0' });
-      } else {
-        groupApiData.group.push({ uuid: dragNode.key, weight: 0, parentID: '0' });
+      const treeNodes = this.apiGroup.getTreeNodes();
+      const targetIndex = treeNodes.findIndex((n) => n.key === dragNode.key);
+      if (targetIndex === dragNode.origin.weight) {
+        return;
       }
+      treeNodes.forEach((item, index) => {
+        if (dragNode.isLeaf) {
+          groupApiData.api.push({ uuid: item.key, weight: index, groupID: '0' });
+        } else {
+          groupApiData.group.push({ uuid: item.key.replace('group-', ''), weight: index, parentID: '0' });
+        }
+      });
     }
     this.updateoperateApiEvent(groupApiData);
   }
@@ -349,14 +342,18 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         'groupBulkUpdate',
         [
           data.group.map((val) => {
-            return { ...val, uuid: val.uuid.replace('group-',''), parentID: val.parentID.replace('group-','') };
+            return { ...val, uuid: val.uuid.replace('group-', ''), parentID: val.parentID.replace('group-', '') };
           }),
         ],
-        (result: StorageRes) => {}
+        (result: StorageRes) => {
+          this.buildGroupTreeData();
+        }
       );
     }
     if (data.api.length > 0) {
-      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {});
+      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {
+        this.buildGroupTreeData();
+      });
     }
   }
   private watchRouterChange() {

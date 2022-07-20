@@ -38,13 +38,18 @@ export interface TestLocalNodeData {
    * request body
    * @type {string|array}
    */
-  params:string|{
-    checkbox: boolean;
-    paramKey: string;
-    paramType: string;
-    paramInfo: string;
-    childList: object[];
-  }[];
+  params:
+    | string
+    | {
+        checkbox: boolean;
+        paramKey: string;
+        paramType: string;
+        /**
+         * value
+         */
+        paramInfo: string;
+        childList: object[];
+      }[];
   /**
    * request auth,baisc auth/jwt
    * @type {object}
@@ -54,12 +59,12 @@ export interface TestLocalNodeData {
    * execute script before test
    * @type {string}
    */
-  beforeInject?: null;
+  beforeInject?: string;
   /**
    * execute script after response
    * @type {string}
    */
-  afterInject?: null;
+  afterInject?: string;
 
   /**
    * advanced http setting
@@ -75,4 +80,8 @@ export interface TestLocalNodeData {
   testTime: string;
   globals?: object;
   globalHeader?: object;
+  /**
+   * System language
+   */
+  lang:string;
 }

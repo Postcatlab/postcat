@@ -24,21 +24,21 @@ export class ApiOverviewComponent implements OnDestroy {
   constructor(private modalService: ModalService, private router: Router, private message: EoMessageService) {}
   overviewList = [
     {
-      title: '导入',
+      title: $localize`Import`,
       icon: 'import',
-      desc: '导入 API 数据',
+      desc: $localize`Import API data`,
       type: 'import',
     },
     {
-      title: '导出',
+      title: $localize`Export`,
       icon: 'export',
-      desc: '导出 API 数据',
+      desc: $localize`Export API data`,
       type: 'export',
     },
     {
-      title: '推送',
+      title: $localize`Push`,
       icon: 'sync',
-      desc: '将 API 推送/同步到其他平台',
+      desc: $localize`Push/Sync API to other platforms`,
       type: 'push',
     },
   ];
@@ -52,10 +52,10 @@ export class ApiOverviewComponent implements OnDestroy {
       nzOnOk: () => {
         this.modal.componentInstance.submit((status) => {
           if (status) {
-            this.message.success(`${title}成功`);
+            this.message.success($localize`${title} successfully`);
             this.modal.destroy();
           } else {
-            this.message.error(`${title}失败`);
+            this.message.error($localize`Failed to ${title}`);
           }
         });
       },

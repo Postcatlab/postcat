@@ -1,7 +1,6 @@
-import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { env } from 'process';
-import { Observable, map, filter } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   Project,
   Environment,
@@ -9,28 +8,9 @@ import {
   ApiData,
   ApiTestHistory,
   StorageInterface,
-  StorageItem,
   ApiMockEntity,
 } from '../../index.model';
 
-const protocolReg = new RegExp('^(http|https)://');
-
-// implements StorageInterface
-@Injectable()
-export class BaseUrlInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const { url = '', token = '' } = window.eo?.getModuleSettings?.('eoapi-common.remoteServer') || {};
-    req = req.clone({
-      url: protocolReg.test(req.url) ? req.url : url + req.url,
-      headers: req.headers.append('x-api-key', token),
-    });
-
-    return next.handle(req).pipe(
-      filter((event) => event instanceof HttpResponse && [200, 201].includes(event.status)),
-      map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data } }))
-    );
-  }
-}
 @Injectable()
 export class HttpStorage implements StorageInterface {
   constructor(private http: HttpClient) {
@@ -144,7 +124,12 @@ export class HttpStorage implements StorageInterface {
     return this.http.get(`/api_test_history?apiDataID=${apiDataID}`) as Observable<object>;
   }
   mockCreate(item: ApiMockEntity) {
-    return this.http.post('/mock', item) as Observable<object>;
+    if (typeof item.response !== 'string') {
+      item.response = JSON.stringify(item.response);
+    }
+    const obj = { ...item };
+    delete obj.url;
+    return this.http.post('/mock', obj) as Observable<object>;
   }
   mockLoad(uuid: number | string): Observable<object> {
     return this.http.get(`/mock/${uuid}`) as Observable<object>;
@@ -153,9 +138,14 @@ export class HttpStorage implements StorageInterface {
     return this.http.delete(`/mock/${uuid}`);
   }
   mockUpdate(item: ApiMockEntity, uuid: number | string): Observable<object> {
-    return this.http.put(`/mock/${uuid}`, item);
+    if (typeof item.response !== 'string') {
+      item.response = JSON.stringify(item.response);
+    }
+    const obj = { ...item };
+    delete obj.url;
+    return this.http.put(`/mock/${uuid}`, obj);
   }
   apiMockLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
-    return this.http.get(`/mock/list?apiDataID=${apiDataID}`);
+    return this.http.get(`/mock?apiDataID=${apiDataID}`);
   }
 }

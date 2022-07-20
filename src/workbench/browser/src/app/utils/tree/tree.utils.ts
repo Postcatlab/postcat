@@ -47,6 +47,9 @@ export const listToTreeHasLevel = (
   return result;
 };
 export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (val) => object } = { listDepth: 0 }) => {
+  if (!Array.isArray(tree)) {
+    return [];
+  }
   let result = [];
   tree.forEach((val) => {
     val.listDepth = opts.listDepth;
@@ -163,11 +166,16 @@ export const getExpandGroupByKey = (component, key) => {
  */
 export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {}) => {
   const { key = 'name', valueKey = 'description', childKey = 'children' } = opts;
-
   return list?.reduce?.((prev, curr) => {
-    prev[curr[key]] = curr[valueKey] || fieldTypeMap.get(curr.type);
-    if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
-      tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
+    try {
+      curr = typeof curr === 'string' ? JSON.parse(curr) : curr;
+      prev[curr[key]] = curr[valueKey] || fieldTypeMap.get(curr.type);
+      if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
+        console.log(`prev: ${prev} == curr: ${curr} == key: ${key}`);
+        tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
+      }
+    } catch (error) {
+      console.log('error==>', `prev: ${prev} == curr: ${curr} == key: ${key}`);
     }
     return prev;
   }, initObj);

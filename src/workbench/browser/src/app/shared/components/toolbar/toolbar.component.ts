@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
-  showThemeDrawer: boolean = false;
+  showThemeDrawer = false;
   sideBarCollapsed: boolean;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(private sidebar: SidebarService) {

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { parserJsonFile } from '../../../utils';
+import { EoMessageService } from '../../../eoui/message/eo-message.service';
 
 type optionType = {
   label: string;
@@ -20,6 +21,9 @@ export class ExtensionSelectComponent {
   @Output() extensionChange = new EventEmitter<string>();
   @Output() currentOptionChange = new EventEmitter<string>();
   @Output() uploadChange = new EventEmitter<any>();
+  filename = '';
+
+  constructor(private message: EoMessageService) {}
 
   selectExtension({ key, properties }) {
     this.extensionChange.emit(key);
@@ -36,7 +40,12 @@ export class ExtensionSelectComponent {
 
   parserFile = (file) =>
     new Observable((observer: Observer<boolean>) => {
-      parserJsonFile(file).then((result) => {
+      if (file.type !== 'application/json') {
+        this.message.error($localize `Only files in JSON format are supported`);
+        observer.complete();
+      }
+      parserJsonFile(file).then((result: { name: string }) => {
+        this.filename = result.name;
         this.uploadChange.emit(result);
         observer.complete();
       });

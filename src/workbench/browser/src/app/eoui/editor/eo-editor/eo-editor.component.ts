@@ -2,40 +2,43 @@ import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, ViewC
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { AceConfigInterface, AceComponent, AceDirective } from 'ngx-ace-wrapper';
 import { whatTextType } from '../../../utils';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import beautifier from 'js-beautify';
 import 'brace';
+import 'brace/ext/language_tools';
 import 'brace/theme/tomorrow_night_eighties';
 import 'brace/mode/json';
 import 'brace/mode/text';
 import 'brace/mode/html';
 import 'brace/mode/xml';
 import 'brace/ext/searchbox';
+import ace from 'brace';
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
 const eventHash = new Map()
   .set('format', {
-    label: '整理格式',
+    label: $localize`Format`,
     icon: 'deployment-unit',
   })
   .set('copy', {
-    label: '复制',
+    label: $localize`:@@Copy:Copy`,
     icon: 'copy',
   })
   .set('search', {
-    label: '搜索',
+    label: $localize`:@@Search:Search`,
     icon: 'search',
   })
   .set('download', {
-    label: '下载',
+    label: $localize`Download`,
     icon: 'download',
   })
   .set('newTab', {
-    label: '新开标签',
+    label: $localize`New Tab`,
     icon: 'file-text',
   })
   .set('replace', {
-    label: '替换',
+    label: $localize`Replace`,
     icon: 'security-scan',
   });
 
@@ -48,8 +51,12 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
   @Input() code: string;
+  @Input() minHeight = 70;
   @Input() editorType = 'json';
   @Input() autoFormat = false;
+  @Input() disabled = false;
+  @Input() completions = [];
+  @Input() config: AceConfigInterface = {};
   @Output() codeChange = new EventEmitter<string>();
   @ViewChild(AceComponent, { static: false }) aceRef?: AceComponent;
   @ViewChild(AceDirective, { static: false }) directiveRef?: AceDirective;
@@ -74,13 +81,21 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     },
   ];
 
-  public config: AceConfigInterface = {
+  public $config: AceConfigInterface = {
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
     theme: 'tomorrow_night_eighties',
     readOnly: false,
     tabSize: 4,
+    minLines: 5,
+    maxLines: 20,
   };
 
-  constructor(private message: EoMessageService) {}
+  get aceConfig() {
+    return { ...this.$config, ...this.config };
+  }
+
+  constructor(private message: EoMessageService, private electron: ElectronService) {}
 
   ngAfterViewInit(): void {}
   ngOnChanges() {
@@ -94,13 +109,27 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     }
   }
   ngOnInit() {
+    // console.log(this.eventList);
     // To get the Ace instance:
-    this.buttonList = this.eventList
-      .filter((it) => it !== 'type')
-      .map((it) => ({
-        event: it,
-        ...eventHash.get(it),
-      }));
+    this.buttonList = this.electron.isElectron
+      ? this.eventList
+          .filter((it) => !['newTab', 'type'].includes(it))
+          .map((it) => ({
+            event: it,
+            ...eventHash.get(it),
+          }))
+      : this.eventList
+          .filter((it) => it !== 'type')
+          .map((it) => ({
+            event: it,
+            ...eventHash.get(it),
+          }));
+    const langTools = ace.acequire('ace/ext/language_tools');
+    langTools.setCompleters([]);
+    langTools.addCompleter({
+      // this.aceEditorServiceService.getAutocomplete(this.autocompleteData),
+      getCompletions: (editor, session, pos, prefix, callback) => callback(null, this.completions),
+    });
   }
   log(event, txt) {
     console.log('ace event', event, txt);
@@ -115,8 +144,11 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
       this.codeChange.emit(this.code);
     }, 0);
   }
+  rerenderAce() {
+    this.aceRef.directiveRef.ace().renderer.updateFull(true);
+  }
   formatCode(code, type) {
-    if (type === 'json') {
+    if (['json', 'javascript'].includes(type)) {
       return beautifier.js(code, {
         indent_size: 2,
         space_in_empty_paren: true,
@@ -143,7 +175,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
         const value = session.getValue();
         if (navigator.clipboard) {
           navigator.clipboard.writeText(value);
-          this.message.success('复制成功');
+          this.message.success($localize`Copied`);
           return;
         }
         break;
@@ -182,8 +214,13 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
           document.body.removeChild(a);
         }
         break;
-      default:
-        break;
     }
+  }
+
+  handleInsert(code) {
+    const ace = this.aceRef.directiveRef.ace();
+    const cursorPos = ace.getCursorPosition();
+    ace.session.insert(cursorPos, code);
+    ace.focus();
   }
 }

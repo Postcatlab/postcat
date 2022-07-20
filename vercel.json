@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/:path((?!zh/).*)",
+      "destination": "/zh/:path*"
+    },
+    {
+      "source": "/:path((?!en/).*)",
+      "destination": "/en/:path*"
+    }
+  ]
+}

@@ -4,6 +4,8 @@ import { ModuleHandlerOptions, ModuleHandlerResult } from '../types';
 import { fileExists, writeJson } from 'eo/shared/node/file';
 import { CoreHandler } from './core';
 import * as fs from 'fs';
+import { spawn } from 'child_process';
+type Action = 'uninstall' | 'install' | 'update';
 // import npmCli from 'npm';
 const npmCli = require('npm');
 /**
@@ -57,16 +59,15 @@ export class ModuleHandler extends CoreHandler {
    * @param modules 模块名称数组
    * @param isLocal 本地安装用link
    */
-  async install(modules: string[], isLocal: boolean): Promise<ModuleHandlerResult> {
+  async install(modules: any[], isLocal: boolean): Promise<ModuleHandlerResult> {
     return await this.execCommand(isLocal ? 'link' : 'install', modules);
   }
-
   /**
    * 更新模块
-   * @param {...string[]} modules 模块名称数组
+   * @param [{ name:string, version:string }]
    */
-  async update(...modules: string[]): Promise<ModuleHandlerResult> {
-    return await this.execCommand('update', modules);
+  async update(modules: any[]): Promise<ModuleHandlerResult> {
+    return await this.execCommand('install', modules);
   }
 
   /**
@@ -74,7 +75,7 @@ export class ModuleHandler extends CoreHandler {
    * @param {string[]} modules 模块名称数组
    * @param isLocal 本地卸载用unlink
    */
-  async uninstall(modules: string[], isLocal: boolean): Promise<ModuleHandlerResult> {
+  async uninstall(modules: any[], isLocal: boolean): Promise<ModuleHandlerResult> {
     return await this.execCommand(isLocal ? 'unlink' : 'uninstall', modules);
   }
 
@@ -83,7 +84,7 @@ export class ModuleHandler extends CoreHandler {
    * @param result npm install安装成功回调的结果
    * @param moduleList 所有的模块列表
    */
-  private operatePackage(result: any[], moduleList: string[], action: 'uninstall' | 'install' | 'update') {
+  private operatePackage(result: any[], moduleList: string[], action: Action) {
     if (Array.isArray(result)) {
       const moduleNames = moduleList.map((n) => n.split('@')[0]);
       const packagePath = path.join(this.baseDir, 'package.json');
@@ -105,79 +106,66 @@ export class ModuleHandler extends CoreHandler {
       });
     }
   }
-
+  private executeByAppNpm(command: string, modules: any[], resolve, reject) {
+    // https://www.npmjs.com/package/bin-links
+    npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
+      const moduleList = modules.map(({ name, version }) => (version ? `${name}@${version}` : name));
+      let executeCommand = ['update', 'install', 'uninstall'];
+      if (!executeCommand.includes(command)) {
+        return;
+      }
+      npmCli.commands[command](moduleList, (err, data) => {
+        console.log('command', command);
+        process.chdir(this.baseDir);
+        if (err) {
+          return reject(err);
+        }
+        this.operatePackage(data, moduleList, command as Action);
+        return resolve({ code: 0, data });
+      });
+    });
+  }
+  private executeBySystemNpm(command: string, modules: string[], resolve) {
+    let args = [command].concat(modules).concat('--color=always', '--save');
+    if (!['link', 'unlink', 'uninstall', 'update'].includes(command)) {
+      if (this.registry) {
+        args = args.concat(`--registry=${this.registry}`);
+      }
+      if (this.proxy) {
+        args = args.concat(`--proxy=${this.proxy}`);
+      }
+    }
+    console.log(args);
+    const npm = spawn('npm', args, { cwd: this.baseDir });
+    // console.log('2==>', npm);
+    let output = '';
+    npm.stdout
+      .on('data', (data: string) => {
+        output += data;
+      })
+      .pipe(process.stdout);
+    npm.stderr
+      .on('data', (data: string) => {
+        output += data;
+      })
+      .pipe(process.stderr);
+    npm.on('close', (code: number) => {
+      if (!code) {
+        resolve({ code: 0, data: output });
+      } else {
+        resolve({ code: code, data: output });
+      }
+    });
+  }
   /**
    * 运行模块管理器
    * @param command
    * @param modules
    */
-  private async execCommand(command: string, modules: string[]): Promise<ModuleHandlerResult> {
+  private async execCommand(command: string, modules: any[]): Promise<ModuleHandlerResult> {
     return await new Promise((resolve: any, reject: any): void => {
-      let args = [command].concat(modules).concat('--color=always', '--save');
-      if (!['link', 'unlink', 'uninstall', 'update'].includes(command)) {
-        if (this.registry) {
-          args = args.concat(`--registry=${this.registry}`);
-        }
-        if (this.proxy) {
-          args = args.concat(`--proxy=${this.proxy}`);
-        }
-      }
-      // console.log(npmCli.commands.run('version'));
-      // console.log('command', [command].concat(modules), this.baseDir);
-      npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
-        const moduleList = modules.map((it) => it + '@latest');
-        if (command === 'update') {
-          npmCli.commands.update(moduleList, (err, data) => {
-            process.chdir(this.baseDir);
-            if (err) {
-              return reject(err);
-            }
-            this.operatePackage(data, moduleList, 'update');
-            return resolve({ code: 0, data });
-          });
-        }
-        if (command === 'install') {
-          npmCli.commands.install(moduleList, (err, data) => {
-            process.chdir(this.baseDir);
-            if (err) {
-              return reject(err);
-            }
-            this.operatePackage(data, moduleList, 'install');
-            return resolve({ code: 0, data });
-          });
-        }
-        if (command === 'uninstall') {
-          npmCli.commands.uninstall(moduleList, (err, data) => {
-            process.chdir(this.baseDir);
-            if (err) {
-              return reject(err);
-            }
-            this.operatePackage(data, moduleList, 'uninstall');
-            return resolve({ code: 0, data });
-          });
-        }
-      });
-
-      // const npm = spawn('npm', args, { cwd: this.baseDir });
-      // // console.log('2==>', npm);
-      // let output = '';
-      // npm.stdout
-      //   .on('data', (data: string) => {
-      //     output += data;
-      //   })
-      //   .pipe(process.stdout);
-      // npm.stderr
-      //   .on('data', (data: string) => {
-      //     output += data;
-      //   })
-      //   .pipe(process.stderr);
-      // npm.on('close', (code: number) => {
-      //   if (!code) {
-      //     resolve({ code: 0, data: output });
-      //   } else {
-      //     resolve({ code: code, data: output });
-      //   }
-      // });
+      // this.executeBySystemNpm(command, modules, resolve)
+      this.executeByAppNpm(command, modules, resolve, reject);
     });
   }
 }
