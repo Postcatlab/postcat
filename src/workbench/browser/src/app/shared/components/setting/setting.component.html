@@ -80,7 +80,7 @@
           >
             <eo-shadow-dom [text]="module.properties[field]?.description || ''"></eo-shadow-dom>
           </div>
-          <nz-form-control i18n-nzErrorTip nzErrorTip="请输入{{ module.properties[field]?.label }}" class="form-control">
+          <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ module.properties[field]?.label }}" class="form-control">
             <!-- 字符串类型 -->
             <ng-container *ngIf="module.properties[field]?.type === 'string'">
               <input
@@ -89,7 +89,7 @@
                 id="{{ field }}"
                 [disabled]="module.properties[field]?.disabled"
                 i18n-placeholder
-                placeholder="{{ module.properties[field]?.placeholder ?? '请输入' + module.properties[field]?.label }}"
+                placeholder="{{ module.properties[field]?.placeholder ?? 'Please Enter ' + module.properties[field]?.label }}"
                 formControlName="{{ field }}"
                 [(ngModel)]="settings[field]"
               />
