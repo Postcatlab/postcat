@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import type { IpcRenderer } from 'electron';
 import { ApiData, ApiMockEntity } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,43 +11,75 @@ import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/s
 export class AppService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
-  constructor(private indexedDBStorage: IndexedDBStorage) {
+  constructor(private indexedDBStorage: IndexedDBStorage, private remoteService: RemoteService) {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
+        const sender = event.sender;
+        console.log('req', req);
+        const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType') !== false;
         // console.log('wo接收到了哇', event, message);
         const { mockID } = req.query;
         if (Number.isInteger(Number(mockID))) {
           try {
             const mock = await this.getMockByMockID(Number(mockID));
-            if (mock.createType === 0 && mock.apiDataID) {
-              const apiData = await this.getApiData(Number(mock.apiDataID));
-              mock.response =
-                tree2obj([].concat(apiData.responseBody), { key: 'name', valueKey: 'description' }) || mock.response;
+            const apiData = await this.getApiData(Number(mock.apiDataID));
+            if (!mock && isEnabledMatchType) {
+              const result = await this.matchApiData(1, req);
+              return sender.send('getMockApiList', result);
+            } else {
+              mock.response = mock?.response ?? this.generateResponse(apiData.responseBody);
             }
-            event.sender.send('getMockApiList', mock);
+            sender.send('getMockApiList', mock);
           } catch (error) {
-            event.sender.send('getMockApiList', {
+            sender.send('getMockApiList', {
               response: {
                 message: error,
               },
             });
           }
-          // 是否开启了匹配请求方式
-        } else if (window.eo?.getModuleSettings?.('eoapi-features.mock.matchType')) {
-          const apiList = await this.getAllApi(1);
-          const apiData = apiList.find((n) => n.method === req.method && n.uri.trim() === req.url);
-          event.sender.send(
-            'getMockApiList',
-            apiData
-              ? { response: tree2obj([].concat(apiData.responseBody), { key: 'name', valueKey: 'description' }) }
-              : { statusCode: 404 }
-          );
+          // Whether the matching request mode is enabled
+        } else if (isEnabledMatchType) {
+          const response = await this.matchApiData(1, req);
+          sender.send('getMockApiList', response);
         } else {
-          event.sender.send('getMockApiList', { response: { message: `没有找到ID为${mockID}的mock！` }, url: req.url });
+          sender.send('getMockApiList', {
+            response: { message: $localize`No mock found with ID ${mockID}` },
+            url: req.url,
+          });
         }
       });
     }
   }
+
+  /**
+   * generate response data
+   * @returns
+   */
+  generateResponse(responseBody: ApiData['responseBody']) {
+    return tree2obj([].concat(responseBody), { key: 'name', valueKey: 'description' });
+  }
+  /**
+   * match apiData by method and url
+   * @param {Number} projectID
+   * @param {Object} req
+   * @returns {Object}
+   */
+  async matchApiData(projectID = 1, req) {
+    const apiList = await this.getAllApi(projectID);
+    const { pathname } = new URL(req.url, this.remoteService.mockUrl);
+    const apiData = apiList.find((n) => {
+      let uri = n.uri.trim();
+      if (Array.isArray(n.restParams) && n.restParams.length > 0) {
+        const restMap = n.restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
+        uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
+        // console.log('restMap', restMap, n.uri, uri);
+      }
+      const uriReg = new RegExp(`/?${uri}/?`);
+      return n.method === req.method && uriReg.test(pathname);
+    });
+    return apiData ? { response: this.generateResponse(apiData.responseBody) } : { statusCode: 404 };
+  }
+
   /**
    * get mock by mockID
    *

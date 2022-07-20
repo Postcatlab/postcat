@@ -1,0 +1,23 @@
+name: Crowdin Action
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  synchronize-with-crowdin:
+    if: contains(github.event.head_commit.message , 'i18n')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: crowdin action
+        uses: crowdin/github-action@1.4.10
+        with:
+          upload_translations: true
+          download_translations: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

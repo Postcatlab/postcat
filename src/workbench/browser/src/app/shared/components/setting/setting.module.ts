@@ -16,10 +16,18 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 import { ElectronService } from '../../../core/services';
-import { SharedModule } from '../../shared.module';
+import { SelectThemeComponent } from 'eo/workbench/browser/src/app/shared/components/toolbar/select-theme/select-theme.component';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import {
+  DataStorageComponent,
+  LanguageSwticherComponent,
+  AboutComponent,
+} from 'eo/workbench/browser/src/app/shared/components/setting/common';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -37,11 +45,19 @@ const ANTDMODULES = [
   NzEmptyModule,
   NzDropDownModule,
   NzPopoverModule,
+  NzRadioModule,
+  NzDescriptionsModule,
 ];
 @NgModule({
-  declarations: [SettingComponent],
+  declarations: [
+    SettingComponent,
+    SelectThemeComponent,
+    DataStorageComponent,
+    LanguageSwticherComponent,
+    AboutComponent,
+  ],
   imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
-  exports: [SettingComponent],
+  exports: [SettingComponent, SelectThemeComponent],
   providers: [ElectronService],
 })
 export class SettingModule {}

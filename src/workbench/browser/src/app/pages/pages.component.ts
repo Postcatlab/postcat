@@ -3,11 +3,10 @@ import { SafeResourceUrl } from '@angular/platform-browser';
 import { SidebarService } from 'eo/workbench/browser/src/app/shared/components/sidebar/sidebar.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { Subject, takeUntil } from 'rxjs';
-import { isElectron } from 'eo/shared/common/common';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { debounce } from 'lodash';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 
 @Component({
   selector: 'eo-pages',
@@ -20,12 +19,12 @@ export class PagesComponent implements OnInit {
   get isRemote() {
     return this.remoteService.isRemote;
   }
-  isElectron = isElectron();
   isShow = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true';
   get dataSourceText() {
     return this.remoteService.dataSourceText;
   }
   private destroy$: Subject<void> = new Subject<void>();
+  private rawChange$: Subject<string> = new Subject<string>();
   get isShowNotification() {
     return !this.isRemote && this.isShow;
   }
@@ -34,12 +33,17 @@ export class PagesComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     public sidebar: SidebarService,
     private messageService: MessageService,
-    private remoteService: RemoteService
-  ) {}
+    private remoteService: RemoteService,
+    public electron:ElectronService
+  ) {
+    this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+      this.updateState();
+    });
+  }
   ngOnInit(): void {
     this.watchSidebarItemChange();
     this.watchRemoteServerChange();
-    this.updateState();
+    this.rawChange$.next('');
   }
   private watchSidebarItemChange() {
     this.sidebar.appChanged$.subscribe(() => {
@@ -48,7 +52,7 @@ export class PagesComponent implements OnInit {
         setTimeout(() => {
           //add loading
           this.loadedIframe = false;
-          let iframe = document.getElementById('app_iframe') as HTMLIFrameElement;
+          const iframe = document.getElementById('app_iframe') as HTMLIFrameElement;
           //load resource
           iframe.src = this.sidebar.currentModule.main;
           //loading finish
@@ -65,7 +69,7 @@ export class PagesComponent implements OnInit {
     this.remoteService.switchDataSource();
   };
 
-  updateState = debounce(async () => {
+  updateState = async () => {
     if (!this.isRemote && localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false') {
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
       this.isShow = isSuccess;
@@ -73,7 +77,7 @@ export class PagesComponent implements OnInit {
     // if (!) {
     //   this.isClose = false;
     // }
-  }, 500);
+  };
 
   private watchRemoteServerChange() {
     this.messageService
@@ -82,7 +86,7 @@ export class PagesComponent implements OnInit {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'onDataSourceChange': {
-            this.updateState();
+            this.rawChange$.next(inArg.type);
             break;
           }
         }

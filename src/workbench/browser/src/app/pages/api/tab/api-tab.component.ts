@@ -23,11 +23,11 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * Default tabs of api.
    */
   defaultTabs = {
-    edit: { path: '/home/api/edit', title: '新 API' },
-    test: { path: '/home/api/test', title: '新 API' },
-    detail: { path: '/home/api/detail', title: 'API 详情' },
-    overview: { path: '/home/api/overview', title: '概况', key: 'overview' },
-    mock: { path: '/home/api/mock', title: 'mock', key: 'mock' },
+    edit: { path: '/home/api/edit', title: $localize`New API` },
+    test: { path: '/home/api/test', title: $localize`New API` },
+    detail: { path: '/home/api/detail', title: $localize`:@@API Detail:Preview` },
+    overview: { path: '/home/api/overview', title: $localize`:@@API Index:Index`, key: 'overview' },
+    mock: { path: '/home/api/mock', title: 'Mock', key: 'mock' },
   };
   MAX_TAB_LIMIT = 15;
 
@@ -214,7 +214,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param inArg.index
    */
   pickTab() {
-    let tab = this.tabSerive.tabs[this.selectedIndex];
+    const tab = this.tabSerive.tabs[this.selectedIndex];
     this.tabSerive.tabChange$.next(tab);
     this.activeRoute(tab);
   }
@@ -234,17 +234,24 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             this.appendOrSwitchTab('detail', inArg.data.origin);
             break;
           case 'detailOverview': {
-            console.log(inArg.data.origin);
+            // console.log(inArg.data.origin);
             this.appendOrSwitchTab('overview', inArg.data.origin);
             break;
           }
+          case 'gotoApiTest':
+            this.appendOrSwitchTab('test', inArg.data.origin);
+            // ! It is bad way for delay render detail of api history.
+            setTimeout(() => {
+              this.messageService.send({ type: 'renderHistory', data: inArg.data });
+            }, 20);
+            break;
           case 'gotoEditApi':
             this.appendOrSwitchTab('edit', inArg.data.origin);
             break;
           case 'copyApi':
             this.storage.run('apiDataCreate', [{ ...inArg.data }, inArg.data.uuid], (result: StorageRes) => {
               if (result.status === StorageResStatus.success) {
-                this.message.success('复制成功');
+                this.message.success($localize`Copied successfully`);
                 this.appendOrSwitchTab('edit', {
                   ...inArg.data,
                   ...result.data,
@@ -253,7 +260,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
                 });
                 this.messageService.send({ type: `copyApiSuccess`, data: result.data });
               } else {
-                this.message.success('失败');
+                this.message.success($localize`Failed to copy`);
               }
             });
             break;

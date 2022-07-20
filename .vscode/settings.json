@@ -5,16 +5,11 @@
       "mode": "auto"
     }
   ],
-  // "files.exclude": {
-  //   "**/*.js": {
-  //     "when": "$(basename).ts"
-  //   },
-  //   "**/*.js.map": true,
-  // }
   "search.exclude": {
     "**/node_modules": true,
-    "**/bower_components": true,
+    "**/dist": true,
+    "**/.angular/**.*": true,
     "**/*.code-search": true,
-    "**/*.lock": true,
+    "**/*.lock": true
   }
 }

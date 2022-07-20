@@ -7,17 +7,28 @@
   "files": [
     "out/app/**/*.js*",
     "out/platform/**/*.js*",
+    "out/enviroment.js",
     "out/shared/**/*.js*",
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
-    "out/workbench/node/",
+    "out/workbench/browser/src/**/*.js*",
+    "out/workbench/node/**/*.js*",
     "out/core/**/package.json",
     "out/app/common/**/*",
     "!**/*.ts"
   ],
+<<<<<<< HEAD
   "afterSign": "builder/notarize.js",
   "publish": [
     "github"
+=======
+  "publish": [
+    "github",
+    {
+      "provider": "generic",
+      "url": "https://packages.eoapi.io"
+    }
+>>>>>>> main
   ],
   "generateUpdatesFilesForAllChannels": true,
   "nsis": {
@@ -41,11 +52,14 @@
     "icon": "src/app/common/images/512x512.png",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist",
     "target": ["dmg", "zip"]
   },
   "dmg": {
     "sign": false
   },
+  "afterSign": "build/notarize.js",
   "linux": {
     "icon": "src/app/common/images/",
     "target": [

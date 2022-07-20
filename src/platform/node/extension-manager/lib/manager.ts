@@ -1,13 +1,20 @@
-import { MODULE_DIR as baseDir } from 'eo/shared/common/constant';
+import { MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
 import { ModuleHandler } from './handler';
 import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
+import http from 'axios';
+import { DATA_DIR } from '../../../../shared/electron-main/constant';
+import { promises, readFileSync } from 'fs';
+import { ELETRON_APP_CONFIG } from '../../../../enviroment';
 
 // * npm pkg name
-// const installExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
-const installExtension = [{ name: 'eoapi-export-openapi' }];
-
+const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
+const isExists = async (filePath) =>
+  await promises
+    .access(filePath)
+    .then(() => true)
+    .catch((_) => false);
 export class ModuleManager implements ModuleManagerInterface {
   /**
    * 模块管理器
@@ -17,7 +24,7 @@ export class ModuleManager implements ModuleManagerInterface {
   /**
    * extension list
    */
-  private readonly installExtension = installExtension;
+  private installExtension = [];
 
   /**
    * 模块集合
@@ -34,20 +41,17 @@ export class ModuleManager implements ModuleManagerInterface {
     this.modules = new Map();
     this.features = new Map();
     this.init();
-    // * ModuleManager will be new only one while app run start, so it should be here upgrade & install extension
-    // * upgrade
-    const list = Array.from(this.getModules().keys());
-    list.forEach((item) => {
-      this.update({ name: item });
-    });
-    // * install
-    // console.log('install');
-    this.installExtension.forEach((item) => {
-      // * If the extension already in local extension list, then do not repeat installation
-      if (!list.includes(item.name)) {
-        this.install(item);
-      }
-    });
+    this.updateAll();
+  }
+
+  async getRemoteExtension() {
+    const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
+    return data.data.map(({ name, version }) => ({ name, version }));
+  }
+
+  async installExt({ name }) {
+    const remoteExtension = await this.getRemoteExtension();
+    return await this.install(remoteExtension.find((it) => it.name === name));
   }
 
   /**
@@ -55,22 +59,10 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param module
    */
   async install(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
-    const result = await this.moduleHandler.install([module.name], module.isLocal || false);
+    const result = await this.moduleHandler.install([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
       this.set(moduleInfo);
-    }
-    return result;
-  }
-
-  /**
-   * 更新模块，调用npm update
-   * @param module
-   */
-  async update(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
-    const result = await this.moduleHandler.update(module.name);
-    if (result.code === 0) {
-      this.refresh(module);
     }
     return result;
   }
@@ -81,11 +73,34 @@ export class ModuleManager implements ModuleManagerInterface {
    */
   async uninstall(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
     const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
-    const result = await this.moduleHandler.uninstall([module.name], module.isLocal || false);
+    const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
     }
     return result;
+  }
+
+  async updateAll() {
+    // * ModuleManager will be new only one while app run start, so it should be here upgrade & install extension
+    // * Upgrade
+    const list = Array.from(this.getModules().values()).map((val) => ({ name: val.name, version: val.version }));
+    // * get version in remote
+    const remoteExtension = await this.getRemoteExtension();
+    const isOK = await isExists(`${DATA_DIR}/debugger.json`);
+    let debugExtension = [];
+    if (isOK) {
+      const debuggerExtension = readFileSync(`${DATA_DIR}/debugger.json`, 'utf-8');
+      const { extensions } = JSON.parse(debuggerExtension);
+      debugExtension = extensions;
+    }
+    const localExtensionName = [...new Set(list.map((it) => it.name).concat(defaultExtension.map((it) => it.name)))];
+    this.installExtension = remoteExtension
+      .filter((it) => localExtensionName.includes(it.name))
+      .filter((it) => !debugExtension.includes(it.name));
+    this.moduleHandler.update(this.installExtension);
+    this.installExtension.forEach((it) => {
+      this.install(it);
+    });
   }
 
   /**
@@ -96,7 +111,16 @@ export class ModuleManager implements ModuleManagerInterface {
     const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
     this.set(moduleInfo);
   }
-
+  /**
+   * 读取本地package.json更新模块信息
+   * @param module
+   */
+  refreshAll(): void {
+    const list = Array.from(this.getModules().values());
+    list.forEach((module) => {
+      this.refresh(module);
+    });
+  }
   /**
    * 获取应用级app列表
    */
@@ -282,5 +306,3 @@ export class ModuleManager implements ModuleManagerInterface {
     return newModules;
   }
 }
-
-export default () => new ModuleManager();

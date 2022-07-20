@@ -6,11 +6,12 @@ import { text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
 export class ApiTestService {
+  globalStorageKey= 'EO_TEST_VAR_GLOBALS';
   constructor() {}
   initListConf(opts) {
-    opts.title = opts.title || '参数';
-    opts.nameTitle = opts.nameTitle || `${opts.title}名`;
-    opts.valueTitle = opts.valueTitle || `${opts.title}值`;
+    opts.title = opts.title || $localize`Param`;
+    opts.nameTitle = opts.nameTitle || $localize`${opts.title} Name`;
+    opts.valueTitle = opts.valueTitle || $localize`${opts.title} Value`;
     return {
       setting: {
         // draggable: true,
@@ -26,7 +27,6 @@ export class ApiTestService {
           type: 'checkbox',
           modelKey: 'required',
           mark: 'require',
-          width: 80,
         },
         {
           thKey: opts.nameTitle,
@@ -50,7 +50,7 @@ export class ApiTestService {
           class: 'w_250',
           btnList: [
             {
-              key: '删除',
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
             },
           ],
@@ -81,6 +81,7 @@ export class ApiTestService {
       baseFun: {
         reduceItemWhenAddChildItem: reduceItemWhenIsOprDepth,
         watchCheckboxChange: opts.watchFormLastChange,
+        importFile: opts.importFile,
       },
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
@@ -88,19 +89,18 @@ export class ApiTestService {
           thKey: '',
           type: 'checkbox',
           modelKey: 'required',
-          width: 80,
           mark: 'require',
         },
         {
-          thKey: '参数名',
+          thKey: $localize`Param Name`,
           type: 'depthInput',
           modelKey: 'name',
-          placeholder: '参数名',
+          placeholder: $localize`Param Name`,
           width: 300,
           mark: 'name',
         },
         {
-          thKey: '类型',
+          thKey: $localize`Type`,
           type: 'select',
           key: 'key',
           value: 'value',
@@ -113,10 +113,12 @@ export class ApiTestService {
         },
 
         {
-          thKey: '参数值',
-          type: 'input',
+          thKey: $localize`Value`,
+          type: 'autoCompleteAndFile',
           modelKey: 'value',
-          placeholder: '参数值',
+          switchVar: 'type',
+          swicthFile: 'file',
+          placeholder: $localize`Value`,
           width: 300,
           mark: 'value',
         },
@@ -125,12 +127,12 @@ export class ApiTestService {
           class: 'w_250',
           btnList: [
             {
-              key: '添加子字段',
+              key: $localize`Add Child`,
               operateName: 'addChild',
               itemExpression: `eo-attr-tip-placeholder="add_child_btn" ng-if="$ctrl.mainObject.setting.isLevel"`,
             },
             {
-              key: '删除',
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
               itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
             },
@@ -261,7 +263,7 @@ export class ApiTestService {
     };
     let result = {
       ...inData.testData,
-      responseHeaders: inData.history.response.headers,
+      responseHeaders: inData.history.response.headers||[],
       responseBodyType: 'json',
       responseBodyJsonType: 'object',
       responseBody: [],
@@ -273,7 +275,6 @@ export class ApiTestService {
     });
     if (inData.history.response.responseType === 'text') {
       let bodyInfo = text2UiData(inData.history.response.body);
-      console.log(bodyInfo);
       result.responseBody = bodyInfo.data;
       result.responseBodyType = bodyInfo.textType;
       result.responseBodyJsonType = bodyInfo.rootType;
@@ -282,7 +283,7 @@ export class ApiTestService {
   }
   getTestDataFromApi(inData) {
     let editToTestParams = (arr) => {
-      arr=arr||[];
+      arr = arr || [];
       arr.forEach((val) => {
         val.value = val.example;
         delete val.example;
@@ -334,12 +335,24 @@ export class ApiTestService {
       case 'formData': {
         inData.requestBody.forEach((val) => {
           val.value = val.example;
-          val.type = 'string';
+          val.type = val.type === 'file' ? 'file' : 'string';
           delete val.example;
         });
         break;
       }
     }
     return inData;
+  }
+  getGlobals() {
+    let result = '{}';
+    const global = localStorage.getItem(this.globalStorageKey);
+    try {
+      result = JSON.parse(global);
+    } catch (e) {}
+    return result;
+  }
+  setGlobals(globals) {
+    if(!globals) return;
+    localStorage.setItem(this.globalStorageKey, JSON.stringify(globals));
   }
 }

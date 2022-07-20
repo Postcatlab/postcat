@@ -38,6 +38,7 @@ export const parseTree = (key, value, level = 0) => {
       return {
         name: key,
         required: true,
+        value: JSON.stringify(value),
         example: JSON.stringify(value),
         type: 'array',
         description: '',
@@ -157,6 +158,7 @@ export const xml2UiData = (text) => {
   });
   return JSON.parse(JSON.stringify(result));
 };
+
 /**
  * Transfer text to json/xml/raw ui data,such as request body/response body
  * @returns {object} body info

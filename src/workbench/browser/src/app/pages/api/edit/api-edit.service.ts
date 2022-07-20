@@ -6,7 +6,7 @@ export class ApiEditService {
   constructor(private modalService: ModalService) {}
   showMore(inputArg, opts: { nzOnOk: (result: any) => void; title: string }) {
     const modal = this.modalService.create({
-      nzTitle: `${opts.title}详情`,
+      nzTitle: $localize`${opts.title} Detail`,
       nzContent: ApiParamsExtraSettingComponent,
       nzClosable: false,
       nzWidth: '60%',
@@ -25,7 +25,7 @@ export class ApiEditService {
     });
   }
   initListConf(opts) {
-    opts.title = opts.title || '参数';
+    opts.title = opts.title || $localize`Param`;
     return {
       setting: {
         draggable: true,
@@ -45,33 +45,33 @@ export class ApiEditService {
           itemExpression: 'ng-if="$index+1!==$ctrl.list.length"',
         },
         {
-          thKey: opts.nameTitle || `${opts.title}名`,
+          thKey: opts.nameTitle || $localize`${opts.title} Name`,
           type: 'input',
           modelKey: 'name',
-          placeholder: opts.nameTitle || `${opts.title}名`,
+          placeholder: opts.nameTitle || $localize`${opts.title} Name`,
           width: 300,
           mark: 'name',
         },
         {
-          thKey: '必填',
+          thKey: $localize`Required`,
           type: 'checkbox',
           modelKey: 'required',
           mark: 'require',
-          width: 80,
+          width: 100,
         },
         {
-          thKey: '说明',
+          thKey: $localize`:@@Description:Description`,
           type: 'input',
           modelKey: 'description',
-          placeholder: `${opts.title}说明`,
+          placeholder: $localize`${opts.title} Description`,
           width: 200,
           mark: 'description',
         },
         {
-          thKey: '示例',
+          thKey: $localize`Example`,
           type: 'input',
           modelKey: 'example',
-          placeholder: `${opts.title}示例`,
+          placeholder: $localize`${opts.title} Example`,
           width: 200,
           mark: 'example',
         },
@@ -80,7 +80,7 @@ export class ApiEditService {
           class: 'w_250',
           btnList: [
             {
-              key: '更多设置',
+              key: $localize`More Settings`,
               operateName: 'more',
               param: `inputArg`,
               itemExpression: `eo-attr-tip-placeholder="more_setting_btn" `,
@@ -92,12 +92,12 @@ export class ApiEditService {
               },
             },
             {
-              key: '插入',
+              key: $localize`Insert`,
               operateName: 'insert',
               itemExpression: `eo-attr-tip-placeholder="insert_param_btn"`,
             },
             {
-              key: '删除',
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
             },
           ],
@@ -144,15 +144,15 @@ export class ApiEditService {
           itemExpression: 'ng-if="$index+1!==$ctrl.list.length"',
         },
         {
-          thKey: '参数名',
+          thKey: $localize`Param Name`,
           type: 'depthInput',
           modelKey: 'name',
-          placeholder: '参数名',
+          placeholder: $localize`Param Name`,
           width: 300,
           mark: 'name',
         },
         {
-          thKey: '类型',
+          thKey: $localize`Type`,
           type: 'select',
           key: 'key',
           value: 'value',
@@ -164,41 +164,41 @@ export class ApiEditService {
           width: 100,
         },
         {
-          thKey: '必填',
+          thKey: $localize`Required`,
           type: 'checkbox',
           modelKey: 'required',
-          width: 80,
+          width: 100,
           mark: 'require',
         },
         {
-          thKey: '说明',
+          thKey: $localize`:@@Description:Description`,
           type: 'input',
           modelKey: 'description',
-          placeholder: '参数说明',
+          placeholder: $localize`Param Description`,
           width: 300,
           mark: 'description',
         },
 
         {
-          thKey: '示例',
+          thKey: $localize`Example`,
           type: 'input',
           modelKey: 'example',
-          placeholder: '参数示例',
+          placeholder: $localize`Param Example`,
           width: 200,
           hide: 1,
           mark: 'example',
         },
         {
           type: 'btn',
-          class: 'w_250',
+          class: 'w_300',
           btnList: [
             {
-              key: '添加子字段',
+              key: $localize`Add Child`,
               operateName: 'addChild',
               itemExpression: `ng-if="$ctrl.mainObject.setting.isLevel"`,
             },
             {
-              key: '更多设置',
+              key: $localize`More Settings`,
               operateName: 'more',
               fun: (inputArg) => {
                 this.showMore(inputArg, {
@@ -210,14 +210,14 @@ export class ApiEditService {
               itemExpression: `eo-attr-tip-placeholder="more_setting_btn" `,
             },
             {
-              key: '插入',
+              key: $localize`Insert`,
               operateName: 'insert',
-              itemExpression: `ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"`
+              itemExpression: `ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"`,
             },
             {
-              key: '删除',
+              key: $localize`:@@Delete:Delete`,
               operateName: 'delete',
-              itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"'
+              itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
             },
           ],
         },

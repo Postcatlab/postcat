@@ -1,0 +1,71 @@
+.btn {
+  border-radius: 3px;
+  background-color: var(--BTN_PRIMARY_BG);
+  color: #fff;
+  font-size: 0.9em;
+  height: 30px;
+  cursor: pointer;
+}
+.icon {
+  -webkit-app-region: no-drag;
+  width: 30px;
+  height: 30px;
+  font-size: 1.5em;
+  color: rgba(0,0,0,0.5);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all .4s ease;
+  &:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+}
+ .iconfont{
+  -webkit-app-region: no-drag;
+}
+.eo_navbar {
+  -webkit-app-region: drag;
+  position: sticky;
+  width: 100%;
+  z-index: 11;
+  left: 0;
+  top: 0;
+  padding: 0 8px;
+  // background-color: var(--NAVBAR_BG);
+  // color: var(--NAVBAR_TEXT);
+  // border-bottom: 1px solid var(--NAVBAR_BORDER_BOTTOM);
+  border-bottom: 1px solid var(--BORDER);
+  height: var(--NAVBAR_HEIGHT);
+  .logo {
+    width: 120px;
+    margin-left: 10px;
+  }
+  .tips_wrap {
+    position: relative;
+
+    &:hover {
+      .trigger_item {
+        display: inline-flex;
+      }
+    }
+  }
+}
+
+.can_be_click {
+  -webkit-app-region: no-drag;
+}
+.switch-data-source-box {
+  width: 200px;
+  display: grid;
+  padding: 10px 14px;
+  grid-template-columns: 34px auto;
+  background-color: white;
+  .title {
+    margin-bottom: 0;
+    color: black;
+    font-weight: 700;
+  }
+  .desc {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+}

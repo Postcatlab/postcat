@@ -1,3 +1,5 @@
+const { resolve } = require('path');
+
 (function () {
   'use strict';
   var url = require('url'),
@@ -12,10 +14,13 @@
     _HttpPackageClass = new (require('./libs/http.package').core)(),
     _GetFileClass = new (require('./libs/getFile.package').core)(),
     _LibsMineType = require('./libs/mineType.package');
+    
   let CONFIG = require('./config.json');
+
   const _EO_LANG_OBJ = require('./lang.json');
   var iconv = require('iconv-lite');
-  global.eoLang = _EO_LANG_OBJ['cn'];
+  global.eoLang = _EO_LANG_OBJ['en'];
+  global.eoTestGlobals = {};
   /**
    * 解析uri信息
    * @param  {number} protocol 请求协议
@@ -492,10 +497,10 @@
                           : JSON.stringify(tmpReportData.response.body);
                     }
                   } else {
-                    tmpReportData.response.body = tmpAfterCodeObj.errorReason;
-                    delete tmpReportData.response.responseType;
-                    delete tmpReportData.blobFileName;
-                    delete tmpReportData.response.contentType;
+                    tmpReportData.response.errorReason = tmpAfterCodeObj.errorReason;
+                    // delete tmpReportData.response.responseType;
+                    // delete tmpReportData.blobFileName;
+                    // delete tmpReportData.response.contentType;
                   }
                   for (let key in inputRes.headers) {
                     tmpReportData.response.headers.push({
@@ -503,7 +508,6 @@
                       value: inputRes.headers[key],
                     });
                   }
-
                   tmpReportData.response.testDeny = tmpInputResponseObj.totalTime.toFixed(2);
                   if (callback) callback(tmpReportData);
                   resolve('success');
@@ -680,146 +684,153 @@
         }
       });
     }
-    main(inputTestData, callback) {
+    main(inputTestData) {
+      global.eoLang = _EO_LANG_OBJ[inputTestData.lang||'en'];
       let unitCommonClass = this;
-      async function main() {
-        let template = {
-            ajax: {},
-            status: 'finish',
-          },
-          tmpDecorateObj,
-          tmpReportData = {
-            afterInject: inputTestData.afterInject,
-            beforeInject: inputTestData.beforeInject,
-          };
-        try {
-          inputTestData.globalHeader = inputTestData.globalHeader || {};
-          await privateFun.parseTestData(inputTestData, inputTestData.env || {}).then((tmpInputData) => {
-            tmpDecorateObj = tmpInputData;
-          });
-          switch (tmpDecorateObj.status) {
-            case 'preCode error': {
-              template.ajax = {
-                status: 'error',
-                errorReason: tmpDecorateObj.content,
-                reportList: tmpDecorateObj.reportList,
-                general: {
-                  time: '0.00ms',
-                },
-              };
-              break;
-            }
-            default: {
-              tmpReportData.requestInfo = {
-                messageSeparatorSetting: inputTestData.messageSeparatorSetting,
-                params: [],
-                apiProtocol: '0',
-                URL: tmpDecorateObj.history.uri,
-                headers: [],
-                methodType: inputTestData.methodType,
-                method: inputTestData.method,
-              };
-              if (tmpDecorateObj.requestType === '4') {
-                tmpReportData.requestInfo.requestType = '2';
-                delete tmpReportData.requestInfo.params;
-              } else {
-                switch (typeof tmpDecorateObj.history.body) {
-                  case 'object': {
-                    tmpReportData.requestInfo.requestType = '0';
-                    for (let key in tmpDecorateObj.history.body) {
-                      switch (typeof tmpDecorateObj.history.body[key]) {
-                        case 'object': {
-                          for (let childKey in tmpDecorateObj.history.body[key]) {
+      return new Promise((resolve, reject) => {
+        async function main() {
+          let template = {
+              ajax: {},
+              status: 'finish',
+            },
+            tmpDecorateObj,
+            tmpReportData = {
+              afterInject: inputTestData.afterInject,
+              beforeInject: inputTestData.beforeInject,
+            };
+          try {
+            inputTestData.globalHeader = inputTestData.globalHeader || {};
+            await privateFun.parseTestData(inputTestData, inputTestData.env || {}).then((tmpInputData) => {
+              tmpDecorateObj = tmpInputData;
+            });
+            switch (tmpDecorateObj.status) {
+              case 'preCode error': {
+                template.ajax = {
+                  status: 'error',
+                  errorReason: tmpDecorateObj.content,
+                  reportList: tmpDecorateObj.reportList,
+                  general: {
+                    time: '0.00ms',
+                  },
+                };
+                break;
+              }
+              default: {
+                tmpReportData.requestInfo = {
+                  messageSeparatorSetting: inputTestData.messageSeparatorSetting,
+                  params: [],
+                  apiProtocol: '0',
+                  URL: tmpDecorateObj.history.uri,
+                  headers: [],
+                  methodType: inputTestData.methodType,
+                  method: inputTestData.method,
+                };
+                if (tmpDecorateObj.requestType === '4') {
+                  tmpReportData.requestInfo.requestType = '2';
+                  delete tmpReportData.requestInfo.params;
+                } else {
+                  switch (typeof tmpDecorateObj.history.body) {
+                    case 'object': {
+                      tmpReportData.requestInfo.requestType = '0';
+                      for (let key in tmpDecorateObj.history.body) {
+                        switch (typeof tmpDecorateObj.history.body[key]) {
+                          case 'object': {
+                            for (let childKey in tmpDecorateObj.history.body[key]) {
+                              tmpReportData.requestInfo.params.push({
+                                key: key,
+                                value:
+                                  typeof tmpDecorateObj.history.body[key][childKey] == 'string'
+                                    ? tmpDecorateObj.history.body[key][childKey]
+                                    : '[file]',
+                              });
+                              if (typeof tmpDecorateObj.history.body[key][childKey] != 'string') break;
+                            }
+                            break;
+                          }
+                          default: {
                             tmpReportData.requestInfo.params.push({
                               key: key,
-                              value:
-                                typeof tmpDecorateObj.history.body[key][childKey] == 'string'
-                                  ? tmpDecorateObj.history.body[key][childKey]
-                                  : '[file]',
+                              value: tmpDecorateObj.history.body[key],
                             });
-                            if (typeof tmpDecorateObj.history.body[key][childKey] != 'string') break;
+                            break;
                           }
-                          break;
-                        }
-                        default: {
-                          tmpReportData.requestInfo.params.push({
-                            key: key,
-                            value: tmpDecorateObj.history.body[key],
-                          });
-                          break;
                         }
                       }
+                      break;
                     }
-                    break;
-                  }
-                  default: {
-                    tmpReportData.requestInfo.requestType = '1';
-                    tmpReportData.requestInfo.params = tmpDecorateObj.history.body;
-                    break;
-                  }
-                }
-              }
-              for (let key in tmpDecorateObj.history.headers) {
-                tmpReportData.requestInfo.headers.push({
-                  name: key,
-                  value: tmpDecorateObj.history.headers[key],
-                });
-              }
-              let tmpIsOversized,
-                tmpRequestBodyStr =
-                  typeof tmpReportData.requestInfo.params === 'object'
-                    ? JSON.stringify(tmpReportData.requestInfo.params)
-                    : tmpReportData.requestInfo.params;
-              if ((tmpRequestBodyStr || '').length > CONFIG.REQUEST_BODY_LIMIT_STORAGE_LENGTH) {
-                tmpReportData.requestInfo.requestType = 'oversized';
-                tmpReportData.requestInfo.params = '';
-                tmpIsOversized = true;
-              }
-              tmpReportData.requestInfo = JSON.stringify(tmpReportData.requestInfo);
-              await unitCommonClass.ajax(
-                tmpDecorateObj,
-                {
-                  requestData: _LibsCommon.parseRequestDataToObj(tmpDecorateObj),
-                  globalHeader: inputTestData.globalHeader,
-                  pckSplitByHeader: inputTestData.messageSeparatorSetting === 'spliceLength',
-                  messageEncoding: inputTestData.messageEncoding,
-                },
-                function (res) {
-                  template.ajax = res;
-                  if (res.status != 'abort') {
-                    let tmpHistoryResponse = Object.assign({}, res.response);
-                    tmpHistoryResponse.reportList = res.reportList;
-                    // if (tmpHistoryResponse.responseType !== 'text') delete tmpHistoryResponse.body;
-                    tmpReportData.general = JSON.stringify(res.general);
-                    tmpReportData.resultInfo = JSON.stringify(tmpHistoryResponse);
-                    template.ajax.request.body = tmpDecorateObj.binaryFileName || tmpDecorateObj.requestBody.body;
-                    if (tmpIsOversized) {
-                      template.ajax.request.requestType = 'oversized';
-                    } else {
-                      template.ajax.request.requestType =
-                        tmpDecorateObj.requestType === '4'
-                          ? '1'
-                          : typeof tmpDecorateObj.requestBody.body == 'object'
-                          ? '0'
-                          : '1';
+                    default: {
+                      tmpReportData.requestInfo.requestType = '1';
+                      tmpReportData.requestInfo.params = tmpDecorateObj.history.body;
+                      break;
                     }
                   }
                 }
-              );
-              break;
+                for (let key in tmpDecorateObj.history.headers) {
+                  tmpReportData.requestInfo.headers.push({
+                    name: key,
+                    value: tmpDecorateObj.history.headers[key],
+                  });
+                }
+                let tmpIsOversized,
+                  tmpRequestBodyStr =
+                    typeof tmpReportData.requestInfo.params === 'object'
+                      ? JSON.stringify(tmpReportData.requestInfo.params)
+                      : tmpReportData.requestInfo.params;
+                if ((tmpRequestBodyStr || '').length > CONFIG.REQUEST_BODY_LIMIT_STORAGE_LENGTH) {
+                  tmpReportData.requestInfo.requestType = 'oversized';
+                  tmpReportData.requestInfo.params = '';
+                  tmpIsOversized = true;
+                }
+                tmpReportData.requestInfo = JSON.stringify(tmpReportData.requestInfo);
+                await unitCommonClass.ajax(
+                  tmpDecorateObj,
+                  {
+                    requestData: _LibsCommon.parseRequestDataToObj(tmpDecorateObj),
+                    globalHeader: inputTestData.globalHeader,
+                    pckSplitByHeader: inputTestData.messageSeparatorSetting === 'spliceLength',
+                    messageEncoding: inputTestData.messageEncoding,
+                  },
+                  function (res) {
+                    template.ajax = res;
+                    if (res.status != 'abort') {
+                      let tmpHistoryResponse = Object.assign({}, res.response);
+                      tmpHistoryResponse.reportList = res.reportList;
+                      // if (tmpHistoryResponse.responseType !== 'text') delete tmpHistoryResponse.body;
+                      tmpReportData.general = JSON.stringify(res.general);
+                      tmpReportData.resultInfo = JSON.stringify(tmpHistoryResponse);
+                      template.ajax.request.body = tmpDecorateObj.binaryFileName || tmpDecorateObj.requestBody.body;
+                      if (tmpIsOversized) {
+                        template.ajax.request.requestType = 'oversized';
+                      } else {
+                        template.ajax.request.requestType =
+                          tmpDecorateObj.requestType === '4'
+                            ? '1'
+                            : typeof tmpDecorateObj.requestBody.body == 'object'
+                            ? '0'
+                            : '1';
+                      }
+                    }
+                  }
+                );
+                break;
+              }
             }
+            resolve({
+              report: template.ajax,
+              history: tmpReportData,
+              globals: global.eoTestGlobals,
+            });
+          } catch (e) {
+            resolve({
+              report: template.ajax,
+              history: tmpReportData,
+              globals: global.eoTestGlobals,
+            });
+            console.error(new Date() + '：unit/common.js 336：', e);
           }
-          if (callback) {
-            callback(template.ajax, tmpReportData);
-          }
-        } catch (e) {
-          if (callback) {
-            callback(template.ajax, tmpReportData);
-          }
-          console.error(new Date() + '：unit/common.js 336：', e);
         }
-      }
-      main();
+        main();
+      });
     }
     abort() {
       this.areadyAbortXhr = true;

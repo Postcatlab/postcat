@@ -1,17 +1,19 @@
-
 <header>
   <button
     nz-popconfirm
-    nzPopconfirmTitle="此操作无法恢复，确认操作？"
+    i18n-nzPopconfirmTitle
+    nzPopconfirmTitle="This operation cannot be restored, do you want to do it?"
     (nzOnConfirm)="deleteAll()"
     nzPopconfirmPlacement="topLeft"
     nz-button
     nzType="primary"
     nzDanger
+    i18n
   >
-    清空测试历史
+    Empty Test History
   </button>
 </header>
 <nz-divider></nz-divider>
-<list-block-common-component class="api_test_history_list" [(list)]="model" [mainObject]="listConf"> </list-block-common-component>
-<nz-empty class="pb20" *ngIf="!model||!model.length" nzNotFoundImage="simple"></nz-empty>
+<list-block-common-component class="api_test_history_list" [(list)]="model" [mainObject]="listConf">
+</list-block-common-component>
+<nz-empty class="pb20" *ngIf="!model || !model.length" nzNotFoundImage="simple"></nz-empty>

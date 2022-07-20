@@ -110,12 +110,13 @@ export interface ApiTestHistoryResponse {
   body: string;
   contentType: string;
   responseType: 'text' | 'longText' | 'stream';
+  blobFileName?: string;
   responseLength: number;
   testDeny: string;
   /**
    * Inject Code println
    */
-  reportList: string[] | object[];
+  reportList: string[] | { type: 'throw' | 'interrupt'; content: string }[];
 }
 
 /**
@@ -257,7 +258,7 @@ export type ApiMockEntity = StorageModel & {
   apiDataID: string | number;
 
   /** 0 is system default mock; 1 is user custom mock */
-  createType: 0 | 1;
+  createWay: 'system' | 'custom';
 
   /** mock response data */
   response: string;
@@ -295,51 +296,51 @@ export enum RequestProtocol {
 }
 
 /**
- * API数据对象接口
+ * API Data
  */
 export interface ApiData extends StorageModel {
   /**
-   * 名称
+   * name
    * @type {string}
    */
   name: string;
 
   /**
-   * 文档所属项目主键ID
+   * Belongs to which project
    *
    * @type {string|number}
    */
   projectID?: string | number;
 
   /**
-   * 文档所属分组主键ID
+   * Belongs to which group
    *
    * @type {string|number}
    */
   groupID: string | number;
 
   /**
-   * 请求地址
+   * Request url,Usually value is path
    *
    * @type {string}
    */
   uri: string;
   /**
-   * API协议 [http, https, ...]
+   * API protocol [http, https, ...]
    *
    * @type {RequestProtocol|string}
    */
   protocol: RequestProtocol | string;
 
   /**
-   * 请求方法 [POST, GET, PUT, ...]
+   * Request method [POST, GET, PUT, ...]
    *
    * @type {RequestMethod|string}
    */
   method: RequestMethod | string;
 
   /**
-   * 分组排序号
+   * api show order
    *
    * @type {number}
    */
@@ -385,7 +386,7 @@ export interface ApiData extends StorageModel {
    *
    * @type {object[]}
    */
-  restParams?: object[];
+  restParams?: Record<string, any>[];
 
   /**
    * 返回头数据，数据用json存储
@@ -395,7 +396,7 @@ export interface ApiData extends StorageModel {
   responseHeaders?: ApiEditHeaders[];
 
   /**
-   * 返回参数(多层结构)，数据用json存储
+   * Response(多层结构)，数据用json存储
    *
    * @type {ApiEditBody[] | string}
    */
@@ -409,7 +410,7 @@ export interface ApiData extends StorageModel {
   responseBodyType?: ApiBodyType | string;
 
   /**
-   * 返回参数json根类型
+   * Responsejson根类型
    *
    * @type {JsonRootType|string}
    */
@@ -486,7 +487,7 @@ export type ApiEditMock = {
   /** mock返回值 */
   response: string;
   /** 0 is system default mock; 1 is user custom mock */
-  createType: 0 | 1;
+  createWay: 'system' | 'custom';
 };
 
 export interface BasiApiEditParams {

@@ -550,7 +550,7 @@ fdescribe('test unit format request/response', function () {
       weight: 0,
       uuid: 2,
     };
-    let result = eoFormatRequestData(requestInfo, { env: {} }, 'en-US');
+    let result = eoFormatRequestData(requestInfo, { env: {}, beforeScript: '', afterScript: '' }, 'en-US');
     expect(result).toEqual(
       jasmine.objectContaining({
         URL: 'https://view.inews.qq.com/g2/getOnsInfo?name=disease_h5',

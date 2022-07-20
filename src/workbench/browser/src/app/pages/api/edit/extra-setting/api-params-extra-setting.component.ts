@@ -14,23 +14,23 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     },
     tdList: [
       {
-        thKey: '参数名',
+        thKey: $localize`Param Name`,
         type: 'text',
         modelKey: 'name',
       },
       {
-        thKey: '必填',
+        thKey: $localize`Required`,
         type: 'html',
-        html: '{{item.required?"是":"否"}}',
+        html: '{{item.required?"True":"False"}}',
         class: 'w_100',
       },
       {
-        thKey: '说明',
+        thKey: $localize`:@@Description:Description`,
         type: 'text',
         modelKey: 'description',
       },
       {
-        thKey: '类型',
+        thKey: $localize`Type`,
         type: 'text',
         modelKey: 'type',
       },
