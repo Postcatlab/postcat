@@ -44,7 +44,7 @@ export class ModuleManager implements ModuleManagerInterface {
   }
 
   async getRemoteExtension() {
-    const { data } = await http.get(process.env.EXTENSION_URL + '/list');
+    const { data } = await http.get('http://106.12.149.147/list');
     return data.data.map(({ name, version }) => ({ name, version }));
   }
 
