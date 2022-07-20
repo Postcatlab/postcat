@@ -14,7 +14,7 @@ module.exports = (req, res) => {
         JSON.stringify({
           action: 'finish',
           data: {
-            id: ctx.request.body.id,
+            id: req.body.id,
             globals:globals,
             report: report,
             history: history,
