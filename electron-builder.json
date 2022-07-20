@@ -17,18 +17,12 @@
     "out/app/common/**/*",
     "!**/*.ts"
   ],
-<<<<<<< HEAD
-  "afterSign": "builder/notarize.js",
-  "publish": [
-    "github"
-=======
   "publish": [
     "github",
     {
       "provider": "generic",
       "url": "https://packages.eoapi.io"
     }
->>>>>>> main
   ],
   "generateUpdatesFilesForAllChannels": true,
   "nsis": {
@@ -62,8 +56,6 @@
   "afterSign": "build/notarize.js",
   "linux": {
     "icon": "src/app/common/images/",
-    "target": [
-      "AppImage"
-    ]
+    "target": ["AppImage"]
   }
 }
