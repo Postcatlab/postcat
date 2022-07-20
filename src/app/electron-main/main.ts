@@ -1,5 +1,4 @@
 require('@bqy/node-module-alias/register');
-require('dotenv').config();
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { EoUpdater } from './updater';
 import * as path from 'path';

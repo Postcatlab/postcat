@@ -5,6 +5,8 @@ import { lastValueFrom } from 'rxjs';
 import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment'; 
+
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +19,7 @@ export class ExtensionService {
   constructor(private http: HttpClient, private electron: ElectronService, private language: LanguageService) {
     this.localExtensions = this.getExtensions();
     this.extensionIDs = this.updateExtensionIDs();
-    this.HOST = this.electron.isElectron ? process.env.EXTENSION_URL : process.env.MOCK_URL;
+    this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
   }
   private getExtensions() {
     // Local extension

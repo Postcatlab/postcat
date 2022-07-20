@@ -6,6 +6,7 @@ import { processEnv } from '../../constant';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
 import { promises, readFileSync } from 'fs';
+import { ELETRON_APP_CONFIG } from '../../../../enviroment';
 
 // * npm pkg name
 const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
@@ -44,7 +45,7 @@ export class ModuleManager implements ModuleManagerInterface {
   }
 
   async getRemoteExtension() {
-    const { data } = await http.get('http://106.12.149.147/list');
+    const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
     return data.data.map(({ name, version }) => ({ name, version }));
   }
 

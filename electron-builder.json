@@ -7,6 +7,7 @@
   "files": [
     "out/app/**/*.js*",
     "out/platform/**/*.js*",
+    "out/enviroment.js",
     "out/shared/**/*.js*",
     "**/*/browser/dist/**/*",
     "**/*/node/dist/**/*",
