@@ -24,7 +24,8 @@ class webPlatformBuilder {
          }catch(e){
           
          }
-        //  window.location.href="/"+lang;
+         console.log('change lang:',lang)
+         window.location.href="/"+lang;
         </script>
       </head>
       <body></body>
