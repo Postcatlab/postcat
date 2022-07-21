@@ -18,11 +18,13 @@ class webPlatformBuilder {
         <meta charset="utf-8" />
         <title>eoapi redirect</title>
         <script>
-          if(window.location.href.includes("/en/")){
-            window.location.href="/en"
-          }else{
-            window.location.href="/zh"
-          }
+         let lang=window.location.href.includes("/en")?'en':'zh';
+         try{
+          lang=JSON.parse(window.localStorage.getItem("LOCAL_SETTINGS_KEY")).eoapi-language==='en-US'?'en':'zh';
+         }catch(e){
+          
+         }
+         window.location.href="/${lang}"
         </script>
       </head>
       <body></body>
