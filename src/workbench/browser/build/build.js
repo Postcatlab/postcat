@@ -10,6 +10,29 @@ class webPlatformBuilder {
   }
   executeBuild() {
     execSync('ng build -c production', { stdio: 'inherit' });
+    fs.writeFile(
+      './dist/index.html',
+      `<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>eoapi redirect</title>
+        <script>
+         let lang=window.location.href.includes("/en")?'en':'zh';
+         try{
+          lang=JSON.parse(window.localStorage.getItem("LOCAL_SETTINGS_KEY"))["eoapi-language"]=='en-US'?'en':'zh';
+         }catch(e){
+          
+         }
+         console.log('change lang:',lang)
+         window.location.href="/"+lang;
+        </script>
+      </head>
+      <body></body>
+    </html>
+    `,
+      () => {}
+    );
   }
 }
 class appPlatformBuilder {
