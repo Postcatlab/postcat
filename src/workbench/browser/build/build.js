@@ -10,6 +10,22 @@ class webPlatformBuilder {
   }
   executeBuild() {
     execSync('ng build -c production', { stdio: 'inherit' });
+    fs.writeFile(
+      './dist/index.html',
+      `<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>eoapi redirect</title>
+        <script>
+          console.log(window.location);
+        </script>
+      </head>
+      <body></body>
+    </html>
+    `,
+      () => {}
+    );
   }
 }
 class appPlatformBuilder {
