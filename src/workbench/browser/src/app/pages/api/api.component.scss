@@ -22,11 +22,18 @@ nz-sider {
  ::ng-deep {
   .ant-layout-sider-children {
     border-right: 1px solid #f0f0f0;
-    padding: 0 10px;
+    // padding: 0 10px;
     .group-btn-add,
     .group-search {
       margin-bottom: 12px;
     }
+  }
+  .ant-tabs-top > .ant-tabs-nav::before {
+    left: 10px;
+    right: 10px;
+  }
+  .ant-tabs-nav.ng-star-inserted {
+    padding: 0 10px;
   }
   .api-tabs .ant-tabs-nav-list {
     width: 100%;
