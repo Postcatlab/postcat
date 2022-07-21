@@ -20,7 +20,7 @@ class webPlatformBuilder {
         <script>
          let lang=window.location.href.includes("/en")?'en':'zh';
          try{
-          lang=JSON.parse(window.localStorage.getItem("LOCAL_SETTINGS_KEY")).eoapi-language==='en-US'?'en':'zh';
+          lang=JSON.parse(window.localStorage.getItem("LOCAL_SETTINGS_KEY"))["eoapi-language"]=='en-US'?'en':'zh';
          }catch(e){
           
          }
