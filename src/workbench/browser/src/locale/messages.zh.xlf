@@ -981,6 +981,14 @@
         </context-group>
         <target state="translated">删除分组</target>
       </trans-unit>
+      <trans-unit id="3219703548513157080" datatype="html">
+        <source>Test History</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/history/eo-history.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <target state="translated">测试历史</target>
+      </trans-unit>
       <trans-unit id="84f41a74439fc0804dc5c0d4a5b7ef58fb39475e" datatype="html">
         <source>Add Mock</source>
         <context-group purpose="location">
@@ -3095,23 +3103,23 @@
         </context-group>
         <target state="translated">语言</target>
       </trans-unit>
-      <trans-unit id="b20217b59531361f9ebc6df4c148399f76461f96" datatype="html">
-        <source>请输入<x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.label }}"/></source>
+      <trans-unit id="98336771d9bed95509ee1317c3751b4f71cd2a29" datatype="html">
+        <source>Please Enter <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.label }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
-        <target state="translated">Please Enter <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.label }}"/></target>
+        <target state="translated">请输入 <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.label }}"/></target>
       </trans-unit>
-      <trans-unit id="872abb7923d5fcf1c5b3b60f3c469ea277a17f48" datatype="html">
+      <trans-unit id="8f00741b14cbd6028c8b316de0728fbfcd5ae565" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.placeholder ?? &apos;请输入&apos; + module.properties[field]?.label }}"/>
+          <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.placeholder ?? &apos;Please Enter &apos; + module.properties[field]?.label }}"/>
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.placeholder ?? 'Please enter ' + module.properties[field]?.label }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.placeholder ?? '请输入 ' + module.properties[field]?.label }}"/></target>
       </trans-unit>
       <trans-unit id="0153ca63af84192825f056daf8503077a518d413" datatype="html">
         <source> Switched to <x id="INTERPOLATION" equiv-text="{{ isRemote ? &apos;Localhost&apos; : &apos;Remote Server&apos; }}"/> </source>
@@ -3177,7 +3185,7 @@
         <source>Test service connection failed, please submit Issue contact community</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/api-test/remote-node/test-connect.service.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/api-test/serverless-node/test-connect.service.ts</context>

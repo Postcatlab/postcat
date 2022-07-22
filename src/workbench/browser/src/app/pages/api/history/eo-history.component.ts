@@ -40,7 +40,7 @@ export class HistoryComponent implements OnInit {
       type: 'gotoApiTest',
       data: {
         ...data,
-        origin: { method: data.request.method.toUpperCase(), title: '测试历史', key: `history_${data.uuid}` },
+        origin: { method: data.request.method.toUpperCase(), title: $localize`Test History`, key: `history_${data.uuid}` },
       },
     });
   }

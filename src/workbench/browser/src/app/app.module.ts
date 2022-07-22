@@ -67,8 +67,9 @@ registerLocaleData(zh);
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {
+        console.log(localId)
         switch (localId) {
-          case 'zh-Hans':
+          case 'zh':
             return zh_CN;
           default:
             return en_US;
