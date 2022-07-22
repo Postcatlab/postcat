@@ -51,6 +51,12 @@
 ::ng-deep .group_tree {
   overflow: hidden scroll;
   height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 120px);
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &:hover::-webkit-scrollbar {
+    width: 8px;
+  }
   .ant-tree-switcher {
     // width: 12px;
     // padding-left: 4px;
