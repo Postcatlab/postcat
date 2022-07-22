@@ -49,8 +49,8 @@
   }
 }
 ::ng-deep .group_tree {
-  overflow: auto;
-  height: calc(100vh - var(--NAVBAR_HEIGHT) - 88px);
+  overflow: hidden scroll;
+  height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 120px);
   .ant-tree-switcher {
     // width: 12px;
     // padding-left: 4px;
