@@ -127,7 +127,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.message.error($localize`Name is not allowed to be empty`);
       return;
     }
-    const data = parameters?.filter((it) => it.name && it.value);
+    const data = parameters?.filter((it) => it.name || it.value);
     if (uuid != null) {
       this.storage.run(
         'environmentUpdate',

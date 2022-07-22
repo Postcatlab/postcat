@@ -49,11 +49,17 @@
   }
 }
 ::ng-deep .group_tree {
-  overflow: auto;
-  height: calc(100vh - var(--NAVBAR_HEIGHT) - 88px);
+  overflow: hidden scroll;
+  height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 120px);
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &:hover::-webkit-scrollbar {
+    width: 8px;
+  }
   .ant-tree-switcher {
-    width: 12px;
-    padding-left: 4px;
+    // width: 12px;
+    // padding-left: 4px;
   }
   .ant-tree-indent-unit {
     width: 8px;
@@ -79,7 +85,7 @@
 .tree_node {
   font-size: 12px;
   white-space: nowrap;
-  padding-left: 5px;
+  width: calc(100% - var(--tree-level) * 8px - 20px);
   .tree_node_operate {
     font-size: 14px;
     font-weight: bold;
