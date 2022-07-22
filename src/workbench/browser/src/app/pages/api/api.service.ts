@@ -11,13 +11,12 @@ export class ApiService {
     private messageService: MessageService,
     private storage: StorageService
   ) {}
-
+  get({ uuid }) {}
   copy({ uuid, createdAt, ...data }: ApiData): void {
     data.name += ' Copy';
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(data));
     this.messageService.send({ type: 'copyApi', data });
   }
-
   delete({ name, uuid }: ApiData): void {
     this.nzModalService.confirm({
       nzTitle: $localize`Deletion Confirmation?`,

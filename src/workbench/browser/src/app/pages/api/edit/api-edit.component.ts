@@ -19,7 +19,7 @@ import {
   StorageRes,
   StorageResStatus,
 } from '../../../shared/services/storage/index.model';
-import { ApiTabService } from '../tab/api-tab.service';
+import { ApiTabStorageService } from '../tab/api-tab-storage.service';
 
 import { objectToArray } from '../../../utils';
 import { getRest } from '../../../utils/api';
@@ -53,7 +53,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private message: NzMessageService,
     private messageService: MessageService,
-    private apiTab: ApiTabService,
+    private apiTab: ApiTabStorageService,
     private storage: StorageService
   ) {}
   getApiGroup() {
@@ -134,7 +134,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getApiGroup();
     this.initApi(Number(this.route.snapshot.queryParams.uuid));
-    this.watchTabChange();
     this.watchGroupIDChange();
     this.watchUri();
   }
@@ -158,7 +157,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         //Add From Test|Copy Api
         window.sessionStorage.removeItem('apiDataWillbeSave');
         Object.assign(this.apiData, JSON.parse(tmpApiData));
-        console.log(this.apiData)
+        console.log(this.apiData);
         this.validateForm.patchValue(this.apiData);
       } else {
         //Add directly
@@ -178,24 +177,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     } else {
       this.getApi(id);
     }
-  }
-  private watchTabChange() {
-    this.apiTab.tabChange$
-      .pipe(
-        pairwise(),
-        //actually change tab,not init tab
-        filter((data) => data[0].uuid !== data[1].uuid),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(([nowTab, nextTab]) => {
-        this.apiTab.saveTabData$.next({
-          tab: nowTab,
-          data: {
-            apiData: this.apiData,
-          },
-        });
-        this.initApi(nextTab.key);
-      });
   }
   private watchGroupIDChange() {
     this.changeGroupID$.pipe(debounceTime(500), take(1)).subscribe((id) => {

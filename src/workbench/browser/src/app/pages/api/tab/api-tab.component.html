@@ -22,11 +22,10 @@
   </a>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="operateTab('closeOther')" i18n>Close All Tags (excluding current tabs)</li>
-      <li nz-menu-item (click)="operateTab('closeAll')" i18n>Close All Tabs</li>
-      <!-- <li nz-menu-item>关闭已保存</li> -->
-      <li nz-menu-item (click)="operateTab('closeLeft')" i18n>Close Tabs To The Left</li>
-      <li nz-menu-item (click)="operateTab('closeRight')" i18n>Close Tabs to Right</li>
+      <li nz-menu-item (click)="operateCloseTab('closeOther')" i18n>Close All Tags (excluding current tabs)</li>
+      <li nz-menu-item (click)="operateCloseTab('closeAll')" i18n>Close All Tabs</li>
+      <li nz-menu-item (click)="operateCloseTab('closeLeft')" i18n>Close Tabs To The Left</li>
+      <li nz-menu-item (click)="operateCloseTab('closeRight')" i18n>Close Tabs to Right</li>
     </ul>
   </nz-dropdown-menu>
 </ng-template>

@@ -17,8 +17,8 @@ import { take, takeUntil, distinctUntilChanged, pairwise, filter } from 'rxjs/op
 import { ApiTestHistoryComponent } from './history/api-test-history.component';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
-import { ApiTestService } from './api-test.service';
-import { ApiTabService } from '../tab/api-tab.service';
+import { ApiTestUtilService } from './api-test-util.service';
+import { ApiTabStorageService } from '../tab/api-tab-storage.service';
 import { objectToArray } from '../../../utils';
 
 import { EnvState } from '../../../shared/store/env.state';
@@ -78,8 +78,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef,
-    private apiTest: ApiTestService,
-    private apiTab: ApiTabService,
+    private apiTest: ApiTestUtilService,
+    private apiTab: ApiTabStorageService,
     private testServerService: TestServerService,
     private messageService: MessageService,
     private storage: StorageService,
@@ -325,7 +325,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(([nowTab, nextTab]) => {
-        this.apiTab.saveTabData$.next({
+        this.apiTab.addData({
           tab: nowTab,
           data: {
             apiData: this.apiData,
