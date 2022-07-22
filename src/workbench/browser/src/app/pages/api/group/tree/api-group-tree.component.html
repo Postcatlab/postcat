@@ -1,4 +1,4 @@
-<header class="flex py-2">
+<header class="flex p-2">
   <input type="text" class="flex-1 px-3 input" i18n-placeholder="@@Search" placeholder="Search"
     [(ngModel)]="searchValue" />
   <div class="flex items-center justify-center ml-3 text-base btn shrink-0" nzType="primary" nz-button nz-dropdown
@@ -14,7 +14,7 @@
   </nz-dropdown-menu>
 </header>
 <!-- Fixed Group -->
-<div class="group_container fixed_group_tree pt10">
+<div class="px-2 group_container fixed_group_tree pt10">
   <!-- <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron"> -->
   <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
     [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
@@ -22,25 +22,24 @@
     <div class="tree_node" *ngIf="node.origin?.isFixed">
       <div class="flex items-center">
         <span class="mr-2 text-sm">
-          <eo-iconpark-icon name="home">
-          </eo-iconpark-icon>
+          <eo-iconpark-icon name="home"> </eo-iconpark-icon>
         </span>
         <span class="text_omit node_title">{{ node.title }}</span>
       </div>
     </div>
   </ng-template>
 </div>
-<div class="bbd"></div>
+<div class="mx-2 bbd"></div>
 <!-- <div class="bbd" *ngIf="electron.isElectron"></div> -->
 
 <!-- Custom Group -->
-<div class="group_container group_tree pt10">
+<div class="px-2 group_container group_tree pt10">
   <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzSearchValue]="searchValue"
     [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys" (nzClick)="clickTreeItem($event)"
     (nzExpandChange)="toggleExpand()" nzDraggable nzBlockNode (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
-    <div>
+    <div [style.--tree-level]="node.level - 2">
       <!-- Folder -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
         <div class="f_row_ac">

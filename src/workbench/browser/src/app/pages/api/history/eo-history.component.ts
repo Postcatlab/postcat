@@ -15,12 +15,12 @@ export class HistoryComponent implements OnInit {
     const observer = this.loadAllTest();
     observer.subscribe((result: any) => {
       // console.log(result.data);
-      this.historyList = result.data;
+      this.historyList = result.data.reverse();
     });
     this.message.get().subscribe(({ type }) => {
       if (type === 'updateHistory') {
         this.loadAllTest().subscribe((result: any) => {
-          this.historyList = result.data;
+          this.historyList = result.data.reverse();
         });
       }
     });

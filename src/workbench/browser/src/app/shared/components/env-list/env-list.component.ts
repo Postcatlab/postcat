@@ -12,7 +12,7 @@ import { StorageService } from '../../services/storage';
       <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
     <p *ngIf="!gloablParams.length" class="text-gray-500" i18n>No Global variables</p>
-    <div  class="py-2.5" *ngIf="env.uuid">
+    <div class="py-2.5" *ngIf="env.uuid">
       <span class="text-gray-400" i18n>Environment Host</span>
       <div>
         <p class="text-gray-500 text-ellipsis overflow-hidden" class="h-8">{{ env.hostUri }}</p>
@@ -51,7 +51,7 @@ export class EnvListComponent implements OnInit {
     });
   }
   getGlobalParams() {
-    return Object.entries(this.apiTest.getGlobals()).map((it) => {
+    return Object.entries(this.apiTest.getGlobals() || {}).map((it) => {
       const [key, value] = it;
       return { name: key, value };
     });
