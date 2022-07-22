@@ -44,7 +44,6 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           yarn release
-          dir ./release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -81,7 +80,6 @@ jobs:
           echo "${{ secrets.NOTARIZE_JS }}" > build/notarize.js
           yarn release:m1
           yarn release
-          ls ./release
 
           # clean up keychain and provisioning profile
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
