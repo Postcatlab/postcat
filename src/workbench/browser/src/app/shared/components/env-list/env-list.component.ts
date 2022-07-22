@@ -51,7 +51,7 @@ export class EnvListComponent implements OnInit {
     });
   }
   getGlobalParams() {
-    return Object.entries(this.apiTest.getGlobals()).map((it) => {
+    return Object.entries(this.apiTest.getGlobals() || {}).map((it) => {
       const [key, value] = it;
       return { name: key, value };
     });
