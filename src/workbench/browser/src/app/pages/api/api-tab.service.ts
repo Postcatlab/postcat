@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ApiModule } from 'eo/workbench/browser/src/app/pages/api/api.module';
 
-@Injectable({
-  providedIn: ApiModule,
-})
+@Injectable()
 export class ApiTabService {
   constructor() {}
   watchRouteChange() {}

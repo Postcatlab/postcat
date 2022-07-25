@@ -8,6 +8,7 @@ import { ApiService } from './api.service';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'eo-api',
@@ -45,6 +46,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiService: ApiService,
     private messageService: MessageService,
+    private nzModalService: NzModalService,
     private storage: StorageService,
     private remoteService: RemoteService,
     private store: Store
@@ -96,11 +98,19 @@ export class ApiComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
-          case 'gotoCopyApi':
+          case 'copyAPI':
             this.apiService.copy(inArg.data);
             break;
-          case 'gotoDeleteApi':
-            this.apiService.delete(inArg.data);
+          case 'deleteAPI':
+            this.nzModalService.confirm({
+              nzTitle: $localize`Deletion Confirmation?`,
+              nzContent: $localize`Are you sure you want to delete the data <strong title="${inArg.data.name}">${
+                inArg.data.name.length > 50 ? inArg.data.name.slice(0, 50) + '...' : inArg.data.name
+              }</strong> ? You cannot restore it once deleted!`,
+              nzOnOk: () => {
+                this.apiService.delete(inArg.data.uuid);
+              },
+            });
             break;
           case 'gotoBulkDeleteApi':
             this.apiService.bulkDelete(inArg.data.uuids);
@@ -131,10 +141,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       this.id = Number(params.get('uuid'));
     });
   }
-  clickContentMenu(data) {
-    this.messageService.send({ type: 'beforeChangeRouter', data });
-  }
-
   gotoEnvManager() {
     // * switch to env
     this.tabsIndex = 2;

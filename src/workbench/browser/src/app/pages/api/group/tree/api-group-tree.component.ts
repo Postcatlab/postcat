@@ -14,6 +14,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
+import { node } from 'webpack';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -50,7 +51,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
-      title: $localize `:@@API Index:Index`,
+      title: $localize`:@@API Index:Index`,
       key: 'overview',
       weight: 0,
       parentID: '0',
@@ -162,7 +163,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   async createGroup({ name, projectID, content }) {
     const groupID = await this.storageInstance.group.add({ name: name.replace(/\.json$/, ''), projectID });
-    // console.log('==>', content);
     const result = content.apiData.map((it, index) => ({ ...it, groupID, uuid: Date.now() + index }));
     await this.storageInstance.apiData.bulkAdd(result);
     this.buildGroupTreeData();
@@ -194,12 +194,37 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   /**
    * Group tree click api event
-   *
+   * Router jump page or Event emit
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
     inArg.event.stopPropagation();
-    this.messageService.send({ type: inArg.eventName, data: inArg.node });
+    switch (inArg.eventName) {
+      case 'testApi': {
+        this.router.navigate(['/home/api/test'], { queryParams: { uuid: inArg.node.key } });
+        break;
+      }
+      case 'editAPI': {
+        this.router.navigate(['/home/api/edit'], { queryParams: { uuid: inArg.node.key } });
+        break;
+      }
+      case 'jumpOverview': {
+        this.router.navigate(['/home/overview']);
+        break;
+      }
+      case 'addAPI': {
+        this.router.navigate(['/home/api/edit'], {
+          queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') },
+        });
+        break;
+      }
+      case 'deleteAPI':
+      case 'copyAPI':
+      default: {
+        this.messageService.send({ type: inArg.eventName, data: inArg.node });
+        break;
+      }
+    }
   }
   /**
    * Group tree item click.
@@ -215,13 +240,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         break;
       }
       case 'clickFixedItem': {
-        event.eventName = 'detailOverview';
-        this.operateApiEvent(event);
+        this.operateApiEvent({ ...event, eventName: 'jumpOverview' });
         break;
       }
       case 'clickItem': {
-        event.eventName = 'detailApi';
-        this.operateApiEvent(event);
+        this.operateApiEvent({ ...event, eventName: 'detailApi' });
         break;
       }
     }
@@ -273,7 +296,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   deleteGroup(node: NzTreeNode) {
-    this.groupModal($localize`Delete Group`, { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
+    this.groupModal($localize`Delete Group`, {
+      group: this.nodeToGroup(node),
+      treeItems: this.treeItems,
+      action: 'delete',
+    });
   }
 
   /**
@@ -356,6 +383,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       });
     }
   }
+  /**
+   * Expand Group fit current select api  when router change 
+   */
   private watchRouterChange() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.setSelectedKeys();

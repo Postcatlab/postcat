@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ApiModule } from 'eo/workbench/browser/src/app/pages/api/api.module';
 import { ReplaySubject, Subject } from 'rxjs';
 import { TabItem } from './tab.model';
 
-@Injectable({
-  providedIn: ApiModule,
-})
+@Injectable()
 /**
  * Storage api tab data
  */
