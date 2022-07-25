@@ -2,53 +2,37 @@
  * Tab item.
  */
 export interface TabItem {
+  /**
+   * Tab id,timestamp
+   */
   uuid: number;
   /**
-   * 标签标题
+   * Tab title
    *
    * @type {string}
    */
   title: string;
 
   /**
-   * 标签对应的路径
+   * Router path
    *
    * @type {string}
    */
-  path: string;
-
+  pathname: string;
   /**
-   * 路径的主键参数
-   *
-   * @type {string | number}
+   * Query params
    */
-  key?: string | number;
-
+   params: any;
   /**
-   * 路径的分组参数
-   *
-   * @type {string | number}
+   * Preview page or edit page
    */
-  groupID?: string | number;
-
+  type: string | 'preview' | 'edit';
   /**
-   * 路径的项目参数
-   *
-   * @type {string | number}
+   * In edit page,value will be set true when content change
    */
-  projectID?: string | number;
-
+  hasChanged?: boolean;
   /**
-   * 标签路径的请求类型，用于显示
-   *
-   * @type {string | number}
+   * Extend key
    */
-  method?: string;
-
-  /**
-   * 实体类型，为后期加上其他类型到Tab预留，如Group
-   *
-   * @type {string}
-   */
-  entity?: string;
+  extends?: any;
 }

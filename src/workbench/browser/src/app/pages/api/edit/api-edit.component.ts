@@ -38,7 +38,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   expandKeys: string[];
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
-  nzSelectedIndex = 1;
 
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
@@ -50,7 +49,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     private apiEdit: ApiEditService
-  ) {}
+  ) {
+  }
   getApiGroup() {
     this.groups = [];
     const treeItems: any = [
@@ -100,20 +100,33 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.getApiGroup();
-    this.initApi(Number(this.route.snapshot.queryParams.uuid));
     this.watchGroupIDChange();
+    this.apiData = {
+      name: '',
+      projectID: 1,
+      uri: '/',
+      groupID: this.route.snapshot.queryParams.groupID || '-1',
+      protocol: RequestProtocol.HTTP,
+      method: RequestMethod.POST,
+    };
+    this.initBasicForm();
     this.watchUri();
+    this.init();
   }
-
+  async init(apiData?) {
+    let id = Number(this.route.snapshot.queryParams.uuid);
+    if (apiData) {
+      //[From outside data]('eoApiComponent'),such as tab cache
+      this.apiData = apiData;
+    } else {
+      this.apiData = await this.apiEdit.getApi(id);
+    }
+    this.changeGroupID$.next(this.apiData.groupID);
+    this.validateForm.patchValue(this.apiData);
+  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-  private async initApi(id) {
-    this.initBasicForm();
-    this.apiData = await this.apiEdit.getApi(id);
-    this.changeGroupID$.next(this.apiData.groupID);
-    this.validateForm.patchValue(this.apiData);
   }
   private watchGroupIDChange() {
     this.changeGroupID$.pipe(debounceTime(500), take(1)).subscribe((id) => {

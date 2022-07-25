@@ -5,13 +5,18 @@ import { StorageService } from '../../shared/services/storage';
 @Injectable()
 export class ApiService {
   constructor(private messageService: MessageService, private storage: StorageService) {}
-  get({ uuid }): Promise<ApiData> {
+  get(uuid): Promise<ApiData> {
     return new Promise((resolve) => {
       this.storage.run('apiDataLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
         }
       });
+    });
+  }
+  getAll(projectID):Promise<StorageRes> {
+    return new Promise((resolve) => {
+      this.storage.run('apiDataLoadAllByProjectID', [projectID], resolve);
     });
   }
   add(apiData: ApiData): Promise<StorageRes> {
@@ -35,7 +40,7 @@ export class ApiService {
   bulkDelete(apis) {
     this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'bulkDeleteApiSuccess', data: { uuids: apis } });
+        this.messageService.send({ type: 'bulkdeleteApiSuccess', data: { uuids: apis } });
       }
     });
   }

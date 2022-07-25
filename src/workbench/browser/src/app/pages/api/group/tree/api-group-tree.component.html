@@ -116,18 +116,18 @@
           </button>
           <nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'editAPI', node: node })">
+              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'editApi', node: node })">
                 <a i18n>Edit</a>
               </li>
               <li
                 nz-menu-item
-                (click)="operateApiEvent({ event: $event, eventName: 'copyAPI', node: apiDataItems[node.key] })"
+                (click)="operateApiEvent({ event: $event, eventName: 'copyApi', node: apiDataItems[node.key] })"
               >
                 <a i18n="@@Copy">Copy</a>
               </li>
               <li
                 nz-menu-item
-                (click)="operateApiEvent({ event: $event, eventName: 'deleteAPI', node: apiDataItems[node.key] })"
+                (click)="operateApiEvent({ event: $event, eventName: 'deleteApi', node: apiDataItems[node.key] })"
               >
                 <a i18n="@@Delete">Delete</a>
               </li>

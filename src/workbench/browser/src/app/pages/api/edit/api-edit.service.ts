@@ -9,12 +9,13 @@ export class ApiEditService {
   constructor(private storage: StorageService, private apiTab: ApiTabStorageService, private apiService: ApiService) {}
   async getApi(id): Promise<ApiData> {
     let result: ApiData;
-    //Recovery from tab
-    if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
-      let tabData = this.apiTab.tabCache[this.apiTab.tabID];
-      return tabData.apiData;
-    }
+    // //Recovery from tab
+    // if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
+    //   let tabData = this.apiTab.tabCache[this.apiTab.tabID];
+    //   return tabData.apiData;
+    // }
     if (!id) {
+      // From test page/copy api data;
       let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
       if (tmpApiData) {
         //Add From Test|Copy Api
