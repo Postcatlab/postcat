@@ -59,7 +59,8 @@
             <span
               class="flex items-center justify-center mx-1 icon"
               i18n-nzTooltipTitle
-              nz-tooltip nzTooltipTitle="Enviroment Quick Look"
+              nz-tooltip
+              nzTooltipTitle="Enviroment Quick Look"
               nz-popover
               [nzPopoverContent]="envParams"
               nzPopoverPlacement="bottomRight"
@@ -79,7 +80,8 @@
                 (click)="clickContentMenu(tab)"
                 [routerLink]="[tab.routerLink]"
                 queryParamsHandling="merge"
-                >{{ tab.title }}</a
+              >
+                {{ tab.title }}</a
               >
             </nz-tab>
           </nz-tabset>
