@@ -44,13 +44,8 @@
     </nz-input-group>
   </form>
   <!-- 请求参数 -->
-  <nz-collapse class="eo_collapse mt10" [nzGhost]="true">
-    <nz-collapse-panel #panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
-      <!-- <ng-template #extraTpl>
-        <div class="flex">
-          <eo-iconpark-icon name="{{ panel.nzActive ? 'up' : 'down' }}"></eo-iconpark-icon>
-        </div>
-      </ng-template> -->
+  <nz-collapse class="eo_collapse mt-2.5" [nzGhost]="true">
+    <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
       <nz-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
         <!-- Request Headers -->
         <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
@@ -105,8 +100,8 @@
     </nz-collapse-panel>
   </nz-collapse>
   <!-- 响应内容 -->
-  <nz-collapse class="eo_collapse mt10" [nzGhost]="true">
-    <nz-collapse-panel #panelRes [nzActive]="true" i18n-nzHeader nzHeader="Response">
+  <nz-collapse class="eo_collapse mt-2.5" [nzGhost]="true">
+    <nz-collapse-panel  [nzActive]="true" i18n-nzHeader nzHeader="Response">
       <nz-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
         <nz-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">
           <ng-template #responseHeaderTitleTmp>

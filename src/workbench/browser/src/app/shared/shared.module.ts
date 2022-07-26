@@ -28,6 +28,7 @@ import { ApiScriptComponent } from './components/api-script/api-script.component
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
+import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/components/split-panel/split.panel.component';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 const COMPONENTS = [
@@ -36,6 +37,7 @@ const COMPONENTS = [
   SidebarComponent,
   PageNotFoundComponent,
   ApiScriptComponent,
+  SplitPanelComponent,
 ];
 @NgModule({
   imports: [
@@ -63,6 +65,14 @@ const COMPONENTS = [
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
-  exports: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, NzPopoverModule, EoIconparkIconModule, EnvListComponent],
+  exports: [
+    WebviewDirective,
+    ...COMPONENTS,
+    ApiParamsNumPipe,
+    NzPopoverModule,
+    EoIconparkIconModule,
+    EnvListComponent,
+    SplitPanelComponent,
+  ],
 })
 export class SharedModule {}

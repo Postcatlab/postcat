@@ -21,30 +21,3 @@ eo-api-edit-rest {
   background-color: var(--MAIN_THEME_COLOR);
   margin-left: 5px;
 }
-::ng-deep {
-  .param_header {
-    padding: 5px 15px;
-    .ant-radio-wrapper {
-      font-size: 12px;
-    }
-    .ant-radio-inner {
-      width: 14px;
-      height: 14px;
-    }
-    .ant-radio-inner::after {
-      width: 14px;
-      height: 14px;
-      margin-top: -7px;
-      margin-left: -7px;
-    }
-  }
-  .ant-collapse-content {
-    margin: 0 25px;
-  }
-  .param_header + list-block-common-component .wrap_lbcc {
-    border-top: 1px solid var(--BORDER);
-  }
-  .ant-divider {
-    margin: 10px 0;
-  }
-}
