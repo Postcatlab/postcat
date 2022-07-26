@@ -27,9 +27,10 @@
     </span>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu nzSelectable>
-        <a href="https://eoapi.io/" target="_blank" nz-menu-item i18n>Document</a>
+        <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
+        <a href="https://developer.eoapi.io" target="_blank" nz-menu-item i18n>Developer Support</a>
         <li nz-menu-divider></li>
-        <a href="https://github.com/eolinker/eoapi/issues/new" target="_blank" nz-menu-item i18n>Report Issue</a>
+        <a href="https://github.com/eolinker/eoapi/issues" target="_blank" nz-menu-item i18n>Report Issue</a>
       </ul>
     </nz-dropdown-menu>
     <div *ngIf="!OS_TYPE.includes('mac') && isElectron">
