@@ -1,4 +1,4 @@
-<div class="eo-editor" [style.--eo-editor-height]="minHeight + 'px'">
+<div class="eo-editor" [style.--eo-editor-height]="isNaN(minHeight) ? minHeight : minHeight + 'px'">
   <div class="button_list">
     <span *ngIf="eventList.includes('type') && !hiddenList.includes('type')" i18n>
       Content Type

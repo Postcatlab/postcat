@@ -21,7 +21,7 @@
 <list-block-common-component *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [mainObject]="listConf"
   [(list)]="model"></list-block-common-component>
 <!-- Raw -->
-<eo-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'" [config]="{maxLines: 10}"
+<eo-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'" [minHeight]="'100%'"
   [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"></eo-editor>
 <!-- Binary -->
 <textarea class="btd" rows="4" *ngIf="bodyType === 'binary'" nzBorderless i18n-placeholder="@@Description"
