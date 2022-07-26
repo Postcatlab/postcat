@@ -59,7 +59,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">93</context>
         </context-group>
         <target state="translated">复制</target>
       </trans-unit>
@@ -799,11 +799,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">64</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
@@ -909,7 +909,7 @@
         <source>Add API</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <target state="translated">添加 API</target>
       </trans-unit>
@@ -917,7 +917,7 @@
         <source>Add Subgroup</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <target state="translated">添加子分组</target>
       </trans-unit>
@@ -925,11 +925,11 @@
         <source>Edit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">89</context>
         </context-group>
         <target state="translated">编辑</target>
       </trans-unit>
@@ -980,6 +980,14 @@
           <context context-type="linenumber">276</context>
         </context-group>
         <target state="translated">删除分组</target>
+      </trans-unit>
+      <trans-unit id="c6b146602288a87386004d591558477a97497e60" datatype="html">
+        <source>Are you sure delete all history?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/history/eo-history.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <target state="translated">是否确定要删除所有历史？</target>
       </trans-unit>
       <trans-unit id="3219703548513157080" datatype="html">
         <source>Test History</source>
@@ -3156,6 +3164,14 @@
           <context context-type="linenumber">111</context>
         </context-group>
         <target state="translated">关于</target>
+      </trans-unit>
+      <trans-unit id="59a3abb75073b478f8ec94aade779d38d5d28887" datatype="html">
+        <source>Hide/Show Sidebar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/toolbar/toolbar.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <target state="translated">隐藏/展示侧栏</target>
       </trans-unit>
       <trans-unit id="3173655943326087472" datatype="html">
         <source>Windows Client</source>

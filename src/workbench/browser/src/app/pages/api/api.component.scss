@@ -19,7 +19,7 @@ nz-sider {
   background-color: #fff;
 }
 
- ::ng-deep {
+::ng-deep {
   .ant-layout-sider-children {
     border-right: 1px solid #f0f0f0;
     // padding: 0 10px;
@@ -35,18 +35,23 @@ nz-sider {
   .ant-tabs-nav.ng-star-inserted {
     padding: 0 10px;
   }
-  .api-tabs .ant-tabs-nav-list {
-    width: 100%;
-    justify-content: space-evenly;
-    .ant-tabs-tab {
-      flex: 1;
-      justify-content: center;
-      margin: 0;
+  .api-tabs {
+    .ant-tabs-nav {
+      height: 40px;
+    }
+    .ant-tabs-nav-list {
+      width: 100%;
+      justify-content: space-evenly;
+      .ant-tabs-tab {
+        flex: 1;
+        justify-content: center;
+        margin: 0;
+      }
     }
   }
   .tabs-bar {
     background-color: var(--SEC_BG);
-    padding: 5px 10px 0 15px;
+    padding: 5px 0px 0px 5px;
     display: flex;
     margin-bottom: -1px;
     align-items: center;
@@ -105,11 +110,11 @@ nz-divider {
   width: 30px;
   height: 30px;
   font-size: 1.5em;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
   border-radius: 3px;
-  transition: all .4s ease;
+  transition: all 0.4s ease;
   &:hover {
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(0, 0, 0, 0.05);
   }
 }

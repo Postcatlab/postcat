@@ -1,12 +1,15 @@
 .input {
   width: 0px;
   height: 30px;
-  border: none;
+  border-color: transparent;
   background-color: rgba(0,0,0,0.05);
   border-radius: 3px;
   &::placeholder {
     color: rgba(0,0,0,0.5);
     font-size: 0.9em;
+  }
+  &:hover {
+    border-color: #158565;
   }
 }
 .btn {
@@ -17,6 +20,12 @@
   cursor: pointer;
 }
 ::ng-deep {
+  .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab{
+    padding: 8px 10px;
+  }
+  .ant-tabs-nav{
+    height: 35px;
+  }
   .ant-tree .ant-tree-treenode {
     padding: 0;
     margin: 2px 0;
