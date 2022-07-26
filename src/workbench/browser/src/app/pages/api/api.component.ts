@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { Subject, takeUntil } from 'rxjs';
@@ -7,7 +7,7 @@ import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
+import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
 
 @Component({
   selector: 'eo-api',
@@ -15,6 +15,7 @@ import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.se
   styleUrls: ['./api.component.scss'],
 })
 export class ApiComponent implements OnInit, OnDestroy {
+  @ViewChild('apiTabComponent') apiTabComponent: ApiTabComponent;
   /**
    * API uuid
    */
@@ -42,7 +43,6 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private apiTab: ApiTabService,
     private messageService: MessageService,
     private storage: StorageService,
     private remoteService: RemoteService,
@@ -65,9 +65,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     console.log(componentRef);
   }
   ngOnInit(): void {
-    this.apiTab.init();
-
     this.id = Number(this.route.snapshot.queryParams.uuid);
+    this.watchApiChange();
     this.watchRouterChange();
     this.watchDataSourceChange();
     if (this.remoteService.isElectron) {
@@ -93,7 +92,21 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
+  watchApiChange() {
+    this.messageService.get().subscribe((inArg: Message) => {
+      switch (inArg.type) {
+        case 'deleteApiSuccess': {
+          const closeTabIDs = this.apiTabComponent
+            .getTabsInfo()
+            .filter((val) => !inArg.data.uuids.includes(val.params.uuid))
+            .map((val) => val.uuid);
+          console.log(closeTabIDs, inArg.data.uuids);
+          this.apiTabComponent.batchCloseTab(closeTabIDs);
+          break;
+        }
+      }
+    });
+  }
   watchDataSourceChange(): void {
     this.messageService
       .get()

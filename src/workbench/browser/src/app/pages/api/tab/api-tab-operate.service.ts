@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { BasicTab, TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
-import { filter } from 'rxjs';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -13,7 +12,6 @@ export class ApiTabOperateService {
    * Current selected tab index.
    */
   selectedIndex = 0;
-  tabs: Array<TabItem> = [];
   /**
    * Tab basic info
    */
@@ -31,7 +29,6 @@ export class ApiTabOperateService {
       mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
     };
     this.init();
-    this.watchRouterChange();
   }
 
   /**
@@ -41,27 +38,38 @@ export class ApiTabOperateService {
    */
   newDefaultTab() {
     const tabItem: TabItem = this.getTabFromUrl(this.BASIC_TABS.test.pathname);
-    this.tabs.push(tabItem);
+    this.tabStorage.addTab(tabItem);
     //If selectIndex no change,manually change tab content url
     //Because if selectIndex change,tab component will call navigateTabRoute automatically
-    if (this.selectedIndex === this.tabs.length - 1) {
+    if (this.selectedIndex === this.tabStorage.tabs.length - 1) {
       this.navigateTabRoute(tabItem);
       return;
     }
-    this.selectedIndex = this.tabs.length - 1;
+    this.selectedIndex = this.tabStorage.tabs.length - 1;
   }
 
-  close(index) {
-    this.tabStorage.remove(this.tabs[index].uuid);
+  closeTab(index) {
     // If tab is last one,selectIndex will be change by component itself;
-    this.tabs.splice(index, 1);
-
-    if (this.tabs.length === 0) {
+    this.tabStorage.closeTab(index);
+    if (this.tabStorage.tabs.length === 0) {
       this.newDefaultTab();
     }
   }
-  batchClose(ids){
-
+  /**
+   * Close tab by ID
+   * */
+  batchClose(ids) {
+    const tabs = this.tabStorage.tabs.filter((val) => {
+      const shouldClose = ids.includes(val.uuid);
+      if (shouldClose) {
+        this.tabStorage.removeStorage(val.uuid);
+      }
+      return !shouldClose;
+    });
+    this.tabStorage.setTabs(tabs);
+    if (this.tabStorage.tabs.length === 0) {
+      this.newDefaultTab();
+    }
   }
   /**
    * Navigate  url to tab route
@@ -77,16 +85,16 @@ export class ApiTabOperateService {
    * Operate tab after router change,router triggle tab change
    * Such as new tab,pick tab,close tab...
    */
-  private operateTabAfterRouteChange(res: { url: string }) {
+  operateTabAfterRouteChange(res: { url: string }) {
     const tmpTabItem = this.getTabFromUrl(res.url);
 
     //Pick current router url as the first tab
-    if (this.tabs.length === 0) {
-      this.tabs.push(tmpTabItem);
+    if (this.tabStorage.tabs.length === 0) {
+      this.tabStorage.addTab(tmpTabItem);
       return;
     }
     //If exist tab,select that tab
-    const existTabIndex = this.tabs.findIndex((val) => val.uuid === tmpTabItem.params.pageID);
+    const existTabIndex = this.tabStorage.tabs.findIndex((val) => val.uuid === tmpTabItem.params.pageID);
     //Router has focus current tab
     if (this.selectedIndex === existTabIndex) {
       return;
@@ -106,19 +114,15 @@ export class ApiTabOperateService {
    * @param tabItem tab need to be add
    */
   private newOrReplaceTab(tabItem) {
-    const currentTab = this.tabs[this.selectedIndex];
-    if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
-      this.tabs[this.selectedIndex] = tabItem;
-      //If selectedIndex not change,need manual call selectTab to change content
-      this.navigateTabRoute(tabItem);
-    } else {
-      this.tabs.push(currentTab);
-    }
-  }
-  private watchRouterChange() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
-      this.operateTabAfterRouteChange(res);
-    });
+    const currentTab = this.tabStorage.tabs[this.selectedIndex];
+    // if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
+    //   this.tabStorage.tabs[this.selectedIndex] = tabItem;
+    //   //If selectedIndex not change,need manual call selectTab to change content
+    //   this.navigateTabRoute(tabItem);
+    // } else {
+    this.tabStorage.addTab(tabItem);
+    this.selectedIndex = this.tabStorage.tabs.length - 1;
+    // }
   }
   /**
    * Get tab info from url
@@ -139,7 +143,7 @@ export class ApiTabOperateService {
       params[key] = value;
     });
     const result = {
-      uuid: Date.now(),
+      uuid: params.pageID || Date.now(),
       pathname: urlArr[0],
       params,
       title: basicTab.title,

@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
+import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -7,21 +10,35 @@ import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
   MAX_TAB_LIMIT = 15;
-  constructor(public tabOperate: ApiTabOperateService) {}
+  routerSubscribe: Subscription;
+  constructor(
+    public tabStorage: ApiTabStorageService,
+    public tabOperate: ApiTabOperateService,
+    private router: Router
+  ) {}
   ngOnInit(): void {
+    this.watchRouterChange();
   }
   newTab() {
-    if (this.tabOperate.tabs.length >= this.MAX_TAB_LIMIT) {return;}
+    if (this.tabStorage.tabs.length >= this.MAX_TAB_LIMIT) {
+      return;
+    }
     this.tabOperate.newDefaultTab();
   }
   /**
-   * After select tab
+   * Select tab
    */
   selectChange() {
-    this.tabOperate.navigateTabRoute(this.tabOperate.tabs[this.tabOperate.selectedIndex]);
+    this.tabOperate.navigateTabRoute(this.tabStorage.tabs[this.tabOperate.selectedIndex]);
   }
-  closeTab({index}) {
-    this.tabOperate.close(index);
+  closeTab({ index }) {
+    this.tabOperate.closeTab(index);
+  }
+  getTabsInfo() {
+    return this.tabStorage.tabs;
+  }
+  batchCloseTab(uuids) {
+    this.tabOperate.batchClose(uuids);
   }
   /**
    * Tab  Close Operate
@@ -29,5 +46,14 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param action
    */
   operateCloseTab(action: 'closeOther' | 'closeAll' | 'closeLeft' | 'closeRight') {}
-  ngOnDestroy(): void {}
+  private watchRouterChange() {
+    this.routerSubscribe = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((res: NavigationEnd) => {
+        this.tabOperate.operateTabAfterRouteChange(res);
+      });
+  }
+  ngOnDestroy(): void {
+    this.routerSubscribe.unsubscribe();
+  }
 }

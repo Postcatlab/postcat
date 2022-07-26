@@ -114,7 +114,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.init();
   }
   async init(apiData?) {
-    let id = Number(this.route.snapshot.queryParams.uuid);
+    const id = Number(this.route.snapshot.queryParams.uuid);
     if (apiData) {
       //[From outside data]('eoApiComponent'),such as tab cache
       this.apiData = apiData;
@@ -191,7 +191,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private async editApi(formData) {
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`编辑成功` : $localize`新增成功`;
-    let result: StorageRes = await this.apiEdit.editApi(formData);
+    const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
       this.messageService.send({ type: `${busEvent}Success`, data: result.data });
