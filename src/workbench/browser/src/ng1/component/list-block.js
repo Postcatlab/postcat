@@ -118,6 +118,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
   bindings: {
     otherObject: '=',
     authorityObject: '<',
+    wrapStyle: '<',
     mainObject: '<',
     list: '=',
     activeObject: '=',

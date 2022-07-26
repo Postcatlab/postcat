@@ -21,9 +21,36 @@ eo-api-test-rest {
 .test_wrap {
   height: 100%;
   .scroll_container {
-    height: calc(100% - 52px);
-    // overflow-y: auto;
+    // height: calc(100% - 52px);
+    overflow-y: auto;
   }
+  ::ng-deep .top_container {
+    height: 45%;
+
+    form {
+      position: sticky;
+      top: 0;
+    }
+    .ant-tabs {
+      height: calc(100% - 52px);
+      .ant-tabs-nav,.param_header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: white;
+      }
+      .ant-tabs-content {
+        overflow: auto;
+        height: 100%;
+      }
+      eo-api-test-body[ng-reflect-body-type=formData] {
+      }
+    }
+  }
+  .bottom_container {
+    height: 65%;
+  }
+
 }
 .env_front_uri {
   max-width: 240px;
@@ -39,7 +66,7 @@ div.ant-typography{
 }
 ::ng-deep {
   .param_header {
-    padding: 0px 15px;
+    padding: 5px 15px;
   }
   .param_header + list-block-common-component .wrap_lbcc {
     border-top: 1px solid var(--BORDER);
