@@ -28,7 +28,7 @@ export class ApiDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private storage: StorageService, private remoteService: RemoteService) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      this.init(params.id);
+      this.init(params.uuid);
     });
   }
   init(id) {

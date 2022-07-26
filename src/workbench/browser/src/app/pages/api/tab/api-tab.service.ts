@@ -6,6 +6,12 @@ import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/ser
 import { filter } from 'rxjs';
 
 @Injectable()
+/**
+ * Api tab service operate tabs array add/replace/close...
+ * Tab change by
+ * 1. url change(router event)
+ * 2. API data change(event emit)
+ */
 export class ApiTabService {
   /**
    * Current selected tab index.
@@ -32,67 +38,27 @@ export class ApiTabService {
     private router: Router,
     private messageService: MessageService
   ) {
-    this.operateTabAfterRouteChange();
+    this.init();
+    this.watchRouterChange();
+    this.operateTabAfterApiChange();
   }
+
   /**
-   * Add first default tab
+   * Add Default tab
+   * @returns tabItem
    */
-  addDefaultTab() {
-    this.tabs.push(
-      Object.assign(
-        {
-          uuid: new Date().getTime(),
-          params: {},
-          extends: {
-            method: 'POST',
-          },
-        },
-        this.BASIC_TABS.test
-      )
-    );
+  newDefaultTab() {
+    let tabItem = this.getTabFromUrl(this.BASIC_TABS.test.pathname);
+    this.tabs.push(tabItem);
     this.selectedIndex = this.tabs.length - 1;
+    return tabItem;
   }
   /**
-   * Operate tab after router change,router triggle tab change
-   * Such as new tab,pick tab,close tab...
+   * Navigate  url to tab route
+   * @param tab
    */
-  operateTabAfterRouteChange() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
-      console.log('api tab service:', res);
-      let tab = this.getTabFromUrl(res.url);
-      //If exist tab,select that tab
-      let existTabIndex = this.tabs.findIndex((val) => val.uuid === tab.params.pageID);
-      if (existTabIndex !== -1 && this.selectedIndex !== existTabIndex) {
-        this.selectedIndex = existTabIndex;
-        return;
-      }
-      //Add tab or replace tab
-      //Avoid open too much tab,if tab[type==='preview'] or tab[type==='edit'] with no change,replace page in current tab
-      let currentTab = this.tabs[this.selectedIndex];
-      console.log(currentTab, this.tabs, this.selectedIndex);
-      if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
-        this.tabs[this.selectedIndex] = tab;
-        //  this.selectTab(tab);
-      }
-    });
-  }
-  /**
-   * Operate tab from api change which router no change
-   * Such as delete api
-   */
-  operateTabAfterApiChange() {
-    this.messageService.get().subscribe((inArg: Message) => {
-      switch (inArg.type) {
-        case 'deleteApiSuccess': {
-          break;
-        }
-        case 'bulkDeleteApiSuccess': {
-          break;
-        }
-      }
-    });
-  }
-  selectTab(tab: TabItem) {
+  navigateTabRoute(tab: TabItem) {
+    console.log('navigateTabRoute');
     this.router
       .navigate([tab.pathname], {
         queryParams: { pageID: tab.uuid, ...tab.params },
@@ -103,19 +69,109 @@ export class ApiTabService {
     this.apiTabStorage.remove(this.tabs[index].uuid);
     // If tab is last one,selectIndex will be change by component itself;
     this.tabs.splice(index, 1);
+
+    if (this.tabs.length === 0) {
+      let tabItem = this.newDefaultTab();
+      this.navigateTabRoute(tabItem);
+    }
   }
+  /**
+   * Operate tab after router change,router triggle tab change
+   * Such as new tab,pick tab,close tab...
+   */
+  private operateTabAfterRouteChange(res: { url: string }) {
+    let tmpTabItem = this.getTabFromUrl(res.url);
+
+    //Pick current router url as the first tab
+    if (this.tabs.length === 0) {
+      this.tabs.push(tmpTabItem);
+      return;
+    }
+    //If exist tab,select that tab
+    let existTabIndex = this.tabs.findIndex((val) => val.uuid === tmpTabItem.params.pageID);
+    //Router has focus current tab
+    if (this.selectedIndex === existTabIndex) return;
+    //Pick tab
+    if (existTabIndex !== -1) {
+      this.selectedIndex = existTabIndex;
+      return;
+    }
+    //If no exist,new tab or replace origin tab
+    this.newOrReplaceTab(tmpTabItem);
+  }
+  /**
+   * Operate tab from api change which router no change
+   * Such as delete api
+   */
+  private operateTabAfterApiChange() {
+    this.messageService.get().subscribe((inArg: Message) => {
+      switch (inArg.type) {
+        case 'deleteApiSuccess': {
+          const items = [];
+          this.tabs.forEach((tab: TabItem, index: number) => {
+            if (inArg.data.uuids.includes(Number(tab.params.uuid))) {
+              items.push(index );
+            }
+          });
+          items.reverse().forEach((item) => {
+            this.closeTab(item);
+          });
+          break;
+        }
+      }
+    });
+  }
+  /**
+   * New or replace current tab
+   * Avoid open too much tab,if tab[type==='preview'] or tab[type==='edit'] with no change,replace page in current tab
+   * @param tabItem tab need to be add
+   */
+  private newOrReplaceTab(tabItem) {
+    let currentTab = this.tabs[this.selectedIndex];
+    if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
+      this.tabs[this.selectedIndex] = tabItem;
+      //If selectedIndex not change,need manual call selectTab to change content
+      this.navigateTabRoute(tabItem);
+    } else {
+      this.tabs.push(currentTab);
+    }
+  }
+  private watchRouterChange() {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
+      this.operateTabAfterRouteChange(res);
+    });
+  }
+  /**
+   * Get tab info from url
+   * @param url
+   * @returns tabInfo
+   */
   private getTabFromUrl(url): TabItem {
     const urlArr = url.split('?');
-    const params = {};
+    const params: any = {};
     const basicTab = Object.values(this.BASIC_TABS).find((val) => val.pathname === urlArr[0]);
-    new URLSearchParams(urlArr[1]).forEach((value, key) => (params[key] = value));
+    // Parse query params
+    new URLSearchParams(urlArr[1]).forEach((value, key) => {
+      if (key === 'pageID') {
+        params[key] = Number(value);
+        return;
+      }
+      params[key] = value;
+    });
     const result = {
-      uuid: new Date().getTime(),
+      uuid: params.pageID || new Date().getTime(),
       pathname: urlArr[0],
       params: params,
       title: basicTab.title,
       type: basicTab.type,
     };
     return result;
+  }
+  //Init tab info
+  //Maybe from tab cache info or router url
+  private init() {
+    this.operateTabAfterRouteChange({
+      url: window.location.pathname + window.location.search,
+    });
   }
 }

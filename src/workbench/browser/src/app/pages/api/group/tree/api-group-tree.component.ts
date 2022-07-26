@@ -182,7 +182,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'editApiSuccess':
           case 'copyApiSuccess':
           case 'deleteApiSuccess':
-          case 'bulkdeleteApiSuccess':
           case 'updateGroupSuccess': {
             this.buildGroupTreeData();
             break;
@@ -220,19 +219,20 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         break;
       }
       case 'deleteApi': {
+        let apiInfo = inArg.node;
         this.nzModalService.confirm({
           nzTitle: $localize`Deletion Confirmation?`,
-          nzContent: $localize`Are you sure you want to delete the data <strong title="${inArg.data.name}">${
-            inArg.data.name.length > 50 ? inArg.data.name.slice(0, 50) + '...' : inArg.data.name
+          nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
+            apiInfo.name.length > 50 ? apiInfo.name.slice(0, 50) + '...' : apiInfo.name
           }</strong> ? You cannot restore it once deleted!`,
           nzOnOk: () => {
-            this.apiService.delete(inArg.data.uuid);
+            this.apiService.delete(apiInfo.uuid);
           },
         });
         break;
       }
       case 'copyApi': {
-        this.apiService.copy(inArg.data);
+        this.apiService.copy(inArg.node);
         break;
       }
     }
@@ -367,14 +367,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.updateoperateApiEvent(groupApiData);
+    this.updateOperateApiEvent(groupApiData);
   }
   /**
    * Update tree items after drag.
    *
    * @param data GroupApiDataModel
    */
-  updateoperateApiEvent(data: GroupApiDataModel) {
+  updateOperateApiEvent(data: GroupApiDataModel) {
+    console.log('updateOperateApiEvent', data.group);
     if (data.group.length > 0) {
       this.storage.run(
         'groupBulkUpdate',

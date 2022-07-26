@@ -14,7 +14,7 @@ export class ApiService {
       });
     });
   }
-  getAll(projectID):Promise<StorageRes> {
+  getAll(projectID): Promise<StorageRes> {
     return new Promise((resolve) => {
       this.storage.run('apiDataLoadAllByProjectID', [projectID], resolve);
     });
@@ -33,15 +33,15 @@ export class ApiService {
   delete(uuid): void {
     this.storage.run('apiDataRemove', [uuid], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'deleteApiSuccess', data: { uuid } });
+        this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: [uuid] } });
       }
     });
   }
   bulkDelete(apis) {
-    this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'bulkdeleteApiSuccess', data: { uuids: apis } });
-      }
-    });
+    // this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {
+    //   if (result.status === StorageResStatus.success) {
+        this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: apis } });
+    //   }
+    // });
   }
 }
