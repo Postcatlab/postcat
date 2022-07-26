@@ -1,9 +1,10 @@
 <div class="param_header">
-  <div class="flex mt5">
+  <div class="f_row_ac">
     <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
       <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
     </nz-radio-group>
-    <nz-divider nzType="vertical"></nz-divider>
+    <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
+    <!-- <nz-divider nzType="vertical"></nz-divider> -->
     <params-import *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [baseData]="model" [contentType]="bodyType"
       (baseDataChange)="handleParamsImport($event)" (beforeHandleImport)="beforeHandleImport($event)"
       [rootType]="jsonRootType"></params-import>
