@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.service';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -7,24 +7,25 @@ import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/tab/api-ta
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
   MAX_TAB_LIMIT = 15;
-  constructor(public apiTab: ApiTabService) {}
+  constructor(public tabOperate: ApiTabOperateService) {}
   ngOnInit(): void {
   }
   newTab() {
-    if (this.apiTab.tabs.length >= this.MAX_TAB_LIMIT) return;
-    this.apiTab.newDefaultTab();
+    if (this.tabOperate.tabs.length >= this.MAX_TAB_LIMIT) {return;}
+    this.tabOperate.newDefaultTab();
   }
   /**
    * After select tab
    */
   selectChange() {
-    this.apiTab.navigateTabRoute(this.apiTab.tabs[this.apiTab.selectedIndex]);
+    this.tabOperate.navigateTabRoute(this.tabOperate.tabs[this.tabOperate.selectedIndex]);
   }
   closeTab({index}) {
-    this.apiTab.closeTab(index)
+    this.tabOperate.close(index);
   }
   /**
    * Tab  Close Operate
+   *
    * @param action
    */
   operateCloseTab(action: 'closeOther' | 'closeAll' | 'closeLeft' | 'closeRight') {}

@@ -7,6 +7,7 @@ import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
 
 @Component({
   selector: 'eo-api',
@@ -41,6 +42,7 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private apiTab: ApiTabService,
     private messageService: MessageService,
     private storage: StorageService,
     private remoteService: RemoteService,
@@ -63,6 +65,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     console.log(componentRef);
   }
   ngOnInit(): void {
+    this.apiTab.init();
+
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchRouterChange();
     this.watchDataSourceChange();

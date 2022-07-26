@@ -24,7 +24,7 @@ export class ApiGroupEditComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private modalRef: NzModalRef,
-    private apiService:ApiService,
+    private apiService: ApiService,
     private storage: StorageService
   ) {}
 

@@ -8,7 +8,7 @@ import { TabItem } from './tab.model';
 export class ApiTabStorageService {
   storage = {};
   constructor() {}
-  add(tab: TabItem, data: any) {
+  set(tab: TabItem, data: any) {
     this.storage[tab.uuid] = data;
   }
   remove(tabID) {

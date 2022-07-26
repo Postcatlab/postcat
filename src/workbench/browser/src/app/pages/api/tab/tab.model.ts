@@ -1,18 +1,10 @@
-/**
- * Tab item.
- */
-export interface TabItem {
-  /**
-   * Tab id,timestamp
-   */
-  uuid: number;
+export type BasicTab = {
   /**
    * Tab title
    *
    * @type {string}
    */
   title: string;
-
   /**
    * Router path
    *
@@ -20,13 +12,22 @@ export interface TabItem {
    */
   pathname: string;
   /**
-   * Query params
-   */
-   params: any;
-  /**
    * Preview page or edit page
    */
   type: string | 'preview' | 'edit';
+};
+/**
+ * Tab item.
+ */
+export type TabItem = BasicTab & {
+  /**
+   * Tab id,timestamp
+   */
+  uuid: number;
+  /**
+   * Query params
+   */
+  params: any;
   /**
    * In edit page,value will be set true when content change
    */
@@ -35,4 +36,4 @@ export interface TabItem {
    * Extend key
    */
   extends?: any;
-}
+};

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from '../../../shared/services/message';
 
 import { ApiTabComponent } from './api-tab.component';
-import { ApiTabStorageService } from './api-tab.service';
+import { ApiTabStorageService } from '../api-tab.service';
 
 describe('ApiTabComponent', () => {
   let component: ApiTabComponent;
