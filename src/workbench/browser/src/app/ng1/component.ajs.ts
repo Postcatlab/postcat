@@ -5,10 +5,11 @@ import { UpgradeComponent } from '@angular/upgrade/static';
 export class ListBlockCommonComponent extends UpgradeComponent {
   @Input() mainObject: object;
   @Input() list: any;
+  @Input() wrapStyle = {
+    maxHeight: '300px',
+  };
   @Output() listChange: EventEmitter<any>;
   constructor(ref: ElementRef, inj: Injector) {
     super('listBlockCommonComponent', ref, inj);
   }
 }
-
-
