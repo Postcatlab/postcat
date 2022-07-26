@@ -51,7 +51,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
   @Input() code: string;
-  @Input() minHeight = 70;
+  @Input() minHeight = '70';
   @Input() editorType = 'json';
   @Input() autoFormat = false;
   @Input() disabled = false;
@@ -95,9 +95,19 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
     return { ...this.$config, ...this.config };
   }
 
+  isNaN(val) {
+    return Number.isNaN(Number(val));
+  }
+
   constructor(private message: EoMessageService, private electron: ElectronService) {}
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const ace = this.aceRef.directiveRef.ace();
+      ace.resize();
+      console.log('ace resize', ace);
+    }, 10000);
+  }
   ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
