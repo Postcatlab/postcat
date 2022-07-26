@@ -1,7 +1,8 @@
 <div class="app_toolbar f_row">
-  <div class="mx-4 flex">
+  <div class="flex mx-4">
     <button nz-button nzType="text" class="f_row_ac" (click)="toggleCollapsed()">
-      <i class="iconfont icon-zhediedaohang"></i>
+      <i class="iconfont icon-zhediedaohang" i18n-nzTooltipTitle nz-tooltip
+        [nzTooltipPlacement]="['topLeft', 'leftTop']" nzTooltipTitle="Hide/Show Sidebar"></i>
     </button>
     <!-- <button nz-button nzType="text" class="f_row_ac" (click)="changeTheme()">
       <i class="iconfont icon-zhuti_yifu"></i>
