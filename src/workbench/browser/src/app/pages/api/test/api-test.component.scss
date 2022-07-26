@@ -25,10 +25,6 @@ eo-api-test-rest {
     // overflow-y: auto;
   }
 }
-.icon-circle{
-  font-size: 12px;
-  margin-left: 3px;
-}
 .env_front_uri {
   max-width: 240px;
   height: 32px;
@@ -43,7 +39,7 @@ div.ant-typography{
 }
 ::ng-deep {
   .param_header {
-    padding: 5px 15px;
+    padding: 0px 15px;
   }
   .param_header + list-block-common-component .wrap_lbcc {
     border-top: 1px solid var(--BORDER);

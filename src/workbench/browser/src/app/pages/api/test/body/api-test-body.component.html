@@ -22,7 +22,7 @@
   [(list)]="model"></list-block-common-component>
 <!-- Raw -->
 <eo-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'" [config]="{maxLines: 10}"
-  [eventList]="['type', 'format', 'copy', 'download', 'newTab', 'search', 'replace']"></eo-editor>
+  [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-editor>
 <!-- Binary -->
 <textarea class="btd" rows="4" *ngIf="bodyType === 'binary'" nzBorderless i18n-placeholder="@@Description"
   placeholder="Description" nz-input [(ngModel)]="model"></textarea>

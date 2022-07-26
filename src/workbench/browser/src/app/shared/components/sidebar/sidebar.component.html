@@ -3,7 +3,7 @@
     nzTooltipPlacement="right" [nzTooltipTitle]="item.moduleName"
     [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }">
     <i class="icon">
-      <eo-iconpark-icon [name]="item.icon" size="30px">
+      <eo-iconpark-icon [name]="item.icon" size="24px">
       </eo-iconpark-icon>
     </i>
     <span class="mt-1 label" *ngIf="!sidebar.collapsed">{{ item.moduleName }}</span>

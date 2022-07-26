@@ -19,7 +19,7 @@ type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' 
 const eventHash = new Map()
   .set('format', {
     label: $localize`Format`,
-    icon: 'deployment-unit',
+    icon: 'magic',
   })
   .set('copy', {
     label: $localize`:@@Copy:Copy`,
@@ -29,17 +29,9 @@ const eventHash = new Map()
     label: $localize`:@@Search:Search`,
     icon: 'search',
   })
-  .set('download', {
-    label: $localize`Download`,
-    icon: 'download',
-  })
-  .set('newTab', {
-    label: $localize`New Tab`,
-    icon: 'file-text',
-  })
   .set('replace', {
     label: $localize`Replace`,
-    icon: 'security-scan',
+    icon: 'file-text-one',
   });
 
 @Component({

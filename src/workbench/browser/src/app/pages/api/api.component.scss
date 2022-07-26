@@ -60,8 +60,13 @@ nz-sider {
   .content_container {
     border-top: 1px solid var(--BORDER);
     .inside_page_tab {
-      .ant-tabs-nav {
-        padding-left: 20px;
+      .ant-tabs-tab-active {
+        a {
+          color: var(--MAIN_THEME_COLOR);
+        }
+      }
+      a {
+        color: #999;
       }
     }
   }

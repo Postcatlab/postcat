@@ -30,10 +30,10 @@
             [(ngModel)]="apiData.uri"
             (change)="changeUri()"
           />
-          <button type="submit" nz-button nzType="primary" class="ml10" (click)="clickTest()">
+          <button type="submit" nz-button nzType="primary" class="ml10 w_100" (click)="clickTest()">
+            <span *ngIf="status !== 'testing'" i18n><span>Send</span></span>
             <span *ngIf="status === 'testing'" i18n>Abort</span>
-            <span *ngIf="status !== 'testing'" i18n>Send</span>
-            <span *ngIf="status === 'testing' && waitSeconds" class="ml5">{{ waitSeconds }}</span>
+            <span *ngIf="status === 'testing' && waitSeconds" class="ml-10">{{ waitSeconds }}</span>
           </button>
           <button
             type="button"
@@ -68,7 +68,7 @@
         <ng-template #bodyTitleTmp>
           <span i18n>Body</span>
           <span
-            class="iconfont icon-circle eo-tab-theme-icon"
+            class="eo-tab-theme-icon"
             *ngIf="
               ['formData', 'json', 'xml'].includes(apiData.requestBodyType)
                 ? bindGetApiParamNum(apiData.requestBody)
@@ -109,7 +109,7 @@
       <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
         <ng-template #preScriptTitleTmp>
           <span i18n>Pre-request Script</span>
-          <span class="iconfont icon-circle	 eo-tab-theme-icon" *ngIf="beforeScript?.trim()"></span>
+          <span class="eo-tab-theme-icon" *ngIf="beforeScript?.trim()"></span>
         </ng-template>
         <eo-api-script
           *ngIf="nzSelectedIndex === 4"
@@ -122,7 +122,7 @@
       <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
         <ng-template #suffixScriptTitleTmp>
           <span i18n>After-response Script</span>
-          <span class="iconfont icon-circle eo-tab-theme-icon" *ngIf="afterScript?.trim()"></span>
+          <span class="eo-tab-theme-icon" *ngIf="afterScript?.trim()"></span>
         </ng-template>
         <eo-api-script
           *ngIf="nzSelectedIndex === 5"
@@ -135,7 +135,7 @@
     </nz-tabset>
     <!-- Response -->
     <nz-tabset
-      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [nzTabBarStyle]="{ 'padding-left': '20px' }"
       [(nzSelectedIndex)]="tabIndexRes"
       [nzAnimated]="false"
       class="mt10 response_container"
