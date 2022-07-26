@@ -100,7 +100,7 @@ export class ApiComponent implements OnInit, OnDestroy {
             .getTabsInfo()
             .filter((val) => !inArg.data.uuids.includes(val.params.uuid))
             .map((val) => val.uuid);
-          console.log(closeTabIDs, inArg.data.uuids);
+          console.log(closeTabIDs, this.apiTabComponent.getTabsInfo(), inArg.data.uuids);
           this.apiTabComponent.batchCloseTab(closeTabIDs);
           break;
         }
