@@ -25,7 +25,7 @@ eo-api-test-rest {
     overflow-y: auto;
   }
   ::ng-deep .top_container {
-    height: 45%;
+    height: 100%;
 
     form {
       position: sticky;
@@ -48,7 +48,7 @@ eo-api-test-rest {
     }
   }
   .bottom_container {
-    height: 65%;
+    height: 100%;
   }
 
 }
@@ -65,12 +65,6 @@ div.ant-typography{
   margin-bottom: 0;
 }
 ::ng-deep {
-  .param_header {
-    padding: 5px 15px;
-  }
-  .param_header + list-block-common-component .wrap_lbcc {
-    border-top: 1px solid var(--BORDER);
-  }
   .response_container{
     .ant-tabs-tabpane{
       min-height: 208px;

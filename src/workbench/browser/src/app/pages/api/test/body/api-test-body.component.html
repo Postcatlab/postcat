@@ -29,13 +29,8 @@
   [(list)]="model"
 ></list-block-common-component>
 <!-- Raw -->
-<eo-editor
-  [(code)]="model"
-  (codeChange)="rawDataChange()"
-  *ngIf="bodyType === 'raw'"
-  [config]="{ maxLines: 10 }"
-  [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-></eo-editor>
+<eo-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'" [minHeight]="'100%'"
+  [eventList]="['type', 'format', 'copy',  'search', 'replace']"></eo-editor>
 <!-- Binary -->
 <textarea
   class="btd"
