@@ -3,13 +3,18 @@
     <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
       <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
     </nz-radio-group>
-    <nz-divider *ngIf="['formData','raw'].includes(bodyType)" nzType="vertical"></nz-divider>
+    <nz-divider *ngIf="['formData', 'raw'].includes(bodyType)" nzType="vertical"></nz-divider>
+    <!-- Import -->
     <params-import
       *ngIf="['formData'].includes(bodyType)"
       [baseData]="model"
       [contentType]="bodyType"
       (baseDataChange)="handleParamsImport($event)"
     ></params-import>
+    <!--Select content-type-->
+    <nz-select class="fs12" (ngModelChange)="changeContentType($event)" [(ngModel)]="contentType" nzBorderless>
+      <nz-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.name"></nz-option>
+    </nz-select>
   </div>
 </div>
 <!-- FormData -->

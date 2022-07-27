@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiTestQuery } from '../../../shared/services/api-test/api-test-params.model';
+import { ApiTestHeaders, ApiTestQuery, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
 import { ApiBodyType, ApiTestHistory } from '../../../shared/services/storage/index.model';
-import { parseEoapiBody2Json, text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
+import { uiData2Json, text2UiData, json2XML } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
 export class ApiTestService {
@@ -313,15 +313,22 @@ export class ApiTestService {
     //parse body
     switch (inData.requestBodyType) {
       case ApiBodyType.JSON: {
-        inData.requestBody=parseEoapiBody2Json(inData.requestBody, {
-          defaultValueKey: 'example'
-      });
+        inData.requestBody = JSON.stringify(
+          uiData2Json(inData.requestBody, {
+            defaultValueKey: 'example',
+          })
+        );
         break;
       }
-      case  ApiBodyType.JSON: {
+      case ApiBodyType.XML: {
+        inData.requestBody = json2XML(
+          uiData2Json(inData.requestBody, {
+            defaultValueKey: 'example',
+          })
+        );
         break;
       }
-      case  ApiBodyType['Form-data']: {
+      case ApiBodyType['Form-data']: {
         inData.requestBody.forEach((val) => {
           val.value = val.example;
           val.type = val.type === 'file' ? 'file' : 'string';
@@ -331,9 +338,39 @@ export class ApiTestService {
       }
     }
     if (['json', 'xml'].includes(inData.requestBodyType)) {
+      //Add/Replace Content-type
+      const contentType: ContentTypeByAbridge =
+        inData.requestBodyType === 'xml' ? ContentTypeByAbridge.XML : ContentTypeByAbridge.JSON;
+      inData.requestHeaders = this.addOrReplaceContentType(contentType, inData.requestHeaders);
+      //Xml、Json change content-type to raw in test page
       inData.requestBodyType = 'raw';
     }
     return inData;
+  }
+  getContentType(headers) {
+    const existHeader = headers.find((val) => val.name.toLowerCase() === 'content-type');
+    if (!existHeader) {
+      return;
+    }
+    return existHeader.value;
+  }
+  /**
+   * @param type content-type be added/replaced
+   * @param headers
+   */
+  addOrReplaceContentType(contentType: ContentTypeByAbridge, headers: ApiTestHeaders[] = []) {
+    const result = headers;
+    const existHeader = headers.find((val) => val.name.toLowerCase() === 'content-type');
+    if (existHeader) {
+      existHeader.value = contentType;
+      return result;
+    }
+    headers.unshift({
+      required: true,
+      name: 'content-type',
+      value: contentType,
+    });
+    return result;
   }
   getGlobals(): object {
     let result = {};

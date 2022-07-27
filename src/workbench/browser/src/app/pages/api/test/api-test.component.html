@@ -84,7 +84,10 @@
           </ng-template>
           <eo-api-test-body
             class="eo_theme_iblock bbd"
+            [(contentType)]="contentType"
+            (contentTypeChange)="changeContentType($event)"
             [(bodyType)]="apiData.requestBodyType"
+            (bodyTypeChange)="changeBodyType($event)"
             [(model)]="apiData.requestBody"
             [supportType]="['formData', 'raw', 'binary']"
           ></eo-api-test-body>

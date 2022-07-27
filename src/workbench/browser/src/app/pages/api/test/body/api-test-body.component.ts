@@ -7,7 +7,8 @@ import {
   ApiTestParamsTypeFormData,
   ApiTestBody,
   ApiTestBodyType,
-} from '../../../../shared/services/api-test/api-test-params.model';
+  ContentTypeByAbridge,
+} from '../../../../shared/services/api-test/api-test.model';
 import { ApiTestService } from '../api-test.service';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils';
@@ -21,9 +22,11 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
+  @Input() contentType: ContentTypeByAbridge;
   @Input() bodyType: ApiTestBodyType | string;
   @Output() bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() contentTypeChange: EventEmitter<ContentTypeByAbridge> = new EventEmitter();
   isReload = true;
   listConf: any = {};
   binaryFiles: NzUploadFile[] = [];
@@ -60,6 +63,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
+  changeContentType(contentType){
+    this.contentTypeChange.emit(contentType);
+  }
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
@@ -75,6 +81,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.CONST.API_BODY_TYPE = Object.keys(ApiTestBodyType)
       .filter((val) => this.supportType.includes(ApiTestBodyType[val]))
       .map((val) => ({ key: val, value: ApiTestBodyType[val] }));
+    this.CONST.CONTENT_TYPE = Object.keys(ContentTypeByAbridge).map((name) => ({
+      name,
+      value: ContentTypeByAbridge[name],
+    }));
   }
   ngOnDestroy() {
     this.destroy$.next();
