@@ -55,14 +55,10 @@ nz-divider {
         margin-bottom: 12px;
       }
     }
-    .ant-tabs-top > .ant-tabs-nav::before {
-      left: 10px;
-      right: 10px;
-    }
     .ant-tabs-nav.ng-star-inserted {
       padding: 0 10px;
     }
-    .top-tabs {
+    .api-container-tabs {
       .ant-tabs-nav {
         height: 40px;
       }
@@ -87,7 +83,7 @@ nz-divider {
     }
     .content_container {
       border-top: 1px solid var(--BORDER);
-      .inside_page_tab {
+      .inside_page_tabset {
         .ant-tabs-tab-active {
           a {
             color: var(--MAIN_THEME_COLOR);
@@ -120,6 +116,9 @@ nz-divider {
     }
     .param_header {
       padding: 5px 15px;
+      >div{
+        min-height: 32px;
+      }
       .ant-radio-wrapper {
         font-size: 12px;
       }
@@ -159,6 +158,29 @@ nz-divider {
       &:hover {
         color: #00785a;
         background-color: rgba(0, 0, 0, 0.05);
+
+      }
+    }
+  }
+
+  .api-container-tabs {
+    ::ng-deep .ant-tabs-tab {
+      padding: 0.2em 0;
+      padding: 0;
+      margin: 0;
+      .ant-tabs-tab-btn {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .tab-content {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
     }
   }

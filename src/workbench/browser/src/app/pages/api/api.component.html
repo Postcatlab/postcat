@@ -1,7 +1,7 @@
 <nz-layout class="layout">
   <nz-sider nzTheme="light" nzWidth="250">
     <!-- <div class="side-container"> -->
-    <nz-content class="top-tabs">
+    <nz-content class="api-container-tabs">
       <nz-tabset nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
@@ -64,7 +64,7 @@
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
-          <nz-tabset class="inside_page_tab" [nzAnimated]="false" *ngIf="this.id" nzLinkRouter>
+          <nz-tabset class="inside_page_tabset" [nzAnimated]="false" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
               <a
                 *nzTabLink

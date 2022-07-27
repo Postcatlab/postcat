@@ -30,6 +30,7 @@ export const whatType = (data: any): string => {
 };
 /**
  * judge text content type
+ *
  * @returns textType - xml|json|html|text
  */
 export const whatTextType = (tmpText) => {
@@ -49,24 +50,24 @@ export const whatTextType = (tmpText) => {
 };
 /**
  * reverse object key and value
+ *
  * @param obj
  */
-export const reverseObj = (obj) => {
-  return Object.keys(obj).reduce((acc, key) => {
+export const reverseObj = (obj) =>
+  Object.keys(obj).reduce((acc, key) => {
     acc[obj[key]] = key;
     return acc;
   }, {});
-};
 /**
  * reverse object key and value
+ *
  * @param obj
  */
-export const objectToArray = (obj) => {
-  return Object.keys(obj).map((val) => ({
+export const objectToArray = (obj) =>
+  Object.keys(obj).map((val) => ({
     key: val,
     value: obj[val],
   }));
-};
 
 export const isEmptyValue = (obj) => {
   const list = Object.keys(obj);
@@ -74,7 +75,14 @@ export const isEmptyValue = (obj) => {
   // * If they length are equal, means each value of obj is empty. like { name: '', value: '' }
   return emptyList.length === list.length;
 };
-
+export const transferFileToDataUrl = (file) =>
+  new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (ev) => {
+      resolve({ name: file.name, content: ev.target.result });
+    };
+  });
 export const parserJsonFile = (file, type = 'UTF-8') =>
   new Promise((resolve) => {
     const reader = new FileReader();
@@ -116,7 +124,7 @@ export const getBlobUrl = (inputStream, inputFileType) => {
       });
     } else {
       const tmpBlobBuilder =
-        window['BlobBuilder'] || window['MozBlobBuilder'] || window['WebKitBlobBuilder'] || window['MSBlobBuilder'];
+        window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder;
       const tmpBlobClass = new tmpBlobBuilder();
       tmpBlobClass.append(inputStream);
       tmpBlob = tmpBlobClass.getBlob(inputFileType);

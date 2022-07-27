@@ -5,8 +5,12 @@ interface NodeModule {
 }
 interface Window {
   process: any;
-  requirejs:any;
+  requirejs: any;
   require: any;
-  angular:any;
+  angular: any;
   eo: any;
+  BlobBuilder: any;
+  WebKitBlobBuilder: any;
+  MozBlobBuilder: any;
+  MSBlobBuilder: any;
 }
