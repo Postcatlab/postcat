@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
 
+type EventListener = HTMLElement['removeEventListener'] | HTMLElement['addEventListener'];
 @Component({
   selector: 'eo-split-panel',
   templateUrl: './split.panel.component.html',
@@ -37,8 +38,7 @@ export class SplitPanelComponent implements OnInit, OnDestroy {
   // 拖拽结束
   dragEnd = () => {
     document.documentElement.style.userSelect = 'unset';
-    document.documentElement.removeEventListener('mousemove', this.onDrag);
-    document.documentElement.removeEventListener('mouseup', this.dragEnd);
+    this.handleEventListener('remove');
   };
 
   // 鼠标按下
@@ -49,7 +49,12 @@ export class SplitPanelComponent implements OnInit, OnDestroy {
     scalableEl && (this.startHeight = parseInt(window.getComputedStyle(scalableEl).height, 10));
 
     document.documentElement.style.userSelect = 'none';
-    document.documentElement.addEventListener('mousemove', this.onDrag);
-    document.documentElement.addEventListener('mouseup', this.dragEnd);
+    this.handleEventListener('add');
+  };
+
+  handleEventListener = (type: 'add' | 'remove') => {
+    const eventListener = document.documentElement[`${type}EventListener`] as EventListener;
+    eventListener('mousemove', this.onDrag);
+    eventListener('mouseup', this.dragEnd);
   };
 }
