@@ -2,6 +2,12 @@ export enum ApiTestParamsTypeFormData {
   text = 'string',
   file = 'file',
 }
+export enum ContentTypeByAbridge {
+  Text = 'text/plain',
+  JSON = 'application/json',
+  XML = 'application/xml',
+  HTML = 'text/html',
+}
 interface BasiApiTestParams {
   /**
    * send this param when test
