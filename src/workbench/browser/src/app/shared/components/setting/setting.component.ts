@@ -32,6 +32,7 @@ interface FlatNode {
   styleUrls: ['./setting.component.scss'],
 })
 export class SettingComponent implements OnInit {
+  extensitonConfigurations: any[];
   @Input() set isShowModal(val) {
     this.$isShowModal = val;
     if (val) {
@@ -251,24 +252,13 @@ export class SettingComponent implements OnInit {
     const extensitonConfigurations = [...modules.values()].filter((n) => n.features?.configuration);
     const controls = {};
     // All settings
-    const allSettings = structuredClone([eoapiSettings['eoapi-extensions']]);
-    // All configure
-    const allConfiguration = allSettings.map((n) => {
-      const configuration = n.features?.configuration || n.contributes?.configuration;
-      if (Array.isArray(configuration)) {
-        configuration.forEach((m) => (m.moduleID ??= n.moduleID));
-      } else {
-        configuration.moduleID ??= n.moduleID;
-      }
-      return configuration;
-    });
+    const extensionsModule = structuredClone(eoapiSettings['eoapi-extensions']);
+
     // 第三方扩展
-    const extensionsModule = allSettings.find((n) => n.moduleID === 'eoapi-extensions');
     extensitonConfigurations.forEach((item) => {
-      const configuration = item?.features?.configuration || item?.contributes?.configuration;
+      const configuration = item?.features?.configuration;
       if (configuration) {
-        const extensionsConfiguration =
-          extensionsModule.features?.configuration || extensionsModule.contributes?.configuration;
+        const extensionsConfiguration = extensionsModule.features?.configuration;
         configuration.title = item.moduleName ?? configuration.title;
         configuration.moduleID = item.moduleID;
         extensionsConfiguration.push(configuration);
@@ -280,6 +270,18 @@ export class SettingComponent implements OnInit {
         prev[`${moduleID}.${key}`] = properties[key];
         return prev;
       }, {});
+    // All settings
+    const allSettings = structuredClone([eoapiSettings['eoapi-extensions']]);
+    // All configure
+    const allConfiguration = allSettings.map((n) => {
+      const configuration = n.features?.configuration || n.contributes?.configuration;
+      if (Array.isArray(configuration)) {
+        configuration.forEach((m) => (m.moduleID ??= n.moduleID));
+      } else {
+        configuration.moduleID ??= n.moduleID;
+      }
+      return configuration;
+    });
 
     /** Generate settings model based on configuration configuration */
     allConfiguration.forEach((item) => {
@@ -309,7 +311,7 @@ export class SettingComponent implements OnInit {
     // All settings
     const treeData = structuredClone(this.treeNodes);
     const extensions = treeData.find((n) => n.moduleID === 'eoapi-extensions');
-    const extensionConfiguration = allSettings[0].features?.configuration || allSettings[0].contributes?.configuration;
+    const extensionConfiguration = allSettings[0].features?.configuration;
     extensions.children = generateTreeData(extensionConfiguration);
     extensions.configuration = extensionConfiguration;
     this.dataSource.setData(treeData);
