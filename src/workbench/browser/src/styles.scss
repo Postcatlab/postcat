@@ -23,9 +23,6 @@ img, svg, video, canvas, audio, iframe, embed, object {
 }
 
 ::-webkit-scrollbar {
-  width: 0;
-}
-*:hover::-webkit-scrollbar {
   width: 16px;
   height: 16px;
 }

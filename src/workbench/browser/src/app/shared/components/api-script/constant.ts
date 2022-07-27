@@ -22,7 +22,7 @@ export interface FlatNode extends TreeNode {
   disabled: boolean;
 }
 const generateEoExcuteSnippet = (bodyType) => {
-  let variableByBodyType = {
+  const variableByBodyType = {
     formdata: {
       id: 'formdata',
       name: 'FORM-DATA',
@@ -70,9 +70,9 @@ const generateEoExcuteSnippet = (bodyType) => {
     },
   };
 
-  let variables = variableByBodyType[bodyType];
+  const variables = variableByBodyType[bodyType];
   // Because i18n compile complex line error,safe way
-  let localizes = {
+  const localizes = {
     apidefind: $localize`API Definite`,
     url: $localize`[Required][string] Request url`,
     name: $localize`[Required][string] API name,for report detail`,
@@ -85,7 +85,7 @@ const generateEoExcuteSnippet = (bodyType) => {
     info: $localize`Print info`,
     infoError: $localize`Print error info`,
   };
-  let result = `//${localizes.apidefind}
+  const result = `//${localizes.apidefind}
   var ${variables.id}_api_demo_1 = {
       "url": "https://api.eolink.com", //${localizes.url}
       "name": "${variables.name} API Demo", //${localizes.name}
@@ -688,7 +688,7 @@ export const BEFORE_DATA: TreeNode[] = [
       },
 
       {
-        name: $localize`Request body[Form-data/JSON/XML]`,
+        name: $localize`Request body[Form-data]`,
         caption: 'eo.http.bodyParseParam',
         value: 'eo.http.bodyParseParam',
       },
