@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
@@ -16,6 +16,7 @@ import { Subject } from 'rxjs';
 })
 export class EnvComponent implements OnInit, OnDestroy {
   @ViewChild('table') table: EoTableComponent; // * child component ref
+  @Output() private statusChange: EventEmitter<any> = new EventEmitter();
   varName = $localize`{{Variable Name}}`;
   modalTitle = $localize`:@@New Environment:New Environment`;
   isVisible = false;
@@ -72,6 +73,9 @@ export class EnvComponent implements OnInit, OnDestroy {
         return resolve([]);
       });
     });
+  }
+  closeEnv() {
+    this.statusChange.emit();
   }
 
   handleDeleteEnv($event, uuid: string) {

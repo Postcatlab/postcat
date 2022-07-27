@@ -35,6 +35,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     },
   ];
   isOpen = false;
+  activeBar = false;
   envInfo: any = {};
   envList: Array<any> = [];
   activeUuid: number | string = 0;
@@ -137,7 +138,15 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   gotoEnvManager() {
     // * switch to env
-    this.tabsIndex = 2;
+    this.tabsIndex = 1;
+  }
+
+  toggleRightBar(status = null) {
+    if (status == null) {
+      this.activeBar = !this.activeBar;
+      return;
+    }
+    this.activeBar = status;
   }
 
   getAllEnv(uuid?: number) {
