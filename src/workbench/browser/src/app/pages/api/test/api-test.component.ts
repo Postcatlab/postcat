@@ -102,6 +102,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   /**
    * click history to restore data from history
+   *
    * @param item  test history data
    */
   restoreHistory(item) {
@@ -234,7 +235,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testResult = tmpHistory;
     // this.scroller.scrollToAnchor("test-response")
     this.status$.next('tested');
-    if (message.status === 'error') return;
+    if (message.status === 'error') {return;}
 
     //set globals
     this.apiTest.setGlobals(message.globals);
@@ -253,6 +254,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   /**
    * Change test status
+   *
    * @param status - 'start'|'testing'|'tested'
    */
   private changeStatus(status) {
