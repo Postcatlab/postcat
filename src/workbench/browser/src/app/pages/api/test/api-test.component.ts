@@ -311,12 +311,16 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!id) {
       Object.assign(this.apiData, {
         uuid: 0,
-        requestBodyType: 'json',
+        requestBodyType: 'raw',
         requestBodyJsonType: 'object',
         requestBody: [],
         queryParams: [],
         restParams: [],
-        requestHeaders: [],
+        requestHeaders: [{
+          required:true,
+          name:'content-type',
+          value:ContentTypeByAbridge.Text
+        }],
       });
     } else {
       this.getApi(id);
