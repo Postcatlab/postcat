@@ -13,12 +13,5 @@
   [eventList]="['type', 'format', 'copy',  'search', 'replace']"
 ></eo-editor>
 <!-- Binary -->
-<textarea
-  class="btd"
-  rows="4"
-  *ngIf="bodyType === 'binary'"
-  nzBorderless
-  placeholder="参数描述"
-  nz-input
-  [(ngModel)]="model"
-></textarea>
+<pre *ngIf="bodyType === 'binary'">{{model}}</pre>
+
