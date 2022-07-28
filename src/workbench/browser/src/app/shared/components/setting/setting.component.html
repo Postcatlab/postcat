@@ -24,26 +24,20 @@
       </nz-tree-view>
     </div>
     <nz-divider nzType="vertical" class="divider"></nz-divider>
-    <div class="overflow-auto">
+    <div (scroll)="handleScroll($event)" class="setting-container overflow-auto scroll-smooth mr-[14px] pr-[12px]">
       <!-- Data Storage -->
-      <eo-data-storage [(model)]="settings"></eo-data-storage>
+      <eo-data-storage [(model)]="settings" [id]="treeNodes[0].moduleID"></eo-data-storage>
       <nz-divider></nz-divider>
       <!-- Language -->
-      <eo-language-switcher [(model)]="settings"> </eo-language-switcher>
+      <eo-language-switcher [(model)]="settings" [id]="treeNodes[1].moduleID"> </eo-language-switcher>
       <nz-divider></nz-divider>
-      <eo-extension-setting [(model)]="settings" [extensitonConfigurations]="extensitonConfigurations"
-        [validateForm]="validateForm"></eo-extension-setting>
+      <eo-extension-setting [(model)]="settings" [localSettings]="localSettings" [id]="treeNodes[2].moduleID"
+        [extensitonConfigurations]="extensitonConfigurations"></eo-extension-setting>
+      <nz-divider></nz-divider>
       <!-- About -->
-      <eo-about></eo-about>
+      <eo-about [id]="treeNodes[3].moduleID"></eo-about>
     </div>
-    <nz-empty *ngIf="!currentConfiguration.length && selected === 'eoapi-extensions'" nzNotFoundImage="simple"
-      [nzNotFoundContent]="contentTpl">
-      <ng-template #contentTpl>
-        <span i18n>No plugins are currently installed,<a class="eo_link" (click)="navToExtensionList()"> go to install
-          </a>
-        </span>
-      </ng-template>
-    </nz-empty>
+
   </section>
   <!-- <div *nzModalFooter class="footer"> -->
   <!-- <button nz-button nzType="primary" (click)="handleSave()">保存</button>
