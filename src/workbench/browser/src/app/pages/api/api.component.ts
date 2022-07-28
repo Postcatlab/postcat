@@ -92,6 +92,15 @@ export class ApiComponent implements OnInit, OnDestroy {
         this.activeBar = data;
       }
     });
+    this.messageService.get().subscribe(({ type, data }) => {
+      if (type === 'deleteEnv') {
+        const list = this.envList.filter((it) => it.uuid !== Number(data));
+        this.envList = list;
+        if (this.envUuid === Number(data)) {
+          this.envUuid = null;
+        }
+      }
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();
