@@ -7,7 +7,7 @@ type EventListener = HTMLElement['removeEventListener'] | HTMLElement['addEventL
   styleUrls: ['./split.panel.component.scss'],
 })
 export class SplitPanelComponent implements OnInit, OnDestroy {
-  @Input() direction = 'column';
+  @Input() direction: 'column' | 'row' = 'column';
   @Input() topStyle;
   @Input() bottomStyle;
   @Input() hideSeparator = false;
@@ -30,8 +30,13 @@ export class SplitPanelComponent implements OnInit, OnDestroy {
   onDrag = (e: MouseEvent) => {
     const scalableEl = this.scalableRef.nativeElement;
     if (scalableEl) {
-      scalableEl.style.height = `${this.startHeight + e.clientY - this.startY}px`;
-      this.bottomRef.nativeElement.style.height = `calc(100% - 12px - ${scalableEl.style.height})`;
+      if (this.direction === 'column') {
+        scalableEl.style.height = `${this.startHeight + e.clientY - this.startY}px`;
+        this.bottomRef.nativeElement.style.height = `calc(100% - 12px - ${scalableEl.style.height})`;
+      } else {
+        scalableEl.style.width = `${this.startWidth + e.clientX - this.startX}px`;
+        this.bottomRef.nativeElement.style.width = `calc(100% - 12px - ${scalableEl.style.width})`;
+      }
     }
   };
 
@@ -44,9 +49,13 @@ export class SplitPanelComponent implements OnInit, OnDestroy {
   // 鼠标按下
   startDrag = (e: MouseEvent) => {
     this.startY = e.clientY;
+    this.startX = e.clientX;
     const scalableEl = this.scalableRef.nativeElement;
 
-    scalableEl && (this.startHeight = parseInt(window.getComputedStyle(scalableEl).height, 10));
+    if (scalableEl) {
+      this.startWidth = parseInt(window.getComputedStyle(scalableEl).width, 10);
+      this.startHeight = parseInt(window.getComputedStyle(scalableEl).height, 10);
+    }
 
     document.documentElement.style.userSelect = 'none';
     this.handleEventListener('add');

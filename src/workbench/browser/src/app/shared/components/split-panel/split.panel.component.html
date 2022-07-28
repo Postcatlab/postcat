@@ -1,4 +1,4 @@
-<div class="split-wrapper">
+<div class="split-wrapper" [ngStyle]="{ flexDirection: direction }">
   <div #scalable class="scalable" [style]="topStyle">
     <ng-content select="[top]"></ng-content>
   </div>
