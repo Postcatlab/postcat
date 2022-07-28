@@ -39,6 +39,7 @@
               nzAllowClear
               i18n-nzPlaceHolder="Environment Dropdown placeholder"
               nzPlaceHolder="Environment"
+              #envSelect
             >
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
             </nz-select>
