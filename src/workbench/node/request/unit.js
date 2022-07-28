@@ -726,7 +726,7 @@ const { resolve } = require('path');
                   method: inputTestData.method,
                 };
                 if (tmpDecorateObj.requestType === '4') {
-                  tmpReportData.requestInfo.requestType = '2';
+                  tmpReportData.requestInfo.requestType = '4';
                   delete tmpReportData.requestInfo.params;
                 } else {
                   switch (typeof tmpDecorateObj.history.body) {
