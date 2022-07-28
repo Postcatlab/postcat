@@ -8,7 +8,6 @@ import { ApiService } from './api.service';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { NzSelectComponent } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'eo-api',
