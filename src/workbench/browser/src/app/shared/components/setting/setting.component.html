@@ -2,7 +2,7 @@
   (nzOnCancel)="handleCancel()">
   <section *nzModalContent class="container">
     <div class="tree-view">
-      <img src="assets/images/logo-text.svg" class="mb-[10px] h-[40px]" />
+      <img src="assets/images/logo-text.svg" class="h-[40px]" />
       <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
         <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
           <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
@@ -24,7 +24,7 @@
       </nz-tree-view>
     </div>
     <nz-divider nzType="vertical" class="divider"></nz-divider>
-    <div (scroll)="handleScroll($event)" class="setting-container overflow-auto scroll-smooth mr-[14px] pr-[12px]">
+    <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[35px]">
       <!-- Data Storage -->
       <eo-data-storage [(model)]="settings" [id]="treeNodes[0].moduleID"></eo-data-storage>
       <nz-divider></nz-divider>
