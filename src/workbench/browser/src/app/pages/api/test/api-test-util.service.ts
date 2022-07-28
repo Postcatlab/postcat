@@ -6,7 +6,7 @@ import { text2UiData } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
 export class ApiTestUtilService {
-  globalStorageKey= 'EO_TEST_VAR_GLOBALS';
+  globalStorageKey = 'EO_TEST_VAR_GLOBALS';
   constructor() {}
   initListConf(opts) {
     opts.title = opts.title || $localize`Param`;
@@ -143,12 +143,13 @@ export class ApiTestUtilService {
   }
   /**
    * URL and Query transfer each other
+   *
    * @description Add query to URL and read query form url
-   * @param {string} url - whole url include query
-   * @param {object} query - ui query param
-   * @param {string} opts.base - based on which,url or query,delete no exist and replace same
-   * @param {string} opts.replaceType - replace means only keep replace array,merge means union
-   * @returns {object} - {url:"",query:[]}
+   * @param url - whole url include query
+   * @param query - ui query param
+   * @param opts.base - based on which,url or query,delete no exist and replace same
+   * @param opts.replaceType - replace means only keep replace array,merge means union
+   * @returns - {url:"",query:[]}
    */
   transferUrlAndQuery(
     url,
@@ -158,42 +159,42 @@ export class ApiTestUtilService {
       replaceType: 'replace',
     }
   ) {
-    let urlQuery = [];
-    let uiQuery = query;
+    const urlQuery = [];
+    const uiQuery = query;
     // get url query
     new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
-      let item: ApiTestQuery = {
-        name: name,
+      const item: ApiTestQuery = {
+        name,
         required: true,
         value: val,
       };
       urlQuery.push(item);
     });
     //get replace result
-    let origin = opts.base === 'url' ? uiQuery : urlQuery,
-      replace = opts.base === 'url' ? urlQuery : uiQuery;
-    if (opts.replaceType === 'replace') origin.forEach((val) => (val.required = false));
-    let result = [...replace, ...origin];
-    for (var i = 0; i < result.length; ++i) {
-      for (var j = i + 1; j < result.length; ++j) {
-        if (result[i].name === result[j].name) result.splice(j--, 1);
+    const origin = opts.base === 'url' ? uiQuery : urlQuery;
+      const replace = opts.base === 'url' ? urlQuery : uiQuery;
+    if (opts.replaceType === 'replace') {origin.forEach((val) => (val.required = false));}
+    const result = [...replace, ...origin];
+    for (let i = 0; i < result.length; ++i) {
+      for (let j = i + 1; j < result.length; ++j) {
+        if (result[i].name === result[j].name) {result.splice(j--, 1);}
       }
     }
     //joint query
     let search = '';
     result.forEach((val) => {
-      if (!val.name || !val.required) return;
+      if (!val.name || !val.required) {return;}
       search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
     });
     search = search ? `?${search.slice(0, -1)}` : '';
     url = `${url.split('?')[0]}${search}`;
     return {
-      url: url,
+      url,
       query: result,
     };
   }
   getHTTPStatus(statusCode) {
-    let HTTP_CODE_STATUS = [
+    const HTTP_CODE_STATUS = [
       {
         status: 'info',
         cap: 199,
@@ -228,7 +229,7 @@ export class ApiTestUtilService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
-    let result = {
+    const result = {
       testData: {
         uuid: inData.apiDataID,
         queryParams: [],
@@ -246,35 +247,36 @@ export class ApiTestUtilService {
   }
   /**
    * Transfer test data/test history to api data
-   * @param {ApiTestHistory} inData.history
+   *
+   * @param inData.history
    * @param inData.testData - test request info
-   * @returns {ApiData}
+   * @returns
    */
   getApiFromTestData(inData) {
-    let testToEditParams = (arr) => {
-      let result = [];
+    const testToEditParams = (arr) => {
+      const result = [];
       arr.forEach((val) => {
-        if (!val.name) return;
-        let item = { ...val, example: val.value };
+        if (!val.name) {return;}
+        const item = { ...val, example: val.value };
         delete item.value;
         result.push(item);
       });
       return result;
     };
-    let result = {
+    const result = {
       ...inData.testData,
-      responseHeaders: inData.history.response.headers||[],
+      responseHeaders: inData.history.response.headers || [],
       responseBodyType: 'json',
       responseBodyJsonType: 'object',
       responseBody: [],
     };
     delete result.uuid;
     ['requestHeaders', 'requestBody', 'restParams', 'queryParams'].forEach((keyName) => {
-      if (!result[keyName] || typeof result[keyName] !== 'object') return;
+      if (!result[keyName] || typeof result[keyName] !== 'object') {return;}
       result[keyName] = testToEditParams(result[keyName]);
     });
     if (inData.history.response.responseType === 'text') {
-      let bodyInfo = text2UiData(inData.history.response.body);
+      const bodyInfo = text2UiData(inData.history.response.body);
       result.responseBody = bodyInfo.data;
       result.responseBodyType = bodyInfo.textType;
       result.responseBodyJsonType = bodyInfo.rootType;
@@ -282,7 +284,7 @@ export class ApiTestUtilService {
     return result;
   }
   getTestDataFromApi(inData) {
-    let editToTestParams = (arr) => {
+    const editToTestParams = (arr) => {
       arr = arr || [];
       arr.forEach((val) => {
         val.value = val.example;
@@ -293,7 +295,7 @@ export class ApiTestUtilService {
       editToTestParams(inData[keyName]);
     });
     //handle query and url
-    let tmpResult = this.transferUrlAndQuery(inData.uri, inData.queryParams, {
+    const tmpResult = this.transferUrlAndQuery(inData.uri, inData.queryParams, {
       base: 'url',
       replaceType: 'merge',
     });
@@ -306,7 +308,7 @@ export class ApiTestUtilService {
         inData.requestBody = treeToListHasLevel(inData.requestBody, {
           listDepth: 0,
           mapItem: (val) => {
-            let typeSorts = [
+            const typeSorts = [
               {
                 type: 'string',
                 match: ['file', 'date', 'datetime', 'char', 'byte'],
@@ -352,7 +354,7 @@ export class ApiTestUtilService {
     return result;
   }
   setGlobals(globals) {
-    if(!globals) return;
+    if (!globals) {return;}
     localStorage.setItem(this.globalStorageKey, JSON.stringify(globals));
   }
 }

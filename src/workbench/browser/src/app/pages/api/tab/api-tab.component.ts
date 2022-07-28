@@ -3,12 +3,14 @@ import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
+import { BasicTab, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
   styleUrls: ['./api-tab.component.scss'],
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
+  @Input() tagsTemplate: { [key: string]: BasicTab };
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
   constructor(
@@ -17,6 +19,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
   ngOnInit(): void {
+    this.tabOperate.init(this.tagsTemplate);
     this.watchRouterChange();
   }
   newTab() {
@@ -45,7 +48,9 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    *
    * @param action
    */
-  operateCloseTab(action: 'closeOther' | 'closeAll' | 'closeLeft' | 'closeRight') {}
+  closeTabByOperate(action: TabOperate|string) {
+    this.tabOperate.closeTabByOperate(action);
+  }
   private watchRouterChange() {
     this.routerSubscribe = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))

@@ -24,10 +24,10 @@ selectedIndex:{{ tabOperate.selectedIndex}}
   </a>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="operateCloseTab('closeOther')" i18n>Close All Tags (excluding current tabs)</li>
-      <li nz-menu-item (click)="operateCloseTab('closeAll')" i18n>Close All Tabs</li>
-      <li nz-menu-item (click)="operateCloseTab('closeLeft')" i18n>Close Tabs To The Left</li>
-      <li nz-menu-item (click)="operateCloseTab('closeRight')" i18n>Close Tabs to Right</li>
+      <li nz-menu-item (click)="closeTabByOperate('closeOther')" i18n>Close All Tags (excluding current tabs)</li>
+      <li nz-menu-item (click)="closeTabByOperate('closeAll')" i18n>Close All Tabs</li>
+      <li nz-menu-item (click)="closeTabByOperate('closeLeft')" i18n>Close Tabs To The Left</li>
+      <li nz-menu-item (click)="closeTabByOperate('closeRight')" i18n>Close Tabs to Right</li>
     </ul>
   </nz-dropdown-menu>
 </ng-template>

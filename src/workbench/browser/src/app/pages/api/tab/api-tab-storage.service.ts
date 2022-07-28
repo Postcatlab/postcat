@@ -7,7 +7,13 @@ import { TabItem } from './tab.model';
  * All data chagne in this service
  */
 export class ApiTabStorageService {
-  tabs: Array<TabItem> = [];
+  tabs: Array<TabItem> = new Proxy([], {
+    set(target, key, value) {
+      console.log('set','target');
+      target[key] = value;
+      return true;
+    },
+  });
   storage = {};
   constructor() {}
   addTab(tabItem) {

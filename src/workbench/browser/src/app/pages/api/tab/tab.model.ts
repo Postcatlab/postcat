@@ -16,6 +16,12 @@ export type BasicTab = {
    */
   type: string | 'preview' | 'edit';
 };
+export enum TabOperate {
+  'closeOther',
+  'closeAll',
+  'closeLeft',
+  'closeRight',
+}
 /**
  * Tab item.
  */

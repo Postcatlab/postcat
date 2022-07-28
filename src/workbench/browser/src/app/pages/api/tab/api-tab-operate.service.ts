@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { BasicTab, TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { BasicTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -17,20 +17,15 @@ export class ApiTabOperateService {
    */
   BASIC_TABS: { [key: string]: BasicTab };
   constructor(private tabStorage: ApiTabStorageService, private router: Router) {
-    this.BASIC_TABS = {
-      test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
-      edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
-      detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`:@@API Detail:Preview` },
-      overview: {
-        pathname: '/home/api/overview',
-        type: 'preview',
-        title: $localize`:@@API Index:Index`,
-      },
-      mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
-    };
-    this.init();
   }
-
+  //Init tab info
+  //Maybe from tab cache info or router url
+  init(BASIC_TABS) {
+    this.BASIC_TABS =BASIC_TABS;
+    this.operateTabAfterRouteChange({
+      url: window.location.pathname + window.location.search,
+    });
+  }
   /**
    * Add Default tab
    *
@@ -70,6 +65,9 @@ export class ApiTabOperateService {
     if (this.tabStorage.tabs.length === 0) {
       this.newDefaultTab();
     }
+  }
+  closeTabByOperate(action: string|TabOperate){
+
   }
   /**
    * Navigate  url to tab route
@@ -150,12 +148,5 @@ export class ApiTabOperateService {
       type: basicTab.type,
     };
     return result;
-  }
-  //Init tab info
-  //Maybe from tab cache info or router url
-  private init() {
-    this.operateTabAfterRouteChange({
-      url: window.location.pathname + window.location.search,
-    });
   }
 }

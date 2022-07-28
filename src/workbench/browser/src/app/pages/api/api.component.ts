@@ -34,6 +34,13 @@ export class ApiComponent implements OnInit, OnDestroy {
       title: $localize`Test`,
     },
   ];
+  tagsTemplate = {
+    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
+    edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
+    detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`:@@API Detail:Preview` },
+    overview: {pathname: '/home/api/overview',type: 'preview',title: $localize`:@@API Index:Index`},
+    mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
+  };
   isOpen = false;
   envInfo: any = {};
   envList: Array<any> = [];
@@ -64,17 +71,21 @@ export class ApiComponent implements OnInit, OnDestroy {
   onActivate(componentRef) {
     console.log(componentRef);
   }
-  ngOnInit(): void {
-    this.id = Number(this.route.snapshot.queryParams.uuid);
-    this.watchApiChange();
-    this.watchRouterChange();
-    this.watchDataSourceChange();
+  initTabsetData(){
+    //Only electeron has local Mock
     if (this.remoteService.isElectron) {
       this.TABS.push({
         routerLink: 'mock',
         title: 'Mock',
       });
     }
+  }
+  ngOnInit(): void {
+    this.id = Number(this.route.snapshot.queryParams.uuid);
+    this.watchApiChange();
+    this.watchRouterChange();
+    this.watchDataSourceChange();
+    this.initTabsetData();
     this.envUuid = Number(localStorage.getItem('env:selected'));
     // * load All env
     this.getAllEnv().then((result: any[]) => {
@@ -98,9 +109,8 @@ export class ApiComponent implements OnInit, OnDestroy {
         case 'deleteApiSuccess': {
           const closeTabIDs = this.apiTabComponent
             .getTabsInfo()
-            .filter((val) => !inArg.data.uuids.includes(val.params.uuid))
+            .filter((val) => inArg.data.uuids.includes(Number(val.params.uuid)))
             .map((val) => val.uuid);
-          console.log(closeTabIDs, this.apiTabComponent.getTabsInfo(), inArg.data.uuids);
           this.apiTabComponent.batchCloseTab(closeTabIDs);
           break;
         }
