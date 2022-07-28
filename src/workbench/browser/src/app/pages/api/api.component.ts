@@ -8,6 +8,7 @@ import { ApiService } from './api.service';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { NzSelectComponent } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'eo-api',
@@ -86,6 +87,11 @@ export class ApiComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.messageService.get().subscribe(({ type, data }) => {
+      if (type === 'toggleEnv') {
+        this.activeBar = data;
+      }
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -138,7 +144,9 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   gotoEnvManager() {
     // * switch to env
-    this.tabsIndex = 1;
+    this.messageService.send({ type: 'toggleEnv', data: true });
+    // * close select
+    this.isOpen = false;
   }
 
   toggleRightBar(status = null) {
