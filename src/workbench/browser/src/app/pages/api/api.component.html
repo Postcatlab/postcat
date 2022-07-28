@@ -79,21 +79,30 @@
             </nz-tab>
           </nz-tabset>
         </div>
+        <!-- <eo-split-panel direction="row"> -->
         <section class="relative" [ngClass]="activeBar ? 'pr-[250px]' : 'pr-[40px]'">
-          <router-outlet></router-outlet>
-          <div class="absolute top-0 bottom-0 right-0 flex right-bar" [ngClass]="activeBar ? 'w-[250px]' : 'w-[40px]'">
-            <div
-              class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
-              [ngClass]="activeBar ? 'active' : ''"
-              (click)="toggleRightBar()"
-              nz-tooltip
-              i18n-nzTooltipTitle="@@Environment Setting"
-              nzTooltipTitle="Environment Setting"
-            >
-              <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
+          <eo-split-panel direction="row">
+            <div top>
+              <router-outlet></router-outlet>
             </div>
-            <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
-          </div>
+            <div
+              bottom
+              class="absolute top-0 bottom-0 right-0 flex right-bar"
+              [ngClass]="activeBar ? 'w-[250px]' : 'w-[40px]'"
+            >
+              <div
+                class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
+                [ngClass]="activeBar ? 'active' : ''"
+                (click)="toggleRightBar()"
+                nz-tooltip
+                i18n-nzTooltipTitle="@@Environment Setting"
+                nzTooltipTitle="Environment Setting"
+              >
+                <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
+              </div>
+              <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
+            </div>
+          </eo-split-panel>
         </section>
       </div>
     </nz-content>
