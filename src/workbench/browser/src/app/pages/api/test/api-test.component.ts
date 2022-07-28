@@ -319,7 +319,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         requestHeaders: [{
           required:true,
           name:'content-type',
-          value:ContentTypeByAbridge.Text
+          value:ContentTypeByAbridge.JSON
         }],
       });
     } else {
