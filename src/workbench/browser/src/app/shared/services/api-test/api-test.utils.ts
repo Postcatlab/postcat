@@ -122,7 +122,6 @@ export const eoFormatRequestData = (
   return result;
 };
 export const eoFormatResponseData = ({ globals, report, history, id }) => {
-  console.log('eoFormatResponseData', globals, report, history, id);
   let result: ApiTestRes;
   const reportList = report.reportList || [];
   //preScript code tips
