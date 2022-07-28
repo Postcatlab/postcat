@@ -80,6 +80,8 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleDeleteEnv($event, uuid: string) {
     $event?.stopPropagation();
+    // * delete localstrage
+    this.messageService.send({ type: 'deleteEnv', data: uuid });
     // * delete env in menu on left sidebar
     this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {

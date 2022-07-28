@@ -21,7 +21,7 @@
               <button type="submit" nz-button nzType="primary" class="ml10 w_100" (click)="clickTest()">
                 <span *ngIf="status !== 'testing'" i18n><span>Send</span></span>
                 <span *ngIf="status === 'testing'" i18n>Abort</span>
-                <span *ngIf="status === 'testing' && waitSeconds" class="ml-10">{{ waitSeconds }}</span>
+                <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
               </button>
               <button type="button" *ngIf="!apiData.uuid" nz-button nzType="default" (click)="saveTestDataToApi()"
                 class="ml10" i18n>

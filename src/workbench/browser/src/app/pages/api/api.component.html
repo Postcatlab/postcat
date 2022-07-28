@@ -39,6 +39,7 @@
               nzAllowClear
               i18n-nzPlaceHolder="Environment Dropdown placeholder"
               nzPlaceHolder="Environment"
+              #envSelect
             >
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
             </nz-select>
@@ -83,6 +84,7 @@
           <div class="absolute top-0 bottom-0 right-0 flex right-bar" [ngClass]="activeBar ? 'w-[250px]' : 'w-[40px]'">
             <div
               class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
+              [ngClass]="activeBar ? 'active' : ''"
               (click)="toggleRightBar()"
               nz-tooltip
               i18n-nzTooltipTitle="@@Environment Setting"

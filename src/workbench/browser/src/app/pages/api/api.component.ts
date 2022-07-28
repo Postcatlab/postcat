@@ -86,6 +86,20 @@ export class ApiComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.messageService.get().subscribe(({ type, data }) => {
+      if (type === 'toggleEnv') {
+        this.activeBar = data;
+      }
+    });
+    this.messageService.get().subscribe(({ type, data }) => {
+      if (type === 'deleteEnv') {
+        const list = this.envList.filter((it) => it.uuid !== Number(data));
+        this.envList = list;
+        if (this.envUuid === Number(data)) {
+          this.envUuid = null;
+        }
+      }
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -138,7 +152,9 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   gotoEnvManager() {
     // * switch to env
-    this.tabsIndex = 1;
+    this.messageService.send({ type: 'toggleEnv', data: true });
+    // * close select
+    this.isOpen = false;
   }
 
   toggleRightBar(status = null) {
