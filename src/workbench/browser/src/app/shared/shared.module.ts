@@ -72,6 +72,7 @@ const COMPONENTS = [
     ...COMPONENTS,
     ApiParamsNumPipe,
     NzPopoverModule,
+    NzCodeEditorModule,
     EoIconparkIconModule,
     EnvListComponent,
     SplitPanelComponent,

@@ -4,6 +4,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, LOCALE_ID } from '@
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 
 //Other module
 import { CoreModule } from './core/core.module';
@@ -35,6 +36,13 @@ import zh from '@angular/common/locales/zh';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 registerLocaleData(en);
 registerLocaleData(zh);
+
+const ngZorroConfig: NzConfig = {
+  codeEditor: {
+    useStaticLoading: true,
+  },
+};
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -67,7 +75,7 @@ registerLocaleData(zh);
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {
-        console.log(localId)
+        console.log(localId);
         switch (localId) {
           case 'zh':
             return zh_CN;
@@ -77,6 +85,7 @@ registerLocaleData(zh);
       },
       deps: [LOCALE_ID],
     },
+    // { provide: NZ_CONFIG, useValue: ngZorroConfig },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent],
