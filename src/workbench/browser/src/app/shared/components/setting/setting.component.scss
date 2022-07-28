@@ -43,17 +43,6 @@
   font-size: 12px;
 }
 
-.setting-container {
-  &::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    border: 2px solid #fff;
-    background-color: rgba(0,0,0,.3);
-}
-&::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 12px;
-}
-}
 
 ::ng-deep .sidebar_setting_popover{
   padding: 0;
