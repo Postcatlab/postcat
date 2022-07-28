@@ -127,7 +127,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
   }
 
   async submitForm() {
-    if (!this.electronService.isElectron) {
+    if (!this.electronService.isElectron && this.validateForm.value['eoapi-common.dataStorage'] === 'http') {
       return this.message.error(
         $localize`Only the client can connect to the remote server. You need to download the client first.`
       );

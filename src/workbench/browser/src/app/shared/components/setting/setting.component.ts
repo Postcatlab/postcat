@@ -97,7 +97,7 @@ export class SettingComponent implements OnInit {
   get settings() {
     return this.$settings;
   }
-  readonly treeNodes = [
+  treeNodes = [
     {
       name: $localize`:@@DataSource:Data Storage`,
       moduleID: 'eoapi-common',
@@ -240,7 +240,7 @@ export class SettingComponent implements OnInit {
         return prev.concat(treeItem);
       }, []);
     // All settings
-    const treeData = structuredClone(this.treeNodes);
+    const treeData = JSON.parse(JSON.stringify(this.treeNodes));
     const extensions = treeData.find((n) => n.moduleID === 'eoapi-extensions');
     extensions.children = generateTreeData(this.extensitonConfigurations);
     extensions.configuration = this.extensitonConfigurations;
