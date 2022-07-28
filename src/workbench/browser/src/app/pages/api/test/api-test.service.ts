@@ -160,7 +160,7 @@ export class ApiTestService {
   ) {
     const urlQuery = [];
     const uiQuery = query;
-    // get url query
+    //Get url query
     new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
       const item: ApiTestQuery = {
         name,
@@ -169,7 +169,7 @@ export class ApiTestService {
       };
       urlQuery.push(item);
     });
-    //get replace result
+    //Get replace result
     const origin = opts.base === 'url' ? uiQuery : urlQuery;
     const replace = opts.base === 'url' ? urlQuery : uiQuery;
     if (opts.replaceType === 'replace') {
@@ -183,7 +183,7 @@ export class ApiTestService {
         }
       }
     }
-    //joint query
+    //Joint query
     let search = '';
     result.forEach((val) => {
       if (!val.name || !val.required) {
@@ -234,15 +234,15 @@ export class ApiTestService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
+    console.log(inData);
     const result = {
       testData: {
         uuid: inData.apiDataID,
         queryParams: [],
         restParams: [],
-        requestBody:
-          inData.request.requestBodyType === 'raw'
-            ? inData.request.requestBody
-            : inData.request.requestBody.map((val) => (val.required = true)),
+        requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
+          ? inData.request.requestBody
+          : inData.request.requestBody.map((val) => (val.required = true)),
         requestHeaders: inData.response.headers,
         ...inData.request,
       },
@@ -334,6 +334,10 @@ export class ApiTestService {
           val.type = val.type === 'file' ? 'file' : 'string';
           delete val.example;
         });
+        break;
+      }
+      case ApiBodyType.Binary:{
+        inData.requestBody='';
         break;
       }
     }
