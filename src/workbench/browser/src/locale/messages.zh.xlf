@@ -2976,15 +2976,15 @@
         <source>Data Storage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">9</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">102</context>
         </context-group>
         <target state="translated">数据源</target>
       </trans-unit>
@@ -2992,7 +2992,7 @@
         <source>Remote Server</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/remote/remote.service.ts</context>
@@ -3004,7 +3004,7 @@
         <source>Localhost</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">19</context>
         </context-group>
         <target state="translated">本地</target>
       </trans-unit>
@@ -3012,23 +3012,23 @@
         <source>Localhost: Store the data locally. You can only use the product on the current computer.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <target state="translated">本地数据源：将数据存储在本地，你只能在当前计算机使用产品数据。</target>
       </trans-unit>
-      <trans-unit id="9ba12c8d29c115fbc18ff5b07e8fddf73c2e270b" datatype="html">
-        <source>  Remote Server: Store data on a remote server to facilitate cross device use of the product. Only the client can connect to the remote server. You need to download the client first. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> Learn more..<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+      <trans-unit id="a066806015b3d759964130637bcc4fd0e3a1c94e" datatype="html">
+        <source> Remote Server: Store data on a remote server to facilitate cross device use of the product. Only the client can connect to the remote server. You need to download the client first. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> Learn more..<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">19,21</context>
+          <context context-type="linenumber">24,27</context>
         </context-group>
-        <target state="translated"> 将数据存储在远程服务器上，方便跨设备使用产品。仅客户端支持连接远程服务器，需要先下载客户端。 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> 了解更多...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"> 远程服务器：将数据存储在远程服务器上，方便跨设备使用产品。仅客户端支持连接远程服务器，需要先下载客户端。<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> 了解更多...<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767" datatype="html">
         <source>Host</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target state="translated">Host</target>
       </trans-unit>
@@ -3036,7 +3036,7 @@
         <source>Please input your Host</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target state="translated">请输入您的远程 Host！</target>
       </trans-unit>
@@ -3044,7 +3044,7 @@
         <source>your host</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <target state="translated">远程 Host</target>
       </trans-unit>
@@ -3052,7 +3052,7 @@
         <source>Please input your Security Token</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <target state="translated">请输入您的 Security Token</target>
       </trans-unit>
@@ -3060,7 +3060,7 @@
         <source>your security token</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <target state="translated">您的 security token</target>
       </trans-unit>
@@ -3068,7 +3068,7 @@
         <source>Change Data Storage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target state="translated">切换数据源</target>
       </trans-unit>
@@ -3076,23 +3076,39 @@
         <source>Remote server connection failed!!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">124</context>
         </context-group>
         <target state="translated">远程服务器连接失败</target>
+      </trans-unit>
+      <trans-unit id="7906729573431367122" datatype="html">
+        <source>Only the client can connect to the remote server. You need to download the client first.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <target state="translated">仅客户端支持连接远程服务器，需要先下载客户端。</target>
       </trans-unit>
       <trans-unit id="2875796658938124573" datatype="html">
         <source>The remote data source connection is successful!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">140</context>
         </context-group>
         <target state="translated">远程数据源连接成功！</target>
+      </trans-unit>
+      <trans-unit id="0feab442129ba239106e55cf029069d3d4adeadc" datatype="html">
+        <source>Extensions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/setting/common/extensions.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <target state="translated">插件</target>
       </trans-unit>
       <trans-unit id="98336771d9bed95509ee1317c3751b4f71cd2a29" datatype="html">
         <source>Please Enter <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.label }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/extensions.component.ts</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">29</context>
         </context-group>
         <target state="translated">请输入 <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.label }}"/></target>
       </trans-unit>
@@ -3102,9 +3118,17 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/extensions.component.ts</context>
-          <context context-type="linenumber">37,39</context>
+          <context context-type="linenumber">40,42</context>
         </context-group>
         <target state="translated"><x id="INTERPOLATION" equiv-text="{{                   module.properties[field]?.placeholder ?? '请输入 ' + module.properties[field]?.label                 }}"/></target>
+      </trans-unit>
+      <trans-unit id="e0d1ece694da029a20f5a97fbf3302f6213da891" datatype="html">
+        <source>No plugins are currently installed,<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;"/> go to install <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/setting/common/extensions.component.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+        <target state="translated">该功能需要插件支持，请移步至<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;"/>插件广场<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>下载</target>
       </trans-unit>
       <trans-unit id="Language" datatype="html">
         <source>Language</source>
@@ -3118,23 +3142,15 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <target state="translated">语言</target>
-      </trans-unit>
-      <trans-unit id="ff025c338f77455a29c379ad20958e07cfa62cf6" datatype="html">
-        <source>No plugins are currently installed,<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;"/> go to install <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/components/setting/setting.component.html</context>
-          <context context-type="linenumber">42,43</context>
-        </context-group>
-        <target state="translated">目前暂无插件被安装，<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;"/> 点此去安装<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
       </trans-unit>
       <trans-unit id="3139147897029202869" datatype="html">
         <source>Extensions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">110</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
@@ -3146,7 +3162,7 @@
         <source>About</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">114</context>
         </context-group>
         <target state="translated">关于</target>
       </trans-unit>
