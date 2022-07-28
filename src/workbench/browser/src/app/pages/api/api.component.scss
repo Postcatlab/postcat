@@ -155,6 +155,9 @@ nz-divider {
       color: rgba(0, 0, 0, 0.5);
       cursor: pointer;
       transition: all 0.4s ease;
+      &.active {
+        color: #00785a;
+      }
       &:hover {
         color: #00785a;
         background-color: rgba(0, 0, 0, 0.05);
