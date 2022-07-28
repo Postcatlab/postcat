@@ -5,14 +5,9 @@
     </nz-radio-group>
     <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
     <!-- <nz-divider nzType="vertical"></nz-divider> -->
-    <params-import
-      *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-      [baseData]="model"
-      [contentType]="bodyType"
-      (baseDataChange)="handleParamsImport($event)"
-      (beforeHandleImport)="beforeHandleImport($event)"
-      [rootType]="jsonRootType"
-    ></params-import>
+    <params-import *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [baseData]="model" [contentType]="bodyType"
+      (baseDataChange)="handleParamsImport($event)" (beforeHandleImport)="beforeHandleImport($event)"
+      [rootType]="jsonRootType"></params-import>
   </div>
   <div *ngIf="bodyType === 'json'">
     <p class="fs12 c999 mb5" i18n>JSON Root Type:</p>
@@ -24,28 +19,13 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
-<list-block-common-component
-  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-  [mainObject]="listConf"
-  [(list)]="model"
-></list-block-common-component>
+<list-block-common-component *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [mainObject]="listConf"
+  [(list)]="model"></list-block-common-component>
 <!-- Raw -->
-<eo-editor
-  [(code)]="model"
-  *ngIf="bodyType === 'raw'"
-  (codeChange)="rawDataChange()"
-  [config]="{ maxLines: 10 }"
-  [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-></eo-editor>
+<!-- <eo-editor [(code)]="model" *ngIf="bodyType === 'raw'" (codeChange)="rawDataChange()" [config]="{ maxLines: 10 }"
+  [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-editor> -->
+<nz-code-editor *ngIf="bodyType === 'raw'" class="editor" [ngModel]="code" style="height: 300px;"
+  [nzEditorOption]="{ language: 'typescript' }"></nz-code-editor>
 <!-- Binary -->
-<textarea
-class="binary_textarea"
-  rows="4"
-  *ngIf="bodyType === 'binary'"
-  nzBorderless
-  i18n-placeholder
-  (ngModelChange)="rawDataChange()"
-  placeholder="Binary Description"
-  nz-input
-  [(ngModel)]="model"
-></textarea>
+<textarea class="binary_textarea" rows="4" *ngIf="bodyType === 'binary'" nzBorderless i18n-placeholder
+  (ngModelChange)="rawDataChange()" placeholder="Binary Description" nz-input [(ngModel)]="model"></textarea>

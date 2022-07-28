@@ -1,17 +1,10 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
-<list-block-common-component class="eo-block-container"
-  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-  [mainObject]="listConf"
-  [(list)]="model"
-></list-block-common-component>
+<list-block-common-component class="eo-block-container" *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
+  [mainObject]="listConf" [(list)]="model"></list-block-common-component>
 <!-- Raw -->
-<eo-editor
-  [(code)]="model"
-  *ngIf="bodyType === 'raw'"
-  [eventList]="['type', 'format', 'copy',  'search', 'replace']"
-></eo-editor>
+<eo-editor [(code)]="model" *ngIf="bodyType === 'raw'" [eventList]="['type', 'format', 'copy',  'search', 'replace']">
+</eo-editor>
 <!-- Binary -->
 <pre *ngIf="bodyType === 'binary'">{{model}}</pre>
-

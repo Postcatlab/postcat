@@ -93,13 +93,7 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
 
   constructor(private message: EoMessageService, private electron: ElectronService) {}
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const ace = this.aceRef.directiveRef.ace();
-      ace.resize();
-      console.log('ace resize', ace);
-    }, 10000);
-  }
+  ngAfterViewInit(): void {}
   ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
