@@ -31,51 +31,32 @@
         <div class="flex items-center tabs-bar">
           <eo-api-tab class="fg1"></eo-api-tab>
           <div class="flex items-center fix-mt">
-            <nz-select
-              [(ngModel)]="envUuid"
-              [(nzOpen)]="isOpen"
-              (nzOpenChange)="handleEnvSelectStatus($event)"
-              [nzDropdownRender]="renderTemplate"
-              nzAllowClear
-              i18n-nzPlaceHolder="Environment Dropdown placeholder"
-              nzPlaceHolder="Environment"
-              #envSelect
-            >
+            <nz-select [(ngModel)]="envUuid" [(nzOpen)]="isOpen" (nzOpenChange)="handleEnvSelectStatus($event)"
+              [nzDropdownRender]="renderTemplate" nzAllowClear i18n-nzPlaceHolder="Environment Dropdown placeholder"
+              nzPlaceHolder="Environment" #envSelect>
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
             </nz-select>
             <ng-template #renderTemplate>
               <nz-divider></nz-divider>
-              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n
-                >Manage Environment</a
-              >
+              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n>Manage
+                Environment</a>
             </ng-template>
-            <span
-              class="flex items-center justify-center mx-1 icon"
-              i18n-nzTooltipTitle
-              nz-tooltip
-              nzTooltipTitle="Enviroment Quick Look"
-              nz-popover
-              [nzPopoverContent]="envParams"
-              nzPopoverPlacement="bottomRight"
-              nzPopoverTrigger="click"
-            >
+            <span class="flex items-center justify-center mx-1 icon" i18n-nzTooltipTitle nz-tooltip
+              nzTooltipTitle="Enviroment Quick Look" nz-popover [nzPopoverContent]="envParams"
+              nzPopoverPlacement="bottomRight" nzPopoverTrigger="click">
               <eo-iconpark-icon name="eyes"></eo-iconpark-icon>
             </span>
-            <ng-template #envParams> <env-list></env-list> </ng-template>
+            <ng-template #envParams>
+              <env-list></env-list>
+            </ng-template>
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <nz-tabset class="inside_page_tabset" [nzAnimated]="false" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
-              <a
-                *nzTabLink
-                nz-tab-link
-                (click)="clickContentMenu(tab)"
-                [routerLink]="[tab.routerLink]"
-                queryParamsHandling="merge"
-              >
-                {{ tab.title }}</a
-              >
+              <a *nzTabLink nz-tab-link (click)="clickContentMenu(tab)" [routerLink]="[tab.routerLink]"
+                queryParamsHandling="merge">
+                {{ tab.title }}</a>
             </nz-tab>
           </nz-tabset>
         </div>
@@ -85,19 +66,11 @@
             <div top>
               <router-outlet></router-outlet>
             </div>
-            <div
-              bottom
-              class="absolute top-0 bottom-0 right-0 flex right-bar"
-              [ngClass]="activeBar ? 'w-[250px]' : 'w-[40px]'"
-            >
-              <div
-                class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
-                [ngClass]="activeBar ? 'active' : ''"
-                (click)="toggleRightBar()"
-                nz-tooltip
-                i18n-nzTooltipTitle="@@Environment Setting"
-                nzTooltipTitle="Environment Setting"
-              >
+            <div bottom class="absolute top-0 bottom-0 right-0 flex right-bar"
+              [ngClass]="activeBar ? 'w-[250px]' : 'w-[40px]'">
+              <div class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
+                [ngClass]="activeBar ? 'active' : ''" (click)="toggleRightBar()" nz-tooltip
+                i18n-nzTooltipTitle="@@Environment Setting" nzTooltipTitle="Environment Setting">
                 <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
               </div>
               <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
