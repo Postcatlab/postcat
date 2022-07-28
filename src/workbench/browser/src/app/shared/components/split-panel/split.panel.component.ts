@@ -17,6 +17,8 @@ export class SplitPanelComponent implements OnInit, OnDestroy {
   startWidth: number;
   startHeight: number;
 
+  maxRightWidth: number;
+
   @ViewChild('scalable') scalableRef: ElementRef;
   @ViewChild('bottomRef') bottomRef: ElementRef;
 
@@ -29,13 +31,14 @@ export class SplitPanelComponent implements OnInit, OnDestroy {
   // 拖拽中
   onDrag = (e: MouseEvent) => {
     const scalableEl = this.scalableRef.nativeElement;
+    const bottomEl = this.bottomRef.nativeElement;
     if (scalableEl) {
       if (this.direction === 'column') {
         scalableEl.style.height = `${this.startHeight + e.clientY - this.startY}px`;
-        this.bottomRef.nativeElement.style.height = `calc(100% - 12px - ${scalableEl.style.height})`;
+        bottomEl.style.height = `calc(100% - 12px - ${scalableEl.style.height})`;
       } else {
         scalableEl.style.width = `${this.startWidth + e.clientX - this.startX}px`;
-        this.bottomRef.nativeElement.style.width = `calc(100% - 12px - ${scalableEl.style.width})`;
+        bottomEl.style.width = `calc(100% - 12px - ${scalableEl.style.width})`;
       }
     }
   };
