@@ -15,6 +15,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   CONST: any = {
     JSON_ROOT_TYPE: Object.keys(JsonRootType).map((val) => ({ key: val, value: JsonRootType[val] })),
   };
+
   private itemStructure: ApiEditBody = {
     name: '',
     type: 'string',
