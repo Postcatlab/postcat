@@ -15,24 +15,24 @@ export class SplitXComponent implements OnInit {
   @Input() init = [200, 250, 500];
   @Output() x = new EventEmitter();
   isListen = false;
-  current = 0;
+  baseWith = 0;
   min = 0;
   max = 0;
   start = 0;
   width = 0;
   constructor() {}
   ngOnInit() {
-    const [min, current, max] = this.init;
+    const [min, baseWith, max] = this.init;
     this.min = min;
-    this.current = current;
-    this.width = current;
+    this.baseWith = baseWith;
+    this.width = baseWith;
     this.max = max;
     document.addEventListener('mousemove', (e) => {
       if (!this.isListen) {
         return;
       }
       const move = e.clientX;
-      const width = this.start - move + this.current;
+      const width = move >= this.baseWith ? this.baseWith - (move - this.start) : this.baseWith + (this.start - move);
       this.width = this.countMinMax(width, [this.min, this.max]);
       this.x.emit(this.width);
       //   this.x.emit(this.start - move > this.current - this.max ? this.max : this.start - move + this.current);
@@ -42,10 +42,12 @@ export class SplitXComponent implements OnInit {
         return;
       }
       this.isListen = false;
-      const move = e.clientX;
-      const width = this.start - move + this.current;
-      this.width = this.countMinMax(width, [this.min, this.max]);
-      this.x.emit(this.width);
+      this.baseWith = this.width;
+      document.documentElement.style.userSelect = '';
+      // const move = e.clientX;
+      // const width = this.start - move + this.baseWith;
+      // this.width = this.countMinMax(width, [this.min, this.max]);
+      // this.x.emit(this.width);
     });
   }
   countMinMax(current, range) {
@@ -61,5 +63,6 @@ export class SplitXComponent implements OnInit {
   handleMouseDown(e) {
     this.isListen = true;
     this.start = e.clientX;
+    document.documentElement.style.userSelect = 'none';
   }
 }
