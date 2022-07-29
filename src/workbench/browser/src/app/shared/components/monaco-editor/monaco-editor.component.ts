@@ -45,7 +45,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Output() codeChange = new EventEmitter<string>();
   codeEdtor: editor.IStandaloneCodeEditor;
   isReadOnly = false;
-  completionItemProvider = {};
+  completionItemProvider: monaco.IDisposable;
   buttonList: any[] = [];
   typeList = [
     {
@@ -75,9 +75,10 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       enabled: false,
     },
     overviewRulerLanes: 0,
+    quickSuggestions: { other: true, strings: true },
   };
   /** monaco config */
-  get editorOption() {
+  get editorOption(): JoinedEditorOptions {
     return { ...this.defaultConfig, ...this.config };
   }
 
@@ -119,22 +120,33 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   ngOnDestroy(): void {
-    this.codeEdtor.dispose();
+    this.codeEdtor?.dispose();
+    this.completionItemProvider?.dispose();
   }
 
   private initMonacoEditorEvent() {
-    this.completionItemProvider = monaco.languages.registerCompletionItemProvider('javascript', {
-      provideCompletionItems(model, position) {
-        return {
-          suggestions: [
-            {
-              label: 'good',
-              detail: '说明',
-              insertText: '实际插入的代码',
-              kind: monaco.languages.CompletionItemKind.Keyword,
-            },
-          ] as any,
+    console.log('initMonacoEditorEvent');
+
+    this.completionItemProvider = window.monaco.languages.registerCompletionItemProvider('javascript', {
+      provideCompletionItems: (model, position) => {
+        // find out if we are completing a property in the 'dependencies' object.
+        const textUntilPosition = model.getValueInRange({
+          startLineNumber: 1,
+          startColumn: 1,
+          endLineNumber: position.lineNumber,
+          endColumn: position.column,
+        });
+
+        const word = model.getWordUntilPosition(position);
+        const range = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn,
         };
+        return {
+          suggestions: this.completions.map((n) => ({ ...n, range })),
+        } as any;
       },
     });
 

@@ -20,7 +20,7 @@
 <!-- JSON -->
 <!-- XML -->
 <!-- Raw -->
-<eo-monaco-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'" style="'=minHeight: 100%"
+<eo-monaco-editor [(code)]="model" (codeChange)="rawDataChange()" *ngIf="bodyType === 'raw'" [maxLine]="100"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
 <!-- Binary -->
 <div class="px-5" *ngIf="bodyType === 'binary'">
