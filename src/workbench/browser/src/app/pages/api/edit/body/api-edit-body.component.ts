@@ -16,7 +16,10 @@ import { ApiEditService } from '../api-edit.service';
   styleUrls: ['./api-edit-body.component.scss'],
 })
 export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() model: string | object[] | any;
+  @Input() model: string | object[] | any = `import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor'
+
+  @Component({})
+  export class SomeComponent {}`;
   @Input() supportType: string[];
   @Input() bodyType: ApiBodyType | string;
   @Input() jsonRootType: JsonRootType | string;
@@ -25,10 +28,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: any = {};
   cache: any = {};
-  code = `import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor'
 
-  @Component({})
-  export class SomeComponent {}`;
   CONST: any = {
     JSON_ROOT_TYPE: Object.keys(JsonRootType).map((val) => ({ key: val, value: JsonRootType[val] })),
   };
