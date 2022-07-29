@@ -1,8 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { whatTextType } from '../../../utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { editor } from 'monaco-editor';
+import * as monaco from 'monaco-editor';
+import { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
@@ -29,11 +31,13 @@ const eventHash = new Map()
   templateUrl: './monaco-editor.component.html',
   styleUrls: ['./monaco-editor.component.scss'],
 })
-export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges {
+export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
   @Input() code: string;
-  @Input() minHeight = '70';
+  /** Scroll bars appear over 20 lines */
+  @Input() maxLine = 20;
+  @Input() config: JoinedEditorOptions = {};
   @Input() editorType = 'json';
   @Input() autoFormat = false;
   @Input() disabled = false;
@@ -41,6 +45,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Output() codeChange = new EventEmitter<string>();
   codeEdtor: editor.IStandaloneCodeEditor;
   isReadOnly = false;
+  completionItemProvider = {};
   buttonList: any[] = [];
   typeList = [
     {
@@ -60,6 +65,21 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       label: 'Text',
     },
   ];
+  defaultConfig: JoinedEditorOptions = {
+    language: this.editorType || 'json',
+    automaticLayout: true,
+    scrollBeyondLastLine: false,
+    wordWrap: 'on',
+    wrappingStrategy: 'advanced',
+    minimap: {
+      enabled: false,
+    },
+    overviewRulerLanes: 0,
+  };
+  /** monaco config */
+  get editorOption() {
+    return { ...this.defaultConfig, ...this.config };
+  }
 
   isNaN(val) {
     return Number.isNaN(Number(val));
@@ -76,12 +96,12 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       const type = whatTextType(this.code || '');
       this.editorType = type;
       if (this.autoFormat) {
-        this.code = this.formatCode(this.code, type);
+        this.code = this.formatCode();
       }
     }
   }
   ngOnInit() {
-    // console.log(this.eventList);
+    // console.log(this.codeEdtor.getSupportedActions());
     // To get the Ace instance:
     this.buttonList = this.electron.isElectron
       ? this.eventList
@@ -97,37 +117,89 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
             ...eventHash.get(it),
           }));
   }
+
+  ngOnDestroy(): void {
+    this.codeEdtor.dispose();
+  }
+
+  private initMonacoEditorEvent() {
+    this.completionItemProvider = monaco.languages.registerCompletionItemProvider('javascript', {
+      provideCompletionItems(model, position) {
+        return {
+          suggestions: [
+            {
+              label: 'good',
+              detail: '说明',
+              insertText: '实际插入的代码',
+              kind: monaco.languages.CompletionItemKind.Keyword,
+            },
+          ] as any,
+        };
+      },
+    });
+
+    this.codeEdtor.onDidChangeModelDecorations(() => {
+      updateEditorHeight(); // typing
+      requestAnimationFrame(updateEditorHeight); // folding
+    });
+
+    this.codeEdtor.onDidChangeModelContent((e) => {
+      this.codeChange.emit(this.codeEdtor.getValue());
+    });
+
+    this.codeEdtor.onDidBlurEditorText((e) => {
+      this.codeChange.emit(this.codeEdtor.getValue());
+    });
+
+    let prevHeight = 0;
+
+    const updateEditorHeight = () => {
+      const editorElement = this.codeEdtor.getDomNode();
+
+      if (!editorElement) {
+        return;
+      }
+
+      const lineHeight = this.codeEdtor.getOption(59);
+      const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
+      const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
+
+      if (prevHeight !== height) {
+        prevHeight = height;
+        editorElement.style.height = `${height}px`;
+        this.codeEdtor.layout();
+      }
+    };
+  }
   log(event, txt) {
     console.log('ace event', event, txt);
   }
   handleBlur() {
-    setTimeout(() => {
-      this.codeChange.emit(this.code);
-    }, 0);
+    this.codeChange.emit(this.code);
   }
   handleChange() {
-    setTimeout(() => {
-      this.codeChange.emit(this.code);
-    }, 0);
+    this.codeChange.emit(this.code);
   }
-  rerenderAce() {}
-  formatCode(code, type) {
-    return code;
+  rerenderEditor() {
+    this.codeEdtor.layout();
   }
-  handleAction(event) {
-    const ace = {} as any;
-    const session = ace.getSession();
+  formatCode() {
+    this.codeEdtor.getAction('editor.action.formatDocument').run();
+    return this.codeEdtor.getValue();
+  }
+  handleAction(event: EventType) {
     switch (event) {
       case 'format': {
         // * format code
-        const value = session.getValue();
-        const code = this.formatCode(value, this.editorType);
-        session.setValue(code);
+        // const value = session.getValue();
+        // const code = this.formatCode();
+        // session.setValue(code);
+        this.formatCode(); //自动格式化代码
         break;
       }
       case 'copy': {
         // * copy content
-        const value = session.getValue();
+        const value = this.codeEdtor.getValue();
         if (navigator.clipboard) {
           navigator.clipboard.writeText(value);
           this.message.success($localize`Copied`);
@@ -137,18 +209,18 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       }
       case 'search': {
         // * search content
-        ace.execCommand('find');
+        this.codeEdtor.getAction('actions.find').run();
         break;
       }
       case 'replace': {
-        ace.execCommand('replace');
+        this.codeEdtor.getAction('editor.action.startFindReplaceAction').run();
         break;
       }
       case 'newTab':
         {
           const tmpNewWin = window.open();
-          const value = session.getValue();
-          const code = this.formatCode(value, this.editorType);
+          const value = this.codeEdtor.getValue();
+          const code = this.formatCode();
           tmpNewWin.document.open();
           tmpNewWin.document.write(code);
           tmpNewWin.document.close();
@@ -156,8 +228,8 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
         break;
       case 'download':
         {
-          const value = session.getValue();
-          const code = this.formatCode(value, this.editorType);
+          const value = this.codeEdtor.getValue();
+          const code = this.formatCode();
           const a = document.createElement('a');
           const blob = new Blob([code]);
           const url = window.URL.createObjectURL(blob);
@@ -176,5 +248,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
   onEditorInitialized(codeEdtor) {
     this.codeEdtor = codeEdtor;
+    this.initMonacoEditorEvent();
   }
 }
