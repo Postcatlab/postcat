@@ -84,7 +84,7 @@
         <!-- <eo-split-panel direction="row"> -->
         <section class="relative" [ngStyle]="{ paddingRight: activeBar ? dyWidth + 'px' : '40px' }">
           <router-outlet></router-outlet>
-          <eo-split-x *ngIf="activeBar" (x)="handleDrag($event)" [init]="[200, 250, 400]"></eo-split-x>
+          <eo-split-x *ngIf="activeBar" (x)="handleDrag($event)" [init]="[200, dyWidth, 400]"></eo-split-x>
           <div
             class="absolute top-0 bottom-0 right-0 flex right-bar"
             [ngClass]="{ 'left-line': !activeBar }"

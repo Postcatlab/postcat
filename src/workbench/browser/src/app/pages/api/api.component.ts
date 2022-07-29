@@ -159,7 +159,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
 
   toggleRightBar(status = null) {
-    this.dyWidth = 250;
     if (status == null) {
       this.activeBar = !this.activeBar;
       return;
