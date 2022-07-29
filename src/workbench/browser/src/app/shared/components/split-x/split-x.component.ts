@@ -3,7 +3,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 @Component({
   selector: 'eo-split-x',
   template: `<div
-    class="absolute top-0 flex flex-col justify-center bottom-[107px] w-[6px] z-[10] cursor-col-resize line"
+    class="absolute top-0 flex flex-col justify-center bottom-[70px] w-[6px] z-[10] cursor-col-resize line"
     [ngStyle]="{ right: width + 'px' }"
     (mousedown)="handleMouseDown($event)"
   >
