@@ -30,6 +30,7 @@ import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
 import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/components/split-panel/split.panel.component';
+import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 const COMPONENTS = [
@@ -39,6 +40,7 @@ const COMPONENTS = [
   PageNotFoundComponent,
   ApiScriptComponent,
   SplitPanelComponent,
+  EoMonacoEditorComponent,
 ];
 @NgModule({
   imports: [
@@ -76,6 +78,7 @@ const COMPONENTS = [
     EoIconparkIconModule,
     EnvListComponent,
     SplitPanelComponent,
+    EoMonacoEditorComponent,
   ],
 })
 export class SharedModule {}

@@ -10,11 +10,9 @@
 
   .separator {
     position: relative;
-    height: 6px;
     background: #f8f8f9;
     border-left: none;
     border-right: none;
-    cursor: row-resize;
     border: 1px solid #dcdee2;
     transition: all 0.1s;
 
@@ -22,13 +20,30 @@
       background-color: #6366f1;
     }
 
+    &.row {
+      width: 6px;
+      cursor: col-resize;
+      .trigger-bar-con {
+        top: 50%;
+        left: 2px;
+        height: 6px;
+        transform: translate(-50%) rotate(90deg);
+      }
+    }
+    &.column {
+      height: 6px;
+      cursor: row-resize;
+      .trigger-bar-con {
+        left: 50%;
+        height: 100%;
+        transform: translate(-50%);
+      }
+    }
+
+
     .trigger-bar-con {
       position: absolute;
-      left: 50%;
-      top: 1px;
       width: 32px;
-      transform: translate(-50%);
-      height: 100%;
     }
 
     i {
