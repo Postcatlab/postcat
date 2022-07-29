@@ -17,10 +17,10 @@ export type BasicTab = {
   type: string | 'preview' | 'edit';
 };
 export enum TabOperate {
-  'closeOther',
-  'closeAll',
-  'closeLeft',
-  'closeRight',
+  closeOther = 'closeOther',
+  closeAll = 'closeAll',
+  closeLeft = 'closeLeft',
+  closeRight = 'closeRight',
 }
 /**
  * Tab item.

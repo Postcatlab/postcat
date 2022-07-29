@@ -16,15 +16,20 @@ export class ApiTabOperateService {
    * Tab basic info
    */
   BASIC_TABS: { [key: string]: BasicTab };
-  constructor(private tabStorage: ApiTabStorageService, private router: Router) {
-  }
+  constructor(private tabStorage: ApiTabStorageService, private router: Router) {}
   //Init tab info
   //Maybe from tab cache info or router url
   init(BASIC_TABS) {
-    this.BASIC_TABS =BASIC_TABS;
-    this.operateTabAfterRouteChange({
-      url: window.location.pathname + window.location.search,
-    });
+    this.BASIC_TABS = BASIC_TABS;
+    const tabCache = this.tabStorage.getPersistenceStorage();
+    if (tabCache) {
+      this.tabStorage.setTabs(tabCache.tabs);
+      this.navigateTabRoute(tabCache.tabs[tabCache.selectIndex || 0]);
+    } else {
+      this.operateTabAfterRouteChange({
+        url: window.location.pathname + window.location.search,
+      });
+    }
   }
   /**
    * Add Default tab
@@ -66,8 +71,26 @@ export class ApiTabOperateService {
       this.newDefaultTab();
     }
   }
-  closeTabByOperate(action: string|TabOperate){
-
+  closeTabByOperate(action: string | TabOperate) {
+    switch (action) {
+      case TabOperate.closeAll: {
+        this.tabStorage.setTabs([]);
+        this.newDefaultTab();
+        break;
+      }
+      case TabOperate.closeOther: {
+        this.tabStorage.setTabs([this.tabStorage.tabs[this.selectedIndex]]);
+        break;
+      }
+      case TabOperate.closeLeft: {
+        this.tabStorage.setTabs(this.tabStorage.tabs.slice(this.selectedIndex));
+        break;
+      }
+      case TabOperate.closeRight: {
+        this.tabStorage.setTabs(this.tabStorage.tabs.slice(0, this.selectedIndex + 1));
+        break;
+      }
+    }
   }
   /**
    * Navigate  url to tab route
@@ -113,14 +136,14 @@ export class ApiTabOperateService {
    */
   private newOrReplaceTab(tabItem) {
     const currentTab = this.tabStorage.tabs[this.selectedIndex];
-    // if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
-    //   this.tabStorage.tabs[this.selectedIndex] = tabItem;
-    //   //If selectedIndex not change,need manual call selectTab to change content
-    //   this.navigateTabRoute(tabItem);
-    // } else {
-    this.tabStorage.addTab(tabItem);
-    this.selectedIndex = this.tabStorage.tabs.length - 1;
-    // }
+    if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
+      this.tabStorage.tabs[this.selectedIndex] = tabItem;
+      //If selectedIndex not change,need manual call selectTab to change content
+      this.navigateTabRoute(tabItem);
+    } else {
+      this.tabStorage.addTab(tabItem);
+      this.selectedIndex = this.tabStorage.tabs.length - 1;
+    }
   }
   /**
    * Get tab info from url

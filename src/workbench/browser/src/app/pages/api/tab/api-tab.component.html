@@ -1,4 +1,4 @@
-selectedIndex:{{ tabOperate.selectedIndex}}
+selectedIndex:{{ tabOperate.selectedIndex }}
 {{ tabStorage.tabs | json }}
 <nz-tabset
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
@@ -24,10 +24,17 @@ selectedIndex:{{ tabOperate.selectedIndex}}
   </a>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="closeTabByOperate('closeOther')" i18n>Close All Tags (excluding current tabs)</li>
+      <li nz-menu-item (click)="closeTabByOperate('closeOther')" i18n>Close Other Tags (excluding current tabs)</li>
       <li nz-menu-item (click)="closeTabByOperate('closeAll')" i18n>Close All Tabs</li>
       <li nz-menu-item (click)="closeTabByOperate('closeLeft')" i18n>Close Tabs To The Left</li>
-      <li nz-menu-item (click)="closeTabByOperate('closeRight')" i18n>Close Tabs to Right</li>
+      <li
+        nz-menu-item
+        [nzDisabled]="tabStorage.tabs.length - 1 === tabOperate.selectedIndex"
+        (click)="closeTabByOperate('closeRight')"
+        i18n
+      >
+        Close Tabs to Right
+      </li>
     </ul>
   </nz-dropdown-menu>
 </ng-template>
