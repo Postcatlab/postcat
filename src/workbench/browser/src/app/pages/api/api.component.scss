@@ -148,20 +148,21 @@ nz-divider {
     border: 2px solid pink;
   }
   .right-bar {
-    border-left: 1px solid rgba(0,0,0,0.1);
-    transition: 0.1s all ease;
+    // transition: 0.1s all ease;
+    &.left-line {
+      border-left: 1px solid rgba(0, 0, 0, 0.07);
+    }
 
     .env-icon {
       color: rgba(0, 0, 0, 0.5);
       cursor: pointer;
-      transition: all 0.4s ease;
+      // transition: all 0.4s ease;
       &.active {
         color: #00785a;
       }
       &:hover {
         color: #00785a;
         background-color: rgba(0, 0, 0, 0.05);
-
       }
     }
   }
