@@ -4,5 +4,5 @@
     <span>{{ item.label }}</span>
   </div>
 </div>
-<nz-code-editor [ngModel]="code" style="height: 300px;" [nzEditorOption]="{ language: 'typescript' }"
+<nz-code-editor [(ngModel)]="code" style="min-height: 100px;" [nzEditorOption]="editorOption"
   (nzEditorInitialized)="onEditorInitialized($event)"></nz-code-editor>
