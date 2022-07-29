@@ -244,7 +244,17 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     }
   }
 
-  handleInsert(code) {}
+  handleInsert(code) {
+    const p = this.codeEdtor.getPosition();
+    this.codeEdtor.executeEdits('', [
+      {
+        range: new monaco.Range(p.lineNumber, p.column, p.lineNumber, p.column),
+        text: code,
+      },
+    ]);
+    this.codeEdtor.focus();
+    // this.codeEdtor.trigger('keyboard', 'type', { text: code });
+  }
 
   onEditorInitialized(codeEdtor) {
     this.codeEdtor = codeEdtor;

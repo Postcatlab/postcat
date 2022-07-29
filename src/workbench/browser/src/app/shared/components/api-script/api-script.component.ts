@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { EoEditorComponent } from 'eo/workbench/browser/src/app/eoui/editor/eo-editor/eo-editor.component';
+import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
 
 import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
@@ -16,7 +16,7 @@ export class ApiScriptComponent implements OnInit {
   @Input() treeData = [];
   @Input() completions = [];
   @Output() codeChange: EventEmitter<any> = new EventEmitter();
-  @ViewChild(EoEditorComponent, { static: false }) eoEditor?: EoEditorComponent;
+  @ViewChild(EoMonacoEditorComponent, { static: false }) eoEditor?: EoMonacoEditorComponent;
   @ViewChild('nzTreeComponent', { static: false }) nzTreeComponent!: NzTreeComponent;
 
   selectListSelection = new SelectionModel<FlatNode>(true);
@@ -61,7 +61,7 @@ export class ApiScriptComponent implements OnInit {
   }
 
   insertCode = (event) => {
-    console.log('isertCode',event)
+    console.log('isertCode', event);
     const { value } = event.origin;
     this.eoEditor.handleInsert(value);
   };
