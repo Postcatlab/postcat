@@ -1,17 +1,16 @@
 .line {
     background: #f8f8f9;
-    border-left: 1px solid #dcdee2;
-    border-right: 1px solid #dcdee2;
-    // z-index: 100;
+    display: flex;
+    align-items: center;
     &:hover {
         background: #68be8d;
         border-color: #68be8d;
     }
     > i {
-        margin: 2px 0;
-        display: flex;
-        height: 1px;
-        width: 100%;
+        margin: 1px 0;
+        height: 2px;
+        width: 2px;
+        border-radius: 2px;
         background: rgba(23,35,61,.25);
     }
 }

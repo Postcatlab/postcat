@@ -11,10 +11,8 @@
   .separator {
     position: relative;
     background: #f8f8f9;
-    border-left: none;
-    border-right: none;
-    border: 1px solid #dcdee2;
     transition: all 0.1s;
+    display: flex;
 
     &:hover {
       background-color: #68be8d;
@@ -27,6 +25,8 @@
         top: 50%;
         left: 2px;
         height: 6px;
+        display: flex;
+        align-items: center;
         transform: translate(-50%) rotate(90deg);
       }
     }
@@ -35,23 +35,26 @@
       cursor: row-resize;
       .trigger-bar-con {
         left: 50%;
-        height: 100%;
-        transform: translate(-50%);
+        // height: 100%;
+        // transform: translate(-50%);
       }
     }
 
 
     .trigger-bar-con {
-      position: absolute;
-      width: 32px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     i {
-      height: 100%;
-      width: 1px;
+      height: 2px;
+      width: 2px;
+      border-radius: 2px;
+      display: inline-block;
+      margin: 0 1px;
       background: rgba(23,35,61,.25);
-      float: left;
-      margin-right: 3px;
     }
   }
 
