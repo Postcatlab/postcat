@@ -35,7 +35,6 @@ export class SplitXComponent implements OnInit {
       const width = move >= this.baseWith ? this.baseWith - (move - this.start) : this.baseWith + (this.start - move);
       this.width = this.countMinMax(width, [this.min, this.max]);
       this.x.emit(this.width);
-      //   this.x.emit(this.start - move > this.current - this.max ? this.max : this.start - move + this.current);
     });
     document.addEventListener('mouseup', (e) => {
       if (!this.isListen) {
@@ -44,10 +43,6 @@ export class SplitXComponent implements OnInit {
       this.isListen = false;
       this.baseWith = this.width;
       document.documentElement.style.userSelect = '';
-      // const move = e.clientX;
-      // const width = this.start - move + this.baseWith;
-      // this.width = this.countMinMax(width, [this.min, this.max]);
-      // this.x.emit(this.width);
     });
   }
   countMinMax(current, range) {
