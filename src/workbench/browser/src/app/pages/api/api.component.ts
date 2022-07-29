@@ -39,6 +39,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   envInfo: any = {};
   envList: Array<any> = [];
   activeUuid: number | string = 0;
+  dyWidth = 250;
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -158,6 +159,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
 
   toggleRightBar(status = null) {
+    this.dyWidth = 250;
     if (status == null) {
       this.activeBar = !this.activeBar;
       return;
@@ -190,4 +192,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     });
   }
   handleEnvSelectStatus(event: boolean) {}
+  handleDrag(e) {
+    const distance = e;
+    this.dyWidth = distance;
+  }
 }

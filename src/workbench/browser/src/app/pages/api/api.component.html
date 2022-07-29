@@ -82,9 +82,14 @@
           </nz-tabset>
         </div>
         <!-- <eo-split-panel direction="row"> -->
-        <section class="relative" [ngClass]="activeBar ? 'pr-[250px]' : 'pr-[40px]'">
+        <section class="relative" [ngStyle]="{ paddingRight: activeBar ? dyWidth + 'px' : '40px' }">
           <router-outlet></router-outlet>
-          <div class="absolute top-0 bottom-0 right-0 flex right-bar" [ngClass]="activeBar ? 'w-[250px]' : 'w-[40px]'">
+          <eo-split-x *ngIf="activeBar" (x)="handleDrag($event)" [init]="[200, 250, 400]"></eo-split-x>
+          <div
+            class="absolute top-0 bottom-0 right-0 flex right-bar"
+            [ngClass]="{ 'left-line': !activeBar }"
+            [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
+          >
             <div
               class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
               [ngClass]="activeBar ? 'active' : ''"
