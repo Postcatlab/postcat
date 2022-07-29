@@ -7,7 +7,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
     [ngStyle]="{ right: width + 'px' }"
     (mousedown)="handleMouseDown($event)"
   >
-    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i>
   </div>`,
   styleUrls: ['./split-x.component.scss'],
 })
