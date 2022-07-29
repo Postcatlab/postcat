@@ -1,6 +1,5 @@
 //Polyfill Node.js core modules in Webpack. This module is only needed for webpack 5+.
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 /**
  * Custom angular webpack configuration
@@ -26,7 +25,6 @@ module.exports = (config, options) => {
     new NodePolyfillPlugin({
       excludeAliases: ['console'],
     }),
-    new MonacoWebpackPlugin(),
   ];
 
   return config;
