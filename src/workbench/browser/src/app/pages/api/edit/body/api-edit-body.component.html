@@ -24,7 +24,7 @@
 <!-- Raw -->
 <!-- <eo-editor [(code)]="model" *ngIf="bodyType === 'raw'" (codeChange)="rawDataChange()" [config]="{ maxLines: 10 }"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-editor> -->
-<eo-monaco-editor *ngIf="bodyType === 'raw'" [(code)]="model"
+<eo-monaco-editor *ngIf="bodyType === 'raw'" [(code)]="model" [maxLine]="20"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']" (codeChange)="rawDataChange()">
 </eo-monaco-editor>
 <!-- Binary -->

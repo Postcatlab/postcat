@@ -36,7 +36,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() hiddenList: string[] = [];
   @Input() code: string;
   /** Scroll bars appear over 20 lines */
-  @Input() maxLine = 20;
+  @Input() maxLine = 200;
   @Input() config: JoinedEditorOptions = {};
   @Input() editorType = 'json';
   @Input() autoFormat = false;
@@ -67,7 +67,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   ];
   defaultConfig: JoinedEditorOptions = {
     language: this.editorType || 'json',
-    automaticLayout: true,
+    // automaticLayout: true,
     scrollBeyondLastLine: false,
     wordWrap: 'on',
     wrappingStrategy: 'advanced',
@@ -172,7 +172,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
         return;
       }
 
-      const lineHeight = this.codeEdtor.getOption(59);
+      const lineHeight = this.codeEdtor.getOption(editor.EditorOption.lineHeight);
       const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
       const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
 
