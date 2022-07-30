@@ -1,7 +1,11 @@
 .eo-editor {
   min-height: var(--eo-editor-height, 70px);
 }
-
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 .button_list {
   border: 1px solid var(--BORDER);
   border-top-left-radius: 3px;

@@ -17,6 +17,8 @@ eo-api-test-body,
 eo-api-test-query,
 eo-api-test-rest {
   display: block;
+  height: 100%;
+  overflow: auto;
 }
 .test_wrap {
   height: 100%;
@@ -33,14 +35,18 @@ eo-api-test-rest {
     }
     .ant-tabs {
       height: calc(100% - 52px);
+      .ant-tabs-tabpane {
+        height: 100%;
+        overflow: hidden;
+      }
       .ant-tabs-nav,.param_header {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background-color: white;
+        // position: sticky;
+        // top: 0;
+        // z-index: 10;
+        // background-color: white;
       }
       .ant-tabs-content {
-        overflow: auto;
+        overflow: hidden;
         height: 100%;
       }
       eo-api-test-body[ng-reflect-body-type=formData] {
