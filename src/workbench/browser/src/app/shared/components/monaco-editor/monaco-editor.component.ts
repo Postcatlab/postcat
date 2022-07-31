@@ -34,7 +34,16 @@ const eventHash = new Map()
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
-  @Input() code: string;
+  @Input() set code(val) {
+    if (val === this.$$code) {
+      return;
+    }
+    try {
+      this.$$code = JSON.stringify(val);
+    } catch {
+      this.$$code = String(val);
+    }
+  }
   /** Scroll bars appear over 20 lines */
   @Input() maxLine = 200;
   @Input() config: JoinedEditorOptions = {};
@@ -43,6 +52,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() disabled = false;
   @Input() completions = [];
   @Output() codeChange = new EventEmitter<string>();
+  $$code = '';
   codeEdtor: editor.IStandaloneCodeEditor;
   isReadOnly = false;
   completionItemProvider: monaco.IDisposable;
@@ -95,10 +105,10 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
-      const type = whatTextType(this.code || '');
+      const type = whatTextType(this.$$code || '');
       this.editorType = type;
       if (this.autoFormat) {
-        this.code = this.formatCode();
+        this.$$code = this.formatCode();
       }
     }
   }
@@ -188,10 +198,10 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     console.log('ace event', event, txt);
   }
   handleBlur() {
-    this.codeChange.emit(this.code);
+    this.codeChange.emit(this.$$code);
   }
   handleChange() {
-    this.codeChange.emit(this.code);
+    this.codeChange.emit(this.$$code);
   }
   rerenderEditor() {
     this.codeEdtor?.layout?.();
