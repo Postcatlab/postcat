@@ -90,6 +90,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
   ngAfterViewInit(): void {
     console.log('codeEdtor', this.codeEdtor);
+    requestIdleCallback(() => this.rerenderEditor());
   }
   ngOnChanges() {
     // * update root type
@@ -193,7 +194,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.codeChange.emit(this.code);
   }
   rerenderEditor() {
-    this.codeEdtor.layout();
+    this.codeEdtor?.layout?.();
   }
   formatCode() {
     this.codeEdtor.getAction('editor.action.formatDocument').run();
