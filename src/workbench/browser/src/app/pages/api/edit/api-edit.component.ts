@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -31,9 +31,10 @@ import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-
   styleUrls: ['./api-edit.component.scss'],
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
+  @Input() apiData: ApiData;
+  @Output() modelChange = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
-  validateForm!: FormGroup;
-  apiData: ApiData;
+  validateForm: FormGroup;
   groups: any[];
   expandKeys: string[];
   REQUEST_METHOD = objectToArray(RequestMethod);
@@ -49,8 +50,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     private apiEdit: ApiEditService
-  ) {
-  }
+  ) {}
   getApiGroup() {
     this.groups = [];
     const treeItems: any = [
@@ -101,28 +101,21 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getApiGroup();
     this.watchGroupIDChange();
-    this.apiData = {
-      name: '',
-      projectID: 1,
-      uri: '/',
-      groupID: this.route.snapshot.queryParams.groupID || '-1',
-      protocol: RequestProtocol.HTTP,
-      method: RequestMethod.POST,
-    };
+    this.init();
     this.initBasicForm();
     this.watchUri();
-    this.init();
   }
-  async init(apiData?) {
-    const id = Number(this.route.snapshot.queryParams.uuid);
-    if (apiData) {
-      //[From outside data]('eoApiComponent'),such as tab cache
-      this.apiData = apiData;
-    } else {
-      this.apiData = await this.apiEdit.getApi(id);
+  async init() {
+    if (!this.apiData) {
+      this.apiData = {} as ApiData;
+      const id = Number(this.route.snapshot.queryParams.uuid);
+      this.apiData = await this.apiEdit.getApi({
+        id,
+        groupID: this.route.snapshot.queryParams.groupID || '-1',
+      });
     }
+
     this.changeGroupID$.next(this.apiData.groupID);
-    this.validateForm.patchValue(this.apiData);
   }
   ngOnDestroy() {
     this.destroy$.next();

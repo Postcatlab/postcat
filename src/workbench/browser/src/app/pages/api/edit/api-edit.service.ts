@@ -4,26 +4,30 @@ import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { listToTreeHasLevel, treeToListHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { RequestMethod, RequestProtocol } from '../../../shared/services/storage/index.model';
 @Injectable()
 export class ApiEditService {
   constructor(private storage: StorageService, private apiTab: ApiTabStorageService, private apiService: ApiService) {}
-  async getApi(id): Promise<ApiData> {
+  async getApi({id,groupID}): Promise<ApiData> {
     let result: ApiData;
-    // //Recovery from tab
-    // if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
-    //   let tabData = this.apiTab.tabCache[this.apiTab.tabID];
-    //   return tabData.apiData;
-    // }
+    // //Recovery from ta
     if (!id) {
       // From test page/copy api data;
-      let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
+      const tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
       if (tmpApiData) {
         //Add From Test|Copy Api
         window.sessionStorage.removeItem('apiDataWillbeSave');
         Object.assign(result, JSON.parse(tmpApiData));
       } else {
         //Add directly
-        Object.assign(result, {
+        result=Object.assign({
+          name: '',
+          projectID: 1,
+          uri: '/',
+          groupID,
+          protocol: RequestProtocol.HTTP,
+          method: RequestMethod.POST,
+        }, {
           requestBodyType: 'json',
           requestBodyJsonType: 'object',
           requestBody: [],

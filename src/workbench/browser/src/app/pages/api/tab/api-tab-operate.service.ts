@@ -22,14 +22,14 @@ export class ApiTabOperateService {
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
     const tabCache = this.tabStorage.getPersistenceStorage();
-    if (tabCache) {
-      this.tabStorage.setTabs(tabCache.tabs);
-      this.navigateTabRoute(tabCache.tabs[tabCache.selectIndex || 0]);
-    } else {
-      this.operateTabAfterRouteChange({
-        url: window.location.pathname + window.location.search,
-      });
-    }
+    // if (tabCache) {
+    //   this.tabStorage.setTabs(tabCache.tabs);
+    //   this.navigateTabRoute(tabCache.tabs[tabCache.selectIndex || 0]);
+    // } else {
+    this.operateTabAfterRouteChange({
+      url: window.location.pathname + window.location.search,
+    });
+    // }
   }
   /**
    * Add Default tab
@@ -108,14 +108,15 @@ export class ApiTabOperateService {
    */
   operateTabAfterRouteChange(res: { url: string }) {
     const tmpTabItem = this.getTabFromUrl(res.url);
-
     //Pick current router url as the first tab
     if (this.tabStorage.tabs.length === 0) {
       this.tabStorage.addTab(tmpTabItem);
       return;
     }
     //If exist tab,select that tab
-    const existTabIndex = this.tabStorage.tabs.findIndex((val) => val.uuid === tmpTabItem.params.pageID);
+    const existTabIndex = this.tabStorage.tabs.findIndex(
+      (val) => val.uuid === tmpTabItem.params.pageID && val.pathname === tmpTabItem.pathname
+    );
     //Router has focus current tab
     if (this.selectedIndex === existTabIndex) {
       return;
@@ -137,7 +138,7 @@ export class ApiTabOperateService {
   private newOrReplaceTab(tabItem) {
     const currentTab = this.tabStorage.tabs[this.selectedIndex];
     if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
-      this.tabStorage.tabs[this.selectedIndex] = tabItem;
+      this.tabStorage.replaceTab(this.selectedIndex, tabItem);
       //If selectedIndex not change,need manual call selectTab to change content
       this.navigateTabRoute(tabItem);
     } else {

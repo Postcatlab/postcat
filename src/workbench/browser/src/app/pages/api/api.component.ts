@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
@@ -20,6 +20,7 @@ export class ApiComponent implements OnInit, OnDestroy {
    * API uuid
    */
   id: number;
+  pageID: number;
   TABS = [
     {
       routerLink: 'detail',
@@ -38,7 +39,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
     edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
     detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`:@@API Detail:Preview` },
-    overview: {pathname: '/home/api/overview',type: 'preview',title: $localize`:@@API Index:Index`},
+    overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
   isOpen = false;
@@ -50,6 +51,7 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private messageService: MessageService,
     private storage: StorageService,
     private remoteService: RemoteService,
@@ -71,7 +73,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   onActivate(componentRef) {
     console.log(componentRef);
   }
-  initTabsetData(){
+  initTabsetData() {
     //Only electeron has local Mock
     if (this.remoteService.isElectron) {
       this.TABS.push({
@@ -81,6 +83,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
+    this.setPageID();
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchApiChange();
     this.watchRouterChange();
@@ -134,15 +137,19 @@ export class ApiComponent implements OnInit, OnDestroy {
    * Get current API ID to show content tab
    */
   watchRouterChange() {
-    this.route.queryParamMap.subscribe((params) => {
-      this.id = Number(params.get('uuid'));
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
+      console.log('routerChange');
+      this.id = Number(this.route.snapshot.queryParams.uuid);
+      this.setPageID();
     });
   }
   gotoEnvManager() {
     // * switch to env
     this.tabsIndex = 2;
   }
-
+  changeModule($event) {
+    console.log($event);
+  }
   getAllEnv(uuid?: number) {
     const projectID = 1;
     return new Promise((resolve) => {
@@ -153,6 +160,9 @@ export class ApiComponent implements OnInit, OnDestroy {
         return resolve([]);
       });
     });
+  }
+  private setPageID() {
+    this.pageID = Date.now();
   }
 
   private changeStoreEnv(uuid) {

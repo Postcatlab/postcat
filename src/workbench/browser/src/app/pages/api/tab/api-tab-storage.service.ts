@@ -15,6 +15,9 @@ export class ApiTabStorageService {
   addTab(tabItem) {
     this.tabs.push(tabItem);
   }
+  replaceTab(index, tabItem) {
+    this.tabs[index] = tabItem;
+  }
   setTabs(tabs) {
     this.tabs = tabs;
     //reset storage
