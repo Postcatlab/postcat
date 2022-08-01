@@ -1,20 +1,9 @@
 <header class="flex p-2">
-  <input
-    type="text"
-    class="flex-1 px-3 input"
-    i18n-placeholder="@@Search"
-    placeholder="Search"
-    [(ngModel)]="searchValue"
-  />
-  <div
-    class="flex items-center justify-center ml-3 text-base btn shrink-0"
-    nzType="primary"
-    nz-button
-    nz-dropdown
-    [nzDropdownMenu]="menu"
-    nzPlacement="bottomRight"
-    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
-  >
+  <input nz-input type="text" class="flex-1 px-3 input" i18n-placeholder="@@Search" placeholder="Search"
+    [(ngModel)]="searchValue" />
+  <div class="flex items-center justify-center ml-3 text-base btn shrink-0" nzType="primary" nz-button nz-dropdown
+    [nzDropdownMenu]="menu" nzPlacement="bottomRight"
+    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
     <eo-iconpark-icon name="plus"></eo-iconpark-icon>
   </div>
   <nz-dropdown-menu #menu="nzDropdownMenu">

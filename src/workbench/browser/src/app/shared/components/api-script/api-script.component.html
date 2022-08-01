@@ -43,8 +43,9 @@
     </ng-template>
   </div>
   <div class="flex-1 h-[322px]">
-    <eo-editor [(code)]="code" editorType="javascript" [eventList]="['format', 'copy', 'search', 'replace']"
-      (codeChange)="handleChange($event)" [completions]="completions" [minHeight]="270">
-    </eo-editor>
+    <eo-monaco-editor [(code)]="code" [config]="{language: 'javascript'}"
+      [eventList]="['format', 'copy', 'search', 'replace']" (codeChange)="handleChange($event)"
+      [completions]="completions" minHeight="270">
+    </eo-monaco-editor>
   </div>
 </div>

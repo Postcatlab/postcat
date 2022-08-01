@@ -49,9 +49,11 @@ export class ApiComponent implements OnInit, OnDestroy {
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
   isOpen = false;
+  activeBar = false;
   envInfo: any = {};
   envList: Array<any> = [];
   activeUuid: number | string = 0;
+  dyWidth = 250;
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -107,6 +109,20 @@ export class ApiComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.messageService.get().subscribe(({ type, data }) => {
+      if (type === 'toggleEnv') {
+        this.activeBar = data;
+      }
+    });
+    this.messageService.get().subscribe(({ type, data }) => {
+      if (type === 'deleteEnv') {
+        const list = this.envList.filter((it) => it.uuid !== Number(data));
+        this.envList = list;
+        if (this.envUuid === Number(data)) {
+          this.envUuid = null;
+        }
+      }
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -151,7 +167,18 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   gotoEnvManager() {
     // * switch to env
-    this.tabsIndex = 2;
+    this.messageService.send({ type: 'toggleEnv', data: true });
+    // * close select
+    this.isOpen = false;
+  }
+
+  toggleRightBar(status = null) {
+    this.dyWidth = 250;
+    if (status == null) {
+      this.activeBar = !this.activeBar;
+      return;
+    }
+    this.activeBar = status;
   }
   changeModule($event) {
     console.log($event);
@@ -184,4 +211,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     });
   }
   handleEnvSelectStatus(event: boolean) {}
+  handleDrag(e) {
+    const distance = e;
+    this.dyWidth = distance;
+  }
 }
