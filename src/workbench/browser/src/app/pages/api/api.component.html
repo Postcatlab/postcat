@@ -68,7 +68,7 @@
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <!-- Manually pick pageID,Because pageID always change -->
-          <nz-tabset nzSelectedIndex="1" class="inside_page_tab" nzLinkExact="false" *ngIf="this.id" nzLinkRouter>
+          <nz-tabset [nzSelectedIndex]="tabsetIndex" class="inside_page_tab" *ngIf="this.id">
             <nz-tab *ngFor="let tab of TABS">
               <a
                 *nzTabLink
@@ -84,7 +84,8 @@
         </div>
         <!-- <eo-split-panel direction="row"> -->
         <section class="relative" [ngStyle]="{ paddingRight: activeBar ? dyWidth + 'px' : '40px' }">
-          <router-outlet (activate)="onActivate($event)"></router-outlet>
+          <!-- Get router child component by activate -->
+          <router-outlet  (activate)="onActivate($event)"></router-outlet>
           <eo-split-x *ngIf="activeBar" (x)="handleDrag($event)" [init]="[200, 250, 400]"></eo-split-x>
           <div
             class="absolute top-0 bottom-0 right-0 flex right-bar"

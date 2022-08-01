@@ -8,6 +8,7 @@ export type TreeToObjOpts = {
 
 /**
  * Convert old component listBlock array items has level without  parent id to  tree nodes
+ *
  * @param list Array<GroupTreeItem>
  */
 export const listToTreeHasLevel = (
@@ -71,6 +72,7 @@ export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (v
 
 /**
  * Convert array items which has parent id to tree nodes.
+ *
  * @param list Array<GroupTreeItem>
  * @param tree Array<GroupTreeItem>
  * @param parentID number|string
@@ -120,6 +122,7 @@ export const addKeyInTree = ({ children, ...data }, index = 0, key = '1') => {
 };
 /**
  * Find tree node and give value to it
+ *
  * @param _data seach pool tree node
  * @param value value need to be set
  * @param param2 should be find tree node
@@ -144,7 +147,7 @@ export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key 
   return findData(_data);
 };
 
-export const getExpandGroupByKey = (component, key) => {
+export const getExpandGroupByKey: (component,key) => string[] = (component, key) => {
   let treeNode = component.getTreeNodeByKey(key);
   if (!treeNode) {
     return;

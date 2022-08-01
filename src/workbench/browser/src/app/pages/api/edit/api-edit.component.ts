@@ -39,6 +39,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   expandKeys: string[];
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
+  nzSelectedIndex = 1;
 
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
@@ -114,8 +115,15 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         groupID: this.route.snapshot.queryParams.groupID || '-1',
       });
     }
-
     this.changeGroupID$.next(this.apiData.groupID);
+    this.validateForm.patchValue(this.apiData);
+    this.modelChange.emit(this.apiData);
+  }
+  /**
+   * Judge has edit manualy
+   */
+  isEdit(){
+
   }
   ngOnDestroy() {
     this.destroy$.next();

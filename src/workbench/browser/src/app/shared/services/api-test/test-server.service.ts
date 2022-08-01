@@ -15,7 +15,7 @@ export class TestServerService {
     this.isElectron = this.electron.isElectron;
   }
   get instance() {
-    const isVercel = window.location.href.includes('vercel')||window.location.host==='demo.eoapi.io';
+    const isVercel = window.location.href.includes('vercel')||window.location.host.includes('eoapi.io');
     if (this.isElectron) {
       return this.localNode;
     } else if (!isVercel) {

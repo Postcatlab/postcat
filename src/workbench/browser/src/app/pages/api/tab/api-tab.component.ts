@@ -32,7 +32,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * Select tab
    */
   selectChange() {
-    this.tabOperate.navigateTabRoute(this.tabStorage.tabs[this.tabOperate.selectedIndex]);
+    // this.tabOperate.navigateTabRoute(this.tabStorage.tabs[this.tabOperate.selectedIndex]);
   }
   closeTab({ index }) {
     this.tabOperate.closeTab(index);

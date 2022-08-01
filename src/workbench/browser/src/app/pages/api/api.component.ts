@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
@@ -16,12 +16,7 @@ import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-
 })
 export class ApiComponent implements OnInit, OnDestroy {
   @ViewChild('apiTabComponent') apiTabComponent: ApiTabComponent;
-  routerLinkActiveOptions: IsActiveMatchOptions = {
-    matrixParams: 'ignored',
-    queryParams: 'ignored',
-    fragment: 'ignored',
-    paths: 'exact',
-  };
+  tabsetIndex: number;
   /**
    * API uuid
    */
@@ -80,6 +75,11 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   onActivate(componentRef) {
     console.log(componentRef);
+    //Router-outlet bind childComponent output fun by (activate)
+    //https://stackoverflow.com/questions/37662456/angular-2-output-from-router-outlet
+    componentRef.modelChange ={
+      emit: this.watchContentChange
+    };
   }
   initTabsetData() {
     //Only electeron has local Mock
@@ -92,11 +92,12 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.setPageID();
+    this.setTabsetIndex();
     this.id = Number(this.route.snapshot.queryParams.uuid);
+    this.initTabsetData();
     this.watchApiChange();
     this.watchRouterChange();
     this.watchDataSourceChange();
-    this.initTabsetData();
     this.envUuid = Number(localStorage.getItem('env:selected'));
     // * load All env
     this.getAllEnv().then((result: any[]) => {
@@ -127,6 +128,9 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  watchContentChange() {
+    console.log('watchContentChange');
   }
   watchApiChange() {
     this.messageService.get().subscribe((inArg: Message) => {
@@ -163,6 +167,7 @@ export class ApiComponent implements OnInit, OnDestroy {
       console.log('routerChange');
       this.id = Number(this.route.snapshot.queryParams.uuid);
       this.setPageID();
+      this.setTabsetIndex();
     });
   }
   gotoEnvManager() {
@@ -197,7 +202,9 @@ export class ApiComponent implements OnInit, OnDestroy {
   private setPageID() {
     this.pageID = Date.now();
   }
-
+  private setTabsetIndex() {
+    this.tabsetIndex = this.TABS.findIndex((val) => window.location.pathname.includes(val.routerLink));
+  }
   private changeStoreEnv(uuid) {
     if (uuid == null) {
       this.store.dispatch(new Change(null));

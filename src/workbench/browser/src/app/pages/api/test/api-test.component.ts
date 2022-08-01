@@ -83,7 +83,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ref: ChangeDetectorRef,
     private apiTest: ApiTestUtilService,
-    private apiTab: ApiTabStorageService,
     private testServerService: TestServerService,
     private messageService: MessageService,
     private storage: StorageService,
