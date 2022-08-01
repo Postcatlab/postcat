@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -118,6 +118,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.changeGroupID$.next(this.apiData.groupID);
     this.validateForm.patchValue(this.apiData);
     this.modelChange.emit(this.apiData);
+  }
+  modelChangeFun(){
+    console.log('modelChangeFun');
   }
   /**
    * Judge has edit manualy

@@ -16,10 +16,7 @@ import { ApiEditUtilService } from '../api-edit-util.service';
   styleUrls: ['./api-edit-body.component.scss'],
 })
 export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() model: string | object[] | any = `import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor'
-
-  @Component({})
-  export class SomeComponent {}`;
+  @Input() model: string | object[] | any;
   @Input() supportType: string[];
   @Input() bodyType: ApiBodyType | string;
   @Input() jsonRootType: JsonRootType | string;
