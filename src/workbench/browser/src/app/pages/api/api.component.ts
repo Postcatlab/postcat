@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, IsActiveMatchOptions, NavigationEnd, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
@@ -16,6 +16,12 @@ import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-
 })
 export class ApiComponent implements OnInit, OnDestroy {
   @ViewChild('apiTabComponent') apiTabComponent: ApiTabComponent;
+  routerLinkActiveOptions: IsActiveMatchOptions = {
+    matrixParams: 'ignored',
+    queryParams: 'ignored',
+    fragment: 'ignored',
+    paths: 'exact',
+  };
   /**
    * API uuid
    */
