@@ -1,15 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { eoapiSettings } from './eoapi-settings/';
 import { Message, MessageService } from '../../../shared/services/message';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { Router } from '@angular/router';
 import { debounce } from 'eo/workbench/browser/src/app/utils';
 
 interface TreeNode {
