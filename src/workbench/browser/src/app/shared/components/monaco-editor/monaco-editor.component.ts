@@ -39,7 +39,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       return;
     }
     try {
-      this.$$code = JSON.stringify(val);
+      this.$$code = typeof val === 'string' ? val : JSON.stringify(val);
     } catch {
       this.$$code = String(val);
     }

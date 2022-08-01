@@ -122,7 +122,7 @@ export class AboutComponent implements OnInit {
   }
 
   getSystemInfo() {
-    const systemInfo = this.electron.ipcRenderer.sendSync('get-system-info');
-    return systemInfo;
+    const systemInfo = this.electron.ipcRenderer?.sendSync('get-system-info');
+    return systemInfo || {};
   }
 }

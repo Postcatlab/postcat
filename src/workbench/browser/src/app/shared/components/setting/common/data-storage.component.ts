@@ -14,6 +14,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
             formControlName="eoapi-common.dataStorage"
             i18n-nzPlaceHolder="@@DataSource"
             nzPlaceHolder="Data Storage"
+            (ngModelChange)="handleSelectDataStorage($event)"
           >
             <nz-option nzValue="http" i18n-nzLabel="@@Remote Server" nzLabel="Remote Server"></nz-option>
             <nz-option nzValue="local" i18n-nzLabel nzLabel="Localhost"></nz-option>
@@ -89,6 +90,15 @@ export class DataStorageComponent implements OnInit, OnChanges {
 
     if (model && this.validateForm?.value) {
       this.setFormValue(model.currentValue);
+    }
+  }
+
+  handleSelectDataStorage(val) {
+    if (!this.electronService.isElectron && val === 'http') {
+      this.validateForm.controls['eoapi-common.dataStorage'].setValue('local');
+      return this.message.error(
+        $localize`Only the client can connect to the remote server. You need to download the client first.`
+      );
     }
   }
 
