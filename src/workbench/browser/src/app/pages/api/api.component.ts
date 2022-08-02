@@ -9,6 +9,8 @@ import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
+const DY_WIDTH_KEY = 'DY_WIDTH';
+
 @Component({
   selector: 'eo-api',
   templateUrl: './api.component.html',
@@ -39,7 +41,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   envInfo: any = {};
   envList: Array<any> = [];
   activeUuid: number | string = 0;
-  dyWidth = 250;
+  dyWidth = localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : 250;
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -101,6 +103,7 @@ export class ApiComponent implements OnInit, OnDestroy {
         }
       }
     });
+    console.log('dyWidth', this.dyWidth);
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -194,5 +197,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   handleDrag(e) {
     const distance = e;
     this.dyWidth = distance;
+    localStorage.setItem(DY_WIDTH_KEY, String(this.dyWidth));
   }
 }
