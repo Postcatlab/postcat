@@ -103,7 +103,6 @@ export class ApiComponent implements OnInit, OnDestroy {
         }
       }
     });
-    console.log('dyWidth', this.dyWidth);
   }
   ngOnDestroy() {
     this.destroy$.next();
