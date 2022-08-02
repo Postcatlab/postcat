@@ -81,6 +81,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     // private scroller: ViewportScroller,
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private ref: ChangeDetectorRef,
     private apiTest: ApiTestUtilService,
     private testServerService: TestServerService,
@@ -152,7 +153,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       testData: this.apiData,
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    this.messageService.send({ type: 'addApiFromTest', data: apiData });
+    this.router.navigate(['home/api/edit'], {
+      queryParams: { pageID: Date.now() },
+    });
   }
   changeQuery(queryParams) {
     this.apiData.uri = this.apiTest.transferUrlAndQuery(this.apiData.uri, queryParams, {
@@ -314,11 +317,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         requestBody: [],
         queryParams: [],
         restParams: [],
-        requestHeaders: [{
-          required:true,
-          name:'content-type',
-          value:ContentTypeByAbridge.JSON
-        }],
+        requestHeaders: [
+          {
+            required: true,
+            name: 'content-type',
+            value: ContentTypeByAbridge.JSON,
+          },
+        ],
       });
     } else {
       this.getApi(id);

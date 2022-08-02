@@ -119,10 +119,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     });
   }
   async getApis() {
-    let result: StorageRes = await this.apiService.getAll(this.projectID);
+    const result: StorageRes = await this.apiService.getAll(this.projectID);
     const { success, empty } = StorageResStatus;
     if ([success, empty].includes(result.status)) {
-      let apiItems = {};
+      const apiItems = {};
       [].concat(result.data).forEach((item: ApiData) => {
         delete item.updatedAt;
         apiItems[item.uuid] = item;
@@ -195,6 +195,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Group tree click api event
    * Router jump page or Event emit
+   *
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
@@ -204,7 +205,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       case 'detailApi':
       case 'editApi': {
         this.router.navigate([`/home/api/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key, pageID: new Date().getTime() },
+          queryParams: { uuid: inArg.node.key, pageID: Date.now() },
         });
         break;
       }
@@ -214,12 +215,12 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       }
       case 'addAPI': {
         this.router.navigate(['/home/api/edit'], {
-          queryParams: { groupID: inArg.node?.origin.key.replace('group-', ''), pageID: new Date().getTime() },
+          queryParams: { groupID: inArg.node?.origin.key.replace('group-', ''), pageID: Date.now() },
         });
         break;
       }
       case 'deleteApi': {
-        let apiInfo = inArg.node;
+        const apiInfo = inArg.node;
         this.nzModalService.confirm({
           nzTitle: $localize`Deletion Confirmation?`,
           nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
@@ -380,9 +381,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       this.storage.run(
         'groupBulkUpdate',
         [
-          data.group.map((val) => {
-            return { ...val, uuid: val.uuid.replace('group-', ''), parentID: val.parentID.replace('group-', '') };
-          }),
+          data.group.map((val) => ({ ...val, uuid: val.uuid.replace('group-', ''), parentID: val.parentID.replace('group-', '') })),
         ],
         (result: StorageRes) => {
           this.buildGroupTreeData();

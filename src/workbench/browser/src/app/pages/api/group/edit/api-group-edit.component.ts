@@ -111,15 +111,15 @@ export class ApiGroupEditComponent implements OnInit {
     const data: GroupApiDataModel = { group: [this.group.uuid], api: [] };
     this.getChildrenFromTree(this.treeItems, data, `group-${this.group.uuid}`);
     this.modalRef.destroy();
-    // this.storage.run('groupBulkRemove', [data.group], (result: StorageRes) => {
-    //   if (result.status === StorageResStatus.success) {
-    //     //delete group api
-    //     if (data.api.length > 0) {
+    this.storage.run('groupBulkRemove', [data.group], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
+        //delete group api
+        if (data.api.length > 0) {
           this.apiService.bulkDelete(data.api);
-    //     } else {
-    //       this.messageService.send({ type: 'updateGroupSuccess', data: {} });
-    //     }
-    //   }
-    // });
+        } else {
+          this.messageService.send({ type: 'updateGroupSuccess', data: {} });
+        }
+      }
+    });
   }
 }

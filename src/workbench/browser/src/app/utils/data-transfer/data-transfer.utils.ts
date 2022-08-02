@@ -32,8 +32,9 @@ export const parseTree = (key, value, level = 0) => {
     };
   }
   if (whatType(value) === 'array') {
-    // * just by first
+    // * Just pick first element
     const [data] = value;
+    // Array element is primitive value
     if (whatType(data) === 'string') {
       return {
         name: key,
@@ -141,7 +142,7 @@ export const xml2json = (tmpl) => {
 interface uiData {
   textType: ApiBodyType | string;
   rootType: JsonRootType | string;
-  data: any;
+  data: ApiEditBody|any;
 }
 export const xml2UiData = (text) => {
   const data: any[] = xml2json(text);
@@ -211,6 +212,7 @@ export const json2XML: (o: object, tab?) => string = (o, tab) => {
 
 /**
  * Transfer text to json/xml/raw ui data,such as request body/response body
+ * Flat array with listdepth
  *
  * @returns body info
  */
@@ -233,6 +235,7 @@ export const text2UiData: (text: string) => uiData = (text) => {
         result.data = JSON.parse(result.data);
         result.data = flatData(Object.keys(result.data).map((it) => parseTree(it, result.data[it])));
       } catch (error) {
+        console.error('text2UiData', error);
         result.textType = 'raw';
       }
       break;
@@ -246,13 +249,13 @@ export const text2UiData: (text: string) => uiData = (text) => {
 
 /**
  * Format eoapi body to json
- * !TODO refactor
+ * !TODO Current just from sass apikit,need refactor
  *
- * @param eoapiList
+ * @param eoapiArr
  * @param inputOptions
  * @returns
  */
-export const uiData2Json = function(eoapiArr: ApiEditBody, inputOptions) {
+export const uiData2Json = function(eoapiArr: ApiEditBody[], inputOptions) {
   inputOptions = inputOptions || {};
   const result = {};
   const loopFun = (inputArr, inputObject) => {

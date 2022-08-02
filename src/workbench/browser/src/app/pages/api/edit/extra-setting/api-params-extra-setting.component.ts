@@ -42,7 +42,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     },
     tdList: [
       {
-        thKey: '最小长度',
+        thKey: $localize`Minimum length`,
         type: 'input',
         modelKey: 'minLength',
         class: 'w_50percent',
@@ -50,7 +50,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
         inputType: 'number',
       },
       {
-        thKey: '最大长度',
+        thKey: $localize`Maximum Length`,
         type: 'input',
         modelKey: 'maxLength',
         itemExpression: `min="0"`,
@@ -64,7 +64,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     },
     tdList: [
       {
-        thKey: '最小值',
+        thKey: $localize`Minimum`,
         type: 'input',
         modelKey: 'minimum',
         class: 'w_50percent',
@@ -72,7 +72,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
         inputType: 'number',
       },
       {
-        thKey: '最大值',
+        thKey: $localize`Maximum`,
         type: 'input',
         modelKey: 'maximum',
         itemExpression: `min="0"`,
@@ -90,24 +90,34 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     itemStructure: this.itemStructureEnums,
     tdList: [
       {
-        thKey: '默认',
+        thKey: $localize`Default`,
         type: 'radio',
         modelKey: 'default',
         isCanBeCancle: true,
-        class: 'w_50',
+        class: 'w_80',
       },
       {
-        thKey: '参数值可能性',
+        thKey: $localize`Value enum`,
         type: 'input',
         modelKey: 'value',
-        placeholder: '枚举值',
+        placeholder: $localize`enum`,
         itemExpression: `ng-class="{'eo-input-error':!item.value&&item.description}"`,
       },
       {
-        thKey: '说明',
+        thKey: $localize`Description`,
         type: 'input',
         modelKey: 'description',
-        placeholder: '值说明',
+        placeholder: 'Description',
+      },
+      {
+        type: 'btn',
+        class: 'w_250',
+        btnList: [
+          {
+            key: $localize`:@@Delete:Delete`,
+            operateName: 'delete',
+          },
+        ],
       },
     ],
   };

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -22,9 +22,10 @@ import {
 
 import { objectToArray } from '../../../utils';
 import { getRest } from '../../../utils/api';
-import { listToTree, getExpandGroupByKey } from '../../../utils/tree/tree.utils';
+import { listToTree, getExpandGroupByKey, treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
+import { ApiEditUtilService } from './api-edit-util.service';
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -40,12 +41,14 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   nzSelectedIndex = 1;
+  private originApiData: ApiData;
 
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
 
   constructor(
     private route: ActivatedRoute,
+    private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
     private message: NzMessageService,
     private messageService: MessageService,
@@ -104,29 +107,59 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.watchGroupIDChange();
     this.init();
     this.initBasicForm();
+    this.watchBasicForm();
     this.watchUri();
   }
   async init() {
     if (!this.apiData) {
       this.apiData = {} as ApiData;
       const id = Number(this.route.snapshot.queryParams.uuid);
-      this.apiData = await this.apiEdit.getApi({
+      const result = await this.apiEdit.getApi({
         id,
         groupID: this.route.snapshot.queryParams.groupID || '-1',
       });
+      //Storage origin api data
+      this.originApiData = structuredClone(result);
+      //Transfer apidata to table ui data
+      ['requestBody', 'responseBody'].forEach((tableName) => {
+        if (['xml', 'json'].includes(result[`${tableName}Type`])) {
+          result[tableName] = treeToListHasLevel(result[tableName]);
+        }
+      });
+      this.apiData = result;
+    }else{
+      this.originApiData = structuredClone(this.apiData);
     }
     this.changeGroupID$.next(this.apiData.groupID);
     this.validateForm.patchValue(this.apiData);
-    this.modelChange.emit(this.apiData);
+    this.modelChange.emit.apply(this, this.apiData);
   }
-  modelChangeFun(){
-    console.log('modelChangeFun');
+  modelChangeFun() {
+    console.log('api edit modelChangeFun');
+    this.modelChange.emit.apply(this, this.apiData);
+  }
+  watchBasicForm() {
+    this.validateForm.valueChanges.subscribe((x) => {
+      this.modelChange.emit.apply(this, this.apiData);
+    });
   }
   /**
+   *! Don't  Delete，export for outside
    * Judge has edit manualy
    */
-  isEdit(){
-
+  isFormChange(): boolean {
+    if (!this.originApiData || !this.apiData) {
+      return false;
+    }
+    if (JSON.stringify(this.originApiData) !== JSON.stringify(this.apiEditUtil.formatSavingApiData(this.apiData))) {
+      console.log(
+        JSON.stringify(this.originApiData),
+        '\n',
+        JSON.stringify(this.apiEditUtil.formatSavingApiData(this.apiData))
+      );
+      return true;
+    }
+    return false;
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -195,6 +228,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private async editApi(formData) {
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`编辑成功` : $localize`新增成功`;
+    formData = this.apiEditUtil.formatSavingApiData(formData);
     const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {
       this.message.success(title);

@@ -3,7 +3,6 @@ selectedIndex:{{ tabOperate.selectedIndex }}
 <nz-tabset
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
-  nzLinkRouter
   nzHideAdd="true"
   (nzClose)="closeTab($event)"
   (nzSelectChange)="selectChange()"

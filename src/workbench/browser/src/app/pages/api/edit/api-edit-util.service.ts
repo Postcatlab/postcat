@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ModalService } from '../../../shared/services/modal.service';
 import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra-setting.component';
+import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 @Injectable()
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
-  showMore(inputArg, opts: { nzOnOk: (result: any) => void; title: string }) {
+  showMore(inputArg, opts: { nzOnOk: (result: any) => void; changeFun; title: string }) {
     const modal = this.modalService.create({
       nzTitle: $localize`${opts.title} Detail`,
       nzContent: ApiParamsExtraSettingComponent,
@@ -30,6 +31,9 @@ export class ApiEditUtilService {
       setting: {
         draggable: true,
         dragCacheVar: opts.dragCacheVar || 'DRAG_VAR_API_EDIT_PARAM',
+      },
+      baseFun: {
+        watchCheckboxChange: opts.watchFormLastChange,
       },
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
@@ -87,6 +91,7 @@ export class ApiEditUtilService {
               fun: (inputArg) => {
                 this.showMore(inputArg, {
                   nzOnOk: opts.nzOnOkMoreSetting,
+                  changeFun: opts.watchFormLastChange,
                   title: opts.title,
                 });
               },
@@ -202,6 +207,7 @@ export class ApiEditUtilService {
               operateName: 'more',
               fun: (inputArg) => {
                 this.showMore(inputArg, {
+                  changeFun: opts.watchFormLastChange,
                   nzOnOk: opts.nzOnOkMoreSetting,
                   title: opts.title,
                 });
@@ -223,5 +229,23 @@ export class ApiEditUtilService {
         },
       ],
     };
+  }
+  formatSavingApiData(formData) {
+    const result = structuredClone(formData);
+    result.groupID = Number(result.groupID === '-1' ? '0' : result.groupID);
+    ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(
+      (tableName) => {
+        if (typeof result[tableName] !== 'object') {
+          return;
+        }
+        result[tableName] = (result[tableName] || []).filter((val) => val.name);
+        if (['requestBody', 'responseBody'].includes(tableName)) {
+          if (['xml', 'json'].includes(result[`${tableName}Type`])) {
+            result[tableName] = listToTreeHasLevel(result[tableName]);
+          }
+        }
+      }
+    );
+    return result;
   }
 }

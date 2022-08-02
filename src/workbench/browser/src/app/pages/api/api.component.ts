@@ -43,12 +43,14 @@ export class ApiComponent implements OnInit, OnDestroy {
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
-  isOpen = false;
-  activeBar = false;
+  activeUuid: number | string | null = 0;
   envInfo: any = {};
   envList: Array<any> = [];
-  activeUuid: number | string = 0;
+
+  isOpen = false;
+  activeBar = false;
   dyWidth = 250;
+
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -61,7 +63,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private store: Store
   ) {}
 
-  get envUuid(): number {
+  get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
   }
   set envUuid(value) {
@@ -73,12 +75,17 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
     this.changeStoreEnv(value);
   }
+  /**
+   * Router-outlet child componnet change
+   *
+   * @param componentRef
+   */
   onActivate(componentRef) {
-    console.log(componentRef);
+    console.log('onActivate', componentRef);
     //Router-outlet bind childComponent output fun by (activate)
     //https://stackoverflow.com/questions/37662456/angular-2-output-from-router-outlet
-    componentRef.modelChange ={
-      emit: this.watchContentChange
+    componentRef.modelChange = {
+      emit: this.watchContentChange,
     };
   }
   initTabsetData() {
@@ -98,40 +105,20 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchApiChange();
     this.watchRouterChange();
     this.watchDataSourceChange();
-    this.envUuid = Number(localStorage.getItem('env:selected'));
-    // * load All env
-    this.getAllEnv().then((result: any[]) => {
-      this.envList = result || [];
-    });
-    this.messageService.get().subscribe(({ type }) => {
-      if (type === 'updateEnv') {
-        this.getAllEnv().then((result: any[]) => {
-          this.envList = result || [];
-        });
-      }
-    });
-    this.messageService.get().subscribe(({ type, data }) => {
-      if (type === 'toggleEnv') {
-        this.activeBar = data;
-      }
-    });
-    this.messageService.get().subscribe(({ type, data }) => {
-      if (type === 'deleteEnv') {
-        const list = this.envList.filter((it) => it.uuid !== Number(data));
-        this.envList = list;
-        if (this.envUuid === Number(data)) {
-          this.envUuid = null;
-        }
-      }
-    });
+    this.initEnv();
+    this.watchEnvChange();
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  watchContentChange() {
-    console.log('watchContentChange');
-  }
+  /**
+   * Watch router content page change
+   * This has change to childComponent class
+   */
+  watchContentChange = function() {
+    console.log('watchContentChange',this.isFormChange());
+  };
   watchApiChange() {
     this.messageService.get().subscribe((inArg: Message) => {
       switch (inArg.type) {
@@ -164,7 +151,6 @@ export class ApiComponent implements OnInit, OnDestroy {
    */
   watchRouterChange() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
-      console.log('routerChange');
       this.id = Number(this.route.snapshot.queryParams.uuid);
       this.setPageID();
       this.setTabsetIndex();
@@ -176,7 +162,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     // * close select
     this.isOpen = false;
   }
-
   toggleRightBar(status = null) {
     this.dyWidth = 250;
     if (status == null) {
@@ -185,20 +170,12 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
     this.activeBar = status;
   }
-  changeModule($event) {
-    console.log($event);
+
+  handleDrag(e) {
+    const distance = e;
+    this.dyWidth = distance;
   }
-  getAllEnv(uuid?: number) {
-    const projectID = 1;
-    return new Promise((resolve) => {
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          return resolve(result.data || []);
-        }
-        return resolve([]);
-      });
-    });
-  }
+  handleEnvSelectStatus(event: boolean) {}
   private setPageID() {
     this.pageID = Date.now();
   }
@@ -217,9 +194,49 @@ export class ApiComponent implements OnInit, OnDestroy {
       }
     });
   }
-  handleEnvSelectStatus(event: boolean) {}
-  handleDrag(e) {
-    const distance = e;
-    this.dyWidth = distance;
+  private initEnv() {
+    this.envUuid = Number(localStorage.getItem('env:selected'));
+    // * load All env
+    this.getAllEnv().then((result: any[]) => {
+      this.envList = result || [];
+    });
+  }
+  private watchEnvChange() {
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ type, data }) => {
+        switch (type) {
+          case 'updateEnv': {
+            this.getAllEnv().then((result: any[]) => {
+              this.envList = result || [];
+            });
+            break;
+          }
+          case 'toggleEnv': {
+            this.activeBar = data;
+            break;
+          }
+          case 'deleteEnv': {
+            const list = this.envList.filter((it) => it.uuid !== Number(data));
+            this.envList = list;
+            if (this.envUuid === Number(data)) {
+              this.envUuid = null;
+            }
+            break;
+          }
+        }
+      });
+  }
+  private getAllEnv(uuid?: number) {
+    const projectID = 1;
+    return new Promise((resolve) => {
+      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          return resolve(result.data || []);
+        }
+        return resolve([]);
+      });
+    });
   }
 }

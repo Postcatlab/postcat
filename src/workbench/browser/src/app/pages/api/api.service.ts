@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { ApiData, StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
+import { Router } from '@angular/router';
 @Injectable()
 export class ApiService {
-  constructor(private messageService: MessageService, private storage: StorageService) {}
+  constructor(private messageService: MessageService, private router: Router, private storage: StorageService) {}
   get(uuid): Promise<ApiData> {
     return new Promise((resolve) => {
       this.storage.run('apiDataLoad', [uuid], (result: StorageRes) => {
@@ -26,9 +27,11 @@ export class ApiService {
   }
   async copy({ uuid, createdAt, ...apiData }: ApiData) {
     apiData.name += ' Copy';
-    window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    await this.add(apiData);
-    //TODO jump link to edit tab
+    const result = await this.add(apiData);
+    this.router.navigate(['/home/api/edit'], {
+      queryParams: { pageID: Date.now(), uuid: result.data.uuid },
+    });
+    this.messageService.send({ type: 'copyApiSuccess', data: { uuids: [uuid] } });
   }
   delete(uuid): void {
     this.storage.run('apiDataRemove', [uuid], (result: StorageRes) => {
@@ -38,10 +41,10 @@ export class ApiService {
     });
   }
   bulkDelete(apis) {
-    // this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {
-    //   if (result.status === StorageResStatus.success) {
+    this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
         this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: apis } });
-    //   }
-    // });
+      }
+    });
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiTestHeaders, ApiTestQuery, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
-import { ApiBodyType, ApiTestHistory } from '../../../shared/services/storage/index.model';
+import { ApiBodyType, ApiData, ApiTestHistory } from '../../../shared/services/storage/index.model';
 import { uiData2Json, text2UiData, json2XML } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
@@ -256,19 +257,7 @@ export class ApiTestUtilService {
    * @param inData.testData - test request info
    * @returns
    */
-  getApiFromTestData(inData) {
-    const testToEditParams = (arr) => {
-      const result = [];
-      arr.forEach((val) => {
-        if (!val.name) {
-          return;
-        }
-        const item = { ...val, example: val.value };
-        delete item.value;
-        result.push(item);
-      });
-      return result;
-    };
+  getApiFromTestData(inData): ApiData {
     const result = {
       ...inData.testData,
       responseHeaders: inData.history.response.headers || [],
@@ -281,16 +270,17 @@ export class ApiTestUtilService {
       if (!result[keyName] || typeof result[keyName] !== 'object') {
         return;
       }
-      result[keyName] = testToEditParams(result[keyName]);
+      result[keyName] = this.testTableData2ApiBody(result[keyName]);
     });
     if (inData.history.response.responseType === 'text') {
       const bodyInfo = text2UiData(inData.history.response.body);
-      result.responseBody = bodyInfo.data;
+      result.responseBody = listToTreeHasLevel(bodyInfo.data);
       result.responseBodyType = bodyInfo.textType;
       result.responseBodyJsonType = bodyInfo.rootType;
     }
     return result;
   }
+
   getTestDataFromApi(inData) {
     const editToTestParams = (arr) => {
       arr = arr || [];
@@ -335,8 +325,8 @@ export class ApiTestUtilService {
         });
         break;
       }
-      case ApiBodyType.Binary:{
-        inData.requestBody='';
+      case ApiBodyType.Binary: {
+        inData.requestBody = '';
         break;
       }
     }
@@ -388,5 +378,17 @@ export class ApiTestUtilService {
       return;
     }
     localStorage.setItem(this.globalStorageKey, JSON.stringify(globals));
+  }
+  private testTableData2ApiBody(arr): ApiData[] {
+    const result = [];
+    arr.forEach((val) => {
+      if (!val.name) {
+        return;
+      }
+      const item = { ...val, example: val.value };
+      delete item.value;
+      result.push(item);
+    });
+    return result;
   }
 }
