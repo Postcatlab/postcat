@@ -12,8 +12,8 @@
     "src/workbench/node/request"
   ],
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
-    "start": "npm-run-all -p start:workbench electron:serve",
+    "postinstall": "electron-builder install-app-deps && npx patch-package",
+    "start": "npx patch-package && npm-run-all -p start:workbench electron:serve",
     "serve:web": "cd src/workbench/browser && npm run ng:serve",
     "start:testServer": "cd src/workbench/node/server && yarn start",
     "start:workbench": "cd src/workbench/browser && yarn start",
@@ -22,7 +22,7 @@
     "electron:serve": "wait-on tcp:4200 && npm run electron:dev",
     "electron:dev:static": "npm run electron:tsc && electron .",
     "electron:dev": "npm run electron:tsc && electron . --development",
-    "build": "npm-run-all -s build:workbench clear:electron:tsc electron:tsc && electron-builder build",
+    "build": "npx patch-package && npm-run-all -s build:workbench clear:electron:tsc electron:tsc && electron-builder build",
     "build:static": "npm run clear:electron:tsc&&npm run electron:tsc && electron-builder build",
     "release": "npm-run-all -s build:workbench electron:tsc && electron-builder --publish=always",
     "release:m1": "npm-run-all -s build:workbench electron:tsc && electron-builder -m=dmg --arm64 -p onTagOrDraft",

@@ -3,7 +3,7 @@ import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { BasicTab, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { BasicTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -42,6 +42,10 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   batchCloseTab(uuids) {
     this.tabOperate.batchClose(uuids);
+  }
+  updateTabInfo(tabItem: TabItem) {
+    const currentTab=this.tabStorage.tabs[this.tabOperate.selectedIndex];
+    this.tabStorage.updateTab(this.tabOperate.selectedIndex, Object.assign({},currentTab,tabItem));
   }
   /**
    * Tab  Close Operate

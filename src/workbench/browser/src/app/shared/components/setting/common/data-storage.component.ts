@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
@@ -14,6 +16,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
             formControlName="eoapi-common.dataStorage"
             i18n-nzPlaceHolder="@@DataSource"
             nzPlaceHolder="Data Storage"
+            (ngModelChange)="handleSelectDataStorage($event)"
           >
             <nz-option nzValue="http" i18n-nzLabel="@@Remote Server" nzLabel="Remote Server"></nz-option>
             <nz-option nzValue="local" i18n-nzLabel nzLabel="Localhost"></nz-option>
@@ -65,10 +68,17 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class DataStorageComponent implements OnInit, OnChanges {
   @Input() model: Record<string, any> = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
+
+  oldDataStorageType: 'local' | 'http';
   validateForm!: FormGroup;
   loading = false;
 
-  constructor(private fb: FormBuilder, private message: NzMessageService, private electronService: ElectronService) {}
+  constructor(
+    private fb: FormBuilder,
+    private message: NzMessageService,
+    private electronService: ElectronService,
+    private remoteService: RemoteService
+  ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -82,6 +92,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
         [Validators.required],
       ],
     });
+    this.oldDataStorageType = this.validateForm.value['eoapi-common.dataStorage'];
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -89,6 +100,15 @@ export class DataStorageComponent implements OnInit, OnChanges {
 
     if (model && this.validateForm?.value) {
       this.setFormValue(model.currentValue);
+    }
+  }
+
+  handleSelectDataStorage(val) {
+    if (!this.electronService.isElectron && val === 'http') {
+      this.validateForm.controls['eoapi-common.dataStorage'].setValue('local');
+      return this.message.error(
+        $localize`Only the client can connect to the remote server. You need to download the client first.`
+      );
     }
   }
 
@@ -105,7 +125,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
     }
 
     try {
-      const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
+      const url = uniqueSlash(`${remoteUrl}/system/status`);
       const response = await fetch(url, {
         headers: {
           'x-api-key': token,
@@ -127,23 +147,30 @@ export class DataStorageComponent implements OnInit, OnChanges {
   }
 
   async submitForm() {
-    if (!this.electronService.isElectron && this.validateForm.value['eoapi-common.dataStorage'] === 'http') {
+    const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
+    const isRemote = dataStorage === 'http';
+    const isValid = this.validateForm.valid;
+
+    if (!this.electronService.isElectron && isRemote) {
       return this.message.error(
         $localize`Only the client can connect to the remote server. You need to download the client first.`
       );
     }
-    if (this.validateForm.valid) {
+
+    if (this.oldDataStorageType === dataStorage) {
+      return;
+    }
+
+    if (isValid && isRemote) {
       console.log('submit', this.validateForm.value);
       this.loading = true;
       const result = await this.pingRmoteServerUrl().finally(() => (this.loading = false));
       if (Object.is(result, true)) {
         this.message.success($localize`The remote data source connection is successful!`);
       }
-      this.model = {
-        ...this.model,
-        ...this.validateForm.value,
-      };
-      this.modelChange.emit(this.model);
+      this.updateDataSource();
+    } else if (isValid) {
+      this.updateDataSource();
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -152,6 +179,15 @@ export class DataStorageComponent implements OnInit, OnChanges {
         }
       });
     }
+  }
+
+  async updateDataSource() {
+    this.model = {
+      ...this.model,
+      ...this.validateForm.value,
+    };
+    this.modelChange.emit(this.model);
+    await this.remoteService.switchDataSource();
   }
 
   setFormValue(model = {}) {

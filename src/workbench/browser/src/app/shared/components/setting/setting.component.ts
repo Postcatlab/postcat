@@ -1,15 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { eoapiSettings } from './eoapi-settings/';
 import { Message, MessageService } from '../../../shared/services/message';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { Router } from '@angular/router';
 import { debounce } from 'eo/workbench/browser/src/app/utils';
 
 interface TreeNode {
@@ -145,6 +143,7 @@ export class SettingComponent implements OnInit {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'toggleSettingModalVisible': {
+            console.log('inArg.data.isShow', inArg.data.isShow);
             inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
             break;
           }
@@ -270,27 +269,9 @@ export class SettingComponent implements OnInit {
   };
 
   async handleCancel() {
-    try {
-      const isUpdateRemoteInfo =
-        this.remoteServerUrl !== this.settings['eoapi-common.remoteServer.url'] ||
-        this.remoteServerToken !== this.settings['eoapi-common.remoteServer.token'] ||
-        this.oldDataStorage !== this.settings['eoapi-common.dataStorage'];
+    this.handleSave();
 
-      if (isUpdateRemoteInfo) {
-        this.message.success(
-          'You have modified the data source related information, the page will refresh in 2 seconds...'
-        );
-        setTimeout(() => {
-          this.remoteService.switchDataSource();
-          this.remoteService.refreshComponent();
-        }, 2000);
-      }
-    } catch (error) {
-    } finally {
-      this.handleSave();
-
-      this.isShowModal = false;
-      this.isShowModalChange.emit(false);
-    }
+    this.isShowModal = false;
+    this.isShowModalChange.emit(false);
   }
 }

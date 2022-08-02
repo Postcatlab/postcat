@@ -138,7 +138,7 @@ export class ApiTabOperateService {
   private newOrReplaceTab(tabItem) {
     const currentTab = this.tabStorage.tabs[this.selectedIndex];
     if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
-      this.tabStorage.replaceTab(this.selectedIndex, tabItem);
+      this.tabStorage.updateTab(this.selectedIndex, tabItem);
       //If selectedIndex not change,need manual call selectTab to change content
       this.navigateTabRoute(tabItem);
     } else {

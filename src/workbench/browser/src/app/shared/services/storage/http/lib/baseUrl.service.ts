@@ -2,6 +2,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } fr
 import { Injectable } from '@angular/core';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { filter, map, Observable } from 'rxjs';
+import { uniqueSlash } from '../../../../../utils/api';
 const protocolReg = new RegExp('^(http|https)://');
 
 // implements StorageInterface
@@ -10,7 +11,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { url = '', token = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
     req = req.clone({
-      url: protocolReg.test(req.url) ? req.url : url + req.url,
+      url: uniqueSlash(protocolReg.test(req.url) ? req.url : url + req.url),
       headers: req.headers.append('x-api-key', token),
     });
 

@@ -20,7 +20,7 @@ export class ApiEditService {
       if (tmpApiData) {
         console.log('apiDataWillbeSave',tmpApiData);
         //Add From Test
-        // window.sessionStorage.removeItem('apiDataWillbeSave');
+        window.sessionStorage.removeItem('apiDataWillbeSave');
         Object.assign(result, JSON.parse(tmpApiData));
       } else {
         //Add directly

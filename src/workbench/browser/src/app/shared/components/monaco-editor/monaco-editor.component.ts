@@ -34,18 +34,28 @@ const eventHash = new Map()
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
-  @Input() code: string;
+  @Input() set code(val) {
+    if (val === this.$$code) {
+      return;
+    }
+    try {
+      this.$$code = typeof val === 'string' ? val : JSON.stringify(val);
+    } catch {
+      this.$$code = String(val);
+    }
+  }
   /** Scroll bars appear over 20 lines */
-  @Input() maxLine = 20;
+  @Input() maxLine = 200;
   @Input() config: JoinedEditorOptions = {};
   @Input() editorType = 'json';
   @Input() autoFormat = false;
   @Input() disabled = false;
   @Input() completions = [];
   @Output() codeChange = new EventEmitter<string>();
+  $$code = '';
   codeEdtor: editor.IStandaloneCodeEditor;
   isReadOnly = false;
-  completionItemProvider = {};
+  completionItemProvider: monaco.IDisposable;
   buttonList: any[] = [];
   typeList = [
     {
@@ -67,7 +77,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   ];
   defaultConfig: JoinedEditorOptions = {
     language: this.editorType || 'json',
-    automaticLayout: true,
+    // automaticLayout: true,
     scrollBeyondLastLine: false,
     wordWrap: 'on',
     wrappingStrategy: 'advanced',
@@ -75,9 +85,10 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       enabled: false,
     },
     overviewRulerLanes: 0,
+    quickSuggestions: { other: true, strings: true },
   };
   /** monaco config */
-  get editorOption() {
+  get editorOption(): JoinedEditorOptions {
     return { ...this.defaultConfig, ...this.config };
   }
 
@@ -89,14 +100,15 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
   ngAfterViewInit(): void {
     console.log('codeEdtor', this.codeEdtor);
+    requestIdleCallback(() => this.rerenderEditor());
   }
   ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
-      const type = whatTextType(this.code || '');
+      const type = whatTextType(this.$$code || '');
       this.editorType = type;
       if (this.autoFormat) {
-        this.code = this.formatCode();
+        this.$$code = this.formatCode();
       }
     }
   }
@@ -119,22 +131,33 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   ngOnDestroy(): void {
-    this.codeEdtor.dispose();
+    this.codeEdtor?.dispose();
+    this.completionItemProvider?.dispose();
   }
 
   private initMonacoEditorEvent() {
-    this.completionItemProvider = monaco.languages.registerCompletionItemProvider('javascript', {
-      provideCompletionItems(model, position) {
-        return {
-          suggestions: [
-            {
-              label: 'good',
-              detail: '说明',
-              insertText: '实际插入的代码',
-              kind: monaco.languages.CompletionItemKind.Keyword,
-            },
-          ] as any,
+    console.log('initMonacoEditorEvent');
+
+    this.completionItemProvider = window.monaco.languages.registerCompletionItemProvider('javascript', {
+      provideCompletionItems: (model, position) => {
+        // find out if we are completing a property in the 'dependencies' object.
+        const textUntilPosition = model.getValueInRange({
+          startLineNumber: 1,
+          startColumn: 1,
+          endLineNumber: position.lineNumber,
+          endColumn: position.column,
+        });
+
+        const word = model.getWordUntilPosition(position);
+        const range = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn,
         };
+        return {
+          suggestions: this.completions.map((n) => ({ ...n, range })),
+        } as any;
       },
     });
 
@@ -160,7 +183,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
         return;
       }
 
-      const lineHeight = this.codeEdtor.getOption(59);
+      const lineHeight = this.codeEdtor.getOption(editor.EditorOption.lineHeight);
       const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
       const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
 
@@ -175,13 +198,13 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     console.log('ace event', event, txt);
   }
   handleBlur() {
-    this.codeChange.emit(this.code);
+    this.codeChange.emit(this.$$code);
   }
   handleChange() {
-    this.codeChange.emit(this.code);
+    this.codeChange.emit(this.$$code);
   }
   rerenderEditor() {
-    this.codeEdtor.layout();
+    this.codeEdtor?.layout?.();
   }
   formatCode() {
     this.codeEdtor.getAction('editor.action.formatDocument').run();
@@ -244,7 +267,17 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     }
   }
 
-  handleInsert(code) {}
+  handleInsert(code) {
+    const p = this.codeEdtor.getPosition();
+    this.codeEdtor.executeEdits('', [
+      {
+        range: new monaco.Range(p.lineNumber, p.column, p.lineNumber, p.column),
+        text: code,
+      },
+    ]);
+    this.codeEdtor.focus();
+    // this.codeEdtor.trigger('keyboard', 'type', { text: code });
+  }
 
   onEditorInitialized(codeEdtor) {
     this.codeEdtor = codeEdtor;

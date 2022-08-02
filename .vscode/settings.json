@@ -15,5 +15,6 @@
 >>>>>>> preview/new_ui
     "**/*.code-search": true,
     "**/*.lock": true
-  }
+  },
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

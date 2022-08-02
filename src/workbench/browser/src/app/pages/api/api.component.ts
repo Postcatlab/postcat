@@ -8,6 +8,9 @@ import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
+import { timeStamp } from 'console';
+
+const DY_WIDTH_KEY = 'DY_WIDTH';
 
 @Component({
   selector: 'eo-api',
@@ -22,6 +25,7 @@ export class ApiComponent implements OnInit, OnDestroy {
    */
   id: number;
   pageID: number;
+  componentRef;
   TABS = [
     {
       routerLink: 'detail',
@@ -49,7 +53,7 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   isOpen = false;
   activeBar = false;
-  dyWidth = 250;
+  dyWidth = localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : 250;
 
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
@@ -84,9 +88,12 @@ export class ApiComponent implements OnInit, OnDestroy {
     console.log('onActivate', componentRef);
     //Router-outlet bind childComponent output fun by (activate)
     //https://stackoverflow.com/questions/37662456/angular-2-output-from-router-outlet
+    console.log(this.apiTabComponent);
     componentRef.modelChange = {
+      that: this,
       emit: this.watchContentChange,
     };
+    this.componentRef = componentRef;
   }
   initTabsetData() {
     //Only electeron has local Mock
@@ -114,10 +121,15 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   /**
    * Watch router content page change
-   * This has change to childComponent class
+   * !Current scope {this} has change to Object:{emit,that}
    */
   watchContentChange = function() {
-    console.log('watchContentChange',this.isFormChange());
+    console.log('watchContentChange', this);
+    const that = this.that;
+    that.apiTabComponent.updateTabInfo({
+      title: that.componentRef.apiData.name,
+      hasChanged: that.componentRef.isFormChange(),
+    });
   };
   watchApiChange() {
     this.messageService.get().subscribe((inArg: Message) => {
@@ -152,6 +164,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   watchRouterChange() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
       this.id = Number(this.route.snapshot.queryParams.uuid);
+      this.componentRef.init('reset');
       this.setPageID();
       this.setTabsetIndex();
     });
@@ -163,7 +176,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.isOpen = false;
   }
   toggleRightBar(status = null) {
-    this.dyWidth = 250;
     if (status == null) {
       this.activeBar = !this.activeBar;
       return;

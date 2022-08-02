@@ -26,6 +26,7 @@ import { listToTree, getExpandGroupByKey, treeToListHasLevel } from '../../../ut
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
+import { debug } from 'console';
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -110,8 +111,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.watchBasicForm();
     this.watchUri();
   }
-  async init() {
-    if (!this.apiData) {
+  /**
+   * Init Api Data
+   *
+   * @param type Reset means force update apiData
+   */
+  async init(type='default') {
+    if (!this.apiData || type === 'reset') {
       this.apiData = {} as ApiData;
       const id = Number(this.route.snapshot.queryParams.uuid);
       const result = await this.apiEdit.getApi({
@@ -127,20 +133,23 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         }
       });
       this.apiData = result;
-    }else{
+    } else {
       this.originApiData = structuredClone(this.apiData);
     }
     this.changeGroupID$.next(this.apiData.groupID);
     this.validateForm.patchValue(this.apiData);
-    this.modelChange.emit.apply(this, this.apiData);
+    this.modelChange.emit(this.apiData);
   }
-  modelChangeFun() {
+  tableDataChangeFun() {
     console.log('api edit modelChangeFun');
-    this.modelChange.emit.apply(this, this.apiData);
+    this.modelChange.emit(this.apiData);
   }
   watchBasicForm() {
     this.validateForm.valueChanges.subscribe((x) => {
-      this.modelChange.emit.apply(this, this.apiData);
+      // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
+      setTimeout(() => {
+        this.modelChange.emit(this.apiData);
+      }, 0);
     });
   }
   /**
@@ -148,15 +157,11 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Judge has edit manualy
    */
   isFormChange(): boolean {
+    console.log('isFormChange', this.apiData.name);
     if (!this.originApiData || !this.apiData) {
       return false;
     }
     if (JSON.stringify(this.originApiData) !== JSON.stringify(this.apiEditUtil.formatSavingApiData(this.apiData))) {
-      console.log(
-        JSON.stringify(this.originApiData),
-        '\n',
-        JSON.stringify(this.apiEditUtil.formatSavingApiData(this.apiData))
-      );
       return true;
     }
     return false;
