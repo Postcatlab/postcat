@@ -26,7 +26,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
-import { EditorOptions, JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
+import { EditorOptions } from 'ng-zorro-antd/code-editor';
 
 @Component({
   selector: 'eo-api-test-body',
