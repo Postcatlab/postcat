@@ -1206,7 +1206,7 @@
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target state="translated">新 API</target>
+        <target state="translated">添加 API</target>
       </trans-unit>
       <trans-unit id="918073094785621309" datatype="html">
         <source>Copied successfully</source>
@@ -2758,7 +2758,7 @@
           <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
           <context context-type="linenumber">728</context>
         </context-group>
-        <target state="translated">插入新 API 测试[Form-data]</target>
+        <target state="translated">插入 API 测试[Form-data]</target>
       </trans-unit>
       <trans-unit id="3530274128410864685" datatype="html">
         <source>Insert new API test[JSON]</source>
@@ -2766,7 +2766,7 @@
           <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
           <context context-type="linenumber">733</context>
         </context-group>
-        <target state="translated">插入新 API 测试[JSON]</target>
+        <target state="translated">插入 API 测试[JSON]</target>
       </trans-unit>
       <trans-unit id="1990717884814890742" datatype="html">
         <source>Insert new API test[XML]</source>
@@ -2774,7 +2774,7 @@
           <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
           <context context-type="linenumber">738</context>
         </context-group>
-        <target state="translated">插入新 API 测试[XML]</target>
+        <target state="translated">插入 API 测试[XML]</target>
       </trans-unit>
       <trans-unit id="6171129738492955696" datatype="html">
         <source>Insert new API test[Raw]</source>
@@ -2782,7 +2782,7 @@
           <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
           <context context-type="linenumber">743</context>
         </context-group>
-        <target state="translated">插入新 API 测试[Raw]</target>
+        <target state="translated">插入 API 测试[Raw]</target>
       </trans-unit>
       <trans-unit id="525098112891543582" datatype="html">
         <source>Get Response Results</source>
