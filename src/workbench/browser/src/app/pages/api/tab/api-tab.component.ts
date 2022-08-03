@@ -3,7 +3,7 @@ import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { BasicTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { ModalService } from '../../../shared/services/modal.service';
 @Component({
   selector: 'eo-api-tab',
@@ -11,7 +11,7 @@ import { ModalService } from '../../../shared/services/modal.service';
   styleUrls: ['./api-tab.component.scss'],
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
-  @Input() list: { [key: string]: BasicTab };
+  @Input() list;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;

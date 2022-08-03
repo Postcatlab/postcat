@@ -32,7 +32,7 @@ import { ApiEditUtilService } from './api-edit-util.service';
   styleUrls: ['./api-edit.component.scss'],
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
-  @Input() apiData: ApiData;
+  @Input() model: ApiData;
   @Output() modelChange = new EventEmitter<ApiData>();
   @Output() afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
@@ -97,7 +97,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (this.validateForm.status === 'INVALID') {
       return;
     }
-    let formData: any = Object.assign({}, this.apiData, this.validateForm.value);
+    let formData: any = Object.assign({}, this.model, this.validateForm.value);
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatSavingApiData(formData);
@@ -127,9 +127,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    *
    * @param type Reset means force update apiData
    */
-  async init(type = 'default') {
-    if (!this.apiData || type === 'reset') {
-      this.apiData = {} as ApiData;
+  async init() {
+    if (!this.model) {
+      this.model = {} as ApiData;
       const id = Number(this.route.snapshot.queryParams.uuid);
       const result = await this.apiEdit.getApi({
         id,
@@ -143,24 +143,24 @@ export class ApiEditComponent implements OnInit, OnDestroy {
           result[tableName] = treeToListHasLevel(result[tableName]);
         }
       });
-      this.apiData = result;
+      this.model = result;
     } else {
-      this.originApiData = structuredClone(this.apiData);
+      //API data form outside,such as tab cache
+      this.originApiData = structuredClone(this.model);
     }
     this.afterGroupIDChange();
-    this.changeGroupID$.next(this.apiData.groupID);
-    this.validateForm.patchValue(this.apiData);
-    this.modelChange.emit(this.apiData);
+    this.changeGroupID$.next(this.model.groupID);
+    this.validateForm.patchValue(this.model);
+    this.modelChange.emit(this.model);
   }
   tableDataChangeFun() {
-    console.log('api edit modelChangeFun');
-    this.modelChange.emit(this.apiData);
+    this.modelChange.emit(this.model);
   }
   watchBasicForm() {
     this.validateForm.valueChanges.subscribe((x) => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       setTimeout(() => {
-        this.modelChange.emit(this.apiData);
+        this.modelChange.emit(this.model);
       }, 0);
     });
   }
@@ -168,11 +168,11 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Judge has edit manualy
    */
   isFormChange(): boolean {
-    if (!this.originApiData || !this.apiData) {
+    if (!this.originApiData || !this.model) {
       return false;
     }
-    // console.log('origin:', this.originApiData, 'after:', this.apiEditUtil.formatEditingApiData(this.apiData));
-    if (JSON.stringify(this.originApiData) !== JSON.stringify(this.apiEditUtil.formatEditingApiData(this.apiData))) {
+    // console.log('origin:', this.originApiData, 'after:', this.apiEditUtil.formatEditingApiData(this.model));
+    if (JSON.stringify(this.originApiData) !== JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model))) {
       return true;
     }
     return false;
@@ -187,11 +187,11 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   private afterGroupIDChange() {
-    this.apiData.groupID = (this.apiData.groupID === 0 ? -1 : this.apiData.groupID).toString();
+    this.model.groupID = (this.model.groupID === 0 ? -1 : this.model.groupID).toString();
     /**
      * Expand Select Group
      */
-    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.apiData.groupID.toString());
+    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupID.toString());
   }
   private watchUri() {
     this.validateForm
@@ -207,12 +207,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    */
   private resetGroupID() {
     let groupID: number | string = '-1';
-    if (this.apiData && this.apiData.groupID) {
-      groupID = this.apiData.groupID;
-      this.apiData.groupID = '';
+    if (this.model && this.model.groupID) {
+      groupID = this.model.groupID;
+      this.model.groupID = '';
     }
     setTimeout(() => {
-      this.apiData.groupID = groupID;
+      this.model.groupID = groupID;
       this.changeGroupID$.next(groupID);
     }, 0);
   }
@@ -221,12 +221,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    */
   private initBasicForm() {
     //Prevent init error
-    if (!this.apiData) {
-      this.apiData = {} as ApiData;
+    if (!this.model) {
+      this.model = {} as ApiData;
     }
     const controls = {};
     ['protocol', 'method', 'uri', 'groupID', 'name'].forEach((name) => {
-      controls[name] = [this.apiData[name], [Validators.required]];
+      controls[name] = [this.model[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }
@@ -236,7 +236,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private generateRestFromUrl(url) {
     const rests = getRest(url);
     rests.forEach((newRest) => {
-      if (this.apiData.restParams.find((val: ApiEditRest) => val.name === newRest)) {
+      if (this.model.restParams.find((val: ApiEditRest) => val.name === newRest)) {
         return;
       }
       const restItem: ApiEditRest = {
@@ -245,7 +245,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         example: '',
         description: '',
       };
-      this.apiData.restParams.splice(this.apiData.restParams.length - 1, 0, restItem);
+      this.model.restParams.splice(this.model.restParams.length - 1, 0, restItem);
     });
   }
 }

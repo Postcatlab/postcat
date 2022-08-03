@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { BasicTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -15,7 +15,7 @@ export class ApiTabOperateService {
   /**
    * Tab basic info
    */
-  BASIC_TABS: { [key: string]: BasicTab };
+  BASIC_TABS: { [key: string]: Partial<TabItem> };
   constructor(private tabStorage: ApiTabStorageService, private router: Router) {}
   //Init tab info
   //Maybe from tab cache info or router url
@@ -99,7 +99,7 @@ export class ApiTabOperateService {
    */
   navigateTabRoute(tab: TabItem) {
     this.router.navigate([tab.pathname], {
-      queryParams: { pageID: tab.uuid, ...tab.params },
+      queryParams: { ...tab.params, pageID: tab.uuid },
     });
   }
   /**
@@ -171,9 +171,10 @@ export class ApiTabOperateService {
       uuid: params.pageID || Date.now(),
       pathname: urlArr[0],
       params,
-      title: basicTab.title,
-      type: basicTab.type,
     };
-    return result;
+    ['title', 'icon', 'type', 'extends'].forEach((keyName) => {
+      result[keyName] = basicTab[keyName];
+    });
+    return result as TabItem;
   }
 }

@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RoutesRecognized } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { pairwise, startWith } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
-import { BasicTab} from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { ApiTabService } from './api-tab.service';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 
@@ -18,14 +19,18 @@ const DY_WIDTH_KEY = 'DY_WIDTH';
   styleUrls: ['./api.component.scss'],
 })
 export class ApiComponent implements OnInit, OnDestroy {
-  @ViewChild('apiTabComponent') apiTabComponent: ApiTabComponent;
+  @ViewChild('apiTabComponent')
+  set apiTabComponent(value: ApiTabComponent) {
+    // For lifecycle error, use timeout
+  this.apiTab.apiTabComponent = value;
+  }
+
   tabsetIndex: number;
   /**
    * API uuid
    */
   id: number;
   pageID: number;
-  componentRef;
   TABS = [
     {
       routerLink: 'detail',
@@ -40,13 +45,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       title: $localize`Test`,
     },
   ];
-  list= {
-    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
-    edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
-    detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`:@@API Detail:Preview` },
-    overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
-    mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
-  };
   activeUuid: number | string | null = 0;
   envInfo: any = {};
   envList: Array<any> = [];
@@ -60,16 +58,13 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    public apiTab: ApiTabService,
     private router: Router,
     private messageService: MessageService,
     private storage: StorageService,
     private remoteService: RemoteService,
     private store: Store
   ) {}
-  // Set current tab type:'preview'|'edit' for  later judgment
-  get currentTabType(): string {
-    return Object.values(this.list).find((val) => val.pathname === window.location.pathname)?.type || 'preview';
-  }
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
   }
@@ -91,17 +86,8 @@ export class ApiComponent implements OnInit, OnDestroy {
    */
   onActivate(componentRef) {
     console.log('onActivate', componentRef);
-    componentRef.modelChange = {
-      that: this,
-      emit: this.watchContentChange,
-    };
-    if (this.currentTabType === 'edit') {
-      componentRef.afterSaved = {
-        that: this,
-        emit: this.watchContentChange,
-      };
-    }
-    this.componentRef = componentRef;
+    this.apiTab.componentRef = componentRef;
+    this.apiTab.bindChildComponentChangeEvent();
   }
   initTabsetData() {
     //Only electeron has local Mock
@@ -127,44 +113,10 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  /**
-   * Watch router content page change
-   * !Current scope {this} has change to Object:{emit,that}
-   */
-  watchContentChange = function() {
-    const that = this.that;
-    // console.log('watchContentChange', that.componentRef.isFormChange() );
-    that.apiTabComponent.updateTab({
-      title: that.componentRef.apiData.name,
-      extends: {
-        method: that.componentRef.apiData.method,
-      },
-      hasChanged: that.componentRef.isFormChange(),
-    });
-  };
-  /**
-   * Before close tab,handle page content
-   *
-   * @param needSave  Do you want to save the changes?
-   */
-  beforeTabClose(needSave) {
-    if (!needSave) {
-      return;
-    }
-    this.componentRef.saveApi();
-  }
+
   watchApiChange() {
     this.messageService.get().subscribe((inArg: Message) => {
-      switch (inArg.type) {
-        case 'deleteApiSuccess': {
-          const closeTabIDs = this.apiTabComponent
-            .getTabs()
-            .filter((val) => inArg.data.uuids.includes(Number(val.params.uuid)))
-            .map((val) => val.uuid);
-          this.apiTabComponent.batchCloseTab(closeTabIDs);
-          break;
-        }
-      }
+      this.apiTab.watchApiChange(inArg);
     });
   }
   watchDataSourceChange(): void {
@@ -184,16 +136,20 @@ export class ApiComponent implements OnInit, OnDestroy {
    * Get current API ID to show content tab
    */
   watchRouterChange() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
-      this.id = Number(this.route.snapshot.queryParams.uuid);
-      if (this.componentRef?.init) {
-        this.componentRef.init('reset');
-      } else {
-        throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
-      }
-      this.setPageID();
-      this.setTabsetIndex();
-    });
+    const url = window.location.pathname + window.location.search;
+    this.router.events
+      .pipe(
+        // init by manual
+        startWith(new NavigationEnd(1, url, url)),
+        filter((e) => e instanceof NavigationEnd),
+        pairwise()
+      )
+      .subscribe(([lastRouter, currentRouter]: [NavigationEnd,NavigationEnd]) => {
+        this.id = Number(this.route.snapshot.queryParams.uuid);
+        this.apiTab.refleshData(lastRouter,currentRouter);
+        this.setPageID();
+        this.setTabsetIndex();
+      });
   }
   gotoEnvManager() {
     // * switch to env

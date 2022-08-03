@@ -44,7 +44,7 @@ export class TestServerRemoteService implements TestServer {
               responseLength: 0,
               responseType: 'text',
               reportList: [],
-              body: $localize`Test service connection failed, please submit Issue contact community`,
+              body: $localize`The test service connection failed, please submit an Issue to contact the community`,
             },
             report: {
               request: {

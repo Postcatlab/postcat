@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   ApiData,
@@ -17,36 +17,42 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remo
   styleUrls: ['./api-detail.component.scss'],
 })
 export class ApiDetailComponent implements OnInit {
-  apiData: ApiData | any = {};
-  get isElectron() {
-    return this.remoteService.isElectron;
-  }
+  @Input() model: ApiData | any;
+  @Output() afterInit = new EventEmitter<ApiData>();
   CONST = {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType),
   };
-  constructor(private route: ActivatedRoute, private storage: StorageService, private remoteService: RemoteService) {}
+  constructor(private route: ActivatedRoute, private storage: StorageService, public remoteService: RemoteService) {}
   ngOnInit(): void {
     this.init();
   }
-  init() {
-    const id = Number(this.route.snapshot.queryParams.uuid);
-    if (id) {
-      this.getApiByUuid(Number(id));
-    } else {
-      console.error('Can\'t no find api');
+  async init() {
+    if (!this.model) {
+      this.model = {} as ApiData;
+      const id = Number(this.route.snapshot.queryParams.uuid);
+      if (id) {
+        const result = (await this.getApiByUuid(Number(id))) as ApiData;
+        this.afterInit.emit(result);
+        console.log(result);
+      } else {
+        console.error('Can\'t no find api');
+      }
     }
   }
   getApiByUuid(id: number) {
-    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        ['requestBody', 'responseBody'].forEach((tableName) => {
-          if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
-            result.data[tableName] = treeToListHasLevel(result.data[tableName]);
-          }
-        });
-        this.apiData = result.data;
-      }
+    return new Promise((resolve) => {
+      this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          ['requestBody', 'responseBody'].forEach((tableName) => {
+            if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
+              result.data[tableName] = treeToListHasLevel(result.data[tableName]);
+            }
+          });
+          this.model = result.data;
+          resolve(this.model);
+        }
+      });
     });
   }
 }

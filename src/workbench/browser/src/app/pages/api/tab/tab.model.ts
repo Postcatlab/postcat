@@ -1,4 +1,17 @@
-export type BasicTab = {
+export enum TabOperate {
+  closeOther = 'closeOther',
+  closeAll = 'closeAll',
+  closeLeft = 'closeLeft',
+  closeRight = 'closeRight',
+}
+/**
+ * Tab item.
+ */
+export type TabItem =  {
+  /**
+   * Tab id,timestamp
+   */
+  uuid: number;
   /**
    * Tab title
    *
@@ -15,21 +28,6 @@ export type BasicTab = {
    * Preview page or edit page
    */
   type: string | 'preview' | 'edit';
-};
-export enum TabOperate {
-  closeOther = 'closeOther',
-  closeAll = 'closeAll',
-  closeLeft = 'closeLeft',
-  closeRight = 'closeRight',
-}
-/**
- * Tab item.
- */
-export type TabItem = BasicTab & {
-  /**
-   * Tab id,timestamp
-   */
-  uuid: number;
   /**
    * Query params
    */
@@ -38,6 +36,10 @@ export type TabItem = BasicTab & {
    * In edit page,value will be set true when content change
    */
   hasChanged?: boolean;
+  /**
+   * Content Icon
+   */
+  icon?: string;
   /**
    * Extend key
    */
