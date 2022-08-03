@@ -38,11 +38,21 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     if (val === this.$$code) {
       return;
     }
+    let code = '';
     try {
-      this.$$code = typeof val === 'string' ? val : JSON.stringify(val);
+      code = typeof val === 'string' ? val : JSON.stringify(val);
     } catch {
-      this.$$code = String(val);
+      code = String(val);
     }
+
+    if (code && this.isFirstFormat) {
+      this.isFirstFormat = false;
+      (async () => {
+        this.$$code = await this.formatCode();
+      })();
+    }
+
+    this.$$code = code;
   }
   /** Scroll bars appear over 20 lines */
   @Input() maxLine = 200;
@@ -53,6 +63,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() completions = [];
   @Output() codeChange = new EventEmitter<string>();
   $$code = '';
+  isFirstFormat = true;
   codeEdtor: editor.IStandaloneCodeEditor;
   isReadOnly = false;
   completionItemProvider: monaco.IDisposable;
@@ -102,13 +113,13 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     console.log('codeEdtor', this.codeEdtor);
     requestIdleCallback(() => this.rerenderEditor());
   }
-  ngOnChanges() {
+  async ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
       const type = whatTextType(this.$$code || '');
       this.editorType = type;
       if (this.autoFormat) {
-        this.$$code = this.formatCode();
+        // this.$$code = await this.formatCode();
       }
     }
   }
@@ -207,10 +218,14 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.codeEdtor?.layout?.();
   }
   formatCode() {
-    this.codeEdtor.getAction('editor.action.formatDocument').run();
-    return this.codeEdtor.getValue();
+    return new Promise<string>((resolve) => {
+      setTimeout(() => {
+        this.codeEdtor?.getAction('editor.action.formatDocument').run();
+        resolve(this.codeEdtor?.getValue() || '');
+      });
+    });
   }
-  handleAction(event: EventType) {
+  async handleAction(event: EventType) {
     switch (event) {
       case 'format': {
         // * format code
@@ -243,7 +258,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
         {
           const tmpNewWin = window.open();
           const value = this.codeEdtor.getValue();
-          const code = this.formatCode();
+          const code = await this.formatCode();
           tmpNewWin.document.open();
           tmpNewWin.document.write(code);
           tmpNewWin.document.close();
@@ -252,7 +267,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       case 'download':
         {
           const value = this.codeEdtor.getValue();
-          const code = this.formatCode();
+          const code = await this.formatCode();
           const a = document.createElement('a');
           const blob = new Blob([code]);
           const url = window.URL.createObjectURL(blob);

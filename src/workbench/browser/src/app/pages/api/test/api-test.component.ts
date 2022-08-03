@@ -40,6 +40,7 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { ViewportScroller } from '@angular/common';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 
+const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 @Component({
   selector: 'eo-api-test',
   templateUrl: './api-test.component.html',
@@ -70,6 +71,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     request: {},
   };
   scriptCache = {};
+  initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
@@ -191,6 +193,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   changeBodyType($event) {
     this.initContentType();
+  }
+  handleEoDrag([leftEl]: [HTMLDivElement, HTMLDivElement]) {
+    if (leftEl.style.height) {
+      localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, leftEl.style.height);
+    }
   }
   private test() {
     this.scriptCache = {
@@ -316,11 +323,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         requestBody: [],
         queryParams: [],
         restParams: [],
-        requestHeaders: [{
-          required:true,
-          name:'content-type',
-          value:ContentTypeByAbridge.JSON
-        }],
+        requestHeaders: [
+          {
+            required: true,
+            name: 'content-type',
+            value: ContentTypeByAbridge.JSON,
+          },
+        ],
       });
     } else {
       this.getApi(id);
