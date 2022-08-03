@@ -101,6 +101,16 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   clickTest() {
+    //manual set dirty in case user submit directly without edit
+    for (const i in this.validateForm.controls) {
+      if (this.validateForm.controls.hasOwnProperty(i)) {
+        this.validateForm.controls[i].markAsDirty();
+        this.validateForm.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.validateForm.status === 'INVALID') {
+      return;
+    }
     if (this.status === 'testing') {
       this.abort();
       return;
@@ -326,7 +336,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         uuid: 0,
         requestBodyType: 'raw',
         requestBodyJsonType: 'object',
-        requestBody: [],
+        requestBody: '',
         queryParams: [],
         restParams: [],
         requestHeaders: [
@@ -355,6 +365,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       const { env } = data;
       if (env) {
         this.env = env;
+        if (env.uuid) {
+          this.validateForm.controls.uri.setValidators([]);
+          this.validateForm.controls.uri.updateValueAndValidity();
+        } else {
+          this.validateForm.controls.uri.setValidators([Validators.required]);
+        }
       }
     });
   }
