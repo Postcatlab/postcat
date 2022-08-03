@@ -25,7 +25,7 @@
 <!-- Binary -->
 <div class="px-5" *ngIf="bodyType === 'binary'">
   <nz-upload nzType="drag" [nzBeforeUpload]="uploadBinary"
-    [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }" [(nzFileList)]="binaryFiles" nzSize="5120">
+    [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }" [(nzFileList)]="binaryFiles">
     <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
   </nz-upload>
 </div>

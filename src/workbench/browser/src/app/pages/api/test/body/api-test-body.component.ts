@@ -130,6 +130,12 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   }
   uploadBinary = (file) =>
     new Observable((observer: Observer<boolean>) => {
+      console.log(file);
+      if (file.size >= 5*1024*1024) {
+        this.message.error($localize `The file is too large and needs to be less than 5 MB`);
+        observer.complete();
+        return;
+      }
       transferFileToDataUrl(file).then((result: { name: string; content: string }) => {
         this.model = {
           name: file.name,
