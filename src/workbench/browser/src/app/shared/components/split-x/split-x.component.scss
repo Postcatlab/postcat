@@ -2,6 +2,7 @@
     background: #f8f8f9;
     display: flex;
     align-items: center;
+    height: calc(100vh - 120px);
     &:hover {
         background: #68be8d;
         border-color: #68be8d;
