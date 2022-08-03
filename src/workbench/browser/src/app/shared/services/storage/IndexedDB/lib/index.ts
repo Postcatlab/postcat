@@ -2,6 +2,7 @@ import Dexie, { Table } from 'dexie';
 import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { Observable } from 'rxjs';
 import {
@@ -34,7 +35,7 @@ const getApiUrl = (apiData: ApiData) => {
     ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
     : window.eo?.getMockUrl?.();
 
-  const url = new URL(`${mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+  const url = new URL(uniqueSlash(`${mockUrl}/${apiData.uri}`), 'https://github.com/');
   // if (apiData) {
   //   url.searchParams.set('mockID', apiData.uuid + '');
   // }
@@ -228,12 +229,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
               });
             // @ts-ignore
             table
-              .bulkPut(
-                newItems.map((n: any) => ({
-                  ...n,
-                  groupID: ~~n.groupID.replace('group-', ''),
-                }))
-              )
+              .bulkPut(newItems)
               .then((result) => {
                 obs.next(this.resProxy({ number: result, items: newItems }));
                 obs.complete();
