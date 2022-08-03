@@ -4,9 +4,8 @@
   </nz-radio-group>
   <nz-divider *ngIf="['formData', 'raw'].includes(bodyType)" nzType="vertical"></nz-divider>
   <!-- Import -->
-  <div class="inline-flex items-center px-2">
+  <div *ngIf="['formData'].includes(bodyType)" class="inline-flex items-center px-2">
     <params-import
-      *ngIf="['formData'].includes(bodyType)"
       [baseData]="model"
       [contentType]="bodyType"
       (baseDataChange)="handleParamsImport($event)"
