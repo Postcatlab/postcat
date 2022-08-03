@@ -1,5 +1,5 @@
-selectedIndex:{{ tabOperate.selectedIndex }}
-{{ tabStorage.tabs | json }}
+<!-- selectedIndex:{{ tabOperate.selectedIndex }}
+{{ tabStorage.tabs | json }} -->
 <nz-tabset
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
@@ -8,10 +8,19 @@ selectedIndex:{{ tabOperate.selectedIndex }}
   (nzSelectChange)="selectChange()"
   [nzTabBarExtraContent]="extraTemplate"
 >
-  <nz-tab *ngFor="let tab of tabStorage.tabs; let i = index" nzClosable [nzTitle]="titleTemplate">
+  <nz-tab *ngFor="let tab of tabStorage.tabs; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
-      <span class="mr5 method_text_{{ tab.extends.method }}" *ngIf="tab.extends?.method">{{ tab.extends.method }}</span>
-      <span class="text_omit tab_text"> {{ tab.title }}</span>
+      <div class="flex items-center tab-title-container">
+        <span class="mr5 method_text_{{ tab.extends.method }}" *ngIf="tab.extends?.method">{{
+          tab.extends.method
+        }}</span>
+        <span class="text_omit tab_text"> {{ tab.title }}</span>
+        <!-- Close/HasEdit -->
+        <div class="tab-item-button-group">
+          <span class="tab-has-edit-icon eo-tab-theme-icon" *ngIf="tab.hasChanged" ></span>
+          <button aria-label="Close tab" (click)="closeTab({index:i})" type="button" nz-tab-close-button="" class="ant-tabs-tab-remove"></button>
+        </div>
+      </div>
     </ng-template>
   </nz-tab>
 </nz-tabset>

@@ -128,6 +128,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     const that = this.that;
     that.apiTabComponent.updateTabInfo({
       title: that.componentRef.apiData.name,
+      extends:{
+        method:that.componentRef.apiData.method
+      },
       hasChanged: that.componentRef.isFormChange(),
     });
   };
