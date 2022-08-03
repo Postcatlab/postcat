@@ -37,7 +37,7 @@ export class ApiTabOperateService {
    * @returns tabItem
    */
   newDefaultTab() {
-    const tabItem: TabItem = this.getTabFromUrl(this.BASIC_TABS.test.pathname);
+    const tabItem: TabItem = this.getTabFromUrl(Object.values(this.BASIC_TABS)[0].pathname);
     this.tabStorage.addTab(tabItem);
     //If selectIndex no change,manually change tab content url
     //Because if selectIndex change,tab component will call navigateTabRoute automatically
@@ -156,6 +156,9 @@ export class ApiTabOperateService {
     const urlArr = url.split('?');
     const params: any = {};
     const basicTab = Object.values(this.BASIC_TABS).find((val) => val.pathname === urlArr[0]);
+    if (!basicTab) {
+      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+    }
     // Parse query params
     new URLSearchParams(urlArr[1]).forEach((value, key) => {
       if (key === 'pageID') {

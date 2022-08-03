@@ -8,7 +8,7 @@ import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
-import { timeStamp } from 'console';
+import { BasicTab} from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 
@@ -40,7 +40,7 @@ export class ApiComponent implements OnInit, OnDestroy {
       title: $localize`Test`,
     },
   ];
-  tagsTemplate = {
+  list= {
     test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
     edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
     detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`:@@API Detail:Preview` },
@@ -68,7 +68,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   ) {}
   // Set current tab type:'preview'|'edit' for  later judgment
   get currentTabType(): string {
-    return Object.values(this.tagsTemplate).find((val) => val.pathname === window.location.pathname)?.type || 'preview';
+    return Object.values(this.list).find((val) => val.pathname === window.location.pathname)?.type || 'preview';
   }
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;

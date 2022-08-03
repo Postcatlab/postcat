@@ -147,6 +147,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     } else {
       this.originApiData = structuredClone(this.apiData);
     }
+    this.afterGroupIDChange();
     this.changeGroupID$.next(this.apiData.groupID);
     this.validateForm.patchValue(this.apiData);
     this.modelChange.emit(this.apiData);
@@ -182,12 +183,15 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
   private watchGroupIDChange() {
     this.changeGroupID$.pipe(debounceTime(500), take(1)).subscribe((id) => {
-      this.apiData.groupID = (this.apiData.groupID === 0 ? -1 : this.apiData.groupID).toString();
-      /**
-       * Expand Select Group
-       */
-      this.expandKeys = getExpandGroupByKey(this.apiGroup, this.apiData.groupID.toString());
+      this.afterGroupIDChange();
     });
+  }
+  private afterGroupIDChange() {
+    this.apiData.groupID = (this.apiData.groupID === 0 ? -1 : this.apiData.groupID).toString();
+    /**
+     * Expand Select Group
+     */
+    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.apiData.groupID.toString());
   }
   private watchUri() {
     this.validateForm

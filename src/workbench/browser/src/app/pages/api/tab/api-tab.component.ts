@@ -11,7 +11,7 @@ import { ModalService } from '../../../shared/services/modal.service';
   styleUrls: ['./api-tab.component.scss'],
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
-  @Input() tagsTemplate: { [key: string]: BasicTab };
+  @Input() list: { [key: string]: BasicTab };
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
@@ -22,7 +22,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
   ngOnInit(): void {
-    this.tabOperate.init(this.tagsTemplate);
+    this.tabOperate.init(this.list);
     this.watchRouterChange();
   }
   newTab() {

@@ -147,7 +147,8 @@ export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key 
   return findData(_data);
 };
 
-export const getExpandGroupByKey: (component,key) => string[] = (component, key) => {
+export const getExpandGroupByKey: (component, key) => string[] = (component, key) => {
+  if (!component) {return [];}
   let treeNode = component.getTreeNodeByKey(key);
   if (!treeNode) {
     return;

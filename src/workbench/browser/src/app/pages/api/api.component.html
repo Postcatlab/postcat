@@ -29,7 +29,7 @@
     <nz-content>
       <div class="inner-content">
         <div class="flex items-center tabs-bar">
-          <eo-api-tab class="fg1" [tagsTemplate]="tagsTemplate" (beforeClose)="beforeTabClose($event)" #apiTabComponent></eo-api-tab>
+          <eo-api-tab class="fg1" [list]="list" (beforeClose)="beforeTabClose($event)" #apiTabComponent></eo-api-tab>
           <div class="flex items-center fix-mt">
             <nz-select
               [(ngModel)]="envUuid"
