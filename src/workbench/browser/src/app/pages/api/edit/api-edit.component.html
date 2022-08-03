@@ -4,7 +4,7 @@
     <button type="submit" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()" i18n>Save</button>
     <nz-divider></nz-divider>
   </div>
-  <form  nz-form  [formGroup]="validateForm" [nzLayout]="'vertical'">
+  <form nz-form [formGroup]="validateForm" [nzLayout]="'vertical'">
     <nz-form-label nzFor="uri">API Path</nz-form-label>
     <nz-input-group nzCompact>
       <nz-select [(ngModel)]="apiData.protocol" formControlName="protocol">
@@ -38,7 +38,7 @@
       </nz-form-item>
       <nz-form-item nz-col class="fg1">
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API name">
-          <input type="text"  [(ngModel)]="apiData.name" name="name" id="name" nz-input formControlName="name" />
+          <input type="text" [(ngModel)]="apiData.name" name="name" id="name" nz-input formControlName="name" />
         </nz-form-control>
       </nz-form-item>
     </nz-input-group>
@@ -55,7 +55,11 @@
               apiData.requestHeaders | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-edit-header class="eo_theme_iblock bbd bld brd" [model]="apiData.requestHeaders"></eo-api-edit-header>
+          <eo-api-edit-header
+            class="eo_theme_iblock bbd bld brd"
+            (modelChange)="tableDataChangeFun()"
+            [model]="apiData.requestHeaders"
+          ></eo-api-edit-header>
         </nz-tab>
         <!-- 请求体 -->
         <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
@@ -86,7 +90,7 @@
               apiData.queryParams | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-edit-query class="eo_theme_iblock bbd bld brd" [model]="apiData.queryParams"></eo-api-edit-query>
+          <eo-api-edit-query (modelChange)="tableDataChangeFun()" class="eo_theme_iblock bbd bld brd" [model]="apiData.queryParams"></eo-api-edit-query>
         </nz-tab>
         <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
           <ng-template #restTitleTmp>
@@ -95,14 +99,14 @@
               apiData.restParams | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-edit-rest class="eo_theme_iblock bbd bld brd" [model]="apiData.restParams"></eo-api-edit-rest>
+          <eo-api-edit-rest class="eo_theme_iblock bbd bld brd" [model]="apiData.restParams" (modelChange)="tableDataChangeFun()"></eo-api-edit-rest>
         </nz-tab>
       </nz-tabset>
     </nz-collapse-panel>
   </nz-collapse>
   <!-- 响应内容 -->
   <nz-collapse class="eo_collapse mt-2.5" [nzGhost]="true">
-    <nz-collapse-panel  [nzActive]="true" i18n-nzHeader nzHeader="Response">
+    <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Response">
       <nz-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
         <nz-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">
           <ng-template #responseHeaderTitleTmp>
@@ -111,7 +115,11 @@
               apiData.responseHeaders | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-edit-header class="eo_theme_iblock bbd bld brd" [model]="apiData.responseHeaders">
+          <eo-api-edit-header
+            class="eo_theme_iblock bbd bld brd"
+            [model]="apiData.responseHeaders"
+            (modelChange)="tableDataChangeFun()"
+          >
           </eo-api-edit-header>
         </nz-tab>
         <nz-tab [nzTitle]="responseTitleTmp" [nzForceRender]="true">

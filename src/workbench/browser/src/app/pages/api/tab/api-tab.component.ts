@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { BasicTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { ModalService } from '../../../shared/services/modal.service';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -11,11 +12,13 @@ import { BasicTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/page
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
   @Input() tagsTemplate: { [key: string]: BasicTab };
+  @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
   constructor(
     public tabStorage: ApiTabStorageService,
     public tabOperate: ApiTabOperateService,
+    private modal: ModalService,
     private router: Router
   ) {}
   ngOnInit(): void {
@@ -34,18 +37,54 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   selectChange() {
     this.tabOperate.navigateTabRoute(this.tabStorage.tabs[this.tabOperate.selectedIndex]);
   }
-  closeTab({ index }) {
+  closeTab({ index, tab }) {
+    if (tab.hasChanged) {
+      const modal = this.modal.create({
+        nzTitle: $localize`Do you want to save the changes?`,
+        nzContent: $localize`Your changes will be lost if you don't save them.`,
+        nzClosable: false,
+        nzFooter: [
+          {
+            label: $localize`Save`,
+            type: 'primary',
+            onClick: () => {
+              this.beforeClose.emit(true);
+              modal.destroy();
+              this.tabOperate.closeTab(index);
+            },
+          },
+          {
+            label: $localize`Don't Save`,
+            onClick: () => {
+              this.beforeClose.emit(false);
+              modal.destroy();
+              this.tabOperate.closeTab(index);
+            },
+          },
+          {
+            label: $localize`Cancel`,
+            onClick: () => {
+              modal.destroy();
+            },
+          },
+        ],
+      });
+      return;
+    }
     this.tabOperate.closeTab(index);
   }
-  getTabsInfo() {
+  getTabs() {
     return this.tabStorage.tabs;
+  }
+  getCurrentTab() {
+    return this.tabStorage.tabs[this.tabOperate.selectedIndex];
   }
   batchCloseTab(uuids) {
     this.tabOperate.batchClose(uuids);
   }
-  updateTabInfo(tabItem: TabItem) {
-    const currentTab=this.tabStorage.tabs[this.tabOperate.selectedIndex];
-    this.tabStorage.updateTab(this.tabOperate.selectedIndex, Object.assign({},currentTab,tabItem));
+  updateTab(tabItem: TabItem) {
+    const currentTab = this.getCurrentTab();
+    this.tabStorage.updateTab(this.tabOperate.selectedIndex, Object.assign({}, currentTab, tabItem));
   }
   /**
    * Tab  Close Operate

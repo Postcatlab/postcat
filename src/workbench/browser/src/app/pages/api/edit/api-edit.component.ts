@@ -26,7 +26,6 @@ import { listToTree, getExpandGroupByKey, treeToListHasLevel } from '../../../ut
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
-import { debug } from 'console';
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -35,6 +34,7 @@ import { debug } from 'console';
 export class ApiEditComponent implements OnInit, OnDestroy {
   @Input() apiData: ApiData;
   @Output() modelChange = new EventEmitter<ApiData>();
+  @Output() afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
   groups: any[];
@@ -86,7 +86,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       this.resetGroupID();
     });
   }
-  saveApi() {
+  async saveApi() {
     //manual set dirty in case user submit directly without edit
     for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
@@ -97,8 +97,19 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (this.validateForm.status === 'INVALID') {
       return;
     }
-    const formData: any = Object.assign({}, this.apiData, this.validateForm.value);
-    this.editApi(formData);
+    let formData: any = Object.assign({}, this.apiData, this.validateForm.value);
+    const busEvent = formData.uuid ? 'editApi' : 'addApi';
+    const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
+    formData = this.apiEditUtil.formatSavingApiData(formData);
+    const result: StorageRes = await this.apiEdit.editApi(formData);
+    if (result.status === StorageResStatus.success) {
+      this.message.success(title);
+      this.originApiData = result.data;
+      this.messageService.send({ type: `${busEvent}Success`, data: result.data });
+    } else {
+      this.message.success($localize`Failed Operation`);
+    }
+    this.afterSaved.emit(result.data);
   }
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
@@ -116,13 +127,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    *
    * @param type Reset means force update apiData
    */
-  async init(type='default') {
+  async init(type = 'default') {
     if (!this.apiData || type === 'reset') {
       this.apiData = {} as ApiData;
       const id = Number(this.route.snapshot.queryParams.uuid);
       const result = await this.apiEdit.getApi({
         id,
-        groupID: this.route.snapshot.queryParams.groupID || '-1',
+        groupID: Number(this.route.snapshot.queryParams.groupID || 0),
       });
       //Storage origin api data
       this.originApiData = structuredClone(result);
@@ -153,15 +164,14 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
   }
   /**
-   *! Don't  Delete，export for outside
    * Judge has edit manualy
    */
   isFormChange(): boolean {
-    console.log('isFormChange', this.apiData.name);
     if (!this.originApiData || !this.apiData) {
       return false;
     }
-    if (JSON.stringify(this.originApiData) !== JSON.stringify(this.apiEditUtil.formatSavingApiData(this.apiData))) {
+    // console.log('origin:', this.originApiData, 'after:', this.apiEditUtil.formatEditingApiData(this.apiData));
+    if (JSON.stringify(this.originApiData) !== JSON.stringify(this.apiEditUtil.formatEditingApiData(this.apiData))) {
       return true;
     }
     return false;
@@ -206,6 +216,10 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Init basic form,such as url,protocol,method
    */
   private initBasicForm() {
+    //Prevent init error
+    if (!this.apiData) {
+      this.apiData = {} as ApiData;
+    }
     const controls = {};
     ['protocol', 'method', 'uri', 'groupID', 'name'].forEach((name) => {
       controls[name] = [this.apiData[name], [Validators.required]];
@@ -229,17 +243,5 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       };
       this.apiData.restParams.splice(this.apiData.restParams.length - 1, 0, restItem);
     });
-  }
-  private async editApi(formData) {
-    const busEvent = formData.uuid ? 'editApi' : 'addApi';
-    const title = busEvent === 'editApi' ? $localize`编辑成功` : $localize`新增成功`;
-    formData = this.apiEditUtil.formatSavingApiData(formData);
-    const result: StorageRes = await this.apiEdit.editApi(formData);
-    if (result.status === StorageResStatus.success) {
-      this.message.success(title);
-      this.messageService.send({ type: `${busEvent}Success`, data: result.data });
-    } else {
-      this.message.success('失败');
-    }
   }
 }

@@ -9,6 +9,7 @@
         margin: 0;
         padding: 0 4px;
         .ant-tabs-tab {
+          width: 150px;
           border-radius: 6px 6px 0 0;
           border-width: 1px;
           border-bottom: 1px solid var(--BORDER);
@@ -59,9 +60,21 @@
             color: rgba(0, 0, 0, 0.45);
           }
         }
+        .ant-tabs-tab-remove {
+          display: none;
+        }
+        &:hover {
+          .tab-has-edit-icon {
+            display: none;
+          }
+          .ant-tabs-tab-remove {
+            display: flex;
+          }
+        }
       }
     }
     .tab-title-container {
+      padding-right: 15px;
       .tab-has-edit-icon{
         width: 8px;
         height: 8px;
@@ -69,21 +82,10 @@
       .tab-item-button-group{
         position: absolute;
         background:  var(--MAIN_BG);
-        padding-right: 15px;
+        padding-right: 10px;
         right: 0px;
       }
-      .ant-tabs-tab-remove {
-        display: none;
-      }
-
-      &:hover {
-        .tab-has-edit-icon {
-          display: none;
-        }
-        .ant-tabs-tab-remove {
-          display: flex;
-        }
-      }
+     
     }
   }
 }

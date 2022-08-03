@@ -66,7 +66,10 @@ export class ApiComponent implements OnInit, OnDestroy {
     private remoteService: RemoteService,
     private store: Store
   ) {}
-
+  // Set current tab type:'preview'|'edit' for  later judgment
+  get currentTabType(): string {
+    return Object.values(this.tagsTemplate).find((val) => val.pathname === window.location.pathname)?.type || 'preview';
+  }
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
   }
@@ -81,18 +84,23 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   /**
    * Router-outlet child componnet change
+   * Router-outlet bind childComponent output fun by (activate)
+   * https://stackoverflow.com/questions/37662456/angular-2-output-from-router-outlet
    *
    * @param componentRef
    */
   onActivate(componentRef) {
     console.log('onActivate', componentRef);
-    //Router-outlet bind childComponent output fun by (activate)
-    //https://stackoverflow.com/questions/37662456/angular-2-output-from-router-outlet
-    console.log(this.apiTabComponent);
     componentRef.modelChange = {
       that: this,
       emit: this.watchContentChange,
     };
+    if (this.currentTabType === 'edit') {
+      componentRef.afterSaved = {
+        that: this,
+        emit: this.watchContentChange,
+      };
+    }
     this.componentRef = componentRef;
   }
   initTabsetData() {
@@ -124,22 +132,33 @@ export class ApiComponent implements OnInit, OnDestroy {
    * !Current scope {this} has change to Object:{emit,that}
    */
   watchContentChange = function() {
-    console.log('watchContentChange', this);
     const that = this.that;
-    that.apiTabComponent.updateTabInfo({
+    // console.log('watchContentChange', that.componentRef.isFormChange() );
+    that.apiTabComponent.updateTab({
       title: that.componentRef.apiData.name,
-      extends:{
-        method:that.componentRef.apiData.method
+      extends: {
+        method: that.componentRef.apiData.method,
       },
       hasChanged: that.componentRef.isFormChange(),
     });
   };
+  /**
+   * Before close tab,handle page content
+   *
+   * @param needSave  Do you want to save the changes?
+   */
+  beforeTabClose(needSave) {
+    if (!needSave) {
+      return;
+    }
+    this.componentRef.saveApi();
+  }
   watchApiChange() {
     this.messageService.get().subscribe((inArg: Message) => {
       switch (inArg.type) {
         case 'deleteApiSuccess': {
           const closeTabIDs = this.apiTabComponent
-            .getTabsInfo()
+            .getTabs()
             .filter((val) => inArg.data.uuids.includes(Number(val.params.uuid)))
             .map((val) => val.uuid);
           this.apiTabComponent.batchCloseTab(closeTabIDs);
@@ -167,7 +186,11 @@ export class ApiComponent implements OnInit, OnDestroy {
   watchRouterChange() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
       this.id = Number(this.route.snapshot.queryParams.uuid);
-      this.componentRef.init('reset');
+      if (this.componentRef?.init) {
+        this.componentRef.init('reset');
+      } else {
+        throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
+      }
       this.setPageID();
       this.setTabsetIndex();
     });

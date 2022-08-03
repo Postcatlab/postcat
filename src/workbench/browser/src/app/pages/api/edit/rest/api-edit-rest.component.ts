@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges, EventEmitter, Output } from '@angular/core';
 import { ApiEditRest } from '../../../../shared/services/storage/index.model';
 import { ApiEditUtilService } from '../api-edit-util.service';
 @Component({
@@ -8,6 +8,7 @@ import { ApiEditUtilService } from '../api-edit-util.service';
 })
 export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() model: object[];
+  @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: object = {};
   private itemStructure: ApiEditRest = {
     name: '',
@@ -34,6 +35,10 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
       itemStructure: this.itemStructure,
       nzOnOkMoreSetting: (inputArg) => {
         this.model[inputArg.$index] = inputArg.item;
+        this.modelChange.emit(this.model);
+      },
+      watchFormLastChange: () => {
+        this.modelChange.emit(this.model);
       },
     });
   }

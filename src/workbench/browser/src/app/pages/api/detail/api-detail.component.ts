@@ -27,15 +27,14 @@ export class ApiDetailComponent implements OnInit {
   };
   constructor(private route: ActivatedRoute, private storage: StorageService, private remoteService: RemoteService) {}
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.init(params.uuid);
-    });
+    this.init();
   }
-  init(id) {
+  init() {
+    const id = Number(this.route.snapshot.queryParams.uuid);
     if (id) {
       this.getApiByUuid(Number(id));
     } else {
-      console.error("can't no find api");
+      console.error('Can\'t no find api');
     }
   }
   getApiByUuid(id: number) {

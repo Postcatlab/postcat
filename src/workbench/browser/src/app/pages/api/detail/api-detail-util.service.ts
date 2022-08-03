@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ModalService } from '../../../shared/services/modal.service';
 @Injectable()
 export class ApiDetailUtilService {
-  constructor(private modal: ModalService) {}
+  constructor() {}
   spreedAll($event) {
     let tmpEvent = $event.target;
     let tmpDepth = 10;

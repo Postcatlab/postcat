@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ModalService } from '../../../shared/services/modal.service';
 import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra-setting.component';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { ApiData } from '../../../shared/services/storage/index.model';
 @Injectable()
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
@@ -230,7 +231,7 @@ export class ApiEditUtilService {
       ],
     };
   }
-  formatSavingApiData(formData) {
+  private formatApiData(formData, filterArrFun): ApiData {
     const result = structuredClone(formData);
     result.groupID = Number(result.groupID === '-1' ? '0' : result.groupID);
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(
@@ -238,7 +239,7 @@ export class ApiEditUtilService {
         if (typeof result[tableName] !== 'object') {
           return;
         }
-        result[tableName] = (result[tableName] || []).filter((val) => val.name);
+        result[tableName] = filterArrFun(result[tableName] || []);
         if (['requestBody', 'responseBody'].includes(tableName)) {
           if (['xml', 'json'].includes(result[`${tableName}Type`])) {
             result[tableName] = listToTreeHasLevel(result[tableName]);
@@ -247,5 +248,26 @@ export class ApiEditUtilService {
       }
     );
     return result;
+  }
+  /**
+   * Handle api data for judge page has edit
+   * Unlike the saved data, the api data being edited is not as strict
+   *
+   * @param formData
+   * @returns apiData
+   */
+  formatEditingApiData(formData): ApiData {
+    return this.formatApiData(formData, (result) =>
+      (result || []).filter((val) => val.name || val.description || val.example)
+    );
+  }
+  /**
+   * Handle api data to be saved
+   *
+   * @param formData
+   * @returns apiData
+   */
+  formatSavingApiData(formData): ApiData {
+    return this.formatApiData(formData, (result) => (result || []).filter((val) => val.name));
   }
 }
