@@ -66,6 +66,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   tabIndexRes = 0;
+  isRequestBodyLoaded = false;
   testResult: any = {
     response: {},
     request: {},
@@ -197,6 +198,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   handleEoDrag([leftEl]: [HTMLDivElement, HTMLDivElement]) {
     if (leftEl.style.height) {
       localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, leftEl.style.height);
+    }
+  }
+  handleBottomTabSelect(tab) {
+    if (tab.index === 2) {
+      this.isRequestBodyLoaded = true;
     }
   }
   private test() {
