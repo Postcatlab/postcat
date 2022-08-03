@@ -135,7 +135,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   modelChangeFn(code) {
-    console.log('modelChangeFn', code);
+    // console.log('modelChangeFn', code);
     this.codeChange.emit(code);
   }
 
