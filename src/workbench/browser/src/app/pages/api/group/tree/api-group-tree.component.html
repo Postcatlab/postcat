@@ -8,14 +8,13 @@
   </div>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })" i18n><a>New API</a></li>
+      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })"><a i18n>New API</a></li>
       <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
     </ul>
   </nz-dropdown-menu>
 </header>
 <!-- Fixed Group -->
-<div class="px-2 group_container fixed_group_tree pt10">
-  <!-- <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron"> -->
+<div class="px-2 group_container fixed_group_tree pt10" *ngIf="electron.isElectron">
   <nz-tree [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode (nzClick)="clickTreeItem($event)"
     [nzTreeTemplate]="nzFixedTreeTemplate"></nz-tree>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
@@ -29,11 +28,10 @@
     </div>
   </ng-template>
 </div>
-<div class="mx-2 bbd"></div>
-<!-- <div class="bbd" *ngIf="electron.isElectron"></div> -->
+<div class="mx-2 bbd" *ngIf="electron.isElectron"></div>
 
 <!-- Custom Group -->
-<div class="px-2 group_container group_tree pt10">
+<div class="group_container group_tree pt10">
   <nz-tree [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzSearchValue]="searchValue"
     [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys" (nzClick)="clickTreeItem($event)"
     (nzExpandChange)="toggleExpand()" nzDraggable nzBlockNode (nzOnDrop)="treeItemDrop($event)"
