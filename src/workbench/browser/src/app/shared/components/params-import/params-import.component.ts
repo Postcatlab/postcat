@@ -3,7 +3,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { whatType } from '../../../utils';
 import { flatData } from '../../../utils/tree/tree.utils';
 import qs from 'qs';
-import { form2json, parseTree, xml2UiData, xml2json, isXML } from '../../../utils/data-transfer/data-transfer.utils';
+import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-transfer/data-transfer.utils';
 @Component({
   selector: 'params-import',
   templateUrl: './params-import.component.html',
