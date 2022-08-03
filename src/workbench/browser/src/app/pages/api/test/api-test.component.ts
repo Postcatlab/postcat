@@ -363,13 +363,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private watchEnvChange() {
     this.env$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       const { env } = data;
-      if (env?.uuid) {
-        this.validateForm.controls.uri.setValidators([]);
-        this.validateForm.controls.uri.updateValueAndValidity();
-      }else{
-        this.validateForm.controls.uri.setValidators([Validators.required]);
+      if (env) {
+        this.env = env;
+        if (env.uuid) {
+          this.validateForm.controls.uri.setValidators([]);
+          this.validateForm.controls.uri.updateValueAndValidity();
+        } else {
+          this.validateForm.controls.uri.setValidators([Validators.required]);
+        }
       }
-      this.env = env;
     });
   }
   private watchTabChange() {

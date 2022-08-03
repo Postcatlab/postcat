@@ -159,14 +159,12 @@
           </nz-tab>
         </div>
         <nz-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
-          <eo-api-test-result-request-body
-            *ngIf="tabIndexRes === 2 || isRequestBodyLoaded"
-            [model]="testResult.request?.requestBody || ''"
-          >
+          <!-- TODO use isRequestBodyLoaded -->
+          <eo-api-test-result-request-body *ngIf="tabIndexRes === 2" [model]="testResult?.request?.requestBody|| ''">
           </eo-api-test-result-request-body>
         </nz-tab>
         <nz-tab i18n-nzTitle nzTitle="Request Headers">
-          <eo-api-test-result-header [model]="testResult.request?.requestHeaders"> </eo-api-test-result-header>
+          <eo-api-test-result-header [model]="testResult?.request?.requestHeaders"> </eo-api-test-result-header>
         </nz-tab>
       </nz-tabset>
       <div id="test-response"></div>
