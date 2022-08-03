@@ -349,7 +349,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param data GroupApiDataModel
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
+    let count = 0;
     if (data.group.length > 0) {
+      count++;
       console.log('data.group', data.group);
       this.storage.run(
         'groupBulkUpdate',
@@ -361,11 +363,14 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           })),
         ],
         (result: StorageRes) => {
-          this.buildGroupTreeData();
+          if (--count === 0) {
+            this.buildGroupTreeData();
+          }
         }
       );
     }
     if (data.api.length > 0) {
+      count++;
       console.log('data.api', data.api);
       this.storage.run(
         'apiDataBulkUpdate',
@@ -377,7 +382,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           })),
         ],
         (result: StorageRes) => {
-          this.buildGroupTreeData();
+          if (--count === 0) {
+            this.buildGroupTreeData();
+          }
         }
       );
     }
