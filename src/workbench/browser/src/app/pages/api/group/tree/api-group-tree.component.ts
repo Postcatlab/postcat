@@ -1,3 +1,4 @@
+import { debounce } from 'eo/workbench/browser/src/app/utils';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
@@ -93,11 +94,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Load all group and apiData items.
    */
-  buildGroupTreeData(): void {
-    this.groupByID = {};
-    this.treeItems = [];
-    this.getGroups();
-  }
+  buildGroupTreeData = debounce(() => {
+    {
+      this.groupByID = {};
+      this.treeItems = [];
+      this.getGroups();
+    }
+  });
   getGroups() {
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
