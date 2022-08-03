@@ -3,14 +3,14 @@ import MarkdownIt from 'markdown-it/dist/markdown-it';
 
 @Component({
   selector: 'eo-shadow-dom',
-  template: ` <div [innerHTML]="content"></div> `,
-  styles: [
-    `
+  template: `
+    <style>
       img {
         max-width: 600px;
       }
-    `,
-  ],
+    </style>
+    <div part="eo-shadow-dom" [innerHTML]="content"></div>
+  `,
   encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class ShadowDomEncapsulationComponent implements OnInit {
@@ -37,6 +37,7 @@ export class ShadowDomEncapsulationComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    console.log('markdow', this);
     this.md = new MarkdownIt(this.options);
     this.customLinkRender();
   }
