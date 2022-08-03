@@ -1,32 +1,55 @@
-<div class="param_header">
-  <div class="f_row_ac">
+<div class="param_header flex items-center justify-start h-10">
+  <div class="flex items-center h-full">
     <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
       <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
     </nz-radio-group>
-    <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
-    <!-- <nz-divider nzType="vertical"></nz-divider> -->
-    <params-import *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [baseData]="model" [contentType]="bodyType"
-      (baseDataChange)="handleParamsImport($event)" (beforeHandleImport)="beforeHandleImport($event)"
-      [rootType]="jsonRootType"></params-import>
   </div>
-  <div *ngIf="bodyType === 'json'">
-    <p class="fs12 c999 mb5" i18n>JSON Root Type:</p>
-    <nz-select class="w_100 mb10" [(ngModel)]="jsonRootType" (ngModelChange)="jsonRootTypeChange.emit(jsonRootType)">
-      <nz-option *ngFor="let item of CONST.JSON_ROOT_TYPE" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
-    </nz-select>
+  <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
+  <!-- <nz-divider nzType="vertical"></nz-divider> -->
+  <div *ngIf="['formData', 'json', 'xml'].includes(bodyType)" class="inline-flex items-center px-2 mt-1">
+    <params-import
+      [baseData]="model"
+      [contentType]="bodyType"
+      (baseDataChange)="handleParamsImport($event)"
+      (beforeHandleImport)="beforeHandleImport($event)"
+      [rootType]="jsonRootType"
+    ></params-import>
   </div>
+</div>
+<div *ngIf="bodyType === 'json'" class="px-4">
+  <p class="fs12 c999 mb5" i18n>JSON Root Type:</p>
+  <nz-select class="w_100 mb10" [(ngModel)]="jsonRootType" (ngModelChange)="jsonRootTypeChange.emit(jsonRootType)">
+    <nz-option *ngFor="let item of CONST.JSON_ROOT_TYPE" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+  </nz-select>
 </div>
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
-<list-block-common-component *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [mainObject]="listConf"
-  [(list)]="model"></list-block-common-component>
+<list-block-common-component
+  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
+  [mainObject]="listConf"
+  [(list)]="model"
+></list-block-common-component>
 <!-- Raw -->
 <!-- <eo-editor [(code)]="model" *ngIf="bodyType === 'raw'" (codeChange)="rawDataChange()" [config]="{ maxLines: 10 }"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-editor> -->
-<eo-monaco-editor *ngIf="bodyType === 'raw'" [(code)]="model" [maxLine]="20"
-  [eventList]="['type', 'format', 'copy', 'search', 'replace']" (codeChange)="rawDataChange()">
+<eo-monaco-editor
+  *ngIf="bodyType === 'raw'"
+  [(code)]="model"
+  [maxLine]="20"
+  [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+  (codeChange)="rawDataChange()"
+>
 </eo-monaco-editor>
 <!-- Binary -->
-<textarea class="binary_textarea" rows="4" *ngIf="bodyType === 'binary'" nzBorderless i18n-placeholder
-  (ngModelChange)="rawDataChange()" placeholder="Binary Description" nz-input [(ngModel)]="model"></textarea>
+<textarea
+  class="binary_textarea"
+  rows="4"
+  *ngIf="bodyType === 'binary'"
+  nzBorderless
+  i18n-placeholder
+  (ngModelChange)="rawDataChange()"
+  placeholder="Binary Description"
+  nz-input
+  [(ngModel)]="model"
+></textarea>

@@ -116,9 +116,10 @@ nz-divider {
     }
     .param_header {
       padding: 5px 15px;
-      >div{
-        min-height: 32px;
-      }
+      box-sizing: border-box;
+      // >div{
+      //   min-height: 32px;
+      // }
       .ant-radio-wrapper {
         font-size: 12px;
       }
