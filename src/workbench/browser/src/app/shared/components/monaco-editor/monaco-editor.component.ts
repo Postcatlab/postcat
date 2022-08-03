@@ -104,11 +104,11 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   async ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
-      const type = whatTextType(this.$$code || '');
-      this.editorType = type;
-      if (this.autoFormat) {
-        // this.$$code = await this.formatCode();
-      }
+      requestIdleCallback(() => {
+        const type = whatTextType(this.$$code || '');
+        this.editorType = type;
+        window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
+      });
     }
   }
   ngOnInit() {
@@ -134,10 +134,15 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.completionItemProvider?.dispose();
   }
 
+  modelChangeFn(code) {
+    // console.log('modelChangeFn', code);
+  }
+
   private setCode(val: string) {
     if (val === this.$$code) {
       return;
     }
+
     let code = '';
     try {
       code = typeof val === 'string' ? val : JSON.stringify(val);
