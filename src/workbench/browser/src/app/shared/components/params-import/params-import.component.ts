@@ -3,7 +3,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { whatType } from '../../../utils';
 import { flatData } from '../../../utils/tree/tree.utils';
 import qs from 'qs';
-import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-transfer/data-transfer.utils';
+import { form2json, parseTree, xml2UiData, xml2json, isXML } from '../../../utils/data-transfer/data-transfer.utils';
 @Component({
   selector: 'params-import',
   templateUrl: './params-import.component.html',
@@ -13,7 +13,7 @@ export class ParamsImportComponent {
   @Input() rootType: 'array' | string | 'object' = 'object';
   @Input() contentType = 'json';
   @Input() baseData: object[] = [];
-  @Input() modalTitle: string = '';
+  @Input() modalTitle = '';
   @Output() baseDataChange = new EventEmitter<any>();
   @Output() beforeHandleImport = new EventEmitter<any>();
   isVisible = false;
@@ -98,6 +98,7 @@ export class ParamsImportComponent {
         return;
       }
       paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
+      console.log(paramCode);
       // console.log('-->', paramCode);
     }
     if (this.contentType === 'raw') {
@@ -119,7 +120,7 @@ export class ParamsImportComponent {
       paramCode = data || {};
     }
     // * tree to array for table render
-    const cacheData = flatData(Object.keys(paramCode).map((it) => parseTree(it, paramCode[it])));
+    const cacheData = flatData(Object.entries(paramCode).map(([key, value]) => parseTree(key, value)));
 
     // TODO delete useless attribute in cacheData
     switch (type) {
