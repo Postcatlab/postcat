@@ -14,7 +14,7 @@
   <!--Select content-type-->
   <nz-select
     *ngIf="['raw'].includes(bodyType)"
-    class="fs12"
+    class="fs12 content-type-select"
     (ngModelChange)="changeContentType($event)"
     [(ngModel)]="contentType"
     nzBorderless
