@@ -35,6 +35,7 @@ import zh from '@angular/common/locales/zh';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 registerLocaleData(en);
 registerLocaleData(zh);
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -67,8 +68,9 @@ registerLocaleData(zh);
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {
+        console.log(localId);
         switch (localId) {
-          case 'zh-Hans':
+          case 'zh':
             return zh_CN;
           default:
             return en_US;
@@ -76,6 +78,7 @@ registerLocaleData(zh);
       },
       deps: [LOCALE_ID],
     },
+    // { provide: NZ_CONFIG, useValue: ngZorroConfig },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent],

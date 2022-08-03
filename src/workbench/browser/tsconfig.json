@@ -8,7 +8,7 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
-    "emitDecoratorMetadata": false,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "baseUrl": "../../../",
     "paths": {
@@ -25,6 +25,7 @@
       "es2017",
       "es2016",
       "es2015",
+      "ESNext",
       "dom"
     ]
   },

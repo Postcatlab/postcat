@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
 
 import {
+  ApiBodyType,
+  ApiData,
   RequestMethod,
   RequestProtocol,
   StorageRes,
@@ -36,7 +38,9 @@ import {
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ViewportScroller } from '@angular/common';
+import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 
+const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 @Component({
   selector: 'eo-api-test',
   templateUrl: './api-test.component.html',
@@ -46,11 +50,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   @ViewChild('historyComponent') historyComponent: ApiTestHistoryComponent;
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
-  apiData: any;
+  apiData: ApiData | any;
   env: any = {
     parameters: [],
     hostUri: '',
   };
+  contentType: ContentTypeByAbridge;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
   beforeScriptCompletions = beforeScriptCompletions;
@@ -61,11 +66,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   tabIndexRes = 0;
+  isRequestBodyLoaded = false;
   testResult: any = {
     response: {},
     request: {},
   };
   scriptCache = {};
+  initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
@@ -94,6 +101,16 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   clickTest() {
+    //manual set dirty in case user submit directly without edit
+    for (const i in this.validateForm.controls) {
+      if (this.validateForm.controls.hasOwnProperty(i)) {
+        this.validateForm.controls[i].markAsDirty();
+        this.validateForm.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.validateForm.status === 'INVALID') {
+      return;
+    }
     if (this.status === 'testing') {
       this.abort();
       return;
@@ -101,17 +118,18 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.test();
   }
   /**
-   * click history to restore data from history
+   * Click history to restore data from history
+   *
    * @param item  test history data
    */
   restoreHistory(item) {
     const result = this.apiTest.getTestDataFromHistory(item);
-    console.log('restoreHistory', result);
-    //restore request
+    //Restore request
     this.apiData = result.testData;
+    this.afterChangeApiData();
     this.setScriptsByHistory(result.response);
     this.changeUri();
-    //restore response
+    //Restore response
     this.tabIndexRes = 0;
     this.testResult = result.response;
   }
@@ -119,7 +137,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.apiData = this.apiTest.getTestDataFromApi(result.data);
-        this.validateForm.patchValue(this.apiData);
+        this.afterChangeApiData();
       }
     });
   }
@@ -181,6 +199,22 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
     this.testServer.close();
   }
+  changeContentType(contentType) {
+    this.apiData.requestHeaders = this.apiTest.addOrReplaceContentType(contentType, this.apiData.requestHeaders);
+  }
+  changeBodyType($event) {
+    this.initContentType();
+  }
+  handleEoDrag([leftEl]: [HTMLDivElement, HTMLDivElement]) {
+    if (leftEl.style.height) {
+      localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, leftEl.style.height);
+    }
+  }
+  handleBottomTabSelect(tab) {
+    if (tab.index === 2) {
+      this.isRequestBodyLoaded = true;
+    }
+  }
   private test() {
     this.scriptCache = {
       beforeScript: this.beforeScript,
@@ -234,7 +268,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testResult = tmpHistory;
     // this.scroller.scrollToAnchor("test-response")
     this.status$.next('tested');
-    if (message.status === 'error') return;
+    if (message.status === 'error') {
+      return;
+    }
 
     //set globals
     this.apiTest.setGlobals(message.globals);
@@ -253,6 +289,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   /**
    * Change test status
+   *
    * @param status - 'start'|'testing'|'tested'
    */
   private changeStatus(status) {
@@ -290,22 +327,37 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       const tabData = this.apiTab.tabCache[this.apiTab.tabID];
       this.apiData = tabData.apiData;
       this.testResult = tabData.testResult;
-      this.validateForm.patchValue(this.apiData);
+      this.afterChangeApiData();
       this.setScriptsByHistory(tabData.testResult);
       return;
     }
     if (!id) {
       Object.assign(this.apiData, {
         uuid: 0,
-        requestBodyType: 'json',
+        requestBodyType: 'raw',
         requestBodyJsonType: 'object',
-        requestBody: [],
+        requestBody: '',
         queryParams: [],
         restParams: [],
-        requestHeaders: [],
+        requestHeaders: [
+          {
+            required: true,
+            name: 'content-type',
+            value: ContentTypeByAbridge.JSON,
+          },
+        ],
       });
     } else {
       this.getApi(id);
+    }
+  }
+  private afterChangeApiData() {
+    this.validateForm.patchValue(this.apiData);
+    this.initContentType();
+  }
+  private initContentType() {
+    if (this.apiData.requestBodyType === ApiBodyType.Raw) {
+      this.contentType = this.apiTest.getContentType(this.apiData.requestHeaders) || ContentTypeByAbridge.Text;
     }
   }
   private watchEnvChange() {
@@ -313,6 +365,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       const { env } = data;
       if (env) {
         this.env = env;
+        if (env.uuid) {
+          this.validateForm.controls.uri.setValidators([]);
+          this.validateForm.controls.uri.updateValueAndValidity();
+        } else {
+          this.validateForm.controls.uri.setValidators([Validators.required]);
+        }
       }
     });
   }
