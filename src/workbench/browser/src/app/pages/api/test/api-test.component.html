@@ -1,5 +1,5 @@
 <div class="test_wrap">
-  <eo-split-panel [topStyle]="{ height: '45%' }">
+  <eo-split-panel [topStyle]="{ height: initHeight }" (eoDrag)="handleEoDrag($event)">
     <div class="top_container scroll_container" top>
       <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm">
         <nz-form-item nz-col class="basic_info_container">
