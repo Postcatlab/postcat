@@ -3,7 +3,7 @@ import { StorageResStatus } from './index.model';
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
 import { MessageService } from '../../../shared/services/message';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { getSettings, SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 export type DataSourceType = 'local' | 'http';
 /** is show local data source tips */
@@ -16,7 +16,7 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
 @Injectable({ providedIn: 'root' })
 export class StorageService {
   private instance;
-  dataSourceType: DataSourceType = 'local';
+  dataSourceType: DataSourceType = getSettings()['eoapi-common.dataStorage'] || 'local';
   constructor(
     private injector: Injector,
     private messageService: MessageService,

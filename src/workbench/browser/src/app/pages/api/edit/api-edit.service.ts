@@ -148,8 +148,8 @@ export class ApiEditService {
           type: 'depthInput',
           modelKey: 'name',
           placeholder: $localize`Param Name`,
-          width: 300,
           mark: 'name',
+          width: 200,
         },
         {
           thKey: $localize`Type`,
@@ -184,8 +184,7 @@ export class ApiEditService {
           type: 'input',
           modelKey: 'example',
           placeholder: $localize`Param Example`,
-          width: 200,
-          hide: 1,
+          width: 100,
           mark: 'example',
         },
         {

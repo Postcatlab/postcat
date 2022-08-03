@@ -1,10 +1,11 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ElectronService } from '../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
 import { MessageService } from '../../shared/services/message';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { ResourceInfo } from '../../shared/models/client.model';
+import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -16,6 +17,8 @@ export class NavbarComponent implements OnInit {
   isSettingVisible = false;
   messageTop;
   @ViewChild('notificationTemplate', { static: true })
+  @ViewChildren(NzDropdownMenuComponent)
+  dropdownMenuList: QueryList<NzDropdownMenuComponent>;
   notificationTemplate!: TemplateRef<{}>;
   get dataSourceType() {
     return this.remoteService.dataSourceType;

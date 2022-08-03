@@ -43,6 +43,7 @@ export class ExtensionSelectComponent {
       if (file.type !== 'application/json') {
         this.message.error($localize `Only files in JSON format are supported`);
         observer.complete();
+        return;
       }
       parserJsonFile(file).then((result: { name: string }) => {
         this.filename = result.name;
