@@ -1,4 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { throttle } from 'eo/workbench/browser/src/app/utils';
 
 type EventListener = HTMLElement['removeEventListener'] | HTMLElement['addEventListener'];
@@ -7,7 +17,7 @@ type EventListener = HTMLElement['removeEventListener'] | HTMLElement['addEventL
   templateUrl: './split.panel.component.html',
   styleUrls: ['./split.panel.component.scss'],
 })
-export class SplitPanelComponent implements OnInit, OnDestroy {
+export class SplitPanelComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() direction: 'column' | 'row' = 'column';
   @Input() topStyle;
   @Input() bottomStyle;
@@ -25,32 +35,42 @@ export class SplitPanelComponent implements OnInit, OnDestroy {
   maxRightWidth: number;
 
   constructor() {}
+  ngAfterViewInit(): void {
+    if (this.direction === 'column' && this.topStyle.height) {
+      const bottomEl = this.bottomRef.nativeElement;
+      bottomEl.style.height = `calc(100% - ${this.topStyle.height} - 6px)`;
+    }
+  }
 
   ngOnInit(): void {}
 
   ngOnDestroy(): void {}
 
-  // 拖拽中
-  onDrag = throttle((e: MouseEvent) => {
+  updateLayout = throttle(({ clientY, clientX }) => {
     const scalableEl = this.scalableRef.nativeElement;
     const bottomEl = this.bottomRef.nativeElement;
     const { offsetHeight, offsetWidth } = scalableEl.parentElement;
     if (scalableEl) {
       if (this.direction === 'column') {
-        if (e.clientY >= document.documentElement.offsetHeight - (30 + 6)) {
+        if (clientY >= document.documentElement.offsetHeight - (30 + 6)) {
           return;
         }
-        const h = ((this.startHeight + e.clientY - this.startY) / offsetHeight) * 100;
+        const h = ((this.startHeight + clientY - this.startY) / offsetHeight) * 100;
         scalableEl.style.height = `min(${h}%, calc(100% - 6px))`;
         bottomEl.style.height = `calc(100% - ${scalableEl.style.height} - 6px)`;
       } else {
-        const w = ((this.startWidth + e.clientX - this.startX) / offsetWidth) * 100;
+        const w = ((this.startWidth + clientX - this.startX) / offsetWidth) * 100;
         scalableEl.style.width = `min(${w}%, calc(100% - 6px))`;
         bottomEl.style.width = `calc(100% - ${scalableEl.style.width} - 6px)`;
       }
       this.eoDrag.emit([scalableEl, bottomEl]);
     }
   }, 20);
+
+  // 拖拽中
+  onDrag = (e: MouseEvent) => {
+    this.updateLayout(e);
+  };
 
   // 拖拽结束
   dragEnd = () => {

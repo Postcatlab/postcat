@@ -44,6 +44,6 @@
       and open it with other programs. -->
     </div>
     <eo-monaco-editor *ngSwitchDefault class="mt20" [autoFormat]="true" [(code)]="model.body" [maxLine]="20"
-      [eventList]="['type', 'format', 'copy', 'search']"></eo-monaco-editor>
+      [readOnly]="true" [eventList]="['type', 'format', 'copy', 'search']"></eo-monaco-editor>
   </div>
 </div>

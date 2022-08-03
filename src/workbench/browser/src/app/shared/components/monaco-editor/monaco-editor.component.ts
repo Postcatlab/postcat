@@ -34,6 +34,7 @@ const eventHash = new Map()
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
+  @Input() readOnly = false;
   @Input() set code(val) {
     if (val === this.$$code) {
       return;
@@ -45,10 +46,11 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       code = String(val);
     }
 
-    if (code && this.isFirstFormat) {
+    if (code && this.isFirstFormat && this.autoFormat) {
       this.isFirstFormat = false;
       (async () => {
         this.$$code = await this.formatCode();
+        this.defaultConfig.readOnly = this.readOnly;
       })();
     }
 
@@ -94,6 +96,12 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     wrappingStrategy: 'advanced',
     minimap: {
       enabled: false,
+    },
+    formatOnPaste: true,
+    formatOnType: true,
+    scrollbar: {
+      scrollByPage: true,
+      alwaysConsumeMouseWheel: false,
     },
     overviewRulerLanes: 0,
     quickSuggestions: { other: true, strings: true },
@@ -219,8 +227,8 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
   formatCode() {
     return new Promise<string>((resolve) => {
-      setTimeout(() => {
-        this.codeEdtor?.getAction('editor.action.formatDocument').run();
+      setTimeout(async () => {
+        await this.codeEdtor?.getAction('editor.action.formatDocument').run();
         resolve(this.codeEdtor?.getValue() || '');
       });
     });
