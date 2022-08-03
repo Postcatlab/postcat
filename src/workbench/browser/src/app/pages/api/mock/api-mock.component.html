@@ -4,11 +4,11 @@
   <div class="mt-[20px]">
     <eo-table [(model)]="mocklList" [columns]="mockListColumns" [dataModel]="{ name: '', value: '', description: '' }">
       <ng-template cell="name" let-scope="scope" let-index="index">
-        <div class="truncate w-[120px]">{{ scope.name }}</div>
+        <div class=" w-[120px]">{{ scope.name }}</div>
       </ng-template>
       <ng-template cell="url" let-scope="scope" let-index="index">
         <span i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" nzTooltipPlacement="top" nz-tooltip
-          (click)="copyText(scope.url)" class="truncate">
+          (click)="copyText(scope.url)">
           {{ scope.url }}
         </span>
       </ng-template>
