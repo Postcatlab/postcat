@@ -34,27 +34,8 @@ const eventHash = new Map()
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
-  @Input() readOnly = false;
   @Input() set code(val) {
-    if (val === this.$$code) {
-      return;
-    }
-    let code = '';
-    try {
-      code = typeof val === 'string' ? val : JSON.stringify(val);
-    } catch {
-      code = String(val);
-    }
-
-    if (code && this.isFirstFormat && this.autoFormat) {
-      this.isFirstFormat = false;
-      (async () => {
-        this.$$code = await this.formatCode();
-        this.defaultConfig.readOnly = this.readOnly;
-      })();
-    }
-
-    this.$$code = code;
+    this.setCode(val);
   }
   /** Scroll bars appear over 20 lines */
   @Input() maxLine = 200;
@@ -67,7 +48,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   $$code = '';
   isFirstFormat = true;
   codeEdtor: editor.IStandaloneCodeEditor;
-  isReadOnly = false;
   completionItemProvider: monaco.IDisposable;
   buttonList: any[] = [];
   typeList = [
@@ -154,6 +134,27 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.completionItemProvider?.dispose();
   }
 
+  private setCode(val: string) {
+    if (val === this.$$code) {
+      return;
+    }
+    let code = '';
+    try {
+      code = typeof val === 'string' ? val : JSON.stringify(val);
+    } catch {
+      code = String(val);
+    }
+
+    if (code && this.isFirstFormat && this.autoFormat) {
+      this.isFirstFormat = false;
+      (async () => {
+        this.$$code = await this.formatCode();
+      })();
+    }
+
+    this.$$code = code;
+  }
+
   private initMonacoEditorEvent() {
     console.log('initMonacoEditorEvent');
 
@@ -228,7 +229,9 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   formatCode() {
     return new Promise<string>((resolve) => {
       setTimeout(async () => {
+        this.codeEdtor.updateOptions({ readOnly: false });
         await this.codeEdtor?.getAction('editor.action.formatDocument').run();
+        this.codeEdtor.updateOptions({ readOnly: this.config.readOnly });
         resolve(this.codeEdtor?.getValue() || '');
       });
     });
