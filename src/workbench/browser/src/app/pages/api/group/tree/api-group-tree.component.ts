@@ -50,7 +50,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
-      title: $localize `:@@API Index:Index`,
+      title: $localize`:@@API Index:Index`,
       key: 'overview',
       weight: 0,
       parentID: '0',
@@ -86,6 +86,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.treeNodes = [];
     listToTree(this.treeItems, this.treeNodes, '0');
     setTimeout(() => {
+      console.log('this.treeNodes', this.treeNodes);
       this.expandGroup();
     }, 0);
   }
@@ -273,7 +274,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param node NzTreeNode
    */
   deleteGroup(node: NzTreeNode) {
-    this.groupModal($localize`Delete Group`, { group: this.nodeToGroup(node), treeItems: this.treeItems, action: 'delete' });
+    this.groupModal($localize`Delete Group`, {
+      group: this.nodeToGroup(node),
+      treeItems: this.treeItems,
+      action: 'delete',
+    });
   }
 
   /**
@@ -325,11 +330,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         if (dragNode.isLeaf) {
           groupApiData.api.push({ uuid: item.key, weight: index, groupID: '0' });
         } else {
-          groupApiData.group.push({ uuid: item.key.replace('group-', ''), weight: index, parentID: '0' });
+          groupApiData.group.push({ uuid: item.key, weight: index, parentID: '0' });
         }
       });
     }
     this.updateoperateApiEvent(groupApiData);
+  }
+
+  replaceGroupKey(key: string) {
+    return Number(key.replace('group-', ''));
   }
   /**
    * Update tree items after drag.
@@ -338,12 +347,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   updateoperateApiEvent(data: GroupApiDataModel) {
     if (data.group.length > 0) {
+      console.log('data.group', data.group);
       this.storage.run(
         'groupBulkUpdate',
         [
-          data.group.map((val) => {
-            return { ...val, uuid: val.uuid.replace('group-', ''), parentID: val.parentID.replace('group-', '') };
-          }),
+          data.group.map((val) => ({
+            ...val,
+            uuid: this.replaceGroupKey(val.uuid),
+            parentID: this.replaceGroupKey(val.parentID),
+          })),
         ],
         (result: StorageRes) => {
           this.buildGroupTreeData();
@@ -351,9 +363,20 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       );
     }
     if (data.api.length > 0) {
-      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {
-        this.buildGroupTreeData();
-      });
+      console.log('data.api', data.api);
+      this.storage.run(
+        'apiDataBulkUpdate',
+        [
+          data.api.map((n) => ({
+            ...n,
+            uuid: this.replaceGroupKey(n.uuid),
+            groupID: this.replaceGroupKey(n.groupID),
+          })),
+        ],
+        (result: StorageRes) => {
+          this.buildGroupTreeData();
+        }
+      );
     }
   }
   private watchRouterChange() {
