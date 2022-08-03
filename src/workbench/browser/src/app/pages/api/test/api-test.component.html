@@ -99,7 +99,7 @@
     <div class="bottom_container scroll_container" bottom>
       <!-- Response -->
       <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [(nzSelectedIndex)]="tabIndexRes" [nzAnimated]="false"
-        class="mt-2.5 response_container">
+        class="mt-2.5 response_container" (nzSelectChange)="handleBottomTabSelect($event)">
         <nz-tab i18n-nzTitle nzTitle="Response">
           <eo-api-test-result-response [model]="testResult?.response"></eo-api-test-result-response>
         </nz-tab>
@@ -109,7 +109,8 @@
           </nz-tab>
         </div>
         <nz-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
-          <eo-api-test-result-request-body *ngIf="tabIndexRes === 2" [model]="testResult.request?.requestBody|| ''">
+          <eo-api-test-result-request-body *ngIf="tabIndexRes === 2 || isRequestBodyLoaded"
+            [model]="testResult.request?.requestBody|| ''">
           </eo-api-test-result-request-body>
         </nz-tab>
         <nz-tab i18n-nzTitle nzTitle="Request Headers">
