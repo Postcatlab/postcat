@@ -138,24 +138,24 @@ export const xml2json = (tmpl) => {
   return result;
 };
 
-interface uiData {
+type uiData = {
   textType: ApiBodyType | string;
   rootType: JsonRootType | string;
   data: any;
-}
+};
 export const xml2UiData = (text) => {
   const data: any[] = xml2json(text);
-  const result = {};
-  const mapAttr = (obj: any) => {
-    const { tagName, attr, children, content } = obj;
-    return {
-      [tagName]: children.length ? mapAttr(children[0]) : attr,
-    };
-  };
-  data.forEach((it) => {
-    const { tagName, attr, children } = it;
-    result[tagName] = children.length ? mapAttr(children[0]) : attr;
-  });
+  const deep = (list = []) =>
+    list.reduce(
+      (total, { tagName, content, attr, children }) => ({
+        ...total,
+        [tagName]: children?.length > 0 ? deep(children || []) : content,
+        // attribute: attr,  // * not support the key for now cause ui has not show it
+      }),
+      {}
+    );
+  const result = deep(data);
+  console.log('result', result);
   return JSON.parse(JSON.stringify(result));
 };
 /**
