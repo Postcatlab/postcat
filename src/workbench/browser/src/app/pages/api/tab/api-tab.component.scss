@@ -3,7 +3,7 @@
 }
 ::ng-deep {
   eo-api-tab {
-    width: calc(100% - 100px);
+    width: calc(100% - 200px);
     .ant-tabs-card.ant-tabs-top {
       > .ant-tabs-nav {
         margin: 0;
@@ -26,8 +26,7 @@
           }
         }
         .ant-tabs-nav-wrap {
-          // max-width: calc(100% - 100px);
-          max-width: 100%;
+          max-width: calc(100% - 150px);
           flex: none;
         }
         .ant-tabs-nav-add {

@@ -34,7 +34,6 @@ export class ApiDetailComponent implements OnInit {
       if (id) {
         const result = (await this.getApiByUuid(Number(id))) as ApiData;
         this.afterInit.emit(result);
-        console.log(result);
       } else {
         console.error('Can\'t no find api');
       }

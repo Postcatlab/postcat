@@ -99,7 +99,7 @@ export class ApiTabOperateService {
    */
   navigateTabRoute(tab: TabItem) {
     this.router.navigate([tab.pathname], {
-      queryParams: { ...tab.params, pageID: tab.uuid },
+      queryParams: { pageID: tab.uuid, ...tab.params },
     });
   }
   /**
@@ -139,8 +139,8 @@ export class ApiTabOperateService {
     const currentTab = this.tabStorage.tabs[this.selectedIndex];
     if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
       this.tabStorage.updateTab(this.selectedIndex, tabItem);
-      //If selectedIndex not change,need manual call selectTab to change content
-      this.navigateTabRoute(tabItem);
+      //If selectedIndex not change,need manually call selectTab to change content
+      // this.navigateTabRoute(tabItem);
     } else {
       this.tabStorage.addTab(tabItem);
       this.selectedIndex = this.tabStorage.tabs.length - 1;

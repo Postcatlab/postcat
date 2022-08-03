@@ -78,7 +78,7 @@ export class ApiTabService {
    */
   private watchContentChange = function() {
     const that = this.that;
-    console.log('watchContentChange', that.componentRef.model);
+    // console.log('watchContentChange', that.componentRef.model);
     const tabItem: any = {
       title: that.componentRef.model.name,
       extends: {
