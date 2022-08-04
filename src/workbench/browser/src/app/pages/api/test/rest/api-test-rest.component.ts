@@ -1,4 +1,8 @@
-import { Component, OnInit, Input, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+
+import { Subject, takeUntil } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 import { ApiTestRest } from '../../../../shared/services/api-test/api-test.model';
 import { ApiTestUtilService } from '../api-test-util.service';
 @Component({
@@ -8,13 +12,20 @@ import { ApiTestUtilService } from '../api-test-util.service';
 })
 export class ApiTestRestComponent implements OnInit, OnChanges {
   @Input() model: object[];
+  @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: object = {};
+  private modelChange$: Subject<void> = new Subject();
+  private destroy$: Subject<void> = new Subject();
   private itemStructure: ApiTestRest = {
     name: '',
     required: true,
     value: '',
   };
-  constructor(private editService: ApiTestUtilService, private cdRef: ChangeDetectorRef) {}
+  constructor(private editService: ApiTestUtilService) {
+    this.modelChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
+      this.modelChange.emit(this.model);
+    });
+  }
 
   ngOnInit(): void {
     this.initListConf();
@@ -31,6 +42,13 @@ export class ApiTestRestComponent implements OnInit, OnChanges {
     this.listConf = this.editService.initListConf({
       dragCacheVar: 'DRAG_VAR_API_REST',
       itemStructure: this.itemStructure,
+      watchFormLastChange: () => {
+        this.modelChange$.next();
+      },
     });
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

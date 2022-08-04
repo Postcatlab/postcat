@@ -147,7 +147,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.validateForm.patchValue(this.model);
     this.modelChange.emit(this.model);
   }
-  tableDataChangeFun() {
+  emitChangeFun() {
     this.modelChange.emit(this.model);
   }
   watchBasicForm() {

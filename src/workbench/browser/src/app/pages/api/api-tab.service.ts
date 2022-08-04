@@ -14,9 +14,9 @@ export class ApiTabService {
   }
   private changeContent$: Subject<string | number> = new Subject();
   BASIC_TBAS = {
-    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
+    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API`, extends: { method: 'POST' } },
     edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
-    detail: { pathname: '/home/api/detail', type: 'preview' },
+    detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`Preview` },
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
@@ -33,6 +33,11 @@ export class ApiTabService {
           .filter((val) => inArg.data.uuids.includes(Number(val.params.uuid)))
           .map((val) => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
+        break;
+      }
+      case 'saveApiFromTest': {
+        const currentTab = this.apiTabComponent.getCurrentTab();
+        this.apiTabComponent.batchCloseTab([currentTab.uuid]);
         break;
       }
     }
@@ -79,16 +84,19 @@ export class ApiTabService {
     }
   }
   afterContentChange() {
-    const that = this;
+    this.updatePartialTab();
+  }
+  updatePartialTab() {
     const currentTab = this.apiTabComponent.getCurrentTab();
     //Set tabItem
     const tabItem: Partial<TabItem> = {
+      isLoading:false,
       extends: {
-        method: that.componentRef.model.method,
+        method: this.componentRef.model.method,
       },
     };
-    if(that.componentRef.model.name||(currentTab.pathname === '/home/api/test' && that.componentRef.model.url)){
-      tabItem.title=that.componentRef.model.name||that.componentRef.model.url;
+    if (this.componentRef.model.name || (currentTab.pathname === '/home/api/test' && this.componentRef.model.url)) {
+      tabItem.title = this.componentRef.model.name || this.componentRef.model.url;
     }
     //Set hasChange
     if (currentTab.type === 'edit') {

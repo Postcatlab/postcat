@@ -131,7 +131,7 @@ export class ApiTabOperateService {
   }
   /**
    * New or replace current tab
-   * Avoid open too much tab,if tab[type==='preview'] or tab[type==='edit'] with no change,replace page in current tab
+   * * Avoid open too much tab,if tab[type==='preview'] or tab[type==='edit'] with no change,replace page in current tab
    *
    * @param tabItem tab need to be add
    */
@@ -140,13 +140,19 @@ export class ApiTabOperateService {
     if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
       // Same uuid means same tab data
       //*Prevent toggling splash screen with empty tab title
-      if(tabItem.params?.uuid===currentTab.params?.uuid){
-        ['title','extends'].forEach(keyName=>{
-          if(tabItem[keyName]){return;}
-          tabItem[keyName]=currentTab[keyName];
+      if (tabItem.params?.uuid === currentTab.params?.uuid) {
+        //Tabs template default title,like `NEW API`...
+        const defaultTitle =
+          Object.values(this.BASIC_TABS).find((val) => val.pathname === tabItem.pathname).title || '';
+        ['title', 'extends', 'isLoading'].forEach((keyName) => {
+          const isDefaultTitle = keyName === 'title' && tabItem[keyName] === defaultTitle;
+          if (tabItem[keyName] && !isDefaultTitle) {
+            return;
+          }
+          tabItem[keyName] = currentTab[keyName];
         });
+        tabItem.isLoading=false;
       }
-
       this.tabStorage.updateTab(this.selectedIndex, tabItem);
     } else {
       this.tabStorage.addTab(tabItem);
@@ -175,6 +181,8 @@ export class ApiTabOperateService {
       params[key] = value;
     });
     const result = {
+      //If data need load from ajax/indexeddb,add loading
+      isLoading: params.uuid?true:false,
       uuid: params.pageID || Date.now(),
       pathname: urlArr[0],
       params,

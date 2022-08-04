@@ -45,7 +45,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe((model) => {
+    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((model) => {
       //! Must set value by data,because this.model has delay
       this.modelChange.emit(model);
     });

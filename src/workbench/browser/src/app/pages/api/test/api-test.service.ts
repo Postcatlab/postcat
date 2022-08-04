@@ -20,6 +20,7 @@ export class ApiTestService {
       result = Object.assign(
         {
           projectID: 1,
+          groupID:0,
           uri: '',
           protocol: RequestProtocol.HTTP,
           method: RequestMethod.POST,
@@ -43,7 +44,8 @@ export class ApiTestService {
         }
       );
     } else {
-      result = await this.apiTestUtils.getTestDataFromApi(this.apiService.get(id)) ;
+      const apiData = await this.apiService.get(id);
+      result=this.apiTestUtils.getTestDataFromApi(apiData);
     }
     return result;
   }

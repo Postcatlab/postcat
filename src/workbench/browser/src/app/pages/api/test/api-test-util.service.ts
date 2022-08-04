@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { whatType } from 'eo/workbench/browser/src/app/utils';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiTestHeaders, ApiTestQuery, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../../shared/services/storage/index.model';
@@ -152,8 +153,8 @@ export class ApiTestUtilService {
    * @returns - {url:"",query:[]}
    */
   transferUrlAndQuery(
-    url='',
-    query=[],
+    url = '',
+    query = [],
     opts: { base: string; replaceType: string } = {
       base: 'url',
       replaceType: 'replace',
@@ -259,6 +260,12 @@ export class ApiTestUtilService {
    */
   formatEditingApiData(formData): ApiTestData {
     const result = formData;
+    ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach((tableName) => {
+      if (whatType(result[tableName])!=='array') {
+        return;
+      }
+      result[tableName] = (result[tableName] || []).filter((val) => val.name || val.description || val.example);
+    });
     return formData;
   }
   /**

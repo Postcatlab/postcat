@@ -7,7 +7,8 @@ export enum TabOperate {
 /**
  * Tab item.
  */
-export type TabItem =  {
+export type TabItem = {
+  isLoading: boolean;
   /**
    * Tab id,timestamp
    */

@@ -57,7 +57,7 @@
           </ng-template>
           <eo-api-edit-header
             class="eo_theme_iblock bbd bld brd"
-            (modelChange)="tableDataChangeFun()"
+            (modelChange)="emitChangeFun()"
             [model]="model.requestHeaders"
           ></eo-api-edit-header>
         </nz-tab>
@@ -78,7 +78,7 @@
             class="eo_theme_iblock bbd bld brd"
             [(bodyType)]="model.requestBodyType"
             [(model)]="model.requestBody"
-            (modelChange)="tableDataChangeFun()"
+            (modelChange)="emitChangeFun()"
             [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
             [(jsonRootType)]="model.requestBodyJsonType"
           ></eo-api-edit-body>
@@ -90,7 +90,7 @@
               model.queryParams | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-edit-query (modelChange)="tableDataChangeFun()" class="eo_theme_iblock bbd bld brd" [model]="model.queryParams"></eo-api-edit-query>
+          <eo-api-edit-query (modelChange)="emitChangeFun()" class="eo_theme_iblock bbd bld brd" [model]="model.queryParams"></eo-api-edit-query>
         </nz-tab>
         <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
           <ng-template #restTitleTmp>
@@ -99,7 +99,7 @@
               model.restParams | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-edit-rest class="eo_theme_iblock bbd bld brd" [model]="model.restParams" (modelChange)="tableDataChangeFun()"></eo-api-edit-rest>
+          <eo-api-edit-rest class="eo_theme_iblock bbd bld brd" [model]="model.restParams" (modelChange)="emitChangeFun()"></eo-api-edit-rest>
         </nz-tab>
       </nz-tabset>
     </nz-collapse-panel>
@@ -118,7 +118,7 @@
           <eo-api-edit-header
             class="eo_theme_iblock bbd bld brd"
             [model]="model.responseHeaders"
-            (modelChange)="tableDataChangeFun()"
+            (modelChange)="emitChangeFun()"
           >
           </eo-api-edit-header>
         </nz-tab>

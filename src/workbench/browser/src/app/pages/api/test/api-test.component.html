@@ -39,15 +39,7 @@
             <span *ngIf="status === 'testing'" i18n>Abort</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
           </button>
-          <button
-            type="button"
-            *ngIf="!model.uuid"
-            nz-button
-            nzType="default"
-            (click)="saveApi()"
-            class="ml10"
-            i18n
-          >
+          <button type="button" *ngIf="!model.uuid" nz-button nzType="default" (click)="saveApi()" class="ml10" i18n>
             Save as API
           </button>
         </nz-input-group>
@@ -66,7 +58,11 @@
               model.requestHeaders | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-test-header class="eo_theme_iblock bbd" [(model)]="model.requestHeaders"></eo-api-test-header>
+          <eo-api-test-header
+            class="eo_theme_iblock bbd"
+            [(model)]="model.requestHeaders"
+            (modelChange)="emitChangeFun()"
+          ></eo-api-test-header>
         </nz-tab>
         <!--Request Info -->
         <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
@@ -88,6 +84,7 @@
             [(bodyType)]="model.requestBodyType"
             (bodyTypeChange)="changeBodyType($event)"
             [(model)]="model.requestBody"
+            (modelChange)="emitChangeFun()"
             [supportType]="['formData', 'raw', 'binary']"
           ></eo-api-test-body>
         </nz-tab>
@@ -111,7 +108,11 @@
               model.restParams | apiParamsNum
             }}</span>
           </ng-template>
-          <eo-api-test-rest class="eo_theme_iblock bbd" [model]="model.restParams"></eo-api-test-rest>
+          <eo-api-test-rest
+            class="eo_theme_iblock bbd"
+            [(model)]="model.restParams"
+            (modelChange)="emitChangeFun()"
+          ></eo-api-test-rest>
         </nz-tab>
         <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
           <ng-template #preScriptTitleTmp>
@@ -121,6 +122,7 @@
           <eo-api-script
             *ngIf="nzSelectedIndex === 4"
             [(code)]="beforeScript"
+            (codeChange)="emitChangeFun()"
             [treeData]="BEFORE_DATA"
             [completions]="beforeScriptCompletions"
             class="eo_theme_iblock bbd"
@@ -134,6 +136,7 @@
           <eo-api-script
             *ngIf="nzSelectedIndex === 5"
             [(code)]="afterScript"
+            (codeChange)="emitChangeFun()"
             [treeData]="AFTER_DATA"
             [completions]="afterScriptCompletions"
             class="eo_theme_iblock bbd"
@@ -160,7 +163,10 @@
         </div>
         <nz-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
           <!-- TODO use isRequestBodyLoaded -->
-          <eo-api-test-result-request-body *ngIf="responseTabIndexRes === 2" [model]="testResult?.request?.requestBody|| ''">
+          <eo-api-test-result-request-body
+            *ngIf="responseTabIndexRes === 2"
+            [model]="testResult?.request?.requestBody || ''"
+          >
           </eo-api-test-result-request-body>
         </nz-tab>
         <nz-tab i18n-nzTitle nzTitle="Request Headers">

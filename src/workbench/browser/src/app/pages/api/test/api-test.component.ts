@@ -44,6 +44,10 @@ const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
   @Input() model: ApiTestData | any;
+  @Input() testResult: any = {
+    response: {},
+    request: {},
+  };
   @Output() modelChange = new EventEmitter<ApiTestData>();
   @Output() afterSaved = new EventEmitter<ApiData>();
   @Select(EnvState) env$: Observable<any>;
@@ -68,10 +72,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   responseTabIndexRes = 0;
 
   isRequestBodyLoaded = false;
-  testResult: any = {
-    response: {},
-    request: {},
-  };
   initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
@@ -114,22 +114,16 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       //API data form outside,such as tab cache
       this.originModel = structuredClone(this.model);
     }
-    console.log(this.model);
+    //! Set this two function to reset form
+    this.validateForm.markAsPristine();
+    this.validateForm.markAsUntouched();
+
     this.validateForm.patchValue(this.model);
     this.initContentType();
     this.modelChange.emit(this.model);
   }
   clickTest() {
-    //manual set dirty in case user submit directly without edit
-    for (const i in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(i)) {
-        this.validateForm.controls[i].markAsDirty();
-        this.validateForm.controls[i].updateValueAndValidity();
-      }
-    }
-    if (this.validateForm.status === 'INVALID') {
-      return;
-    }
+    if (!this.checkForm()) {return;}
     if (this.status === 'testing') {
       this.abort();
       return;
@@ -141,11 +135,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * ? Maybe support saving test case in future
    */
   saveApi() {
+    if (!this.checkForm()) {return;}
     const apiData = this.apiTestUtil.formatSavingApiData({
       history: this.testResult,
       testData: this.model,
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
+    this.messageService.send({type:'saveApiFromTest',data:{}});
     this.router.navigate(['home/api/edit'], {
       queryParams: { pageID: Date.now() },
     });
@@ -163,6 +159,14 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       replaceType: 'replace',
     }).query;
   }
+  watchBasicForm() {
+    this.validateForm.valueChanges.subscribe((x) => {
+      // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
+      setTimeout(() => {
+        this.modelChange.emit(this.model);
+      }, 0);
+    });
+  }
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
@@ -171,6 +175,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   isFormChange(): boolean {
     //Has exist api can't save
+    //TODO If has test case,test data will be saved to test case
     if (this.model.uuid) {
       return false;
     }
@@ -201,15 +206,31 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.isRequestBodyLoaded = true;
     }
   }
+  emitChangeFun() {
+    this.modelChange.emit(this.model);
+  }
   ngOnInit(): void {
     this.init();
     this.initBasicForm();
+    this.watchBasicForm();
     this.watchEnvChange();
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
     this.testServer.close();
+  }
+  private checkForm(): boolean {
+    for (const i in this.validateForm.controls) {
+      if (this.validateForm.controls.hasOwnProperty(i)) {
+        this.validateForm.controls[i].markAsDirty();
+        this.validateForm.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.validateForm.status === 'INVALID') {
+      return false;
+    }
+    return true;
   }
   private test() {
     this.testServer.send('unitTest', {

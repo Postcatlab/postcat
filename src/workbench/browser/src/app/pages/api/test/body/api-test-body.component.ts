@@ -64,7 +64,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   constructor(
     private apiTest: ApiTestUtilService,
     private cdRef: ChangeDetectorRef,
-     elementRef: ElementRef,
+    elementRef: ElementRef,
     private message: EoMessageService
   ) {
     this.el = elementRef.nativeElement;
@@ -73,6 +73,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((code) => {
+      //! Must set value by data,because this.model has delay
       this.modelChange.emit(code);
     });
   }
@@ -158,6 +159,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
       });
       observer.complete();
     });
+  emitModelChange() {
+    this.modelChange.emit(this.model);
+  }
   handleParamsImport(data) {
     this.model = data;
     this.modelChange.emit(data);
