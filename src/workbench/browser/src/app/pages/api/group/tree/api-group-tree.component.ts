@@ -312,6 +312,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const groupApiData: GroupApiDataModel = { group: [], api: [] };
     if (children?.length) {
       const targetIndex = children.findIndex((n) => n.key === dragNode.key);
+
       if (targetIndex === dragNode.origin.weight) {
         return;
       }
@@ -340,7 +341,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.updateoperateApiEvent(groupApiData);
   }
 
-  replaceGroupKey(key: string) {
+  private replaceGroupKey(key: string) {
     return Number(key.replace('group-', ''));
   }
   /**
