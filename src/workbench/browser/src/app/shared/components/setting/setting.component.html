@@ -1,13 +1,21 @@
-<nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" [nzBodyStyle]="{ paddingLeft: '6px' }"
-  (nzOnCancel)="handleCancel()">
+<nz-modal
+  [(nzVisible)]="isShowModal"
+  nzWidth="70%"
+  [nzFooter]="null"
+  [nzBodyStyle]="{ paddingLeft: '6px' }"
+  (nzOnCancel)="handleCancel()"
+>
   <section *nzModalContent class="container">
     <div class="tree-view">
       <img src="assets/images/logo-text.svg" class="h-[40px]" />
       <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
         <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
           <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
-          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-            (nzClick)="selectModule(node)">
+          <nz-tree-node-option
+            [nzDisabled]="node.disabled"
+            [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)"
+          >
             {{ node.name }}
           </nz-tree-node-option>
         </nz-tree-node>
@@ -16,8 +24,11 @@
           <nz-tree-node-toggle>
             <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
           </nz-tree-node-toggle>
-          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-            (nzClick)="selectModule(node)">
+          <nz-tree-node-option
+            [nzDisabled]="node.disabled"
+            [nzSelected]="selectListSelection.isSelected(node)"
+            (nzClick)="selectModule(node)"
+          >
             {{ node.name }}
           </nz-tree-node-option>
         </nz-tree-node>
@@ -31,13 +42,17 @@
       <!-- Language -->
       <eo-language-switcher [(model)]="settings" [id]="treeNodes[1].moduleID"> </eo-language-switcher>
       <nz-divider></nz-divider>
-      <eo-extension-setting [(model)]="settings" [localSettings]="localSettings" [id]="treeNodes[2].moduleID"
-        [extensitonConfigurations]="extensitonConfigurations"></eo-extension-setting>
+      <eo-extension-setting
+        [(model)]="settings"
+        [(isShowModal)]="isShowModal"
+        [localSettings]="localSettings"
+        [id]="treeNodes[2].moduleID"
+        [extensitonConfigurations]="extensitonConfigurations"
+      ></eo-extension-setting>
       <nz-divider></nz-divider>
       <!-- About -->
       <eo-about [id]="treeNodes[3].moduleID"></eo-about>
     </div>
-
   </section>
   <!-- <div *nzModalFooter class="footer"> -->
   <!-- <button nz-button nzType="primary" (click)="handleSave()">保存</button>

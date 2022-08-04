@@ -193,11 +193,11 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     });
 
     this.codeEdtor.onDidChangeModelContent((e) => {
-      this.codeChange.emit(this.codeEdtor.getValue());
+      this.handleChange();
     });
 
     this.codeEdtor.onDidBlurEditorText((e) => {
-      this.codeChange.emit(this.codeEdtor.getValue());
+      this.handleBlur();
     });
 
     let prevHeight = 0;
@@ -224,10 +224,14 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     console.log('ace event', event, txt);
   }
   handleBlur() {
-    this.codeChange.emit(this.$$code);
+    Promise.resolve().then(() => {
+      this.codeChange.emit(this.$$code);
+    });
   }
   handleChange() {
-    this.codeChange.emit(this.$$code);
+    Promise.resolve().then(() => {
+      this.codeChange.emit(this.$$code);
+    });
   }
   rerenderEditor() {
     this.codeEdtor?.layout?.();

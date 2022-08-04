@@ -346,6 +346,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const groupApiData: GroupApiDataModel = { group: [], api: [] };
     if (children?.length) {
       const targetIndex = children.findIndex((n) => n.key === dragNode.key);
+      // console.log('targetIndex', targetIndex);
+      // console.log('children', children);
+      // console.log('dragNode', dragNode);
       if (targetIndex === dragNode.origin.weight) {
         return;
       }

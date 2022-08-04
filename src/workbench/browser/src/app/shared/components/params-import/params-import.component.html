@@ -18,8 +18,8 @@
   (nzOnCancel)="handleCancel()">
   <div *nzModalContent>
     <pre class="eg" i18n>Import like this:<br />{{ eg }}</pre>
-    <eo-editor [(code)]="paramCode" [editorType]="contenTypeEditor" [hiddenList]="['type']"
-      [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-editor>
+    <eo-monaco-editor [(code)]="paramCode" [editorType]="contenTypeEditor" [hiddenList]="['type']" [maxLine]="16"
+      [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
   </div>
   <div *nzModalFooter style="text-align: left">
     <button nz-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
