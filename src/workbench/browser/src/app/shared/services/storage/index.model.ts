@@ -1,4 +1,8 @@
-import { ApiTestBody, ApiTestBodyType, ApiTestHeaders } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import {
+  ApiTestBody,
+  ApiTestBodyType,
+  ApiTestHeaders,
+} from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 import { Observable } from 'rxjs';
 
 /**
@@ -454,6 +458,10 @@ export interface ApiTestData {
    * For adding test history
    */
   uuid: number;
+  /**
+   * For adding test history
+   */
+  name?: string;
   /**
    * Request url,Usually value is path
    *

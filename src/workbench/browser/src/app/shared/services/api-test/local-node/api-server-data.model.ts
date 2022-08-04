@@ -5,27 +5,32 @@ export interface TestLocalNodeData {
   URL: string;
   /**
    * Request Method,GET/POST/PUT...
+   *
    * @type {string}
    */
   method: string;
   /**
    * Request Method ID,0,1,2...
+   *
    * @type {string}
    */
   methodType: string;
   /**
    * API  protocal type
+   *
    * @type {string}
    */
   httpHeader: number;
 
   /**
    * API request body type
+   *
    * @type {string}
    */
   requestType: string;
   /**
    * json root type when request body is json
+   *
    * @type {string}
    */
   apiRequestParamJsonType: string;
@@ -36,10 +41,10 @@ export interface TestLocalNodeData {
   }[];
   /**
    * request body
+   *
    * @type {string|array}
    */
-  params:
-    | string
+  params: | string
     | {
         checkbox: boolean;
         paramKey: string;
@@ -52,22 +57,26 @@ export interface TestLocalNodeData {
       }[];
   /**
    * request auth,baisc auth/jwt
+   *
    * @type {object}
    */
   auth: { status: string; [propName: string]: any };
   /**
    * execute script before test
+   *
    * @type {string}
    */
   beforeInject?: string;
   /**
    * execute script after response
+   *
    * @type {string}
    */
   afterInject?: string;
 
   /**
    * advanced http setting
+   *
    * @type {string}
    */
   advancedSetting: {
@@ -83,5 +92,5 @@ export interface TestLocalNodeData {
   /**
    * System language
    */
-  lang:string;
+  lang: string;
 }

@@ -2,19 +2,20 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd } from '@angular/router';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { debounceTime, Subject } from 'rxjs';
-
+import { ApiTabComponent } from './tab/api-tab.component';
+import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 @Injectable()
 export class ApiTabService {
   componentRef;
-  apiTabComponent;
+  apiTabComponent: ApiTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
   get currentTabType(): string {
     return Object.values(this.BASIC_TBAS).find((val) => val.pathname === window.location.pathname)?.type || 'preview';
   }
   private changeContent$: Subject<string | number> = new Subject();
   BASIC_TBAS = {
-    test: { pathname: '/home/api/test', type: 'edit' },
-    edit: { pathname: '/home/api/edit', type: 'edit' },
+    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
+    edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
     detail: { pathname: '/home/api/detail', type: 'preview' },
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
@@ -79,21 +80,24 @@ export class ApiTabService {
   }
   afterContentChange() {
     const that = this;
-    const tabItem: any = {
-      title: that.componentRef.model.name,
+    const currentTab = this.apiTabComponent.getCurrentTab();
+    //Set tabItem
+    const tabItem: Partial<TabItem> = {
       extends: {
         method: that.componentRef.model.method,
       },
     };
-    console.log('watchContentChange');
-    if (this.currentTabType === 'edit') {
+    if(that.componentRef.model.name||(currentTab.pathname === '/home/api/test' && that.componentRef.model.url)){
+      tabItem.title=that.componentRef.model.name||that.componentRef.model.url;
+    }
+    //Set hasChange
+    if (currentTab.type === 'edit') {
       if (!this.componentRef?.isFormChange) {
         throw new Error('EO_ERROR:Child componentRef need has isFormChange function check model change');
-        return;
       }
       tabItem.hasChanged = this.componentRef.isFormChange();
-      console.log('isFormChange', tabItem.hasChanged);
     }
+    console.log('watchContentChange', tabItem);
     this.apiTabComponent.updatePartialTab(tabItem);
   }
   /**

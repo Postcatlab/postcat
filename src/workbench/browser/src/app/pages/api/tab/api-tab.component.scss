@@ -55,36 +55,33 @@
           .ant-tabs-tab-remove {
             color: rgba(0, 0, 0, 0);
           }
-          &:hover .ant-tabs-tab-remove {
-            color: rgba(0, 0, 0, 0.45);
+          &:hover {
+            .tab-has-edit-icon {
+              display: none;
+            }
+            .ant-tabs-tab-remove {
+              display: flex;
+              color: rgba(0, 0, 0, 0.45);
+            }
           }
         }
         .ant-tabs-tab-remove {
           display: none;
         }
-        &:hover {
-          .tab-has-edit-icon {
-            display: none;
-          }
-          .ant-tabs-tab-remove {
-            display: flex;
-          }
-        }
       }
     }
     .tab-title-container {
       padding-right: 15px;
-      .tab-has-edit-icon{
+      .tab-has-edit-icon {
         width: 8px;
         height: 8px;
       }
-      .tab-item-button-group{
+      .tab-item-button-group {
         position: absolute;
-        background:  var(--MAIN_BG);
+        background: var(--MAIN_BG);
         padding-right: 10px;
         right: 0px;
       }
-     
     }
   }
 }

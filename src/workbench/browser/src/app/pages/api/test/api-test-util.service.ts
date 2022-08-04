@@ -152,8 +152,8 @@ export class ApiTestUtilService {
    * @returns - {url:"",query:[]}
    */
   transferUrlAndQuery(
-    url,
-    query,
+    url='',
+    query=[],
     opts: { base: string; replaceType: string } = {
       base: 'url',
       replaceType: 'replace',

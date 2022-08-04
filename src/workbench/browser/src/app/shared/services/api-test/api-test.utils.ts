@@ -157,12 +157,13 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
     body: response.body || '',
     headers: response.headers.map((val) => ({ name: val.key, value: val.value })),
   };
+  response={ blobFileName: report.blobFileName, ...response },
   result = {
     status: 'finish',
     id,
     globals,
     general: report.general,
-    response: { blobFileName: report.blobFileName, ...response },
+    response,
     report: {
       request: {
         requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
@@ -171,6 +172,10 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
       },
     },
     history: {
+      general: report.general,
+      response,
+      beforeScript:history.beforeInject,
+      afterScript:history.afterInject,
       request: {
         uri: history.requestInfo.URL,
         method: history.requestInfo.method,

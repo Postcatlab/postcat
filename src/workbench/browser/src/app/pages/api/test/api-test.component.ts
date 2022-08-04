@@ -178,7 +178,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!this.originModel || !this.model) {
       return false;
     }
-    // console.log('origin:', this.originModel, 'after:', this.apiEditUtil.formatEditingApiData(this.model));
+    console.log('origin:', this.originModel, 'after:', this.apiTestUtil.formatEditingApiData(this.model));
     if (JSON.stringify(this.originModel) !== JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model))) {
       return true;
     }
