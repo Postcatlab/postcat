@@ -3,6 +3,7 @@ import { ModalService } from '../../../shared/services/modal.service';
 import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra-setting.component';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiData } from '../../../shared/services/storage/index.model';
+import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 @Injectable()
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
@@ -229,6 +230,16 @@ export class ApiEditUtilService {
         },
       ],
     };
+  }
+  getFormdataFromApiData(apiData) {
+    const result = apiData;
+    //Transfer apidata to table ui data
+    ['requestBody', 'responseBody'].forEach((tableName) => {
+      if (['xml', 'json'].includes(result[`${tableName}Type`])) {
+        result[tableName] = treeToListHasLevel(result[tableName]);
+      }
+    });
+    return result;
   }
   private formatApiData(formData, filterArrFun): ApiData {
     const result = structuredClone(formData);

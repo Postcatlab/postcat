@@ -38,7 +38,7 @@
   [(code)]="model"
   [maxLine]="20"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-  (codeChange)="rawDataChange()"
+  (codeChange)="rawDataChange($event)"
 >
 </eo-monaco-editor>
 <!-- Binary -->
@@ -48,7 +48,7 @@
   *ngIf="bodyType === 'binary'"
   nzBorderless
   i18n-placeholder
-  (ngModelChange)="rawDataChange()"
+  (ngModelChange)="rawDataChange($event)"
   placeholder="Binary Description"
   nz-input
   [(ngModel)]="model"

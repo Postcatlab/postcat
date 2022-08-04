@@ -23,7 +23,7 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges {
     value: '',
   };
   constructor(private editService: ApiTestUtilService) {
-    this.modelChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+    this.modelChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
       this.modelChange.emit(this.model);
     });
   }

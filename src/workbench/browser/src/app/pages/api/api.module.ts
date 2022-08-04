@@ -45,9 +45,8 @@ import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/s
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
-import {ApiTabService} from  'eo/workbench/browser/src/app/pages/api/api-tab.service';import { NzSpinModule } from 'ng-zorro-antd/spin';
-;
-
+import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 const COMPONENTS = [
   ApiComponent,
   ApiGroupEditComponent,
@@ -94,6 +93,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [ElectronService, ApiService,ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
+  providers: [ElectronService, ApiService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
 })
 export class ApiModule {}

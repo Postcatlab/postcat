@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -19,7 +19,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     public tabStorage: ApiTabStorageService,
     public tabOperate: ApiTabOperateService,
     private modal: ModalService,
-    private router: Router
+    private router: Router,
+    private cdRef: ChangeDetectorRef
   ) {}
   ngOnInit(): void {
     this.tabOperate.init(this.list);
@@ -85,6 +86,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   updatePartialTab(tabItem: TabItem) {
     const currentTab = this.getCurrentTab();
     this.tabStorage.updateTab(this.tabOperate.selectedIndex, Object.assign({}, currentTab, tabItem));
+    //! Prevent rendering delay
+    this.cdRef.detectChanges();
   }
   /**
    * Tab  Close Operate

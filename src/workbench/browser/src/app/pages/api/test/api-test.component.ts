@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
@@ -6,26 +6,23 @@ import { Select } from '@ngxs/store';
 import {
   ApiBodyType,
   ApiData,
+  ApiTestData,
+  ApiTestHistoryFrame,
   RequestMethod,
   RequestProtocol,
-  StorageRes,
-  StorageResStatus,
 } from '../../../shared/services/storage/index.model';
 import { MessageService } from '../../../shared/services/message';
 
-import { interval, Subscription, Observable, of, Subject } from 'rxjs';
-import { take, takeUntil, distinctUntilChanged, pairwise, filter } from 'rxjs/operators';
-
-import { ApiTestHistoryComponent } from './history/api-test-history.component';
+import { interval, Subscription, Observable, Subject } from 'rxjs';
+import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
-import { ApiTabStorageService } from '../tab/api-tab-storage.service';
 import { objectToArray } from '../../../utils';
 
 import { EnvState } from '../../../shared/store/env.state';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
-import { StorageService } from '../../../shared/services/storage';
+import { ApiTestService } from './api-test.service';
 import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
@@ -37,7 +34,6 @@ import {
   afterScriptCompletions,
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ViewportScroller } from '@angular/common';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
@@ -47,10 +43,12 @@ const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
   styleUrls: ['./api-test.component.scss'],
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
-  @ViewChild('historyComponent') historyComponent: ApiTestHistoryComponent;
+  @Input() model: ApiTestData | any;
+  @Output() modelChange = new EventEmitter<ApiTestData>();
+  @Output() afterSaved = new EventEmitter<ApiData>();
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
-  apiData: ApiData | any;
+
   env: any = {
     parameters: [],
     hostUri: '',
@@ -58,38 +56,40 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   contentType: ContentTypeByAbridge;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
+
   beforeScriptCompletions = beforeScriptCompletions;
   afterScriptCompletions = afterScriptCompletions;
   beforeScript = '';
   afterScript = '';
+
   nzSelectedIndex = 1;
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
-  tabIndexRes = 0;
+  responseTabIndexRes = 0;
+
   isRequestBodyLoaded = false;
   testResult: any = {
     response: {},
     request: {},
   };
-  scriptCache = {};
   initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
+  private originModel;
 
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
-    // private scroller: ViewportScroller,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
-    private apiTest: ApiTestUtilService,
+    private apiTest: ApiTestService,
+    private apiTestUtil: ApiTestUtilService,
     private testServerService: TestServerService,
     private messageService: MessageService,
-    private storage: StorageService,
     private lang: LanguageService
   ) {
     this.testServer = this.testServerService.instance;
@@ -99,6 +99,25 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((status) => {
       this.changeStatus(status);
     });
+  }
+  async init() {
+    if (!this.model) {
+      this.model = {} as ApiTestData;
+      const id = Number(this.route.snapshot.queryParams.uuid);
+      const result = await this.apiTest.getApi({
+        id,
+      });
+      //Storage origin api data
+      this.originModel = structuredClone(result);
+      this.model = result;
+    } else {
+      //API data form outside,such as tab cache
+      this.originModel = structuredClone(this.model);
+    }
+    console.log(this.model);
+    this.validateForm.patchValue(this.model);
+    this.initContentType();
+    this.modelChange.emit(this.model);
   }
   clickTest() {
     //manual set dirty in case user submit directly without edit
@@ -118,66 +137,28 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.test();
   }
   /**
-   * Click history to restore data from history
-   *
-   * @param item  test history data
+   * Save api test data to api
+   * ? Maybe support saving test case in future
    */
-  restoreHistory(item) {
-    const result = this.apiTest.getTestDataFromHistory(item);
-    //Restore request
-    this.apiData = result.testData;
-    this.afterChangeApiData();
-    this.setScriptsByHistory(result.response);
-    this.changeUri();
-    //Restore response
-    this.tabIndexRes = 0;
-    this.testResult = result.response;
-  }
-  getApi(id) {
-    this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.apiData = this.apiTest.getTestDataFromApi(result.data);
-        this.afterChangeApiData();
-      }
-    });
-  }
-  setScriptsByHistory(response) {
-    this.beforeScript = response?.beforeScript || '';
-    this.afterScript = response?.afterScript || '';
-  }
-  loadTestHistory(id) {
-    if (!id) {
-      this.beforeScript = '';
-      this.afterScript = '';
-      return;
-    }
-    this.storage.run('apiTestHistoryLoadAllByApiDataID', [id], (result: StorageRes) => {
-      let history = {} as any;
-      if (result.status === StorageResStatus.success) {
-        history = result.data.reduce((prev, curr) => (prev.updatedAt > curr.updatedAt ? prev : curr), {});
-      }
-      this.beforeScript = history.beforeScript || '';
-      this.afterScript = history.afterScript || '';
-    });
-  }
-  saveTestDataToApi() {
-    const apiData = this.apiTest.getApiFromTestData({
+  saveApi() {
+    const apiData = this.apiTestUtil.formatSavingApiData({
       history: this.testResult,
-      testData: this.apiData,
+      testData: this.model,
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
     this.router.navigate(['home/api/edit'], {
       queryParams: { pageID: Date.now() },
     });
+    this.afterSaved.emit(apiData);
   }
   changeQuery(queryParams) {
-    this.apiData.uri = this.apiTest.transferUrlAndQuery(this.apiData.uri, queryParams, {
+    this.model.uri = this.apiTestUtil.transferUrlAndQuery(this.model.uri, queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
   }
   changeUri() {
-    this.apiData.queryParams = this.apiTest.transferUrlAndQuery(this.apiData.uri, this.apiData.queryParams, {
+    this.model.queryParams = this.apiTestUtil.transferUrlAndQuery(this.model.uri, this.model.queryParams, {
       base: 'url',
       replaceType: 'replace',
     }).query;
@@ -185,23 +166,27 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
-  ngOnInit(): void {
-    const apiDataId = Number(this.route.snapshot.queryParams.uuid);
-    this.initApi(apiDataId);
-    this.watchEnvChange();
-    this.messageService.get().subscribe(({ type, data }) => {
-      if (type === 'renderHistory') {
-        this.restoreHistory(data);
-      }
-    });
+  /**
+   * Judge has edit manualy
+   */
+  isFormChange(): boolean {
+    //Has exist api can't save
+    if (this.model.uuid) {
+      return false;
+    }
+
+    if (!this.originModel || !this.model) {
+      return false;
+    }
+    // console.log('origin:', this.originModel, 'after:', this.apiEditUtil.formatEditingApiData(this.model));
+    if (JSON.stringify(this.originModel) !== JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model))) {
+      return true;
+    }
+    return false;
   }
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.testServer.close();
-  }
+
   changeContentType(contentType) {
-    this.apiData.requestHeaders = this.apiTest.addOrReplaceContentType(contentType, this.apiData.requestHeaders);
+    this.model.requestHeaders = this.apiTestUtil.addOrReplaceContentType(contentType, this.model.requestHeaders);
   }
   changeBodyType($event) {
     this.initContentType();
@@ -216,17 +201,23 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.isRequestBodyLoaded = true;
     }
   }
+  ngOnInit(): void {
+    this.init();
+    this.initBasicForm();
+    this.watchEnvChange();
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.testServer.close();
+  }
   private test() {
-    this.scriptCache = {
-      beforeScript: this.beforeScript,
-      afterScript: this.afterScript,
-    };
     this.testServer.send('unitTest', {
       // id: this.apiTab.tabID,
       action: 'ajax',
-      data: this.testServer.formatRequestData(this.apiData, {
+      data: this.testServer.formatRequestData(this.model, {
         env: this.env,
-        globals: this.apiTest.getGlobals(),
+        globals: this.apiTestUtil.getGlobals(),
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
@@ -241,52 +232,36 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
     this.status$.next('tested');
   }
-  private addHistory(message, id) {
-    //Only has statusCode need save report
-    if (message.response.statusCode) {
-      this.historyComponent.add(
-        {
-          general: message.general,
-          request: message.history.request,
-          response: message.response,
-          ...this.scriptCache,
-        },
-        id
-      );
-      this.messageService.send({ type: 'updateHistory', data: {} });
-    }
+  private async addHistory(histoy: ApiTestHistoryFrame, id) {
+    await this.apiTest.addHistory(histoy, id);
+    this.messageService.send({ type: 'updateHistory', data: {} });
   }
   /**
    * Receive Test Server Message
    */
   private receiveMessage(message: ApiTestRes) {
-    console.log('[api test componnet]receiveMessage', message);
+    // console.log('[api test componnet]receiveMessage', message);
     const tmpHistory = {
       general: message.general,
       request: message.report?.request,
       response: message.response,
     };
     this.testResult = tmpHistory;
-    // this.scroller.scrollToAnchor("test-response")
     this.status$.next('tested');
     if (message.status === 'error') {
       return;
     }
 
     //set globals
-    this.apiTest.setGlobals(message.globals);
+    this.apiTestUtil.setGlobals(message.globals);
 
     //If test sucess,addHistory
-    // other tab test finish,support multiple tab test same time
-    // if (message.id && this.apiTab.tabID !== message.id) {
-    //   this.apiTab.storage[message.id].testResult = tmpHistory;
-    //   const tab = this.apiTab.tabs.find((val) => val.uuid === message.id);
-    //   if (tab) {
-    //     this.addHistory(message, tab.key);
-    //   }
-    //   return;
-    // }
-    this.addHistory(message, this.apiData.uuid);
+    //Only has statusCode need save report
+    if (!message.response.statusCode) {
+      return;
+    }
+    // TODO Other tab test finish,support multiple tab test same time
+    this.addHistory(message.history, this.model.uuid);
   }
   /**
    * Change test status
@@ -314,51 +289,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       case 'tested': {
         this.timer$.unsubscribe();
         this.waitSeconds = 0;
-        this.tabIndexRes = 0;
+        this.responseTabIndexRes = 0;
         this.ref.detectChanges();
         break;
       }
     }
   }
-  private initApi(id) {
-    this.resetForm();
-    this.initBasicForm();
-    // //recovery from tab
-    // if (this.apiTab.currentTab && this.apiTab.tabCache[this.apiTab.tabID]) {
-    //   const tabData = this.apiTab.tabCache[this.apiTab.tabID];
-    //   this.apiData = tabData.apiData;
-    //   this.testResult = tabData.testResult;
-    //   this.validateForm.patchValue(this.apiData);
-    //   this.setScriptsByHistory(tabData.testResult);
-    //   return;
-    // }
-    if (!id) {
-      Object.assign(this.apiData, {
-        uuid: 0,
-        requestBodyType: 'raw',
-        requestBodyJsonType: 'object',
-        requestBody: '',
-        queryParams: [],
-        restParams: [],
-        requestHeaders: [
-          {
-            required: true,
-            name: 'content-type',
-            value: ContentTypeByAbridge.JSON,
-          },
-        ],
-      });
-    } else {
-      this.getApi(id);
-    }
-  }
-  private afterChangeApiData() {
-    this.validateForm.patchValue(this.apiData);
-    this.initContentType();
-  }
   private initContentType() {
-    if (this.apiData.requestBodyType === ApiBodyType.Raw) {
-      this.contentType = this.apiTest.getContentType(this.apiData.requestHeaders) || ContentTypeByAbridge.Text;
+    if (this.model.requestBodyType === ApiBodyType.Raw) {
+      this.contentType = this.apiTestUtil.getContentType(this.model.requestHeaders) || ContentTypeByAbridge.Text;
     }
   }
   private watchEnvChange() {
@@ -376,34 +315,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   /**
-   * Init API data structure
-   */
-  private resetForm() {
-    this.apiData = {
-      projectID: 1,
-      uri: '',
-      protocol: RequestProtocol.HTTP,
-      method: RequestMethod.POST,
-    };
-
-    this.testResult = {
-      response: {},
-      request: {},
-    };
-    this.status$.next('start');
-    if (this.timer$) {
-      this.timer$.unsubscribe();
-    }
-    this.waitSeconds = 0;
-    this.tabIndexRes = 0;
-  }
-  /**
    * Init basic form,such as url,protocol,method
    */
   private initBasicForm() {
     const controls = {};
     ['protocol', 'method', 'uri'].forEach((name) => {
-      controls[name] = [this.apiData[name], [Validators.required]];
+      controls[name] = [this.model[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }

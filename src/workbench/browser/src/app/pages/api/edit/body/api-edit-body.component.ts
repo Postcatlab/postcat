@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
@@ -40,13 +40,14 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private apiEdit: ApiEditUtilService, private cdRef: ChangeDetectorRef) {
+  constructor(private apiEdit: ApiEditUtilService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
-      this.modelChange.emit(this.model);
+    this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe((model) => {
+      //! Must set value by data,because this.model has delay
+      this.modelChange.emit(model);
     });
   }
   beforeChangeBodyByType(type) {
@@ -69,9 +70,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.jsonRootTypeChange.emit(jsonRootType);
     this.modelChange.emit(this.model);
   }
-  rawDataChange() {
-    this.rawChange$.next(this.model);
-    this.modelChange.emit(this.model);
+  rawDataChange(code) {
+    this.rawChange$.next(code);
   }
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);

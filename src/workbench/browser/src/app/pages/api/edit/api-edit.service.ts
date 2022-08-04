@@ -2,14 +2,11 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { treeToListHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { RequestMethod, RequestProtocol } from '../../../shared/services/storage/index.model';
-import { ApiEditUtilService } from './api-edit-util.service';
 @Injectable()
 export class ApiEditService {
   constructor(
     private storage: StorageService,
-    private apiEditUtil: ApiEditUtilService,
     private apiService: ApiService
   ) {}
   async getApi({ id, groupID }): Promise<ApiData> {

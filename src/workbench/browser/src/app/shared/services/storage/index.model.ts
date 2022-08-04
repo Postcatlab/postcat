@@ -1,3 +1,4 @@
+import { ApiTestBody, ApiTestBodyType, ApiTestHeaders } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 import { Observable } from 'rxjs';
 
 /**
@@ -205,7 +206,8 @@ export interface ApiTestHistoryFrame {
       responseTiming: string;
     }[];
   };
-
+  beforeScript: string;
+  afterScript: string;
   /**
    * HTTP Request
    *
@@ -442,6 +444,85 @@ export interface ApiData extends StorageModel {
    * mock列表
    */
   mockList?: ApiEditMock[];
+}
+/**
+ * API Test Data
+ * Only has request info
+ */
+export interface ApiTestData {
+  /**
+   * For adding test history
+   */
+  uuid: number;
+  /**
+   * Request url,Usually value is path
+   *
+   * @type {string}
+   */
+  uri: string;
+  /**
+   * API protocol [http, https, ...]
+   *
+   * @type {RequestProtocol|string}
+   */
+  protocol: RequestProtocol | string;
+
+  /**
+   * Request method [POST, GET, PUT, ...]
+   *
+   * @type {RequestMethod|string}
+   */
+  method: RequestMethod | string;
+
+  /**
+   * 请求的参数类型
+   *
+   * @type {ApiTestBodyType|string}
+   */
+  requestBodyType?: ApiTestBodyType | string;
+
+  /**
+   * 请求头数据，数据用json存储
+   *
+   * @type {object}
+   */
+  requestHeaders?: ApiTestHeaders[];
+
+  /**
+   * 请求的json参数根类型
+   *
+   * @type {JsonRootType|string}
+   */
+  requestBodyJsonType?: JsonRootType | string;
+
+  /**
+   * 请求参数(多层结构)，数据用json存储
+   *
+   * @type {object}
+   */
+  requestBody?: ApiTestBody[] | string;
+
+  /**
+   * get请求参数，数据用json存储
+   *
+   * @type {object[]}
+   */
+  queryParams?: object[];
+
+  /**
+   * rest请求参数，数据用json存储
+   *
+   * @type {object[]}
+   */
+  restParams?: Record<string, any>[];
+  /**
+   * Javascript code before test
+   */
+  beforeScript: string;
+  /**
+   * Javascript code after api response
+   */
+  afterScript: string;
 }
 
 /**

@@ -14,7 +14,7 @@
           tab.extends.method
         }}</span>
         <ng-template #indicatorTemplate><i nz-icon nzType="loading"></i></ng-template>
-        <!-- <eo-iconpark-icon class="mr5" name="{{tab.icon}}" size="14px" *ngIf="!tab.extends?.method&&tab.icon"></eo-iconpark-icon> -->
+        <eo-iconpark-icon class="mr5" name="{{tab.icon}}" size="14px" *ngIf="tab.icon"></eo-iconpark-icon>
         <span class="text_omit tab_text"> {{ tab.title }}</span>
         <!-- Close/HasEdit -->
         <div class="tab-item-button-group">

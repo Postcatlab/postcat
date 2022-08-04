@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { RemoteService } from '../../../shared/services/remote/remote.service';
 import { TabItem } from './tab.model';
 

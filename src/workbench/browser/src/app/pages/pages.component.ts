@@ -36,7 +36,7 @@ export class PagesComponent implements OnInit {
     private remoteService: RemoteService,
     public electron: ElectronService
   ) {
-    this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+    this.rawChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
       this.updateState();
     });
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiTestHeaders, ApiTestQuery, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
-import { ApiBodyType, ApiData, ApiTestHistory } from '../../../shared/services/storage/index.model';
+import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../../shared/services/storage/index.model';
 import { uiData2Json, text2UiData, json2XML } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
@@ -251,13 +251,24 @@ export class ApiTestUtilService {
     return result;
   }
   /**
+   * Handle api data for judge page has edit
+   * Unlike the saved data, the api data being edited is not as strict
+   *
+   * @param formData
+   * @returns apiData
+   */
+  formatEditingApiData(formData): ApiTestData {
+    const result = formData;
+    return formData;
+  }
+  /**
    * Transfer test data/test history to api data
    *
    * @param inData.history
    * @param inData.testData - test request info
    * @returns
    */
-  getApiFromTestData(inData): ApiData {
+  formatSavingApiData(inData): ApiData {
     const result = {
       ...inData.testData,
       responseHeaders: inData.history.response.headers || [],
@@ -281,7 +292,7 @@ export class ApiTestUtilService {
     return result;
   }
 
-  getTestDataFromApi(inData) {
+  getTestDataFromApi(inData): ApiTestData {
     const editToTestParams = (arr) => {
       arr = arr || [];
       arr.forEach((val) => {

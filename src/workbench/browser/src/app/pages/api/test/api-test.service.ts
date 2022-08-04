@@ -1,5 +1,92 @@
 import { Injectable } from '@angular/core';
+import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
+import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import {
+  ApiTestData,
+  ApiTestHistoryFrame,
+  RequestMethod,
+  RequestProtocol,
+  StorageRes,
+  StorageResStatus,
+} from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiTestUtilService } from './api-test-util.service';
 @Injectable()
 export class ApiTestService {
-  constructor() {}
+  constructor(private apiService: ApiService,private apiTestUtils: ApiTestUtilService, private storage: StorageService) {}
+  async getApi({ id }): Promise<ApiTestData> {
+    let result: ApiTestData = {} as ApiTestData;
+    if (!id) {
+      result = Object.assign(
+        {
+          projectID: 1,
+          uri: '',
+          protocol: RequestProtocol.HTTP,
+          method: RequestMethod.POST,
+        },
+        {
+          uuid: 0,
+          requestBodyType: 'raw',
+          requestBodyJsonType: 'object',
+          requestBody: '',
+          beforeScript: '',
+          afterScript: '',
+          queryParams: [],
+          restParams: [],
+          requestHeaders: [
+            {
+              required: true,
+              name: 'content-type',
+              value: ContentTypeByAbridge.JSON,
+            },
+          ],
+        }
+      );
+    } else {
+      result = await this.apiTestUtils.getTestDataFromApi(this.apiService.get(id)) ;
+    }
+    return result;
+  }
+  addHistory(history: ApiTestHistoryFrame, apiID): Promise<any> {
+    return new Promise((resolve) => {
+      this.storage.run(
+        'apiTestHistoryCreate',
+        [
+          {
+            projectID: 1,
+            apiDataID: apiID,
+            ...history,
+          },
+        ],
+        (result: StorageRes) => {
+          if (result.status === StorageResStatus.success) {
+            resolve(result.data);
+          } else {
+            console.error(result.data);
+          }
+        }
+      );
+    });
+  }
+
+  // setScriptsByHistory(response) {
+  //   this.beforeScript = response?.beforeScript || '';
+  //   this.afterScript = response?.afterScript || '';
+  // }
+  // /**
+  //  * Click history to restore data from history
+  //  *
+  //  * @param item  test history data
+  //  */
+  // restoreTestFromHistory(item) {
+  //   const result = this.apiTestUtil.getTestDataFromHistory(item);
+  //   //Restore request
+  //   this.model = result.testData;
+  //   this.afterChangeApiData();
+  //   this.setScriptsByHistory(result.response);
+  //   this.changeUri();
+  //   //Restore response
+  //   this.responseTabIndexRes = 0;
+  //   this.testResult = result.response;
+  // }
 }

@@ -22,7 +22,7 @@ import {
 
 import { objectToArray } from '../../../utils';
 import { getRest } from '../../../utils/api';
-import { listToTree, getExpandGroupByKey, treeToListHasLevel } from '../../../utils/tree/tree.utils';
+import { listToTree, getExpandGroupByKey } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
@@ -42,7 +42,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   nzSelectedIndex = 1;
-  private originApiData: ApiData;
+  private originModel: ApiData;
 
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
@@ -104,7 +104,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
-      this.originApiData = result.data;
+      this.originModel = result.data;
       this.messageService.send({ type: `${busEvent}Success`, data: result.data });
     } else {
       this.message.success($localize`Failed Operation`);
@@ -136,17 +136,11 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         groupID: Number(this.route.snapshot.queryParams.groupID || 0),
       });
       //Storage origin api data
-      this.originApiData = structuredClone(result);
-      //Transfer apidata to table ui data
-      ['requestBody', 'responseBody'].forEach((tableName) => {
-        if (['xml', 'json'].includes(result[`${tableName}Type`])) {
-          result[tableName] = treeToListHasLevel(result[tableName]);
-        }
-      });
-      this.model = result;
+      this.originModel = structuredClone(result);
+      this.model=this.apiEditUtil.getFormdataFromApiData(result);
     } else {
       //API data form outside,such as tab cache
-      this.originApiData = structuredClone(this.model);
+      this.originModel = structuredClone(this.model);
     }
     this.afterGroupIDChange();
     this.changeGroupID$.next(this.model.groupID);
@@ -168,11 +162,11 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Judge has edit manualy
    */
   isFormChange(): boolean {
-    if (!this.originApiData || !this.model) {
+    if (!this.originModel || !this.model) {
       return false;
     }
-    // console.log('origin:', this.originApiData, 'after:', this.apiEditUtil.formatEditingApiData(this.model));
-    if (JSON.stringify(this.originApiData) !== JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model))) {
+    // console.log('origin:', this.originModel, 'after:', this.apiEditUtil.formatEditingApiData(this.model));
+    if (JSON.stringify(this.originModel) !== JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model))) {
       return true;
     }
     return false;
@@ -182,7 +176,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   private watchGroupIDChange() {
-    this.changeGroupID$.pipe(debounceTime(500), take(1)).subscribe((id) => {
+    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe((id) => {
       this.afterGroupIDChange();
     });
   }
@@ -196,7 +190,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private watchUri() {
     this.validateForm
       .get('uri')
-      .valueChanges.pipe(debounceTime(500), takeUntil(this.destroy$))
+      .valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe((url) => {
         this.generateRestFromUrl(url);
       });

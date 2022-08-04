@@ -71,6 +71,7 @@ export class NavbarComponent implements OnInit {
     fetch('https://api.github.com/repos/eolinker/eoapi/releases')
       .then((response) => response.json())
       .then((data) => {
+        if(!(data instanceof Array)) {return;}
         [...this.resourceInfo]
           .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
           .forEach((item) => {

@@ -72,8 +72,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
-      this.modelChange.emit(this.model);
+    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((code) => {
+      this.modelChange.emit(code);
     });
   }
 

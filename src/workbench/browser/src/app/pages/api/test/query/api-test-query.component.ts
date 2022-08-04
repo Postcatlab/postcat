@@ -26,7 +26,7 @@ export class ApiTestQueryComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$: Subject<void> = new Subject();
 
   constructor(private editService: ApiTestUtilService) {
-    this.modelChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+    this.modelChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
       this.modelChange.emit(this.model);
     });
   }

@@ -145,11 +145,12 @@ export class ApiComponent implements OnInit, OnDestroy {
         pairwise()
       )
       .subscribe(([lastRouter, currentRouter]: [NavigationEnd,NavigationEnd]) => {
-        // console.log('watchRouterChange',lastRouter,currentRouter);
+        console.log('watchRouterChange',lastRouter,currentRouter);
         this.id = Number(this.route.snapshot.queryParams.uuid);
-        this.apiTab.refleshData(lastRouter,currentRouter);
         this.setPageID();
         this.setTabsetIndex();
+
+        this.apiTab.refleshData(lastRouter,currentRouter);
       });
   }
   gotoEnvManager() {

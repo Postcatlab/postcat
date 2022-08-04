@@ -13,9 +13,9 @@ export class ApiTabService {
   }
   private changeContent$: Subject<string | number> = new Subject();
   BASIC_TBAS = {
-    test: { pathname: '/home/api/test', type: 'edit', icon: 'international' },
+    test: { pathname: '/home/api/test', type: 'edit' },
     edit: { pathname: '/home/api/edit', type: 'edit' },
-    detail: { pathname: '/home/api/detail', type: 'preview', icon: 'file-text-one' },
+    detail: { pathname: '/home/api/detail', type: 'preview' },
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
@@ -78,15 +78,21 @@ export class ApiTabService {
     }
   }
   afterContentChange() {
-    const that=this;
+    const that = this;
     const tabItem: any = {
       title: that.componentRef.model.name,
       extends: {
         method: that.componentRef.model.method,
       },
     };
+    console.log('watchContentChange');
     if (this.currentTabType === 'edit') {
+      if (!this.componentRef?.isFormChange) {
+        throw new Error('EO_ERROR:Child componentRef need has isFormChange function check model change');
+        return;
+      }
       tabItem.hasChanged = this.componentRef.isFormChange();
+      console.log('isFormChange', tabItem.hasChanged);
     }
     this.apiTabComponent.updatePartialTab(tabItem);
   }
@@ -95,7 +101,7 @@ export class ApiTabService {
    * !Current scope {this} has change to Object:{emit,that}
    */
   private watchContentChange = function() {
-    const that=this.that;
+    const that = this.that;
     that.changeContent$.next();
   };
 }
