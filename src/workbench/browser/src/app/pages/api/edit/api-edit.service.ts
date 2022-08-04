@@ -5,44 +5,49 @@ import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/service
 import { RequestMethod, RequestProtocol } from '../../../shared/services/storage/index.model';
 @Injectable()
 export class ApiEditService {
-  constructor(
-    private storage: StorageService,
-    private apiService: ApiService
-  ) {}
+  constructor(private storage: StorageService, private apiService: ApiService) {}
+  getPureApi({ groupID }) {
+    return Object.assign(
+      {
+        name: '',
+        projectID: 1,
+        uri: '/',
+        groupID,
+        protocol: RequestProtocol.HTTP,
+        method: RequestMethod.POST,
+      },
+      {
+        requestBodyType: 'json',
+        requestBodyJsonType: 'object',
+        requestBody: [],
+        queryParams: [],
+        restParams: [],
+        requestHeaders: [],
+        responseHeaders: [],
+        responseBodyType: 'json',
+        responseBodyJsonType: 'object',
+        responseBody: [],
+      }
+    );
+  }
   async getApi({ id, groupID }): Promise<ApiData> {
     let result: ApiData = {} as ApiData;
     if (!id) {
       // From test page/copy api data;
-      const tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
+      let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
+      const pureApi = this.getPureApi({ groupID });
       if (tmpApiData) {
-        console.log('apiDataWillbeSave',tmpApiData);
         //Add From Test
+        console.log('apiDataWillbeSave', tmpApiData);
         window.sessionStorage.removeItem('apiDataWillbeSave');
-        Object.assign(result, JSON.parse(tmpApiData));
+        tmpApiData = JSON.parse(tmpApiData);
+        Object.keys(pureApi).forEach((keyName) => {
+          //Filter useless keyName
+          result[keyName] = tmpApiData[keyName];
+        });
       } else {
         //Add directly
-        result = Object.assign(
-          {
-            name: '',
-            projectID: 1,
-            uri: '/',
-            groupID,
-            protocol: RequestProtocol.HTTP,
-            method: RequestMethod.POST,
-          },
-          {
-            requestBodyType: 'json',
-            requestBodyJsonType: 'object',
-            requestBody: [],
-            queryParams: [],
-            restParams: [],
-            requestHeaders: [],
-            responseHeaders: [],
-            responseBodyType: 'json',
-            responseBodyJsonType: 'object',
-            responseBody: [],
-          }
-        );
+        result = pureApi;
       }
     } else {
       result = (await this.apiService.get(id)) as ApiData;

@@ -137,7 +137,7 @@ export class ApiTabOperateService {
    */
   private newOrReplaceTab(tabItem) {
     const currentTab = this.tabStorage.tabs[this.selectedIndex];
-    if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
+    if (currentTab.type === 'preview'||(currentTab.type === 'edit' && !currentTab.hasChanged)) {
       // Same uuid means same tab data
       //*Prevent toggling splash screen with empty tab title
       if (tabItem.params?.uuid === currentTab.params?.uuid) {

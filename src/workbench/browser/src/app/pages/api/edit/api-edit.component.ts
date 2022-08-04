@@ -131,13 +131,19 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (!this.model) {
       this.model = {} as ApiData;
       const id = Number(this.route.snapshot.queryParams.uuid);
+      const groupID= Number(this.route.snapshot.queryParams.groupID || 0);
       const result = await this.apiEdit.getApi({
         id,
-        groupID: Number(this.route.snapshot.queryParams.groupID || 0),
+        groupID
       });
       //Storage origin api data
-      this.originModel = structuredClone(result);
-      this.model=this.apiEditUtil.getFormdataFromApiData(result);
+      if (!id) {
+        // New API/New API from other page such as test page
+        this.originModel = this.apiEdit.getPureApi({groupID});
+      } else {
+        this.originModel = structuredClone(result);
+      }
+      this.model = this.apiEditUtil.getFormdataFromApiData(result);
     } else {
       //API data form outside,such as tab cache
       this.originModel = structuredClone(this.model);
