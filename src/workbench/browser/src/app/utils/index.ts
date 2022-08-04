@@ -175,3 +175,16 @@ export function debounce(fn, wait = 50) {
     }, wait);
   };
 }
+
+export function throttle(fn, gap) {
+  let timerId = null;
+  return function (...rest) {
+    if (timerId === null) {
+      fn(...rest); // 立即执行
+      timerId = setTimeout(() => {
+        // 在间隔时间后清除标识
+        timerId = null;
+      }, gap);
+    }
+  };
+}

@@ -1,4 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { throttle } from 'eo/workbench/browser/src/app/utils';
 
 type EventListener = HTMLElement['removeEventListener'] | HTMLElement['addEventListener'];
 @Component({
@@ -11,83 +22,59 @@ export class SplitPanelComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() topStyle;
   @Input() bottomStyle;
   @Input() hideSeparator = false;
+  @Output() eoDrag = new EventEmitter<[HTMLDivElement, HTMLDivElement]>();
 
-  @ViewChild('scalable') scalableRef: ElementRef;
-  @ViewChild('separator') separatorRef: ElementRef;
-  @ViewChild('bottomRef') bottomRef: ElementRef;
+  @ViewChild('scalable') scalableRef: ElementRef<HTMLDivElement>;
+  @ViewChild('separator') separatorRef: ElementRef<HTMLDivElement>;
+  @ViewChild('bottomRef') bottomRef: ElementRef<HTMLDivElement>;
 
   startX: number;
   startY: number;
   startWidth: number;
   startHeight: number;
   maxRightWidth: number;
-  intersectionObserver: IntersectionObserver;
 
   constructor() {}
   ngAfterViewInit(): void {
-    this.intersectionObserver = new IntersectionObserver(
-      ([change]) => {
-        // @ts-ignore
-        // ⚠️ Feature detection
-        if (typeof change.isVisible === 'undefined') {
-          // The browser doesn't support Intersection Observer v2, falling back to v1 behavior.
-          // change.isVisible = true;
-          return;
-        }
-        // @ts-ignore
-        if (change.isIntersecting && change.isVisible) {
-          // console.log('显示了');
-        } else {
-          const scalableEl = this.scalableRef.nativeElement;
-          const bottomEl = this.bottomRef.nativeElement;
-          const { bottom } = change.boundingClientRect;
-          if (this.direction === 'column' && bottom >= document.documentElement.offsetHeight - 30) {
-            const h =
-              document.documentElement.offsetHeight - change.target.parentElement.getBoundingClientRect().top - 30 - 10;
-            scalableEl.style.height = `${h}px`;
-            bottomEl.style.height = `calc(100% - 12px - ${scalableEl.style.height})`;
-          }
-        }
-      },
-      {
-        threshold: [1.0],
-        // @ts-ignore
-        // 🆕 Set a minimum delay between notifications
-        delay: 600,
-        // 🆕 Track the actual visibility of the element
-        trackVisibility: true,
-      }
-    );
-    this.intersectionObserver.observe(this.separatorRef.nativeElement);
+    if (this.direction === 'column' && this.topStyle.height) {
+      const bottomEl = this.bottomRef.nativeElement;
+      bottomEl.style.height = `calc(100% - ${this.topStyle.height} - 6px)`;
+    }
   }
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.intersectionObserver.disconnect();
-  }
+  ngOnDestroy(): void {}
+
+  updateLayout = throttle(({ clientY, clientX }) => {
+    const scalableEl = this.scalableRef.nativeElement;
+    const bottomEl = this.bottomRef.nativeElement;
+    const { offsetHeight, offsetWidth } = scalableEl.parentElement;
+    if (scalableEl) {
+      if (this.direction === 'column') {
+        if (clientY >= document.documentElement.offsetHeight - (30 + 6)) {
+          return;
+        }
+        const h = ((this.startHeight + clientY - this.startY) / offsetHeight) * 100;
+        scalableEl.style.height = `min(${h}%, calc(100% - 6px))`;
+        bottomEl.style.height = `calc(100% - ${scalableEl.style.height} - 6px)`;
+      } else {
+        const w = ((this.startWidth + clientX - this.startX) / offsetWidth) * 100;
+        scalableEl.style.width = `min(${w}%, calc(100% - 6px))`;
+        bottomEl.style.width = `calc(100% - ${scalableEl.style.width} - 6px)`;
+      }
+      this.eoDrag.emit([scalableEl, bottomEl]);
+    }
+  }, 20);
 
   // 拖拽中
   onDrag = (e: MouseEvent) => {
-    const scalableEl = this.scalableRef.nativeElement;
-    const bottomEl = this.bottomRef.nativeElement;
-    if (scalableEl) {
-      if (this.direction === 'column') {
-        if (e.clientY >= document.documentElement.offsetHeight - 30) {
-          return;
-        }
-        scalableEl.style.height = `${this.startHeight + e.clientY - this.startY}px`;
-        bottomEl.style.height = `calc(100% - 12px - ${scalableEl.style.height})`;
-      } else {
-        scalableEl.style.width = `${this.startWidth + e.clientX - this.startX}px`;
-        bottomEl.style.width = `calc(100% - 12px - ${scalableEl.style.width})`;
-      }
-    }
+    this.updateLayout(e);
   };
 
   // 拖拽结束
   dragEnd = () => {
-    document.documentElement.style.userSelect = 'unset';
+    document.documentElement.style.removeProperty('user-select');
     this.handleEventListener('remove');
   };
 
@@ -102,7 +89,7 @@ export class SplitPanelComponent implements OnInit, OnDestroy, AfterViewInit {
       this.startHeight = parseInt(window.getComputedStyle(scalableEl).height, 10);
     }
 
-    document.documentElement.style.userSelect = 'none';
+    document.documentElement.style.setProperty('user-select', 'none');
     this.handleEventListener('add');
   };
 

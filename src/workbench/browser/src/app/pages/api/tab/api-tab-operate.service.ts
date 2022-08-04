@@ -138,9 +138,16 @@ export class ApiTabOperateService {
   private newOrReplaceTab(tabItem) {
     const currentTab = this.tabStorage.tabs[this.selectedIndex];
     if (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged)) {
+      // Same uuid means same tab data
+      //*Prevent toggling splash screen with empty tab title
+      if(tabItem.params?.uuid===currentTab.params?.uuid){
+        ['title','extends'].forEach(keyName=>{
+          if(tabItem[keyName]){return;}
+          tabItem[keyName]=currentTab[keyName];
+        });
+      }
+
       this.tabStorage.updateTab(this.selectedIndex, tabItem);
-      //If selectedIndex not change,need manually call selectTab to change content
-      // this.navigateTabRoute(tabItem);
     } else {
       this.tabStorage.addTab(tabItem);
       this.selectedIndex = this.tabStorage.tabs.length - 1;

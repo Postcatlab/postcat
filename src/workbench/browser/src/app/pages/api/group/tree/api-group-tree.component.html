@@ -1,21 +1,32 @@
 <header class="flex p-2">
-  <input nz-input type="text" class="flex-1 px-3 input" i18n-placeholder="@@Search" placeholder="Search"
-    [(ngModel)]="searchValue" />
-  <div class="flex items-center justify-center ml-3 text-base btn shrink-0" nzType="primary" nz-button nz-dropdown
-    [nzDropdownMenu]="menu" nzPlacement="bottomRight"
-    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
+  <input
+    nz-input
+    type="text"
+    class="flex-1 px-3 input"
+    i18n-placeholder="@@Search"
+    placeholder="Search"
+    [(ngModel)]="searchValue"
+  />
+  <div
+    class="flex items-center justify-center ml-3 text-base btn shrink-0"
+    nzType="primary"
+    nz-button
+    nz-dropdown
+    [nzDropdownMenu]="menu"
+    nzPlacement="bottomRight"
+    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
+  >
     <eo-iconpark-icon name="plus"></eo-iconpark-icon>
   </div>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })" i18n><a>New API</a></li>
+      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"><a i18n>New API</a></li>
       <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
     </ul>
   </nz-dropdown-menu>
 </header>
 <!-- Fixed Group -->
-<div class="px-2 group_container fixed_group_tree pt10">
-  <!-- <div class="group_container fixed_group_tree pt10" *ngIf="electron.isElectron"> -->
+<div class="px-2 group_container fixed_group_tree pt10" *ngIf="electron.isElectron">
   <nz-tree
     [nzData]="fixedTreeNode"
     [nzSelectedKeys]="nzSelectedKeys"
@@ -34,11 +45,10 @@
     </div>
   </ng-template>
 </div>
-<div class="mx-2 bbd"></div>
-<!-- <div class="bbd" *ngIf="electron.isElectron"></div> -->
+<div class="mx-2 bbd" *ngIf="electron.isElectron"></div>
 
 <!-- Custom Group -->
-<div class="px-2 group_container group_tree pt10">
+<div class="group_container group_tree pt10">
   <nz-tree
     [nzData]="treeNodes"
     [nzSelectedKeys]="nzSelectedKeys"

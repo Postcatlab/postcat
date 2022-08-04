@@ -82,7 +82,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   batchCloseTab(uuids) {
     this.tabOperate.batchClose(uuids);
   }
-  updateTab(tabItem: TabItem) {
+  updatePartialTab(tabItem: TabItem) {
     const currentTab = this.getCurrentTab();
     this.tabStorage.updateTab(this.tabOperate.selectedIndex, Object.assign({}, currentTab, tabItem));
   }

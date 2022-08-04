@@ -1,7 +1,12 @@
 .ant-input-group.ant-input-group-compact {
   display: flex;
 }
-
+.ant-form-item{
+  margin-bottom: 0;
+}
+.ant-select {
+  height: 32px;
+}
 .basic_info_container {
   padding: 10px;
   background-color: var(--MAIN_BG);

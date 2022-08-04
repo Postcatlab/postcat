@@ -26,6 +26,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
+import { EditorOptions } from 'ng-zorro-antd/code-editor';
 
 @Component({
   selector: 'eo-api-test-body',
@@ -46,6 +47,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   binaryFiles: NzUploadFile[] = [];
   CONST: any = {};
   cache: any = {};
+  editorConfig: EditorOptions = {
+    language: 'json',
+  };
   private itemStructure: ApiTestBody = {
     required: true,
     name: '',
@@ -68,7 +72,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {
+    this.rawChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
       this.modelChange.emit(this.model);
     });
   }
@@ -131,6 +135,13 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   }
   uploadBinary = (file) =>
     new Observable((observer: Observer<boolean>) => {
+      this.model = {};
+      this.binaryFiles = [];
+      if (file.size >= 5 * 1024 * 1024) {
+        this.message.error($localize`The file is too large and needs to be less than 5 MB`);
+        observer.complete();
+        return;
+      }
       transferFileToDataUrl(file).then((result: { name: string; content: string }) => {
         this.model = {
           name: file.name,
@@ -152,8 +163,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     this.modelChange.emit(data);
   }
 
-  rawDataChange() {
-    this.rawChange$.next(this.model);
+  rawDataChange(code: string) {
+    this.rawChange$.next(code);
   }
   /**
    * Set model after change bodyType

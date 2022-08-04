@@ -1,5 +1,4 @@
-<!-- selectedIndex:{{ tabOperate.selectedIndex }}
-{{ tabStorage.tabs | json }} -->
+{{ tabStorage.tabs | json }}
 <nz-tabset
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
@@ -10,10 +9,12 @@
   <nz-tab *ngFor="let tab of tabStorage.tabs; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <div class="flex items-center tab-title-container">
+        <nz-spin nzSimple [nzIndicator]="indicatorTemplate" *ngIf="!tab.title"></nz-spin>
         <span class="mr5 method-text method_text_{{ tab.extends.method }}" *ngIf="tab.extends?.method">{{
           tab.extends.method
         }}</span>
-        <eo-iconpark-icon class="mr5" name="{{tab.icon}}" size="14px" *ngIf="tab.icon"></eo-iconpark-icon>
+        <ng-template #indicatorTemplate><i nz-icon nzType="loading"></i></ng-template>
+        <!-- <eo-iconpark-icon class="mr5" name="{{tab.icon}}" size="14px" *ngIf="!tab.extends?.method&&tab.icon"></eo-iconpark-icon> -->
         <span class="text_omit tab_text"> {{ tab.title }}</span>
         <!-- Close/HasEdit -->
         <div class="tab-item-button-group">

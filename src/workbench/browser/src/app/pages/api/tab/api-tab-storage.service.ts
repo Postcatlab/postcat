@@ -55,7 +55,6 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(currentIndex) {
-    console.log('cacheTabData');
     const storage = {};
     this.tabs
       .filter((val) => val.type === 'edit' && val.hasChanged)

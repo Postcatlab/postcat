@@ -17,7 +17,7 @@ export const isXML = (data) => {
   return true;
 };
 /**
- * Parse item to table need row data
+ * Parse item to eoTableComponent need
  */
 export const parseTree = (key, value, level = 0) => {
   if (whatType(value) === 'object') {
@@ -34,12 +34,14 @@ export const parseTree = (key, value, level = 0) => {
   if (whatType(value) === 'array') {
     // * Just pick first element
     const [data] = value;
-    // Array element is primitive value
+    // If array element is primitive value
     if (whatType(data) === 'string') {
       return {
         name: key,
         required: true,
+        //TODO only test page has value
         value: JSON.stringify(value),
+        //TODO only edit page has example
         example: JSON.stringify(value),
         type: 'array',
         description: '',
@@ -62,7 +64,7 @@ export const parseTree = (key, value, level = 0) => {
     description: '',
     type: whatType(value),
     required: true,
-    example: value || '',
+    example: value == null ? '' : value.toString(),
     listDepth: level,
   };
 };
@@ -139,24 +141,24 @@ export const xml2json = (tmpl) => {
   return result;
 };
 
-interface uiData {
+type uiData = {
   textType: ApiBodyType | string;
   rootType: JsonRootType | string;
-  data: ApiEditBody|any;
-}
+  data: ApiEditBody | any;
+};
 export const xml2UiData = (text) => {
   const data: any[] = xml2json(text);
-  const result = {};
-  const mapAttr = (obj: any) => {
-    const { tagName, attr, children, content } = obj;
-    return {
-      [tagName]: children.length ? mapAttr(children[0]) : attr,
-    };
-  };
-  data.forEach((it) => {
-    const { tagName, attr, children } = it;
-    result[tagName] = children.length ? mapAttr(children[0]) : attr;
-  });
+  const deep = (list = []) =>
+    list.reduce(
+      (total, { tagName, content, attr, children }) => ({
+        ...total,
+        [tagName]: children?.length > 0 ? deep(children || []) : content,
+        // attribute: attr,  // * not support the key for now cause ui has not show it
+      }),
+      {}
+    );
+  const result = deep(data);
+  console.log('result', result);
   return JSON.parse(JSON.stringify(result));
 };
 /**

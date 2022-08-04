@@ -40,6 +40,7 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { ViewportScroller } from '@angular/common';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 
+const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 @Component({
   selector: 'eo-api-test',
   templateUrl: './api-test.component.html',
@@ -65,11 +66,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   tabIndexRes = 0;
+  isRequestBodyLoaded = false;
   testResult: any = {
     response: {},
     request: {},
   };
   scriptCache = {};
+  initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
@@ -98,6 +101,16 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   clickTest() {
+    //manual set dirty in case user submit directly without edit
+    for (const i in this.validateForm.controls) {
+      if (this.validateForm.controls.hasOwnProperty(i)) {
+        this.validateForm.controls[i].markAsDirty();
+        this.validateForm.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.validateForm.status === 'INVALID') {
+      return;
+    }
     if (this.status === 'testing') {
       this.abort();
       return;
@@ -192,6 +205,16 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   changeBodyType($event) {
     this.initContentType();
+  }
+  handleEoDrag([leftEl]: [HTMLDivElement, HTMLDivElement]) {
+    if (leftEl.style.height) {
+      localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, leftEl.style.height);
+    }
+  }
+  handleBottomTabSelect(tab) {
+    if (tab.index === 2) {
+      this.isRequestBodyLoaded = true;
+    }
   }
   private test() {
     this.scriptCache = {
@@ -314,7 +337,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         uuid: 0,
         requestBodyType: 'raw',
         requestBodyJsonType: 'object',
-        requestBody: [],
+        requestBody: '',
         queryParams: [],
         restParams: [],
         requestHeaders: [
@@ -343,6 +366,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       const { env } = data;
       if (env) {
         this.env = env;
+        if (env.uuid) {
+          this.validateForm.controls.uri.setValidators([]);
+          this.validateForm.controls.uri.updateValueAndValidity();
+        } else {
+          this.validateForm.controls.uri.setValidators([Validators.required]);
+        }
       }
     });
   }

@@ -1,3 +1,4 @@
+import { debounce } from 'eo/workbench/browser/src/app/utils';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
@@ -95,11 +96,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Load all group and apiData items.
    */
-  buildGroupTreeData(): void {
-    this.groupByID = {};
-    this.treeItems = [];
-    this.getGroups();
-  }
+  buildGroupTreeData = debounce(() => {
+    {
+      this.groupByID = {};
+      this.treeItems = [];
+      this.getGroups();
+    }
+  });
   getGroups() {
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
@@ -364,11 +367,15 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         if (dragNode.isLeaf) {
           groupApiData.api.push({ uuid: item.key, weight: index, groupID: '0' });
         } else {
-          groupApiData.group.push({ uuid: item.key.replace('group-', ''), weight: index, parentID: '0' });
+          groupApiData.group.push({ uuid: item.key, weight: index, parentID: '0' });
         }
       });
     }
     this.updateOperateApiEvent(groupApiData);
+  }
+
+  private replaceGroupKey(key: string) {
+    return Number(key.replace('group-', ''));
   }
   /**
    * Update tree items after drag.
@@ -376,22 +383,44 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param data GroupApiDataModel
    */
   updateOperateApiEvent(data: GroupApiDataModel) {
-    console.log('updateOperateApiEvent', data.group);
+    let count = 0;
     if (data.group.length > 0) {
+      count++;
+      console.log('data.group', data.group);
       this.storage.run(
         'groupBulkUpdate',
         [
-          data.group.map((val) => ({ ...val, uuid: val.uuid.replace('group-', ''), parentID: val.parentID.replace('group-', '') })),
+          data.group.map((val) => ({
+            ...val,
+            uuid: this.replaceGroupKey(val.uuid),
+            parentID: this.replaceGroupKey(val.parentID),
+          })),
         ],
         (result: StorageRes) => {
-          this.buildGroupTreeData();
+          if (--count === 0) {
+            this.buildGroupTreeData();
+          }
         }
       );
     }
     if (data.api.length > 0) {
-      this.storage.run('apiDataBulkUpdate', [data.api], (result: StorageRes) => {
-        this.buildGroupTreeData();
-      });
+      count++;
+      console.log('data.api', data.api);
+      this.storage.run(
+        'apiDataBulkUpdate',
+        [
+          data.api.map((n) => ({
+            ...n,
+            uuid: this.replaceGroupKey(n.uuid),
+            groupID: this.replaceGroupKey(n.groupID),
+          })),
+        ],
+        (result: StorageRes) => {
+          if (--count === 0) {
+            this.buildGroupTreeData();
+          }
+        }
+      );
     }
   }
   /**

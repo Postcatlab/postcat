@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd } from '@angular/router';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
+import { debounceTime, Subject } from 'rxjs';
 
 @Injectable()
 export class ApiTabService {
@@ -10,14 +11,19 @@ export class ApiTabService {
   get currentTabType(): string {
     return Object.values(this.BASIC_TBAS).find((val) => val.pathname === window.location.pathname)?.type || 'preview';
   }
+  private changeContent$: Subject<string | number> = new Subject();
   BASIC_TBAS = {
-    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API` },
+    test: { pathname: '/home/api/test', type: 'edit', icon: 'international' },
     edit: { pathname: '/home/api/edit', type: 'edit' },
-    detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`:@@API Detail:Preview` },
+    detail: { pathname: '/home/api/detail', type: 'preview', icon: 'file-text-one' },
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
-  constructor() {}
+  constructor() {
+    this.changeContent$.pipe(debounceTime(100)).subscribe(() => {
+      this.afterContentChange();
+    });
+  }
   watchApiChange(inArg: Message) {
     switch (inArg.type) {
       case 'deleteApiSuccess': {
@@ -71,14 +77,8 @@ export class ApiTabService {
       throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
     }
   }
-
-  /**
-   * Watch router content page change
-   * !Current scope {this} has change to Object:{emit,that}
-   */
-  private watchContentChange = function() {
-    const that = this.that;
-    // console.log('watchContentChange', that.componentRef.model);
+  afterContentChange() {
+    const that=this;
     const tabItem: any = {
       title: that.componentRef.model.name,
       extends: {
@@ -86,8 +86,16 @@ export class ApiTabService {
       },
     };
     if (this.currentTabType === 'edit') {
-      tabItem.hasChanged = that.componentRef.isFormChange();
+      tabItem.hasChanged = this.componentRef.isFormChange();
     }
-    that.apiTabComponent.updateTab(tabItem);
+    this.apiTabComponent.updatePartialTab(tabItem);
+  }
+  /**
+   * Watch router content page change
+   * !Current scope {this} has change to Object:{emit,that}
+   */
+  private watchContentChange = function() {
+    const that=this.that;
+    that.changeContent$.next();
   };
 }
