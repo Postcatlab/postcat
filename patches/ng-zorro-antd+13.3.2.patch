@@ -1,0 +1,40 @@
+diff --git a/node_modules/ng-zorro-antd/fesm2015/ng-zorro-antd-tree.mjs b/node_modules/ng-zorro-antd/fesm2015/ng-zorro-antd-tree.mjs
+index 03bd5c6..bb0c608 100644
+--- a/node_modules/ng-zorro-antd/fesm2015/ng-zorro-antd-tree.mjs
++++ b/node_modules/ng-zorro-antd/fesm2015/ng-zorro-antd-tree.mjs
+@@ -374,12 +374,12 @@ NzTreeNodeTitleComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0
+         </span>
+       </span>
+       <span class="ant-tree-title" [innerHTML]="title | nzHighlight: matchedValue:'i':'font-highlight'"></span>
+-      <nz-tree-drop-indicator
+-        *ngIf="showIndicator"
+-        [dropPosition]="dragPosition"
+-        [level]="context.level"
+-      ></nz-tree-drop-indicator>
+     </ng-container>
++    <nz-tree-drop-indicator
++    *ngIf="showIndicator"
++    [dropPosition]="dragPosition"
++    [level]="context.level"
++  ></nz-tree-drop-indicator>
+   `, isInline: true, components: [{ type: NzTreeDropIndicatorComponent, selector: "nz-tree-drop-indicator", inputs: ["dropPosition", "level", "direction"], exportAs: ["NzTreeDropIndicator"] }], directives: [{ type: i7.NgTemplateOutlet, selector: "[ngTemplateOutlet]", inputs: ["ngTemplateOutletContext", "ngTemplateOutlet"] }, { type: i7.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { type: i3.NzIconDirective, selector: "[nz-icon]", inputs: ["nzSpin", "nzRotate", "nzType", "nzTheme", "nzTwotoneColor", "nzIconfont"], exportAs: ["nzIcon"] }], pipes: { "nzHighlight": i4.NzHighlightPipe }, changeDetection: i0.ChangeDetectionStrategy.OnPush });
+ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.3.11", ngImport: i0, type: NzTreeNodeTitleComponent, decorators: [{
+             type: Component,
+@@ -409,12 +409,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.3.11", ngImpo
+         </span>
+       </span>
+       <span class="ant-tree-title" [innerHTML]="title | nzHighlight: matchedValue:'i':'font-highlight'"></span>
+-      <nz-tree-drop-indicator
+-        *ngIf="showIndicator"
+-        [dropPosition]="dragPosition"
+-        [level]="context.level"
+-      ></nz-tree-drop-indicator>
+     </ng-container>
++    <nz-tree-drop-indicator
++    *ngIf="showIndicator"
++    [dropPosition]="dragPosition"
++    [level]="context.level"
++  ></nz-tree-drop-indicator>
+   `,
+                     changeDetection: ChangeDetectionStrategy.OnPush,
+                     preserveWhitespaces: false,

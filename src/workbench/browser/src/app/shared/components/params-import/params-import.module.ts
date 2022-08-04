@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ParamsImportComponent } from './params-import.component';
 
-import { EouiModule } from '../../../eoui/eoui.module';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -12,7 +12,7 @@ import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark
 
 @NgModule({
   declarations: [ParamsImportComponent],
-  imports: [FormsModule, EoIconparkIconModule, NzDropDownModule, NzModalModule, NzButtonModule, EouiModule],
+  imports: [FormsModule, EoIconparkIconModule, NzDropDownModule, NzModalModule, NzButtonModule, SharedModule],
   exports: [ParamsImportComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

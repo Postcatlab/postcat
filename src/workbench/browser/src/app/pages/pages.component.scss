@@ -1,5 +1,17 @@
+:host {
+  --body-height: calc(100vh - var(--NAV_TOP) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0px));
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.page-body {
+  height: var(--body-height);
+}
+
 .home_container {
-  height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--remote-notification-height, 0px) - 1px);
+  // height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--remote-notification-height, 0px) - 1px);
 }
 .home {
   background-color: var(--MAIN_BG);
@@ -18,7 +30,7 @@
   eo-api {
     router-outlet + * {
       display: block;
-      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 46px);
+      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 74px);
       overflow: auto;
     }
     router-outlet + eo-api-test {
@@ -35,7 +47,7 @@
     router-outlet + * {
       display: block;
       height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height));
-      // overflow: auto;
+      overflow: auto;
     }
   }
 }

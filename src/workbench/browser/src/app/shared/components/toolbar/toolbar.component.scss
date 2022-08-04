@@ -1,6 +1,7 @@
+:host {
+  z-index: 10;
+}
 .app_toolbar {
-  position: fixed;
-  bottom: 0;
   height: var(--FOOTER_HEIGHT);
   border-top-width: 1px;
   border-top-style: solid;

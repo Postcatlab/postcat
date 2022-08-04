@@ -55,9 +55,10 @@ export const parseTree = (key, value, level = 0) => {
       children: data ? Object.keys(data).map((it) => parseTree(it, data[it], level + 1)) : [],
     };
   }
+  // * value is string & number & null
   return {
     name: key,
-    value,
+    value: value == null ? '' : value.toString(),
     description: '',
     type: whatType(value),
     required: true,
