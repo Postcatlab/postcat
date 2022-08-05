@@ -59,6 +59,7 @@ export class ImportApiComponent implements OnInit {
     {
       const { key } = this.supportList.at(0);
       this.currentExtension = key || '';
+      console.log('this.currentExtension', this.currentExtension);
     }
   }
   uploadChange(data) {
@@ -68,7 +69,7 @@ export class ImportApiComponent implements OnInit {
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension);
+    const module = await window.eo.loadFeatureModule(this.currentExtension);
     const { name, content } = this.uploadData;
     const [data, err] = module[action](content);
     if (err) {
