@@ -117,9 +117,13 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       this.resizeObserver = new ResizeObserver(
         debounce(() => {
           if (this.el.offsetParent) {
-            this?.rerenderEditor();
+            this.el.style.setProperty('overflow', 'hidden');
+            requestAnimationFrame(() => {
+              this?.rerenderEditor();
+              this.el.style.removeProperty('overflow');
+            });
           }
-        }, 150)
+        }, 600)
       );
       this.resizeObserver.observe(this.el);
     }

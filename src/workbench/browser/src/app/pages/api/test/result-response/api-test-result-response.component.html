@@ -7,7 +7,7 @@
 </div>
 <div class="p15" *ngIf="(model | json) !== '{}'">
   <!-- Status Bar -->
-  <div *ngIf="model.statusCode"
+  <div *ngIf="model?.statusCode"
     class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
     <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
     <div class="f_row_ac fs12">

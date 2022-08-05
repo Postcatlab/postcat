@@ -57,7 +57,7 @@ export class SplitPanelComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {}
 
   updateTopAndBottomCssVar() {
-    requestIdleCallback(() => {
+    requestAnimationFrame(() => {
       this.topHeight = getComputedStyle(this.scalableRef.nativeElement).height;
       this.bottomHeight = getComputedStyle(this.bottomRef.nativeElement).height;
     });
