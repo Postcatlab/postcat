@@ -7,7 +7,7 @@
 
 <h1 align="center">Eoapi</h1>
 <div align="center">
-一个可拓展的 API 工具，简单 & 开源的 API 生态系统
+一个可拓展的 API 工具，简单（Easy） & 开源（OpenSource）的 API 生态系统
 </div>
 
 ![](./wiki/images/zh-preview.png)
