@@ -17,25 +17,29 @@ export class ApiTabService {
     test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API`, extends: { method: 'POST' } },
     edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
     detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`Preview` },
-    overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index` },
+    overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index`, icon: 'home' },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
   constructor() {
-    this.changeContent$.pipe(debounceTime(100)).subscribe(() => {
-      this.afterContentChange();
+    this.watchPageLeave();
+    this.changeContent$.pipe(debounceTime(100)).subscribe((model) => {
+      this.updatePartialTab(model);
     });
   }
   watchApiChange(inArg: Message) {
     switch (inArg.type) {
       case 'deleteApiSuccess': {
+        //Close those tab who has been deleted
         const closeTabIDs = this.apiTabComponent
           .getTabs()
           .filter((val) => inArg.data.uuids.includes(Number(val.params.uuid)))
           .map((val) => val.uuid);
+        console.log(closeTabIDs);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
       }
       case 'saveApiFromTest': {
+        //Close current test page
         const currentTab = this.apiTabComponent.getCurrentTab();
         this.apiTabComponent.batchCloseTab([currentTab.uuid]);
         break;
@@ -72,48 +76,76 @@ export class ApiTabService {
   }
   refleshData(lastRouter: NavigationEnd, currentRouter: NavigationEnd) {
     //If componnet init
-    if (this.componentRef?.init) {
-      //Because router reflect childComponnet change, they will query data by themselves.
-      if (lastRouter.url.split('?')[0] !== currentRouter.url.split('?')[0]) {
-        return;
-      }
-      this.componentRef.model = null;
-      this.componentRef.init();
-    } else {
-      throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
+    if (!this.componentRef?.init) {
+      this.changeContent$.next(null);
+      return;
     }
+    console.log('refleshData');
+    //Has tab cache
+    const contentStorage = this.apiTabComponent.getCurrentTabStorage();
+    // console.log('tabStorage',contentStorage);
+    if (contentStorage) {
+      this.componentRef.model = contentStorage;
+    } else {
+      this.componentRef.model = null;
+    }
+    //Because router reflect childComponnet change, they will query data by themselves.
+    if (lastRouter.url.split('?')[0] !== currentRouter.url.split('?')[0]) {
+      return;
+    }
+    this.componentRef.init();
   }
-  afterContentChange() {
-    this.updatePartialTab();
-  }
-  updatePartialTab() {
+  updatePartialTab(model) {
     const currentTab = this.apiTabComponent.getCurrentTab();
     //Set tabItem
     const tabItem: Partial<TabItem> = {
-      isLoading:false,
-      extends: {
-        method: this.componentRef.model.method,
-      },
+      isLoading: false,
+      extends: {}
     };
-    if (this.componentRef.model.name || (currentTab.pathname === '/home/api/test' && this.componentRef.model.url)) {
-      tabItem.title = this.componentRef.model.name || this.componentRef.model.url;
+    let tabTitle = null;
+    if (model) {
+      tabItem.extends.method = model.method;
+      tabTitle = model.name;
+      if (currentTab.pathname === '/home/api/test') {
+        if (!model.uuid) {
+          //Only Untitle request need set url to tab title
+          tabTitle = model.uri || tabTitle;
+        }
+      }
+      if (tabTitle) {
+        tabItem.title = tabTitle;
+      }
     }
+
     //Set hasChange
     if (currentTab.type === 'edit') {
       if (!this.componentRef?.isFormChange) {
         throw new Error('EO_ERROR:Child componentRef need has isFormChange function check model change');
       }
+      //storage data
+      tabItem.content=model;
       tabItem.hasChanged = this.componentRef.isFormChange();
     }
-    console.log('watchContentChange', tabItem);
     this.apiTabComponent.updatePartialTab(tabItem);
+  }
+  componentInit() {
+    //If componnet init
+    if (!this.componentRef?.init) {
+      this.changeContent$.next(null);
+      throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
+    }
   }
   /**
    * Watch router content page change
    * !Current scope {this} has change to Object:{emit,that}
    */
-  private watchContentChange = function() {
+  private watchContentChange = function(model) {
     const that = this.that;
-    that.changeContent$.next();
+    that.changeContent$.next(model);
   };
+  private watchPageLeave() {
+    window.addEventListener('beforeunload', function(e) {
+      console.log('beforeunload');
+    });
+  }
 }

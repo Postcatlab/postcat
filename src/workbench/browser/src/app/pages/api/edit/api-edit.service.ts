@@ -38,7 +38,6 @@ export class ApiEditService {
       const pureApi = this.getPureApi({ groupID });
       if (tmpApiData) {
         //Add From Test
-        console.log('apiDataWillbeSave', tmpApiData);
         window.sessionStorage.removeItem('apiDataWillbeSave');
         tmpApiData = JSON.parse(tmpApiData);
         Object.keys(pureApi).forEach((keyName) => {

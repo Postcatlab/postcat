@@ -103,6 +103,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   async init() {
     if (!this.model) {
       this.model = {} as ApiTestData;
+      this.initBasicForm();
       const id = Number(this.route.snapshot.queryParams.uuid);
       const result = await this.apiTest.getApi({
         id,
@@ -113,6 +114,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     } else {
       //API data form outside,such as tab cache
       this.originModel = structuredClone(this.model);
+      this.initBasicForm();
     }
     //! Set this two function to reset form
     this.validateForm.markAsPristine();
@@ -123,7 +125,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   clickTest() {
-    if (!this.checkForm()) {return;}
+    if (!this.checkForm()) {
+      return;
+    }
     if (this.status === 'testing') {
       this.abort();
       return;
@@ -135,13 +139,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * ? Maybe support saving test case in future
    */
   saveApi() {
-    if (!this.checkForm()) {return;}
+    if (!this.checkForm()) {
+      return;
+    }
     const apiData = this.apiTestUtil.formatSavingApiData({
       history: this.testResult,
       testData: this.model,
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    this.messageService.send({type:'saveApiFromTest',data:{}});
+    this.messageService.send({ type: 'saveApiFromTest', data: {} });
     this.router.navigate(['home/api/edit'], {
       queryParams: { pageID: Date.now() },
     });
@@ -176,14 +182,14 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   isFormChange(): boolean {
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
-    if (this.model.uuid) {
-      return false;
-    }
+    // if (this.model.uuid) {
+    //   return false;
+    // }
 
     if (!this.originModel || !this.model) {
       return false;
     }
-    console.log('origin:', this.originModel, 'after:', this.apiTestUtil.formatEditingApiData(this.model));
+    // console.log('origin:', this.originModel, 'after:', this.apiTestUtil.formatEditingApiData(this.model));
     if (JSON.stringify(this.originModel) !== JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model))) {
       return true;
     }
@@ -211,7 +217,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.init();
-    this.initBasicForm();
     this.watchBasicForm();
     this.watchEnvChange();
   }

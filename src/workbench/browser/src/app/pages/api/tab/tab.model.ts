@@ -8,11 +8,21 @@ export enum TabOperate {
  * Tab item.
  */
 export type TabItem = {
-  isLoading: boolean;
   /**
    * Tab id,timestamp
    */
   uuid: number;
+  isFixed?: boolean;
+  /**
+   * Preview page or edit page
+   */
+  type: string | 'preview' | 'edit';
+  /**
+   * In edit page,value will be set true when content change
+   */
+  hasChanged?: boolean;
+
+  isLoading: boolean;
   /**
    * Tab title
    *
@@ -25,18 +35,11 @@ export type TabItem = {
    * @type {string}
    */
   pathname: string;
-  /**
-   * Preview page or edit page
-   */
-  type: string | 'preview' | 'edit';
+
   /**
    * Query params
    */
   params: any;
-  /**
-   * In edit page,value will be set true when content change
-   */
-  hasChanged?: boolean;
   /**
    * Content Icon
    */
@@ -45,4 +48,8 @@ export type TabItem = {
    * Extend key
    */
   extends?: any;
+  /**
+   * Tab content
+   */
+  content: any;
 };

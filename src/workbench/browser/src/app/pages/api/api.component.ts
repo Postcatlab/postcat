@@ -22,7 +22,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: ApiTabComponent) {
     // For lifecycle error, use timeout
-  this.apiTab.apiTabComponent = value;
+    this.apiTab.apiTabComponent = value;
   }
 
   tabsetIndex: number;
@@ -99,19 +99,29 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
-    this.setPageID();
-    this.setTabsetIndex();
     this.id = Number(this.route.snapshot.queryParams.uuid);
+    this.setPageID();
     this.initTabsetData();
+    //Need execute after init tabset data
+    this.setTabsetIndex();
     this.watchApiChange();
     this.watchRouterChange();
     this.watchDataSourceChange();
     this.initEnv();
     this.watchEnvChange();
+    this.apiTab.componentInit();
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  mockDeleteAPI() {
+    this.messageService.send({
+      type: 'deleteApiSuccess',
+      data: {
+        uuids: [21, 25],
+      },
+    });
   }
 
   watchApiChange() {
@@ -144,13 +154,13 @@ export class ApiComponent implements OnInit, OnDestroy {
         filter((e) => e instanceof NavigationEnd),
         pairwise()
       )
-      .subscribe(([lastRouter, currentRouter]: [NavigationEnd,NavigationEnd]) => {
-        // console.log('watchRouterChange',lastRouter,currentRouter);
+      .subscribe(([lastRouter, currentRouter]: [NavigationEnd, NavigationEnd]) => {
+        console.log('watchRouterChange',lastRouter,currentRouter);
         this.id = Number(this.route.snapshot.queryParams.uuid);
         this.setPageID();
         this.setTabsetIndex();
 
-        this.apiTab.refleshData(lastRouter,currentRouter);
+        this.apiTab.refleshData(lastRouter, currentRouter);
       });
   }
   gotoEnvManager() {

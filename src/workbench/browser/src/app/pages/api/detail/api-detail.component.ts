@@ -32,12 +32,12 @@ export class ApiDetailComponent implements OnInit {
       this.model = {} as ApiData;
       const id = Number(this.route.snapshot.queryParams.uuid);
       if (id) {
-        const result = (await this.getApiByUuid(Number(id))) as ApiData;
-        this.afterInit.emit(result);
+        this.model = (await this.getApiByUuid(Number(id))) as ApiData;
       } else {
         console.error('Can\'t no find api');
       }
     }
+    this.afterInit.emit(this.model);
   }
   getApiByUuid(id: number) {
     return new Promise((resolve) => {

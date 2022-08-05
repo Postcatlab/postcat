@@ -118,7 +118,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.getApiGroup();
     this.watchGroupIDChange();
     this.init();
-    this.initBasicForm();
     this.watchBasicForm();
     this.watchUri();
   }
@@ -130,16 +129,17 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   async init() {
     if (!this.model) {
       this.model = {} as ApiData;
+      this.initBasicForm();
       const id = Number(this.route.snapshot.queryParams.uuid);
-      const groupID= Number(this.route.snapshot.queryParams.groupID || 0);
+      const groupID = Number(this.route.snapshot.queryParams.groupID || 0);
       const result = await this.apiEdit.getApi({
         id,
-        groupID
+        groupID,
       });
       //Storage origin api data
       if (!id) {
         // New API/New API from other page such as test page
-        this.originModel = this.apiEdit.getPureApi({groupID});
+        this.originModel = this.apiEdit.getPureApi({ groupID });
       } else {
         this.originModel = structuredClone(result);
       }
@@ -147,6 +147,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     } else {
       //API data form outside,such as tab cache
       this.originModel = structuredClone(this.model);
+      this.initBasicForm();
     }
     this.afterGroupIDChange();
     this.changeGroupID$.next(this.model.groupID);

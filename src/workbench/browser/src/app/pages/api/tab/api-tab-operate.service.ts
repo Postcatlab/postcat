@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -16,12 +17,12 @@ export class ApiTabOperateService {
    * Tab basic info
    */
   BASIC_TABS: { [key: string]: Partial<TabItem> };
-  constructor(private tabStorage: ApiTabStorageService, private router: Router) {}
+  constructor(private tabStorage: ApiTabStorageService, private router: Router, private modal: ModalService) {}
   //Init tab info
   //Maybe from tab cache info or router url
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
-    const tabCache = this.tabStorage.getPersistenceStorage();
+    // const tabCache = this.tabStorage.getPersistenceStorage();
     // if (tabCache) {
     //   this.tabStorage.setTabs(tabCache.tabs);
     //   this.navigateTabRoute(tabCache.tabs[tabCache.selectIndex || 0]);
@@ -39,19 +40,13 @@ export class ApiTabOperateService {
   newDefaultTab() {
     const tabItem: TabItem = this.getTabFromUrl(Object.values(this.BASIC_TABS)[0].pathname);
     this.tabStorage.addTab(tabItem);
-    //If selectIndex no change,manually change tab content url
-    //Because if selectIndex change,tab component will call navigateTabRoute automatically
-    if (this.selectedIndex === this.tabStorage.tabs.length - 1) {
-      this.navigateTabRoute(tabItem);
-      return;
-    }
-    this.selectedIndex = this.tabStorage.tabs.length - 1;
+    this.selectedIndex = this.tabStorage.tabOrder.length - 1;
   }
 
-  closeTab(index) {
+  closeTab(index: number) {
     // If tab is last one,selectIndex will be change by component itself;
     this.tabStorage.closeTab(index);
-    if (this.tabStorage.tabs.length === 0) {
+    if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
     }
   }
@@ -59,15 +54,9 @@ export class ApiTabOperateService {
    * Close tab by ID
    * */
   batchClose(ids) {
-    const tabs = this.tabStorage.tabs.filter((val) => {
-      const shouldClose = ids.includes(val.uuid);
-      if (shouldClose) {
-        this.tabStorage.removeStorage(val.uuid);
-      }
-      return !shouldClose;
-    });
-    this.tabStorage.setTabs(tabs);
-    if (this.tabStorage.tabs.length === 0) {
+    const tabOrder = this.tabStorage.tabOrder.filter((uuid) => !ids.includes(uuid));
+    this.tabStorage.setTabs(tabOrder);
+    if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
     }
   }
@@ -79,15 +68,15 @@ export class ApiTabOperateService {
         break;
       }
       case TabOperate.closeOther: {
-        this.tabStorage.setTabs([this.tabStorage.tabs[this.selectedIndex]]);
+        this.tabStorage.setTabs([this.tabStorage.tabOrder[this.selectedIndex]]);
         break;
       }
       case TabOperate.closeLeft: {
-        this.tabStorage.setTabs(this.tabStorage.tabs.slice(this.selectedIndex));
+        this.tabStorage.setTabs(this.tabStorage.tabOrder.slice(this.selectedIndex));
         break;
       }
       case TabOperate.closeRight: {
-        this.tabStorage.setTabs(this.tabStorage.tabs.slice(0, this.selectedIndex + 1));
+        this.tabStorage.setTabs(this.tabStorage.tabOrder.slice(0, this.selectedIndex + 1));
         break;
       }
     }
@@ -109,14 +98,26 @@ export class ApiTabOperateService {
   operateTabAfterRouteChange(res: { url: string }) {
     const tmpTabItem = this.getTabFromUrl(res.url);
     //Pick current router url as the first tab
-    if (this.tabStorage.tabs.length === 0) {
+    if (this.tabStorage.tabOrder.length === 0) {
       this.tabStorage.addTab(tmpTabItem);
       return;
     }
-    //If exist tab,select that tab
-    const existTabIndex = this.tabStorage.tabs.findIndex(
-      (val) => val.uuid === tmpTabItem.params.pageID && val.pathname === tmpTabItem.pathname
-    );
+    let existTabIndex = -1;
+    //Get existTabIndex
+    //If exist tab,select it
+    for (const tabInfo of this.tabStorage.tabsByID.values()) {
+      let isSameContent = false;
+      if (tabInfo.params.uuid && tabInfo.params.uuid === tmpTabItem.params.uuid) {
+        if (tabInfo.pathname === tmpTabItem.pathname) {
+          isSameContent = true;
+        }
+        //TODO how to replace current exist tab but editing
+      }
+      if (tabInfo.uuid === tmpTabItem.params.pageID || isSameContent) {
+        existTabIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
+        break;
+      }
+    }
     //Router has focus current tab
     if (this.selectedIndex === existTabIndex) {
       return;
@@ -129,34 +130,37 @@ export class ApiTabOperateService {
     //If no exist,new tab or replace origin tab
     this.newOrReplaceTab(tmpTabItem);
   }
+  getCurrentTab() {
+    const currentID = this.tabStorage.tabOrder[this.selectedIndex];
+    return this.tabStorage.tabsByID.get(currentID);
+  }
   /**
    * New or replace current tab
-   * * Avoid open too much tab,if tab[type==='preview'] or tab[type==='edit'] with no change,replace page in current tab
    *
    * @param tabItem tab need to be add
    */
-  private newOrReplaceTab(tabItem) {
-    const currentTab = this.tabStorage.tabs[this.selectedIndex];
-    if (currentTab.type === 'preview'||(currentTab.type === 'edit' && !currentTab.hasChanged)) {
+  private newOrReplaceTab(tabItem: TabItem) {
+    const currentTab = this.getCurrentTab();
+    //* Avoid open too much tab,if tab[type==='preview'] or tab[type==='edit'] with no change,replace page in current tab
+    const canbeReplace =
+      !currentTab.isFixed && (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged));
+    if (canbeReplace) {
       // Same uuid means same tab data
       //*Prevent toggling splash screen with empty tab title
       if (tabItem.params?.uuid === currentTab.params?.uuid) {
-        //Tabs template default title,like `NEW API`...
-        const defaultTitle =
-          Object.values(this.BASIC_TABS).find((val) => val.pathname === tabItem.pathname).title || '';
         ['title', 'extends', 'isLoading'].forEach((keyName) => {
-          const isDefaultTitle = keyName === 'title' && tabItem[keyName] === defaultTitle;
-          if (tabItem[keyName] && !isDefaultTitle) {
+          //Dont't replace is loading tab content
+          if (tabItem[keyName] && !tabItem.isLoading) {
             return;
           }
           tabItem[keyName] = currentTab[keyName];
         });
-        tabItem.isLoading=false;
+        tabItem.isLoading = false;
       }
       this.tabStorage.updateTab(this.selectedIndex, tabItem);
     } else {
       this.tabStorage.addTab(tabItem);
-      this.selectedIndex = this.tabStorage.tabs.length - 1;
+      this.selectedIndex = this.tabStorage.tabOrder.length - 1;
     }
   }
   /**
@@ -182,8 +186,8 @@ export class ApiTabOperateService {
     });
     const result = {
       //If data need load from ajax/indexeddb,add loading
-      isLoading: params.uuid?true:false,
       uuid: params.pageID || Date.now(),
+      isLoading: params.uuid ? true : false,
       pathname: urlArr[0],
       params,
     };

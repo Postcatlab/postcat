@@ -5,6 +5,7 @@ import { filter, Subscription } from 'rxjs';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { ModalService } from '../../../shared/services/modal.service';
+import { KeyValue } from '@angular/common';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -26,59 +27,72 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.tabOperate.init(this.list);
     this.watchRouterChange();
   }
+  getCurrentTabStorage(){
+    const currentTab=this.getCurrentTab();
+    // return currentTab.content;
+    return null;
+  }
   newTab() {
-    if (this.tabStorage.tabs.length >= this.MAX_TAB_LIMIT) {
+    if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
       return;
     }
     this.tabOperate.newDefaultTab();
+  }
+  sortTab(_left: KeyValue<number, any>, _right: KeyValue<number, any>): number {
+    console.log('sortTab', arguments);
+    const leftIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _left.key);
+    const rightIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _right.key);
+    return leftIndex - rightIndex;
   }
   /**
    * Select tab
    */
   selectChange() {
-    this.tabOperate.navigateTabRoute(this.tabStorage.tabs[this.tabOperate.selectedIndex]);
+    this.tabOperate.navigateTabRoute(this.getCurrentTab());
   }
-  closeTab({ index, tab }) {
-    if (tab.hasChanged) {
-      const modal = this.modal.create({
-        nzTitle: $localize`Do you want to save the changes?`,
-        nzContent: $localize`Your changes will be lost if you don't save them.`,
-        nzClosable: false,
-        nzFooter: [
-          {
-            label: $localize`Save`,
-            type: 'primary',
-            onClick: () => {
-              this.beforeClose.emit(true);
-              modal.destroy();
-              this.tabOperate.closeTab(index);
-            },
-          },
-          {
-            label: $localize`Don't Save`,
-            onClick: () => {
-              this.beforeClose.emit(false);
-              modal.destroy();
-              this.tabOperate.closeTab(index);
-            },
-          },
-          {
-            label: $localize`Cancel`,
-            onClick: () => {
-              modal.destroy();
-            },
-          },
-        ],
-      });
+  closeTab({ index, tab }: { index: number; tab: any }) {
+    if (!tab.hasChanged) {
+      this.tabOperate.closeTab(index);
       return;
     }
-    this.tabOperate.closeTab(index);
+    const modal = this.modal.create({
+      nzTitle: $localize`Do you want to save the changes?`,
+      nzContent: $localize`Your changes will be lost if you don't save them.`,
+      nzClosable: false,
+      nzFooter: [
+        {
+          label: $localize`Save`,
+          type: 'primary',
+          onClick: () => {
+            this.beforeClose.emit(true);
+            modal.destroy();
+            this.tabOperate.closeTab(index);
+          },
+        },
+        {
+          label: $localize`Don't Save`,
+          onClick: () => {
+            this.beforeClose.emit(false);
+            modal.destroy();
+            this.tabOperate.closeTab(index);
+          },
+        },
+        {
+          label: $localize`Cancel`,
+          onClick: () => {
+            modal.destroy();
+          },
+        },
+      ],
+    });
   }
   getTabs() {
-    return this.tabStorage.tabs;
+    const tabs=[];
+    this.tabStorage.tabOrder.forEach(uuid=>tabs.push(this.tabStorage.tabsByID.get(uuid)));
+    return tabs;
   }
   getCurrentTab() {
-    return this.tabStorage.tabs[this.tabOperate.selectedIndex];
+    return this.tabOperate.getCurrentTab();
   }
   batchCloseTab(uuids) {
     this.tabOperate.batchClose(uuids);
@@ -86,9 +100,14 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   updatePartialTab(tabItem: Partial<TabItem>) {
     const currentTab = this.getCurrentTab();
     this.tabStorage.updateTab(this.tabOperate.selectedIndex, Object.assign({}, currentTab, tabItem));
+
     //! Prevent rendering delay
     this.cdRef.detectChanges();
   }
+  /**
+   * Cache tab header/tabs content for restore when page close or component destroy
+   */
+  cacheData() {}
   /**
    * Tab  Close Operate
    *
@@ -106,5 +125,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.routerSubscribe.unsubscribe();
+    this.cacheData();
   }
 }

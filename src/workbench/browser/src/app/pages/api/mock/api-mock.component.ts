@@ -1,11 +1,11 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import {  formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/api/test/api-test-util.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -19,6 +19,7 @@ import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
   styleUrls: ['./api-mock.component.scss'],
 })
 export class ApiMockComponent implements OnInit, OnChanges {
+  @Output() afterInit = new EventEmitter<ApiData>();
   isVisible = false;
   get mockUrl() {
     return this.remoteService.mockUrl;
@@ -75,15 +76,19 @@ export class ApiMockComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'mockAutoSyncSuccess':
-            this.initMockList(Number(this.route.snapshot.queryParams.uuid));
-        }
-      });
+    .get()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((inArg: Message) => {
+      switch (inArg.type) {
+        case 'mockAutoSyncSuccess':
+          this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+      }
+    });
+    this.init();
+  }
+  init() {
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+    this.afterInit.emit(this.apiData);
   }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
@@ -96,7 +101,6 @@ export class ApiMockComponent implements OnInit, OnChanges {
   async initMockList(apiDataID: number) {
     const mockRes = await this.getMockByApiDataID(apiDataID);
     this.apiData = await this.getApiData(apiDataID);
-    console.log('apiDataRes', this.apiData, mockRes);
     this.mocklList = mockRes.map((item) => {
       item.url = this.getApiUrl(item);
       return item;
@@ -239,7 +243,9 @@ export class ApiMockComponent implements OnInit, OnChanges {
   async handleSave() {
     this.isVisible = false;
 
-    if (this.currentEditMock.createWay === 'system') {return;}
+    if (this.currentEditMock.createWay === 'system') {
+      return;
+    }
 
     if (this.isEdit) {
       await this.updateMock(this.currentEditMock, Number(this.currentEditMock.uuid));

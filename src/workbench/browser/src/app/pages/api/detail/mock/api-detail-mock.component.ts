@@ -64,7 +64,6 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   async initMockList(apiData: ApiData) {
     if (apiData?.uuid) {
       const apiDataID = Number(this.apiData.uuid);
-      console.log('apiDataID', this.apiData, apiDataID);
       const mockRes = await this.getMockByApiDataID(apiDataID);
       this.mocklList = mockRes.map((item) => {
         item.url = this.getApiUrl(item);

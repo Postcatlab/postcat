@@ -213,7 +213,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         break;
       }
       case 'jumpOverview': {
-        this.router.navigate(['/home/api/overview']);
+        this.router.navigate(['/home/api/overview'], {
+          queryParams: { uuid: 'overview' },
+        });
         break;
       }
       case 'addAPI': {
