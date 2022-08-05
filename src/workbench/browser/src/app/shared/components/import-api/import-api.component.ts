@@ -59,7 +59,6 @@ export class ImportApiComponent implements OnInit {
     {
       const { key } = this.supportList.at(0);
       this.currentExtension = key || '';
-      console.log('this.currentExtension', this.currentExtension);
     }
   }
   uploadChange(data) {
