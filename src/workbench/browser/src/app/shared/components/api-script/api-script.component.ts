@@ -41,14 +41,14 @@ export class ApiScriptComponent implements OnInit, AfterViewInit, OnDestroy {
     this.el = elementRef.nativeElement;
   }
   ngOnDestroy(): void {
-    this.resizeObserver.disconnect();
+    this.resizeObserver?.disconnect();
   }
 
   ngAfterViewInit(): void {
-    this.resizeObserver = new ResizeObserver(() => {
-      this.eoEditor?.rerenderEditor();
-    });
-    this.resizeObserver.observe(this.el);
+    // this.resizeObserver = new ResizeObserver(() => {
+    //   this.eoEditor?.rerenderEditor();
+    // });
+    // this.resizeObserver.observe(this.el);
   }
 
   nzClick($event) {
