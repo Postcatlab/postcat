@@ -22,11 +22,14 @@
   background-color: var(--RED_NORMAL);
   border-color: var(--RED_NORMAL);
 }
-::ng-deep {
+:host ::ng-deep {
   .eo_alert_bar {
     margin-bottom: 5px;
     .ant-alert-info {
       background-color: #fff;
     }
+  }
+  .ant-code-editor {
+    height: calc(var(--bottom-height) - 156px);
   }
 }
