@@ -1,7 +1,9 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { getBlobUrl } from 'eo/workbench/browser/src/app/utils';
 import { ApiTestHistoryResponse } from '../../../../shared/services/storage/index.model';
 import { ApiTestService } from '../api-test.service';
+import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
+
 @Component({
   selector: 'eo-api-test-result-response',
   templateUrl: './api-test-result-response.component.html',
@@ -9,19 +11,21 @@ import { ApiTestService } from '../api-test.service';
 })
 export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   @Input() model: any | ApiTestHistoryResponse;
+  @ViewChild(EoMonacoEditorComponent, { static: false }) eoEditor?: EoMonacoEditorComponent;
   codeStatus: { status: string; cap: number; class: string };
   size: string;
-  blobUrl='';
+  blobUrl = '';
   responseIsImg = false;
   constructor(private apiTest: ApiTestService) {}
   ngOnChanges(changes) {
-    if (changes.model&&this.model) {
+    if (changes.model && this.model) {
       this.codeStatus = this.apiTest.getHTTPStatus(this.model.statusCode);
+      this.eoEditor?.formatCode();
     }
   }
   ngOnInit(): void {}
   downloadResponseText() {
-    this.blobUrl=getBlobUrl(this.model.body, this.model.contentType);
+    this.blobUrl = getBlobUrl(this.model.body, this.model.contentType);
     const blobFileName = decodeURI(this.model.blobFileName);
     const tmpAElem = document.createElement('a');
     if ('download' in tmpAElem) {
