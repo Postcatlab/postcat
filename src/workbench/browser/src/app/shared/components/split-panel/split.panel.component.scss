@@ -19,19 +19,19 @@
     }
 
     &.row {
-      width: 6px;
+      width: var(--separator-height);
       cursor: col-resize;
       .trigger-bar-con {
         top: 50%;
         left: 2px;
-        height: 6px;
+        height: var(--separator-height);
         display: flex;
         align-items: center;
         transform: translate(-50%) rotate(90deg);
       }
     }
     &.column {
-      height: 6px;
+      height: var(--separator-height);
       cursor: row-resize;
       .trigger-bar-con {
         left: 50%;
