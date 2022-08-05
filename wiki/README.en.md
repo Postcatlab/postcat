@@ -5,10 +5,10 @@
 </p>
 <h1 align="center">Eoapi</h1>
 <div align="center">
-A lightweight, extensible API tool
+A extensible API tool,Easy & Open Source API Ecosystem
 </div>
 
-![](./images/preview_1.png)
+![](./images/en-preview.png)
 
 English | [简体中文](README.md)
 
@@ -18,7 +18,8 @@ English | [简体中文](README.md)
 
 - You can download it on [Releases](https://github.com/eolinker/eoapi/releases) available for macOS, Windows
 
-- Read our [document](https://www.eoapi.io/) for more features
+- Read our [User Manual](https://docs.eoapi.io) for more features
+- Read our [developer documentation](https://developer.eoapi.io) to develop extensions
 
 # Featue
 
@@ -32,17 +33,17 @@ English | [简体中文](README.md)
 - Quickly test the API
 - Test local API
 
+🎭 Mock
+- Mock document interface return value
+
 🌐 Test environment management
 
 📶 Available offline
 
 🌱 Extension Marketplace
 
-# Preview Features
-
 💻 Collaboration
-
-🎭 Mock Servers
+- Collaboration via remote data sources
 
 # Build and run
 
