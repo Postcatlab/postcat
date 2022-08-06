@@ -64,13 +64,14 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * @param type Reset means force update apiData
    */
   async init() {
+    console.log('api edit init function',arguments[0]);
     const id = Number(this.route.snapshot.queryParams.uuid);
     const groupID = Number(this.route.snapshot.queryParams.groupID || 0);
     if (!this.model) {
       this.model = {} as ApiData;
       //! Execute before await to prevent template
       this.initBasicForm();
-      this.model = await this.apiEdit.getApi({
+      this.model= await this.apiEdit.getApi({
         id,
         groupID,
       });
@@ -92,6 +93,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.afterGroupIDChange();
     this.changeGroupID$.next(this.model.groupID);
     this.validateForm.patchValue(this.model);
+    console.log(this.model);
     this.afterInit.emit(this.model);
   }
 
@@ -99,9 +101,10 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     return new ApiParamsNumPipe().transform(params);
   }
   ngOnInit(): void {
+    console.log('api edit ngOnInit');
     this.getApiGroup();
-    this.watchGroupIDChange();
     this.init();
+    this.watchGroupIDChange();
   }
   async saveApi() {
     //manual set dirty in case user submit directly without edit
@@ -139,16 +142,16 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (!this.initialModel || !this.model) {
       return false;
     }
-    console.log(
-      'api edit origin:',
-      this.apiEditUtil.formatEditingApiData(this.initialModel),
-      'after:',
-      this.apiEditUtil.formatEditingApiData(this.model)
-    );
+    // console.log(
+    //   'api edit origin:',
+    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
+    //   'after:',
+    //   this.apiEditUtil.formatEditingApiData(this.model)
+    // );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
     if (originText !== afterText) {
-      console.log('api edit formChange true!', originText.split(afterText));
+      // console.log('api edit formChange true!', originText.split(afterText));
       return true;
     }
     return false;

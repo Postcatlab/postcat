@@ -4,6 +4,11 @@ export enum TabOperate {
   closeLeft = 'closeLeft',
   closeRight = 'closeRight',
 }
+export type storageTab = {
+  selectedIndex: number;
+  tabOrder: number[];
+  tabsByID: { [key: number]: TabItem };
+};
 /**
  * Tab item.
  */

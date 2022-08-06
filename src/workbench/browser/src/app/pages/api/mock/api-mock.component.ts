@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
   templateUrl: './api-mock.component.html',
   styleUrls: ['./api-mock.component.scss'],
 })
-export class ApiMockComponent implements OnInit, OnChanges {
+export class ApiMockComponent implements OnInit {
   @Output() afterInit = new EventEmitter<ApiData>();
   isVisible = false;
   get mockUrl() {
@@ -80,27 +80,22 @@ export class ApiMockComponent implements OnInit, OnChanges {
     .pipe(takeUntil(this.destroy$))
     .subscribe((inArg: Message) => {
       switch (inArg.type) {
-        case 'mockAutoSyncSuccess':
+        case 'mockAutoSyncSuccess':{
           this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+        }
       }
     });
     this.init();
   }
   init() {
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
-    this.afterInit.emit(this.apiData);
   }
 
-  async ngOnChanges(changes: SimpleChanges): Promise<void> {
-    const { apiData } = changes;
-    if (apiData.currentValue.uuid !== apiData.previousValue?.uuid) {
-      this.initMockList(apiData.currentValue.uuid);
-    }
-  }
 
   async initMockList(apiDataID: number) {
     const mockRes = await this.getMockByApiDataID(apiDataID);
     this.apiData = await this.getApiData(apiDataID);
+    this.afterInit.emit(this.apiData);
     this.mocklList = mockRes.map((item) => {
       item.url = this.getApiUrl(item);
       return item;

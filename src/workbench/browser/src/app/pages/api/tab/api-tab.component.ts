@@ -119,7 +119,9 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   /**
    * Cache tab header/tabs content for restore when page close or component destroy
    */
-  cacheData() {}
+  cacheData() {
+    this.tabStorage.setPersistenceStorage(this.tabOperate.selectedIndex);
+  }
   /**
    * Tab  Close Operate
    *
@@ -136,7 +138,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       });
   }
   ngOnDestroy(): void {
-    this.routerSubscribe.unsubscribe();
+    this.routerSubscribe?.unsubscribe();
     this.cacheData();
   }
 }

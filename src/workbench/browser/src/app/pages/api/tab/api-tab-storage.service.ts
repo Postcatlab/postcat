@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RemoteService } from '../../../shared/services/remote/remote.service';
-import { TabItem } from './tab.model';
+import { storageTab, TabItem } from './tab.model';
 
 @Injectable()
 /**
@@ -21,7 +21,7 @@ export class ApiTabStorageService {
     this.tabOrder[index] = tabItem.uuid;
     this.tabsByID.set(tabItem.uuid, tabItem);
   }
-  setTabs(order) {
+  resetTabsByOrdr(order) {
     const tabs = new Map();
     this.tabsByID.forEach((value, key) => {
       if (!order.includes(key)) {
@@ -43,21 +43,21 @@ export class ApiTabStorageService {
    * @param tab
    * @param data
    */
-  setPersistenceStorage(currentIndex) {
+  setPersistenceStorage(selectedIndex) {
     window.localStorage.setItem(
       this.cacheName,
       JSON.stringify({
-        currentIndex,
+        selectedIndex,
         tabOrder: this.tabOrder,
-        tabsByID: this.tabsByID,
+        tabsByID:Object.fromEntries(this.tabsByID),
       })
     );
   }
-  // getPersistenceStorage() {
-  //   let result: any = null;
-  //   try {
-  //     result = JSON.parse(window.localStorage.getItem(this.cacheName) as string);
-  //   } catch (e) {}
-  //   return result;
-  // }
+  getPersistenceStorage(): storageTab {
+    let result: any = null;
+    try {
+      result = JSON.parse(window.localStorage.getItem(this.cacheName) as string);
+    } catch (e) {}
+    return result;
+  }
 }

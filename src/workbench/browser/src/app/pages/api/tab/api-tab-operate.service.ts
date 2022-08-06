@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { map } from 'rxjs';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -17,20 +18,29 @@ export class ApiTabOperateService {
    * Tab basic info
    */
   BASIC_TABS: { [key: string]: Partial<TabItem> };
-  constructor(private tabStorage: ApiTabStorageService, private router: Router, private modal: ModalService) {}
+  constructor(private tabStorage: ApiTabStorageService, private router: Router, private modal: ModalService) {
+    this.watchPageLeave();
+  }
   //Init tab info
   //Maybe from tab cache info or router url
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
-    // const tabCache = this.tabStorage.getPersistenceStorage();
-    // if (tabCache) {
-    //   this.tabStorage.setTabs(tabCache.tabs);
-    //   this.navigateTabRoute(tabCache.tabs[tabCache.selectIndex || 0]);
-    // } else {
-    this.operateTabAfterRouteChange({
-      url: window.location.pathname + window.location.search,
-    });
-    // }
+    const tabCache = this.tabStorage.getPersistenceStorage();
+    console.log(tabCache);
+    if (tabCache) {
+      this.tabStorage.tabOrder = tabCache.tabOrder;
+      const tabsByID=new Map();
+      Object.values(tabCache.tabsByID).forEach(tabItem=>{
+        tabsByID.set(tabItem.uuid,tabItem);
+      });
+      this.tabStorage.tabsByID = tabsByID;
+      const targetTab = this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[tabCache.selectedIndex || 0]);
+      this.navigateTabRoute(targetTab);
+    } else {
+      this.operateTabAfterRouteChange({
+        url: window.location.pathname + window.location.search,
+      });
+    }
   }
   /**
    * Add Default tab
@@ -55,7 +65,7 @@ export class ApiTabOperateService {
    * */
   batchClose(ids) {
     const tabOrder = this.tabStorage.tabOrder.filter((uuid) => !ids.includes(uuid));
-    this.tabStorage.setTabs(tabOrder);
+    this.tabStorage.resetTabsByOrdr(tabOrder);
     if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
     }
@@ -63,20 +73,20 @@ export class ApiTabOperateService {
   closeTabByOperate(action: string | TabOperate) {
     switch (action) {
       case TabOperate.closeAll: {
-        this.tabStorage.setTabs([]);
+        this.tabStorage.resetTabsByOrdr([]);
         this.newDefaultTab();
         break;
       }
       case TabOperate.closeOther: {
-        this.tabStorage.setTabs([this.tabStorage.tabOrder[this.selectedIndex]]);
+        this.tabStorage.resetTabsByOrdr([this.tabStorage.tabOrder[this.selectedIndex]]);
         break;
       }
       case TabOperate.closeLeft: {
-        this.tabStorage.setTabs(this.tabStorage.tabOrder.slice(this.selectedIndex));
+        this.tabStorage.resetTabsByOrdr(this.tabStorage.tabOrder.slice(this.selectedIndex));
         break;
       }
       case TabOperate.closeRight: {
-        this.tabStorage.setTabs(this.tabStorage.tabOrder.slice(0, this.selectedIndex + 1));
+        this.tabStorage.resetTabsByOrdr(this.tabStorage.tabOrder.slice(0, this.selectedIndex + 1));
         break;
       }
     }
@@ -203,5 +213,11 @@ export class ApiTabOperateService {
       this.tabStorage.addTab(tabItem);
       this.selectedIndex = this.tabStorage.tabOrder.length - 1;
     }
+  }
+
+  private watchPageLeave() {
+    window.addEventListener('beforeunload', function(e) {
+      console.log('beforeunload');
+    });
   }
 }

@@ -21,7 +21,6 @@ export class ApiTabService {
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
   constructor() {
-    this.watchPageLeave();
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
     });
@@ -34,7 +33,6 @@ export class ApiTabService {
           .getTabs()
           .filter((val) => inArg.data.uuids.includes(Number(val.params.uuid)))
           .map((val) => val.uuid);
-        console.log(closeTabIDs);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
       }
@@ -45,7 +43,28 @@ export class ApiTabService {
       }
     }
   }
-  bindChildComponentChangeEvent() {
+  onChildComponentInit(componentRef) {
+    if (!this.componentRef) {
+      //!First init component should wait api tab component init,judge if tab storage exist
+      componentRef.model = { type: 'preventInit' };
+    }
+    this.componentRef = componentRef;
+    this.bindChildComponentChangeEvent();
+  }
+  /**
+   * After tab component/child component  init
+   */
+  onAllComponentInit() {
+    console.log('onAllComponentInit', this.apiTabComponent);
+    const url = window.location.pathname + window.location.search;
+    if (!this.componentRef.init) {
+      this.changeContent$.next({ when: 'init', url });
+      throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
+    }
+    this.refleshData(new NavigationEnd(0, '', ''), new NavigationEnd(1, url, url));
+  }
+  private bindChildComponentChangeEvent() {
+    console.log('bindChildComponentChangeEvent');
     const url = window.location.pathname + window.location.search;
     this.componentRef.modelChange = {
       emit: (model) => {
@@ -84,12 +103,9 @@ export class ApiTabService {
    * @returns
    */
   refleshData(lastRouter: NavigationEnd, currentRouter: NavigationEnd) {
-    // Rebind child component for reset component fit url
-    this.bindChildComponentChangeEvent();
-    //If componnet init
-    if (!this.componentRef?.init) {
-      this.changeContent$.next(null);
-      return;
+    if (lastRouter.url !== currentRouter.url) {
+      //* Rebind child component for reset component fit url
+      this.bindChildComponentChangeEvent();
     }
     //Set tab cache
     //?Why should use getCurrentTab()?
@@ -97,13 +113,14 @@ export class ApiTabService {
     const currentTab = this.apiTabComponent.getTabByUrl(currentRouter.url);
     this.componentRef.model = currentTab.content || null;
     this.componentRef.initialModel = currentTab.baseContent || null;
-
+    console.log('refleshData', currentTab.content);
     //Because router reflect childComponnet change, they will query data by themselves.
     if (lastRouter.url.split('?')[0] !== currentRouter.url.split('?')[0]) {
       return;
     }
-    this.componentRef.init();
+    this.componentRef.init('outside');
   }
+
   /**
    * After content changed
    * Update tab by model data
@@ -111,8 +128,10 @@ export class ApiTabService {
    * @param inData.url get component fit tab data
    */
   afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'; url: string; model: any }) {
+    if (!this.apiTabComponent) {
+      throw new Error(`EO_ERROR:apiTabComponent hasn't init yet!`);
+    }
     const currentContentTab = this.apiTabComponent.getTabByUrl(inData.url);
-    console.log('afterContentChanged', currentContentTab);
     const model = inData.model;
     //Set tabItem
     const tabItem: Partial<TabItem> = {
@@ -148,19 +167,6 @@ export class ApiTabService {
       tabItem.content = model;
       tabItem.hasChanged = this.componentRef.isFormChange(currentContentTab.baseContent);
     }
-    // console.log('afterContentChanged', tabItem);
-    this.apiTabComponent.updatePartialTab(inData.url,tabItem);
-  }
-  componentInit() {
-    //If componnet init
-    if (this.componentRef && !this.componentRef?.init) {
-      this.changeContent$.next(null);
-      throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
-    }
-  }
-  private watchPageLeave() {
-    window.addEventListener('beforeunload', function(e) {
-      console.log('beforeunload');
-    });
+    this.apiTabComponent.updatePartialTab(inData.url, tabItem);
   }
 }
