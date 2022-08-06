@@ -17,8 +17,8 @@ export class ApiTestQueryComponent implements OnInit, OnChanges, OnDestroy {
 
   listConf: object = {};
   private itemStructure: ApiTestQuery = {
-    name: '',
     required: true,
+    name: '',
     value: '',
   };
 

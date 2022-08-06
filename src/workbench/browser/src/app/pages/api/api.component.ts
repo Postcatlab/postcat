@@ -85,7 +85,6 @@ export class ApiComponent implements OnInit, OnDestroy {
    * @param componentRef
    */
   onActivate(componentRef) {
-    console.log('onActivate', componentRef);
     this.apiTab.componentRef = componentRef;
     this.apiTab.bindChildComponentChangeEvent();
   }
@@ -155,7 +154,7 @@ export class ApiComponent implements OnInit, OnDestroy {
         pairwise()
       )
       .subscribe(([lastRouter, currentRouter]: [NavigationEnd, NavigationEnd]) => {
-        console.log('watchRouterChange',lastRouter,currentRouter);
+        // console.log('watchRouterChange',lastRouter,currentRouter);
         this.id = Number(this.route.snapshot.queryParams.uuid);
         this.setPageID();
         this.setTabsetIndex();

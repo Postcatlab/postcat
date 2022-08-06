@@ -3,9 +3,14 @@ import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { RequestMethod, RequestProtocol } from '../../../shared/services/storage/index.model';
+import { ApiEditUtilService } from './api-edit-util.service';
 @Injectable()
 export class ApiEditService {
-  constructor(private storage: StorageService, private apiService: ApiService) {}
+  constructor(
+    private storage: StorageService,
+    private apiEditUtil: ApiEditUtilService,
+    private apiService: ApiService
+  ) {}
   getPureApi({ groupID }) {
     return Object.assign(
       {
@@ -51,7 +56,7 @@ export class ApiEditService {
     } else {
       result = (await this.apiService.get(id)) as ApiData;
     }
-    return result;
+    return this.apiEditUtil.getFormdataFromApiData(result);
   }
   editApi(apiData): Promise<StorageRes> {
     const busEvent = apiData.uuid ? 'editApi' : 'addApi';

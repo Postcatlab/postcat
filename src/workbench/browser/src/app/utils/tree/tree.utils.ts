@@ -1,4 +1,5 @@
 import { GroupTreeItem } from '../../shared/models';
+import { whatType } from 'eo/workbench/browser/src/app/utils';
 
 export type TreeToObjOpts = {
   key?: string;
@@ -19,6 +20,7 @@ export const listToTreeHasLevel = (
     childKey: 'children',
   }
 ) => {
+  if(whatType(list)!=='array') {return list;}
   const listDepths = [];
   //delete useless key
   const uselessKeys = ['listDepth', 'isHide', 'isShrink'];
@@ -39,7 +41,6 @@ export const listToTreeHasLevel = (
       const parent = list[listDepths.lastIndexOf(listDepth - 1, key)];
       if (!parent) {
         console.error(`can't find the parent`);
-        return;
       }
       parent[opts.childKey] = parent[opts.childKey] || [];
       parent[opts.childKey].push(item);

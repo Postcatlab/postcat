@@ -205,8 +205,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     inArg.event.stopPropagation();
     switch (inArg.eventName) {
       case 'testApi':
-      case 'detailApi':
-      case 'editApi': {
+      case 'editApi':
+      case 'detailApi': {
         this.router.navigate([`/home/api/${inArg.eventName.replace('Api', '')}`], {
           queryParams: { uuid: inArg.node.key, pageID: Date.now() },
         });

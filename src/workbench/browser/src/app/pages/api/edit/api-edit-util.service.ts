@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { ModalService } from '../../../shared/services/modal.service';
 import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra-setting.component';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { ApiData } from '../../../shared/services/storage/index.model';
+import { ApiData, ApiEditRest } from '../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
+import { getRest } from '../../../utils/api';
 @Injectable()
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
@@ -238,6 +239,26 @@ export class ApiEditUtilService {
       if (['xml', 'json'].includes(result[`${tableName}Type`])) {
         result[tableName] = treeToListHasLevel(result[tableName]);
       }
+    });
+    return result;
+  }
+  /**
+   * Generate Rest Param From Url
+   */
+  generateRestFromUrl(url, rest): ApiEditRest[] {
+    const result = rest;
+    const rests = getRest(url);
+    rests.forEach((newRest) => {
+      if (result.find((val: ApiEditRest) => val.name === newRest)) {
+        return;
+      }
+      const restItem: ApiEditRest = {
+        name: newRest,
+        required: true,
+        example: '',
+        description: '',
+      };
+      result.splice(result.length - 1, 0, restItem);
     });
     return result;
   }

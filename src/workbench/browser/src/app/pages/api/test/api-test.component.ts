@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
@@ -44,12 +44,17 @@ const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
   @Input() model: ApiTestData | any;
+  /**
+   * Intial model from outside,check form is change
+   * * Usually restored from tab
+   */
+  @Input() initialModel: ApiData;
   @Input() testResult: any = {
     response: {},
     request: {},
   };
   @Output() modelChange = new EventEmitter<ApiTestData>();
-  @Output() afterSaved = new EventEmitter<ApiData>();
+  @Output() afterInit = new EventEmitter<ApiData>();
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
 
@@ -76,7 +81,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
-  private originModel;
 
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
@@ -105,24 +109,25 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.model = {} as ApiTestData;
       this.initBasicForm();
       const id = Number(this.route.snapshot.queryParams.uuid);
-      const result = await this.apiTest.getApi({
+      this.model = await this.apiTest.getApi({
         id,
       });
-      //Storage origin api data
-      this.originModel = structuredClone(result);
-      this.model = result;
     } else {
       //API data form outside,such as tab cache
-      this.originModel = structuredClone(this.model);
       this.initBasicForm();
+    }
+    //Storage origin api data
+    if (!this.initialModel) {
+      this.initialModel = structuredClone(this.model);
     }
     //! Set this two function to reset form
     this.validateForm.markAsPristine();
     this.validateForm.markAsUntouched();
 
     this.validateForm.patchValue(this.model);
+    this.watchBasicForm();
     this.initContentType();
-    this.modelChange.emit(this.model);
+    this.afterInit.emit(this.model);
   }
   clickTest() {
     if (!this.checkForm()) {
@@ -151,7 +156,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.router.navigate(['home/api/edit'], {
       queryParams: { pageID: Date.now() },
     });
-    this.afterSaved.emit(apiData);
   }
   changeQuery(queryParams) {
     this.model.uri = this.apiTestUtil.transferUrlAndQuery(this.model.uri, queryParams, {
@@ -182,15 +186,22 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   isFormChange(): boolean {
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
-    // if (this.model.uuid) {
-    //   return false;
-    // }
-
-    if (!this.originModel || !this.model) {
+    if (this.model.uuid) {
       return false;
     }
-    // console.log('origin:', this.originModel, 'after:', this.apiTestUtil.formatEditingApiData(this.model));
-    if (JSON.stringify(this.originModel) !== JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model))) {
+    if (!this.initialModel || !this.model) {
+      return false;
+    }
+    // console.log(
+    //   'api test origin:',
+    //   this.apiTestUtil.formatEditingApiData(this.initialModel),
+    //   'after:',
+    //   this.apiTestUtil.formatEditingApiData(this.model)
+    // );
+    const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel));
+    const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model));
+    if (originText !== afterText) {
+      // console.log('api test formChange true!', originText.split(afterText));
       return true;
     }
     return false;
@@ -212,12 +223,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.isRequestBodyLoaded = true;
     }
   }
-  emitChangeFun() {
+  emitChangeFun(where) {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
     this.init();
-    this.watchBasicForm();
     this.watchEnvChange();
   }
   ngOnDestroy() {

@@ -17,8 +17,8 @@ export class ApiTestRestComponent implements OnInit, OnChanges {
   private modelChange$: Subject<void> = new Subject();
   private destroy$: Subject<void> = new Subject();
   private itemStructure: ApiTestRest = {
-    name: '',
     required: true,
+    name: '',
     value: '',
   };
   constructor(private editService: ApiTestUtilService) {

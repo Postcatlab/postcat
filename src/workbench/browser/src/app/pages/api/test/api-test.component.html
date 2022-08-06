@@ -61,7 +61,7 @@
           <eo-api-test-header
             class="eo_theme_iblock bbd"
             [(model)]="model.requestHeaders"
-            (modelChange)="emitChangeFun()"
+            (modelChange)="emitChangeFun('requestHeaders')"
           ></eo-api-test-header>
         </nz-tab>
         <!--Request Info -->
@@ -84,7 +84,7 @@
             [(bodyType)]="model.requestBodyType"
             (bodyTypeChange)="changeBodyType($event)"
             [(model)]="model.requestBody"
-            (modelChange)="emitChangeFun()"
+            (modelChange)="emitChangeFun('requestBody')"
             [supportType]="['formData', 'raw', 'binary']"
           ></eo-api-test-body>
         </nz-tab>
@@ -111,7 +111,7 @@
           <eo-api-test-rest
             class="eo_theme_iblock bbd"
             [(model)]="model.restParams"
-            (modelChange)="emitChangeFun()"
+            (modelChange)="emitChangeFun('restParams')"
           ></eo-api-test-rest>
         </nz-tab>
         <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
@@ -122,7 +122,7 @@
           <eo-api-script
             *ngIf="nzSelectedIndex === 4"
             [(code)]="beforeScript"
-            (codeChange)="emitChangeFun()"
+            (codeChange)="emitChangeFun('beforeScript')"
             [treeData]="BEFORE_DATA"
             [completions]="beforeScriptCompletions"
             class="eo_theme_iblock bbd"
@@ -136,7 +136,7 @@
           <eo-api-script
             *ngIf="nzSelectedIndex === 5"
             [(code)]="afterScript"
-            (codeChange)="emitChangeFun()"
+            (codeChange)="emitChangeFun('afterScript')"
             [treeData]="AFTER_DATA"
             [completions]="afterScriptCompletions"
             class="eo_theme_iblock bbd"

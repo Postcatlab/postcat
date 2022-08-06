@@ -98,7 +98,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   constructor(private message: EoMessageService, private electron: ElectronService) {}
 
   ngAfterViewInit(): void {
-    console.log('codeEdtor', this.codeEdtor);
+    // console.log('codeEdtor', this.codeEdtor);
     requestIdleCallback(() => this.rerenderEditor());
   }
   async ngOnChanges() {
@@ -162,8 +162,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   private initMonacoEditorEvent() {
-    console.log('initMonacoEditorEvent');
-
     this.completionItemProvider = window.monaco.languages.registerCompletionItemProvider('javascript', {
       provideCompletionItems: (model, position) => {
         // find out if we are completing a property in the 'dependencies' object.

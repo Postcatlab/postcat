@@ -165,8 +165,8 @@ export class ApiTestUtilService {
     //Get url query
     new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
       const item: ApiTestQuery = {
-        name,
         required: true,
+        name,
         value: val,
       };
       urlQuery.push(item);
@@ -264,7 +264,7 @@ export class ApiTestUtilService {
       if (whatType(result[tableName])!=='array') {
         return;
       }
-      result[tableName] = (result[tableName] || []).filter((val) => val.name || val.description || val.example);
+      result[tableName] = (result[tableName] || []).filter((val) => val.name  || val.value);
     });
     return formData;
   }

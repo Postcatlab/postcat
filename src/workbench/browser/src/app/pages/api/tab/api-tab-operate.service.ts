@@ -38,7 +38,7 @@ export class ApiTabOperateService {
    * @returns tabItem
    */
   newDefaultTab() {
-    const tabItem: TabItem = this.getTabFromUrl(Object.values(this.BASIC_TABS)[0].pathname);
+    const tabItem: TabItem = this.getBaiscTabFromUrl(Object.values(this.BASIC_TABS)[0].pathname);
     this.tabStorage.addTab(tabItem);
     this.selectedIndex = this.tabStorage.tabOrder.length - 1;
   }
@@ -91,44 +91,85 @@ export class ApiTabOperateService {
       queryParams: { pageID: tab.uuid, ...tab.params },
     });
   }
+  getTabIndex(tab: TabItem): number {
+    let result = -1;
+    //Get existTabIndex
+    //If exist tab,select it
+    for (const tabInfo of this.tabStorage.tabsByID.values()) {
+      if (tabInfo.uuid === tab.params.pageID) {
+        result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
+        break;
+      }
+      let isSameContent = false;
+      if (tabInfo.params.uuid && tabInfo.params.uuid === tab.params.uuid) {
+        if (tabInfo.pathname === tab.pathname) {
+          isSameContent = true;
+          result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
+          break;
+        }
+        //TODO how to replace current exist tab but editing
+      }
+    }
+    return result;
+  }
+  /**
+   * Get tab info from url
+   *
+   * @param url
+   * @returns tabInfo
+   */
+  getBaiscTabFromUrl(url): TabItem {
+    const urlArr = url.split('?');
+    const params: any = {};
+    const basicTab = Object.values(this.BASIC_TABS).find((val) => val.pathname === urlArr[0]);
+    if (!basicTab) {
+      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+    }
+    // Parse query params
+    new URLSearchParams(urlArr[1]).forEach((value, key) => {
+      if (key === 'pageID') {
+        params[key] = Number(value);
+        return;
+      }
+      params[key] = value;
+    });
+    const result = {
+      //If data need load from ajax/indexeddb,add loading
+      uuid: params.pageID || Date.now(),
+      isLoading: params.uuid ? true : false,
+      pathname: urlArr[0],
+      params,
+    };
+    ['title', 'icon', 'type', 'extends'].forEach((keyName) => {
+      result[keyName] = basicTab[keyName];
+    });
+    return result as TabItem;
+  }
   /**
    * Operate tab after router change,router triggle tab change
    * Such as new tab,pick tab,close tab...
    */
   operateTabAfterRouteChange(res: { url: string }) {
-    const tmpTabItem = this.getTabFromUrl(res.url);
+    const tmpTabItem = this.getBaiscTabFromUrl(res.url);
     //Pick current router url as the first tab
     if (this.tabStorage.tabOrder.length === 0) {
       this.tabStorage.addTab(tmpTabItem);
       return;
     }
-    let existTabIndex = -1;
-    //Get existTabIndex
-    //If exist tab,select it
-    for (const tabInfo of this.tabStorage.tabsByID.values()) {
-      let isSameContent = false;
-      if (tabInfo.params.uuid && tabInfo.params.uuid === tmpTabItem.params.uuid) {
-        if (tabInfo.pathname === tmpTabItem.pathname) {
-          isSameContent = true;
-        }
-        //TODO how to replace current exist tab but editing
-      }
-      if (tabInfo.uuid === tmpTabItem.params.pageID || isSameContent) {
-        existTabIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
-        break;
-      }
-    }
+    const existTabIndex = this.getTabIndex(tmpTabItem);
+
     //Router has focus current tab
     if (this.selectedIndex === existTabIndex) {
       return;
     }
-    //Pick tab
+    //If exist tab,select it
     if (existTabIndex !== -1) {
       this.selectedIndex = existTabIndex;
       return;
     }
     //If no exist,new tab or replace origin tab
     this.newOrReplaceTab(tmpTabItem);
+    console.log('operateTabAfterRouteChange');
   }
   getCurrentTab() {
     const currentID = this.tabStorage.tabOrder[this.selectedIndex];
@@ -162,38 +203,5 @@ export class ApiTabOperateService {
       this.tabStorage.addTab(tabItem);
       this.selectedIndex = this.tabStorage.tabOrder.length - 1;
     }
-  }
-  /**
-   * Get tab info from url
-   *
-   * @param url
-   * @returns tabInfo
-   */
-  private getTabFromUrl(url): TabItem {
-    const urlArr = url.split('?');
-    const params: any = {};
-    const basicTab = Object.values(this.BASIC_TABS).find((val) => val.pathname === urlArr[0]);
-    if (!basicTab) {
-      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
-    }
-    // Parse query params
-    new URLSearchParams(urlArr[1]).forEach((value, key) => {
-      if (key === 'pageID') {
-        params[key] = Number(value);
-        return;
-      }
-      params[key] = value;
-    });
-    const result = {
-      //If data need load from ajax/indexeddb,add loading
-      uuid: params.pageID || Date.now(),
-      isLoading: params.uuid ? true : false,
-      pathname: urlArr[0],
-      params,
-    };
-    ['title', 'icon', 'type', 'extends'].forEach((keyName) => {
-      result[keyName] = basicTab[keyName];
-    });
-    return result as TabItem;
   }
 }

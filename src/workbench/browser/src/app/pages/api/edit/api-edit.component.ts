@@ -15,13 +15,11 @@ import {
   ApiData,
   RequestProtocol,
   RequestMethod,
-  ApiEditRest,
   StorageRes,
   StorageResStatus,
 } from '../../../shared/services/storage/index.model';
 
 import { objectToArray } from '../../../utils';
-import { getRest } from '../../../utils/api';
 import { listToTree, getExpandGroupByKey } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
@@ -33,7 +31,13 @@ import { ApiEditUtilService } from './api-edit-util.service';
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
   @Input() model: ApiData;
+  /**
+   * Intial model from outside,check form is change
+   * * Usually restored from tab
+   */
+  @Input() initialModel: ApiData;
   @Output() modelChange = new EventEmitter<ApiData>();
+  @Output() afterInit = new EventEmitter<ApiData>();
   @Output() afterSaved = new EventEmitter<ApiData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
@@ -42,8 +46,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   nzSelectedIndex = 1;
-  private originModel: ApiData;
-
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
 
@@ -56,7 +58,126 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private apiEdit: ApiEditService
   ) {}
-  getApiGroup() {
+  /**
+   * Init Api Data
+   *
+   * @param type Reset means force update apiData
+   */
+  async init() {
+    const id = Number(this.route.snapshot.queryParams.uuid);
+    const groupID = Number(this.route.snapshot.queryParams.groupID || 0);
+    if (!this.model) {
+      this.model = {} as ApiData;
+      //! Execute before await to prevent template
+      this.initBasicForm();
+      this.model = await this.apiEdit.getApi({
+        id,
+        groupID,
+      });
+    } else {
+      //API data form outside,such as tab cache
+      this.initBasicForm();
+    }
+    //Storage origin api data
+    if (!this.initialModel) {
+      if (!id) {
+        // New API/New API from other page such as test page
+        this.initialModel = this.apiEdit.getPureApi({ groupID });
+      } else {
+        this.initialModel = structuredClone(this.model);
+      }
+    }
+    this.watchBasicForm();
+    this.watchUri();
+    this.afterGroupIDChange();
+    this.changeGroupID$.next(this.model.groupID);
+    this.validateForm.patchValue(this.model);
+    this.afterInit.emit(this.model);
+  }
+
+  bindGetApiParamNum(params) {
+    return new ApiParamsNumPipe().transform(params);
+  }
+  ngOnInit(): void {
+    this.getApiGroup();
+    this.watchGroupIDChange();
+    this.init();
+  }
+  async saveApi() {
+    //manual set dirty in case user submit directly without edit
+    for (const i in this.validateForm.controls) {
+      if (this.validateForm.controls.hasOwnProperty(i)) {
+        this.validateForm.controls[i].markAsDirty();
+        this.validateForm.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.validateForm.status === 'INVALID') {
+      return;
+    }
+    let formData: any = Object.assign({}, this.model, this.validateForm.value);
+    const busEvent = formData.uuid ? 'editApi' : 'addApi';
+    const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
+    const initialModel=formData;
+    formData = this.apiEditUtil.formatSavingApiData(formData);
+    const result: StorageRes = await this.apiEdit.editApi(formData);
+    if (result.status === StorageResStatus.success) {
+      this.message.success(title);
+      this.initialModel = initialModel;
+      this.messageService.send({ type: `${busEvent}Success`, data: result.data });
+    } else {
+      this.message.success($localize`Failed Operation`);
+    }
+    this.afterSaved.emit(result.data);
+  }
+  emitChangeFun() {
+    this.modelChange.emit(this.model);
+  }
+  /**
+   * Judge has edit manualy
+   */
+  isFormChange(): boolean {
+    if (!this.initialModel || !this.model) {
+      return false;
+    }
+    console.log(
+      'api edit origin:',
+      this.apiEditUtil.formatEditingApiData(this.initialModel),
+      'after:',
+      this.apiEditUtil.formatEditingApiData(this.model)
+    );
+    const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
+    const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
+    if (originText !== afterText) {
+      console.log('api edit formChange true!', originText.split(afterText));
+      return true;
+    }
+    return false;
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  private watchGroupIDChange() {
+    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe((id) => {
+      this.afterGroupIDChange();
+    });
+  }
+  private afterGroupIDChange() {
+    this.model.groupID = (this.model.groupID === 0 ? -1 : this.model.groupID).toString();
+    /**
+     * Expand Select Group
+     */
+    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupID.toString());
+  }
+  private watchUri() {
+    this.validateForm
+      .get('uri')
+      ?.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe((url) => {
+        this.apiEditUtil.generateRestFromUrl(url, this.model.restParams);
+      });
+  }
+  private getApiGroup() {
     this.groups = [];
     const treeItems: any = [
       {
@@ -85,122 +206,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       listToTree(treeItems, this.groups, '0');
       this.resetGroupID();
     });
-  }
-  async saveApi() {
-    //manual set dirty in case user submit directly without edit
-    for (const i in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(i)) {
-        this.validateForm.controls[i].markAsDirty();
-        this.validateForm.controls[i].updateValueAndValidity();
-      }
-    }
-    if (this.validateForm.status === 'INVALID') {
-      return;
-    }
-    let formData: any = Object.assign({}, this.model, this.validateForm.value);
-    const busEvent = formData.uuid ? 'editApi' : 'addApi';
-    const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
-    formData = this.apiEditUtil.formatSavingApiData(formData);
-    const result: StorageRes = await this.apiEdit.editApi(formData);
-    if (result.status === StorageResStatus.success) {
-      this.message.success(title);
-      this.originModel = result.data;
-      this.messageService.send({ type: `${busEvent}Success`, data: result.data });
-    } else {
-      this.message.success($localize`Failed Operation`);
-    }
-    this.afterSaved.emit(result.data);
-  }
-  bindGetApiParamNum(params) {
-    return new ApiParamsNumPipe().transform(params);
-  }
-  ngOnInit(): void {
-    this.getApiGroup();
-    this.watchGroupIDChange();
-    this.init();
-    this.watchBasicForm();
-    this.watchUri();
-  }
-  /**
-   * Init Api Data
-   *
-   * @param type Reset means force update apiData
-   */
-  async init() {
-    if (!this.model) {
-      this.model = {} as ApiData;
-      this.initBasicForm();
-      const id = Number(this.route.snapshot.queryParams.uuid);
-      const groupID = Number(this.route.snapshot.queryParams.groupID || 0);
-      const result = await this.apiEdit.getApi({
-        id,
-        groupID,
-      });
-      //Storage origin api data
-      if (!id) {
-        // New API/New API from other page such as test page
-        this.originModel = this.apiEdit.getPureApi({ groupID });
-      } else {
-        this.originModel = structuredClone(result);
-      }
-      this.model = this.apiEditUtil.getFormdataFromApiData(result);
-    } else {
-      //API data form outside,such as tab cache
-      this.originModel = structuredClone(this.model);
-      this.initBasicForm();
-    }
-    this.afterGroupIDChange();
-    this.changeGroupID$.next(this.model.groupID);
-    this.validateForm.patchValue(this.model);
-    this.modelChange.emit(this.model);
-  }
-  emitChangeFun() {
-    this.modelChange.emit(this.model);
-  }
-  watchBasicForm() {
-    this.validateForm.valueChanges.subscribe((x) => {
-      // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
-      setTimeout(() => {
-        this.modelChange.emit(this.model);
-      }, 0);
-    });
-  }
-  /**
-   * Judge has edit manualy
-   */
-  isFormChange(): boolean {
-    if (!this.originModel || !this.model) {
-      return false;
-    }
-    // console.log('origin:', this.originModel, 'after:', this.apiEditUtil.formatEditingApiData(this.model));
-    if (JSON.stringify(this.originModel) !== JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model))) {
-      return true;
-    }
-    return false;
-  }
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-  private watchGroupIDChange() {
-    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe((id) => {
-      this.afterGroupIDChange();
-    });
-  }
-  private afterGroupIDChange() {
-    this.model.groupID = (this.model.groupID === 0 ? -1 : this.model.groupID).toString();
-    /**
-     * Expand Select Group
-     */
-    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupID.toString());
-  }
-  private watchUri() {
-    this.validateForm
-      .get('uri')
-      .valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$))
-      .subscribe((url) => {
-        this.generateRestFromUrl(url);
-      });
   }
   /**
    * Reset Group ID after group list load
@@ -231,22 +236,13 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     });
     this.validateForm = this.fb.group(controls);
   }
-  /**
-   * Generate Rest Param From Url
-   */
-  private generateRestFromUrl(url) {
-    const rests = getRest(url);
-    rests.forEach((newRest) => {
-      if (this.model.restParams.find((val: ApiEditRest) => val.name === newRest)) {
-        return;
-      }
-      const restItem: ApiEditRest = {
-        name: newRest,
-        required: true,
-        example: '',
-        description: '',
-      };
-      this.model.restParams.splice(this.model.restParams.length - 1, 0, restItem);
+
+  private watchBasicForm() {
+    this.validateForm.valueChanges.subscribe((x) => {
+      // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
+      setTimeout(() => {
+        this.modelChange.emit(this.model);
+      }, 0);
     });
   }
 }

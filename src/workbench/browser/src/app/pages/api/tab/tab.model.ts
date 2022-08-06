@@ -49,6 +49,11 @@ export type TabItem = {
    */
   extends?: any;
   /**
+   * Save base model used by judge form is change
+   * Only exist in tab[type='edit']
+   */
+  baseContent?: any;
+  /**
    * Tab content
    */
   content: any;

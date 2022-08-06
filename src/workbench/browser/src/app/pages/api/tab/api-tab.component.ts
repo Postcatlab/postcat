@@ -27,11 +27,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.tabOperate.init(this.list);
     this.watchRouterChange();
   }
-  getCurrentTabStorage(){
-    const currentTab=this.getCurrentTab();
-    // return currentTab.content;
-    return null;
-  }
   newTab() {
     if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
       return;
@@ -86,10 +81,27 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       ],
     });
   }
-  getTabs() {
-    const tabs=[];
-    this.tabStorage.tabOrder.forEach(uuid=>tabs.push(this.tabStorage.tabsByID.get(uuid)));
+  //Quick see tabs change in templete,for debug,can be deleted
+  getConsoleTabs() {
+    const tabs = [];
+    this.tabStorage.tabOrder.forEach((uuid) => {
+      const tab = this.tabStorage.tabsByID.get(uuid);
+      tabs.push({ uuid: tab.uuid, title: tab.title, pathname: tab.pathname });
+    });
     return tabs;
+  }
+  getTabs() {
+    const tabs = [];
+    this.tabStorage.tabOrder.forEach((uuid) => tabs.push(this.tabStorage.tabsByID.get(uuid)));
+    return tabs;
+  }
+  getTabByUrl(url: string): TabItem {
+    const tabItem = this.tabOperate.getBaiscTabFromUrl(url);
+    const existTabIndex = this.tabOperate.getTabIndex(tabItem);
+    if (existTabIndex === -1) {
+      return tabItem;
+    }
+    return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
   }
   getCurrentTab() {
     return this.tabOperate.getCurrentTab();
@@ -97,10 +109,10 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   batchCloseTab(uuids) {
     this.tabOperate.batchClose(uuids);
   }
-  updatePartialTab(tabItem: Partial<TabItem>) {
-    const currentTab = this.getCurrentTab();
-    this.tabStorage.updateTab(this.tabOperate.selectedIndex, Object.assign({}, currentTab, tabItem));
-
+  updatePartialTab(url: string, tabItem: Partial<TabItem>) {
+    const originTab = this.getTabByUrl(url);
+    const index = this.tabOperate.getTabIndex(originTab);
+    this.tabStorage.updateTab(index, Object.assign({}, originTab, tabItem));
     //! Prevent rendering delay
     this.cdRef.detectChanges();
   }
