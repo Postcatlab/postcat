@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { NavigationEnd } from '@angular/router';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { debounceTime, of, Subject } from 'rxjs';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { isEmptyObj } from '../../utils';
+import { MessageService } from '../../shared/services/message';
 @Injectable()
 export class ApiTabService {
   componentRef;
@@ -21,9 +21,12 @@ export class ApiTabService {
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index`, icon: 'home' },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
-  constructor() {
+  constructor(private messageService: MessageService) {
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
+    });
+    this.messageService.get().subscribe((inArg: Message) => {
+      this.watchApiChange(inArg);
     });
   }
   watchApiChange(inArg: Message) {
@@ -51,7 +54,6 @@ export class ApiTabService {
   }
   onChildComponentInit(componentRef) {
     this.componentRef = componentRef;
-    this.bindChildComponentChangeEvent();
   }
   /**
    * After tab component/child component  init
@@ -69,7 +71,6 @@ export class ApiTabService {
       return;
     }
     const url = window.location.pathname + window.location.search;
-    console.log('bindChildComponentChangeEvent',url);
     this.componentRef.afterInit = {
       emit: (model) => {
         this.afterContentChanged({ when: 'init', url, model });
@@ -107,7 +108,6 @@ export class ApiTabService {
    * @returns
    */
   updateChildView(url) {
-    console.log('updateChildView', url);
     if (!this.apiTabComponent) {
       return;
     }
@@ -162,7 +162,7 @@ export class ApiTabService {
     if (currentContentTab.type === 'edit') {
       //Only edit page storage data
       //Set baseContent
-      if (inData.when === 'init') {
+      if (['init', 'saved'].includes(inData.when)) {
         const initialModel = this.componentRef.initialModel;
         tabItem.baseContent = initialModel && !isEmptyObj(initialModel) ? initialModel : null;
       }
@@ -172,9 +172,13 @@ export class ApiTabService {
       if (!this.componentRef?.isFormChange) {
         throw new Error('EO_ERROR:Child componentRef need has isFormChange function check model change');
       }
-      tabItem.hasChanged = this.componentRef.isFormChange(currentContentTab.baseContent);
+      if (['init', 'saved'].includes(inData.when)) {
+        tabItem.hasChanged = false;
+      } else {
+        tabItem.hasChanged = this.componentRef.isFormChange();
+      }
     }
-    console.log('updatePartialTab', currentContentTab.uuid,tabItem,inData.url);
+    console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
     this.apiTabComponent.updatePartialTab(inData.url, tabItem);
   }
 }

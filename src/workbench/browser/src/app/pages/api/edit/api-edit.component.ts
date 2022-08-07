@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -51,6 +51,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private changeGroupID$: Subject<string | number> = new Subject();
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
@@ -122,12 +123,17 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     let formData: any = Object.assign({}, this.model, this.validateForm.value);
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
-    const initialModel = formData;
     formData = this.apiEditUtil.formatSavingApiData(formData);
     const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {
-      this.message.success(title);
-      this.initialModel = initialModel;
+      this.message.success(title);;
+      this.initialModel=this.apiEditUtil.getFormdataFromApiData(result.data);
+      this.router.navigate(['home/api/edit'], {
+        queryParams: {
+          pageID: Number(this.route.snapshot.queryParams.pageID),
+          uuid: result.data.uuid,
+        },
+      });
       this.messageService.send({ type: `${busEvent}Success`, data: result.data });
     } else {
       this.message.success($localize`Failed Operation`);
@@ -144,12 +150,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (!this.initialModel || !this.model) {
       return false;
     }
-    // console.log(
-    //   'api edit origin:',
-    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
-    //   'after:',
-    //   this.apiEditUtil.formatEditingApiData(this.model)
-    // );
+    console.log(
+      'api edit origin:',
+      this.apiEditUtil.formatEditingApiData(this.initialModel),
+      'after:',
+      this.apiEditUtil.formatEditingApiData(this.model)
+    );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
     if (originText !== afterText) {

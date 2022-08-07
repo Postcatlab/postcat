@@ -16,6 +16,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
+  // private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public tabStorage: ApiTabStorageService,
     public tabOperate: ApiTabOperateService,

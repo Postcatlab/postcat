@@ -423,7 +423,6 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
       if (status === 200 && data) {
         const mockList = await this.mock.where('apiDataID').equals(uuid).toArray();
-        console.log('uuids', mockList);
         this.mock.bulkDelete(mockList.map((n) => n.uuid));
       }
     });

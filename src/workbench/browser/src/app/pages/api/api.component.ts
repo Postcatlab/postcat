@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RoutesRecognized } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
-import { filter, Subject, takeUntil } from 'rxjs';
-import { debounceTime, pairwise, startWith } from 'rxjs/operators';
+import {  Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
@@ -100,7 +99,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.initTabsetData();
-    this.watchApiChange();
     this.watchRouterChange();
     this.watchDataSourceChange();
     this.initEnv();
@@ -110,12 +108,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  watchApiChange() {
-    this.messageService.get().subscribe((inArg: Message) => {
-      this.apiTab.watchApiChange(inArg);
-    });
   }
   watchDataSourceChange(): void {
     this.messageService

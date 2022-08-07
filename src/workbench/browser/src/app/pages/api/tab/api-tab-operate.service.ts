@@ -41,6 +41,7 @@ export class ApiTabOperateService {
       });
       this.tabStorage.tabsByID = tabsByID;
       const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
+      this.selectedIndex=tabCache.selectedIndex;
       this.navigateTabRoute(targetTab);
     } else {
       this.operateTabAfterRouteChange({
@@ -120,7 +121,7 @@ export class ApiTabOperateService {
       }
     }
     this.tabStorage.resetTabsByOrdr(tabsObj.left);
-    if(tabsObj.hasChanged.length){
+    if (tabsObj.hasChanged.length) {
       this.message.warn($localize`Program will not close unsaved tabs`);
     }
   }
@@ -214,23 +215,27 @@ export class ApiTabOperateService {
     const sameContentIndex = this.getTabIndex('sameContent', tmpTabItem);
     const existTab = this.getTabByIndex(sameContentIndex);
 
-    // If url different,jump to exist tab item to keep same save pageID
-    const nextTab = existTab || tmpTabItem;
+    // If url different,jump to exist tab item to keep same  pageID
     console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
-    if (this.getUrlByTab(nextTab) !== res.url) {
-      this.navigateTabRoute(nextTab);
+    const nextTab = existTab || tmpTabItem;
+    console.log(this.getUrlByTab(nextTab),this.getUrlByTab(tmpTabItem));
+    if (this.getUrlByTab(nextTab) !== this.getUrlByTab(tmpTabItem)) {
+      this.navigateTabRoute(
+        Object.assign(nextTab, {
+          params: Object.assign(tmpTabItem.params || {}, nextTab.params),
+        })
+      );
       return;
     }
     if (this.tabStorage.tabOrder.length === 0) {
       this.tabStorage.addTab(tmpTabItem);
-      this.updateContetnView();
+      this.updateChildView();
       return;
     }
-
     //If exist tab,select it
     if (existTab) {
       this.selectedIndex = sameContentIndex;
-      this.updateContetnView();
+      this.updateChildView();
       return;
     }
     //  If has exist tabID,replace one
@@ -252,7 +257,7 @@ export class ApiTabOperateService {
           const mergeTab = this.preventBlankTab(tab, tmpTabItem);
           this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
           this.tabStorage.updateTab(this.selectedIndex, mergeTab);
-          this.updateContetnView();
+          this.updateChildView();
           return;
         }
       }
@@ -262,14 +267,14 @@ export class ApiTabOperateService {
     if (canbeReplaceID) {
       this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === canbeReplaceID);
       this.tabStorage.updateTab(this.selectedIndex, tmpTabItem);
-      this.updateContetnView();
+      this.updateChildView();
       return;
     }
 
     //No one can be replace,add tab
     this.tabStorage.addTab(tmpTabItem);
     this.selectedIndex = this.tabStorage.tabOrder.length - 1;
-    this.updateContetnView();
+    this.updateChildView();
   }
   //*Prevent toggling splash screen with empty tab title
   preventBlankTab(origin, target) {
@@ -310,11 +315,12 @@ export class ApiTabOperateService {
       tab.pathname +
       '?' +
       Object.keys(tab.params)
+        .sort()
         .map((keyName) => `${keyName}=${tab.params[keyName]}`)
         .join('&')
     );
   }
-  private updateContetnView() {
+  private updateChildView() {
     this.messageService.send({ type: 'tabContentInit', data: {} });
   }
   private watchPageLeave() {
