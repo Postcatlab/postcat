@@ -41,7 +41,7 @@ export class ApiTabOperateService {
       });
       this.tabStorage.tabsByID = tabsByID;
       const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
-      this.selectedIndex=tabCache.selectedIndex;
+      this.selectedIndex = tabCache.selectedIndex;
       this.navigateTabRoute(targetTab);
     } else {
       this.operateTabAfterRouteChange({
@@ -204,6 +204,22 @@ export class ApiTabOperateService {
     });
     return result as TabItem;
   }
+  formatUrl(url) {
+    const urlArr = url.split('?');
+    // Parse query params
+    const params = {};
+    new URLSearchParams(urlArr[1]).forEach((value, key) => {
+      if (key === 'pageID') {
+        params[key] = Number(value);
+        return;
+      }
+      params[key] = value;
+    });
+    return urlArr[0]+'?'+Object.keys(params)
+      .sort()
+      .map((keyName) => `${keyName}=${params[keyName]}`)
+      .join('&');
+  }
   /**
    * Operate tab after router change,router triggle tab change
    * Such as new tab,pick tab,close tab...
@@ -218,8 +234,8 @@ export class ApiTabOperateService {
     // If url different,jump to exist tab item to keep same  pageID
     console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
     const nextTab = existTab || tmpTabItem;
-    console.log(this.getUrlByTab(nextTab),this.getUrlByTab(tmpTabItem));
-    if (this.getUrlByTab(nextTab) !== this.getUrlByTab(tmpTabItem)) {
+    console.log(this.getUrlByTab(nextTab),this.formatUrl(res.url));
+    if (this.getUrlByTab(nextTab) !== this.formatUrl(res.url)) {
       this.navigateTabRoute(
         Object.assign(nextTab, {
           params: Object.assign(tmpTabItem.params || {}, nextTab.params),
