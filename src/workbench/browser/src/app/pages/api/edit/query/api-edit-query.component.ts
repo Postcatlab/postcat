@@ -8,7 +8,7 @@ import { ApiEditUtilService } from '../api-edit-util.service';
   styleUrls: ['./api-edit-query.component.scss'],
 })
 export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecked {
-  @Input() model: object[];
+  @Input() model: ApiEditQuery[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: object = {};
   private itemStructure: ApiEditQuery = {
@@ -28,7 +28,9 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
   }
   ngOnChanges(changes) {
     if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
-      this.model.push(Object.assign({}, this.itemStructure));
+      if (!this.model.length || this.model[this.model.length - 1].name) {
+        this.model.push(Object.assign({}, this.itemStructure));
+      }
     }
   }
   private initListConf() {

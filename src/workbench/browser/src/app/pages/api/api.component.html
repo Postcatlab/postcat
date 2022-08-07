@@ -68,13 +68,12 @@
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <!-- Manually pick pageID,Because pageID always change -->
-          <nz-tabset [nzSelectedIndex]="tabsetIndex" class="inside_page_tab" *ngIf="this.id">
+          <nz-tabset  class="inside_page_tab" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
               <a
                 *nzTabLink
                 nz-tab-link
                 [routerLink]="[tab.routerLink]"
-                [queryParams]="{ pageID: pageID }"
                 queryParamsHandling="merge"
               >
                 {{ tab.title }}</a

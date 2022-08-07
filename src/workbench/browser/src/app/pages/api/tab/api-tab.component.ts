@@ -34,7 +34,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.tabOperate.newDefaultTab();
   }
   sortTab(_left: KeyValue<number, any>, _right: KeyValue<number, any>): number {
-    console.log('sortTab', arguments);
     const leftIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _left.key);
     const rightIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _right.key);
     return leftIndex - rightIndex;
@@ -86,6 +85,9 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => {
       const tab = this.tabStorage.tabsByID.get(uuid);
+      if (!tab) {
+        return;
+      }
       tabs.push({ uuid: tab.uuid, title: tab.title, pathname: tab.pathname });
     });
     return tabs;
@@ -95,11 +97,11 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.tabStorage.tabOrder.forEach((uuid) => tabs.push(this.tabStorage.tabsByID.get(uuid)));
     return tabs;
   }
-  getTabByUrl(url: string): TabItem {
+  getTabByUrl(url: string): TabItem | null {
     const tabItem = this.tabOperate.getBaiscTabFromUrl(url);
-    const existTabIndex = this.tabOperate.getTabIndex(tabItem);
+    const existTabIndex = this.tabOperate.getTabIndex('sameContent', tabItem);
     if (existTabIndex === -1) {
-      return tabItem;
+      return null;
     }
     return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
   }
@@ -111,7 +113,9 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   updatePartialTab(url: string, tabItem: Partial<TabItem>) {
     const originTab = this.getTabByUrl(url);
-    const index = this.tabOperate.getTabIndex(originTab);
+    if (!originTab) {return;}
+    const index = this.tabOperate.getTabIndex('sameContent', originTab);
+
     this.tabStorage.updateTab(index, Object.assign({}, originTab, tabItem));
     //! Prevent rendering delay
     this.cdRef.detectChanges();

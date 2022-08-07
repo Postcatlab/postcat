@@ -7,7 +7,7 @@ import { ApiEditUtilService } from '../api-edit-util.service';
   styleUrls: ['./api-edit-rest.component.scss'],
 })
 export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked {
-  @Input() model: object[];
+  @Input() model: ApiEditRest[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: object = {};
   private itemStructure: ApiEditRest = {
@@ -26,7 +26,9 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
   }
   ngOnChanges(changes) {
     if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
-      this.model.push(Object.assign({}, this.itemStructure));
+      if (!this.model.length || this.model[this.model.length - 1].name) {
+        this.model.push(Object.assign({}, this.itemStructure));
+      }
     }
   }
   private initListConf() {

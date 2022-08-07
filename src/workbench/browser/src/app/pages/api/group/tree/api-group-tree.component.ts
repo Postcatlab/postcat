@@ -208,7 +208,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       case 'editApi':
       case 'detailApi': {
         this.router.navigate([`/home/api/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key, pageID: Date.now() },
+          queryParams: { uuid: inArg.node.key },
         });
         break;
       }
@@ -220,7 +220,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       }
       case 'addAPI': {
         this.router.navigate(['/home/api/edit'], {
-          queryParams: { groupID: inArg.node?.origin.key.replace('group-', ''), pageID: Date.now() },
+          queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') },
         });
         break;
       }

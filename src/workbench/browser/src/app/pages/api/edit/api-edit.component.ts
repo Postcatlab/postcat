@@ -19,7 +19,7 @@ import {
   StorageResStatus,
 } from '../../../shared/services/storage/index.model';
 
-import { objectToArray } from '../../../utils';
+import { isEmptyObj, objectToArray } from '../../../utils';
 import { listToTree, getExpandGroupByKey } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
@@ -42,6 +42,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
   groups: any[];
+  initTimes = 0;
   expandKeys: string[];
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
@@ -57,28 +58,31 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     private apiEdit: ApiEditService
-  ) {}
+  ) {
+    this.initBasicForm();
+  }
   /**
    * Init Api Data
    *
    * @param type Reset means force update apiData
    */
   async init() {
-    console.log('api edit init function',arguments[0]);
+    this.initTimes++;
     const id = Number(this.route.snapshot.queryParams.uuid);
     const groupID = Number(this.route.snapshot.queryParams.groupID || 0);
-    if (!this.model) {
+    if (!this.model || isEmptyObj(this.model)) {
       this.model = {} as ApiData;
-      //! Execute before await to prevent template
-      this.initBasicForm();
-      this.model= await this.apiEdit.getApi({
+      const initTimes = this.initTimes;
+      const result = await this.apiEdit.getApi({
         id,
         groupID,
       });
-    } else {
-      //API data form outside,such as tab cache
-      this.initBasicForm();
+      //!Prevent await async ,replace current  api data
+      if (initTimes >= this.initTimes) {
+        this.model = result;
+      }
     }
+
     //Storage origin api data
     if (!this.initialModel) {
       if (!id) {
@@ -88,22 +92,20 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.initialModel = structuredClone(this.model);
       }
     }
+    this.initBasicForm();
     this.watchBasicForm();
     this.watchUri();
     this.afterGroupIDChange();
     this.changeGroupID$.next(this.model.groupID);
     this.validateForm.patchValue(this.model);
-    console.log(this.model);
+    console.log('api eidt init', this.model);
     this.afterInit.emit(this.model);
   }
-
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }
   ngOnInit(): void {
-    console.log('api edit ngOnInit');
     this.getApiGroup();
-    this.init();
     this.watchGroupIDChange();
   }
   async saveApi() {
@@ -120,7 +122,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     let formData: any = Object.assign({}, this.model, this.validateForm.value);
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
-    const initialModel=formData;
+    const initialModel = formData;
     formData = this.apiEditUtil.formatSavingApiData(formData);
     const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {

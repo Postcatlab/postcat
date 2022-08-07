@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
@@ -18,7 +18,7 @@ import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
-import { objectToArray } from '../../../utils';
+import { isEmptyObj, objectToArray } from '../../../utils';
 
 import { EnvState } from '../../../shared/store/env.state';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
@@ -75,6 +75,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   responseTabIndexRes = 0;
+  initTimes = 0;
 
   isRequestBodyLoaded = false;
   initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
@@ -96,6 +97,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private lang: LanguageService
   ) {
+    this.initBasicForm();
     this.testServer = this.testServerService.instance;
     this.testServer.init((message) => {
       this.receiveMessage(message);
@@ -105,21 +107,25 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   async init() {
-    if (!this.model) {
+    this.initTimes++;
+    if (!this.model || isEmptyObj(this.model)) {
       this.model = {} as ApiTestData;
-      this.initBasicForm();
       const id = Number(this.route.snapshot.queryParams.uuid);
-      this.model = await this.apiTest.getApi({
+      const initTimes = this.initTimes;
+      const result = await this.apiTest.getApi({
         id,
       });
-    } else {
-      //API data form outside,such as tab cache
-      this.initBasicForm();
+      //!Prevent await async ,replace current  api data
+      if (initTimes >= this.initTimes) {
+        this.model = result;
+      }
     }
     //Storage origin api data
     if (!this.initialModel) {
       this.initialModel = structuredClone(this.model);
     }
+    console.log('api test inti', this.model, isEmptyObj(this.model));
+    this.initBasicForm();
     //! Set this two function to reset form
     this.validateForm.markAsPristine();
     this.validateForm.markAsUntouched();
@@ -227,7 +233,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
-    this.init();
     this.watchEnvChange();
   }
   ngOnDestroy() {
@@ -354,9 +359,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Init basic form,such as url,protocol,method
    */
   private initBasicForm() {
+    //Prevent init error
+    if (!this.model) {
+      this.model = {} as ApiData;
+    }
     const controls = {};
     ['protocol', 'method', 'uri'].forEach((name) => {
-      controls[name] = [this.model[name], [Validators.required]];
+      controls[name] = [this.model?.[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }

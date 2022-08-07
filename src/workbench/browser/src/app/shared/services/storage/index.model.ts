@@ -408,14 +408,14 @@ export interface ApiData extends StorageModel {
    *
    * @type {object[]}
    */
-  queryParams?: object[];
+  queryParams?: ApiEditQuery[];
 
   /**
    * rest请求参数，数据用json存储
    *
    * @type {object[]}
    */
-  restParams?: Record<string, any>[];
+  restParams?: ApiEditRest[];
 
   /**
    * 返回头数据，数据用json存储

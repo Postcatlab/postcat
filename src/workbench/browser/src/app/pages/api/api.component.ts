@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RoutesRecognized } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { pairwise, startWith } from 'rxjs/operators';
+import { debounceTime, pairwise, startWith } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
@@ -99,10 +99,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.queryParams.uuid);
-    this.setPageID();
     this.initTabsetData();
-    //Need execute after init tabset data
-    this.setTabsetIndex();
     this.watchApiChange();
     this.watchRouterChange();
     this.watchDataSourceChange();
@@ -137,22 +134,9 @@ export class ApiComponent implements OnInit, OnDestroy {
    * Get current API ID to show content tab
    */
   watchRouterChange() {
-    const url = window.location.pathname + window.location.search;
-    this.router.events
-      .pipe(
-        // init by manual
-        startWith(new NavigationEnd(1, url, url)),
-        filter((e) => e instanceof NavigationEnd),
-        pairwise(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(([lastRouter, currentRouter]: [NavigationEnd, NavigationEnd]) => {
-        // console.log('watchRouterChange',lastRouter,currentRouter);
-        this.id = Number(this.route.snapshot.queryParams.uuid);
-        this.setPageID();
-        this.setTabsetIndex();
-        this.apiTab.refleshData(lastRouter, currentRouter);
-      });
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.id = Number(this.route.snapshot.queryParams.uuid);
+    });
   }
   gotoEnvManager() {
     // * switch to env
@@ -173,12 +157,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.dyWidth = distance;
   }
   handleEnvSelectStatus(event: boolean) {}
-  private setPageID() {
-    this.pageID = Date.now();
-  }
-  private setTabsetIndex() {
-    this.tabsetIndex = this.TABS.findIndex((val) => window.location.pathname.includes(val.routerLink));
-  }
   private changeStoreEnv(uuid) {
     if (uuid == null) {
       this.store.dispatch(new Change(null));

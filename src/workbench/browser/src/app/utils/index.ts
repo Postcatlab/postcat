@@ -68,7 +68,7 @@ export const objectToArray = (obj) =>
     key: val,
     value: obj[val],
   }));
-
+export const isEmptyObj = (obj) => obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 export const isEmptyValue = (obj) => {
   const list = Object.keys(obj);
   const emptyList = list.filter((it) => !obj[it]);
@@ -161,7 +161,7 @@ export function debounce(fn, wait = 50) {
   let timer = null;
   // 将 debounce 处理结果当作函数返回
   // 触发事件回调时执行这个返回函数
-  return function (...args) {
+  return function(...args) {
     // this保存给context
     const context = this;
     // 如果已经设定过定时器就清空上一次的定时器
@@ -178,7 +178,7 @@ export function debounce(fn, wait = 50) {
 
 export function throttle(fn, gap) {
   let timerId = null;
-  return function (...rest) {
+  return function(...rest) {
     if (timerId === null) {
       fn(...rest); // 立即执行
       timerId = setTimeout(() => {
