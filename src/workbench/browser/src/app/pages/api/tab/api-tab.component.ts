@@ -44,7 +44,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   selectChange() {
     this.tabOperate.navigateTabRoute(this.getCurrentTab());
   }
-  closeTab({ index, tab }: { index: number; tab: any }) {
+  closeTab({ $event, index, tab }: { $event: Event;index: number; tab: any }) {
+    $event.stopPropagation();
     if (!tab.hasChanged) {
       this.tabOperate.closeTab(index);
       return;
@@ -88,7 +89,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       if (!tab) {
         return;
       }
-      tabs.push({ uuid: tab.uuid, title: tab.title, pathname: tab.pathname });
+      tabs.push({ uuid: tab.uuid, title: tab.title, pathname: tab.pathname, params: tab.params });
     });
     return tabs;
   }
@@ -113,9 +114,10 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   updatePartialTab(url: string, tabItem: Partial<TabItem>) {
     const originTab = this.getTabByUrl(url);
-    if (!originTab) {return;}
-    const index = this.tabOperate.getTabIndex('sameContent', originTab);
-
+    if (!originTab) {
+      return;
+    }
+    const index = this.tabStorage.tabOrder.findIndex((uuid) => uuid === originTab.uuid);
     this.tabStorage.updateTab(index, Object.assign({}, originTab, tabItem));
     //! Prevent rendering delay
     this.cdRef.detectChanges();

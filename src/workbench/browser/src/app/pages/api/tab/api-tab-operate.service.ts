@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 /**
  * Api tab service operate tabs array add/replace/close...
@@ -22,6 +23,7 @@ export class ApiTabOperateService {
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
     private router: Router,
+    private message: EoMessageService,
     private modal: ModalService
   ) {
     this.watchPageLeave();
@@ -31,7 +33,7 @@ export class ApiTabOperateService {
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
     const tabCache = this.tabStorage.getPersistenceStorage();
-    if (tabCache) {
+    if (tabCache && tabCache.tabOrder?.length) {
       this.tabStorage.tabOrder = tabCache.tabOrder;
       const tabsByID = new Map();
       Object.values(tabCache.tabsByID).forEach((tabItem) => {
@@ -53,7 +55,12 @@ export class ApiTabOperateService {
    */
   newDefaultTab() {
     const tabItem: TabItem = this.getBaiscTabFromUrl(Object.values(this.BASIC_TABS)[0].pathname);
-    this.navigateTabRoute(tabItem);
+    this.tabStorage.addTab(tabItem);
+    if (this.selectedIndex === this.tabStorage.tabOrder.length - 1) {
+      this.navigateTabRoute(tabItem);
+      return;
+    }
+    this.selectedIndex = this.tabStorage.tabOrder.length - 1;
   }
 
   closeTab(index: number) {
@@ -74,24 +81,47 @@ export class ApiTabOperateService {
     }
   }
   closeTabByOperate(action: string | TabOperate) {
+    const tabsObj = {
+      hasChanged: this.tabStorage.tabOrder.filter((uuid) => this.tabStorage.tabsByID.get(uuid).hasChanged),
+      left: [],
+    };
     switch (action) {
       case TabOperate.closeAll: {
-        this.tabStorage.resetTabsByOrdr([]);
-        this.newDefaultTab();
+        tabsObj.left = tabsObj.hasChanged;
+        if (tabsObj.left.length === 0) {
+          this.newDefaultTab();
+        }
         break;
       }
       case TabOperate.closeOther: {
-        this.tabStorage.resetTabsByOrdr([this.tabStorage.tabOrder[this.selectedIndex]]);
+        tabsObj.left = this.tabStorage.tabOrder.filter(
+          (uuid) =>
+            this.tabStorage.tabsByID.get(uuid).hasChanged || uuid === this.tabStorage.tabOrder[this.selectedIndex]
+        );
         break;
       }
       case TabOperate.closeLeft: {
-        this.tabStorage.resetTabsByOrdr(this.tabStorage.tabOrder.slice(this.selectedIndex));
+        tabsObj.left = [
+          ...this.tabStorage.tabOrder
+            .slice(0, this.selectedIndex)
+            .filter((uuid) => this.tabStorage.tabsByID.get(uuid).hasChanged),
+          ...this.tabStorage.tabOrder.slice(this.selectedIndex),
+        ];
         break;
       }
       case TabOperate.closeRight: {
-        this.tabStorage.resetTabsByOrdr(this.tabStorage.tabOrder.slice(0, this.selectedIndex + 1));
+        tabsObj.left = [
+          ...this.tabStorage.tabOrder.slice(0, this.selectedIndex + 1),
+          ...this.tabStorage.tabOrder
+            .slice(this.selectedIndex + 1)
+            .filter((uuid) => this.tabStorage.tabsByID.get(uuid).hasChanged),
+        ];
         break;
       }
+    }
+    this.tabStorage.resetTabsByOrdr(tabsObj.left);
+    if(tabsObj.hasChanged.length){
+      this.message.warn($localize`Program will not close unsaved tabs`);
     }
   }
   /**
@@ -114,22 +144,26 @@ export class ApiTabOperateService {
   getTabIndex(type: 'sameTab' | 'sameContent' = 'sameTab', tab: TabItem): number {
     let result = -1;
     //Get exist TabIndex
-    for (const tabInfo of this.tabStorage.tabsByID.values()) {
-      if (tabInfo.uuid === tab.params.pageID) {
-        result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
-        break;
-      }
-      if (tabInfo.params.uuid && tabInfo.params.uuid === tab.params.uuid) {
-        if (type === 'sameContent') {
-          if (tabInfo.pathname === tab.pathname) {
+    const existTab = this.tabStorage.tabsByID.get(tab.uuid);
+    if (existTab && existTab.pathname === tab.pathname) {
+      return this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
+    }
+    const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
+    for (const key in mapObj) {
+      if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
+        const tabInfo = mapObj[key];
+        if (tabInfo.params.uuid && tabInfo.params.uuid === tab.params.uuid) {
+          if (type === 'sameContent') {
+            if (tabInfo.pathname === tab.pathname) {
+              result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
+              break;
+            }
+          } else {
             result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
-            break;
           }
-        } else {
-          result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
+          break;
+          //TODO how to replace current exist tab but editing
         }
-        break;
-        //TODO how to replace current exist tab but editing
       }
     }
     return result;
@@ -143,6 +177,7 @@ export class ApiTabOperateService {
   getBaiscTabFromUrl(url): TabItem {
     const urlArr = url.split('?');
     const params: any = {};
+    const timestamp = Date.now();
     const basicTab = Object.values(this.BASIC_TABS).find((val) => val.pathname === urlArr[0]);
     if (!basicTab) {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
@@ -155,9 +190,10 @@ export class ApiTabOperateService {
       }
       params[key] = value;
     });
+    params.pageID = params.pageID || timestamp;
     const result = {
       //If data need load from ajax/indexeddb,add loading
-      uuid: params.pageID || Date.now(),
+      uuid: params.pageID,
       isLoading: params.uuid ? true : false,
       pathname: urlArr[0],
       params,
@@ -170,69 +206,121 @@ export class ApiTabOperateService {
   /**
    * Operate tab after router change,router triggle tab change
    * Such as new tab,pick tab,close tab...
+   *
+   * @param res.url location.pathname+location.search
    */
   operateTabAfterRouteChange(res: { url: string }) {
     const tmpTabItem = this.getBaiscTabFromUrl(res.url);
-    console.log('operateTabAfterRouteChange',tmpTabItem);
-    this.messageService.send({ type: 'tabContentInit', data: {} });
-    //Pick current router url as the first tab
+    const sameContentIndex = this.getTabIndex('sameContent', tmpTabItem);
+    const existTab = this.getTabByIndex(sameContentIndex);
+
+    // If url different,jump to exist tab item to keep same save pageID
+    const nextTab = existTab || tmpTabItem;
+    console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
+    if (this.getUrlByTab(nextTab) !== res.url) {
+      this.navigateTabRoute(nextTab);
+      return;
+    }
     if (this.tabStorage.tabOrder.length === 0) {
       this.tabStorage.addTab(tmpTabItem);
+      this.updateContetnView();
       return;
     }
-    const existTabIndex = this.getTabIndex('sameContent', tmpTabItem);
-    //Router has focus current tab
-    if (this.selectedIndex === existTabIndex) {
-      return;
-    }
+
     //If exist tab,select it
-    if (existTabIndex !== -1) {
-      this.selectedIndex = existTabIndex;
+    if (existTab) {
+      this.selectedIndex = sameContentIndex;
+      this.updateContetnView();
       return;
     }
-    //If no exist,new tab or replace origin tab
-    this.newOrReplaceTab(tmpTabItem);
+    //  If has exist tabID,replace one
+    if (this.tabStorage.tabsByID.has(tmpTabItem.uuid)) {
+      tmpTabItem.uuid = tmpTabItem.params.pageID = Date.now();
+      this.navigateTabRoute(Object.assign(tmpTabItem));
+      return;
+    }
+    //If has {params.uuid} same tab,replace it
+    let canbeReplaceID = null;
+    const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
+    for (const key in mapObj) {
+      if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
+        const tab = mapObj[key];
+        if (this.canbeReplace(tab)) {
+          canbeReplaceID = tab.uuid;
+        }
+        if (tab.params.uuid === tmpTabItem.params.uuid && canbeReplaceID) {
+          const mergeTab = this.preventBlankTab(tab, tmpTabItem);
+          this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
+          this.tabStorage.updateTab(this.selectedIndex, mergeTab);
+          this.updateContetnView();
+          return;
+        }
+      }
+    }
+
+    //Find other tab to be replace
+    if (canbeReplaceID) {
+      this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === canbeReplaceID);
+      this.tabStorage.updateTab(this.selectedIndex, tmpTabItem);
+      this.updateContetnView();
+      return;
+    }
+
+    //No one can be replace,add tab
+    this.tabStorage.addTab(tmpTabItem);
+    this.selectedIndex = this.tabStorage.tabOrder.length - 1;
+    this.updateContetnView();
   }
-  getTabByIndex(index) {
+  //*Prevent toggling splash screen with empty tab title
+  preventBlankTab(origin, target) {
+    const result = target;
+    if (result.params?.uuid === origin.params?.uuid) {
+      ['title', 'extends', 'isLoading'].forEach((keyName) => {
+        //Dont't replace is loading tab content
+        if (result[keyName] && !result.isLoading) {
+          return;
+        }
+        result[keyName] = origin[keyName];
+      });
+      result.isLoading = false;
+    }
+    return result;
+  }
+  canbeReplace(tabItem: TabItem) {
+    if (tabItem.isFixed) {
+      return false;
+    }
+    if (tabItem.type === 'edit' && tabItem.hasChanged) {
+      return false;
+    }
+    return true;
+  }
+  getTabByIndex(index): TabItem | null {
+    if (index <= -1) {
+      return null;
+    }
     const tabID = this.tabStorage.tabOrder[index];
     return this.tabStorage.tabsByID.get(tabID);
   }
   getCurrentTab() {
     return this.getTabByIndex(this.selectedIndex);
   }
-  /**
-   * New or replace current tab
-   *
-   * @param tabItem tab need to be add
-   */
-  private newOrReplaceTab(tabItem: TabItem) {
-    const currentTab = this.getCurrentTab();
-    //* Avoid open too much tab,if tab[type==='preview'] or tab[type==='edit'] with no change,replace page in current tab
-    const canbeReplace =
-      !currentTab.isFixed && (currentTab.type === 'preview' || (currentTab.type === 'edit' && !currentTab.hasChanged));
-    if (canbeReplace) {
-      // Same uuid means same tab data
-      //*Prevent toggling splash screen with empty tab title
-      if (tabItem.params?.uuid === currentTab.params?.uuid) {
-        ['title', 'extends', 'isLoading'].forEach((keyName) => {
-          //Dont't replace is loading tab content
-          if (tabItem[keyName] && !tabItem.isLoading) {
-            return;
-          }
-          tabItem[keyName] = currentTab[keyName];
-        });
-        tabItem.isLoading = false;
-      }
-      this.tabStorage.updateTab(this.selectedIndex, tabItem);
-    } else {
-      this.tabStorage.addTab(tabItem);
-      this.selectedIndex = this.tabStorage.tabOrder.length - 1;
-    }
+  private getUrlByTab(tab: TabItem) {
+    return (
+      tab.pathname +
+      '?' +
+      Object.keys(tab.params)
+        .map((keyName) => `${keyName}=${tab.params[keyName]}`)
+        .join('&')
+    );
   }
-
+  private updateContetnView() {
+    this.messageService.send({ type: 'tabContentInit', data: {} });
+  }
   private watchPageLeave() {
+    const that = this;
     window.addEventListener('beforeunload', function(e) {
-      console.log('beforeunload');
+      that.tabStorage.setPersistenceStorage(that.selectedIndex);
     });
   }
 }

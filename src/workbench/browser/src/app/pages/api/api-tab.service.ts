@@ -44,13 +44,12 @@ export class ApiTabService {
         break;
       }
       case 'tabContentInit': {
-        this.updateChildView(window.location.pathname+window.location.search);
+        this.updateChildView(window.location.pathname + window.location.search);
         break;
       }
     }
   }
   onChildComponentInit(componentRef) {
-    console.log('onChildComponentInit');
     this.componentRef = componentRef;
     this.bindChildComponentChangeEvent();
   }
@@ -70,11 +69,7 @@ export class ApiTabService {
       return;
     }
     const url = window.location.pathname + window.location.search;
-    this.componentRef.modelChange = {
-      emit: (model) => {
-        this.changeContent$.next({ when: 'editing', url, model });
-      },
-    };
+    console.log('bindChildComponentChangeEvent',url);
     this.componentRef.afterInit = {
       emit: (model) => {
         this.afterContentChanged({ when: 'init', url, model });
@@ -84,6 +79,11 @@ export class ApiTabService {
       this.componentRef.afterSaved = {
         emit: (model) => {
           this.afterContentChanged({ when: 'saved', url, model });
+        },
+      };
+      this.componentRef.modelChange = {
+        emit: (model) => {
+          this.changeContent$.next({ when: 'editing', url, model });
         },
       };
     }
@@ -99,17 +99,19 @@ export class ApiTabService {
     }
     this.componentRef.saveApi();
   }
-    /**
-     * Reflesh data after Tab init
-     *
-     * @param lastRouter
-     * @param currentRouter
-     * @returns
-     */
+  /**
+   * Reflesh data after Tab init
+   *
+   * @param lastRouter
+   * @param currentRouter
+   * @returns
+   */
   updateChildView(url) {
-    if (!this.apiTabComponent) {return;}
-    this.bindChildComponentChangeEvent();
     console.log('updateChildView', url);
+    if (!this.apiTabComponent) {
+      return;
+    }
+    this.bindChildComponentChangeEvent();
     //Set tab cache
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
@@ -133,6 +135,7 @@ export class ApiTabService {
     }
     const currentContentTab = this.apiTabComponent.getTabByUrl(inData.url);
     if (!currentContentTab) {
+      console.warn(`has't find the tab fit child component ,url:${inData.url}`);
       return;
     }
     const model = inData.model;
@@ -156,21 +159,22 @@ export class ApiTabService {
         tabItem.title = tabTitle;
       }
     }
-    //Set hasChange
     if (currentContentTab.type === 'edit') {
+      //Only edit page storage data
       //Set baseContent
       if (inData.when === 'init') {
         const initialModel = this.componentRef.initialModel;
         tabItem.baseContent = initialModel && !isEmptyObj(initialModel) ? initialModel : null;
       }
+      tabItem.content = model && !isEmptyObj(model) ? model : null;
+
+      //Set hasChange
       if (!this.componentRef?.isFormChange) {
         throw new Error('EO_ERROR:Child componentRef need has isFormChange function check model change');
       }
-      //Only edit page storage data
-      tabItem.content = model && !isEmptyObj(model) ? model : null;
       tabItem.hasChanged = this.componentRef.isFormChange(currentContentTab.baseContent);
     }
-    console.log('updatePartialTab', currentContentTab, inData);
+    console.log('updatePartialTab', currentContentTab.uuid,tabItem,inData.url);
     this.apiTabComponent.updatePartialTab(inData.url, tabItem);
   }
 }

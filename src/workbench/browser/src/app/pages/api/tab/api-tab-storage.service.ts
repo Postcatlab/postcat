@@ -13,6 +13,9 @@ export class ApiTabStorageService {
   private cacheName = `${this.dataSource.dataSourceType}_TabCache`;
   constructor(private dataSource: RemoteService) {}
   addTab(tabItem) {
+    if (this.tabsByID.has(tabItem.uuid)) {
+      throw new Error(`EO_ERROR:can't add same id tab`);
+    }
     this.tabOrder.push(tabItem.uuid);
     this.tabsByID.set(tabItem.uuid, tabItem);
   }
@@ -49,7 +52,7 @@ export class ApiTabStorageService {
       JSON.stringify({
         selectedIndex,
         tabOrder: this.tabOrder,
-        tabsByID:Object.fromEntries(this.tabsByID),
+        tabsByID: Object.fromEntries(this.tabsByID),
       })
     );
   }
