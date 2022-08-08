@@ -5,13 +5,11 @@ import { takeUntil, debounceTime } from 'rxjs/operators';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import {  formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
-import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -74,15 +72,6 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'mockAutoSyncSuccess':
-            this.initMockList(Number(this.route.snapshot.queryParams.uuid));
-        }
-      });
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
   }
 
@@ -239,7 +228,9 @@ export class ApiMockComponent implements OnInit, OnChanges {
   async handleSave() {
     this.isVisible = false;
 
-    if (this.currentEditMock.createWay === 'system') {return;}
+    if (this.currentEditMock.createWay === 'system') {
+      return;
+    }
 
     if (this.isEdit) {
       await this.updateMock(this.currentEditMock, Number(this.currentEditMock.uuid));
