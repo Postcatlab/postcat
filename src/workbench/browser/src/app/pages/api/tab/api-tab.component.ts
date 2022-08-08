@@ -95,6 +95,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     return tabs;
   }
   getTabs() {
+    // console.log('getTabs');
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => tabs.push(this.tabStorage.tabsByID.get(uuid)));
     return tabs;

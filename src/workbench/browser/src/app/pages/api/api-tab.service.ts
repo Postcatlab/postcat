@@ -121,23 +121,7 @@ export class ApiTabService {
     this.componentRef.initialModel = currentTab?.baseContent || null;
     this.componentRef.init();
   }
-
-  /**
-   * After content changed
-   * Update tab by model data
-   *
-   * @param inData.url get component fit tab data
-   */
-  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'; url: string; model: any }) {
-    if (!this.apiTabComponent) {
-      console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
-      return;
-    }
-    const currentContentTab = this.apiTabComponent.getTabByUrl(inData.url);
-    if (!currentContentTab) {
-      console.warn(`has't find the tab fit child component ,url:${inData.url}`);
-      return;
-    }
+  updateTab(currentContentTab,inData) {
     const model = inData.model;
     //Set tabItem
     const tabItem: Partial<TabItem> = {
@@ -178,7 +162,25 @@ export class ApiTabService {
         tabItem.hasChanged = this.componentRef.isFormChange();
       }
     }
-    console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
+    // console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
     this.apiTabComponent.updatePartialTab(inData.url, tabItem);
+  }
+  /**
+   * After content changed
+   * Update tab by model data
+   *
+   * @param inData.url get component fit tab data
+   */
+  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'; url: string; model: any }) {
+    if (!this.apiTabComponent) {
+      console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
+      return;
+    }
+    const currentContentTab = this.apiTabComponent.getTabByUrl(inData.url);
+    if (!currentContentTab) {
+      console.warn(`has't find the tab fit child component ,url:${inData.url}`);
+      return;
+    }
+    this.updateTab(currentContentTab, inData);
   }
 }

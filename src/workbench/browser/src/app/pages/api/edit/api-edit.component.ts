@@ -99,7 +99,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.afterGroupIDChange();
     this.changeGroupID$.next(this.model.groupID);
     this.validateForm.patchValue(this.model);
-    console.log('api eidt init', this.model);
     this.afterInit.emit(this.model);
   }
   bindGetApiParamNum(params) {
@@ -150,12 +149,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (!this.initialModel || !this.model) {
       return false;
     }
-    console.log(
-      'api edit origin:',
-      this.apiEditUtil.formatEditingApiData(this.initialModel),
-      'after:',
-      this.apiEditUtil.formatEditingApiData(this.model)
-    );
+    // console.log(
+    //   'api edit origin:',
+    //   this.apiEditUtil.formatEditingApiData(this.initialModel),
+    //   'after:',
+    //   this.apiEditUtil.formatEditingApiData(this.model)
+    // );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
     if (originText !== afterText) {
