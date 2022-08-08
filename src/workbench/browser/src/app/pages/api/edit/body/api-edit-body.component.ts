@@ -63,7 +63,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
       default: {
-        this.cache[type] = [...this.model];
+        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
         break;
       }
     }
