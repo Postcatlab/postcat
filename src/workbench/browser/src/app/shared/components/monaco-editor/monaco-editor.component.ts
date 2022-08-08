@@ -134,6 +134,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       requestIdleCallback(() => {
         const type = whatTextType(this.$$code || '');
         this.editorType = type;
+        console.log('type', type);
         window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
       });
     }
