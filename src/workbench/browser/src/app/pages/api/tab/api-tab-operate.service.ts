@@ -239,6 +239,7 @@ export class ApiTabOperateService {
     //If page repeat or final url is different(lack of id/additional params)
     //jump to exist tab item to keep same  pageID and so on
     let nextTab = existTab || tmpTabItem;
+    console.log(this.getUrlByTab(nextTab), this.formatUrl(res.url));
     const isPageRepeat = existTab && existTab.pathname !== tmpTabItem.pathname;
     if (isPageRepeat || this.getUrlByTab(nextTab) !== this.formatUrl(res.url)) {
       if (isPageRepeat) {
@@ -248,12 +249,13 @@ export class ApiTabOperateService {
       this.navigateTabRoute(
         Object.assign(nextTab, {
           //new url may has new queryParams
-          params: Object.assign(nextTab.params || {}, tmpTabItem.params),
+          params: Object.assign(nextTab.params || {}, tmpTabItem.params, {
+            pageID: nextTab.uuid
+          }),
         })
       );
       return;
     }
-
 
     if (this.tabStorage.tabOrder.length === 0) {
       this.tabStorage.addTab(tmpTabItem);
@@ -274,7 +276,7 @@ export class ApiTabOperateService {
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tab = mapObj[key];
-        const canbeReplace=this.canbeReplace(tab);
+        const canbeReplace = this.canbeReplace(tab);
         if (canbeReplace) {
           canbeReplaceID = tab.uuid;
         }

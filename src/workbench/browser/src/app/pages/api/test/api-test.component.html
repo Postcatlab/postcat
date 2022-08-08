@@ -3,10 +3,10 @@
     <div class="top_container scroll_container" top>
       <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="basic_info_container">
         <nz-input-group nzCompact>
-          <nz-select class="w_100" [(ngModel)]="model.protocol" formControlName="protocol">
+          <nz-select class="w_100" [(ngModel)]="model.request.protocol" formControlName="protocol">
             <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"> </nz-option>
           </nz-select>
-          <nz-select class="!w-[106px] flex-none" [(ngModel)]="model.method" formControlName="method">
+          <nz-select class="!w-[106px] flex-none" [(ngModel)]="model.request.method" formControlName="method">
             <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
           </nz-select>
           <div
@@ -29,7 +29,7 @@
                 name="uri"
                 nz-input
                 formControlName="uri"
-                [(ngModel)]="model.uri"
+                [(ngModel)]="model.request.uri"
                 (change)="changeUri()"
               />
             </nz-form-control>
@@ -39,7 +39,7 @@
             <span *ngIf="status === 'testing'" i18n>Abort</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
           </button>
-          <button type="button" *ngIf="!model.uuid" nz-button nzType="default" (click)="saveApi()" class="ml10" i18n>
+          <button type="button" *ngIf="!model.request.uuid" nz-button nzType="default" (click)="saveApi()" class="ml10" i18n>
             Save as API
           </button>
         </nz-input-group>
@@ -54,13 +54,13 @@
         <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
           <ng-template #headerTitleTmp>
             <span i18n="@@RequestHeaders">Headers</span>
-            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.requestHeaders)">{{
-              model.requestHeaders | apiParamsNum
+            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.requestHeaders)">{{
+              model.request.requestHeaders | apiParamsNum
             }}</span>
           </ng-template>
           <eo-api-test-header
             class="eo_theme_iblock bbd"
-            [(model)]="model.requestHeaders"
+            [(model)]="model.request.requestHeaders"
             (modelChange)="emitChangeFun('requestHeaders')"
           ></eo-api-test-header>
         </nz-tab>
@@ -71,9 +71,9 @@
             <span
               class="eo-tab-theme-icon"
               *ngIf="
-                ['formData', 'json', 'xml'].includes(model.requestBodyType)
-                  ? bindGetApiParamNum(model.requestBody)
-                  : model.requestBody?.length
+                ['formData', 'json', 'xml'].includes(model.request.requestBodyType)
+                  ? bindGetApiParamNum(model.request.requestBody)
+                  : model.request.requestBody?.length
               "
             ></span>
           </ng-template>
@@ -81,9 +81,9 @@
             class="eo_theme_iblock bbd"
             [(contentType)]="contentType"
             (contentTypeChange)="changeContentType($event)"
-            [(bodyType)]="model.requestBodyType"
+            [(bodyType)]="model.request.requestBodyType"
             (bodyTypeChange)="changeBodyType($event)"
-            [(model)]="model.requestBody"
+            [(model)]="model.request.requestBody"
             (modelChange)="emitChangeFun('requestBody')"
             [supportType]="['formData', 'raw', 'binary']"
           ></eo-api-test-body>
@@ -91,26 +91,26 @@
         <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
             <span i18n>Query</span>
-            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.queryParams)">{{
-              model.queryParams | apiParamsNum
+            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.queryParams)">{{
+              model.request.queryParams | apiParamsNum
             }}</span>
           </ng-template>
           <eo-api-test-query
             class="eo_theme_iblock bbd"
-            [model]="model.queryParams"
+            [model]="model.request.queryParams"
             (modelChange)="changeQuery($event)"
           ></eo-api-test-query>
         </nz-tab>
         <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
           <ng-template #restTitleTmp>
             <span i18n>REST</span>
-            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.restParams)">{{
-              model.restParams | apiParamsNum
+            <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.restParams)">{{
+              model.request.restParams | apiParamsNum
             }}</span>
           </ng-template>
           <eo-api-test-rest
             class="eo_theme_iblock bbd"
-            [(model)]="model.restParams"
+            [(model)]="model.request.restParams"
             (modelChange)="emitChangeFun('restParams')"
           ></eo-api-test-rest>
         </nz-tab>
@@ -154,23 +154,23 @@
         (nzSelectChange)="handleBottomTabSelect($event)"
       >
         <nz-tab i18n-nzTitle nzTitle="Response">
-          <eo-api-test-result-response [model]="testResult?.response"></eo-api-test-result-response>
+          <eo-api-test-result-response [model]="model.testResult.response"></eo-api-test-result-response>
         </nz-tab>
         <div>
           <nz-tab i18n-nzTitle nzTitle="Response Headers">
-            <eo-api-test-result-header [model]="testResult?.response?.headers"></eo-api-test-result-header>
+            <eo-api-test-result-header [model]="model.testResult.response.headers"></eo-api-test-result-header>
           </nz-tab>
         </div>
         <nz-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
           <!-- TODO use isRequestBodyLoaded -->
           <eo-api-test-result-request-body
             *ngIf="responseTabIndexRes === 2"
-            [model]="testResult?.request?.requestBody || ''"
+            [model]="model.testResult.request?.requestBody || ''"
           >
           </eo-api-test-result-request-body>
         </nz-tab>
         <nz-tab i18n-nzTitle nzTitle="Request Headers">
-          <eo-api-test-result-header [model]="testResult?.request?.requestHeaders"> </eo-api-test-result-header>
+          <eo-api-test-result-header [model]="model.testResult.request.requestHeaders"> </eo-api-test-result-header>
         </nz-tab>
       </nz-tabset>
       <div id="test-response"></div>

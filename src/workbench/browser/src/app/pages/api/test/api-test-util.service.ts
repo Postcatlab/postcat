@@ -244,7 +244,7 @@ export class ApiTestUtilService {
         requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
           ? inData.request.requestBody
           : inData.request.requestBody.map((val) => (val.required = true)),
-        requestHeaders: inData.response.headers,
+        requestHeaders: inData.response?.headers,
         ...inData.request,
       },
       response: JSON.parse(JSON.stringify(inData)),
@@ -261,10 +261,10 @@ export class ApiTestUtilService {
   formatEditingApiData(formData): ApiTestData {
     const result = formData;
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach((tableName) => {
-      if (whatType(result[tableName])!=='array') {
+      if (whatType(result[tableName]) !== 'array') {
         return;
       }
-      result[tableName] = (result[tableName] || []).filter((val) => val.name  || val.value);
+      result[tableName] = (result[tableName] || []).filter((val) => val.name || val.value);
     });
     return formData;
   }

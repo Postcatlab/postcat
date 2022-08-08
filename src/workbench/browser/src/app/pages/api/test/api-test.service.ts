@@ -10,17 +10,22 @@ import {
   StorageRes,
   StorageResStatus,
 } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiTestHistory } from '../../../shared/services/storage/index.model';
 import { ApiTestUtilService } from './api-test-util.service';
 @Injectable()
 export class ApiTestService {
-  constructor(private apiService: ApiService,private apiTestUtils: ApiTestUtilService, private storage: StorageService) {}
+  constructor(
+    private apiService: ApiService,
+    private apiTestUtils: ApiTestUtilService,
+    private storage: StorageService
+  ) {}
   async getApi({ id }): Promise<ApiTestData> {
     let result: ApiTestData = {} as ApiTestData;
     if (!id) {
       result = Object.assign(
         {
           projectID: 1,
-          groupID:0,
+          groupID: 0,
           uri: '',
           protocol: RequestProtocol.HTTP,
           method: RequestMethod.POST,
@@ -43,11 +48,22 @@ export class ApiTestService {
           ],
         }
       );
-    } else {
+    }  else {
       const apiData = await this.apiService.get(id);
-      result=this.apiTestUtils.getTestDataFromApi(apiData);
+      result = this.apiTestUtils.getTestDataFromApi(apiData);
     }
     return result;
+  }
+  getHistory(id): Promise<ApiTestHistory> {
+    return new Promise((resolve) => {
+      this.storage.run('apiTestHistoryLoad', [id], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        } else {
+          console.error(result.data);
+        }
+      });
+    });
   }
   addHistory(history: ApiTestHistoryFrame, apiID): Promise<any> {
     return new Promise((resolve) => {
@@ -71,24 +87,5 @@ export class ApiTestService {
     });
   }
 
-  // setScriptsByHistory(response) {
-  //   this.beforeScript = response?.beforeScript || '';
-  //   this.afterScript = response?.afterScript || '';
-  // }
-  // /**
-  //  * Click history to restore data from history
-  //  *
-  //  * @param item  test history data
-  //  */
-  // restoreTestFromHistory(item) {
-  //   const result = this.apiTestUtil.getTestDataFromHistory(item);
-  //   //Restore request
-  //   this.model = result.testData;
-  //   this.afterChangeApiData();
-  //   this.setScriptsByHistory(result.response);
-  //   this.changeUri();
-  //   //Restore response
-  //   this.responseTabIndexRes = 0;
-  //   this.testResult = result.response;
-  // }
+
 }

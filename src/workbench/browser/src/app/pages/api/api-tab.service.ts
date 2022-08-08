@@ -121,7 +121,7 @@ export class ApiTabService {
     this.componentRef.initialModel = currentTab?.baseContent || null;
     this.componentRef.init();
   }
-  updateTab(currentContentTab,inData) {
+  updateTab(currentContentTab, inData) {
     const model = inData.model;
     //Set tabItem
     const tabItem: Partial<TabItem> = {
@@ -134,7 +134,11 @@ export class ApiTabService {
       tabItem.extends.method = model.method;
       tabTitle = model.name;
       if (currentContentTab.pathname === '/home/api/test') {
-        if (!model.uuid) {
+        if (currentContentTab.params.uuid?.includes('history')) {
+          //Only Untitle request need set url to tab title
+          tabTitle = model.request.uri || tabTitle;
+          tabItem.extends.method = model.request.method;
+        } else if (!model.uuid) {
           //Only Untitle request need set url to tab title
           tabTitle = model.uri || tabTitle;
         }
@@ -162,7 +166,7 @@ export class ApiTabService {
         tabItem.hasChanged = this.componentRef.isFormChange();
       }
     }
-    // console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
+    console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
     this.apiTabComponent.updatePartialTab(inData.url, tabItem);
   }
   /**

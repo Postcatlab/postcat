@@ -35,26 +35,30 @@ import {
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { AnyRecord } from 'dns';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
+interface testViewModel {
+  request: ApiTestData;
+  testResult: {
+    request: any;
+    response: any;
+  };
+}
 @Component({
   selector: 'eo-api-test',
   templateUrl: './api-test.component.html',
   styleUrls: ['./api-test.component.scss'],
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
-  @Input() model: ApiTestData | any;
+  @Input() model: testViewModel = this.resetModel();
   /**
    * Intial model from outside,check form is change
    * * Usually restored from tab
    */
-  @Input() initialModel: ApiData;
-  @Input() testResult: any = {
-    response: {},
-    request: {},
-  };
-  @Output() modelChange = new EventEmitter<ApiTestData>();
-  @Output() afterInit = new EventEmitter<ApiData>();
+  @Input() initialModel: testViewModel;
+  @Output() modelChange = new EventEmitter<testViewModel>();
+  @Output() afterInit = new EventEmitter<testViewModel>();
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
 
@@ -106,33 +110,61 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.changeStatus(status);
     });
   }
+  /**
+   * Restore data from history
+   *
+   */
+  restoreResponseFromHistory(response) {
+    this.beforeScript = response?.beforeScript || '';
+    this.afterScript = response?.afterScript || '';
+    this.responseTabIndexRes = 0;
+    this.model.testResult = response;
+    this.model.testResult.response ??= {};
+  }
   async init() {
     this.initTimes++;
     if (!this.model || isEmptyObj(this.model)) {
-      this.model = {} as ApiTestData;
-      const id = Number(this.route.snapshot.queryParams.uuid);
+      this.model = this.resetModel();
+      let id = this.route.snapshot.queryParams.uuid;
       const initTimes = this.initTimes;
-      const result = await this.apiTest.getApi({
-        id,
-      });
+      let requestInfo = null;
+      if (id && id.includes('history_')) {
+        id = Number(id.replace('history_', ''));
+        const historyData = await this.apiTest.getHistory(id);
+        const history = this.apiTestUtil.getTestDataFromHistory(historyData);
+        requestInfo = history.testData;
+        this.restoreResponseFromHistory(history.response);
+      } else {
+        id = Number(id);
+        requestInfo = await this.apiTest.getApi({
+          id,
+        });
+        this.model.testResult = {
+          response: {},
+          request: {},
+        };
+      }
+      console.log(initTimes, this.initTimes);
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
-        this.model = result;
+        this.model.request = requestInfo;
       }
     }
-    //Storage origin api data
-    if (!this.initialModel) {
-      this.initialModel = structuredClone(this.model);
-    }
-    console.log('api test inti', this.model, isEmptyObj(this.model));
+    console.log('api test inti', this.model);
     this.initBasicForm();
+    this.changeUri();
     //! Set this two function to reset form
     this.validateForm.markAsPristine();
     this.validateForm.markAsUntouched();
 
-    this.validateForm.patchValue(this.model);
+    this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
     this.initContentType();
+
+    //Storage origin api data
+    if (!this.initialModel) {
+      this.initialModel = structuredClone(this.model);
+    }
     this.afterInit.emit(this.model);
   }
   clickTest() {
@@ -154,8 +186,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       return;
     }
     const apiData = this.apiTestUtil.formatSavingApiData({
-      history: this.testResult,
-      testData: this.model,
+      history: this.model.testResult,
+      testData: this.model.request,
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
     this.messageService.send({ type: 'saveApiFromTest', data: {} });
@@ -164,16 +196,20 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   changeQuery(queryParams) {
-    this.model.uri = this.apiTestUtil.transferUrlAndQuery(this.model.uri, queryParams, {
+    this.model.request.uri = this.apiTestUtil.transferUrlAndQuery(this.model.request.uri, queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
   }
   changeUri() {
-    this.model.queryParams = this.apiTestUtil.transferUrlAndQuery(this.model.uri, this.model.queryParams, {
-      base: 'url',
-      replaceType: 'replace',
-    }).query;
+    this.model.request.queryParams = this.apiTestUtil.transferUrlAndQuery(
+      this.model.request.uri,
+      this.model.request.queryParams,
+      {
+        base: 'url',
+        replaceType: 'replace',
+      }
+    ).query;
   }
   watchBasicForm() {
     this.validateForm.valueChanges.subscribe((x) => {
@@ -192,20 +228,20 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   isFormChange(): boolean {
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
-    // if (this.model.uuid) {
+    // if (this.model.request.uuid) {
     //   return false;
     // }
-    if (!this.initialModel || !this.model) {
+    if (!this.initialModel.request || !this.model.request) {
       return false;
     }
     // console.log(
     //   'api test origin:',
     //   this.apiTestUtil.formatEditingApiData(this.initialModel),
     //   'after:',
-    //   this.apiTestUtil.formatEditingApiData(this.model)
+    //   this.apiTestUtil.formatEditingApiData(this.model.request)
     // );
-    const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel));
-    const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model));
+    const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
+    const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (originText !== afterText) {
       // console.log('api test formChange true!', originText.split(afterText));
       return true;
@@ -214,7 +250,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
 
   changeContentType(contentType) {
-    this.model.requestHeaders = this.apiTestUtil.addOrReplaceContentType(contentType, this.model.requestHeaders);
+    this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(
+      contentType,
+      this.model.request.requestHeaders
+    );
   }
   changeBodyType($event) {
     this.initContentType();
@@ -256,7 +295,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.send('unitTest', {
       // id: this.apiTab.tabID,
       action: 'ajax',
-      data: this.testServer.formatRequestData(this.model, {
+      data: this.testServer.formatRequestData(this.model.request, {
         env: this.env,
         globals: this.apiTestUtil.getGlobals(),
         beforeScript: this.beforeScript,
@@ -287,7 +326,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       request: message.report?.request,
       response: message.response,
     };
-    this.testResult = tmpHistory;
+    this.model.testResult = tmpHistory;
+    this.modelChange.emit(this.model);
     this.status$.next('tested');
     if (message.status === 'error') {
       return;
@@ -302,7 +342,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       return;
     }
     // TODO Other tab test finish,support multiple tab test same time
-    this.addHistory(message.history, this.model.uuid);
+    this.addHistory(message.history, this.model.request.uuid);
   }
   /**
    * Change test status
@@ -337,8 +377,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
   }
   private initContentType() {
-    if (this.model.requestBodyType === ApiBodyType.Raw) {
-      this.contentType = this.apiTestUtil.getContentType(this.model.requestHeaders) || ContentTypeByAbridge.Text;
+    if (this.model.request.requestBodyType === ApiBodyType.Raw) {
+      this.contentType =
+        this.apiTestUtil.getContentType(this.model.request.requestHeaders) || ContentTypeByAbridge.Text;
     }
   }
   private watchEnvChange() {
@@ -355,17 +396,26 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       }
     });
   }
+  private resetModel() {
+    return {
+      request: {},
+      testResult: {
+        response: {},
+        request: {},
+      },
+    } as testViewModel;
+  }
   /**
    * Init basic form,such as url,protocol,method
    */
   private initBasicForm() {
     //Prevent init error
     if (!this.model) {
-      this.model = {} as ApiData;
+      this.model = this.resetModel();
     }
     const controls = {};
     ['protocol', 'method', 'uri'].forEach((name) => {
-      controls[name] = [this.model?.[name], [Validators.required]];
+      controls[name] = [this.model.request?.[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }
