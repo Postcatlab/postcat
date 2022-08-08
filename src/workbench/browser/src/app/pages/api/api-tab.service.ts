@@ -123,6 +123,9 @@ export class ApiTabService {
   }
   updateTab(currentContentTab, inData) {
     const model = inData.model;
+    if (!model || isEmptyObj(model)) {
+      return;
+    }
     //Set tabItem
     const tabItem: Partial<TabItem> = {
       isLoading: false,
@@ -130,25 +133,21 @@ export class ApiTabService {
     };
     //Set title
     let tabTitle = null;
-    if (model) {
-      tabItem.extends.method = model.method;
-      tabTitle = model.name;
-      if (currentContentTab.pathname === '/home/api/test') {
-        if (currentContentTab.params.uuid?.includes('history')) {
-          //Only Untitle request need set url to tab title
-          tabTitle = model.request.uri || tabTitle;
-          tabItem.extends.method = model.request.method;
-        } else if (!model.uuid) {
-          //Only Untitle request need set url to tab title
-          tabTitle = model.uri || tabTitle;
-        }
-      }
-      if (tabTitle) {
-        tabItem.title = tabTitle;
+    tabItem.extends.method = model.method;
+    tabTitle = model.name;
+    if (currentContentTab.pathname === '/home/api/test') {
+      tabItem.extends.method = model.request.method;
+      //Only Untitle request need set url to tab title
+      if (!model.request.uuid) {
+        tabTitle = model.request.uri || tabTitle;
       }
     }
+    if (tabTitle) {
+      tabItem.title = tabTitle;
+    }
+
+    //Only edit page storage data
     if (currentContentTab.type === 'edit') {
-      //Only edit page storage data
       //Set baseContent
       if (['init', 'saved'].includes(inData.when)) {
         const initialModel = this.componentRef.initialModel;
@@ -166,7 +165,7 @@ export class ApiTabService {
         tabItem.hasChanged = this.componentRef.isFormChange();
       }
     }
-    console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
+    // console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
     this.apiTabComponent.updatePartialTab(inData.url, tabItem);
   }
   /**

@@ -179,7 +179,7 @@ export class ApiTabOperateService {
     const urlArr = url.split('?');
     const params: any = {};
     const timestamp = Date.now();
-    const basicTab = Object.values(this.BASIC_TABS).find((val) => val.pathname === urlArr[0]);
+    const basicTab = Object.values(this.BASIC_TABS).find((val) => urlArr[0].includes(val.pathname));
     if (!basicTab) {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
     }
@@ -196,7 +196,7 @@ export class ApiTabOperateService {
       //If data need load from ajax/indexeddb,add loading
       uuid: params.pageID,
       isLoading: params.uuid ? true : false,
-      pathname: urlArr[0],
+      pathname: basicTab.pathname,
       params,
     };
     ['title', 'icon', 'type', 'extends'].forEach((keyName) => {
@@ -250,7 +250,7 @@ export class ApiTabOperateService {
         Object.assign(nextTab, {
           //new url may has new queryParams
           params: Object.assign(nextTab.params || {}, tmpTabItem.params, {
-            pageID: nextTab.uuid
+            pageID: nextTab.uuid,
           }),
         })
       );
@@ -316,6 +316,7 @@ export class ApiTabOperateService {
       });
       result.isLoading = false;
     }
+    console.log('preventBlankTab',result);
     return result;
   }
   canbeReplace(tabItem: TabItem) {
