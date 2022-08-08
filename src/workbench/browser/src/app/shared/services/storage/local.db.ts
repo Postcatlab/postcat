@@ -73,32 +73,7 @@ const batchCreateMock = async (mock: Table<ApiMockEntity, number | string>, data
  * @description
  * A storage service with IndexedDB.
  */
-export class IndexedDBStorage extends Dexie implements StorageInterface {
-  project!: Table<Project, number | string>;
-  group!: Table<Group, number | string>;
-  environment!: Table<Environment, number | string>;
-  apiData!: Table<ApiData, number | string>;
-  apiTestHistory!: Table<ApiTestHistory, number | string>;
-  mock!: Table<ApiMockEntity, number | string>;
-
-  constructor() {
-    super('eoapi_core');
-    this.version(2).stores({
-      project: '++uuid, name',
-      environment: '++uuid, name, projectID',
-      group: '++uuid, name, projectID, parentID',
-      apiData: '++uuid, name, projectID, groupID',
-      apiTestHistory: '++uuid, projectID, apiDataID',
-      mock: '++uuid, name, apiDataID, projectID, createWay',
-    });
-    this.open();
-    this.on('populate', () => this.populate());
-  }
-
-  async populate() {
-    await this.project.add({ uuid: 1, name: 'Default' });
-    await this.apiData.bulkAdd(sampleApiData);
-  }
+export default class localStorage extends Dexie {
 
   private resProxy(data): ResultType {
     const result = {
@@ -138,7 +113,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     });
   }
 
-  update(table: Table, items: Array<StorageItem>): object {
+  update({table: Table, items: Array<StorageItem>}): object {
     const time = Date.now();
     const list: any = items.map((item: StorageItem) => ({
       ...item,

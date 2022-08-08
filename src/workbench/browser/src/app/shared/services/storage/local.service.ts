@@ -1,28 +1,50 @@
-import localStorage from './localStorage'
+import localStorage from './local.db'
+import { Table } from 'dexie'
 const ErrorStyle =
   'background-color: #a73836; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;'
 
 const SuccessStyle =
   'background-color: #316745; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;'
 
-export class localService extends localStorage {
-  constructor() {}
+export default class LocalService extends localStorage {
+  project!: Table<Project, number | string>
+  group!: Table<Group, number | string>
+  environment!: Table<Environment, number | string>
+  apiData!: Table<ApiData, number | string>
+  apiTestHistory!: Table<ApiTestHistory, number | string>
+  mock!: Table<ApiMockEntity, number | string>
+  constructor() {
+    super('eoapi_core')
+    this.version(2).stores({
+      project: '++uuid, name',
+      environment: '++uuid, name, projectID',
+      group: '++uuid, name, projectID, parentID',
+      apiData: '++uuid, name, projectID, groupID',
+      apiTestHistory: '++uuid, projectID, apiDataID',
+      mock: '++uuid, name, apiDataID, projectID, createWay',
+    })
+    this.open()
+    this.on('populate', () => this.populate())
+  }
+  async populate() {
+    await this.project.add({ uuid: 1, name: 'Default' })
+    await this.apiData.bulkAdd(sampleApiData)
+  }
 
   api_projectCreate(params) {
     return new Promise((resolve) => {
-      this.storage.post(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.add(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c project - create 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c project - create 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -37,19 +59,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.put({ uuid, ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.update({ uuid, ...items })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c project - update 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c project - update 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -64,55 +85,52 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.delete({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.remove({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c project - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c project - delete 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_projectExport(params) {
     return new Promise((resolve) => {
-      this.storage.get(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c project - export 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c project - export 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_envCreate(params) {
     return new Promise((resolve) => {
-      this.storage.post(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.add(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c env - create 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c env - create 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -127,19 +145,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.put({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.update({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c env - update 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c env - update 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -154,19 +171,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.delete({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.remove({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c env - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c env - delete 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -177,19 +193,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c env - load 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c env - load 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -204,8 +219,8 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ projectID }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ projectID })
+        .then(({ statusCode, ...data }: any) => {
           console.log(
             '%c env - loadByProjectID 接口调用成功 %c',
             SuccessStyle,
@@ -215,34 +230,32 @@ export class localService extends localStorage {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log(
             '%c env - loadByProjectID 接口调用失败 %c',
             ErrorStyle,
             ''
           )
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_groupCreate(params) {
     return new Promise((resolve) => {
-      this.storage.post(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.add(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c group - create 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c group - create 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -257,37 +270,35 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.put({ uuid, ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.update({ uuid, ...items })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c group - update 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c group - update 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_groupBulkUpdate(params) {
     return new Promise((resolve) => {
-      this.storage.put(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.update(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c group - bulkUpdate 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c group - bulkUpdate 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -302,19 +313,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.delete({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.remove({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c group - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c group - delete 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -329,37 +339,35 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ projectID }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ projectID })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c group - loadAll 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c group - loadAll 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_apiCreate(params) {
     return new Promise((resolve) => {
-      this.storage.post(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.add(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c api - create 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c api - create 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -374,37 +382,35 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.put({ uuid, ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.update({ uuid, ...items })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c api - update 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c api - update 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_apiBulkUpdate(params) {
     return new Promise((resolve) => {
-      this.storage.put(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.update(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c api - bulkUpdate 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c api - bulkUpdate 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -419,19 +425,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.delete({ uuids }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.remove({ uuids })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c api - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c api - delete 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -446,19 +451,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c api - loadApi 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c api - loadApi 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -473,8 +477,8 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ projectID }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ projectID })
+        .then(({ statusCode, ...data }: any) => {
           console.log(
             '%c api - LoadAllByProjectID 接口调用成功 %c',
             SuccessStyle,
@@ -484,34 +488,32 @@ export class localService extends localStorage {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log(
             '%c api - LoadAllByProjectID 接口调用失败 %c',
             ErrorStyle,
             ''
           )
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_testCreate(params) {
     return new Promise((resolve) => {
-      this.storage.post(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.add(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c test - create 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c test - create 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -526,19 +528,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.delete({ uuids }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.remove({ uuids })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c test - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c test - delete 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -553,37 +554,35 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ apiDataID }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ apiDataID })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c test - LoadAll 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c test - LoadAll 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
   api_mockCreate(params) {
     return new Promise((resolve) => {
-      this.storage.post(params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.add(params)
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c mock - create 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c mock - create 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -594,19 +593,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c mock - load 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c mock - load 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -621,19 +619,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.delete({ uuid }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.remove({ uuid })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c mock - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c mock - delete 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -648,19 +645,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.put({ uuid, ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.update({ uuid, ...items })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c mock - update 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c mock - update 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 
@@ -675,19 +671,18 @@ export class localService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.storage.get({ apiDataID }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.load({ apiDataID })
+        .then(({ statusCode, ...data }: any) => {
           console.log('%c mock - loadAll 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
             return resolve([data, null])
           }
           resolve([null, data])
-        },
-        error: (error) => {
+        })
+        .catch((error) => {
           console.log('%c mock - loadAll 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
-        },
-      })
+        })
     })
   }
 }

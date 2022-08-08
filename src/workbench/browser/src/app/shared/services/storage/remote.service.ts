@@ -10,7 +10,7 @@ const SuccessStyle =
 @Injectable({
   providedIn: 'root',
 })
-export class remoteService {
+export default class RemoteService {
   constructor(private http: HttpClient) {}
 
   api_projectCreate(params) {
