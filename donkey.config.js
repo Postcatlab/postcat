@@ -5,16 +5,16 @@ module.exports = {
     target: [baseUrl + 'api.ts'],
   },
   output: [
-    // {
-    //   mode: 'angular',
-    //   name: 'remote.service',
-    //   path: baseUrl,
-    // },
-    // {
-    //   mode: 'dexie',
-    //   name: 'local.service',
-    //   path: baseUrl,
-    // },
+    {
+      mode: 'angular',
+      name: 'remote.service',
+      path: baseUrl,
+    },
+    {
+      mode: 'dexie',
+      name: 'local.service',
+      path: baseUrl,
+    },
     {
       mode: 'glue',
       name: 'api.service',
