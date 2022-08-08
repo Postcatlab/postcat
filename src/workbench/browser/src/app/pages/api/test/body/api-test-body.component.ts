@@ -79,10 +79,10 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   }
 
   ngAfterViewInit(): void {
-    this.resizeObserver = new ResizeObserver(() => {
-      this.eoMonacoEditor?.rerenderEditor();
-    });
-    this.resizeObserver.observe(this.el);
+    // this.resizeObserver = new ResizeObserver(() => {
+    //   this.eoMonacoEditor?.rerenderEditor();
+    // });
+    // this.resizeObserver.observe(this.el);
   }
   beforeChangeBodyByType(type) {
     switch (type) {
@@ -123,7 +123,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.resizeObserver.disconnect();
+    this.resizeObserver?.disconnect();
   }
   ngOnChanges(changes) {
     if (

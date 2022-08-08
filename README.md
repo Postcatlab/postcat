@@ -7,20 +7,22 @@
 
 <h1 align="center">Eoapi</h1>
 <div align="center">
-一个轻量、可拓展的 API 工具
+一个可拓展的 API 工具，简单（Easy） & 开源（OpenSource）的 API 生态系统
 </div>
 
-![](./wiki/images/preview_1.png)
+![](./wiki/images/zh-preview.png)
 
 [English](wiki/README.en.md)｜简体中文
 
 # 快速开始
 
-- 访问 [在线示例](https://demo.eoapi.io/) 快速体验产品特性
-
-- 查看 [官方文档](https://www.eoapi.io/docs/about.html) 了解更多功能
+- 访问 [在线示例](https://eoapi.io/) 快速体验产品特性
 
 - 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
+
+- 查看 [用户使用文档](https://docs.eoapi.io) 了解更多功能
+
+- 查看 [开发者文档](https://developer.eoapi.io) 开发插件
 
 # 功能
 
@@ -34,17 +36,17 @@
 - 快速对 API 发起测试
 - 支持本地测试
 
+🎭 Mock
+- 模拟文档接口返回值
+
 📶 可离线使用
 
 🌐 测试环境管理
 
 🌱 插件集市
 
-# 功能预告
-
 💻 多人协作
-
-🎭 Mock 服务
+- 通过远程数据源实现多人协作
 
 # 源码运行/构建
 
