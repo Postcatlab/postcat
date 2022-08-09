@@ -1,17 +1,22 @@
-.method_type {
-  &.green {
-    color: green
+  .method_text_GET {
+    color: var(--BLUE_TAG_BG);
   }
-  &.red {
-    color: red
+  .method_text_POST {
+    color: var(--GREEN_TAG_BG);
   }
-  &.blue {
-    color: blue
+  .method_text_DELETE {
+    color: var(--RED_TAG_BG);
   }
-  &.pink {
-    color: pink
+  .method_text_HEAD {
+    color: var(--YELLOW_TAG_BG);
   }
-}
+  .method_text_PATCH {
+    color: var(--ORANGE_TAG_BG);
+  }
+  .method_text_PUT,
+  .method_text_OPTIONS {
+    color: var(--BLACK_TAG_BG);
+  }
 
 .icon {
   width: 30px;
