@@ -129,7 +129,7 @@
           <context context-type="sourcefile">src/app/pages/api/api-tab.service.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target state="translated">新 API</target>
+        <target state="translated">添加 API</target>
       </trans-unit>
       <trans-unit id="1295614462098694869" datatype="html">
         <source>Preview</source>
