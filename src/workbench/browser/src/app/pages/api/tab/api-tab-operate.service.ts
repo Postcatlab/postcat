@@ -45,7 +45,7 @@ export class ApiTabOperateService {
       this.navigateTabRoute(targetTab);
     } else {
       this.operateTabAfterRouteChange({
-        url: window.location.pathname + window.location.search,
+        url: this.router.url
       });
     }
   }

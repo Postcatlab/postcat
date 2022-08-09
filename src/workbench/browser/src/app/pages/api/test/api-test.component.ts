@@ -143,7 +143,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
           request: {},
         };
       }
-      console.log(initTimes, this.initTimes);
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model.request = requestInfo;
