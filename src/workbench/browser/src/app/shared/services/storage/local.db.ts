@@ -28,7 +28,7 @@ export default class localStorage extends Dexie {
         ...item,
       }))
     );
-    return this.resProxy(result);
+    return Promise.resolve(this.resProxy(result));
   }
 
   remove(table: Table, uuids: Array<number | string>): object {
