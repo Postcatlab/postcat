@@ -213,7 +213,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         replaceType: 'replace',
       }
     ).query;
-    console.log(this.model.request.uri, this.model.request.queryParams);
   }
   watchBasicForm() {
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((x) => {

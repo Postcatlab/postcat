@@ -57,11 +57,7 @@ export class ApiTabOperateService {
   newDefaultTab() {
     const tabItem: TabItem = this.getBaiscTabFromUrl(Object.values(this.BASIC_TABS)[0].pathname);
     this.tabStorage.addTab(tabItem);
-    if (this.selectedIndex === this.tabStorage.tabOrder.length - 1) {
-      this.navigateTabRoute(tabItem);
-      return;
-    }
-    this.selectedIndex = this.tabStorage.tabOrder.length - 1;
+    this.navigateTabRoute(tabItem);
   }
 
   closeTab(index: number) {
@@ -316,7 +312,7 @@ export class ApiTabOperateService {
       });
       result.isLoading = false;
     }
-    console.log('preventBlankTab',result);
+    console.log('preventBlankTab', result);
     return result;
   }
   canbeReplace(tabItem: TabItem) {

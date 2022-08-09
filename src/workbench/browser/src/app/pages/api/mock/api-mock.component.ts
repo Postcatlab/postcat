@@ -10,8 +10,6 @@ import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/api/test/
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
-import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -75,16 +73,6 @@ export class ApiMockComponent implements OnInit {
   }
 
   ngOnInit() {
-    messageService
-    .get()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((inArg: Message) => {
-      switch (inArg.type) {
-        case 'mockAutoSyncSuccess':{
-          this.initMockList(Number(this.route.snapshot.queryParams.uuid));
-        }
-      }
-    });
     this.init();
   }
   init() {

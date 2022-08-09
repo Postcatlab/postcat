@@ -34,6 +34,7 @@ export class SettingComponent implements OnInit {
   extensitonConfigurations: any[];
   @Input() set isShowModal(val) {
     this.$isShowModal = val;
+    this.isShowModalChange.emit(val);
     if (val) {
       this.init();
       this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
@@ -271,6 +272,6 @@ export class SettingComponent implements OnInit {
     this.handleSave();
 
     this.isShowModal = false;
-    this.isShowModalChange.emit(false);
+    // this.isShowModalChange.emit(false);
   }
 }

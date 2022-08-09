@@ -117,9 +117,13 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       this.resizeObserver = new ResizeObserver(
         debounce(() => {
           if (this.el.offsetParent) {
-            this?.rerenderEditor();
+            this.el.style.setProperty('overflow', 'hidden');
+            requestAnimationFrame(() => {
+              this?.rerenderEditor();
+              this.el.style.removeProperty('overflow');
+            });
           }
-        }, 150)
+        }, 600)
       );
       this.resizeObserver.observe(this.el);
     }
@@ -130,6 +134,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       requestIdleCallback(() => {
         const type = whatTextType(this.$$code || '');
         this.editorType = type;
+        console.log('type', type);
         window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
       });
     }
@@ -260,7 +265,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   };
   formatCode() {
     return new Promise<string>((resolve) => {
-      setTimeout(async () => {
+      requestAnimationFrame(async () => {
         this.codeEdtor.updateOptions({ readOnly: false });
         await this.codeEdtor?.getAction('editor.action.formatDocument').run();
         this.codeEdtor.updateOptions({ readOnly: this.config.readOnly });

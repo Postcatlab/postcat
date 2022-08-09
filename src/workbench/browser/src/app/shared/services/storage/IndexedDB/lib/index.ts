@@ -23,7 +23,6 @@ export type ResultType<T = any> = {
   data: T;
 };
 
-let isFirstLoad = true;
 const getApiUrl = (apiData: ApiData) => {
   const dataSourceType: DataSourceType = getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
 
@@ -42,7 +41,7 @@ const getApiUrl = (apiData: ApiData) => {
   return decodeURIComponent(url.toString());
 };
 
-const createMockObj = (apiData: ApiData, options: Record<string, any> = {}) => {
+export const createMockObj = (apiData: ApiData, options: Record<string, any> = {}) => {
   const { name = '', createWay = 'custom', ...rest } = options;
   return {
     name,
@@ -53,22 +52,6 @@ const createMockObj = (apiData: ApiData, options: Record<string, any> = {}) => {
     response: JSON.stringify(tree2obj([].concat(apiData.responseBody))),
     ...rest,
   };
-};
-
-const batchCreateMock = async (mock: Table<ApiMockEntity, number | string>, data: ApiData[]) => {
-  try {
-    if (Array.isArray(data)) {
-      isFirstLoad = false;
-      const mockList = await mock.where('uuid').above(0).toArray();
-      const noHasDefaultMockApiDatas = data
-        .filter((item) => !mockList.some((m) => Number(m.apiDataID) === item.uuid))
-        .map((item) => createMockObj(item, { name: $localize`Default Mock`, createWay: 'system' }));
-
-      await mock.bulkAdd(noHasDefaultMockApiDatas);
-    }
-    messageService.send({ type: 'mockAutoSyncSuccess', data: {} });
-  } catch (e) {}
-  return Promise.resolve(true);
 };
 
 /**
@@ -99,7 +82,11 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
 
   async populate() {
     await this.project.add({ uuid: 1, name: 'Default' });
-    await this.apiData.bulkAdd(sampleApiData);
+    const apiDataKeys = await this.apiData.bulkAdd(sampleApiData, { allKeys: true });
+    const apiData = sampleApiData.map((n, i) =>
+      createMockObj(n, { name: $localize`Default Mock`, createWay: 'system', apiDataID: apiDataKeys.at(i) })
+    );
+    this.mock.bulkAdd(apiData);
   }
 
   private resProxy(data): ResultType {
@@ -379,7 +366,6 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
       if (status === 200 && data) {
         await this.mock.add(createMockObj(data, { name: '默认 Mock', createWay: 'system' }));
-        messageService.send({ type: 'mockAutoSyncSuccess', data: {} });
       }
     });
     return result;
@@ -393,13 +379,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   apiDataLoadAllByProjectID(projectID: number | string): Observable<object> {
-    const result = this.loadAllByConditions(this.apiData, { projectID });
-    result.subscribe(({ status, data }: ResultType<ApiData[]>) => {
-      if (isFirstLoad && status === 200 && data) {
-        requestIdleCallback(() => batchCreateMock(this.mock, data));
-      }
-    });
-    return result;
+    return this.loadAllByConditions(this.apiData, { projectID });
   }
 
   /**

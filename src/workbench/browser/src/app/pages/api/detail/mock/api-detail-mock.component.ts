@@ -7,10 +7,6 @@ import { copyText } from 'eo/workbench/browser/src/app/utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-api-detail-mock',
@@ -34,7 +30,6 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
     { title: $localize`Created Type`, slot: 'createWay' },
     { title: 'URL', slot: 'url' },
   ];
-  private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private storageService: StorageService,
     private apiTest: ApiTestUtilService,
@@ -43,15 +38,7 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   ) {}
 
   async ngOnInit() {
-    messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'mockAutoSyncSuccess':
-            this.initMockList(this.apiData);
-        }
-      });
+    this.initMockList(this.apiData);
   }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {

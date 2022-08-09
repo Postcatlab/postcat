@@ -80,7 +80,7 @@ export class ParamsImportComponent {
       }
     }
     if (this.contentType === 'query') {
-      paramCode = qs.parse(this.paramCode.split('?')[1]);
+      paramCode = qs.parse(this.paramCode.indexOf('?') > -1 ? this.paramCode.split('?')[1] : this.paramCode);
       // console.log('-->', paramCode);
     }
     if (this.contentType === 'formData') {

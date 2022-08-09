@@ -64,7 +64,7 @@
     [nzTreeTemplate]="nzTreeTemplate"
   ></nz-tree>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
-    <div [style.--tree-level]="node.level - 2">
+    <div [style.--tree-level]="node.level">
       <!-- Folder -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
         <div class="f_row_ac">
