@@ -267,7 +267,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     return new Promise<string>((resolve) => {
       requestAnimationFrame(async () => {
         this.codeEdtor.updateOptions({ readOnly: false });
-        await this.codeEdtor?.getAction('editor.action.formatDocument').run();
+        await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
         this.codeEdtor.updateOptions({ readOnly: this.config.readOnly });
         resolve(this.codeEdtor?.getValue() || '');
       });
@@ -295,11 +295,11 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       }
       case 'search': {
         // * search content
-        this.codeEdtor.getAction('actions.find').run();
+        this.codeEdtor.getAction('actions.find')?.run();
         break;
       }
       case 'replace': {
-        this.codeEdtor.getAction('editor.action.startFindReplaceAction').run();
+        this.codeEdtor.getAction('editor.action.startFindReplaceAction')?.run();
         break;
       }
       case 'newTab':
