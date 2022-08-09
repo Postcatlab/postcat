@@ -149,7 +149,7 @@ export class ApiTestUtilService {
    * @param url - whole url include query
    * @param query - ui query param
    * @param opts.base - based on which,url or query,delete no exist and replace same
-   * @param opts.replaceType - replace means only keep replace array,merge means union
+   * @param opts.replaceType 'replace'|'merge' replace means only keep replace array,merge means union
    * @returns - {url:"",query:[]}
    */
   transferUrlAndQuery(
@@ -175,7 +175,7 @@ export class ApiTestUtilService {
     const origin = opts.base === 'url' ? uiQuery : urlQuery;
     const replace = opts.base === 'url' ? urlQuery : uiQuery;
     if (opts.replaceType === 'replace') {
-      origin.forEach((val) => (val.required = false));
+      origin.forEach((val) => (val.name ? (val.required = false) : ''));
     }
     const result = [...replace, ...origin];
     for (let i = 0; i < result.length; ++i) {

@@ -5,7 +5,6 @@ import { Select } from '@ngxs/store';
 
 import {
   ApiBodyType,
-  ApiData,
   ApiTestData,
   ApiTestHistoryFrame,
   RequestMethod,
@@ -14,7 +13,7 @@ import {
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, Subject } from 'rxjs';
-import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { take, debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
@@ -195,11 +194,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       queryParams: { pageID: Date.now() },
     });
   }
-  changeQuery(queryParams) {
-    this.model.request.uri = this.apiTestUtil.transferUrlAndQuery(this.model.request.uri, queryParams, {
-      base: 'query',
-      replaceType: 'replace',
-    }).url;
+  changeQuery() {
+    this.model.request.uri = this.apiTestUtil.transferUrlAndQuery(
+      this.model.request.uri,
+      this.model.request.queryParams,
+      {
+        base: 'query',
+        replaceType: 'replace',
+      }
+    ).url;
   }
   changeUri() {
     this.model.request.queryParams = this.apiTestUtil.transferUrlAndQuery(
@@ -210,9 +213,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         replaceType: 'replace',
       }
     ).query;
+    console.log(this.model.request.uri, this.model.request.queryParams);
   }
   watchBasicForm() {
-    this.validateForm.valueChanges.subscribe((x) => {
+    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((x) => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       setTimeout(() => {
         this.modelChange.emit(this.model);
@@ -269,6 +273,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
   }
   emitChangeFun(where) {
+    if (where === 'queryParams') {
+      this.changeQuery();
+    }
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {

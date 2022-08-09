@@ -165,7 +165,7 @@ export class ApiTabService {
         tabItem.hasChanged = this.componentRef.isFormChange();
       }
     }
-    console.log('updatePartialTab', currentContentTab.uuid, tabItem);
+    // console.log('updatePartialTab', currentContentTab.uuid, tabItem);
     this.apiTabComponent.updatePartialTab(inData.url, tabItem);
   }
   /**

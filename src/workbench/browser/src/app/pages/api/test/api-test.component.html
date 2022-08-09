@@ -98,7 +98,7 @@
           <eo-api-test-query
             class="eo_theme_iblock bbd"
             [model]="model.request.queryParams"
-            (modelChange)="changeQuery($event)"
+            (modelChange)="emitChangeFun('queryParams')"
           ></eo-api-test-query>
         </nz-tab>
         <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
