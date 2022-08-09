@@ -1,54 +1,65 @@
+export enum TabOperate {
+  closeOther = 'closeOther',
+  closeAll = 'closeAll',
+  closeLeft = 'closeLeft',
+  closeRight = 'closeRight',
+}
+export type storageTab = {
+  selectedIndex: number;
+  tabOrder: number[];
+  tabsByID: { [key: number]: TabItem };
+};
 /**
  * Tab item.
  */
-export interface TabItem {
-  uuid: number;
+export type TabItem = {
   /**
-   * 标签标题
+   * Tab id,timestamp
+   */
+  uuid: number;
+  isFixed?: boolean;
+  /**
+   * Preview page or edit page
+   */
+  type: string | 'preview' | 'edit';
+  /**
+   * In edit page,value will be set true when content change
+   */
+  hasChanged?: boolean;
+
+  isLoading: boolean;
+  /**
+   * Tab title
    *
    * @type {string}
    */
   title: string;
-
   /**
-   * 标签对应的路径
+   * Router path
    *
    * @type {string}
    */
-  path: string;
+  pathname: string;
 
   /**
-   * 路径的主键参数
-   *
-   * @type {string | number}
+   * Query params
    */
-  key?: string | number;
-
+  params: any;
   /**
-   * 路径的分组参数
-   *
-   * @type {string | number}
+   * Content Icon
    */
-  groupID?: string | number;
-
+  icon?: string;
   /**
-   * 路径的项目参数
-   *
-   * @type {string | number}
+   * Extend key
    */
-  projectID?: string | number;
-
+  extends?: any;
   /**
-   * 标签路径的请求类型，用于显示
-   *
-   * @type {string | number}
+   * Save base model used by judge form is change
+   * Only exist in tab[type='edit']
    */
-  method?: string;
-
+  baseContent?: any;
   /**
-   * 实体类型，为后期加上其他类型到Tab预留，如Group
-   *
-   * @type {string}
+   * Tab content
    */
-  entity?: string;
-}
+  content: any;
+};

@@ -8,7 +8,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NavbarModule } from 'eo/workbench/browser/src/app/pages/navbar/navbar.module';
 
 @NgModule({
-  imports: [PagesRoutingModule, SettingModule, CommonModule, SharedModule, NzIconModule, NavbarModule],
+  imports: [PagesRoutingModule,SettingModule, CommonModule, SharedModule, NzIconModule, NavbarModule],
   declarations: [PagesComponent],
   exports: [],
 })

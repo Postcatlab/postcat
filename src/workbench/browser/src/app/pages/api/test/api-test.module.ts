@@ -25,10 +25,10 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 
-
 import { ByteToStringPipe } from './result-response/get-size.pipe';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
+import { ApiTestUtilService } from './api-test-util.service';
 import { ApiTestService } from './api-test.service';
 import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
@@ -40,7 +40,6 @@ import { ApiTestQueryComponent } from './query/api-test-query.component';
 import { ApiTestRestComponent } from './rest/api-test-rest.component';
 import { ApiTestResultHeaderComponent } from './result-header/api-test-result-header.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
-import { ApiTestHistoryComponent } from './history/api-test-history.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
@@ -62,7 +61,7 @@ const NZ_COMPONETS = [
   NzToolTipModule,
   NzAlertModule,
   NzTypographyModule,
-  NzUploadModule
+  NzUploadModule,
 ];
 const COMPONENTS = [
   ApiTestComponent,
@@ -73,7 +72,6 @@ const COMPONENTS = [
   ApiTestResultHeaderComponent,
   ApiTestResultResponseComponent,
   ApiTestResultRequestBodyComponent,
-  ApiTestHistoryComponent,
 ];
 @NgModule({
   declarations: [...COMPONENTS, ByteToStringPipe],
@@ -87,6 +85,13 @@ const COMPONENTS = [
     SharedModule,
     ParamsImportModule,
   ],
-  providers: [ApiTestService, TestServerService, TestServerLocalNodeService,TestServerServerlessService,TestServerRemoteService],
+  providers: [
+    ApiTestUtilService,
+    ApiTestService,
+    TestServerService,
+    TestServerLocalNodeService,
+    TestServerServerlessService,
+    TestServerRemoteService,
+  ],
 })
 export class ApiTestModule {}

@@ -1,4 +1,5 @@
 import { GroupTreeItem } from '../../shared/models';
+import { whatType } from 'eo/workbench/browser/src/app/utils';
 
 export type TreeToObjOpts = {
   key?: string;
@@ -8,6 +9,7 @@ export type TreeToObjOpts = {
 
 /**
  * Convert old component listBlock array items has level without  parent id to  tree nodes
+ *
  * @param list Array<GroupTreeItem>
  */
 export const listToTreeHasLevel = (
@@ -18,6 +20,7 @@ export const listToTreeHasLevel = (
     childKey: 'children',
   }
 ) => {
+  if(whatType(list)!=='array') {return list;}
   const listDepths = [];
   //delete useless key
   const uselessKeys = ['listDepth', 'isHide', 'isShrink'];
@@ -38,7 +41,6 @@ export const listToTreeHasLevel = (
       const parent = list[listDepths.lastIndexOf(listDepth - 1, key)];
       if (!parent) {
         console.error(`can't find the parent`);
-        return;
       }
       parent[opts.childKey] = parent[opts.childKey] || [];
       parent[opts.childKey].push(item);
@@ -71,6 +73,7 @@ export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (v
 
 /**
  * Convert array items which has parent id to tree nodes.
+ *
  * @param list Array<GroupTreeItem>
  * @param tree Array<GroupTreeItem>
  * @param parentID number|string
@@ -120,6 +123,7 @@ export const addKeyInTree = ({ children, ...data }, index = 0, key = '1') => {
 };
 /**
  * Find tree node and give value to it
+ *
  * @param _data seach pool tree node
  * @param value value need to be set
  * @param param2 should be find tree node
@@ -144,7 +148,8 @@ export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key 
   return findData(_data);
 };
 
-export const getExpandGroupByKey = (component, key) => {
+export const getExpandGroupByKey: (component, key) => string[] = (component, key) => {
+  if (!component) {return [];}
   let treeNode = component.getTreeNodeByKey(key);
   if (!treeNode) {
     return;

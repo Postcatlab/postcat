@@ -16,7 +16,7 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'test',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'overview',

@@ -21,7 +21,7 @@ import {
   ApiTestBodyType,
   ContentTypeByAbridge,
 } from '../../../../shared/services/api-test/api-test.model';
-import { ApiTestService } from '../api-test.service';
+import { ApiTestUtilService } from '../api-test-util.service';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -61,13 +61,19 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private apiTest: ApiTestService, elementRef: ElementRef, private message: EoMessageService) {
+  constructor(
+    private apiTest: ApiTestUtilService,
+    private cdRef: ChangeDetectorRef,
+    elementRef: ElementRef,
+    private message: EoMessageService
+  ) {
     this.el = elementRef.nativeElement;
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((code) => {
+      //! Must set value by data,because this.model has delay
       this.modelChange.emit(code);
     });
   }
@@ -153,6 +159,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
       });
       observer.complete();
     });
+  emitModelChange() {
+    this.modelChange.emit(this.model);
+  }
   handleParamsImport(data) {
     this.model = data;
     this.modelChange.emit(data);

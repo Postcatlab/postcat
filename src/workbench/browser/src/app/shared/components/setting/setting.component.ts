@@ -183,7 +183,7 @@ export class SettingComponent implements OnInit {
   }
 
   handleScroll = debounce((e: Event) => {
-    if (this.isClick) return;
+    if (this.isClick) {return;}
     const target = e.target as HTMLDivElement;
     const treeNodes = this.dataSource._flattenedData.value;
     treeNodes.some((node) => {
@@ -212,7 +212,6 @@ export class SettingComponent implements OnInit {
    */
   private init() {
     this.settings = this.localSettings = this.settingService.getSettings();
-    console.log('localSettings', this.localSettings);
     const modules = window.eo?.getModules() || new Map([]);
     this.extensitonConfigurations = [...modules.values()]
       .filter((n) => n.features?.configuration)
