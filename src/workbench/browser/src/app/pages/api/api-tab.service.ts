@@ -129,7 +129,7 @@ export class ApiTabService {
       return;
     }
     this.bindChildComponentChangeEvent();
-
+    console.log('updatechildview');
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
     const currentTab = this.apiTabComponent.getTabByUrl(url);

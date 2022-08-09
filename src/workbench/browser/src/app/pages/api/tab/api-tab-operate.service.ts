@@ -65,6 +65,8 @@ export class ApiTabOperateService {
     this.tabStorage.closeTab(index);
     if (this.tabStorage.tabOrder.length === 0) {
       this.newDefaultTab();
+    } else {
+      this.navigateTabRoute(this.getCurrentTab());
     }
   }
   /**
@@ -127,6 +129,7 @@ export class ApiTabOperateService {
    * @param tab
    */
   navigateTabRoute(tab: TabItem) {
+    if(!tab) {return;}
     this.router.navigate([tab.pathname], {
       queryParams: { pageID: tab.uuid, ...tab.params },
     });
@@ -281,7 +284,10 @@ export class ApiTabOperateService {
       }
     }
     //Find other tab to be replace
-    const canbeReplaceTab = Object.values(mapObj).find((val) => this.canbeReplace(val));
+    const currentTab=this.getCurrentTab();
+    //* Replace current tab first
+    const canbeReplaceTab =  this.canbeReplace(currentTab)?currentTab:Object.values(mapObj).find((val) => this.canbeReplace(val));
+
     if (canbeReplaceTab) {
       this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === canbeReplaceTab.uuid);
       this.tabStorage.updateTab(this.selectedIndex, tmpTabItem);
