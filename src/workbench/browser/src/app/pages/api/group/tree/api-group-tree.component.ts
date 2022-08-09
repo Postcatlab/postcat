@@ -97,11 +97,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Load all group and apiData items.
    */
   buildGroupTreeData = debounce(() => {
-    {
-      this.groupByID = {};
-      this.treeItems = [];
-      this.getGroups();
-    }
+    this.groupByID = {};
+    this.treeItems = [];
+    this.getGroups();
   });
   getGroups() {
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
@@ -337,25 +335,18 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       },
     });
   }
+
   /**
    * Drag & drop tree item.
    *
    * @param event
    */
-  treeItemDrop(event: NzFormatEmitEvent): void {
+  treeItemDrop = (event: NzFormatEmitEvent) => {
     const dragNode = event.dragNode;
-    const children = dragNode.parentNode?.getChildren();
     const groupApiData: GroupApiDataModel = { group: [], api: [] };
-    if (children?.length) {
-      const targetIndex = children.findIndex((n) => n.key === dragNode.key);
-      // console.log('targetIndex', targetIndex);
-      // console.log('children', children);
-      // console.log('dragNode', dragNode);
-      if (targetIndex === dragNode.origin.weight) {
-        return;
-      }
+    if (dragNode.parentNode) {
       const parentNode = dragNode.parentNode;
-      children.forEach((item: NzTreeNode, index: number) => {
+      parentNode.getChildren().forEach((item: NzTreeNode, index: number) => {
         if (item.isLeaf) {
           groupApiData.api.push({ uuid: item.key, weight: index, groupID: parentNode.key });
         } else {
@@ -363,13 +354,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      const treeNodes = this.apiGroup.getTreeNodes();
-      const targetIndex = treeNodes.findIndex((n) => n.key === dragNode.key);
-      if (targetIndex === dragNode.origin.weight) {
-        return;
-      }
-      treeNodes.forEach((item, index) => {
-        if (dragNode.isLeaf) {
+      const nodes = this.apiGroup.getTreeNodes().filter((n) => n.level === 0);
+      nodes.forEach((item, index) => {
+        if (item.isLeaf) {
           groupApiData.api.push({ uuid: item.key, weight: index, groupID: '0' });
         } else {
           groupApiData.group.push({ uuid: item.key, weight: index, parentID: '0' });
@@ -377,7 +364,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       });
     }
     this.updateOperateApiEvent(groupApiData);
-  }
+  };
 
   private replaceGroupKey(key: string) {
     return Number(key.replace('group-', ''));
