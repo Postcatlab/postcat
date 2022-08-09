@@ -29,9 +29,14 @@
         </button>
         <span i18n>and open it with other programs.</span>
       </div>
-      <!-- <div class="mt20" *ngIf="responseIsImg">
-        <img class="maw_100percent" [src]="model.blobUrl" />
-      </div> -->
+      <div class="mt20" *ngIf="responseIsImg" (contextmenu)="contextMenu($event, menu)">
+        <img class="maw_100percent" [src]="imgBlobUrl" />
+      </div>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item i18n="@@downloadResponse" (click)="downloadResponseText()">download back result</li>
+        </ul>
+      </nz-dropdown-menu>
     </div>
     <div class="text-center" *ngSwitchCase="'longText'">
       <span i18n>The response result exceeds the previewable size, you can</span>
