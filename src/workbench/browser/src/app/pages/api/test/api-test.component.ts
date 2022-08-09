@@ -122,6 +122,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   async init() {
     this.initTimes++;
+    console.log(this.model);
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       let id = this.route.snapshot.queryParams.uuid;
@@ -147,17 +148,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       if (initTimes >= this.initTimes) {
         this.model.request = requestInfo;
       }
+      this.initContentType();
     }
-    console.log('api test inti', this.model);
     this.initBasicForm();
-    this.changeUri();
     //! Set this two function to reset form
     this.validateForm.markAsPristine();
     this.validateForm.markAsUntouched();
 
     this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
-    this.initContentType();
 
     //Storage origin api data
     if (!this.initialModel) {
@@ -189,9 +188,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
     this.messageService.send({ type: 'saveApiFromTest', data: {} });
-    this.router.navigate(['home/api/edit'], {
-      queryParams: { pageID: Date.now() },
-    });
   }
   changeQuery() {
     this.model.request.uri = this.apiTestUtil.transferUrlAndQuery(
@@ -236,12 +232,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!this.initialModel.request || !this.model.request) {
       return false;
     }
-    // console.log(
-    //   'api test origin:',
-    //   this.apiTestUtil.formatEditingApiData(this.initialModel),
-    //   'after:',
-    //   this.apiTestUtil.formatEditingApiData(this.model.request)
-    // );
+    console.log(
+      'api test origin:',
+      this.apiTestUtil.formatEditingApiData(this.initialModel.request),
+      'after:',
+      this.apiTestUtil.formatEditingApiData(this.model.request)
+    );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (originText !== afterText) {

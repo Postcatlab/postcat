@@ -240,6 +240,7 @@ export class ApiEditUtilService {
         result[tableName] = treeToListHasLevel(result[tableName]);
       }
     });
+    result.groupID = (result.groupID === 0 ? -1 : result.groupID).toString();
     return result;
   }
   /**
