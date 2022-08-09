@@ -70,8 +70,9 @@
         }
       }
     }
-    .tab-title-container {
+    .tab-item-container {
       padding-right: 15px;
+      font-style: italic;
       .tab-has-edit-icon {
         width: 8px;
         height: 8px;
@@ -82,6 +83,9 @@
         padding-right: 10px;
         right: 0px;
       }
+    }
+    .fixed-tab-item-container{
+      font-style: initial;
     }
   }
 }

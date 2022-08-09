@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute,Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -83,7 +83,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.model = result;
       }
     }
-
     //Storage origin api data
     if (!this.initialModel) {
       if (!id) {
@@ -96,7 +95,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.initBasicForm();
     this.watchBasicForm();
     this.watchUri();
-    this.afterGroupIDChange();
     this.changeGroupID$.next(this.model.groupID);
     this.validateForm.patchValue(this.model);
     this.afterInit.emit(this.model);
@@ -106,7 +104,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.getApiGroup();
-    this.watchGroupIDChange();
+    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe((id) => {
+      /**
+       * Expand Select Group
+       */
+      this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupID.toString());
+    });
   }
   async saveApi() {
     //manual set dirty in case user submit directly without edit
@@ -125,8 +128,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     formData = this.apiEditUtil.formatSavingApiData(formData);
     const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {
-      this.message.success(title);;
-      this.initialModel=this.apiEditUtil.getFormdataFromApiData(result.data);
+      this.message.success(title);
+      this.initialModel = this.apiEditUtil.getFormdataFromApiData(result.data);
       this.router.navigate(['home/api/edit'], {
         queryParams: {
           pageID: Number(this.route.snapshot.queryParams.pageID),
@@ -166,18 +169,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-  private watchGroupIDChange() {
-    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe((id) => {
-      this.afterGroupIDChange();
-    });
-  }
-  private afterGroupIDChange() {
-    this.model.groupID = (this.model.groupID === 0 ? -1 : this.model.groupID).toString();
-    /**
-     * Expand Select Group
-     */
-    this.expandKeys = getExpandGroupByKey(this.apiGroup, this.model.groupID.toString());
   }
   private watchUri() {
     this.validateForm
