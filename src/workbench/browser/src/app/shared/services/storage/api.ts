@@ -35,7 +35,7 @@ const http = {
         { 'create @post': '/api_data' },
         { 'update @put': '/api_data/{uuid}', json: '...' },
         { 'bulkUpdate @put': '/api_data/batch' },
-        { 'delete @delete': '/api_data?uuids=[{uuids}]' },
+        { 'delete @delete': '/api_data?uuids=[{uuid}]' },
         { 'loadApi @get': '/api_data/{uuid}' },
         { 'LoadAllByProjectID @get': '/api_data', query: 'projectID' },
       ],
@@ -44,7 +44,7 @@ const http = {
       name: 'test',
       data: [
         { 'create @post': '/api_test_history' },
-        { 'delete @delete': '/api_test_history?uuids=[{uuids}]' },
+        { 'delete @delete': '/api_test_history?uuids=[{uuid}]' },
         { 'LoadAll @get': '/api_test_history', query: 'apiDataID' },
       ],
     },

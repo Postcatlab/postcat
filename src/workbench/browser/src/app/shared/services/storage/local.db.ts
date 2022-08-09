@@ -1,6 +1,14 @@
 import Dexie, { Table } from 'dexie';
 import { StorageItem, StorageResStatus } from './index.model';
 
+type uuidType = string | number | string[] | number[];
+const toArray = (data: uuidType) => {
+  if (Array.isArray(data)) {
+    return data;
+  }
+  return [data];
+};
+
 export type ResultType<T = any> = {
   status: StorageResStatus.success;
   data: T;
@@ -19,7 +27,7 @@ export default class localStorage extends Dexie {
     return result as ResultType;
   }
 
-  create(table: Table, items: Array<StorageItem>): object {
+  create(table: Table, items: Array<StorageItem>): Promise<ResultType> {
     const time = Date.now();
     const result = table.bulkAdd(
       items.map((item: StorageItem) => ({
@@ -31,34 +39,38 @@ export default class localStorage extends Dexie {
     return Promise.resolve(this.resProxy(result));
   }
 
-  remove(table: Table, uuids: Array<number | string>): object {
-    const result = table.bulkDelete(uuids);
-    return this.resProxy(result);
+  remove(table: Table, { uuid }): Promise<ResultType> {
+    const result = table.bulkDelete(toArray(uuid));
+    return Promise.resolve(this.resProxy(result));
   }
 
-  load(table: Table, uuids: Array<number | string>): object {
+  load(
+    table: Table,
+    {
+      uuid,
+      projectID = 1,
+      apiDataID = 1,
+    }: { uuid?: number | string; projectID?: string | number; apiDataID?: string | number }
+  ): Promise<ResultType> {
+    console.log('uuid', uuid);
     return new Promise((resolve, reject) => {
       table
-        .bulkGet(uuids)
-        .then((result) => {
-          resolve(this.resProxy(result));
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .bulkGet(toArray(uuid))
+        .then((result) => resolve(this.resProxy(result)))
+        .catch((error) => reject(error));
     });
   }
 
-  update(table: Table, items: Array<StorageItem>): object {
+  update(table: Table, items: any): Promise<ResultType> {
     const time = Date.now();
-    const list: any = items.map((item: StorageItem) => ({
+    const list: any = [items].map((item: any) => ({
       ...item,
       updatedAt: time,
     }));
     return new Promise((resolve, reject) => {
       table
-        .bulkGet(list)
-        .then((res) => resolve(res))
+        .bulkPut(list)
+        .then((res) => resolve(this.resProxy(res)))
         .catch((err) => reject(err));
     });
   }

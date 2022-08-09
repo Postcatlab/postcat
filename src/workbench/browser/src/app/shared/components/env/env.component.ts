@@ -6,6 +6,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
 import { StorageService } from '../../services/storage';
+import { ApiService } from '../../services/storage/api.service';
 
 import { Subject } from 'rxjs';
 
@@ -35,6 +36,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private storage: StorageService,
+    private api: ApiService,
     private messageService: MessageService,
     private message: EoMessageService,
     private store: Store
@@ -97,20 +99,16 @@ export class EnvComponent implements OnInit, OnDestroy {
     const data = JSON.parse(JSON.stringify(this.envInfo.parameters));
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
-  handleEditEnv(uuid) {
+  async handleEditEnv(uuid) {
     this.modalTitle = $localize`Edit Environment`;
     this.handleShowModal();
     // * switch env in menu on left sidebar
-    return new Promise((resolve) => {
-      this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.envInfo = result.data ?? {};
-          this.activeUuid = result.data?.uuid ?? null;
-          resolve(true);
-        }
-        resolve(false);
-      });
-    });
+    const [res, err]: any = await this.api.api_envLoad({ uuid });
+    if (err) {
+      return;
+    }
+    this.envInfo = res.data ?? {};
+    this.activeUuid = res.data?.uuid ?? null;
   }
 
   handleAddEnv(pid = 1) {

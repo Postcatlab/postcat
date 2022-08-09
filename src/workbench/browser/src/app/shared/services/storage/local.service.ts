@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core'
 import localStorage from './local.db'
 import { Table } from 'dexie'
 import {
@@ -19,6 +20,9 @@ const ErrorStyle =
 const SuccessStyle =
   'background-color: #316745; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;'
 
+@Injectable({
+  providedIn: 'root',
+})
 export default class LocalService extends localStorage {
   project!: Table<Project, number | string>
   group!: Table<Group, number | string>
@@ -427,10 +431,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_apiDelete({ uuids }) {
-    if (!uuids) {
+  api_apiDelete({ uuid }) {
+    if (!uuid) {
       console.log(
-        '%c Error: api - delete 接口 缺失参数 uuids %c',
+        '%c Error: api - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
       )
@@ -438,7 +442,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.remove(this.apiData, { uuids })
+      this.remove(this.apiData, { uuid })
         .then(({ statusCode, ...data }: any) => {
           console.log('%c api - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {
@@ -530,10 +534,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_testDelete({ uuids }) {
-    if (!uuids) {
+  api_testDelete({ uuid }) {
+    if (!uuid) {
       console.log(
-        '%c Error: test - delete 接口 缺失参数 uuids %c',
+        '%c Error: test - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
       )
@@ -541,7 +545,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.remove(this.apiTestHistory, { uuids })
+      this.remove(this.apiTestHistory, { uuid })
         .then(({ statusCode, ...data }: any) => {
           console.log('%c test - delete 接口调用成功 %c', SuccessStyle, '')
           if (statusCode === 0) {

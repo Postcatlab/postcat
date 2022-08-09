@@ -421,10 +421,10 @@ export default class RemoteService {
     })
   }
 
-  api_apiDelete({ uuids }) {
-    if (!uuids) {
+  api_apiDelete({ uuid }) {
+    if (!uuid) {
       console.log(
-        '%c Error: api - delete 接口 缺失参数 uuids %c',
+        '%c Error: api - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
       )
@@ -432,7 +432,7 @@ export default class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http.delete('/api_data?uuids=[${uuids}]', {}).subscribe({
+      this.http.delete('/api_data?uuids=[${uuid}]', {}).subscribe({
         next: ({ statusCode, ...data }: any) => {
           console.log('%c api - delete 接口请求成功 %c', SuccessStyle, '')
           if (statusCode === 200) {
@@ -532,10 +532,10 @@ export default class RemoteService {
     })
   }
 
-  api_testDelete({ uuids }) {
-    if (!uuids) {
+  api_testDelete({ uuid }) {
+    if (!uuid) {
       console.log(
-        '%c Error: test - delete 接口 缺失参数 uuids %c',
+        '%c Error: test - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
       )
@@ -543,7 +543,7 @@ export default class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http.delete('/api_test_history?uuids=[${uuids}]', {}).subscribe({
+      this.http.delete('/api_test_history?uuids=[${uuid}]', {}).subscribe({
         next: ({ statusCode, ...data }: any) => {
           console.log('%c test - delete 接口请求成功 %c', SuccessStyle, '')
           if (statusCode === 200) {

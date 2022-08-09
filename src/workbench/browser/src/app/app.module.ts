@@ -15,6 +15,7 @@ import { EnvState } from './shared/store/env.state';
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
 import { MessageService } from './shared/services/message';
+import { ApiService } from '../app/shared/services/storage/api.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
@@ -55,6 +56,7 @@ registerLocaleData(zh);
     StorageService,
     RemoteService,
     MessageService,
+    ApiService,
     IndexedDBStorage,
     HttpStorage,
     NzMessageService,
