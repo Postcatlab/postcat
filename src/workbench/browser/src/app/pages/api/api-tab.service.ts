@@ -15,7 +15,7 @@ export class ApiTabService {
   }
   private changeContent$: Subject<any> = new Subject();
   BASIC_TBAS = {
-    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New API`, extends: { method: 'POST' } },
+    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New Request`, extends: { method: 'POST' } },
     edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
     detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`Preview` },
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index`, icon: 'home' },
@@ -131,19 +131,19 @@ export class ApiTabService {
       isLoading: false,
       extends: {},
     };
-    //Set title
-    let tabTitle = null;
+    //Set title/method
+    tabItem.title = model.name;
     tabItem.extends.method = model.method;
-    tabTitle = model.name;
     if (currentContentTab.pathname === '/home/api/test') {
       tabItem.extends.method = model.request.method;
       //Only Untitle request need set url to tab title
       if (!model.request.uuid) {
-        tabTitle = model.request.uri || tabTitle;
+        tabItem.title ??= model.request.uri || this.BASIC_TBAS.test.title;
+      } else {
+        tabItem.title ??= model.request.name;
       }
-    }
-    if (tabTitle) {
-      tabItem.title = tabTitle;
+    } else if (!model.uuid) {
+      tabItem.title ??= Object.values(this.BASIC_TBAS).find((val) => val.pathname === tabItem.pathname).title;
     }
 
     //Only edit page storage data
@@ -165,7 +165,7 @@ export class ApiTabService {
         tabItem.hasChanged = this.componentRef.isFormChange();
       }
     }
-    // console.log('updatePartialTab', currentContentTab.uuid, tabItem, inData.url);
+    console.log('updatePartialTab', currentContentTab.uuid, tabItem);
     this.apiTabComponent.updatePartialTab(inData.url, tabItem);
   }
   /**
