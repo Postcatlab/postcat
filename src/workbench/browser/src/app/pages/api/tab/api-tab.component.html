@@ -1,3 +1,4 @@
+{{ getConsoleTabs() | json }}
 <nz-tabset
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
@@ -7,13 +8,20 @@
 >
   <nz-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
-      <div class="flex items-center tab-title-container">
+      <div class="flex items-center tab-item-container" [ngClass]="{'fixed-tab-item-container':tabStorage.tabsByID.get(uuid).isFixed}">
+        <!-- loading -->
         <nz-spin nzSimple [nzIndicator]="indicatorTemplate" *ngIf="tabStorage.tabsByID.get(uuid).isLoading"></nz-spin>
-        <span class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid).extends.method }}" *ngIf="tabStorage.tabsByID.get(uuid).extends?.method">{{
-          tabStorage.tabsByID.get(uuid).extends.method
-        }}</span>
         <ng-template #indicatorTemplate><i nz-icon nzType="loading"></i></ng-template>
-        <eo-iconpark-icon class="mr5" name="{{ tabStorage.tabsByID.get(uuid).icon }}" size="14px" *ngIf="tabStorage.tabsByID.get(uuid).icon"></eo-iconpark-icon>
+        <eo-iconpark-icon
+          class="mr5"
+          name="{{ tabStorage.tabsByID.get(uuid).icon }}"
+          size="14px"
+          *ngIf="tabStorage.tabsByID.get(uuid).icon"
+        ></eo-iconpark-icon>
+        <span class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid).extends.method }}"
+          *ngIf="tabStorage.tabsByID.get(uuid).extends?.method"
+          >{{ tabStorage.tabsByID.get(uuid).extends.method }}</span
+        >
         <span class="text_omit tab_text"> {{ tabStorage.tabsByID.get(uuid).title }}</span>
         <!-- Close/HasEdit -->
         <div class="tab-item-button-group">

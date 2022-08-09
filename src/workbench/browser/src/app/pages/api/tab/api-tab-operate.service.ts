@@ -45,7 +45,7 @@ export class ApiTabOperateService {
       this.navigateTabRoute(targetTab);
     } else {
       this.operateTabAfterRouteChange({
-        url: this.router.url
+        url: this.router.url,
       });
     }
   }
@@ -230,12 +230,10 @@ export class ApiTabOperateService {
     const tmpTabItem = this.getBaiscTabFromUrl(res.url);
     const sameContentIndex = this.getTabIndex('sameContent', tmpTabItem);
     const existTab = this.getTabByIndex(sameContentIndex);
-
     console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
     //If page repeat or final url is different(lack of id/additional params)
     //jump to exist tab item to keep same  pageID and so on
     let nextTab = existTab || tmpTabItem;
-    console.log(this.getUrlByTab(nextTab), this.formatUrl(res.url));
     const isPageRepeat = existTab && existTab.pathname !== tmpTabItem.pathname;
     if (isPageRepeat || this.getUrlByTab(nextTab) !== this.formatUrl(res.url)) {
       if (isPageRepeat) {
@@ -267,17 +265,14 @@ export class ApiTabOperateService {
     }
 
     //If has {params.uuid} same tab,replace it
-    let canbeReplaceID = null;
     const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tab = mapObj[key];
-        const canbeReplace = this.canbeReplace(tab);
-        if (canbeReplace) {
-          canbeReplaceID = tab.uuid;
-        }
-        if (tab.params.uuid === tmpTabItem.params.uuid && canbeReplace) {
+        if (tab.params.uuid === tmpTabItem.params.uuid) {
           const mergeTab = this.preventBlankTab(tab, tmpTabItem);
+          tmpTabItem.content = tab.content;
+          tmpTabItem.baseContent = tab.baseContent;
           this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
           this.tabStorage.updateTab(this.selectedIndex, mergeTab);
           this.updateChildView();
@@ -285,10 +280,10 @@ export class ApiTabOperateService {
         }
       }
     }
-
     //Find other tab to be replace
-    if (canbeReplaceID) {
-      this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === canbeReplaceID);
+    const canbeReplaceTab = Object.values(mapObj).find((val) => this.canbeReplace(val));
+    if (canbeReplaceTab) {
+      this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === canbeReplaceTab.uuid);
       this.tabStorage.updateTab(this.selectedIndex, tmpTabItem);
       this.updateChildView();
       return;
@@ -302,24 +297,21 @@ export class ApiTabOperateService {
   //*Prevent toggling splash screen with empty tab title
   preventBlankTab(origin, target) {
     const result = target;
-    if (result.params?.uuid === origin.params?.uuid) {
-      ['title', 'extends', 'isLoading'].forEach((keyName) => {
-        //Dont't replace is loading tab content
-        if (result[keyName] && !result.isLoading) {
-          return;
-        }
-        result[keyName] = origin[keyName];
-      });
-      result.isLoading = false;
-    }
-    console.log('preventBlankTab', result);
+    /**
+     * Keyname effect show tab
+     */
+    ['title', 'extends', 'hasChanged', 'isFixed', 'isLoading'].forEach((keyName) => {
+      //Dont't replace is loading tab content
+      if (result[keyName] && !result.isLoading) {
+        return;
+      }
+      result[keyName] = origin[keyName];
+    });
+    result.isLoading = false;
     return result;
   }
   canbeReplace(tabItem: TabItem) {
     if (tabItem.isFixed) {
-      return false;
-    }
-    if (tabItem.type === 'edit' && tabItem.hasChanged) {
       return false;
     }
     return true;
