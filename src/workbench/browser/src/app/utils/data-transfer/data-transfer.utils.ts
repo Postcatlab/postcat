@@ -17,7 +17,7 @@ export const isXML = (data) => {
   return true;
 };
 /**
- * Parse item to table need row data
+ * Parse item to eoTableComponent need
  */
 export const parseTree = (key, value, level = 0) => {
   if (whatType(value) === 'object') {
@@ -32,13 +32,16 @@ export const parseTree = (key, value, level = 0) => {
     };
   }
   if (whatType(value) === 'array') {
-    // * just by first
+    // * Just pick first element
     const [data] = value;
+    // If array element is primitive value
     if (whatType(data) === 'string') {
       return {
         name: key,
         required: true,
+        //TODO only test page has value
         value: JSON.stringify(value),
+        //TODO only edit page has example
         example: JSON.stringify(value),
         type: 'array',
         description: '',
@@ -142,7 +145,7 @@ export const xml2json = (tmpl) => {
 type uiData = {
   textType: ApiBodyType | string;
   rootType: JsonRootType | string;
-  data: any;
+  data: ApiEditBody | any;
 };
 export const xml2UiData = (text) => {
   const data: any[] = xml2json(text);
@@ -167,7 +170,7 @@ export const xml2UiData = (text) => {
  * @returns
  */
 export const json2XML: (o: object, tab?) => string = (o, tab) => {
-  const toXml = function (v, name, ind) {
+  const toXml = function(v, name, ind) {
     let xml = '';
     if (v instanceof Array) {
       for (let i = 0, n = v.length; i < n; i++) {
@@ -212,6 +215,7 @@ export const json2XML: (o: object, tab?) => string = (o, tab) => {
 
 /**
  * Transfer text to json/xml/raw ui data,such as request body/response body
+ * Flat array with listdepth
  *
  * @returns body info
  */
@@ -234,6 +238,7 @@ export const text2UiData: (text: string) => uiData = (text) => {
         result.data = JSON.parse(result.data);
         result.data = flatData(Object.keys(result.data).map((it) => parseTree(it, result.data[it])));
       } catch (error) {
+        console.error('text2UiData', error);
         result.textType = 'raw';
       }
       break;
@@ -247,13 +252,13 @@ export const text2UiData: (text: string) => uiData = (text) => {
 
 /**
  * Format eoapi body to json
- * !TODO refactor
+ * !TODO Current just from sass apikit,need refactor
  *
- * @param eoapiList
+ * @param eoapiArr
  * @param inputOptions
  * @returns
  */
-export const uiData2Json = function (eoapiArr: ApiEditBody, inputOptions) {
+export const uiData2Json = function(eoapiArr: ApiEditBody[], inputOptions) {
   inputOptions = inputOptions || {};
   const result = {};
   const loopFun = (inputArr, inputObject) => {

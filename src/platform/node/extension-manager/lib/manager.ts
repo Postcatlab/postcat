@@ -245,7 +245,7 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param moduleInfo
    */
   private setup(moduleInfo: ModuleInfo) {
-    if (isNotEmpty(moduleInfo.moduleID)) {
+    if (moduleInfo&&isNotEmpty(moduleInfo.moduleID)) {
       this.set(moduleInfo);
     }
   }

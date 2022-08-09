@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
-import { ApiTestService } from 'eo/workbench/browser/src/app/pages/api/test/api-test.service';
+import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/api/test/api-test-util.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
@@ -16,7 +16,8 @@ import { copyText } from 'eo/workbench/browser/src/app/utils';
   templateUrl: './api-mock.component.html',
   styleUrls: ['./api-mock.component.scss'],
 })
-export class ApiMockComponent implements OnInit, OnChanges {
+export class ApiMockComponent implements OnInit {
+  @Output() afterInit = new EventEmitter<ApiData>();
   isVisible = false;
   get mockUrl() {
     return this.remoteService.mockUrl;
@@ -63,7 +64,7 @@ export class ApiMockComponent implements OnInit, OnChanges {
 
   constructor(
     private storageService: StorageService,
-    private apiTest: ApiTestService,
+    private apiTest: ApiTestUtilService,
     private route: ActivatedRoute,
     private remoteService: RemoteService,
     private message: NzMessageService
@@ -72,20 +73,17 @@ export class ApiMockComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.init();
+  }
+  init() {
     this.initMockList(Number(this.route.snapshot.queryParams.uuid));
   }
 
-  async ngOnChanges(changes: SimpleChanges): Promise<void> {
-    const { apiData } = changes;
-    if (apiData.currentValue.uuid !== apiData.previousValue?.uuid) {
-      this.initMockList(apiData.currentValue.uuid);
-    }
-  }
 
   async initMockList(apiDataID: number) {
     const mockRes = await this.getMockByApiDataID(apiDataID);
     this.apiData = await this.getApiData(apiDataID);
-    console.log('apiDataRes', this.apiData, mockRes);
+    this.afterInit.emit(this.apiData);
     this.mocklList = mockRes.map((item) => {
       item.url = this.getApiUrl(item);
       return item;

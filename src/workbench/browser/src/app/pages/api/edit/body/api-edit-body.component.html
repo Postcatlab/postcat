@@ -6,7 +6,7 @@
   </div>
   <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
   <!-- <nz-divider nzType="vertical"></nz-divider> -->
-  <div *ngIf="['formData', 'json', 'xml'].includes(bodyType)" class="inline-flex items-center px-2 mt-1">
+  <div *ngIf="['formData','json','xml'].includes(bodyType)" class="inline-flex items-center px-2 mt-1">
     <params-import
       [baseData]="model"
       [contentType]="bodyType"
@@ -18,7 +18,7 @@
 </div>
 <div *ngIf="bodyType === 'json'" class="px-4">
   <p class="fs12 c999 mb5" i18n>JSON Root Type:</p>
-  <nz-select class="w_100 mb10" [(ngModel)]="jsonRootType" (ngModelChange)="jsonRootTypeChange.emit(jsonRootType)">
+  <nz-select class="w_100 mb10" [(ngModel)]="jsonRootType" (ngModelChange)="jsonRootTypeDataChange(jsonRootType)">
     <nz-option *ngFor="let item of CONST.JSON_ROOT_TYPE" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
   </nz-select>
 </div>
@@ -38,7 +38,7 @@
   [(code)]="model"
   [maxLine]="20"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-  (codeChange)="rawDataChange()"
+  (codeChange)="rawDataChange($event)"
 >
 </eo-monaco-editor>
 <!-- Binary -->
@@ -48,7 +48,7 @@
   *ngIf="bodyType === 'binary'"
   nzBorderless
   i18n-placeholder
-  (ngModelChange)="rawDataChange()"
+  (ngModelChange)="rawDataChange($event)"
   placeholder="Binary Description"
   nz-input
   [(ngModel)]="model"

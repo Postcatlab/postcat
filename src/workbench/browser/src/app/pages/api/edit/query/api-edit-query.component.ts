@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges, Output, EventEmitter } from '@angular/core';
 import { ApiEditQuery } from '../../../../shared/services/storage/index.model';
-import { ApiEditService } from '../api-edit.service';
+import { ApiEditUtilService } from '../api-edit-util.service';
 
 @Component({
   selector: 'eo-api-edit-query',
@@ -8,7 +8,8 @@ import { ApiEditService } from '../api-edit.service';
   styleUrls: ['./api-edit-query.component.scss'],
 })
 export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecked {
-  @Input() model: object[];
+  @Input() model: ApiEditQuery[];
+  @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: object = {};
   private itemStructure: ApiEditQuery = {
     name: '',
@@ -16,7 +17,7 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
     example: '',
     description: '',
   };
-  constructor(private editService: ApiEditService, private cdRef: ChangeDetectorRef) {}
+  constructor(private editService: ApiEditUtilService, private cdRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.initListConf();
@@ -27,7 +28,9 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
   }
   ngOnChanges(changes) {
     if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
-      this.model.push(Object.assign({}, this.itemStructure));
+      if (!this.model.length || this.model[this.model.length - 1].name) {
+        this.model.push(Object.assign({}, this.itemStructure));
+      }
     }
   }
   private initListConf() {
@@ -36,7 +39,11 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
       itemStructure: this.itemStructure,
       nzOnOkMoreSetting: (inputArg) => {
         this.model[inputArg.$index] = inputArg.item;
+        this.modelChange.emit(this.model);
       },
+      watchFormLastChange: () => {
+        this.modelChange.emit(this.model);
+      }
     });
   }
 }

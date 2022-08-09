@@ -111,7 +111,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   ngAfterViewInit(): void {
-    console.log('codeEdtor', this.codeEdtor);
+    // console.log('codeEdtor', this.codeEdtor);
     requestIdleCallback(() => this.rerenderEditor());
     if (this.editorOption.automaticLayout === undefined) {
       this.resizeObserver = new ResizeObserver(
@@ -191,8 +191,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   private initMonacoEditorEvent() {
-    console.log('initMonacoEditorEvent');
-
     this.completionItemProvider = window.monaco.languages.registerCompletionItemProvider('javascript', {
       provideCompletionItems: (model, position) => {
         // find out if we are completing a property in the 'dependencies' object.

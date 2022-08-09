@@ -4,7 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
 import { Group, ApiData, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { Message } from '../../../../shared/services/message/message.model';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
 import { MessageService } from '../../../../shared/services/message';
@@ -15,6 +15,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
+import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -68,7 +69,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public electron: ElectronService,
-    public storageInstance: IndexedDBStorage
+    public storageInstance: IndexedDBStorage,
+    private apiService: ApiService,
+    private nzModalService: NzModalService
   ) {}
   ngOnInit(): void {
     this.buildGroupTreeData();
@@ -87,7 +90,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.treeNodes = [];
     listToTree(this.treeItems, this.treeNodes, '0');
     setTimeout(() => {
-      console.log('this.treeNodes', this.treeNodes);
       this.expandGroup();
     }, 0);
   }
@@ -119,30 +121,29 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       this.getApis();
     });
   }
-  getApis() {
-    this.storage.run('apiDataLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
-      const { success, empty } = StorageResStatus;
-      if ([success, empty].includes(result.status)) {
-        let apiItems = {};
-        [].concat(result.data).forEach((item: ApiData) => {
-          delete item.updatedAt;
-          apiItems[item.uuid] = item;
-          this.treeItems.push({
-            title: item.name,
-            key: item.uuid.toString(),
-            weight: item.weight || 0,
-            parentID: item.groupID ? `group-${item.groupID}` : '0',
-            method: item.method,
-            isLeaf: true,
-          });
+  async getApis() {
+    const result: StorageRes = await this.apiService.getAll(this.projectID);
+    const { success, empty } = StorageResStatus;
+    if ([success, empty].includes(result.status)) {
+      const apiItems = {};
+      [].concat(result.data).forEach((item: ApiData) => {
+        delete item.updatedAt;
+        apiItems[item.uuid] = item;
+        this.treeItems.push({
+          title: item.name,
+          key: item.uuid.toString(),
+          weight: item.weight || 0,
+          parentID: item.groupID ? `group-${item.groupID}` : '0',
+          method: item.method,
+          isLeaf: true,
         });
-        this.apiDataItems = apiItems;
-        this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
-        this.setSelectedKeys();
-        this.generateGroupTreeData();
-        this.restoreExpandStatus();
-      }
-    });
+      });
+      this.apiDataItems = apiItems;
+      this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+      this.setSelectedKeys();
+      this.generateGroupTreeData();
+      this.restoreExpandStatus();
+    }
   }
   restoreExpandStatus() {
     const key = this.expandKeys.slice(0);
@@ -166,7 +167,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   async createGroup({ name, projectID, content }) {
     const groupID = await this.storageInstance.group.add({ name: name.replace(/\.json$/, ''), projectID });
-    // console.log('==>', content);
     const result = content.apiData.map((it, index) => ({ ...it, groupID, uuid: Date.now() + index }));
     await this.storageInstance.apiData.bulkAdd(result);
     this.buildGroupTreeData();
@@ -185,7 +185,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'editApiSuccess':
           case 'copyApiSuccess':
           case 'deleteApiSuccess':
-          case 'bulkDeleteApiSuccess':
           case 'updateGroupSuccess': {
             this.buildGroupTreeData();
             break;
@@ -198,12 +197,51 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   /**
    * Group tree click api event
+   * Router jump page or Event emit
    *
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
     inArg.event.stopPropagation();
-    this.messageService.send({ type: inArg.eventName, data: inArg.node });
+    switch (inArg.eventName) {
+      case 'testApi':
+      case 'editApi':
+      case 'detailApi': {
+        this.router.navigate([`/home/api/${inArg.eventName.replace('Api', '')}`], {
+          queryParams: { uuid: inArg.node.key },
+        });
+        break;
+      }
+      case 'jumpOverview': {
+        this.router.navigate(['/home/api/overview'], {
+          queryParams: { uuid: 'overview' },
+        });
+        break;
+      }
+      case 'addAPI': {
+        this.router.navigate(['/home/api/edit'], {
+          queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') },
+        });
+        break;
+      }
+      case 'deleteApi': {
+        const apiInfo = inArg.node;
+        this.nzModalService.confirm({
+          nzTitle: $localize`Deletion Confirmation?`,
+          nzContent: $localize`Are you sure you want to delete the data <strong title="${apiInfo.name}">${
+            apiInfo.name.length > 50 ? apiInfo.name.slice(0, 50) + '...' : apiInfo.name
+          }</strong> ? You cannot restore it once deleted!`,
+          nzOnOk: () => {
+            this.apiService.delete(apiInfo.uuid);
+          },
+        });
+        break;
+      }
+      case 'copyApi': {
+        this.apiService.copy(inArg.node);
+        break;
+      }
+    }
   }
   /**
    * Group tree item click.
@@ -219,13 +257,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         break;
       }
       case 'clickFixedItem': {
-        event.eventName = 'detailOverview';
-        this.operateApiEvent(event);
+        this.operateApiEvent({ ...event, eventName: 'jumpOverview' });
         break;
       }
       case 'clickItem': {
-        event.eventName = 'detailApi';
-        this.operateApiEvent(event);
+        this.operateApiEvent({ ...event, eventName: 'detailApi' });
         break;
       }
     }
@@ -340,7 +376,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.updateoperateApiEvent(groupApiData);
+    this.updateOperateApiEvent(groupApiData);
   }
 
   private replaceGroupKey(key: string) {
@@ -351,7 +387,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    *
    * @param data GroupApiDataModel
    */
-  updateoperateApiEvent(data: GroupApiDataModel) {
+  updateOperateApiEvent(data: GroupApiDataModel) {
     let count = 0;
     if (data.group.length > 0) {
       count++;
@@ -392,6 +428,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       );
     }
   }
+  /**
+   * Expand Group fit current select api  when router change
+   */
   private watchRouterChange() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.setSelectedKeys();

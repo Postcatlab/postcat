@@ -20,7 +20,7 @@ import { ApiDetailQueryComponent } from './query/api-detail-query.component';
 import { ApiDetailRestComponent } from './rest/api-detail-rest.component';
 import { ApiDetailMockComponent } from './mock/api-detail-mock.component';
 
-import { ApiDetailService } from './api-detail.service';
+import { ApiDetailUtilService } from './api-detail-util.service';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 const NZ_COMPONETS = [NzButtonModule, NzCollapseModule,NzIconModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
@@ -35,6 +35,6 @@ const COMPONENTS = [
 @NgModule({
   declarations: [...COMPONENTS],
   imports: [FormsModule, ReactiveFormsModule, Ng1Module, CommonModule, ...NZ_COMPONETS, EouiModule, SharedModule],
-  providers: [ApiDetailService],
+  providers: [ApiDetailUtilService],
 })
 export class ApiDetailModule {}
