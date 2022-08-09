@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
-import { debounceTime, of, Subject } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { isEmptyObj } from '../../utils';
 import { MessageService } from '../../shared/services/message';
+import { Router } from '@angular/router';
 @Injectable()
 export class ApiTabService {
   componentRef;
   apiTabComponent: ApiTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
   get currentTabType(): string {
-    return Object.values(this.BASIC_TBAS).find((val) => val.pathname === window.location.pathname)?.type || 'preview';
+    return Object.values(this.BASIC_TBAS).find((val) => this.router.url.includes(val.pathname))?.type || 'preview';
   }
   private changeContent$: Subject<any> = new Subject();
   BASIC_TBAS = {
@@ -21,7 +22,7 @@ export class ApiTabService {
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index`, icon: 'home' },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
   };
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService, private router: Router) {
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
     });
@@ -47,7 +48,7 @@ export class ApiTabService {
         break;
       }
       case 'tabContentInit': {
-        this.updateChildView(window.location.pathname + window.location.search);
+        this.updateChildView(this.router.url);
         break;
       }
     }
@@ -59,7 +60,7 @@ export class ApiTabService {
    * After tab component/child component  init
    */
   onAllComponentInit() {
-    const url = window.location.pathname + window.location.search;
+    const url = this.router.url;
     if (!this.componentRef.init) {
       this.changeContent$.next({ when: 'init', url });
       throw new Error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
@@ -70,7 +71,7 @@ export class ApiTabService {
     if (!this.componentRef) {
       return;
     }
-    const url = window.location.pathname + window.location.search;
+    const url = this.router.url;
     this.componentRef.afterInit = {
       emit: (model) => {
         this.afterContentChanged({ when: 'init', url, model });
