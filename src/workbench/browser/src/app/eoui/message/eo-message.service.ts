@@ -11,6 +11,9 @@ export class EoMessageService {
   success(content, time = 2000) {
     this.subject.next({ type: 'success', content, icon: 'check-circle', time });
   }
+  warn(content, time = 2000) {
+    this.subject.next({ type: 'warn', content, icon: 'check-circle', time });
+  }
   error(content, time = 2000) {
     this.subject.next({ type: 'error', content, icon: 'close-circle', time });
   }

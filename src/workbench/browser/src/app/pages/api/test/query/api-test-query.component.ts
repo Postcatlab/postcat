@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { ApiTestQuery } from '../../../../shared/services/api-test/api-test.model';
-import { ApiTestService } from '../api-test.service';
+import { ApiTestUtilService } from '../api-test-util.service';
 
 @Component({
   selector: 'eo-api-test-query',
@@ -17,16 +17,16 @@ export class ApiTestQueryComponent implements OnInit, OnChanges, OnDestroy {
 
   listConf: object = {};
   private itemStructure: ApiTestQuery = {
-    name: '',
     required: true,
+    name: '',
     value: '',
   };
 
   private modelChange$: Subject<void> = new Subject();
   private destroy$: Subject<void> = new Subject();
 
-  constructor(private editService: ApiTestService) {
-    this.modelChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+  constructor(private editService: ApiTestUtilService) {
+    this.modelChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
       this.modelChange.emit(this.model);
     });
   }

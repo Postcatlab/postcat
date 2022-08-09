@@ -20,10 +20,14 @@
       align-items: center;
       justify-content: center;
       border-radius: 3px;
-      box-shadow: 0 0 10px rgba(0,0,0,.2);
-      
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
       &.success {
         background-color: #00785a;
+        color: #fff;
+      }
+      &.warn {
+        background-color: var(--YELLOW_TAG_BG);
         color: #fff;
       }
       &.error {

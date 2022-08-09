@@ -34,9 +34,9 @@ export class PagesComponent implements OnInit {
     public sidebar: SidebarService,
     private messageService: MessageService,
     private remoteService: RemoteService,
-    public electron:ElectronService
+    public electron: ElectronService
   ) {
-    this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
+    this.rawChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
       this.updateState();
     });
   }

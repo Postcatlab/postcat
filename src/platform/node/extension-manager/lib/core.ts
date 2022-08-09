@@ -70,7 +70,7 @@ export class CoreHandler {
         moduleInfo.author = moduleInfo.author['name'] || '';
       }
     } catch (e) {
-      console.log(`get module ${moduleInfo.moduleID} error:${e}`);
+      console.log(`Get module ${moduleInfo?.moduleID} error:${e}`);
       moduleInfo = {} as ModuleInfo;
     }
     return moduleInfo;

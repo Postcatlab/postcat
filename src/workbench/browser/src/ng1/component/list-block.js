@@ -134,6 +134,7 @@ function listBlockController($rootScope, $element, $scope) {
   vm.listBlockVarible = {
     operate: locale === 'zh' ? '操作' : 'Operation',
     column: locale === 'zh' ? '列表项' : 'Column',
+    fileBtnText: locale === 'zh' ? '选择文件' : 'Select File',
   };
 
   const fun = {};
@@ -1945,8 +1946,8 @@ function listBlockController($rootScope, $element, $scope) {
       case 'autoCompleteAndFile': {
         vm.data.isEditTable = true;
         let tmpFileInputHtml = '';
-        const tmpFilePlaceholder = inputVal.filePlaceholder || '请选择文件';
-        const tmpFileBtnText = inputVal.fileBtnText || '选择文件';
+        const tmpFilePlaceholder = inputVal.filePlaceholder || vm.listBlockVarible.fileBtnText;
+        const tmpFileBtnText = inputVal.fileBtnText || vm.listBlockVarible.fileBtnText;
         if (vm.mainObject.setting && vm.mainObject.setting.draggableWithSelect) {
           inputVal.setting = inputVal.setting || {
             isNeedToResetPosition: true,
