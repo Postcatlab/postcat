@@ -121,7 +121,7 @@ export const eoFormatRequestData = (
   };
   return result;
 };
-export const eoFormatResponseData = ({ globals, report, history, id }) => {
+export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestRes => {
   let result: ApiTestRes;
   const reportList = report.reportList || [];
   //preScript code tips
@@ -157,12 +157,13 @@ export const eoFormatResponseData = ({ globals, report, history, id }) => {
     body: response.body || '',
     headers: response.headers.map((val) => ({ name: val.key, value: val.value })),
   };
+  response={ blobFileName: report.blobFileName, ...response },
   result = {
     status: 'finish',
     id,
     globals,
     general: report.general,
-    response: { blobFileName: report.blobFileName, ...response },
+    response,
     report: {
       request: {
         requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
@@ -171,6 +172,10 @@ export const eoFormatResponseData = ({ globals, report, history, id }) => {
       },
     },
     history: {
+      general: report.general,
+      response,
+      beforeScript:history.beforeInject,
+      afterScript:history.afterInject,
       request: {
         uri: history.requestInfo.URL,
         method: history.requestInfo.method,
@@ -199,4 +204,34 @@ export const eoFormatResponseData = ({ globals, report, history, id }) => {
     }));
   }
   return result;
+};
+export const DEFAULT_UNIT_TEST_RESULT={
+    general: { redirectTimes: 0, downloadSize: 0, downloadRate: 0, time: '0.00ms' },
+    response: {
+      statusCode: 0,
+      headers: [],
+      testDeny: '0.00',
+      responseLength: 0,
+      responseType: 'text',
+      reportList: [],
+      body: $localize`The test service connection failed, please submit an Issue to contact the community`,
+    },
+    report: {
+      request: {
+        requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
+        requestBodyType: 'raw',
+        requestBody: '{}',
+      },
+    },
+    history: {
+      request: {
+        uri: 'http:///',
+        method: 'POST',
+        protocol: 'http',
+        requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
+        requestBodyJsonType: 'object',
+        requestBodyType: 'raw',
+        requestBody: '{}',
+      },
+    },
 };

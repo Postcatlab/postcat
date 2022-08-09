@@ -68,7 +68,6 @@ registerLocaleData(zh);
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {
-        console.log(localId);
         switch (localId) {
           case 'zh':
             return zh_CN;

@@ -1,4 +1,7 @@
 import { Environment, ApiTestHistoryResponse, ApiTestResGeneral, ApiTestHistoryFrame } from '../storage/index.model';
+/**
+ * Test response from  test server to ui
+ */
 export interface ApiTestRes {
   status: 'finish' | 'error';
   id: number;
@@ -6,7 +9,10 @@ export interface ApiTestRes {
   report?: any;
   globals?: object;
   general?: ApiTestResGeneral;
-  history?: ApiTestHistoryFrame | any;
+  /**
+   * Test history
+   */
+  history?: ApiTestHistoryFrame;
 }
 export interface TestServer {
   init: (receiveMessage: (message: any) => void) => void;

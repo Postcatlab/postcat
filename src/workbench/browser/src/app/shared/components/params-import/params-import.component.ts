@@ -121,6 +121,7 @@ export class ParamsImportComponent {
     }
     // * tree to array for table render
     const cacheData = flatData(Object.entries(paramCode).map(([key, value]) => parseTree(key, value)));
+    console.log(cacheData);
 
     // TODO delete useless attribute in cacheData
     switch (type) {
