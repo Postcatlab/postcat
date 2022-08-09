@@ -48,13 +48,6 @@ export class ApiTabStorageService {
    */
   setPersistenceStorage(selectedIndex) {
     const tabsByID = Object.fromEntries(this.tabsByID);
-    Object.values(tabsByID).forEach((val) => {
-      if (!val.hasChanged) {
-        ['baseContent', 'content'].forEach((keyName) => {
-          val[keyName]=null;
-        });
-      }
-    });
     window.localStorage.setItem(
       this.cacheName,
       JSON.stringify({

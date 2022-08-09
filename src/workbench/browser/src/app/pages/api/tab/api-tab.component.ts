@@ -45,7 +45,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   selectChange() {
     this.tabOperate.navigateTabRoute(this.getCurrentTab());
   }
-  closeTab({ $event, index, tab }: { $event: Event;index: number; tab: any }) {
+  closeTab({ $event, index, tab }: { $event: Event; index: number; tab: any }) {
     $event.stopPropagation();
     if (!tab.hasChanged) {
       this.tabOperate.closeTab(index);
@@ -83,6 +83,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     });
   }
   //Quick see tabs change in templete,for debug,can be deleted
+  //! just for debug
   getConsoleTabs() {
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => {
@@ -90,19 +91,32 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       if (!tab) {
         return;
       }
-      tabs.push({ uuid: tab.uuid, title: tab.title, pathname: tab.pathname, params: tab.params });
+      tabs.push({
+        uuid: tab.uuid,
+        type:tab.type,
+        title: tab.title,
+        pathname: tab.pathname,
+        params: tab.params,
+        isFixed:tab.isFixed,
+        hasChanged: tab.hasChanged
+      });
     });
     return tabs;
   }
   getTabs() {
-    // console.log('getTabs');
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => tabs.push(this.tabStorage.tabsByID.get(uuid)));
     return tabs;
   }
+  /**
+   * Get tab by url with same tab uuid
+   *
+   * @param url
+   * @returns
+   */
   getTabByUrl(url: string): TabItem | null {
     const tabItem = this.tabOperate.getBaiscTabFromUrl(url);
-    const existTabIndex = this.tabOperate.getTabIndex('sameContent', tabItem);
+    const existTabIndex = this.tabOperate.getTabIndex('sameTab', tabItem);
     if (existTabIndex === -1) {
       return null;
     }
@@ -114,9 +128,17 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   batchCloseTab(uuids) {
     this.tabOperate.batchClose(uuids);
   }
+  /**
+   * update tab
+   *
+   * @param url when url exist in tabs,replace
+   * @param tabItem
+   * @returns
+   */
   updatePartialTab(url: string, tabItem: Partial<TabItem>) {
     const originTab = this.getTabByUrl(url);
     if (!originTab) {
+      console.error(`EO_ERROR:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
       return;
     }
     const index = this.tabStorage.tabOrder.findIndex((uuid) => uuid === originTab.uuid);
