@@ -236,11 +236,17 @@ export class ApiTestUtilService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
+    //handle query and url
+    const tmpResult = this.transferUrlAndQuery(inData.request.uri, [], {
+      base: 'url',
+      replaceType: 'merge',
+    });
     const result = {
       testData: {
         uuid: inData.apiDataID,
-        queryParams: [],
         restParams: [],
+        uri: tmpResult.url,
+        queryParams: tmpResult.query,
         requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
           ? inData.request.requestBody
           : inData.request.requestBody.map((val) => (val.required = true)),

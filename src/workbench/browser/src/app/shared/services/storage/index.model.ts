@@ -2,6 +2,7 @@ import {
   ApiTestBody,
   ApiTestBodyType,
   ApiTestHeaders,
+  ApiTestQuery,
 } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 import { Observable } from 'rxjs';
 
@@ -221,7 +222,7 @@ export interface ApiTestHistoryFrame {
     uri: string;
     protocol: string;
     method: string;
-    requestHeaders: any | object[];
+    requestHeaders: any | ApiTestHeaders[];
     requestBodyJsonType: JsonRootType | string;
     requestBodyType: string | 'formData' | 'raw';
     requestBody: any | object[] | string;

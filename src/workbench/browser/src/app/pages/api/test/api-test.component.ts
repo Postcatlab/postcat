@@ -122,7 +122,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   async init() {
     this.initTimes++;
-    console.log(this.model);
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       let id = this.route.snapshot.queryParams.uuid;
