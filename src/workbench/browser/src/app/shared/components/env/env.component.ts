@@ -4,9 +4,7 @@ import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
-import { StorageService } from '../../services/storage';
 import { ApiService } from '../../services/storage/api.service';
-
 import { Subject } from 'rxjs';
 
 @Component({
