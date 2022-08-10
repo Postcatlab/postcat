@@ -18,7 +18,7 @@ export class TestServerRemoteService implements TestServer {
         break;
       }
       default: {
-        this.xhrByTabID[message.id].abort();
+        this.xhrByTabID[message.id]?.abort();
       }
     }
     if (message.action !== 'ajax') {return;}

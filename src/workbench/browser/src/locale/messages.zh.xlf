@@ -129,7 +129,7 @@
           <context context-type="sourcefile">src/app/pages/api/api-tab.service.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target state="translated">新 API</target>
+        <target state="translated">添加 API</target>
       </trans-unit>
       <trans-unit id="1295614462098694869" datatype="html">
         <source>Preview</source>
@@ -430,7 +430,7 @@
           <context context-type="sourcefile">src/app/pages/api/detail/api-detail-util.service.ts</context>
           <context context-type="linenumber">154</context>
         </context-group>
-        <target state="translated">&lt;button type="button" class="eo-operate-btn" ng-click="$ctrl.data.isSpreedBtnClick=!$ctrl.data.isSpreedBtnClick;$ctrl.data.isSpreed=true;$ctrl.mainObject.baseFun.spreedAll($event);$ctrl.data.isSpreed=false;"&gt;{{$ctrl.data.isSpreedBtnClick?"全部展开":"全部收缩"}}&lt;/button&gt;</target>
+        <target state="translated">&lt;button type="button" class="eo-operate-btn" ng-click="$ctrl.data.isSpreedBtnClick=!$ctrl.data.isSpreedBtnClick;$ctrl.data.isSpreed=true;$ctrl.mainObject.baseFun.spreedAll($event);$ctrl.data.isSpreed=false;"&gt;{{$ctrl.data.isSpreedBtnClick?"全部收缩":"全部展开"}}&lt;/button&gt;</target>
       </trans-unit>
       <trans-unit id="5531234025897938404" datatype="html">
         <source>&lt;span class=&quot;eo-operate-btn fs12&quot; ng-show=&quot;item.minimum ||
@@ -446,7 +446,7 @@
           item.maximum ||
           item.minLength ||
           item.maxLength ||
-          (item.enum &amp;&amp; item.enum.length &gt; 0 &amp;&amp; item.enum[0].value)"&gt;{{item.isClick?"展开":"收缩"}}&lt;/span&gt;</target>
+          (item.enum &amp;&amp; item.enum.length &gt; 0 &amp;&amp; item.enum[0].value)"&gt;{{item.isClick?"收缩":"展开"}}&lt;/span&gt;</target>
       </trans-unit>
       <trans-unit id="9b985691961fb794ada1fb16421cc0c677c6480a" datatype="html">
         <source>Request Headers</source>
@@ -526,7 +526,7 @@
           <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target state="needs-translation">The outermost structure is: <x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[model.requestBodyJsonType] }}"/></target>
+        <target state="translated">JSON 根类型： <x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[model.requestBodyJsonType] }}"/></target>
       </trans-unit>
       <trans-unit id="a0b40184f4ad0e2da08dabf8c5209d23f02513b7" datatype="html">
         <source>Response Headers</source>
@@ -574,7 +574,7 @@
           <context context-type="sourcefile">src/app/pages/api/detail/api-detail.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
-        <target state="needs-translation">The outermost structure is: <x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[model.responseBodyJsonType] }}"/></target>
+        <target state="translated">JSON 根类型： <x id="INTERPOLATION" equiv-text="{{ CONST.JSON_ROOT_TYPE[model.responseBodyJsonType] }}"/></target>
       </trans-unit>
       <trans-unit id="150b08e70491356590c3f3706be1715d0b099467" datatype="html">
         <source>MOCK</source>
@@ -894,7 +894,7 @@
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.ts</context>
           <context context-type="linenumber">138</context>
         </context-group>
-        <target state="needs-translation">Failed Operation</target>
+        <target state="translated">操作失败</target>
       </trans-unit>
       <trans-unit id="4926605800185679045" datatype="html">
         <source>Root directory</source>
@@ -926,7 +926,7 @@
           <context context-type="sourcefile">src/app/pages/api/edit/extra-setting/api-params-extra-setting.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target state="needs-translation">Minimum length</target>
+        <target state="translated">最小长度</target>
       </trans-unit>
       <trans-unit id="1834980375662449209" datatype="html">
         <source>Maximum Length</source>
@@ -934,7 +934,7 @@
           <context context-type="sourcefile">src/app/pages/api/edit/extra-setting/api-params-extra-setting.component.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
-        <target state="needs-translation">Maximum Length</target>
+        <target state="translated">最大长度</target>
       </trans-unit>
       <trans-unit id="1571736586383450200" datatype="html">
         <source>Minimum</source>
@@ -1126,7 +1126,9 @@
           <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
           <context context-type="linenumber">20,21</context>
         </context-group>
-        <target state="translated"> <x id="INTERPOLATION" equiv-text="{{ scope.createWay === 'system' ? '预览' : '编辑' }}"/></target>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{ scope.createWay === 'system' ? '预览' : '编辑' }}"/>
+        </target>
       </trans-unit>
       <trans-unit id="feacc7017fd641efba1aeb4883e42a352d9d5b6c" datatype="html">
         <source>Are you sure you want to delete this Mock?</source>
@@ -3220,7 +3222,9 @@
           <context context-type="sourcefile">src/app/shared/components/setting/common/extensions.component.ts</context>
           <context context-type="linenumber">40,42</context>
         </context-group>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{                   module.properties[field]?.placeholder ?? '请输入 ' + module.properties[field]?.label                 }}"/></target>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{                   module.properties[field]?.placeholder ?? '请输入 ' + module.properties[field]?.label                 }}"/>
+        </target>
       </trans-unit>
       <trans-unit id="e0d1ece694da029a20f5a97fbf3302f6213da891" datatype="html">
         <source>No plugins are currently installed,<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;eo_link&quot; (click)=&quot;navToExtensionList()&quot;&gt;"/> go to install <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>

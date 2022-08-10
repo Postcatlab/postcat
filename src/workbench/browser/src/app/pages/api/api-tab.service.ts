@@ -174,6 +174,10 @@ export class ApiTabService {
       if (replaceTab.hasChanged) {
         replaceTab.isFixed = true;
       }
+      //Has tested set fixed
+      if(currentTab.pathname === '/home/api/test'&&model.testStartTime!==undefined){
+        replaceTab.isFixed = true;
+      }
 
       // Set storage
       //Set baseContent
@@ -186,7 +190,7 @@ export class ApiTabService {
       replaceTab.content = inData.when === 'saved' ? {} : currentTab.content || {};
       replaceTab.content[contentID] = model && !isEmptyObj(model) ? model : null;
     }
-    // console.log('updatePartialTab', currentTab.uuid, replaceTab);
+    console.log('updatePartialTab', currentTab.uuid, replaceTab);
     this.apiTabComponent.updatePartialTab(inData.url, replaceTab);
   }
   /**
@@ -195,7 +199,7 @@ export class ApiTabService {
    *
    * @param inData.url get component fit tab data
    */
-  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'; url: string; model: any }) {
+  afterContentChanged(inData: { when: 'init' | 'editing' |'saved'; url: string; model: any }) {
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
