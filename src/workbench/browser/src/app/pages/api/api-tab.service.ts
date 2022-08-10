@@ -41,24 +41,6 @@ export class ApiTabService {
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
       }
-      case 'saveApiFromTest': {
-        const currentTab = this.apiTabComponent.getCurrentTab();
-        const tabItem: Partial<TabItem> = Object.assign(
-          {
-            isLoading: false,
-            content: null,
-            baseContent: null,
-          },
-          this.BASIC_TBAS.edit
-        );
-        //Replace currentTab
-        this.apiTabComponent.updatePartialTab(this.router.url, tabItem);
-        //Jump to api edit page
-        this.router.navigate([tabItem.pathname], {
-          queryParams: currentTab.params,
-        });
-        break;
-      }
       case 'tabContentInit': {
         this.updateChildView(this.router.url);
         break;
@@ -156,15 +138,17 @@ export class ApiTabService {
       replaceTab.extends.method = model.request.method;
       //Only Untitle request need set url to tab title
       if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
-        replaceTab.title ??= model.request.uri || this.BASIC_TBAS.test.title;
+        replaceTab.title = model.request.uri || this.BASIC_TBAS.test.title;
       } else {
-        replaceTab.title ??= model.request.name;
+        replaceTab.title = model.request.name || this.BASIC_TBAS.test.title;
       }
     } else if (!model.uuid) {
-      replaceTab.title ??= Object.values(this.BASIC_TBAS).find((val) => val.pathname === currentTab.pathname).title;
+      replaceTab.title =
+        replaceTab.title || Object.values(this.BASIC_TBAS).find((val) => val.pathname === currentTab.pathname).title;
     }
     //Only hasChanged edit page storage data
     if (currentTab.type === 'edit') {
+      const contentID = this.getContentID(currentTab.pathname);
       //Set hasChange
       if (!this.componentRef?.isFormChange) {
         throw new Error(
@@ -173,21 +157,25 @@ export class ApiTabService {
       }
       switch (inData.when) {
         case 'editing': {
-          //* Share change status within all content page
-          replaceTab.hasChanged = currentTab.hasChanged || this.componentRef.isFormChange();
+          replaceTab.hasChanged = this.componentRef.isFormChange();
           break;
         }
         case 'saved': {
           replaceTab.hasChanged = false;
         }
       }
+      //* Share change status within all content page
+      replaceTab.extends.hasChanged = currentTab.extends?.hasChanged || {};
+      replaceTab.extends.hasChanged[contentID] = replaceTab.hasChanged;
+      replaceTab.hasChanged =
+        currentTab.extends?.hasChanged?.[contentID === 'edit' ? 'test' : 'edit'] || replaceTab.hasChanged;
+
       //Set isFixed
       if (replaceTab.hasChanged) {
         replaceTab.isFixed = true;
       }
 
       // Set storage
-      const contentID = this.getContentID(currentTab.pathname);
       //Set baseContent
       if (['init', 'saved'].includes(inData.when)) {
         const initialModel = this.componentRef.initialModel;
@@ -198,7 +186,7 @@ export class ApiTabService {
       replaceTab.content = inData.when === 'saved' ? {} : currentTab.content || {};
       replaceTab.content[contentID] = model && !isEmptyObj(model) ? model : null;
     }
-    // console.log('updatePartialTab', currentTab.uuid, replaceTab);
+    console.log('updatePartialTab', currentTab.uuid, replaceTab);
     this.apiTabComponent.updatePartialTab(inData.url, replaceTab);
   }
   /**

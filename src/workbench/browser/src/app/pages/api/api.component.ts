@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
-import {  Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
@@ -18,11 +18,15 @@ const DY_WIDTH_KEY = 'DY_WIDTH';
   styleUrls: ['./api.component.scss'],
 })
 export class ApiComponent implements OnInit, OnDestroy {
+  isFirstTime = true;
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: ApiTabComponent) {
     // For lifecycle error, use timeout
     this.apiTab.apiTabComponent = value;
-    this.apiTab.onAllComponentInit();
+    if (this.isFirstTime) {
+      this.isFirstTime = false;
+      this.apiTab.onAllComponentInit();
+    }
   }
 
   tabsetIndex: number;

@@ -129,8 +129,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
-      this.initialModel = this.apiEditUtil.getFormdataFromApiData(result.data);
-      this.router.navigate(['home/api/edit'], {
+      this.initialModel = this.apiEditUtil.getFormdataFromApiData(structuredClone(result.data));
+      this.router.navigate(['/home/api/detail'], {
         queryParams: {
           pageID: Number(this.route.snapshot.queryParams.pageID),
           uuid: result.data.uuid,
@@ -140,7 +140,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     } else {
       this.message.success($localize`Failed Operation`);
     }
-    this.afterSaved.emit(result.data);
+    this.afterSaved.emit(this.initialModel);
   }
   emitChangeFun() {
     this.modelChange.emit(this.model);
