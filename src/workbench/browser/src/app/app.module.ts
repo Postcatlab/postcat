@@ -18,7 +18,7 @@ import { MessageService } from './shared/services/message';
 import { ApiService } from '../app/shared/services/storage/api.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { NzMessageService } from 'ng-zorro-antd/message';

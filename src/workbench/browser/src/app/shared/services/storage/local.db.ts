@@ -10,6 +10,13 @@ const toArray = (data: uuidType) => {
   return [data];
 };
 
+const tranform = (source, data) => {
+  if (Array.isArray(data)) {
+    return source;
+  }
+  return source[0] || null;
+};
+
 export type ResultType<T = any> = {
   status: StorageResStatus.success;
   data: T;
@@ -37,12 +44,12 @@ export default class localStorage extends Dexie {
         ...item,
       }))
     );
-    return Promise.resolve(this.resProxy(result));
+    return Promise.resolve(this.resProxy(tranform(result, items)));
   }
 
   remove(table: Table, { uuid }): Promise<ResultType> {
     const result = table.bulkDelete(toArray(uuid));
-    return Promise.resolve(this.resProxy(result));
+    return Promise.resolve(this.resProxy(tranform(result, uuid)));
   }
 
   load(
@@ -53,10 +60,19 @@ export default class localStorage extends Dexie {
       apiDataID = 1,
     }: { uuid?: number | string; projectID?: string | number; apiDataID?: string | number }
   ): Promise<ResultType> {
-    console.log('uuid', uuid);
     return new Promise((resolve, reject) => {
       table
         .bulkGet(toArray(uuid))
+        .then((result) => resolve(this.resProxy(tranform(result, uuid))))
+        .catch((error) => reject(error));
+    });
+  }
+
+  search(table: Table, condition = {}): Promise<ResultType> {
+    return new Promise((resolve, reject) => {
+      table
+        .where(condition)
+        .toArray()
         .then((result) => resolve(this.resProxy(result)))
         .catch((error) => reject(error));
     });
@@ -71,7 +87,7 @@ export default class localStorage extends Dexie {
     return new Promise((resolve, reject) => {
       table
         .bulkPut(list)
-        .then((res) => resolve(this.resProxy(res)))
+        .then((result) => resolve(this.resProxy(tranform(result, items))))
         .catch((err) => reject(err));
     });
   }

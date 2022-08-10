@@ -47,13 +47,23 @@ export default class LocalService extends localStorage {
     await this.project.add({ uuid: 1, name: 'Default' })
     await this.apiData.bulkAdd(sampleApiData)
   }
+  projectExports(): Promise<any> {
+    const result = ['environment', 'group', 'project', 'apiData'].reduce(
+      async (total, it) => ({
+        [it]: await this[it].toArray(),
+        ...total,
+      }),
+      {}
+    )
+    return Promise.resolve(result)
+  }
 
   api_projectCreate(params) {
     return new Promise((resolve) => {
       this.create(this.project, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c project - create 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -77,9 +87,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.update(this.project, { uuid, ...items })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c project - update 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -103,9 +113,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.remove(this.project, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c project - delete 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -120,9 +130,9 @@ export default class LocalService extends localStorage {
   api_projectExport(params) {
     return new Promise((resolve) => {
       this.load(this.project, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c project - export 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -137,9 +147,9 @@ export default class LocalService extends localStorage {
   api_envCreate(params) {
     return new Promise((resolve) => {
       this.create(this.environment, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c env - create 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -163,9 +173,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.update(this.environment, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c env - update 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -189,9 +199,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.remove(this.environment, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c env - delete 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -211,9 +221,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.load(this.environment, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c env - load 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -225,10 +235,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_envLoadByProjectId({ projectID }) {
+  api_envSearch({ projectID }) {
     if (!projectID) {
       console.log(
-        '%c Error: env - loadByProjectID 接口 缺失参数 projectID %c',
+        '%c Error: env - search 接口 缺失参数 projectID %c',
         ErrorStyle,
         ''
       )
@@ -236,24 +246,16 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.load(this.environment, { projectID })
-        .then(({ statusCode, ...data }: any) => {
-          console.log(
-            '%c env - loadByProjectID 接口调用成功 %c',
-            SuccessStyle,
-            ''
-          )
-          if (statusCode === 0) {
+      this.search(this.environment, { projectID })
+        .then(({ status, ...data }: any) => {
+          console.log('%c env - search 接口调用成功 %c', SuccessStyle, '')
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
         })
         .catch((error) => {
-          console.log(
-            '%c env - loadByProjectID 接口调用失败 %c',
-            ErrorStyle,
-            ''
-          )
+          console.log('%c env - search 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
         })
     })
@@ -262,9 +264,9 @@ export default class LocalService extends localStorage {
   api_groupCreate(params) {
     return new Promise((resolve) => {
       this.create(this.group, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c group - create 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -288,9 +290,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.update(this.group, { uuid, ...items })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c group - update 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -305,9 +307,9 @@ export default class LocalService extends localStorage {
   api_groupBulkUpdate(params) {
     return new Promise((resolve) => {
       this.update(this.group, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c group - bulkUpdate 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -331,9 +333,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.remove(this.group, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c group - delete 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -357,9 +359,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.load(this.group, { projectID })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c group - loadAll 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -374,9 +376,9 @@ export default class LocalService extends localStorage {
   api_apiCreate(params) {
     return new Promise((resolve) => {
       this.create(this.apiData, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c api - create 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -400,9 +402,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.update(this.apiData, { uuid, ...items })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c api - update 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -417,9 +419,9 @@ export default class LocalService extends localStorage {
   api_apiBulkUpdate(params) {
     return new Promise((resolve) => {
       this.update(this.apiData, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c api - bulkUpdate 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -443,9 +445,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.remove(this.apiData, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c api - delete 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -469,9 +471,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.load(this.apiData, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c api - loadApi 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -495,13 +497,13 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.load(this.apiData, { projectID })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log(
             '%c api - LoadAllByProjectID 接口调用成功 %c',
             SuccessStyle,
             ''
           )
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -520,9 +522,9 @@ export default class LocalService extends localStorage {
   api_testCreate(params) {
     return new Promise((resolve) => {
       this.create(this.apiTestHistory, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c test - create 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -546,9 +548,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.remove(this.apiTestHistory, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c test - delete 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -572,9 +574,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.load(this.apiTestHistory, { apiDataID })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c test - LoadAll 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -589,9 +591,9 @@ export default class LocalService extends localStorage {
   api_mockCreate(params) {
     return new Promise((resolve) => {
       this.create(this.mock, params)
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c mock - create 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -611,9 +613,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.load(this.mock, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c mock - load 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -637,9 +639,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.remove(this.mock, { uuid })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c mock - delete 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -663,9 +665,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.update(this.mock, { uuid, ...items })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c mock - update 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -689,9 +691,9 @@ export default class LocalService extends localStorage {
 
     return new Promise((resolve) => {
       this.load(this.mock, { apiDataID })
-        .then(({ statusCode, ...data }: any) => {
+        .then(({ status, ...data }: any) => {
           console.log('%c mock - loadAll 接口调用成功 %c', SuccessStyle, '')
-          if (statusCode === 0) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])

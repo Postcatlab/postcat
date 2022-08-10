@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
@@ -35,7 +34,6 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
-    private storage: StorageService,
     private api: ApiService,
     private messageService: MessageService,
     private message: EoMessageService,
@@ -55,50 +53,48 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.changeStoreEnv(value);
   }
 
-  ngOnInit(): void {
-    this.getAllEnv();
+  async ngOnInit(): Promise<void> {
+    this.envList = await this.getAllEnv();
     this.changeStoreEnv(localStorage.getItem('env:selected'));
   }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  getAllEnv(uuid?: number) {
-    const projectID = 1;
-    return new Promise((resolve) => {
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.envList = result.data || [];
-          return resolve(result.data || []);
-        }
-        return resolve([]);
-      });
-    });
+  async getAllEnv(projectID = 1) {
+    const [res, err]: any = await this.api.api_envSearch({ projectID });
+    if (err) {
+      return;
+    }
+    return res.data;
   }
+
   closeEnv() {
     this.statusChange.emit();
   }
 
-  handleDeleteEnv($event, uuid: string) {
+  async handleDeleteEnv($event, uuid: string) {
     $event?.stopPropagation();
     // * delete localstrage
     this.messageService.send({ type: 'deleteEnv', data: uuid });
     // * delete env in menu on left sidebar
-    this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        await this.getAllEnv();
-        if (this.envUuid === Number(uuid)) {
-          this.envUuid = this.activeUuid;
-        }
-      }
-    });
+    const [, err]: any = await this.api.api_envDelete({ uuid });
+    if (err) {
+      return;
+    }
+    this.envList = await this.getAllEnv();
+    if (this.envUuid === Number(uuid)) {
+      this.envUuid = this.activeUuid;
+    }
   }
   handleDeleteParams(index) {
     // * delete params in table
     const data = JSON.parse(JSON.stringify(this.envInfo.parameters));
     this.envInfo.parameters = data.filter((it, i) => i !== index);
   }
+
   async handleEditEnv(uuid) {
     this.modalTitle = $localize`Edit Environment`;
     this.handleShowModal();
@@ -124,7 +120,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.handleShowModal();
   }
 
-  handleSaveEnv(uuid: string | number | undefined = undefined) {
+  async handleSaveEnv(uuid: string | number | undefined = undefined) {
     // * update list after call save api
     const { parameters, name, ...other } = this.envInfo;
     if (!name) {
@@ -133,34 +129,28 @@ export class EnvComponent implements OnInit, OnDestroy {
     }
     const data = parameters?.filter((it) => it.name || it.value);
     if (uuid != null) {
-      this.storage.run(
-        'environmentUpdate',
-        [{ ...other, name, parameters: data }, uuid],
-        async (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.message.success($localize`Edited successfully`);
-            await this.getAllEnv(this.activeUuid);
-            if (this.envUuid === Number(uuid)) {
-              this.envUuid = Number(uuid);
-            }
-            this.handleCancel();
-          } else {
-            this.message.error($localize`Failed to edit`);
-          }
-        }
-      );
-    } else {
-      this.storage.run('environmentCreate', [this.envInfo], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.message.success($localize`Added successfully`);
-          this.activeUuid = Number(result.data.uuid);
-          await this.getAllEnv();
-          this.handleCancel();
-        } else {
-          this.message.error($localize`Failed to add`);
-        }
-      });
+      const [, err]: any = await this.api.api_envUpdate({ ...other, name, parameters: data, uuid });
+      if (err) {
+        this.message.error($localize`Failed to edit`);
+        return;
+      }
+      this.message.success($localize`Edited successfully`);
+      this.envList = await this.getAllEnv();
+      if (this.envUuid === Number(uuid)) {
+        this.envUuid = Number(uuid);
+      }
+      this.handleCancel();
+      return;
     }
+    const [res, error]: any = await this.api.api_envCreate(this.envInfo);
+    if (error) {
+      this.message.error($localize`Failed to add`);
+      return;
+    }
+    this.message.success($localize`Added successfully`);
+    this.activeUuid = Number(res.data.uuid);
+    this.envList = await this.getAllEnv();
+    this.handleCancel();
   }
 
   handleCancel(): void {
@@ -174,27 +164,24 @@ export class EnvComponent implements OnInit, OnDestroy {
     // this.handleAddEnv(null);
     this.isVisible = true;
     this.isOpen = false;
-    // this.getAllEnv(this.envUuid);
   }
 
-  handleEnvSelectStatus(event: boolean) {
-    if (event) {
-      this.activeUuid = this.envUuid;
-      this.handleEditEnv(this.activeUuid);
-      this.getAllEnv();
+  async handleEnvSelectStatus(event: boolean) {
+    if (!event) {
+      return;
     }
+    this.activeUuid = this.envUuid;
+    this.handleEditEnv(this.activeUuid);
+    this.envList = await this.getAllEnv();
   }
 
-  private changeStoreEnv(uuid) {
+  private async changeStoreEnv(uuid) {
     if (uuid == null) {
       this.store.dispatch(new Change(null));
       return;
     }
-    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.dispatch(new Change(data));
-      }
-    });
+    this.envList = await this.getAllEnv();
+    const data = this.envList.find((val) => val.uuid === Number(uuid));
+    this.store.dispatch(new Change(data));
   }
 }

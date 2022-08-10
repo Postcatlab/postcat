@@ -198,10 +198,10 @@ export default class RemoteService {
     })
   }
 
-  api_envLoadByProjectId({ projectID }) {
+  api_envSearch({ projectID }) {
     if (!projectID) {
       console.log(
-        '%c Error: env - loadByProjectID 接口 缺失参数 projectID %c',
+        '%c Error: env - search 接口 缺失参数 projectID %c',
         ErrorStyle,
         ''
       )
@@ -215,22 +215,14 @@ export default class RemoteService {
         })
         .subscribe({
           next: ({ statusCode, ...data }: any) => {
-            console.log(
-              '%c env - loadByProjectID 接口请求成功 %c',
-              SuccessStyle,
-              ''
-            )
+            console.log('%c env - search 接口请求成功 %c', SuccessStyle, '')
             if (statusCode === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
           },
           error: (error) => {
-            console.log(
-              '%c env - loadByProjectID 接口请求失败 %c',
-              ErrorStyle,
-              ''
-            )
+            console.log('%c env - search 接口请求失败 %c', ErrorStyle, '')
             resolve([null, error])
           },
         })

@@ -16,7 +16,7 @@ const http = {
         { 'update @put': '/environment/{uuid}' },
         { 'delete @delete': '/environment/{uuid}' },
         { 'load @get': '/environment/{uuid}' },
-        { 'loadByProjectID @get': '/environment', query: 'projectID' },
+        { 'search @search': '/environment', query: 'projectID' },
       ],
     },
     {
