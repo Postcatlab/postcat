@@ -13,6 +13,7 @@ import { KeyValue } from '@angular/common';
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
   @Input() list;
+  @Input() handleDataBeforeCache;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
@@ -27,6 +28,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.tabOperate.init(this.list);
     this.watchRouterChange();
+    this.watchPageLeave();
   }
   newTab() {
     if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
@@ -93,12 +95,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       }
       tabs.push({
         uuid: tab.uuid,
-        type:tab.type,
+        type: tab.type,
         title: tab.title,
         pathname: tab.pathname,
         params: tab.params,
-        isFixed:tab.isFixed,
-        hasChanged: tab.hasChanged
+        isFixed: tab.isFixed,
+        hasChanged: tab.hasChanged,
       });
     });
     return tabs;
@@ -117,10 +119,10 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   getTabByUrl(url: string): TabItem | null {
     const tabItem = this.tabOperate.getBaiscTabFromUrl(url);
     const existTabIndex = this.tabOperate.getSameContentTabIndex(tabItem);
-    if (existTabIndex === -1) {
-      return null;
+    if (existTabIndex !== -1) {
+      return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
     }
-    return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
+    return this.tabStorage.tabsByID.get(tabItem.uuid)||null;
   }
   getCurrentTab() {
     return this.tabOperate.getCurrentTab();
@@ -150,7 +152,9 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * Cache tab header/tabs content for restore when page close or component destroy
    */
   cacheData() {
-    this.tabStorage.setPersistenceStorage(this.tabOperate.selectedIndex);
+    this.tabStorage.setPersistenceStorage(this.tabOperate.selectedIndex, {
+      handleDataBeforeCache: this.handleDataBeforeCache,
+    });
   }
   /**
    * Tab  Close Operate
@@ -170,5 +174,11 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routerSubscribe?.unsubscribe();
     this.cacheData();
+  }
+  private watchPageLeave() {
+    const that = this;
+    window.addEventListener('beforeunload', function(e) {
+      that.cacheData();
+    });
   }
 }

@@ -265,14 +265,14 @@ export class ApiTestUtilService {
    * @returns apiData
    */
   formatEditingApiData(formData): ApiTestData {
-    const result = formData;
+    const result = structuredClone(formData);
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach((tableName) => {
       if (whatType(result[tableName]) !== 'array') {
         return;
       }
       result[tableName] = (result[tableName] || []).filter((val) => val.name || val.value);
     });
-    return formData;
+    return result;
   }
   /**
    * Transfer test data/test history to api data
