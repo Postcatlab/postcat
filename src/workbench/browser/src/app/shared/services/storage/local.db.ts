@@ -2,6 +2,7 @@ import Dexie, { Table } from 'dexie';
 import { StorageItem, StorageResStatus } from './index.model';
 
 type uuidType = string | number | string[] | number[];
+
 const toArray = (data: uuidType) => {
   if (Array.isArray(data)) {
     return data;

@@ -690,6 +690,17 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       fun();
     });
   }
+
+  projectExports(): Promise<any> {
+    const result = ['environment', 'group', 'project', 'apiData'].reduce(
+      async (total, it) => ({
+        [it]: await this[it].toArray(),
+        ...total,
+      }),
+      {}
+    );
+    return Promise.resolve(result);
+  }
   /**
    * Bulk load project items.
    * @param uuids
