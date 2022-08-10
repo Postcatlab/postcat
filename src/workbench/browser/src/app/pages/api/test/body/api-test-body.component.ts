@@ -218,6 +218,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
         this.modelChange.emit(this.model);
       },
       importFile: (inputArg) => {
+        console.log('importFile',inputArg);
         if (inputArg.file.length === 0) {
           return;
         }

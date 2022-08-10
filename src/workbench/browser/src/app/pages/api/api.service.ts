@@ -1,16 +1,24 @@
 import { Injectable } from '@angular/core';
 import { ApiData, StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Router } from '@angular/router';
 @Injectable()
 export class ApiService {
-  constructor(private messageService: MessageService, private router: Router, private storage: StorageService) {}
+  constructor(
+    private messageService: MessageService,
+    private message: EoMessageService,
+    private router: Router,
+    private storage: StorageService
+  ) {}
   get(uuid): Promise<ApiData> {
     return new Promise((resolve) => {
       this.storage.run('apiDataLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
+        } else {
+          this.message.error(`Can't find this api`);
         }
       });
     });

@@ -111,7 +111,6 @@ export class ApiTabService {
       return;
     }
     this.bindChildComponentChangeEvent();
-    console.log('updatechildview');
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
     const currentTab = this.apiTabComponent.getTabByUrl(url);
@@ -175,7 +174,7 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
       //Has tested set fixed
-      if(currentTab.pathname === '/home/api/test'&&model.testStartTime!==undefined){
+      if (currentTab.pathname === '/home/api/test' && model.testStartTime !== undefined) {
         replaceTab.isFixed = true;
       }
 
@@ -199,7 +198,7 @@ export class ApiTabService {
    *
    * @param inData.url get component fit tab data
    */
-  afterContentChanged(inData: { when: 'init' | 'editing' |'saved'; url: string; model: any }) {
+  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'; url: string; model: any }) {
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
@@ -210,5 +209,16 @@ export class ApiTabService {
       return;
     }
     this.updateTab(currentTab, inData);
+  }
+  handleDataBeforeCache(tabsByID) {
+    Object.values(tabsByID).forEach((val: TabItem) => {
+      if (val.pathname === '/home/api/test'&&val.content?.test?.testResult) {
+        val.content.test.testResult = {
+          request: {},
+          response: {},
+        };
+      }
+    });
+    return tabsByID;
   }
 }

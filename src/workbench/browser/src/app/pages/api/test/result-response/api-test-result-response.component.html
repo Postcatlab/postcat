@@ -25,7 +25,7 @@
         <span i18n>Unable to preview non-text type data, you can</span>
         <button class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()"
           i18n="@@downloadResponse">
-          download back result
+          download response
         </button>
         <span i18n>and open it with other programs.</span>
       </div>
@@ -34,7 +34,7 @@
       </div>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item i18n="@@downloadResponse" (click)="downloadResponseText()">download back result</li>
+          <li nz-menu-item i18n="@@downloadResponse" (click)="downloadResponseText()">download response</li>
         </ul>
       </nz-dropdown-menu>
     </div>
@@ -42,7 +42,7 @@
       <span i18n>The response result exceeds the previewable size, you can</span>
       <button i18n="@@downloadResponse" class="eo_theme_btn_default mlr5" type="button"
         (click)="downloadResponseText()">
-        download back result
+        download response
       </button>
       <!-- or
       <button class="eo_theme_btn_default" type="button" (click)="newTabResponseText()">在新标签页中显示返回结果</button>

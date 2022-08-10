@@ -1260,6 +1260,7 @@ function listBlockController($rootScope, $element, $scope) {
     }
   };
   $scope.importFile = function (inputArg, inputEvent) {
+    console.log('importFile')
     inputArg.$index = this.$parent.$index;
     inputArg.item = vm.list[inputArg.$index];
     vm.mainObject.baseFun.importFile(inputArg);

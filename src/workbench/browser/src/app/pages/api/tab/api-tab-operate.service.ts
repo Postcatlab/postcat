@@ -27,7 +27,6 @@ export class ApiTabOperateService {
     private message: EoMessageService,
     private modal: ModalService
   ) {
-    this.watchPageLeave();
   }
   //Init tab info
   //Maybe from tab cache info or router url
@@ -223,8 +222,8 @@ export class ApiTabOperateService {
 
     //same tab content,selected it
     if (existTab) {
-      this.selectedIndex = sameContentIndex;
-      this.updateChildView();
+        this.selectedIndex = sameContentIndex;
+        this.updateChildView();
       return;
     }
     //If has same content tab (same {params.uuid}),replace it and merge data
@@ -315,10 +314,5 @@ export class ApiTabOperateService {
   private updateChildView() {
     this.messageService.send({ type: 'tabContentInit', data: {} });
   }
-  private watchPageLeave() {
-    const that = this;
-    window.addEventListener('beforeunload', function(e) {
-      that.tabStorage.setPersistenceStorage(that.selectedIndex);
-    });
-  }
+
 }
