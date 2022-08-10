@@ -71,7 +71,9 @@ export class NavbarComponent implements OnInit {
     fetch('https://api.github.com/repos/eolinker/eoapi/releases')
       .then((response) => response.json())
       .then((data) => {
-        if(!(data instanceof Array)) {return;}
+        if (!(data instanceof Array)) {
+          return;
+        }
         [...this.resourceInfo]
           .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
           .forEach((item) => {
@@ -109,13 +111,6 @@ export class NavbarComponent implements OnInit {
   handleShowModal() {
     this.isSettingVisible = true;
   }
-
-  /**
-   * switch data
-   */
-  switchDataSource = async () => {
-    this.remoteService.switchDataSource();
-  };
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());

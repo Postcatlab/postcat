@@ -1,10 +1,10 @@
 <eo-navbar></eo-navbar>
 <div class="page-body"
   [style.--remote-notification-height]="isShowNotification && electron.isElectron ? '50px' : '0px'">
-  <div *ngIf="isShowNotification && electron.isElectron" class="remote-notification">
+  <div *ngIf="!isRemote && isShowNotification && electron.isElectron" class="remote-notification">
     <i nz-icon [nzType]="isRemote ? 'cloud' : 'exclamation-circle'" nzTheme="outline" class="text-[13px] mr-[2px]"></i>
     <span i18n>Current data storage exists {{ dataSourceText }},please switch if you want to collaborate</span>
-    <a class="eo-blod ml-0.5" (click)="switchDataSource()" i18n>{{ isRemote ? 'Remote Server' : 'Localhost' }} Data Storage</a>
+    <a class="eo-blod ml-0.5" (click)="switchDataSource()" i18n>Remote Server Data Storage</a>
     <i nz-icon nzType="close" nzTheme="outline" class="absolute right-[20px] cursor-pointer"
       (click)="closeNotification()"></i>
   </div>
