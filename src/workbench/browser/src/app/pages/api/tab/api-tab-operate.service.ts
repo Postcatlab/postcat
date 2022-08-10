@@ -26,15 +26,14 @@ export class ApiTabOperateService {
     private router: Router,
     private message: EoMessageService,
     private modal: ModalService
-  ) {
-  }
+  ) {}
   //Init tab info
   //Maybe from tab cache info or router url
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
     const tabCache = this.tabStorage.getPersistenceStorage();
     if (tabCache && tabCache.tabOrder?.length) {
-      this.tabStorage.tabOrder = tabCache.tabOrder;
+      this.tabStorage.tabOrder = tabCache.tabOrder.filter((uuid) => tabCache.tabsByID.hasOwnProperty(uuid));
       const tabsByID = new Map();
       Object.values(tabCache.tabsByID).forEach((tabItem) => {
         tabsByID.set(tabItem.uuid, tabItem);
@@ -144,8 +143,12 @@ export class ApiTabOperateService {
    * @param tab
    * @returns
    */
-   getSameContentTabIndex(tab: TabItem): number {
+  getSameContentTabIndex(tab: TabItem): number {
     let result = -1;
+    const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
+    if (sameTabIDTab && !sameTabIDTab.params.uuid && sameTabIDTab.pathname === tab.pathname) {
+      return this.tabStorage.tabOrder.findIndex((uuid) => uuid === sameTabIDTab.uuid);
+    }
     const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
@@ -203,7 +206,7 @@ export class ApiTabOperateService {
     const tmpTabItem = this.getBaiscTabFromUrl(res.url);
     const sameContentIndex = this.getSameContentTabIndex(tmpTabItem);
     const existTab = this.getTabByIndex(sameContentIndex);
-    // console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
+    console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
     //If page lack pageID
     //Jump to exist tab item to keep same  pageID and so on
     if (!res.url.includes('pageID')) {
@@ -222,8 +225,8 @@ export class ApiTabOperateService {
 
     //same tab content,selected it
     if (existTab) {
-        this.selectedIndex = sameContentIndex;
-        this.updateChildView();
+      this.selectedIndex = sameContentIndex;
+      this.updateChildView();
       return;
     }
     //If has same content tab (same {params.uuid}),replace it and merge data
@@ -231,7 +234,7 @@ export class ApiTabOperateService {
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tab = mapObj[key];
-        if (tab.params.uuid === tmpTabItem.params.uuid) {
+        if (tab.params.uuid && tab.params.uuid === tmpTabItem.params.uuid) {
           const mergeTab = this.preventBlankTab(tab, tmpTabItem);
           mergeTab.content = tab.content;
           mergeTab.baseContent = tab.baseContent;
@@ -314,5 +317,4 @@ export class ApiTabOperateService {
   private updateChildView() {
     this.messageService.send({ type: 'tabContentInit', data: {} });
   }
-
 }
