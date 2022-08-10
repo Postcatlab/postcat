@@ -34,6 +34,7 @@ export class SettingComponent implements OnInit {
   extensitonConfigurations: any[];
   @Input() set isShowModal(val) {
     this.$isShowModal = val;
+    this.isShowModalChange.emit(val);
     if (val) {
       this.init();
       this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
@@ -182,7 +183,7 @@ export class SettingComponent implements OnInit {
   }
 
   handleScroll = debounce((e: Event) => {
-    if (this.isClick) return;
+    if (this.isClick) {return;}
     const target = e.target as HTMLDivElement;
     const treeNodes = this.dataSource._flattenedData.value;
     treeNodes.some((node) => {
@@ -211,7 +212,6 @@ export class SettingComponent implements OnInit {
    */
   private init() {
     this.settings = this.localSettings = this.settingService.getSettings();
-    console.log('localSettings', this.localSettings);
     const modules = window.eo?.getModules() || new Map([]);
     this.extensitonConfigurations = [...modules.values()]
       .filter((n) => n.features?.configuration)
@@ -272,6 +272,6 @@ export class SettingComponent implements OnInit {
     this.handleSave();
 
     this.isShowModal = false;
-    this.isShowModalChange.emit(false);
+    // this.isShowModalChange.emit(false);
   }
 }

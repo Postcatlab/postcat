@@ -65,6 +65,7 @@
   .ant-tree {
     .ant-tree-node-content-wrapper {
       padding: 0 2px;
+      width: 0;
     }
   }
 }
@@ -83,7 +84,7 @@
 .tree_node {
   font-size: 12px;
   white-space: nowrap;
-  width: calc(100% - var(--tree-level) * 8px - 20px);
+  // width: calc(100% - 20px - var(--tree-level) * 8px);
   .tree_node_operate {
     font-size: 14px;
     font-weight: bold;

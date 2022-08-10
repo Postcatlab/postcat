@@ -1,15 +1,12 @@
-<div class="param_header flex items-center justify-start h-10">
+<div class="flex items-center justify-start h-10 param_header">
   <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
     <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
   </nz-radio-group>
   <nz-divider *ngIf="['formData', 'raw'].includes(bodyType)" nzType="vertical"></nz-divider>
   <!-- Import -->
   <div *ngIf="['formData'].includes(bodyType)" class="inline-flex items-center px-2">
-    <params-import
-      [baseData]="model"
-      [contentType]="bodyType"
-      (baseDataChange)="handleParamsImport($event)"
-    ></params-import>
+    <params-import [baseData]="model" [contentType]="bodyType" (baseDataChange)="handleParamsImport($event)">
+    </params-import>
   </div>
   <!--Select content-type-->
   <nz-select
@@ -40,6 +37,7 @@
 <div class="px-5" *ngIf="bodyType === 'binary'">
   <nz-upload
     nzType="drag"
+    (nzChange)="emitModelChange()"
     [nzBeforeUpload]="uploadBinary"
     [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }"
     [(nzFileList)]="binaryFiles"

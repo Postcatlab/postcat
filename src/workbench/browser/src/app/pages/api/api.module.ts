@@ -43,7 +43,10 @@ import { HistoryComponent } from './history/eo-history.component';
 import { ApiMockComponent } from './mock/api-mock.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
-
+import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
+import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
+import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 const COMPONENTS = [
   ApiComponent,
   ApiGroupEditComponent,
@@ -79,6 +82,7 @@ const COMPONENTS = [
     NzDropDownModule,
     NzDividerModule,
     NzToolTipModule,
+    NzSpinModule,
     EouiModule,
     EnvModule,
     NzCardModule,
@@ -89,6 +93,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [ElectronService, ApiService, IndexedDBStorage],
+  providers: [ElectronService, ApiService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
 })
 export class ApiModule {}

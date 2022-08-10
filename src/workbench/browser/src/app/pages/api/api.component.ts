@@ -1,13 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
-import { ApiService } from './api.service';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
+import { ApiTabService } from './api-tab.service';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 
@@ -17,11 +18,23 @@ const DY_WIDTH_KEY = 'DY_WIDTH';
   styleUrls: ['./api.component.scss'],
 })
 export class ApiComponent implements OnInit, OnDestroy {
+  isFirstTime = true;
+  @ViewChild('apiTabComponent')
+  set apiTabComponent(value: ApiTabComponent) {
+    // For lifecycle error, use timeout
+    this.apiTab.apiTabComponent = value;
+    if (this.isFirstTime) {
+      this.isFirstTime = false;
+      this.apiTab.onAllComponentInit();
+    }
+  }
+
+  tabsetIndex: number;
   /**
    * API uuid
    */
   id: number;
-
+  pageID: number;
   TABS = [
     {
       routerLink: 'detail',
@@ -36,25 +49,27 @@ export class ApiComponent implements OnInit, OnDestroy {
       title: $localize`Test`,
     },
   ];
-  isOpen = false;
-  activeBar = false;
+  activeUuid: number | string | null = 0;
   envInfo: any = {};
   envList: Array<any> = [];
-  activeUuid: number | string = 0;
+
+  isOpen = false;
+  activeBar = false;
   dyWidth = localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : 250;
+
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService,
+    public apiTab: ApiTabService,
+    private router: Router,
     private messageService: MessageService,
     private storage: StorageService,
     private remoteService: RemoteService,
     private store: Store
   ) {}
-
-  get envUuid(): number {
+  get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
   }
   set envUuid(value) {
@@ -66,67 +81,38 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
     this.changeStoreEnv(value);
   }
-
-  ngOnInit(): void {
-    this.watchChangeRouter();
-    this.watchApiAction();
-    this.watchDataSourceChange();
+  /**
+   * Router-outlet child componnet change
+   * Router-outlet bind childComponent output fun by (activate)
+   * https://stackoverflow.com/questions/37662456/angular-2-output-from-router-outlet
+   *
+   * @param componentRef
+   */
+  onActivate(componentRef) {
+    this.apiTab.onChildComponentInit(componentRef);
+  }
+  initTabsetData() {
+    //Only electeron has local Mock
     if (this.remoteService.isElectron) {
       this.TABS.push({
         routerLink: 'mock',
         title: 'Mock',
       });
     }
-    this.envUuid = Number(localStorage.getItem('env:selected'));
-    // * load All env
-    this.getAllEnv().then((result: any[]) => {
-      this.envList = result || [];
-    });
-    this.messageService.get().subscribe(({ type }) => {
-      if (type === 'updateEnv') {
-        this.getAllEnv().then((result: any[]) => {
-          this.envList = result || [];
-        });
-      }
-    });
-    this.messageService.get().subscribe(({ type, data }) => {
-      if (type === 'toggleEnv') {
-        this.activeBar = data;
-      }
-    });
-    this.messageService.get().subscribe(({ type, data }) => {
-      if (type === 'deleteEnv') {
-        const list = this.envList.filter((it) => it.uuid !== Number(data));
-        this.envList = list;
-        if (this.envUuid === Number(data)) {
-          this.envUuid = null;
-        }
-      }
-    });
+  }
+  ngOnInit(): void {
+    this.id = Number(this.route.snapshot.queryParams.uuid);
+    this.initTabsetData();
+    this.watchRouterChange();
+    this.watchDataSourceChange();
+    this.initEnv();
+    this.watchEnvChange();
+    console.log('ngOnInit');
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  watchApiAction(): void {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'gotoCopyApi':
-            this.apiService.copy(inArg.data);
-            break;
-          case 'gotoDeleteApi':
-            this.apiService.delete(inArg.data);
-            break;
-          case 'gotoBulkDeleteApi':
-            this.apiService.bulkDelete(inArg.data.uuids);
-            break;
-        }
-      });
-  }
-
   watchDataSourceChange(): void {
     this.messageService
       .get()
@@ -143,23 +129,17 @@ export class ApiComponent implements OnInit, OnDestroy {
   /**
    * Get current API ID to show content tab
    */
-  watchChangeRouter() {
-    this.id = Number(this.route.snapshot.queryParams.uuid);
-    this.route.queryParamMap.subscribe((params) => {
-      this.id = Number(params.get('uuid'));
+  watchRouterChange() {
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.id = Number(this.route.snapshot.queryParams.uuid);
     });
   }
-  clickContentMenu(data) {
-    this.messageService.send({ type: 'beforeChangeRouter', data });
-  }
-
   gotoEnvManager() {
     // * switch to env
     this.messageService.send({ type: 'toggleEnv', data: true });
     // * close select
     this.isOpen = false;
   }
-
   toggleRightBar(status = null) {
     if (status == null) {
       this.activeBar = !this.activeBar;
@@ -168,18 +148,11 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.activeBar = status;
   }
 
-  getAllEnv(uuid?: number) {
-    const projectID = 1;
-    return new Promise((resolve) => {
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          return resolve(result.data || []);
-        }
-        return resolve([]);
-      });
-    });
+  handleDrag(e) {
+    const distance = e;
+    this.dyWidth = distance;
   }
-
+  handleEnvSelectStatus(event: boolean) {}
   private changeStoreEnv(uuid) {
     if (uuid == null) {
       this.store.dispatch(new Change(null));
@@ -192,10 +165,49 @@ export class ApiComponent implements OnInit, OnDestroy {
       }
     });
   }
-  handleEnvSelectStatus(event: boolean) {}
-  handleDrag(e) {
-    const distance = e;
-    this.dyWidth = distance;
-    localStorage.setItem(DY_WIDTH_KEY, String(this.dyWidth));
+  private initEnv() {
+    this.envUuid = Number(localStorage.getItem('env:selected'));
+    // * load All env
+    this.getAllEnv().then((result: any[]) => {
+      this.envList = result || [];
+    });
+  }
+  private watchEnvChange() {
+    this.messageService
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ type, data }) => {
+        switch (type) {
+          case 'updateEnv': {
+            this.getAllEnv().then((result: any[]) => {
+              this.envList = result || [];
+            });
+            break;
+          }
+          case 'toggleEnv': {
+            this.activeBar = data;
+            break;
+          }
+          case 'deleteEnv': {
+            const list = this.envList.filter((it) => it.uuid !== Number(data));
+            this.envList = list;
+            if (this.envUuid === Number(data)) {
+              this.envUuid = null;
+            }
+            break;
+          }
+        }
+      });
+  }
+  private getAllEnv(uuid?: number) {
+    const projectID = 1;
+    return new Promise((resolve) => {
+      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          return resolve(result.data || []);
+        }
+        return resolve([]);
+      });
+    });
   }
 }

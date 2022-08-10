@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
@@ -9,17 +9,14 @@ import {
   ApiBodyType,
   JsonRootType,
 } from '../../../../shared/services/storage/index.model';
-import { ApiEditService } from '../api-edit.service';
+import { ApiEditUtilService } from '../api-edit-util.service';
 @Component({
   selector: 'eo-api-edit-body',
   templateUrl: './api-edit-body.component.html',
   styleUrls: ['./api-edit-body.component.scss'],
 })
 export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() model: string | object[] | any = `import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor'
-
-  @Component({})
-  export class SomeComponent {}`;
+  @Input() model: string | object[] | any;
   @Input() supportType: string[];
   @Input() bodyType: ApiBodyType | string;
   @Input() jsonRootType: JsonRootType | string;
@@ -43,13 +40,14 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private apiEdit: ApiEditService, private cdRef: ChangeDetectorRef) {
+  constructor(private apiEdit: ApiEditUtilService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(500), takeUntil(this.destroy$)).subscribe(() => {
-      this.modelChange.emit(this.model);
+    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((model) => {
+      //! Must set value by data,because this.model has delay
+      this.modelChange.emit(model);
     });
   }
   beforeChangeBodyByType(type) {
@@ -63,13 +61,17 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
       default: {
-        this.cache[type] = [...this.model];
+        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
         break;
       }
     }
   }
-  rawDataChange() {
-    this.rawChange$.next(this.model);
+  jsonRootTypeDataChange(jsonRootType){
+    this.jsonRootTypeChange.emit(jsonRootType);
+    this.modelChange.emit(this.model);
+  }
+  rawDataChange(code) {
+    this.rawChange$.next(code);
   }
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);

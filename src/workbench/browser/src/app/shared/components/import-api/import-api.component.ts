@@ -68,7 +68,7 @@ export class ImportApiComponent implements OnInit {
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension);
+    const module = await window.eo.loadFeatureModule(this.currentExtension);
     const { name, content } = this.uploadData;
     const [data, err] = module[action](content);
     if (err) {

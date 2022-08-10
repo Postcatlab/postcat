@@ -30,13 +30,13 @@ export class ExtensionListComponent implements OnInit {
 
   constructor(
     public extensionService: ExtensionService,
-    public electron:ElectronService,
+    public electron: ElectronService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService
   ) {
     this.type = this.route.snapshot.queryParams.type;
-    this.seachChanged$.pipe(debounceTime(500), distinctUntilChanged()).subscribe(async (keyword) => {
+    this.seachChanged$.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async (keyword) => {
       this.renderList = await this.searchPlugin(keyword);
     });
   }
