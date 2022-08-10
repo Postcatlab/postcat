@@ -13,7 +13,7 @@ import {
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, Subject } from 'rxjs';
-import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
@@ -39,6 +39,7 @@ import { AnyRecord } from 'dns';
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 interface testViewModel {
   request: ApiTestData;
+  testStartTime?: number;
   testResult: {
     request: any;
     response: any;
@@ -77,14 +78,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
   responseTabIndexRes = 0;
-  initTimes = 0;
 
   isRequestBodyLoaded = false;
   initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
+  MAX_TEST_SECONDS = 60;
 
+  private initTimes = 0;
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
@@ -145,10 +147,20 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model.request = requestInfo;
-      }else{
+      } else {
         return;
       }
       this.initContentType();
+      this.waitSeconds = 0;
+      this.status = 'start';
+    } else {
+      if (this.timer$ && this.model.testStartTime) {
+        this.waitSeconds = Math.round((Date.now() - this.model.testStartTime) / 1000);
+        this.status$.next('testing');
+      } else {
+        this.waitSeconds = 0;
+        this.status$.next('start');
+      }
     }
     this.initBasicForm();
     //! Set this two function to reset form
@@ -236,12 +248,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!this.initialModel.request || !this.model.request) {
       return false;
     }
-    console.log(
-      'api test origin:',
-      this.apiTestUtil.formatEditingApiData(this.initialModel.request),
-      'after:',
-      this.apiTestUtil.formatEditingApiData(this.model.request)
-    );
+    // console.log(
+    //   'api test origin:',
+    //   this.apiTestUtil.formatEditingApiData(this.initialModel.request),
+    //   'after:',
+    //   this.apiTestUtil.formatEditingApiData(this.model.request)
+    // );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
     if (originText !== afterText) {
@@ -298,7 +310,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private test() {
     this.testServer.send('unitTest', {
-      // id: this.apiTab.tabID,
+      id: this.route.snapshot.queryParams.pageID,
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.env,
@@ -308,11 +320,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
       }),
     });
+    this.model.testStartTime = Date.now();
     this.status$.next('testing');
   }
   private abort() {
     this.testServer.send('unitTest', {
-      // id: this.apiTab.tabID,
+      id: this.route.snapshot.queryParams.pageID,
       action: 'abort',
     });
     this.status$.next('tested');
@@ -332,7 +345,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       response: message.response,
     };
     this.model.testResult = tmpHistory;
-    this.modelChange.emit(this.model);
     this.status$.next('tested');
     if (message.status === 'error') {
       return;
@@ -349,6 +361,24 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     // TODO Other tab test finish,support multiple tab test same time
     this.addHistory(message.history, this.model.request.uuid);
   }
+  setTestSecondsTimmer() {
+    if (this.timer$) {
+      this.timer$.unsubscribe();
+    }
+    const that = this;
+    this.timer$ = interval(1000)
+      .subscribe({
+        next(val) {
+          that.waitSeconds++;
+          if (that.waitSeconds >= that.MAX_TEST_SECONDS) {
+            this.complete();
+          }
+        },
+        complete() {
+          that.changeStatus('tested');
+        },
+      });
+  }
   /**
    * Change test status
    *
@@ -356,23 +386,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   private changeStatus(status) {
     this.status = status;
-    const that = this;
+    console.log('changeStatus',status);
     switch (status) {
       case 'testing': {
-        this.timer$ = interval(1000)
-          .pipe(take(60))
-          .subscribe({
-            next(val) {
-              console.log('next');
-              that.waitSeconds = val + 1;
-            },
-            complete() {
-              that.changeStatus('tested');
-            },
-          });
+        this.setTestSecondsTimmer();
         break;
       }
       case 'tested': {
+        this.model.testStartTime = 0;
+        this.modelChange.emit(this.model);
         this.timer$.unsubscribe();
         this.waitSeconds = 0;
         this.responseTabIndexRes = 0;

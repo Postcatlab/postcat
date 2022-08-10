@@ -145,28 +145,15 @@ export class ApiTabOperateService {
    * @param tab
    * @returns
    */
-  getTabIndex(type, tab: TabItem): number {
+   getSameContentTabIndex(tab: TabItem): number {
     let result = -1;
-    //If exist tab，return exist TabIndex
-    if (this.tabStorage.tabsByID.get(tab.uuid)) {
-      return this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
-    }
-
     const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tabInfo = mapObj[key];
-        if (tabInfo.params.uuid && tabInfo.params.uuid === tab.params.uuid) {
-          if (type === 'sameContent') {
-            if (tabInfo.pathname === tab.pathname) {
-              result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
-              break;
-            }
-          } else {
-            result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
-          }
+        if (tabInfo.params.uuid && tabInfo.params.uuid === tab.params.uuid && tabInfo.pathname === tab.pathname) {
+          result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
           break;
-          //TODO how to replace current exist tab but editing
         }
       }
     }
@@ -207,26 +194,6 @@ export class ApiTabOperateService {
     });
     return result as TabItem;
   }
-  formatUrl(url) {
-    const urlArr = url.split('?');
-    // Parse query params
-    const params = {};
-    new URLSearchParams(urlArr[1]).forEach((value, key) => {
-      if (key === 'pageID') {
-        params[key] = Number(value);
-        return;
-      }
-      params[key] = value;
-    });
-    return (
-      urlArr[0] +
-      '?' +
-      Object.keys(params)
-        .sort()
-        .map((keyName) => `${keyName}=${params[keyName]}`)
-        .join('&')
-    );
-  }
   /**
    * Operate tab after router change,router triggle tab change
    * Such as new tab,pick tab,close tab...
@@ -235,19 +202,14 @@ export class ApiTabOperateService {
    */
   operateTabAfterRouteChange(res: { url: string }) {
     const tmpTabItem = this.getBaiscTabFromUrl(res.url);
-    const sameContentIndex = this.getTabIndex('sameContent', tmpTabItem);
+    const sameContentIndex = this.getSameContentTabIndex(tmpTabItem);
     const existTab = this.getTabByIndex(sameContentIndex);
-    const samePageID = this.tabStorage.tabsByID.has(tmpTabItem.uuid);
     console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
-    //If page repeat or final url is different(lack of id/additional params)
-    //jump to exist tab item to keep same  pageID and so on
+    //If page lack pageID
+    //Jump to exist tab item to keep same  pageID and so on
     if (!res.url.includes('pageID')) {
       if (existTab) {
-        if (existTab.pathname !== tmpTabItem.pathname) {
-          tmpTabItem.uuid = tmpTabItem.params.pageID = Date.now();
-        } else {
-          tmpTabItem.uuid = tmpTabItem.params.pageID = existTab.uuid;
-        }
+        tmpTabItem.uuid = tmpTabItem.params.pageID = existTab.uuid;
       }
       this.navigateTabRoute(tmpTabItem);
       return;
@@ -260,7 +222,7 @@ export class ApiTabOperateService {
     }
 
     //same tab content,selected it
-    if (existTab && this.getUrlByTab(existTab) === this.formatUrl(res.url)) {
+    if (existTab) {
       this.selectedIndex = sameContentIndex;
       this.updateChildView();
       return;
@@ -282,8 +244,8 @@ export class ApiTabOperateService {
         }
       }
     }
-
     //If has same  tab (same uuid),replace it
+    const samePageID = this.tabStorage.tabsByID.has(tmpTabItem.uuid);
     if (samePageID) {
       this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tmpTabItem.uuid);
       this.tabStorage.updateTab(this.selectedIndex, tmpTabItem);
