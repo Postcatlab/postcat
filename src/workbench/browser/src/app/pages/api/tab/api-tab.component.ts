@@ -119,10 +119,13 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   getTabByUrl(url: string): TabItem | null {
     const tabItem = this.tabOperate.getBaiscTabFromUrl(url);
     const existTabIndex = this.tabOperate.getSameContentTabIndex(tabItem);
-    if (existTabIndex === -1) {
-      return null;
+    if (existTabIndex !== -1) {
+      return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
     }
-    return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
+    if (!url.includes('uuid')) {
+      return this.tabStorage.tabsByID.get(tabItem.uuid) || null;
+    }
+    return null;
   }
   getCurrentTab() {
     return this.tabOperate.getCurrentTab();
@@ -144,9 +147,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       return;
     }
     const index = this.tabStorage.tabOrder.findIndex((uuid) => uuid === originTab.uuid);
-    this.tabStorage.updateTab(index, Object.assign({}, originTab, tabItem,{
-      extends:Object.assign({},originTab.extends,tabItem.extends)
-    }));
+    this.tabStorage.updateTab(
+      index,
+      Object.assign({}, originTab, tabItem, {
+        extends: Object.assign({}, originTab.extends, tabItem.extends),
+      })
+    );
     //! Prevent rendering delay
     this.cdRef.detectChanges();
   }
