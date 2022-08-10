@@ -119,13 +119,10 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   getTabByUrl(url: string): TabItem | null {
     const tabItem = this.tabOperate.getBaiscTabFromUrl(url);
     const existTabIndex = this.tabOperate.getSameContentTabIndex(tabItem);
-    if (existTabIndex !== -1) {
-      return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
+    if (existTabIndex === -1) {
+      return null;
     }
-    if (!url.includes('uuid')) {
-      return this.tabStorage.tabsByID.get(tabItem.uuid) || null;
-    }
-    return null;
+    return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
   }
   getCurrentTab() {
     return this.tabOperate.getCurrentTab();

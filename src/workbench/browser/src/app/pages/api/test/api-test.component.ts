@@ -386,7 +386,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   private changeStatus(status) {
     this.status = status;
-    console.log('changeStatus',status);
     switch (status) {
       case 'testing': {
         this.setTestSecondsTimmer();
