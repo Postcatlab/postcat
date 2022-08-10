@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IndexedDBStorage } from '../../../../../../../workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
 import { MessageService } from '../../../shared/services/message';
 
@@ -10,7 +11,7 @@ import { MessageService } from '../../../shared/services/message';
 export class HistoryComponent implements OnInit {
   historyList = [];
   colorHash = new Map().set('get', 'green').set('post', 'blue').set('delete', 'red').set('put', 'pink');
-  constructor(public storageInstance: IndexedDBStorage, private message: MessageService) {}
+  constructor(public storageInstance: IndexedDBStorage, private router: Router, private message: MessageService) {}
   ngOnInit() {
     const observer = this.loadAllTest();
     observer.subscribe((result: any) => {
@@ -35,12 +36,9 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(data) {
-    // this.message.send({ type: 'gotoApiTest', data });
-    this.message.send({
-      type: 'gotoApiTest',
-      data: {
-        ...data,
-        origin: { method: data.request.method.toUpperCase(), title: $localize`Test History`, key: `history_${data.uuid}` },
+    this.router.navigate(['home/api/test'], {
+      queryParams: {
+        uuid:`history_${data.uuid}`
       },
     });
   }

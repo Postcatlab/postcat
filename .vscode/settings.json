@@ -8,7 +8,11 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
+<<<<<<< HEAD
+    "**/.angular/**/**.*": true,
+=======
     "**/.angular/**/*.*": true,
+>>>>>>> preview/new_ui
     "**/*.code-search": true,
     "**/*.lock": true
   },

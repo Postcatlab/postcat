@@ -58,7 +58,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log('->', this.columns);
+    // console.log('->', this.columns);
   }
   ngAfterContentInit() {
     this.slotList.forEach(({ cellName, templateRef }) => {

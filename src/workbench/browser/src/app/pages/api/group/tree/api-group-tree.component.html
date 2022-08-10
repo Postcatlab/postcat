@@ -2,13 +2,13 @@
   <input nz-input type="text" class="flex-1 px-3 input" i18n-placeholder="@@Search" placeholder="Search"
     [(ngModel)]="searchValue" />
   <div class="flex items-center justify-center ml-3 text-base btn shrink-0" nzType="primary" nz-button nz-dropdown
-    [nzDropdownMenu]="menu" nzPlacement="bottomRight"
-    (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })">
+    [nzDropdownMenu]="menu" nzPlacement="bottomRight" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
     <eo-iconpark-icon name="plus"></eo-iconpark-icon>
   </div>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi' })"><a i18n>New API</a></li>
+      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"><a i18n="@@AddAPI">New API</a>
+      </li>
       <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
     </ul>
   </nz-dropdown-menu>
@@ -37,7 +37,7 @@
     (nzExpandChange)="toggleExpand()" nzDraggable nzBlockNode (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
-    <div [style.--tree-level]="node.level - 2">
+    <div [style.--tree-level]="node.level">
       <!-- Folder -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
         <div class="f_row_ac">
@@ -49,7 +49,7 @@
           </button>
           <nz-dropdown-menu #groupMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoAddApi', node: node })">
+              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI', node: node })">
                 <a i18n>Add API</a>
               </li>
               <li nz-menu-item (click)="addSubGroup(node)">
@@ -83,15 +83,15 @@
           </button>
           <nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'gotoEditApi', node: node })">
+              <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'editApi', node: node })">
                 <a i18n>Edit</a>
               </li>
               <li nz-menu-item
-                (click)="operateApiEvent({ event: $event, eventName: 'gotoCopyApi', node: apiDataItems[node.key] })">
+                (click)="operateApiEvent({ event: $event, eventName: 'copyApi', node: apiDataItems[node.key] })">
                 <a i18n="@@Copy">Copy</a>
               </li>
               <li nz-menu-item
-                (click)="operateApiEvent({ event: $event, eventName: 'gotoDeleteApi', node: apiDataItems[node.key] })">
+                (click)="operateApiEvent({ event: $event, eventName: 'deleteApi', node: apiDataItems[node.key] })">
                 <a i18n="@@Delete">Delete</a>
               </li>
             </ul>

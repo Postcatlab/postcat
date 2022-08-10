@@ -7,7 +7,7 @@
 </div>
 <div class="p15" *ngIf="(model | json) !== '{}'">
   <!-- Status Bar -->
-  <div *ngIf="model.statusCode"
+  <div *ngIf="model?.statusCode"
     class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
     <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
     <div class="f_row_ac fs12">
@@ -25,19 +25,24 @@
         <span i18n>Unable to preview non-text type data, you can</span>
         <button class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()"
           i18n="@@downloadResponse">
-          download back result
+          download response
         </button>
         <span i18n>and open it with other programs.</span>
       </div>
-      <!-- <div class="mt20" *ngIf="responseIsImg">
-        <img class="maw_100percent" [src]="model.blobUrl" />
-      </div> -->
+      <div class="mt20" *ngIf="responseIsImg" (contextmenu)="contextMenu($event, menu)">
+        <img class="maw_100percent" [src]="imgBlobUrl" />
+      </div>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item i18n="@@downloadResponse" (click)="downloadResponseText()">download response</li>
+        </ul>
+      </nz-dropdown-menu>
     </div>
     <div class="text-center" *ngSwitchCase="'longText'">
       <span i18n>The response result exceeds the previewable size, you can</span>
       <button i18n="@@downloadResponse" class="eo_theme_btn_default mlr5" type="button"
         (click)="downloadResponseText()">
-        download back result
+        download response
       </button>
       <!-- or
       <button class="eo_theme_btn_default" type="button" (click)="newTabResponseText()">在新标签页中显示返回结果</button>

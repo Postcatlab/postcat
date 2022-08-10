@@ -60,7 +60,7 @@ export const sampleApiData: ApiData[] = [
     requestBodyType: 'raw',
     requestBodyJsonType: 'object',
     requestBody: '',
-    queryParams: [{ name: 'name', required: true, example: 'disease_h5' }],
+    queryParams: [{ name: 'name', required: true, example: 'disease_h5',description:'' }],
     restParams: [],
     requestHeaders: [],
     responseHeaders: [

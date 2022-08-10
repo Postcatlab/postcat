@@ -1,14 +1,16 @@
-.tab_text{
-  max-width: 100px;
+.tab_text {
+  max-width: 90px;
+  font-weight: 500;
 }
 ::ng-deep {
   eo-api-tab {
-    width: calc(100% - 100px);
+    width: calc(100% - 200px);
     .ant-tabs-card.ant-tabs-top {
       > .ant-tabs-nav {
         margin: 0;
-        padding:0 4px;
+        padding: 0 4px;
         .ant-tabs-tab {
+          width: 150px;
           border-radius: 6px 6px 0 0;
           border-width: 1px;
           border-bottom: 1px solid var(--BORDER);
@@ -54,11 +56,37 @@
           .ant-tabs-tab-remove {
             color: rgba(0, 0, 0, 0);
           }
-          &:hover .ant-tabs-tab-remove {
-            color: rgba(0, 0, 0, 0.45);
+          &:hover {
+            .tab-has-edit-icon {
+              display: none;
+            }
+            .ant-tabs-tab-remove {
+              display: flex;
+              color: rgba(0, 0, 0, 0.45);
+            }
           }
         }
+        .ant-tabs-tab-remove {
+          display: none;
+        }
       }
+    }
+    .tab-item-container {
+      padding-right: 15px;
+      font-style: italic;
+      .tab-has-edit-icon {
+        width: 8px;
+        height: 8px;
+      }
+      .tab-item-button-group {
+        position: absolute;
+        background: var(--MAIN_BG);
+        padding-right: 10px;
+        right: 0px;
+      }
+    }
+    .fixed-tab-item-container{
+      font-style: initial;
     }
   }
 }

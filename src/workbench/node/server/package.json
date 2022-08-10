@@ -4,7 +4,9 @@
   "description": "Recieve eoapi tes config and response http result",
   "main": "main.js",
   "scripts": {
-    "start": "node main",
+    "dev": "node main.js",
+    "start": "pm2 start main.js",
+    "stop": "pm2 stop all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "eoapi",
@@ -12,6 +14,7 @@
   "dependencies": {
     "@koa/cors": "3.3.0",
     "koa": "2.13.4",
-    "koa-body": "5.0.0"
+    "koa-body": "5.0.0",
+    "pm2": "5.2.0"
   }
 }
