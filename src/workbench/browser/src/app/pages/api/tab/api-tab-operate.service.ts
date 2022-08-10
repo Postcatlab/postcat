@@ -203,7 +203,7 @@ export class ApiTabOperateService {
     const tmpTabItem = this.getBaiscTabFromUrl(res.url);
     const sameContentIndex = this.getSameContentTabIndex(tmpTabItem);
     const existTab = this.getTabByIndex(sameContentIndex);
-    console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
+    // console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
     //If page lack pageID
     //Jump to exist tab item to keep same  pageID and so on
     if (!res.url.includes('pageID')) {
