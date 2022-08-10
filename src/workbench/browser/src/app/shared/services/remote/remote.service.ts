@@ -22,7 +22,9 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 export class RemoteService {
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
-  dataSourceType: DataSourceType = 'local';
+  get dataSourceType(): DataSourceType {
+    return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
+  }
   get isElectron() {
     return this.electronService.isElectron;
   }
@@ -49,14 +51,12 @@ export class RemoteService {
     private settingService: SettingService,
     private router: Router
   ) {
-    this.dataSourceType = this.settingService.settings['eoapi-common.dataStorage'] ?? this.dataSourceType;
     this.messageService
       .get()
       .pipe(takeUntil(this.destroy$))
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'onDataSourceChange': {
-            this.dataSourceType = inArg.data.dataSourceType;
             if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
               this.showMessage();
             }
@@ -86,7 +86,7 @@ export class RemoteService {
    * Test if remote server address is available
    */
   async pingRmoteServerUrl(): Promise<[boolean, any]> {
-    const { url: remoteUrl, token } = window.eo?.getModuleSettings('eoapi-common.remoteServer') || {};
+    const { url: remoteUrl, token } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
 
     if (!remoteUrl) {
       return [false, remoteUrl];
@@ -160,12 +160,9 @@ export class RemoteService {
   /**
    * switch data
    */
-  switchDataSource = async () => {
-    if (this.isRemote) {
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
-      this.switchToLocal();
-      this.refreshComponent();
-    } else {
+  switchDataSource = async (dataSource: DataSourceType) => {
+    const isRemote = dataSource === 'http';
+    if (isRemote) {
       const [isSuccess] = await this.pingRmoteServerUrl();
       if (isSuccess) {
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
@@ -175,6 +172,10 @@ export class RemoteService {
         this.message.create('error', $localize`Remote data source not available`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
+    } else {
+      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+      this.switchToLocal();
+      this.refreshComponent();
     }
   };
 

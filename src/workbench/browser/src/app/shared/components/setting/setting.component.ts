@@ -149,9 +149,9 @@ export class SettingComponent implements OnInit {
             break;
           }
           case 'onDataSourceChange': {
-            if (inArg.data.showWithSetting) {
-              this.remoteService.refreshComponent();
-            }
+            // if (inArg.data.showWithSetting) {
+            //   this.remoteService.refreshComponent();
+            // }
             break;
           }
         }
@@ -159,17 +159,6 @@ export class SettingComponent implements OnInit {
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
-
-  /**
-   * switch data source
-   */
-  switchDataSource() {
-    this.switchDataSourceLoading = true;
-    this.remoteService.switchDataSource().finally(() => {
-      this.switchDataSourceLoading = false;
-    });
-    // this.messageService.send({ type: 'switchDataSource', data: { showWithSetting: true } });
-  }
 
   /**
    * Get the title of the module
@@ -183,7 +172,9 @@ export class SettingComponent implements OnInit {
   }
 
   handleScroll = debounce((e: Event) => {
-    if (this.isClick) {return;}
+    if (this.isClick) {
+      return;
+    }
     const target = e.target as HTMLDivElement;
     const treeNodes = this.dataSource._flattenedData.value;
     treeNodes.some((node) => {

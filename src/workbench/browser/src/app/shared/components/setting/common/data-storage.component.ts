@@ -187,7 +187,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       ...this.validateForm.value,
     };
     this.modelChange.emit(this.model);
-    await this.remoteService.switchDataSource();
+    await this.remoteService.switchDataSource(this.model['eoapi-common.dataStorage']);
   }
 
   setFormValue(model = {}) {
