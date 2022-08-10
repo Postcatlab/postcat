@@ -13,7 +13,7 @@ import {
 import { MessageService } from '../../../shared/services/message';
 
 import { interval, Subscription, Observable, Subject } from 'rxjs';
-import { take, debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
@@ -60,7 +60,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   @Output() afterInit = new EventEmitter<testViewModel>();
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
-
   env: any = {
     parameters: [],
     hostUri: '',
@@ -91,7 +90,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private fb: FormBuilder,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     private router: Router,
     private ref: ChangeDetectorRef,
     private apiTest: ApiTestService,
@@ -146,6 +145,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
         this.model.request = requestInfo;
+      }else{
+        return;
       }
       this.initContentType();
     }
@@ -156,7 +157,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
 
     this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
-
     //Storage origin api data
     if (!this.initialModel) {
       this.initialModel = structuredClone(this.model);
@@ -183,10 +183,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
     const apiData = this.apiTestUtil.formatSavingApiData({
       history: this.model.testResult,
-      testData: this.model.request,
+      testData: Object.assign({}, this.model.request),
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    this.messageService.send({ type: 'saveApiFromTest', data: {} });
+    console.log(JSON.stringify(apiData));
+    this.router.navigate(['/home/api/edit'], {
+      queryParams: {
+        pageID: Number(this.route.snapshot.queryParams.pageID),
+      },
+    });
   }
   changeQuery() {
     this.model.request.uri = this.apiTestUtil.transferUrlAndQuery(

@@ -49,6 +49,7 @@ export class ApiEditService {
           //Filter useless keyName
           result[keyName] = tmpApiData[keyName];
         });
+        result.projectID=pureApi.projectID;
       } else {
         //Add directly
         result = pureApi;

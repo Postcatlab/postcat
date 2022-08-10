@@ -39,7 +39,7 @@
             <span *ngIf="status === 'testing'" i18n>Abort</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
           </button>
-          <button type="button" *ngIf="!model.request.uuid" nz-button nzType="default" (click)="saveApi()" class="ml10" i18n>
+          <button type="button" *ngIf="!route.snapshot.queryParams.uuid||route.snapshot.queryParams.uuid.includes('history_')" nz-button nzType="default" (click)="saveApi()" class="ml10" i18n>
             Save as API
           </button>
         </nz-input-group>

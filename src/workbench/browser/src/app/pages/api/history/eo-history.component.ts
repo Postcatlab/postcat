@@ -38,7 +38,6 @@ export class HistoryComponent implements OnInit {
   gotoTestHistory(data) {
     this.router.navigate(['home/api/test'], {
       queryParams: {
-        pageID: Date.now(),
         uuid:`history_${data.uuid}`
       },
     });
