@@ -47,22 +47,22 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex) {
-    // const tabsByID = Object.fromEntries(this.tabsByID);
-    // Object.values(tabsByID).forEach((val) => {
-    //   if (!val.hasChanged) {
-    //     ['baseContent', 'content'].forEach((keyName) => {
-    //       val[keyName]=null;
-    //     });
-    //   }
-    // });
-    // window.localStorage.setItem(
-    //   this.cacheName,
-    //   JSON.stringify({
-    //     selectedIndex,
-    //     tabOrder: this.tabOrder,
-    //     tabsByID,
-    //   })
-    // );
+    const tabsByID = Object.fromEntries(this.tabsByID);
+    Object.values(tabsByID).forEach((val) => {
+      if (!val.hasChanged) {
+        ['baseContent', 'content'].forEach((keyName) => {
+          val[keyName]=null;
+        });
+      }
+    });
+    window.localStorage.setItem(
+      this.cacheName,
+      JSON.stringify({
+        selectedIndex,
+        tabOrder: this.tabOrder,
+        tabsByID,
+      })
+    );
   }
   getPersistenceStorage(): storageTab {
     let result: any = null;

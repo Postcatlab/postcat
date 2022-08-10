@@ -186,7 +186,7 @@ export class ApiTabService {
       replaceTab.content = inData.when === 'saved' ? {} : currentTab.content || {};
       replaceTab.content[contentID] = model && !isEmptyObj(model) ? model : null;
     }
-    console.log('updatePartialTab', currentTab.uuid, replaceTab);
+    // console.log('updatePartialTab', currentTab.uuid, replaceTab);
     this.apiTabComponent.updatePartialTab(inData.url, replaceTab);
   }
   /**
