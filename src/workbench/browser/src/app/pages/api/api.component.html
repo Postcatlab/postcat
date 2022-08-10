@@ -29,7 +29,13 @@
     <nz-content>
       <div class="inner-content">
         <div class="flex items-center tabs-bar">
-          <eo-api-tab class="fg1" [list]="apiTab.BASIC_TBAS" [handleDataBeforeCache]="apiTab.handleDataBeforeCache" (beforeClose)="apiTab.beforeTabClose($event)" #apiTabComponent></eo-api-tab>
+          <eo-api-tab
+            class="fg1"
+            [list]="apiTab.BASIC_TBAS"
+            [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
+            (beforeClose)="apiTab.beforeTabClose($event)"
+            #apiTabComponent
+          ></eo-api-tab>
           <div class="flex items-center fix-mt">
             <nz-select
               [(ngModel)]="envUuid"
@@ -68,16 +74,9 @@
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
           <!-- Manually pick pageID,Because pageID always change -->
-          <nz-tabset  class="inside_page_tabset" *ngIf="this.id" nzLinkRouter>
+          <nz-tabset class="inside_page_tabset" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
-              <a
-                *nzTabLink
-                nz-tab-link
-                [routerLink]="[tab.routerLink]"
-                queryParamsHandling="merge"
-              >
-                {{ tab.title }}</a
-              >
+              <a *nzTabLink nz-tab-link [routerLink]="[tab.routerLink]" queryParamsHandling="merge"> {{ tab.title }}</a>
             </nz-tab>
           </nz-tabset>
         </div>
@@ -103,7 +102,6 @@
             </div>
             <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
           </div>
-          <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
         </section>
       </div>
     </nz-content>
