@@ -10,7 +10,6 @@ import { storageTab, TabItem } from './tab.model';
 export class ApiTabStorageService {
   tabOrder: Array<number> = [];
   tabsByID = new Map<number, TabItem>();
-  private cacheName = `${this.dataSource.dataSourceType}_TabCache`;
   constructor(private dataSource: RemoteService) {}
   addTab(tabItem) {
     if (this.tabsByID.has(tabItem.uuid)) {
@@ -47,6 +46,8 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
+    // storage cache may change
+    if (this.dataSource.dataSourceType === 'http') {return;}
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach((val) => {
       if (!val.hasChanged) {
@@ -59,7 +60,7 @@ export class ApiTabStorageService {
       tabsByID = opts.handleDataBeforeCache(tabsByID);
     }
     window.localStorage.setItem(
-      this.cacheName,
+      `${this.dataSource.dataSourceType}_TabCache`,
       JSON.stringify({
         selectedIndex,
         tabOrder: this.tabOrder,
@@ -70,7 +71,7 @@ export class ApiTabStorageService {
   getPersistenceStorage(): storageTab {
     let result: any = null;
     try {
-      result = JSON.parse(window.localStorage.getItem(this.cacheName) as string);
+      result = JSON.parse(window.localStorage.getItem(`${this.dataSource.dataSourceType}_TabCache`) as string);
     } catch (e) {}
     return result;
   }

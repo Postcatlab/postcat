@@ -233,9 +233,9 @@ export class ApiTabOperateService {
         const tab = mapObj[key];
         if (tab.params.uuid === tmpTabItem.params.uuid) {
           const mergeTab = this.preventBlankTab(tab, tmpTabItem);
-          tmpTabItem.content = tab.content;
-          tmpTabItem.baseContent = tab.baseContent;
-          tmpTabItem.extends = Object.assign(tmpTabItem.extends || {}, tab.extends);
+          mergeTab.content = tab.content;
+          mergeTab.baseContent = tab.baseContent;
+          mergeTab.extends = Object.assign(mergeTab.extends || {}, tab.extends);
           this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
           this.tabStorage.updateTab(this.selectedIndex, mergeTab);
           this.updateChildView();
