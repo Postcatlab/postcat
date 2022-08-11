@@ -66,7 +66,7 @@ export class PagesComponent implements OnInit {
   }
 
   switchDataSource = () => {
-    this.remoteService.switchDataSource();
+    this.remoteService.switchDataSource('http');
   };
 
   updateState = async () => {
@@ -86,7 +86,7 @@ export class PagesComponent implements OnInit {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'onDataSourceChange': {
-            this.rawChange$.next(inArg.type);
+            // this.rawChange$.next(inArg.type);
             break;
           }
         }
