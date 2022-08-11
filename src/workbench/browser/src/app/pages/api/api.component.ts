@@ -9,6 +9,7 @@ import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
 import { ApiTabService } from './api-tab.service';
+import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 
@@ -19,6 +20,9 @@ const DY_WIDTH_KEY = 'DY_WIDTH';
 })
 export class ApiComponent implements OnInit, OnDestroy {
   isFirstTime = true;
+  siderWidth = 250;
+  contentHeight = 200;
+  animateId = -1;
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: ApiTabComponent) {
     // For lifecycle error, use timeout
@@ -134,6 +138,14 @@ export class ApiComponent implements OnInit, OnDestroy {
       this.id = Number(this.route.snapshot.queryParams.uuid);
     });
   }
+
+  onSideResize({ width }: NzResizeEvent): void {
+    cancelAnimationFrame(this.animateId);
+    this.animateId = requestAnimationFrame(() => {
+      this.siderWidth = width;
+    });
+  }
+
   gotoEnvManager() {
     // * switch to env
     this.messageService.send({ type: 'toggleEnv', data: true });

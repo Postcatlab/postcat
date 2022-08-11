@@ -31,6 +31,8 @@ nz-divider {
   color: #00785a;
 }
 
+
+
 .icon {
   -webkit-app-region: no-drag;
   width: 30px;
@@ -48,11 +50,39 @@ nz-divider {
 ::ng-deep {
   eo-api {
     .ant-layout-sider-children {
-      border-right: 1px solid #f0f0f0;
+      position: relative;
+      display: flex;
+      // border-right: 1px solid #f0f0f0;
       // padding: 0 10px;
       .group-btn-add,
       .group-search {
         margin-bottom: 12px;
+      }
+      .sider-resize-line {
+        position: absolute;
+        width: 1px;
+        background: #f8f8f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        cursor: col-resize;
+        &:hover {
+            width: 6px;
+            right: -3px;
+            background: #68be8d;
+            border-color: #68be8d;
+        }
+        > i {
+            margin: 1px 0;
+            height: 2px;
+            width: 2px;
+            border-radius: 2px;
+            background: rgba(23,35,61,.25);
+        }
       }
     }
     .ant-tabs-nav.ng-star-inserted {
@@ -144,7 +174,7 @@ nz-divider {
       // margin: 10px 0;
     }
   }
-  
+
   .env {
     border: 2px solid pink;
   }
