@@ -80,12 +80,19 @@
       }
       .tab-item-button-group {
         position: absolute;
-        background: var(--MAIN_BG);
-        padding-right: 10px;
-        right: 0px;
+        margin-right: 10px;
+        right: 0;
+      }
+      .ant-tabs-tab-remove {
+        padding: 3px;
+        margin-left: 3px;
+        border-radius: 50%;
+        &:hover {
+          background-color: #eee;
+        }
       }
     }
-    .fixed-tab-item-container{
+    .fixed-tab-item-container {
       font-style: initial;
     }
   }

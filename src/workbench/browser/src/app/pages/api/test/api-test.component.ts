@@ -242,9 +242,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   isFormChange(): boolean {
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
-    if (this.model.request.uuid) {
-      return false;
-    }
+    // if (this.model.request.uuid) {
+    //   return false;
+    // }
     if (!this.initialModel.request || !this.model.request) {
       return false;
     }

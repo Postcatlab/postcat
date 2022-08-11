@@ -116,13 +116,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @param url
    * @returns
    */
-  getTabByUrl(url: string): TabItem | null {
-    const tabItem = this.tabOperate.getBaiscTabFromUrl(url);
-    const existTabIndex = this.tabOperate.getSameContentTabIndex(tabItem);
-    if (existTabIndex === -1) {
+  getExistTabByUrl(url: string): TabItem | null {
+    const existTab = this.tabOperate.getSameContentTab(this.tabOperate.getTabInfoFromUrl(url));
+    if (!existTab) {
       return null;
     }
-    return this.tabStorage.tabsByID.get(this.tabStorage.tabOrder[existTabIndex]);
+    return existTab;
   }
   getCurrentTab() {
     return this.tabOperate.getCurrentTab();
@@ -138,20 +137,20 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @returns
    */
   updatePartialTab(url: string, tabItem: Partial<TabItem>) {
-    const originTab = this.getTabByUrl(url);
-    if (!originTab) {
+    const existTab = this.getExistTabByUrl(url);
+    if (!existTab) {
       console.error(`EO_ERROR:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
       return;
     }
-    const index = this.tabStorage.tabOrder.findIndex((uuid) => uuid === originTab.uuid);
+    const index = this.tabStorage.tabOrder.findIndex((uuid) => uuid === existTab.uuid);
     this.tabStorage.updateTab(
       index,
-      Object.assign({}, originTab, tabItem, {
-        extends: Object.assign({}, originTab.extends, tabItem.extends),
+      Object.assign({}, existTab, tabItem, {
+        extends: Object.assign({}, existTab.extends, tabItem.extends),
       })
     );
     //! Prevent rendering delay
-    this.cdRef.detectChanges();
+    // this.cdRef.detectChanges();
   }
   /**
    * Cache tab header/tabs content for restore when page close or component destroy
