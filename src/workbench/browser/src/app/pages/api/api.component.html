@@ -1,6 +1,6 @@
 <nz-layout class="layout">
   <nz-sider nzTheme="light" [nzWidth]="siderWidth" nz-resizable [nzMinWidth]="120" [nzMaxWidth]="400"
-    (nzResize)="onSideResize($event)">
+    (nzResize)="onSideResize($event)" (nzResizeEnd)="onResizeEnd()">
     <!-- <div class="side-container"> -->
     <nz-content class="api-container-tabs">
       <nz-tabset nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
@@ -25,7 +25,7 @@
       </nz-tabset>
     </nz-content>
     <nz-resize-handle nzDirection="right">
-      <div class="sider-resize-line"> <i></i><i></i><i></i><i></i></div>
+      <div class="sider-resize-line" [ngClass]="{'is-drag': isDragging}"> <i></i><i></i><i></i><i></i></div>
     </nz-resize-handle>
     <!-- </div> -->
   </nz-sider>

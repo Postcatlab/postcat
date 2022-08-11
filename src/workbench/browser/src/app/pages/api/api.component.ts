@@ -24,6 +24,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   isFirstTime = true;
   siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
   contentHeight = 200;
+  isDragging = false;
   animateId = -1;
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: ApiTabComponent) {
@@ -142,11 +143,16 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
 
   onSideResize({ width }: NzResizeEvent): void {
+    this.isDragging = true;
     cancelAnimationFrame(this.animateId);
     this.animateId = requestAnimationFrame(() => {
       this.siderWidth = width;
       localStorage.setItem(LEFT_SIDER_WIDTH_KEY, String(width));
     });
+  }
+
+  onResizeEnd() {
+    this.isDragging = false;
   }
 
   gotoEnvManager() {

@@ -61,7 +61,7 @@ nz-divider {
       .sider-resize-line {
         @apply absolute w-[1px] bg-[#f8f8f9] flex items-center justify-center flex-col right-0 top-0 bottom-0;
         cursor: col-resize;
-        &:hover {
+        &:hover, &.is-drag {
             width: 6px;
             right: -3px;
             background: #68be8d;
