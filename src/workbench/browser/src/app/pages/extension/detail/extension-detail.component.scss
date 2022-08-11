@@ -3,6 +3,9 @@
     .ant-tabs-content-holder {
       padding-top: 20px;
     }
+    .ant-skeleton-element .ant-skeleton-button {
+      width: 100%;
+    }
   }
   .md-preview {
     img {
@@ -13,7 +16,7 @@
     .markdown-desc {
       overflow: auto;
     }
-  
+
     .ant-descriptions-row > td {
       padding-bottom: 8px;
     }

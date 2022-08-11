@@ -16,7 +16,9 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
 @Injectable({ providedIn: 'root' })
 export class StorageService {
   private instance;
-  dataSourceType: DataSourceType = getSettings()['eoapi-common.dataStorage'] || 'local';
+  get dataSourceType(): DataSourceType {
+    return getSettings()['eoapi-common.dataStorage'] || 'local';
+  }
   constructor(
     private injector: Injector,
     private messageService: MessageService,
@@ -47,7 +49,7 @@ export class StorageService {
         callback(handleResult);
       },
       (error: any) => {
-        console.log('EOERROR:',action, error);
+        console.log('EOERROR:', action, error);
         handleResult.status = StorageResStatus.error;
         callback(handleResult);
       }
@@ -73,8 +75,7 @@ export class StorageService {
   };
   toggleDataSource = (options: any = {}) => {
     const { dataSourceType } = options;
-    this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
-    this.setStorage(this.dataSourceType, options);
+    this.setStorage(dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http'), options);
   };
   setDataStorage(value) {
     this.settingService.putSettings({

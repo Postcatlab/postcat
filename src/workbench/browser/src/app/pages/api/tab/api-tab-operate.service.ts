@@ -139,22 +139,26 @@ export class ApiTabOperateService {
   /**
    * Get exist tab index
    *
-   * @param type sameTab means has same {params.uuid}
+   * @param type sameTab means has same pageID and same {params.uuid}
    * @param tab
    * @returns
    */
-  getSameContentTabIndex(tab: TabItem): number {
-    let result = -1;
-    const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
-    if (sameTabIDTab && !sameTabIDTab.params.uuid && sameTabIDTab.pathname === tab.pathname) {
-      return this.tabStorage.tabOrder.findIndex((uuid) => uuid === sameTabIDTab.uuid);
+  getSameContentTab(tab: Partial<TabItem>): TabItem | null {
+    let result = null;
+    if (!tab.params.uuid) {
+      const sameTabIDTab = this.tabStorage.tabsByID.get(tab.uuid);
+      if (sameTabIDTab && sameTabIDTab.pathname === tab.pathname) {
+        return sameTabIDTab;
+      }
+      return result;
     }
+    //Get exist params.uuid content tab,same pathname and uuid match
     const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
     for (const key in mapObj) {
       if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
         const tabInfo = mapObj[key];
-        if (tabInfo.params.uuid && tabInfo.params.uuid === tab.params.uuid && tabInfo.pathname === tab.pathname) {
-          result = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tabInfo.uuid);
+        if (tabInfo.params.uuid === tab.params.uuid && tabInfo.pathname === tab.pathname) {
+          result = tabInfo;
           break;
         }
       }
@@ -167,10 +171,9 @@ export class ApiTabOperateService {
    * @param url
    * @returns tabInfo
    */
-  getBaiscTabFromUrl(url): TabItem {
+  getTabInfoFromUrl(url): { uuid: number; pathname: string; params: any } {
     const urlArr = url.split('?');
     const params: any = {};
-    const timestamp = Date.now();
     const basicTab = Object.values(this.BASIC_TABS).find((val) => urlArr[0].includes(val.pathname));
     if (!basicTab) {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
@@ -183,19 +186,30 @@ export class ApiTabOperateService {
       }
       params[key] = value;
     });
-    params.pageID = params.pageID || timestamp;
     const result = {
-      //If data need load from ajax/indexeddb,add loading
       uuid: params.pageID,
-      isLoading: params.uuid ? true : false,
       pathname: basicTab.pathname,
       params,
     };
-    ['title', 'icon', 'type', 'extends'].forEach((keyName) => {
-      result[keyName] = basicTab[keyName];
-    });
+    return result;
+  }
+  /**
+   * Get basic tab info from url
+   *
+   * @param url
+   * @returns tabInfo
+   */
+  getBaiscTabFromUrl(url): TabItem {
+    const result = this.getTabInfoFromUrl(url);
+    const basicTab = Object.values(this.BASIC_TABS).find((val) => result.pathname === val.pathname);
+    if (!basicTab) {
+      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+    }
+    result.params.pageID = result.params.pageID || Date.now();
+    Object.assign(result, basicTab);
     return result as TabItem;
   }
+
   /**
    * Operate tab after router change,router triggle tab change
    * Such as new tab,pick tab,close tab...
@@ -203,89 +217,68 @@ export class ApiTabOperateService {
    * @param res.url location.pathname+location.search
    */
   operateTabAfterRouteChange(res: { url: string }) {
-    const tmpTabItem = this.getBaiscTabFromUrl(res.url);
-    const sameContentIndex = this.getSameContentTabIndex(tmpTabItem);
-    const existTab = this.getTabByIndex(sameContentIndex);
-    console.log('operateTabAfterRouteChange', existTab, tmpTabItem);
-    //If page lack pageID
-    //Jump to exist tab item to keep same  pageID and so on
-    if (!res.url.includes('pageID')) {
+    const pureTab = this.getTabInfoFromUrl(res.url);
+    const nextTab = this.getBaiscTabFromUrl(res.url);
+    const existTab = this.getSameContentTab(pureTab);
+    //!Every tab must has pageID
+    //If lack pageID,Jump to exist tab item to keep same  pageID and so on
+    if (!pureTab.uuid) {
       if (existTab) {
-        tmpTabItem.uuid = tmpTabItem.params.pageID = existTab.uuid;
+        pureTab.uuid = pureTab.params.pageID = existTab.uuid;
       }
-      this.navigateTabRoute(tmpTabItem);
+      this.navigateTabRoute(nextTab);
       return;
     }
 
     if (this.tabStorage.tabOrder.length === 0) {
-      this.tabStorage.addTab(tmpTabItem);
+      this.tabStorage.addTab(nextTab);
       this.updateChildView();
       return;
     }
 
     //same tab content,selected it
     if (existTab) {
-      this.selectedIndex = sameContentIndex;
+      this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === existTab.uuid);
       this.updateChildView();
       return;
     }
-    //If has same content tab (same {params.uuid}),replace it and merge data
-    const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
-    for (const key in mapObj) {
-      if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
-        const tab = mapObj[key];
-        if (tab.params.uuid && tab.params.uuid === tmpTabItem.params.uuid) {
-          const mergeTab = this.preventBlankTab(tab, tmpTabItem);
-          mergeTab.content = tab.content;
-          mergeTab.baseContent = tab.baseContent;
-          mergeTab.extends = Object.assign(mergeTab.extends || {}, tab.extends);
-          this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
-          this.tabStorage.updateTab(this.selectedIndex, mergeTab);
-          this.updateChildView();
-          return;
-        }
+    //!Same params.uuid can only open one Tab
+    //If has same  subTab (same {params.uuid}), merge data and replace it
+    if (nextTab.params?.uuid) {
+      const hasFind = this.jumpToSameSubTab(nextTab);
+      if (hasFind) {
+        return;
       }
     }
-    //If has same  tab (same uuid),replace it
-    const samePageID = this.tabStorage.tabsByID.has(tmpTabItem.uuid);
-    if (samePageID) {
-      this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tmpTabItem.uuid);
-      this.tabStorage.updateTab(this.selectedIndex, tmpTabItem);
+    //Determine whether to replace the current Tab
+    let canbeReplaceTab = null;
+    if (this.tabStorage.tabsByID.has(pureTab.uuid)) {
+      //If the same tab exists, directly replace
+      canbeReplaceTab = nextTab;
+    } else {
+      canbeReplaceTab = this.findTabCanbeReplace();
     }
-
-    //Find other tab to be replace
-    const currentTab = this.getCurrentTab();
-    //* Replace current tab first
-    const canbeReplaceTab =
-      currentTab && this.canbeReplace(currentTab)
-        ? currentTab
-        : Object.values(mapObj).find((val) => this.canbeReplace(val));
     if (canbeReplaceTab) {
       this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === canbeReplaceTab.uuid);
-      this.tabStorage.updateTab(this.selectedIndex, tmpTabItem);
+      this.tabStorage.updateTab(this.selectedIndex, nextTab);
       this.updateChildView();
       return;
     }
 
     //No one can be replace,add tab
-    this.tabStorage.addTab(tmpTabItem);
+    this.tabStorage.addTab(nextTab);
     this.selectedIndex = this.tabStorage.tabOrder.length - 1;
     this.updateChildView();
   }
   //*Prevent toggling splash screen with empty tab title
-  preventBlankTab(origin, target) {
+  private preventBlankTab(origin, target) {
     const result = target;
     /**
      * Keyname effect show tab
      */
-    ['title', 'hasChanged', 'isFixed', 'isLoading'].forEach((keyName) => {
-      //Dont't replace is loading tab content
-      if (result[keyName] && !result.isLoading) {
-        return;
-      }
+    ['title', 'hasChanged', 'isLoading'].forEach((keyName) => {
       result[keyName] = origin[keyName];
     });
-    result.isLoading = false;
     return result;
   }
   canbeReplace(tabItem: TabItem) {
@@ -304,15 +297,46 @@ export class ApiTabOperateService {
   getCurrentTab() {
     return this.getTabByIndex(this.selectedIndex);
   }
-  private getUrlByTab(tab: TabItem) {
-    return (
-      tab.pathname +
-      '?' +
-      Object.keys(tab.params)
-        .sort()
-        .map((keyName) => `${keyName}=${tab.params[keyName]}`)
-        .join('&')
-    );
+  /**
+   * Same sub means tab has same {params.uuid}
+   *
+   * @param inTab
+   * @returns hasFind
+   */
+  private jumpToSameSubTab(inTab): boolean {
+    const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
+    for (const key in mapObj) {
+      if (Object.prototype.hasOwnProperty.call(mapObj, key)) {
+        const tab = mapObj[key];
+        if (tab.params.uuid && tab.params.uuid === inTab.params.uuid) {
+          const mergeTab = this.preventBlankTab(tab, inTab);
+          mergeTab.content = tab.content;
+          mergeTab.baseContent = tab.baseContent;
+          mergeTab.extends = Object.assign(mergeTab.extends || {}, tab.extends);
+          this.selectedIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === tab.uuid);
+          this.tabStorage.updateTab(this.selectedIndex, mergeTab);
+          this.updateChildView();
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Find can be replace tab
+   *
+   * @returns
+   */
+  private findTabCanbeReplace(): TabItem {
+    const mapObj = Object.fromEntries(this.tabStorage.tabsByID);
+    const currentTab = this.getCurrentTab();
+    //* Replace current tab first
+    const result =
+      currentTab && this.canbeReplace(currentTab)
+        ? currentTab
+        : Object.values(mapObj).find((val) => this.canbeReplace(val));
+    return result;
   }
   private updateChildView() {
     this.messageService.send({ type: 'tabContentInit', data: {} });
