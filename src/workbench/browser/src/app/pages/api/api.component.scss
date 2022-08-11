@@ -59,24 +59,20 @@ nz-divider {
         margin-bottom: 12px;
       }
       .sider-resize-line {
-        position: absolute;
-        width: 1px;
-        background: #f8f8f9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        right: 0;
-        top: 0;
-        bottom: 0;
+        @apply absolute w-[1px] bg-[#f8f8f9] flex items-center justify-center flex-col right-0 top-0 bottom-0;
         cursor: col-resize;
         &:hover {
             width: 6px;
             right: -3px;
             background: #68be8d;
             border-color: #68be8d;
+            z-index: 20;
+            i {
+               opacity: 1;
+            }
         }
         > i {
+            opacity: 0;
             margin: 1px 0;
             height: 2px;
             width: 2px;

@@ -12,7 +12,9 @@ import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
+const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
 
+const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KEY), 10);
 @Component({
   selector: 'eo-api',
   templateUrl: './api.component.html',
@@ -20,7 +22,7 @@ const DY_WIDTH_KEY = 'DY_WIDTH';
 })
 export class ApiComponent implements OnInit, OnDestroy {
   isFirstTime = true;
-  siderWidth = 250;
+  siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
   contentHeight = 200;
   animateId = -1;
   @ViewChild('apiTabComponent')
@@ -143,6 +145,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     cancelAnimationFrame(this.animateId);
     this.animateId = requestAnimationFrame(() => {
       this.siderWidth = width;
+      localStorage.setItem(LEFT_SIDER_WIDTH_KEY, String(width));
     });
   }
 
@@ -163,6 +166,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   handleDrag(e) {
     const distance = e;
     this.dyWidth = distance;
+    localStorage.setItem(DY_WIDTH_KEY, String(this.dyWidth));
   }
   handleEnvSelectStatus(event: boolean) {}
   private changeStoreEnv(uuid) {
