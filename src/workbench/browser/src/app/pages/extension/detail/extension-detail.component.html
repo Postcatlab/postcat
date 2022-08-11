@@ -9,10 +9,8 @@
   </div>
   <section class="h-full p-4 max-w-[80vw] mx-auto">
     <div class="flex">
-      <i
-        class="block w-24 h-24 mr-8 bg-center bg-no-repeat bg-cover border rounded-lg bd_all"
-        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"
-      ></i>
+      <i class="block w-24 h-24 mr-8 bg-center bg-no-repeat bg-cover border rounded-lg bd_all"
+        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"></i>
       <div class="flex flex-col flex-1">
         <div class="flex flex-col">
           <span class="mb-2 text-xl font-bold">{{ extensionDetail?.moduleName }}</span>
@@ -36,18 +34,13 @@
       <div class="shrink-0 w-[200px] 2xl:w-[250px] overflow-auto h-full">
         <h2 class="text-lg font-bold" i18n>Install</h2>
         <div class="flex items-center mt-[22px]" *ngIf="!extensionDetail?.installed">
-          <button
-            *ngIf="isElectron"
-            nz-button
-            nzType="primary"
-            nzBlock
-            nzSize="large"
-            [nzLoading]="isOperating"
-            (click)="manageExtension('install', extensionDetail?.name)"
-            i18n
-          >
+          <nz-skeleton-element *ngIf="isNotLoaded" nzType="button" nzSize="large" [nzActive]="true" style="width:100%">
+          </nz-skeleton-element>
+          <button *ngIf="isElectron && !isNotLoaded" nz-button nzType="primary" nzBlock nzSize="large"
+            [nzLoading]="isOperating" (click)="manageExtension('install', extensionDetail?.name)" i18n>
             Install
           </button>
+
           <div *ngIf="!isElectron">
             <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full" i18n>
               Download Client
@@ -65,20 +58,15 @@
             </div>
           </div>
         </div>
-        <button
-          *ngIf="extensionDetail?.installed"
-          nz-button
-          nzBlock
-          nzType="primary"
-          nzDanger
-          nzSize="large"
-          [nzLoading]="isOperating"
-          class="mt-[12px]"
-          (click)="manageExtension('uninstall', extensionDetail?.name)"
-          i18n
-        >
-          Uninstall
-        </button>
+        <div *ngIf="extensionDetail?.installed">
+          <nz-skeleton-element *ngIf="isNotLoaded" nzType="button" [nzActive]="true" nzSize="large" style="width:100%">
+          </nz-skeleton-element>
+          <button *ngIf="!isNotLoaded" nz-button nzBlock nzType="primary" nzDanger nzSize="large"
+            [nzLoading]="isOperating" class="mt-[12px]" (click)="manageExtension('uninstall', extensionDetail?.name)"
+            i18n>
+            Uninstall
+          </button>
+        </div>
 
         <h2 class="text-lg font-bold mt-[30px]" i18n>Support</h2>
         <nz-descriptions [nzColumn]="1" nzTitle="">
