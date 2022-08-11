@@ -15,9 +15,14 @@ export class ApiTabService {
     return Object.values(this.BASIC_TBAS).find((val) => this.router.url.includes(val.pathname))?.type || 'preview';
   }
   private changeContent$: Subject<any> = new Subject();
-  BASIC_TBAS = {
-    test: { pathname: '/home/api/test', type: 'edit', title: $localize`New Request`, extends: { method: 'POST' } },
-    edit: { pathname: '/home/api/edit', type: 'edit', title: $localize`New API` },
+  BASIC_TBAS: { [key: string]: Partial<TabItem> } = {
+    test: {
+      pathname: '/home/api/test',
+      type: 'edit',
+      title: $localize`New Request`,
+      extends: { method: 'POST' },
+    },
+    edit: { pathname: '/home/api/edit', isFixed: true, type: 'edit', title: $localize`New API` },
     detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`Preview` },
     overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index`, icon: 'home' },
     mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
@@ -115,7 +120,7 @@ export class ApiTabService {
     }
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
-    const currentTab = this.apiTabComponent.getTabByUrl(url);
+    const currentTab = this.apiTabComponent.getExistTabByUrl(url);
     const contentID = this.getContentID(url);
     //Get tab cache
     this.componentRef.model = currentTab?.content?.[contentID] || null;
@@ -124,9 +129,11 @@ export class ApiTabService {
   }
   updateTab(currentTab, inData) {
     const model = inData.model;
+    const contentID = this.getContentID(currentTab.pathname);
 
     //Set tabItem
     const replaceTab: Partial<TabItem> = {
+      hasChanged: currentTab.hasChanged,
       isLoading: false,
       extends: {},
     };
@@ -148,7 +155,6 @@ export class ApiTabService {
       }
       //Only hasChanged edit page storage data
       if (currentTab.type === 'edit') {
-        const contentID = this.getContentID(currentTab.pathname);
         //Set hasChange
         if (!this.componentRef?.isFormChange) {
           throw new Error(
@@ -157,7 +163,10 @@ export class ApiTabService {
         }
         switch (inData.when) {
           case 'editing': {
-            replaceTab.hasChanged = this.componentRef.isFormChange();
+            // Saved APIs do not need to verify changes
+            if (!currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
+              replaceTab.hasChanged = this.componentRef.isFormChange();
+            }
             break;
           }
           case 'saved': {
@@ -170,15 +179,6 @@ export class ApiTabService {
         replaceTab.hasChanged =
           currentTab.extends?.hasChanged?.[contentID === 'edit' ? 'test' : 'edit'] || replaceTab.hasChanged;
 
-        //Set isFixed
-        if (replaceTab.hasChanged) {
-          replaceTab.isFixed = true;
-        }
-        //Has tested set fixed
-        if (currentTab.pathname === '/home/api/test' && model.testStartTime !== undefined) {
-          replaceTab.isFixed = true;
-        }
-
         // Set storage
         //Set baseContent
         if (['init', 'saved'].includes(inData.when)) {
@@ -189,6 +189,15 @@ export class ApiTabService {
         //Set content
         replaceTab.content = inData.when === 'saved' ? {} : currentTab.content || {};
         replaceTab.content[contentID] = model && !isEmptyObj(model) ? model : null;
+      }
+
+      //Set isFixed
+      if (replaceTab.hasChanged) {
+        replaceTab.isFixed = true;
+      }
+      //Has tested/exsix api set fixed
+      if (currentTab.pathname === '/home/api/test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
+        replaceTab.isFixed = true;
       }
     }
     // console.log('updatePartialTab',inData.url,currentTab, replaceTab);
@@ -205,7 +214,7 @@ export class ApiTabService {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
     }
-    const currentTab = this.apiTabComponent.getTabByUrl(inData.url);
+    const currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
     if (!currentTab) {
       console.warn(`has't find the tab fit child component ,url:${inData.url}`);
       return;
