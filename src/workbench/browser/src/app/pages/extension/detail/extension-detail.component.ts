@@ -14,6 +14,7 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   introLoading = false;
+  isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
   get isElectron() {
@@ -37,6 +38,7 @@ export class ExtensionDetailComponent implements OnInit {
     if (!this.extensionDetail?.installed) {
       await this.fetchReadme(this.language.systemLanguage);
     }
+    this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
   }
 
