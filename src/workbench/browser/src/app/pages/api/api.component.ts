@@ -9,9 +9,12 @@ import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
 import { ApiTabService } from './api-tab.service';
+import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
+const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
 
+const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KEY), 10);
 @Component({
   selector: 'eo-api',
   templateUrl: './api.component.html',
@@ -19,6 +22,10 @@ const DY_WIDTH_KEY = 'DY_WIDTH';
 })
 export class ApiComponent implements OnInit, OnDestroy {
   isFirstTime = true;
+  siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
+  contentHeight = 200;
+  isDragging = false;
+  animateId = -1;
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: ApiTabComponent) {
     // For lifecycle error, use timeout
@@ -134,6 +141,20 @@ export class ApiComponent implements OnInit, OnDestroy {
       this.id = Number(this.route.snapshot.queryParams.uuid);
     });
   }
+
+  onSideResize({ width }: NzResizeEvent): void {
+    this.isDragging = true;
+    cancelAnimationFrame(this.animateId);
+    this.animateId = requestAnimationFrame(() => {
+      this.siderWidth = width;
+      localStorage.setItem(LEFT_SIDER_WIDTH_KEY, String(width));
+    });
+  }
+
+  onResizeEnd() {
+    this.isDragging = false;
+  }
+
   gotoEnvManager() {
     // * switch to env
     this.messageService.send({ type: 'toggleEnv', data: true });
@@ -151,6 +172,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   handleDrag(e) {
     const distance = e;
     this.dyWidth = distance;
+    localStorage.setItem(DY_WIDTH_KEY, String(this.dyWidth));
   }
   handleEnvSelectStatus(event: boolean) {}
   private changeStoreEnv(uuid) {

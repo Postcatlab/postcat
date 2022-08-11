@@ -16,6 +16,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
+import { NzResizableModule } from 'ng-zorro-antd/resizable';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -68,6 +69,7 @@ const COMPONENTS = [
     NzTreeModule,
     NzPopoverModule,
     NzCodeEditorModule,
+    NzResizableModule,
   ],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
@@ -77,6 +79,7 @@ const COMPONENTS = [
     ApiParamsNumPipe,
     NzPopoverModule,
     NzCodeEditorModule,
+    NzResizableModule,
     EoIconparkIconModule,
     EnvListComponent,
     SplitPanelComponent,
