@@ -439,6 +439,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   private setSelectedKeys() {
+    console.log('setSelectedKeys', this.route.snapshot.queryParams.uuid, this.nzSelectedKeys);
     if (this.route.snapshot.queryParams.uuid) {
       this.nzSelectedKeys = [this.route.snapshot.queryParams.uuid];
     } else {
