@@ -33,32 +33,15 @@
       <div class="w-[1px] bg-[#f2f2f2] mx-[10px]"></div>
       <div class="shrink-0 w-[200px] 2xl:w-[250px] overflow-auto h-full">
         <h2 class="text-lg font-bold" i18n>Install</h2>
-        <div class="flex items-center mt-[22px]" *ngIf="!extensionDetail?.installed">
+        <div class="flex items-center mt-[22px]" *ngIf="isElectron && !extensionDetail?.installed">
           <nz-skeleton-element *ngIf="isNotLoaded" nzType="button" nzSize="large" [nzActive]="true" style="width:100%">
           </nz-skeleton-element>
           <button *ngIf="isElectron && !isNotLoaded" nz-button nzType="primary" nzBlock nzSize="large"
             [nzLoading]="isOperating" (click)="manageExtension('install', extensionDetail?.name)" i18n>
             Install
           </button>
-
-          <div *ngIf="!isElectron">
-            <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full" i18n>
-              Download Client
-            </button>
-            <nz-dropdown-menu #download="nzDropdownMenu">
-              <ul nz-menu>
-                <ng-container *ngFor="let item of resourceInfo; let index = index">
-                  <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
-                  <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
-                </ng-container>
-              </ul>
-            </nz-dropdown-menu>
-            <div class="bg-[#FF1744] p-[6px] mt-[14px] rounded-[3px] text-white" i18n>
-              The extensions can only be installed on the client at present. Please download the client first~
-            </div>
-          </div>
         </div>
-        <div *ngIf="extensionDetail?.installed">
+        <div *ngIf="isElectron && extensionDetail?.installed">
           <nz-skeleton-element *ngIf="isNotLoaded" nzType="button" [nzActive]="true" nzSize="large" style="width:100%">
           </nz-skeleton-element>
           <button *ngIf="!isNotLoaded" nz-button nzBlock nzType="primary" nzDanger nzSize="large"
@@ -66,6 +49,23 @@
             i18n>
             Uninstall
           </button>
+        </div>
+
+        <div *ngIf="!isElectron">
+          <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full" i18n>
+            Download Client
+          </button>
+          <nz-dropdown-menu #download="nzDropdownMenu">
+            <ul nz-menu>
+              <ng-container *ngFor="let item of resourceInfo; let index = index">
+                <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+                <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
+              </ng-container>
+            </ul>
+          </nz-dropdown-menu>
+          <div class="bg-[#FF1744] p-[6px] mt-[14px] rounded-[3px] text-white" i18n>
+            The extensions can only be installed on the client at present. Please download the client first~
+          </div>
         </div>
 
         <h2 class="text-lg font-bold mt-[30px]" i18n>Support</h2>
