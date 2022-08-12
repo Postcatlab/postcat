@@ -1,0 +1,14 @@
+<h1 class="pt20 text-center text-lg">体验插件功能请<b>下载桌面端</b>使用</h1>
+<section class="w-full flex justify-center h-40 py-20">
+  <div *ngFor="let item of resourceInfo" class="border mx-8 h-48 flex flex-col justify-center items-center">
+    <a [href]="item.link">
+      <span class="card text-6xl flex items-center justify-center">
+        <i nz-icon class="relative" [nzType]="item.icon" nzTheme="fill"></i>
+        <i nz-icon class="absolute" nzType="download" nzTheme="outline"></i>
+      </span>
+    </a>
+    <span class="my-4 text-lg">
+      {{ item.name }}
+    </span>
+  </div>
+</section>
