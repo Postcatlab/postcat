@@ -50,6 +50,9 @@ nz-divider {
 
 ::ng-deep {
   eo-api {
+    display: flex;
+    height: 100%;
+
     .ant-layout-sider-children {
       position: relative;
       display: flex;
@@ -122,25 +125,7 @@ nz-divider {
       }
     }
 
-    .method_text_GET {
-      color: var(--BLUE_TAG_BG);
-    }
-    .method_text_POST {
-      color: var(--GREEN_TAG_BG);
-    }
-    .method_text_DELETE {
-      color: var(--RED_TAG_BG);
-    }
-    .method_text_HEAD {
-      color: var(--YELLOW_TAG_BG);
-    }
-    .method_text_PATCH {
-      color: var(--ORANGE_TAG_BG);
-    }
-    .method_text_PUT,
-    .method_text_OPTIONS {
-      color: var(--BLACK_TAG_BG);
-    }
+
     .param_header {
       padding: 5px 15px;
       box-sizing: border-box;
