@@ -161,7 +161,7 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_envUpdate({ uuid }) {
+  api_envUpdate({ uuid, ...items }) {
     if (!uuid) {
       console.log(
         '%c Error: env - update 接口 缺失参数 uuid %c',
@@ -172,7 +172,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.update(this.environment, { uuid })
+      this.update(this.environment, { uuid, ...items })
         .then(({ status, ...data }: any) => {
           console.log('%c env - update 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {

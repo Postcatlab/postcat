@@ -126,40 +126,34 @@ export class EnvComponent implements OnInit, OnDestroy {
       return;
     }
     const data = parameters?.filter((it) => it.name || it.value);
-    if (uuid != null) {
+
+    if (uuid == null) {
+      const [res, error]: any = await this.api.api_envCreate(this.envInfo);
+      if (error) {
+        this.message.error($localize`Failed to add`);
+        return;
+      }
+      this.message.success($localize`Added successfully`);
+      this.activeUuid = Number(res);
+    } else {
       const [, err]: any = await this.api.api_envUpdate({ ...other, name, parameters: data, uuid });
       if (err) {
         this.message.error($localize`Failed to edit`);
         return;
       }
       this.message.success($localize`Edited successfully`);
-      this.envList = await this.getAllEnv();
-      if (this.envUuid === Number(uuid)) {
-        this.envUuid = Number(uuid);
-      }
-      this.handleCancel();
-      return;
     }
-    const [res, error]: any = await this.api.api_envCreate(this.envInfo);
-    if (error) {
-      this.message.error($localize`Failed to add`);
-      return;
-    }
-    this.message.success($localize`Added successfully`);
-    this.activeUuid = Number(res.data.uuid);
     this.envList = await this.getAllEnv();
     this.handleCancel();
   }
 
   handleCancel(): void {
     this.isVisible = false;
-    // this.envList = [];
     this.envInfo = {};
     this.messageService.send({ type: 'updateEnv', data: {} });
   }
 
   handleShowModal() {
-    // this.handleAddEnv(null);
     this.isVisible = true;
     this.isOpen = false;
   }

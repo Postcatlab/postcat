@@ -13,7 +13,7 @@ const http = {
       name: 'env',
       data: [
         { 'create @post': '/environment' },
-        { 'update @put': '/environment/{uuid}' },
+        { 'update @put': '/environment/{uuid}', json: '...' },
         { 'delete @delete': '/environment/{uuid}' },
         { 'load @get': '/environment/{uuid}' },
         { 'search @search': '/environment', query: 'projectID' },

@@ -121,7 +121,7 @@ export default class RemoteService {
     })
   }
 
-  api_envUpdate({ uuid }) {
+  api_envUpdate({ uuid, ...items }) {
     if (!uuid) {
       console.log(
         '%c Error: env - update 接口 缺失参数 uuid %c',
@@ -132,7 +132,7 @@ export default class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http.put('/environment/${uuid}', {}).subscribe({
+      this.http.put('/environment/${uuid}', { ...items }).subscribe({
         next: ({ statusCode, ...data }: any) => {
           console.log('%c env - update 接口请求成功 %c', SuccessStyle, '')
           if (statusCode === 200) {

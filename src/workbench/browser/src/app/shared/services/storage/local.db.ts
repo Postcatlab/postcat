@@ -3,7 +3,7 @@ import { StorageItem, StorageResStatus } from './index.model';
 
 type uuidType = string | number | string[] | number[];
 
-const toArray = (data: uuidType) => {
+const toArray = (data: uuidType): any[] => {
   if (Array.isArray(data)) {
     return data;
   }
@@ -11,6 +11,7 @@ const toArray = (data: uuidType) => {
 };
 
 const tranform = (source, data) => {
+  console.log(':::', source);
   if (Array.isArray(data)) {
     return source;
   }
@@ -35,16 +36,20 @@ export default class localStorage extends Dexie {
     return result as ResultType;
   }
 
-  create(table: Table, items: Array<StorageItem>): Promise<ResultType> {
+  create(table: Table, items: Array<any>): Promise<ResultType> {
     const time = Date.now();
-    const result = table.bulkAdd(
-      items.map((item: StorageItem) => ({
-        createdAt: time,
-        updatedAt: time,
-        ...item,
-      }))
-    );
-    return Promise.resolve(this.resProxy(tranform(result, items)));
+    return new Promise((resolve, reject) => {
+      table
+        .bulkAdd(
+          toArray(items).map((item: StorageItem) => ({
+            createdAt: time,
+            updatedAt: time,
+            ...item,
+          }))
+        )
+        .then((result) => resolve(this.resProxy(tranform(result, items))))
+        .catch((error) => reject(error));
+    });
   }
 
   remove(table: Table, { uuid }): Promise<ResultType> {
@@ -80,14 +85,14 @@ export default class localStorage extends Dexie {
 
   update(table: Table, items: any): Promise<ResultType> {
     const time = Date.now();
-    const list: any = [items].map((item: any) => ({
+    const list: any = toArray(items).map((item: any) => ({
       ...item,
       updatedAt: time,
     }));
     return new Promise((resolve, reject) => {
       table
         .bulkPut(list)
-        .then((result) => resolve(this.resProxy(tranform(result, items))))
+        .then((result) => resolve(this.resProxy(tranform(result, list))))
         .catch((err) => reject(err));
     });
   }
