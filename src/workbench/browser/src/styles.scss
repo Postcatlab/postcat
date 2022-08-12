@@ -22,6 +22,26 @@ img, svg, video, canvas, audio, iframe, embed, object {
   vertical-align: unset;
 }
 
+.method_text_GET {
+  color: var(--BLUE_TAG_BG);
+}
+.method_text_POST {
+  color: var(--GREEN_TAG_BG);
+}
+.method_text_DELETE {
+  color: var(--RED_TAG_BG);
+}
+.method_text_HEAD {
+  color: var(--YELLOW_TAG_BG);
+}
+.method_text_PATCH {
+  color: var(--ORANGE_TAG_BG);
+}
+.method_text_PUT,
+.method_text_OPTIONS {
+  color: var(--BLACK_TAG_BG);
+}
+
 ::-webkit-scrollbar {
   width: 16px;
   height: 16px;
