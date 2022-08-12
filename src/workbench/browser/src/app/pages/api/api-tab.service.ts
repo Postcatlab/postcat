@@ -161,24 +161,39 @@ export class ApiTabService {
             `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
           );
         }
+        let currentHasChanged=false;
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes
-            if (!currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
-              replaceTab.hasChanged = this.componentRef.isFormChange();
+            if (
+              currentTab.pathname !== '/home/api/test' ||
+              !currentTab.params.uuid ||
+              currentTab.params.uuid.includes('history')
+            ) {
+              currentHasChanged = this.componentRef.isFormChange();
             }
             break;
           }
           case 'saved': {
-            replaceTab.hasChanged = false;
+            currentHasChanged = false;
           }
         }
         //* Share change status within all content page
         replaceTab.extends.hasChanged = currentTab.extends?.hasChanged || {};
-        replaceTab.extends.hasChanged[contentID] = replaceTab.hasChanged;
-        replaceTab.hasChanged =
-          currentTab.extends?.hasChanged?.[contentID === 'edit' ? 'test' : 'edit'] || replaceTab.hasChanged;
-
+        replaceTab.extends.hasChanged[contentID] = currentHasChanged;
+        // Editiable tab  share hasChanged data
+        if (!currentHasChanged) {
+          const otherEditableTabs = [];
+          for (const key in this.BASIC_TBAS) {
+            if (this.BASIC_TBAS[key].type === 'edit' && key !== contentID) {
+              otherEditableTabs.push(key);
+            }
+          }
+          if (currentTab.extends?.hasChanged) {
+            currentHasChanged = otherEditableTabs.some((module) => currentTab.extends?.hasChanged[module]);
+          }
+        }
+        replaceTab.hasChanged=currentHasChanged;
         // Set storage
         //Set baseContent
         if (['init', 'saved'].includes(inData.when)) {
