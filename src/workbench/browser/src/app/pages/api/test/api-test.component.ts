@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Select } from '@ngxs/store';
 
 import {
   ApiBodyType,
@@ -23,9 +22,9 @@ import { ApiTestService } from './api-test.service';
 import { ApiTabService } from '../tab/api-tab.service';
 import { objectToArray } from '../../../utils';
 
-import { EnvState } from '../../../shared/store/env.state';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { StorageService } from '../../../shared/services/storage';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/services/store.service';
 import { TestServerLocalNodeService } from '../../../shared/services/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from '../../../shared/services/api-test/serverless-node/test-connect.service';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
@@ -37,7 +36,6 @@ import {
   afterScriptCompletions,
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ViewportScroller } from '@angular/common';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
@@ -48,13 +46,8 @@ const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 })
 export class ApiTestComponent implements OnInit, OnDestroy {
   @ViewChild('historyComponent') historyComponent: ApiTestHistoryComponent;
-  @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
   apiData: ApiData | any;
-  env: any = {
-    parameters: [],
-    hostUri: '',
-  };
   contentType: ContentTypeByAbridge;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
@@ -70,6 +63,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     response: {},
     request: {},
   };
+  store: StoreService;
   scriptCache = {};
   initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
@@ -89,8 +83,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private testServerService: TestServerService,
     private messageService: MessageService,
     private storage: StorageService,
-    private lang: LanguageService
+    private lang: LanguageService,
+    store: StoreService
   ) {
+    this.store = store;
     this.testServer = this.testServerService.instance;
     this.testServer.init((message) => {
       this.receiveMessage(message);
@@ -176,7 +172,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     const apiDataId = Number(this.route.snapshot.queryParams.uuid);
     this.initApi(apiDataId);
     this.watchTabChange();
-    this.watchEnvChange();
     this.messageService.get().subscribe(({ type, data }) => {
       if (type === 'renderHistory') {
         this.restoreHistory(data);
@@ -199,7 +194,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, leftEl.style.height);
     }
   }
-  private test() {
+  test() {
     this.scriptCache = {
       beforeScript: this.beforeScript,
       afterScript: this.afterScript,
@@ -208,7 +203,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       id: this.apiTab.tabID,
       action: 'ajax',
       data: this.testServer.formatRequestData(this.apiData, {
-        env: this.env,
+        env: this.store.env,
         globals: this.apiTest.getGlobals(),
         beforeScript: this.beforeScript,
         afterScript: this.afterScript,
@@ -344,14 +339,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.contentType = this.apiTest.getContentType(this.apiData.requestHeaders) || ContentTypeByAbridge.Text;
     }
   }
-  private watchEnvChange() {
-    this.env$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      const { env } = data;
-      if (env) {
-        this.env = env;
-      }
-    });
-  }
+
   private watchTabChange() {
     this.apiTab.tabChange$
       .pipe(

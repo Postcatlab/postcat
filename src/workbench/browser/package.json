@@ -32,7 +32,6 @@
     "@angular/upgrade": "^14.0.3",
     "@ant-design/icons-angular": "13.1.0",
     "@babel/runtime": "7.18.3",
-    "@ngxs/store": "3.7.4",
     "angular": "1.8.2",
     "brace": "0.11.1",
     "js-beautify": "1.14.4",

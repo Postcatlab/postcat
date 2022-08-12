@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/services/store.service';
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
-import { Change } from '../../store/env.state';
 import { ApiService } from '../../services/storage/api.service';
 import { Subject } from 'rxjs';
 
@@ -35,7 +34,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private messageService: MessageService,
     private message: EoMessageService,
-    private store: Store
+    private store: StoreService
   ) {}
 
   get envUuid(): number {
@@ -169,11 +168,11 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   private async changeStoreEnv(uuid) {
     if (uuid == null) {
-      this.store.dispatch(new Change(null));
+      this.store.setEnv(null);
       return;
     }
     this.envList = await this.getAllEnv();
     const data = this.envList.find((val) => val.uuid === Number(uuid));
-    this.store.dispatch(new Change(data));
+    this.store.setEnv(data);
   }
 }

@@ -94,13 +94,12 @@ export const eoFormatRequestData = (
     }
     return result;
   };
-  const formatEnv = (env) => {
-    const result = {
-      paramList: (env.parameters || []).map((val) => ({ paramKey: val.name, paramValue: val.value })),
-      frontURI: env.hostUri,
-    };
-    return result;
-  };
+
+  const formatEnv = ({ parameters, hostUri }) => ({
+    paramList: (parameters || []).map((val) => ({ paramKey: val.name, paramValue: val.value })),
+    hostUri,
+  });
+
   const result: TestLocalNodeData = {
     lang: opts.lang,
     globals: opts.globals,

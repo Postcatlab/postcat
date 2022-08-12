@@ -2,11 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { Subject, takeUntil } from 'rxjs';
-import { Store } from '@ngxs/store';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/services/store.service';
 import { Message, MessageService } from '../../shared/services/message';
 import { ApiService } from './api.service';
 import { StorageService } from '../../shared/services/storage';
-import { Change } from '../../shared/store/env.state';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
@@ -51,7 +50,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     private remoteService: RemoteService,
-    private store: Store
+    private store: StoreService
   ) {}
 
   get envUuid(): number {
@@ -182,13 +181,13 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   private changeStoreEnv(uuid) {
     if (uuid == null) {
-      this.store.dispatch(new Change(null));
+      this.store.setEnv(null);
       return;
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.dispatch(new Change(data));
+        this.store.setEnv(data);
       }
     });
   }

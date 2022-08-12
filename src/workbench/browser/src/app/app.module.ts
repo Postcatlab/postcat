@@ -7,10 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 //Other module
 import { CoreModule } from './core/core.module';
-import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EnvState } from './shared/store/env.state';
 
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
@@ -19,6 +17,7 @@ import { ApiService } from '../app/shared/services/storage/api.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/services/store.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -48,7 +47,6 @@ registerLocaleData(zh);
     HttpClientModule,
     UpgradeModule,
     EouiModule,
-    NgxsModule.forRoot([EnvState]),
   ],
   providers: [
     SettingService,
@@ -61,6 +59,7 @@ registerLocaleData(zh);
     HttpStorage,
     NzMessageService,
     NzModalService,
+    StoreService,
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),
