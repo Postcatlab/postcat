@@ -102,7 +102,6 @@ export class RemoteService {
         },
       });
       result = await response.json();
-
       if (result.statusCode !== 200) {
         return [false, result];
       }

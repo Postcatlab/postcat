@@ -34,7 +34,6 @@ import {
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
-import { AnyRecord } from 'dns';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 interface testViewModel {
@@ -198,7 +197,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       testData: Object.assign({}, this.model.request),
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    console.log(JSON.stringify(apiData));
     this.router.navigate(['/home/api/edit'], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID),
@@ -264,6 +262,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
 
   changeContentType(contentType) {
+    console.log(contentType);
     this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(
       contentType,
       this.model.request.requestHeaders
@@ -366,18 +365,17 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.timer$.unsubscribe();
     }
     const that = this;
-    this.timer$ = interval(1000)
-      .subscribe({
-        next(val) {
-          that.waitSeconds++;
-          if (that.waitSeconds >= that.MAX_TEST_SECONDS) {
-            this.complete();
-          }
-        },
-        complete() {
-          that.changeStatus('tested');
-        },
-      });
+    this.timer$ = interval(1000).subscribe({
+      next(val) {
+        that.waitSeconds++;
+        if (that.waitSeconds >= that.MAX_TEST_SECONDS) {
+          this.complete();
+        }
+      },
+      complete() {
+        that.changeStatus('tested');
+      },
+    });
   }
   /**
    * Change test status
