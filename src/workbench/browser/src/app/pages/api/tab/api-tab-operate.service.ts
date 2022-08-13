@@ -19,7 +19,7 @@ export class ApiTabOperateService {
   /**
    * Tab basic info
    */
-  BASIC_TABS: { [key: string]: Partial<TabItem> };
+  BASIC_TABS:  Partial<TabItem>[];
   constructor(
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
@@ -54,7 +54,7 @@ export class ApiTabOperateService {
    * @returns tabItem
    */
   newDefaultTab() {
-    const tabItem: TabItem = this.getBaiscTabFromUrl(Object.values(this.BASIC_TABS)[0].pathname);
+    const tabItem: TabItem = this.getBaiscTabFromUrl(this.BASIC_TABS[0].pathname);
     tabItem.uuid = tabItem.params.pageID = Date.now();
     this.tabStorage.addTab(tabItem);
     this.navigateTabRoute(tabItem);
@@ -174,7 +174,7 @@ export class ApiTabOperateService {
   getTabInfoFromUrl(url): { uuid: number; pathname: string; params: any } {
     const urlArr = url.split('?');
     const params: any = {};
-    const basicTab = Object.values(this.BASIC_TABS).find((val) => urlArr[0].includes(val.pathname));
+    const basicTab = this.BASIC_TABS.find((val) => urlArr[0].includes(val.pathname));
     if (!basicTab) {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
     }
@@ -201,7 +201,7 @@ export class ApiTabOperateService {
    */
   getBaiscTabFromUrl(url): TabItem {
     const result = this.getTabInfoFromUrl(url);
-    const basicTab = Object.values(this.BASIC_TABS).find((val) => result.pathname === val.pathname);
+    const basicTab = this.BASIC_TABS.find((val) => result.pathname === val.pathname);
     if (!basicTab) {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
     }

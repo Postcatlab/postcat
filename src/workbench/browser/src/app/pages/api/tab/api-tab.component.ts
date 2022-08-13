@@ -12,7 +12,7 @@ import { KeyValue } from '@angular/common';
   styleUrls: ['./api-tab.component.scss'],
 })
 export class ApiTabComponent implements OnInit, OnDestroy {
-  @Input() list;
+  @Input() list: Partial<TabItem>[];
   @Input() handleDataBeforeCache;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
@@ -95,12 +95,11 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       }
       tabs.push({
         uuid: tab.uuid,
+        module: tab.module,
         type: tab.type,
         title: tab.title,
         pathname: tab.pathname,
         params: tab.params,
-        isFixed: tab.isFixed,
-        hasChanged: tab.hasChanged,
       });
     });
     return tabs;

@@ -33,7 +33,7 @@
     <nz-content>
       <div class="inner-content">
         <div class="flex items-center tabs-bar">
-          <eo-api-tab class="fg1" [list]="apiTab.BASIC_TBAS" [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
+          <eo-api-tab class="fg1" [list]="apiTab.BASIC_TABS" [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
             (beforeClose)="apiTab.beforeTabClose($event)" #apiTabComponent></eo-api-tab>
           <div class="flex items-center fix-mt">
             <nz-select [(ngModel)]="envUuid" [(nzOpen)]="isOpen" (nzOpenChange)="handleEnvSelectStatus($event)"

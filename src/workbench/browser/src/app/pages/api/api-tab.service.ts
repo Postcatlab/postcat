@@ -12,21 +12,28 @@ export class ApiTabService {
   apiTabComponent: ApiTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
   get currentTabType(): string {
-    return Object.values(this.BASIC_TBAS).find((val) => this.router.url.includes(val.pathname))?.type || 'preview';
+    return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname))?.type || 'preview';
   }
   private changeContent$: Subject<any> = new Subject();
-  BASIC_TBAS: { [key: string]: Partial<TabItem> } = {
-    test: {
+  BASIC_TABS: Partial<TabItem>[] = [
+    {
       pathname: '/home/api/test',
+      module: 'test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' },
     },
-    edit: { pathname: '/home/api/edit', isFixed: true, type: 'edit', title: $localize`New API` },
-    detail: { pathname: '/home/api/detail', type: 'preview', title: $localize`Preview` },
-    overview: { pathname: '/home/api/overview', type: 'preview', title: $localize`:@@API Index:Index`, icon: 'home' },
-    mock: { pathname: '/home/api/mock', type: 'preview', title: 'Mock' },
-  };
+    { pathname: '/home/api/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
+    { pathname: '/home/api/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    {
+      pathname: '/home/api/overview',
+      type: 'preview',
+      module: 'overview',
+      title: $localize`:@@API Index:Index`,
+      icon: 'home',
+    },
+    { pathname: '/home/api/mock', module: 'mock', type: 'preview', title: 'Mock' },
+  ];
   constructor(private messageService: MessageService, private router: Router) {
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
@@ -61,10 +68,6 @@ export class ApiTabService {
   onAllComponentInit() {
     const url = this.router.url;
     this.updateChildView(url);
-  }
-  // Set current tab type:'preview'|'edit' for  later judgment
-  getContentID(path) {
-    return Object.keys(this.BASIC_TBAS).find((keyname) => path.includes(keyname)) || 'test';
   }
   private bindChildComponentChangeEvent() {
     if (!this.componentRef) {
@@ -121,7 +124,7 @@ export class ApiTabService {
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
     const currentTab = this.apiTabComponent.getExistTabByUrl(url);
-    const contentID = this.getContentID(url);
+    const contentID = currentTab.module;
     //Get tab cache
     this.componentRef.model = currentTab?.content?.[contentID] || null;
     this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
@@ -129,13 +132,15 @@ export class ApiTabService {
   }
   updateTab(currentTab, inData) {
     const model = inData.model;
-    const contentID = this.getContentID(currentTab.pathname);
+    const contentID = currentTab.module;
 
     //Set tabItem
     const replaceTab: Partial<TabItem> = {
       hasChanged: currentTab.hasChanged,
       isLoading: false,
-      extends: {},
+      extends: {
+        module: contentID,
+      },
     };
     if (model && !isEmptyObj(model)) {
       //Set title/method
@@ -145,13 +150,13 @@ export class ApiTabService {
         replaceTab.extends.method = model.request.method;
         //Only Untitle request need set url to tab title
         if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
-          replaceTab.title = model.request.uri || this.BASIC_TBAS.test.title;
+          replaceTab.title = model.request.uri || this.BASIC_TABS[0].title;
         } else {
-          replaceTab.title = model.request.name || this.BASIC_TBAS.test.title;
+          replaceTab.title = model.request.name || this.BASIC_TABS[0].title;
         }
       } else if (!model.uuid) {
         replaceTab.title =
-          replaceTab.title || Object.values(this.BASIC_TBAS).find((val) => val.pathname === currentTab.pathname).title;
+          replaceTab.title || this.BASIC_TABS.find((val) => val.pathname === currentTab.pathname).title;
       }
       //Only hasChanged edit page storage data
       if (currentTab.type === 'edit') {
@@ -161,7 +166,7 @@ export class ApiTabService {
             `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
           );
         }
-        let currentHasChanged=false;
+        let currentHasChanged = false;
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes
@@ -183,17 +188,16 @@ export class ApiTabService {
         replaceTab.extends.hasChanged[contentID] = currentHasChanged;
         // Editiable tab  share hasChanged data
         if (!currentHasChanged) {
-          const otherEditableTabs = [];
-          for (const key in this.BASIC_TBAS) {
-            if (this.BASIC_TBAS[key].type === 'edit' && key !== contentID) {
-              otherEditableTabs.push(key);
-            }
-          }
+          const otherEditableTabs = this.BASIC_TABS.filter(
+            (val) => val.type === 'edit' && val.module !== contentID
+          );
           if (currentTab.extends?.hasChanged) {
-            currentHasChanged = otherEditableTabs.some((module) => currentTab.extends?.hasChanged[module]);
+            currentHasChanged = otherEditableTabs.some(
+              (tabItem) => currentTab.extends?.hasChanged[tabItem.module]
+            );
           }
         }
-        replaceTab.hasChanged=currentHasChanged;
+        replaceTab.hasChanged = currentHasChanged;
         // Set storage
         //Set baseContent
         if (['init', 'saved'].includes(inData.when)) {
