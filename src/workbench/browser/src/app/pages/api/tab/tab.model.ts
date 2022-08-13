@@ -17,6 +17,10 @@ export type TabItem = {
    * Tab id,timestamp
    */
   uuid: number;
+  /**
+   * Content module
+   */
+  module: string;
   isFixed?: boolean;
   /**
    * Preview page or edit page
