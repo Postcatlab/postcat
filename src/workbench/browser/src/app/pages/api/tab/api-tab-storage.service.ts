@@ -9,8 +9,14 @@ import { storageTab, TabItem } from './tab.model';
  */
 export class ApiTabStorageService {
   tabOrder: Array<number> = [];
+  cacheName: string;
   tabsByID = new Map<number, TabItem>();
   constructor(private dataSource: RemoteService) {}
+  init() {
+    this.tabOrder = [];
+    this.tabsByID = new Map();
+    this.cacheName = `${this.dataSource.dataSourceType}_TabCache`;
+  }
   addTab(tabItem) {
     if (this.tabsByID.has(tabItem.uuid)) {
       throw new Error(`EO_ERROR:can't add same id tab`);
@@ -46,8 +52,8 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
-    // storage cache may change
-    if (this.dataSource.dataSourceType === 'http') {return;}
+    //! remote datasource may change
+    // if (this.dataSource.dataSourceType === 'http') {return;}
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach((val) => {
       if (!val.hasChanged) {
@@ -59,8 +65,9 @@ export class ApiTabStorageService {
     if (opts.handleDataBeforeCache) {
       tabsByID = opts.handleDataBeforeCache(tabsByID);
     }
+    console.log(this.cacheName);
     window.localStorage.setItem(
-      `${this.dataSource.dataSourceType}_TabCache`,
+      this.cacheName,
       JSON.stringify({
         selectedIndex,
         tabOrder: this.tabOrder,
@@ -71,7 +78,7 @@ export class ApiTabStorageService {
   getPersistenceStorage(): storageTab {
     let result: any = null;
     try {
-      result = JSON.parse(window.localStorage.getItem(`${this.dataSource.dataSourceType}_TabCache`) as string);
+      result = JSON.parse(window.localStorage.getItem(this.cacheName) as string);
     } catch (e) {}
     return result;
   }

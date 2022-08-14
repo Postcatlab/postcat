@@ -165,10 +165,10 @@ const COMMON_DATA: TreeNode[] = [
     children: [
       {
         name: $localize`Get enviroment host`,
-        caption: 'http.baseUrl.get',
-        value: 'http.baseUrl.get()',
+        caption: 'eo.env.http.baseUrl.get',
+        value: 'eo.env.http.baseUrl.get()',
         note: {
-          code: 'http.baseUrl.get()',
+          code: 'eo.env.http.baseUrl.get()',
           desc: $localize`Get enviroment host`,
           output: $localize`The host prefix set in the environment`,
         },

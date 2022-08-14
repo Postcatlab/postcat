@@ -17,7 +17,7 @@ import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 import { TestServerService } from '../../../shared/services/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
-import { isEmptyObj, objectToArray } from '../../../utils';
+import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../utils';
 
 import { EnvState } from '../../../shared/store/env.state';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
@@ -38,7 +38,11 @@ import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/servic
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 interface testViewModel {
   request: ApiTestData;
+  beforeScript: string;
+  afterScript: string;
   testStartTime?: number;
+  requestTabIndex: number;
+  responseTabIndex: number;
   testResult: {
     request: any;
     response: any;
@@ -64,19 +68,15 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     parameters: [],
     hostUri: '',
   };
-  contentType: ContentTypeByAbridge;
+  contentType: ContentTypeByAbridge = ContentTypeByAbridge.JSON;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
 
   beforeScriptCompletions = beforeScriptCompletions;
   afterScriptCompletions = afterScriptCompletions;
-  beforeScript = '';
-  afterScript = '';
 
-  nzSelectedIndex = 1;
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
-  responseTabIndexRes = 0;
 
   isRequestBodyLoaded = false;
   initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
@@ -90,6 +90,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private timer$: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
+    private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
     public route: ActivatedRoute,
     private router: Router,
@@ -114,10 +115,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    *
    */
   restoreResponseFromHistory(response) {
-    this.beforeScript = response?.beforeScript || '';
-    this.afterScript = response?.afterScript || '';
-    this.responseTabIndexRes = 0;
+    this.model.beforeScript = response?.beforeScript || '';
+    this.model.afterScript = response?.afterScript || '';
+    this.model.responseTabIndex = 0;
     this.model.testResult = response;
+    this.model.testResult.request ??= {};
     this.model.testResult.response ??= {};
   }
   async init() {
@@ -162,16 +164,13 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       }
     }
     this.initBasicForm();
-    //! Set this two function to reset form
-    this.validateForm.markAsPristine();
-    this.validateForm.markAsUntouched();
-
     this.validateForm.patchValue(this.model.request);
     this.watchBasicForm();
     //Storage origin api data
     if (!this.initialModel) {
-      this.initialModel = structuredClone(this.model);
+      this.initialModel = eoDeepCopy(this.model);
     }
+    this.cdRef.detectChanges();
     this.afterInit.emit(this.model);
   }
   clickTest() {
@@ -254,7 +253,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     // );
     const originText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.initialModel.request));
     const afterText = JSON.stringify(this.apiTestUtil.formatEditingApiData(this.model.request));
-    if (originText !== afterText) {
+    if (
+      originText !== afterText ||
+      this.initialModel.beforeScript !== this.model.beforeScript ||
+      this.initialModel.afterScript !== this.model.afterScript
+    ) {
       // console.log('api test formChange true!', originText.split(afterText));
       return true;
     }
@@ -262,7 +265,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
 
   changeContentType(contentType) {
-    console.log(contentType);
     this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(
       contentType,
       this.model.request.requestHeaders
@@ -296,6 +298,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.close();
   }
   private checkForm(): boolean {
+    console.log(this.validateForm);
     for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
         this.validateForm.controls[i].markAsDirty();
@@ -314,8 +317,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.env,
         globals: this.apiTestUtil.getGlobals(),
-        beforeScript: this.beforeScript,
-        afterScript: this.afterScript,
+        beforeScript: this.model.beforeScript,
+        afterScript: this.model.afterScript,
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
       }),
     });
@@ -340,8 +343,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     // console.log('[api test componnet]receiveMessage', message);
     const tmpHistory = {
       general: message.general,
-      request: message.report?.request,
-      response: message.response,
+      request: message.report?.request || {},
+      response: message.response || {},
     };
     this.model.testResult = tmpHistory;
     this.status$.next('tested');
@@ -394,7 +397,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         this.modelChange.emit(this.model);
         this.timer$.unsubscribe();
         this.waitSeconds = 0;
-        this.responseTabIndexRes = 0;
+        this.model.responseTabIndex = 0;
         this.ref.detectChanges();
         break;
       }
@@ -422,7 +425,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private resetModel() {
     return {
+      requestTabIndex: 1,
+      responseTabIndex: 0,
       request: {},
+      beforeScript: '',
+      afterScript: '',
       testResult: {
         response: {},
         request: {},
@@ -439,7 +446,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
     const controls = {};
     ['protocol', 'method', 'uri'].forEach((name) => {
-      controls[name] = [this.model.request?.[name], [Validators.required]];
+      controls[name] = [this.model.request[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }

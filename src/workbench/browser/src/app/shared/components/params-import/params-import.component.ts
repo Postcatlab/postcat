@@ -75,7 +75,7 @@ export class ParamsImportComponent {
         this.beforeHandleImport.emit(paramCode);
         rootType = Array.isArray(paramCode) ? 'array' : 'object';
       } catch (error) {
-        this.message.error('JSON格式不合法');
+        this.message.error($localize`JSON format invalid`);
         return;
       }
     }

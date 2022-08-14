@@ -107,7 +107,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
         thKey: $localize`Description`,
         type: 'input',
         modelKey: 'description',
-        placeholder: 'Description',
+        placeholder: $localize`Description`,
       },
       {
         type: 'btn',

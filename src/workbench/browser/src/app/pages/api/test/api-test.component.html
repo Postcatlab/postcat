@@ -21,7 +21,7 @@
             {{ env.hostUri }}
           </div>
           <nz-form-item nz-col class="fg1">
-            <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter URL">
+            <nz-form-control [nzValidateStatus]="this.validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
               <input
                 type="text"
                 i18n-placeholder
@@ -48,7 +48,7 @@
       <nz-tabset
         [nzTabBarStyle]="{ 'padding-left': '10px' }"
         [nzAnimated]="false"
-        [(nzSelectedIndex)]="nzSelectedIndex"
+        [(nzSelectedIndex)]="model.requestTabIndex"
       >
         <!-- Request Headers -->
         <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
@@ -117,11 +117,11 @@
         <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
           <ng-template #preScriptTitleTmp>
             <span i18n>Pre-request Script</span>
-            <span class="eo-tab-theme-icon" *ngIf="beforeScript?.trim()"></span>
+            <span class="eo-tab-theme-icon" *ngIf="model.beforeScript?.trim()"></span>
           </ng-template>
           <eo-api-script
-            *ngIf="nzSelectedIndex === 4"
-            [(code)]="beforeScript"
+            *ngIf="model.requestTabIndex === 4"
+            [(code)]="model.beforeScript"
             (codeChange)="emitChangeFun('beforeScript')"
             [treeData]="BEFORE_DATA"
             [completions]="beforeScriptCompletions"
@@ -131,11 +131,11 @@
         <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
           <ng-template #suffixScriptTitleTmp>
             <span i18n>After-response Script</span>
-            <span class="eo-tab-theme-icon" *ngIf="afterScript?.trim()"></span>
+            <span class="eo-tab-theme-icon" *ngIf="model.afterScript?.trim()"></span>
           </ng-template>
           <eo-api-script
-            *ngIf="nzSelectedIndex === 5"
-            [(code)]="afterScript"
+            *ngIf="model.requestTabIndex === 5"
+            [(code)]="model.afterScript"
             (codeChange)="emitChangeFun('afterScript')"
             [treeData]="AFTER_DATA"
             [completions]="afterScriptCompletions"
@@ -148,7 +148,7 @@
       <!-- Response -->
       <nz-tabset
         [nzTabBarStyle]="{ 'padding-left': '10px' }"
-        [(nzSelectedIndex)]="responseTabIndexRes"
+        [(nzSelectedIndex)]="model.responseTabIndex"
         [nzAnimated]="false"
         class="mt-2.5 response_container"
         (nzSelectChange)="handleBottomTabSelect($event)"
@@ -164,8 +164,8 @@
         <nz-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
           <!-- TODO use isRequestBodyLoaded -->
           <eo-api-test-result-request-body
-            *ngIf="responseTabIndexRes === 2"
-            [model]="model.testResult.request?.requestBody || ''"
+            *ngIf="model.responseTabIndex === 2"
+            [model]="model.testResult.request.requestBody || ''"
           >
           </eo-api-test-result-request-body>
         </nz-tab>

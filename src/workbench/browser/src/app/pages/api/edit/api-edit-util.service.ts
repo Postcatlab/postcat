@@ -5,6 +5,7 @@ import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree
 import { ApiData, ApiEditRest } from '../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
 import { getRest } from '../../../utils/api';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils';
 @Injectable()
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
@@ -264,7 +265,7 @@ export class ApiEditUtilService {
     return result;
   }
   private formatApiData(formData, filterArrFun): ApiData {
-    const result = structuredClone(formData);
+    const result = eoDeepCopy(formData);
     result.groupID = Number(result.groupID === '-1' ? '0' : result.groupID);
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(
       (tableName) => {

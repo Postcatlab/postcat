@@ -36,8 +36,8 @@
           </nz-tree-select>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nz-col class="fg1">
-        <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API name">
+      <nz-form-item nz-col class="fg1" >
+        <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API name" [nzValidateStatus]="this.validateForm.controls.name">
           <input type="text" [(ngModel)]="model.name" name="name" id="name" nz-input formControlName="name" />
         </nz-form-control>
       </nz-form-item>
@@ -138,6 +138,7 @@
             class="eo_theme_iblock bbd bld brd"
             [(bodyType)]="model.responseBodyType"
             [(model)]="model.responseBody"
+            (modelChange)="emitChangeFun()"
             [supportType]="['json', 'xml', 'raw', 'binary']"
             [(jsonRootType)]="model.responseBodyJsonType"
           ></eo-api-edit-body>

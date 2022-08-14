@@ -19,7 +19,7 @@ import {
   StorageResStatus,
 } from '../../../shared/services/storage/index.model';
 
-import { isEmptyObj, objectToArray } from '../../../utils';
+import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../utils';
 import { listToTree, getExpandGroupByKey } from '../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
@@ -89,7 +89,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         // New API/New API from other page such as test page
         this.initialModel = this.apiEdit.getPureApi({ groupID });
       } else {
-        this.initialModel = structuredClone(this.model);
+        this.initialModel = eoDeepCopy(this.model);
       }
     }
     this.initBasicForm();
@@ -129,7 +129,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     const result: StorageRes = await this.apiEdit.editApi(formData);
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
-      this.initialModel = this.apiEditUtil.getFormdataFromApiData(structuredClone(result.data));
+      this.initialModel = this.apiEditUtil.getFormdataFromApiData(eoDeepCopy(result.data));
       this.router.navigate(['/home/api/detail'], {
         queryParams: {
           pageID: Number(this.route.snapshot.queryParams.pageID),
