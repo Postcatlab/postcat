@@ -114,7 +114,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchDataSourceChange();
     this.initEnv();
     this.watchEnvChange();
-    console.log('ngOnInit');
   }
   ngOnDestroy() {
     this.destroy$.next();

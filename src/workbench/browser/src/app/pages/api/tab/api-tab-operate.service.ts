@@ -19,7 +19,7 @@ export class ApiTabOperateService {
   /**
    * Tab basic info
    */
-  BASIC_TABS:  Partial<TabItem>[];
+  BASIC_TABS: Partial<TabItem>[];
   constructor(
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
@@ -31,16 +31,20 @@ export class ApiTabOperateService {
   //Maybe from tab cache info or router url
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
+    this.tabStorage.init();
     const tabCache = this.tabStorage.getPersistenceStorage();
     if (tabCache && tabCache.tabOrder?.length) {
       this.tabStorage.tabOrder = tabCache.tabOrder.filter((uuid) => tabCache.tabsByID.hasOwnProperty(uuid));
+      //init tabsByID
       const tabsByID = new Map();
       Object.values(tabCache.tabsByID).forEach((tabItem) => {
         tabsByID.set(tabItem.uuid, tabItem);
       });
       this.tabStorage.tabsByID = tabsByID;
       const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
+      //init selectIndex
       this.selectedIndex = tabCache.selectedIndex;
+      //jump to exist tab
       this.navigateTabRoute(targetTab);
     } else {
       this.operateTabAfterRouteChange({
@@ -79,50 +83,7 @@ export class ApiTabOperateService {
       this.newDefaultTab();
     }
   }
-  closeTabByOperate(action: string | TabOperate) {
-    const tabsObj = {
-      hasChanged: this.tabStorage.tabOrder.filter((uuid) => this.tabStorage.tabsByID.get(uuid).hasChanged),
-      left: [],
-    };
-    switch (action) {
-      case TabOperate.closeAll: {
-        tabsObj.left = tabsObj.hasChanged;
-        if (tabsObj.left.length === 0) {
-          this.newDefaultTab();
-        }
-        break;
-      }
-      case TabOperate.closeOther: {
-        tabsObj.left = this.tabStorage.tabOrder.filter(
-          (uuid) =>
-            this.tabStorage.tabsByID.get(uuid).hasChanged || uuid === this.tabStorage.tabOrder[this.selectedIndex]
-        );
-        break;
-      }
-      case TabOperate.closeLeft: {
-        tabsObj.left = [
-          ...this.tabStorage.tabOrder
-            .slice(0, this.selectedIndex)
-            .filter((uuid) => this.tabStorage.tabsByID.get(uuid).hasChanged),
-          ...this.tabStorage.tabOrder.slice(this.selectedIndex),
-        ];
-        break;
-      }
-      case TabOperate.closeRight: {
-        tabsObj.left = [
-          ...this.tabStorage.tabOrder.slice(0, this.selectedIndex + 1),
-          ...this.tabStorage.tabOrder
-            .slice(this.selectedIndex + 1)
-            .filter((uuid) => this.tabStorage.tabsByID.get(uuid).hasChanged),
-        ];
-        break;
-      }
-    }
-    this.tabStorage.resetTabsByOrdr(tabsObj.left);
-    if (tabsObj.hasChanged.length) {
-      this.message.warn($localize`Program will not close unsaved tabs`);
-    }
-  }
+
   /**
    * Navigate  url to tab route
    *
@@ -270,17 +231,7 @@ export class ApiTabOperateService {
     this.selectedIndex = this.tabStorage.tabOrder.length - 1;
     this.updateChildView();
   }
-  //*Prevent toggling splash screen with empty tab title
-  private preventBlankTab(origin, target) {
-    const result = target;
-    /**
-     * Keyname effect show tab
-     */
-    ['title', 'hasChanged', 'isLoading'].forEach((keyName) => {
-      result[keyName] = origin[keyName];
-    });
-    return result;
-  }
+
   canbeReplace(tabItem: TabItem) {
     if (tabItem.isFixed) {
       return false;
@@ -296,6 +247,41 @@ export class ApiTabOperateService {
   }
   getCurrentTab() {
     return this.getTabByIndex(this.selectedIndex);
+  }
+  closeTabByOperate(action: string | TabOperate) {
+    const currentTabID = this.tabStorage.tabOrder[this.selectedIndex];
+    let tabsObj = {
+      //Close tab has hasChanged tab
+      needTips: false,
+      selectedIndex: 0,
+      left: [],
+    };
+    switch (action) {
+      case TabOperate.closeAll: {
+        tabsObj = this.closeTabByDuration([0, this.tabStorage.tabOrder.length]);
+        if (tabsObj.left.length === 0) {
+          this.newDefaultTab();
+        }
+        break;
+      }
+      case TabOperate.closeOther: {
+        tabsObj = this.closeTabByDuration([0, this.tabStorage.tabOrder.length], currentTabID);
+        break;
+      }
+      case TabOperate.closeLeft: {
+        tabsObj = this.closeTabByDuration([0, this.selectedIndex], currentTabID);
+        break;
+      }
+      case TabOperate.closeRight: {
+        tabsObj = this.closeTabByDuration([this.selectedIndex + 1, this.tabStorage.tabOrder.length], currentTabID);
+        break;
+      }
+    }
+    this.tabStorage.resetTabsByOrdr(tabsObj.left);
+    this.selectedIndex = tabsObj.selectedIndex;
+    if (tabsObj.needTips) {
+      this.message.warn($localize`Program will not close unsaved tabs`);
+    }
   }
   /**
    * Same sub means tab has same {params.uuid}
@@ -322,7 +308,36 @@ export class ApiTabOperateService {
     }
     return false;
   }
-
+  /**
+   * Close tab by need close duration
+   */
+  private closeTabByDuration(duration, keepID?) {
+    const tabsObj = {
+      //Close tab has hasChanged tab
+      needTips: false,
+      selectedIndex: 0,
+      left: [],
+    };
+    const start = duration[0];
+    const end = duration[1];
+    tabsObj.left = [
+      ...this.tabStorage.tabOrder.slice(0, start),
+      ...this.tabStorage.tabOrder.slice(start, end).filter((uuid) => {
+        if (keepID && uuid === keepID) {
+          return true;
+        }
+        if (this.tabStorage.tabsByID.get(uuid).hasChanged) {
+          tabsObj.needTips = true;
+          return true;
+        }
+      }),
+      ...this.tabStorage.tabOrder.slice(end),
+    ];
+    if (keepID) {
+      tabsObj.selectedIndex = tabsObj.left.findIndex((uuid) => uuid === keepID);
+    }
+    return tabsObj;
+  }
   /**
    * Find can be replace tab
    *
@@ -336,6 +351,17 @@ export class ApiTabOperateService {
       currentTab && this.canbeReplace(currentTab)
         ? currentTab
         : Object.values(mapObj).find((val) => this.canbeReplace(val));
+    return result;
+  }
+  //*Prevent toggling splash screen with empty tab title
+  private preventBlankTab(origin, target) {
+    const result = target;
+    /**
+     * Keyname effect show tab
+     */
+    ['title', 'hasChanged', 'isLoading'].forEach((keyName) => {
+      result[keyName] = origin[keyName];
+    });
     return result;
   }
   private updateChildView() {

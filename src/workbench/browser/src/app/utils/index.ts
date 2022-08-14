@@ -68,7 +68,8 @@ export const objectToArray = (obj) =>
     key: val,
     value: obj[val],
   }));
-export const isEmptyObj = (obj) => obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
+export const isEmptyObj = (obj) =>
+  obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 export const isEmptyValue = (obj) => {
   const list = Object.keys(obj);
   const emptyList = list.filter((it) => !obj[it]);
@@ -188,3 +189,42 @@ export function throttle(fn, gap) {
     }
   };
 }
+
+export const eoDeepCopy = (obj) => {
+  if (structuredClone) {return structuredClone(obj);}
+  let copy;
+
+  // Handle the 3 simple types, and null or undefined
+  if (null == obj || 'object' != typeof obj) {
+    return obj;
+  }
+
+  // Handle Date
+  if (obj instanceof Date) {
+    copy = new Date();
+    copy.setTime(obj.getTime());
+    return copy;
+  }
+
+  // Handle Array
+  if (obj instanceof Array) {
+    copy = [];
+    for (let i = 0, len = obj.length; i < len; i++) {
+      copy[i] = eoDeepCopy(obj[i]);
+    }
+    return copy;
+  }
+
+  // Handle Object
+  if (obj instanceof Object) {
+    copy = {};
+    for (const attr in obj) {
+      if (obj.hasOwnProperty(attr)) {
+        copy[attr] = eoDeepCopy(obj[attr]);
+      }
+    }
+    return copy;
+  }
+
+  throw new Error('Unable to copy obj! Its type isn\'t supported.');
+};

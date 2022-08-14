@@ -22,7 +22,7 @@
           *ngIf="tabStorage.tabsByID.get(uuid).extends?.method"
           >{{ tabStorage.tabsByID.get(uuid).extends.method }}</span
         >
-        <span class="text_omit tab_text"> {{ tabStorage.tabsByID.get(uuid).title }}</span>
+        <span class="text_omit tab_text"  [title]="tabStorage.tabsByID.get(uuid).title"> {{ tabStorage.tabsByID.get(uuid).title }}</span>
         <!-- Close/HasEdit -->
         <div class="tab-item-button-group flex items-center">
           <span class="tab-has-edit-icon eo-tab-theme-icon" *ngIf="tabStorage.tabsByID.get(uuid).hasChanged"></span>
@@ -52,7 +52,7 @@
       </li>
       <li nz-menu-item (click)="closeTabByOperate('closeAll')" i18n>Close All Tabs</li>
       <li nz-menu-item (click)="closeTabByOperate('closeLeft')" [nzDisabled]="tabOperate.selectedIndex === 0" i18n>
-        Close Tabs To The Left
+        Close Tabs To the Left
       </li>
       <li
         nz-menu-item
@@ -60,7 +60,7 @@
         (click)="closeTabByOperate('closeRight')"
         i18n
       >
-        Close Tabs to Right
+        Close Tabs to the Right
       </li>
     </ul>
   </nz-dropdown-menu>

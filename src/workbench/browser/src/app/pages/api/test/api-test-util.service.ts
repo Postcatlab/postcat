@@ -3,6 +3,7 @@ import { whatType } from 'eo/workbench/browser/src/app/utils';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiTestHeaders, ApiTestQuery, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../../shared/services/storage/index.model';
+import { eoDeepCopy } from '../../../utils';
 import { uiData2Json, text2UiData, json2XML } from '../../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
@@ -265,7 +266,7 @@ export class ApiTestUtilService {
    * @returns apiData
    */
   formatEditingApiData(formData): ApiTestData {
-    const result = structuredClone(formData);
+    const result = eoDeepCopy(formData);
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach((tableName) => {
       if (whatType(result[tableName]) !== 'array') {
         return;
@@ -390,12 +391,12 @@ export class ApiTestUtilService {
     return result;
   }
   getGlobals(): object {
-    let result = {};
+    let result = null;
     const global = localStorage.getItem(this.globalStorageKey);
     try {
       result = JSON.parse(global);
     } catch (e) {}
-    return result;
+    return result || {};
   }
   setGlobals(globals) {
     if (!globals) {

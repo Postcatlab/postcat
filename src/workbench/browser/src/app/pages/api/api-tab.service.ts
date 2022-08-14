@@ -124,6 +124,7 @@ export class ApiTabService {
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
     const currentTab = this.apiTabComponent.getExistTabByUrl(url);
+    if(!currentTab) {return;}
     const contentID = currentTab.module;
     //Get tab cache
     this.componentRef.model = currentTab?.content?.[contentID] || null;
@@ -166,7 +167,7 @@ export class ApiTabService {
             `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
           );
         }
-        let currentHasChanged = false;
+        let currentHasChanged = currentTab.hasChanged;
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes
@@ -176,6 +177,8 @@ export class ApiTabService {
               currentTab.params.uuid.includes('history')
             ) {
               currentHasChanged = this.componentRef.isFormChange();
+            }else{
+              currentHasChanged=false;
             }
             break;
           }
@@ -187,15 +190,9 @@ export class ApiTabService {
         replaceTab.extends.hasChanged = currentTab.extends?.hasChanged || {};
         replaceTab.extends.hasChanged[contentID] = currentHasChanged;
         // Editiable tab  share hasChanged data
-        if (!currentHasChanged) {
-          const otherEditableTabs = this.BASIC_TABS.filter(
-            (val) => val.type === 'edit' && val.module !== contentID
-          );
-          if (currentTab.extends?.hasChanged) {
-            currentHasChanged = otherEditableTabs.some(
-              (tabItem) => currentTab.extends?.hasChanged[tabItem.module]
-            );
-          }
+        if (!currentHasChanged && currentTab.extends?.hasChanged) {
+          const otherEditableTabs = this.BASIC_TABS.filter((val) => val.type === 'edit' && val.module !== contentID);
+          currentHasChanged = otherEditableTabs.some((tabItem) => currentTab.extends?.hasChanged[tabItem.module]);
         }
         replaceTab.hasChanged = currentHasChanged;
         // Set storage
@@ -219,7 +216,7 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
     }
-    // console.log('updatePartialTab',inData.url,currentTab, replaceTab);
+    // console.log('updatePartialTab', inData, currentTab, replaceTab);
     this.apiTabComponent.updatePartialTab(inData.url, replaceTab);
   }
   /**
