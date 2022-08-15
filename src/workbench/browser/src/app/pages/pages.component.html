@@ -1,5 +1,5 @@
 <eo-navbar></eo-navbar>
-<div class="page-body"
+<div class="page-body" [ngClass]="{'web-page-body':!electron.isElectron,'pc-page-body':electron.isElectron}"
   [style.--remote-notification-height]="isShowNotification && electron.isElectron ? '50px' : '0px'">
   <div *ngIf="!isRemote && isShowNotification && electron.isElectron" class="remote-notification">
     <i nz-icon [nzType]="isRemote ? 'cloud' : 'exclamation-circle'" nzTheme="outline" class="text-[13px] mr-[2px]"></i>
