@@ -13,4 +13,8 @@ eo-api-edit-query,
 eo-api-edit-rest {
   display: block;
 }
+.top-save-bar {
+  @apply sticky top-0 z-10 py-2.5 bg-white;
+  border-bottom: 1px solid var(--DIVIDER);
+}
 
