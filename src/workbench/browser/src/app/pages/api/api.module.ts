@@ -4,9 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ApiRoutingModule } from './api-routing.module';
-import { ApiEditModule } from './edit/api-edit.module';
-import { ApiDetailModule } from './detail/api-detail.module';
-import { ApiTestModule } from './test/api-test.module';
 import { EnvModule } from '../../shared/components/env/env.module';
 import { EouiModule } from '../../eoui/eoui.module';
 
@@ -65,9 +62,6 @@ const COMPONENTS = [
     ReactiveFormsModule,
     CommonModule,
     ApiRoutingModule,
-    ApiEditModule,
-    ApiDetailModule,
-    ApiTestModule,
     NzButtonModule,
     NzIconModule,
     NzTabsModule,
