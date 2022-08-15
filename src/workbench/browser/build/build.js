@@ -16,7 +16,7 @@ class webPlatformBuilder {
     <html>
       <head>
         <meta charset="utf-8" />
-        <title>eoapi redirect</title>
+        <title>Eoapi - Easy &amp; Open Source API Ecosystem</title>
         <script>
          let lang=window.location.href.includes("/en")?'en':'zh';
          try{
