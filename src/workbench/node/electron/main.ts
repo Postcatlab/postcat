@@ -16,12 +16,12 @@ export const UnitWorkerModule = {
           break;
         }
         case 'abort': {
-          UnitWorkerModule.works[id].kill();
+          if (UnitWorkerModule.works[id]) {
+            UnitWorkerModule.works[id].kill();
+          }
           break;
         }
       }
     });
   },
 };
-
-

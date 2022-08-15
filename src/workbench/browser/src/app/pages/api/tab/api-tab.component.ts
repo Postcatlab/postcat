@@ -86,7 +86,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   //Quick see tabs change in templete,for debug,can be deleted
   //! just for debug
-  getConsoleTabs() {
+  private getConsoleTabs() {
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => {
       const tab = this.tabStorage.tabsByID.get(uuid);

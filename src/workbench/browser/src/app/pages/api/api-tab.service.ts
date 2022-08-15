@@ -124,7 +124,9 @@ export class ApiTabService {
     //?Why should use getCurrentTab()?
     //Because maybe current tab  has't  finish init
     const currentTab = this.apiTabComponent.getExistTabByUrl(url);
-    if(!currentTab) {return;}
+    if (!currentTab) {
+      return;
+    }
     const contentID = currentTab.module;
     //Get tab cache
     this.componentRef.model = currentTab?.content?.[contentID] || null;
@@ -177,8 +179,8 @@ export class ApiTabService {
               currentTab.params.uuid.includes('history')
             ) {
               currentHasChanged = this.componentRef.isFormChange();
-            }else{
-              currentHasChanged=false;
+            } else {
+              currentHasChanged = false;
             }
             break;
           }
@@ -230,10 +232,16 @@ export class ApiTabService {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
     }
-    const currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
+    let currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
     if (!currentTab) {
       console.warn(`has't find the tab fit child component ,url:${inData.url}`);
       return;
+    }
+    if (inData.model?.when === 'otherTabTested') {
+      //Update other tab test result
+      inData.url = `/home/api/test?pageID=${inData.model.id}`;
+      currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
+      inData.model = Object.assign({}, currentTab.content.test, inData.model.model);
     }
     this.updateTab(currentTab, inData);
   }

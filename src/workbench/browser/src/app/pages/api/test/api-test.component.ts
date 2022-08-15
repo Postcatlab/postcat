@@ -60,7 +60,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * * Usually restored from tab
    */
   @Input() initialModel: testViewModel;
-  @Output() modelChange = new EventEmitter<testViewModel>();
+  @Output() modelChange = new EventEmitter<testViewModel | any>();
   @Output() afterInit = new EventEmitter<testViewModel>();
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
@@ -312,7 +312,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private test() {
     this.testServer.send('unitTest', {
-      id: this.route.snapshot.queryParams.pageID,
+      id: JSON.stringify(this.route.snapshot.queryParams),
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.env,
@@ -340,14 +340,30 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Receive Test Server Message
    */
   private receiveMessage(message: ApiTestRes) {
-    // console.log('[api test componnet]receiveMessage', message);
+    console.log('[api test componnet]receiveMessage', message);
     const tmpHistory = {
       general: message.general,
       request: message.report?.request || {},
       response: message.response || {},
     };
-    this.model.testResult = tmpHistory;
-    this.status$.next('tested');
+    let queryParams: { pageID: string; uuid?: string };
+    try {
+      queryParams = JSON.parse(message.id);
+    } catch (e) {}
+    if (queryParams.pageID !== this.route.snapshot.queryParams.pageID) {
+      //* Other tab test finish,support multiple tab test same time
+      this.modelChange.emit({
+        when: 'otherTabTested',
+        id: queryParams.pageID,
+        model: {
+          testStartTime: 0,
+          testResult: tmpHistory,
+        },
+      });
+    } else {
+      this.model.testResult = tmpHistory;
+      this.status$.next('tested');
+    }
     if (message.status === 'error') {
       return;
     }
@@ -360,8 +376,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!message.response.statusCode) {
       return;
     }
-    // TODO Other tab test finish,support multiple tab test same time
-    this.addHistory(message.history, this.model.request.uuid);
+    this.addHistory(message.history, Number(queryParams.uuid));
   }
   setTestSecondsTimmer() {
     if (this.timer$) {
