@@ -43,6 +43,8 @@ export class ParamsImportComponent {
         return `name: Jack\nage: 12`;
       case 'query':
         return `/api?name=Jack&age=12`;
+      case 'json':
+        return `{ "name": "Jack", "age": 12}`;
       default:
         return `/api?name=Jack&age=12`;
     }
