@@ -31,6 +31,7 @@ import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra
 
 import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
+import { RouterModule } from '@angular/router';
 
 const NZ_COMPONETS = [
   NzDropDownModule,
@@ -59,6 +60,12 @@ const COMPONENTS = [
 @NgModule({
   declarations: [...COMPONENTS],
   imports: [
+    RouterModule.forChild([
+      {
+        path: '',
+        component: ApiEditComponent,
+      },
+    ]),
     FormsModule,
     ReactiveFormsModule,
     Ng1Module,
