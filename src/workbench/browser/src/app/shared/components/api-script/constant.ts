@@ -211,10 +211,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`JSON Decode`,
-        caption: 'json.decode',
-        value: 'json.decode(json)',
+        caption: 'eo.json.decode',
+        value: 'eo.json.decode(json)',
         note: {
-          code: 'json.decode(json)',
+          code: 'eo.json.decode(json)',
           desc: $localize`JSON Decode`,
           input: [{ key: 'json', value: $localize`JSON string` }],
           output: $localize`JSON object`,
@@ -222,10 +222,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`XML Encode`,
-        caption: 'xml.encode',
-        value: 'xml.encode(xml_object)',
+        caption: 'eo.xml.encode',
+        value: 'eo.xml.encode(xml_object)',
         note: {
-          code: 'xml.encode(xml_object)',
+          code: 'eo.xml.encode(xml_object)',
           desc: $localize`XML Encode`,
           input: [{ key: 'xml_object', value: $localize`XML object` }],
           output: $localize`XML string`,
@@ -233,10 +233,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`XML Decode`,
-        caption: 'xml.decode',
-        value: 'xml.decode(xml)',
+        caption: 'eo.xml.decode',
+        value: 'eo.xml.decode(xml)',
         note: {
-          code: 'xml.decode(xml)',
+          code: 'eo.xml.decode(xml)',
           desc: $localize`XML Decode`,
           input: [{ key: 'xml', value: $localize`XML string` }],
           output: $localize`XML code`,
@@ -244,10 +244,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Base64 Encode`,
-        caption: 'base64.encode',
-        value: 'base64.encode(data)',
+        caption: 'eo.base64.encode',
+        value: 'eo.base64.encode(data)',
         note: {
-          code: 'base64.encode(data)',
+          code: 'eo.base64.encode(data)',
           desc: $localize`Base64 Encode`,
           input: [{ key: 'data', value: $localize`string of wait for encode` }],
           output: $localize`string after encode`,
@@ -255,10 +255,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Base64 Decode`,
-        caption: 'base64.decode',
-        value: 'base64.decode(data)',
+        caption: 'eo.base64.decode',
+        value: 'eo.base64.decode(data)',
         note: {
-          code: 'base64.decode(data)',
+          code: 'eo.base64.decode(data)',
           desc: $localize`Base64 Decode`,
           input: [{ key: 'data', value: $localize`string of wait for decode` }],
           output: $localize`string after decode`,

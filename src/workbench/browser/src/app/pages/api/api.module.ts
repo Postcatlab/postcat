@@ -40,7 +40,6 @@ import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { ApiOverviewComponent } from './overview/api-overview.component';
 import { HistoryComponent } from './history/eo-history.component';
-import { ApiMockComponent } from './mock/api-mock.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
@@ -57,7 +56,6 @@ const COMPONENTS = [
   ApiOverviewComponent,
   ImportApiComponent,
   ExtensionSelectComponent,
-  ApiMockComponent,
   HistoryComponent,
 ];
 @NgModule({

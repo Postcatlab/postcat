@@ -22,8 +22,17 @@ import { ApiDetailMockComponent } from './mock/api-detail-mock.component';
 
 import { ApiDetailUtilService } from './api-detail-util.service';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { RouterModule } from '@angular/router';
 
-const NZ_COMPONETS = [NzButtonModule, NzCollapseModule,NzIconModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
+const NZ_COMPONETS = [
+  NzButtonModule,
+  NzCollapseModule,
+  NzIconModule,
+  NzTagModule,
+  NzModalModule,
+  NzFormModule,
+  NzToolTipModule,
+];
 const COMPONENTS = [
   ApiDetailComponent,
   ApiDetailHeaderComponent,
@@ -34,7 +43,21 @@ const COMPONENTS = [
 ];
 @NgModule({
   declarations: [...COMPONENTS],
-  imports: [FormsModule, ReactiveFormsModule, Ng1Module, CommonModule, ...NZ_COMPONETS, EouiModule, SharedModule],
+  imports: [
+    RouterModule.forChild([
+      {
+        path: '',
+        component: ApiDetailComponent,
+      },
+    ]),
+    FormsModule,
+    ReactiveFormsModule,
+    Ng1Module,
+    CommonModule,
+    ...NZ_COMPONETS,
+    EouiModule,
+    SharedModule,
+  ],
   providers: [ApiDetailUtilService],
 })
 export class ApiDetailModule {}

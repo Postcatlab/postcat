@@ -43,6 +43,7 @@ import { ApiTestResultResponseComponent } from './result-response/api-test-resul
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { RouterModule, Routes } from '@angular/router';
 const NZ_COMPONETS = [
   NzDropDownModule,
   NzModalModule,
@@ -76,6 +77,12 @@ const COMPONENTS = [
 @NgModule({
   declarations: [...COMPONENTS, ByteToStringPipe],
   imports: [
+    RouterModule.forChild([
+      {
+        path: '',
+        component: ApiTestComponent,
+      },
+    ]),
     FormsModule,
     ReactiveFormsModule,
     Ng1Module,

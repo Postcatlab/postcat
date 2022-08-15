@@ -39,7 +39,7 @@ export class StorageService {
       data: undefined,
       callback,
     };
-    console.log('this.instance', this.instance, action);
+    // console.log('this.instance', this.instance, action);
     if (!this.instance[action]) {
       throw Error(`Lack request API: ${action}`);
     }
