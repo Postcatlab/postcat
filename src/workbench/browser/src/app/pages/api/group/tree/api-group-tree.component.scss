@@ -56,17 +56,23 @@
     }
   }
 }
-::ng-deep .group_tree {
-  overflow: hidden auto;
-  height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 120px);
-  .ant-tree-indent-unit {
-    width: 8px;
-  }
-  .ant-tree {
-    .ant-tree-node-content-wrapper {
-      padding: 0 2px;
-      width: 0;
+
+::ng-deep {
+  .group_tree {
+    overflow: hidden auto;
+    height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 123px);
+    .ant-tree-indent-unit {
+      width: 8px;
     }
+    .ant-tree {
+      .ant-tree-node-content-wrapper {
+        padding: 0 2px;
+        width: 0;
+      }
+    }
+  }
+  .web-page-body .group_tree{
+    height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 87px);
   }
 }
 .ant-dropdown-menu {
