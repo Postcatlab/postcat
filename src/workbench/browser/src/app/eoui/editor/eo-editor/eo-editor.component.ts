@@ -97,10 +97,14 @@ export class EoEditorComponent implements AfterViewInit, OnInit, OnChanges {
   ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
-      const type = whatTextType(this.code || '');
-      this.editorType = type;
-      if (this.autoFormat) {
-        this.code = this.formatCode(this.code, type);
+      try {
+        const type = whatTextType(this.code || '');
+        this.editorType = type;
+        if (this.autoFormat) {
+          this.code = this.formatCode(this.code, type);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }
