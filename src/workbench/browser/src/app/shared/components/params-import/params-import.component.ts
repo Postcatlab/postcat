@@ -43,6 +43,8 @@ export class ParamsImportComponent {
         return `name: Jack\nage: 12`;
       case 'query':
         return `/api?name=Jack&age=12`;
+      case 'json':
+        return `{ "name": "Jack", "age": 12}`;
       default:
         return `/api?name=Jack&age=12`;
     }
@@ -87,6 +89,10 @@ export class ParamsImportComponent {
       const json = {};
       form2json(this.paramCode).forEach((it) => {
         const { key, value } = it;
+        if (key == null || value == null) {
+          this.message.error($localize`Form format invalid`);
+          return;
+        }
         json[key] = value;
       });
       paramCode = JSON.parse(JSON.stringify(json));
@@ -94,7 +100,7 @@ export class ParamsImportComponent {
     if (this.contentType === 'xml') {
       const status = isXML(this.paramCode);
       if (!status) {
-        this.message.error('XML格式不合法');
+        this.message.error($localize`XML format invalid`);
         return;
       }
       paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
