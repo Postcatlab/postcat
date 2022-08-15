@@ -91,7 +91,7 @@
         <source>Copied</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/eoui/editor/eo-editor/eo-editor.component.ts</context>
-          <context context-type="linenumber">174</context>
+          <context context-type="linenumber">178</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/detail/mock/api-detail-mock.component.ts</context>
@@ -424,7 +424,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
@@ -439,7 +439,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
@@ -458,7 +458,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">80</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
@@ -473,7 +473,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">56</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
@@ -499,7 +499,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test.component.html</context>
@@ -514,11 +514,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">93</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">108</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/mock/api-mock.component.html</context>
@@ -762,35 +762,35 @@
         <source>Please enter API Path</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f7848824c704e61bdc0f83b860e45e3684202137" datatype="html">
         <source>Group / API Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7b80c964c7c7659379ceba7b6df92cb0430f391d" datatype="html">
         <source>Please select an API group</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3fcbcebaa310b7251b630e120e85046191420992" datatype="html">
         <source>Please enter API name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5e6ed1bb801ebc08ddb3b9ffdad6ffea0d20174f" datatype="html">
         <source>Request</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/edit/api-edit.component.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7200525885296527058" datatype="html">
@@ -1165,7 +1165,7 @@
         <source>Program will not close unsaved tabs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab-operate.service.ts</context>
-          <context context-type="linenumber">279</context>
+          <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
       <trans-unit id="44efde0bbba66e81ad32078ed9809767ad54db13" datatype="html">
@@ -2802,7 +2802,21 @@
         <source>JSON format invalid</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/params-import/params-import.component.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3203939388415346732" datatype="html">
+        <source>Form format invalid</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/params-import/params-import.component.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3714735999945287741" datatype="html">
+        <source>XML format invalid</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/params-import/params-import.component.ts</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2724055831234181057" datatype="html">
