@@ -4,7 +4,7 @@ import { Environment, ApiTestHistoryResponse, ApiTestResGeneral, ApiTestHistoryF
  */
 export interface ApiTestRes {
   status: 'finish' | 'error';
-  id: number;
+  id: string;
   response: ApiTestHistoryResponse | any;
   report?: any;
   globals?: object;
