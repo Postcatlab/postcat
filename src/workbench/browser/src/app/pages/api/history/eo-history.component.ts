@@ -17,7 +17,6 @@ export class HistoryComponent implements OnInit {
   async ngOnInit() {
     const result = await this.loadAllTest();
     this.historyList = result.reverse();
-    console.log('this.historyList', this.historyList);
     this.message.get().subscribe(async ({ type }) => {
       if (type === 'updateHistory') {
         const data = await this.loadAllTest();

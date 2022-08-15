@@ -168,9 +168,11 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   private setCode(val: string) {
+    console.log(val === this.$$code);
     if (val === this.$$code) {
       return;
     }
+    // console.log('val', val);
 
     let code = '';
     try {
@@ -180,10 +182,10 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     }
 
     if (code && this.isFirstFormat && this.autoFormat) {
-      (async () => {
+      requestAnimationFrame(async () => {
         this.$$code = await this.formatCode();
         this.isFirstFormat = false;
-      })();
+      });
     }
 
     this.$$code = code;

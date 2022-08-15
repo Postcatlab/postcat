@@ -70,6 +70,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
   oldDataStorageType: 'local' | 'http';
+  oldRemoteServerUrl: '';
   validateForm!: FormGroup;
   loading = false;
 
@@ -93,6 +94,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       ],
     });
     this.oldDataStorageType = this.validateForm.value['eoapi-common.dataStorage'];
+    this.oldRemoteServerUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -150,6 +152,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
     const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
     const isRemote = dataStorage === 'http';
     const isValid = this.validateForm.valid;
+    const remoteUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
 
     if (!this.electronService.isElectron && isRemote) {
       return this.message.error(
@@ -157,7 +160,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       );
     }
 
-    if (this.oldDataStorageType === dataStorage) {
+    if (this.oldDataStorageType === dataStorage && this.oldRemoteServerUrl === remoteUrl) {
       return;
     }
 
