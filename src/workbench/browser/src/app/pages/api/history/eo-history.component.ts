@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { IndexedDBStorage } from '../../../../../../../workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
 import { MessageService } from '../../../shared/services/message';
 
@@ -11,24 +13,31 @@ import { MessageService } from '../../../shared/services/message';
 export class HistoryComponent implements OnInit {
   historyList = [];
   colorHash = new Map().set('get', 'green').set('post', 'blue').set('delete', 'red').set('put', 'pink');
-  constructor(public storageInstance: IndexedDBStorage, private router: Router, private message: MessageService) {}
-  ngOnInit() {
-    const observer = this.loadAllTest();
-    observer.subscribe((result: any) => {
-      // console.log(result.data);
-      this.historyList = result.data.reverse();
-    });
-    this.message.get().subscribe(({ type }) => {
+  constructor(private storage: StorageService, private router: Router, private message: MessageService) {}
+  async ngOnInit() {
+    const result = await this.loadAllTest();
+    this.historyList = result.reverse();
+    console.log('this.historyList', this.historyList);
+    this.message.get().subscribe(async ({ type }) => {
       if (type === 'updateHistory') {
-        this.loadAllTest().subscribe((result: any) => {
-          this.historyList = result.data.reverse();
-        });
+        const data = await this.loadAllTest();
+        this.historyList = data.reverse();
       }
     });
   }
 
   loadAllTest() {
-    return this.storageInstance.apiTestHistoryLoadAllByProjectID(1);
+    // return this.storageInstance.apiTestHistoryLoadAllByProjectID(1);
+    return new Promise<any[]>((resolve) => {
+      this.storage.run('apiTestHistoryLoadAllByProjectID', [1], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        } else {
+          console.error(result.data);
+          resolve(result.data);
+        }
+      });
+    });
   }
 
   methodColor(type) {
@@ -38,7 +47,7 @@ export class HistoryComponent implements OnInit {
   gotoTestHistory(data) {
     this.router.navigate(['home/api/test'], {
       queryParams: {
-        uuid:`history_${data.uuid}`
+        uuid: `history_${data.uuid}`,
       },
     });
   }
@@ -46,7 +55,14 @@ export class HistoryComponent implements OnInit {
   clearAllHistory() {
     const uuids = this.historyList.map((it) => it.uuid);
     this.historyList = [];
-    this.storageInstance.apiTestHistoryBulkRemove(uuids);
+    // this.storageInstance.apiTestHistoryBulkRemove(uuids);
+    this.storage.run('apiTestHistoryBulkRemove', [uuids], (result: StorageRes) => {
+      // if (result.status === StorageResStatus.success) {
+      //   resolve(result.data);
+      // } else {
+      //   console.error(result.data);
+      // }
+    });
   }
   cancel() {}
 }

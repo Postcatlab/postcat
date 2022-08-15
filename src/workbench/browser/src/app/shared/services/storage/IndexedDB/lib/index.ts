@@ -470,9 +470,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuid
    */
-  apiTestHistoryLoad(uuid: number | string): Observable<object> {
+  apiTestHistoryLoad = (uuid: number | string): Observable<object> => {
     return this.load(this.apiTestHistory, uuid);
-  }
+  };
 
   /**
    * Load all apiTestHistory items by apiDataID.
@@ -691,7 +691,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return new Observable((obs) => {
       const fun = async () => {
         const result = {};
-          const tables = ['environment', 'group', 'project', 'apiData'];
+        const tables = ['environment', 'group', 'project', 'apiData'];
         for (let i = 0; i < tables.length; i++) {
           const tableName = tables[i];
           if (tableName === 'project') {

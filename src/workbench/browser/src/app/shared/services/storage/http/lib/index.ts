@@ -117,9 +117,13 @@ export class HttpStorage implements StorageInterface {
   apiTestHistoryBulkRemove(uuids: Array<number | string>) {
     return this.http.delete(`/api_test_history?uuids=[${uuids}]`) as Observable<object>;
   }
-  apiTestHistoryLoad: (uuid: number | string) => Observable<object>;
+  apiTestHistoryLoad(uuid: number | string) {
+    return this.http.get(`/api_test_history/${uuid}`) as Observable<object>;
+  }
   apiTestHistoryBulkLoad: (uuids: Array<number | string>) => Observable<object>;
-  apiTestHistoryLoadAllByProjectID: (projectID: number | string) => Observable<object>;
+  apiTestHistoryLoadAllByProjectID(projectID: number | string) {
+    return this.http.get(`/api_test_history?projectID=${projectID}`) as Observable<object>;
+  }
   apiTestHistoryLoadAllByApiDataID(apiDataID: number | string) {
     return this.http.get(`/api_test_history?apiDataID=${apiDataID}`) as Observable<object>;
   }
