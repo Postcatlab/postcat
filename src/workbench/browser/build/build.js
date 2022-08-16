@@ -27,7 +27,7 @@ class webPlatformBuilder {
          let baseDir="/"+lang+'/'
          let search={};
          if(window.location.search){
-          window.location.href=baseDir+window.location.search);
+          window.location.href=baseDir+window.location.search;
          }else{
          window.location.href=baseDir;
          }
