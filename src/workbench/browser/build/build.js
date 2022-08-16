@@ -24,11 +24,12 @@ class webPlatformBuilder {
          }catch(e){
           
          }
+         let baseDir="/"+lang+'/'+window.location.pathname.replace('/zh','').replace('/en','')
          let search={};
          if(window.location.search){
-          window.location.href="/"+lang+'/'+window.location.search);
+          window.location.href=baseDir+window.location.search);
          }else{
-         window.location.href="/"+lang;
+         window.location.href=baseDir;
          }
         </script>
       </head>
