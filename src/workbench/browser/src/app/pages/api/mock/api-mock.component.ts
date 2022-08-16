@@ -6,10 +6,10 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
-import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/api/test/api-test-util.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -64,7 +64,6 @@ export class ApiMockComponent implements OnInit {
 
   constructor(
     private storageService: StorageService,
-    private apiTest: ApiTestUtilService,
     private route: ActivatedRoute,
     private remoteService: RemoteService,
     private message: NzMessageService
@@ -91,7 +90,7 @@ export class ApiMockComponent implements OnInit {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const uri = this.apiTest.transferUrlAndQuery(
+    const uri = transferUrlAndQuery(
       formatUri(this.apiData.uri, this.apiData.restParams),
       this.apiData.queryParams,
       {

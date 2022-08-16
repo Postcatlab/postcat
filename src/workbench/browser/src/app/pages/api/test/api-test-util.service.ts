@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { whatType } from 'eo/workbench/browser/src/app/utils';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiTestHeaders, ApiTestQuery, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../../shared/services/storage/index.model';
@@ -143,64 +144,6 @@ export class ApiTestUtilService {
       ],
     };
   }
-  /**
-   * URL and Query transfer each other
-   *
-   * @description Add query to URL and read query form url
-   * @param url - whole url include query
-   * @param query - ui query param
-   * @param opts.base - based on which,url or query,delete no exist and replace same
-   * @param opts.replaceType 'replace'|'merge' replace means only keep replace array,merge means union
-   * @returns - {url:"",query:[]}
-   */
-  transferUrlAndQuery(
-    url = '',
-    query = [],
-    opts: { base: string; replaceType: string } = {
-      base: 'url',
-      replaceType: 'replace',
-    }
-  ) {
-    const urlQuery = [];
-    const uiQuery = query;
-    //Get url query
-    new URLSearchParams(url.split('?').slice(1).join('?')).forEach((val, name) => {
-      const item: ApiTestQuery = {
-        required: true,
-        name,
-        value: val,
-      };
-      urlQuery.push(item);
-    });
-    //Get replace result
-    const origin = opts.base === 'url' ? uiQuery : urlQuery;
-    const replace = opts.base === 'url' ? urlQuery : uiQuery;
-    if (opts.replaceType === 'replace') {
-      origin.forEach((val) => (val.name ? (val.required = false) : ''));
-    }
-    const result = [...replace, ...origin];
-    for (let i = 0; i < result.length; ++i) {
-      for (let j = i + 1; j < result.length; ++j) {
-        if (result[i].name === result[j].name) {
-          result.splice(j--, 1);
-        }
-      }
-    }
-    //Joint query
-    let search = '';
-    result.forEach((val) => {
-      if (!val.name || !val.required) {
-        return;
-      }
-      search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
-    });
-    search = search ? `?${search.slice(0, -1)}` : '';
-    url = `${url.split('?')[0]}${search}`;
-    return {
-      url,
-      query: result,
-    };
-  }
   getHTTPStatus(statusCode) {
     const HTTP_CODE_STATUS = [
       {
@@ -238,7 +181,7 @@ export class ApiTestUtilService {
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
     //handle query and url
-    const tmpResult = this.transferUrlAndQuery(inData.request.uri, [], {
+    const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
       base: 'url',
       replaceType: 'merge',
     });
@@ -318,7 +261,7 @@ export class ApiTestUtilService {
       editToTestParams(inData[keyName]);
     });
     //handle query and url
-    const tmpResult = this.transferUrlAndQuery(inData.uri, inData.queryParams, {
+    const tmpResult = transferUrlAndQuery(inData.uri, inData.queryParams, {
       base: 'url',
       replaceType: 'merge',
     });

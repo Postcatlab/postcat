@@ -80,8 +80,8 @@ class EoBrowserWindow {
     this.win = new BrowserWindow({
       width,
       height,
-      minWidth: Math.min(width, 1280),
-      minHeight: Math.min(height, 720),
+      minWidth: Math.floor(size.width * 0.5),
+      minHeight: Math.floor(size.height * 0.5),
       useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
       frame: os.type() === 'Darwin' ? true : false, //mac use default frame
       webPreferences: {

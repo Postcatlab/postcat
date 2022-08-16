@@ -34,6 +34,7 @@ import {
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 interface testViewModel {
@@ -203,7 +204,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     });
   }
   changeQuery() {
-    this.model.request.uri = this.apiTestUtil.transferUrlAndQuery(
+    this.model.request.uri = transferUrlAndQuery(
       this.model.request.uri,
       this.model.request.queryParams,
       {
@@ -213,7 +214,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     ).url;
   }
   changeUri() {
-    this.model.request.queryParams = this.apiTestUtil.transferUrlAndQuery(
+    this.model.request.queryParams = transferUrlAndQuery(
       this.model.request.uri,
       this.model.request.queryParams,
       {
