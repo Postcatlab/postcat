@@ -24,8 +24,13 @@ class webPlatformBuilder {
          }catch(e){
           
          }
-         console.log('change lang:',lang)
+         let search={};
+         if(window.location.search){
+          search=new URLSearchParams(window.location.search);
+          window.location.href="/"+lang+'/?utm_source='+search.get('utm_source');
+         }else{
          window.location.href="/"+lang;
+         }
         </script>
       </head>
       <body></body>
