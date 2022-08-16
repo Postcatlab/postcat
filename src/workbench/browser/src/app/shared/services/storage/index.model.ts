@@ -445,10 +445,6 @@ export interface ApiData extends StorageModel {
    * @type {JsonRootType|string}
    */
   responseBodyJsonType?: JsonRootType | string;
-  /**
-   * mock列表
-   */
-  mockList?: ApiEditMock[];
 }
 /**
  * API Test Data

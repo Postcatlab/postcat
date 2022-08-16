@@ -1,10 +1,10 @@
 import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
-import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/api/test/api-test-util.service';
 import {  formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -32,7 +32,6 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   ];
   constructor(
     private storageService: StorageService,
-    private apiTest: ApiTestUtilService,
     private remoteService: RemoteService,
     private message: NzMessageService
   ) {}
@@ -60,7 +59,7 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const uri = this.apiTest.transferUrlAndQuery(
+    const uri = transferUrlAndQuery(
       formatUri(this.apiData.uri, this.apiData.queryParams),
       this.apiData.queryParams,
       {
@@ -134,3 +133,4 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
     this.message.success($localize`Copied`);
   }
 }
+
