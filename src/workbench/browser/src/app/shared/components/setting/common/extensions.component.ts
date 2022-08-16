@@ -20,9 +20,9 @@ import { debounceTime } from 'rxjs';
           <!-- 二级说明 -->
           <div
             *ngIf="module.properties[field]?.type !== 'boolean' && module.properties[field]?.description"
-            class="description"
+            class="text-[12px] mb-[8px] text-gray-400"
           >
-            <eo-shadow-dom [text]="module.properties[field]?.description || ''"></eo-shadow-dom>
+            {{ module.properties[field]?.description }}
           </div>
           <nz-form-control
             i18n-nzErrorTip
@@ -30,20 +30,20 @@ import { debounceTime } from 'rxjs';
             class="form-control"
           >
             <!-- 字符串类型 -->
-            <ng-container *ngIf="module.properties[field]?.type === 'string'">
-              <input
-                type="text"
-                nz-input
-                id="{{ field }}"
-                [disabled]="module.properties[field]?.disabled"
-                i18n-placeholder
-                placeholder="{{
-                  module.properties[field]?.placeholder ?? 'Please Enter ' + module.properties[field]?.label
-                }}"
-                formControlName="{{ field }}"
-                [(ngModel)]="model[field]"
-              />
-            </ng-container>
+            <!-- <ng-container *ngIf="module.properties[field]?.type === 'string'"> -->
+            <input
+              type="text"
+              nz-input
+              id="{{ field }}"
+              [disabled]="module.properties[field]?.disabled"
+              i18n-placeholder
+              placeholder="{{
+                module.properties[field]?.placeholder ?? 'Please Enter ' + module.properties[field]?.label
+              }}"
+              formControlName="{{ field }}"
+              [(ngModel)]="model[field]"
+            />
+            <!-- </ng-container> -->
 
             <!-- 布尔类型 -->
             <ng-container *ngIf="module.properties[field]?.type === 'boolean'">
