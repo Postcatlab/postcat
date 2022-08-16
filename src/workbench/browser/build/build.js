@@ -26,8 +26,7 @@ class webPlatformBuilder {
          }
          let search={};
          if(window.location.search){
-          search=new URLSearchParams(window.location.search);
-          window.location.href="/"+lang+'/?utm_source='+search.get('utm_source');
+          window.location.href="/"+lang+'/'+window.location.search);
          }else{
          window.location.href="/"+lang;
          }
