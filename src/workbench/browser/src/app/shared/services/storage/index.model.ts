@@ -666,6 +666,7 @@ export interface StorageInterface {
    */
   systemCheck?: () => Observable<object>;
   // Project
+  projectImport: (uuid: number, item: any) => Observable<object>;
   projectCreate: (item: Project) => Observable<object>;
   projectUpdate: (item: Project, uuid: number | string) => Observable<object>;
   projectBulkUpdate: (items: Array<Project>) => Observable<object>;

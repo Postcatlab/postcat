@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FeatureType } from '../../types';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 // const optionList = [
 //   {
@@ -48,7 +50,11 @@ export class ImportApiComponent implements OnInit {
   currentExtension = '';
   uploadData = null;
   featureMap = window.eo.getFeature('apimanage.import');
-  constructor(private messageService: MessageService, private eoMessage: EoMessageService) {}
+  constructor(
+    private messageService: MessageService,
+    private storage: StorageService,
+    private eoMessage: EoMessageService
+  ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
@@ -77,9 +83,73 @@ export class ImportApiComponent implements OnInit {
       return;
     }
     // console.log(JSON.stringify(data, null, 2));
-    this.messageService.send({
-      type: 'importSuccess',
-      data: { name, content: data },
+    const projectData = {
+      items: [
+        {
+          name: '文件夹',
+          items: [
+            {
+              name: '子文件夹1',
+              items: [
+                {
+                  name: 'fdsf Copy Copy Copy Copy Copy Copy Copy Copy Copy Copy',
+                  projectID: 1,
+                  uri: 'fsdf/',
+                  groupID: 0,
+                  protocol: 'http',
+                  method: 'POST',
+                  requestBodyType: 'json',
+                  requestBodyJsonType: 'object',
+                  requestBody: [],
+                  queryParams: [],
+                  restParams: [],
+                  requestHeaders: [],
+                  responseHeaders: [],
+                  responseBodyType: 'json',
+                  responseBodyJsonType: 'object',
+                  responseBody: [],
+                  createdAt: '2022-08-15T07:23:08.507Z',
+                  updatedAt: '2022-08-15T07:23:08.507Z',
+                  uuid: 19,
+                },
+              ],
+            },
+            {
+              name: '子文件夹',
+            },
+            {
+              name: 'fdsf Copy Copy Copy Copy Copy Copy Copy Copy Copy Copy',
+              projectID: 1,
+              uri: 'fsdf/',
+              groupID: 0,
+              protocol: 'http',
+              method: 'POST',
+              requestBodyType: 'json',
+              requestBodyJsonType: 'object',
+              requestBody: [],
+              queryParams: [],
+              restParams: [],
+              requestHeaders: [],
+              responseHeaders: [],
+              responseBodyType: 'json',
+              responseBodyJsonType: 'object',
+              responseBody: [],
+              createdAt: '2022-08-15T07:23:08.507Z',
+              updatedAt: '2022-08-15T07:23:08.507Z',
+              uuid: 19,
+            },
+          ],
+        },
+      ],
+      envList: [],
+    };
+    this.storage.run('projectImport', [1, projectData], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
+        this.messageService.send({
+          type: 'importSuccess',
+          data: { },
+        });
+      }
     });
     callback(true);
   }

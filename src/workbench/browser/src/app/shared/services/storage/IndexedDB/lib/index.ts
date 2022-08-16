@@ -1,6 +1,5 @@
 import Dexie, { Table } from 'dexie';
 import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -470,9 +469,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuid
    */
-  apiTestHistoryLoad = (uuid: number | string): Observable<object> => {
-    return this.load(this.apiTestHistory, uuid);
-  };
+  apiTestHistoryLoad = (uuid: number | string): Observable<object> => this.load(this.apiTestHistory, uuid);
 
   /**
    * Load all apiTestHistory items by apiDataID.
@@ -678,12 +675,19 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   groupUpdate(item: Group, uuid: number | string): Observable<object> {
     return this.update(this.group, item, uuid);
   }
-
+  projectImport(uuid: number, item): Observable<object> {
+    return new Observable((obs) => {
+      this.bulkCreate(this.group, [{name:'test',}]);
+      // obs.next(this.resProxy(result));
+      // obs.complete();
+    });
+  }
   /**
    * Bulk create project items.
    *
    * @param items
    */
+
   projectBulkCreate(items: Array<Project>): Observable<object> {
     return this.bulkCreate(this.project, items);
   }
