@@ -165,7 +165,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   async createGroup({ name, projectID, content }) {
     const groupID = await this.storageInstance.group.add({ name: name.replace(/\.json$/, ''), projectID });
-    const result = content.apiData.map((it, index) => ({ ...it, groupID, uuid: Date.now() + index }));
+    const result = content.apiData.map(({ uuid, ...it }, index) => ({ ...it, groupID }));
     const apiDataKeys = await this.storageInstance.apiData.bulkAdd(result, { allKeys: true });
     const apiData = result.map((n, i) =>
       createMockObj(n, { name: $localize`Default Mock`, createWay: 'system', apiDataID: apiDataKeys.at(i) })
