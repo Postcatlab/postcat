@@ -15,7 +15,7 @@ import {
   StorageItem,
   StorageResStatus,
 } from '../../index.model';
-import { sampleApiData } from '../sample';
+import { sampleApiData } from './index.model';
 
 export type ResultType<T = any> = {
   status: StorageResStatus.success;
@@ -93,11 +93,6 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       status: StorageResStatus.success,
       data,
     };
-    // if (isNotEmpty(data)) {
-    //   result.status = StorageResStatus.success;
-    // } else {
-    //   result.status = StorageResStatus.empty;
-    // }
     return result as ResultType;
   }
   /**
@@ -675,9 +670,10 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   groupUpdate(item: Group, uuid: number | string): Observable<object> {
     return this.update(this.group, item, uuid);
   }
-  projectImport(uuid: number, item): Observable<object> {
+  projectImport(uuid: number, data): Observable<object> {
     return new Observable((obs) => {
-      this.bulkCreate(this.group, [{name:'test',}]);
+      const tmpIndex = Date.now();
+      this.bulkCreate(this.group, [{ name: 'test' }]);
       // obs.next(this.resProxy(result));
       // obs.complete();
     });
@@ -695,7 +691,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return new Observable((obs) => {
       const fun = async () => {
         const result = {};
-        const tables = ['environment', 'group', 'project', 'apiData'];
+        const tables = ['environment', 'group', 'project', 'apiData', 'mock'];
         for (let i = 0; i < tables.length; i++) {
           const tableName = tables[i];
           if (tableName === 'project') {

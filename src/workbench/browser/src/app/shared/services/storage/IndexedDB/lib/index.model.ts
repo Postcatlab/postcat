@@ -1,4 +1,5 @@
 import { ApiData } from '../../index.model';
+import { JsonRootType,RequestProtocol,RequestMethod,ApiBodyType } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [
   {
@@ -6,10 +7,10 @@ export const sampleApiData: ApiData[] = [
     projectID: 1,
     uri: 'http://www.weather.com.cn/data/cityinfo/{cityCode}.html',
     groupID: 0,
-    protocol: 'http',
-    method: 'GET',
-    requestBodyType: 'raw',
-    requestBodyJsonType: 'object',
+    protocol: RequestProtocol.HTTP,
+    method: RequestMethod.GET,
+    requestBodyType: ApiBodyType.Raw,
+    requestBodyJsonType: JsonRootType.Object,
     requestBody: '',
     queryParams: [],
     restParams: [
@@ -27,8 +28,8 @@ export const sampleApiData: ApiData[] = [
     ],
     requestHeaders: [],
     responseHeaders: [],
-    responseBodyType: 'json',
-    responseBodyJsonType: 'object',
+    responseBodyType: ApiBodyType.JSON,
+    responseBodyJsonType: JsonRootType.Object,
     responseBody: [
       {
         name: 'weatherinfo',
@@ -55,10 +56,10 @@ export const sampleApiData: ApiData[] = [
     projectID: 1,
     uri: 'https://view.inews.qq.com/g2/getOnsInfo',
     groupID: 0,
-    protocol: 'http',
-    method: 'GET',
-    requestBodyType: 'raw',
-    requestBodyJsonType: 'object',
+    protocol: RequestProtocol.HTTP,
+    method: RequestMethod.GET,
+    requestBodyType: ApiBodyType.Raw,
+    requestBodyJsonType: JsonRootType.Object,
     requestBody: '',
     queryParams: [{ name: 'name', required: true, example: 'disease_h5',description:'' }],
     restParams: [],
@@ -73,8 +74,8 @@ export const sampleApiData: ApiData[] = [
       { name: 'x-client-ip', required: true, description: '', example: '120.26.198.150' },
       { name: 'x-server-ip', required: true, description: '', example: '58.250.137.40' },
     ],
-    responseBodyType: 'json',
-    responseBodyJsonType: 'object',
+    responseBodyType: ApiBodyType.JSON,
+    responseBodyJsonType: JsonRootType.Object,
     responseBody: [
       { name: 'ret', description: '', type: 'number', required: true, example: '' },
       {

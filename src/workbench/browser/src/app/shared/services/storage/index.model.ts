@@ -327,7 +327,7 @@ export enum RequestProtocol {
 /**
  * API Data
  */
-export interface ApiData extends StorageModel {
+interface BasicApiData extends StorageModel {
   /**
    * name
    *
@@ -338,36 +338,27 @@ export interface ApiData extends StorageModel {
   /**
    * Belongs to which project
    *
-   * @type {string|number}
    */
-  projectID?: string | number;
+  projectID?: number;
 
-  /**
-   * Belongs to which group
-   *
-   * @type {string|number}
-   */
-  groupID: string | number;
 
   /**
    * Request url,Usually value is path
    *
-   * @type {string}
    */
   uri: string;
+
   /**
    * API protocol [http, https, ...]
    *
-   * @type {RequestProtocol|string}
    */
-  protocol: RequestProtocol | string;
+  protocol: RequestProtocol;
 
   /**
    * Request method [POST, GET, PUT, ...]
    *
-   * @type {RequestMethod|string}
    */
-  method: RequestMethod | string;
+  method: RequestMethod;
 
   /**
    * api show order
@@ -379,28 +370,23 @@ export interface ApiData extends StorageModel {
   /**
    * 请求的参数类型
    *
-   * @type {ApiBodyType|string}
    */
-  requestBodyType?: ApiBodyType | string;
+  requestBodyType?: ApiBodyType;
 
   /**
    * 请求头数据，数据用json存储
    *
-   * @type {object}
    */
   requestHeaders?: ApiEditHeaders[];
 
   /**
    * 请求的json参数根类型
    *
-   * @type {JsonRootType|string}
    */
-  requestBodyJsonType?: JsonRootType | string;
+  requestBodyJsonType?: JsonRootType;
 
   /**
    * 请求参数(多层结构)，数据用json存储
-   *
-   * @type {object}
    */
   requestBody?: ApiEditBody[] | string;
 
@@ -421,30 +407,32 @@ export interface ApiData extends StorageModel {
   /**
    * 返回头数据，数据用json存储
    *
-   * @type {object}
    */
   responseHeaders?: ApiEditHeaders[];
 
   /**
    * Response(多层结构)，数据用json存储
-   *
-   * @type {ApiEditBody[] | string}
    */
-  responseBody?: ApiEditBody[] | string;
+  responseBody?: ApiEditBody[];
 
   /**
    * 返回的参数类型
-   *
-   * @type {ApiBodyType|string}
    */
-  responseBodyType?: ApiBodyType | string;
+  responseBodyType?: ApiBodyType;
 
   /**
    * Responsejson根类型
-   *
-   * @type {JsonRootType|string}
    */
-  responseBodyJsonType?: JsonRootType | string;
+  responseBodyJsonType?: JsonRootType;
+}
+export interface ApiData extends BasicApiData{
+   groupID: number;
+}
+/**
+ * API data view model
+ */
+export interface ApiEditViewData extends BasicApiData {
+  groupID: string;
 }
 /**
  * API Test Data
