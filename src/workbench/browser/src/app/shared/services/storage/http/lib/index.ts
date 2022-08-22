@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ResultType } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { Observable } from 'rxjs';
 import {
   Project,
@@ -59,7 +60,7 @@ export class HttpStorage implements StorageInterface {
   }
   // Group
   groupCreate(item: Group) {
-    return this.http.post(`/group`, item) as Observable<object>;
+    return this.http.post(`/group`, item) as Observable<ResultType<Group>>;
   }
   groupUpdate(item: Group, uuid: number | string) {
     return this.http.put(`/group/${uuid}`, item) as Observable<object>;

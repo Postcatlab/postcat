@@ -53,7 +53,6 @@ window.eo.loadFeatureModule = (moduleID) => {
   if (!featureModules.has(moduleID)) {
     try {
       const module = window.eo.getModule(moduleID);
-      console.log('featureModules module', module);
       window.eo._currentExtensionID = moduleID;
       const _module = require(module.baseDir);
       featureModules.set(moduleID, _module);

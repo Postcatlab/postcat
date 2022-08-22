@@ -71,19 +71,23 @@ export class ImportApiComponent implements OnInit {
     this.uploadData = data;
   }
   async submit(callback) {
+    if(!this.uploadData){
+      this.eoMessage.error($localize `Please import the file first`);
+      return;
+    }
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = await window.eo.loadFeatureModule(this.currentExtension);
-    const { name, content } = this.uploadData;
-    const [data, err] = module[action](content);
-    if (err) {
-      console.error(err.msg);
-      callback(false);
-      return;
-    }
-    // console.log(JSON.stringify(data, null, 2));
-    const projectData = {
+    // const { name, content } = this.uploadData;
+    // const [data, err] = module[action](content);
+    // if (err) {
+    //   console.error(err.msg);
+    //   callback(false);
+    //   return;
+    // }
+     // console.log(JSON.stringify(data, null, 2));
+     const projectData = {
       items: [
         {
           name: '文件夹',
@@ -141,7 +145,7 @@ export class ImportApiComponent implements OnInit {
           ],
         },
       ],
-      envList: [],
+      envList: [{}],
     };
     this.storage.run('projectImport', [1, projectData], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {

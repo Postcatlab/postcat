@@ -1,10 +1,6 @@
-import {
-  ApiTestBody,
-  ApiTestBodyType,
-  ApiTestHeaders,
-  ApiTestQuery,
-} from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { ApiTestBody, ApiTestBodyType, ApiTestHeaders } from './../api-test/api-test.model';
 import { Observable } from 'rxjs';
+import { ResultType } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 
 /**
  * 数据对象基础模型
@@ -13,9 +9,9 @@ interface StorageModel {
   /**
    * 主键UUID，字符串UUID或数值型
    *
-   * @type {string|number}
+   * @type {number}
    */
-  uuid?: string | number;
+  uuid?: number;
 
   /**
    * 名称
@@ -336,13 +332,6 @@ interface BasicApiData extends StorageModel {
   name: string;
 
   /**
-   * Belongs to which project
-   *
-   */
-  projectID?: number;
-
-
-  /**
    * Request url,Usually value is path
    *
    */
@@ -413,7 +402,7 @@ interface BasicApiData extends StorageModel {
   /**
    * Response(多层结构)，数据用json存储
    */
-  responseBody?: ApiEditBody[];
+  responseBody?:  ApiEditBody[] | string;
 
   /**
    * 返回的参数类型
@@ -425,8 +414,13 @@ interface BasicApiData extends StorageModel {
    */
   responseBodyJsonType?: JsonRootType;
 }
-export interface ApiData extends BasicApiData{
-   groupID: number;
+export interface ApiData extends BasicApiData {
+  /**
+   * Belongs to which project
+   *
+   */
+  projectID: number;
+  groupID: number;
 }
 /**
  * API data view model
@@ -512,11 +506,11 @@ export interface ApiTestData {
   /**
    * Javascript code before test
    */
-  beforeScript: string;
+  beforeScript?: string;
   /**
    * Javascript code after api response
    */
-  afterScript: string;
+  afterScript?: string;
 }
 
 /**
@@ -674,7 +668,7 @@ export interface StorageInterface {
   environmentBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   environmentLoadAllByProjectID: (projectID: number | string) => Observable<object>;
   // Group
-  groupCreate: (item: Group) => Observable<object>;
+  groupCreate: (item: Group) => Observable<ResultType<Group>>;
   groupUpdate: (item: Group, uuid: number | string) => Observable<object>;
   groupBulkCreate: (items: Array<Group>) => Observable<object>;
   groupBulkUpdate: (items: Array<Group>) => Observable<object>;

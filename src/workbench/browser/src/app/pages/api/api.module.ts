@@ -43,6 +43,10 @@ import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+
+import { ImportOutline, ExportOutline, SyncOutline,PlusOutline } from '@ant-design/icons-angular/icons';
+import { IconDefinition } from '@ant-design/icons-angular';
+const icons: IconDefinition[] = [  ImportOutline, ExportOutline, SyncOutline,PlusOutline ];
 const COMPONENTS = [
   ApiComponent,
   ApiGroupEditComponent,
@@ -59,11 +63,11 @@ const COMPONENTS = [
   imports: [
     HttpClientModule,
     FormsModule,
+    NzIconModule.forRoot(icons),
     ReactiveFormsModule,
     CommonModule,
     ApiRoutingModule,
     NzButtonModule,
-    NzIconModule,
     NzTabsModule,
     NzLayoutModule,
     NzTreeModule,

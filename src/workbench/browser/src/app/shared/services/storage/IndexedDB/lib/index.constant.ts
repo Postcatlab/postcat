@@ -1,5 +1,5 @@
 import { ApiData } from '../../index.model';
-import { JsonRootType,RequestProtocol,RequestMethod,ApiBodyType } from '../../index.model';
+import { JsonRootType, RequestProtocol, RequestMethod, ApiBodyType } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [
   {
@@ -40,8 +40,20 @@ export const sampleApiData: ApiData[] = [
         children: [
           { name: 'city', description: '', type: 'string', required: true, example: '北京' },
           { name: 'cityid', description: '', type: 'string', required: true, example: '101010100' },
-          { name: 'temp1', description: $localize`minimum temperature`, type: 'string', required: true, example: '18℃' },
-          { name: 'temp2', description:  $localize`maximun temperature`, type: 'string', required: true, example: '31℃' },
+          {
+            name: 'temp1',
+            description: $localize`minimum temperature`,
+            type: 'string',
+            required: true,
+            example: '18℃',
+          },
+          {
+            name: 'temp2',
+            description: $localize`maximun temperature`,
+            type: 'string',
+            required: true,
+            example: '31℃',
+          },
           { name: 'weather', description: '', type: 'string', required: true, example: '多云转阴' },
           { name: 'img1', description: '', type: 'string', required: true, example: 'n1.gif' },
           { name: 'img2', description: '', type: 'string', required: true, example: 'd2.gif' },
@@ -61,7 +73,7 @@ export const sampleApiData: ApiData[] = [
     requestBodyType: ApiBodyType.Raw,
     requestBodyJsonType: JsonRootType.Object,
     requestBody: '',
-    queryParams: [{ name: 'name', required: true, example: 'disease_h5',description:'' }],
+    queryParams: [{ name: 'name', required: true, example: 'disease_h5', description: '' }],
     restParams: [],
     requestHeaders: [],
     responseHeaders: [
