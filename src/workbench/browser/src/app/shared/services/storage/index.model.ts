@@ -1,6 +1,5 @@
 import { ApiTestBody, ApiTestBodyType, ApiTestHeaders } from './../api-test/api-test.model';
 import { Observable } from 'rxjs';
-import { ResultType } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 
 /**
  * 数据对象基础模型
@@ -19,13 +18,6 @@ interface StorageModel {
    * @type {string}
    */
   name?: string;
-
-  /**
-   * 备注信息
-   *
-   * @type {string}
-   */
-  description?: string;
 
   /**
    * 创建时间，可为空
@@ -47,32 +39,30 @@ interface StorageModel {
  */
 export interface Environment extends StorageModel {
   /**
-   * 名称
+   * Env name
    *
    * @type {string}
    */
   name: string;
 
   /**
-   * 项目主键ID
+   * Project primary ID
    *
-   * @type {string|number}
+   * @type {number}
    */
-  projectID: string | number;
+  projectID: number;
 
   /**
-   * 前置url
+   * Host uri
    *
    * @type {string}
    */
-  hostUri: string;
+  hostUri?: string;
 
   /**
-   * 环境变量（可选）
-   *
-   * @type {object}
+   * Env parameters
    */
-  parameters?: object;
+  parameters?: { name: string; value: string }[];
 }
 
 /**
@@ -402,7 +392,7 @@ interface BasicApiData extends StorageModel {
   /**
    * Response(多层结构)，数据用json存储
    */
-  responseBody?:  ApiEditBody[] | string;
+  responseBody?: ApiEditBody[] | string;
 
   /**
    * 返回的参数类型
@@ -668,7 +658,7 @@ export interface StorageInterface {
   environmentBulkLoad: (uuids: Array<number | string>) => Observable<object>;
   environmentLoadAllByProjectID: (projectID: number | string) => Observable<object>;
   // Group
-  groupCreate: (item: Group) => Observable<ResultType<Group>>;
+  groupCreate: (item: Group) => Observable<object>;
   groupUpdate: (item: Group, uuid: number | string) => Observable<object>;
   groupBulkCreate: (items: Array<Group>) => Observable<object>;
   groupBulkUpdate: (items: Array<Group>) => Observable<object>;

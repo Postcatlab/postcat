@@ -16,7 +16,7 @@ import {
   StorageResStatus,
 } from '../../index.model';
 
-import { parseAndCheckApiData, parseAndCheckGroup } from './validate';
+import { parseAndCheckApiData, parseAndCheckEnv, parseAndCheckGroup } from './validate';
 import { sampleApiData } from './index.constant';
 
 export type ResultType<T = any> = {
@@ -677,33 +677,47 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       const errors = {
         apiData: [],
       };
-      const deepFn = (items, parentID) => {
-        items.forEach(async (item) => {
-          item.projectID = uuid;
-          //Judge item is api or group
-          if (item.uri || item.method || item.protocol) {
-            delete item.uuid;
-            item.groupID = parentID;
-            const result = parseAndCheckApiData(item);
-            if (!result.validate) {
-              errors.apiData.push(item.name || item.uri);
-              return;
+      //Add api and group
+      const deepFn = (items, parentID) =>
+        new Promise((resolve) => {
+          items.forEach(async (item) => {
+            item.projectID = uuid;
+            //Judge item is api or group
+            if (item.uri || item.method || item.protocol) {
+              delete item.uuid;
+              item.groupID = parentID;
+              const result = parseAndCheckApiData(item);
+              if (!result.validate) {
+                errors.apiData.push(item.name || item.uri);
+                return;
+              }
+              this.apiDataCreate(result.data);
+            } else {
+              item.parentID = parentID;
+              const result = parseAndCheckGroup(item);
+              if (!result.validate) {
+                return;
+              }
+              item.uuid = (await firstValueFrom(this.groupCreate(result.data))).data.uuid;
             }
-            this.apiData.add(result.data);
-          } else {
-            item.parentID = parentID;
-            const result = parseAndCheckGroup(item);
-            if (!result.validate) {
-              return;
+            if (item.items?.length) {
+              await deepFn(item.items, item.uuid);
             }
-            item.uuid = (await firstValueFrom(this.groupCreate(result.data))).data.uuid;
-          }
-          if (item.items?.length) {
-            deepFn(item.items, item.uuid);
-          }
+            resolve('');
+          });
         });
-      };
       deepFn(data.items, 0);
+      //Add env
+      if (data.envList && data.envList.length) {
+        data.envList.forEach((item) => {
+          item.projectID = uuid;
+          const result = parseAndCheckEnv(item);
+          if (!result.validate) {
+            return;
+          }
+          this.environmentCreate(result.data);
+        });
+      }
       obs.next(
         this.resProxy({
           errors,

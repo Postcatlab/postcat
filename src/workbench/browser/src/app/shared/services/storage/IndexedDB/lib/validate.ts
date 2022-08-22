@@ -1,29 +1,53 @@
 import Ajv, { JSONSchemaType } from 'ajv';
-import { ApiData, Group } from '../../index.model';
+import { ApiData, Environment, Group } from '../../index.model';
 import apiDataSchema from '../schema/apiData.json';
+import envSchema from '../schema/env.json';
 export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiData; error?: any } => {
   const ajv = new Ajv({
     useDefaults: true,
+    removeAdditional:true
   });
   const validate = ajv.compile<ApiData>(apiDataSchema);
   if (validate(apiData)) {
     return { validate: true, data: apiData };
   } else {
+    console.error(validate.errors);
     return { validate: false, error: validate.errors };
   }
 };
 
-export const parseAndCheckGroup = (group): { validate: boolean; data?: Group}  => {
+export const parseAndCheckGroup = (group): { validate: boolean; data?: Group } => {
   if (group.name) {
     return {
-      validate:true,
-      data:{
-        projectID:group.projectID,
-        parentID:group.parentID,
-        name:group.name
-      }
+      validate: true,
+      data: {
+        projectID: group.projectID,
+        parentID: group.parentID,
+        name: group.name,
+      },
     };
   } else {
     return { validate: false };
+  }
+};
+export const parseAndCheckEnv = (env): { validate: boolean; data?: Environment; error?: any } => {
+  const ajv = new Ajv({
+    useDefaults: true,
+    removeAdditional:true
+  });
+  const validate = ajv.compile<Environment>(envSchema);
+  if (validate(env)) {
+    return {
+      validate: true,
+      data: {
+        projectID: env.projectID,
+        name: env.name,
+        hostUri: env.hostUri,
+        parameters: env.parameters,
+      },
+    };
+  } else {
+    console.error(validate.errors);
+    return { validate: false, error: validate.errors };
   }
 };

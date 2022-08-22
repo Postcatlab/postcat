@@ -79,75 +79,14 @@ export class ImportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = await window.eo.loadFeatureModule(this.currentExtension);
-    // const { name, content } = this.uploadData;
-    // const [data, err] = module[action](content);
-    // if (err) {
-    //   console.error(err.msg);
-    //   callback(false);
-    //   return;
-    // }
-     // console.log(JSON.stringify(data, null, 2));
-     const projectData = {
-      items: [
-        {
-          name: '文件夹',
-          items: [
-            {
-              name: '子文件夹1',
-              items: [
-                {
-                  name: 'fdsf Copy Copy Copy Copy Copy Copy Copy Copy Copy Copy',
-                  projectID: 1,
-                  uri: 'fsdf/',
-                  groupID: 0,
-                  protocol: 'http',
-                  method: 'POST',
-                  requestBodyType: 'json',
-                  requestBodyJsonType: 'object',
-                  requestBody: [],
-                  queryParams: [],
-                  restParams: [],
-                  requestHeaders: [],
-                  responseHeaders: [],
-                  responseBodyType: 'json',
-                  responseBodyJsonType: 'object',
-                  responseBody: [],
-                  createdAt: '2022-08-15T07:23:08.507Z',
-                  updatedAt: '2022-08-15T07:23:08.507Z',
-                  uuid: 19,
-                },
-              ],
-            },
-            {
-              name: '子文件夹',
-            },
-            {
-              name: 'fdsf Copy Copy Copy Copy Copy Copy Copy Copy Copy Copy',
-              projectID: 1,
-              uri: 'fsdf/',
-              groupID: 0,
-              protocol: 'http',
-              method: 'POST',
-              requestBodyType: 'json',
-              requestBodyJsonType: 'object',
-              requestBody: [],
-              queryParams: [],
-              restParams: [],
-              requestHeaders: [],
-              responseHeaders: [],
-              responseBodyType: 'json',
-              responseBodyJsonType: 'object',
-              responseBody: [],
-              createdAt: '2022-08-15T07:23:08.507Z',
-              updatedAt: '2022-08-15T07:23:08.507Z',
-              uuid: 19,
-            },
-          ],
-        },
-      ],
-      envList: [{}],
-    };
-    this.storage.run('projectImport', [1, projectData], (result: StorageRes) => {
+    const { name, content } = this.uploadData;
+    const [data, err] = module[action](content);
+    if (err) {
+      console.error(err.msg);
+      callback(false);
+      return;
+    }
+    this.storage.run('projectImport', [1, data], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.messageService.send({
           type: 'importSuccess',
