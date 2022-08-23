@@ -678,9 +678,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         apiData: [],
       };
       //Add api and group
-      const deepFn = (items, parentID) =>
+      const deepFn = (collections, parentID) =>
         new Promise((resolve) => {
-          items.forEach(async (item) => {
+          collections.forEach(async (item) => {
             item.projectID = uuid;
             //Judge item is api or group
             if (item.uri || item.method || item.protocol) {
@@ -700,16 +700,16 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
               }
               item.uuid = (await firstValueFrom(this.groupCreate(result.data))).data.uuid;
             }
-            if (item.items?.length) {
-              await deepFn(item.items, item.uuid);
+            if (item.children?.length) {
+              await deepFn(item.children, item.uuid);
             }
             resolve('');
           });
         });
-      deepFn(data.items, 0);
+      deepFn(data.collections, 0);
       //Add env
-      if (data.envList && data.envList.length) {
-        data.envList.forEach((item) => {
+      if (data.enviroments && data.enviroments.length) {
+        data.enviroments.forEach((item) => {
           item.projectID = uuid;
           const result = parseAndCheckEnv(item);
           if (!result.validate) {
