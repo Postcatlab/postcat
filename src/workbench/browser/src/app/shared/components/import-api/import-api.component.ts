@@ -86,6 +86,7 @@ export class ImportApiComponent implements OnInit {
       callback(false);
       return;
     }
+    console.log(data);
     this.storage.run('projectImport', [1, data], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.messageService.send({

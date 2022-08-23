@@ -14,11 +14,14 @@ export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiDa
     ['requestBody', 'responseBody'].forEach((keyName) => {
       if (
         [ApiBodyType['Form-data'], ApiBodyType.JSON, ApiBodyType.XML].includes(apiData[`${keyName}Type`]) &&
-        whatType(apiData[keyName] !== 'array')
+        whatType(apiData[keyName]) !== 'array'
       ) {
         //Handle xml\formdata\json  data
         apiData[keyName] = [];
-      } else if (whatType(apiData[keyName] !== 'string')) {
+      } else if (
+        [ApiBodyType.Raw, ApiBodyType.Binary].includes(apiData[`${keyName}Type`]) &&
+        whatType(apiData[keyName]) !== 'string'
+      ) {
         //Handle raw\binary data
         apiData[keyName] = '';
       }
