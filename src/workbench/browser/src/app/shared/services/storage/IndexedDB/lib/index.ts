@@ -1,10 +1,9 @@
 import Dexie, { Table } from 'dexie';
 import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { messageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import {
   Project,
   Environment,
@@ -16,7 +15,9 @@ import {
   StorageItem,
   StorageResStatus,
 } from '../../index.model';
-import { sampleApiData } from '../sample';
+
+import { parseAndCheckApiData, parseAndCheckEnv, parseAndCheckGroup } from './validate';
+import { sampleApiData } from './index.constant';
 
 export type ResultType<T = any> = {
   status: StorageResStatus.success;
@@ -94,11 +95,6 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       status: StorageResStatus.success,
       data,
     };
-    // if (isNotEmpty(data)) {
-    //   result.status = StorageResStatus.success;
-    // } else {
-    //   result.status = StorageResStatus.empty;
-    // }
     return result as ResultType;
   }
   /**
@@ -107,7 +103,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param item
    */
-  private create(table: Table, item: StorageItem): Observable<object> {
+  private create(table: Table, item: StorageItem): Observable<any> {
     if (!item.createdAt) {
       item.createdAt = new Date();
     }
@@ -134,6 +130,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    */
   private bulkCreate(table: Table, items: Array<StorageItem>): Observable<object> {
     items = items.map((item: StorageItem) => {
+      delete item.uuid;
       if (!item.createdAt) {
         item.createdAt = new Date();
       }
@@ -470,9 +467,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuid
    */
-  apiTestHistoryLoad = (uuid: number | string): Observable<object> => {
-    return this.load(this.apiTestHistory, uuid);
-  };
+  apiTestHistoryLoad = (uuid: number | string): Observable<object> => this.load(this.apiTestHistory, uuid);
 
   /**
    * Load all apiTestHistory items by apiDataID.
@@ -643,7 +638,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param item
    */
-  groupCreate(item: Group): Observable<object> {
+  groupCreate(item: Group): Observable<ResultType<Group>> {
     return this.create(this.group, item);
   }
 
@@ -678,12 +673,66 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   groupUpdate(item: Group, uuid: number | string): Observable<object> {
     return this.update(this.group, item, uuid);
   }
-
+  projectImport(uuid: number, data): Observable<object> {
+    return new Observable((obs) => {
+      const errors = {
+        apiData: [],
+      };
+      //Add api and group
+      const deepFn = (collections, parentID) =>
+        new Promise((resolve) => {
+          collections.forEach(async (item) => {
+            item.projectID = uuid;
+            //Judge item is api or group
+            if (item.uri || item.method || item.protocol) {
+              delete item.uuid;
+              item.groupID = parentID;
+              const result = parseAndCheckApiData(item);
+              if (!result.validate) {
+                errors.apiData.push(item.name || item.uri);
+                return;
+              }
+              this.apiDataCreate(result.data);
+            } else {
+              item.parentID = parentID;
+              const result = parseAndCheckGroup(item);
+              if (!result.validate) {
+                return;
+              }
+              item.uuid = (await firstValueFrom(this.groupCreate(result.data))).data.uuid;
+            }
+            if (item.children?.length) {
+              await deepFn(item.children, item.uuid);
+            }
+            resolve('');
+          });
+        });
+      deepFn(data.collections, 0);
+      //Add env
+      if (data.enviroments && data.enviroments.length) {
+        data.enviroments.forEach((item) => {
+          item.projectID = uuid;
+          const result = parseAndCheckEnv(item);
+          if (!result.validate) {
+            return;
+          }
+          this.environmentCreate(result.data);
+        });
+      }
+      obs.next(
+        this.resProxy({
+          errors,
+        })
+      );
+      obs.complete();
+    });
+  }
   /**
    * Bulk create project items.
    *
    * @param items
    */
+
   projectBulkCreate(items: Array<Project>): Observable<object> {
     return this.bulkCreate(this.project, items);
   }
@@ -691,9 +740,8 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return new Observable((obs) => {
       const fun = async () => {
         const result = {};
-        const tables = ['environment', 'group', 'project', 'apiData'];
-        for (let i = 0; i < tables.length; i++) {
-          const tableName = tables[i];
+        const tables = ['environment', 'group', 'project', 'apiData', 'mock'];
+        for (const tableName of tables) {
           if (tableName === 'project') {
             result[tableName] = (await this[tableName].toArray())[0];
           } else {

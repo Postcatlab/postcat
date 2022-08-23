@@ -240,7 +240,9 @@ export class ApiTestUtilService {
       result[keyName] = this.testTableData2ApiBody(result[keyName]);
     });
     if (inData.history.response.responseType === 'text') {
+      console.log('inData.history.response.body', inData.history.response.body);
       const bodyInfo = text2UiData(inData.history.response.body);
+      console.log('bodyInfo', bodyInfo);
       result.responseBody = listToTreeHasLevel(bodyInfo.data);
       result.responseBodyType = bodyInfo.textType;
       result.responseBodyJsonType = bodyInfo.rootType;
