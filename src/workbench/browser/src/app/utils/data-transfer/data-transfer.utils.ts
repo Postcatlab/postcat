@@ -152,7 +152,7 @@ export const xml2json = (tmpl) => {
   if (stack.length) {
     throw new Error('Parse error 102');
   }
-  console.log(JSON.stringify(result, null, 2));
+  // console.log(JSON.stringify(result, null, 2));
   return result;
 };
 
@@ -264,29 +264,6 @@ export const text2UiData: (text: string) => uiData = (text) => {
   }
   return result;
 };
-
-const data = `
-<?xml version="1.0" encoding="UTF-8"?>
-<AgentDeploymentAndUpdate>
-
-<Globals>
-<Parameter Name="SourceDirectory" Value="../test" />
-<Parameter Name="KeyFile" Value="../test/keyfile.txt" />
-</Globals>
-
-<Target id="9.164.102.169">
-<Parameter Name="SourceDirectory" Value="../test/wind" />
-<Parameter Name="ConnectionType" Value="ssh" />
-<Parameter Name="UserName" Value="root" />
-<Parameter Name="Password" Value="toor123" />
-<Parameter Name="ExistingAgentPath" Value="/usr/local/bin/bfagent" />
-<Parameter Name="AgentInstallLocation" Value="/usr/local/bin/bfagent" />
-</Target>
-
-</AgentDeploymentAndUpdate>
-`;
-
-console.log('text2UiData', text2UiData(data));
 
 /**
  * Format eoapi body to json
