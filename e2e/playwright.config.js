@@ -1,5 +1,5 @@
 const config = {
-  testDir: './e2e',
+  testDir: './',
 };
 
 module.exports = config;
