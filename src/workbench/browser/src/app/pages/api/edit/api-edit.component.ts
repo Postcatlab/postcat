@@ -12,6 +12,7 @@ import { StorageService } from '../../../shared/services/storage';
 
 import {
   Group,
+  ApiEditViewData,
   ApiData,
   RequestProtocol,
   RequestMethod,
@@ -30,15 +31,15 @@ import { ApiEditUtilService } from './api-edit-util.service';
   styleUrls: ['./api-edit.component.scss'],
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
-  @Input() model: ApiData;
+  @Input() model: ApiEditViewData;
   /**
    * Intial model from outside,check form is change
    * * Usually restored from tab
    */
-  @Input() initialModel: ApiData;
-  @Output() modelChange = new EventEmitter<ApiData>();
-  @Output() afterInit = new EventEmitter<ApiData>();
-  @Output() afterSaved = new EventEmitter<ApiData>();
+  @Input() initialModel: ApiEditViewData;
+  @Output() modelChange = new EventEmitter<ApiEditViewData>();
+  @Output() afterInit = new EventEmitter<ApiEditViewData>();
+  @Output() afterSaved = new EventEmitter<ApiEditViewData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
   groups: any[];
@@ -72,7 +73,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     const id = Number(this.route.snapshot.queryParams.uuid);
     const groupID = Number(this.route.snapshot.queryParams.groupID || 0);
     if (!this.model || isEmptyObj(this.model)) {
-      this.model = {} as ApiData;
+      this.model = {} as ApiEditViewData;
       const initTimes = this.initTimes;
       const result = await this.apiEdit.getApi({
         id,
@@ -213,7 +214,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Resolve the problem that groupID change but view not change
    */
   private resetGroupID() {
-    let groupID: number | string = '-1';
+    let groupID = '-1';
     if (this.model && this.model.groupID) {
       groupID = this.model.groupID;
       this.model.groupID = '';
@@ -229,7 +230,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   private initBasicForm() {
     //Prevent init error
     if (!this.model) {
-      this.model = {} as ApiData;
+      this.model = {} as ApiEditViewData;
     }
     const controls = {};
     ['protocol', 'method', 'uri', 'groupID', 'name'].forEach((name) => {

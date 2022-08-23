@@ -11,11 +11,12 @@ export class LanguageService {
   languages = LANGUAGES;
   //If the user does not set it, the system default language is used
   // Web from nginx setting and App from computer system setting
-  systemLanguage =
+  systemLanguage =this.setting.getSettings()?.['eoapi-language']||
     this.languages.find((val) => window.location.href.includes(`/${val.path}`))?.value ||
     (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
 
-  constructor(private remote: RemoteService, private electron: ElectronService,private setting:SettingService) {}
+  constructor(private remote: RemoteService, private electron: ElectronService,private setting: SettingService) {
+  }
 
   init() {
     this.changeLanguage(this.setting.getSettings()?.['eoapi-language']);

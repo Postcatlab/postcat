@@ -14,7 +14,6 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
-import { createMockObj, IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 @Component({
   selector: 'eo-api-group-tree',
@@ -69,7 +68,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public electron: ElectronService,
-    public storageInstance: IndexedDBStorage,
     private apiService: ApiService,
     private nzModalService: NzModalService
   ) {}
@@ -163,17 +161,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
     ];
   }
-  async createGroup({ name, projectID, content }) {
-    const groupID = await this.storageInstance.group.add({ name: name.replace(/\.json$/, ''), projectID });
-    const result = content.apiData.map(({ uuid, ...it }, index) => ({ ...it, groupID }));
-    const apiDataKeys = await this.storageInstance.apiData.bulkAdd(result, { allKeys: true });
-    const apiData = result.map((n, i) =>
-      createMockObj(n, { name: $localize`Default Mock`, createWay: 'system', apiDataID: apiDataKeys.at(i) })
-    );
-    this.storageInstance.mock.bulkAdd(apiData);
-    this.buildGroupTreeData();
-  }
-
   /**
    * Watch  apiData change event.
    */
@@ -187,12 +174,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'editApiSuccess':
           case 'copyApiSuccess':
           case 'deleteApiSuccess':
+          case 'importSuccess':
           case 'updateGroupSuccess': {
             this.buildGroupTreeData();
             break;
-          }
-          case 'importSuccess': {
-            this.createGroup({ projectID: 1, ...inArg.data });
           }
         }
       });

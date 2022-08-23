@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
-import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiBodyType, ApiData, ApiEditViewData, JsonRootType, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { RequestMethod, RequestProtocol } from '../../../shared/services/storage/index.model';
 import { ApiEditUtilService } from './api-edit-util.service';
 @Injectable()
@@ -22,21 +22,21 @@ export class ApiEditService {
         method: RequestMethod.POST,
       },
       {
-        requestBodyType: 'json',
-        requestBodyJsonType: 'object',
+        requestBodyType: ApiBodyType.JSON,
+        requestBodyJsonType: JsonRootType.Object,
         requestBody: [],
         queryParams: [],
         restParams: [],
         requestHeaders: [],
         responseHeaders: [],
-        responseBodyType: 'json',
-        responseBodyJsonType: 'object',
+        responseBodyType: ApiBodyType.JSON,
+        responseBodyJsonType: JsonRootType.Object,
         responseBody: [],
       }
     );
   }
-  async getApi({ id, groupID }): Promise<ApiData> {
-    let result: ApiData = {} as ApiData;
+  async getApi({ id, groupID }): Promise<ApiEditViewData> {
+    let result= {} as ApiData;
     if (!id) {
       // From test page/copy api data;
       let tmpApiData = window.sessionStorage.getItem('apiDataWillbeSave');
@@ -55,7 +55,7 @@ export class ApiEditService {
         result = pureApi;
       }
     } else {
-      result = (await this.apiService.get(id)) as ApiData;
+      result = (await this.apiService.get(id));
     }
     return this.apiEditUtil.getFormdataFromApiData(result);
   }

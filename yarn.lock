@@ -9204,10 +9204,10 @@ neo-async@^2.6.0, neo-async@^2.6.2:
   resolved "https://registry.npmmirror.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ng-zorro-antd@13.3.2:
-  version "13.3.2"
-  resolved "https://registry.npmmirror.com/ng-zorro-antd/-/ng-zorro-antd-13.3.2.tgz#04d79f884231afdfdb5759919c0fa202f431cc8f"
-  integrity sha512-bmpolaSevoZSVlP2nVpvi/CrFFu7hdaK/vz1k0R84db4AYOYFHcRwlAUBaWVKjWGaCHek+k1atC/pckXZqEgIA==
+ng-zorro-antd@13.4.0:
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-13.4.0.tgz#a62a9df914d7241a6f5baabe1f4740ddd724b737"
+  integrity sha512-ZIXeeXtTUNg3mdXNg2A3gJGh0aqN/pM3Ii61FiUhwkVwmVzIIDwYfGZZNNOl+cURL5HGzrwQ10nrYgdfFfZ20g==
   dependencies:
     "@angular/cdk" "^13.0.1"
     "@ant-design/icons-angular" "^13.0.1"

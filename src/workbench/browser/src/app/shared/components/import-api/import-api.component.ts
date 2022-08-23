@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FeatureType } from '../../types';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 // const optionList = [
 //   {
@@ -48,7 +50,11 @@ export class ImportApiComponent implements OnInit {
   currentExtension = '';
   uploadData = null;
   featureMap = window.eo.getFeature('apimanage.import');
-  constructor(private messageService: MessageService, private eoMessage: EoMessageService) {}
+  constructor(
+    private messageService: MessageService,
+    private storage: StorageService,
+    private eoMessage: EoMessageService
+  ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
       this.supportList.push({
@@ -65,6 +71,10 @@ export class ImportApiComponent implements OnInit {
     this.uploadData = data;
   }
   async submit(callback) {
+    if(!this.uploadData){
+      this.eoMessage.error($localize `Please import the file first`);
+      return;
+    }
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
@@ -76,10 +86,14 @@ export class ImportApiComponent implements OnInit {
       callback(false);
       return;
     }
-    // console.log(JSON.stringify(data, null, 2));
-    this.messageService.send({
-      type: 'importSuccess',
-      data: { name, content: data },
+    console.log(data);
+    this.storage.run('projectImport', [1, data], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
+        this.messageService.send({
+          type: 'importSuccess',
+          data: { },
+        });
+      }
     });
     callback(true);
   }
