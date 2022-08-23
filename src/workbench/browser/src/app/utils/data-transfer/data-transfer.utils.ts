@@ -265,7 +265,7 @@ export const uiData2Json = function (eoapiArr: ApiEditBody[], inputOptions) {
     if (inputOptions.checkXmlAttr) {
       inputObject['@eo_attr'] = inputObject['@eo_attr'] || {};
     }
-    for (const val of inputArr) {
+    for (const val of inputArr || []) {
       if (!val.name) {
         continue;
       }
