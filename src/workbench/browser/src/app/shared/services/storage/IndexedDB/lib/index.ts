@@ -130,6 +130,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    */
   private bulkCreate(table: Table, items: Array<StorageItem>): Observable<object> {
     items = items.map((item: StorageItem) => {
+      delete item.uuid;
       if (!item.createdAt) {
         item.createdAt = new Date();
       }
