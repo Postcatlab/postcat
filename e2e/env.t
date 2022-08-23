@@ -1,11 +1,11 @@
 ::: env_manage {
 
-find: (<)
+find(<):
     [select 'Environment'] = sel
 
 sel -> 'Mangage Environment'
 
-find: (<)
+find(<):
     [icon] [label 'New'] = newLabel
 
 newLabel -> click
@@ -42,10 +42,10 @@ host -> 'https://youtube.com'
 
 save -> click
 
-find: (<)
+find(<):
     [label 'myEnv']
 
-find: (<)
+find(<):
     [select 'Environment'] = sel
 
 sel -> 'myEnv'
