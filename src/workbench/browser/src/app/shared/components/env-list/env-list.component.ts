@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiTestUtilService } from 'eo/workbench/browser/src/app/pages/api/test/api-test-util.service';
+import { getGlobals } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { Environment, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { StorageService } from '../../services/storage';
 
@@ -29,7 +29,7 @@ import { StorageService } from '../../services/storage';
 export class EnvListComponent implements OnInit {
   env: Environment | any = {};
   gloablParams: any = [];
-  constructor(private storage: StorageService, private apiTest: ApiTestUtilService) {}
+  constructor(private storage: StorageService) {}
   async ngOnInit() {
     this.gloablParams = this.getGlobalParams();
     const uuid = Number(localStorage.getItem('env:selected')) || null;
@@ -51,7 +51,7 @@ export class EnvListComponent implements OnInit {
     });
   }
   getGlobalParams() {
-    return Object.entries(this.apiTest.getGlobals() || {}).map((it) => {
+    return Object.entries(getGlobals() || {}).map((it) => {
       const [key, value] = it;
       return { name: key, value };
     });
