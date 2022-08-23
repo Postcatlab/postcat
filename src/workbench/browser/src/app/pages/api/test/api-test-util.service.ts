@@ -9,7 +9,6 @@ import { uiData2Json, text2UiData, json2XML } from '../../../utils/data-transfer
 
 @Injectable()
 export class ApiTestUtilService {
-  globalStorageKey = 'EO_TEST_VAR_GLOBALS';
   constructor() {}
   initListConf(opts) {
     opts.title = opts.title || $localize`Param`;
@@ -332,20 +331,6 @@ export class ApiTestUtilService {
       value: contentType,
     });
     return result;
-  }
-  getGlobals(): object {
-    let result = null;
-    const global = localStorage.getItem(this.globalStorageKey);
-    try {
-      result = JSON.parse(global);
-    } catch (e) {}
-    return result || {};
-  }
-  setGlobals(globals) {
-    if (!globals) {
-      return;
-    }
-    localStorage.setItem(this.globalStorageKey, JSON.stringify(globals));
   }
   private testTableData2ApiBody(arr): ApiData[] {
     const result = [];

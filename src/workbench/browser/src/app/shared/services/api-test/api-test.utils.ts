@@ -6,6 +6,8 @@ import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/shared
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
 const PROTOCOL = ['http', 'https'];
 const REQUEST_BODY_TYPE = ['formData', 'raw', 'json', 'xml', 'binary'];
+const globalStorageKey = 'EO_TEST_VAR_GLOBALS';
+
 /**
  * Handle Test url,such as replace rest
  *
@@ -157,36 +159,36 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
     body: response.body || '',
     headers: response.headers.map((val) => ({ name: val.key, value: val.value })),
   };
-  response={ blobFileName: report.blobFileName, ...response },
-  result = {
-    status: 'finish',
-    id,
-    globals,
-    general: report.general,
-    response,
-    report: {
-      request: {
-        requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
-        requestBodyType: REQUEST_BODY_TYPE[report.request.requestType],
-        requestBody: report.request.body,
-      },
-    },
-    history: {
+  (response = { blobFileName: report.blobFileName, ...response }),
+    (result = {
+      status: 'finish',
+      id,
+      globals,
       general: report.general,
       response,
-      beforeScript:history.beforeInject,
-      afterScript:history.afterInject,
-      request: {
-        uri: history.requestInfo.URL,
-        method: history.requestInfo.method,
-        protocol: PROTOCOL[history.requestInfo.apiProtocol],
-        requestHeaders: history.requestInfo.headers,
-        requestBodyJsonType: 'object',
-        requestBodyType: REQUEST_BODY_TYPE[history.requestInfo.requestType],
-        requestBody: history.requestInfo.params,
+      report: {
+        request: {
+          requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
+          requestBodyType: REQUEST_BODY_TYPE[report.request.requestType],
+          requestBody: report.request.body,
+        },
       },
-    },
-  };
+      history: {
+        general: report.general,
+        response,
+        beforeScript: history.beforeInject,
+        afterScript: history.afterInject,
+        request: {
+          uri: history.requestInfo.URL,
+          method: history.requestInfo.method,
+          protocol: PROTOCOL[history.requestInfo.apiProtocol],
+          requestHeaders: history.requestInfo.headers,
+          requestBodyJsonType: 'object',
+          requestBodyType: REQUEST_BODY_TYPE[history.requestInfo.requestType],
+          requestBody: history.requestInfo.params,
+        },
+      },
+    });
   if (result.report.request.requestBodyType === 'formData') {
     result.report.request.requestBody = [];
     for (const keyName in report.request.body) {
@@ -205,33 +207,48 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
   }
   return result;
 };
-export const DEFAULT_UNIT_TEST_RESULT={
-    general: { redirectTimes: 0, downloadSize: 0, downloadRate: 0, time: '0.00ms' },
-    response: {
-      statusCode: 0,
-      headers: [],
-      testDeny: '0.00',
-      responseLength: 0,
-      responseType: 'text',
-      reportList: [],
-      body: $localize`The test service connection failed, please submit an Issue to contact the community`,
+export const DEFAULT_UNIT_TEST_RESULT = {
+  general: { redirectTimes: 0, downloadSize: 0, downloadRate: 0, time: '0.00ms' },
+  response: {
+    statusCode: 0,
+    headers: [],
+    testDeny: '0.00',
+    responseLength: 0,
+    responseType: 'text',
+    reportList: [],
+    body: $localize`The test service connection failed, please submit an Issue to contact the community`,
+  },
+  report: {
+    request: {
+      requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
+      requestBodyType: 'raw',
+      requestBody: '{}',
     },
-    report: {
-      request: {
-        requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
-        requestBodyType: 'raw',
-        requestBody: '{}',
-      },
+  },
+  history: {
+    request: {
+      uri: 'http:///',
+      method: 'POST',
+      protocol: 'http',
+      requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
+      requestBodyJsonType: 'object',
+      requestBodyType: 'raw',
+      requestBody: '{}',
     },
-    history: {
-      request: {
-        uri: 'http:///',
-        method: 'POST',
-        protocol: 'http',
-        requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
-        requestBodyJsonType: 'object',
-        requestBodyType: 'raw',
-        requestBody: '{}',
-      },
-    },
+  },
+};
+
+export const getGlobals = (): object => {
+  let result = null;
+  const global = localStorage.getItem(globalStorageKey);
+  try {
+    result = JSON.parse(global);
+  } catch (e) {}
+  return result || {};
+};
+export const setGlobals = (globals) => {
+  if (!globals) {
+    return;
+  }
+  localStorage.setItem(globalStorageKey, JSON.stringify(globals));
 };

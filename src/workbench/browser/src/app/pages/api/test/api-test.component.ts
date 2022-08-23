@@ -35,6 +35,7 @@ import {
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 interface testViewModel {
@@ -317,7 +318,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
         env: this.env,
-        globals: this.apiTestUtil.getGlobals(),
+        globals:getGlobals(),
         beforeScript: this.model.beforeScript,
         afterScript: this.model.afterScript,
         lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
@@ -370,7 +371,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
 
     //set globals
-    this.apiTestUtil.setGlobals(message.globals);
+   setGlobals(message.globals);
 
     //If test sucess,addHistory
     //Only has statusCode need save report
