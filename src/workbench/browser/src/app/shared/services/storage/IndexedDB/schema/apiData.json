@@ -137,6 +137,7 @@
     },
     "method": {
       "$ref": "#/definitions/RequestMethod",
+      "default":"POST",
       "description": "Request method [POST, GET, PUT, ...]"
     },
     "name": {
@@ -165,10 +166,12 @@
           "items": {
             "$ref": "#/definitions/ApiEditBody"
           },
-          "type": "array"
+          "type": "array",
+          "default":[]
         },
         {
-          "type": "string"
+          "type": "string",
+          "default":""
         }
       ],
       "default": "",
