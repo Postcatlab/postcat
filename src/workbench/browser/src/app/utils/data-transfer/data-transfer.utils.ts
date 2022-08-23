@@ -96,7 +96,7 @@ export const xml2json = (tmpl) => {
   let index = null;
   while (xml) {
     // * handle end tags
-    if (xml.substring(0, 2) === '</') {
+    if (xml.trim().substring(0, 2) === '</') {
       const end = xml.match(endTag);
       const [str, label] = end;
       const last = stack.pop();
@@ -110,7 +110,7 @@ export const xml2json = (tmpl) => {
         parent.children.push(last);
         stack.push(parent);
       }
-      xml = xml.substring(str.length);
+      xml = xml.trim().substring(str.length);
       continue;
     }
     // * handle start tags
@@ -118,7 +118,6 @@ export const xml2json = (tmpl) => {
       const [str, label, attr] = start;
       if (str.slice(-2) === '/>') {
         // * single tag
-        console.log('=>', str, label, attr);
         const parent = stack.pop();
         parent.children.push({
           tagName: label.trim(),
@@ -153,6 +152,7 @@ export const xml2json = (tmpl) => {
   if (stack.length) {
     throw new Error('Parse error 102');
   }
+  console.log(JSON.stringify(result, null, 2));
   return result;
 };
 
@@ -270,17 +270,17 @@ const data = `
 <AgentDeploymentAndUpdate>
 
 <Globals>
-<Parameter Name="SourceDirectory" Value="..\test"/>
-<Parameter Name="KeyFile" Value="..\test\keyfile.txt"/>
+<Parameter Name="SourceDirectory" Value="../test" />
+<Parameter Name="KeyFile" Value="../test/keyfile.txt" />
 </Globals>
 
 <Target id="9.164.102.169">
-<Parameter Name="SourceDirectory" Value="..\test\wind"/>
-<Parameter Name="ConnectionType" Value="ssh"/>
-<Parameter Name="UserName" Value="root"/>
-<Parameter Name="Password" Value="toor123"/>
-<Parameter Name="ExistingAgentPath" Value="/usr/local/bin/bfagent"/>
-<Parameter Name="AgentInstallLocation" Value="/usr/local/bin/bfagent"/>
+<Parameter Name="SourceDirectory" Value="../test/wind" />
+<Parameter Name="ConnectionType" Value="ssh" />
+<Parameter Name="UserName" Value="root" />
+<Parameter Name="Password" Value="toor123" />
+<Parameter Name="ExistingAgentPath" Value="/usr/local/bin/bfagent" />
+<Parameter Name="AgentInstallLocation" Value="/usr/local/bin/bfagent" />
 </Target>
 
 </AgentDeploymentAndUpdate>
