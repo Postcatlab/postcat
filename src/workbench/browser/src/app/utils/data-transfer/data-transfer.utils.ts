@@ -101,7 +101,7 @@ export const xml2json = (tmpl) => {
       const [str, label] = end;
       const last = stack.pop();
       if (last.tagName !== label) {
-        throw new Error('Parse error 101');
+        throw new Error(`Parse error 101. [${last.tagName}] is not eq [${label}]`);
       }
       if (stack.length === 0) {
         result.push(last);
@@ -116,6 +116,20 @@ export const xml2json = (tmpl) => {
     // * handle start tags
     if ((start = xml.match(startTag))) {
       const [str, label, attr] = start;
+      if (str.slice(-2) === '/>') {
+        // * single tag
+        console.log('=>', str, label, attr);
+        const parent = stack.pop();
+        parent.children.push({
+          tagName: label.trim(),
+          attr: attr.trim(),
+          content: '',
+          children: [],
+        });
+        stack.push(parent);
+        xml = xml.trim().substring(str.length);
+        continue;
+      }
       stack.push({
         tagName: label.trim(),
         attr: attr.trim(),
@@ -147,6 +161,7 @@ type uiData = {
   rootType: JsonRootType | string;
   data: ApiEditBody | any;
 };
+
 export const xml2UiData = (text) => {
   const data: any[] = xml2json(text);
   const deep = (list = []) =>
@@ -249,6 +264,29 @@ export const text2UiData: (text: string) => uiData = (text) => {
   }
   return result;
 };
+
+const data = `
+<?xml version="1.0" encoding="UTF-8"?>
+<AgentDeploymentAndUpdate>
+
+<Globals>
+<Parameter Name="SourceDirectory" Value="..\test"/>
+<Parameter Name="KeyFile" Value="..\test\keyfile.txt"/>
+</Globals>
+
+<Target id="9.164.102.169">
+<Parameter Name="SourceDirectory" Value="..\test\wind"/>
+<Parameter Name="ConnectionType" Value="ssh"/>
+<Parameter Name="UserName" Value="root"/>
+<Parameter Name="Password" Value="toor123"/>
+<Parameter Name="ExistingAgentPath" Value="/usr/local/bin/bfagent"/>
+<Parameter Name="AgentInstallLocation" Value="/usr/local/bin/bfagent"/>
+</Target>
+
+</AgentDeploymentAndUpdate>
+`;
+
+console.log('text2UiData', text2UiData(data));
 
 /**
  * Format eoapi body to json
