@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { whatType } from 'eo/workbench/browser/src/app/utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { ApiTestHeaders, ApiTestQuery, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
+import { ApiTestHeaders, ContentTypeByAbridge } from '../../../shared/services/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../../shared/services/storage/index.model';
 import { eoDeepCopy } from '../../../utils';
 import { uiData2Json, text2UiData, json2XML } from '../../../utils/data-transfer/data-transfer.utils';
@@ -217,6 +217,18 @@ export class ApiTestUtilService {
     });
     return result;
   }
+  private text2Body(keyName, inData = '') {
+    const result = {};
+    const bodyInfo = text2UiData(inData);
+    if (bodyInfo.textType !== 'raw') {
+      result[`${keyName}`] = listToTreeHasLevel(bodyInfo.data);
+    } else {
+      result[`${keyName}`] = bodyInfo.data;
+    }
+    result[`${keyName}Type`] = bodyInfo.textType;
+    result[`${keyName}JsonType`] = bodyInfo.rootType;
+    return result;
+  }
   /**
    * Transfer test data/test history to api data
    *
@@ -233,6 +245,9 @@ export class ApiTestUtilService {
       responseBody: [],
     };
     delete result.uuid;
+    if (result.requestBodyType === ApiBodyType.Raw) {
+      Object.assign(result, this.text2Body('requestBody', result.requestBody));
+    }
     ['requestHeaders', 'requestBody', 'restParams', 'queryParams'].forEach((keyName) => {
       if (!result[keyName] || typeof result[keyName] !== 'object') {
         return;
@@ -240,12 +255,7 @@ export class ApiTestUtilService {
       result[keyName] = this.testTableData2ApiBody(result[keyName]);
     });
     if (inData.history.response.responseType === 'text') {
-      console.log('inData.history.response.body', inData.history.response.body);
-      const bodyInfo = text2UiData(inData.history.response.body);
-      console.log('bodyInfo', bodyInfo);
-      result.responseBody = listToTreeHasLevel(bodyInfo.data);
-      result.responseBodyType = bodyInfo.textType;
-      result.responseBodyJsonType = bodyInfo.rootType;
+      Object.assign(result, this.text2Body('responseBody', inData.history.response.body));
     }
     return result;
   }
@@ -273,7 +283,7 @@ export class ApiTestUtilService {
       case ApiBodyType.JSON: {
         inData.requestBody = JSON.stringify(
           uiData2Json(inData.requestBody, {
-            defaultValueKey: 'example',
+            rootType: inData.requestBodyJsonType,
           })
         );
         break;
@@ -281,7 +291,7 @@ export class ApiTestUtilService {
       case ApiBodyType.XML: {
         inData.requestBody = json2XML(
           uiData2Json(inData.requestBody, {
-            defaultValueKey: 'example',
+            rootType: inData.requestBodyJsonType,
           })
         );
         break;
