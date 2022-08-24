@@ -33,12 +33,16 @@ export const whatType = (data: any): string => {
  *
  * @returns textType - xml|json|html|text
  */
-export const whatTextType = (tmpText) => {
+export const whatTextType = (tmpText): 'xml' | 'json' | 'html' | 'text' => {
   // TODO it can be better
   const tmpCompareText = tmpText.replace(/\s/g, '');
-  if (/^({|\[)(.*)(}|])$/.test(tmpCompareText) && JSON.parse(tmpCompareText)) {
-    return 'json';
-  } else if (/^(<)(.*)(>)$/.test(tmpCompareText)) {
+  if (/^({|\[)(.*)(}|])$/.test(tmpCompareText)) {
+    try {
+      JSON.parse(tmpCompareText);
+      return 'json';
+    } catch (e) {}
+  }
+  if (/^(<)(.*)(>)$/.test(tmpCompareText)) {
     if (/^(<!DOCTYPEhtml>)|(html)/i.test(tmpCompareText)) {
       return 'html';
     } else {
@@ -191,7 +195,9 @@ export function throttle(fn, gap) {
 }
 
 export const eoDeepCopy = (obj) => {
-  if (structuredClone) {return structuredClone(obj);}
+  if (structuredClone) {
+    return structuredClone(obj);
+  }
   let copy;
 
   // Handle the 3 simple types, and null or undefined
