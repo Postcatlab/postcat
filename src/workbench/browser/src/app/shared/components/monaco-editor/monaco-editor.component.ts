@@ -168,7 +168,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   private setCode(val: string) {
-    console.log(val === this.$$code);
     if (val === this.$$code) {
       return;
     }
