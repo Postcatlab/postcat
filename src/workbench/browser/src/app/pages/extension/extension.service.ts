@@ -7,7 +7,6 @@ import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -32,7 +31,9 @@ export class ExtensionService {
   private translateModule(module: ModuleInfo) {
     const lang = this.language.systemLanguage;
     const locale = module.i18n?.find((val) => val.locale === lang)?.package;
-    if (!locale) {return module;}
+    if (!locale) {
+      return module;
+    }
     module = new TranslateService(module, locale).translate();
     return module;
   }
@@ -48,12 +49,13 @@ export class ExtensionService {
     return result;
   }
   async getDetail(id, name): Promise<any> {
-    const result = {};
+    let result = {} as ModuleInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
     if (this.localExtensions.has(id)) {
       Object.assign(result, this.localExtensions.get(id), { installed: true });
     }
+    result = this.translateModule(result);
     return result;
   }
   /**
