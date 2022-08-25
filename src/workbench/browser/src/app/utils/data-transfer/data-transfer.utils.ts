@@ -96,7 +96,7 @@ export const xml2json = (tmpl) => {
   let index = null;
   while (xml) {
     // * handle end tags
-    if (xml.trim().substring(0, 2) === '</') {
+    if (xml.substring(0, 2) === '</') {
       const end = xml.match(endTag);
       const [str, label] = end;
       const last = stack.pop();
@@ -110,7 +110,7 @@ export const xml2json = (tmpl) => {
         parent.children.push(last);
         stack.push(parent);
       }
-      xml = xml.trim().substring(str.length);
+      xml = xml.trim().substring(str.length).trim();
       continue;
     }
     // * handle start tags
@@ -185,7 +185,7 @@ export const xml2UiData = (text) => {
  * @returns
  */
 export const json2XML: (o: object, tab?) => string = (o, tab) => {
-  const toXml = function(v, name, ind) {
+  const toXml = function (v, name, ind) {
     let xml = '';
     if (v instanceof Array) {
       for (let i = 0, n = v.length; i < n; i++) {
@@ -241,7 +241,7 @@ export const text2UiData: (text: string) => uiData = (text) => {
     data: text,
   };
   const textType = whatTextType(text);
-  result.textType = ['xml', 'json'].includes(textType) ? textType as ApiBodyType : ApiBodyType.Raw;
+  result.textType = ['xml', 'json'].includes(textType) ? (textType as ApiBodyType) : ApiBodyType.Raw;
   switch (result.textType) {
     case 'xml': {
       result.data = xml2UiData(text);
@@ -268,7 +268,7 @@ export const text2UiData: (text: string) => uiData = (text) => {
  * @param inputOptions
  * @returns
  */
-export const uiData2Json = function(eoapiArr: ApiEditBody[], inputOptions) {
+export const uiData2Json = function (eoapiArr: ApiEditBody[], inputOptions) {
   inputOptions = inputOptions || {};
   let result = {};
   const loopFun = (inputArr, inputObject) => {
