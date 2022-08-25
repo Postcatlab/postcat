@@ -6,7 +6,7 @@
       <nz-tabset nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
-            <span i18n-nzTooltipTitle nzTooltipTitle="Collections" nz-tooltip class="text-lg tab-content">
+            <span i18n-nzTooltipTitle nzTooltipTitle="Collections" nz-tooltip [nzTooltipMouseEnterDelay]="0.7" class="text-lg tab-content">
               <eo-iconpark-icon name="folder-open"></eo-iconpark-icon>
             </span>
           </ng-template>
@@ -16,7 +16,7 @@
         </nz-tab>
         <nz-tab [nzTitle]="historyTitle">
           <ng-template #historyTitle>
-            <span i18n-nzTooltipTitle nzTooltipTitle="History" nz-tooltip class="text-lg tab-content">
+            <span i18n-nzTooltipTitle nzTooltipTitle="History" nz-tooltip  [nzTooltipMouseEnterDelay]="0.7" class="text-lg tab-content">
               <eo-iconpark-icon name="history"></eo-iconpark-icon>
             </span>
           </ng-template>
@@ -46,8 +46,8 @@
               <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n>Manage
                 Environment</a>
             </ng-template>
-            <span class="flex items-center justify-center mx-1 icon" i18n-nzTooltipTitle nz-tooltip
-              nzTooltipTitle="Enviroment Quick Look" nz-popover [nzPopoverContent]="envParams"
+            <span class="flex items-center justify-center mx-1 icon" i18n-nzTooltipTitle nz-tooltip [nzTooltipMouseEnterDelay]="0.8" [nzTooltipMouseLeaveDelay]="0"
+              nzTooltipTitle="Enviroment Quick Look" nz-popover [nzPopoverContent]="envParams"  nzTooltipPlacement="bottomRight"
               nzPopoverPlacement="bottomRight" nzPopoverTrigger="click">
               <eo-iconpark-icon name="eyes"></eo-iconpark-icon>
             </span>
@@ -72,7 +72,7 @@
           <div class="absolute top-0 bottom-0 right-0 flex right-bar" [ngClass]="{ 'left-line': !activeBar }"
             [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }">
             <div class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
-              [ngClass]="activeBar ? 'active' : ''" (click)="toggleRightBar()" nz-tooltip
+              [ngClass]="activeBar ? 'active' : ''" (click)="toggleRightBar()" nz-tooltip [nzTooltipMouseEnterDelay]="0.7" [nzTooltipMouseLeaveDelay]="0"
               i18n-nzTooltipTitle="@@Environment Setting" nzTooltipTitle="Environment Setting">
               <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
             </div>

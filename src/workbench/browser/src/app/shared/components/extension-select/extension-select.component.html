@@ -8,6 +8,7 @@
           nzTooltipPlacement="bottom"
           [nzTooltipTitle]="item.label"
           nz-tooltip
+          [nzTooltipMouseEnterDelay]="0.7"
         >
           <span *ngIf="!item.icon">{{ item.label }}</span>
           <i
