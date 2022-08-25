@@ -111,11 +111,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/monaco-editor/monaco-editor.component.ts</context>
-          <context context-type="linenumber">292</context>
+          <context context-type="linenumber">291</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/index.ts</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">156</context>
         </context-group>
         <target state="translated">复制成功</target>
       </trans-unit>
@@ -260,7 +260,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">14</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/body/api-test-body.component.ts</context>
@@ -288,7 +288,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">15</context>
         </context-group>
         <target state="translated"><x id="PH" equiv-text="opts.title"/>名</target>
       </trans-unit>
@@ -396,11 +396,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">100</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/api-script/constant.ts</context>
@@ -424,7 +424,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <target state="translated">类型</target>
       </trans-unit>
@@ -768,11 +768,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">137</context>
         </context-group>
         <target state="translated">删除</target>
       </trans-unit>
@@ -800,7 +800,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">132</context>
         </context-group>
         <target state="translated">添加子字段</target>
       </trans-unit>
@@ -1352,7 +1352,7 @@
         <source><x id="PH" equiv-text="opts.title"/> Value</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <target state="translated"><x id="PH" equiv-text="opts.title"/>值</target>
       </trans-unit>
@@ -1360,11 +1360,11 @@
         <source>Value</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">118</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/api-test-util.service.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">123</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/test/header/api-test-header.component.ts</context>
@@ -2948,8 +2948,8 @@
         </context-group>
         <target state="translated">环境名称</target>
       </trans-unit>
-      <trans-unit id="3f1eeb54017aceaa8f374a1c7c6b5e64cef7af4c" datatype="html">
-        <source>Environment variable：can be referenced by using <x id="INTERPOLATION" equiv-text="{{ varName }}"/> in Document or Test</source>
+      <trans-unit id="9d6c75cb4672c810be4a0962f2b7a3647accf451" datatype="html">
+        <source>Environment variable: API Documentation/Test can use <x id="INTERPOLATION" equiv-text="{{ varName }}"/> to refer to the environment variable</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
           <context context-type="linenumber">41</context>
@@ -3272,9 +3272,9 @@
         </context-group>
         <target state="translated">请输入 <x id="INTERPOLATION" equiv-text="{{ module.properties[field]?.label }}"/></target>
       </trans-unit>
-      <trans-unit id="4d24a97a96715437f47fbfc6d374af2c535edd17" datatype="html">
+      <trans-unit id="20bbc8f1f0dc927880bc2ba24c4fb242a90f5b58" datatype="html">
         <source>
-          <x id="INTERPOLATION" equiv-text="{{                   module.properties[field]?.placeholder ?? &apos;Please Enter &apos; + module.properties[field]?.label                 }}"/>
+          <x id="INTERPOLATION" equiv-text="{{                 module.properties[field]?.placeholder ?? &apos;Please Enter &apos; + module.properties[field]?.label               }}"/>
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/extensions.component.ts</context>
@@ -3362,7 +3362,7 @@
         <source>The test service connection failed, please submit an Issue to contact the community</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/api-test/api-test.utils.ts</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">219</context>
         </context-group>
         <target state="translated">测试服务连接失败，请提交 Issue 联系社区</target>
       </trans-unit>
