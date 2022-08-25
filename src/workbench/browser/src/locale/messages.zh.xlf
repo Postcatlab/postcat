@@ -2940,13 +2940,13 @@
         </context-group>
         <target state="translated">是否确定删除?</target>
       </trans-unit>
-      <trans-unit id="141a4b3b5905cbfba657c8dd03f4b4b449910f93" datatype="html">
-        <source>Environment Name</source>
+      <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
+        <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target state="translated">环境名称</target>
+        <target state="translated">名称</target>
       </trans-unit>
       <trans-unit id="9d6c75cb4672c810be4a0962f2b7a3647accf451" datatype="html">
         <source>Environment variable: API Documentation/Test can use <x id="INTERPOLATION" equiv-text="{{ varName }}"/> to refer to the environment variable</source>
