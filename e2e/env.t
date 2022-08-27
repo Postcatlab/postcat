@@ -13,10 +13,11 @@ newLabel -> click
 }
 
 ::: modal_layout {
+
 find: 
     [input] = envName
     [input] = host
-    [input] = name [input] = value [input] = desc [img]
+    [input] = name [input] = value [input] = desc
     [button 'Save']=save
 }
 
