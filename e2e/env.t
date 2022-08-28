@@ -17,7 +17,7 @@ newLabel -> click
 find: 
     [input] = envName
     [input] = host
-    [input] = name [input] = value [input] = desc
+    [input] = name [input] = value [input] = desc [img]
     [button 'Save']=save
 }
 
@@ -70,18 +70,29 @@ host -> 'https://youtube.com'
 
 --- add_data :a:b:c
 
+# 保存
 save -> click
-sel -> hover
+
+sel -> 'myEnv'
 
 find: 
+    [label 'New']
+    [label 'myEnv'] = env
+
+env -> hover
+
+find: 
+    [label 'New']
     [label 'myEnv'] [img] = delIcon
-icon -> click
+
+delIcon -> click
 
 find: 
-    [label 'Cancel'] [label 'OK']=OK
+    [label 'Cancel'] [label 'OK']=ok
+    
 ok -> click
 
 find: (!)
     [label 'myEnv']
 
-
+capture
