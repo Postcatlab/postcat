@@ -15,7 +15,7 @@
             class="logobg absolute left-1.5 right-1.5 top-0 bottom-0"
             [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
           ></i>
-          <i class="check absolute right-0 bottom-0" nz-icon nzType="check" nzTheme="outline"></i>
+          <eo-iconpark-icon name="check" class="check absolute right-0 bottom-0" size="16px"></eo-iconpark-icon>
         </div>
       </div>
     </div>
@@ -37,9 +37,6 @@
 
 <div class="mt-4" *ngIf="allowDrag && extensionList.length">
   <nz-upload nzType="drag" [nzBeforeUpload]="parserFile">
-    <p class="ant-upload-drag-icon">
-      <i nz-icon nzType="inbox"></i>
-    </p>
     <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
     <p class="ant-upload-hint" i18n>Only supports importing a single file</p>
   </nz-upload>

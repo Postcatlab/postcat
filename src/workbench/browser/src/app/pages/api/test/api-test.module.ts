@@ -15,7 +15,6 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -53,7 +52,6 @@ const NZ_COMPONETS = [
   NzSelectModule,
   NzTreeSelectModule,
   NzCollapseModule,
-  NzIconModule,
   NzTabsModule,
   NzRadioModule,
   NzDividerModule,
