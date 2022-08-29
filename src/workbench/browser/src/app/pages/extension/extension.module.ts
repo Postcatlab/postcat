@@ -7,7 +7,6 @@ import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
 import { ExtensionDetailComponent } from './detail/extension-detail.component';
 
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
@@ -28,13 +27,12 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
     NzDescriptionsModule,
     NzInputModule,
     NzButtonModule,
-    NzIconModule,
     ExtensionRoutingModule,
     CommonModule,
     NzDividerModule,
     NzTreeModule,
     NzDropDownModule,
-    NzSkeletonModule,
+    NzSkeletonModule
   ],
   declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent],
 })

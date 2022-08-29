@@ -17,12 +17,12 @@
         box-shadow: 0 0 10px rgba(0,0,0,.2);
         background-color: #fff;
         
-        i.check {
+        eo-iconpark-icon {
             color: #158565;
-            display: block;
+            display: flex;
         }
     }   
-    i.check {
+    eo-iconpark-icon {
         display: none;
     }
 }

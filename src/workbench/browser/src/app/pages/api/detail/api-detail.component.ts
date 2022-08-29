@@ -18,7 +18,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remo
 })
 export class ApiDetailComponent implements OnInit {
   @Input() model: ApiData | any;
-  @Output() afterInit = new EventEmitter<ApiData>();
+  @Output() eoOnInit = new EventEmitter<ApiData>();
   CONST = {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType),
@@ -37,7 +37,7 @@ export class ApiDetailComponent implements OnInit {
         console.error('Can\'t no find api');
       }
     }
-    this.afterInit.emit(this.model);
+    this.eoOnInit.emit(this.model);
   }
   getApiByUuid(id: number) {
     return new Promise((resolve) => {

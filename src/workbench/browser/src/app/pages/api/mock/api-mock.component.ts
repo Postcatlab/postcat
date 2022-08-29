@@ -17,7 +17,7 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
   styleUrls: ['./api-mock.component.scss'],
 })
 export class ApiMockComponent implements OnInit {
-  @Output() afterInit = new EventEmitter<ApiData>();
+  @Output() eoOnInit = new EventEmitter<ApiData>();
   isVisible = false;
   get mockUrl() {
     return this.remoteService.mockUrl;
@@ -82,7 +82,7 @@ export class ApiMockComponent implements OnInit {
   async initMockList(apiDataID: number) {
     const mockRes = await this.getMockByApiDataID(apiDataID);
     this.apiData = await this.getApiData(apiDataID);
-    this.afterInit.emit(this.apiData);
+    this.eoOnInit.emit(this.apiData);
     this.mocklList = mockRes.map((item) => {
       item.url = this.getApiUrl(item);
       return item;

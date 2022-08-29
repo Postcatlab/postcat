@@ -124,7 +124,9 @@ nz-divider {
         }
       }
     }
-
+    .ant-tabs-nav,.ant-tabs-extra-content {
+      height: 35px;
+    }
 
     .param_header {
       padding: 5px 15px;

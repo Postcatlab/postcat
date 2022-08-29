@@ -74,7 +74,7 @@ export class ApiTabService {
       return;
     }
     const url = this.router.url;
-    this.componentRef.afterInit = {
+    this.componentRef.eoOnInit = {
       emit: (model) => {
         this.afterContentChanged({ when: 'init', url, model });
       },

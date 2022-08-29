@@ -2,27 +2,32 @@
 <nz-tabset
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
-  nzHideAdd="true"
+  [nzHideAdd]="true"
   (nzSelectChange)="selectChange()"
   [nzTabBarExtraContent]="extraTemplate"
 >
   <nz-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
-      <div class="flex items-center tab-item-container" [ngClass]="{'fixed-tab-item-container':tabStorage.tabsByID.get(uuid).isFixed}">
+      <div
+        class="flex items-center tab-item-container"
+        [ngClass]="{ 'fixed-tab-item-container': tabStorage.tabsByID.get(uuid).isFixed }"
+      >
         <!-- loading -->
-        <nz-spin nzSimple [nzIndicator]="indicatorTemplate" *ngIf="tabStorage.tabsByID.get(uuid).isLoading"></nz-spin>
-        <ng-template #indicatorTemplate><i nz-icon nzType="loading"></i></ng-template>
+        <nz-spin nzSimple class="mr10" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid).isLoading"></nz-spin>
         <eo-iconpark-icon
           class="mr5"
           name="{{ tabStorage.tabsByID.get(uuid).icon }}"
           size="14px"
           *ngIf="tabStorage.tabsByID.get(uuid).icon"
         ></eo-iconpark-icon>
-        <span class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid).extends.method }}"
+        <span
+          class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid).extends.method }}"
           *ngIf="tabStorage.tabsByID.get(uuid).extends?.method"
           >{{ tabStorage.tabsByID.get(uuid).extends.method }}</span
         >
-        <span class="text_omit tab_text"  [title]="tabStorage.tabsByID.get(uuid).title"> {{ tabStorage.tabsByID.get(uuid).title }}</span>
+        <span class="text_omit tab_text" [title]="tabStorage.tabsByID.get(uuid).title">
+          {{ tabStorage.tabsByID.get(uuid).title }}</span
+        >
         <!-- Close/HasEdit -->
         <div class="tab-item-button-group flex items-center">
           <span class="tab-has-edit-icon eo-tab-theme-icon" *ngIf="tabStorage.tabsByID.get(uuid).hasChanged"></span>
@@ -39,11 +44,11 @@
   </nz-tab>
 </nz-tabset>
 <ng-template #extraTemplate>
-  <button (click)="newTab()" class="ant-tabs-nav-add {{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}">
-    <i nz-icon nzType="plus"></i>
+  <button  (click)="newTab()" class="ant-tabs-nav-add {{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}">
+    <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
   </button>
   <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
-    <button class="ant-tabs-nav-more"><i nz-icon nzType="ellipsis" nzTheme="outline"></i></button>
+    <button class="ant-tabs-nav-more"><eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon></button>
   </a>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>

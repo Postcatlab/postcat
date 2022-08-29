@@ -25,19 +25,19 @@ export class ApiOverviewComponent implements OnDestroy {
   overviewList = [
     {
       title: $localize`Import`,
-      icon: 'import',
+      icon: 'afferent-three',
       desc: $localize`Import API data`,
       type: 'import',
     },
     {
       title: $localize`Export`,
-      icon: 'export',
+      icon: 'efferent-three',
       desc: $localize`Export API data`,
       type: 'export',
     },
     {
       title: $localize`Push`,
-      icon: 'sync',
+      icon: 'send',
       desc: $localize`Push/Sync API to other platforms`,
       type: 'push',
     },

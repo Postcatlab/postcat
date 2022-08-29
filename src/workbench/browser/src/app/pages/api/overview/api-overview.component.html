@@ -7,7 +7,7 @@
         <nz-card-meta [nzTitle]="item.title" [nzDescription]="item.desc"></nz-card-meta>
       </nz-card>
       <ng-template #card>
-        <i (click)="clickCard(item)" nz-icon [nzType]="item.icon"></i>
+        <eo-iconpark-icon (click)="clickCard(item)" class="mr5" name="{{ item.icon }}" size="16px"></eo-iconpark-icon>
       </ng-template>
     </div>
   </section>

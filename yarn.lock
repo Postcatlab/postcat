@@ -430,7 +430,15 @@
   dependencies:
     "@ctrl/tinycolor" "^3.3.1"
 
-"@ant-design/icons-angular@13.1.0", "@ant-design/icons-angular@^13.0.1":
+"@ant-design/icons-angular@14.1.0":
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@ant-design/icons-angular/-/icons-angular-14.1.0.tgz#7612507aae28872ce3ccd139857452426cc30be3"
+  integrity sha512-SvWi8p4L+cCfTGtezeUq1s8kahZEO1UVf7ZR615Fix3c2l9OnAJi+niDkq2fZHjpiarFrt8HoZ2EhMAMN7jfbg==
+  dependencies:
+    "@ant-design/colors" "^5.0.0"
+    tslib "^2.0.0"
+
+"@ant-design/icons-angular@^13.0.1":
   version "13.1.0"
   resolved "https://registry.npmmirror.com/@ant-design/icons-angular/-/icons-angular-13.1.0.tgz#6ff472ae880f911bf3a04f19b2f9b5ef5d096a90"
   integrity sha512-bQ1pxiDmR8Hx7kUwQImxLGAtexv0uDCCMlKSWdyaw39TnNAPz+Hls0XL+UqVIjHgt/D4R8tkmSMpx3eBGFIY/Q==
