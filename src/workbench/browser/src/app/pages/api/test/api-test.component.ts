@@ -63,7 +63,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    */
   @Input() initialModel: testViewModel;
   @Output() modelChange = new EventEmitter<testViewModel | any>();
-  @Output() afterInit = new EventEmitter<testViewModel>();
+  @Output() eoOnInit = new EventEmitter<testViewModel>();
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
   env: any = {
@@ -173,7 +173,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       this.initialModel = eoDeepCopy(this.model);
     }
     this.cdRef.detectChanges();
-    this.afterInit.emit(this.model);
+    this.eoOnInit.emit(this.model);
   }
   clickTest() {
     if (!this.checkForm()) {
@@ -292,9 +292,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
+    console.log('ngOnInit');
     this.watchEnvChange();
   }
   ngOnDestroy() {
+    console.log('ngOnDestroy');
     this.destroy$.next();
     this.destroy$.complete();
     this.testServer.close();

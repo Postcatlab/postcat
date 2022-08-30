@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import {  NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ParamsImportComponent } from './params-import.component';
@@ -13,7 +13,6 @@ import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark
 @NgModule({
   declarations: [ParamsImportComponent],
   imports: [FormsModule, EoIconparkIconModule, NzDropDownModule, NzModalModule, NzButtonModule, SharedModule],
-  exports: [ParamsImportComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [ParamsImportComponent]
 })
 export class ParamsImportModule {}

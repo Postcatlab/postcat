@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { SettingComponent } from './setting.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
@@ -23,19 +22,22 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { ElectronService } from '../../../core/services';
 import { SelectThemeComponent } from 'eo/workbench/browser/src/app/shared/components/toolbar/select-theme/select-theme.component';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import { IconDefinition } from '@ant-design/icons-angular';
+import { CaretDownFill } from '@ant-design/icons-angular/icons';
 import {
   DataStorageComponent,
   LanguageSwticherComponent,
   AboutComponent,
   ExtensionSettingComponent,
 } from 'eo/workbench/browser/src/app/shared/components/setting/common';
-
+import { NzIconModule } from 'ng-zorro-antd/icon';
+const icons: IconDefinition[] = [CaretDownFill];
 const ANTDMODULES = [
   NzModalModule,
   NzButtonModule,
-  NzIconModule,
   NzListModule,
   NzInputModule,
+  NzIconModule.forRoot(icons),
   NzFormModule,
   NzSelectModule,
   NzDividerModule,
