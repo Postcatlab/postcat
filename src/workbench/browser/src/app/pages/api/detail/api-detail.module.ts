@@ -7,7 +7,6 @@ import { EouiModule } from '../../../eoui/eoui.module';
 import { SharedModule } from '../../../shared/shared.module';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -27,7 +26,6 @@ import { RouterModule } from '@angular/router';
 const NZ_COMPONETS = [
   NzButtonModule,
   NzCollapseModule,
-  NzIconModule,
   NzTagModule,
   NzModalModule,
   NzFormModule,

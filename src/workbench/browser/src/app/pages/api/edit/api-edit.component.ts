@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } 
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
 import { Subject } from 'rxjs';
@@ -13,7 +12,6 @@ import { StorageService } from '../../../shared/services/storage';
 import {
   Group,
   ApiEditViewData,
-  ApiData,
   RequestProtocol,
   RequestMethod,
   StorageRes,
@@ -25,6 +23,7 @@ import { listToTree, getExpandGroupByKey } from '../../../utils/tree/tree.utils'
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
+import { EoMessageService } from '../../../eoui/message/eo-message.service';
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -38,7 +37,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    */
   @Input() initialModel: ApiEditViewData;
   @Output() modelChange = new EventEmitter<ApiEditViewData>();
-  @Output() afterInit = new EventEmitter<ApiEditViewData>();
+  @Output() eoOnInit = new EventEmitter<ApiEditViewData>();
   @Output() afterSaved = new EventEmitter<ApiEditViewData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
@@ -56,7 +55,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
-    private message: NzMessageService,
+    private message: EoMessageService,
     private messageService: MessageService,
     private storage: StorageService,
     private apiEdit: ApiEditService
@@ -98,7 +97,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.watchUri();
     this.changeGroupID$.next(this.model.groupID);
     this.validateForm.patchValue(this.model);
-    this.afterInit.emit(this.model);
+    this.eoOnInit.emit(this.model);
   }
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);

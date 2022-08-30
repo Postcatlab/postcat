@@ -167,7 +167,7 @@ export class ApiTabOperateService {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
     }
     result.params.pageID = result.params.pageID || Date.now();
-    Object.assign(result, basicTab);
+    Object.assign(result, { isLoading: true }, basicTab);
     return result as TabItem;
   }
 
