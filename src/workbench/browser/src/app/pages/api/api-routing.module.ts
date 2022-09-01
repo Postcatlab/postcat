@@ -11,28 +11,32 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'test',
-        pathMatch: 'full'
+        redirectTo: 'ws',
+        pathMatch: 'full',
       },
       {
         path: 'overview',
         component: ApiOverviewComponent,
       },
       {
-        path: 'detail',
-        loadChildren: () => import('./detail/api-detail.module').then((m) => m.ApiDetailModule),
+        path: 'ws',
+        loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
+      },
+      {
+        path: 'grpc',
+        loadChildren: () => import('./grpc/grpc.module').then((m) => m.GrpcModule),
       },
       {
         path: 'edit',
-        loadChildren: () => import('./edit/api-edit.module').then((m) => m.ApiEditModule),
+        loadChildren: () => import('./http/edit/api-edit.module').then((m) => m.ApiEditModule),
       },
       {
         path: 'test',
-        loadChildren: () => import('./test/api-test.module').then((m) => m.ApiTestModule),
+        loadChildren: () => import('./http/test/api-test.module').then((m) => m.ApiTestModule),
       },
       {
         path: 'mock',
-        loadChildren: () => import('./mock/api-mock.module').then((m) => m.ApiMockModule),
+        loadChildren: () => import('./http/mock/api-mock.module').then((m) => m.ApiMockModule),
       },
     ],
   },

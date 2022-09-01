@@ -22,14 +22,6 @@ const routes: Routes = [
         loadChildren: () => import('./api/api.module').then((m) => m.ApiModule),
       },
       {
-        path: 'ws',
-        loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
-      },
-      {
-        path: 'grpc',
-        loadChildren: () => import('./grpc/grpc.module').then((m) => m.GrpcModule),
-      },
-      {
         path: 'extension',
         loadChildren: () => import('./extension/extension.module').then((m) => m.ExtensionModule),
       },
