@@ -73,6 +73,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/ws',
       },
       {
+        moduleName: 'GRPC',
+        moduleID: '@eo-core-grpc',
+        isOffical: true,
+        icon: 'api',
+        activeRoute: 'home/grpc',
+        route: 'home/grpc',
+      },
+      {
         moduleName: $localize`Extensions`,
         moduleID: '@eo-core-extension',
         isOffical: true,
