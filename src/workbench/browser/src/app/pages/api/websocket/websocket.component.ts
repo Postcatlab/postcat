@@ -45,7 +45,19 @@ import { io } from 'socket.io-client';
     </nz-tabset>
     <!-- body -->
     <div>
-      [编辑器]
+      <nz-select [(ngModel)]="editorConfig.language">
+        <nz-option nzValue="css" nzLabel="css"></nz-option>
+        <nz-option nzValue="html" nzLabel="html"></nz-option>
+        <nz-option nzValue="json" nzLabel="json"></nz-option>
+      </nz-select>
+      <eo-monaco-editor
+        [(code)]="model.beforeScript"
+        [config]="editorConfig"
+        [maxLine]="20"
+        [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+        (codeChange)="rawDataChange($event)"
+      >
+      </eo-monaco-editor>
       <button nz-button class="mx-1" nzType="primary" [disabled]="!isConnect" (click)="handleSendMsg()">Send</button>
     </div>
     <!-- response -->
@@ -87,6 +99,9 @@ export class WebsocketComponent implements OnInit {
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
   ];
+  editorConfig = {
+    language: 'css',
+  };
   constructor() {}
   ngOnInit() {
     // * 通过 SocketIO 通知后端
@@ -110,6 +125,9 @@ export class WebsocketComponent implements OnInit {
         request: {},
       },
     };
+  }
+  rawDataChange(e) {
+    console.log('rawDataChange', e);
   }
   handleConnect(bool = false) {
     if (this.socket == null) {

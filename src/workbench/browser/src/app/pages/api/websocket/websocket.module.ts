@@ -9,11 +9,12 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 import { WebsocketComponent } from './websocket.component';
 import { WebsocketRoutingModule } from './websocket.routing.module';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 const ANTDS = [NzButtonModule, NzInputModule, NzSelectModule, NzTabsModule];
 
 @NgModule({
-  imports: [WebsocketRoutingModule, FormsModule, ReactiveFormsModule, CommonModule, ...ANTDS],
+  imports: [WebsocketRoutingModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule, ...ANTDS],
   declarations: [WebsocketComponent],
   exports: [WebsocketComponent],
   providers: [],
