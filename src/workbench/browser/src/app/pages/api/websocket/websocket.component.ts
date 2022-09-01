@@ -45,11 +45,6 @@ import { io } from 'socket.io-client';
     </nz-tabset>
     <!-- body -->
     <div>
-      <nz-select [(ngModel)]="editorConfig.language">
-        <nz-option nzValue="css" nzLabel="css"></nz-option>
-        <nz-option nzValue="html" nzLabel="html"></nz-option>
-        <nz-option nzValue="json" nzLabel="json"></nz-option>
-      </nz-select>
       <eo-monaco-editor
         [(code)]="model.beforeScript"
         [config]="editorConfig"
@@ -58,7 +53,14 @@ import { io } from 'socket.io-client';
         (codeChange)="rawDataChange($event)"
       >
       </eo-monaco-editor>
-      <button nz-button class="mx-1" nzType="primary" [disabled]="!isConnect" (click)="handleSendMsg()">Send</button>
+      <div class="flex justify-between p-2">
+        <nz-select [(ngModel)]="editorConfig.language">
+          <nz-option nzValue="text" nzLabel="text"></nz-option>
+          <nz-option nzValue="xml" nzLabel="xml"></nz-option>
+          <nz-option nzValue="json" nzLabel="json"></nz-option>
+        </nz-select>
+        <button nz-button class="mx-1" nzType="primary" [disabled]="!isConnect" (click)="handleSendMsg()">Send</button>
+      </div>
     </div>
     <!-- response -->
     <nz-tabset
@@ -100,7 +102,7 @@ export class WebsocketComponent implements OnInit {
     { value: 'wss', key: 'WSS' },
   ];
   editorConfig = {
-    language: 'css',
+    language: 'json',
   };
   constructor() {}
   ngOnInit() {
