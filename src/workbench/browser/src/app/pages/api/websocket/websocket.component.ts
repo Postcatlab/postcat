@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
   selector: 'websocket-content',
   template: `<div class="h-full">
     <eo-split-panel [topStyle]="{ height: '350px' }">
-      <div top>
+      <div top class="h-full overflow-auto">
         <header class="flex p-4">
           <nz-select class="!w-[106px] flex-none" [(ngModel)]="model.request.protocol">
             <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
