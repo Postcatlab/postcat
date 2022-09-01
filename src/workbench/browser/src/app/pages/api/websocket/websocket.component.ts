@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { io } from 'socket.io-client';
 
 @Component({
   selector: 'websocket-content',
   template: `<div>
-    <div class="flex">
-      <input nz-input placeholder="ws://" nzSize="default" [(ngModel)]="wsUrl" />
-      <button *ngIf="!isConnect" nz-button nzType="primary" (click)="handleConnect(true)">Connect</button>
-      <button *ngIf="isConnect" nzDanger nz-button nzType="primary" (click)="handleConnect(false)">Disconnect</button>
+    <div class="flex p-4">
+      <nz-select class="!w-[106px] flex-none" [(ngModel)]="model">
+        <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+      </nz-select>
+      <input type="text" i18n-placeholder placeholder="Enter URL" [(ngModel)]="wsUrl" name="uri" nz-input />
+      <div class="flex px-2">
+        <button *ngIf="!isConnect" nz-button nzType="primary" (click)="handleConnect(true)">Connect</button>
+        <button *ngIf="isConnect" nzDanger nz-button nzType="primary" (click)="handleConnect(false)">Disconnect</button>
+      </div>
     </div>
     <input nz-input placeholder="Message ..." [(ngModel)]="msg" nzSize="default" />
     <button nz-button nzType="primary" [disabled]="!isConnect" (click)="handleSendMsg()">Send</button>
@@ -18,11 +23,16 @@ import { io } from 'socket.io-client';
   styleUrls: [],
 })
 export class WebsocketComponent implements OnInit {
+  @Input() model = this.resetModel();
   isConnect = false;
   wsUrl = 'ws://106.12.149.147:3782';
   socket = null;
   msg = '';
   msgList = [];
+  WS_PROTOCOL = [
+    { value: 'ws', key: 'WS' },
+    { value: 'wss', key: 'WSS' },
+  ];
   constructor() {}
   ngOnInit() {
     // * 通过 SocketIO 通知后端
@@ -31,6 +41,21 @@ export class WebsocketComponent implements OnInit {
     this.socket.on('ws-client', (...args) => {
       console.log('链接成功', args);
     });
+  }
+  private resetModel() {
+    return {
+      requestTabIndex: 1,
+      responseTabIndex: 0,
+      request: {
+        method: 'ws',
+      },
+      beforeScript: '',
+      afterScript: '',
+      testResult: {
+        response: {},
+        request: {},
+      },
+    };
   }
   handleConnect(bool = false) {
     if (!bool) {

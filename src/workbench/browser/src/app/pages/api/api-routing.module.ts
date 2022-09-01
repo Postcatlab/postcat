@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'ws',
+        redirectTo: 'api',
         pathMatch: 'full',
       },
       {
@@ -19,25 +19,30 @@ const routes: Routes = [
         component: ApiOverviewComponent,
       },
       {
+        path: 'http',
+        children: [
+          {
+            path: 'edit',
+            loadChildren: () => import('./http/edit/api-edit.module').then((m) => m.ApiEditModule),
+          },
+          {
+            path: 'test',
+            loadChildren: () => import('./http/test/api-test.module').then((m) => m.ApiTestModule),
+          },
+          {
+            path: 'mock',
+            loadChildren: () => import('./http/mock/api-mock.module').then((m) => m.ApiMockModule),
+          },
+        ],
+      },
+      {
         path: 'ws',
         loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
       },
-      {
-        path: 'grpc',
-        loadChildren: () => import('./grpc/grpc.module').then((m) => m.GrpcModule),
-      },
-      {
-        path: 'edit',
-        loadChildren: () => import('./http/edit/api-edit.module').then((m) => m.ApiEditModule),
-      },
-      {
-        path: 'test',
-        loadChildren: () => import('./http/test/api-test.module').then((m) => m.ApiTestModule),
-      },
-      {
-        path: 'mock',
-        loadChildren: () => import('./http/mock/api-mock.module').then((m) => m.ApiMockModule),
-      },
+      // {
+      //   path: 'grpc',
+      //   loadChildren: () => import('./grpc/grpc.module').then((m) => m.GrpcModule),
+      // },
     ],
   },
 ];
