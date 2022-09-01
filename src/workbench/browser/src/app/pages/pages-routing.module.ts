@@ -22,6 +22,10 @@ const routes: Routes = [
         loadChildren: () => import('./api/api.module').then((m) => m.ApiModule),
       },
       {
+        path: 'ws',
+        loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
+      },
+      {
         path: 'extension',
         loadChildren: () => import('./extension/extension.module').then((m) => m.ExtensionModule),
       },

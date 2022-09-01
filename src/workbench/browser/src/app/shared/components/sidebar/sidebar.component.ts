@@ -65,6 +65,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/api/test',
       },
       {
+        moduleName: 'WebSocket',
+        moduleID: '@eo-core-ws',
+        isOffical: true,
+        icon: 'api',
+        activeRoute: 'home/ws',
+        route: 'home/ws',
+      },
+      {
         moduleName: $localize`Extensions`,
         moduleID: '@eo-core-extension',
         isOffical: true,
