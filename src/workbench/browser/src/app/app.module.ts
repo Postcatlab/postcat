@@ -28,11 +28,11 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 //I18n
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { registerLocaleData } from '@angular/common';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 registerLocaleData(en);
 registerLocaleData(zh);
 
