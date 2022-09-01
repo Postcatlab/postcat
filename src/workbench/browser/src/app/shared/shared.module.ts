@@ -16,6 +16,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -52,7 +54,6 @@ const COMPONENTS = [
     ReactiveFormsModule,
     NzDrawerModule,
     NzRadioModule,
-    NzButtonModule,
     NzToolTipModule,
     NzResultModule,
     NzDropDownModule,
@@ -82,6 +83,11 @@ const COMPONENTS = [
     EnvListComponent,
     SplitPanelComponent,
     EoMonacoEditorComponent,
+    NzFormModule,
+    NzInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzButtonModule,
   ],
 })
 export class SharedModule {}
