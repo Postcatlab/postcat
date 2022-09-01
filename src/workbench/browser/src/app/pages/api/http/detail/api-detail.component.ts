@@ -6,10 +6,10 @@ import {
   JsonRootType,
   StorageRes,
   StorageResStatus,
-} from '../../../shared/services/storage/index.model';
-import { treeToListHasLevel } from '../../../utils/tree/tree.utils';
-import { reverseObj } from '../../../utils';
-import { StorageService } from '../../../shared/services/storage';
+} from '../../../../shared/services/storage/index.model';
+import { treeToListHasLevel } from '../../../../utils/tree/tree.utils';
+import { reverseObj } from '../../../../utils';
+import { StorageService } from '../../../../shared/services/storage';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 @Component({
   selector: 'api-detail',
@@ -34,7 +34,7 @@ export class ApiDetailComponent implements OnInit {
       if (id) {
         this.model = (await this.getApiByUuid(Number(id))) as ApiData;
       } else {
-        console.error('Can\'t no find api');
+        console.error("Can't no find api");
       }
     }
     this.eoOnInit.emit(this.model);

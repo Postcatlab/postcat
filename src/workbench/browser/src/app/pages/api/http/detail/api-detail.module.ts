@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { Ng1Module } from '../../../ng1/ng1.module';
-import { EouiModule } from '../../../eoui/eoui.module';
-import { SharedModule } from '../../../shared/shared.module';
+import { Ng1Module } from '../../../../ng1/ng1.module';
+import { EouiModule } from '../../../../eoui/eoui.module';
+import { SharedModule } from '../../../../shared/shared.module';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -23,14 +23,7 @@ import { ApiDetailUtilService } from './api-detail-util.service';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { RouterModule } from '@angular/router';
 
-const NZ_COMPONETS = [
-  NzButtonModule,
-  NzCollapseModule,
-  NzTagModule,
-  NzModalModule,
-  NzFormModule,
-  NzToolTipModule,
-];
+const NZ_COMPONETS = [NzButtonModule, NzCollapseModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
 const COMPONENTS = [
   ApiDetailComponent,
   ApiDetailHeaderComponent,

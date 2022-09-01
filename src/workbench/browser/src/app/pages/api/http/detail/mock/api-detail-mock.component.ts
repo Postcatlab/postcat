@@ -1,11 +1,16 @@
 import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
-import {  formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { copyText } from 'eo/workbench/browser/src/app/utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
+import {
+  ApiData,
+  ApiMockEntity,
+  StorageRes,
+  StorageResStatus,
+} from '../../../../../shared/services/storage/index.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
@@ -59,14 +64,10 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const uri = transferUrlAndQuery(
-      formatUri(this.apiData.uri, this.apiData.queryParams),
-      this.apiData.queryParams,
-      {
-        base: 'query',
-        replaceType: 'replace',
-      }
-    ).url;
+    const uri = transferUrlAndQuery(formatUri(this.apiData.uri, this.apiData.queryParams), this.apiData.queryParams, {
+      base: 'query',
+      replaceType: 'replace',
+    }).url;
     const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (mock?.createWay === 'custom' && mock.uuid) {
       url.searchParams.set('mockID', mock.uuid + '');
@@ -133,4 +134,3 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
     this.message.success($localize`Copied`);
   }
 }
-
