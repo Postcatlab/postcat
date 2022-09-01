@@ -21,7 +21,11 @@
             {{ env.hostUri }}
           </div>
           <nz-form-item nz-col class="fg1">
-            <nz-form-control [nzValidateStatus]="this.validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
+            <nz-form-control
+              [nzValidateStatus]="this.validateForm.controls.uri"
+              i18n-nzErrorTip
+              nzErrorTip="Please enter URL"
+            >
               <input
                 type="text"
                 i18n-placeholder
@@ -39,7 +43,15 @@
             <span *ngIf="status === 'testing'" i18n>Abort</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
           </button>
-          <button type="button" *ngIf="!route.snapshot.queryParams.uuid||route.snapshot.queryParams.uuid.includes('history_')" nz-button nzType="default" (click)="saveApi()" class="ml10" i18n>
+          <button
+            type="button"
+            *ngIf="!route.snapshot.queryParams.uuid || route.snapshot.queryParams.uuid.includes('history_')"
+            nz-button
+            nzType="default"
+            (click)="saveApi()"
+            class="ml10"
+            i18n
+          >
             Save as API
           </button>
         </nz-input-group>

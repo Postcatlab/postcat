@@ -4,21 +4,75 @@ import { io } from 'socket.io-client';
 @Component({
   selector: 'websocket-content',
   template: `<div>
-    <div class="flex p-4">
-      <nz-select class="!w-[106px] flex-none" [(ngModel)]="model">
+    <header class="flex p-4">
+      <nz-select class="!w-[106px] flex-none" [(ngModel)]="model.request.protocol">
         <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
       </nz-select>
       <input type="text" i18n-placeholder placeholder="Enter URL" [(ngModel)]="wsUrl" name="uri" nz-input />
-      <div class="flex px-2">
-        <button *ngIf="!isConnect" nz-button nzType="primary" (click)="handleConnect(true)">Connect</button>
-        <button *ngIf="isConnect" nzDanger nz-button nzType="primary" (click)="handleConnect(false)">Disconnect</button>
+      <div class="flex px-1">
+        <button class="mx-1 w-28" *ngIf="!isConnect" nz-button nzType="primary" (click)="handleConnect(true)">
+          Connect
+        </button>
+        <button
+          class="mx-1 w-28"
+          *ngIf="isConnect"
+          nzDanger
+          [disabled]="!msg"
+          nz-button
+          nzType="primary"
+          (click)="handleConnect(false)"
+        >
+          Disconnect
+        </button>
       </div>
+    </header>
+    <nz-tabset
+      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [nzAnimated]="false"
+      [(nzSelectedIndex)]="model.requestTabIndex"
+    >
+      <!-- Request Headers -->
+      <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+        <ng-template #headerTitleTmp>
+          <span i18n="@@RequestHeaders">Headers</span>
+        </ng-template>
+      </nz-tab>
+      <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+        <ng-template #queryTitleTmp>
+          <span i18n>Query Params</span>
+        </ng-template>
+      </nz-tab>
+    </nz-tabset>
+    <!-- body -->
+    <div>
+      [编辑器]
+      <button nz-button class="mx-1" nzType="primary" [disabled]="!isConnect" (click)="handleSendMsg()">Send</button>
     </div>
-    <input nz-input placeholder="Message ..." [(ngModel)]="msg" nzSize="default" />
-    <button nz-button nzType="primary" [disabled]="!isConnect" (click)="handleSendMsg()">Send</button>
-    <ul>
-      <li *ngFor="let m of msgList">{{ m }}</li>
-    </ul>
+    <!-- response -->
+    <nz-tabset
+      [nzTabBarStyle]="{ 'padding-left': '10px' }"
+      [nzAnimated]="false"
+      [(nzSelectedIndex)]="model.requestTabIndex"
+    >
+      <nz-tab [nzTitle]="messageTmp" [nzForceRender]="true">
+        <ng-template #messageTmp>
+          <span i18n>Message</span>
+        </ng-template>
+        <ul>
+          <li *ngFor="let m of msgList">{{ m }}</li>
+        </ul>
+      </nz-tab>
+      <nz-tab [nzTitle]="resHeaderTmp" [nzForceRender]="true">
+        <ng-template #resHeaderTmp>
+          <span i18n>Response Headers</span>
+        </ng-template>
+      </nz-tab>
+      <nz-tab [nzTitle]="reqHeaderTmp" [nzForceRender]="true">
+        <ng-template #reqHeaderTmp>
+          <span i18n>Request Headers</span>
+        </ng-template>
+      </nz-tab>
+    </nz-tabset>
   </div>`,
   styleUrls: [],
 })
@@ -47,7 +101,7 @@ export class WebsocketComponent implements OnInit {
       requestTabIndex: 1,
       responseTabIndex: 0,
       request: {
-        method: 'ws',
+        protocol: 'ws',
       },
       beforeScript: '',
       afterScript: '',
@@ -58,12 +112,12 @@ export class WebsocketComponent implements OnInit {
     };
   }
   handleConnect(bool = false) {
-    if (!bool) {
-      this.socket = null;
+    if (this.socket == null) {
+      console.log('通信未就绪');
       return;
     }
-    if (this.socket == null) {
-      console.log('连接未就绪');
+    if (!bool) {
+      this.isConnect = false;
       return;
     }
     if (this.wsUrl === '') {

@@ -5,11 +5,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 import { WebsocketComponent } from './websocket.component';
 import { WebsocketRoutingModule } from './websocket.routing.module';
 
-const ANTDS = [NzButtonModule, NzInputModule, NzSelectModule];
+const ANTDS = [NzButtonModule, NzInputModule, NzSelectModule, NzTabsModule];
 
 @NgModule({
   imports: [WebsocketRoutingModule, FormsModule, ReactiveFormsModule, CommonModule, ...ANTDS],
