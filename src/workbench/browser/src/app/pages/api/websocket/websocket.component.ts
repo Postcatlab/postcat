@@ -39,17 +39,21 @@ import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
             <ng-template #headerTitleTmp>
               <span i18n="@@RequestHeaders">Headers</span>
             </ng-template>
-            <list-block-common-component
-              class="eo-block-container"
-              *ngIf="['json', 'xml'].includes(bodyType)"
-              [mainObject]="listConf"
-              [(list)]="model"
-            ></list-block-common-component>
+            <eo-api-test-header
+              class="eo_theme_iblock bbd"
+              [(model)]="model.request.requestHeaders"
+              (modelChange)="emitChangeFun('requestHeaders')"
+            ></eo-api-test-header>
           </nz-tab>
           <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
             <ng-template #queryTitleTmp>
               <span i18n>Query Params</span>
             </ng-template>
+            <eo-api-test-query
+              class="eo_theme_iblock bbd"
+              [model]="model.request.queryParams"
+              (modelChange)="emitChangeFun('queryParams')"
+            ></eo-api-test-query>
           </nz-tab>
         </nz-tabset>
         <!-- body -->
@@ -107,8 +111,6 @@ import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 export class WebsocketComponent implements OnInit {
   @Input() model = this.resetModel();
   @Input() bodyType = 'json';
-  listConf: any = {};
-  cache: any = {};
   isConnect = false;
   wsUrl = 'ws://106.12.149.147:3782';
   socket = null;
@@ -121,14 +123,6 @@ export class WebsocketComponent implements OnInit {
   editorConfig = {
     language: 'json',
   };
-  private itemStructure = {
-    name: '',
-    type: 'string',
-    required: true,
-    example: '',
-    enum: [],
-    description: '',
-  };
   constructor(private apiEdit: ApiEditUtilService) {}
   ngOnInit() {
     // * 通过 SocketIO 通知后端
@@ -137,20 +131,6 @@ export class WebsocketComponent implements OnInit {
     this.socket.on('ws-client', (...args) => {
       console.log('链接成功', args);
     });
-  }
-  private initListConf() {
-    this.listConf = this.apiEdit.initBodyListConf({
-      title: '参数',
-      itemStructure: this.itemStructure,
-      nzOnOkMoreSetting: (result) => {
-        this.model[result.$index] = result.item;
-        // this.modelChange.emit(this.model);
-      },
-      watchFormLastChange: () => {
-        // this.modelChange.emit(this.model);
-      },
-    });
-    this.cache.listConfSetting = Object.assign({}, this.listConf.setting);
   }
   private resetModel() {
     return {
