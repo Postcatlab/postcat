@@ -8,7 +8,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 import { Ng1Module } from '../../../ng1/ng1.module';
-import { ApiEditUtilService } from '../api-edit-util.service';
+import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 
 import { WebsocketComponent } from './websocket.component';
 import { WebsocketRoutingModule } from './websocket.routing.module';

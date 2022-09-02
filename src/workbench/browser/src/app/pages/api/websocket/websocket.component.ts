@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { io } from 'socket.io-client';
-import { ApiEditUtilService } from '../api-edit-util.service';
+import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 
 @Component({
   selector: 'websocket-content',
@@ -107,8 +107,8 @@ import { ApiEditUtilService } from '../api-edit-util.service';
 export class WebsocketComponent implements OnInit {
   @Input() model = this.resetModel();
   @Input() bodyType = 'json';
-  listConf = {};
-  cache = {};
+  listConf: any = {};
+  cache: any = {};
   isConnect = false;
   wsUrl = 'ws://106.12.149.147:3782';
   socket = null;
