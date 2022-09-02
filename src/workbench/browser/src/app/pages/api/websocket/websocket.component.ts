@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { io } from 'socket.io-client';
+import { ApiEditUtilService } from '../api-edit-util.service';
 
 @Component({
   selector: 'websocket-content',
@@ -38,6 +39,12 @@ import { io } from 'socket.io-client';
             <ng-template #headerTitleTmp>
               <span i18n="@@RequestHeaders">Headers</span>
             </ng-template>
+            <list-block-common-component
+              class="eo-block-container"
+              *ngIf="['json', 'xml'].includes(bodyType)"
+              [mainObject]="listConf"
+              [(list)]="model"
+            ></list-block-common-component>
           </nz-tab>
           <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
             <ng-template #queryTitleTmp>
@@ -99,6 +106,9 @@ import { io } from 'socket.io-client';
 })
 export class WebsocketComponent implements OnInit {
   @Input() model = this.resetModel();
+  @Input() bodyType = 'json';
+  listConf = {};
+  cache = {};
   isConnect = false;
   wsUrl = 'ws://106.12.149.147:3782';
   socket = null;
@@ -111,7 +121,15 @@ export class WebsocketComponent implements OnInit {
   editorConfig = {
     language: 'json',
   };
-  constructor() {}
+  private itemStructure = {
+    name: '',
+    type: 'string',
+    required: true,
+    example: '',
+    enum: [],
+    description: '',
+  };
+  constructor(private apiEdit: ApiEditUtilService) {}
   ngOnInit() {
     // * 通过 SocketIO 通知后端
     this.socket = io('ws://localhost:3008', { transports: ['websocket'] });
@@ -119,6 +137,20 @@ export class WebsocketComponent implements OnInit {
     this.socket.on('ws-client', (...args) => {
       console.log('链接成功', args);
     });
+  }
+  private initListConf() {
+    this.listConf = this.apiEdit.initBodyListConf({
+      title: '参数',
+      itemStructure: this.itemStructure,
+      nzOnOkMoreSetting: (result) => {
+        this.model[result.$index] = result.item;
+        // this.modelChange.emit(this.model);
+      },
+      watchFormLastChange: () => {
+        // this.modelChange.emit(this.model);
+      },
+    });
+    this.cache.listConfSetting = Object.assign({}, this.listConf.setting);
   }
   private resetModel() {
     return {
