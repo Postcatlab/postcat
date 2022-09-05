@@ -101,7 +101,7 @@ export class ModuleHandler extends CoreHandler {
               delete packageObj.dependencies[pkgName];
             }
           }
-          fs.writeFileSync(packagePath, JSON.stringify(packageObj));
+          fs.writeFileSync(packagePath, JSON.stringify(packageObj, null, 2));
         }
       });
     }

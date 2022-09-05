@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { ApiEditHeaders } from '../../../../shared/services/storage/index.model';
+import { ApiEditHeaders, ApiEditBody } from '../../../../shared/services/storage/index.model';
 import { ApiDetailUtilService } from '../api-detail-util.service';
+
 @Component({
   selector: 'eo-api-detail-header',
   templateUrl: './api-detail-header.component.html',
@@ -9,6 +10,14 @@ import { ApiDetailUtilService } from '../api-detail-util.service';
 export class ApiDetailHeaderComponent implements OnInit, OnChanges {
   @Input() model: ApiEditHeaders[];
   listConf: object = {};
+  private itemStructure: ApiEditBody = {
+    name: '',
+    type: 'string',
+    required: true,
+    example: '',
+    enum: [],
+    description: '',
+  };
   constructor(private detailService: ApiDetailUtilService) {}
 
   ngOnInit(): void {
@@ -24,6 +33,7 @@ export class ApiDetailHeaderComponent implements OnInit, OnChanges {
       dragCacheVar: 'DRAG_VAR_API_EDIT_HEADER',
       title: $localize`:@@Header:Header`,
       nameTitle: $localize`Key`,
+      itemStructure: this.itemStructure,
     });
   }
 }

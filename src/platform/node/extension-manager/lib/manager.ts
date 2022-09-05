@@ -59,7 +59,7 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param module
    */
   async install(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
-    const result = await this.moduleHandler.install([{ name: module.name }], module.isLocal || false);
+    const result = await this.moduleHandler.install([module], module.isLocal || false);
     if (result.code === 0) {
       const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
       this.set(moduleInfo);
@@ -245,7 +245,7 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param moduleInfo
    */
   private setup(moduleInfo: ModuleInfo) {
-    if (moduleInfo&&isNotEmpty(moduleInfo.moduleID)) {
+    if (moduleInfo && isNotEmpty(moduleInfo.moduleID)) {
       this.set(moduleInfo);
     }
   }
