@@ -33,9 +33,9 @@ import { TestServerLocalNodeService } from '../../../../shared/services/api-test
 import { TestServerServerlessService } from '../../../../shared/services/api-test/serverless-node/test-connect.service';
 
 import { ApiTestComponent } from './api-test.component';
-import { ApiTestHeaderComponent } from './header/api-test-header.component';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
-import { ApiTestQueryComponent } from './query/api-test-query.component';
+// import { ApiTestHeaderComponent } from './header/api-test-header.component';
+// import { ApiTestQueryComponent } from './query/api-test-query.component';
 import { ApiTestRestComponent } from './rest/api-test-rest.component';
 import { ApiTestResultHeaderComponent } from './result-header/api-test-result-header.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
@@ -43,6 +43,8 @@ import { ApiTestResultRequestBodyComponent } from './result-request-body/api-tes
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { RouterModule, Routes } from '@angular/router';
+import { ApiSharedModule } from 'eo/workbench/browser/src/app/pages/api/api-shared.module';
+
 const NZ_COMPONETS = [
   NzDropDownModule,
   NzModalModule,
@@ -61,12 +63,13 @@ const NZ_COMPONETS = [
   NzAlertModule,
   NzTypographyModule,
   NzUploadModule,
+  ApiSharedModule,
 ];
 const COMPONENTS = [
   ApiTestComponent,
-  ApiTestHeaderComponent,
+  // ApiTestHeaderComponent,
   ApiTestBodyComponent,
-  ApiTestQueryComponent,
+  // ApiTestQueryComponent,
   ApiTestRestComponent,
   ApiTestResultHeaderComponent,
   ApiTestResultResponseComponent,

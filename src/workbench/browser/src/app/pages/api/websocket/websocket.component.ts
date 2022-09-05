@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { io } from 'socket.io-client';
 import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 
 @Component({
   selector: 'websocket-content',
@@ -111,6 +112,7 @@ import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 export class WebsocketComponent implements OnInit {
   @Input() model = this.resetModel();
   @Input() bodyType = 'json';
+  @Output() modelChange = new EventEmitter<any>();
   isConnect = false;
   wsUrl = 'ws://106.12.149.147:3782';
   socket = null;
@@ -138,6 +140,9 @@ export class WebsocketComponent implements OnInit {
       responseTabIndex: 0,
       request: {
         protocol: 'ws',
+        requestHeaders: [],
+        queryParams: [],
+        uri: '',
       },
       beforeScript: '',
       afterScript: '',
@@ -149,6 +154,18 @@ export class WebsocketComponent implements OnInit {
   }
   rawDataChange(e) {
     console.log('rawDataChange', e);
+  }
+  changeQuery() {
+    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+      base: 'query',
+      replaceType: 'replace',
+    }).url;
+  }
+  emitChangeFun(where) {
+    if (where === 'queryParams') {
+      this.changeQuery();
+    }
+    this.modelChange.emit(this.model);
   }
   handleConnect(bool = false) {
     if (this.socket == null) {

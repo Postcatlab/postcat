@@ -13,11 +13,21 @@ import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 import { WebsocketComponent } from './websocket.component';
 import { WebsocketRoutingModule } from './websocket.routing.module';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import { ApiSharedModule } from 'eo/workbench/browser/src/app/pages/api/api-shared.module';
 
 const ANTDS = [NzButtonModule, NzInputModule, NzSelectModule, NzTabsModule];
 
 @NgModule({
-  imports: [WebsocketRoutingModule, FormsModule, Ng1Module, ReactiveFormsModule, CommonModule, SharedModule, ...ANTDS],
+  imports: [
+    WebsocketRoutingModule,
+    ApiSharedModule,
+    FormsModule,
+    Ng1Module,
+    ReactiveFormsModule,
+    CommonModule,
+    SharedModule,
+    ...ANTDS,
+  ],
   declarations: [WebsocketComponent],
   exports: [WebsocketComponent],
   providers: [ApiEditUtilService],
