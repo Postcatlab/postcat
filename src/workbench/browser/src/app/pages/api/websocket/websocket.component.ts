@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { io } from 'socket.io-client';
-import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { StorageService } from '../../../shared/services/storage';
+import { MessageService } from '../../../shared/services/message';
 
 @Component({
   selector: 'websocket-content',
@@ -12,7 +13,14 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
           <nz-select class="!w-[106px] flex-none" [(ngModel)]="model.request.protocol">
             <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
           </nz-select>
-          <input type="text" i18n-placeholder placeholder="Enter URL" [(ngModel)]="wsUrl" name="uri" nz-input />
+          <input
+            type="text"
+            i18n-placeholder
+            placeholder="Enter URL"
+            [(ngModel)]="model.request.uri"
+            name="uri"
+            nz-input
+          />
           <div class="flex px-1">
             <button class="mx-1 w-28" *ngIf="!isConnect" nz-button nzType="primary" (click)="handleConnect(true)">
               Connect
@@ -21,7 +29,6 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
               class="mx-1 w-28"
               *ngIf="isConnect"
               nzDanger
-              [disabled]="!msg"
               nz-button
               nzType="primary"
               (click)="handleConnect(false)"
@@ -52,15 +59,16 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
             </ng-template>
             <eo-api-test-query
               class="eo_theme_iblock bbd"
-              [model]="model.request.queryParams"
+              [model]="model.queryParams"
               (modelChange)="emitChangeFun('queryParams')"
             ></eo-api-test-query>
           </nz-tab>
         </nz-tabset>
+        <div class="h-8 top-line"></div>
         <!-- body -->
         <div>
           <eo-monaco-editor
-            [(code)]="model.beforeScript"
+            [(code)]="msg"
             [config]="editorConfig"
             [maxLine]="20"
             [eventList]="['type', 'format', 'copy', 'search', 'replace']"
@@ -73,7 +81,7 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
               <nz-option nzValue="xml" nzLabel="xml"></nz-option>
               <nz-option nzValue="json" nzLabel="json"></nz-option>
             </nz-select>
-            <button nz-button class="mx-1" nzType="primary" [disabled]="!isConnect" (click)="handleSendMsg()">
+            <button nz-button class="mx-1" nzType="primary" [disabled]="!isConnect || !msg" (click)="handleSendMsg()">
               Send
             </button>
           </div>
@@ -84,14 +92,14 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
         bottom
         [nzTabBarStyle]="{ 'padding-left': '10px' }"
         [nzAnimated]="false"
-        [(nzSelectedIndex)]="model.requestTabIndex"
+        [(nzSelectedIndex)]="model.responseTabIndex"
       >
         <nz-tab [nzTitle]="messageTmp" [nzForceRender]="true">
           <ng-template #messageTmp>
             <span i18n>Message</span>
           </ng-template>
           <ul>
-            <li *ngFor="let m of msgList">{{ m }}</li>
+            <li *ngFor="let msg of model.response.responseBody">{{ msg }}</li>
           </ul>
         </nz-tab>
         <nz-tab [nzTitle]="resHeaderTmp" [nzForceRender]="true">
@@ -107,17 +115,15 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
       </nz-tabset>
     </eo-split-panel>
   </div>`,
-  styleUrls: [],
+  styleUrls: ['./websocket.component.scss'],
 })
 export class WebsocketComponent implements OnInit {
   @Input() model = this.resetModel();
   @Input() bodyType = 'json';
   @Output() modelChange = new EventEmitter<any>();
   isConnect = false;
-  wsUrl = 'ws://106.12.149.147:3782';
   socket = null;
   msg = '';
-  msgList = [];
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
@@ -125,38 +131,38 @@ export class WebsocketComponent implements OnInit {
   editorConfig = {
     language: 'json',
   };
-  constructor(private apiEdit: ApiEditUtilService) {}
+  constructor(private storage: StorageService, private message: MessageService) {}
   ngOnInit() {
     // * 通过 SocketIO 通知后端
     this.socket = io('ws://localhost:3008', { transports: ['websocket'] });
     // receive a message from the server
-    this.socket.on('ws-client', (...args) => {
-      console.log('链接成功', args);
-    });
+    this.socket.on('ws-client', (...args) => {});
   }
   private resetModel() {
     return {
       requestTabIndex: 1,
       responseTabIndex: 0,
       request: {
-        protocol: 'ws',
         requestHeaders: [],
-        queryParams: [],
-        uri: '',
+        requestBodyJsonType: '',
+        requestBody: '',
+        method: 'WS',
+        protocol: 'ws',
+        uri: 'ws://106.12.149.147:3782',
       },
-      beforeScript: '',
-      afterScript: '',
-      testResult: {
-        response: {},
-        request: {},
+      response: {
+        responseHeaders: [],
+        responseBodyType: 'string',
+        responseBody: [],
       },
+      queryParams: [],
     };
   }
   rawDataChange(e) {
     console.log('rawDataChange', e);
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
@@ -173,19 +179,29 @@ export class WebsocketComponent implements OnInit {
       return;
     }
     if (!bool) {
+      // * save to test history
+      const data = JSON.parse(JSON.stringify(this.model));
+      this.storage.run('apiTestHistoryCreate', [{ projectID: 1, apiDataID: 1, ...data }], async (result) => {
+        if (result.status === 200) {
+          console.log('save to test history');
+          this.message.send({ type: 'updateHistory', data: {} });
+        }
+      });
       this.isConnect = false;
       return;
     }
-    if (this.wsUrl === '') {
+    const wsUrl = this.model.request.uri;
+    if (wsUrl === '') {
       console.log('Websocket 地址为空');
       return;
     }
-    this.socket.emit('ws-server', { type: 'ws-connect', content: { url: this.wsUrl } });
+    this.socket.emit('ws-server', { type: 'ws-connect', content: { url: wsUrl } });
     this.listen();
   }
   handleSendMsg() {
     // * 通过 SocketIO 通知后端
     // send a message to the server
+    // console.log(JSON.stringify(this.model));
     if (!this.msg) {
       return;
     }
@@ -202,7 +218,7 @@ export class WebsocketComponent implements OnInit {
       }
       if (type === 'ws-message-back' && status === 0) {
         console.log(content);
-        this.msgList.push(content);
+        this.model.response.responseBody.push(content);
       }
     });
   }

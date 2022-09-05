@@ -80,6 +80,7 @@ export class MockServer {
           if (!message) {
             console.log('发送内容为空');
           }
+          console.log('Send before', message);
           ws.send(message);
         }
       });
