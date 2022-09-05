@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponent, ToolbarComponent, SidebarComponent } from './components';
-import { WebviewDirective } from './directives';
+import { ClickStopPropagationDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
@@ -69,10 +69,10 @@ const COMPONENTS = [
     NzCodeEditorModule,
     NzResizableModule,
   ],
-  declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
+  declarations: [ClickStopPropagationDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
   exports: [
-    WebviewDirective,
+    ClickStopPropagationDirective,
     ...COMPONENTS,
     ApiParamsNumPipe,
     NzPopoverModule,

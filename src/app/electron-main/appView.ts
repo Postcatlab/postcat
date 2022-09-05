@@ -18,7 +18,7 @@ export class AppViews {
     if (module && module.moduleType === ModuleType.app) {
       if (module.isApp && this.mainModuleID !== module.moduleID) {
         this.mainModuleID = module.moduleID;
-        this.sidePosition = module.sidePosition;
+        // this.sidePosition = module.sidePosition;
       }
       this.createAppView(module);
 
