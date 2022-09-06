@@ -41,7 +41,12 @@ const routes: Routes = [
       },
       {
         path: 'ws',
-        loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
+        children: [
+          {
+            path: 'test',
+            loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
+          },
+        ]
       },
       // {
       //   path: 'grpc',

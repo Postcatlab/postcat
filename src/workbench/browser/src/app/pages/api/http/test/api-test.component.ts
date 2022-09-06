@@ -109,7 +109,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   /**
    * Restore data from history
-   *
    */
   restoreResponseFromHistory(response) {
     this.model.beforeScript = response?.beforeScript || '';
