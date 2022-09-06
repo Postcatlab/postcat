@@ -1,6 +1,4 @@
 import express from 'express';
-import IO from 'socket.io';
-import WebSocket from 'ws';
 
 import type { Response } from 'express';
 import portfinder from 'portfinder';
@@ -29,7 +27,6 @@ const jsonStringify = (obj) => {
   return str;
 };
 
-const WebSocketServer = WebSocket.Server;
 export class MockServer {
   private app: ReturnType<typeof express>;
   private server: Server;
@@ -42,49 +39,6 @@ export class MockServer {
   constructor() {
     this.app ??= express();
     this.createProxyServer();
-
-    const io = new IO.Server(3008);
-
-    io.on('connection', (socket) => {
-      // send a message to the client
-      console.log('link success');
-      socket.emit('ws-client', 'link success');
-      let ws = null;
-
-      // receive a message from the client
-      socket.on('ws-server', ({ type, content }) => {
-        console.log('server-get');
-        if (type === 'connect') {
-          console.log('connect success !');
-          return;
-        }
-        if (type === 'ws-connect') {
-          ws = new WebSocket(content.url);
-          // 打开WebSocket连接后立刻发送一条消息:
-
-          ws.on('open', () => {
-            console.log(`[CLIENT] open()`);
-            socket.emit('ws-client', { type: 'ws-connect-back', status: 0 });
-          });
-          ws.on('message', (message) => {
-            console.log('==> message', message);
-            socket.emit('ws-client', {
-              type: 'ws-message-back',
-              status: 0,
-              content: new TextDecoder().decode(message),
-            });
-          });
-        }
-        if (type === 'ws-message') {
-          const { message } = content;
-          if (!message) {
-            console.log('发送内容为空');
-          }
-          console.log('Send before', message);
-          ws.send(message);
-        }
-      });
-    });
   }
 
   /**

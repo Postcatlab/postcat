@@ -111,6 +111,7 @@ import { MessageService } from '../../../shared/services/message';
           <ng-template #reqHeaderTmp>
             <span i18n>Request Headers</span>
           </ng-template>
+          <pre>{{ reqHeader | json }}</pre>
         </nz-tab>
       </nz-tabset>
     </eo-split-panel>
@@ -124,6 +125,7 @@ export class WebsocketComponent implements OnInit {
   isConnect = false;
   socket = null;
   msg = '';
+  reqHeader = '';
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
@@ -178,9 +180,9 @@ export class WebsocketComponent implements OnInit {
       console.log('通信未就绪');
       return;
     }
+    const { responseTabIndex, requestTabIndex, ...data } = this.model;
     if (!bool) {
       // * save to test history
-      const data = JSON.parse(JSON.stringify(this.model));
       this.storage.run('apiTestHistoryCreate', [{ projectID: 1, apiDataID: 1, ...data }], async (result) => {
         if (result.status === 200) {
           console.log('save to test history');
@@ -195,7 +197,7 @@ export class WebsocketComponent implements OnInit {
       console.log('Websocket 地址为空');
       return;
     }
-    this.socket.emit('ws-server', { type: 'ws-connect', content: { url: wsUrl } });
+    this.socket.emit('ws-server', { type: 'ws-connect', content: data });
     this.listen();
   }
   handleSendMsg() {
@@ -209,15 +211,18 @@ export class WebsocketComponent implements OnInit {
     this.msg = '';
   }
   listen() {
+    // * 无论是否连接成功，都清空发送历史
+    this.model.response.responseBody = [];
     if (this.socket == null) {
       console.log('通信未连接');
     }
     this.socket.on('ws-client', ({ type, status, content }) => {
       if (type === 'ws-connect-back' && status === 0) {
         this.isConnect = true;
+        const { reqHeader } = content;
+        this.reqHeader = reqHeader;
       }
       if (type === 'ws-message-back' && status === 0) {
-        console.log(content);
         this.model.response.responseBody.push(content);
       }
     });
