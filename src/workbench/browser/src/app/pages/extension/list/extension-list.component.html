@@ -2,39 +2,38 @@
   <div class="grid grid-cols-2 gap-6 py-5 list-block">
     <div
       class="bd_all w-full min-h-[140px] p-5 flex flex-col flex-wrap plugin-block hover:border-green-700 hover:shadow-lg transition-shadow duration-300"
-      *ngFor="let it of renderList"
-      (click)="clickExtension(it)"
-    >
-      <div class="flex w-full">
-        <div
-          class="shrink-0 block w-[40px] h-[40px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
-          [ngClass]="{ 'bg-gray-100': it.logo }"
-          [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
-        ></div>
-        <div class="flex flex-col">
-          <div class="flex flex-col flex-auto">
-            <span class="text-lg font-bold">{{ it.moduleName }}</span>
-            <span class="my-2 text-gray-400">{{ it.author }}</span>
-            <span class="my-1 text-gray-500 desc">{{ it.description }}</span>
+      *ngFor="let it of renderList" (click)="clickExtension(it)">
+      <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzAvatar]="true">
+        <div class="flex justify-between w-full">
+          <div class="flex">
+            <div class="shrink-0 block w-[40px] h-[40px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
+              [ngClass]="{ 'bg-gray-100': it.logo }" [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }">
+            </div>
+            <div class="flex flex-col">
+              <div class="flex flex-col flex-auto">
+                <span class="text-lg font-bold">{{ it.moduleName }}</span>
+                <span class="my-2 text-gray-400">{{ it.author }}</span>
+                <span class="my-1 text-gray-500 desc">{{ it.description }}</span>
+              </div>
+              <div class="btn-group" *ngIf="type === 'installed'">
+                <ng-container *ngIf="it.features?.configuration">
+                  <a nz-button nzType="link">Setting</a>
+                  <nz-divider nzType="vertical"></nz-divider>
+                </ng-container>
+                <a nz-button nzType="link">Details</a>
+              </div>
+            </div>
           </div>
-          <div class="btn-group" *ngIf="type === 'installed'">
-            <a nz-button nzType="link">Setting</a>
-            <nz-divider nzType="vertical"></nz-divider>
-            <a nz-button nzType="link">Details</a>
+          <div *ngIf="type === 'installed'">
+            <nz-switch click-stop-propagation [(ngModel)]="it.isOpen"></nz-switch>
+          </div>
+          <div *ngIf="type !== 'installed'">
+            <span *ngIf="electron.isElectron ? extensionService.localExtensions.has(it.moduleID) : it.installed"
+              class="p-1 text-xs text-green-700 border-green-700 rounded-sm bd_all whitespace-nowrap"
+              i18n>Installed</span>
           </div>
         </div>
-        <div *ngIf="type === 'installed'">
-          <nz-switch click-stop-propagation [(ngModel)]="it.isOpen"></nz-switch>
-        </div>
-        <div *ngIf="type !== 'installed'">
-          <span
-            *ngIf="electron.isElectron ? extensionService.localExtensions.has(it.moduleID) : it.installed"
-            class="p-1 text-xs text-green-700 border-green-700 rounded-sm bd_all whitespace-nowrap"
-            i18n
-            >Installed</span
-          >
-        </div>
-      </div>
+      </nz-skeleton>
     </div>
   </div>
 </div>
