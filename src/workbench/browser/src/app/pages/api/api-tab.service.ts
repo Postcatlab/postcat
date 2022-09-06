@@ -218,7 +218,6 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
     }
-    // console.log('updatePartialTab', inData, currentTab, replaceTab);
     this.apiTabComponent.updatePartialTab(inData.url, replaceTab);
   }
   /**

@@ -292,11 +292,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.watchEnvChange();
   }
   ngOnDestroy() {
-    console.log('ngOnDestroy');
     this.destroy$.next();
     this.destroy$.complete();
     this.testServer.close();
