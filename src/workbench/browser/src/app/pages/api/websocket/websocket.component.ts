@@ -107,7 +107,7 @@ import { MessageService } from '../../../shared/services/message';
           <ng-template #messageTmp>
             <span i18n>Message</span>
           </ng-template>
-          <ul>
+          <ul class="p-4">
             <li *ngFor="let msg of model.response.responseBody">{{ msg }}</li>
           </ul>
         </nz-tab>
@@ -226,6 +226,7 @@ export class WebsocketComponent implements OnInit {
       return;
     }
     this.socket.emit('ws-server', { type: 'ws-message', content: { message: this.msg } });
+    this.model.response.responseBody.push(this.msg);
     this.msg = '';
   }
   listen() {
