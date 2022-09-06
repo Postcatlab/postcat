@@ -60,7 +60,16 @@ export class ApiDetailUtilService {
     return {
       setting: {
         draggable: true,
-        dragCacheVar: opts.dragCacheVar || 'DRAG_VAR_API_EDIT_PARAM',
+        trClass: 'va_tr_asad',
+        trDirective:
+          'insert-html-common-directive insert-type="after" template-id="paramDetail_Template_js" bind-fun="$ctrl.mainObject.baseFun.itemClick(item,$ctrl.data.isSpreed,$ctrl.data.isSpreedBtnClick)"',
+        isLevel: true,
+        dragCacheVar: 'DRAG_VAR_API_EDIT_BODY',
+      },
+      baseFun: {
+        spreedAll: this.spreedAll,
+        itemClick: this.spreedSingleItem,
+        watchCheckboxChange: opts.watchFormLastChange,
       },
       itemStructure: Object.assign({}, opts.itemStructure),
       tdList: [
@@ -93,6 +102,19 @@ export class ApiDetailUtilService {
           modelKey: 'example',
           width: 200,
           mark: 'example',
+        },
+        {
+          thKey: $localize`<button type="button" class="eo-operate-btn" ng-click="$ctrl.data.isSpreedBtnClick=!$ctrl.data.isSpreedBtnClick;$ctrl.data.isSpreed=true;$ctrl.mainObject.baseFun.spreedAll($event);$ctrl.data.isSpreed=false;">{{$ctrl.data.isSpreedBtnClick?"Shrink All":"Expand All"}}</button>`,
+          type: 'html',
+          html: $localize`<span class="eo-operate-btn fs12" ng-show="item.minimum ||
+          item.maximum ||
+          item.minLength ||
+          item.maxLength ||
+          (item.enum && item.enum.length > 0 && item.enum[0].value)">{{item.isClick?"Shrink":"Expand"}}</span>`,
+          mark: 'fn_btn',
+          width: '100px',
+          class: 'undivide_line_lbcc',
+          undivide: true,
         },
       ],
     };

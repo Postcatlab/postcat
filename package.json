@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "postinstall": "electron-builder install-app-deps && npx patch-package",
-    "start": "npx patch-package && npm-run-all -p start:workbench electron:serve",
+    "start": "npm-run-all -p start:workbench electron:serve",
     "serve:web": "cd src/workbench/browser && npm run ng:serve",
     "start:testServer": "cd src/workbench/node/server && yarn dev",
     "start:workbench": "cd src/workbench/browser && yarn start",
