@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -27,22 +27,22 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { ByteToStringPipe } from './result-response/get-size.pipe';
 
 import { TestServerService } from '../../../../shared/services/api-test/test-server.service';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/shared/services/api-test/local-node/test-connect.service';
+import { TestServerServerlessService } from 'eo/workbench/browser/src/app/shared/services/api-test/serverless-node/test-connect.service';
+
 import { ApiTestUtilService } from './api-test-util.service';
 import { ApiTestService } from './api-test.service';
-import { TestServerLocalNodeService } from '../../../../shared/services/api-test/local-node/test-connect.service';
-import { TestServerServerlessService } from '../../../../shared/services/api-test/serverless-node/test-connect.service';
 
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
-// import { ApiTestHeaderComponent } from './header/api-test-header.component';
-// import { ApiTestQueryComponent } from './query/api-test-query.component';
 import { ApiTestRestComponent } from './rest/api-test-rest.component';
 import { ApiTestResultHeaderComponent } from './result-header/api-test-result-header.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/pages/api/api-shared.module';
 
 const NZ_COMPONETS = [
@@ -96,10 +96,20 @@ const COMPONENTS = [
   providers: [
     ApiTestUtilService,
     ApiTestService,
-    TestServerService,
-    TestServerLocalNodeService,
-    TestServerServerlessService,
-    TestServerRemoteService,
+    {
+      provide: TestServerService,
+      useFactory: (electron: ElectronService, locale) => {
+        const isVercel = window.location.href.includes('vercel') || window.location.host.includes('eoapi.io');
+        if (electron.isElectron) {
+          return new TestServerLocalNodeService(electron, locale);
+        } else if (!isVercel) {
+          return new TestServerRemoteService(locale);
+        } else {
+          return new TestServerServerlessService(locale);
+        }
+      },
+      deps: [ElectronService, LOCALE_ID],
+    },
   ],
 })
 export class ApiTestModule {}

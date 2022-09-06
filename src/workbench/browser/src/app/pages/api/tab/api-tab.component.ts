@@ -86,7 +86,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   //Quick see tabs change in templete,for debug,can be deleted
   //! just for debug
-  private getConsoleTabs() {
+  getConsoleTabs() {
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => {
       const tab = this.tabStorage.tabsByID.get(uuid);
@@ -116,7 +116,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
    * @returns
    */
   getExistTabByUrl(url: string): TabItem | null {
-    const existTab = this.tabOperate.getSameContentTab(this.tabOperate.getTabInfoFromUrl(url));
+    const existTab = this.tabOperate.getSameContentTab(this.tabOperate.getBasicInfoFromUrl(url));
     if (!existTab) {
       return null;
     }
@@ -148,8 +148,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
         extends: Object.assign({}, existTab.extends, tabItem.extends),
       })
     );
-    //! Prevent rendering delay
-    // this.cdRef.detectChanges();
   }
   /**
    * Cache tab header/tabs content for restore when page close or component destroy

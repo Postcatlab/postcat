@@ -17,14 +17,14 @@ export class ApiTabService {
   private changeContent$: Subject<any> = new Subject();
   BASIC_TABS: Partial<TabItem>[] = [
     {
-      pathname: '/home/api/test',
+      pathname: '/home/api/http/test',
       module: 'test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' },
     },
-    { pathname: '/home/api/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
-    { pathname: '/home/api/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
+    { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
     {
       pathname: '/home/api/overview',
       type: 'preview',
@@ -32,7 +32,7 @@ export class ApiTabService {
       title: $localize`:@@API Index:Index`,
       icon: 'home',
     },
-    { pathname: '/home/api/mock', module: 'mock', type: 'preview', title: 'Mock' },
+    { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' },
   ];
   constructor(private messageService: MessageService, private router: Router) {
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
@@ -149,7 +149,7 @@ export class ApiTabService {
       //Set title/method
       replaceTab.title = model.name;
       replaceTab.extends.method = model.method;
-      if (currentTab.pathname === '/home/api/test') {
+      if (currentTab.pathname === '/home/api/http/test') {
         replaceTab.extends.method = model.request.method;
         //Only Untitle request need set url to tab title
         if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
@@ -174,7 +174,7 @@ export class ApiTabService {
           case 'editing': {
             // Saved APIs do not need to verify changes
             if (
-              currentTab.pathname !== '/home/api/test' ||
+              currentTab.pathname !== '/home/api/http/test' ||
               !currentTab.params.uuid ||
               currentTab.params.uuid.includes('history')
             ) {
@@ -214,11 +214,10 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
       //Has tested/exsix api set fixed
-      if (currentTab.pathname === '/home/api/test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
+      if (currentTab.pathname === '/home/api/http/test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
         replaceTab.isFixed = true;
       }
     }
-    // console.log('updatePartialTab', inData, currentTab, replaceTab);
     this.apiTabComponent.updatePartialTab(inData.url, replaceTab);
   }
   /**
@@ -239,7 +238,7 @@ export class ApiTabService {
     }
     if (inData.model?.when === 'otherTabTested') {
       //Update other tab test result
-      inData.url = `/home/api/test?pageID=${inData.model.id}`;
+      inData.url = `/home/api/http/test?pageID=${inData.model.id}`;
       currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
       inData.model = Object.assign({}, currentTab.content.test, inData.model.model);
     }
@@ -247,7 +246,7 @@ export class ApiTabService {
   }
   handleDataBeforeCache(tabsByID) {
     Object.values(tabsByID).forEach((val: TabItem) => {
-      if (val.pathname === '/home/api/test' && val.content?.test?.testResult) {
+      if (val.pathname === '/home/api/http/test' && val.content?.test?.testResult) {
         val.content.test.testResult = {
           request: {},
           response: {},

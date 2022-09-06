@@ -130,7 +130,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
       this.initialModel = this.apiEditUtil.getFormdataFromApiData(eoDeepCopy(result.data));
-      this.router.navigate(['/home/api/detail'], {
+      this.router.navigate(['/home/api/http/detail'], {
         queryParams: {
           pageID: Number(this.route.snapshot.queryParams.pageID),
           uuid: result.data.uuid,

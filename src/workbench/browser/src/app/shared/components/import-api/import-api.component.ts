@@ -71,8 +71,8 @@ export class ImportApiComponent implements OnInit {
     this.uploadData = data;
   }
   async submit(callback) {
-    if(!this.uploadData){
-      this.eoMessage.error($localize `Please import the file first`);
+    if (!this.uploadData) {
+      this.eoMessage.error($localize`Please import the file first`);
       return;
     }
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
@@ -86,12 +86,12 @@ export class ImportApiComponent implements OnInit {
       callback(false);
       return;
     }
-    console.log(data);
+    console.log(JSON.parse(JSON.stringify(data)));
     this.storage.run('projectImport', [1, data], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.messageService.send({
           type: 'importSuccess',
-          data: { },
+          data: {},
         });
       }
     });

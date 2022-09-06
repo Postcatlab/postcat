@@ -302,19 +302,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@13.3.9":
+"@angular/cdk@13.3.9", "@angular/cdk@^13.0.1":
   version "13.3.9"
   resolved "https://registry.npmmirror.com/@angular/cdk/-/cdk-13.3.9.tgz#a177196e872e29be3f84d3a50f778d361c689ff7"
   integrity sha512-XCuCbeuxWFyo3EYrgEYx7eHzwl76vaWcxtWXl00ka8d+WAOtMQ6Tf1D98ybYT5uwF9889fFpXAPw98mVnlo3MA==
-  dependencies:
-    tslib "^2.3.0"
-  optionalDependencies:
-    parse5 "^5.0.0"
-
-"@angular/cdk@^14.1.0":
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-14.2.0.tgz#27d0b307b1e9361fff21199001ac19f9b107767c"
-  integrity sha512-rAeQXUSbOJSKLVizueRKoZmRb0An5qJUMigsF8wJwJjySUIcJ8uSIOMV+G1rxkvxVVY0HRAVi2rIkJbeq3+WKQ==
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
@@ -439,10 +430,18 @@
   dependencies:
     "@ctrl/tinycolor" "^3.3.1"
 
-"@ant-design/icons-angular@14.1.0", "@ant-design/icons-angular@^14.1.0":
+"@ant-design/icons-angular@14.1.0":
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@ant-design/icons-angular/-/icons-angular-14.1.0.tgz#7612507aae28872ce3ccd139857452426cc30be3"
   integrity sha512-SvWi8p4L+cCfTGtezeUq1s8kahZEO1UVf7ZR615Fix3c2l9OnAJi+niDkq2fZHjpiarFrt8HoZ2EhMAMN7jfbg==
+  dependencies:
+    "@ant-design/colors" "^5.0.0"
+    tslib "^2.0.0"
+
+"@ant-design/icons-angular@^13.0.1":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@ant-design/icons-angular/-/icons-angular-13.1.0.tgz#6ff472ae880f911bf3a04f19b2f9b5ef5d096a90"
+  integrity sha512-bQ1pxiDmR8Hx7kUwQImxLGAtexv0uDCCMlKSWdyaw39TnNAPz+Hls0XL+UqVIjHgt/D4R8tkmSMpx3eBGFIY/Q==
   dependencies:
     "@ant-design/colors" "^5.0.0"
     tslib "^2.0.0"
@@ -9229,13 +9228,13 @@ neo-async@^2.6.0, neo-async@^2.6.2:
   resolved "https://registry.npmmirror.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ng-zorro-antd@14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-14.0.0.tgz#31ae2120a866fca33f348c7e65fc612f788732a7"
-  integrity sha512-KqWyplJDvlHEarWhyAlexFGovQIhMHkwOmsJk0MmC0NFgU+WA9GgclZG3Z6sK8q9o0XXz7zPKmMzufcJyM+ghQ==
+ng-zorro-antd@13.3.2:
+  version "13.3.2"
+  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-13.3.2.tgz#04d79f884231afdfdb5759919c0fa202f431cc8f"
+  integrity sha512-bmpolaSevoZSVlP2nVpvi/CrFFu7hdaK/vz1k0R84db4AYOYFHcRwlAUBaWVKjWGaCHek+k1atC/pckXZqEgIA==
   dependencies:
-    "@angular/cdk" "^14.1.0"
-    "@ant-design/icons-angular" "^14.1.0"
+    "@angular/cdk" "^13.0.1"
+    "@ant-design/icons-angular" "^13.0.1"
     date-fns "^2.16.1"
     tslib "^2.3.0"
 
