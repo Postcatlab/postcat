@@ -108,27 +108,37 @@ import { MessageService } from '../../../shared/services/message';
             <span i18n>Message</span>
           </ng-template>
           <ul class="p-4">
-            <li *ngFor="let msg of model.response.responseBody">{{ msg }}</li>
+            <li *ngFor="let item of model.response.responseBody" class="flex bottom-line">
+              <div *ngIf="item.type === 'send'" class="inline-flex items-center text-gray-400 text-xs my-1">
+                <eo-iconpark-icon name="arrow-up" size="12"></eo-iconpark-icon>
+                <div class="px-2 text-gray-500">{{ item.msg }}</div>
+              </div>
+              <div *ngIf="item.type === 'get'" class="inline-flex items-center text-green-700 text-xs my-1">
+                <eo-iconpark-icon name="arrow-down" size="12"></eo-iconpark-icon>
+                <div class="px-2 text-green-600">{{ item.msg }}</div>
+              </div>
+            </li>
           </ul>
         </nz-tab>
         <nz-tab [nzTitle]="resHeaderTmp" [nzForceRender]="true">
           <ng-template #resHeaderTmp>
             <span i18n>Response Headers</span>
           </ng-template>
-          <div class="p-4">
-            <pre
-              >{{ resHeader }}
-        </pre
-            >
-          </div>
+          <ul class="p-4">
+            <li *ngFor="let item of resHeader">
+              <span class="c6 fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
+            </li>
+          </ul>
         </nz-tab>
         <nz-tab [nzTitle]="reqHeaderTmp" [nzForceRender]="true">
           <ng-template #reqHeaderTmp>
             <span i18n>Request Headers</span>
           </ng-template>
-          <div class="p-4">
-            <pre>{{ reqHeader }}</pre>
-          </div>
+          <ul class="p-4">
+            <li *ngFor="let item of reqHeader">
+              <span class="c6 fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
+            </li>
+          </ul>
         </nz-tab>
       </nz-tabset>
     </eo-split-panel>
@@ -142,8 +152,8 @@ export class WebsocketComponent implements OnInit {
   isConnect = false;
   socket = null;
   msg = '';
-  reqHeader = '';
-  resHeader = '';
+  reqHeader = [];
+  resHeader = [];
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
@@ -201,6 +211,7 @@ export class WebsocketComponent implements OnInit {
     const { responseTabIndex, requestTabIndex, ...data } = this.model;
     if (!bool) {
       // * save to test history
+      // TODO delete apiDataID、projectID
       this.storage.run('apiTestHistoryCreate', [{ projectID: 1, apiDataID: 1, ...data }], async (result) => {
         if (result.status === 200) {
           // console.log('save to test history');
@@ -226,7 +237,7 @@ export class WebsocketComponent implements OnInit {
       return;
     }
     this.socket.emit('ws-server', { type: 'ws-message', content: { message: this.msg } });
-    this.model.response.responseBody.push(this.msg);
+    this.model.response.responseBody.push({ type: 'send', msg: this.msg });
     this.msg = '';
   }
   listen() {
@@ -240,13 +251,13 @@ export class WebsocketComponent implements OnInit {
         this.isConnect = true;
         this.model.requestTabIndex = 2;
         const { reqHeader, resHeader } = content;
-        const json2String = (data) =>
-          Object.entries(data).reduce((total, [name, value]) => `${name}: ${value}\n${total}`, '');
-        this.reqHeader = json2String(reqHeader);
-        this.resHeader = json2String(resHeader);
+        const json2Array = (data) =>
+          Object.entries(data).reduce((total, [name, value]) => [{ name, value }].concat(total), []);
+        this.reqHeader = json2Array(reqHeader);
+        this.resHeader = json2Array(resHeader);
       }
       if (type === 'ws-message-back' && status === 0) {
-        this.model.response.responseBody.push(content);
+        this.model.response.responseBody.push({ type: 'get', msg: content });
       }
     });
   }
