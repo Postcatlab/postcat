@@ -32,31 +32,38 @@ export class ApiTabOperateService {
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
     this.tabStorage.init();
-    // if (this.router.url.includes(this.BASIC_TABS[0].pathname)) {
-    //   throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${this.router.url}`);
-    // }
     const tabCache = this.tabStorage.getPersistenceStorage();
-    if (tabCache && tabCache.tabOrder?.length) {
-      this.tabStorage.tabOrder = tabCache.tabOrder.filter((uuid) => tabCache.tabsByID.hasOwnProperty(uuid));
-      //init tabsByID
-      const tabsByID = new Map();
-      Object.values(tabCache.tabsByID).forEach((tabItem) => {
-        tabsByID.set(tabItem.uuid, tabItem);
+    //No cache
+    if (!tabCache || !tabCache.tabOrder?.length) {
+      this.operateTabAfterRouteChange({
+        url: this.router.url,
       });
-      this.tabStorage.tabsByID = tabsByID;
-      const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
-      //init selectIndex
-      this.selectedIndex = tabCache.selectedIndex;
-      //jump to exist tab
-      // this.navigateTabRoute(targetTab);
-      // this.operateTabAfterRouteChange({
-      //   url: this.router.url,
-      // });
       return;
     }
-    this.operateTabAfterRouteChange({
-      url: this.router.url,
+    //Restore from cache
+    this.tabStorage.tabOrder = tabCache.tabOrder.filter((uuid) => tabCache.tabsByID.hasOwnProperty(uuid));
+    const tabsByID = new Map();
+    Object.values(tabCache.tabsByID).forEach((tabItem) => {
+      tabsByID.set(tabItem.uuid, tabItem);
     });
+    this.tabStorage.tabsByID = tabsByID;
+
+    //Tab from url
+    try {
+      //If current url did't match exist tab,throw error
+      this.generateTabFromUrl(this.router.url);
+      this.operateTabAfterRouteChange({
+        url: this.router.url,
+      });
+      return;
+    } catch (e) {
+      console.error(e);
+    }
+
+    //Tab from last choose
+    const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
+    this.selectedIndex = tabCache.selectedIndex;
+    this.navigateTabRoute(targetTab);
   }
   /**
    * Add Default tab
@@ -170,6 +177,9 @@ export class ApiTabOperateService {
    */
   generateTabFromUrl(url): TabItem {
     const result = this.getBasicInfoFromUrl(url);
+    if (!result) {
+      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+    }
     const basicTab = eoDeepCopy(this.BASIC_TABS.find((val) => result.pathname === val.pathname));
     if (!basicTab) {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
