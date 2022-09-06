@@ -191,33 +191,35 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   }
 
   private initMonacoEditorEvent() {
-    this.completionItemProvider = window.monaco.languages.registerCompletionItemProvider('javascript', {
-      provideCompletionItems: (model, position) => {
-        // find out if we are completing a property in the 'dependencies' object.
-        const textUntilPosition = model.getValueInRange({
-          startLineNumber: 1,
-          startColumn: 1,
-          endLineNumber: position.lineNumber,
-          endColumn: position.column,
-        });
+    if (this.completions?.length) {
+      this.completionItemProvider = window.monaco.languages.registerCompletionItemProvider('javascript', {
+        provideCompletionItems: (model, position) => {
+          // find out if we are completing a property in the 'dependencies' object.
+          const textUntilPosition = model.getValueInRange({
+            startLineNumber: 1,
+            startColumn: 1,
+            endLineNumber: position.lineNumber,
+            endColumn: position.column,
+          });
 
-        const word = model.getWordUntilPosition(position);
-        const range = {
-          startLineNumber: position.lineNumber,
-          endLineNumber: position.lineNumber,
-          startColumn: word.startColumn,
-          endColumn: word.endColumn,
-        };
-        return {
-          suggestions: this.completions.map((n) => ({ ...n, range })),
-        } as any;
-      },
-    });
+          const word = model.getWordUntilPosition(position);
+          const range = {
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: word.startColumn,
+            endColumn: word.endColumn,
+          };
+          return {
+            suggestions: this.completions.map((n) => ({ ...n, range })),
+          } as any;
+        },
+      });
+    }
 
-    this.codeEdtor.onDidChangeModelDecorations(() => {
-      updateEditorHeight(); // typing
-      requestAnimationFrame(updateEditorHeight); // folding
-    });
+    // this.codeEdtor.onDidChangeModelDecorations(() => {
+    //   updateEditorHeight(); // typing
+    //   requestAnimationFrame(updateEditorHeight); // folding
+    // });
 
     this.codeEdtor.onDidChangeModelContent((e) => {
       this.handleChange();
@@ -227,25 +229,25 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       this.handleBlur();
     });
 
-    let prevHeight = 0;
+    // let prevHeight = 0;
 
-    const updateEditorHeight = () => {
-      const editorElement = this.codeEdtor.getDomNode();
+    // const updateEditorHeight = () => {
+    //   const editorElement = this.codeEdtor.getDomNode();
 
-      if (!editorElement) {
-        return;
-      }
+    //   if (!editorElement) {
+    //     return;
+    //   }
 
-      const lineHeight = this.codeEdtor.getOption(editor.EditorOption.lineHeight);
-      const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
-      const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
+    //   const lineHeight = this.codeEdtor.getOption(editor.EditorOption.lineHeight);
+    //   const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
+    //   const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
 
-      if (prevHeight !== height) {
-        prevHeight = height;
-        editorElement.style.height = `${height}px`;
-        this.codeEdtor.layout();
-      }
-    };
+    //   if (prevHeight !== height) {
+    //     prevHeight = height;
+    //     editorElement.style.height = `${height}px`;
+    //     this.codeEdtor.layout();
+    //   }
+    // };
   }
   log(event, txt) {
     console.log('ace event', event, txt);

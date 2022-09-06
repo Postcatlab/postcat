@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'api',
+        redirectTo: 'http',
         pathMatch: 'full',
       },
       {
@@ -21,6 +21,10 @@ const routes: Routes = [
       {
         path: 'http',
         children: [
+          {
+            path: 'detail',
+            loadChildren: () => import('./http/detail/api-detail.module').then((m) => m.ApiDetailModule),
+          },
           {
             path: 'edit',
             loadChildren: () => import('./http/edit/api-edit.module').then((m) => m.ApiEditModule),

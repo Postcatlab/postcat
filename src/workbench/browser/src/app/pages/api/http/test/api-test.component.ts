@@ -22,9 +22,6 @@ import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils';
 import { EnvState } from '../../../../shared/store/env.state';
 import { ApiParamsNumPipe } from '../../../../shared/pipes/api-param-num.pipe';
 import { ApiTestService } from './api-test.service';
-import { TestServerLocalNodeService } from '../../../../shared/services/api-test/local-node/test-connect.service';
-import { TestServerServerlessService } from '../../../../shared/services/api-test/serverless-node/test-connect.service';
-import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
 import {
   BEFORE_DATA,
@@ -43,6 +40,7 @@ interface testViewModel {
   beforeScript: string;
   afterScript: string;
   testStartTime?: number;
+  contentType: ContentTypeByAbridge;
   requestTabIndex: number;
   responseTabIndex: number;
   testResult: {
@@ -70,7 +68,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     parameters: [],
     hostUri: '',
   };
-  contentType: ContentTypeByAbridge = ContentTypeByAbridge.JSON;
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
 
@@ -82,7 +79,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
 
   isRequestBodyLoaded = false;
   initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
-  testServer: TestServerLocalNodeService | TestServerServerlessService | TestServerRemoteService;
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   MAX_TEST_SECONDS = 60;
@@ -99,12 +95,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private ref: ChangeDetectorRef,
     private apiTest: ApiTestService,
     private apiTestUtil: ApiTestUtilService,
-    private testServerService: TestServerService,
+    private testServer: TestServerService,
     private messageService: MessageService,
     private lang: LanguageService
   ) {
     this.initBasicForm();
-    this.testServer = this.testServerService.instance;
     this.testServer.init((message) => {
       this.receiveMessage(message);
     });
@@ -284,11 +279,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.watchEnvChange();
   }
   ngOnDestroy() {
-    console.log('ngOnDestroy');
     this.destroy$.next();
     this.destroy$.complete();
     this.testServer.close();
@@ -416,7 +409,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private initContentType() {
     if (this.model.request.requestBodyType === ApiBodyType.Raw) {
-      this.contentType =
+      this.model.contentType =
         this.apiTestUtil.getContentType(this.model.request.requestHeaders) || ContentTypeByAbridge.Text;
     }
   }
@@ -436,6 +429,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private resetModel() {
     return {
+      contentType:ContentTypeByAbridge.JSON,
       requestTabIndex: 1,
       responseTabIndex: 0,
       request: {},

@@ -16,8 +16,6 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -45,49 +43,41 @@ const COMPONENTS = [
   SplitPanelComponent,
   SplitXComponent,
   EoMonacoEditorComponent,
+  EnvListComponent,
+  SplitPanelComponent,
+  EoMonacoEditorComponent,
 ];
+
+const SHARED_MODULE = [
+  CommonModule,
+  FormsModule,
+  RouterModule,
+  ReactiveFormsModule,
+  NzDrawerModule,
+  NzRadioModule,
+  NzButtonModule,
+  NzToolTipModule,
+  NzResultModule,
+  NzDropDownModule,
+  NzSpinModule,
+  NzCardModule,
+  NzNotificationModule,
+  NzEmptyModule,
+  NzMessageModule,
+  NzDescriptionsModule,
+  EoIconparkIconModule,
+  EouiModule,
+  NzTreeModule,
+  NzPopoverModule,
+  NzCodeEditorModule,
+  NzResizableModule,
+  EoIconparkIconModule,
+] as const;
+
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    ReactiveFormsModule,
-    NzDrawerModule,
-    NzRadioModule,
-    NzToolTipModule,
-    NzResultModule,
-    NzDropDownModule,
-    NzSpinModule,
-    NzCardModule,
-    NzNotificationModule,
-    NzEmptyModule,
-    NzMessageModule,
-    NzDescriptionsModule,
-    EoIconparkIconModule,
-    EouiModule,
-    NzTreeModule,
-    NzPopoverModule,
-    NzCodeEditorModule,
-    NzResizableModule,
-  ],
+  imports: [...SHARED_MODULE],
   declarations: [WebviewDirective, ...COMPONENTS, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
-  exports: [
-    WebviewDirective,
-    ...COMPONENTS,
-    ApiParamsNumPipe,
-    NzPopoverModule,
-    NzCodeEditorModule,
-    NzResizableModule,
-    EoIconparkIconModule,
-    EnvListComponent,
-    SplitPanelComponent,
-    EoMonacoEditorComponent,
-    NzFormModule,
-    NzInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NzButtonModule,
-  ],
+  exports: [...SHARED_MODULE, ...COMPONENTS, WebviewDirective, ApiParamsNumPipe],
 })
 export class SharedModule {}
