@@ -11,8 +11,8 @@ export class ApiTabService {
   componentRef;
   apiTabComponent: ApiTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
-  get currentTabType(): string {
-    return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname))?.type || 'preview';
+  get currentComponentTab(): Partial<TabItem> {
+    return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
   BASIC_TABS: Partial<TabItem>[] = [
@@ -80,7 +80,7 @@ export class ApiTabService {
         this.afterContentChanged({ when: 'init', url, model });
       },
     };
-    if (this.currentTabType === 'edit') {
+    if (this.currentComponentTab.type === 'edit') {
       this.componentRef.afterSaved = {
         emit: (model) => {
           this.afterContentChanged({ when: 'saved', url, model });
@@ -92,7 +92,7 @@ export class ApiTabService {
         },
       };
     }
-    if(url.includes('home/api/http/test')){
+    if (this.currentComponentTab.module === 'test') {
       this.componentRef.afterTested = {
         emit: (model) => {
           this.afterContentChanged({ when: 'afterTested', url, model });
@@ -222,7 +222,10 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
       //Has tested/exsix api set fixed
-      if (currentTab.pathname === '/home/api/http/test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
+      if (
+        currentTab.pathname === '/home/api/http/test' &&
+        (model.testStartTime !== undefined || currentTab.params.uuid)
+      ) {
         replaceTab.isFixed = true;
       }
     }
@@ -234,7 +237,8 @@ export class ApiTabService {
    *
    * @param inData.url get component fit tab data
    */
-  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'|'afterTested'; url: string; model: any }) {
+  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
+    console.log(inData);
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
@@ -246,7 +250,7 @@ export class ApiTabService {
     }
     if (inData?.when === 'afterTested') {
       //Update other tab test result
-      inData.url = `/home/api/http/test?pageID=${inData.model.id}`;
+      inData.url = `${inData.model.url}?pageID=${inData.model.id}`;
       currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
       inData.model = Object.assign({}, currentTab.content.test, inData.model.model);
     }

@@ -343,6 +343,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       //* Other tab test finish,support multiple tab test same time
       this.afterTested.emit({
         id: queryParams.pageID,
+        url:'/home/api/http/test',
         model: {
           testStartTime: 0,
           testResult: tmpHistory,
