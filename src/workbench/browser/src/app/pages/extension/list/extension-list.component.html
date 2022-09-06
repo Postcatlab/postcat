@@ -17,7 +17,7 @@
             <span class="my-2 text-gray-400">{{ it.author }}</span>
             <span class="my-1 text-gray-500 desc">{{ it.description }}</span>
           </div>
-          <div class="btn-group">
+          <div class="btn-group" *ngIf="type === 'installed'">
             <a nz-button nzType="link">Setting</a>
             <nz-divider nzType="vertical"></nz-divider>
             <a nz-button nzType="link">Details</a>

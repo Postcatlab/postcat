@@ -1,11 +1,12 @@
 <div class="py-3 extension-detail" *ngIf="extensionDetail">
-  <div class="sticky top-0 z-50 bg-white">
+  <div class="sticky px-2 top-0 z-50 bg-white">
     <div class="pb-3 flex justify-between h-[50px]">
       <div class="flex items-center">
         <a nz-button nzType="link" (click)="backToList()">
           <eo-iconpark-icon name="left" class="anticon" size="16px"></eo-iconpark-icon><span i18n>Back</span>
         </a>
-        <div class="mr-4">
+        <nz-divider nzType="vertical"></nz-divider>
+        <div class="mr-2">
           <nz-avatar nzSize="small" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
         </div>
         <span class="font-bold text-[16px]">{{ extensionDetail.moduleName }}</span>
@@ -13,7 +14,7 @@
       <div class="flex items-center">
         <nz-switch class="mr-2.5"></nz-switch>
         <!-- <button nz-button nzType="primary">Install</button> -->
-        <eo-iconpark-icon size="20px" name="delete" nz-tooltip nzTooltipTitle="Uninstall"> </eo-iconpark-icon>
+        <button nz-button nzType="default">Uninstall</button>
       </div>
     </div>
     <!-- <div class="bbd"></div> -->
@@ -34,23 +35,32 @@
       </nz-tab>
       <!-- Details -->
       <nz-tab nzTitle="Details">
-        <div class="h-full overflow-auto markdown-desc">
+        <div class="h-full overflow-auto w-4/5 m-auto">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
             <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
             </eo-shadow-dom>
-          </nz-skeleton></div
-      ></nz-tab>
+          </nz-skeleton>
+        </div>
+      </nz-tab>
       <nz-tab nzTitle="Support">
         <nz-descriptions [nzColumn]="1" nzTitle="">
           <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Repository">dfsdfds </nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Homepage">dsfdsf </nz-descriptions-item>
-        </nz-descriptions></nz-tab>
+        </nz-descriptions></nz-tab
+      >
       <nz-tab nzTitle="ChangeLog">
         <h1>Change Log</h1>
         <p>All notable changes to this project will be documented in this file.</p>
         <h2>[12.0.1] - 2022-03-03</h2>
+        <!-- !show be markdown preview -->
+        <!-- <div class="h-full overflow-auto w-4/5 m-auto">
+          <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
+            <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
+            </eo-shadow-dom>
+          </nz-skeleton>
+        </div> -->
       </nz-tab>
     </nz-tabset>
   </section>
