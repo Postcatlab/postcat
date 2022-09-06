@@ -67,9 +67,7 @@ const NZ_COMPONETS = [
 ];
 const COMPONENTS = [
   ApiTestComponent,
-  // ApiTestHeaderComponent,
   ApiTestBodyComponent,
-  // ApiTestQueryComponent,
   ApiTestRestComponent,
   ApiTestResultHeaderComponent,
   ApiTestResultResponseComponent,
