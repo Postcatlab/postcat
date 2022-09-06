@@ -63,29 +63,38 @@ import { MessageService } from '../../../shared/services/message';
               (modelChange)="emitChangeFun('queryParams')"
             ></eo-api-test-query>
           </nz-tab>
+          <nz-tab [nzTitle]="messageTmp">
+            <ng-template #messageTmp>Message</ng-template>
+            <div>
+              <eo-monaco-editor
+                [(code)]="msg"
+                [config]="editorConfig"
+                [maxLine]="20"
+                [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+                (codeChange)="rawDataChange($event)"
+              >
+              </eo-monaco-editor>
+              <div class="flex justify-between p-2">
+                <nz-select [(ngModel)]="editorConfig.language">
+                  <nz-option nzValue="text" nzLabel="text"></nz-option>
+                  <nz-option nzValue="xml" nzLabel="xml"></nz-option>
+                  <nz-option nzValue="json" nzLabel="json"></nz-option>
+                </nz-select>
+                <button
+                  nz-button
+                  class="mx-1"
+                  nzType="primary"
+                  [disabled]="!isConnect || !msg"
+                  (click)="handleSendMsg()"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </nz-tab>
         </nz-tabset>
         <div class="h-8 top-line"></div>
         <!-- body -->
-        <div>
-          <eo-monaco-editor
-            [(code)]="msg"
-            [config]="editorConfig"
-            [maxLine]="20"
-            [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-            (codeChange)="rawDataChange($event)"
-          >
-          </eo-monaco-editor>
-          <div class="flex justify-between p-2">
-            <nz-select [(ngModel)]="editorConfig.language">
-              <nz-option nzValue="text" nzLabel="text"></nz-option>
-              <nz-option nzValue="xml" nzLabel="xml"></nz-option>
-              <nz-option nzValue="json" nzLabel="json"></nz-option>
-            </nz-select>
-            <button nz-button class="mx-1" nzType="primary" [disabled]="!isConnect || !msg" (click)="handleSendMsg()">
-              Send
-            </button>
-          </div>
-        </div>
       </div>
       <!-- response -->
       <nz-tabset
@@ -106,12 +115,20 @@ import { MessageService } from '../../../shared/services/message';
           <ng-template #resHeaderTmp>
             <span i18n>Response Headers</span>
           </ng-template>
+          <div class="p-4">
+            <pre
+              >{{ resHeader }}
+        </pre
+            >
+          </div>
         </nz-tab>
         <nz-tab [nzTitle]="reqHeaderTmp" [nzForceRender]="true">
           <ng-template #reqHeaderTmp>
             <span i18n>Request Headers</span>
           </ng-template>
-          <pre>{{ reqHeader | json }}</pre>
+          <div class="p-4">
+            <pre>{{ reqHeader }}</pre>
+          </div>
         </nz-tab>
       </nz-tabset>
     </eo-split-panel>
@@ -126,6 +143,7 @@ export class WebsocketComponent implements OnInit {
   socket = null;
   msg = '';
   reqHeader = '';
+  resHeader = '';
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
@@ -142,7 +160,7 @@ export class WebsocketComponent implements OnInit {
   }
   private resetModel() {
     return {
-      requestTabIndex: 1,
+      requestTabIndex: 2,
       responseTabIndex: 0,
       request: {
         requestHeaders: [],
@@ -185,7 +203,7 @@ export class WebsocketComponent implements OnInit {
       // * save to test history
       this.storage.run('apiTestHistoryCreate', [{ projectID: 1, apiDataID: 1, ...data }], async (result) => {
         if (result.status === 200) {
-          console.log('save to test history');
+          // console.log('save to test history');
           this.message.send({ type: 'updateHistory', data: {} });
         }
       });
@@ -219,8 +237,12 @@ export class WebsocketComponent implements OnInit {
     this.socket.on('ws-client', ({ type, status, content }) => {
       if (type === 'ws-connect-back' && status === 0) {
         this.isConnect = true;
-        const { reqHeader } = content;
-        this.reqHeader = reqHeader;
+        this.model.requestTabIndex = 2;
+        const { reqHeader, resHeader } = content;
+        const json2String = (data) =>
+          Object.entries(data).reduce((total, [name, value]) => `${name}: ${value}\n${total}`, '');
+        this.reqHeader = json2String(reqHeader);
+        this.resHeader = json2String(resHeader);
       }
       if (type === 'ws-message-back' && status === 0) {
         this.model.response.responseBody.push(content);

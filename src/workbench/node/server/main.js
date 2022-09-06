@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
     }
     if (type === 'ws-connect') {
       const { request } = content;
-      console.log(request?.requestHeaders);
+      // console.log(request?.requestHeaders);
       ws = new WebSocket(request.uri, {
         headers: request?.requestHeaders
           ?.filter((it) => it.name && it.value)
@@ -84,7 +84,10 @@ io.on('connection', (socket) => {
       // 打开WebSocket连接后立刻发送一条消息:
       ws.on('open', () => {
         console.log(`[CLIENT] open()`);
-        socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader } });
+      });
+      ws.on('upgrade', (res) => {
+        const { headers: resHeader } = res;
+        socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader, resHeader } });
       });
       ws.on('message', (message) => {
         console.log('==> message', message);
