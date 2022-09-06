@@ -60,7 +60,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * * Usually restored from tab
    */
   @Input() initialModel: testViewModel;
-  @Output() modelChange = new EventEmitter<testViewModel | any>();
+  @Output() modelChange = new EventEmitter<testViewModel>();
+  @Output() afterTested = new EventEmitter<any>();
   @Output() eoOnInit = new EventEmitter<testViewModel>();
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
@@ -340,13 +341,12 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     } catch (e) {}
     if (queryParams.pageID !== this.route.snapshot.queryParams.pageID) {
       //* Other tab test finish,support multiple tab test same time
-      this.modelChange.emit({
-        when: 'otherTabTested',
+      this.afterTested.emit({
         id: queryParams.pageID,
         model: {
           testStartTime: 0,
           testResult: tmpHistory,
-        },
+        }
       });
     } else {
       this.model.testResult = tmpHistory;
@@ -428,7 +428,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private resetModel() {
     return {
-      contentType:ContentTypeByAbridge.JSON,
+      contentType: ContentTypeByAbridge.JSON,
       requestTabIndex: 1,
       responseTabIndex: 0,
       request: {},

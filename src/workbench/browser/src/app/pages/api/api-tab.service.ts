@@ -92,6 +92,13 @@ export class ApiTabService {
         },
       };
     }
+    if(url.includes('home/api/http/test')){
+      this.componentRef.afterTested = {
+        emit: (model) => {
+          this.afterContentChanged({ when: 'afterTested', url, model });
+        },
+      };
+    }
   }
   /**
    * Before close tab,handle page content
@@ -227,7 +234,7 @@ export class ApiTabService {
    *
    * @param inData.url get component fit tab data
    */
-  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'; url: string; model: any }) {
+  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'|'afterTested'; url: string; model: any }) {
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
@@ -237,7 +244,7 @@ export class ApiTabService {
       console.warn(`has't find the tab fit child component ,url:${inData.url}`);
       return;
     }
-    if (inData.model?.when === 'otherTabTested') {
+    if (inData?.when === 'afterTested') {
       //Update other tab test result
       inData.url = `/home/api/http/test?pageID=${inData.model.id}`;
       currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
