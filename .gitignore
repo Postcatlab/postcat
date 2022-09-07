@@ -14,11 +14,10 @@ out/
 !src/workbench/node/request/**/*.js
 !src/workbench/node/server/**/*.js
 !/api/*.js
-!/build/*.js
+!/scripts/*.js
 !*.config.js
 !upload.js
 
-scripts/notarize.js
 # dependencies
 node_modules
 # package-lock.json
