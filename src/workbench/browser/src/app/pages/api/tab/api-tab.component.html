@@ -25,6 +25,7 @@
           *ngIf="tabStorage.tabsByID.get(uuid).extends?.method"
           >{{ tabStorage.tabsByID.get(uuid).extends.method }}</span
         >
+        {{ tabStorage.tabsByID.get(uuid).extends | json }}
         <span class="text_omit tab_text" [title]="tabStorage.tabsByID.get(uuid).title">
           {{ tabStorage.tabsByID.get(uuid).title }}</span
         >

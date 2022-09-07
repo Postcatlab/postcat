@@ -32,7 +32,13 @@ export class ApiTabService {
       title: $localize`:@@API Index:Index`,
       icon: 'home',
     },
-    { pathname: '/home/api/ws/test', module: 'test', type: 'preview', title: $localize`New Websocket` },
+    {
+      pathname: '/home/api/ws/test',
+      module: 'test',
+      type: 'preview',
+      extends: { method: 'WS' },
+      title: $localize`New Websocket`,
+    },
     { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' },
   ];
   constructor(private messageService: MessageService, private router: Router) {
