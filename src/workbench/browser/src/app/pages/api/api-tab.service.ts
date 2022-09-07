@@ -157,7 +157,7 @@ export class ApiTabService {
       //Set title/method
       replaceTab.title = model.name;
       replaceTab.extends.method = model.method;
-      if (currentTab.pathname === '/home/api/http/test') {
+      if (currentTab.module==='test') {
         replaceTab.extends.method = model.request.method;
         //Only Untitle request need set url to tab title
         if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
