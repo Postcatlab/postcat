@@ -40,7 +40,8 @@
           <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
           <nz-descriptions-item *ngIf="extensionDetail.repository?.url" i18n-nzTitle nzTitle="Repository">
-            <a [href]="extensionDetail.repository.url" target="_blank">{{ extensionDetail.repository.url }}</a>
+            <a [href]="extensionDetail.repository.url.replace('git+', '')" target="_blank">{{
+              extensionDetail.repository.url }}</a>
           </nz-descriptions-item>
           <nz-descriptions-item *ngIf="extensionDetail.homepage" i18n-nzTitle nzTitle="Homepage">
             <a [href]="extensionDetail.homepage" target="_blank">{{ extensionDetail.homepage }}</a>
