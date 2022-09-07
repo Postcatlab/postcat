@@ -36,9 +36,7 @@ export class ExtensionDetailComponent implements OnInit {
     this.getInstaller();
   }
 
-  ngOnInit(): void {
-    this.nzSelectedIndex = ~~this.route.snapshot.queryParams.tab;
-  }
+  ngOnInit(): void {}
 
   handleInstall() {
     if (this.electronService.isElectron) {
@@ -68,6 +66,10 @@ export class ExtensionDetailComponent implements OnInit {
     }
     this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
+
+    if (this.extensionDetail?.features?.configuration) {
+      this.nzSelectedIndex = ~~this.route.snapshot.queryParams.tab;
+    }
   }
 
   async fetchChangelog(locale = '') {
