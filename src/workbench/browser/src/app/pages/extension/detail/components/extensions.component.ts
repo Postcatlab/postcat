@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'eo-extension-setting',
@@ -10,7 +11,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
       class="bg-white sticky top-0 py-[6px] border-solid border-0 border-b-[1px] z-10 mb-[3px]"
       style="border-color: var(--BORDER)"
     >
-      <button nz-button nzType="primary">Save</button>
+      <button nz-button nzType="primary" (click)="handleSave()">Save</button>
     </div>
 
     <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="form">
@@ -82,7 +83,8 @@ export class ExtensionSettingComponent implements OnInit {
   constructor(
     public languageService: LanguageService,
     private fb: FormBuilder,
-    private settingService: SettingService
+    private settingService: SettingService,
+    private message: NzMessageService
   ) {}
 
   ngOnInit(): void {
@@ -116,4 +118,10 @@ export class ExtensionSettingComponent implements OnInit {
       }
     });
   }
+
+  handleSave = () => {
+    this.settingService.saveSetting(this.localSettings);
+    window.eo?.saveSettings?.({ ...this.localSettings });
+    this.message.create('success', `Save Success`);
+  };
 }
