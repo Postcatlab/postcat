@@ -18,13 +18,14 @@
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
     <div>
-      <button nz-button nzSize="small" nzType="default" class="mt-[8px]" [nzLoading]="isOperating"
-        (click)="handleInstall()">
+      <button nz-button nzSize="small" [nzType]="extensionDetail?.installed ? 'default': 'primary'" class="mt-[8px]"
+        [nzLoading]="isOperating" (click)="handleInstall()">
         {{extensionDetail?.installed ? 'Uninstall' : 'Install'}}
       </button>
     </div>
 
-    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzAnimated]="false" class="settings"
+    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzAnimated]="false"
+      [class]="{settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration}"
       (nzSelectChange)="handleTabChange($event)">
       <!-- Setting -->
       <nz-tab *ngIf="extensionDetail?.features?.configuration" nzTitle="Settings">

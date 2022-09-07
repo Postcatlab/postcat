@@ -69,13 +69,14 @@ export class ExtensionListComponent implements OnInit {
     this.seachChanged$.next(keyword);
   }
   clickExtension(event, item) {
+    console.log('event?.target?.dataset', event?.target);
     this.router
       .navigate(['home/extension/detail'], {
         queryParams: {
           type: this.route.snapshot.queryParams.type,
           id: item.moduleID,
           name: item.name,
-          tab: event?.target?.innerText === 'Details' ? 1 : 0,
+          tab: event?.target?.dataset?.id === 'details' ? 1 : 0,
         },
       })
       .finally();

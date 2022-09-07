@@ -8,7 +8,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   selector: 'eo-extension-setting',
   template: `
     <div
-      class="bg-white sticky top-0 py-[6px] border-solid border-0 border-b-[1px] z-10 mb-[3px]"
+      class="bg-white sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]"
       style="border-color: var(--BORDER)"
     >
       <button nz-button nzType="primary" (click)="handleSave()">Save</button>
