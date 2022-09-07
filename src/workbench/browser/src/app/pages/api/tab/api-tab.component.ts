@@ -29,7 +29,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.watchRouterChange();
     this.watchPageLeave();
   }
-  newTab(key = null) {
+  newTab(key = undefined) {
     if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
       return;
     }
