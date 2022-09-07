@@ -3,11 +3,12 @@ import { io } from 'socket.io-client';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { StorageService } from '../../../shared/services/storage';
 import { MessageService } from '../../../shared/services/message';
+import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 
 @Component({
   selector: 'websocket-content',
   template: `<div class="h-full">
-    <eo-split-panel [topStyle]="{ height: '350px' }">
+    <eo-split-panel [topStyle]="{ height: '300px' }">
       <div top class="h-full overflow-auto">
         <header class="flex p-4">
           <nz-select class="!w-[106px] flex-none" [disabled]="isConnect" [(ngModel)]="model.request.protocol">
@@ -129,21 +130,13 @@ import { MessageService } from '../../../shared/services/message';
           <ng-template #resHeaderTmp>
             <span i18n>Response Headers</span>
           </ng-template>
-          <ul class="p-4">
-            <li *ngFor="let item of resHeader">
-              <span class="c6 fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
-            </li>
-          </ul>
+          <eo-api-test-result-header [model]="resHeader"></eo-api-test-result-header>
         </nz-tab>
         <nz-tab [nzTitle]="reqHeaderTmp" [nzForceRender]="true">
           <ng-template #reqHeaderTmp>
             <span i18n>Request Headers</span>
           </ng-template>
-          <ul class="p-4">
-            <li *ngFor="let item of reqHeader">
-              <span class="c6 fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
-            </li>
-          </ul>
+          <eo-api-test-result-header [model]="reqHeader"></eo-api-test-result-header>
         </nz-tab>
       </nz-tabset>
     </eo-split-panel>
@@ -166,7 +159,7 @@ export class WebsocketComponent implements OnInit {
   editorConfig = {
     language: 'json',
   };
-  constructor(private storage: StorageService, private message: MessageService) {}
+  constructor(private storage: StorageService, private testService: ApiTestService, private message: MessageService) {}
   ngOnInit() {
     // * 通过 SocketIO 通知后端
     this.socket = io('ws://localhost:3008', { transports: ['websocket'] });
@@ -208,27 +201,26 @@ export class WebsocketComponent implements OnInit {
     }
     this.modelChange.emit(this.model);
   }
-  handleConnect(bool = false) {
+  async handleConnect(bool = false) {
     if (this.socket == null) {
-      console.log('通信未就绪');
+      console.log('communication is not ready');
       return;
     }
     const { responseTabIndex, requestTabIndex, ...data } = this.model;
     if (!bool) {
       // * save to test history
-      // TODO delete apiDataID、projectID
-      this.storage.run('apiTestHistoryCreate', [{ projectID: 1, apiDataID: 1, ...data }], async (result) => {
-        if (result.status === 200) {
-          // console.log('save to test history');
-          this.message.send({ type: 'updateHistory', data: {} });
-        }
-      });
+      const res = await this.testService.addHistory(data, Date.now().toString().slice(-5));
+      if (res) {
+        this.message.send({ type: 'updateHistory', data: {} });
+      }
+      this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
+      this.socket.off('ws-client');
       this.isConnect = false;
       return;
     }
     const wsUrl = this.model.request.uri;
     if (wsUrl === '') {
-      console.log('Websocket 地址为空');
+      console.log('Websocket URL is empty');
       return;
     }
     this.socket.emit('ws-server', { type: 'ws-connect', content: data });
@@ -237,7 +229,6 @@ export class WebsocketComponent implements OnInit {
   handleSendMsg() {
     // * 通过 SocketIO 通知后端
     // send a message to the server
-    // console.log(JSON.stringify(this.model));
     if (!this.msg) {
       return;
     }
@@ -249,7 +240,8 @@ export class WebsocketComponent implements OnInit {
     // * 无论是否连接成功，都清空发送历史
     this.model.response.responseBody = [];
     if (this.socket == null) {
-      console.log('通信未连接');
+      console.log('communication is no ready');
+      return;
     }
     this.socket.on('ws-client', ({ type, status, content }) => {
       if (type === 'ws-connect-back' && status === 0) {

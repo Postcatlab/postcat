@@ -64,6 +64,11 @@ io.on('connection', (socket) => {
       console.log('connect success !');
       return;
     }
+    if (type === 'ws-disconnect') {
+      console.log('kkii');
+      ws = null;
+      return;
+    }
     if (type === 'ws-connect') {
       const { request } = content;
       // console.log(request?.requestHeaders);

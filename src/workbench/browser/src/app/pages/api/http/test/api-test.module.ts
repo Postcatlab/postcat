@@ -37,7 +37,7 @@ import { ApiTestService } from './api-test.service';
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
 import { ApiTestRestComponent } from './rest/api-test-rest.component';
-import { ApiTestResultHeaderComponent } from './result-header/api-test-result-header.component';
+// import { ApiTestResultHeaderComponent } from './result-header/api-test-result-header.component';
 import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
 import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
 import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/services/api-test/remote-node/test-connect.service';
@@ -69,7 +69,7 @@ const COMPONENTS = [
   ApiTestComponent,
   ApiTestBodyComponent,
   ApiTestRestComponent,
-  ApiTestResultHeaderComponent,
+  // ApiTestResultHeaderComponent,
   ApiTestResultResponseComponent,
   ApiTestResultRequestBodyComponent,
 ];

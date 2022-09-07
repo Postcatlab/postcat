@@ -65,7 +65,7 @@ export class ApiTestService {
       });
     });
   }
-  addHistory(history: ApiTestHistoryFrame, apiID): Promise<any> {
+  addHistory(history: ApiTestHistoryFrame | any, apiID): Promise<any> {
     return new Promise((resolve) => {
       this.storage.run(
         'apiTestHistoryCreate',
