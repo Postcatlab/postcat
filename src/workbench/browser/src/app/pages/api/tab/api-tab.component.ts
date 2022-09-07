@@ -29,11 +29,11 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.watchRouterChange();
     this.watchPageLeave();
   }
-  newTab() {
+  newTab(key = null) {
     if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
       return;
     }
-    this.tabOperate.newDefaultTab();
+    this.tabOperate.newDefaultTab(key);
   }
   sortTab(_left: KeyValue<number, any>, _right: KeyValue<number, any>): number {
     const leftIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _left.key);
@@ -177,7 +177,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
       that.cacheData();
     });
   }
