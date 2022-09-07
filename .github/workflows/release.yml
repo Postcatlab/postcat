@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*.*.*'
+   branches:
+      - feat/extension-manage
 
 jobs:
   release:
@@ -77,7 +79,7 @@ jobs:
           # apply provisioning profile
           # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.NOTARIZE_JS }}" > build/notarize.js
+          echo "${{ secrets.NOTARIZE_JS }}" > scripts/notarize.js
           yarn release:m1
           yarn release
 
