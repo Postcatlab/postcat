@@ -19,6 +19,7 @@ export class ExtensionDetailComponent implements OnInit {
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
+  nzSelectedIndex = 0;
 
   changeLog = '';
   get isElectron() {
@@ -35,7 +36,9 @@ export class ExtensionDetailComponent implements OnInit {
     this.getInstaller();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.nzSelectedIndex = ~~this.route.snapshot.queryParams.tab;
+  }
 
   handleInstall() {
     if (this.electronService.isElectron) {

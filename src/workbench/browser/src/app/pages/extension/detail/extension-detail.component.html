@@ -24,7 +24,8 @@
       </button>
     </div>
 
-    <nz-tabset [nzAnimated]="false" class="settings" (nzSelectChange)="handleTabChange($event)">
+    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzAnimated]="false" class="settings"
+      (nzSelectChange)="handleTabChange($event)">
       <!-- Setting -->
       <nz-tab *ngIf="extensionDetail?.features?.configuration" nzTitle="Settings">
         <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"></eo-extension-setting>

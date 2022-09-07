@@ -2,7 +2,7 @@
   <div class="grid grid-cols-2 gap-6 py-5 list-block">
     <div
       class="bd_all w-full min-h-[140px] p-5 flex flex-col flex-wrap plugin-block hover:border-green-700 hover:shadow-lg transition-shadow duration-300"
-      *ngFor="let it of renderList" (click)="clickExtension(it)">
+      *ngFor="let it of renderList" (click)="clickExtension($event,it)">
       <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzAvatar]="true">
         <div class="flex justify-between w-full">
           <div class="flex">

@@ -68,14 +68,14 @@ export class ExtensionListComponent implements OnInit {
   onSeachChange(keyword) {
     this.seachChanged$.next(keyword);
   }
-  clickExtension(item) {
+  clickExtension(event, item) {
     this.router
       .navigate(['home/extension/detail'], {
         queryParams: {
           type: this.route.snapshot.queryParams.type,
           id: item.moduleID,
           name: item.name,
-          jump: 'setting',
+          tab: event?.target?.innerText === 'Details' ? 1 : 0,
         },
       })
       .finally();
