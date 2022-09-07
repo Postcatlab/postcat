@@ -8,15 +8,9 @@ import MarkdownIt from 'markdown-it/dist/markdown-it';
       rel="stylesheet"
       href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/github-markdown-css/5.1.0/github-markdown.min.css"
     />
-    <style>
-      article.markdown-body img {
-        max-width: 600px;
-      }
-    </style>
-    <article class="markdown-body">
-      <div part="eo-shadow-dom" [innerHTML]="content"></div>
-    </article>
+    <article class="markdown-body" [innerHTML]="content"></article>
   `,
+  styleUrls: ['./eo-shadow-dom.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class ShadowDomEncapsulationComponent implements OnInit {

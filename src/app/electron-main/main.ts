@@ -19,6 +19,8 @@ export const subView = {
   appView: null,
   mainView: null,
 };
+const PROTOCOL = 'eoapi';
+app.setAsDefaultProtocolClient(PROTOCOL); // 注册协议
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
@@ -92,6 +94,7 @@ class EoBrowserWindow {
         contextIsolation: false, // false if you want to run e2e test with Spectron
       },
     });
+
     proxyOpenExternal(this.win);
     this.loadURL();
     this.startMock();

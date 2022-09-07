@@ -5,7 +5,15 @@ import { ClickStopPropagationDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
@@ -16,6 +24,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -53,6 +63,7 @@ const SHARED_MODULE = [
   FormsModule,
   RouterModule,
   ReactiveFormsModule,
+  NzFormModule,
   NzDrawerModule,
   NzRadioModule,
   NzButtonModule,
@@ -65,18 +76,27 @@ const SHARED_MODULE = [
   NzEmptyModule,
   NzMessageModule,
   NzDescriptionsModule,
+  NzInputModule,
+  NzCheckboxModule,
   EouiModule,
   NzTreeModule,
+  NzAvatarModule,
+  NzTabsModule,
+  NzSkeletonModule,
   NzPopoverModule,
   NzCodeEditorModule,
   NzResizableModule,
   EoIconparkIconModule,
+  NzInputNumberModule,
+  NzSwitchModule,
+  NzDividerModule,
+  NzModalModule,
 ] as const;
 
 @NgModule({
   imports: [...SHARED_MODULE],
-  declarations: [ ...COMPONENTS,ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
+  declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [ModalService],
-  exports: [...SHARED_MODULE, ...COMPONENTS,  ClickStopPropagationDirective,ApiParamsNumPipe],
+  exports: [...SHARED_MODULE, ...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe],
 })
 export class SharedModule {}

@@ -14,9 +14,14 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   introLoading = false;
+  changelogLoading = false;
+  isVisible = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
+  nzSelectedIndex = 0;
+
+  changeLog = '';
   get isElectron() {
     return this.electronService.isElectron;
   }
@@ -30,6 +35,27 @@ export class ExtensionDetailComponent implements OnInit {
     this.getDetail();
     this.getInstaller();
   }
+
+  ngOnInit(): void {}
+
+  handleInstall() {
+    if (this.electronService.isElectron) {
+      this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
+    } else {
+      const PROTOCOL = 'eoapi://';
+      (window as any).protocolCheck(
+        PROTOCOL,
+        () => {
+          // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
+          this.isVisible = true;
+        },
+        () => {
+          window.location.href = PROTOCOL;
+        }
+      );
+    }
+  }
+
   async getDetail() {
     this.extensionDetail = await this.extensionService.getDetail(
       this.route.snapshot.queryParams.id,
@@ -40,8 +66,48 @@ export class ExtensionDetailComponent implements OnInit {
     }
     this.isNotLoaded = false;
     this.extensionDetail.introduction ||= $localize`This plugin has no documentation yet.`;
+
+    if (this.extensionDetail?.features?.configuration) {
+      this.nzSelectedIndex = ~~this.route.snapshot.queryParams.tab;
+    }
   }
 
+  async fetchChangelog(locale = '') {
+    //Default locale en-US
+    if (locale === 'en-US') locale = '';
+    const timer = setTimeout(() => (this.changelogLoading = true), 200);
+    try {
+      const response = await fetch(
+        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/changeLog.${
+          locale ? locale + '.' : ''
+        }md`
+      );
+      if (response.status === 200) {
+        this.changeLog = await response.text();
+      } else if (!locale && response.status === 404) {
+        const result = await fetch(`https://registry.npmjs.org/${this.extensionDetail.name}`, {
+          headers: {
+            // if fullmeta
+            // accept: ' application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*',
+          },
+        });
+        const data = await result.json();
+        this.changeLog = Object.entries<any>(data.versions).reduceRight((log, [key, value]) => {
+          return `
+${log}
+## [${key}](${value.dist.tarball}) - ${new Date(data.time[key]).toLocaleString()}
+          `;
+        }, '# Change Log');
+      } else if (locale) {
+        //If locale README not find,fetch default locale(en-US)
+        this.fetchChangelog();
+      }
+    } catch (error) {
+    } finally {
+      clearTimeout(timer);
+      this.changelogLoading = false;
+    }
+  }
   async fetchReadme(locale = '') {
     //Default locale en-US
     if (locale === 'en-US') locale = '';
@@ -63,6 +129,12 @@ export class ExtensionDetailComponent implements OnInit {
       this.introLoading = false;
     }
   }
+
+  handleTabChange = (e) => {
+    if (e.tab?.nzTitle === 'ChangeLog') {
+      this.fetchChangelog();
+    }
+  };
 
   private findLinkInSingleAssets(assets, item) {
     let result = '';
@@ -126,7 +198,6 @@ export class ExtensionDetailComponent implements OnInit {
       this.isOperating = false;
     }, 100);
   }
-  ngOnInit(): void {}
 
   backToList() {
     this.router.navigate(['/home/extension/list'], {
@@ -134,5 +205,10 @@ export class ExtensionDetailComponent implements OnInit {
         type: this.route.snapshot.queryParams.type,
       },
     });
+  }
+
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
   }
 }

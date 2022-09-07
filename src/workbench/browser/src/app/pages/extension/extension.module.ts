@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ExtensionRoutingModule } from './extension-routing.module';
 import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
-import { ExtensionDetailComponent } from './detail/extension-detail.component';
+import { ExtensionDetailModule } from './detail/extension-detail.module';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -39,8 +39,9 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzDropDownModule,
     NzSkeletonModule,
     NzCardModule,
-    NzAvatarModule
+    NzAvatarModule,
+    ExtensionDetailModule,
   ],
-  declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent],
+  declarations: [ExtensionComponent, ExtensionListComponent],
 })
 export class ExtensionModule {}

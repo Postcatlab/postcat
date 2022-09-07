@@ -5,7 +5,6 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { debounce } from 'eo/workbench/browser/src/app/utils';
@@ -105,10 +104,10 @@ export class SettingComponent implements OnInit {
       name: $localize`:@@Language:Language`,
       moduleID: 'eoapi-language',
     },
-    {
-      name: $localize`Extensions`,
-      moduleID: 'eoapi-extensions',
-    },
+    // {
+    //   name: $localize`Extensions`,
+    //   moduleID: 'eoapi-extensions',
+    // },
     {
       name: $localize`About`,
       moduleID: 'eoapi-about',
@@ -130,7 +129,6 @@ export class SettingComponent implements OnInit {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private messageService: MessageService,
-    private message: NzMessageService,
     private remoteService: RemoteService,
     private settingService: SettingService
   ) {}
@@ -231,9 +229,9 @@ export class SettingComponent implements OnInit {
       }, []);
     // All settings
     const treeData = JSON.parse(JSON.stringify(this.treeNodes));
-    const extensions = treeData.find((n) => n.moduleID === 'eoapi-extensions');
-    extensions.children = generateTreeData(this.extensitonConfigurations);
-    extensions.configuration = this.extensitonConfigurations;
+    // const extensions = treeData.find((n) => n.moduleID === 'eoapi-extensions');
+    // extensions.children = generateTreeData(this.extensitonConfigurations);
+    // extensions.configuration = this.extensitonConfigurations;
     this.dataSource.setData(treeData);
     this.treeControl.expandAll();
 
