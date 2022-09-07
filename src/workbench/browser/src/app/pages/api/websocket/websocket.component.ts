@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { io } from 'socket.io-client';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { StorageService } from '../../../shared/services/storage';
@@ -144,7 +145,6 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
   styleUrls: ['./websocket.component.scss'],
 })
 export class WebsocketComponent implements OnInit {
-  @Input() model = this.resetModel();
   @Input() bodyType = 'json';
   @Output() modelChange = new EventEmitter<any>();
   isConnect = false;
@@ -152,6 +152,7 @@ export class WebsocketComponent implements OnInit {
   msg = '';
   reqHeader = [];
   resHeader = [];
+  model: any = this.resetModel();
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
@@ -159,8 +160,25 @@ export class WebsocketComponent implements OnInit {
   editorConfig = {
     language: 'json',
   };
-  constructor(private storage: StorageService, private testService: ApiTestService, private message: MessageService) {}
-  ngOnInit() {
+  constructor(
+    private storage: StorageService,
+    public route: ActivatedRoute,
+    private testService: ApiTestService,
+    private message: MessageService
+  ) {}
+  async ngOnInit() {
+    const id = this.route.snapshot.queryParams.uuid;
+    if (id && id.includes('history_')) {
+      const historyData = await this.testService.getHistory(Number(id.replace('history_', '')));
+      console.log('historyData', historyData);
+      this.model = historyData;
+      // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
+    }
+    this.message.get().subscribe(({ type, data }) => {
+      if (type === 'ws-test-history') {
+        this.model = data;
+      }
+    });
     // * 通过 SocketIO 通知后端
     this.socket = io('ws://localhost:3008', { transports: ['websocket'] });
     // receive a message from the server
