@@ -25,6 +25,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -89,6 +90,7 @@ const SHARED_MODULE = [
   NzInputNumberModule,
   NzSwitchModule,
   NzDividerModule,
+  NzModalModule,
 ] as const;
 
 @NgModule({

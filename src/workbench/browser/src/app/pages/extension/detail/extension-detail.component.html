@@ -18,7 +18,10 @@
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
     <div>
-      <button nz-button nzSize="small" nzType="default" class="mt-[8px]">Uninstall</button>
+      <button nz-button nzSize="small" nzType="default" class="mt-[8px]" [nzLoading]="isOperating"
+        (click)="handleInstall()">
+        {{extensionDetail?.installed ? 'Uninstall' : 'Install'}}
+      </button>
     </div>
 
     <nz-tabset [nzAnimated]="false" class="settings" (nzSelectChange)="handleTabChange($event)">
@@ -64,3 +67,21 @@
     </nz-tabset>
   </section>
 </div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Eoapi is required to install this extension." [nzOkText]="null"
+  (nzOnCancel)="handleOk()">
+  <ng-container *nzModalContent>
+    Don't have Eoapi?
+    <a nz-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n>
+      Get it now
+    </a>.
+    <nz-dropdown-menu #download="nzDropdownMenu">
+      <ul nz-menu>
+        <ng-container *ngFor="let item of resourceInfo; let index = index">
+          <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+          <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
+        </ng-container>
+      </ul>
+    </nz-dropdown-menu>
+  </ng-container>
+</nz-modal>

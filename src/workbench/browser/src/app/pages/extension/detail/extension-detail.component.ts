@@ -15,9 +15,11 @@ export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   introLoading = false;
   changelogLoading = false;
+  isVisible = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
+
   changeLog = '';
   get isElectron() {
     return this.electronService.isElectron;
@@ -32,6 +34,27 @@ export class ExtensionDetailComponent implements OnInit {
     this.getDetail();
     this.getInstaller();
   }
+
+  ngOnInit(): void {}
+
+  handleInstall() {
+    if (this.electronService.isElectron) {
+      this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
+    } else {
+      const PROTOCOL = 'eoapi://';
+      (window as any).protocolCheck(
+        PROTOCOL,
+        () => {
+          // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
+          this.isVisible = true;
+        },
+        () => {
+          window.location.href = PROTOCOL;
+        }
+      );
+    }
+  }
+
   async getDetail() {
     this.extensionDetail = await this.extensionService.getDetail(
       this.route.snapshot.queryParams.id,
@@ -170,7 +193,6 @@ ${log}
       this.isOperating = false;
     }, 100);
   }
-  ngOnInit(): void {}
 
   backToList() {
     this.router.navigate(['/home/extension/list'], {
@@ -178,5 +200,10 @@ ${log}
         type: this.route.snapshot.queryParams.type,
       },
     });
+  }
+
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
   }
 }
