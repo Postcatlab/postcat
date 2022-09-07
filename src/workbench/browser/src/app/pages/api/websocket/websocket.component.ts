@@ -2,7 +2,6 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { io } from 'socket.io-client';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { StorageService } from '../../../shared/services/storage';
 import { MessageService } from '../../../shared/services/message';
 import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 
@@ -160,22 +159,22 @@ export class WebsocketComponent implements OnInit {
   editorConfig = {
     language: 'json',
   };
-  constructor(
-    private storage: StorageService,
-    public route: ActivatedRoute,
-    private testService: ApiTestService,
-    private message: MessageService
-  ) {}
+  constructor(public route: ActivatedRoute, private testService: ApiTestService, private message: MessageService) {}
   async ngOnInit() {
     const id = this.route.snapshot.queryParams.uuid;
     if (id && id.includes('history_')) {
       const historyData = await this.testService.getHistory(Number(id.replace('history_', '')));
-      console.log('historyData', historyData);
       this.model = historyData;
       // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
     }
-    this.message.get().subscribe(({ type, data }) => {
+    this.message.get().subscribe(async ({ type, data }) => {
       if (type === 'ws-test-history') {
+        const id = this.route.snapshot.queryParams.uuid;
+        if (id && id.includes('history_')) {
+          const historyData = await this.testService.getHistory(Number(id.replace('history_', '')));
+          this.model = historyData;
+          // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
+        }
         this.model = data;
       }
     });
