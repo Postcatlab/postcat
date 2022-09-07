@@ -48,7 +48,12 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
           <!-- Request Headers -->
           <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
             <ng-template #headerTitleTmp>
-              <span i18n="@@RequestHeaders">Headers</span>
+              <span
+                i18n="@@RequestHeaders"
+                nz-tooltip
+                [nzTooltipTitle]="isConnect ? 'Editable only before connection' : ''"
+                >Headers</span
+              >
             </ng-template>
             <fieldset [disabled]="isConnect">
               <eo-api-test-header
@@ -60,7 +65,9 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
           </nz-tab>
           <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
             <ng-template #queryTitleTmp>
-              <span i18n>Query Params</span>
+              <span i18n nz-tooltip [nzTooltipTitle]="isConnect ? 'Editable only before connection' : ''"
+                >Query Params</span
+              >
             </ng-template>
             <fieldset [disabled]="isConnect">
               <eo-api-test-query
