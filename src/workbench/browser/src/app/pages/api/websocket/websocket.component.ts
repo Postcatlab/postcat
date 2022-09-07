@@ -10,7 +10,7 @@ import { MessageService } from '../../../shared/services/message';
     <eo-split-panel [topStyle]="{ height: '350px' }">
       <div top class="h-full overflow-auto">
         <header class="flex p-4">
-          <nz-select class="!w-[106px] flex-none" [(ngModel)]="model.request.protocol">
+          <nz-select class="!w-[106px] flex-none" [disabled]="isConnect" [(ngModel)]="model.request.protocol">
             <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
           </nz-select>
           <input
@@ -18,6 +18,7 @@ import { MessageService } from '../../../shared/services/message';
             i18n-placeholder
             placeholder="Enter URL"
             [(ngModel)]="model.request.uri"
+            [disabled]="isConnect"
             name="uri"
             nz-input
           />
@@ -47,21 +48,25 @@ import { MessageService } from '../../../shared/services/message';
             <ng-template #headerTitleTmp>
               <span i18n="@@RequestHeaders">Headers</span>
             </ng-template>
-            <eo-api-test-header
-              class="eo_theme_iblock bbd"
-              [(model)]="model.request.requestHeaders"
-              (modelChange)="emitChangeFun('requestHeaders')"
-            ></eo-api-test-header>
+            <fieldset [disabled]="isConnect">
+              <eo-api-test-header
+                class="eo_theme_iblock bbd"
+                [(model)]="model.request.requestHeaders"
+                (modelChange)="emitChangeFun('requestHeaders')"
+              ></eo-api-test-header>
+            </fieldset>
           </nz-tab>
           <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
             <ng-template #queryTitleTmp>
               <span i18n>Query Params</span>
             </ng-template>
-            <eo-api-test-query
-              class="eo_theme_iblock bbd"
-              [model]="model.queryParams"
-              (modelChange)="emitChangeFun('queryParams')"
-            ></eo-api-test-query>
+            <fieldset [disabled]="isConnect">
+              <eo-api-test-query
+                class="eo_theme_iblock bbd"
+                [model]="model.queryParams"
+                (modelChange)="emitChangeFun('queryParams')"
+              ></eo-api-test-query>
+            </fieldset>
           </nz-tab>
           <nz-tab [nzTitle]="messageTmp">
             <ng-template #messageTmp>Message</ng-template>
