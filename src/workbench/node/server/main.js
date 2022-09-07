@@ -53,26 +53,22 @@ app.listen(port);
 
 io.on('connection', (socket) => {
   // send a message to the client
-  console.log('====>>   link success');
   socket.emit('ws-client', 'link success');
   let ws = null;
 
   // receive a message from the client
   socket.on('ws-server', ({ type, content }) => {
-    console.log('server-get');
     if (type === 'connect') {
-      console.log('connect success !');
       return;
     }
     if (type === 'ws-disconnect') {
-      console.log('kkii');
       ws = null;
       return;
     }
     if (type === 'ws-connect') {
       const { request } = content;
       // console.log(request?.requestHeaders);
-      ws = new WebSocket(request.uri, {
+      ws = new WebSocket(request.protocol + request.uri, {
         headers: request?.requestHeaders
           ?.filter((it) => it.name && it.value)
           .reduce(
@@ -88,14 +84,14 @@ io.on('connection', (socket) => {
 
       // 打开WebSocket连接后立刻发送一条消息:
       ws.on('open', () => {
-        console.log(`[CLIENT] open()`);
+        // console.log(`[CLIENT] open()`);
       });
       ws.on('upgrade', (res) => {
         const { headers: resHeader } = res;
         socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader, resHeader } });
       });
       ws.on('message', (message) => {
-        console.log('==> message', message);
+        // console.log('==> message', message);
         socket.emit('ws-client', {
           type: 'ws-message-back',
           status: 0,
@@ -108,7 +104,6 @@ io.on('connection', (socket) => {
       if (!message) {
         console.log('发送内容为空');
       }
-      console.log('Send before', message);
       ws.send(message);
     }
   });

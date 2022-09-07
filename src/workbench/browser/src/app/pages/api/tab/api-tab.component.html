@@ -47,12 +47,12 @@
   <button
     (click)="newTab()"
     nz-dropdown
-    [nzDropdownMenu]="menu"
+    [nzDropdownMenu]="addMenu"
     class="ant-tabs-nav-add {{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
   >
     <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
   </button>
-  <nz-dropdown-menu #menu="nzDropdownMenu">
+  <nz-dropdown-menu #addMenu="nzDropdownMenu">
     <ul nz-menu nzSelectable>
       <li nz-menu-item (click)="newTab()">HTTP</li>
       <li nz-menu-item (click)="newTab('ws-test')">Websocket</li>

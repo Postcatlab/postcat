@@ -195,7 +195,7 @@ export class WebsocketComponent implements OnInit {
         requestBody: '',
         method: 'WS',
         protocol: 'ws',
-        uri: 'ws://106.12.149.147:3782',
+        uri: '',
       },
       response: {
         responseHeaders: [],
