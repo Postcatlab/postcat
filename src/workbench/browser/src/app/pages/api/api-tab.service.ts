@@ -157,7 +157,7 @@ export class ApiTabService {
       //Set title/method
       replaceTab.title = model.name;
       replaceTab.extends.method = model.method;
-      if (currentTab.module==='test') {
+      if (currentTab.module === 'test') {
         replaceTab.extends.method = model.request.method;
         //Only Untitle request need set url to tab title
         if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
@@ -181,11 +181,7 @@ export class ApiTabService {
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes
-            if (
-              currentTab.pathname !== '/home/api/http/test' ||
-              !currentTab.params.uuid ||
-              currentTab.params.uuid.includes('history')
-            ) {
+            if (currentTab.module !== 'test' || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
               currentHasChanged = this.componentRef.isFormChange();
             } else {
               currentHasChanged = false;
@@ -222,10 +218,7 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
       //Has tested/exsix api set fixed
-      if (
-        currentTab.pathname === '/home/api/http/test' &&
-        (model.testStartTime !== undefined || currentTab.params.uuid)
-      ) {
+      if (currentTab.module === 'xstest' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
         replaceTab.isFixed = true;
       }
     }
@@ -258,7 +251,7 @@ export class ApiTabService {
   }
   handleDataBeforeCache(tabsByID) {
     Object.values(tabsByID).forEach((val: TabItem) => {
-      if (val.pathname === '/home/api/http/test' && val.content?.test?.testResult) {
+      if (val.module === 'test' && val.content?.test?.testResult) {
         val.content.test.testResult = {
           request: {},
           response: {},
