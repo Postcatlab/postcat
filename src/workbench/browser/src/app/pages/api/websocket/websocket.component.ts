@@ -161,11 +161,13 @@ export class WebsocketComponent implements OnInit {
   };
   constructor(public route: ActivatedRoute, private testService: ApiTestService, private message: MessageService) {}
   async ngOnInit() {
-    const id = this.route.snapshot.queryParams.uuid;
-    if (id && id.includes('history_')) {
-      const historyData = await this.testService.getHistory(Number(id.replace('history_', '')));
-      this.model = historyData;
-      // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
+    {
+      const id = this.route.snapshot.queryParams.uuid;
+      if (id && id.includes('history_')) {
+        const historyData = await this.testService.getHistory(Number(id.replace('history_', '')));
+        this.model = historyData;
+        // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
+      }
     }
     this.message.get().subscribe(async ({ type, data }) => {
       if (type === 'ws-test-history') {
