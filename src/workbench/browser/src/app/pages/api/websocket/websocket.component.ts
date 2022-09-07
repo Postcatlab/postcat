@@ -20,6 +20,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
             placeholder="Enter URL"
             [(ngModel)]="model.request.uri"
             [disabled]="isConnect"
+            class="left-1"
             name="uri"
             nz-input
           />
