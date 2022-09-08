@@ -167,7 +167,7 @@ ${log}
   getInstaller() {
     fetch('https://api.github.com/repos/eolinker/eoapi/releases')
       .then((response) => response.json())
-      .then((data) => {
+      .then((data = []) => {
         [...this.resourceInfo]
           .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
           .forEach((item) => {
@@ -190,11 +190,13 @@ ${log}
       switch (operate) {
         case 'install': {
           this.extensionDetail.installed = this.extensionService.install(id);
+          this.handleEnableExtension(true);
           this.getDetail();
           break;
         }
         case 'uninstall': {
           this.extensionDetail.installed = !this.extensionService.uninstall(id);
+          this.handleEnableExtension(false);
           this.fetchReadme(this.language.systemLanguage);
           break;
         }

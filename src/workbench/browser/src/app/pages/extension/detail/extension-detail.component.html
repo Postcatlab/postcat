@@ -10,8 +10,11 @@
           <nz-avatar nzSize="small" class="!w-[20px] !h-[20px]" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
         </div>
         <span class="font-bold text-[14px]">{{ extensionDetail.moduleName }}</span>
-        <nz-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5" (ngModelChange)="handleEnableExtension($event)">
-        </nz-switch>
+        <ng-container *ngIf="extensionDetail?.installed">
+          <nz-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5"
+            (ngModelChange)="handleEnableExtension($event)">
+          </nz-switch>
+        </ng-container>
       </div>
     </div>
     <!-- <div class="bbd"></div> -->

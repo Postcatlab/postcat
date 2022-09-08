@@ -20,7 +20,12 @@ export const subView = {
   mainView: null,
 };
 const PROTOCOL = 'eoapi';
-app.setAsDefaultProtocolClient(PROTOCOL); // 注册协议
+// app.setAsDefaultProtocolClient(PROTOCOL); // 注册协议
+if (app.isPackaged) {
+  app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, ['--']);
+} else {
+  app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [path.resolve(process.argv[1]), '--']);
+}
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
