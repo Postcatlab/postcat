@@ -21,9 +21,9 @@ const ANTDS = [NzButtonModule, NzInputModule, NzSelectModule, NzTabsModule];
   imports: [
     WebsocketRoutingModule,
     ApiSharedModule,
-    FormsModule,
+    // FormsModule,
     Ng1Module,
-    ReactiveFormsModule,
+    // ReactiveFormsModule,
     CommonModule,
     SharedModule,
     ...ANTDS,

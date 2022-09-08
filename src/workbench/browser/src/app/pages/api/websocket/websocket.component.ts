@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { io } from 'socket.io-client';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { MessageService } from '../../../shared/services/message';
@@ -8,38 +10,56 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 @Component({
   selector: 'websocket-content',
   template: `<div class="h-full">
+    <header class="flex p-4">
+      <div>
+        <nz-select class="!w-[106px]" [disabled]="isConnect" [(ngModel)]="model.request.protocol">
+          <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+        </nz-select>
+      </div>
+      <form nz-form [formGroup]="validateForm" class="flex-1">
+        <nz-form-item nz-col>
+          <nz-form-control
+            [nzValidateStatus]="this.validateForm.controls.uri"
+            i18n-nzErrorTip
+            nzErrorTip="Please enter URL"
+          >
+            <input
+              type="text"
+              i18n-placeholder
+              placeholder="Enter URL"
+              formControlName="uri"
+              [disabled]="isConnect"
+              [(ngModel)]="model.request.uri"
+              class="left-1"
+              name="uri"
+              nz-input
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+      <div class="flex px-1">
+        <button class="mx-1 w-28" *ngIf="isConnect === false" nz-button nzType="primary" (click)="handleConnect(true)">
+          Connect
+        </button>
+        <button class="mx-1 w-28" *ngIf="isConnect === null" nz-button nzType="default" (click)="handleConnect(null)">
+          Connecting
+        </button>
+        <button
+          class="mx-1 w-28"
+          *ngIf="isConnect === true"
+          nz-button
+          nzDanger
+          nzType="default"
+          (click)="handleConnect(false)"
+        >
+          Disconnect
+        </button>
+      </div>
+    </header>
+
     <eo-split-panel [topStyle]="{ height: '300px' }">
       <div top class="h-full overflow-auto">
-        <header class="flex p-4">
-          <nz-select class="!w-[106px] flex-none" [disabled]="isConnect" [(ngModel)]="model.request.protocol">
-            <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
-          </nz-select>
-          <input
-            type="text"
-            i18n-placeholder
-            placeholder="Enter URL"
-            [(ngModel)]="model.request.uri"
-            [disabled]="isConnect"
-            class="left-1"
-            name="uri"
-            nz-input
-          />
-          <div class="flex px-1">
-            <button class="mx-1 w-28" *ngIf="!isConnect" nz-button nzType="primary" (click)="handleConnect(true)">
-              Connect
-            </button>
-            <button
-              class="mx-1 w-28"
-              *ngIf="isConnect"
-              nzDanger
-              nz-button
-              nzType="primary"
-              (click)="handleConnect(false)"
-            >
-              Disconnect
-            </button>
-          </div>
-        </header>
         <nz-tabset
           [nzTabBarStyle]="{ 'padding-left': '10px' }"
           [nzAnimated]="false"
@@ -111,42 +131,70 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
         <!-- body -->
       </div>
       <!-- response -->
-      <nz-tabset
-        bottom
-        [nzTabBarStyle]="{ 'padding-left': '10px' }"
-        [nzAnimated]="false"
-        [(nzSelectedIndex)]="model.responseTabIndex"
-      >
-        <nz-tab [nzTitle]="messageTmp" [nzForceRender]="true">
-          <ng-template #messageTmp>
-            <span i18n>Message</span>
-          </ng-template>
-          <ul class="p-4">
-            <li *ngFor="let item of model.response.responseBody" class="flex bottom-line">
-              <div *ngIf="item.type === 'send'" class="inline-flex items-center text-gray-400 text-xs my-1">
-                <eo-iconpark-icon name="arrow-up" size="12"></eo-iconpark-icon>
-                <div class="px-2 text-gray-500">{{ item.msg }}</div>
+      <section bottom>
+        <div class="flex items-center justify-between p-3">
+          <span class="font-bold">Messages</span>
+          <span class="font-semibold px-2 py-1 status" [ngClass]="'status_' + renderStatus(isConnect)">{{
+            renderStatus(isConnect)
+          }}</span>
+        </div>
+        <ul class="p-2">
+          <li *ngFor="let item of model.response.responseBody; let index = index" class="block w-full">
+            <div (click)="expandMessage(index)" class="flex flex-col top-line w-full text-gray-500">
+              <div
+                *ngIf="item.type === 'send'"
+                class="inline-flex items-center py-3 px-2 truncate hover:bg-gray-100 hover:cursor-pointer"
+              >
+                <span class="h-5 w-5 flex shrink-0 items-cente justify-center rounded send_icon">
+                  <eo-iconpark-icon name="arrow-up" size="10"></eo-iconpark-icon>
+                </span>
+                <div class="px-2">{{ item.msg }}</div>
               </div>
-              <div *ngIf="item.type === 'get'" class="inline-flex items-center text-green-700 text-xs my-1">
-                <eo-iconpark-icon name="arrow-down" size="12"></eo-iconpark-icon>
-                <div class="px-2 text-green-600">{{ item.msg }}</div>
+              <div
+                *ngIf="item.type === 'get'"
+                class="inline-flex items-center py-3 px-2 truncate hover:bg-gray-100 hover:cursor-pointer"
+              >
+                <span class="h-5 w-5 flex shrink-0 items-cente justify-center rounded get_icon">
+                  <eo-iconpark-icon name="arrow-down" size="10"></eo-iconpark-icon>
+                </span>
+                <div class="px-2">{{ item.msg }}</div>
               </div>
-            </li>
-          </ul>
-        </nz-tab>
-        <nz-tab [nzTitle]="resHeaderTmp" [nzForceRender]="true">
-          <ng-template #resHeaderTmp>
-            <span i18n>Response Headers</span>
-          </ng-template>
-          <eo-api-test-result-header [model]="resHeader"></eo-api-test-result-header>
-        </nz-tab>
-        <nz-tab [nzTitle]="reqHeaderTmp" [nzForceRender]="true">
-          <ng-template #reqHeaderTmp>
-            <span i18n>Request Headers</span>
-          </ng-template>
-          <eo-api-test-result-header [model]="reqHeader"></eo-api-test-result-header>
-        </nz-tab>
-      </nz-tabset>
+              <div
+                *ngIf="item.type === 'start'"
+                class="inline-flex items-center py-3 px-2 hover:bg-gray-100 hover:cursor-pointer"
+              >
+                <span class="h-5 w-5 flex items-cente justify-center box-border rounded-full start_icon">
+                  <eo-iconpark-icon name="check-small" size="10"></eo-iconpark-icon>
+                </span>
+                <div class="px-2">{{ item.title }}</div>
+              </div>
+              <div
+                *ngIf="item.type === 'end'"
+                class="inline-flex items-center py-3 px-2 hover:bg-gray-100 hover:cursor-pointer"
+              >
+                <span class="h-4 w-4 flex items-cente justify-center box-border rounded-full end_icon">
+                  <eo-iconpark-icon name="close-small" size="10"></eo-iconpark-icon>
+                </span>
+                <div class="px-2">{{ item.msg }}</div>
+              </div>
+            </div>
+
+            <eo-monaco-editor
+              *ngIf="item.isExpand"
+              [code]="item.msg"
+              [disabled]="true"
+              [config]="{
+                language: 'json',
+                readOnly: true
+              }"
+              [maxLine]="20"
+              [eventList]="['type', 'format', 'copy', 'search']"
+              (codeChange)="rawDataChange($event)"
+            >
+            </eo-monaco-editor>
+          </li>
+        </ul>
+      </section>
     </eo-split-panel>
   </div>`,
   styleUrls: ['./websocket.component.scss'],
@@ -157,8 +205,6 @@ export class WebsocketComponent implements OnInit {
   isConnect = false;
   socket = null;
   msg = '';
-  reqHeader = [];
-  resHeader = [];
   model: any = this.resetModel();
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
@@ -167,7 +213,13 @@ export class WebsocketComponent implements OnInit {
   editorConfig = {
     language: 'json',
   };
-  constructor(public route: ActivatedRoute, private testService: ApiTestService, private message: MessageService) {}
+  validateForm!: FormGroup;
+  constructor(
+    public route: ActivatedRoute,
+    private fb: FormBuilder,
+    private testService: ApiTestService,
+    private message: MessageService
+  ) {}
   async ngOnInit() {
     {
       const id = this.route.snapshot.queryParams.uuid;
@@ -188,6 +240,9 @@ export class WebsocketComponent implements OnInit {
         this.model = data;
       }
     });
+    this.validateForm = this.fb.group({
+      uri: [this.model.request.uri, [Validators.required]],
+    });
     // * 通过 SocketIO 通知后端
     this.socket = io('ws://localhost:3008', { transports: ['websocket'] });
     // receive a message from the server
@@ -196,7 +251,6 @@ export class WebsocketComponent implements OnInit {
   private resetModel() {
     return {
       requestTabIndex: 2,
-      responseTabIndex: 0,
       request: {
         requestHeaders: [],
         requestBodyJsonType: '',
@@ -212,6 +266,27 @@ export class WebsocketComponent implements OnInit {
       },
       queryParams: [],
     };
+  }
+  private checkForm(): boolean {
+    console.log(this.validateForm);
+    for (const i in this.validateForm.controls) {
+      if (this.validateForm.controls.hasOwnProperty(i)) {
+        this.validateForm.controls[i].markAsDirty();
+        this.validateForm.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.validateForm.status === 'INVALID') {
+      return false;
+    }
+    return true;
+  }
+  expandMessage(index) {
+    const status = this.model.response.responseBody[index].isExpand;
+    this.model.response.responseBody[index].isExpand = status == null ? true : !status;
+  }
+  renderStatus(status) {
+    const hash = new Map().set(true, 'Connected').set(false, 'Disconnect').set(null, 'Connecting');
+    return hash.get(status);
   }
   rawDataChange(e) {
     console.log('rawDataChange', e);
@@ -229,11 +304,19 @@ export class WebsocketComponent implements OnInit {
     this.modelChange.emit(this.model);
   }
   async handleConnect(bool = false) {
+    const isOK = this.checkForm();
+    if (!isOK) {
+      return;
+    }
+    if (bool == null) {
+      this.isConnect = null;
+      return;
+    }
     if (this.socket == null) {
       console.log('communication is not ready');
       return;
     }
-    const { responseTabIndex, requestTabIndex, ...data } = this.model;
+    const { requestTabIndex, ...data } = this.model;
     if (!bool) {
       // * save to test history
       const res = await this.testService.addHistory(data, Date.now().toString().slice(-5));
@@ -242,6 +325,11 @@ export class WebsocketComponent implements OnInit {
       }
       this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
       this.socket.off('ws-client');
+      this.model.response.responseBody.unshift({
+        type: 'end',
+        msg: 'Disconnect from ' + this.model.request.uri,
+        isExpand: false,
+      });
       this.isConnect = false;
       return;
     }
@@ -253,6 +341,7 @@ export class WebsocketComponent implements OnInit {
     this.socket.emit('ws-server', { type: 'ws-connect', content: data });
     this.listen();
   }
+
   handleSendMsg() {
     // * 通过 SocketIO 通知后端
     // send a message to the server
@@ -260,7 +349,7 @@ export class WebsocketComponent implements OnInit {
       return;
     }
     this.socket.emit('ws-server', { type: 'ws-message', content: { message: this.msg } });
-    this.model.response.responseBody.push({ type: 'send', msg: this.msg });
+    this.model.response.responseBody.unshift({ type: 'send', msg: this.msg, isExpand: false });
     this.msg = '';
   }
   listen() {
@@ -275,13 +364,22 @@ export class WebsocketComponent implements OnInit {
         this.isConnect = true;
         this.model.requestTabIndex = 2;
         const { reqHeader, resHeader } = content;
-        const json2Array = (data) =>
-          Object.entries(data).reduce((total, [name, value]) => [{ name, value }].concat(total), []);
-        this.reqHeader = json2Array(reqHeader);
-        this.resHeader = json2Array(resHeader);
+        this.model.response.responseBody.unshift({
+          type: 'start',
+          msg: JSON.stringify(
+            {
+              'Request Headers': reqHeader,
+              'Response Headers': resHeader,
+            },
+            null,
+            2
+          ),
+          title: 'Connected to ' + this.model.request.uri,
+          isExpand: false,
+        });
       }
       if (type === 'ws-message-back' && status === 0) {
-        this.model.response.responseBody.push({ type: 'get', msg: content });
+        this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
       }
     });
   }

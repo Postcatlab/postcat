@@ -9,3 +9,40 @@
 .left-1 {
     transform: translateX(-5px);
 }
+
+.status {
+    border-radius: 5px;
+    &.status_Connected {
+        color: #158565;
+        background-color: rgba(21,133,101, .2);
+        box-shadow: 0 0 10px rgba(21,133,101, .2);
+    }
+
+    &.status_Disconnect {
+        color: #640125;
+        background-color: rgba(100,1,37, .1);
+        box-shadow: 0 0 10px rgba(100,1,37, .1);
+    }
+
+    &.status_Connecting {
+        color:  #158565;
+        background-color: rgba(21,133,101, .1);
+        box-shadow: 0 0 10px rgba(21,133,101, .1);
+    }
+}
+
+.send_icon {
+    background-color: rgba(166,154,189, .1);
+}
+.get_icon {
+    background-color: rgba(21,133,101, .1);
+}
+
+.start_icon {
+    color: #158565;
+    border: 1px solid #158565;
+}
+.end_icon {
+    color: #8f2e14;
+    border: 1px solid #8f2e14;
+}

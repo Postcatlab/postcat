@@ -30,6 +30,6 @@ const COMPONENTS = [ApiTestHeaderComponent, ApiTestQueryComponent, ApiTestResult
   ],
   declarations: [...COMPONENTS],
   providers: [ApiTestUtilService, ApiTestService],
-  exports: [...COMPONENTS],
+  exports: [...COMPONENTS, NzFormModule, FormsModule, ReactiveFormsModule],
 })
 export class ApiSharedModule {}
