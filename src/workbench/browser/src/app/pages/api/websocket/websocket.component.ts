@@ -10,7 +10,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 @Component({
   selector: 'websocket-content',
   template: `<div class="h-full">
-    <header class="flex p-4">
+    <header class="flex p-[10px]">
       <div>
         <nz-select class="!w-[106px]" [disabled]="isConnect" [(ngModel)]="model.request.protocol">
           <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
@@ -58,12 +58,13 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
       </div>
     </header>
 
-    <eo-split-panel [topStyle]="{ height: '300px' }">
-      <div top class="h-full overflow-auto">
+    <eo-split-panel [topStyle]="{ height: '300px' }" style="height: calc(100% - 56px)">
+      <div top class="h-full ">
         <nz-tabset
           [nzTabBarStyle]="{ 'padding-left': '10px' }"
           [nzAnimated]="false"
           [(nzSelectedIndex)]="model.requestTabIndex"
+          class="h-full"
         >
           <!-- Request Headers -->
           <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
@@ -131,14 +132,14 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
         <!-- body -->
       </div>
       <!-- response -->
-      <section bottom>
+      <section bottom class="h-full">
         <div class="flex items-center justify-between p-3">
           <span class="font-bold">Messages</span>
           <span class="font-semibold px-2 py-1 status" [ngClass]="'status_' + renderStatus(isConnect)">{{
             renderStatus(isConnect)
           }}</span>
         </div>
-        <ul class="p-2">
+        <ul class="p-2   overflow-auto" style="height: calc(100% - 48px)">
           <li *ngFor="let item of model.response.responseBody; let index = index" class="block w-full">
             <div (click)="expandMessage(index)" class="flex flex-col top-line w-full text-gray-500">
               <div
