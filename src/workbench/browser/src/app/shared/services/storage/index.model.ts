@@ -1,4 +1,4 @@
-import { ApiTestBody, ApiTestBodyType, ApiTestHeaders } from './../api-test/api-test.model';
+import { ApiTestBody, ApiTestBodyType, ApiTestHeaders, ApiTestQuery } from './../api-test/api-test.model';
 import { Observable } from 'rxjs';
 
 /**
@@ -461,8 +461,6 @@ export interface ApiTestData {
 
   /**
    * 请求头数据，数据用json存储
-   *
-   * @type {object}
    */
   requestHeaders?: ApiTestHeaders[];
 
@@ -476,7 +474,6 @@ export interface ApiTestData {
   /**
    * 请求参数(多层结构)，数据用json存储
    *
-   * @type {object}
    */
   requestBody?: ApiTestBody[] | string;
 
@@ -485,7 +482,7 @@ export interface ApiTestData {
    *
    * @type {object[]}
    */
-  queryParams?: object[];
+  queryParams?: ApiTestQuery[];
 
   /**
    * rest请求参数，数据用json存储

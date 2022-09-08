@@ -12,7 +12,7 @@ import { ApiTestUtilService } from '../api-test-util.service';
   styleUrls: ['./api-test-query.component.scss'],
 })
 export class ApiTestQueryComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() model: object[];
+  @Input() model: ApiTestQuery[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
   listConf: object = {};
