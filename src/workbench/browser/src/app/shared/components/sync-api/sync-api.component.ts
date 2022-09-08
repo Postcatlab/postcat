@@ -17,7 +17,7 @@ export class SyncApiComponent implements OnInit {
 
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(key)) {
+      if (this.extensionService.isEnable(data.name)) {
         this.supportList.push({
           key,
           ...data,

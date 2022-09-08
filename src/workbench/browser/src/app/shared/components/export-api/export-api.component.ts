@@ -17,7 +17,7 @@ export class ExportApiComponent implements OnInit {
   constructor(private storage: StorageService, public extensionService: ExtensionService) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(key)) {
+      if (this.extensionService.isEnable(data.name)) {
         this.supportList.push({
           key,
           ...data,
