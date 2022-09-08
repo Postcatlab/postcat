@@ -12,7 +12,7 @@ const cors = require('@koa/cors');
 const IO = require('socket.io');
 const WebSocket = require('ws');
 
-const io = new IO.Server(3008);
+const io = new IO.Server(4301);
 
 const app = new Koa();
 const port = 4201;
@@ -82,6 +82,7 @@ io.on('connection', (socket) => {
         });
       } catch (error) {
         socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: error });
+        ws = null;
         return;
       }
 

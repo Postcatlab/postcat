@@ -2,6 +2,8 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+
 import { io } from 'socket.io-client';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { MessageService } from '../../../shared/services/message';
@@ -21,7 +23,7 @@ interface testViewModel {
   };
   response: {
     requestHeaders: ApiTestHeaders[];
-    // responseHeaders: ApiTestHeaders[];
+    responseHeaders: ApiTestHeaders[];
     responseBody: any;
   };
 }
@@ -69,7 +71,7 @@ export class WebsocketComponent implements OnInit {
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
-    this.socket = io('ws://localhost:3008', { transports: ['websocket'] });
+    this.socket = io(APP_CONFIG.SOCKETIO_URL, { transports: ['websocket'] });
     // receive a message from the server
     this.socket.on('ws-client', (...args) => {});
   }
@@ -83,7 +85,6 @@ export class WebsocketComponent implements OnInit {
     return hash.get(status);
   }
   rawDataChange(e) {
-    console.log(this.model);
     this.modelChange.emit(this.model);
   }
   changeQuery() {
@@ -103,16 +104,12 @@ export class WebsocketComponent implements OnInit {
     if (!isOK) {
       return;
     }
-    if (bool == null) {
-      this.isConnect = null;
-      return;
-    }
     if (this.socket == null) {
       console.log('communication is not ready');
       return;
     }
     const { requestTabIndex, msg, ...data } = this.model;
-    if (!bool) {
+    if (bool === false) {
       // * save to test history
       const res = await this.testService.addHistory(data, 0);
       if (res) {
@@ -128,11 +125,14 @@ export class WebsocketComponent implements OnInit {
       this.isConnect = false;
       return;
     }
+    // * connecting
+    this.isConnect = null;
     const wsUrl = this.model.request.uri;
     if (wsUrl === '') {
       console.log('Websocket URL is empty');
       return;
     }
+    console.log('kkk');
     this.socket.emit('ws-server', { type: 'ws-connect', content: data });
     this.listen();
   }
@@ -174,12 +174,14 @@ export class WebsocketComponent implements OnInit {
             isExpand: false,
           });
         } else {
+          console.log(status);
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: content,
             title: 'Connected to ' + this.model.request.uri + ` is failed`,
             isExpand: false,
           });
+          this.isConnect = false;
         }
       }
       if (type === 'ws-message-back' && status === 0) {
@@ -206,6 +208,7 @@ export class WebsocketComponent implements OnInit {
         queryParams: [],
       },
       response: {
+        requestHeaders:[],
         responseHeaders: [],
         responseBody: [],
       },
