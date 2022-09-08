@@ -1,53 +1,49 @@
 <div class="h-full">
   <header class="p-[10px]">
-  <form nz-form [formGroup]="validateForm" class="flex">
-    <div>
-      <nz-select
-        class="!w-[106px]"
-        [disabled]="isConnect"
-        [(ngModel)]="model.request.protocol"
-        formControlName="protocol"
-      >
-        <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
-      </nz-select>
-    </div>
-    <nz-form-item nz-col class="flex-1">
-      <nz-form-control
-        [nzValidateStatus]="this.validateForm.controls.uri"
-        i18n-nzErrorTip
-        nzErrorTip="Please enter URL"
-      >
-        <input
-          type="text"
-          i18n-placeholder
-          placeholder="Enter URL"
-          formControlName="uri"
+    <form nz-form [formGroup]="validateForm" class="flex">
+      <div>
+        <nz-select
+          class="!w-[106px]"
           [disabled]="isConnect"
-          [(ngModel)]="model.request.uri"
-          class="left-1"
-          name="uri"
-          nz-input
-        />
-      </nz-form-control>
-    </nz-form-item>
-    <div class="flex px-1">
-      <button class="mx-1 w-28" *ngIf="isConnect === false" nz-button nzType="primary" (click)="handleConnect(null)">
-        Connect
-      </button>
-      <button class="mx-1 w-28" *ngIf="isConnect === null" nz-button nzType="default">Connecting</button>
-      <button
-        class="mx-1 w-28"
-        *ngIf="isConnect === true"
-        nz-button
-        nzDanger
-        nzType="default"
-        (click)="handleConnect(false)"
-      >
-        Disconnect
-      </button>
-    </div>
-  </form>
-</header>
+          [(ngModel)]="model.request.protocol"
+          formControlName="protocol"
+        >
+          <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+        </nz-select>
+      </div>
+      <nz-form-item nz-col class="flex-1">
+        <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
+          <input
+            type="text"
+            i18n-placeholder
+            placeholder="Enter URL"
+            formControlName="uri"
+            [disabled]="isConnect"
+            [(ngModel)]="model.request.uri"
+            class="left-1"
+            name="uri"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <div class="flex px-1">
+        <button class="mx-1 w-28" *ngIf="isConnect === false" nz-button nzType="primary" (click)="handleConnect(null)">
+          Connect
+        </button>
+        <button class="mx-1 w-28" *ngIf="isConnect === null" disabled nz-button nzType="default">Connecting</button>
+        <button
+          class="mx-1 w-28"
+          *ngIf="isConnect === true"
+          nz-button
+          nzDanger
+          nzType="default"
+          (click)="handleConnect(false)"
+        >
+          Disconnect
+        </button>
+      </div>
+    </form>
+  </header>
   <eo-split-panel [topStyle]="{ height: '300px' }" style="height: calc(100% - 56px)">
     <div top class="h-full">
       <nz-tabset
