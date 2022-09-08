@@ -172,7 +172,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
                 *ngIf="item.type === 'end'"
                 class="inline-flex items-center py-3 px-2 hover:bg-gray-100 hover:cursor-pointer"
               >
-                <span class="h-4 w-4 flex items-cente justify-center box-border rounded-full end_icon">
+                <span class="h-5 w-5 flex items-cente justify-center box-border rounded-full end_icon">
                   <eo-iconpark-icon name="close-small" size="10"></eo-iconpark-icon>
                 </span>
                 <div class="px-2">{{ item.msg }}</div>
