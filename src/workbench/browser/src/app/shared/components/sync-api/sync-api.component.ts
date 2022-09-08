@@ -3,6 +3,7 @@ import { StorageRes, StorageResStatus } from '../../services/storage/index.model
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 
 @Component({
   selector: 'eo-sync-api',
@@ -12,14 +13,16 @@ export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
   featureMap = window.eo.getFeature('apimanage.sync');
-  constructor(private storage: StorageService) {}
+  constructor(private storage: StorageService, public extensionService: ExtensionService) {}
 
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
-      this.supportList.push({
-        key,
-        ...data,
-      });
+      if (this.extensionService.isEnable(key)) {
+        this.supportList.push({
+          key,
+          ...data,
+        });
+      }
     });
     {
       const { key } = this.supportList.at(0);

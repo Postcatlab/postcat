@@ -16,6 +16,7 @@ export class ExtensionDetailComponent implements OnInit {
   introLoading = false;
   changelogLoading = false;
   isVisible = false;
+  isEnable = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
@@ -61,6 +62,9 @@ export class ExtensionDetailComponent implements OnInit {
       this.route.snapshot.queryParams.id,
       this.route.snapshot.queryParams.name
     );
+
+    this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
+
     if (!this.extensionDetail?.installed) {
       await this.fetchReadme(this.language.systemLanguage);
     }
@@ -97,7 +101,7 @@ export class ExtensionDetailComponent implements OnInit {
 ${log}
 ## [${key}](${value.dist.tarball}) - ${new Date(data.time[key]).toLocaleString()}
           `;
-        }, '# Change Log');
+        }, '');
       } else if (locale) {
         //If locale README not find,fetch default locale(en-US)
         this.fetchChangelog();
@@ -210,5 +214,13 @@ ${log}
   handleOk(): void {
     console.log('Button ok clicked!');
     this.isVisible = false;
+  }
+
+  handleEnableExtension(isEnable) {
+    if (isEnable) {
+      this.extensionService.enableExtension(this.extensionDetail.name);
+    } else {
+      this.extensionService.disableExtension(this.extensionDetail.name);
+    }
   }
 }

@@ -51,7 +51,10 @@ export class ExtensionListComponent implements OnInit {
     try {
       if (this.type === 'installed') {
         const installedList = new ExtensionList(this.extensionService.getInstalledList());
-        return installedList.search(keyword);
+        return installedList.search(keyword).map((n) => {
+          n.isEnable = this.extensionService.isEnable(n.name);
+          return n;
+        });
       }
       const res: any = await this.extensionService.requestList();
       if (this.type === 'official') {
@@ -81,6 +84,15 @@ export class ExtensionListComponent implements OnInit {
       })
       .finally();
   }
+
+  handleEnableExtension(isEnable, item) {
+    if (isEnable) {
+      this.extensionService.enableExtension(item.name);
+    } else {
+      this.extensionService.disableExtension(item.name);
+    }
+  }
+
   private watchSearchConditionChange() {
     this.route.queryParamMap.subscribe(async (params) => {
       this.type = this.route.snapshot.queryParams.type;

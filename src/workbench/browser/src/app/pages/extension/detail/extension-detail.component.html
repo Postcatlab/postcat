@@ -10,7 +10,8 @@
           <nz-avatar nzSize="small" class="!w-[20px] !h-[20px]" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
         </div>
         <span class="font-bold text-[14px]">{{ extensionDetail.moduleName }}</span>
-        <nz-switch nzSize="small" class="ml-2.5"></nz-switch>
+        <nz-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5" (ngModelChange)="handleEnableExtension($event)">
+        </nz-switch>
       </div>
     </div>
     <!-- <div class="bbd"></div> -->
@@ -45,8 +46,9 @@
           <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
           <nz-descriptions-item *ngIf="extensionDetail.repository?.url" i18n-nzTitle nzTitle="Repository">
-            <a [href]="extensionDetail.repository.url.replace('git+', '')" target="_blank">{{
-              extensionDetail.repository.url }}</a>
+            <a [href]="extensionDetail.repository.url.replace('git+', '')" target="_blank">
+              {{ extensionDetail.repository.url.replace('git+', '') }}
+            </a>
           </nz-descriptions-item>
           <nz-descriptions-item *ngIf="extensionDetail.homepage" i18n-nzTitle nzTitle="Homepage">
             <a [href]="extensionDetail.homepage" target="_blank">{{ extensionDetail.homepage }}</a>

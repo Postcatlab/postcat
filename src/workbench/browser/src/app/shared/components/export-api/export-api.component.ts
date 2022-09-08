@@ -4,6 +4,7 @@ import { StorageRes, StorageResStatus } from '../../services/storage/index.model
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 
 @Component({
   selector: 'eo-export-api',
@@ -13,13 +14,15 @@ export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
   supportList: Array<FeatureType> = [];
   featureMap = window.eo.getFeature('apimanage.export');
-  constructor(private storage: StorageService) {}
+  constructor(private storage: StorageService, public extensionService: ExtensionService) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
-      this.supportList.push({
-        key,
-        ...data,
-      });
+      if (this.extensionService.isEnable(key)) {
+        this.supportList.push({
+          key,
+          ...data,
+        });
+      }
     });
     {
       const { key } = this.supportList.at(0);
