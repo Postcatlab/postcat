@@ -116,7 +116,7 @@ interface testViewModel {
           </nz-tab>
           <nz-tab [nzTitle]="messageTmp">
             <ng-template #messageTmp>Message</ng-template>
-            <div>
+            <div style="height: calc(100% - 48px);">
               <eo-monaco-editor
                 [(code)]="msg"
                 [config]="editorConfig"
@@ -247,9 +247,9 @@ export class WebsocketComponent implements OnInit {
       const id = this.route.snapshot.queryParams.uuid;
       if (id && id.includes('history_')) {
         const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
-        this.model =historyData as testViewModel;
+        this.model = historyData as testViewModel;
       }
-      console.log( this.model);
+      console.log(this.model);
     }
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
