@@ -175,7 +175,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
                 <span class="h-5 w-5 flex items-cente justify-center box-border rounded-full end_icon">
                   <eo-iconpark-icon name="close-small" size="10"></eo-iconpark-icon>
                 </span>
-                <div class="px-2">{{ item.msg }}</div>
+                <div class="px-2">{{ item.title || item.msg }}</div>
               </div>
             </div>
 
@@ -360,23 +360,32 @@ export class WebsocketComponent implements OnInit {
       return;
     }
     this.socket.on('ws-client', ({ type, status, content }) => {
-      if (type === 'ws-connect-back' && status === 0) {
-        this.isConnect = true;
-        this.model.requestTabIndex = 2;
-        const { reqHeader, resHeader } = content;
-        this.model.response.responseBody.unshift({
-          type: 'start',
-          msg: JSON.stringify(
-            {
-              'Request Headers': reqHeader,
-              'Response Headers': resHeader,
-            },
-            null,
-            2
-          ),
-          title: 'Connected to ' + this.model.request.uri,
-          isExpand: false,
-        });
+      if (type === 'ws-connect-back') {
+        if (status === 0) {
+          this.isConnect = true;
+          this.model.requestTabIndex = 2;
+          const { reqHeader, resHeader } = content;
+          this.model.response.responseBody.unshift({
+            type: 'start',
+            msg: JSON.stringify(
+              {
+                'Request Headers': reqHeader,
+                'Response Headers': resHeader,
+              },
+              null,
+              2
+            ),
+            title: 'Connected to ' + this.model.request.uri,
+            isExpand: false,
+          });
+        } else {
+          this.model.response.responseBody.unshift({
+            type: 'end',
+            msg: content,
+            title: 'Connected to ' + this.model.request.uri + ` is failed`,
+            isExpand: false,
+          });
+        }
       }
       if (type === 'ws-message-back' && status === 0) {
         this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
