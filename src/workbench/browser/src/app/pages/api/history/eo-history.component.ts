@@ -44,17 +44,7 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(data) {
-    // ! 这里的数据如何传递到 ws.components.ts
-    if (data.request.protocol === 'ws') {
-      this.router.navigate(['home/api/ws/test'], {
-        queryParams: {
-          uuid: `history_${data.uuid}`,
-        },
-      });
-      this.message.send({ type: 'ws-test-history', data });
-      return;
-    }
-    this.router.navigate(['home/api/http/test'], {
+    this.router.navigate([`home/api/${data.request.protocol || 'http'}/test`], {
       queryParams: {
         uuid: `history_${data.uuid}`,
       },

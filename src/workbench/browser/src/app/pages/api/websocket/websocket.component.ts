@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -8,7 +8,23 @@ import { io } from 'socket.io-client';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { MessageService } from '../../../shared/services/message';
 import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
-
+import { Subject, takeUntil } from 'rxjs';
+import { isEmptyObj } from 'eo/workbench/browser/src/app/utils';
+import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+interface testViewModel {
+  requestTabIndex: number;
+  request: {
+    requestHeaders: ApiTestHeaders[];
+    requestBody: string;
+    protocol: string;
+    uri: string;
+    queryParams: ApiTestQuery[];
+  };
+  response: {
+    responseHeaders: ApiTestHeaders[];
+    responseBody: any;
+  };
+}
 @Component({
   selector: 'websocket-content',
   template: `<div class="h-full">
@@ -93,14 +109,14 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
             <fieldset [disabled]="isConnect">
               <eo-api-test-query
                 class="eo_theme_iblock bbd"
-                [model]="model.queryParams"
+                [model]="model.request.queryParams"
                 (modelChange)="emitChangeFun('queryParams')"
               ></eo-api-test-query>
             </fieldset>
           </nz-tab>
           <nz-tab [nzTitle]="messageTmp">
             <ng-template #messageTmp>Message</ng-template>
-            <div>
+            <div style="height: calc(100% - 48px);">
               <eo-monaco-editor
                 [(code)]="msg"
                 [config]="editorConfig"
@@ -146,7 +162,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
                 *ngIf="item.type === 'send'"
                 class="inline-flex items-center py-3 px-2 truncate hover:bg-gray-100 hover:cursor-pointer"
               >
-                <span class="h-5 w-5 flex shrink-0 items-cente justify-center rounded send_icon">
+                <span class="h-4 w-4 flex shrink-0 items-cente justify-center rounded send_icon">
                   <eo-iconpark-icon name="arrow-up" size="10"></eo-iconpark-icon>
                 </span>
                 <div class="px-2">{{ item.msg }}</div>
@@ -155,7 +171,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
                 *ngIf="item.type === 'get'"
                 class="inline-flex items-center py-3 px-2 truncate hover:bg-gray-100 hover:cursor-pointer"
               >
-                <span class="h-5 w-5 flex shrink-0 items-cente justify-center rounded get_icon">
+                <span class="h-4 w-4 flex shrink-0 items-cente justify-center rounded get_icon">
                   <eo-iconpark-icon name="arrow-down" size="10"></eo-iconpark-icon>
                 </span>
                 <div class="px-2">{{ item.msg }}</div>
@@ -164,7 +180,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
                 *ngIf="item.type === 'start'"
                 class="inline-flex items-center py-3 px-2 hover:bg-gray-100 hover:cursor-pointer"
               >
-                <span class="h-5 w-5 flex items-cente justify-center box-border rounded-full start_icon">
+                <span class="h-4 w-4 flex items-cente justify-center box-border rounded-full start_icon">
                   <eo-iconpark-icon name="check-small" size="10"></eo-iconpark-icon>
                 </span>
                 <div class="px-2">{{ item.title }}</div>
@@ -173,7 +189,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
                 *ngIf="item.type === 'end'"
                 class="inline-flex items-center py-3 px-2 hover:bg-gray-100 hover:cursor-pointer"
               >
-                <span class="h-5 w-5 flex items-cente justify-center box-border rounded-full end_icon">
+                <span class="h-4 w-4 flex items-cente justify-center box-border rounded-full end_icon">
                   <eo-iconpark-icon name="close-small" size="10"></eo-iconpark-icon>
                 </span>
                 <div class="px-2">{{ item.title || item.msg }}</div>
@@ -202,11 +218,12 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 })
 export class WebsocketComponent implements OnInit {
   @Input() bodyType = 'json';
-  @Output() modelChange = new EventEmitter<any>();
+  @Output() modelChange = new EventEmitter<testViewModel>();
+  @Output() eoOnInit = new EventEmitter<testViewModel>();
   isConnect = false;
   socket = null;
   msg = '';
-  model: any = this.resetModel();
+  model: testViewModel;
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
@@ -215,72 +232,35 @@ export class WebsocketComponent implements OnInit {
     language: 'json',
   };
   validateForm!: FormGroup;
+  private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public route: ActivatedRoute,
     private fb: FormBuilder,
     private testService: ApiTestService,
     private message: MessageService
-  ) {}
-  async ngOnInit() {
-    {
+  ) {
+    this.initBasicForm();
+  }
+  async init() {
+    if (!this.model || isEmptyObj(this.model)) {
+      this.model = this.resetModel();
       const id = this.route.snapshot.queryParams.uuid;
       if (id && id.includes('history_')) {
-        const historyData = await this.testService.getHistory(Number(id.replace('history_', '')));
-        this.model = historyData;
-        // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
+        const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
+        this.model = historyData as testViewModel;
       }
+      console.log(this.model);
     }
-    this.message.get().subscribe(async ({ type, data }) => {
-      if (type === 'ws-test-history') {
-        const id = this.route.snapshot.queryParams.uuid;
-        if (id && id.includes('history_')) {
-          const historyData = await this.testService.getHistory(Number(id.replace('history_', '')));
-          this.model = historyData;
-          // const history = this.apiTestUtil.getTestDataFromHistory(historyData);
-        }
-        this.model = data;
-      }
-    });
-    this.validateForm = this.fb.group({
-      uri: [this.model.request.uri, [Validators.required]],
-    });
+    this.watchBasicForm();
+    this.eoOnInit.emit(this.model);
+  }
+  async ngOnInit() {
     // * 通过 SocketIO 通知后端
     this.socket = io(APP_CONFIG.SOCKETIO_URL, { transports: ['websocket'] });
     // receive a message from the server
     this.socket.on('ws-client', (...args) => {});
   }
-  private resetModel() {
-    return {
-      requestTabIndex: 2,
-      request: {
-        requestHeaders: [],
-        requestBodyJsonType: '',
-        requestBody: '',
-        method: 'WS',
-        protocol: 'ws',
-        uri: '',
-      },
-      response: {
-        responseHeaders: [],
-        responseBodyType: 'string',
-        responseBody: [],
-      },
-      queryParams: [],
-    };
-  }
-  private checkForm(): boolean {
-    console.log(this.validateForm);
-    for (const i in this.validateForm.controls) {
-      if (this.validateForm.controls.hasOwnProperty(i)) {
-        this.validateForm.controls[i].markAsDirty();
-        this.validateForm.controls[i].updateValueAndValidity();
-      }
-    }
-    if (this.validateForm.status === 'INVALID') {
-      return false;
-    }
-    return true;
-  }
+
   expandMessage(index) {
     const status = this.model.response.responseBody[index].isExpand;
     this.model.response.responseBody[index].isExpand = status == null ? true : !status;
@@ -293,7 +273,7 @@ export class WebsocketComponent implements OnInit {
     console.log('rawDataChange', e);
   }
   changeQuery() {
-    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.queryParams, {
+    this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
@@ -316,7 +296,8 @@ export class WebsocketComponent implements OnInit {
     const { requestTabIndex, ...data } = this.model;
     if (bool === false) {
       // * save to test history
-      const res = await this.testService.addHistory(data, Date.now().toString().slice(-5));
+      console.log(data);
+      const res = await this.testService.addHistory(data, 0);
       if (res) {
         this.message.send({ type: 'updateHistory', data: {} });
       }
@@ -393,5 +374,59 @@ export class WebsocketComponent implements OnInit {
         this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
       }
     });
+  }
+  isFormChange() {
+    return false;
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  private resetModel() {
+    return {
+      requestTabIndex: 2,
+      request: {
+        requestHeaders: [],
+        requestBody: '',
+        protocol: 'ws',
+        uri: '',
+        queryParams: [],
+      },
+      response: {
+        responseHeaders: [],
+        responseBody: [],
+      },
+    };
+  }
+  private checkForm(): boolean {
+    for (const i in this.validateForm.controls) {
+      if (this.validateForm.controls.hasOwnProperty(i)) {
+        this.validateForm.controls[i].markAsDirty();
+        this.validateForm.controls[i].updateValueAndValidity();
+      }
+    }
+    if (this.validateForm.status === 'INVALID') {
+      return false;
+    }
+    return true;
+  }
+  private watchBasicForm() {
+    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((x) => {
+      // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
+      setTimeout(() => {
+        this.modelChange.emit(this.model);
+      }, 0);
+    });
+  }
+  private initBasicForm() {
+    //Prevent init error
+    if (!this.model) {
+      this.model = this.resetModel();
+    }
+    const controls = {};
+    ['uri'].forEach((name) => {
+      controls[name] = [this.model.request[name], [Validators.required]];
+    });
+    this.validateForm = this.fb.group(controls);
   }
 }

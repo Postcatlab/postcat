@@ -35,8 +35,8 @@ export class ApiTabService {
     {
       pathname: '/home/api/ws/test',
       module: 'test',
-      type: 'preview',
       isFixed: true,
+      type: 'edit',
       extends: { method: 'WS' },
       title: $localize`New Websocket`,
     },
@@ -167,10 +167,11 @@ export class ApiTabService {
       if (currentTab.module === 'test') {
         replaceTab.extends.method = model.request.method;
         //Only Untitle request need set url to tab title
+        const originTitle=this.BASIC_TABS.find(val=>val.pathname===currentTab.pathname)?.title;
         if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
-          replaceTab.title = model.request.uri || this.BASIC_TABS[0].title;
+          replaceTab.title = model.request.uri || originTitle;
         } else {
-          replaceTab.title = model.request.name || this.BASIC_TABS[0].title;
+          replaceTab.title = model.request.name || originTitle;
         }
       } else if (!model.uuid) {
         replaceTab.title =
@@ -225,7 +226,7 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
       //Has tested/exsix api set fixed
-      if (currentTab.module === 'xstest' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
+      if (currentTab.module === 'test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
         replaceTab.isFixed = true;
       }
     }
@@ -238,7 +239,6 @@ export class ApiTabService {
    * @param inData.url get component fit tab data
    */
   afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
-    console.log(inData);
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;

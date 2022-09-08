@@ -22,6 +22,11 @@ const routes: Routes = [
         path: 'http',
         children: [
           {
+            path: '',
+            redirectTo: 'test',
+            pathMatch: 'full',
+          },
+          {
             path: 'detail',
             loadChildren: () => import('./http/detail/api-detail.module').then((m) => m.ApiDetailModule),
           },
