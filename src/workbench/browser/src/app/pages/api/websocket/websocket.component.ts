@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -32,7 +32,7 @@ interface testViewModel {
   templateUrl: './websocket.component.html',
   styleUrls: ['./websocket.component.scss'],
 })
-export class WebsocketComponent implements OnInit {
+export class WebsocketComponent implements OnInit, OnDestroy {
   @Input() bodyType = 'json';
   @Output() modelChange = new EventEmitter<testViewModel>();
   @Output() eoOnInit = new EventEmitter<testViewModel>();
@@ -127,12 +127,12 @@ export class WebsocketComponent implements OnInit {
     }
     // * connecting
     this.isConnect = null;
+    this.unListen();
     const wsUrl = this.model.request.uri;
     if (wsUrl === '') {
       console.log('Websocket URL is empty');
       return;
     }
-    console.log('kkk');
     this.socket.emit('ws-server', { type: 'ws-connect', content: data });
     this.listen();
   }
@@ -146,6 +146,9 @@ export class WebsocketComponent implements OnInit {
     this.socket.emit('ws-server', { type: 'ws-message', content: { message: this.model.msg } });
     this.model.response.responseBody.unshift({ type: 'send', msg: this.model.msg, isExpand: false });
     this.model.msg = '';
+  }
+  unListen() {
+    this.socket.off('ws-client');
   }
   listen() {
     // * 无论是否连接成功，都清空发送历史
@@ -174,7 +177,6 @@ export class WebsocketComponent implements OnInit {
             isExpand: false,
           });
         } else {
-          console.log(status);
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: content,
@@ -208,7 +210,7 @@ export class WebsocketComponent implements OnInit {
         queryParams: [],
       },
       response: {
-        requestHeaders:[],
+        requestHeaders: [],
         responseHeaders: [],
         responseBody: [],
       },

@@ -97,12 +97,21 @@ io.on('connection', (socket) => {
         const { headers: resHeader } = res;
         socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader, resHeader } });
       });
+
       ws.on('message', (message) => {
-        // console.log('==> message', message);
+        console.log('==> message', message);
         socket.emit('ws-client', {
           type: 'ws-message-back',
           status: 0,
           content: message,
+        });
+      });
+
+      ws.on('close', () => {
+        socket.emit('ws-client', {
+          type: 'ws-message-back',
+          status: 1,
+          content: 'Server disconnected',
         });
       });
     }
