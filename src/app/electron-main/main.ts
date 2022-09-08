@@ -19,6 +19,13 @@ export const subView = {
   appView: null,
   mainView: null,
 };
+
+// 获取单实例锁
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  // 如果获取失败，说明已经有实例在运行了，直接退出
+  app.quit();
+}
 const PROTOCOL = 'eoapi';
 // app.setAsDefaultProtocolClient(PROTOCOL); // 注册协议
 if (app.isPackaged) {
@@ -26,6 +33,7 @@ if (app.isPackaged) {
 } else {
   app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [path.resolve(process.argv[1]), '--']);
 }
+
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
