@@ -44,7 +44,8 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(data) {
-    this.router.navigate([`home/api/${data.request.protocol || 'http'}/test`], {
+    const protocol=data.protocol==='websocket'?'ws':'http';
+    this.router.navigate([`home/api/${protocol}/test`], {
       queryParams: {
         uuid: `history_${data.uuid}`,
       },

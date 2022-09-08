@@ -165,9 +165,13 @@ export class ApiTabService {
       replaceTab.title = model.name;
       replaceTab.extends.method = model.method;
       if (currentTab.module === 'test') {
-        replaceTab.extends.method = model.request.method;
+        if (currentTab.pathname === '/home/api/ws/test') {
+          replaceTab.extends.method = model.request.protocol.toUpperCase();
+        } else {
+          replaceTab.extends.method = model.request.method;
+        }
         //Only Untitle request need set url to tab title
-        const originTitle=this.BASIC_TABS.find(val=>val.pathname===currentTab.pathname)?.title;
+        const originTitle = this.BASIC_TABS.find((val) => val.pathname === currentTab.pathname)?.title;
         if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
           replaceTab.title = model.request.uri || originTitle;
         } else {
