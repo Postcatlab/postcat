@@ -68,17 +68,23 @@ io.on('connection', (socket) => {
     if (type === 'ws-connect') {
       const { request } = content;
       // console.log(request?.requestHeaders);
-      ws = new WebSocket(request.protocol + request.uri, {
-        headers: request?.requestHeaders
-          ?.filter((it) => it.name && it.value)
-          .reduce(
-            (total, { name, value }) => ({
-              ...total,
-              [name]: value,
-            }),
-            {}
-          ),
-      });
+      try {
+        ws = new WebSocket(request.protocol + request.uri, {
+          headers: request?.requestHeaders
+            ?.filter((it) => it.name && it.value)
+            .reduce(
+              (total, { name, value }) => ({
+                ...total,
+                [name]: value,
+              }),
+              {}
+            ),
+        });
+      } catch (error) {
+        socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: error });
+        return;
+      }
+
       const reqHeader = ws._req.getHeaders();
       // console.log(ws);
 

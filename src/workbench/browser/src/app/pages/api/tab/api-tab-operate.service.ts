@@ -16,6 +16,7 @@ export class ApiTabOperateService {
    * Current selected tab index.
    */
   selectedIndex = 0;
+  beforeLeave = true;
   /**
    * Tab basic info
    */

@@ -3,7 +3,7 @@
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
   [nzHideAdd]="true"
-  (nzSelectChange)="selectChange()"
+  (nzSelectChange)="selectChange($event)"
   [nzTabBarExtraContent]="extraTemplate"
 >
   <nz-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">

@@ -26,7 +26,7 @@ interface testViewModel {
 @Component({
   selector: 'websocket-content',
   template: `<div class="h-full">
-    <header class="flex p-4">
+    <header class="flex p-[10px]">
       <div>
         <nz-select class="!w-[106px]" [disabled]="isConnect" [(ngModel)]="model.request.protocol">
           <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
@@ -74,12 +74,13 @@ interface testViewModel {
       </div>
     </header>
 
-    <eo-split-panel [topStyle]="{ height: '300px' }">
-      <div top class="h-full overflow-auto">
+    <eo-split-panel [topStyle]="{ height: '300px' }" style="height: calc(100% - 56px)">
+      <div top class="h-full ">
         <nz-tabset
           [nzTabBarStyle]="{ 'padding-left': '10px' }"
           [nzAnimated]="false"
           [(nzSelectedIndex)]="model.requestTabIndex"
+          class="h-full"
         >
           <!-- Request Headers -->
           <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
@@ -147,14 +148,14 @@ interface testViewModel {
         <!-- body -->
       </div>
       <!-- response -->
-      <section bottom>
+      <section bottom class="h-full">
         <div class="flex items-center justify-between p-3">
           <span class="font-bold">Messages</span>
           <span class="font-semibold px-2 py-1 status" [ngClass]="'status_' + renderStatus(isConnect)">{{
             renderStatus(isConnect)
           }}</span>
         </div>
-        <ul class="p-2">
+        <ul class="p-2   overflow-auto" style="height: calc(100% - 48px)">
           <li *ngFor="let item of model.response.responseBody; let index = index" class="block w-full">
             <div (click)="expandMessage(index)" class="flex flex-col top-line w-full text-gray-500">
               <div
@@ -191,7 +192,7 @@ interface testViewModel {
                 <span class="h-4 w-4 flex items-cente justify-center box-border rounded-full end_icon">
                   <eo-iconpark-icon name="close-small" size="10"></eo-iconpark-icon>
                 </span>
-                <div class="px-2">{{ item.msg }}</div>
+                <div class="px-2">{{ item.title || item.msg }}</div>
               </div>
             </div>
 
@@ -341,23 +342,32 @@ export class WebsocketComponent implements OnInit {
       return;
     }
     this.socket.on('ws-client', ({ type, status, content }) => {
-      if (type === 'ws-connect-back' && status === 0) {
-        this.isConnect = true;
-        this.model.requestTabIndex = 2;
-        const { reqHeader, resHeader } = content;
-        this.model.response.responseBody.unshift({
-          type: 'start',
-          msg: JSON.stringify(
-            {
-              'Request Headers': reqHeader,
-              'Response Headers': resHeader,
-            },
-            null,
-            2
-          ),
-          title: 'Connected to ' + this.model.request.uri,
-          isExpand: false,
-        });
+      if (type === 'ws-connect-back') {
+        if (status === 0) {
+          this.isConnect = true;
+          this.model.requestTabIndex = 2;
+          const { reqHeader, resHeader } = content;
+          this.model.response.responseBody.unshift({
+            type: 'start',
+            msg: JSON.stringify(
+              {
+                'Request Headers': reqHeader,
+                'Response Headers': resHeader,
+              },
+              null,
+              2
+            ),
+            title: 'Connected to ' + this.model.request.uri,
+            isExpand: false,
+          });
+        } else {
+          this.model.response.responseBody.unshift({
+            type: 'end',
+            msg: content,
+            title: 'Connected to ' + this.model.request.uri + ` is failed`,
+            isExpand: false,
+          });
+        }
       }
       if (type === 'ws-message-back' && status === 0) {
         this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });

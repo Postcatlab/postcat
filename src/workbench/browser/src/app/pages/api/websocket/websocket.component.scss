@@ -1,48 +1,61 @@
+:host {
+  overflow: initial;
+}
+
 .top-line {
-    border-top: 1px solid var(--BORDER);
+  border-top: 1px solid var(--BORDER);
 }
 
 .bottom-line {
-    border-bottom: 1px solid var(--BORDER);
+  border-bottom: 1px solid var(--BORDER);
 }
 
 .left-1 {
-    transform: translateX(-5px);
+  transform: translateX(-5px);
 }
 
 .status {
-    border-radius: 5px;
-    &.status_Connected {
-        color: #158565;
-        background-color: rgba(21,133,101, .2);
-        box-shadow: 0 0 10px rgba(21,133,101, .2);
-    }
+  border-radius: 5px;
+  &.status_Connected {
+    color: #158565;
+    background-color: rgba(21, 133, 101, 0.2);
+    box-shadow: 0 0 10px rgba(21, 133, 101, 0.2);
+  }
 
-    &.status_Disconnect {
-        color: #640125;
-        background-color: rgba(100,1,37, .1);
-        box-shadow: 0 0 10px rgba(100,1,37, .1);
-    }
+  &.status_Disconnect {
+    color: #640125;
+    background-color: rgba(100, 1, 37, 0.1);
+    box-shadow: 0 0 10px rgba(100, 1, 37, 0.1);
+  }
 
-    &.status_Connecting {
-        color:  #158565;
-        background-color: rgba(21,133,101, .1);
-        box-shadow: 0 0 10px rgba(21,133,101, .1);
-    }
+  &.status_Connecting {
+    color: #158565;
+    background-color: rgba(21, 133, 101, 0.1);
+    box-shadow: 0 0 10px rgba(21, 133, 101, 0.1);
+  }
 }
 
 .send_icon {
-    background-color: rgba(166,154,189, .1);
+  background-color: rgba(166, 154, 189, 0.1);
 }
 .get_icon {
-    background-color: rgba(21,133,101, .1);
+  background-color: rgba(21, 133, 101, 0.1);
 }
 
 .start_icon {
-    color: #158565;
-    border: 1px solid #158565;
+  color: #158565;
+  border: 1px solid #158565;
 }
 .end_icon {
-    color: #8f2e14;
-    border: 1px solid #8f2e14;
+  color: #8f2e14;
+  border: 1px solid #8f2e14;
+}
+
+::ng-deep {
+  .ant-form-item {
+    margin-bottom: 0;
+  }
+  .ant-tabs-content-holder {
+    overflow: auto;
+  }
 }
