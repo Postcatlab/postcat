@@ -68,6 +68,11 @@ io.on('connection', (socket) => {
     if (type === 'ws-connect') {
       const { request } = content;
       // console.log(request?.requestHeaders);
+      // try {
+      //   new WebSocket(request.uri);
+      // } catch (error) {
+      //   console.log('try to get the error', error);
+      // }
       try {
         ws = new WebSocket(request.protocol + request.uri, {
           headers: request?.requestHeaders
@@ -99,7 +104,6 @@ io.on('connection', (socket) => {
       });
 
       ws.on('message', (message) => {
-        console.log('==> message', message);
         socket.emit('ws-client', {
           type: 'ws-message-back',
           status: 0,

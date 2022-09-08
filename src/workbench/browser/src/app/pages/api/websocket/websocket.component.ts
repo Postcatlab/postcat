@@ -108,20 +108,20 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       console.log('communication is not ready');
       return;
     }
-    const { requestTabIndex, msg, ...data } = this.model;
     if (bool === false) {
       // * save to test history
+      this.model.response.responseBody.unshift({
+        type: 'end',
+        msg: 'Disconnect from ' + this.model.request.uri,
+        isExpand: false,
+      });
+      const { requestTabIndex, msg, ...data } = this.model;
       const res = await this.testService.addHistory(data, 0);
       if (res) {
         this.message.send({ type: 'updateHistory', data: {} });
       }
       this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
       this.socket.off('ws-client');
-      this.model.response.responseBody.unshift({
-        type: 'end',
-        msg: 'Disconnect from ' + this.model.request.uri,
-        isExpand: false,
-      });
       this.isConnect = false;
       return;
     }
@@ -133,7 +133,10 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       console.log('Websocket URL is empty');
       return;
     }
-    this.socket.emit('ws-server', { type: 'ws-connect', content: data });
+    {
+      const { requestTabIndex, msg, ...data } = this.model;
+      this.socket.emit('ws-server', { type: 'ws-connect', content: data });
+    }
     this.listen();
   }
 
