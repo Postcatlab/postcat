@@ -13,7 +13,7 @@
               <div class="flex flex-col flex-auto">
                 <span class="text-lg font-bold">{{ it.moduleName }}</span>
                 <span class="my-2 text-gray-400">{{ it.author }}</span>
-                <span nz-typography nzEllipsis nzType="secondary" [nzContent]="it.description" class="my-1"></span>
+                <span class="my-1 desc">{{it.description}}</span>
 
               </div>
               <div class="btn-group" *ngIf="type === 'installed'">

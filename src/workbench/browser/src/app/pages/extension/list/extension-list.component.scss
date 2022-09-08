@@ -3,8 +3,7 @@
   display: -webkit-box;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  height: 2rem;
+  -webkit-line-clamp: 1;
 }
 
 .plugin-block {
@@ -15,7 +14,7 @@
 .list-block {
   height: calc(100% - 65px);
   overflow: auto;
-  >div{
+  > div {
     border-radius: 3px;
   }
 }
