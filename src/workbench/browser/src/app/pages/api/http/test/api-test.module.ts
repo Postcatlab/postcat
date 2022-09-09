@@ -75,6 +75,7 @@ const COMPONENTS = [
 ];
 @NgModule({
   declarations: [...COMPONENTS, ByteToStringPipe],
+  exports: [...COMPONENTS],
   imports: [
     RouterModule.forChild([
       {

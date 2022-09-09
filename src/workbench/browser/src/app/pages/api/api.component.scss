@@ -32,8 +32,6 @@ nz-divider {
   color: #00785a;
 }
 
-
-
 .icon {
   -webkit-app-region: no-drag;
   width: 30px;
@@ -65,29 +63,28 @@ nz-divider {
       .sider-resize-line {
         @apply absolute w-[1px] bg-[#f8f8f9] flex items-center justify-center flex-col right-0 top-0 bottom-0;
         cursor: col-resize;
-        &:hover, &.is-drag {
-            width: 6px;
-            right: -3px;
-            background: #68be8d;
-            border-color: #68be8d;
-            z-index: 20;
-            i {
-               opacity: 1;
-            }
+        &:hover,
+        &.is-drag {
+          width: 6px;
+          right: -3px;
+          background: #68be8d;
+          border-color: #68be8d;
+          z-index: 20;
+          i {
+            opacity: 1;
+          }
         }
         > i {
-            opacity: 0;
-            margin: 1px 0;
-            height: 2px;
-            width: 2px;
-            border-radius: 2px;
-            background: rgba(23,35,61,.25);
+          opacity: 0;
+          margin: 1px 0;
+          height: 2px;
+          width: 2px;
+          border-radius: 2px;
+          background: rgba(23, 35, 61, 0.25);
         }
       }
     }
-    .ant-tabs-nav.ng-star-inserted {
-      padding: 0 10px;
-    }
+
     .api-container-tabs {
       .ant-tabs-nav {
         height: 40px;
@@ -124,7 +121,8 @@ nz-divider {
         }
       }
     }
-    .ant-tabs-nav,.ant-tabs-extra-content {
+    .ant-tabs-nav,
+    .ant-tabs-extra-content {
       height: 35px;
     }
 
@@ -183,23 +181,28 @@ nz-divider {
   }
 
   .api-container-tabs {
-    ::ng-deep .ant-tabs-tab {
-      padding: 0.2em 0;
-      padding: 0;
-      margin: 0;
-      .ant-tabs-tab-btn {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .tab-content {
+    ::ng-deep {
+      .ant-tabs-tab {
+        padding: 0.2em 0;
+        padding: 0;
+        margin: 0;
+        .ant-tabs-tab-btn {
           width: 100%;
           height: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
+          .tab-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
         }
+      }
+      > .ant-tabs {
+        padding: 0 10px;
       }
     }
   }
