@@ -71,7 +71,6 @@ export class MockServer {
       if (req.query.mockID || isMatchType !== false) {
         this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
         ipcMain.once('getMockApiList', (event, message) => {
-          console.log('getMockApiList message', message);
           const { response = {}, statusCode = 200 } = message;
           res.statusCode = statusCode;
           if (res.statusCode === 404) {

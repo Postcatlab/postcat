@@ -2,8 +2,6 @@ import { COMMON_CONFIG } from 'eo/workbench/browser/src/environments/common';
 export const APP_CONFIG = Object.assign(
   {
     production: false,
-    environment: 'DEV',
-    SOCKETIO_URL: 'ws://localhost:4301',
-  },
+    environment: 'DEV'  },
   COMMON_CONFIG
 );

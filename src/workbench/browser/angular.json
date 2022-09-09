@@ -61,6 +61,7 @@
               "outputHashing": "none",
               "sourceMap": true,
               "namedChunks": false,
+              "localize": false,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": false,
@@ -68,20 +69,7 @@
                 { "replace": "src/environments/environment.ts", "with": "src/environments/environment.dev.ts" }
               ]
             },
-            "web": {
-              "optimization": false,
-              "outputHashing": "none",
-              "sourceMap": true,
-              "namedChunks": false,
-              "localize": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false,
-              "fileReplacements": [
-                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.web.ts" }
-              ]
-            },
-            "webCn": {
+            "devCn": {
               "optimization": false,
               "outputHashing": "none",
               "sourceMap": true,
@@ -91,7 +79,7 @@
               "vendorChunk": false,
               "buildOptimizer": false,
               "fileReplacements": [
-                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.web.ts" }
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.dev.ts" }
               ]
             },
             "production": {
@@ -113,8 +101,7 @@
           "options": { "browserTarget": "eoapi:build" },
           "configurations": {
             "dev": { "browserTarget": "eoapi:build:dev" },
-            "web": { "browserTarget": "eoapi:build:web" },
-            "webCn": { "browserTarget": "eoapi:build:webCn" },
+            "devCn": { "browserTarget": "eoapi:build:devCn" },
             "production": { "browserTarget": "eoapi:build:production" }
           }
         },
