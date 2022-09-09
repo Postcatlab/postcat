@@ -221,13 +221,20 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           this.switchEditStatus();
         }
       }
-      if (type === 'ws-message-back' && status === 0) {
-        const { type: msgType } = this.model.response.responseBody.at();
-        if (msgType === 'end') {
-          // * If the last message is disconnect type, then do not push new message to list
-          return;
+      if (type === 'ws-message-back') {
+        if (status === 0) {
+          const { type: msgType } = this.model.response.responseBody.at();
+          if (msgType === 'end') {
+            // * If the last message is disconnect type, then do not push new message to list
+            return;
+          }
+          this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
+        } else {
+          this.model.response.responseBody.unshift({ type: 'end', msg: 'Disconnect by Server', isExpand: false });
+          this.wsStatus = 'disconnect';
+          this.switchEditStatus();
+          this.unListen();
         }
-        this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
       }
     });
   }
