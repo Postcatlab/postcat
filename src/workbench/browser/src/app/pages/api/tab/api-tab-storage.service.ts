@@ -56,7 +56,7 @@ export class ApiTabStorageService {
     // if (this.dataSource.dataSourceType === 'http') {return;}
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach((val) => {
-      if (val.type==='preview') {
+      if (val.type === 'preview') {
         ['baseContent', 'content'].forEach((keyName) => {
           val[keyName] = null;
         });
@@ -65,7 +65,6 @@ export class ApiTabStorageService {
     if (opts.handleDataBeforeCache) {
       tabsByID = opts.handleDataBeforeCache(tabsByID);
     }
-    console.log(this.cacheName);
     window.localStorage.setItem(
       this.cacheName,
       JSON.stringify({
@@ -75,10 +74,24 @@ export class ApiTabStorageService {
       })
     );
   }
+  parseChangeRouter(cache: storageTab) {
+    const map = {
+      '/home/api/edit': '/home/api/http/edit',
+      '/home/api/test': '/home/api/http/test',
+      '/home/api/detail': '/home/api/http/detail',
+      '/home/api/mock': '/home/api/http/mock',
+    };
+    cache.tabOrder.forEach((id) => {
+      const tabItem = cache.tabsByID[id];
+      tabItem.pathname = map[tabItem.pathname] || tabItem.pathname;
+    });
+    return cache;
+  }
   getPersistenceStorage(): storageTab {
     let result: any = null;
     try {
       result = JSON.parse(window.localStorage.getItem(this.cacheName) as string);
+      result = this.parseChangeRouter(result);
     } catch (e) {}
     return result;
   }

@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { MessageService } from '../../../shared/services/message';
 import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Subject, takeUntil } from 'rxjs';
 import { ModalService } from '../../../shared/services/modal.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils';
@@ -54,6 +55,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   constructor(
     public route: ActivatedRoute,
     private fb: FormBuilder,
+    private electron: ElectronService,
     private testService: ApiTestService,
     private modal: ModalService,
     private message: MessageService
@@ -75,7 +77,12 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
-    this.socket = io(APP_CONFIG.SOCKETIO_URL, { transports: ['websocket'] });
+    this.socket = io(
+      `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : 'ws://localhost'}:${
+        APP_CONFIG.SOCKET_PORT
+      }`,
+      { transports: ['websocket'] }
+    );
     this.socket.on('connect_error', (error) => {
       // * conncet socketIO is failed
       console.log('error', error);
@@ -229,7 +236,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           }
           this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
         } else {
-          this.model.response.responseBody.unshift({ type: 'end', msg: `Disconnect by ${this.getLink()}` , isExpand: false });
+          this.model.response.responseBody.unshift({
+            type: 'end',
+            msg: `Disconnect by ${this.getLink()}`,
+            isExpand: false,
+          });
           this.wsStatus = 'disconnect';
           this.switchEditStatus();
           this.unListen();

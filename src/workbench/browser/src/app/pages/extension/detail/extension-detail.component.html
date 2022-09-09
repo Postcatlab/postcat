@@ -24,7 +24,7 @@
     <div>
       <button nz-button [nzSize]="extensionDetail?.installed ? 'small' :'default'"
         [nzType]="extensionDetail?.installed ? 'default': 'primary'" class="mt-[8px]" [nzLoading]="isOperating"
-        (click)="handleInstall()">
+        (click)="handleInstall()" i18n>
         {{extensionDetail?.installed ? 'Uninstall' : 'Install'}}
       </button>
     </div>
@@ -33,11 +33,11 @@
       [class]="{settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration}"
       (nzSelectChange)="handleTabChange($event)">
       <!-- Setting -->
-      <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" nzTitle="Settings">
+      <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle nzTitle="Settings">
         <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"></eo-extension-setting>
       </nz-tab>
       <!-- Details -->
-      <nz-tab nzTitle="Details">
+      <nz-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
         <div class="h-full overflow-auto">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
             <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
@@ -45,7 +45,7 @@
           </nz-skeleton>
         </div>
       </nz-tab>
-      <nz-tab nzTitle="Support">
+      <nz-tab i18n-nzTitle nzTitle="Support">
         <nz-descriptions [nzColumn]="1" nzTitle="">
           <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
@@ -62,7 +62,7 @@
           </nz-descriptions-item>
         </nz-descriptions>
       </nz-tab>
-      <nz-tab nzTitle="ChangeLog">
+      <nz-tab i18n-nzTitle nzTitle="ChangeLog">
         <!-- <h1>Change Log</h1>
         <p>All notable changes to this project will be documented in this file.</p>
         <h2>[12.0.1] - 2022-03-03</h2> -->
@@ -76,10 +76,10 @@
   </section>
 </div>
 
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Eoapi is required to install this extension." [nzOkText]="null"
+<nz-modal [(nzVisible)]="isVisible" i18n-nzTitle nzTitle="Eoapi Client is required to install this extension." [nzOkText]="null"
   (nzOnCancel)="handleOk()">
   <ng-container *nzModalContent>
-    Don't have Eoapi?
+    <span i18n>Don't have Eoapi Client?</span>
     <a nz-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n>
       Download
     </a>.
