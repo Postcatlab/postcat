@@ -1,10 +1,26 @@
+:host {
+  overflow: initial;
+}
+.ant-divider-vertical {
+  margin: 0 16px;
+}
 ::ng-deep {
   eo-extension-detail {
+    .settings .ant-tabs-content-holder {
+      padding-top: 0;
+    }
     .ant-tabs-content-holder {
-      padding-top: 20px;
+      padding-top: 15px;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      overflow: auto;
     }
     .ant-skeleton-element .ant-skeleton-button {
       width: 100%;
+    }
+    .ant-tabs-tab {
+      color: #333;
+      padding: 10px 0;
     }
   }
   .md-preview {
@@ -13,10 +29,6 @@
     }
   }
   .extension-detail {
-    .markdown-desc {
-      overflow: auto;
-    }
-
     .ant-descriptions-row > td {
       padding-bottom: 8px;
     }
@@ -25,4 +37,8 @@
       color: #999;
     }
   }
+}
+
+a {
+  color: var(--BLUE_NORMAL);
 }

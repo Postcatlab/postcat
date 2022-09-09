@@ -6,9 +6,11 @@ export enum ExtensionGroupType {
   installed = 'installed',
 }
 
-export interface EoExtensionInfo extends ModuleInfo{
-  installed?:boolean;
-  bugs:{
-    url:string
+export interface EoExtensionInfo extends ModuleInfo {
+  installed?: boolean;
+  changeLog?: string;
+  bugs: {
+    url: string;
   };
+  [key: string]: any;
 }

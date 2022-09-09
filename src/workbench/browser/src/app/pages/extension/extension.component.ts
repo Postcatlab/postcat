@@ -22,6 +22,11 @@ export class ExtensionComponent implements OnInit {
       title: $localize`Official`,
       isLeaf: true,
     },
+    {
+      key: 'installed',
+      title: $localize`Installed`,
+      isLeaf: true,
+    }
   ];
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {

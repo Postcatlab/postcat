@@ -36,6 +36,7 @@ export interface ModuleInfo {
   // extension name
   moduleName: string;
   // extension type
+  //!TODO what usage
   moduleType: ModuleType;
   // extension logo
   logo: string;
@@ -48,19 +49,17 @@ export interface ModuleInfo {
   // inject script before start app
   preload?: string;
   // 判断是不是顶层App
+  //!TODO use feature contribution to control page
   isApp?: boolean;
-  // web运行支持
-  web?: boolean;
+
   // 模块对应上层模块ID
+  //!TODO what usage?
   belongs?: Array<string>;
   // 下层关联模块ID集合
+  //!TODO what usage?
   sideItems?: Array<string>;
-  // 下层功能模块ID集合, 待移除
-  featureItems?: Array<string>;
   // 模块路径
   baseDir?: string;
-  // 边栏显示
-  sidePosition?: SidePosition;
   // 配置项
   configuration?: ModuleConfiguration;
   /** 贡献点 */
