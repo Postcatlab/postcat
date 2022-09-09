@@ -33,12 +33,12 @@
       [class]="{settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration}"
       (nzSelectChange)="handleTabChange($event)">
       <!-- Setting -->
-      <nz-tab *ngIf="extensionDetail?.features?.configuration" nzTitle="Settings">
+      <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" nzTitle="Settings">
         <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"></eo-extension-setting>
       </nz-tab>
       <!-- Details -->
       <nz-tab nzTitle="Details">
-        <div class="w-4/5 h-full m-auto overflow-auto">
+        <div class="h-full overflow-auto">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
             <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
             </eo-shadow-dom>
