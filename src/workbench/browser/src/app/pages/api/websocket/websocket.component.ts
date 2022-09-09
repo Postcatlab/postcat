@@ -93,7 +93,10 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.model.response.responseBody[index].isExpand = status == null ? true : !status;
   }
   renderStatus(status) {
-    const hash = new Map().set(true, 'Connected').set(false, 'Disconnect').set(null, 'Connecting');
+    const hash = new Map()
+      .set('connected', 'Connected')
+      .set('disconnect', 'Disconnect')
+      .set('connecting', 'Connecting');
     return hash.get(status);
   }
   rawDataChange(e) {
