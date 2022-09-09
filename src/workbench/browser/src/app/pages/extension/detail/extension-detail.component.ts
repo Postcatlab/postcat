@@ -99,7 +99,7 @@ export class ExtensionDetailComponent implements OnInit {
         this.changeLog = Object.entries<any>(data.versions).reduceRight((log, [key, value]) => {
           return `
 ${log}
-## [${key}](${value.dist.tarball}) - ${new Date(data.time[key]).toLocaleString()}
+* [${key}](${value.dist.tarball}) - ${new Date(data.time[key]).toLocaleString()}
           `;
         }, '');
       } else if (locale) {

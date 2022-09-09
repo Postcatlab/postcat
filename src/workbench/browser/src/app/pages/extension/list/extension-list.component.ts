@@ -72,7 +72,6 @@ export class ExtensionListComponent implements OnInit {
     this.seachChanged$.next(keyword);
   }
   clickExtension(event, item) {
-    console.log('event?.target?.dataset', event?.target);
     this.router
       .navigate(['home/extension/detail'], {
         queryParams: {
