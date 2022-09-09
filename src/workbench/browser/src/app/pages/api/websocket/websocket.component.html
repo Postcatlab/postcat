@@ -18,7 +18,6 @@
             i18n-placeholder
             placeholder="Enter URL"
             formControlName="uri"
-            [disabled]="['connecting', 'connected'].includes(wsStatus)"
             [(ngModel)]="model.request.uri"
             class="left-1"
             name="uri"
