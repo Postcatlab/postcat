@@ -85,6 +85,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     );
     this.socket.on('connect_error', (error) => {
       // * conncet socketIO is failed
+      console.log('connect_error', error);
+      this.isSocketConnect = false;
+    });
+    this.socket.on('error', (error) => {
+      // * conncet socketIO is failed
       console.log('error', error);
       this.isSocketConnect = false;
     });
