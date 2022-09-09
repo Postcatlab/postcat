@@ -62,13 +62,12 @@
               >Headers</span
             >
           </ng-template>
-          <fieldset [disabled]="isConnect">
-            <eo-api-test-header
-              class="eo_theme_iblock bbd"
-              [(model)]="model.request.requestHeaders"
-              (modelChange)="emitChangeFun('requestHeaders')"
-            ></eo-api-test-header>
-          </fieldset>
+          <eo-api-test-header
+            [disabled]="isConnect"
+            class="eo_theme_iblock bbd"
+            [(model)]="model.request.requestHeaders"
+            (modelChange)="emitChangeFun('requestHeaders')"
+          ></eo-api-test-header>
         </nz-tab>
         <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
@@ -76,13 +75,12 @@
               >Query Params</span
             >
           </ng-template>
-          <fieldset [disabled]="isConnect">
-            <eo-api-test-query
-              class="eo_theme_iblock bbd"
-              [model]="model.request.queryParams"
-              (modelChange)="emitChangeFun('queryParams')"
-            ></eo-api-test-query>
-          </fieldset>
+          <eo-api-test-query
+            class="eo_theme_iblock bbd"
+            [disabled]="isConnect"
+            [model]="model.request.queryParams"
+            (modelChange)="emitChangeFun('queryParams')"
+          ></eo-api-test-query>
         </nz-tab>
         <nz-tab [nzTitle]="messageTmp">
           <ng-template #messageTmp>Message</ng-template>

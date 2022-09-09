@@ -3,6 +3,7 @@
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
   [nzHideAdd]="true"
+  [nzCanDeactivate]=" canDeactivate"
   (nzSelectChange)="selectChange($event)"
   [nzTabBarExtraContent]="extraTemplate"
 >

@@ -6,6 +6,7 @@ import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { ModalService } from '../../../shared/services/modal.service';
 import { KeyValue } from '@angular/common';
+import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -14,6 +15,7 @@ import { KeyValue } from '@angular/common';
 export class ApiTabComponent implements OnInit, OnDestroy {
   @Input() list: Partial<TabItem>[];
   @Input() handleDataBeforeCache;
+  @Input() checkTabCanLeave;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
@@ -29,7 +31,10 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.watchRouterChange();
     this.watchPageLeave();
   }
-  newTab(key = undefined) {
+  async newTab(key = undefined) {
+    if (this.checkTabCanLeave && !(await this.checkTabCanLeave())) {
+      return false;
+    }
     if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
       return;
     }
@@ -40,14 +45,22 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     const rightIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _right.key);
     return leftIndex - rightIndex;
   }
+  canDeactivate: NzTabsCanDeactivateFn = async (fromIndex: number, toIndex: number) => {
+    if (this.checkTabCanLeave && !(await this.checkTabCanLeave())) {
+      return false;
+    }
+    return true;
+  };
   /**
    * Select tab
    */
-  async selectChange(data) {
-    console.log(data.tab);
+  selectChange($event) {
     this.tabOperate.navigateTabRoute(this.getCurrentTab());
   }
-  closeTab({ $event, index, tab }: { $event: Event; index: number; tab: any }) {
+  async closeTab({ $event, index, tab }: { $event: Event; index: number; tab: any }) {
+    if (this.checkTabCanLeave && !(await this.checkTabCanLeave())) {
+      return;
+    }
     $event.stopPropagation();
     if (!tab.hasChanged) {
       this.tabOperate.closeTab(index);
@@ -178,7 +191,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function (e) {
+    window.addEventListener('beforeunload', function(e) {
       that.cacheData();
     });
   }

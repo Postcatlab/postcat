@@ -11,6 +11,9 @@ import { MessageService } from '../../../shared/services/message';
   styleUrls: ['./eo-history.component.scss'],
 })
 export class HistoryComponent implements OnInit {
+  TEXT_BY_PROTOCOL={
+    websocket:'WS'
+  };
   historyList = [];
   colorHash = new Map().set('get', 'green').set('post', 'blue').set('delete', 'red').set('put', 'pink');
   constructor(private storage: StorageService, private router: Router, private message: MessageService) {}

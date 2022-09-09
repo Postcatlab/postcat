@@ -10,6 +10,7 @@ import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-tra
   styleUrls: ['./params-import.component.scss'],
 })
 export class ParamsImportComponent {
+  @Input() disabled: boolean;
   @Input() rootType: 'array' | string | 'object' = 'object';
   @Input() contentType = 'json';
   @Input() baseData: object[] = [];
