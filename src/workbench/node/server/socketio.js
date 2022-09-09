@@ -1,5 +1,8 @@
 const IO = require('socket.io');
 const WebSocket = require('ws');
+process.on('uncaughtException', err => {
+  console.error('uncaughtException', err)
+})
 
 const socket = (port = 4301) => {
   const io = new IO.Server(port);
@@ -7,7 +10,6 @@ const socket = (port = 4301) => {
     // send a message to the client
     socket.emit('ws-client', 'link success');
     let ws = null;
-
     // receive a message from the client
     socket.on('ws-server', ({ type, content }) => {
       if (type === 'connect') {
@@ -44,7 +46,6 @@ const socket = (port = 4301) => {
         }
 
         const reqHeader = ws._req.getHeaders();
-        // console.log(ws);
 
         // 打开WebSocket连接后立刻发送一条消息:
         ws.on('open', () => {
@@ -59,7 +60,7 @@ const socket = (port = 4301) => {
           socket.emit('ws-client', {
             type: 'ws-message-back',
             status: 0,
-            content: message instanceof ArrayBuffer ? new TextDecoder().decode(message) : message,
+            content:message?.toString()
           });
         });
 
