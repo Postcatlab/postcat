@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
@@ -12,7 +12,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { ModalService } from '../../../shared/services/modal.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils';
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
-import { ConsoleSqlOutline } from '@ant-design/icons-angular/icons';
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -76,11 +75,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
-    const link = APP_CONFIG.SOCKETIO_URL;
-    // const link = 'ws://localhost:4301';
-
-    console.log('link', link);
-    this.socket = io(link, { transports: ['websocket'] });
+    this.socket = io(APP_CONFIG.SOCKETIO_URL, { transports: ['websocket'] });
     this.socket.on('connect_error', (error) => {
       // * conncet socketIO is failed
       console.log('error', error);
@@ -154,6 +149,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
       this.socket.off('ws-client');
       this.wsStatus = 'disconnect';
+      this.switchEditStatus();
       return;
     }
     // * connecting
@@ -187,6 +183,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   listen() {
     // * 无论是否连接成功，都清空发送历史
     this.model.response.responseBody = [];
+    this.switchEditStatus();
     if (this.socket == null) {
       console.log('communication is no ready');
       return;
@@ -221,6 +218,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             isExpand: false,
           });
           this.wsStatus = 'disconnect';
+          this.switchEditStatus();
         }
       }
       if (type === 'ws-message-back' && status === 0) {
@@ -229,6 +227,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           // * If the last message is disconnect type, then do not push new message to list
           return;
         }
+        console.log('content', content);
         this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
       }
     });
@@ -319,5 +318,16 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       controls[name] = [this.model.request[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
+  }
+  private switchEditStatus() {
+    const bool = this.wsStatus !== 'disconnect';
+    ['uri', 'protocol'].forEach((name) => {
+      if (bool) {
+        // wsStatus !== 'disconnect'
+        this.validateForm.controls[name].disable();
+      } else {
+        this.validateForm.controls[name].enable();
+      }
+    });
   }
 }
