@@ -62,9 +62,9 @@ export class ApiDetailUtilService {
         draggable: true,
         trClass: 'va_tr_asad',
         trDirective:
-          'insert-html-common-directive insert-type="after" template-id="paramDetail_Template_js" bind-fun="$ctrl.mainObject.baseFun.itemClick(item,$ctrl.data.isSpreed,$ctrl.data.isSpreedBtnClick)"',
+        'insert-html-common-directive insert-type="after" template-id="paramDetail_Template_js" bind-fun="$ctrl.mainObject.baseFun.itemClick(item,$ctrl.data.isSpreed,$ctrl.data.isSpreedBtnClick)"',
         isLevel: true,
-        dragCacheVar: 'DRAG_VAR_API_EDIT_BODY',
+        dragCacheVar: `DRAG_VAR_${opts.title}_BODY`,
       },
       baseFun: {
         spreedAll: this.spreedAll,
@@ -75,8 +75,8 @@ export class ApiDetailUtilService {
       tdList: [
         {
           thKey: opts.nameTitle || $localize`${opts.title} Name`,
-          type: 'text',
-          modelKey: 'name',
+          type: 'depthHtml',
+          html: '<span class="param-name-span">{{item.name}}</span>',
           placeholder: opts.nameTitle || $localize`${opts.title} Name`,
           width: 250,
           mark: 'name',
@@ -127,7 +127,7 @@ export class ApiDetailUtilService {
         trDirective:
           'insert-html-common-directive insert-type="after" template-id="paramDetail_Template_js" bind-fun="$ctrl.mainObject.baseFun.itemClick(item,$ctrl.data.isSpreed,$ctrl.data.isSpreedBtnClick)"',
         isLevel: true,
-        dragCacheVar: 'DRAG_VAR_API_EDIT_BODY',
+        dragCacheVar: 'DRAG_VAR_API_DETAIL_BODY',
       },
       baseFun: {
         spreedAll: this.spreedAll,
@@ -154,7 +154,7 @@ export class ApiDetailUtilService {
           thKey: $localize`Required`,
           type: 'html',
           html: $localize`{{item.required?"True":""}}`,
-          width: 60,
+          width: 70,
           mark: 'require',
         },
         {

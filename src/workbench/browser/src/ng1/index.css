@@ -5390,6 +5390,7 @@ input::-ms-reveal {
   background-color: var(--MAIN_BG);
   border: 1px solid var(--BORDER);
   display: block;
+  overflow: auto;
   color: var(--MAIN_TEXT);
 }
 
