@@ -1,0 +1,186 @@
+<div class="h-full">
+  <header class="p-[10px]">
+    <form nz-form [formGroup]="validateForm" class="flex">
+      <div>
+        <nz-select
+          class="!w-[106px]"
+          [disabled]="isConnect"
+          [(ngModel)]="model.request.protocol"
+          formControlName="protocol"
+        >
+          <nz-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
+        </nz-select>
+      </div>
+      <nz-form-item nz-col class="flex-1">
+        <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
+          <input
+            type="text"
+            i18n-placeholder
+            placeholder="Enter URL"
+            formControlName="uri"
+            [disabled]="isConnect"
+            [(ngModel)]="model.request.uri"
+            class="left-1"
+            name="uri"
+            nz-input
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <div class="flex px-1">
+        <button class="mx-1 w-28" *ngIf="isConnect === false" nz-button nzType="primary" (click)="handleConnect(null)">
+          Connect
+        </button>
+        <button class="mx-1 w-28" *ngIf="isConnect === null" disabled nz-button nzType="default">Connecting</button>
+        <button
+          class="mx-1 w-28"
+          *ngIf="isConnect === true"
+          nz-button
+          nzDanger
+          nzType="default"
+          (click)="handleConnect(false)"
+        >
+          Disconnect
+        </button>
+      </div>
+    </form>
+  </header>
+  <eo-split-panel [topStyle]="{ height: '300px' }" style="height: calc(100% - 56px)">
+    <div top class="h-full">
+      <nz-tabset
+        [nzTabBarStyle]="{ 'padding-left': '10px' }"
+        [nzAnimated]="false"
+        [(nzSelectedIndex)]="model.requestTabIndex"
+        class="h-full"
+      >
+        <!-- Request Headers -->
+        <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+          <ng-template #headerTitleTmp>
+            <span
+              i18n="@@RequestHeaders"
+              nz-tooltip
+              [nzTooltipTitle]="isConnect ? 'Editable only before connection' : ''"
+              >Headers</span
+            >
+          </ng-template>
+          <fieldset [disabled]="isConnect">
+            <eo-api-test-header
+              class="eo_theme_iblock bbd"
+              [(model)]="model.request.requestHeaders"
+              (modelChange)="emitChangeFun('requestHeaders')"
+            ></eo-api-test-header>
+          </fieldset>
+        </nz-tab>
+        <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+          <ng-template #queryTitleTmp>
+            <span i18n nz-tooltip [nzTooltipTitle]="isConnect ? 'Editable only before connection' : ''"
+              >Query Params</span
+            >
+          </ng-template>
+          <fieldset [disabled]="isConnect">
+            <eo-api-test-query
+              class="eo_theme_iblock bbd"
+              [model]="model.request.queryParams"
+              (modelChange)="emitChangeFun('queryParams')"
+            ></eo-api-test-query>
+          </fieldset>
+        </nz-tab>
+        <nz-tab [nzTitle]="messageTmp">
+          <ng-template #messageTmp>Message</ng-template>
+          <div style="height: calc(100% - 48px)">
+            <eo-monaco-editor
+              [(code)]="model.msg"
+              [config]="editorConfig"
+              [maxLine]="20"
+              [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+              (codeChange)="rawDataChange($event)"
+            >
+            </eo-monaco-editor>
+            <div class="flex justify-between p-2">
+              <nz-select [(ngModel)]="editorConfig.language">
+                <nz-option nzValue="text" nzLabel="text"></nz-option>
+                <nz-option nzValue="xml" nzLabel="xml"></nz-option>
+                <nz-option nzValue="json" nzLabel="json"></nz-option>
+              </nz-select>
+              <button
+                nz-button
+                class="mx-1"
+                nzType="primary"
+                [disabled]="!isConnect || !model.msg"
+                (click)="handleSendMsg()"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </nz-tab>
+      </nz-tabset>
+      <div class="h-8 top-line"></div>
+      <!-- body -->
+    </div>
+    <!-- response -->
+    <section bottom class="h-full">
+      <div class="flex items-center justify-between p-3">
+        <span class="font-bold">Messages</span>
+        <span class="px-2 py-1 font-semibold status" [ngClass]="'status_' + renderStatus(isConnect)">{{
+          renderStatus(isConnect)
+        }}</span>
+      </div>
+      <ul class="p-2 overflow-auto" style="height: calc(100% - 48px)">
+        <li *ngFor="let item of model.response.responseBody; let index = index" class="block w-full">
+          <div (click)="expandMessage(index)" class="flex flex-col w-full text-gray-500 top-line">
+            <div
+              *ngIf="item.type === 'send'"
+              class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer"
+            >
+              <span class="flex justify-center w-4 h-4 rounded shrink-0 items-cente send_icon">
+                <eo-iconpark-icon name="arrow-up" size="10"></eo-iconpark-icon>
+              </span>
+              <div class="px-2">{{ item.msg }}</div>
+            </div>
+            <div
+              *ngIf="item.type === 'get'"
+              class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer"
+            >
+              <span class="flex justify-center w-4 h-4 rounded shrink-0 items-cente get_icon">
+                <eo-iconpark-icon name="arrow-down" size="10"></eo-iconpark-icon>
+              </span>
+              <div class="px-2">{{ item.msg }}</div>
+            </div>
+            <div
+              *ngIf="item.type === 'start'"
+              class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer"
+            >
+              <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente start_icon">
+                <eo-iconpark-icon name="check-small" size="10"></eo-iconpark-icon>
+              </span>
+              <div class="px-2">{{ item.title }}</div>
+            </div>
+            <div
+              *ngIf="item.type === 'end'"
+              class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer"
+            >
+              <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente end_icon">
+                <eo-iconpark-icon name="close-small" size="10"></eo-iconpark-icon>
+              </span>
+              <div class="px-2">{{ item.title || item.msg }}</div>
+            </div>
+          </div>
+
+          <eo-monaco-editor
+            *ngIf="item.isExpand"
+            [code]="item.msg"
+            [disabled]="true"
+            [config]="{
+              language: 'json',
+              readOnly: true
+            }"
+            [maxLine]="20"
+            [eventList]="['type', 'format', 'copy', 'search']"
+            (codeChange)="rawDataChange($event)"
+          >
+          </eo-monaco-editor>
+        </li>
+      </ul>
+    </section>
+  </eo-split-panel>
+</div>

@@ -5,7 +5,6 @@ import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { debug } from 'console';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils';
 /**
  * Api tab service operate tabs array add/replace/close...
@@ -17,6 +16,7 @@ export class ApiTabOperateService {
    * Current selected tab index.
    */
   selectedIndex = 0;
+  beforeLeave = true;
   /**
    * Tab basic info
    */
@@ -34,32 +34,46 @@ export class ApiTabOperateService {
     this.BASIC_TABS = BASIC_TABS;
     this.tabStorage.init();
     const tabCache = this.tabStorage.getPersistenceStorage();
-    if (tabCache && tabCache.tabOrder?.length) {
-      this.tabStorage.tabOrder = tabCache.tabOrder.filter((uuid) => tabCache.tabsByID.hasOwnProperty(uuid));
-      //init tabsByID
-      const tabsByID = new Map();
-      Object.values(tabCache.tabsByID).forEach((tabItem) => {
-        tabsByID.set(tabItem.uuid, tabItem);
-      });
-      this.tabStorage.tabsByID = tabsByID;
-      const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
-      //init selectIndex
-      this.selectedIndex = tabCache.selectedIndex;
-      //jump to exist tab
-      this.navigateTabRoute(targetTab);
-    } else {
+    //No cache
+    if (!tabCache || !tabCache.tabOrder?.length) {
       this.operateTabAfterRouteChange({
         url: this.router.url,
       });
+      return;
     }
+    //Restore from cache
+    this.tabStorage.tabOrder = tabCache.tabOrder.filter((uuid) => tabCache.tabsByID.hasOwnProperty(uuid));
+    const tabsByID = new Map();
+    Object.values(tabCache.tabsByID).forEach((tabItem) => {
+      tabsByID.set(tabItem.uuid, tabItem);
+    });
+    this.tabStorage.tabsByID = tabsByID;
+
+    //Tab from url
+    try {
+      //If current url did't match exist tab,throw error
+      this.generateTabFromUrl(this.router.url);
+      this.operateTabAfterRouteChange({
+        url: this.router.url,
+      });
+      return;
+    } catch (e) {
+      console.error(e);
+    }
+
+    //Tab from last choose
+    const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
+    this.selectedIndex = tabCache.selectedIndex;
+    this.navigateTabRoute(targetTab);
   }
   /**
    * Add Default tab
    *
    * @returns tabItem
    */
-  newDefaultTab() {
-    const tabItem = Object.assign({}, eoDeepCopy(this.BASIC_TABS[0]));
+  newDefaultTab(key = 'http-test') {
+    const pathHash = ['http-test', 'http-edit', 'http-detail', 'overview', 'ws-test', 'http-mock'];
+    const tabItem = Object.assign({}, eoDeepCopy(this.BASIC_TABS[pathHash.findIndex((it) => it === key)]));
     tabItem.params = {};
     tabItem.uuid = tabItem.params.pageID = Date.now();
     Object.assign(tabItem, { isLoading: false });
@@ -165,6 +179,9 @@ export class ApiTabOperateService {
    */
   generateTabFromUrl(url): TabItem {
     const result = this.getBasicInfoFromUrl(url);
+    if (!result) {
+      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+    }
     const basicTab = eoDeepCopy(this.BASIC_TABS.find((val) => result.pathname === val.pathname));
     if (!basicTab) {
       throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);

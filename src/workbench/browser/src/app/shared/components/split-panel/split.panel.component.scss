@@ -1,3 +1,7 @@
+:host {
+  display: block;
+  height: 100%;
+}
 .split-wrapper {
   display: flex;
   flex-direction: column;
@@ -40,7 +44,6 @@
       }
     }
 
-
     .trigger-bar-con {
       width: 100%;
       display: flex;
@@ -54,7 +57,7 @@
       border-radius: 2px;
       display: inline-block;
       margin: 0 1px;
-      background: rgba(23,35,61,.25);
+      background: rgba(23, 35, 61, 0.25);
     }
   }
 

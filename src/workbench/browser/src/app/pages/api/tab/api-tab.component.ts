@@ -17,7 +17,6 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
-  // private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public tabStorage: ApiTabStorageService,
     public tabOperate: ApiTabOperateService,
@@ -30,11 +29,11 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     this.watchRouterChange();
     this.watchPageLeave();
   }
-  newTab() {
+  newTab(key = undefined) {
     if (this.tabStorage.tabOrder.length >= this.MAX_TAB_LIMIT) {
       return;
     }
-    this.tabOperate.newDefaultTab();
+    this.tabOperate.newDefaultTab(key);
   }
   sortTab(_left: KeyValue<number, any>, _right: KeyValue<number, any>): number {
     const leftIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _left.key);
@@ -44,7 +43,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   /**
    * Select tab
    */
-  selectChange() {
+  async selectChange(data) {
+    console.log(data.tab);
     this.tabOperate.navigateTabRoute(this.getCurrentTab());
   }
   closeTab({ $event, index, tab }: { $event: Event; index: number; tab: any }) {
@@ -86,7 +86,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   //Quick see tabs change in templete,for debug,can be deleted
   //! just for debug
-  private getConsoleTabs() {
+  getConsoleTabs() {
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => {
       const tab = this.tabStorage.tabsByID.get(uuid);
@@ -178,7 +178,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
       that.cacheData();
     });
   }

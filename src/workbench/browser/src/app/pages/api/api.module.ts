@@ -84,6 +84,13 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [ElectronService, ApiService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
+  providers: [
+    ElectronService,
+    ApiService,
+    ApiTabService,
+    ApiTabOperateService,
+    ApiTabStorageService,
+    IndexedDBStorage,
+  ],
 })
 export class ApiModule {}
