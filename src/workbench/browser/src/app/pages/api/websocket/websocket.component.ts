@@ -37,7 +37,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   @Input() bodyType = 'json';
   @Output() modelChange = new EventEmitter<testViewModel>();
   @Output() eoOnInit = new EventEmitter<testViewModel>();
-  isWsConnect: 'connected' | 'connecting' | 'disconnect' = 'disconnect';
+  wsStatus: 'connected' | 'connecting' | 'disconnect' = 'disconnect';
   isSocketConnect = true;
   socket = null;
   model: testViewModel;
@@ -142,11 +142,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       }
       this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
       this.socket.off('ws-client');
-      this.isWsConnect = 'disconnect';
+      this.wsStatus = 'disconnect';
       return;
     }
     // * connecting
-    this.isWsConnect = 'connecting';
+    this.wsStatus = 'connecting';
     this.unListen();
     const wsUrl = this.model.request.uri;
     if (wsUrl === '') {
@@ -184,7 +184,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.isSocketConnect = true;
       if (type === 'ws-connect-back') {
         if (status === 0) {
-          this.isWsConnect = 'connected';
+          this.wsStatus = 'connected';
           this.model.requestTabIndex = 2;
           const { reqHeader, resHeader } = content;
           this.model.response.responseBody.unshift({
@@ -207,7 +207,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             title: 'Connected to ' + this.model.request.uri + ` is failed`,
             isExpand: false,
           });
-          this.isWsConnect = 'disconnect';
+          this.wsStatus = 'disconnect';
         }
       }
       if (type === 'ws-message-back' && status === 0) {
@@ -228,7 +228,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   checkTabCanLeave = () => {
-    if (this.isWsConnect === 'disconnect') {
+    if (this.wsStatus === 'disconnect') {
       return true;
     }
     return new Promise((resolve) => {
