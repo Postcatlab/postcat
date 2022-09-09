@@ -32,11 +32,12 @@
           *ngIf="wsStatus === 'disconnect'"
           nz-button
           nzType="primary"
+          i18n
           (click)="handleConnect('connecting')"
         >
           Connect
         </button>
-        <button class="mx-1 w-28" *ngIf="wsStatus === 'connecting'" disabled nz-button nzType="default">
+        <button i18n class="mx-1 w-28" *ngIf="wsStatus === 'connecting'" disabled nz-button nzType="default">
           Connecting
         </button>
         <button
@@ -44,6 +45,7 @@
           *ngIf="wsStatus === 'connected'"
           nz-button
           nzDanger
+          i18n
           nzType="default"
           (click)="handleConnect('disconnect')"
         >
@@ -111,6 +113,7 @@
                 nz-button
                 class="mx-1"
                 nzType="primary"
+                i18n
                 [disabled]="wsStatus !== 'connected' || !model.msg"
                 (click)="handleSendMsg()"
               >
@@ -126,10 +129,10 @@
     <!-- response -->
     <section bottom class="h-full">
       <div class="flex items-center justify-between p-3">
-        <span class="font-bold">Messages</span>
-        <span class="px-2 py-1 font-semibold status" [ngClass]="'status_' + renderStatus(wsStatus)">{{
+        <span class="font-bold" i18n>Messages</span>
+        <!-- <span class="px-2 py-1 font-semibold status" [ngClass]="'status_' + renderStatus(wsStatus)">{{
           renderStatus(wsStatus)
-        }}</span>
+        }}</span> -->
       </div>
       <ul class="p-2 overflow-auto" style="height: calc(100% - 48px)">
         <li *ngFor="let item of model.response.responseBody; let index = index" class="block w-full">

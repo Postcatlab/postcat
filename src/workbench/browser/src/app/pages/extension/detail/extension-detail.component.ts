@@ -78,7 +78,7 @@ export class ExtensionDetailComponent implements OnInit {
 
   async fetchChangelog(locale = '') {
     //Default locale en-US
-    if (locale === 'en-US') locale = '';
+    if (locale === 'en-US') {locale = '';}
     const timer = setTimeout(() => (this.changelogLoading = true), 200);
     try {
       const response = await fetch(
@@ -96,12 +96,10 @@ export class ExtensionDetailComponent implements OnInit {
           },
         });
         const data = await result.json();
-        this.changeLog = Object.entries<any>(data.versions).reduceRight((log, [key, value]) => {
-          return `
+        this.changeLog = Object.entries<any>(data.versions).reduceRight((log, [key, value]) => `
 ${log}
 * [${key}](${value.dist.tarball}) - ${new Date(data.time[key]).toLocaleString()}
-          `;
-        }, '');
+          `, '');
       } else if (locale) {
         //If locale README not find,fetch default locale(en-US)
         this.fetchChangelog();
@@ -114,7 +112,7 @@ ${log}
   }
   async fetchReadme(locale = '') {
     //Default locale en-US
-    if (locale === 'en-US') locale = '';
+    if (locale === 'en-US') {locale = '';}
     try {
       this.introLoading = true;
       const response = await fetch(
@@ -214,7 +212,6 @@ ${log}
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
     this.isVisible = false;
   }
 
