@@ -77,22 +77,27 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
-    this.socket = io(
-      `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : 'ws://localhost'}:${
-        APP_CONFIG.SOCKET_PORT
-      }`,
-      { transports: ['websocket'] }
-    );
-    this.socket.on('connect_error', (error) => {
-      // * conncet socketIO is failed
-      console.log('connect_error', error);
+    try {
+      this.socket = io(
+        `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : 'ws://localhost'}:${
+          APP_CONFIG.SOCKET_PORT
+        }`,
+        { transports: ['websocket'] }
+      );
+      this.socket.on('connect_error', (error) => {
+        // * conncet socketIO is failed
+        console.log('connect_error', error);
+        this.isSocketConnect = false;
+      });
+      this.socket.on('error', (error) => {
+        // * conncet socketIO is failed
+        console.log('error', error);
+        this.isSocketConnect = false;
+      });
+    } catch (e) {
+      console.log('Connect not allow', e);
       this.isSocketConnect = false;
-    });
-    this.socket.on('error', (error) => {
-      // * conncet socketIO is failed
-      console.log('error', error);
-      this.isSocketConnect = false;
-    });
+    }
   }
 
   expandMessage(index) {
