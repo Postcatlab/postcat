@@ -78,6 +78,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.socket = io(APP_CONFIG.SOCKETIO_URL, { transports: ['websocket'] });
     this.socket.on('connect_error', (error) => {
       // * conncet socketIO is failed
+      console.log('connect_error', error);
+      this.isSocketConnect = false;
+    });
+    this.socket.on('error', (error) => {
+      // * conncet socketIO is failed
       console.log('error', error);
       this.isSocketConnect = false;
     });
@@ -229,7 +234,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           }
           this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
         } else {
-          this.model.response.responseBody.unshift({ type: 'end', msg: `Disconnect by ${this.getLink()}` , isExpand: false });
+          this.model.response.responseBody.unshift({
+            type: 'end',
+            msg: `Disconnect by ${this.getLink()}`,
+            isExpand: false,
+          });
           this.wsStatus = 'disconnect';
           this.switchEditStatus();
           this.unListen();
