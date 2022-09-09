@@ -25,6 +25,7 @@ export class ExtensionListComponent implements OnInit {
   type: ExtensionGroupType = ExtensionGroupType.all;
   keyword = '';
   renderList = [];
+  loading = false;
   seachChanged$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -45,31 +46,53 @@ export class ExtensionListComponent implements OnInit {
     this.watchSearchKeywordChange();
   }
   async searchPlugin(keyword = '') {
-    if (this.type === 'installed') {
-      const installedList = new ExtensionList(this.extensionService.getInstalledList());
-      return installedList.search(keyword);
+    const timer = setTimeout(() => (this.loading = true), 80);
+    const timeStart = Date.now();
+    try {
+      if (this.type === 'installed') {
+        const installedList = new ExtensionList(this.extensionService.getInstalledList());
+        return installedList.search(keyword).map((n) => {
+          n.isEnable = this.extensionService.isEnable(n.name);
+          return n;
+        });
+      }
+      const res: any = await this.extensionService.requestList();
+      if (this.type === 'official') {
+        return new ExtensionList(res.data.filter((it) => it.author === 'Eoapi')).search(keyword);
+      }
+      return new ExtensionList(res.data).search(keyword);
+    } catch (error) {
+    } finally {
+      clearTimeout(timer);
+      const timeout = Date.now() - timeStart > 300 ? 0 : 300;
+      setTimeout(() => (this.loading = false), timeout);
     }
-    const res: any = await this.extensionService.requestList();
-    if (this.type === 'official') {
-      return new ExtensionList(res.data.filter((it) => it.author === 'Eoapi')).search(keyword);
-    }
-    return new ExtensionList(res.data).search(keyword);
   }
   onSeachChange(keyword) {
     this.seachChanged$.next(keyword);
   }
-  clickExtension(item) {
+  clickExtension(event, item) {
+    console.log('event?.target?.dataset', event?.target);
     this.router
       .navigate(['home/extension/detail'], {
         queryParams: {
           type: this.route.snapshot.queryParams.type,
           id: item.moduleID,
           name: item.name,
-          jump: 'setting',
+          tab: event?.target?.dataset?.id === 'details' ? 1 : 0,
         },
       })
       .finally();
   }
+
+  handleEnableExtension(isEnable, item) {
+    if (isEnable) {
+      this.extensionService.enableExtension(item.name);
+    } else {
+      this.extensionService.disableExtension(item.name);
+    }
+  }
+
   private watchSearchConditionChange() {
     this.route.queryParamMap.subscribe(async (params) => {
       this.type = this.route.snapshot.queryParams.type;

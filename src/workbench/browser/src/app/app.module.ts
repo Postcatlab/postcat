@@ -76,7 +76,7 @@ registerLocaleData(zh);
         }
       },
       deps: [LOCALE_ID],
-    }
+    },
   ],
   bootstrap: [AppComponent],
 })

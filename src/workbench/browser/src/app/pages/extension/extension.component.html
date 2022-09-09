@@ -1,4 +1,4 @@
-<section class="main">
+<section class="eo-extension-main">
   <section class="flex-shrink-0 p-0 left">
     <div class="mb-2">
       <input type="text" nz-input class="flex-1 w-full px-3 input" i18n-placeholder="@@Search" placeholder="Search"
@@ -24,9 +24,6 @@
       <div class="pl-[18px]">
         <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
           <div class="overflow-hidden f_row_ac text-ellipsis">
-            <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">
-              {{ node.origin.method }}
-            </b>
             <span class="text_omit node_title">{{ node.title }}</span>
           </div>
         </div>

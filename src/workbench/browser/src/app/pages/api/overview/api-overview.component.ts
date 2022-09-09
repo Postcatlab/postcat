@@ -43,6 +43,12 @@ export class ApiOverviewComponent implements OnDestroy {
     },
   ];
 
+  handleClickCard = (event, item) => {
+    if (event.target?.classList?.contains?.('ant-card-actions') || event.target?.closest('.ant-card-actions')) {
+      this.clickCard(item);
+    }
+  };
+
   clickCard({ title, desc, type }) {
     this.modal = this.modalService.create({
       nzTitle: desc,

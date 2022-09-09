@@ -1,79 +1,95 @@
-<div class="py-3 extension-detail">
-  <div class="sticky top-0 z-50 bg-white">
-    <div class="pb-3">
-      <a nz-button nzType="link" (click)="backToList()">
-        <eo-iconpark-icon name="left" class="anticon" size="16px"></eo-iconpark-icon><span i18n>Back</span>
-      </a>
-    </div>
-    <div class="bbd"></div>
-  </div>
-  <section class="h-full p-4 max-w-[80vw] mx-auto">
-    <div class="flex">
-      <i class="block w-24 h-24 mr-8 bg-center bg-no-repeat bg-cover border rounded-lg bd_all"
-        [ngStyle]="{ 'background-image': 'url(' + (extensionDetail?.logo || '') + ')' }"></i>
-      <div class="flex flex-col flex-1">
-        <div class="flex flex-col">
-          <span class="mb-2 text-xl font-bold">{{ extensionDetail?.moduleName }}</span>
-          <p class="w-full h-20">{{ extensionDetail?.description }}</p>
+<div class="h-full py-3 extension-detail" *ngIf="extensionDetail">
+  <div class="sticky top-0 z-50 px-2 bg-white">
+    <div class="pb-3 flex justify-between h-[36px]">
+      <div class="flex items-center">
+        <a nz-button nzType="link" (click)="backToList()">
+          <eo-iconpark-icon name="left" class="anticon" size="16px"></eo-iconpark-icon><span i18n>Back</span>
+        </a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <div class="mr-2">
+          <nz-avatar nzSize="small" class="!w-[20px] !h-[20px]" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
         </div>
-        <div class="flex"></div>
+        <span class="font-bold text-[14px]">{{ extensionDetail.moduleName }}</span>
+        <ng-container *ngIf="extensionDetail?.installed">
+          <nz-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5"
+            (ngModelChange)="handleEnableExtension($event)">
+          </nz-switch>
+        </ng-container>
       </div>
     </div>
-    <div class="flex w-full mt-6 h-[calc(100vh-350px)]">
-      <div class="flex-auto min-w-0">
-        <h2 class="text-lg font-bold" i18n>Intro</h2>
-        <!-- <nz-divider></nz-divider> -->
-        <div class="h-full overflow-auto markdown-desc">
+    <!-- <div class="bbd"></div> -->
+  </div>
+  <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
+    <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
+    <div>
+      <button nz-button [nzSize]="extensionDetail?.installed ? 'small' :'default'"
+        [nzType]="extensionDetail?.installed ? 'default': 'primary'" class="mt-[8px]" [nzLoading]="isOperating"
+        (click)="handleInstall()">
+        {{extensionDetail?.installed ? 'Uninstall' : 'Install'}}
+      </button>
+    </div>
+
+    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzAnimated]="false"
+      [class]="{settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration}"
+      (nzSelectChange)="handleTabChange($event)">
+      <!-- Setting -->
+      <nz-tab *ngIf="extensionDetail?.features?.configuration" nzTitle="Settings">
+        <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"></eo-extension-setting>
+      </nz-tab>
+      <!-- Details -->
+      <nz-tab nzTitle="Details">
+        <div class="w-4/5 h-full m-auto overflow-auto">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
-            <eo-shadow-dom class="md-preview" [text]="extensionDetail?.introduction" [options]="{ html: true }">
+            <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
             </eo-shadow-dom>
           </nz-skeleton>
         </div>
-      </div>
-      <div class="w-[1px] bg-[#f2f2f2] mr-[10px]"></div>
-      <div class="shrink-0 w-[200px] 2xl:w-[250px] overflow-auto h-full">
-        <h2 class="text-lg font-bold" i18n>Install</h2>
-        <div class="flex items-center mt-[22px]" *ngIf="isElectron && !extensionDetail?.installed">
-          <nz-skeleton-element *ngIf="isNotLoaded" nzType="button" nzSize="large" [nzActive]="true" style="width:100%">
-          </nz-skeleton-element>
-          <button *ngIf="isElectron && !isNotLoaded" nz-button nzType="primary" nzBlock nzSize="large"
-            [nzLoading]="isOperating" (click)="manageExtension('install', extensionDetail?.name)" i18n>
-            Install
-          </button>
-        </div>
-        <div *ngIf="isElectron && extensionDetail?.installed">
-          <nz-skeleton-element *ngIf="isNotLoaded" nzType="button" [nzActive]="true" nzSize="large" style="width:100%">
-          </nz-skeleton-element>
-          <button *ngIf="!isNotLoaded" nz-button nzBlock nzType="primary" nzDanger nzSize="large"
-            [nzLoading]="isOperating" class="mt-[12px]" (click)="manageExtension('uninstall', extensionDetail?.name)"
-            i18n>
-            Uninstall
-          </button>
-        </div>
-
-        <div *ngIf="!isElectron">
-          <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="download" class="!w-full" i18n>
-            Download Client
-          </button>
-          <nz-dropdown-menu #download="nzDropdownMenu">
-            <ul nz-menu>
-              <ng-container *ngFor="let item of resourceInfo; let index = index">
-                <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
-                <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
-              </ng-container>
-            </ul>
-          </nz-dropdown-menu>
-          <div class="bg-[#FF1744] p-[6px] mt-[14px] rounded-[3px] text-white" i18n>
-            The extensions can only be installed on the client at present. Please download the client first~
-          </div>
-        </div>
-
-        <h2 class="text-lg font-bold mt-[30px]" i18n>Support</h2>
+      </nz-tab>
+      <nz-tab nzTitle="Support">
         <nz-descriptions [nzColumn]="1" nzTitle="">
-          <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail?.author }}</nz-descriptions-item>
-          <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail?.version }} </nz-descriptions-item>
+          <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
+          <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
+          <nz-descriptions-item *ngIf="extensionDetail.repository?.url" i18n-nzTitle nzTitle="Repository">
+            <a [href]="extensionDetail.repository.url.replace('git+', '')" target="_blank">
+              {{ extensionDetail.repository.url.replace('git+', '') }}
+            </a>
+          </nz-descriptions-item>
+          <nz-descriptions-item *ngIf="extensionDetail.homepage" i18n-nzTitle nzTitle="Homepage">
+            <a [href]="extensionDetail.homepage" target="_blank">{{ extensionDetail.homepage }}</a>
+          </nz-descriptions-item>
+          <nz-descriptions-item *ngIf="extensionDetail.bugs?.url" i18n-nzTitle nzTitle="BugReport">
+            <a [href]="extensionDetail.bugs.url" target="_blank">{{extensionDetail.bugs.url }}</a>
+          </nz-descriptions-item>
         </nz-descriptions>
-      </div>
-    </div>
+      </nz-tab>
+      <nz-tab nzTitle="ChangeLog">
+        <!-- <h1>Change Log</h1>
+        <p>All notable changes to this project will be documented in this file.</p>
+        <h2>[12.0.1] - 2022-03-03</h2> -->
+        <!-- !show be markdown preview -->
+        <nz-skeleton [nzLoading]="changelogLoading" [nzActive]="true">
+          <eo-shadow-dom class="md-preview" [text]="changeLog">
+          </eo-shadow-dom>
+        </nz-skeleton>
+      </nz-tab>
+    </nz-tabset>
   </section>
 </div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Eoapi is required to install this extension." [nzOkText]="null"
+  (nzOnCancel)="handleOk()">
+  <ng-container *nzModalContent>
+    Don't have Eoapi?
+    <a nz-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n>
+      Download
+    </a>.
+    <nz-dropdown-menu #download="nzDropdownMenu">
+      <ul nz-menu>
+        <ng-container *ngFor="let item of resourceInfo; let index = index">
+          <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+          <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
+        </ng-container>
+      </ul>
+    </nz-dropdown-menu>
+  </ng-container>
+</nz-modal>
