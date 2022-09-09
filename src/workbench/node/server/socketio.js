@@ -1,8 +1,8 @@
 const IO = require('socket.io');
 const WebSocket = require('ws');
-process.on('uncaughtException', err => {
-  console.error('uncaughtException', err)
-})
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException', err);
+});
 
 const socket = (port = 4301) => {
   const io = new IO.Server(port);
@@ -60,7 +60,7 @@ const socket = (port = 4301) => {
           socket.emit('ws-client', {
             type: 'ws-message-back',
             status: 0,
-            content:message?.toString()
+            content: message?.toString() || message,
           });
         });
 
