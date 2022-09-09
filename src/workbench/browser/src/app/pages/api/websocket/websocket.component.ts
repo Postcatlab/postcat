@@ -195,7 +195,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           this.wsStatus = 'connected';
           this.model.requestTabIndex = 2;
           const { reqHeader, resHeader } = content;
-
           this.model.response.responseBody.unshift({
             type: 'start',
             msg: {
@@ -228,7 +227,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           // * If the last message is disconnect type, then do not push new message to list
           return;
         }
-        console.log('content', content);
         this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
       }
     });
