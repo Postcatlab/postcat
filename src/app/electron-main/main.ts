@@ -13,6 +13,7 @@ import { UnitWorkerModule } from '../../workbench/node/electron/main';
 import Configuration from '../../platform/node/configuration/lib';
 import { ConfigurationInterface } from 'src/platform/node/configuration';
 import { MockServer } from 'eo/platform/node/mock-server';
+import socket from '../../workbench/node/server/socketio';
 import { LanguageService } from 'eo/app/electron-main/language.service';
 
 export const subView = {
@@ -36,6 +37,8 @@ if (app.isPackaged) {
 
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
+// * start SocketIO
+socket();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 global.shareObject = {
