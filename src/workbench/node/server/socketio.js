@@ -26,7 +26,10 @@ const socket = (port = 4301) => {
         //   console.log('try to get the error', error);
         // }
         try {
-          ws = new WebSocket(request.protocol + request.uri, {
+          const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(request.uri.trim())
+            ? request.uri.trim()
+            : request.protocol + '://' + request.uri.trim().replace('//', '');
+          ws = new WebSocket(link, {
             headers: request?.requestHeaders
               ?.filter((it) => it.name && it.value)
               .reduce(
