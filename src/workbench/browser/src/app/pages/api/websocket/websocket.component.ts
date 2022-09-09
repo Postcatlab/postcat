@@ -138,7 +138,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       // * save to test history
       this.model.response.responseBody.unshift({
         type: 'end',
-        msg: 'Disconnect from ' + this.model.request.uri,
+        msg: 'Disconnect from ' + this.getLink(),
         isExpand: false,
       });
       const { requestTabIndex, msg, ...data } = this.model;
@@ -195,6 +195,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           this.wsStatus = 'connected';
           this.model.requestTabIndex = 2;
           const { reqHeader, resHeader } = content;
+
           this.model.response.responseBody.unshift({
             type: 'start',
             msg: {
@@ -207,14 +208,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
                 value,
               })),
             },
-            title: 'Connected to ' + this.model.request.uri,
+            title: 'Connected to ' + this.getLink(),
             isExpand: false,
           });
         } else {
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: content,
-            title: 'Connected to ' + this.model.request.uri + ` is failed`,
+            title: 'Connected to ' + this.getLink() + ` is failed`,
             isExpand: false,
           });
           this.wsStatus = 'disconnect';
@@ -270,6 +271,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       });
     });
   };
+  private getLink() {
+    const { uri, protocol } = this.model.request;
+    const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(uri.trim())
+      ? uri.trim()
+      : protocol + '://' + uri.trim().replace('//', '');
+    console.log('link', link);
+    return link;
+  }
   private resetModel() {
     return {
       requestTabIndex: 2,
