@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ExtensionRoutingModule } from './extension-routing.module';
 import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
-import { ExtensionDetailComponent } from './detail/extension-detail.component';
+import { ExtensionDetailModule } from './detail/extension-detail.module';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -15,14 +15,18 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
-
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 @NgModule({
   imports: [
     SharedModule,
     FormsModule,
     NzTabsModule,
+    NzToolTipModule,
     NzTagModule,
     NzDescriptionsModule,
     NzInputModule,
@@ -31,9 +35,13 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
     CommonModule,
     NzDividerModule,
     NzTreeModule,
+    NzSwitchModule,
     NzDropDownModule,
-    NzSkeletonModule
+    NzSkeletonModule,
+    NzCardModule,
+    NzAvatarModule,
+    ExtensionDetailModule,
   ],
-  declarations: [ExtensionComponent, ExtensionListComponent, ExtensionDetailComponent],
+  declarations: [ExtensionComponent, ExtensionListComponent],
 })
 export class ExtensionModule {}

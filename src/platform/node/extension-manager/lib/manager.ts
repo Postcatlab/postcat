@@ -211,7 +211,7 @@ export class ModuleManager implements ModuleManagerInterface {
         if (!this.features.has(key)) {
           this.features.set(key, new Map());
         }
-        this.features.get(key).set(moduleInfo.moduleID, value);
+        this.features.get(key).set(moduleInfo.moduleID, { name: moduleInfo.name, ...value });
       });
     }
   }

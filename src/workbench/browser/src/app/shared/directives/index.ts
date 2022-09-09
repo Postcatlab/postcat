@@ -1,1 +1,1 @@
-export * from './webview/webview.directive';
+export * from './stop-propagation/stop-propagation.directive';

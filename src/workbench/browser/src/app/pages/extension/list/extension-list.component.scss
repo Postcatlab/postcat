@@ -3,7 +3,7 @@
   display: -webkit-box;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 1;
 }
 
 .plugin-block {
@@ -14,21 +14,12 @@
 .list-block {
   height: calc(100% - 65px);
   overflow: auto;
-  >div{
+  > div {
     border-radius: 3px;
   }
-}
-.warn-color {
-  color: var(--MAIN_THEME_COLOR);
 }
 @media (max-width: 1279.9px) {
   .grid-cols-4 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-}
-.w-60{
-  width: 15rem;
-}
-.h-76{
-  height: 17rem;
 }

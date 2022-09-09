@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-
-
 import { ExtensionDetailComponent } from './detail/extension-detail.component';
 import { ExtensionListComponent } from './list/extension-list.component';
 import { ExtensionComponent } from './extension.component';
