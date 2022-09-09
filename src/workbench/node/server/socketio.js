@@ -19,12 +19,6 @@ const socket = (port = 4301) => {
       }
       if (type === 'ws-connect') {
         const { request } = content;
-        // console.log(request?.requestHeaders);
-        // try {
-        //   new WebSocket(request.uri);
-        // } catch (error) {
-        //   console.log('try to get the error', error);
-        // }
         try {
           const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(request.uri.trim())
             ? request.uri.trim()
@@ -65,7 +59,7 @@ const socket = (port = 4301) => {
           socket.emit('ws-client', {
             type: 'ws-message-back',
             status: 0,
-            content: message,
+            content: message instanceof ArrayBuffer ? new TextDecoder().decode(message) : message,
           });
         });
 
