@@ -13,13 +13,12 @@
       </div>
       <nz-form-item nz-col class="flex-1">
         <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
-          {{ wsStatus }}
           <input
             type="text"
             i18n-placeholder
             placeholder="Enter URL"
             formControlName="uri"
-            [disabled]="true"
+            [disabled]="['connecting', 'connected'].includes(wsStatus)"
             [(ngModel)]="model.request.uri"
             class="left-1"
             name="uri"
@@ -174,7 +173,7 @@
           </div>
 
           <eo-monaco-editor
-            *ngIf="item.isExpand"
+            *ngIf="item.isExpand && item.type !== 'start'"
             [code]="item.msg"
             [disabled]="true"
             [config]="{
@@ -186,6 +185,12 @@
             (codeChange)="rawDataChange($event)"
           >
           </eo-monaco-editor>
+          <ng-container *ngIf="item.isExpand && item.type === 'start'">
+            <div *ngFor="let k of Object.keys(item.msg); let index = index" class="headers">
+              <div class="font-bold bbd pb-[10px] pt-[8px]">{{ k }}</div>
+              <eo-api-test-result-header [model]="item.msg?.[k] || []"></eo-api-test-result-header>
+            </div>
+          </ng-container>
         </li>
       </ul>
     </section>

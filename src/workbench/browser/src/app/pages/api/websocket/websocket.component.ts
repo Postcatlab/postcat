@@ -12,6 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ModalService } from '../../../shared/services/modal.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils';
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { ConsoleSqlOutline } from '@ant-design/icons-angular/icons';
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -39,6 +40,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   @Output() eoOnInit = new EventEmitter<testViewModel>();
   wsStatus: 'connected' | 'connecting' | 'disconnect' = 'disconnect';
   isSocketConnect = true;
+  Object = Object;
   socket = null;
   model: testViewModel;
   WS_PROTOCOL = [
@@ -102,6 +104,12 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       base: 'query',
       replaceType: 'replace',
     }).url;
+  }
+  changeUri() {
+    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+      base: 'url',
+      replaceType: 'replace',
+    }).query;
   }
   emitChangeFun(where) {
     if (where === 'queryParams') {
@@ -189,14 +197,16 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           const { reqHeader, resHeader } = content;
           this.model.response.responseBody.unshift({
             type: 'start',
-            msg: JSON.stringify(
-              {
-                'Request Headers': reqHeader,
-                'Response Headers': resHeader,
-              },
-              null,
-              2
-            ),
+            msg: {
+              'Request Headers': Object.entries<string>(reqHeader).map(([key, value]) => ({
+                name: key,
+                value,
+              })),
+              'Response Headers': Object.entries<string>(resHeader).map(([key, value]) => ({
+                name: key,
+                value,
+              })),
+            },
             title: 'Connected to ' + this.model.request.uri,
             isExpand: false,
           });

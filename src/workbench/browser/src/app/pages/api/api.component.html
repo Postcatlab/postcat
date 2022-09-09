@@ -103,7 +103,7 @@
           <!-- Manually pick pageID,Because pageID always change -->
           <nz-tabset class="inside_page_tabset" *ngIf="this.id" nzLinkRouter>
             <nz-tab *ngFor="let tab of TABS">
-              <a *nzTabLink nz-tab-link [routerLink]="[tab.routerLink]" queryParamsHandling="merge"> {{ tab.title }}</a>
+              <a *nzTabLink nz-tab-link [routerLink]="['http/'+tab.routerLink]" queryParamsHandling="merge"> {{ tab.title }}</a>
             </nz-tab>
           </nz-tabset>
         </div>
