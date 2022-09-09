@@ -50,5 +50,6 @@ const COMPONENTS = [
     SharedModule,
   ],
   providers: [ApiDetailUtilService],
+  exports: [...COMPONENTS],
 })
 export class ApiDetailModule {}

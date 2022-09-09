@@ -14,6 +14,7 @@ import { WebsocketComponent } from './websocket.component';
 import { WebsocketRoutingModule } from './websocket.routing.module';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/pages/api/api-shared.module';
+import { ApiTestModule } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.module';
 
 const ANTDS = [NzButtonModule, NzInputModule, NzSelectModule, NzTabsModule];
 
@@ -26,6 +27,7 @@ const ANTDS = [NzButtonModule, NzInputModule, NzSelectModule, NzTabsModule];
     // ReactiveFormsModule,
     CommonModule,
     SharedModule,
+    ApiTestModule,
     ...ANTDS,
   ],
   declarations: [WebsocketComponent],
