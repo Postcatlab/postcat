@@ -11,8 +11,12 @@
         </div>
         <span class="font-bold text-[14px]">{{ extensionDetail.moduleName }}</span>
         <ng-container *ngIf="extensionDetail?.installed">
-          <nz-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5"
-            (ngModelChange)="handleEnableExtension($event)">
+          <nz-switch
+            [(ngModel)]="isEnable"
+            nzSize="small"
+            class="ml-2.5"
+            (ngModelChange)="handleEnableExtension($event)"
+          >
           </nz-switch>
         </ng-container>
       </div>
@@ -22,23 +26,36 @@
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
     <div>
-      <button nz-button [nzSize]="extensionDetail?.installed ? 'small' :'default'"
-        [nzType]="extensionDetail?.installed ? 'default': 'primary'" class="mt-[8px]" [nzLoading]="isOperating"
-        (click)="handleInstall()" i18n>
-        {{extensionDetail?.installed ? 'Uninstall' : 'Install'}}
+      <button
+        nz-button
+        [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
+        [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
+        class="mt-[8px]"
+        [nzLoading]="isOperating"
+        (click)="handleInstall()"
+      >
+        <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
+        <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
       </button>
     </div>
 
-    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzAnimated]="false"
-      [class]="{settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration}"
-      (nzSelectChange)="handleTabChange($event)">
+    <nz-tabset
+      [(nzSelectedIndex)]="nzSelectedIndex"
+      [nzAnimated]="false"
+      [class]="{ settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration }"
+      (nzSelectChange)="handleTabChange($event)"
+    >
       <!-- Setting -->
-      <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle nzTitle="Settings">
+      <nz-tab
+        *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed"
+        i18n-nzTitle
+        nzTitle="Settings"
+      >
         <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"></eo-extension-setting>
       </nz-tab>
       <!-- Details -->
       <nz-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
-        <div class="h-full overflow-auto">
+        <div class="h-full overflow-auto preview_tab">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
             <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
             </eo-shadow-dom>
@@ -58,7 +75,7 @@
             <a [href]="extensionDetail.homepage" target="_blank">{{ extensionDetail.homepage }}</a>
           </nz-descriptions-item>
           <nz-descriptions-item *ngIf="extensionDetail.bugs?.url" i18n-nzTitle nzTitle="BugReport">
-            <a [href]="extensionDetail.bugs.url" target="_blank">{{extensionDetail.bugs.url }}</a>
+            <a [href]="extensionDetail.bugs.url" target="_blank">{{ extensionDetail.bugs.url }}</a>
           </nz-descriptions-item>
         </nz-descriptions>
       </nz-tab>
@@ -67,22 +84,24 @@
         <p>All notable changes to this project will be documented in this file.</p>
         <h2>[12.0.1] - 2022-03-03</h2> -->
         <!-- !show be markdown preview -->
-        <nz-skeleton [nzLoading]="changelogLoading" [nzActive]="true">
-          <eo-shadow-dom class="md-preview" [text]="changeLog">
-          </eo-shadow-dom>
+        <nz-skeleton class="preview_tab" [nzLoading]="changelogLoading" [nzActive]="true">
+          <eo-shadow-dom class="md-preview" [text]="changeLog"> </eo-shadow-dom>
         </nz-skeleton>
       </nz-tab>
     </nz-tabset>
   </section>
 </div>
 
-<nz-modal [(nzVisible)]="isVisible" i18n-nzTitle nzTitle="Eoapi Client is required to install this extension." [nzOkText]="null"
-  (nzOnCancel)="handleOk()">
+<nz-modal
+  [(nzVisible)]="isVisible"
+  i18n-nzTitle
+  nzTitle="Eoapi Client is required to install this extension."
+  [nzOkText]="null"
+  (nzOnCancel)="handleOk()"
+>
   <ng-container *nzModalContent>
     <span i18n>Don't have Eoapi Client?</span>
-    <a nz-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n>
-      Download
-    </a>.
+    <a nz-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n> Download </a>.
     <nz-dropdown-menu #download="nzDropdownMenu">
       <ul nz-menu>
         <ng-container *ngFor="let item of resourceInfo; let index = index">
