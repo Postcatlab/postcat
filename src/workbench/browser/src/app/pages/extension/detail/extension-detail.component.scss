@@ -22,6 +22,9 @@
       color: #333;
       padding: 10px 0;
     }
+    .ant-tabs-tabpane {
+      @apply w-4/5 m-auto;
+    }
   }
   .md-preview {
     img {
