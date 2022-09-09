@@ -85,6 +85,9 @@ io.on('connection', (socket) => {
               {}
             ),
         });
+        ws.on('error', (err) => {
+          socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: err });
+        });
       } catch (error) {
         socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: error });
         ws = null;

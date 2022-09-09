@@ -12,7 +12,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { ModalService } from '../../../shared/services/modal.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils';
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
-import { resolve } from 'path';
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -38,7 +37,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   @Input() bodyType = 'json';
   @Output() modelChange = new EventEmitter<testViewModel>();
   @Output() eoOnInit = new EventEmitter<testViewModel>();
-  isConnect = false;
+  isWsConnect = false;
+  isSocketConnect = false;
   socket = null;
   model: testViewModel;
   WS_PROTOCOL = [
@@ -75,8 +75,10 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
     this.socket = io(APP_CONFIG.SOCKETIO_URL, { transports: ['websocket'] });
-    // receive a message from the server
-    this.socket.on('ws-client', (...args) => {});
+    this.socket.on('connect_error', (error) => {
+      // * conncet socketIO is failed
+      this.isSocketConnect = false;
+    });
   }
 
   expandMessage(index) {
@@ -111,6 +113,16 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       console.log('communication is not ready');
       return;
     }
+    if (!this.isSocketConnect) {
+      this.model.response.responseBody = [
+        {
+          type: 'end',
+          msg: 'The test service connection failed, please submit an Issue to contact the community',
+          isExpand: false,
+        },
+      ];
+      return;
+    }
     if (bool === false) {
       // * save to test history
       this.model.response.responseBody.unshift({
@@ -125,11 +137,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       }
       this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
       this.socket.off('ws-client');
-      this.isConnect = false;
+      this.isWsConnect = false;
       return;
     }
     // * connecting
-    this.isConnect = null;
+    this.isWsConnect = null;
     this.unListen();
     const wsUrl = this.model.request.uri;
     if (wsUrl === '') {
@@ -164,9 +176,10 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       return;
     }
     this.socket.on('ws-client', ({ type, status, content }) => {
+      this.isSocketConnect = true;
       if (type === 'ws-connect-back') {
         if (status === 0) {
-          this.isConnect = true;
+          this.isWsConnect = true;
           this.model.requestTabIndex = 2;
           const { reqHeader, resHeader } = content;
           this.model.response.responseBody.unshift({
@@ -189,10 +202,15 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             title: 'Connected to ' + this.model.request.uri + ` is failed`,
             isExpand: false,
           });
-          this.isConnect = false;
+          this.isWsConnect = false;
         }
       }
       if (type === 'ws-message-back' && status === 0) {
+        const { type: msgType } = this.model.response.responseBody.at();
+        if (msgType === 'end') {
+          // * If the last message is disconnect type, then do not push new message to list
+          return;
+        }
         this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
       }
     });
@@ -205,7 +223,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   checkTabCanLeave=()=>{
-    if (this.isConnect===false) {
+    if (this.isWsConnect===false) {
       return true;
     }
     return new Promise((resolve) => {
