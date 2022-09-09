@@ -184,6 +184,7 @@ export class ApiTestUtilService {
       base: 'url',
       replaceType: 'merge',
     });
+    console.log(inData);
     const result = {
       testData: {
         uuid: inData.apiDataID,

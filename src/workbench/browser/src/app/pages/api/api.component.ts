@@ -44,15 +44,15 @@ export class ApiComponent implements OnInit, OnDestroy {
   pageID: number;
   TABS = [
     {
-      routerLink: 'http/detail',
+      routerLink: 'detail',
       title: $localize`:@@API Detail:Preview`,
     },
     {
-      routerLink: 'http/edit',
+      routerLink: 'edit',
       title: $localize`Edit`,
     },
     {
-      routerLink: 'http/test',
+      routerLink: 'test',
       title: $localize`Test`,
     },
   ];
