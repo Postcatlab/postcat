@@ -37,8 +37,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   @Input() bodyType = 'json';
   @Output() modelChange = new EventEmitter<testViewModel>();
   @Output() eoOnInit = new EventEmitter<testViewModel>();
-  isWsConnect = false;
-  isSocketConnect = false;
+  isWsConnect: 'connected' | 'connecting' | 'disconnect' = 'disconnect';
+  isSocketConnect = true;
   socket = null;
   model: testViewModel;
   WS_PROTOCOL = [
@@ -74,9 +74,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
-    this.socket = io(APP_CONFIG.SOCKETIO_URL, { transports: ['websocket'] });
+    const link = APP_CONFIG.SOCKETIO_URL;
+    // const link = 'ws://localhost:4301';
+
+    console.log('link', link);
+    this.socket = io(link, { transports: ['websocket'] });
     this.socket.on('connect_error', (error) => {
       // * conncet socketIO is failed
+      console.log('error', error);
       this.isSocketConnect = false;
     });
   }
@@ -104,7 +109,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     }
     this.modelChange.emit(this.model);
   }
-  async handleConnect(bool = false) {
+  async handleConnect(bool = 'disconnect') {
     const isOK = this.checkForm();
     if (!isOK) {
       return;
@@ -123,7 +128,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       ];
       return;
     }
-    if (bool === false) {
+    if (bool === 'disconnect') {
       // * save to test history
       this.model.response.responseBody.unshift({
         type: 'end',
@@ -137,11 +142,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       }
       this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
       this.socket.off('ws-client');
-      this.isWsConnect = false;
+      this.isWsConnect = 'disconnect';
       return;
     }
     // * connecting
-    this.isWsConnect = null;
+    this.isWsConnect = 'connecting';
     this.unListen();
     const wsUrl = this.model.request.uri;
     if (wsUrl === '') {
@@ -179,7 +184,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.isSocketConnect = true;
       if (type === 'ws-connect-back') {
         if (status === 0) {
-          this.isWsConnect = true;
+          this.isWsConnect = 'connected';
           this.model.requestTabIndex = 2;
           const { reqHeader, resHeader } = content;
           this.model.response.responseBody.unshift({
@@ -202,7 +207,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             title: 'Connected to ' + this.model.request.uri + ` is failed`,
             isExpand: false,
           });
-          this.isWsConnect = false;
+          this.isWsConnect = 'disconnect';
         }
       }
       if (type === 'ws-message-back' && status === 0) {
@@ -222,8 +227,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  checkTabCanLeave=()=>{
-    if (this.isWsConnect===false) {
+  checkTabCanLeave = () => {
+    if (this.isWsConnect === 'disconnect') {
       return true;
     }
     return new Promise((resolve) => {
@@ -237,6 +242,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             type: 'primary',
             onClick: () => {
               modal.destroy();
+              // * disconnect ws connect
+              this.handleConnect('disconnect');
               resolve(true);
             },
           },

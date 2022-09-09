@@ -191,7 +191,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
       that.cacheData();
     });
   }

@@ -4,7 +4,7 @@
       <div>
         <nz-select
           class="!w-[106px]"
-          [disabled]="isWsConnect"
+          [disabled]="['connecting', 'connected'].includes(isWsConnect)"
           [(ngModel)]="model.request.protocol"
           formControlName="protocol"
         >
@@ -18,7 +18,7 @@
             i18n-placeholder
             placeholder="Enter URL"
             formControlName="uri"
-            [disabled]="isWsConnect"
+            [disabled]="['connecting', 'connected'].includes(isWsConnect)"
             [(ngModel)]="model.request.uri"
             class="left-1"
             name="uri"
@@ -27,19 +27,27 @@
         </nz-form-control>
       </nz-form-item>
       <div class="flex px-1">
-        <button class="mx-1 w-28" *ngIf="isWsConnect === false" nz-button nzType="primary" (click)="handleConnect(null)">
-          Connect
-        </button>
-        <button class="mx-1 w-28" *ngIf="isWsConnect === null" disabled nz-button nzType="default">Connecting</button>
         <button
           class="mx-1 w-28"
-          *ngIf="isWsConnect === true"
+          *ngIf="isWsConnect === 'disconnect'"
+          nz-button
+          nzType="primary"
+          (click)="handleConnect('connecting')"
+        >
+          Connect
+        </button>
+        <button class="mx-1 w-28" *ngIf="isWsConnect === 'connecting'" disabled nz-button nzType="default">
+          Connecting
+        </button>
+        <button
+          class="mx-1 w-28"
+          *ngIf="isWsConnect === 'connected'"
           nz-button
           nzDanger
           nzType="default"
-          (click)="handleConnect(false)"
+          (click)="handleConnect('disconnect')"
         >
-          DisWsConnect
+          Disconnect
         </button>
       </div>
     </form>
@@ -62,12 +70,12 @@
               >Headers</span
             >
           </ng-template>
-            <eo-api-test-header
-            [disabled]="isWsConnect"
-              class="eo_theme_iblock bbd"
-              [(model)]="model.request.requestHeaders"
-              (modelChange)="emitChangeFun('requestHeaders')"
-            ></eo-api-test-header>
+          <eo-api-test-header
+            [disabled]="['connecting', 'connected'].includes(isWsConnect)"
+            class="eo_theme_iblock bbd"
+            [(model)]="model.request.requestHeaders"
+            (modelChange)="emitChangeFun('requestHeaders')"
+          ></eo-api-test-header>
         </nz-tab>
         <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
@@ -77,7 +85,7 @@
           </ng-template>
           <eo-api-test-query
             class="eo_theme_iblock bbd"
-            [disabled]="isWsConnect"
+            [disabled]="['connecting', 'connected'].includes(isWsConnect)"
             [model]="model.request.queryParams"
             (modelChange)="emitChangeFun('queryParams')"
           ></eo-api-test-query>
@@ -103,7 +111,7 @@
                 nz-button
                 class="mx-1"
                 nzType="primary"
-                [disabled]="!isWsConnect || !model.msg"
+                [disabled]="isWsConnect !== 'connected' || !model.msg"
                 (click)="handleSendMsg()"
               >
                 Send
