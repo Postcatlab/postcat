@@ -193,7 +193,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       testData: Object.assign({}, this.model.request),
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    this.router.navigate(['/home/api/edit'], {
+    this.router.navigate(['/home/api/http/edit'], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID),
       },
