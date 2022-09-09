@@ -75,18 +75,18 @@ export class ExtensionService {
     const { code, data, modules } = window.eo.installModule(id);
     if (code === 0) {
       this.localExtensions = modules;
-      this.updateExtensionIDs();
+      this.extensionIDs = this.updateExtensionIDs();
       return true;
     }
     console.error(data);
     return false;
   }
   uninstall(id): boolean {
-    console.log('Install module:', id);
+    console.log('Uninstall module:', id);
     const { code, data, modules } = window.eo.uninstallModule(id);
     if (code === 0) {
       this.localExtensions = modules;
-      this.updateExtensionIDs();
+      this.extensionIDs = this.updateExtensionIDs();
       return true;
     }
     console.error(data);
