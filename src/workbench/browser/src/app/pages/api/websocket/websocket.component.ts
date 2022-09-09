@@ -175,7 +175,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     }
     this.socket.emit('ws-server', { type: 'ws-message', content: { message: this.model.msg } });
     this.model.response.responseBody.unshift({ type: 'send', msg: this.model.msg, isExpand: false });
-    this.model.msg = '';
   }
   unListen() {
     this.socket.off('ws-client');
