@@ -4,7 +4,7 @@
       <div>
         <nz-select
           class="!w-[106px]"
-          [disabled]="isConnect"
+          [disabled]="isWsConnect"
           [(ngModel)]="model.request.protocol"
           formControlName="protocol"
         >
@@ -18,7 +18,7 @@
             i18n-placeholder
             placeholder="Enter URL"
             formControlName="uri"
-            [disabled]="isConnect"
+            [disabled]="isWsConnect"
             [(ngModel)]="model.request.uri"
             class="left-1"
             name="uri"
@@ -27,19 +27,19 @@
         </nz-form-control>
       </nz-form-item>
       <div class="flex px-1">
-        <button class="mx-1 w-28" *ngIf="isConnect === false" nz-button nzType="primary" (click)="handleConnect(null)">
+        <button class="mx-1 w-28" *ngIf="isWsConnect === false" nz-button nzType="primary" (click)="handleConnect(null)">
           Connect
         </button>
-        <button class="mx-1 w-28" *ngIf="isConnect === null" disabled nz-button nzType="default">Connecting</button>
+        <button class="mx-1 w-28" *ngIf="isWsConnect === null" disabled nz-button nzType="default">Connecting</button>
         <button
           class="mx-1 w-28"
-          *ngIf="isConnect === true"
+          *ngIf="isWsConnect === true"
           nz-button
           nzDanger
           nzType="default"
           (click)="handleConnect(false)"
         >
-          Disconnect
+          DisWsConnect
         </button>
       </div>
     </form>
@@ -58,26 +58,26 @@
             <span
               i18n="@@RequestHeaders"
               nz-tooltip
-              [nzTooltipTitle]="isConnect ? 'Editable only before connection' : ''"
+              [nzTooltipTitle]="isWsConnect ? 'Editable only before connection' : ''"
               >Headers</span
             >
           </ng-template>
-          <eo-api-test-header
-            [disabled]="isConnect"
-            class="eo_theme_iblock bbd"
-            [(model)]="model.request.requestHeaders"
-            (modelChange)="emitChangeFun('requestHeaders')"
-          ></eo-api-test-header>
+            <eo-api-test-header
+            [disabled]="isWsConnect"
+              class="eo_theme_iblock bbd"
+              [(model)]="model.request.requestHeaders"
+              (modelChange)="emitChangeFun('requestHeaders')"
+            ></eo-api-test-header>
         </nz-tab>
         <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
-            <span i18n nz-tooltip [nzTooltipTitle]="isConnect ? 'Editable only before connection' : ''"
+            <span i18n nz-tooltip [nzTooltipTitle]="isWsConnect ? 'Editable only before connection' : ''"
               >Query Params</span
             >
           </ng-template>
           <eo-api-test-query
             class="eo_theme_iblock bbd"
-            [disabled]="isConnect"
+            [disabled]="isWsConnect"
             [model]="model.request.queryParams"
             (modelChange)="emitChangeFun('queryParams')"
           ></eo-api-test-query>
@@ -103,7 +103,7 @@
                 nz-button
                 class="mx-1"
                 nzType="primary"
-                [disabled]="!isConnect || !model.msg"
+                [disabled]="!isWsConnect || !model.msg"
                 (click)="handleSendMsg()"
               >
                 Send
@@ -119,8 +119,8 @@
     <section bottom class="h-full">
       <div class="flex items-center justify-between p-3">
         <span class="font-bold">Messages</span>
-        <span class="px-2 py-1 font-semibold status" [ngClass]="'status_' + renderStatus(isConnect)">{{
-          renderStatus(isConnect)
+        <span class="px-2 py-1 font-semibold status" [ngClass]="'status_' + renderStatus(isWsConnect)">{{
+          renderStatus(isWsConnect)
         }}</span>
       </div>
       <ul class="p-2 overflow-auto" style="height: calc(100% - 48px)">
