@@ -42,11 +42,3 @@
   color: var(--TEXT_TITLE_SEC);
   font-size: 12px;
 }
-
-
-::ng-deep .sidebar_setting_popover{
-  padding: 0;
-  .ant-popover-inner-content {
-    padding: 0;
-  }
-}
