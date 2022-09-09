@@ -230,7 +230,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           }
           this.model.response.responseBody.unshift({ type: 'get', msg: content, isExpand: false });
         } else {
-          this.model.response.responseBody.unshift({ type: 'end', msg: 'Disconnect by Server', isExpand: false });
+          this.model.response.responseBody.unshift({ type: 'end', msg: `Disconnect by ${this.getLink()}` , isExpand: false });
           this.wsStatus = 'disconnect';
           this.switchEditStatus();
           this.unListen();

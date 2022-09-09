@@ -7,7 +7,6 @@ const socket = (port = 4301) => {
     // send a message to the client
     socket.emit('ws-client', 'link success');
     let ws = null;
-
     // receive a message from the client
     socket.on('ws-server', ({ type, content }) => {
       if (type === 'connect') {
@@ -44,7 +43,6 @@ const socket = (port = 4301) => {
         }
 
         const reqHeader = ws._req.getHeaders();
-        // console.log(ws);
 
         // 打开WebSocket连接后立刻发送一条消息:
         ws.on('open', () => {
@@ -55,11 +53,12 @@ const socket = (port = 4301) => {
           socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader, resHeader } });
         });
 
-        ws.on('message', (message) => {
+        ws.on('message', (message,data,isbianry) => {
           socket.emit('ws-client', {
             type: 'ws-message-back',
             status: 0,
-            content: message instanceof ArrayBuffer ? new TextDecoder().decode(message) : message,
+            content:
+              message instanceof ArrayBuffer || message instanceof Buffer ? new TextDecoder().decode(message) : message,
           });
         });
 
