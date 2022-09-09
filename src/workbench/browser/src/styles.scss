@@ -35,10 +35,18 @@ img, svg, video, canvas, audio, iframe, embed, object {
 .method_text_HEAD {
   color: var(--YELLOW_TAG_BG);
 }
+.method_text_WS {
+  color: #507ea4;
+}
+.method_text_WSS {
+  color: #165e83;
+}
 .method_text_PATCH {
   color: var(--ORANGE_TAG_BG);
 }
-.method_text_PUT,
+.method_text_PUT {
+  color: #82ae46;
+}
 .method_text_OPTIONS {
   color: var(--BLACK_TAG_BG);
 }

@@ -56,7 +56,7 @@ export class ApiTabStorageService {
     // if (this.dataSource.dataSourceType === 'http') {return;}
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach((val) => {
-      if (!val.hasChanged) {
+      if (val.type==='preview') {
         ['baseContent', 'content'].forEach((keyName) => {
           val[keyName] = null;
         });

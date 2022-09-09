@@ -3,7 +3,7 @@
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
   [nzHideAdd]="true"
-  (nzSelectChange)="selectChange()"
+  (nzSelectChange)="selectChange($event)"
   [nzTabBarExtraContent]="extraTemplate"
 >
   <nz-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
@@ -29,7 +29,7 @@
           {{ tabStorage.tabsByID.get(uuid).title }}</span
         >
         <!-- Close/HasEdit -->
-        <div class="tab-item-button-group flex items-center">
+        <div class="flex items-center tab-item-button-group">
           <span class="tab-has-edit-icon eo-tab-theme-icon" *ngIf="tabStorage.tabsByID.get(uuid).hasChanged"></span>
           <button
             aria-label="Close tab"
@@ -44,9 +44,20 @@
   </nz-tab>
 </nz-tabset>
 <ng-template #extraTemplate>
-  <button  (click)="newTab()" class="ant-tabs-nav-add {{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}">
+  <button
+    (click)="newTab()"
+    nz-dropdown
+    [nzDropdownMenu]="addMenu"
+    class="ant-tabs-nav-add {{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
+  >
     <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
   </button>
+  <nz-dropdown-menu #addMenu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <li nz-menu-item (click)="newTab()">HTTP</li>
+      <li nz-menu-item (click)="newTab('ws-test')">Websocket</li>
+    </ul>
+  </nz-dropdown-menu>
   <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
     <button class="ant-tabs-nav-more"><eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon></button>
   </a>

@@ -36,12 +36,12 @@ describe('ApiGroupTreeComponent', () => {
         {
           provide: Router,
           useValue: {
-            url: '/home/api/test?uuid=1',
+            url: '/home/api/http/test?uuid=1',
             events: of(
               new NavigationEnd(
                 0,
-                'http://localhost:4200/home/api/test',
-                'http://localhost:4200/home/api/test?uuid=1',
+                'http://localhost:4200/home/api/http/test',
+                'http://localhost:4200/home/api/http/test?uuid=1',
               )
             ),
             navigate: jasmine.createSpy('navigate'),

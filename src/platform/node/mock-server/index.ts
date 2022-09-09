@@ -1,4 +1,5 @@
 import express from 'express';
+
 import type { Response } from 'express';
 import portfinder from 'portfinder';
 // import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -25,6 +26,7 @@ const jsonStringify = (obj) => {
   cache = null; // Empty variables for easy recycling by garbage collection mechanisms
   return str;
 };
+
 export class MockServer {
   private app: ReturnType<typeof express>;
   private server: Server;

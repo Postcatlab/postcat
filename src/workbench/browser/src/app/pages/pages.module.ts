@@ -8,7 +8,7 @@ import { NavbarModule } from 'eo/workbench/browser/src/app/pages/navbar/navbar.m
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 
 @NgModule({
-  imports: [PagesRoutingModule,SettingModule, EouiModule, CommonModule, SharedModule, NavbarModule],
+  imports: [PagesRoutingModule, SettingModule, EouiModule, CommonModule, SharedModule, NavbarModule],
   declarations: [PagesComponent],
   exports: [],
 })

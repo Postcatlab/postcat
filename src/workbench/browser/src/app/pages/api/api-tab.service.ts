@@ -11,20 +11,20 @@ export class ApiTabService {
   componentRef;
   apiTabComponent: ApiTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
-  get currentTabType(): string {
-    return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname))?.type || 'preview';
+  get currentComponentTab(): Partial<TabItem> {
+    return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
   BASIC_TABS: Partial<TabItem>[] = [
     {
-      pathname: '/home/api/test',
+      pathname: '/home/api/http/test',
       module: 'test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' },
     },
-    { pathname: '/home/api/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
-    { pathname: '/home/api/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
+    { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
     {
       pathname: '/home/api/overview',
       type: 'preview',
@@ -32,7 +32,15 @@ export class ApiTabService {
       title: $localize`:@@API Index:Index`,
       icon: 'home',
     },
-    { pathname: '/home/api/mock', module: 'mock', type: 'preview', title: 'Mock' },
+    {
+      pathname: '/home/api/ws/test',
+      module: 'test',
+      isFixed: true,
+      type: 'edit',
+      extends: { method: 'WS' },
+      title: $localize`New Websocket`,
+    },
+    { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' },
   ];
   constructor(private messageService: MessageService, private router: Router) {
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
@@ -79,7 +87,7 @@ export class ApiTabService {
         this.afterContentChanged({ when: 'init', url, model });
       },
     };
-    if (this.currentTabType === 'edit') {
+    if (this.currentComponentTab.type === 'edit') {
       this.componentRef.afterSaved = {
         emit: (model) => {
           this.afterContentChanged({ when: 'saved', url, model });
@@ -88,6 +96,13 @@ export class ApiTabService {
       this.componentRef.modelChange = {
         emit: (model) => {
           this.changeContent$.next({ when: 'editing', url, model });
+        },
+      };
+    }
+    if (this.currentComponentTab.module === 'test') {
+      this.componentRef.afterTested = {
+        emit: (model) => {
+          this.afterContentChanged({ when: 'afterTested', url, model });
         },
       };
     }
@@ -149,13 +164,18 @@ export class ApiTabService {
       //Set title/method
       replaceTab.title = model.name;
       replaceTab.extends.method = model.method;
-      if (currentTab.pathname === '/home/api/test') {
-        replaceTab.extends.method = model.request.method;
-        //Only Untitle request need set url to tab title
-        if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
-          replaceTab.title = model.request.uri || this.BASIC_TABS[0].title;
+      if (currentTab.module === 'test') {
+        if (currentTab.pathname === '/home/api/ws/test') {
+          replaceTab.extends.method = model.request.protocol.toUpperCase();
         } else {
-          replaceTab.title = model.request.name || this.BASIC_TABS[0].title;
+          replaceTab.extends.method = model.request.method;
+        }
+        //Only Untitle request need set url to tab title
+        const originTitle = this.BASIC_TABS.find((val) => val.pathname === currentTab.pathname)?.title;
+        if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
+          replaceTab.title = model.request.uri || originTitle;
+        } else {
+          replaceTab.title = model.request.name || originTitle;
         }
       } else if (!model.uuid) {
         replaceTab.title =
@@ -173,11 +193,7 @@ export class ApiTabService {
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes
-            if (
-              currentTab.pathname !== '/home/api/test' ||
-              !currentTab.params.uuid ||
-              currentTab.params.uuid.includes('history')
-            ) {
+            if (currentTab.module !== 'test' || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
               currentHasChanged = this.componentRef.isFormChange();
             } else {
               currentHasChanged = false;
@@ -214,7 +230,7 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
       //Has tested/exsix api set fixed
-      if (currentTab.pathname === '/home/api/test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
+      if (currentTab.module === 'test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
         replaceTab.isFixed = true;
       }
     }
@@ -226,7 +242,7 @@ export class ApiTabService {
    *
    * @param inData.url get component fit tab data
    */
-  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved'; url: string; model: any }) {
+  afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
@@ -236,9 +252,9 @@ export class ApiTabService {
       console.warn(`has't find the tab fit child component ,url:${inData.url}`);
       return;
     }
-    if (inData.model?.when === 'otherTabTested') {
+    if (inData?.when === 'afterTested') {
       //Update other tab test result
-      inData.url = `/home/api/test?pageID=${inData.model.id}`;
+      inData.url = `${inData.model.url}?pageID=${inData.model.id}`;
       currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
       inData.model = Object.assign({}, currentTab.content.test, inData.model.model);
     }
@@ -246,7 +262,7 @@ export class ApiTabService {
   }
   handleDataBeforeCache(tabsByID) {
     Object.values(tabsByID).forEach((val: TabItem) => {
-      if (val.pathname === '/home/api/test' && val.content?.test?.testResult) {
+      if (val.module === 'test' && val.content?.test?.testResult) {
         val.content.test.testResult = {
           request: {},
           response: {},
