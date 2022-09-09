@@ -11,6 +11,7 @@ import { ApiTestUtilService } from '../api-test-util.service';
   styleUrls: ['./api-test-header.component.scss'],
 })
 export class ApiTestHeaderComponent implements OnInit, OnChanges {
+  @Input() disabled: boolean;
   @Input() model: ApiTestHeaders[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 

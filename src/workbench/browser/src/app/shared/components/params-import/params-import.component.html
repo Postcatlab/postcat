@@ -1,8 +1,7 @@
-<button class="menu" (click)="showModal('json')">
+<button [disabled]="disabled" type="button" class="menu" (click)="showModal('json')">
   <eo-iconpark-icon name="afferent-three" size="14px"></eo-iconpark-icon>
   <span class="fs12 ml5" i18n>Import</span>
 </button>
-
 <!-- <span class="menu" nz-dropdown [nzDropdownMenu]="menu">
   <i class="fs24 iconfont icon-daoru"></i>
     <span i18n>Import</span>
@@ -16,7 +15,8 @@
 
 <nz-modal
   [(nzVisible)]="isVisible"
-  [nzTitle]="'导入' + (modalTitle || contentTypeTitle)"
+  i18n-nzTitle
+  [nzTitle]="'Import' + (modalTitle || contentTypeTitle)"
   [nzStyle]="{ width: '800px' }"
   (nzOnCancel)="handleCancel()"
 >

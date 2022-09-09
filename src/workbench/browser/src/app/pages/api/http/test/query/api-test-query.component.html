@@ -1,4 +1,6 @@
-<div class="param_header flex items-center h-10">
-  <params-import [(baseData)]="model" contentType="query" i18n-modalTitle modalTitle="Query"></params-import>
-</div>
-<list-block-common-component [mainObject]="listConf" [(list)]="model"></list-block-common-component>
+<fieldset [disabled]="disabled">
+  <div class="param_header flex items-center h-10">
+    <params-import [disabled]="disabled" [(baseData)]="model" contentType="query" i18n-modalTitle modalTitle="Query"></params-import>
+  </div>
+  <list-block-common-component [mainObject]="listConf" [(list)]="model"></list-block-common-component>
+</fieldset>

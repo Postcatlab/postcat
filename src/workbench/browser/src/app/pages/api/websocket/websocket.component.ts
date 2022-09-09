@@ -9,8 +9,10 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { MessageService } from '../../../shared/services/message';
 import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ModalService } from '../../../shared/services/modal.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils';
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { resolve } from 'path';
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -52,6 +54,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     public route: ActivatedRoute,
     private fb: FormBuilder,
     private testService: ApiTestService,
+    private modal: ModalService,
     private message: MessageService
   ) {
     this.initBasicForm();
@@ -201,6 +204,35 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  checkTabCanLeave=()=>{
+    if (this.isConnect===false) {
+      return true;
+    }
+    return new Promise((resolve) => {
+      const modal = this.modal.create({
+        nzTitle: $localize`Do you want to leave the page?`,
+        nzContent: $localize`After leaving, the current long connection is no longer maintained, whether to confirm to leave?`,
+        nzClosable: false,
+        nzFooter: [
+          {
+            label: $localize`Leave`,
+            type: 'primary',
+            onClick: () => {
+              modal.destroy();
+              resolve(true);
+            },
+          },
+          {
+            label: $localize`Cancel`,
+            onClick: () => {
+              modal.destroy();
+              resolve(false);
+            },
+          },
+        ],
+      });
+    });
+  };
   private resetModel() {
     return {
       requestTabIndex: 2,

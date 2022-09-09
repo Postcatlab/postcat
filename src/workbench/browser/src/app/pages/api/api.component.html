@@ -56,6 +56,7 @@
             class="fg1"
             [list]="apiTab.BASIC_TABS"
             [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
+            [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
             (beforeClose)="apiTab.beforeTabClose($event)"
             #apiTabComponent
           ></eo-api-tab>
