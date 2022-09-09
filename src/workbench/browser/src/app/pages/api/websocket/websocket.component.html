@@ -18,6 +18,7 @@
             i18n-placeholder
             placeholder="Enter URL"
             formControlName="uri"
+            (change)="changeUri()"
             [(ngModel)]="model.request.uri"
             class="left-1"
             name="uri"
