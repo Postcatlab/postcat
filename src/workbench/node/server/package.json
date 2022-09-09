@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node main.js",
     "start": "pm2 start main.js",
+    "start:io": "pm2 start socketio.js",
     "stop": "pm2 stop all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
