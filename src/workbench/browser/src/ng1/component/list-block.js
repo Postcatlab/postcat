@@ -2,23 +2,23 @@ angular.module('eolinker').component('listBlockCommonComponent', {
   template: `<script type="text/ng-template" id="paramDetail_Template_js">
   <div class="container_pdtj" style="padding-left: -{-(item.listDepth||0)*29+20-}-px" {eoData}-show="item.isClick">
       <p class="f_row" {eoData}-if="item.minLength">
-          <span class="title-span mw_100" i18n>最小长度：</span>
+          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.minLen}}：</span>
           <span  class="wb_all">-{-item.minLength-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.maxLength">
-          <span class="title-span mw_100">最大长度：</span>
+          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.maxLen}}：</span>
           <span  class="wb_all">-{-item.maxLength-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.minimum">
-          <span class="title-span mw_100">最小值：</span>
+          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.minValue}}：</span>
           <span  class="wb_all">-{-item.minimum-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.maximum">
-          <span class="title-span mw_100">最大值：</span>
+          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.maxValue}}：</span>
           <span  class="wb_all">-{-item.maximum-}-</span>
       </p>
       <div class="f_row" {eoData}-if="item.enum.length>0&&item.enum[0].value">
-          <span class="title-span mw_100">值可能性：</span>
+  <span class="title-span mw_100">{{ $ctrl.listBlockVarible.valueExampple}}：</span>
           <table>
               <tr {eoData}-repeat="childItem in item.enum track by $index">
                   <td class="value-td">
@@ -134,6 +134,11 @@ function listBlockController($rootScope, $element, $scope) {
   vm.listBlockVarible = {
     operate: locale === 'zh' ? '操作' : 'Operation',
     column: locale === 'zh' ? '列表项' : 'Column',
+    minLen: locale === 'zh' ? '最小长度' : 'Minimum length',
+    maxLen: locale === 'zh' ? '最大长度' : 'Maximum Length',
+    minValue: locale === 'zh' ? '最小值' : 'Minimum value',
+    maxValue: locale === 'zh' ? '最大值' : 'Maximum value',
+    valueExampple: locale === 'zh' ? '值可能性' : 'Enum',
     fileBtnText: locale === 'zh' ? '选择文件' : 'Select File',
   };
 
@@ -1260,7 +1265,7 @@ function listBlockController($rootScope, $element, $scope) {
     }
   };
   $scope.importFile = function (inputArg, inputEvent) {
-    console.log('importFile')
+    console.log('importFile');
     inputArg.$index = this.$parent.$index;
     inputArg.item = vm.list[inputArg.$index];
     vm.mainObject.baseFun.importFile(inputArg);
