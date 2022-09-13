@@ -11,6 +11,13 @@ const socket = (port = 4301) => {
     // send a message to the client
     socket.emit('ws-client', 'link success');
     let ws = null;
+
+    const unlisten = () => {
+      ws.on('close', null);
+      ws.on('upgrade', null);
+      ws.on('message', null);
+      ws = null;
+    };
     // receive a message from the client
     socket.on('ws-server', ({ type, content }) => {
       if (type === 'connect') {
@@ -39,10 +46,11 @@ const socket = (port = 4301) => {
           });
           ws.on('error', (err) => {
             socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: err });
+            unlisten();
           });
         } catch (error) {
           socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: error });
-          ws = null;
+          unlisten();
           return;
         }
 
@@ -67,10 +75,11 @@ const socket = (port = 4301) => {
 
         ws.on('close', () => {
           socket.emit('ws-client', {
-            type: 'ws-message-back',
-            status: 1,
+            type: 'ws-connect-back',
+            status: -1,
             content: 'Server disconnected',
           });
+          unlisten();
         });
       }
       if (type === 'ws-message') {

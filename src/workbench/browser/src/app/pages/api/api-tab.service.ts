@@ -166,7 +166,8 @@ export class ApiTabService {
       replaceTab.extends.method = model.method;
       if (currentTab.module === 'test') {
         if (currentTab.pathname === '/home/api/ws/test') {
-          replaceTab.extends.method = model.request.protocol.toUpperCase();
+          console.log('model', model);
+          replaceTab.extends.method = model.request.protocol?.toUpperCase();
         } else {
           replaceTab.extends.method = model.request.method;
         }
