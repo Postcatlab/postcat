@@ -70,9 +70,9 @@ export class ExtensionService {
    * @param id
    * @returns if install success
    */
-  install(id): boolean {
+  async install(id): Promise<boolean> {
     console.log('Install module:', id);
-    const { code, data, modules } = window.eo.installModule(id);
+    const { code, data, modules } = await window.eo.installModule(id);
     if (code === 0) {
       this.localExtensions = modules;
       this.extensionIDs = this.updateExtensionIDs();
@@ -81,9 +81,9 @@ export class ExtensionService {
     console.error(data);
     return false;
   }
-  uninstall(id): boolean {
+  async uninstall(id): Promise<boolean> {
     console.log('Uninstall module:', id);
-    const { code, data, modules } = window.eo.uninstallModule(id);
+    const { code, data, modules } = await window.eo.uninstallModule(id);
     if (code === 0) {
       this.localExtensions = modules;
       this.extensionIDs = this.updateExtensionIDs();

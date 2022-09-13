@@ -78,7 +78,9 @@ export class ExtensionDetailComponent implements OnInit {
 
   async fetchChangelog(locale = '') {
     //Default locale en-US
-    if (locale === 'en-US') {locale = '';}
+    if (locale === 'en-US') {
+      locale = '';
+    }
     const timer = setTimeout(() => (this.changelogLoading = true), 200);
     try {
       const response = await fetch(
@@ -96,10 +98,13 @@ export class ExtensionDetailComponent implements OnInit {
           },
         });
         const data = await result.json();
-        this.changeLog = Object.entries<any>(data.versions).reduceRight((log, [key, value]) => `
+        this.changeLog = Object.entries<any>(data.versions).reduceRight(
+          (log, [key, value]) => `
 ${log}
 * [${key}](${value.dist.tarball}) - ${new Date(data.time[key]).toLocaleString()}
-          `, '');
+          `,
+          ''
+        );
       } else if (locale) {
         //If locale README not find,fetch default locale(en-US)
         this.fetchChangelog();
@@ -112,7 +117,9 @@ ${log}
   }
   async fetchReadme(locale = '') {
     //Default locale en-US
-    if (locale === 'en-US') {locale = '';}
+    if (locale === 'en-US') {
+      locale = '';
+    }
     try {
       this.introLoading = true;
       const response = await fetch(
@@ -184,16 +191,16 @@ ${log}
      * renderer process until the reply is received, so use this method only as a last
      * resort. It's much better to use the asynchronous version, `invoke()`.
      */
-    setTimeout(() => {
+    setTimeout(async () => {
       switch (operate) {
         case 'install': {
-          this.extensionDetail.installed = this.extensionService.install(id);
+          this.extensionDetail.installed = await this.extensionService.install(id);
           this.handleEnableExtension(true);
           this.getDetail();
           break;
         }
         case 'uninstall': {
-          this.extensionDetail.installed = !this.extensionService.uninstall(id);
+          this.extensionDetail.installed = !(await this.extensionService.uninstall(id));
           this.handleEnableExtension(false);
           this.fetchReadme(this.language.systemLanguage);
           break;
