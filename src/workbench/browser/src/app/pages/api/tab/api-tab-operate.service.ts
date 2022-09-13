@@ -52,11 +52,13 @@ export class ApiTabOperateService {
     //Tab from url
     try {
       //If current url did't match exist tab,throw error
-      this.generateTabFromUrl(this.router.url);
-      this.operateTabAfterRouteChange({
-        url: this.router.url,
-      });
-      return;
+      const existTab = this.getSameContentTab(this.generateTabFromUrl(this.router.url));
+      if (existTab) {
+        this.operateTabAfterRouteChange({
+          url: this.router.url,
+        });
+        return;
+      }
     } catch (e) {
       console.error(e);
     }
