@@ -4,7 +4,7 @@ export type APP_CONFIG_INSTANT = {
   production: boolean;
   environment: 'DEV' | 'PROD';
   EXTENSION_URL: string;
-  REMOTE_SOCKET_URL: 'ws://106.12.149.147';
+  REMOTE_SOCKET_URL: 'wss://8.219.85.124';
   SOCKET_PORT: number;
   MOCK_URL: string;
 };
