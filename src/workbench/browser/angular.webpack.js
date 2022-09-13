@@ -25,17 +25,15 @@ module.exports = (config, options) => {
       excludeAliases: ['console'],
     })
   ];
-
   config.module.rules = [
     {
       test: /\.css$/,
       use: ['style-loader', 'css-loader'],
-      resourceQuery: { not: [/\?ngResource/] },
+      resourceQuery: { not: [/\?src/] },
     },
     {
       test: /\.ttf$/,
-      type: 'asset/resource',
-      resourceQuery: { not: [/\?ngResource/] },
+      type: 'asset/resource'
     },
     ...config.module.rules,
   ];

@@ -30,7 +30,6 @@
     "@angular/platform-browser-dynamic": "14.0.3",
     "@angular/router": "14.0.3",
     "@angular/upgrade": "^14.0.3",
-    "@angularclass/hmr": "3.0.0",
     "@ant-design/icons-angular": "14.1.0",
     "@babel/runtime": "7.18.3",
     "@ngxs/store": "3.7.4",

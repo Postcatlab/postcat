@@ -423,11 +423,6 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angularclass/hmr@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@angularclass/hmr/-/hmr-3.0.0.tgz#6d0c31a237a46af99085de65082a97975575eda5"
-  integrity sha512-4A/DKmSafWUcffv7f536oY6RbpXEAD7f0NCGVLlRj9Gna8dkGc9JOHSr3NCWHd/NRc4ey8x+V0itsBqlPxEJ/A==
-
 "@ant-design/colors@^5.0.0":
   version "5.1.1"
   resolved "https://registry.npmmirror.com/@ant-design/colors/-/colors-5.1.1.tgz#800b2186b1e27e66432e67d03ed96af3e21d8940"

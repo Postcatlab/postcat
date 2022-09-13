@@ -61,6 +61,7 @@ export class ApiTabOperateService {
       }
     } catch (e) {
       console.error(e);
+      return;
     }
 
     //Tab from last choose
