@@ -2,6 +2,10 @@ import { I18N } from './i18n';
 const { ipcRenderer } = require('electron');
 // 可以加上条件判断，根据不同模块id哪些允许放出
 const apiAccessRules = ipcRenderer.sendSync('eo-sync', { action: 'getApiAccessRules' }) || [];
+// 正在安装中的插件任务列表
+const installTask = new Map();
+// 正在卸载中的插件任务列表
+const uninstallTask = new Map();
 
 // 异步防止返回处理覆盖
 const storageCallback = new Map();
@@ -83,14 +87,85 @@ window.eo.getModules = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
 };
 window.eo.installModule = (name, isLocal = false) => {
-  return ipcRenderer.invoke('eo-sync', { action: 'installModule', data: { name, isLocal } });
+  installTask.set(name, []);
+  const result = ipcRenderer.invoke('eo-sync', { action: 'installModule', data: { name, isLocal } });
+  result
+    .then(() => {
+      const callbackTask = installTask.get(name);
+      callbackTask.forEach((callback) =>
+        callback({
+          extName: name,
+          type: 'install',
+          status: 'success',
+        })
+      );
+    })
+    .catch(() => {
+      const callbackTask = installTask.get(name);
+      callbackTask.forEach((callback) =>
+        callback({
+          extName: name,
+          type: 'install',
+          status: 'error',
+        })
+      );
+    })
+    .finally(() => {
+      installTask.delete(name);
+    });
+  return result;
 };
 window.eo.uninstallModule = (name, isLocal = false) => {
-  return ipcRenderer.invoke('eo-sync', { action: 'uninstallModule', data: { name, isLocal } });
+  uninstallTask.set(name, []);
+  const result = ipcRenderer.invoke('eo-sync', { action: 'uninstallModule', data: { name, isLocal } });
+
+  result
+    .then(() => {
+      const callbackTask = uninstallTask.get(name);
+      callbackTask.forEach((callback) =>
+        callback({
+          extName: name,
+          type: 'uninstall',
+          status: 'success',
+        })
+      );
+    })
+    .catch(() => {
+      const callbackTask = uninstallTask.get(name);
+      callbackTask.forEach((callback) =>
+        callback({
+          extName: name,
+          type: 'uninstall',
+          status: 'error',
+        })
+      );
+    })
+    .finally(() => {
+      uninstallTask.delete(name);
+    });
+  return result;
 };
 window.eo.openApp = (inputArg) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'openApp', data: inputArg });
 };
+window.eo.getInstallTask = () => installTask;
+window.eo.getUninstallTask = () => uninstallTask;
+window.eo.getExtIsInTask = (name, callback) => {
+  if (installTask.has(name)) {
+    const callbackTask = installTask.get(name);
+    callback && callbackTask.push(callback);
+    installTask.set(name, callbackTask);
+    return true;
+  }
+  if (uninstallTask.has(name)) {
+    const callbackTask = uninstallTask.get(name);
+    callback && callbackTask.push(callback);
+    uninstallTask.set(name, callbackTask);
+    return true;
+  }
+  return false;
+};
+
 window.eo.storage = (args, callback: any) => {
   const key = `${args.action}_${Date.now()}`;
   storageCallback.set(key, callback);

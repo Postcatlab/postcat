@@ -58,10 +58,17 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   async getDetail() {
-    this.extensionDetail = await this.extensionService.getDetail(
-      this.route.snapshot.queryParams.id,
-      this.route.snapshot.queryParams.name
-    );
+    const extName = this.route.snapshot.queryParams.name;
+    this.isOperating = window.eo?.getExtIsInTask(extName, ({ type, status }) => {
+      if (type === 'install' && status === 'success') {
+        this.extensionDetail.installed = true;
+      }
+      if (type === 'uninstall' && status === 'success') {
+        this.extensionDetail.installed = false;
+      }
+      this.isOperating = false;
+    });
+    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, extName);
 
     this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
 
