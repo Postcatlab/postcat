@@ -112,7 +112,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
   ngAfterViewInit(): void {
     // console.log('codeEdtor', this.codeEdtor);
-    requestIdleCallback(() => this.rerenderEditor());
+    requestAnimationFrame(() => this.rerenderEditor());
     if (this.editorOption.automaticLayout === undefined) {
       this.resizeObserver = new ResizeObserver(
         debounce(() => {
@@ -131,7 +131,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   async ngOnChanges() {
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
-      requestIdleCallback(() => {
+      requestAnimationFrame(() => {
         const type = whatTextType(this.$$code || '');
         this.editorType = type;
         window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
@@ -175,18 +175,17 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
     let code = '';
     try {
-      code = typeof val === 'string' ? val : JSON.stringify(val);
+      code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val, null, 4);
     } catch {
       code = String(val);
     }
 
     if (code && (this.config?.readOnly || (this.isFirstFormat && this.autoFormat))) {
-      requestAnimationFrame(async () => {
+      (async () => {
         this.$$code = await this.formatCode();
         this.isFirstFormat = false;
-      });
+      })();
     }
-
     this.$$code = code;
   }
 
@@ -269,7 +268,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   };
   formatCode() {
     return new Promise<string>((resolve) => {
-      requestIdleCallback(async () => {
+      requestAnimationFrame(async () => {
         this.codeEdtor?.updateOptions({ readOnly: false });
         await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
         this.codeEdtor?.updateOptions({ readOnly: this.config.readOnly });

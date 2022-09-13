@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { ElectronService } from '../../../../core/services';
 import pkg from '../../../../../../../../../package.json';
+import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
+import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 type DescriptionsItem = {
   readonly id: string;
@@ -59,6 +61,15 @@ const electronDetails: DescriptionsItem[] = [
 
 if (isElectron) {
   descriptions.push(...electronDetails);
+} else {
+  const browserType = getBrowserType(getSettings()?.['eoapi-language']);
+  descriptions.push(
+    ...Object.entries(browserType).map(([key, value]) => ({
+      id: key,
+      label: key.replace(/^\S/, (s) => s.toUpperCase()),
+      value,
+    }))
+  );
 }
 @Component({
   selector: 'eo-about',
@@ -122,7 +133,8 @@ export class AboutComponent implements OnInit {
   }
 
   getSystemInfo() {
-    const systemInfo = this.electron.ipcRenderer?.sendSync('get-system-info');
+    const systemInfo =
+      this.electron.ipcRenderer?.sendSync('get-system-info') || getBrowserType(getSettings()?.['eoapi.language']);
     return systemInfo || {};
   }
 }
