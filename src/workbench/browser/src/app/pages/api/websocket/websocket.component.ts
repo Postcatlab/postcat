@@ -66,8 +66,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   async init() {
     if (!this.model || isEmptyObj(this.model)) {
-      this.model = this.resetModel();
       this.resetForm();
+      this.model = this.resetModel();
       const id = this.route.snapshot.queryParams.uuid;
       if (id && id.includes('history_')) {
         const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
