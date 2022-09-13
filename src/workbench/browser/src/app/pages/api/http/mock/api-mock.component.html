@@ -42,7 +42,7 @@
         <nz-form-item>
           <nz-form-label i18n nzFor="currentEditMock.response">Response</nz-form-label>
           <nz-form-control>
-            <eo-monaco-editor [(code)]="responseStr" (codeChange)="rawDataChange()" [maxLine]="20"
+            <eo-monaco-editor [(code)]="responseStr" (codeChange)="rawDataChange()" [maxLine]="15" class="h-[200px]"
               [disabled]="currentEditMock.createWay === 'system'"
               [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
           </nz-form-control>

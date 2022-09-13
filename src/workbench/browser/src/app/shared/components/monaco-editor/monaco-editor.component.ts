@@ -48,7 +48,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.setCode(val);
   }
   /** Scroll bars appear over 20 lines */
-  @Input() maxLine = 200;
+  @Input() maxLine: number;
   @Input() config: JoinedEditorOptions = {};
   @Input() editorType = 'json';
   @Input() autoFormat = false;
@@ -180,7 +180,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       code = String(val);
     }
 
-    if (code && this.isFirstFormat && this.autoFormat) {
+    if (code && (this.config?.readOnly || (this.isFirstFormat && this.autoFormat))) {
       requestAnimationFrame(async () => {
         this.$$code = await this.formatCode();
         this.isFirstFormat = false;
@@ -216,10 +216,10 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       });
     }
 
-    // this.codeEdtor.onDidChangeModelDecorations(() => {
-    //   updateEditorHeight(); // typing
-    //   requestAnimationFrame(updateEditorHeight); // folding
-    // });
+    this.codeEdtor.onDidChangeModelDecorations(() => {
+      updateEditorHeight(); // typing
+      requestAnimationFrame(updateEditorHeight); // folding
+    });
 
     this.codeEdtor.onDidChangeModelContent((e) => {
       this.handleChange();
@@ -229,25 +229,27 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       this.handleBlur();
     });
 
-    // let prevHeight = 0;
+    let prevHeight = 0;
 
-    // const updateEditorHeight = () => {
-    //   const editorElement = this.codeEdtor.getDomNode();
+    const updateEditorHeight = () => {
+      if (this.maxLine) {
+        const editorElement = this.codeEdtor.getDomNode();
 
-    //   if (!editorElement) {
-    //     return;
-    //   }
+        if (!editorElement) {
+          return;
+        }
 
-    //   const lineHeight = this.codeEdtor.getOption(editor.EditorOption.lineHeight);
-    //   const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
-    //   const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
+        const lineHeight = this.codeEdtor.getOption(editor.EditorOption.lineHeight);
+        const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
+        const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
 
-    //   if (prevHeight !== height) {
-    //     prevHeight = height;
-    //     editorElement.style.height = `${height}px`;
-    //     this.codeEdtor.layout();
-    //   }
-    // };
+        if (prevHeight !== height) {
+          prevHeight = height;
+          editorElement.style.height = `${height}px`;
+          this.codeEdtor.layout();
+        }
+      }
+    };
   }
   log(event, txt) {
     console.log('ace event', event, txt);

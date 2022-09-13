@@ -5,6 +5,8 @@ import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/ser
 import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
 class ExtensionList {
   list = [];
   constructor(list) {
@@ -34,16 +36,20 @@ export class ExtensionListComponent implements OnInit {
     public electron: ElectronService,
     private route: ActivatedRoute,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private modal: NzModalService
   ) {
     this.type = this.route.snapshot.queryParams.type;
     this.seachChanged$.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async (keyword) => {
-      this.renderList = await this.searchPlugin(keyword);
+      this.getPluginList(keyword);
     });
   }
   async ngOnInit() {
     this.watchSearchConditionChange();
     this.watchSearchKeywordChange();
+  }
+  async getPluginList(keyword: string) {
+    this.renderList = await this.searchPlugin(keyword);
   }
   async searchPlugin(keyword = '') {
     const timer = setTimeout(() => (this.loading = true), 80);
@@ -62,6 +68,11 @@ export class ExtensionListComponent implements OnInit {
       }
       return new ExtensionList(res.data).search(keyword);
     } catch (error) {
+      this.modal.confirm({
+        nzTitle: '插件列表加载失败',
+        nzOkText: '重试',
+        nzOnOk: () => this.getPluginList(keyword),
+      });
     } finally {
       clearTimeout(timer);
       const timeout = Date.now() - timeStart > 300 ? 0 : 300;

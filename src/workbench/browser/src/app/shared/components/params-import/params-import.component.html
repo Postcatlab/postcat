@@ -13,21 +13,12 @@
   </ul>
 </nz-dropdown-menu> -->
 
-<nz-modal
-  [(nzVisible)]="isVisible"
-  i18n-[nzTitle]
-  [nzTitle]="'Import ' + (modalTitle || contentTypeTitle)"
-  [nzStyle]="{ width: '800px' }"
-  (nzOnCancel)="handleCancel()"
->
+<nz-modal [(nzVisible)]="isVisible" i18n-[nzTitle] [nzTitle]="'Import ' + (modalTitle || contentTypeTitle)"
+  [nzStyle]="{ width: '800px' }" (nzOnCancel)="handleCancel()">
   <div *nzModalContent>
     <pre class="eg" i18n>Import like this:<br />{{ eg }}</pre>
-    <eo-monaco-editor
-      [(code)]="paramCode"
-      [editorType]="contenTypeEditor"
-      [maxLine]="16"
-      [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-    ></eo-monaco-editor>
+    <eo-monaco-editor [(code)]="paramCode" [editorType]="contenTypeEditor"
+      [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
   </div>
   <div *nzModalFooter style="text-align: left">
     <button nz-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
