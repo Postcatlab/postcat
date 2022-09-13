@@ -271,7 +271,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   checkTabCanLeave = () => {
     if (this.wsStatus === 'disconnect') {
-      this.resetForm();
+      // this.resetForm();
       return true;
     }
     return new Promise((resolve) => {
@@ -285,7 +285,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             type: 'primary',
             onClick: () => {
               modal.destroy();
-              this.resetForm();
+              // this.resetForm();
               // * disconnect ws connect
               this.handleConnect('disconnect');
               resolve(true);
