@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ApplicationRef } from '@angular/core';
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,6 +35,7 @@ import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 registerLocaleData(en);
 registerLocaleData(zh);
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -81,7 +82,7 @@ registerLocaleData(zh);
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(private upgrade: UpgradeModule, private lang: LanguageService) {
+  constructor(private upgrade: UpgradeModule,public appRef: ApplicationRef, private lang: LanguageService) {
     if (APP_CONFIG.production) {
       this.lang.init();
     }
