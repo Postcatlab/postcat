@@ -29,11 +29,12 @@ module.exports = (config, options) => {
     {
       test: /\.css$/,
       use: ['style-loader', 'css-loader'],
-      resourceQuery: { not: [/\?src/] },
+      resourceQuery: { not: [/\?ngResource/] },
     },
     {
       test: /\.ttf$/,
-      type: 'asset/resource'
+      type: 'asset/resource',
+      resourceQuery: { not: [/\?ngResource/] },
     },
     ...config.module.rules,
   ];
