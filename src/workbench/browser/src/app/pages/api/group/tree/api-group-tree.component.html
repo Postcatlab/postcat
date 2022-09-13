@@ -41,10 +41,10 @@
     <div [style.--tree-level]="node.level">
       <!-- Folder -->
       <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
-        <div class="f_row_ac">
+        <div class="overflow-hidden f_row_ac text-ellipsis">
           <span class="text_omit node_title">{{ node.title }}</span>
         </div>
-        <span class="tree_node_operate">
+        <span class="flex tree_node_operate">
           <button nz-dropdown [nzDropdownMenu]="groupMenu">
             <eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon>
           </button>
