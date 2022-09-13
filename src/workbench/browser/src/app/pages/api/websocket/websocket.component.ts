@@ -79,9 +79,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     // * 通过 SocketIO 通知后端
     try {
       this.socket = io(
-        `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : 'ws://localhost'}:${
-          APP_CONFIG.SOCKET_PORT
-        }`,
+        `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : 'ws://localhost:4301'}`,
         { transports: ['websocket'] }
       );
       this.socket.on('connect_error', (error) => {
