@@ -83,10 +83,10 @@ window.eo.getModules = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
 };
 window.eo.installModule = (name, isLocal = false) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'installModule', data: { name, isLocal } });
+  return ipcRenderer.invoke('eo-sync', { action: 'installModule', data: { name, isLocal } });
 };
 window.eo.uninstallModule = (name, isLocal = false) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'uninstallModule', data: { name, isLocal } });
+  return ipcRenderer.invoke('eo-sync', { action: 'uninstallModule', data: { name, isLocal } });
 };
 window.eo.openApp = (inputArg) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'openApp', data: inputArg });
