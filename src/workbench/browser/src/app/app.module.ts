@@ -36,6 +36,7 @@ import zh from '@angular/common/locales/zh';
 registerLocaleData(en);
 registerLocaleData(zh);
 
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
