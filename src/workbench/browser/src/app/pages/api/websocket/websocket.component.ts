@@ -67,6 +67,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async init() {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
+      this.resetForm();
       const id = this.route.snapshot.queryParams.uuid;
       if (id && id.includes('history_')) {
         const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
@@ -132,6 +133,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     }
     this.modelChange.emit(this.model);
   }
+
   async handleConnect(bool = 'disconnect') {
     const isOK = this.checkForm();
     if (!isOK) {
@@ -271,7 +273,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   checkTabCanLeave = () => {
     if (this.wsStatus === 'disconnect') {
-      // this.resetForm();
       return true;
     }
     return new Promise((resolve) => {
@@ -285,7 +286,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             type: 'primary',
             onClick: () => {
               modal.destroy();
-              // this.resetForm();
               // * disconnect ws connect
               this.handleConnect('disconnect');
               resolve(true);

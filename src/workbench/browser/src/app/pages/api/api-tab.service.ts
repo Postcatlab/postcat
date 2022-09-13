@@ -148,8 +148,10 @@ export class ApiTabService {
     this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
     this.componentRef.init();
   }
+
   updateTab(currentTab, inData) {
     const model = inData.model;
+    console.log('=< model', model);
     const contentID = currentTab.module;
 
     //Set tabItem
@@ -166,7 +168,6 @@ export class ApiTabService {
       replaceTab.extends.method = model.method;
       if (currentTab.module === 'test') {
         if (currentTab.pathname === '/home/api/ws/test') {
-          console.log('model', model);
           replaceTab.extends.method = model.request.protocol?.toUpperCase();
         } else {
           replaceTab.extends.method = model.request.method;
@@ -244,6 +245,7 @@ export class ApiTabService {
    * @param inData.url get component fit tab data
    */
   afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
+    console.log('model =>', inData.model);
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
