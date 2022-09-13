@@ -414,7 +414,18 @@ const { resolve } = require('path');
               tmpReportData.response.responseLength = tmpInputResponseObj.chunk.length;
               let tmpDetected = {},
                 tmpSuffix = _LibsMineType.getSuffix(inputRes.headers['content-type']),
-                tmpFileBinary;
+                tmpFileBinary,
+                blobFileName;
+              try {
+                blobFileName = _ContentDisposition.parse(inputRes.headers['content-disposition'] || 'undefined')
+                  .parameters.filename;
+              } catch (PARSE_CONTENT_DISPOSITION_ERR) {
+                try {
+                  blobFileName = _ContentDisposition.parse(
+                    encodeURI(inputRes.headers['content-disposition'] || 'undefined').replace(/\?/g, '')
+                  ).parameters.filename;
+                } catch (URL_ENCODE_PARSE_CONTENT_DISPOSITION_ERR) {}
+              }
               if (!inputRes.headers['content-type']) {
                 tmpDetected =
                   _GetFileClass.byContent(
@@ -423,10 +434,11 @@ const { resolve } = require('path');
                   ) || {};
               }
               if (
-                /^(text\/(.*))|(application(.*)((\/)|(\+))json)|(application(.*)((\/)|(\+))xml)/gi.test(
+                !blobFileName &&
+                (/^(text\/(.*))|(application(.*)((\/)|(\+))json)|(application(.*)((\/)|(\+))xml)/gi.test(
                   inputRes.headers['content-type']
                 ) ||
-                (!(inputRes.headers['content-type'] && tmpSuffix) && !(tmpDetected && tmpDetected.mime))
+                  (!(inputRes.headers['content-type'] && tmpSuffix) && !(tmpDetected && tmpDetected.mime)))
               ) {
                 tmpReportData.response.contentType = inputRes.headers['content-type'];
                 if (tmpReportData.response.responseLength >= 300 * 1024) {
@@ -449,17 +461,7 @@ const { resolve } = require('path');
                 tmpReportData.response.responseType = 'stream';
                 tmpReportData.response.contentType = inputRes.headers['content-type'] || tmpDetected.mime;
                 let tmpPathUrl = inputTestData.options.path;
-                try {
-                  tmpReportData.blobFileName = _ContentDisposition.parse(
-                    inputRes.headers['content-disposition'] || 'undefined'
-                  ).parameters.filename;
-                } catch (PARSE_CONTENT_DISPOSITION_ERR) {
-                  try {
-                    tmpReportData.blobFileName = _ContentDisposition.parse(
-                      encodeURI(inputRes.headers['content-disposition'] || 'undefined').replace(/\?/g, '')
-                    ).parameters.filename;
-                  } catch (URL_ENCODE_PARSE_CONTENT_DISPOSITION_ERR) {}
-                }
+                tmpReportData.blobFileName = blobFileName;
                 if (!tmpReportData.blobFileName && tmpDetected && tmpDetected.ext) {
                   tmpReportData.blobFileName = `response.${tmpDetected.ext}`;
                 } else if (!tmpReportData.blobFileName) {
