@@ -230,7 +230,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: content,
-            title: 'Connected to ' + this.getLink() + ` is failed`,
+            title: 'Connect to ' + this.getLink() + ` is failed`,
             isExpand: false,
           });
           this.wsStatus = 'disconnect';

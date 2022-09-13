@@ -31,7 +31,7 @@ desc -> '{$3}'
 
 --- add case
 
-goto 'https://www.eoapi.io/en'
+goto 'http://localhost:4200'
 
 --- env_manage
 
@@ -59,7 +59,7 @@ find:
 
 --- del case
 
-goto 'https://www.eoapi.io/en'
+goto 'http://localhost:4200'
 
 --- env_manage
 

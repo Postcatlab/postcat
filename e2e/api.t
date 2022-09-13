@@ -2,7 +2,7 @@
 
 --- API test
 
-goto 'http://www.eoapi.io/en'
+goto 'http://localhost:4200'
 
 find: 
     [select 'POST'] = method  [input] = input [button 'Send'] = sendBtn 
@@ -25,7 +25,7 @@ capture
 
 --- add New
 
-goto 'http://www.eoapi.io/en'
+goto 'http://localhost:4200'
 
 find:
     [input 'Search'] [button 'xpath:body > eo-root > eo-pages > div > div > div > eo-api > nz-layout > nz-sider > div > nz-content > nz-tabset > div > div > div.ant-tabs-tabpane.ant-tabs-tabpane-active.ng-star-inserted > div > eo-api-group-tree > header > div']=addBtn
