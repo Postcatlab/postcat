@@ -42,6 +42,7 @@ testem.log
 
 # e2e
 /e2e/test
+/e2e/imgs
 !/e2e/protractor.conf.js
 /e2e/*.map
 /e2e/tracing
