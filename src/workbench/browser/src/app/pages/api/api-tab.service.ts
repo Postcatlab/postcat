@@ -151,7 +151,6 @@ export class ApiTabService {
 
   updateTab(currentTab, inData) {
     const model = inData.model;
-    console.log('=< model', model);
     const contentID = currentTab.module;
 
     //Set tabItem
@@ -245,7 +244,6 @@ export class ApiTabService {
    * @param inData.url get component fit tab data
    */
   afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
-    console.log('model =>', inData.model);
     if (!this.apiTabComponent) {
       console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
       return;
