@@ -1,6 +1,5 @@
 import {
   Component,
-  OnChanges,
   AfterContentInit,
   Input,
   QueryList,
@@ -9,7 +8,6 @@ import {
   Output,
   EventEmitter,
   OnInit,
-  ViewChild,
 } from '@angular/core';
 import { CellDirective } from './cell.directive';
 import { isEmptyValue } from '../../../utils/index';
@@ -37,6 +35,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   @Input() columns: Column[] = [];
   @Input() dataModel: {} = {};
   @Input() rules: [] = [];
+  @Input() hideEmptyLine = false;
   @Output() modelChange = new EventEmitter<any>();
 
   // * about share scope
@@ -50,7 +49,7 @@ export class EoTableComponent implements OnInit, AfterContentInit {
   @Input() set model(value) {
     this.modelData = (value ?? []).flat(Infinity);
     const emptyList = this.modelData.filter(isEmptyValue);
-    if (emptyList.length === 0) {
+    if (!this.hideEmptyLine && emptyList.length === 0) {
       // * If has no empty line, then add a new line.
       this.modelData = this.modelData.concat([JSON.parse(JSON.stringify(this.dataModel))]);
     }
