@@ -19,36 +19,38 @@
   <nz-alert class="eo_alert_bar" *ngFor="let item of model.reportList"
     [nzType]="item.type === 'interrupt' ? 'error' : 'info'" [nzMessage]="item.content.toString()" nzShowIcon></nz-alert>
   <!-- Response -->
-  <div *ngIf="model.responseType" [ngSwitch]="model.responseType">
-    <div class="text-center" *ngSwitchCase="'stream'">
-      <div *ngIf="!responseIsImg">
-        <span i18n>Unable to preview non-text type data, you can</span>
-        <button class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()"
-          i18n="@@downloadResponse">
-          download response
-        </button>
-        <span i18n>and open it with other programs.</span>
-      </div>
-      <div class="mt20" *ngIf="responseIsImg" (contextmenu)="contextMenu($event, menu)">
-        <img class="maw_100percent" [src]="imgBlobUrl" />
-      </div>
-      <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-menu-item i18n="@@downloadResponse" (click)="downloadResponseText()">download response</li>
-        </ul>
-      </nz-dropdown-menu>
-    </div>
-    <div class="text-center" *ngSwitchCase="'longText'">
-      <span i18n>The response result exceeds the previewable size, you can</span>
-      <button i18n="@@downloadResponse" class="eo_theme_btn_default mlr5" type="button"
-        (click)="downloadResponseText()">
-        download response
-      </button>
-      <!-- or
-      <button class="eo_theme_btn_default" type="button" (click)="newTabResponseText()">在新标签页中显示返回结果</button>
-      and open it with other programs. -->
-    </div>
-    <eo-monaco-editor *ngSwitchDefault class="mt20" [autoFormat]="true" [(code)]="model.body"
-      [config]="{ readOnly: true }" [eventList]="['type', 'format', 'copy', 'search']"></eo-monaco-editor>
+  <div *ngIf="model.responseType">
+    <ng-container *ngIf="responseIsImg; else stream">
+      <img class="maw_100percent" [src]="imgBlobUrl" />
+    </ng-container>
+    <ng-template #stream>
+      <ng-container *ngIf="model.responseType === 'stream' && model.responseLength > 500000; else longText">
+        <div class="text-center">
+          <span i18n>Unable to preview non-text type data, you can</span>
+          <button class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()"
+            i18n="@@downloadResponse">
+            download response
+          </button>
+          <span i18n>and open it with other programs.</span>
+        </div>
+      </ng-container>
+    </ng-template>
+    <ng-template #longText>
+      <ng-container *ngIf="model.responseType === 'longText' && model.responseLength > 500000; else other">
+        <div class="text-center">
+          <span i18n>The response result exceeds the previewable size, you can</span>
+          <button i18n="@@downloadResponse" class="eo_theme_btn_default mlr5" type="button"
+            (click)="downloadResponseText()">
+            download response
+          </button>
+          <!-- or
+        <button class="eo_theme_btn_default" type="button" (click)="newTabResponseText()">在新标签页中显示返回结果</button>
+        and open it with other programs. -->
+        </div>
+      </ng-container>
+    </ng-template>
+    <ng-template #other>
+      <eo-monaco-editor class="mt20" [autoFormat]="true" [(code)]="model.body" [config]="{ readOnly: true }"
+        [eventList]="['type', 'format', 'copy', 'search']"></eo-monaco-editor>
+    </ng-template>
   </div>
-</div>
