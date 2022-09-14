@@ -2702,11 +2702,6 @@ accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.8:
     mime-types "~2.1.34"
     negotiator "0.6.3"
 
-ace-builds@^1.4.0:
-  version "1.8.1"
-  resolved "https://registry.npmmirror.com/ace-builds/-/ace-builds-1.8.1.tgz#5d318fa13d7e6ea947f8a50e42c570c573b29529"
-  integrity sha512-wjEQ4khMQYg9FfdEDoOtqdoHwcwFL48H0VB3te5b5A3eqHwxsTw8IX6+xzfisgborIb8dYU+1y9tcmtGFrCPIg==
-
 acorn-globals@^4.1.0:
   version "4.3.4"
   resolved "https://registry.npmmirror.com/acorn-globals/-/acorn-globals-4.3.4.tgz#9fa1926addc11c97308c4e66d7add0d40c3272e7"
@@ -3519,18 +3514,6 @@ brace-expansion@^2.0.1:
   integrity sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==
   dependencies:
     balanced-match "^1.0.0"
-
-brace-extra@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.npmmirror.com/brace-extra/-/brace-extra-0.9.0.tgz#ce18e93a07b8f6ed9e17e79799c5f7bcd90443d6"
-  integrity sha512-FqtEfrZc7f+w63Knlxvv3VeIME6EJp1v4fKVdlh7w2Fgqab3JozWr9for/hVnKsgT3USIPu8brvbs0zK88tPfQ==
-  dependencies:
-    w3c-blob "0.0.1"
-
-brace@0.11.1, brace@^0.11.0:
-  version "0.11.1"
-  resolved "https://registry.npmmirror.com/brace/-/brace-0.11.1.tgz#4896fcc9d544eef45f4bb7660db320d3b379fe58"
-  integrity sha512-Fc8Ne62jJlKHiG/ajlonC4Sd66Pq68fFwK4ihJGNZpGqboc324SQk+lRvMzpPRuJOmfrJefdG8/7JdWX4bzJ2Q==
 
 braces@^3.0.2, braces@~3.0.2:
   version "3.0.2"
@@ -9257,16 +9240,6 @@ ng-zorro-antd@13.3.2:
     date-fns "^2.16.1"
     tslib "^2.3.0"
 
-ngx-ace-wrapper@12.0.0:
-  version "12.0.0"
-  resolved "https://registry.npmmirror.com/ngx-ace-wrapper/-/ngx-ace-wrapper-12.0.0.tgz#d0e87794e0ac67c813c1865886181f397666d750"
-  integrity sha512-iamy+c6aO1Lw/c0NgvU6iBknKUj8BpBflZB34vvlyV+GwWFkze+CtJ8M3RBHj95yIGu8JhiWjB0uqHhiLj+N9Q==
-  dependencies:
-    ace-builds "^1.4.0"
-    brace "^0.11.0"
-    brace-extra "^0.9.0"
-    tslib "^2.3.0"
-
 nice-napi@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/nice-napi/-/nice-napi-1.0.2.tgz#dc0ab5a1eac20ce548802fc5686eaa6bc654927b"
@@ -13326,11 +13299,6 @@ void-elements@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npmmirror.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha512-qZKX4RnBzH2ugr8Lxa7x+0V6XD9Sb/ouARtiasEQCHB1EVU4NXtmHsDDrx1dO4ne5fc3J6EW05BP1Dl0z0iung==
-
-w3c-blob@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.npmmirror.com/w3c-blob/-/w3c-blob-0.0.1.tgz#b0cd352a1a50f515563420ffd5861f950f1d85b8"
-  integrity sha512-fKfmCyRd0A/tSLt0zPR2716jAkoysa4+2nA2ip6ytr6fs1I9Tml2aXb28w8ljUjUutT23Zn7Vyc2GQM5w3rtWA==
 
 w3c-hr-time@^1.0.1:
   version "1.0.2"
