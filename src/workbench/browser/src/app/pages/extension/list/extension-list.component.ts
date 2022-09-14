@@ -69,8 +69,8 @@ export class ExtensionListComponent implements OnInit {
       return new ExtensionList(res.data).search(keyword);
     } catch (error) {
       this.modal.confirm({
-        nzTitle: '插件列表加载失败',
-        nzOkText: '重试',
+        nzTitle: $localize`Extension list failed to load`,
+        nzOkText: $localize`Retry`,
         nzOnOk: () => this.getPluginList(keyword),
       });
     } finally {
