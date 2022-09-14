@@ -10,7 +10,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { debounce, whatTextType } from '../../../utils';
+import { debounce, isBase64, whatTextType } from '../../../utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { editor } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
@@ -171,11 +171,14 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     if (val === this.$$code) {
       return;
     }
-    // console.log('val', val);
 
     let code = '';
     try {
-      code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val, null, 4);
+      if (isBase64(val)) {
+        code = window.atob(val);
+      } else {
+        code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val, null, 4);
+      }
     } catch {
       code = String(val);
     }
