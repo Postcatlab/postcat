@@ -2,6 +2,8 @@ table.eo-table {
   width: 100%;
   border-radius: 3px 3px 0 0;
   border: 1px solid #f1f1f1;
+  table-layout: fixed;
+  border-collapse: separate;
   thead {
     height: 40px;
     background-color: #fafafa;

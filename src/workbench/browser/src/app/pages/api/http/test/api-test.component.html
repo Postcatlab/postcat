@@ -126,10 +126,11 @@
         </nz-tab>
       </nz-tabset>
       <ng-template #extraTemplate>
-        <div *ngIf="model.responseTabIndex === 0" class="px-[10px]">
+        <div *ngIf="model.responseTabIndex === 0" class="py-[6px] px-[12px] flex items-center">
           <!-- <span nz-icon nzType="download" nzTheme="outline">下载</span> -->
-          <a nz-button nzType="link" [disabled]="isEmpty(model.testResult?.response)" (click)="downloadFile()"
-            i18n>Download</a>
+          <eo-iconpark-icon name="download" *ngIf="!isEmpty(model.testResult?.response)" class="cursor-pointer"
+            (click)="downloadFile()">
+          </eo-iconpark-icon>
         </div>
       </ng-template>
       <div id="test-response"></div>

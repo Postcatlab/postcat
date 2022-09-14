@@ -108,7 +108,7 @@ export function getBrowserType(lang: 'zh-Hans' | 'en-US' = 'en-US') {
       {
         内核: engine, // 内核: webkit gecko presto trident
         内核版本: engineVs, // 内核版本
-        平台: platform, // 平台: desktop mobile
+        // 平台: platform, // 平台: desktop mobile
         载体: supporter, // 载体: chrome safari firefox opera iexplore edge
         载体版本: supporterVs, // 载体版本
         系统: system, // 系统: windows macos linux android ios
@@ -125,7 +125,7 @@ export function getBrowserType(lang: 'zh-Hans' | 'en-US' = 'en-US') {
       {
         engine, // 内核: webkit gecko presto trident
         engineVs, // 内核版本
-        platform, // 平台: desktop mobile
+        // platform, // 平台: desktop mobile
         supporter, // 载体: chrome safari firefox opera iexplore edge
         supporterVs, // 载体版本
         system, // 系统: windows macos linux android ios

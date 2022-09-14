@@ -40,8 +40,8 @@ export class ApiMockComponent implements OnInit {
   mockListColumns = [
     { title: $localize`Name`, slot: 'name', width: '20%' },
     { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
-    { title: 'URL', slot: 'url', width: '50%' },
-    { title: '', slot: 'action', width: '15%', fixed: true },
+    { title: 'URL', slot: 'url', width: '42%' },
+    { title: '', slot: 'action', width: '20%', fixed: true },
   ];
   /** 当前被编辑的mock */
   currentEditMock: ApiMockEntity;
