@@ -64,7 +64,7 @@ if (isElectron) {
 } else {
   const browserType = getBrowserType(getSettings()?.['eoapi-language']);
   descriptions.push(
-    ...Object.entries(browserType).map(([key, value]) => ({
+    ...Object.entries<string>(browserType).map(([key, value]) => ({
       id: key,
       label: key.replace(/^\S/, (s) => s.toUpperCase()),
       value,
