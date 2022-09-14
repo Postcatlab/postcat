@@ -76,8 +76,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     }
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
-    // ! here is question
-    this.validateForm.reset();
+    this.initBasicForm();
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
