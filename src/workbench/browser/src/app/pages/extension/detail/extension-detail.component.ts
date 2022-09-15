@@ -23,6 +23,7 @@ export class ExtensionDetailComponent implements OnInit {
   nzSelectedIndex = 0;
 
   changeLog = '';
+  changeLogNotFound = false;
   get isElectron() {
     return this.electronService.isElectron;
   }
@@ -91,27 +92,32 @@ export class ExtensionDetailComponent implements OnInit {
     const timer = setTimeout(() => (this.changelogLoading = true), 200);
     try {
       const response = await fetch(
-        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/changeLog.${
+        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/CHANGELOG.${
           locale ? locale + '.' : ''
         }md`
       );
       if (response.status === 200) {
         this.changeLog = await response.text();
       } else if (!locale && response.status === 404) {
-        const result = await fetch(`https://registry.npmjs.org/${this.extensionDetail.name}`, {
-          headers: {
-            // if fullmeta
-            // accept: ' application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*',
-          },
-        });
-        const data = await result.json();
-        this.changeLog = Object.entries<any>(data.versions).reduceRight(
-          (log, [key, value]) => `
+        try {
+          // const result = await fetch(`https://eoapi.eolinker.com/npm/${this.extensionDetail.name}`, {
+          const result = await fetch(`https://regi3stry.npmjs.org/${this.extensionDetail.name}`, {
+            headers: {
+              // if fullmeta
+              // accept: ' application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*',
+            },
+          });
+          const data = await result.json();
+          this.changeLog = Object.entries<any>(data.versions).reduceRight(
+            (log, [key, value]) => `
 ${log}
 * [${key}](${value.dist.tarball}) - ${new Date(data.time[key]).toLocaleString()}
-          `,
-          ''
-        );
+              `,
+            ''
+          );
+        } catch (error) {
+          this.changeLogNotFound = true;
+        }
       } else if (locale) {
         //If locale README not find,fetch default locale(en-US)
         this.fetchChangelog();
