@@ -45,7 +45,7 @@
           <span class="text_omit node_title">{{ node.title }}</span>
         </div>
         <span class="flex tree_node_operate">
-          <button nz-dropdown [nzDropdownMenu]="groupMenu">
+          <button nz-dropdown [nzDropdownMenu]="groupMenu" class="flex items-center">
             <eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon>
           </button>
           <nz-dropdown-menu #groupMenu="nzDropdownMenu">

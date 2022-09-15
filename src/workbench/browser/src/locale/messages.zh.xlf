@@ -1634,7 +1634,7 @@
         <source>Uninstall</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <target state="translated">卸载</target>
       </trans-unit>
@@ -1642,7 +1642,7 @@
         <source>Install</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">29</context>
         </context-group>
         <target state="translated">安装</target>
       </trans-unit>
@@ -1650,7 +1650,7 @@
         <source>Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <target state="translated">设置</target>
       </trans-unit>
@@ -1658,7 +1658,7 @@
         <source>Details</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/list/extension-list.component.html</context>
@@ -1670,7 +1670,7 @@
         <source>Support</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">50</context>
         </context-group>
         <target state="translated">支持</target>
       </trans-unit>
@@ -1678,7 +1678,7 @@
         <source>Author</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target state="translated">作者</target>
       </trans-unit>
@@ -1686,7 +1686,7 @@
         <source>Version</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <target state="translated">版本</target>
       </trans-unit>
@@ -1694,7 +1694,7 @@
         <source>Repository</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <target state="translated">代码仓库</target>
       </trans-unit>
@@ -1702,7 +1702,7 @@
         <source>Homepage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <target state="translated">首页</target>
       </trans-unit>
@@ -1710,7 +1710,7 @@
         <source>BugReport</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <target state="translated">报告问题</target>
       </trans-unit>
@@ -1718,15 +1718,31 @@
         <source>ChangeLog</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <target state="translated">更新日志</target>
+      </trans-unit>
+      <trans-unit id="7c12eacb43981edfc3ead9a883bb88c99d4364d5" datatype="html">
+        <source>Changelog failed to load</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+        <target state="translated">更新日志加载失败</target>
+      </trans-unit>
+      <trans-unit id="ff27cf4a48690eee831ba883e7b99c4621128a5c" datatype="html">
+        <source>Reacquire</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+        <target state="translated">重新获取</target>
       </trans-unit>
       <trans-unit id="482943acb7ee731000e8a6956a3654af77b10a08" datatype="html">
         <source>Eoapi Client is required to install this extension.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">85</context>
         </context-group>
         <target state="translated">安装此扩展需要下载 Eoapi 客户端。</target>
       </trans-unit>
@@ -1734,7 +1750,7 @@
         <source>Don&apos;t have Eoapi Client?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">88</context>
         </context-group>
         <target state="translated">还没有安装 Eoapi 客户端？</target>
       </trans-unit>
@@ -1742,7 +1758,7 @@
         <source> Download </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">89</context>
         </context-group>
         <target state="translated"> 下载 </target>
       </trans-unit>
@@ -1750,7 +1766,7 @@
         <source>This plugin has no documentation yet.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">80</context>
         </context-group>
         <target state="translated">此插件尚无文档。</target>
       </trans-unit>
