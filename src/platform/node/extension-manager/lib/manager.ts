@@ -7,11 +7,11 @@ import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
 import { promises, readFileSync, access, constants } from 'fs';
 import { ELETRON_APP_CONFIG } from '../../../../enviroment';
-import child_process from 'node:child_process';
-import util from 'node:util';
+import { createServer } from 'http-server/lib/http-server';
 import path from 'node:path';
-// 调用util.promisify方法，返回一个promise,如const { stdout, stderr } = await exec('rm -rf build')
-const exec = util.promisify(child_process.exec);
+import portfinder from 'portfinder';
+
+const extensionServerMap = new Map<string, string>();
 
 // * npm pkg name
 const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
@@ -312,18 +312,22 @@ export class ModuleManager implements ModuleManagerInterface {
   }
 
   setupExtensionPageServe(extName: string) {
+    if (extensionServerMap.has(extName)) {
+      return extensionServerMap.get(extName);
+    }
     const extPath = this.moduleHandler.getModuleDir(extName);
     const pageDir = path.join(extPath, 'page');
-    console.log('pageDir', pageDir);
     return new Promise((resolve, reject) => {
       access(path.join(pageDir, 'index.html'), constants.F_OK, async (err) => {
-        console.log('/??fwerwerwr', err, path.join(pageDir, 'index.html'));
         if (err) {
           reject(err);
         } else {
-          const data = await exec(`http-server`, { cwd: pageDir });
-          resolve(data);
-          console.log('setupExtensionPageServe data', data);
+          const port = await portfinder.getPortPromise();
+          const server = createServer({ root: pageDir });
+          server.listen(port);
+          const url = `http://127.0.0.1:${port}`;
+          extensionServerMap.set(extName, url);
+          resolve(url);
         }
       });
     });

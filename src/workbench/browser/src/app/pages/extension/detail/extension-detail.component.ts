@@ -21,6 +21,7 @@ export class ExtensionDetailComponent implements OnInit {
   extensionDetail: EoExtensionInfo;
   resourceInfo = ResourceInfo;
   nzSelectedIndex = 0;
+  pagePath = '';
 
   changeLog = '';
   changeLogNotFound = false;
@@ -65,6 +66,7 @@ export class ExtensionDetailComponent implements OnInit {
       ?.getExtensionPagePathByName(extName)
       ?.then((res) => {
         console.log('extName res', res);
+        this.pagePath = res;
       })
       .catch((err) => {
         console.log('extName catch', err);

@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class Vue3Component implements OnInit {
   constructor() {}
 
-  url = `http://localhost:4009/child/vue3/`;
+  url = `https://vue3-antd-admin.vercel.app`;
 
   microAppData = { msg: '来自基座的数据' };
 

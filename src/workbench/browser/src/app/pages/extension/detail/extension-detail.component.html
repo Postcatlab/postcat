@@ -78,8 +78,8 @@
           </nz-result>
         </nz-skeleton>
       </nz-tab>
-      <nz-tab i18n-nzTitle nzTitle="ChangeLog">
-        <eo-custom-tab></eo-custom-tab>
+      <nz-tab *ngIf="pagePath" i18n-nzTitle nzTitle="CustomTab">
+        <eo-custom-tab [url]="pagePath"></eo-custom-tab>
       </nz-tab>
     </nz-tabset>
   </section>
