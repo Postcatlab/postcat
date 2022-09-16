@@ -30,6 +30,7 @@
     "test": "npm-run-all --serial test:*",
     "clear:electron:tsc": "tsc --build --clean",
     "electron:tsc": "tsc -p tsconfig.json",
+    "changelog":"conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out"
   },
   "dependencies": {
