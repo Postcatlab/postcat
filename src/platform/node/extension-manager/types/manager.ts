@@ -128,4 +128,5 @@ export interface ModuleManagerInterface {
   getSideModuleList: (moduleID: string) => Array<ModuleInfo>;
   getFeature: (featureKey: string) => Map<string, object>;
   getFeatures: () => Map<string, Map<string, object>>;
+  setupExtensionPageServe: (extName: string) => any;
 }

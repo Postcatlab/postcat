@@ -260,6 +260,8 @@ try {
         // 重置并初始化mock路由
       } else if (arg.action === 'hook') {
         returnValue = 'hook返回';
+      } else if (arg.action === 'getExtensionPagePathByName') {
+        returnValue = moduleManager.setupExtensionPageServe(arg.data.extName);
       } else {
         returnValue = 'Invalid data';
       }

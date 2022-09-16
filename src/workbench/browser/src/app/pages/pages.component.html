@@ -1,27 +1,20 @@
 <eo-navbar></eo-navbar>
-<div
-  class="page-body"
-  [ngClass]="{ 'web-page-body': !electron.isElectron, 'pc-page-body': electron.isElectron }"
-  [style.--remote-notification-height]="isShowNotification && electron.isElectron ? '50px' : '0px'"
->
+<div class="page-body" [ngClass]="{ 'web-page-body': !electron.isElectron, 'pc-page-body': electron.isElectron }"
+  [style.--remote-notification-height]="isShowNotification && electron.isElectron ? '50px' : '0px'">
   <div *ngIf="!isRemote && isShowNotification && electron.isElectron" class="remote-notification">
     <eo-iconpark-icon name="{{ isRemote ? 'wifi' : 'close-wifi' }}" class="text-[13px] mr-[2px]"></eo-iconpark-icon>
     <span i18n>Current data storage exists {{ dataSourceText }},please switch if you want to collaborate</span>
     <a class="eo-blod ml-0.5" (click)="switchDataSource()" i18n>Remote Server Data Storage</a>
-    <eo-iconpark-icon name="close-small" class="absolute right-[20px] cursor-pointer"></eo-iconpark-icon>
+    <eo-iconpark-icon name="close-small" class="absolute right-[20px] cursor-pointer" (click)="closeNotification()">
+    </eo-iconpark-icon>
   </div>
   <div class="home_container f_row">
     <eo-setting></eo-setting>
     <eo-sidebar></eo-sidebar>
     <div class="home fg1">
       <router-outlet *ngIf="!loadedIframe"></router-outlet>
-      <iframe
-        *ngIf="!this.sidebar.currentModule.isOffical"
-        id="app_iframe"
-        frameborder="no"
-        border="0"
-        style="width: calc(100vw - 90px); height: calc(100vh - var(--NAVBAR_HEIGHT) - 4px)"
-      ></iframe>
+      <iframe *ngIf="!this.sidebar.currentModule.isOffical" id="app_iframe" frameborder="no" border="0"
+        style="width: calc(100vw - 90px); height: calc(100vh - var(--NAVBAR_HEIGHT) - 4px)"></iframe>
     </div>
   </div>
 </div>

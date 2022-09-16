@@ -5,8 +5,13 @@ import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
-import { promises, readFileSync } from 'fs';
+import { promises, readFileSync, access, constants } from 'fs';
 import { ELETRON_APP_CONFIG } from '../../../../enviroment';
+import child_process from 'node:child_process';
+import util from 'node:util';
+import path from 'node:path';
+// 调用util.promisify方法，返回一个promise,如const { stdout, stderr } = await exec('rm -rf build')
+const exec = util.promisify(child_process.exec);
 
 // * npm pkg name
 const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
@@ -304,5 +309,23 @@ export class ModuleManager implements ModuleManagerInterface {
       }
     });
     return newModules;
+  }
+
+  setupExtensionPageServe(extName: string) {
+    const extPath = this.moduleHandler.getModuleDir(extName);
+    const pageDir = path.join(extPath, 'page');
+    console.log('pageDir', pageDir);
+    return new Promise((resolve, reject) => {
+      access(path.join(pageDir, 'index.html'), constants.F_OK, async (err) => {
+        console.log('/??fwerwerwr', err, path.join(pageDir, 'index.html'));
+        if (err) {
+          reject(err);
+        } else {
+          const data = await exec(`http-server`, { cwd: pageDir });
+          resolve(data);
+          console.log('setupExtensionPageServe data', data);
+        }
+      });
+    });
   }
 }

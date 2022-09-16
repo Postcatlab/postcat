@@ -166,6 +166,10 @@ window.eo.getExtIsInTask = (name, callback) => {
   return false;
 };
 
+window.eo.getExtensionPagePathByName = (extName: string) => {
+  return ipcRenderer.invoke('eo-sync', { action: 'getExtensionPagePathByName', data: { extName } });
+};
+
 window.eo.storage = (args, callback: any) => {
   const key = `${args.action}_${Date.now()}`;
   storageCallback.set(key, callback);

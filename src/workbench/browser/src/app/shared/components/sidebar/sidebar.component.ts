@@ -72,6 +72,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/extension',
         route: 'home/extension/list',
       },
+      {
+        moduleName: $localize`Vue3`,
+        moduleID: '@eo-core-vue3',
+        isOffical: true,
+        icon: 'puzzle',
+        activeRoute: 'home/app-vue3',
+        route: 'home/app-vue3',
+      },
     ];
     if (this.electron.isElectron) {
       this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
