@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./vue3.component.scss'],
 })
 export class Vue3Component implements OnInit {
-  url = `https://www.eolink.com/`;
+  url = `https://www.npmjs.com/`;
   name = 'app-vue3';
 
   constructor() {}

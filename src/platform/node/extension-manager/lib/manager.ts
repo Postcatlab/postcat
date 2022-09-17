@@ -311,25 +311,23 @@ export class ModuleManager implements ModuleManagerInterface {
     return newModules;
   }
 
-  setupExtensionPageServe(extName: string) {
-    if (extensionServerMap.has(extName)) {
-      return extensionServerMap.get(extName);
+  async setupExtensionPageServe(extName: string) {
+    try {
+      const extPath = this.moduleHandler.getModuleDir(extName);
+      const pageDir = path.join(extPath, 'page');
+      const pageFile = path.join(pageDir, 'index.html');
+      await promises.access(pageFile, constants.W_OK);
+      if (extensionServerMap.has(extName)) {
+        return extensionServerMap.get(extName);
+      }
+      const port = await portfinder.getPortPromise();
+      const server = createServer({ root: pageDir });
+      server.listen(port);
+      const url = `http://127.0.0.1:${port}`;
+      extensionServerMap.set(extName, url);
+      return Promise.resolve(url);
+    } catch (error) {
+      return Promise.reject(error);
     }
-    const extPath = this.moduleHandler.getModuleDir(extName);
-    const pageDir = path.join(extPath, 'page');
-    return new Promise((resolve, reject) => {
-      access(path.join(pageDir, 'index.html'), constants.F_OK, async (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          const port = await portfinder.getPortPromise();
-          const server = createServer({ root: pageDir });
-          server.listen(port);
-          const url = `http://127.0.0.1:${port}`;
-          extensionServerMap.set(extName, url);
-          resolve(url);
-        }
-      });
-    });
   }
 }

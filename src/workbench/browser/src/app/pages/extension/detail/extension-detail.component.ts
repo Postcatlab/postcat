@@ -89,17 +89,11 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   fetchExtensionPage = async (extName: string) => {
-    if (this.electronService.isElectron) {
-      window.eo
-        ?.getExtensionPagePathByName(extName)
-        ?.then((res) => {
-          console.log('extName res', res);
-          this.pagePath = res;
-        })
-        .catch((err) => {
-          console.log('extName catch', err);
-        });
-    } else {
+    try {
+      const res = await window.eo.getExtensionPagePathByName(extName);
+      console.log('extName res', res);
+      this.pagePath = res;
+    } catch (e) {
       fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
         if (res.status === 200) {
           this.pagePath = res.url;
