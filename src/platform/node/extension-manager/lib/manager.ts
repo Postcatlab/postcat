@@ -5,13 +5,13 @@ import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
-import { promises, readFileSync, access, constants } from 'fs';
+import { promises, readFileSync, constants } from 'fs';
 import { ELETRON_APP_CONFIG } from '../../../../enviroment';
 import { createServer } from 'http-server/lib/http-server';
 import path from 'node:path';
 import portfinder from 'portfinder';
 
-const extensionServerMap = new Map<string, string>();
+const extensionServerMap = new Map<string, { url: string; server: ReturnType<typeof createServer> }>();
 
 // * npm pkg name
 const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
@@ -81,6 +81,10 @@ export class ModuleManager implements ModuleManagerInterface {
     const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
+      if (extensionServerMap.has(module.name)) {
+        extensionServerMap.get(module.name).server.close();
+        extensionServerMap.delete(module.name);
+      }
     }
     return result;
   }
@@ -318,13 +322,16 @@ export class ModuleManager implements ModuleManagerInterface {
       const pageFile = path.join(pageDir, 'index.html');
       await promises.access(pageFile, constants.W_OK);
       if (extensionServerMap.has(extName)) {
-        return extensionServerMap.get(extName);
+        return extensionServerMap.get(extName).url;
       }
       const port = await portfinder.getPortPromise();
       const server = createServer({ root: pageDir });
       server.listen(port);
       const url = `http://127.0.0.1:${port}`;
-      extensionServerMap.set(extName, url);
+      extensionServerMap.set(extName, {
+        url,
+        server,
+      });
       return Promise.resolve(url);
     } catch (error) {
       return Promise.reject(error);
