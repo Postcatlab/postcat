@@ -3,12 +3,13 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-vue3',
   templateUrl: './vue3.component.html',
-  styleUrls: ['./vue3.component.sass'],
+  styleUrls: ['./vue3.component.scss'],
 })
 export class Vue3Component implements OnInit {
-  constructor() {}
+  url = `https://www.eolink.com/`;
+  name = 'app-vue3';
 
-  url = `https://vue3-antd-admin.vercel.app`;
+  constructor() {}
 
   microAppData = { msg: '来自基座的数据' };
 

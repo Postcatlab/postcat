@@ -8,22 +8,26 @@ import microApp from '@micro-zoe/micro-app';
 @Component({
   selector: 'eo-custom-tab',
   template: `
-    <micro-app
-      *ngIf="url"
-      name="appname-custom-tab"
-      shadowDOM
-      [attr.url]="url"
-      [data]="microAppData"
-      (created)="handleCreate()"
-      (beforemount)="handleBeforeMount()"
-      (mounted)="handleMount()"
-      (unmount)="handleUnmount()"
-      (error)="handleError()"
-      (datachange)="handleDataChange($event)"
-    ></micro-app>
+    <div style="transform: translate(0)">
+      <micro-app
+        *ngIf="url"
+        [attr.name]="name"
+        [attr.url]="url"
+        default-page="/"
+        shadowDOM
+        [data]="microAppData"
+        (created)="handleCreate()"
+        (beforemount)="handleBeforeMount()"
+        (mounted)="handleMount()"
+        (unmount)="handleUnmount()"
+        (error)="handleError()"
+        (datachange)="handleDataChange($event)"
+      ></micro-app>
+    </div>
   `,
 })
 export class CustomTabComponent implements OnInit {
+  @Input() name = ``;
   @Input() url = ``;
   microAppData = { msg: '来自基座的数据' };
 
@@ -48,7 +52,7 @@ export class CustomTabComponent implements OnInit {
       if (result.status === 200) {
         this.microAppData = result.data;
         // 发送数据给子应用 my-app，setData第二个参数只接受对象类型
-        microApp.setData('appname-custom-tab', { data: this.microAppData });
+        microApp.setData(this.name, { data: this.microAppData });
         console.log('this.microAppData', this.microAppData);
       }
     });

@@ -22,6 +22,7 @@ export class ExtensionDetailComponent implements OnInit {
   resourceInfo = ResourceInfo;
   nzSelectedIndex = 0;
   pagePath = '';
+  extName = '';
 
   changeLog = '';
   changeLogNotFound = false;
@@ -60,19 +61,10 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   async getDetail() {
-    const extName = this.route.snapshot.queryParams.name;
-    console.log('ddd', window.eo?.getExtensionPagePathByName(extName));
-    window.eo
-      ?.getExtensionPagePathByName(extName)
-      ?.then((res) => {
-        console.log('extName res', res);
-        this.pagePath = res;
-      })
-      .catch((err) => {
-        console.log('extName catch', err);
-      });
+    this.extName = this.route.snapshot.queryParams.name;
 
-    this.isOperating = window.eo?.getExtIsInTask(extName, ({ type, status }) => {
+    this.fetchExtensionPage(this.extName);
+    this.isOperating = window.eo?.getExtIsInTask(this.extName, ({ type, status }) => {
       if (type === 'install' && status === 'success') {
         this.extensionDetail.installed = true;
       }
@@ -81,7 +73,7 @@ export class ExtensionDetailComponent implements OnInit {
       }
       this.isOperating = false;
     });
-    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, extName);
+    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, this.extName);
 
     this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
 
@@ -95,6 +87,26 @@ export class ExtensionDetailComponent implements OnInit {
       this.nzSelectedIndex = ~~this.route.snapshot.queryParams.tab;
     }
   }
+
+  fetchExtensionPage = async (extName: string) => {
+    if (this.electronService.isElectron) {
+      window.eo
+        ?.getExtensionPagePathByName(extName)
+        ?.then((res) => {
+          console.log('extName res', res);
+          this.pagePath = res;
+        })
+        .catch((err) => {
+          console.log('extName catch', err);
+        });
+    } else {
+      fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
+        if (res.status === 200) {
+          this.pagePath = res.url;
+        }
+      });
+    }
+  };
 
   async fetchChangelog(locale = '') {
     //Default locale en-US
@@ -113,7 +125,7 @@ export class ExtensionDetailComponent implements OnInit {
       } else if (!locale && response.status === 404) {
         try {
           // const result = await fetch(`https://eoapi.eolinker.com/npm/${this.extensionDetail.name}`, {
-          const result = await fetch(`https://regi3stry.npmjs.org/${this.extensionDetail.name}`, {
+          const result = await fetch(`https://registry.npmjs.org/${this.extensionDetail.name}`, {
             headers: {
               // if fullmeta
               // accept: ' application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*',

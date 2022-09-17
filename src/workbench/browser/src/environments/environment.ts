@@ -4,7 +4,3 @@ export const APP_CONFIG: APP_CONFIG_INSTANT | any = {
   production: false,
   environment: 'LOCAL',
 };
-
-export const environment = {
-  production: false,
-};
