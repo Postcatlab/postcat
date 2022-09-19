@@ -261,7 +261,7 @@ try {
       } else if (arg.action === 'hook') {
         returnValue = 'hook返回';
       } else if (arg.action === 'getExtensionPagePathByName') {
-        returnValue = moduleManager.setupExtensionPageServe(arg.data.extName);
+        returnValue = moduleManager.setupExtensionPageServer(arg.data.extName);
       } else {
         returnValue = 'Invalid data';
       }

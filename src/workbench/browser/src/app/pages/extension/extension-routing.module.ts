@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ExtensionDetailComponent } from './detail/extension-detail.component';
 import { ExtensionListComponent } from './list/extension-list.component';
 import { ExtensionComponent } from './extension.component';
-import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
 
 const routes: Routes = [
   {
@@ -23,12 +22,6 @@ const routes: Routes = [
       {
         path: 'detail',
         component: ExtensionDetailComponent,
-        children: [
-          {
-            path: 'custom-tab',
-            component: Vue3Component,
-          },
-        ],
       },
     ],
   },

@@ -315,7 +315,7 @@ export class ModuleManager implements ModuleManagerInterface {
     return newModules;
   }
 
-  async setupExtensionPageServe(extName: string) {
+  async setupExtensionPageServer(extName: string) {
     try {
       const extPath = this.moduleHandler.getModuleDir(extName);
       const pageDir = path.join(extPath, 'page');
