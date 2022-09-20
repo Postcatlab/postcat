@@ -94,9 +94,10 @@ export class ExtensionDetailComponent implements OnInit {
       console.log('extName res', res);
       this.pagePath = res;
     } catch (e) {
+      console.log('getExtensionPagePathByName err', e);
       fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
         if (res.status === 200) {
-          this.pagePath = res.url;
+          this.pagePath = res.url + '/child/react17/';
         }
       });
     }

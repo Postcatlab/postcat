@@ -5,11 +5,12 @@ import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
-import { promises, readFileSync, constants } from 'fs';
+import { promises, readFileSync } from 'fs';
 import { ELETRON_APP_CONFIG } from '../../../../enviroment';
 import { createServer } from 'http-server/lib/http-server';
 import path from 'node:path';
 import portfinder from 'portfinder';
+import { lstat } from 'fs/promises';
 
 const extensionServerMap = new Map<string, { url: string; server: ReturnType<typeof createServer> }>();
 
@@ -318,21 +319,32 @@ export class ModuleManager implements ModuleManagerInterface {
   async setupExtensionPageServer(extName: string) {
     try {
       const extPath = this.moduleHandler.getModuleDir(extName);
-      const pageDir = path.join(extPath, 'page');
-      const pageFile = path.join(pageDir, 'index.html');
-      await promises.access(pageFile, constants.W_OK);
-      if (extensionServerMap.has(extName)) {
-        return extensionServerMap.get(extName).url;
+      const stats = await lstat(extPath);
+      const pkg = require(path.join(extPath, 'package.json'));
+      // 是否为软连接，是则为本地开发，需要提供本地开发web服务地址
+      if (stats.isSymbolicLink()) {
+        if (pkg?.devServerUrl) {
+          return pkg?.devServerUrl;
+        }
       }
-      const port = await portfinder.getPortPromise();
-      const server = createServer({ root: pageDir });
-      server.listen(port);
-      const url = `http://127.0.0.1:${port}`;
-      extensionServerMap.set(extName, {
-        url,
-        server,
-      });
-      return Promise.resolve(url);
+      // 生产环境需要提供 html 入口文件地址(pageEntry字段)
+      if (pkg?.pageEntry) {
+        if (extensionServerMap.has(extName)) {
+          return extensionServerMap.get(extName).url;
+        }
+        const port = await portfinder.getPortPromise();
+        const pageDir = path.parse(path.join(extPath, pkg?.pageEntry)).dir;
+        console.log('extension pageDir', pageDir);
+        const server = createServer({ root: pageDir });
+        server.listen(port);
+        const url = `http://127.0.0.1:${port}`;
+        extensionServerMap.set(extName, {
+          url,
+          server,
+        });
+        return url;
+      }
+      return Promise.reject('该插件package.json缺少pageEntry字段');
     } catch (error) {
       return Promise.reject(error);
     }
