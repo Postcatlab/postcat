@@ -44,6 +44,12 @@ const eventHash = new Map()
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
+  @Input() set isBase64(val) {
+    this.$$isBase64 = val;
+    if (val) {
+      this.setCode(window.atob(this.$$code));
+    }
+  }
   @Input() set code(val) {
     this.setCode(val);
   }
@@ -56,6 +62,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() completions = [];
   @Output() codeChange = new EventEmitter<string>();
   $$code = '';
+  $$isBase64 = false;
   isFirstFormat = true;
   codeEdtor: editor.IStandaloneCodeEditor;
   completionItemProvider: monaco.IDisposable;
@@ -174,7 +181,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
     let code = '';
     try {
-      if (isBase64(val)) {
+      if (this.$$isBase64) {
         code = window.atob(val);
       } else {
         code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val, null, 4);
