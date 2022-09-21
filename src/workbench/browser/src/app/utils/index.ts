@@ -234,13 +234,15 @@ export const eoDeepCopy = (obj) => {
 
   throw new Error("Unable to copy obj! Its type isn't supported.");
 };
+//判断是否为base64转码过的字符串
+const exg = new RegExp('^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
 
 export function isBase64(str) {
   if (str === '' || str.trim() === '') {
     return false;
   }
   try {
-    return window.btoa(window.atob(str)) === str;
+    return exg.test(str);
   } catch (err) {
     return false;
   }

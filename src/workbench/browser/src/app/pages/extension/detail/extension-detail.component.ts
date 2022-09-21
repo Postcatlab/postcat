@@ -82,6 +82,7 @@ export class ExtensionDetailComponent implements OnInit {
     if (this.extensionDetail?.features?.configuration) {
       this.nzSelectedIndex = ~~this.route.snapshot.queryParams.tab;
     }
+    this.fetchChangelog(this.language.systemLanguage);
   }
 
   async fetchChangelog(locale = '') {
@@ -101,7 +102,7 @@ export class ExtensionDetailComponent implements OnInit {
       } else if (!locale && response.status === 404) {
         try {
           // const result = await fetch(`https://eoapi.eolinker.com/npm/${this.extensionDetail.name}`, {
-          const result = await fetch(`https://regi3stry.npmjs.org/${this.extensionDetail.name}`, {
+          const result = await fetch(`https://registry.npmjs.org/${this.extensionDetail.name}`, {
             headers: {
               // if fullmeta
               // accept: ' application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*',
