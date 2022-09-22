@@ -50,7 +50,7 @@
       </ng-container>
     </ng-template>
     <ng-template #other>
-      <eo-monaco-editor class="mt20" [autoFormat]="true" [(code)]="model.body" [config]="{ readOnly: true }"
+      <eo-monaco-editor class="mt20" [autoFormat]="true" [code]="model.body" [config]="{ readOnly: true }"
         [isBase64]="['longText', 'stream'].includes(model.responseType)"
         [eventList]="['type', 'format', 'copy', 'search']"></eo-monaco-editor>
     </ng-template>

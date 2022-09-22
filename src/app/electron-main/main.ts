@@ -15,6 +15,7 @@ import { ConfigurationInterface } from 'src/platform/node/configuration';
 import { MockServer } from 'eo/platform/node/mock-server';
 import socket from '../../workbench/node/server/socketio';
 import { LanguageService } from 'eo/app/electron-main/language.service';
+import portfinder from 'portfinder';
 
 export const subView = {
   appView: null,
@@ -37,8 +38,13 @@ if (app.isPackaged) {
 
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
-// * start SocketIO
-socket();
+(async () => {
+  portfinder.basePort = 10000;
+  // Use portfinder for port detection. If the port is found to be occupied, the port will be incremented by 1.
+  const port = await portfinder.getPortPromise();
+  // * start SocketIO
+  socket(port);
+})();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 global.shareObject = {
