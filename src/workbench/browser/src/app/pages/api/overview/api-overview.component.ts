@@ -53,7 +53,6 @@ export class ApiOverviewComponent implements OnDestroy {
     this.modal = this.modalService.create({
       nzTitle: desc,
       nzContent: actionComponent[type],
-      nzClosable: false,
       nzComponentParams: {},
       nzOnOk: () => {
         this.modal.componentInstance.submit((status) => {

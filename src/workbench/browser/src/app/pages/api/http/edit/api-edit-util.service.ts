@@ -13,7 +13,6 @@ export class ApiEditUtilService {
     const modal = this.modalService.create({
       nzTitle: $localize`${opts.title} Detail`,
       nzContent: ApiParamsExtraSettingComponent,
-      nzClosable: false,
       nzWidth: '60%',
       nzComponentParams: {
         model: JSON.parse(JSON.stringify(inputArg.item)),

@@ -17,7 +17,6 @@
         </ng-container>
       </div>
     </div>
-    <!-- <div class="bbd"></div> -->
   </div>
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
@@ -65,10 +64,6 @@
         </nz-descriptions>
       </nz-tab>
       <nz-tab *ngIf="changeLog" i18n-nzTitle nzTitle="ChangeLog">
-        <!-- <h1>Change Log</h1>
-        <p>All notable changes to this project will be documented in this file.</p>
-        <h2>[12.0.1] - 2022-03-03</h2> -->
-        <!-- !show be markdown preview -->
         <nz-skeleton class="preview_tab" [nzLoading]="changelogLoading" [nzActive]="true">
           <eo-shadow-dom *ngIf="!changeLogNotFound" class="md-preview" [text]="changeLog"> </eo-shadow-dom>
           <nz-result nzStatus="info" i18n-nzTitle nzTitle="Changelog failed to load" *ngIf="changeLogNotFound">

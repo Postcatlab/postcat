@@ -14,8 +14,6 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
   styleUrls: ['./pages.component.scss'],
 })
 export class PagesComponent implements OnInit {
-  loadedIframe = false;
-  iframeSrc: SafeResourceUrl;
   get isRemote() {
     return this.remoteService.isRemote;
   }
@@ -38,28 +36,8 @@ export class PagesComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.watchSidebarItemChange();
     this.watchRemoteServerChange();
     this.rawChange$.next('');
-  }
-  private watchSidebarItemChange() {
-    this.sidebar.appChanged$.subscribe(() => {
-      this.loadedIframe = false;
-      if (!this.sidebar.currentModule.isOffical) {
-        setTimeout(() => {
-          //add loading
-          this.loadedIframe = false;
-          const iframe = document.getElementById('app_iframe') as HTMLIFrameElement;
-          //load resource
-          iframe.src = this.sidebar.currentModule.main;
-          //loading finish
-          iframe.onload = () => {
-            this.loadedIframe = true;
-            this.cdRef.detectChanges();
-          };
-        }, 0);
-      }
-    });
   }
 
   switchDataSource = () => {

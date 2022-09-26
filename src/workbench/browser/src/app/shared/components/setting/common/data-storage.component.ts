@@ -69,8 +69,6 @@ export class DataStorageComponent implements OnInit, OnChanges {
   @Input() model: Record<string, any> = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
-  oldDataStorageType: 'local' | 'http';
-  oldRemoteServerUrl: '';
   validateForm!: FormGroup;
   loading = false;
 
@@ -85,7 +83,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
     this.validateForm = this.fb.group({
       'eoapi-common.dataStorage': this.model['eoapi-common.dataStorage'] ?? 'local',
       'eoapi-common.remoteServer.url': [
-        this.model['eoapi-common.remoteServer.url'] || 'http://localhost:3000',
+        this.model['eoapi-common.remoteServer.url'] || '',
         [Validators.required],
       ],
       'eoapi-common.remoteServer.token': [
@@ -93,8 +91,6 @@ export class DataStorageComponent implements OnInit, OnChanges {
         [Validators.required],
       ],
     });
-    this.oldDataStorageType = this.validateForm.value['eoapi-common.dataStorage'];
-    this.oldRemoteServerUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -160,10 +156,6 @@ export class DataStorageComponent implements OnInit, OnChanges {
       return this.message.error(
         $localize`Only the client can connect to the cloud server. You need to download the client first.`
       );
-    }
-
-    if (this.oldDataStorageType === dataStorage && this.oldRemoteServerUrl === remoteUrl) {
-      return;
     }
 
     if (isValid && isRemote) {

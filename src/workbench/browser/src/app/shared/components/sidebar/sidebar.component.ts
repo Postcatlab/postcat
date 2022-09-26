@@ -45,7 +45,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   clickModule(module) {
     this.sidebar.currentModule = module;
-    this.sidebar.appChanged$.next();
     const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
     console.log('route', route);
@@ -91,6 +90,5 @@ export class SidebarComponent implements OnInit, OnDestroy {
       return;
     }
     this.sidebar.currentModule = currentModule;
-    this.sidebar.appChanged$.next();
   }
 }

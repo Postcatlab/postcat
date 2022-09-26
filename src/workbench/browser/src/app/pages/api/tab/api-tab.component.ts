@@ -72,12 +72,9 @@ export class ApiTabComponent implements OnInit, OnDestroy {
       nzClosable: false,
       nzFooter: [
         {
-          label: $localize`Save`,
-          type: 'primary',
+          label: $localize`Cancel`,
           onClick: () => {
-            this.beforeClose.emit(true);
             modal.destroy();
-            this.tabOperate.closeTab(index);
           },
         },
         {
@@ -89,11 +86,14 @@ export class ApiTabComponent implements OnInit, OnDestroy {
           },
         },
         {
-          label: $localize`Cancel`,
+          label: $localize`Save`,
+          type: 'primary',
           onClick: () => {
+            this.beforeClose.emit(true);
             modal.destroy();
+            this.tabOperate.closeTab(index);
           },
-        },
+        }
       ],
     });
   }
@@ -191,7 +191,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function (e) {
+    window.addEventListener('beforeunload', function(e) {
       that.cacheData();
     });
   }
