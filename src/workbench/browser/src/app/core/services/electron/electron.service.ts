@@ -5,6 +5,15 @@ import { Injectable } from '@angular/core';
 import { ipcRenderer, webFrame } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+import pkg from '../../../../../../../../package.json';
+import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
+import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+
+type DescriptionsItem = {
+  readonly id: string;
+  readonly label: string;
+  value: string;
+};
 @Injectable({
   providedIn: 'root',
 })
@@ -36,5 +45,73 @@ export class ElectronService {
 
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
+  }
+  getSystemInfo(): DescriptionsItem[] {
+    const descriptions: DescriptionsItem[] = [
+      {
+        id: 'version',
+        label: $localize`Version`,
+        value: pkg.version,
+      },
+      // {
+      //   id: 'publishTime',
+      //   label: $localize`Publish Time`,
+      //   value: '',
+      // },
+    ];
+
+    const electronDetails: DescriptionsItem[] = [
+      {
+        id: 'homeDir',
+        label: 'Install Location',
+        value: '',
+      },
+      {
+        id: 'electron',
+        label: 'Electron',
+        value: '',
+      },
+      {
+        id: 'chrome',
+        label: 'Chromium',
+        value: '',
+      },
+      {
+        id: 'node',
+        label: 'Node.js',
+        value: '',
+      },
+      {
+        id: 'v8',
+        label: 'V8',
+        value: '',
+      },
+      {
+        id: 'os',
+        label: 'OS',
+        value: '',
+      },
+    ];
+
+    if (this.isElectron) {
+      descriptions.push(...electronDetails);
+    } else {
+      const browserType = getBrowserType(getSettings()?.['eoapi-language']);
+      descriptions.push(
+        ...Object.entries<string>(browserType).map(([key, value]) => ({
+          id: key,
+          label: key.replace(/^\S/, (s) => s.toUpperCase()),
+          value,
+        }))
+      );
+    }
+    const systemInfo =
+      this.ipcRenderer?.sendSync('get-system-info') || getBrowserType(getSettings()?.['eoapi.language']);
+    descriptions.forEach((item) => {
+      if (item.id in systemInfo) {
+        item.value = systemInfo[item.id];
+      }
+    });
+    return descriptions;
   }
 }

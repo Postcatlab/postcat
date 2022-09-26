@@ -13,7 +13,6 @@ import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 })
 export class NavbarComponent implements OnInit {
   isMaximized = false;
-  isElectron = false;
   isSettingVisible = false;
   messageTop;
   @ViewChild('notificationTemplate', { static: true })
@@ -34,15 +33,15 @@ export class NavbarComponent implements OnInit {
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
   resourceInfo = ResourceInfo;
-
+  issueEnvironment;
   constructor(
-    private electron: ElectronService,
+    public electron: ElectronService,
     private messageService: MessageService,
     private nzConfigService: NzConfigService,
     private remoteService: RemoteService
   ) {
-    this.isElectron = this.electron.isElectron;
     this.messageTop = this.nzConfigService.getConfig()?.message?.nzTop;
+    this.issueEnvironment = this.getEnviroment();
     this.getInstaller();
   }
   private findLinkInSingleAssets(assets, item) {
@@ -101,7 +100,7 @@ export class NavbarComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    if (this.isElectron) {
+    if (this.electron.isElectron) {
       this.modules = window.eo.getAppModuleList();
     } else {
       this.modules = new Map();
@@ -121,5 +120,15 @@ export class NavbarComponent implements OnInit {
    */
   openSettingModal() {
     this.messageService.send({ type: 'toggleSettingModalVisible', data: { isShow: true } });
+  }
+  private getEnviroment(): string {
+    let result = '';
+    const systemInfo = this.electron.getSystemInfo();
+    console.log(systemInfo);
+    systemInfo.forEach((val) => {
+      if (['homeDir'].includes(val.id)) {return;}
+      result += `- ${val.label}: ${val.value}\r\n`;
+    });
+    return encodeURIComponent(result);
   }
 }
