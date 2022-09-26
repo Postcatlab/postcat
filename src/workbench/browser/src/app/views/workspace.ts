@@ -5,28 +5,14 @@ import {
   Input,
   //   SelectPeople,
   Component,
+  Element,
   Module,
+  Title,
+  Line,
   Text,
+  WhiteBoard,
   //   EventS,
 } from '../elements';
-
-const invate = new Modal({
-  id: 'invate',
-  title: {
-    text: 'Add people to the space',
-  },
-  children: [
-    new Input({}),
-    new Button({
-      id: 'select',
-      label: {
-        text: 'Select a member above',
-      },
-      event: [],
-    }),
-  ],
-  footer: [],
-});
 
 // const select = new SelectPeople({
 
@@ -41,23 +27,45 @@ export default new Module({
       imports: [],
       init: [],
       children: [
-        new Text({ label: 'Workspace Operate', type: 'title' }),
-        new Text({ label: 'Edit Workspace', type: 'title' }),
-        new Button({
-          id: 'save-btn',
-          label: 'Save',
-          event: {
-            click: [],
-          },
-        }),
-        new Text({ label: 'Delete Workspace', type: 'title' }),
-        new Button({
-          id: 'del-wsp',
-          label: 'Delete',
-          theme: 'danger',
-          event: {
-            click: [],
-          },
+        new WhiteBoard({
+          class: ['py-5', 'px-10'],
+          children: [
+            new Title({ label: 'Workspace Operate' }),
+            new Line(),
+            new Title({ label: 'Edit Workspace' }),
+            new Form({
+              id: 'wsp-name',
+              layout: '|', // * 这个 | 的意思是竖向排列
+              data: [
+                {
+                  label: 'Name',
+                  type: 'input',
+                  class: '',
+                  rules: ['required'],
+                },
+              ],
+            }),
+            new Button({
+              id: 'save-btn',
+              label: 'Save',
+              event: {
+                click: [],
+              },
+            }),
+            new Line(),
+            new Title({ label: 'Delete Workspace' }),
+            new Text({
+              label: [{ text: 'After deleting a workspace, all data in the workspace will be permanently deleted.' }],
+            }),
+            new Button({
+              id: 'del-wsp',
+              label: 'Delete',
+              theme: 'danger',
+              event: {
+                click: [],
+              },
+            }),
+          ],
         }),
       ],
     }),

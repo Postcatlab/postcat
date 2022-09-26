@@ -11,7 +11,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
   >
     <ng-container *nzModalContent>
       <input placeholder="" />
-      <button nz-button nzType="primary" ng i18n>Select a member above</button>
+      <button nz-button nzType="primary" i18n>Select a member above</button>
     </ng-container>
     <ng-template #modalFooter> </ng-template>
   </nz-modal>`

@@ -16,9 +16,17 @@ type dataType = {
 type initType = {
   id: string;
   data: dataType[];
-  layout?: 'horizontal' | 'vertical' | 'inline';
+  layout?: '-' | '|' | '--' | 'horizontal' | 'vertical' | 'inline';
   children?: any[];
 };
+
+const layoutHash = new Map()
+  .set('-', 'horizontal')
+  .set('|', 'vertical')
+  .set('--', 'inline')
+  .set('horizontal', 'horizontal')
+  .set('vertical', 'vertical')
+  .set('inline', 'inline');
 export class Form extends Render implements formType {
   id = '';
   data;
@@ -27,7 +35,7 @@ export class Form extends Render implements formType {
     super({ children });
     this.id = Render.toCamel(id);
     this.data = data;
-    this.layout = layout;
+    this.layout = layoutHash.get(layout);
   }
   init(id) {
     const initRules = (list) =>
@@ -64,7 +72,7 @@ export class Form extends Render implements formType {
           return `<input type="text" nz-input ${formBindName({
             label,
             rules,
-          })} placeholder="${placeholder}" ${isLabelRequired(rules)} />`;
+          })} placeholder="${placeholder || ''}" ${isLabelRequired(rules)} />`;
 
         default:
           return '';
@@ -75,7 +83,7 @@ export class Form extends Render implements formType {
         .map(
           (it) => `
         <nz-form-item>
-          <nz-form-control nzErrorTip="Please input your username!">
+          <nz-form-control nzErrorTip="Please input your ${_.lowerCase(it.label)} !">
             <nz-form-label [nzSpan]="4">${it.label}</nz-form-label>
             ${renderKey(it)}
           </nz-form-control>
@@ -89,10 +97,22 @@ export class Form extends Render implements formType {
           target: [{ name: 'UntypedFormBuilder', inject: { name: 'fb' } }, 'UntypedFormGroup', 'Validators'],
           from: '@angular/forms',
         },
+        {
+          target: [{ name: 'NzFormModule', type: 'module' }],
+          from: 'ng-zorro-antd/form',
+        },
+        {
+          target: [{ name: 'ReactiveFormsModule', type: 'module' }],
+          from: '@angular/forms',
+        },
+        {
+          target: [{ name: 'NzInputModule', type: 'module' }],
+          from: 'ng-zorro-antd/input',
+        },
         ...this.children.imports,
       ],
       template: `
-      <form nz-form [formGroup]="validateForm" nzLayout="${this.layout}">
+      <form nz-form [formGroup]="validate${this.id}Form" nzLayout="${this.layout}">
         ${formList(this.data)}
       </form>`,
       init: [this.init(this.id), ...this.children.init],
