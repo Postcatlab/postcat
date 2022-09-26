@@ -34,7 +34,7 @@ export class RemoteService {
   }
   /** Text corresponding to the current data source */
   get dataSourceText() {
-    return this.isRemote ? $localize`:@@Remote Server:Remote Server` : $localize`Localhost`;
+    return this.isRemote ? $localize`:@@Cloud Server:Cloud` : $localize`Localhost`;
   }
   /** get mock url */
   get mockUrl() {
@@ -83,7 +83,7 @@ export class RemoteService {
   }
 
   /**
-   * Test if remote server address is available
+   * Test if cloud server address is available
    */
   async pingRmoteServerUrl(): Promise<[boolean, any]> {
     const { url: remoteUrl, token } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
@@ -179,7 +179,7 @@ export class RemoteService {
   };
 
   showMessage() {
-    this.message.create('success', $localize`successfully switched to ${this.dataSourceText} data source`);
+    this.message.create('success', $localize`Successfully switched to ${this.dataSourceText} data source`);
     localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

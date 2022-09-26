@@ -25,7 +25,6 @@ export class AppComponent {
   async checkRemoteServerConnect() {
     if (this.remoteService.isRemote && window.eo) {
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
-      console.log('isSuccess', isSuccess);
       if (!isSuccess) {
         const timer = setTimeout(() => {
           this.remoteService.switchDataSource('local');

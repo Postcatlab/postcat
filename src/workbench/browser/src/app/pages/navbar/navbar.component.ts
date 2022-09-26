@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
   get dataSourceType() {
     return this.remoteService.dataSourceType;
   }
-  /** 是否远程数据源 */
+  /** 是否云端数据源 */
   get isRemote() {
     return this.remoteService.isRemote;
   }

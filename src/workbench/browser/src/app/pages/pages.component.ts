@@ -20,9 +20,6 @@ export class PagesComponent implements OnInit {
     return this.remoteService.isRemote;
   }
   isShow = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true';
-  get dataSourceText() {
-    return this.remoteService.dataSourceText;
-  }
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   get isShowNotification() {
@@ -33,7 +30,7 @@ export class PagesComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     public sidebar: SidebarService,
     private messageService: MessageService,
-    private remoteService: RemoteService,
+    public remoteService: RemoteService,
     public electron: ElectronService
   ) {
     this.rawChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
@@ -74,9 +71,6 @@ export class PagesComponent implements OnInit {
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
       this.isShow = isSuccess;
     }
-    // if (!) {
-    //   this.isClose = false;
-    // }
   };
 
   private watchRemoteServerChange() {
