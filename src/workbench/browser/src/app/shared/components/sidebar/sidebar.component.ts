@@ -64,6 +64,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/api/http/test',
       },
       {
+        moduleName: $localize`Workspace`,
+        moduleID: '@eo-core-workspace',
+        isOffical: true,
+        icon: 'home-5kaioboo',
+        activeRoute: 'home/workspace',
+        route: 'home/workspace',
+      },
+      {
+        moduleName: $localize`Member`,
+        moduleID: '@eo-core-member',
+        isOffical: true,
+        icon: 'every-user',
+        activeRoute: 'home/member',
+        route: 'home/member',
+      },
+      {
         moduleName: $localize`Extensions`,
         moduleID: '@eo-core-extension',
         isOffical: true,
