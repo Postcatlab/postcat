@@ -1,9 +1,22 @@
 <div class="eo_navbar f_row f_js_ac">
   <div>
     <img class="logo" src="assets/images/logo.svg" />
+    <!-- star -->
     <a href="https://github.com/eolinker/eoapi" target="_blank">
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
+    <a nz-dropdown [nzDropdownMenu]="menu1">
+      Hover me
+      <span nz-icon nzType="down"></span>
+    </a>
+    <nz-dropdown-menu #menu1="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item>1st menu item</li>
+        <li nz-menu-item>2nd menu item</li>
+        <li nz-menu-item>3rd menu item</li>
+        <li nz-menu-item nzDanger>4th danger item</li>
+      </ul>
+    </nz-dropdown-menu>
   </div>
   <div class="flex items-center">
     <span
