@@ -10,7 +10,6 @@ export class SidebarService {
   collapsed = false;
   currentModule: ModuleInfo | SidebarModuleInfo | any;
   private collapsedChanged$: Subject<boolean> = new Subject();
-  public appChanged$: Subject<void> = new Subject();
   constructor() {}
   getCollapsed() {
     return this.collapsed;
@@ -19,7 +18,7 @@ export class SidebarService {
     this.collapsed = !this.collapsed;
     this.collapsedChanged$.next(this.collapsed);
   }
-  onCollapsedChanged = function () {
+  onCollapsedChanged = function() {
     return this.collapsedChanged$.pipe();
   };
 }

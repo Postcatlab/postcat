@@ -14,15 +14,10 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
   styleUrls: ['./pages.component.scss'],
 })
 export class PagesComponent implements OnInit {
-  loadedIframe = false;
-  iframeSrc: SafeResourceUrl;
   get isRemote() {
     return this.remoteService.isRemote;
   }
   isShow = localStorage.getItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION) === 'true';
-  get dataSourceText() {
-    return this.remoteService.dataSourceText;
-  }
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   get isShowNotification() {
@@ -33,7 +28,7 @@ export class PagesComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     public sidebar: SidebarService,
     private messageService: MessageService,
-    private remoteService: RemoteService,
+    public remoteService: RemoteService,
     public electron: ElectronService
   ) {
     this.rawChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
@@ -41,28 +36,8 @@ export class PagesComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.watchSidebarItemChange();
     this.watchRemoteServerChange();
     this.rawChange$.next('');
-  }
-  private watchSidebarItemChange() {
-    this.sidebar.appChanged$.subscribe(() => {
-      this.loadedIframe = false;
-      if (!this.sidebar.currentModule.isOffical) {
-        setTimeout(() => {
-          //add loading
-          this.loadedIframe = false;
-          const iframe = document.getElementById('app_iframe') as HTMLIFrameElement;
-          //load resource
-          iframe.src = this.sidebar.currentModule.main;
-          //loading finish
-          iframe.onload = () => {
-            this.loadedIframe = true;
-            this.cdRef.detectChanges();
-          };
-        }, 0);
-      }
-    });
   }
 
   switchDataSource = () => {
@@ -74,9 +49,6 @@ export class PagesComponent implements OnInit {
       const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
       this.isShow = isSuccess;
     }
-    // if (!) {
-    //   this.isClose = false;
-    // }
   };
 
   private watchRemoteServerChange() {

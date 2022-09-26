@@ -317,7 +317,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const modal: NzModalRef = this.modalService.create({
       nzTitle: title,
       nzContent: ApiGroupEditComponent,
-      nzClosable: false,
       nzComponentParams: params,
       nzOnOk() {
         modal.componentInstance.submit();

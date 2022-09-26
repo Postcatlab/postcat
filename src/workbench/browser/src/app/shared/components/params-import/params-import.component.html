@@ -13,17 +13,25 @@
   </ul>
 </nz-dropdown-menu> -->
 
-<nz-modal [(nzVisible)]="isVisible" i18n-[nzTitle] [nzTitle]="'Import ' + (modalTitle || contentTypeTitle)"
-  [nzStyle]="{ width: '800px' }" (nzOnCancel)="handleCancel()">
+<nz-modal
+  [(nzVisible)]="isVisible"
+  i18n-[nzTitle]
+  [nzTitle]="'Import ' + (modalTitle || contentTypeTitle)"
+  [nzStyle]="{ width: '800px' }"
+  (nzOnCancel)="handleCancel()"
+>
   <div *nzModalContent>
     <pre class="eg" i18n>Import like this:<br />{{ eg }}</pre>
-    <eo-monaco-editor [(code)]="paramCode" [editorType]="contenTypeEditor"
-      [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
+    <eo-monaco-editor
+      [(code)]="paramCode"
+      [editorType]="contenTypeEditor"
+      [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+    ></eo-monaco-editor>
   </div>
-  <div *nzModalFooter style="text-align: left">
-    <button nz-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
-    <button nz-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
-    <button nz-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
+  <div *nzModalFooter>
     <button nz-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
+    <button nz-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
+    <button nz-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
+    <button nz-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
   </div>
 </nz-modal>

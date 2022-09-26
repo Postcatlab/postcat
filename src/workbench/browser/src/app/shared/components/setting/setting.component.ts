@@ -116,9 +116,9 @@ export class SettingComponent implements OnInit {
   /** local configure */
   localSettings = {};
   validateForm!: FormGroup;
-  /** remote server url */
+  /** cloud server url */
   remoteServerUrl = '';
-  /** remote server token */
+  /** cloud server token */
   remoteServerToken = '';
   oldDataStorage = '';
 
@@ -142,14 +142,7 @@ export class SettingComponent implements OnInit {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'toggleSettingModalVisible': {
-            console.log('inArg.data.isShow', inArg.data.isShow);
             inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
-            break;
-          }
-          case 'onDataSourceChange': {
-            // if (inArg.data.showWithSetting) {
-            //   this.remoteService.refreshComponent();
-            // }
             break;
           }
         }
