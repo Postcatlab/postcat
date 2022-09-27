@@ -31,8 +31,8 @@
             ],
             "styles": [
               { "input": "src/assets/theme/classic_forest.scss", "bundleName": "classic_forest", "inject": false },
-              "src/styles.scss",
               "src/assets/theme/antd.less",
+              "src/styles.scss",
               "src/assets/font/iconfont.css",
               "src/ng1/index.css"
             ],

@@ -14,7 +14,29 @@ import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 export class NavbarComponent implements OnInit {
   isMaximized = false;
   isSettingVisible = false;
-  messageTop;
+
+  currentWorkspace={
+    title: $localize`Local workspace`,
+    type:'offline',
+    id: -1,
+  };
+  searchValue: string;
+  private workspace = [
+    {
+      title: 'online workspace 1',
+      type:'online',
+      id: 1,
+    },
+    {
+      title: 'online workspace 2',
+      type:'online',
+      id: 2,
+    },{
+      title: $localize`Local workspace`,
+      type:'offline',
+      id: -1,
+    }
+  ];
   @ViewChild('notificationTemplate', { static: true })
   @ViewChildren(NzDropdownMenuComponent)
   dropdownMenuList: QueryList<NzDropdownMenuComponent>;
@@ -40,7 +62,6 @@ export class NavbarComponent implements OnInit {
     private nzConfigService: NzConfigService,
     private remoteService: RemoteService
   ) {
-    this.messageTop = this.nzConfigService.getConfig()?.message?.nzTop;
     this.issueEnvironment = this.getEnviroment();
     this.getInstaller();
   }
@@ -57,6 +78,16 @@ export class NavbarComponent implements OnInit {
     result = assets[assetIndex].browser_download_url;
     assets.splice(assetIndex, 1);
     return result;
+  }
+  changeWorkspace(item){
+
+  }
+  searchWorkspace() {
+    if (!this.searchValue) {
+      return this.workspace;
+    }
+    const searchText = this.searchValue.toLocaleLowerCase();
+    return this.workspace.filter((val) => val.title.toLocaleLowerCase().includes(searchText));
   }
   private findLink(allAssets, item) {
     let result = '';
@@ -126,7 +157,9 @@ export class NavbarComponent implements OnInit {
     const systemInfo = this.electron.getSystemInfo();
     console.log(systemInfo);
     systemInfo.forEach((val) => {
-      if (['homeDir'].includes(val.id)) {return;}
+      if (['homeDir'].includes(val.id)) {
+        return;
+      }
       result += `- ${val.label}: ${val.value}\r\n`;
     });
     return encodeURIComponent(result);

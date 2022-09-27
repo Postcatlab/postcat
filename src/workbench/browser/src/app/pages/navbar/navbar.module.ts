@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 @NgModule({
-  imports: [CommonModule, NzDropDownModule, NzToolTipModule, SettingModule, SharedModule],
+  imports: [CommonModule,NzDropDownModule, NzToolTipModule, SettingModule, SharedModule],
   declarations: [NavbarComponent],
   exports: [NavbarComponent],
 })
