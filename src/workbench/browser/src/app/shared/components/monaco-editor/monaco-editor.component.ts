@@ -10,7 +10,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { debounce, isBase64, whatTextType } from '../../../utils';
+import { debounce, isBase64, whatTextType } from '../../../utils/index.utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { editor } from 'monaco-editor';
 import * as monaco from 'monaco-editor';

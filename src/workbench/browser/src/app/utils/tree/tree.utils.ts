@@ -1,5 +1,5 @@
 import { GroupTreeItem } from '../../shared/models';
-import { whatType } from 'eo/workbench/browser/src/app/utils';
+import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 export type TreeToObjOpts = {
   key?: string;

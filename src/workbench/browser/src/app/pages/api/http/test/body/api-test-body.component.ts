@@ -23,7 +23,7 @@ import {
 } from '../../../../../shared/services/api-test/api-test.model';
 import { ApiTestUtilService } from '../api-test-util.service';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils';
+import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
