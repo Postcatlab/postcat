@@ -1,6 +1,4 @@
-<nz-modal [(nzVisible)]="isShowModal" nzWidth="70%" [nzFooter]="null" [nzBodyStyle]="{ paddingLeft: '6px' }"
-  (nzOnCancel)="handleCancel()">
-  <section *nzModalContent class="container">
+  <section  class="container">
     <div class="tree-view">
       <img src="assets/images/logo-text.svg" class="h-[40px]" />
       <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
@@ -43,5 +41,3 @@
       <eo-about [id]="treeNodes[2].moduleID"></eo-about>
     </div>
   </section>
-</nz-modal>
-<!-- </ng-container> -->

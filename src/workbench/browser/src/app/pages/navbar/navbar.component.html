@@ -6,7 +6,7 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <div class="flex items-center"  nz-dropdown [nzDropdownMenu]="workspaceMenu">
+    <div class="flex items-center" nz-dropdown [nzDropdownMenu]="workspaceMenu">
       <eo-iconpark-icon
         class="mr-[5px]"
         name="link-cloud-{{ currentWorkspace.type === 'online' ? 'sucess' : 'faild' }}"
@@ -25,7 +25,14 @@
             placeholder="Search online workspace"
             [(ngModel)]="searchValue"
           />
-          <button nz-tooltip nzTooltipTitle="Add Workspace" nzType="primary" nz-button class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0">
+          <button
+            nz-tooltip
+            i18n-nzTooltipTitle
+            nzTooltipTitle="Add Workspace"
+            nzType="primary"
+            nz-button
+            class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0"
+          >
             <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
           </button>
         </div>
@@ -52,7 +59,7 @@
       nz-tooltip
       [nzTooltipMouseEnterDelay]="0.7"
       nzTooltipTitle="Open Settings"
-      (click)="handleShowModal()"
+      (click)="openSettingModal()"
     >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </span>
@@ -82,7 +89,7 @@
     </span>
     <nz-dropdown-menu #UserMenu="nzDropdownMenu">
       <ul nz-menu>
-        <li nz-menu-item><button type="button"  i18n>Sign in for Collaboration</button></li>
+        <li nz-menu-item><button type="button" i18n>Sign in for Collaboration</button></li>
         <li nz-menu-item><button type="button" i18n>Account Setting</button></li>
         <li nz-menu-item><button type="button" i18n>Sign Out</button></li>
       </ul>
@@ -137,4 +144,4 @@
     </div>
   </div>
 </div>
-<eo-setting [(isShowModal)]="isSettingVisible"></eo-setting>
+<!-- <eo-setting [(isShowModal)]="isSettingVisible"></eo-setting> -->

@@ -19,7 +19,6 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
-import { ElectronService } from '../../../core/services';
 import { SelectThemeComponent } from 'eo/workbench/browser/src/app/shared/components/toolbar/select-theme/select-theme.component';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { IconDefinition } from '@ant-design/icons-angular';
@@ -62,6 +61,5 @@ const ANTDMODULES = [
   ],
   imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent, SelectThemeComponent],
-  providers: [ElectronService],
 })
 export class SettingModule {}

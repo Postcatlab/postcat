@@ -14,7 +14,6 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { EouiModule } from '../../../eoui/eoui.module';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { ElectronService } from '../../../core/services';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 const ANTDMODULES = [
@@ -32,6 +31,5 @@ const ANTDMODULES = [
   declarations: [EnvComponent],
   imports: [FormsModule, CommonModule, EouiModule, SharedModule, ...ANTDMODULES],
   exports: [EnvComponent],
-  providers: [ElectronService],
 })
 export class EnvModule {}

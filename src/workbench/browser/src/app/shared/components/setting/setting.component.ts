@@ -3,8 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { Message, MessageService } from '../../../shared/services/message';
-import { Subject, takeUntil } from 'rxjs';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { debounce } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -31,22 +29,6 @@ interface FlatNode {
 })
 export class SettingComponent implements OnInit {
   extensitonConfigurations: any[];
-  @Input() set isShowModal(val) {
-    this.$isShowModal = val;
-    this.isShowModalChange.emit(val);
-    if (val) {
-      this.init();
-      this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
-      this.remoteServerToken = this.settings['eoapi-common.remoteServer.token'];
-      this.oldDataStorage = this.settings['eoapi-common.dataStorage'];
-    } else {
-      // this.handleSave();
-    }
-  }
-  get isShowModal() {
-    return this.$isShowModal;
-  }
-  @Output() isShowModalChange = new EventEmitter<any>();
   objectKeys = Object.keys;
   isClick = false;
   /** Whether the remote data source */
@@ -81,8 +63,6 @@ export class SettingComponent implements OnInit {
   switchDataSourceLoading = false;
   /** current configuration */
   currentConfiguration = [];
-  // ! isVisible = false;
-  $isShowModal = false;
   /** current active configure */
   /** all configure */
   $settings = {};
@@ -120,33 +100,21 @@ export class SettingComponent implements OnInit {
   remoteServerUrl = '';
   /** cloud server token */
   remoteServerToken = '';
-  oldDataStorage = '';
 
   get selected() {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  private destroy$: Subject<void> = new Subject<void>();
   constructor(
-    private messageService: MessageService,
     private remoteService: RemoteService,
     private settingService: SettingService
   ) {}
 
   ngOnInit(): void {
     this.init();
+    this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
+    this.remoteServerToken = this.settings['eoapi-common.remoteServer.token'];
     // this.parseSettings();
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'toggleSettingModalVisible': {
-            inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
-            break;
-          }
-        }
-      });
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
@@ -232,9 +200,6 @@ export class SettingComponent implements OnInit {
     this.selectModule(this.treeControl.dataNodes.at(0));
   }
 
-  handleShowModal() {
-    this.isShowModal = true;
-  }
 
   handleSave = () => {
     // for (const i in this.validateForm.controls) {
@@ -249,11 +214,4 @@ export class SettingComponent implements OnInit {
     this.settingService.saveSetting(this.settings);
     window.eo?.saveSettings?.({ ...this.settings });
   };
-
-  async handleCancel() {
-    this.handleSave();
-
-    this.isShowModal = false;
-    // this.isShowModalChange.emit(false);
-  }
 }
