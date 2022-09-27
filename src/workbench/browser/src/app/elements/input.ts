@@ -17,7 +17,7 @@ export class Input extends Render {
     return `const ${data} = this.input${this.id}Value`;
   }
   isEmpty() {
-    return `this.input${this.id}Value == ''`;
+    return `this.input${this.id}Value === ''`;
   }
   render() {
     return {

@@ -22,7 +22,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
           [disabled]="isselectDisabled()"
           nzType="primary"
           nzBlock
-          (click)="btnj0rjtdCallback()"
+          (click)="btncdtxytCallback()"
           i18n
         >
           Select a member above
@@ -32,7 +32,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
     <section class="py-5 px-10">
       <h2 class="text-lg flex justify-between items-center">
         <span i18n>Manage access</span
-        ><button nz-button nzType="primary" (click)="btnzbiq7oCallback()" i18n>
+        ><button nz-button nzType="primary" (click)="btn5t21ozCallback()" i18n>
           Add people
         </button>
       </h2>
@@ -51,15 +51,15 @@ export class MemberComponent implements OnInit {
     this.isInvateModalVisible = false
   }
   isselectDisabled() {
-    return this.inputPersonValue == ''
+    return this.inputPersonValue === ''
   }
-  async btnj0rjtdCallback() {
+  async btncdtxytCallback() {
     const data = this.inputPersonValue
     {
       console.log(data)
     }
   }
-  async btnzbiq7oCallback() {
+  async btn5t21ozCallback() {
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }

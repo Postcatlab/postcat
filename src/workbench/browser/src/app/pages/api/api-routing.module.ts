@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ApiComponent } from './api.component';
-import { ApiOverviewComponent } from './overview/api-overview.component';
 
 const routes: Routes = [
   {
@@ -13,10 +12,6 @@ const routes: Routes = [
         path: '',
         redirectTo: 'http',
         pathMatch: 'full',
-      },
-      {
-        path: 'overview',
-        component: ApiOverviewComponent,
       },
       {
         path: 'http',
@@ -51,7 +46,7 @@ const routes: Routes = [
             path: 'test',
             loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
           },
-        ]
+        ],
       },
       // {
       //   path: 'grpc',
