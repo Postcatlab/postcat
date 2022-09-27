@@ -2,7 +2,7 @@ import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/cor
 import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { copyText } from 'eo/workbench/browser/src/app/utils';
+import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import {

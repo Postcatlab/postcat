@@ -1,4 +1,4 @@
-import { debounce } from 'eo/workbench/browser/src/app/utils';
+import { debounce } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';

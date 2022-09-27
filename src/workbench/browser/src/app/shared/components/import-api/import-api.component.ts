@@ -5,7 +5,6 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils';
 
 // const optionList = [
 //   {
@@ -91,27 +90,28 @@ export class ImportApiComponent implements OnInit {
       callback(false);
       return;
     }
-    function cycle(obj, parent?) {
+    //The datastructure may has circular reference,decycle by reset object;
+    const decycle = (obj, parent?) => {
       const parentArr = parent || [obj];
-      for (var i in obj) {
+      for (const i in obj) {
         if (typeof obj[i] === 'object') {
           parentArr.forEach((pObj) => {
             if (pObj === obj[i]) {
               obj[i] = {
-                description: '',
+                description: $localize`Same as the parent's field ${obj[i].name}`,
                 example: '',
                 name: obj[i].name,
                 required: true,
-                type: 'object',
+                type: obj[i].type,
               };
             }
           });
-          cycle(obj[i], [...parentArr, obj[i]]);
+          decycle(obj[i], [...parentArr, obj[i]]);
         }
       }
       return obj;
-    }
-    this.storage.run('projectImport', [1, cycle(data)], (result: StorageRes) => {
+    };
+    this.storage.run('projectImport', [1, decycle(data)], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.messageService.send({
           type: 'importSuccess',

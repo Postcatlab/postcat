@@ -7,7 +7,7 @@ import { Message, MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { debounce } from 'eo/workbench/browser/src/app/utils';
+import { debounce } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 interface TreeNode {
   name: string;

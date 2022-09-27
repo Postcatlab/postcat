@@ -3,7 +3,7 @@ import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { debounceTime, Subject } from 'rxjs';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
-import { isEmptyObj } from '../../utils';
+import { isEmptyObj } from '../../utils/index.utils';
 import { MessageService } from '../../shared/services/message';
 import { Router } from '@angular/router';
 @Injectable()

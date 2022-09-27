@@ -5,7 +5,7 @@ import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)

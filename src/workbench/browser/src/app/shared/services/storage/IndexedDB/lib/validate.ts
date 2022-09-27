@@ -1,6 +1,6 @@
 import Ajv, { JSONSchemaType } from 'ajv';
 import { ApiData, Environment, Group } from '../../index.model';
-import { whatType } from 'eo/workbench/browser/src/app/utils';
+import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import apiDataSchema from '../schema/apiData.json';
 import { ApiBodyType } from '../../index.model';
 import envSchema from '../schema/env.json';

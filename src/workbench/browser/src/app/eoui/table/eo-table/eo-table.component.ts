@@ -10,7 +10,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { CellDirective } from './cell.directive';
-import { isEmptyValue } from '../../../utils/index';
+import { isEmptyValue } from '../../../utils/index.utils';
 
 type Column = {
   title: string;

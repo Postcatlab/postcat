@@ -5,7 +5,7 @@ import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree
 import { ApiData, ApiEditRest } from '../../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../../utils/tree/tree.utils';
 import { getRest } from '../../../../utils/api';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 @Injectable()
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}

@@ -18,7 +18,7 @@ import {
   StorageResStatus,
 } from '../../../../shared/services/storage/index.model';
 
-import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils';
+import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { listToTree, getExpandGroupByKey } from '../../../../utils/tree/tree.utils';
 import { ApiParamsNumPipe } from '../../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';

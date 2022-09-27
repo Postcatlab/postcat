@@ -8,7 +8,7 @@ import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { copyText } from 'eo/workbench/browser/src/app/utils';
+import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 
 @Component({
