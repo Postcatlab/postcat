@@ -19,6 +19,9 @@ export class Input extends Render {
   isEmpty() {
     return `this.input${this.id}Value === ''`;
   }
+  reset() {
+    return `this.input${this.id}Value = ''`;
+  }
   render() {
     return {
       type: 'element',

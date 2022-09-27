@@ -18,6 +18,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { AccountComponent } from 'eo/workbench/browser/src/app/pages/account.component';
 
 import { ElectronService } from '../../../core/services';
 import { SelectThemeComponent } from 'eo/workbench/browser/src/app/shared/components/toolbar/select-theme/select-theme.component';
@@ -57,6 +58,7 @@ const ANTDMODULES = [
     SelectThemeComponent,
     DataStorageComponent,
     LanguageSwticherComponent,
+    AccountComponent,
     AboutComponent,
     ExtensionSettingComponent,
   ],

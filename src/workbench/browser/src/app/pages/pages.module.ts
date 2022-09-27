@@ -6,10 +6,11 @@ import { PagesComponent } from './pages.component';
 import { SharedModule } from '../shared/shared.module';
 import { NavbarModule } from 'eo/workbench/browser/src/app/pages/navbar/navbar.module';
 import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
+import { UserModalComponent } from './user-modal.component';
 
 @NgModule({
   imports: [PagesRoutingModule, SettingModule, EouiModule, CommonModule, SharedModule, NavbarModule],
-  declarations: [PagesComponent],
+  declarations: [PagesComponent, UserModalComponent],
   exports: [],
 })
 export class PagesModule {}
