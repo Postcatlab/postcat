@@ -60,7 +60,7 @@ export class Form extends Render implements formType {
   render() {
     const isLabelRequired = (rules) => (rules.includes('required') ? 'nzRequired' : '');
 
-    const formBindName = ({ label, rules }) => {
+    const formBindName = ({ label, rules = [] }) => {
       if (rules.length) {
         return `formControlName="${Render.toCamel('fc-' + label)}"`;
       }

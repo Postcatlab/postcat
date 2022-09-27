@@ -34,7 +34,6 @@ import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
-import { ApiOverviewComponent } from './overview/api-overview.component';
 import { HistoryComponent } from './history/eo-history.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
@@ -50,7 +49,6 @@ const COMPONENTS = [
   ExportApiComponent,
   SyncApiComponent,
   ApiTabComponent,
-  ApiOverviewComponent,
   ImportApiComponent,
   ExtensionSelectComponent,
   HistoryComponent,
@@ -84,13 +82,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [],
-  providers: [
-    ElectronService,
-    ApiService,
-    ApiTabService,
-    ApiTabOperateService,
-    ApiTabStorageService,
-    IndexedDBStorage,
-  ],
+  providers: [ElectronService, ApiService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
 })
 export class ApiModule {}

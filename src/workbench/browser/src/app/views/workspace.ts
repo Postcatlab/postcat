@@ -3,6 +3,7 @@ import {
   Form,
   Button,
   Input,
+  Overview,
   //   SelectPeople,
   Component,
   Element,
@@ -31,6 +32,8 @@ export default new Module({
           class: ['py-5', 'px-10'],
           children: [
             new Title({ label: 'Workspace Operate' }),
+            new WhiteBoard({ class: ['py-2'] }),
+            new Overview(),
             new Line(),
             new Title({ label: 'Edit Workspace' }),
             new Form({
@@ -60,7 +63,7 @@ export default new Module({
             new Button({
               id: 'del-wsp',
               label: 'Delete',
-              theme: 'danger',
+              theme: ['danger'],
               event: {
                 click: [],
               },

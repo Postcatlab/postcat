@@ -7,7 +7,6 @@ import { ExportApiComponent } from '../../../shared/components/export-api/export
 import { SyncApiComponent } from '../../../shared/components/sync-api/sync-api.component';
 import { ImportApiComponent } from '../../../shared/components/import-api/import-api.component';
 import { ModalService } from '../../../shared/services/modal.service';
-import { filter } from 'rxjs';
 
 const actionComponent = {
   push: SyncApiComponent,

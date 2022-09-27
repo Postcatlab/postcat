@@ -2,7 +2,7 @@ import { Render } from 'ecode/dist/render';
 
 export class WhiteBoard extends Render {
   class;
-  constructor({ children, class: cls }) {
+  constructor({ children = [], class: cls }) {
     super({ children });
     this.class = cls;
   }

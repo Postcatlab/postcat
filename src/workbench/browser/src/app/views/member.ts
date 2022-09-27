@@ -3,11 +3,15 @@ import {
   Form,
   Button,
   Input,
+  Title,
   //   SelectPeople,
   Component,
+  WhiteBoard,
   Module,
   //   EventS,
 } from '../elements';
+
+const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
 
 const invate = new Modal({
   id: 'invate',
@@ -15,13 +19,23 @@ const invate = new Modal({
     text: 'Add people to the space',
   },
   children: [
-    new Input({}),
+    personInput,
+    new WhiteBoard({ class: ['h-4'] }),
     new Button({
       id: 'select',
       label: {
         text: 'Select a member above',
       },
-      event: [],
+      isDisabled: [personInput.isEmpty()],
+      theme: ['block'],
+      event: {
+        click: [
+          personInput.getValue('data'),
+          (data) => {
+            console.log(data);
+          },
+        ],
+      },
     }),
   ],
   footer: [],
@@ -31,6 +45,14 @@ const invate = new Modal({
 
 // })
 
+const addPeople = new Button({
+  id: 'add-people',
+  label: 'Add people',
+  event: {
+    click: [invate.wakeUp()],
+  },
+});
+
 export default new Module({
   id: 'member',
   children: [
@@ -39,7 +61,18 @@ export default new Module({
       link: true,
       imports: [],
       init: [],
-      children: [invate],
+      children: [
+        invate,
+        new WhiteBoard({
+          class: ['py-5', 'px-10'],
+          children: [
+            new Title({
+              label: 'Manage access',
+              children: [addPeople],
+            }),
+          ],
+        }),
+      ],
     }),
   ],
 });
