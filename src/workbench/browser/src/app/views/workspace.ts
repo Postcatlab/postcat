@@ -60,7 +60,7 @@ export default new Module({
             new Button({
               id: 'del-wsp',
               label: 'Delete',
-              theme: 'danger',
+              theme: ['danger'],
               event: {
                 click: [],
               },

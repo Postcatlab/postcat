@@ -9,9 +9,13 @@ import {
 @Component({
   selector: 'eo-workspace',
   template: `<section class="py-5 px-10">
-    <h2 class="text-lg" i18n>Workspace Operate</h2>
+    <h2 class="text-lg flex justify-between items-center">
+      <span i18n>Workspace Operate</span>
+    </h2>
     <nz-divider></nz-divider>
-    <h2 class="text-lg" i18n>Edit Workspace</h2>
+    <h2 class="text-lg flex justify-between items-center">
+      <span i18n>Edit Workspace</span>
+    </h2>
     <form nz-form [formGroup]="validateWspNameForm" nzLayout="vertical">
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your name !">
@@ -26,11 +30,13 @@ import {
         </nz-form-control>
       </nz-form-item>
     </form>
-    <button nz-button nzType="primary" (click)="btntusoh2Callback()" i18n>
+    <button nz-button nzType="primary" (click)="btnve5nidCallback()" i18n>
       Save
     </button>
     <nz-divider></nz-divider>
-    <h2 class="text-lg" i18n>Delete Workspace</h2>
+    <h2 class="text-lg flex justify-between items-center">
+      <span i18n>Delete Workspace</span>
+    </h2>
     <div class="pb-4">
       <span i18n
         >After deleting a workspace, all data in the workspace will be
@@ -41,7 +47,7 @@ import {
       nz-button
       nzType="primary"
       nzDanger
-      (click)="btnvej49oCallback()"
+      (click)="btnxehq2bCallback()"
       i18n
     >
       Delete
@@ -59,6 +65,6 @@ export class WorkspaceComponent implements OnInit {
       FcName: [null, [Validators.required]]
     })
   }
-  async btntusoh2Callback() {}
-  async btnvej49oCallback() {}
+  async btnve5nidCallback() {}
+  async btnxehq2bCallback() {}
 }
