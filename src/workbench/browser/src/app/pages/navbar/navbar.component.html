@@ -1,24 +1,51 @@
-<div class="eo_navbar f_row f_js_ac">
-  <div>
+<div class="eo_navbar flex items-center justify-between">
+  <div class="flex">
     <img class="logo" src="assets/images/logo.svg" />
     <!-- star -->
     <a href="https://github.com/eolinker/eoapi" target="_blank">
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
-    <a nz-dropdown [nzDropdownMenu]="menu1">
-      Hover me
-      <span nz-icon nzType="down"></span>
-    </a>
-    <nz-dropdown-menu #menu1="nzDropdownMenu">
-      <ul nz-menu nzSelectable>
-        <li nz-menu-item>1st menu item</li>
-        <li nz-menu-item>2nd menu item</li>
-        <li nz-menu-item>3rd menu item</li>
-        <li nz-menu-item nzDanger>4th danger item</li>
+    <!-- Select workspace -->
+    <div class="flex items-center"  nz-dropdown [nzDropdownMenu]="workspaceMenu">
+      <eo-iconpark-icon
+        class="mr-[5px]"
+        name="link-cloud-{{ currentWorkspace.type === 'online' ? 'sucess' : 'faild' }}"
+      ></eo-iconpark-icon>
+      {{ currentWorkspace.title }}
+      <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
+    </div>
+    <nz-dropdown-menu #workspaceMenu="nzDropdownMenu">
+      <ul class="ml-[-11px]" nz-menu nzSelectable>
+        <div class="flex py-[5px] px-[12px]">
+          <input
+            nz-input
+            type="text"
+            class="flex-1 px-3 eo-search-input"
+            i18n-placeholder
+            placeholder="Search online workspace"
+            [(ngModel)]="searchValue"
+          />
+          <button nz-tooltip nzTooltipTitle="Add Workspace" nzType="primary" nz-button class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0">
+            <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
+          </button>
+        </div>
+        <li
+          nz-menu-item
+          (click)="changeWorkspace(item)"
+          [nzSelected]="currentWorkspace.id === item.id"
+          *ngFor="let item of searchWorkspace()"
+        >
+          <eo-iconpark-icon
+            class="mr-[5px]"
+            name="link-cloud-{{ item.type === 'online' ? 'sucess' : 'faild' }}"
+          ></eo-iconpark-icon>
+          {{ item.title }}
+        </li>
       </ul>
     </nz-dropdown-menu>
   </div>
   <div class="flex items-center">
+    <!-- setting -->
     <span
       class="flex items-center justify-center mx-1 icon"
       i18n-nzTooltipTitle
@@ -29,18 +56,38 @@
     >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </span>
-
-    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="menu">
+    <!-- help -->
+    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="helpMenu">
       <eo-iconpark-icon name="help"> </eo-iconpark-icon>
     </span>
-    <nz-dropdown-menu #menu="nzDropdownMenu">
+    <nz-dropdown-menu #helpMenu="nzDropdownMenu">
       <ul nz-menu>
         <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
         <a href="https://developer.eoapi.io" target="_blank" nz-menu-item i18n>Developer Support</a>
         <li nz-menu-divider></li>
-        <a href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{issueEnvironment}}" target="_blank" nz-menu-item i18n>Report Issue</a>
+        <a
+          href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
+            issueEnvironment
+          }}"
+          target="_blank"
+          nz-menu-item
+          i18n
+          >Report Issue</a
+        >
       </ul>
     </nz-dropdown-menu>
+    <!-- User -->
+    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="UserMenu">
+      <eo-iconpark-icon name="me"> </eo-iconpark-icon>
+    </span>
+    <nz-dropdown-menu #UserMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item><button type="button"  i18n>Sign in for Collaboration</button></li>
+        <li nz-menu-item><button type="button" i18n>Account Setting</button></li>
+        <li nz-menu-item><button type="button" i18n>Sign Out</button></li>
+      </ul>
+    </nz-dropdown-menu>
+    <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
       <span
         nz-tooltip
@@ -71,6 +118,7 @@
       >
       </span>
     </div>
+    <!-- Web download client -->
     <div *ngIf="!electron.isElectron">
       <div class="btn py-1.5 px-2 mx-1 flex items-center" nz-dropdown i18n [nzDropdownMenu]="download">
         <span class="flex items-center delete-icon">

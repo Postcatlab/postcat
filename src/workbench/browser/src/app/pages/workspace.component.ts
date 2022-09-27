@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators
-} from '@angular/forms'
+} from '@angular/forms';
 
 @Component({
   selector: 'eo-workspace',
@@ -49,15 +49,15 @@ import {
   </section>`
 })
 export class WorkspaceComponent implements OnInit {
-  validateWspNameForm
+  validateWspNameForm;
   constructor(public fb: UntypedFormBuilder) {
-    this.validateWspNameForm = UntypedFormGroup
+    this.validateWspNameForm = UntypedFormGroup;
   }
   ngOnInit(): void {
     // * Init WspName form
     this.validateWspNameForm = this.fb.group({
       FcName: [null, [Validators.required]]
-    })
+    });
   }
   async btntusoh2Callback() {}
   async btnvej49oCallback() {}
