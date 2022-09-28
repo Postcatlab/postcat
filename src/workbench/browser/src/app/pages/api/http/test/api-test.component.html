@@ -20,7 +20,7 @@
                 [(ngModel)]="model.request.uri" (change)="changeUri()" />
             </nz-form-control>
           </nz-form-item>
-          <button type="submit" nz-button nzType="primary" class="ml10 w_100" (click)="clickTest()">
+          <button type="submit" id="btn-test" nz-button nzType="primary" class="ml10 w_100" (click)="clickTest()">
             <span *ngIf="status !== 'testing'" i18n><span>Send</span></span>
             <span *ngIf="status === 'testing'" i18n>Abort</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
