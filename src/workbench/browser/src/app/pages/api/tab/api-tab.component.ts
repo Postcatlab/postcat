@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -23,8 +23,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     public tabStorage: ApiTabStorageService,
     public tabOperate: ApiTabOperateService,
     private modal: ModalService,
-    private router: Router,
-    private cdRef: ChangeDetectorRef
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.tabOperate.init(this.list);
@@ -191,7 +190,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function (e) {
+    window.addEventListener('beforeunload', function(e) {
       that.cacheData();
     });
   }
