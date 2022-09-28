@@ -6,6 +6,7 @@
 let _LibsDataConstructor = new (require('./data_constructor').core)();
 let xml2json = require('xml2js');
 let privateFun = {};
+const CONFIG = require('../config.json');
 const LOCAL_REGEXP_CONST = 'eoundefined$';
 /**
  * @desc 处理用户脚本允许错误时返回的内容

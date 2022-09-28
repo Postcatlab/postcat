@@ -10,7 +10,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { debounce, whatTextType } from '../../../utils';
+import { debounce, isBase64, whatTextType } from '../../../utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { editor } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
@@ -44,6 +44,12 @@ const eventHash = new Map()
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
+  @Input() set isBase64(val) {
+    this.$$isBase64 = val;
+    if (val) {
+      this.setCode(window.atob(this.$$code));
+    }
+  }
   @Input() set code(val) {
     this.setCode(val);
   }
@@ -56,6 +62,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() completions = [];
   @Output() codeChange = new EventEmitter<string>();
   $$code = '';
+  $$isBase64 = false;
   isFirstFormat = true;
   codeEdtor: editor.IStandaloneCodeEditor;
   completionItemProvider: monaco.IDisposable;
@@ -171,11 +178,14 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     if (val === this.$$code) {
       return;
     }
-    // console.log('val', val);
 
     let code = '';
     try {
-      code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val, null, 4);
+      if (this.$$isBase64) {
+        code = window.atob(val);
+      } else {
+        code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val, null, 4);
+      }
     } catch {
       code = String(val);
     }

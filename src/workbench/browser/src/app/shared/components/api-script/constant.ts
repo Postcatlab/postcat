@@ -788,7 +788,6 @@ export const beforeScriptCompletions: any[] = BEFORE_DATA.flatMap((n) => n.child
   }
   return prev;
 }, []);
-
 export const afterScriptCompletions: Completion[] = AFTER_DATA.flatMap((n) => n.children).reduce((prev, curr) => {
   const { caption, value } = curr;
   if (caption) {

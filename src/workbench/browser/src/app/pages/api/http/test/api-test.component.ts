@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select } from '@ngxs/store';
@@ -33,6 +33,8 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
+import { isEmpty } from 'lodash-es';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 interface testViewModel {
@@ -63,6 +65,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   @Output() modelChange = new EventEmitter<testViewModel>();
   @Output() afterTested = new EventEmitter<any>();
   @Output() eoOnInit = new EventEmitter<testViewModel>();
+  @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent; // 通过组件类型获取
   @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
   env: any = {
@@ -83,6 +86,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   MAX_TEST_SECONDS = 60;
+  isEmpty = isEmpty;
 
   private initTimes = 0;
   private status$: Subject<string> = new Subject<string>();
@@ -100,6 +104,17 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private lang: LanguageService
   ) {
+    //Select demo api when first open Eoapi
+    if (!window.localStorage.getItem('local_TabCache')) {
+      this.router.navigate(['/home/api/http/test'], {
+        queryParams: { pageID: Date.now(), uuid: 1 },
+      });
+      setTimeout(() => {
+        const testBtn = document.getElementById('btn-test');
+        testBtn && testBtn.click();
+      }, 600);
+    }
+
     this.initBasicForm();
     this.testServer.init((message) => {
       this.receiveMessage(message);
@@ -343,11 +358,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       //* Other tab test finish,support multiple tab test same time
       this.afterTested.emit({
         id: queryParams.pageID,
-        url:'/home/api/http/test',
+        url: '/home/api/http/test',
         model: {
           testStartTime: 0,
           testResult: tmpHistory,
-        }
+        },
       });
     } else {
       this.model.testResult = tmpHistory;
@@ -383,6 +398,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         that.changeStatus('tested');
       },
     });
+  }
+  downloadFile() {
+    this.apiTestResultResponseComponent.downloadResponseText();
   }
   /**
    * Change test status

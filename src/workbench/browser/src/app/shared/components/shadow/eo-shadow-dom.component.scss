@@ -1,4 +1,10 @@
 :host {
+  width: 100%;
+  overflow: hidden;
+  * {
+    max-width: 100%;
+  }
+
   .markdown-body {
     font-size: 14px;
     > :first-child {
@@ -6,6 +12,7 @@
     }
     img {
       max-width: 600px;
+      width: 100%;
     }
     h1 {
       font-size: 16px;

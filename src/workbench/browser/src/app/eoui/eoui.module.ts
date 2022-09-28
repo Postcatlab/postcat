@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { AceModule, ACE_CONFIG, AceConfigInterface } from 'ngx-ace-wrapper';
-
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -18,16 +16,9 @@ import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark
 
 const antdModules = [NzTableModule, NzButtonModule, NzInputModule, NzSelectModule];
 
-const DEFAULT_ACE_CONFIG: AceConfigInterface = {};
 @NgModule({
   declarations: [EoTableComponent, EoMessageComponent, CellDirective],
-  imports: [CommonModule, FormsModule, AceModule, EoIconparkIconModule, ...antdModules],
+  imports: [CommonModule, FormsModule, EoIconparkIconModule, ...antdModules],
   exports: [EoTableComponent, EoMessageComponent, CellDirective],
-  providers: [
-    {
-      provide: ACE_CONFIG,
-      useValue: DEFAULT_ACE_CONFIG,
-    },
-  ],
 })
 export class EouiModule {}
