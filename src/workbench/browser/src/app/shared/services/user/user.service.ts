@@ -5,6 +5,7 @@ import { StorageUtil } from '../../../utils/storage/Storage';
   providedIn: 'root',
 })
 export class UserService {
+  userInfo: API.User;
   accessToken = '';
   refreshToken = '';
   accessTokenExpiresAt = 0;
@@ -12,7 +13,13 @@ export class UserService {
 
   constructor() {}
 
-  login() {
-    StorageUtil.set();
+  async login() {
+    // const data = await this.apiService.login('http://localhost:3008/auth/login');
+    // if (data) {
+    //   StorageUtil.set('accessToken', data.accessToken, data.accessTokenExpiresAt);
+    //   StorageUtil.set('refreshToken', data.accessToken, data.refreshTokenExpiresAt);
+    // }
   }
+
+  async getUserProfile() {}
 }
