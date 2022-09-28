@@ -52,7 +52,6 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
-    return;
     //! remote datasource may change
     // if (this.dataSource.dataSourceType === 'http') {return;}
     let tabsByID = Object.fromEntries(this.tabsByID);
