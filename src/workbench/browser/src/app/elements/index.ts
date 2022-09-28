@@ -8,7 +8,7 @@ export { Text } from './text';
 export { Input } from './input';
 export { Line } from './line';
 export { Title } from './title';
-export { WhiteBoard } from './whiteboard';
+export { Card } from './card';
 export { Overview } from './overview';
 
 // * service

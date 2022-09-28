@@ -6,12 +6,19 @@ import { StorageUtil } from '../../../utils/storage/Storage';
 })
 export class UserService {
   userInfo: API.User;
-  accessToken = '';
-  refreshToken = '';
+  accessToken = StorageUtil.get('accessToken');
+  refreshToken = StorageUtil.get('refreshToken');
   accessTokenExpiresAt = 0;
   refreshTokenExpiresAt = 0;
 
   constructor() {}
+
+  getLoginInfo() {
+    return {
+      accessToken: StorageUtil.get('accessToken'),
+      refreshToken: StorageUtil.get('refreshToken'),
+    };
+  }
 
   setLoginInfo(data: API.LoginToken) {
     StorageUtil.set('accessToken', data.accessToken, (Date.now() - data.accessTokenExpiresAt) / 1000);

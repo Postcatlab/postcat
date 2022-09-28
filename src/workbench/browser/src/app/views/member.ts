@@ -6,7 +6,7 @@ import {
   Title,
   //   SelectPeople,
   Component,
-  WhiteBoard,
+  Card,
   Module,
   EventS,
 } from '../elements';
@@ -20,7 +20,7 @@ const invate = new Modal({
   },
   children: [
     personInput,
-    new WhiteBoard({ class: ['h-4'] }),
+    new Card({ class: ['h-4'] }),
     new Button({
       id: 'select',
       label: {
@@ -68,7 +68,7 @@ export default new Module({
       init: [],
       children: [
         invate,
-        new WhiteBoard({
+        new Card({
           class: ['py-5', 'px-10'],
           children: [
             new Title({

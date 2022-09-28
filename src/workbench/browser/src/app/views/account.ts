@@ -1,4 +1,4 @@
-import { Button, Component, Form } from '../elements';
+import { Button, Component, Form, Title, Card } from '../elements';
 // const userHeader = new UserHeader({
 
 // })
@@ -9,28 +9,34 @@ export default new Component({
   init: [],
   children: [
     //   userHeader,
-    new Form({
-      id: 'password',
-      layout: '|',
-      data: [
-        {
-          label: 'Current password',
-          key: 'a',
-          type: 'password',
-          rules: ['required'],
-        },
-        {
-          label: 'New password',
-          key: 'b',
-          type: 'password',
-          rules: ['required'],
-        },
-        {
-          label: 'Confirm new password',
-          key: 'c',
-          type: 'password',
-          rules: ['required'],
-        },
+    new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
+    new Card({
+      class: ['w-1/2'],
+      children: [
+        new Form({
+          id: 'password',
+          layout: '|',
+          data: [
+            {
+              label: 'Current password',
+              key: 'a',
+              type: 'password',
+              rules: ['required'],
+            },
+            {
+              label: 'New password',
+              key: 'b',
+              type: 'password',
+              rules: ['required'],
+            },
+            {
+              label: 'Confirm new password',
+              key: 'c',
+              type: 'password',
+              rules: ['required'],
+            },
+          ],
+        }),
       ],
     }),
     new Button({
@@ -46,5 +52,6 @@ export default new Component({
         ],
       },
     }),
+    new Card({ class: ['h-4'] }),
   ],
 });

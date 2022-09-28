@@ -1,4 +1,4 @@
-import { Modal, Form, Button, Component, Text, EventS, HTTPS } from '../elements';
+import { Modal, Form, Button, Component, Text, Input, EventS, HTTPS } from '../elements';
 
 const http = new HTTPS();
 
@@ -34,6 +34,18 @@ const userPassForm = new Form({
       rules: ['required'],
     },
   ],
+});
+
+const addWorkspace = new Modal({
+  id: 'add-workspace',
+  title: { text: 'Create Workspace' },
+  children: [
+    new Input({
+      id: 'workspace-name',
+      placeholder: 'Workspace Name',
+    }),
+  ],
+  footer: [],
 });
 
 // * 登录弹窗
@@ -108,6 +120,7 @@ const event = new EventS({
         http.send('api_authLogout', '{ refreshTokenExpiresAt }'),
       ],
     },
+    { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },
   ],
 });
 
@@ -115,5 +128,5 @@ export default new Component({
   id: 'user-modal',
   imports: [],
   init: [],
-  children: [http, event, retry, checkConnect, login, openSetting],
+  children: [http, event, retry, checkConnect, login, openSetting, addWorkspace],
 });

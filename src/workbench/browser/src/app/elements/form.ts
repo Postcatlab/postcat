@@ -90,7 +90,7 @@ export class Form extends Render implements formType {
           (it) => `
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your ${it.label.split('/').map(_.lowerCase).join(' or ')} !">
-            <nz-form-label [nzSpan]="4">${it.label}</nz-form-label>
+            <nz-form-label [nzSpan]="${it.span || 12}">${it.label}</nz-form-label>
             ${renderKey(it)}
           </nz-form-control>
         </nz-form-item>

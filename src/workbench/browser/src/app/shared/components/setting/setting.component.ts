@@ -77,6 +77,10 @@ export class SettingComponent implements OnInit {
   }
   treeNodes = [
     {
+      name: $localize`:@@Account:Account`,
+      moduleID: 'eoapi-account',
+    },
+    {
       name: $localize`:@@DataSource:Data Storage`,
       moduleID: 'eoapi-common',
     },
@@ -105,10 +109,7 @@ export class SettingComponent implements OnInit {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  constructor(
-    private remoteService: RemoteService,
-    private settingService: SettingService
-  ) {}
+  constructor(private remoteService: RemoteService, private settingService: SettingService) {}
 
   ngOnInit(): void {
     this.init();
@@ -199,7 +200,6 @@ export class SettingComponent implements OnInit {
     // The first item is selected by default
     this.selectModule(this.treeControl.dataNodes.at(0));
   }
-
 
   handleSave = () => {
     // for (const i in this.validateForm.controls) {

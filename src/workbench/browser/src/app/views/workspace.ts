@@ -11,7 +11,7 @@ import {
   Title,
   Line,
   Text,
-  WhiteBoard,
+  Card,
   //   EventS,
 } from '../elements';
 
@@ -28,11 +28,11 @@ export default new Module({
       imports: [],
       init: [],
       children: [
-        new WhiteBoard({
+        new Card({
           class: ['py-5', 'px-10'],
           children: [
             new Title({ label: 'Workspace Operate' }),
-            new WhiteBoard({ class: ['py-2'], children: [new Overview()] }),
+            new Card({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
             new Title({ label: 'Edit Workspace' }),
             new Form({

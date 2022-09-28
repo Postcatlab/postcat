@@ -1,43 +1,51 @@
-  <section  class="container">
-    <div class="tree-view">
-      <img src="assets/images/logo-text.svg" class="h-[40px]" />
-      <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
-        <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
-          <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
-          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-            (nzClick)="selectModule(node)">
-            {{ node.name }}
-          </nz-tree-node-option>
-        </nz-tree-node>
+<section class="container">
+  <div class="tree-view">
+    <img src="assets/images/logo-text.svg" class="h-[40px]" />
+    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
+      <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
+        <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
+        <nz-tree-node-option
+          [nzDisabled]="node.disabled"
+          [nzSelected]="selectListSelection.isSelected(node)"
+          (nzClick)="selectModule(node)"
+        >
+          {{ node.name }}
+        </nz-tree-node-option>
+      </nz-tree-node>
 
-        <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
-          <nz-tree-node-toggle>
-            <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
-          </nz-tree-node-toggle>
-          <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-            (nzClick)="selectModule(node)">
-            {{ node.name }}
-          </nz-tree-node-option>
-        </nz-tree-node>
-      </nz-tree-view>
-    </div>
-    <nz-divider nzType="vertical" class="divider"></nz-divider>
-    <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px]">
-      <!-- Data Storage -->
-      <eo-data-storage [(model)]="settings" [id]="treeNodes[0].moduleID"></eo-data-storage>
-      <nz-divider></nz-divider>
-      <!-- Language -->
-      <eo-language-switcher [(model)]="settings" [id]="treeNodes[1].moduleID"> </eo-language-switcher>
-      <nz-divider></nz-divider>
-      <!-- <eo-extension-setting
+      <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
+        <nz-tree-node-toggle>
+          <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
+        </nz-tree-node-toggle>
+        <nz-tree-node-option
+          [nzDisabled]="node.disabled"
+          [nzSelected]="selectListSelection.isSelected(node)"
+          (nzClick)="selectModule(node)"
+        >
+          {{ node.name }}
+        </nz-tree-node-option>
+      </nz-tree-node>
+    </nz-tree-view>
+  </div>
+  <nz-divider nzType="vertical" class="divider"></nz-divider>
+  <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px]">
+    <eo-account></eo-account>
+    <nz-divider></nz-divider>
+    <!-- Data Storage -->
+    <eo-data-storage [(model)]="settings" [id]="treeNodes[0].moduleID"></eo-data-storage>
+    <nz-divider></nz-divider>
+    <!-- Language -->
+    <eo-language-switcher [(model)]="settings" [id]="treeNodes[1].moduleID"> </eo-language-switcher>
+    <nz-divider></nz-divider>
+    <!-- <eo-extension-setting
         [(model)]="settings"
         [(isShowModal)]="isShowModal"
         [localSettings]="localSettings"
         [id]="treeNodes[2].moduleID"
         [extensitonConfigurations]="extensitonConfigurations"
       ></eo-extension-setting> -->
-      <!-- <nz-divider></nz-divider> -->
-      <!-- About -->
-      <eo-about [id]="treeNodes[2].moduleID"></eo-about>
-    </div>
-  </section>
+    <!-- <nz-divider></nz-divider> -->
+    <!-- About -->
+    <eo-about [id]="treeNodes[2].moduleID"></eo-about>
+  </div>
+</section>

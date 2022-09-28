@@ -98,6 +98,9 @@ export class NavbarComponent implements OnInit {
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });
   }
+  addWorkspace() {
+    this.message.send({ type: 'addWorkspace', data: {} });
+  }
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
