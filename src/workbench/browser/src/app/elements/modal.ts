@@ -3,7 +3,7 @@ import { Render } from 'ecode/dist/render';
 import { Button } from './button';
 
 type modalType = {
-  footer: any[];
+  footer?: { label: string; event: any; status: any; theme?: string[] }[];
   close: () => string;
   //   static close: () => string
 };
@@ -20,7 +20,7 @@ export class Modal extends Render implements modalType {
   footer: any[] = [];
   id = '';
   title;
-  constructor({ id = '', event = {}, title, children, footer }) {
+  constructor({ id = '', event = {}, title, children, footer = [] }) {
     super({ children, event: eventTranlate(event) });
     this.id = Render.toCamel(id);
     this.title = title;
@@ -51,6 +51,7 @@ export class Modal extends Render implements modalType {
           label: it.label,
           id: it.label,
           event: { click: it.callback },
+          status: { disabled: it.status },
         }).render()
       );
     const footer = footerRender(this.footer);
