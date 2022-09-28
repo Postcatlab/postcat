@@ -12,8 +12,8 @@ import {
     <h2 class="text-lg flex justify-between items-center">
       <span i18n>Workspace Operate</span>
     </h2>
-    <section class="py-2"></section>
-    <eo-api-overview></eo-api-overview> <nz-divider></nz-divider>
+    <section class="py-2"><eo-api-overview></eo-api-overview></section>
+    <nz-divider></nz-divider>
     <h2 class="text-lg flex justify-between items-center">
       <span i18n>Edit Workspace</span>
     </h2>
@@ -31,7 +31,7 @@ import {
         </nz-form-control>
       </nz-form-item>
     </form>
-    <button nz-button nzType="primary" (click)="btnh3vjomCallback()" i18n>
+    <button nz-button nzType="primary" (click)="btnhbtxmgCallback()" i18n>
       Save
     </button>
     <nz-divider></nz-divider>
@@ -48,7 +48,7 @@ import {
       nz-button
       nzType="primary"
       nzDanger
-      (click)="btnq1qjztCallback()"
+      (click)="btngzambqCallback()"
       i18n
     >
       Delete
@@ -66,10 +66,10 @@ export class WorkspaceComponent implements OnInit {
       FcName: [null, [Validators.required]]
     })
   }
-  async btnh3vjomCallback() {
+  async btnhbtxmgCallback() {
     // * click event callback
   }
-  async btnq1qjztCallback() {
+  async btngzambqCallback() {
     // * click event callback
   }
 }

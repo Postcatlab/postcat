@@ -32,8 +32,7 @@ export default new Module({
           class: ['py-5', 'px-10'],
           children: [
             new Title({ label: 'Workspace Operate' }),
-            new WhiteBoard({ class: ['py-2'] }),
-            new Overview(),
+            new WhiteBoard({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
             new Title({ label: 'Edit Workspace' }),
             new Form({

@@ -10,3 +10,4 @@ export { Line } from './line';
 export { Title } from './title';
 export { WhiteBoard } from './whiteboard';
 export { Overview } from './overview';
+export { EventS } from './eventS';

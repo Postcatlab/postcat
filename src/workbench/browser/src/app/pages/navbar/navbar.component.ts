@@ -4,6 +4,7 @@ import { ModuleInfo } from 'eo/platform/node/extension-manager';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingComponent } from '../../shared/components/setting/setting.component';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -55,7 +56,8 @@ export class NavbarComponent implements OnInit {
     public electron: ElectronService,
     private web: WebService,
     private modal: NzModalService,
-    private remoteService: RemoteService
+    private remoteService: RemoteService,
+    private message: MessageService
   ) {
     this.issueEnvironment = this.getEnviroment();
   }
@@ -90,7 +92,9 @@ export class NavbarComponent implements OnInit {
       this.modules = new Map();
     }
   }
-
+  loginOrSign() {
+    this.message.send({ type: 'login', data: {} });
+  }
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
@@ -101,9 +105,9 @@ export class NavbarComponent implements OnInit {
    */
   openSettingModal() {
     this.modal.create({
-      nzClassName:'eo-setting-modal',
+      nzClassName: 'eo-setting-modal',
       nzContent: SettingComponent,
-      nzFooter:null
+      nzFooter: null,
     });
   }
   private getEnviroment(): string {

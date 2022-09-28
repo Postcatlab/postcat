@@ -8,7 +8,7 @@ import {
   Component,
   WhiteBoard,
   Module,
-  //   EventS,
+  EventS,
 } from '../elements';
 
 const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
@@ -26,8 +26,10 @@ const invate = new Modal({
       label: {
         text: 'Select a member above',
       },
-      isDisabled: [personInput.isEmpty()],
       theme: ['block'],
+      status: {
+        disabled: [personInput.isEmpty()],
+      },
       event: {
         click: [
           personInput.getValue('data'),

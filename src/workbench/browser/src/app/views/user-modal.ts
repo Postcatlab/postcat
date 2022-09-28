@@ -1,4 +1,4 @@
-import { Modal, Form, Button, Component, Text } from '../elements';
+import { Modal, Form, Button, Component, Text, EventS } from '../elements';
 
 const retry = new Modal({
   id: 'retry',
@@ -77,13 +77,19 @@ const checkConnect = new Modal({
   footer: [],
 });
 
-// const event = new EventS({
-//   id: 'event',
-// });
+const event = new EventS({
+  id: 'event',
+  listen: [
+    {
+      name: 'login',
+      callback: [login.wakeUp()],
+    },
+  ],
+});
 
 export default new Component({
   id: 'user-modal',
   imports: [],
   init: [],
-  children: [retry, checkConnect, login, openSetting],
+  children: [event, retry, checkConnect, login, openSetting],
 });
