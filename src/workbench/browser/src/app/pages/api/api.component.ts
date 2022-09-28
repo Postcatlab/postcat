@@ -81,6 +81,10 @@ export class ApiComponent implements OnInit, OnDestroy {
       this.router.navigate(['/home/api/http/test'], {
         queryParams: { pageID: Date.now(), uuid: 1 },
       });
+      setTimeout(() => {
+        const testBtn = document.getElementById('btn-test');
+        testBtn && testBtn.click();
+      }, 600);
     }
   }
   get envUuid(): number | null {
