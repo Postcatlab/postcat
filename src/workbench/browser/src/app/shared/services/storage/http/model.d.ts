@@ -99,4 +99,40 @@ declare namespace API {
      */
     oldPassword?: string;
   };
+
+  /**
+   * UserEntity
+   */
+  export interface UserEntity {
+    /**
+     * 用户头像
+     */
+    avatar?: string;
+    id: number;
+    /**
+     * 密码
+     */
+    password: string;
+    /**
+     * 用户名
+     */
+    username: string;
+    workspaces: ApifoxModal[];
+  }
+
+  /**
+   * WorkspaceEntity
+   */
+  export interface ApifoxModal {
+    /**
+     * 空间创建者ID
+     */
+    creatorID: number;
+    id: number;
+    /**
+     * 空间名称
+     */
+    title: string;
+    users: UserEntity[];
+  }
 }
