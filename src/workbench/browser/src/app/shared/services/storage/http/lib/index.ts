@@ -155,4 +155,32 @@ export class HttpStorage implements StorageInterface {
   apiMockLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
     return this.http.get(`/mock?apiDataID=${apiDataID}`);
   }
+
+  authLogin(loginParams: API.LoginInfoDto): Observable<object> {
+    return this.http.post('/auth/login', loginParams);
+  }
+
+  authLogout(): Observable<object> {
+    return this.http.get('/auth/logout');
+  }
+
+  authRefresh(refreshParams: API.JwtRefreshTokenDto): Observable<object> {
+    return this.http.put('/auth/refresh', refreshParams);
+  }
+
+  getUserProfile(): Observable<object> {
+    return this.http.get('/user/profile');
+  }
+
+  updateUserProfile(params: API.UpdateUserInfoDto): Observable<object> {
+    return this.http.put('/user/profile', params);
+  }
+
+  updateUserPassword(params: API.UpdateUserPasswordDto): Observable<object> {
+    return this.http.put('/user/password', params);
+  }
+
+  searchUserByName(username: string): Observable<object> {
+    return this.http.get(`/user/{${username}}`);
+  }
 }
