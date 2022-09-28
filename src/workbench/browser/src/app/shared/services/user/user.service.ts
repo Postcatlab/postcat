@@ -13,13 +13,21 @@ export class UserService {
 
   constructor() {}
 
-  async login() {
-    // const data = await this.apiService.login('http://localhost:3008/auth/login');
-    // if (data) {
-    //   StorageUtil.set('accessToken', data.accessToken, data.accessTokenExpiresAt);
-    //   StorageUtil.set('refreshToken', data.accessToken, data.refreshTokenExpiresAt);
-    // }
+  setLoginInfo(data: API.LoginToken) {
+    StorageUtil.set('accessToken', data.accessToken, (Date.now() - data.accessTokenExpiresAt) / 1000);
+    StorageUtil.set('refreshToken', data.refreshToken, (Date.now() - data.refreshTokenExpiresAt) / 1000);
   }
 
-  async getUserProfile() {}
+  setUserProfile(userInfo: API.User) {
+    this.userInfo = userInfo;
+    StorageUtil.set('userInfo', JSON.stringify(userInfo));
+  }
+
+  clearAuth() {
+    this.userInfo = null;
+    this.accessToken = this.refreshToken = '';
+    StorageUtil.remove('accessToken');
+    StorageUtil.remove('refreshToken');
+    StorageUtil.remove('userInfo');
+  }
 }
