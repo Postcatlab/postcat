@@ -23,7 +23,10 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
+import {
+  BaseUrlInterceptor,
+  RemoteUrlInterceptor,
+} from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
@@ -35,7 +38,6 @@ import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 registerLocaleData(en);
 registerLocaleData(zh);
-
 
 @NgModule({
   declarations: [AppComponent],
@@ -65,7 +67,8 @@ registerLocaleData(zh);
       useFactory: (i) => i.get('$rootScope'),
       deps: ['$injector'],
     },
-    { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: false },
+    { provide: HTTP_INTERCEPTORS, useClass: RemoteUrlInterceptor, multi: true },
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {

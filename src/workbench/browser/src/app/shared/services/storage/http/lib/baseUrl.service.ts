@@ -21,3 +21,19 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     );
   }
 }
+
+@Injectable()
+export class RemoteUrlInterceptor extends SettingService implements HttpInterceptor {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const { url = '', token = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
+    req = req.clone({
+      url: uniqueSlash(protocolReg.test(req.url) ? req.url : url + req.url),
+      headers: req.headers.append('x-api-key', token),
+    });
+
+    return next.handle(req).pipe(
+      filter((event) => event instanceof HttpResponse && [200, 201].includes(event.status)),
+      map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data } }))
+    );
+  }
+}

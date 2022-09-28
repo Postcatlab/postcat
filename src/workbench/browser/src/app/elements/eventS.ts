@@ -5,7 +5,7 @@ const renderEvent = (list) =>
     .map(
       ({ name, callback }) => `
     if(type === '${name}') {
-        ${callback.map(Render.callbackRender)}
+        ${callback.map(Render.callbackRender).join('\n')}
         return 
     }
     `

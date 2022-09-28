@@ -95,6 +95,9 @@ export class NavbarComponent implements OnInit {
   loginOrSign() {
     this.message.send({ type: 'login', data: {} });
   }
+  loginOut() {
+    this.message.send({ type: 'logOut', data: {} });
+  }
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -34,24 +35,26 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
       [nzFooter]="null"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
+      (nzAfterClose)="ej9jcf9Callback()"
       nzTitle="Login"
     >
       <ng-container *nzModalContent>
         <form nz-form [formGroup]="validateUsernameForm" nzLayout="horizontal">
           <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your email phone !">
+            <nz-form-control nzErrorTip="Please input your email or phone !">
               <nz-form-label [nzSpan]="4">Email/Phone</nz-form-label>
-              <input type="text" nz-input formControlName="FcEmailPhone" placeholder="Enter env name" nzRequired />
+              <input type="text" nz-input formControlName="username" placeholder="Enter username" nzRequired />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your password !">
               <nz-form-label [nzSpan]="4">Password</nz-form-label>
+              <input type="password" nz-input formControlName="password" placeholder="Enter password" nzRequired />
             </nz-form-control>
           </nz-form-item>
         </form>
-        <button nz-button nzType="primary" (click)="btnpocr37Callback()" i18n>Sign In/Up</button>
+        <button nz-button nzType="primary" (click)="btngzae7oCallback()" i18n>Sign In/Up</button>
       </ng-container>
     </nz-modal>
     <nz-modal
@@ -75,7 +78,12 @@ export class UserModalComponent implements OnInit {
   isLoginModalVisible;
   validateUsernameForm;
   isOpenSettingModalVisible;
-  constructor(public message: MessageService, public modal: NzModalService, public fb: UntypedFormBuilder) {
+  constructor(
+    public api: RemoteService,
+    public message: MessageService,
+    public modal: NzModalService,
+    public fb: UntypedFormBuilder
+  ) {
     this.isRetryModalVisible = false;
     this.isCheckConnectModalVisible = false;
     this.isLoginModalVisible = false;
@@ -84,10 +92,22 @@ export class UserModalComponent implements OnInit {
   }
   ngOnInit(): void {
     this.message.get().subscribe(async ({ type, data }) => {
-      console.log('jjiji');
       if (type === 'login') {
         // * 唤起弹窗
         this.isLoginModalVisible = true;
+
+        return;
+      }
+
+      if (type === 'logOut') {
+        const refreshTokenExpiresAt = '2333';
+
+        const [err, data]: any = await this.api.api_authLogout({
+          refreshTokenExpiresAt,
+        });
+        if (err) {
+          return;
+        }
 
         return;
       }
@@ -95,8 +115,8 @@ export class UserModalComponent implements OnInit {
 
     // * Init Username form
     this.validateUsernameForm = this.fb.group({
-      FcEmailPhone: [null, [Validators.required]],
-      FcPassword: [null, [Validators.required]],
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]],
     });
   }
   handleRetryModalCancel(): void {
@@ -111,8 +131,24 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false;
   }
-  async btnpocr37Callback() {
+  async ej9jcf9Callback() {
+    // * nzAfterClose event callback
+
+    // * Clear Username form
+    this.validateUsernameForm.reset();
+  }
+  async btngzae7oCallback() {
     // * click event callback
+
+    // * get Username form values
+    const formData = this.validateUsernameForm.value;
+    const [err, data]: any = await this.api.api_authLogin(formData);
+    if (err) {
+      return;
+    }
+
+    // * 关闭弹窗
+    this.isLoginModalVisible = false;
 
     // * 唤起弹窗
     this.isRetryModalVisible = true;

@@ -10,4 +10,9 @@ export { Line } from './line';
 export { Title } from './title';
 export { WhiteBoard } from './whiteboard';
 export { Overview } from './overview';
+
+// * service
 export { EventS } from './eventS';
+
+// * http
+export { HTTPS } from './httpS';

@@ -17,7 +17,7 @@ export class HttpStorage implements StorageInterface {
     console.log('eoapi http storage start');
   }
   systemCheck() {
-    return this.http.get('/system/status') as Observable<object>;
+    return this.http.get('/api/system/status') as Observable<object>;
   }
   // Project
   projectImport(uuid: number, item: Project) {

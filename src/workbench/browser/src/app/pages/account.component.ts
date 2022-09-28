@@ -16,22 +16,43 @@ import {
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your current password !">
           <nz-form-label [nzSpan]="4">Current password</nz-form-label>
+          <input
+            type="password"
+            nz-input
+            formControlName="a"
+            placeholder=""
+            nzRequired
+          />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your new password !">
           <nz-form-label [nzSpan]="4">New password</nz-form-label>
+          <input
+            type="password"
+            nz-input
+            formControlName="b"
+            placeholder=""
+            nzRequired
+          />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your confirm new password !">
           <nz-form-label [nzSpan]="4">Confirm new password</nz-form-label>
+          <input
+            type="password"
+            nz-input
+            formControlName="c"
+            placeholder=""
+            nzRequired
+          />
         </nz-form-control>
       </nz-form-item>
     </form>
-    <button nz-button nzType="primary" (click)="btnoz9tanCallback()" i18n>
+    <button nz-button nzType="primary" (click)="btngkxclyCallback()" i18n>
       Change
     </button>`
 })
@@ -43,12 +64,12 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
     // * Init Password form
     this.validatePasswordForm = this.fb.group({
-      FcCurrentPassword: [null, [Validators.required]],
-      FcNewPassword: [null, [Validators.required]],
-      FcConfirmNewPassword: [null, [Validators.required]]
+      a: [null, [Validators.required]],
+      b: [null, [Validators.required]],
+      c: [null, [Validators.required]]
     })
   }
-  async btnoz9tanCallback() {
+  async btngkxclyCallback() {
     // * click event callback
   }
 }

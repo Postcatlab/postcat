@@ -1,4 +1,5 @@
 <eo-navbar></eo-navbar>
+<eo-user-modal></eo-user-modal>
 <div
   class="page-body"
   [ngClass]="{ 'web-page-body': !electron.isElectron, 'pc-page-body': electron.isElectron }"
@@ -10,7 +11,9 @@
       class="text-[13px] mr-[5px]"
     ></eo-iconpark-icon>
     <span i18n>The current data is stored locally,If you want to collaborate,Please</span>
-    <button class="ml-[5px]" nz-button nzType="default" nzSize="small" (click)="switchDataSource()" i18n>switch to the cloud workspace</button>
+    <button class="ml-[5px]" nz-button nzType="default" nzSize="small" (click)="switchDataSource()" i18n>
+      switch to the cloud workspace
+    </button>
     <eo-iconpark-icon name="close-small" class="absolute right-[20px] cursor-pointer"></eo-iconpark-icon>
   </div>
   <div class="home_container f_row">

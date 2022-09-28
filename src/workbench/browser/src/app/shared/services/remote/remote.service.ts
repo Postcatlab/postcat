@@ -92,7 +92,7 @@ export class RemoteService {
       return [false, remoteUrl];
     }
 
-    const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
+    const url = `${remoteUrl}/api/system/status`.replace(/(?<!:)\/{2,}/g, '/');
 
     let result;
     try {

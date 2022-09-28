@@ -1,4 +1,6 @@
-import { Modal, Form, Button, Component, Text, EventS } from '../elements';
+import { Modal, Form, Button, Component, Text, EventS, HTTPS } from '../elements';
+
+const http = new HTTPS();
 
 const retry = new Modal({
   id: 'retry',
@@ -13,6 +15,27 @@ const retry = new Modal({
   footer: [],
 });
 
+const userPassForm = new Form({
+  id: 'username',
+  data: [
+    {
+      label: 'Email/Phone',
+      key: 'username',
+      type: 'input',
+      class: '',
+      placeholder: 'Enter username',
+      rules: ['required'],
+    },
+    {
+      label: 'Password',
+      key: 'password',
+      type: 'password',
+      placeholder: 'Enter password',
+      rules: ['required'],
+    },
+  ],
+});
+
 // * 登录弹窗
 const login = new Modal({
   id: 'login',
@@ -20,33 +43,25 @@ const login = new Modal({
     text: 'Login',
   },
   children: [
-    new Form({
-      id: 'username',
-      data: [
-        {
-          label: 'Email/Phone',
-          type: 'input',
-          class: '',
-          placeholder: 'Enter env name',
-          rules: ['required'],
-        },
-        {
-          label: 'Password',
-          type: 'password',
-          placeholder: 'Enter env host',
-          rules: ['required'],
-        },
-      ],
-    }),
+    userPassForm,
     new Button({
       id: 'login-btn',
       label: { text: 'Sign In/Up' },
       event: {
-        click: [retry.wakeUp()],
+        click: [
+          // * login
+          userPassForm.getData('formData'),
+          http.send('api_authLogin', 'formData'),
+          Modal.close('login'),
+          retry.wakeUp(),
+        ],
       },
     }),
   ],
   footer: [],
+  event: {
+    close: [userPassForm.reset()],
+  },
 });
 
 const openSetting = new Modal({
@@ -84,6 +99,15 @@ const event = new EventS({
       name: 'login',
       callback: [login.wakeUp()],
     },
+    {
+      name: 'logOut',
+      callback: [
+        () => {
+          const refreshTokenExpiresAt = '2333';
+        },
+        http.send('api_authLogout', '{ refreshTokenExpiresAt }'),
+      ],
+    },
   ],
 });
 
@@ -91,5 +115,5 @@ export default new Component({
   id: 'user-modal',
   imports: [],
   init: [],
-  children: [event, retry, checkConnect, login, openSetting],
+  children: [http, event, retry, checkConnect, login, openSetting],
 });

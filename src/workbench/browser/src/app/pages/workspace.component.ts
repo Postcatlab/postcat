@@ -24,14 +24,14 @@ import {
           <input
             type="text"
             nz-input
-            formControlName="FcName"
+            formControlName="undefined"
             placeholder=""
             nzRequired
           />
         </nz-form-control>
       </nz-form-item>
     </form>
-    <button nz-button nzType="primary" (click)="btnhbtxmgCallback()" i18n>
+    <button nz-button nzType="primary" (click)="btnunm79zCallback()" i18n>
       Save
     </button>
     <nz-divider></nz-divider>
@@ -48,7 +48,7 @@ import {
       nz-button
       nzType="primary"
       nzDanger
-      (click)="btngzambqCallback()"
+      (click)="btnvld0wiCallback()"
       i18n
     >
       Delete
@@ -63,13 +63,13 @@ export class WorkspaceComponent implements OnInit {
   ngOnInit(): void {
     // * Init WspName form
     this.validateWspNameForm = this.fb.group({
-      FcName: [null, [Validators.required]]
+      undefined: [null, [Validators.required]]
     })
   }
-  async btnhbtxmgCallback() {
+  async btnunm79zCallback() {
     // * click event callback
   }
-  async btngzambqCallback() {
+  async btnvld0wiCallback() {
     // * click event callback
   }
 }

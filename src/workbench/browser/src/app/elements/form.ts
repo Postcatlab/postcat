@@ -8,6 +8,7 @@ type formType = {
 type dataType = {
   label?: string | { text: string; i18n?: string };
   type: 'input' | 'select' | 'date' | 'time' | 'password';
+  key: string;
   class?: string;
   placeholder?: string;
   rules?: (string | Record<string, string | number>)[];
@@ -40,8 +41,8 @@ export class Form extends Render implements formType {
   init(id) {
     const initRules = (list) =>
       list.map(
-        ({ label, rules = [] }) =>
-          `${Render.toCamel('fc-' + label)}: [null, [${rules
+        ({ key, rules = [] }) =>
+          `${key}: [null, [${rules
             .filter(_.isString)
             .map((it) => 'Validators.' + it)
             .join(',')}]]`
@@ -54,23 +55,28 @@ export class Form extends Render implements formType {
       `;
   }
   reset() {
-    Form.reset(this.id);
+    return Form.reset(this.id);
+  }
+  getData(name) {
+    return Form.getData(this.id, name);
   }
 
   render() {
     const isLabelRequired = (rules) => (rules.includes('required') ? 'nzRequired' : '');
 
-    const formBindName = ({ label, rules = [] }) => {
+    const formBindName = ({ key, rules = [] }) => {
       if (rules.length) {
-        return `formControlName="${Render.toCamel('fc-' + label)}"`;
+        return `formControlName="${key}"`;
       }
       return '';
     };
-    const renderKey = ({ label, type, placeholder, rules }) => {
+    const typeHash = new Map().set('input', 'text').set('text', 'text').set('password', 'password');
+    const renderKey = ({ key, type, placeholder, rules }) => {
       switch (type) {
         case 'input':
-          return `<input type="text" nz-input ${formBindName({
-            label,
+        case 'password':
+          return `<input type="${typeHash.get(type)}" nz-input ${formBindName({
+            key,
             rules,
           })} placeholder="${placeholder || ''}" ${isLabelRequired(rules)} />`;
 
@@ -83,7 +89,7 @@ export class Form extends Render implements formType {
         .map(
           (it) => `
         <nz-form-item>
-          <nz-form-control nzErrorTip="Please input your ${_.lowerCase(it.label)} !">
+          <nz-form-control nzErrorTip="Please input your ${it.label.split('/').map(_.lowerCase).join(' or ')} !">
             <nz-form-label [nzSpan]="4">${it.label}</nz-form-label>
             ${renderKey(it)}
           </nz-form-control>
@@ -131,5 +137,10 @@ export class Form extends Render implements formType {
     return `
     /\/ * Clear ${id} form
     this.validate${Render.toCamel(id)}Form.reset()`;
+  }
+  static getData(id, formData) {
+    return `
+    /\/ * get ${id} form values
+    const ${formData} = this.validate${Render.toCamel(id)}Form.value`;
   }
 }

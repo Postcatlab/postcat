@@ -15,16 +15,19 @@ export default new Component({
       data: [
         {
           label: 'Current password',
+          key: 'a',
           type: 'password',
           rules: ['required'],
         },
         {
           label: 'New password',
+          key: 'b',
           type: 'password',
           rules: ['required'],
         },
         {
           label: 'Confirm new password',
+          key: 'c',
           type: 'password',
           rules: ['required'],
         },

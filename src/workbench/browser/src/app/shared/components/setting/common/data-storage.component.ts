@@ -123,7 +123,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
     }
 
     try {
-      const url = uniqueSlash(`${remoteUrl}/system/status`);
+      const url = uniqueSlash(`${remoteUrl}/api/system/status`);
       const response = await fetch(url, {
         headers: {
           'x-api-key': token,
