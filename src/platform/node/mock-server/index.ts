@@ -7,6 +7,8 @@ import { BrowserView, ipcMain } from 'electron';
 import type { Server } from 'http';
 import type { AddressInfo } from 'net';
 import { Configuration } from 'eo/platform/node/configuration/lib';
+import Store from 'electron-store';
+const store = new Store();
 
 const protocolReg = new RegExp('^/(http|https)://');
 // Solve object circular reference problem
@@ -94,9 +96,9 @@ export class MockServer {
    * start mock server
    * @param port mock server port
    */
-  async start(view: BrowserView, port = 3040) {
+  async start(view: BrowserView, port = store.get('mock_port') || 3040) {
     this.view = view;
-    portfinder.basePort = port;
+    portfinder.basePort = Number(port);
     // Use portfinder for port detection. If the port is found to be occupied, the port will be incremented by 1.
     const _port = await portfinder.getPortPromise();
 
@@ -105,6 +107,7 @@ export class MockServer {
         .listen(_port, () => {
           const { port } = this.server.address() as AddressInfo;
           this.mockUrl = `http://127.0.0.1:${port}`;
+          store.set('mock_port', port);
           console.log(`mock service is started：${this.mockUrl}`);
           resolve(this.mockUrl);
         })

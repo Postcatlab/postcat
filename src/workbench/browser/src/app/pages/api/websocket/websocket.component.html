@@ -3,7 +3,7 @@
     <form nz-form [formGroup]="validateForm" class="flex">
       <div>
         <nz-select
-          class="!w-[106px]"
+          class="!w-[106px] no-radius-select"
           [disabled]="['connecting', 'connected'].includes(wsStatus)"
           [(ngModel)]="model.request.protocol"
           formControlName="protocol"

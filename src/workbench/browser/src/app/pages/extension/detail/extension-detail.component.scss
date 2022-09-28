@@ -5,6 +5,9 @@
   margin: 0 16px;
 }
 ::ng-deep {
+  .ant-skeleton {
+    display: block;
+  }
   eo-extension-detail {
     .settings .ant-tabs-content-holder {
       padding-top: 0;

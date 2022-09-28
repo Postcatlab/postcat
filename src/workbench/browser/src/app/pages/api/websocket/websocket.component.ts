@@ -66,7 +66,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   async init() {
     if (!this.model || isEmptyObj(this.model)) {
-      this.resetForm();
       this.model = this.resetModel();
       const id = this.route.snapshot.queryParams.uuid;
       if (id && id.includes('history_')) {
@@ -77,6 +76,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     }
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
+    this.initBasicForm();
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
@@ -327,9 +327,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         responseBody: [],
       },
     };
-  }
-  resetForm() {
-    this.validateForm.reset();
   }
   private checkForm(): boolean {
     for (const i in this.validateForm.controls) {
