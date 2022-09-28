@@ -76,16 +76,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     private remoteService: RemoteService,
     private store: Store
   ) {
-    //Select demo api when first open Eoapi
-    if (!window.localStorage.getItem('local_TabCache')) {
-      this.router.navigate(['/home/api/http/test'], {
-        queryParams: { pageID: Date.now(), uuid: 1 },
-      });
-      setTimeout(() => {
-        const testBtn = document.getElementById('btn-test');
-        testBtn && testBtn.click();
-      }, 600);
-    }
   }
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
