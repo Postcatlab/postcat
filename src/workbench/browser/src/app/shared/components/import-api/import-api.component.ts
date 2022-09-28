@@ -50,7 +50,7 @@ export class ImportApiComponent implements OnInit {
   supportList: Array<FeatureType> = [];
   currentExtension = '';
   uploadData = null;
-  featureMap = window.eo.getFeature('apimanage.import');
+  featureMap = window.eo?.getFeature('apimanage.import');
   constructor(
     private messageService: MessageService,
     private storage: StorageService,

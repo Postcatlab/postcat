@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -20,7 +19,7 @@ const actionComponent = {
 })
 export class ApiOverviewComponent implements OnDestroy {
   modal: NzModalRef;
-  constructor(private modalService: ModalService, private router: Router, private message: EoMessageService) {}
+  constructor(private modalService: ModalService, private message: EoMessageService) {}
   overviewList = [
     {
       title: $localize`Import`,
@@ -65,10 +64,5 @@ export class ApiOverviewComponent implements OnDestroy {
       },
     });
   }
-  ngOnDestroy() {
-    //TODO router change manual close modal
-    if (this.modal) {
-      this.modal.destroy();
-    }
-  }
+  ngOnDestroy() {}
 }
