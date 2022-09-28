@@ -13,7 +13,7 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
   supportList: Array<FeatureType> = [];
-  featureMap = window.eo.getFeature('apimanage.export');
+  featureMap = window.eo?.getFeature('apimanage.export');
   constructor(private storage: StorageService, public extensionService: ExtensionService) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
@@ -48,6 +48,7 @@ export class ExportApiComponent implements OnInit {
 
   /**
    * Default export
+   *
    * @param callback
    */
   private exportEoapi(callback) {
@@ -65,6 +66,7 @@ export class ExportApiComponent implements OnInit {
   /**
    * Module export
    * callback应该支持返回具体的错误信息显示
+   *
    * @param callback
    */
   private export(callback) {

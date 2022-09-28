@@ -116,7 +116,6 @@ export class NavbarComponent implements OnInit {
   private getEnviroment(): string {
     let result = '';
     const systemInfo = this.electron.getSystemInfo();
-    console.log(systemInfo);
     systemInfo.forEach((val) => {
       if (['homeDir'].includes(val.id)) {
         return;
