@@ -26,13 +26,6 @@ export class ApiTabService {
     { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
     { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
     {
-      pathname: '/home/api/overview',
-      type: 'preview',
-      module: 'overview',
-      title: $localize`:@@API Index:Index`,
-      icon: 'home',
-    },
-    {
       pathname: '/home/api/ws/test',
       module: 'test',
       isFixed: true,
