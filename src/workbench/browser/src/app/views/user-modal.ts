@@ -45,7 +45,18 @@ const addWorkspace = new Modal({
       placeholder: 'Workspace Name',
     }),
   ],
-  footer: [],
+  footer: [
+    new Button({
+      id: 'cancel-btn',
+      label: { text: 'cancel' },
+      event: {},
+    }),
+    new Button({
+      id: 'confirm-btn',
+      label: { text: 'confirm' },
+      event: {},
+    }),
+  ],
 });
 
 // * 登录弹窗

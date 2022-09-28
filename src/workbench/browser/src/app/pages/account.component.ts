@@ -55,7 +55,7 @@ import {
         </nz-form-item>
       </form>
     </section>
-    <button nz-button nzType="primary" (click)="btnpb4yjqCallback()" i18n>
+    <button nz-button nzType="primary" (click)="btnomkhcsCallback()" i18n>
       Change
     </button>
     <section class="h-4"></section>`
@@ -73,7 +73,7 @@ export class AccountComponent implements OnInit {
       c: [null, [Validators.required]]
     })
   }
-  async btnpb4yjqCallback() {
+  async btnomkhcsCallback() {
     // * click event callback
   }
 }
