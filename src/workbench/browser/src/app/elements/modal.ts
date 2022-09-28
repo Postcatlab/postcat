@@ -8,12 +8,20 @@ type modalType = {
   //   static close: () => string
 };
 
+const eventHash = new Map().set('open', 'nzAfterOpen').set('close', 'nzAfterClose');
+
+const eventTranlate = (event) =>
+  Object.entries(event).reduce((total, [e, cb]) => {
+    total[eventHash.get(e)] = cb;
+    return total;
+  }, {});
+
 export class Modal extends Render implements modalType {
   footer: any[] = [];
   id = '';
   title;
-  constructor({ id = '', title, children, footer }) {
-    super({ children });
+  constructor({ id = '', event = {}, title, children, footer }) {
+    super({ children, event: eventTranlate(event) });
     this.id = Render.toCamel(id);
     this.title = title;
     this.footer = footer;
@@ -32,8 +40,8 @@ export class Modal extends Render implements modalType {
   }
   render() {
     const mainMethods = [
-      `handle${this.id}ModalCancel() {
-        // * 关闭弹窗
+      `handle${this.id}ModalCancel(): void {
+        // * 关闭弹窗 
         this.is${this.id}ModalVisible = false
       }`,
     ];
@@ -51,11 +59,13 @@ export class Modal extends Render implements modalType {
     ${footer.map((it) => it.template).join('\n')}
     </ng-template>`
       : '';
+
     return {
       template: `<nz-modal 
                     [nzFooter]="${footer.length ? 'modalFooter' : null}"
                     [(nzVisible)]="is${this.id}ModalVisible"
                     (nzOnCancel)="handle${this.id}ModalCancel()"
+                    ${this.eventCb.join(' ')}
                     nzTitle="${this.title.text}">
                 <ng-container *nzModalContent>
                   ${this.children.template}   
@@ -78,7 +88,7 @@ export class Modal extends Render implements modalType {
         },
         ...this.children.imports,
       ],
-      methods: [...mainMethods, footer.map((it) => it.methods), ...this.children.methods],
+      methods: [...mainMethods, ...this.methods, footer.map((it) => it.methods), ...this.children.methods],
     };
   }
   static wakeUp(id) {

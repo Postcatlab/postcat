@@ -18,7 +18,7 @@ export class ApiService {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
         } else {
-          this.message.error(`Can't find this api`);
+          this.message.error(`Can't find this Api`);
         }
       });
     });

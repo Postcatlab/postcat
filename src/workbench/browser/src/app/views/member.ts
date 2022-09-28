@@ -38,6 +38,9 @@ const invate = new Modal({
       },
     }),
   ],
+  event: {
+    close: [personInput.reset()],
+  },
   footer: [],
 });
 
