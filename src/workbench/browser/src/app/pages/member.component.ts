@@ -8,7 +8,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="efxbpx7Callback()"
+      (nzAfterClose)="e6ezs9iCallback()"
       nzTitle="Add people to the space"
       i18n-nzTitle
     >
@@ -24,8 +24,8 @@ import { NzModalService } from 'ng-zorro-antd/modal'
           nz-button
           nzType="primary"
           nzBlock
-          (click)="btnpwsfolCallback()"
-          [disabled]="btn40gvqjStatus()"
+          (click)="btnmz81zrCallback()"
+          [disabled]="btnghongtStatus()"
           i18n
         >
           Select a member above
@@ -35,7 +35,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
     <section class="py-5 px-10">
       <h2 class="text-lg flex justify-between items-center">
         <span i18n>Manage access</span
-        ><button nz-button nzType="primary" (click)="btn4swcqtCallback()" i18n>
+        ><button nz-button nzType="primary" (click)="btniszcfmCallback()" i18n>
           Add people
         </button>
       </h2>
@@ -53,21 +53,21 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async efxbpx7Callback() {
+  async e6ezs9iCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnpwsfolCallback() {
+  async btnmz81zrCallback() {
     // * click event callback
     const data = this.inputPersonValue
 
     console.log(data)
   }
-  btn40gvqjStatus() {
+  btnghongtStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn4swcqtCallback() {
+  async btniszcfmCallback() {
     // * click event callback
 
     // * 唤起弹窗

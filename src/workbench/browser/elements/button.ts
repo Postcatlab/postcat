@@ -11,12 +11,16 @@ type initType = {
   id: string;
   label: string | object;
   type?: 'primary' | 'default';
-  theme?: ('danger' | 'block')[];
+  theme?: ('danger' | 'block' | 'large' | 'small')[];
   event: object;
   status?: object;
 };
 
-const themeHash = new Map().set('danger', 'nzDanger').set('block', 'nzBlock');
+const themeHash = new Map()
+  .set('danger', 'nzDanger')
+  .set('block', 'nzBlock')
+  .set('large', 'nzSize="large"')
+  .set('small', 'nzSize="small"');
 
 export class Button extends Render implements buttonType {
   id = '';
@@ -28,7 +32,7 @@ export class Button extends Render implements buttonType {
     this.id = id;
     this.label = label;
     this.type = type;
-    this.theme = theme.map((it) => themeHash.get(it));
+    this.theme = theme.map((it) => themeHash.get(it)).join(' ');
   }
   render() {
     // TODO update array and object type

@@ -7,6 +7,7 @@ type formType = {
 
 type dataType = {
   label?: string | { text: string; i18n?: string };
+  isShowLabel?: boolean;
   type: 'input' | 'select' | 'date' | 'time' | 'password';
   key: string;
   class?: string;
@@ -86,16 +87,19 @@ export class Form extends Render implements formType {
     };
     const formList = (list) =>
       list
-        .map(
-          (it) => `
+        .map((it) => {
+          const labelTmpl = it.isShowLabel
+            ? `<nz-form-label [nzSpan]="${it.span || 12}" i18n>${it.label}</nz-form-label>`
+            : '';
+          return `
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your ${it.label.split('/').map(_.lowerCase).join(' or ')} !">
-            <nz-form-label [nzSpan]="${it.span || 12}" i18n>${it.label}</nz-form-label>
+            ${labelTmpl}
             ${renderKey(it)}
           </nz-form-control>
         </nz-form-item>
-    `
-        )
+    `;
+        })
         .join('\n');
     return {
       imports: [

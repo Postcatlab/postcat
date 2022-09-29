@@ -1,4 +1,4 @@
-import { Modal, Form, Button, Component, Text, Input, EventS, HTTPS } from '../../../elements';
+import { Modal, Form, Button, Component, Canvas, Text, Input, EventS, HTTPS } from '../../../elements';
 
 const http = new HTTPS();
 
@@ -20,6 +20,7 @@ const userPassForm = new Form({
   data: [
     {
       label: 'Email/Phone',
+      isShowLabel: false,
       key: 'username',
       type: 'input',
       class: '',
@@ -28,6 +29,7 @@ const userPassForm = new Form({
     },
     {
       label: 'Password',
+      isShowLabel: false,
       key: 'password',
       type: 'password',
       placeholder: 'Enter password',
@@ -63,23 +65,33 @@ const addWorkspace = new Modal({
 // * 登录弹窗
 const login = new Modal({
   id: 'login',
+  width: 400,
   title: {
-    text: 'Login',
+    text: 'Sign In/Up',
   },
   children: [
-    userPassForm,
-    new Button({
-      id: 'login-btn',
-      label: { text: 'Sign In/Up' },
-      event: {
-        click: [
-          // * login
-          userPassForm.getData('formData'),
-          http.send('api_authLogin', 'formData'),
-          Modal.close('login'),
-          retry.wakeUp(),
-        ],
-      },
+    new Canvas({
+      class: ['my-12'],
+      children: [
+        userPassForm,
+        new Canvas({
+          class: ['h-2'],
+        }),
+        new Button({
+          id: 'login-btn',
+          label: { text: 'Sign In/Up' },
+          theme: ['block'],
+          event: {
+            click: [
+              // * login
+              userPassForm.getData('formData'),
+              http.send('api_authLogin', 'formData'),
+              Modal.close('login'),
+              retry.wakeUp(),
+            ],
+          },
+        }),
+      ],
     }),
   ],
   footer: [],

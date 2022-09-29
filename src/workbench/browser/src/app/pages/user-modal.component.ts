@@ -42,45 +42,57 @@ import {
     </nz-modal>
     <nz-modal
       [nzFooter]="null"
+      [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="epj9kfcCallback()"
-      nzTitle="Login"
+      (nzAfterClose)="ehhncl7Callback()"
+      nzTitle="Sign In/Up"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <form nz-form [formGroup]="validateUsernameForm" nzLayout="horizontal">
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your email or phone !">
-              <nz-form-label [nzSpan]="12" i18n>Email/Phone</nz-form-label>
-              <input
-                type="text"
-                nz-input
-                formControlName="username"
-                placeholder="Enter username"
-                i18n-placeholder
-                nzRequired
-              />
-            </nz-form-control>
-          </nz-form-item>
+        <section class="my-12">
+          <form
+            nz-form
+            [formGroup]="validateUsernameForm"
+            nzLayout="horizontal"
+          >
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Please input your email or phone !">
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="username"
+                  placeholder="Enter username"
+                  i18n-placeholder
+                  nzRequired
+                />
+              </nz-form-control>
+            </nz-form-item>
 
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your password !">
-              <nz-form-label [nzSpan]="12" i18n>Password</nz-form-label>
-              <input
-                type="password"
-                nz-input
-                formControlName="password"
-                placeholder="Enter password"
-                i18n-placeholder
-                nzRequired
-              />
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-        <button nz-button nzType="primary" (click)="btnbe0ddaCallback()" i18n>
-          Sign In/Up
-        </button>
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Please input your password !">
+                <input
+                  type="password"
+                  nz-input
+                  formControlName="password"
+                  placeholder="Enter password"
+                  i18n-placeholder
+                  nzRequired
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+          <section class="h-2"></section>
+          <button
+            nz-button
+            nzType="primary"
+            nzBlock
+            (click)="btnmc4twvCallback()"
+            i18n
+          >
+            Sign In/Up
+          </button>
+        </section>
       </ng-container>
     </nz-modal>
     <nz-modal
@@ -114,10 +126,10 @@ import {
         />
       </ng-container>
       <ng-template #modalFooter>
-        <button nz-button nzType="default" (click)="btn8ait4xCallback()" i18n>
+        <button nz-button nzType="default" (click)="btn4ond0dCallback()" i18n>
           Cancel
         </button>
-        <button nz-button nzType="primary" (click)="btnhv09dlCallback()" i18n>
+        <button nz-button nzType="primary" (click)="btn9mz64lCallback()" i18n>
           Create
         </button>
       </ng-template>
@@ -193,13 +205,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async epj9kfcCallback() {
+  async ehhncl7Callback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnbe0ddaCallback() {
+  async btnmc4twvCallback() {
     // * click event callback
 
     // * get Username form values
@@ -223,13 +235,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn8ait4xCallback() {
+  async btn4ond0dCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnhv09dlCallback() {
+  async btn9mz64lCallback() {
     // * click event callback
   }
 }

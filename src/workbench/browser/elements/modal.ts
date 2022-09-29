@@ -20,11 +20,13 @@ export class Modal extends Render implements modalType {
   footer;
   id = '';
   title;
-  constructor({ id = '', event = {}, title, children, footer = null }) {
+  width;
+  constructor({ id = '', event = {}, width = null, title, children, footer = null }) {
     super({ children, event: eventTranlate(event) });
     this.id = Render.toCamel(id);
     this.title = title;
     this.footer = footer;
+    this.width = width;
   }
   wakeUp() {
     return `
@@ -61,12 +63,13 @@ export class Modal extends Render implements modalType {
     ${footer.map((it) => it.template).join('\n')}
     </ng-template>`
       : '';
-
+    const width = this.width ? `[nzWidth]="${this.width}"` : '';
     return {
       template: `<nz-modal 
                     ${
                       this.footer == null ? '' : footer?.length === 0 ? '[nzFooter]="null"' : '[nzFooter]="modalFooter"'
                     }
+                    ${width}
                     [(nzVisible)]="is${this.id}ModalVisible"
                     (nzOnCancel)="handle${this.id}ModalCancel()"
                     ${this.eventCb.join(' ')}
