@@ -61,6 +61,9 @@ export class Form extends Render implements formType {
   getData(name) {
     return Form.getData(this.id, name);
   }
+  patch(name, data) {
+    return Form.patch(this.id, name, data);
+  }
 
   render() {
     const isLabelRequired = (rules) => (rules.includes('required') ? 'nzRequired' : '');
@@ -146,5 +149,12 @@ export class Form extends Render implements formType {
     return `
     /\/ * get ${id} form values
     const ${formData} = this.validate${Render.toCamel(id)}Form.value`;
+  }
+  static patch(id, key, data) {
+    return `
+    /\/ * get ${id} form values
+    this.validate${Render.toCamel(id)}Form.patchValue({
+      ${key}: ${data}
+    })`;
   }
 }

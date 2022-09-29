@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalService } from 'ng-zorro-antd/modal'
 
 @Component({
   selector: 'eo-member',
@@ -8,20 +8,25 @@ import { NzModalService } from 'ng-zorro-antd/modal';
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="e1hw7vlCallback()"
+      (nzAfterClose)="e8jejw6Callback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <input nz-input [(ngModel)]="inputPersonValue" i18n-placeholder placeholder="Search by username" />
+        <input
+          nz-input
+          [(ngModel)]="inputPersonValue"
+          i18n-placeholder
+          placeholder="Search by username"
+        />
         <section class="h-4"></section>
         <button
           nz-button
           class=""
           nzType="primary"
           nzBlock
-          (click)="btni8b65aCallback()"
-          [disabled]="btnt7dqkoStatus()"
+          (click)="btnm2expaCallback()"
+          [disabled]="btn393967Status()"
           i18n
         >
           Select a member above
@@ -31,40 +36,55 @@ import { NzModalService } from 'ng-zorro-antd/modal';
     <section class="py-5 px-10">
       <h2 class="text-lg flex justify-between items-center">
         <span i18n>Manage access</span
-        ><button nz-button class="" nzType="primary" (click)="btnmwmcqmCallback()" i18n>Add people</button>
+        ><button
+          nz-button
+          class=""
+          nzType="primary"
+          (click)="btnluqhtfCallback()"
+          i18n
+        >
+          Add people
+        </button>
       </h2>
-    </section>`,
+      <section class="py-5">
+        <eo-manage-access (remove)="eo6yc8xCallback($event)"></eo-manage-access>
+      </section>
+    </section>`
 })
 export class MemberComponent implements OnInit {
-  isInvateModalVisible;
-  inputPersonValue;
+  isInvateModalVisible
+  inputPersonValue
   constructor(public modal: NzModalService) {
-    this.isInvateModalVisible = false;
-    this.inputPersonValue = '';
+    this.isInvateModalVisible = false
+    this.inputPersonValue = ''
   }
   ngOnInit(): void {}
   handleInvateModalCancel(): void {
     // * 关闭弹窗
-    this.isInvateModalVisible = false;
+    this.isInvateModalVisible = false
   }
-  async e1hw7vlCallback() {
+  async e8jejw6Callback() {
     // * nzAfterClose event callback
-    this.inputPersonValue = '';
+    this.inputPersonValue = ''
   }
-  async btni8b65aCallback() {
+  async btnm2expaCallback() {
     // * click event callback
-    const data = this.inputPersonValue;
+    const data = this.inputPersonValue
 
-    console.log(data);
+    console.log(data)
   }
-  btnt7dqkoStatus() {
+  btn393967Status() {
     // * disabled status status
-    return this.inputPersonValue === '';
+    return this.inputPersonValue === ''
   }
-  async btny9a5xiCallback() {
+  async btnluqhtfCallback() {
     // * click event callback
 
     // * 唤起弹窗
-    this.isInvateModalVisible = true;
+    this.isInvateModalVisible = true
+  }
+  async eo6yc8xCallback($event) {
+    // * remove event callback
+    console.log($event)
   }
 }

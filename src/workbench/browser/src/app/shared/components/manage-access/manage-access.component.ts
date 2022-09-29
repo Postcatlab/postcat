@@ -11,20 +11,7 @@ type UserMeta = {
   styleUrls: ['./manage-access.component.scss'],
 })
 export class ManageAccessComponent implements OnInit {
-  @Input() data = [
-    {
-      username: 'Bonana',
-      role: 'member',
-    },
-    {
-      username: 'China',
-      role: 'member',
-    },
-    {
-      username: 'Drina',
-      role: 'member',
-    },
-  ];
+  @Input() data = [];
   @Input() loading = false;
   @Output() eoOnRemove = new EventEmitter<UserMeta>();
 

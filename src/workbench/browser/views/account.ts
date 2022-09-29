@@ -1,7 +1,6 @@
-import { Button, Component, Form, Title, Canvas } from '../elements';
-// const userHeader = new UserHeader({
+import { Button, Component, Form, Title, Canvas, UserS } from '../elements';
 
-// })
+const userS = new UserS();
 
 const username = new Form({
   id: 'username',
@@ -20,7 +19,7 @@ const username = new Form({
 export default new Component({
   id: 'account',
   imports: [],
-  init: [username.set('username', userS.get('userInfo.username'))],
+  init: [username.patch('username', userS.get('userInfo.username'))], // TODO 需要用 vm 替换
   children: [
     new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
     new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'] }),
@@ -90,5 +89,6 @@ export default new Component({
       },
     }),
     new Canvas({ class: ['h-4'] }),
+    userS,
   ],
 });

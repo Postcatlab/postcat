@@ -13,6 +13,11 @@ export { Overview } from './overview';
 
 // * service
 export { EventS } from './eventS';
+export { UserS } from './userS';
+export { WorkspaceS } from './workspaceS';
 
 // * http
 export { HTTPS } from './httpS';
+
+// * 业务
+export { ManageAccess } from './manageAccess';

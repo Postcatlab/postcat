@@ -1,15 +1,4 @@
-import {
-  Modal,
-  Form,
-  Button,
-  Input,
-  Title,
-  //   SelectPeople,
-  Component,
-  Canvas,
-  Module,
-  EventS,
-} from '../elements';
+import { Modal, Form, Button, Input, Title, ManageAccess, Component, Canvas, Module, EventS } from '../elements';
 
 const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
 
@@ -46,9 +35,14 @@ const invate = new Modal({
   footer: [],
 });
 
-// const select = new SelectPeople({
-
-// })
+const manageAccess = new ManageAccess({
+  event: {
+    remove: {
+      params: ['$event'],
+      callback: [`console.log($event)`],
+    },
+  },
+});
 
 const addPeople = new Button({
   id: 'add-people',
@@ -64,7 +58,16 @@ export default new Module({
     new Component({
       id: 'member',
       link: true,
-      imports: [],
+      imports: [
+        {
+          target: [{ name: 'SharedModule', type: 'module' }],
+          from: 'eo/workbench/browser/src/app/shared/shared.module',
+        },
+        {
+          target: [{ name: 'ManageAccessComponent', type: 'component' }],
+          from: 'eo/workbench/browser/src/app/shared/components/manage-access/manage-access.component',
+        },
+      ],
       init: [],
       children: [
         invate,
@@ -74,6 +77,10 @@ export default new Module({
             new Title({
               label: 'Manage access',
               children: [addPeople],
+            }),
+            new Canvas({
+              class: ['py-5'],
+              children: [manageAccess],
             }),
           ],
         }),

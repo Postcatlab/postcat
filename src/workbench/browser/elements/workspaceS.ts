@@ -18,8 +18,8 @@ export class WorkspaceS extends Render {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'UserService', type: 'service', inject: { name: 'user' } }],
-          from: 'eo/workbench/browser/src/app/shared/services/user/user.service',
+          target: [{ name: 'WorkspaceService', type: 'service', inject: { name: 'user' } }],
+          from: 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service',
         },
       ],
       template: ``,

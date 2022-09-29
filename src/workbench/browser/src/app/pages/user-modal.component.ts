@@ -45,7 +45,7 @@ import {
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="ekem5h9Callback()"
+      (nzAfterClose)="epk4bvhCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -88,7 +88,7 @@ import {
             class=""
             nzType="primary"
             nzBlock
-            (click)="btnvdrn9sCallback()"
+            (click)="btncyvonyCallback()"
             i18n
           >
             Sign In/Up
@@ -131,7 +131,7 @@ import {
           nz-button
           class=""
           nzType="default"
-          (click)="btnqs9ftqCallback()"
+          (click)="btn5wnc28Callback()"
           i18n
         >
           Cancel
@@ -140,7 +140,7 @@ import {
           nz-button
           class=""
           nzType="primary"
-          (click)="btn6ehstlCallback()"
+          (click)="btnrtcpp3Callback()"
           i18n
         >
           Create
@@ -218,13 +218,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async ekem5h9Callback() {
+  async epk4bvhCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnvdrn9sCallback() {
+  async btncyvonyCallback() {
     // * click event callback
 
     // * get Username form values
@@ -248,13 +248,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnqs9ftqCallback() {
+  async btn5wnc28Callback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn6ehstlCallback() {
+  async btnrtcpp3Callback() {
     // * click event callback
   }
 }

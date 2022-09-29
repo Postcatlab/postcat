@@ -5,6 +5,7 @@ import {
   UntypedFormGroup,
   Validators
 } from '@angular/forms'
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 
 @Component({
   selector: 'eo-account',
@@ -33,7 +34,7 @@ import {
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btn9jmt4oCallback()"
+        (click)="btnvoax3aCallback()"
         i18n
       >
         Save
@@ -96,17 +97,17 @@ import {
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btnvr931lCallback()"
+      (click)="btnlo9jtiCallback()"
       i18n
     >
       Reset
     </button>
-    <section class="h-4"></section>`
+    <section class="h-4"></section> `
 })
 export class AccountComponent implements OnInit {
   validateUsernameForm
   validatePasswordForm
-  constructor(public fb: UntypedFormBuilder) {
+  constructor(public fb: UntypedFormBuilder, public user: UserService) {
     this.validateUsernameForm = UntypedFormGroup
     this.validatePasswordForm = UntypedFormGroup
   }
@@ -122,11 +123,16 @@ export class AccountComponent implements OnInit {
       b: [null, [Validators.required]],
       c: [null, [Validators.required]]
     })
+
+    // * get Username form values
+    this.validateUsernameForm.patchValue({
+      username: this.user.userInfo.username
+    })
   }
-  async btn9jmt4oCallback() {
+  async btnvoax3aCallback() {
     // * click event callback
   }
-  async btnvr931lCallback() {
+  async btnlo9jtiCallback() {
     // * click event callback
   }
 }
