@@ -10,7 +10,7 @@ type buttonType = {
 type initType = {
   id: string;
   label: string | object;
-  class: string[];
+  class?: string[];
   type?: 'primary' | 'default';
   theme?: ('danger' | 'block' | 'large' | 'small')[];
   event: object;
