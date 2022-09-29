@@ -31,17 +31,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
     <section class="py-5 px-10">
       <h2 class="text-lg flex justify-between items-center">
         <span i18n>Manage access</span
-        ><button
-          nz-button
-          class=""
-          nzType="primary"
-          (click)="btnmwmcqmCallback()"
-          i18n
-        >
-          Add people
-        </button>
+        ><button nz-button class="" nzType="primary" (click)="btnmwmcqmCallback()" i18n>Add people</button>
       </h2>
-      <eo-manage-access></eo-manage-access>
     </section>`,
 })
 export class MemberComponent implements OnInit {
