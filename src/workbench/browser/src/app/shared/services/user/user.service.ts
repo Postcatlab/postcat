@@ -5,7 +5,7 @@ import { StorageUtil } from '../../../utils/storage/Storage';
   providedIn: 'root',
 })
 export class UserService {
-  userInfo: API.User;
+  userProfile: API.User;
   accessToken = StorageUtil.get('accessToken');
   refreshToken = StorageUtil.get('refreshToken');
   accessTokenExpiresAt = 0;
@@ -22,17 +22,17 @@ export class UserService {
 
   setLoginInfo(data: API.LoginToken) {
     console.log(data);
-    StorageUtil.set('accessToken', data.accessToken, (Date.now() - data.accessTokenExpiresAt) / 1000);
-    StorageUtil.set('refreshToken', data.refreshToken, (Date.now() - data.refreshTokenExpiresAt) / 1000);
+    StorageUtil.set('accessToken', data.accessToken, (data.accessTokenExpiresAt - Date.now()) / 1000);
+    StorageUtil.set('refreshToken', data.refreshToken, (data.refreshTokenExpiresAt - Date.now()) / 1000);
   }
 
-  setUserProfile(userInfo: API.User) {
-    this.userInfo = userInfo;
-    StorageUtil.set('userInfo', JSON.stringify(userInfo));
+  setUserProfile(userProfile: API.User) {
+    this.userProfile = userProfile;
+    StorageUtil.set('userInfo', JSON.stringify(userProfile));
   }
 
   clearAuth() {
-    this.userInfo = null;
+    this.userProfile = null;
     this.accessToken = this.refreshToken = '';
     StorageUtil.remove('accessToken');
     StorageUtil.remove('refreshToken');
