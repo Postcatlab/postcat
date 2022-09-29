@@ -16,7 +16,7 @@ const personInput = new Input({ id: 'person', placeholder: 'Search by username' 
 const invate = new Modal({
   id: 'invate',
   title: {
-    text: 'Add people to the space',
+    text: 'Add people to the workspace',
   },
   children: [
     personInput,

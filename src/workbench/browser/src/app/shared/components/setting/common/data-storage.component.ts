@@ -38,17 +38,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
             <input nz-input formControlName="eoapi-common.remoteServer.url" i18n-placeholder placeholder="your host" />
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item>
-          <nz-form-label>Security Token</nz-form-label>
-          <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Security Token">
-            <input
-              nz-input
-              formControlName="eoapi-common.remoteServer.token"
-              i18n-placeholder
-              placeholder="your security token"
-            />
-          </nz-form-control>
-        </nz-form-item>
       </ng-container>
       <nz-form-item>
         <nz-form-control>
@@ -85,11 +74,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       'eoapi-common.remoteServer.url': [
         this.model['eoapi-common.remoteServer.url'] || '',
         [Validators.required],
-      ],
-      'eoapi-common.remoteServer.token': [
-        this.model['eoapi-common.remoteServer.token'] || '1ab2c3d4e5f61ab2c3d4e5f6',
-        [Validators.required],
-      ],
+      ]
     });
   }
 
@@ -109,43 +94,6 @@ export class DataStorageComponent implements OnInit, OnChanges {
       );
     }
   }
-
-  /**
-   * 测试远程服务器地址是否可用
-   */
-  async pingRmoteServerUrl() {
-    const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
-    const remoteUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
-    const token = this.validateForm.value['eoapi-common.remoteServer.token'];
-
-    if (dataStorage !== 'http') {
-      return Promise.resolve(false);
-    }
-
-    try {
-      const url = uniqueSlash(`${remoteUrl}/api/system/status`);
-      const response = await fetch(url, {
-        headers: {
-          'x-api-key': token,
-        },
-      });
-      const result = await response.json();
-      if (result.statusCode !== 200) {
-        throw result;
-      }
-      // await result.json();
-      // this.message.create('success', $localize`Cloud server address set successfully!`);
-      return Promise.resolve(true);
-    } catch (error) {
-      console.error(error);
-      this.message.create(
-        'error',
-        $localize`Unable to connect to the cloud, please check your Data Storage settings`
-      );
-      return Promise.reject(false);
-    }
-  }
-
   async submitForm() {
     const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
     const isRemote = dataStorage === 'http';

@@ -12,7 +12,6 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     const { url = '', token = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
     req = req.clone({
       url: uniqueSlash(protocolReg.test(req.url) ? req.url : url + req.url),
-      headers: req.headers.append('x-api-key', token),
     });
 
     return next.handle(req).pipe(
