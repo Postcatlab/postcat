@@ -45,7 +45,7 @@ import {
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="ehhncl7Callback()"
+      (nzAfterClose)="e2ms7ktCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -85,9 +85,10 @@ import {
           <section class="h-2"></section>
           <button
             nz-button
+            class=""
             nzType="primary"
             nzBlock
-            (click)="btnmc4twvCallback()"
+            (click)="btnvsnq7mCallback()"
             i18n
           >
             Sign In/Up
@@ -126,10 +127,22 @@ import {
         />
       </ng-container>
       <ng-template #modalFooter>
-        <button nz-button nzType="default" (click)="btn4ond0dCallback()" i18n>
+        <button
+          nz-button
+          class=""
+          nzType="default"
+          (click)="btnl4junpCallback()"
+          i18n
+        >
           Cancel
         </button>
-        <button nz-button nzType="primary" (click)="btn9mz64lCallback()" i18n>
+        <button
+          nz-button
+          class=""
+          nzType="primary"
+          (click)="btn6pnbm8Callback()"
+          i18n
+        >
           Create
         </button>
       </ng-template>
@@ -205,13 +218,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async ehhncl7Callback() {
+  async e2ms7ktCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnmc4twvCallback() {
+  async btnvsnq7mCallback() {
     // * click event callback
 
     // * get Username form values
@@ -235,13 +248,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn4ond0dCallback() {
+  async btnl4junpCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn9mz64lCallback() {
+  async btn6pnbm8Callback() {
     // * click event callback
   }
 }

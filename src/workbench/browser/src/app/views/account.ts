@@ -27,6 +27,7 @@ export default new Component({
         }),
         new Button({
           id: 'save-username',
+          class: ['w-[120px]'],
           label: {
             text: 'Save',
           },
@@ -73,6 +74,7 @@ export default new Component({
     }),
     new Button({
       id: 'reset-btn',
+      class: ['w-[120px]'],
       label: {
         text: 'Reset',
       },

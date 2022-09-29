@@ -10,6 +10,7 @@ type buttonType = {
 type initType = {
   id: string;
   label: string | object;
+  class: string[];
   type?: 'primary' | 'default';
   theme?: ('danger' | 'block' | 'large' | 'small')[];
   event: object;
@@ -27,12 +28,14 @@ export class Button extends Render implements buttonType {
   label;
   type;
   theme;
-  constructor({ id = '', type, theme = [], event, label, status = {} }: initType) {
+  class;
+  constructor({ id = '', type, theme = [], class: cls = [], event, label, status = {} }: initType) {
     super({ event, status, children: [], elementType: 'btn' });
     this.id = id;
     this.label = label;
     this.type = type;
     this.theme = theme.map((it) => themeHash.get(it)).join(' ');
+    this.class = cls;
   }
   render() {
     // TODO update array and object type
@@ -46,9 +49,9 @@ export class Button extends Render implements buttonType {
         },
         ...this.children.imports,
       ],
-      template: `<button nz-button nzType="${this.type || 'primary'}" ${this.theme} ${this.eventCb.join(
-        ' '
-      )} i18n>${label}</button>`,
+      template: `<button nz-button class="${this.class.join(' ')}" nzType="${this.type || 'primary'}" ${
+        this.theme
+      } ${this.eventCb.join(' ')} i18n>${label}</button>`,
       data: [],
       methods: [...this.methods],
     };

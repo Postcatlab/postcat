@@ -31,7 +31,13 @@ import {
         </nz-form-control>
       </nz-form-item>
     </form>
-    <button nz-button nzType="primary" (click)="btnthjjmoCallback()" i18n>
+    <button
+      nz-button
+      class=""
+      nzType="primary"
+      (click)="btnaxbl4jCallback()"
+      i18n
+    >
       Save
     </button>
     <nz-divider></nz-divider>
@@ -46,9 +52,10 @@ import {
     </div>
     <button
       nz-button
+      class=""
       nzType="primary"
       nzDanger
-      (click)="btn40m3h4Callback()"
+      (click)="btnt08fx4Callback()"
       i18n
     >
       Delete
@@ -66,10 +73,10 @@ export class WorkspaceComponent implements OnInit {
       workspace: [null, [Validators.required]]
     })
   }
-  async btnthjjmoCallback() {
+  async btnaxbl4jCallback() {
     // * click event callback
   }
-  async btn40m3h4Callback() {
+  async btnt08fx4Callback() {
     // * click event callback
   }
 }

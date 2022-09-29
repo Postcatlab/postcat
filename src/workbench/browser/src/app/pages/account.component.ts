@@ -29,7 +29,13 @@ import {
           </nz-form-control>
         </nz-form-item>
       </form>
-      <button nz-button nzType="primary" (click)="btnh8xfniCallback()" i18n>
+      <button
+        nz-button
+        class="w-[120px]"
+        nzType="primary"
+        (click)="btncoqi5eCallback()"
+        i18n
+      >
         Save
       </button>
       <section class="h-4"></section>
@@ -81,7 +87,13 @@ import {
         </nz-form-item>
       </form>
     </section>
-    <button nz-button nzType="primary" (click)="btnwvteooCallback()" i18n>
+    <button
+      nz-button
+      class="w-[120px]"
+      nzType="primary"
+      (click)="btn4yj53qCallback()"
+      i18n
+    >
       Reset
     </button>
     <section class="h-4"></section>`
@@ -106,10 +118,10 @@ export class AccountComponent implements OnInit {
       c: [null, [Validators.required]]
     })
   }
-  async btnh8xfniCallback() {
+  async btncoqi5eCallback() {
     // * click event callback
   }
-  async btnwvteooCallback() {
+  async btn4yj53qCallback() {
     // * click event callback
   }
 }
