@@ -343,7 +343,7 @@ export default class LocalService extends localStorage {
 
   api_userUpdateUserProfile(params) {
     return new Promise((resolve) => {
-      this.create(this.undefined, params)
+      this.update(this.undefined, params)
         .then(({ status, ...data }: any) => {
           console.log(
             '%c user - updateUserProfile 接口调用成功 %c',
@@ -366,9 +366,9 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_userReadProfile(params) {
+  api_userReadProfile({ ...items }) {
     return new Promise((resolve) => {
-      this.load(this.undefined, params)
+      this.load(this.undefined, { ...items })
         .then(({ status, ...data }: any) => {
           console.log('%c user - readProfile 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -383,9 +383,26 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_userUpdatePsd(params) {
+  api_userUpdatePsd({ oldPassword, newPassword }) {
+    if (!oldPassword) {
+      console.log(
+        '%c Error: user - updatePsd 接口 缺失参数 oldPassword %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!newPassword) {
+      console.log(
+        '%c Error: user - updatePsd 接口 缺失参数 newPassword %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
     return new Promise((resolve) => {
-      this.create(this.undefined, params)
+      this.update(this.undefined, { oldPassword, newPassword })
         .then(({ status, ...data }: any) => {
           console.log('%c user - updatePsd 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -477,10 +494,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_authLogout({ refreshTokenExpiresAt }) {
-    if (!refreshTokenExpiresAt) {
+  api_authLogout({ refreshToken }) {
+    if (!refreshToken) {
       console.log(
-        '%c Error: auth - logout 接口 缺失参数 refreshTokenExpiresAt %c',
+        '%c Error: auth - logout 接口 缺失参数 refreshToken %c',
         ErrorStyle,
         ''
       )
@@ -488,7 +505,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.create(this.undefined, { refreshTokenExpiresAt })
+      this.create(this.undefined, { refreshToken })
         .then(({ status, ...data }: any) => {
           console.log('%c auth - logout 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {

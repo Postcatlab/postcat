@@ -25,9 +25,9 @@ const http = {
     {
       name: 'user',
       data: [
-        { 'updateUserProfile @post': '/user/profile' },
-        { 'readProfile @get': '/user/profile' },
-        { 'updatePsd @post': '/user/pawwsord' },
+        { 'updateUserProfile @put': '/user/profile' },
+        { 'readProfile @get': '/user/profile', query: '...' },
+        { 'updatePsd @put': '/user/password', json: 'oldPassword, newPassword' },
         { 'search @get': '/user/{usernme}' },
       ],
     },
@@ -36,7 +36,7 @@ const http = {
       data: [
         { 'login @post': '/auth/login', json: 'username, password' },
         { 'refresh @put': '/auth/refresh' },
-        { 'logout @post': '/auth/logout', json: 'refreshTokenExpiresAt' },
+        { 'logout @post': '/auth/logout', json: 'refreshToken' },
       ],
     },
     {

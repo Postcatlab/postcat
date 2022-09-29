@@ -1,6 +1,8 @@
-import { Button, Component, Form, Title, Canvas, UserS } from '../elements';
+import { Button, Component, Form, Title, Canvas, HTTPS, UserS, MessageS } from '../elements';
 
 const userS = new UserS();
+const http = new HTTPS();
+const message = new MessageS();
 
 const username = new Form({
   id: 'username',
@@ -16,10 +18,35 @@ const username = new Form({
   ],
 });
 
+const passwordF = new Form({
+  id: 'password',
+  layout: '|',
+  data: [
+    {
+      label: 'Current password',
+      key: 'oldPassword',
+      type: 'password',
+      rules: ['required'],
+    },
+    {
+      label: 'New password',
+      key: 'newPassword',
+      type: 'password',
+      rules: ['required'],
+    },
+    {
+      label: 'Confirm new password',
+      key: 'confirmPassword',
+      type: 'password',
+      rules: ['required'],
+    },
+  ],
+});
+
 export default new Component({
   id: 'account',
   imports: [],
-  init: [username.patch('username', userS.get('userInfo?.username'))], // TODO 需要用 vm 替换
+  init: [username.patch('username', userS.get('userProfile?.username'))], // TODO 需要用 vm 替换
   children: [
     new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
     new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'] }),
@@ -35,9 +62,13 @@ export default new Component({
           },
           event: {
             click: [
-              // * Diff old & new password is same
-              // * check the Current password is right ?
-              // * update new password
+              username.getValue('username', 'user'),
+              `const [err, data]:any = await this.api.api_userUpdateUserProfile({ username: user, avatar: '111' });
+                if (err) {
+                  return;
+                }`,
+              http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
+              userS.setUserProfile('pData.data'),
             ],
           },
         }),
@@ -47,32 +78,7 @@ export default new Component({
     new Title({ label: 'Password', class: ['font-bold', 'text-base', 'mb-2'] }),
     new Canvas({
       class: ['w-1/2'],
-      children: [
-        new Form({
-          id: 'password',
-          layout: '|',
-          data: [
-            {
-              label: 'Current password',
-              key: 'a',
-              type: 'password',
-              rules: ['required'],
-            },
-            {
-              label: 'New password',
-              key: 'b',
-              type: 'password',
-              rules: ['required'],
-            },
-            {
-              label: 'Confirm new password',
-              key: 'c',
-              type: 'password',
-              rules: ['required'],
-            },
-          ],
-        }),
-      ],
+      children: [passwordF],
     }),
     new Button({
       id: 'reset-btn',
@@ -85,10 +91,20 @@ export default new Component({
           // * Diff old & new password is same
           // * check the Current password is right ?
           // * update new password
+          passwordF.getValue('oldPassword', 'oldPassword'),
+          passwordF.getValue('newPassword', 'newPassword'),
+          `const [err, data]:any = await this.api.api_userUpdatePsd({ oldPassword, newPassword });
+          if (err) {
+            return;
+          }`,
+          message.success('Password reset success !'),
+          passwordF.reset(),
         ],
       },
     }),
     new Canvas({ class: ['h-4'] }),
     userS,
+    http,
+    message,
   ],
 });

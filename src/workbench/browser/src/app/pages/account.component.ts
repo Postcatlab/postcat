@@ -6,6 +6,8 @@ import {
   Validators
 } from '@angular/forms'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 
 @Component({
   selector: 'eo-account',
@@ -34,7 +36,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btnu4hgjqCallback()"
+        (click)="btnkxpfndCallback()"
         i18n
       >
         Save
@@ -52,7 +54,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
             <input
               type="password"
               nz-input
-              formControlName="a"
+              formControlName="oldPassword"
               placeholder=""
               i18n-placeholder
               nzRequired
@@ -66,7 +68,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
             <input
               type="password"
               nz-input
-              formControlName="b"
+              formControlName="newPassword"
               placeholder=""
               i18n-placeholder
               nzRequired
@@ -84,7 +86,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
             <input
               type="password"
               nz-input
-              formControlName="c"
+              formControlName="confirmPassword"
               placeholder=""
               i18n-placeholder
               nzRequired
@@ -97,7 +99,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btncav1yeCallback()"
+      (click)="btnxri7oqCallback()"
       i18n
     >
       Reset
@@ -107,7 +109,12 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
 export class AccountComponent implements OnInit {
   validateUsernameForm
   validatePasswordForm
-  constructor(public fb: UntypedFormBuilder, public user: UserService) {
+  constructor(
+    public fb: UntypedFormBuilder,
+    public user: UserService,
+    public api: RemoteService,
+    public message: EoMessageService
+  ) {
     this.validateUsernameForm = UntypedFormGroup
     this.validatePasswordForm = UntypedFormGroup
   }
@@ -119,20 +126,47 @@ export class AccountComponent implements OnInit {
 
     // * Init Password form
     this.validatePasswordForm = this.fb.group({
-      a: [null, [Validators.required]],
-      b: [null, [Validators.required]],
-      c: [null, [Validators.required]]
+      oldPassword: [null, [Validators.required]],
+      newPassword: [null, [Validators.required]],
+      confirmPassword: [null, [Validators.required]]
     })
 
     // * get Username form values
     this.validateUsernameForm.patchValue({
-      username: this.user.userInfo?.username
+      username: this.user.userProfile?.username
     })
   }
-  async btnu4hgjqCallback() {
+  async btnkxpfndCallback() {
     // * click event callback
+    const { username: user } = this.validateUsernameForm.value
+    const [err, data]: any = await this.api.api_userUpdateUserProfile({
+      username: user,
+      avatar: '111'
+    })
+    if (err) {
+      return
+    }
+    const [pErr, pData]: any = await this.api.api_userReadProfile(null)
+    if (pErr) {
+      return
+    }
+
+    this.user.setUserProfile(pData.data)
   }
-  async btncav1yeCallback() {
+  async btnxri7oqCallback() {
     // * click event callback
+    const { oldPassword: oldPassword } = this.validatePasswordForm.value
+    const { newPassword: newPassword } = this.validatePasswordForm.value
+    const [err, data]: any = await this.api.api_userUpdatePsd({
+      oldPassword,
+      newPassword
+    })
+    if (err) {
+      return
+    }
+    this.message.success(`Password reset success !`)
+
+    // * Clear Password form
+    this.validatePasswordForm.reset()
   }
 }

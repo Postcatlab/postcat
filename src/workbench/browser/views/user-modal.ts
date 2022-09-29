@@ -149,10 +149,11 @@ const event = new EventS({
     {
       name: 'logOut',
       callback: [
-        () => {
-          const refreshTokenExpiresAt = '2333';
-        },
-        http.send('api_authLogout', '{ refreshTokenExpiresAt }'),
+        userS.getKey('refreshToken'),
+        `const [err, data]:any = await this.api.api_authLogout({ refreshToken });
+        if (err) {
+          return;
+        }`,
       ],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },

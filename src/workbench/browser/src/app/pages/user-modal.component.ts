@@ -32,7 +32,7 @@ import {
           nz-button
           class=""
           nzType="primary"
-          (click)="btn03r97nCallback()"
+          (click)="btnmchx5mCallback()"
           i18n
         >
           Cancel
@@ -57,7 +57,7 @@ import {
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e73i81yCallback()"
+      (nzAfterClose)="erbjxsyCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -100,7 +100,7 @@ import {
             class=""
             nzType="primary"
             nzBlock
-            (click)="btndgfm65Callback()"
+            (click)="btnf4mzhiCallback()"
             i18n
           >
             Sign In/Up
@@ -143,7 +143,7 @@ import {
           nz-button
           class=""
           nzType="default"
-          (click)="btn06rz3fCallback()"
+          (click)="btnptbqpfCallback()"
           i18n
         >
           Cancel
@@ -152,7 +152,7 @@ import {
           nz-button
           class=""
           nzType="primary"
-          (click)="btnnapov8Callback()"
+          (click)="btnws2obgCallback()"
           i18n
         >
           Create
@@ -193,15 +193,11 @@ export class UserModalComponent implements OnInit {
       }
 
       if (type === 'logOut') {
-        const refreshTokenExpiresAt = '2333'
-
-        const [err, data]: any = await this.api.api_authLogout({
-          refreshTokenExpiresAt
-        })
+        const refreshToken = this.user.refreshToken
+        const [err, data]: any = await this.api.api_authLogout({ refreshToken })
         if (err) {
           return
         }
-
         return
       }
 
@@ -223,7 +219,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btn03r97nCallback() {
+  async btnmchx5mCallback() {
     // * click event callback
   }
   handleCheckConnectModalCancel(): void {
@@ -234,13 +230,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e73i81yCallback() {
+  async erbjxsyCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btndgfm65Callback() {
+  async btnf4mzhiCallback() {
     // * click event callback
 
     // * get Username form values
@@ -273,13 +269,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn06rz3fCallback() {
+  async btnptbqpfCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnnapov8Callback() {
+  async btnws2obgCallback() {
     // * click event callback
   }
 }
