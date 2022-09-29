@@ -88,10 +88,6 @@ export class SettingComponent implements OnInit {
       name: $localize`:@@Language:Language`,
       moduleID: 'eoapi-language',
     },
-    // {
-    //   name: $localize`Extensions`,
-    //   moduleID: 'eoapi-extensions',
-    // },
     {
       name: $localize`About`,
       moduleID: 'eoapi-about',
@@ -102,9 +98,6 @@ export class SettingComponent implements OnInit {
   validateForm!: FormGroup;
   /** cloud server url */
   remoteServerUrl = '';
-  /** cloud server token */
-  remoteServerToken = '';
-
   get selected() {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
@@ -114,7 +107,6 @@ export class SettingComponent implements OnInit {
   ngOnInit(): void {
     this.init();
     this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
-    this.remoteServerToken = this.settings['eoapi-common.remoteServer.token'];
     // this.parseSettings();
   }
 
@@ -202,15 +194,6 @@ export class SettingComponent implements OnInit {
   }
 
   handleSave = () => {
-    // for (const i in this.validateForm.controls) {
-    //   if (this.validateForm.controls.hasOwnProperty(i)) {
-    //     this.validateForm.controls[i].markAsDirty();
-    //     this.validateForm.controls[i].updateValueAndValidity();
-    //   }
-    // }
-    // if (this.validateForm.status === 'INVALID') {
-    //   return;
-    // }
     this.settingService.saveSetting(this.settings);
     window.eo?.saveSettings?.({ ...this.settings });
   };

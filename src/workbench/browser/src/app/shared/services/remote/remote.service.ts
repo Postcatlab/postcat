@@ -96,11 +96,7 @@ export class RemoteService {
 
     let result;
     try {
-      const response = await fetch(url, {
-        headers: {
-          'x-api-key': token,
-        },
-      });
+      const response = await fetch(url);
       result = await response.json();
       if (result.statusCode !== 200) {
         return [false, result];

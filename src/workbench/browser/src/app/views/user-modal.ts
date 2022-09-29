@@ -96,6 +96,7 @@ const login = new Modal({
   ],
   footer: [],
   event: {
+    //!TODO modal control self status，no need to reset
     close: [userPassForm.reset()],
   },
 });
