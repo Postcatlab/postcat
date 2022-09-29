@@ -6,10 +6,10 @@ import {
   Title,
   //   SelectPeople,
   Component,
-  Card,
+  Canvas,
   Module,
   EventS,
-} from '../elements';
+} from '../../../elements';
 
 const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
 
@@ -20,7 +20,7 @@ const invate = new Modal({
   },
   children: [
     personInput,
-    new Card({ class: ['h-4'] }),
+    new Canvas({ class: ['h-4'] }),
     new Button({
       id: 'select',
       label: {
@@ -68,7 +68,7 @@ export default new Module({
       init: [],
       children: [
         invate,
-        new Card({
+        new Canvas({
           class: ['py-5', 'px-10'],
           children: [
             new Title({

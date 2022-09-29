@@ -11,9 +11,9 @@ import {
   Title,
   Line,
   Text,
-  Card,
+  Canvas,
   //   EventS,
-} from '../elements';
+} from '../../../elements';
 
 // const select = new SelectPeople({
 
@@ -28,11 +28,11 @@ export default new Module({
       imports: [],
       init: [],
       children: [
-        new Card({
+        new Canvas({
           class: ['py-5', 'px-10'],
           children: [
             new Title({ label: 'Workspace Operate' }),
-            new Card({ class: ['py-2'], children: [new Overview()] }),
+            new Canvas({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
             new Title({ label: 'Edit Workspace' }),
             new Form({
@@ -41,6 +41,7 @@ export default new Module({
               data: [
                 {
                   label: 'Name',
+                  key: 'workspace',
                   type: 'input',
                   class: '',
                   rules: ['required'],

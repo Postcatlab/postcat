@@ -1,6 +1,6 @@
 import { Render } from 'ecode/dist/render';
 
-export class Card extends Render {
+export class Canvas extends Render {
   class;
   constructor({ children = [], class: cls }) {
     super({ children });

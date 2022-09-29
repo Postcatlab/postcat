@@ -3,7 +3,7 @@ import { Render } from 'ecode/dist/render';
 import { Button } from './button';
 
 type modalType = {
-  footer?: { label: string; event: any; status: any; theme?: string[] }[];
+  footer?: { label: string; event: any; status: any; theme?: string[] }[] | null;
   close: () => string;
   //   static close: () => string
 };
@@ -17,10 +17,10 @@ const eventTranlate = (event) =>
   }, {});
 
 export class Modal extends Render implements modalType {
-  footer: any[] = [];
+  footer;
   id = '';
   title;
-  constructor({ id = '', event = {}, title, children, footer = [] }) {
+  constructor({ id = '', event = {}, title, children, footer = null }) {
     super({ children, event: eventTranlate(event) });
     this.id = Render.toCamel(id);
     this.title = title;
@@ -45,17 +45,18 @@ export class Modal extends Render implements modalType {
         this.is${this.id}ModalVisible = false
       }`,
     ];
-    const footerRender = (list) =>
-      list.map((it) =>
+    const footerRender = (list = []) =>
+      list.map(({ label, type = '', click, disabled = [] }) =>
         new Button({
-          label: it.label,
-          id: it.label,
-          event: { click: it.callback },
-          status: { disabled: it.status },
+          id: _.camelCase(label),
+          type,
+          label: { text: label },
+          event: { click },
+          status: { disabled },
         }).render()
       );
-    const footer = footerRender(this.footer);
-    const footerTemplate = footer.length
+    const footer = footerRender(this.footer || []);
+    const footerTemplate = footer?.length
       ? `<ng-template #modalFooter>
     ${footer.map((it) => it.template).join('\n')}
     </ng-template>`
@@ -63,11 +64,15 @@ export class Modal extends Render implements modalType {
 
     return {
       template: `<nz-modal 
-                    [nzFooter]="${footer.length ? 'modalFooter' : null}"
+                    ${
+                      this.footer == null ? '' : footer?.length === 0 ? '[nzFooter]="null"' : '[nzFooter]="modalFooter"'
+                    }
                     [(nzVisible)]="is${this.id}ModalVisible"
                     (nzOnCancel)="handle${this.id}ModalCancel()"
                     ${this.eventCb.join(' ')}
-                    nzTitle="${this.title.text}">
+                    nzTitle="${this.title.text}"
+                    i18n-nzTitle
+                    >
                 <ng-container *nzModalContent>
                   ${this.children.template}   
                 </ng-container>
@@ -88,8 +93,9 @@ export class Modal extends Render implements modalType {
           from: 'ng-zorro-antd/modal',
         },
         ...this.children.imports,
+        ...footer.map((it) => it.imports),
       ],
-      methods: [...mainMethods, ...this.methods, footer.map((it) => it.methods), ...this.children.methods],
+      methods: [...mainMethods, ...this.methods, ...footer.map((it) => it.methods), ...this.children.methods],
     };
   }
   static wakeUp(id) {

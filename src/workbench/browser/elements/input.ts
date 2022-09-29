@@ -35,7 +35,9 @@ export class Input extends Render {
           from: '@angular/forms',
         },
       ],
-      template: `<input nz-input [(ngModel)]="input${this.id}Value" placeholder="${this.placeholder || ''}"/>`,
+      template: `<input nz-input [(ngModel)]="input${this.id}Value" i18n-placeholder placeholder="${
+        this.placeholder || ''
+      }"/>`,
       data: [{ name: `input${this.id}Value`, init: '', type: ['string'] }],
       init: [],
       methods: [],

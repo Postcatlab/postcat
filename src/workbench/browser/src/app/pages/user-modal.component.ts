@@ -16,6 +16,7 @@ import {
       [(nzVisible)]="isRetryModalVisible"
       (nzOnCancel)="handleRetryModalCancel()"
       nzTitle="Do you want to upload local data to the cloud ?"
+      i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <div class="pb-4">
@@ -31,6 +32,7 @@ import {
       [(nzVisible)]="isCheckConnectModalVisible"
       (nzOnCancel)="handleCheckConnectModalCancel()"
       nzTitle="Check your connection"
+      i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <div class="pb-4">
@@ -42,19 +44,21 @@ import {
       [nzFooter]="null"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="el45iboCallback()"
+      (nzAfterClose)="epj9kfcCallback()"
       nzTitle="Login"
+      i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <form nz-form [formGroup]="validateUsernameForm" nzLayout="horizontal">
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your email or phone !">
-              <nz-form-label [nzSpan]="12">Email/Phone</nz-form-label>
+              <nz-form-label [nzSpan]="12" i18n>Email/Phone</nz-form-label>
               <input
                 type="text"
                 nz-input
                 formControlName="username"
                 placeholder="Enter username"
+                i18n-placeholder
                 nzRequired
               />
             </nz-form-control>
@@ -62,18 +66,19 @@ import {
 
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your password !">
-              <nz-form-label [nzSpan]="12">Password</nz-form-label>
+              <nz-form-label [nzSpan]="12" i18n>Password</nz-form-label>
               <input
                 type="password"
                 nz-input
                 formControlName="password"
                 placeholder="Enter password"
+                i18n-placeholder
                 nzRequired
               />
             </nz-form-control>
           </nz-form-item>
         </form>
-        <button nz-button nzType="primary" (click)="btny6xl79Callback()" i18n>
+        <button nz-button nzType="primary" (click)="btnbe0ddaCallback()" i18n>
           Sign In/Up
         </button>
       </ng-container>
@@ -83,6 +88,7 @@ import {
       [(nzVisible)]="isOpenSettingModalVisible"
       (nzOnCancel)="handleOpenSettingModalCancel()"
       nzTitle="Open setting"
+      i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <div class="pb-4">
@@ -93,18 +99,28 @@ import {
       </ng-container>
     </nz-modal>
     <nz-modal
-      [nzFooter]="null"
+      [nzFooter]="modalFooter"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
       nzTitle="Create Workspace"
+      i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <input
           nz-input
           [(ngModel)]="inputWorkspaceNameValue"
+          i18n-placeholder
           placeholder="Workspace Name"
         />
       </ng-container>
+      <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="btn8ait4xCallback()" i18n>
+          Cancel
+        </button>
+        <button nz-button nzType="primary" (click)="btnhv09dlCallback()" i18n>
+          Create
+        </button>
+      </ng-template>
     </nz-modal>`
 })
 export class UserModalComponent implements OnInit {
@@ -177,13 +193,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async el45iboCallback() {
+  async epj9kfcCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btny6xl79Callback() {
+  async btnbe0ddaCallback() {
     // * click event callback
 
     // * get Username form values
@@ -206,5 +222,14 @@ export class UserModalComponent implements OnInit {
   handleAddWorkspaceModalCancel(): void {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
+  }
+  async btn8ait4xCallback() {
+    // * click event callback
+
+    // * 关闭弹窗
+    this.isAddWorkspaceModalVisible = false
+  }
+  async btnhv09dlCallback() {
+    // * click event callback
   }
 }

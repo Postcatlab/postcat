@@ -18,6 +18,7 @@
     "**/*.d.ts"
   ],
   "exclude": [
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "**/views/*.ts"
   ]
 }

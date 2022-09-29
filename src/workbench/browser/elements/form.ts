@@ -75,10 +75,10 @@ export class Form extends Render implements formType {
       switch (type) {
         case 'input':
         case 'password':
-          return `<input type="${typeHash.get(type)}" nz-input ${formBindName({
+          return `<input type="${typeHash.get(type)}" nz-input  ${formBindName({
             key,
             rules,
-          })} placeholder="${placeholder || ''}" ${isLabelRequired(rules)} />`;
+          })} placeholder="${placeholder || ''}" i18n-placeholder ${isLabelRequired(rules)} />`;
 
         default:
           return '';
@@ -90,7 +90,7 @@ export class Form extends Render implements formType {
           (it) => `
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your ${it.label.split('/').map(_.lowerCase).join(' or ')} !">
-            <nz-form-label [nzSpan]="${it.span || 12}">${it.label}</nz-form-label>
+            <nz-form-label [nzSpan]="${it.span || 12}" i18n>${it.label}</nz-form-label>
             ${renderKey(it)}
           </nz-form-control>
         </nz-form-item>

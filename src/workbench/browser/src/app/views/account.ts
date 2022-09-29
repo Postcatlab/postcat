@@ -1,4 +1,4 @@
-import { Button, Component, Form, Title, Card } from '../elements';
+import { Button, Component, Form, Title, Canvas } from '../../../elements';
 // const userHeader = new UserHeader({
 
 // })
@@ -10,7 +10,7 @@ export default new Component({
   children: [
     //   userHeader,
     new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
-    new Card({
+    new Canvas({
       class: ['w-1/2'],
       children: [
         new Form({
@@ -52,6 +52,6 @@ export default new Component({
         ],
       },
     }),
-    new Card({ class: ['h-4'] }),
+    new Canvas({ class: ['h-4'] }),
   ],
 });
