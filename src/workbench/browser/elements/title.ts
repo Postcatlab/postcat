@@ -3,7 +3,7 @@ import { Render } from 'ecode/dist/render';
 
 type initType = {
   label: string;
-  class: string[];
+  class?: string[];
   children?: any[];
 };
 

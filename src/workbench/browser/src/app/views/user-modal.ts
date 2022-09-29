@@ -1,4 +1,4 @@
-import { Modal, Form, Button, Component, Text, Input, EventS, HTTPS } from '../elements';
+import { Modal, Form, Button, Component, Text, Input, EventS, HTTPS } from '../../../elements';
 
 const http = new HTTPS();
 
@@ -46,16 +46,17 @@ const addWorkspace = new Modal({
     }),
   ],
   footer: [
-    new Button({
-      id: 'cancel-btn',
-      label: { text: 'cancel' },
-      event: {},
-    }),
-    new Button({
-      id: 'confirm-btn',
-      label: { text: 'confirm' },
-      event: {},
-    }),
+    {
+      label: 'Cancel',
+      type: 'default',
+      click: [Modal.close('add-workspace')],
+      disabled: [],
+    },
+    {
+      label: 'Create',
+      click: [],
+      disabled: [],
+    },
   ],
 });
 

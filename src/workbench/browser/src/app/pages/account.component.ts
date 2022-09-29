@@ -15,12 +15,13 @@ import {
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your current password !">
-            <nz-form-label [nzSpan]="12">Current password</nz-form-label>
+            <nz-form-label [nzSpan]="12" i18n>Current password</nz-form-label>
             <input
               type="password"
               nz-input
               formControlName="a"
               placeholder=""
+              i18n-placeholder
               nzRequired
             />
           </nz-form-control>
@@ -28,12 +29,13 @@ import {
 
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your new password !">
-            <nz-form-label [nzSpan]="12">New password</nz-form-label>
+            <nz-form-label [nzSpan]="12" i18n>New password</nz-form-label>
             <input
               type="password"
               nz-input
               formControlName="b"
               placeholder=""
+              i18n-placeholder
               nzRequired
             />
           </nz-form-control>
@@ -43,19 +45,22 @@ import {
           <nz-form-control
             nzErrorTip="Please input your confirm new password !"
           >
-            <nz-form-label [nzSpan]="12">Confirm new password</nz-form-label>
+            <nz-form-label [nzSpan]="12" i18n
+              >Confirm new password</nz-form-label
+            >
             <input
               type="password"
               nz-input
               formControlName="c"
               placeholder=""
+              i18n-placeholder
               nzRequired
             />
           </nz-form-control>
         </nz-form-item>
       </form>
     </section>
-    <button nz-button nzType="primary" (click)="btnomkhcsCallback()" i18n>
+    <button nz-button nzType="primary" (click)="btnkti9inCallback()" i18n>
       Change
     </button>
     <section class="h-4"></section>`
@@ -73,7 +78,7 @@ export class AccountComponent implements OnInit {
       c: [null, [Validators.required]]
     })
   }
-  async btnomkhcsCallback() {
+  async btnkti9inCallback() {
     // * click event callback
   }
 }

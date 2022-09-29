@@ -20,18 +20,19 @@ import {
     <form nz-form [formGroup]="validateWspNameForm" nzLayout="vertical">
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your name !">
-          <nz-form-label [nzSpan]="12">Name</nz-form-label>
+          <nz-form-label [nzSpan]="12" i18n>Name</nz-form-label>
           <input
             type="text"
             nz-input
-            formControlName="undefined"
+            formControlName="workspace"
             placeholder=""
+            i18n-placeholder
             nzRequired
           />
         </nz-form-control>
       </nz-form-item>
     </form>
-    <button nz-button nzType="primary" (click)="btnk08gclCallback()" i18n>
+    <button nz-button nzType="primary" (click)="btnmceuvlCallback()" i18n>
       Save
     </button>
     <nz-divider></nz-divider>
@@ -48,7 +49,7 @@ import {
       nz-button
       nzType="primary"
       nzDanger
-      (click)="btnoeyzdyCallback()"
+      (click)="btn91fjx3Callback()"
       i18n
     >
       Delete
@@ -63,13 +64,13 @@ export class WorkspaceComponent implements OnInit {
   ngOnInit(): void {
     // * Init WspName form
     this.validateWspNameForm = this.fb.group({
-      undefined: [null, [Validators.required]]
+      workspace: [null, [Validators.required]]
     })
   }
-  async btnk08gclCallback() {
+  async btnmceuvlCallback() {
     // * click event callback
   }
-  async btnoeyzdyCallback() {
+  async btn91fjx3Callback() {
     // * click event callback
   }
 }

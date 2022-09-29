@@ -14,7 +14,6 @@ type initType = {
   theme?: ('danger' | 'block')[];
   event: object;
   status?: object;
-  isDisabled?: any[];
 };
 
 const themeHash = new Map().set('danger', 'nzDanger').set('block', 'nzBlock');
@@ -24,8 +23,7 @@ export class Button extends Render implements buttonType {
   label;
   type;
   theme;
-  isDisabled;
-  constructor({ id = '', type, theme = [], event, label, status }: initType) {
+  constructor({ id = '', type, theme = [], event, label, status = {} }: initType) {
     super({ event, status, children: [], elementType: 'btn' });
     this.id = id;
     this.label = label;
