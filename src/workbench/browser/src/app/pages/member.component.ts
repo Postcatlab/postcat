@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 
-import { NzModalService } from 'ng-zorro-antd/modal'
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'eo-member',
@@ -13,12 +13,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <input
-          nz-input
-          [(ngModel)]="inputPersonValue"
-          i18n-placeholder
-          placeholder="Search by username"
-        />
+        <input nz-input [(ngModel)]="inputPersonValue" i18n-placeholder placeholder="Search by username" />
         <section class="h-4"></section>
         <button
           nz-button
@@ -40,44 +35,45 @@ import { NzModalService } from 'ng-zorro-antd/modal'
           nz-button
           class=""
           nzType="primary"
-          (click)="btny9a5xiCallback()"
+          (click)="btnmwmcqmCallback()"
           i18n
         >
           Add people
         </button>
       </h2>
-    </section>`
+      <eo-manage-access></eo-manage-access>
+    </section>`,
 })
 export class MemberComponent implements OnInit {
-  isInvateModalVisible
-  inputPersonValue
+  isInvateModalVisible;
+  inputPersonValue;
   constructor(public modal: NzModalService) {
-    this.isInvateModalVisible = false
-    this.inputPersonValue = ''
+    this.isInvateModalVisible = false;
+    this.inputPersonValue = '';
   }
   ngOnInit(): void {}
   handleInvateModalCancel(): void {
     // * 关闭弹窗
-    this.isInvateModalVisible = false
+    this.isInvateModalVisible = false;
   }
   async e1hw7vlCallback() {
     // * nzAfterClose event callback
-    this.inputPersonValue = ''
+    this.inputPersonValue = '';
   }
   async btni8b65aCallback() {
     // * click event callback
-    const data = this.inputPersonValue
+    const data = this.inputPersonValue;
 
-    console.log(data)
+    console.log(data);
   }
   btnt7dqkoStatus() {
     // * disabled status status
-    return this.inputPersonValue === ''
+    return this.inputPersonValue === '';
   }
   async btny9a5xiCallback() {
     // * click event callback
 
     // * 唤起弹窗
-    this.isInvateModalVisible = true
+    this.isInvateModalVisible = true;
   }
 }
