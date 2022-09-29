@@ -19,6 +19,6 @@
   ],
   "exclude": [
     "**/*.spec.ts",
-    "**/views/*.ts"
+    "./app/views/*"
   ]
 }

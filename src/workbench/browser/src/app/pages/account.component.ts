@@ -18,6 +18,7 @@ import {
       <form nz-form [formGroup]="validateUsernameForm" nzLayout="vertical">
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your current password !">
+            <nz-form-label [nzSpan]="12" i18n>Current password</nz-form-label>
             <input
               type="password"
               nz-input
@@ -33,7 +34,7 @@ import {
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btncoqi5eCallback()"
+        (click)="btnxbv3kcCallback()"
         i18n
       >
         Save
@@ -47,6 +48,7 @@ import {
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your current password !">
+            <nz-form-label [nzSpan]="12" i18n>Current password</nz-form-label>
             <input
               type="password"
               nz-input
@@ -60,6 +62,7 @@ import {
 
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your new password !">
+            <nz-form-label [nzSpan]="12" i18n>New password</nz-form-label>
             <input
               type="password"
               nz-input
@@ -75,6 +78,9 @@ import {
           <nz-form-control
             nzErrorTip="Please input your confirm new password !"
           >
+            <nz-form-label [nzSpan]="12" i18n
+              >Confirm new password</nz-form-label
+            >
             <input
               type="password"
               nz-input
@@ -91,7 +97,7 @@ import {
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btn4yj53qCallback()"
+      (click)="btn4jwvh8Callback()"
       i18n
     >
       Reset
@@ -118,10 +124,10 @@ export class AccountComponent implements OnInit {
       c: [null, [Validators.required]]
     })
   }
-  async btncoqi5eCallback() {
+  async btnxbv3kcCallback() {
     // * click event callback
   }
-  async btn4yj53qCallback() {
+  async btn4jwvh8Callback() {
     // * click event callback
   }
 }

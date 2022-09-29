@@ -9,7 +9,7 @@ import {
   Canvas,
   Module,
   EventS,
-} from '../../../elements';
+} from '../elements';
 
 const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
 

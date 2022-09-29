@@ -13,7 +13,7 @@ import {
   Text,
   Canvas,
   //   EventS,
-} from '../../../elements';
+} from '../elements';
 
 // const select = new SelectPeople({
 

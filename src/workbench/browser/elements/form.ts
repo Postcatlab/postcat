@@ -72,7 +72,7 @@ export class Form extends Render implements formType {
       return '';
     };
     const typeHash = new Map().set('input', 'text').set('text', 'text').set('password', 'password');
-    const renderKey = ({ key, type, placeholder, rules }) => {
+    const renderKey = ({ key, type, placeholder, rules }: any) => {
       switch (type) {
         case 'input':
         case 'password':
@@ -87,8 +87,8 @@ export class Form extends Render implements formType {
     };
     const formList = (list) =>
       list
-        .map((it) => {
-          const labelTmpl = it.isShowLabel
+        .map(({ isShowLabel = true, ...it }) => {
+          const labelTmpl = isShowLabel
             ? `<nz-form-label [nzSpan]="${it.span || 12}" i18n>${it.label}</nz-form-label>`
             : '';
           return `

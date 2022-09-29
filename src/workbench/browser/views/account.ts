@@ -1,4 +1,4 @@
-import { Button, Component, Form, Title, Canvas } from '../../../elements';
+import { Button, Component, Form, Title, Canvas } from '../elements';
 // const userHeader = new UserHeader({
 
 // })

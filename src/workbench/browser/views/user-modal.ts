@@ -1,4 +1,4 @@
-import { Modal, Form, Button, Component, Canvas, Text, Input, EventS, HTTPS } from '../../../elements';
+import { Modal, Form, Button, Component, Canvas, Text, Input, EventS, HTTPS } from '../elements';
 
 const http = new HTTPS();
 
