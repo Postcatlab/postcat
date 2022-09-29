@@ -8,7 +8,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="eptulraCallback()"
+      (nzAfterClose)="e1hw7vlCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -25,8 +25,8 @@ import { NzModalService } from 'ng-zorro-antd/modal'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btn94kp1jCallback()"
-          [disabled]="btnw0mwsmStatus()"
+          (click)="btni8b65aCallback()"
+          [disabled]="btnt7dqkoStatus()"
           i18n
         >
           Select a member above
@@ -40,7 +40,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnmwmcqmCallback()"
+          (click)="btny9a5xiCallback()"
           i18n
         >
           Add people
@@ -60,21 +60,21 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async eptulraCallback() {
+  async e1hw7vlCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btn94kp1jCallback() {
+  async btni8b65aCallback() {
     // * click event callback
     const data = this.inputPersonValue
 
     console.log(data)
   }
-  btnw0mwsmStatus() {
+  btnt7dqkoStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnmwmcqmCallback() {
+  async btny9a5xiCallback() {
     // * click event callback
 
     // * 唤起弹窗

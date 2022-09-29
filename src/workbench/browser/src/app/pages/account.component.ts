@@ -17,12 +17,11 @@ import {
     <section class="w-1/2">
       <form nz-form [formGroup]="validateUsernameForm" nzLayout="vertical">
         <nz-form-item>
-          <nz-form-control nzErrorTip="Please input your current password !">
-            <nz-form-label [nzSpan]="12" i18n>Current password</nz-form-label>
+          <nz-form-control nzErrorTip="Please input your username !">
             <input
-              type="password"
+              type="text"
               nz-input
-              formControlName="a"
+              formControlName="username"
               placeholder=""
               i18n-placeholder
               nzRequired
@@ -34,7 +33,7 @@ import {
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btnxbv3kcCallback()"
+        (click)="btn9jmt4oCallback()"
         i18n
       >
         Save
@@ -97,7 +96,7 @@ import {
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btn4jwvh8Callback()"
+      (click)="btnvr931lCallback()"
       i18n
     >
       Reset
@@ -114,7 +113,7 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
     // * Init Username form
     this.validateUsernameForm = this.fb.group({
-      a: [null, [Validators.required]]
+      username: [null, [Validators.required]]
     })
 
     // * Init Password form
@@ -124,10 +123,10 @@ export class AccountComponent implements OnInit {
       c: [null, [Validators.required]]
     })
   }
-  async btnxbv3kcCallback() {
+  async btn9jmt4oCallback() {
     // * click event callback
   }
-  async btn4jwvh8Callback() {
+  async btnvr931lCallback() {
     // * click event callback
   }
 }

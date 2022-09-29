@@ -3,28 +3,31 @@ import { Button, Component, Form, Title, Canvas } from '../elements';
 
 // })
 
+const username = new Form({
+  id: 'username',
+  layout: '|',
+  data: [
+    {
+      label: 'Username',
+      isShowLabel: false,
+      key: 'username',
+      type: 'input',
+      rules: ['required'],
+    },
+  ],
+});
+
 export default new Component({
   id: 'account',
   imports: [],
-  init: [],
+  init: [username.set('username', userS.get('userInfo.username'))],
   children: [
     new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
     new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'] }),
     new Canvas({
       class: ['w-1/2'],
       children: [
-        new Form({
-          id: 'username',
-          layout: '|',
-          data: [
-            {
-              label: 'Current password',
-              key: 'a',
-              type: 'password',
-              rules: ['required'],
-            },
-          ],
-        }),
+        username,
         new Button({
           id: 'save-username',
           class: ['w-[120px]'],

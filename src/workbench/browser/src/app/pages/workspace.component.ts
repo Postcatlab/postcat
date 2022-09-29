@@ -36,7 +36,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnk4r3jpCallback()"
+      (click)="btn3htvc3Callback()"
       i18n
     >
       Save
@@ -56,7 +56,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btn4wx4nzCallback()"
+      (click)="btncnsb3fCallback()"
       i18n
     >
       Delete
@@ -74,10 +74,10 @@ export class WorkspaceComponent implements OnInit {
       workspace: [null, [Validators.required]]
     })
   }
-  async btnk4r3jpCallback() {
+  async btn3htvc3Callback() {
     // * click event callback
   }
-  async btn4wx4nzCallback() {
+  async btncnsb3fCallback() {
     // * click event callback
   }
 }
