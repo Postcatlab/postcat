@@ -111,18 +111,18 @@ export class ApiService {
     return this.remote.api_workspaceRemoveMember(params)
   }
 
-  api_userRead(params) {
+  api_userUpdateUserProfile(params) {
     if (this.dataSourceType === 'local') {
-      return this.local.api_userRead(params)
+      return this.local.api_userUpdateUserProfile(params)
     }
-    return this.remote.api_userRead(params)
+    return this.remote.api_userUpdateUserProfile(params)
   }
 
-  api_userUpdateFile(params) {
+  api_userReadProfile(params) {
     if (this.dataSourceType === 'local') {
-      return this.local.api_userUpdateFile(params)
+      return this.local.api_userReadProfile(params)
     }
-    return this.remote.api_userUpdateFile(params)
+    return this.remote.api_userReadProfile(params)
   }
 
   api_userUpdatePsd(params) {

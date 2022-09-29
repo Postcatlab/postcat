@@ -21,6 +21,7 @@ export class UserService {
   }
 
   setLoginInfo(data: API.LoginToken) {
+    console.log(data);
     StorageUtil.set('accessToken', data.accessToken, (Date.now() - data.accessTokenExpiresAt) / 1000);
     StorageUtil.set('refreshToken', data.refreshToken, (Date.now() - data.refreshTokenExpiresAt) / 1000);
   }

@@ -25,8 +25,8 @@ const http = {
     {
       name: 'user',
       data: [
-        { 'read @post': '/user/profile' },
-        { 'updateFile @get': '/user/profile' },
+        { 'updateUserProfile @post': '/user/profile' },
+        { 'readProfile @get': '/user/profile' },
         { 'updatePsd @post': '/user/pawwsord' },
         { 'search @get': '/user/{usernme}' },
       ],

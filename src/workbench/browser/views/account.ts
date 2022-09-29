@@ -19,7 +19,7 @@ const username = new Form({
 export default new Component({
   id: 'account',
   imports: [],
-  init: [username.patch('username', userS.get('userInfo.username'))], // TODO 需要用 vm 替换
+  init: [username.patch('username', userS.get('userInfo?.username'))], // TODO 需要用 vm 替换
   children: [
     new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
     new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'] }),

@@ -39,7 +39,11 @@ const manageAccess = new ManageAccess({
   event: {
     remove: {
       params: ['$event'],
-      callback: [`console.log($event)`],
+      callback: [
+        ($event) => {
+          console.log($event);
+        },
+      ],
     },
   },
 });

@@ -8,6 +8,12 @@ export class UserS extends Render {
   get(name, eq = false) {
     return `${eq ? '=' : ''} this.user.${name}`;
   }
+  setLoginInfo(data) {
+    return `this.user.setLoginInfo(${data})`;
+  }
+  setUserProfile(data) {
+    return `this.user.setUserProfile(${data})`;
+  }
   render() {
     return {
       type: 'element',

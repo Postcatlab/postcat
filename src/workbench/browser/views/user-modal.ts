@@ -1,5 +1,6 @@
-import { Modal, Form, Button, Component, Canvas, Text, Input, EventS, HTTPS } from '../elements';
+import { Modal, Form, Button, Component, Canvas, Text, Input, UserS, EventS, HTTPS } from '../elements';
 
+const userS = new UserS();
 const http = new HTTPS();
 
 const retry = new Modal({
@@ -12,7 +13,13 @@ const retry = new Modal({
       },
     }),
   ],
-  footer: [],
+  footer: [
+    {
+      label: 'Cancel',
+      click: [],
+      theme: [''],
+    },
+  ],
 });
 
 const userPassForm = new Form({
@@ -86,7 +93,10 @@ const login = new Modal({
               // * login
               userPassForm.getData('formData'),
               http.send('api_authLogin', 'formData'),
+              userS.setLoginInfo('data.data'),
               Modal.close('login'),
+              http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
+              userS.setUserProfile('pData.data'),
               retry.wakeUp(),
             ],
           },
@@ -153,5 +163,5 @@ export default new Component({
   id: 'user-modal',
   imports: [],
   init: [],
-  children: [http, event, retry, checkConnect, login, openSetting, addWorkspace],
+  children: [http, userS, event, retry, checkConnect, login, openSetting, addWorkspace],
 });

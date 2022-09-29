@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import {
@@ -12,7 +13,7 @@ import {
 @Component({
   selector: 'eo-user-modal',
   template: ` <nz-modal
-      [nzFooter]="null"
+      [nzFooter]="modalFooter"
       [(nzVisible)]="isRetryModalVisible"
       (nzOnCancel)="handleRetryModalCancel()"
       nzTitle="Do you want to upload local data to the cloud ?"
@@ -26,6 +27,17 @@ import {
           >
         </div>
       </ng-container>
+      <ng-template #modalFooter>
+        <button
+          nz-button
+          class=""
+          nzType="primary"
+          (click)="btn03r97nCallback()"
+          i18n
+        >
+          Cancel
+        </button>
+      </ng-template>
     </nz-modal>
     <nz-modal
       [nzFooter]="null"
@@ -45,7 +57,7 @@ import {
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="epk4bvhCallback()"
+      (nzAfterClose)="e73i81yCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -88,7 +100,7 @@ import {
             class=""
             nzType="primary"
             nzBlock
-            (click)="btncyvonyCallback()"
+            (click)="btndgfm65Callback()"
             i18n
           >
             Sign In/Up
@@ -131,7 +143,7 @@ import {
           nz-button
           class=""
           nzType="default"
-          (click)="btn5wnc28Callback()"
+          (click)="btn06rz3fCallback()"
           i18n
         >
           Cancel
@@ -140,7 +152,7 @@ import {
           nz-button
           class=""
           nzType="primary"
-          (click)="btnrtcpp3Callback()"
+          (click)="btnnapov8Callback()"
           i18n
         >
           Create
@@ -158,6 +170,7 @@ export class UserModalComponent implements OnInit {
   inputWorkspaceNameValue
   constructor(
     public api: RemoteService,
+    public user: UserService,
     public message: MessageService,
     public modal: NzModalService,
     public fb: UntypedFormBuilder
@@ -210,6 +223,9 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
+  async btn03r97nCallback() {
+    // * click event callback
+  }
   handleCheckConnectModalCancel(): void {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
@@ -218,13 +234,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async epk4bvhCallback() {
+  async e73i81yCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btncyvonyCallback() {
+  async btndgfm65Callback() {
     // * click event callback
 
     // * get Username form values
@@ -234,8 +250,17 @@ export class UserModalComponent implements OnInit {
       return
     }
 
+    this.user.setLoginInfo(data.data)
+
     // * 关闭弹窗
     this.isLoginModalVisible = false
+
+    const [pErr, pData]: any = await this.api.api_userReadProfile(null)
+    if (pErr) {
+      return
+    }
+
+    this.user.setUserProfile(pData.data)
 
     // * 唤起弹窗
     this.isRetryModalVisible = true
@@ -248,13 +273,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn5wnc28Callback() {
+  async btn06rz3fCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnrtcpp3Callback() {
+  async btnnapov8Callback() {
     // * click event callback
   }
 }

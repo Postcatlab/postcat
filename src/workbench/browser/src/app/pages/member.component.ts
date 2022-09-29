@@ -8,7 +8,7 @@ import { NzModalService } from 'ng-zorro-antd/modal'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="e8jejw6Callback()"
+      (nzAfterClose)="e0looquCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -25,8 +25,8 @@ import { NzModalService } from 'ng-zorro-antd/modal'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnm2expaCallback()"
-          [disabled]="btn393967Status()"
+          (click)="btnb7u6zsCallback()"
+          [disabled]="btnz0qxgzStatus()"
           i18n
         >
           Select a member above
@@ -40,14 +40,14 @@ import { NzModalService } from 'ng-zorro-antd/modal'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnluqhtfCallback()"
+          (click)="btnzi0yqtCallback()"
           i18n
         >
           Add people
         </button>
       </h2>
       <section class="py-5">
-        <eo-manage-access (remove)="eo6yc8xCallback($event)"></eo-manage-access>
+        <eo-manage-access (remove)="e6v4937Callback($event)"></eo-manage-access>
       </section>
     </section>`
 })
@@ -63,28 +63,29 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async e8jejw6Callback() {
+  async e0looquCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnm2expaCallback() {
+  async btnb7u6zsCallback() {
     // * click event callback
     const data = this.inputPersonValue
 
     console.log(data)
   }
-  btn393967Status() {
+  btnz0qxgzStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnluqhtfCallback() {
+  async btnzi0yqtCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async eo6yc8xCallback($event) {
+  async e6v4937Callback($event) {
     // * remove event callback
+
     console.log($event)
   }
 }

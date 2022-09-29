@@ -341,35 +341,43 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_userRead(params) {
+  api_userUpdateUserProfile(params) {
     return new Promise((resolve) => {
       this.create(this.undefined, params)
         .then(({ status, ...data }: any) => {
-          console.log('%c user - read 接口调用成功 %c', SuccessStyle, '')
+          console.log(
+            '%c user - updateUserProfile 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
           if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
         })
         .catch((error) => {
-          console.log('%c user - read 接口调用失败 %c', ErrorStyle, '')
+          console.log(
+            '%c user - updateUserProfile 接口调用失败 %c',
+            ErrorStyle,
+            ''
+          )
           resolve([null, error])
         })
     })
   }
 
-  api_userUpdateFile(params) {
+  api_userReadProfile(params) {
     return new Promise((resolve) => {
       this.load(this.undefined, params)
         .then(({ status, ...data }: any) => {
-          console.log('%c user - updateFile 接口调用成功 %c', SuccessStyle, '')
+          console.log('%c user - readProfile 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
         })
         .catch((error) => {
-          console.log('%c user - updateFile 接口调用失败 %c', ErrorStyle, '')
+          console.log('%c user - readProfile 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
         })
     })

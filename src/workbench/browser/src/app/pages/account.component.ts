@@ -34,7 +34,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btnvoax3aCallback()"
+        (click)="btnu4hgjqCallback()"
         i18n
       >
         Save
@@ -97,7 +97,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btnlo9jtiCallback()"
+      (click)="btncav1yeCallback()"
       i18n
     >
       Reset
@@ -126,13 +126,13 @@ export class AccountComponent implements OnInit {
 
     // * get Username form values
     this.validateUsernameForm.patchValue({
-      username: this.user.userInfo.username
+      username: this.user.userInfo?.username
     })
   }
-  async btnvoax3aCallback() {
+  async btnu4hgjqCallback() {
     // * click event callback
   }
-  async btnlo9jtiCallback() {
+  async btncav1yeCallback() {
     // * click event callback
   }
 }
