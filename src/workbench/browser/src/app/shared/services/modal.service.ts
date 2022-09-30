@@ -10,7 +10,9 @@ export type ModalOptions = {
   nzFooter?: null | ModalButtonOptions[];
   [propName: string]: any;
 };
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ModalService {
   constructor(private modal: NzModalService, private router: Router) {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
