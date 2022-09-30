@@ -4,7 +4,9 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Router } from '@angular/router';
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ApiService {
   constructor(
     private messageService: MessageService,
