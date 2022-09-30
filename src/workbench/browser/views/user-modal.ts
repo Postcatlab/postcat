@@ -92,7 +92,7 @@ const addWorkspace = new Modal({
           return
         }
         `,
-        message.success('Create new workspace success !'),
+        message.success('Create new workspace successfully !'),
         Modal.close('add-workspace'),
         newWorkspaceName.reset(),
         // * update workspace list
@@ -129,7 +129,7 @@ const login = new Modal({
               // * login
               userPassForm.getData('formData'),
               httpS.send('api_authLogin', 'formData', {
-                errTip: 'Authentication was not successful !',
+                errTip: 'Authentication failed !',
               }),
               userS.setLoginInfo('data'),
               Modal.close('login'),
@@ -192,7 +192,7 @@ const event = new EventS({
         if (err) {
           return;
         }`,
-        message.success('Logout already !'),
+        message.success('Successfully logged out !'),
       ],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },

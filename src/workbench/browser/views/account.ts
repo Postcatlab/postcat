@@ -68,7 +68,7 @@ export default new Component({
               }),
               http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
               userS.setUserProfile('pData'),
-              message.success('username update success !'),
+              message.success('Username update success !'),
             ],
           },
         }),
