@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
 import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -21,7 +21,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class ApiDetailMockComponent implements OnInit, OnChanges {
   @Input() apiData: ApiData;
   get mockUrl() {
-    return this.remoteService.mockUrl;
+    return this.dataSource.mockUrl;
   }
   mocklList: ApiMockEntity[] = [];
   listConf: object = {};
@@ -37,7 +37,7 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   ];
   constructor(
     private storageService: StorageService,
-    private remoteService: RemoteService,
+    private dataSource: DataSourceService,
     private message: NzMessageService
   ) {}
 

@@ -17,7 +17,7 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -52,7 +52,7 @@ registerLocaleData(zh);
     SettingService,
     ExtensionService,
     StorageService,
-    RemoteService,
+    DataSourceService,
     IndexedDBStorage,
     HttpStorage,
     NzMessageService,

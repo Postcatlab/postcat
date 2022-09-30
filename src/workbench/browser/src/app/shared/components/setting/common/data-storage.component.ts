@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
@@ -11,19 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     <div class="font-bold text-lg mb-2" i18n="@@DataSource">Data Storage</div>
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-control>
-          <nz-select
-            formControlName="eoapi-common.dataStorage"
-            i18n-nzPlaceHolder="@@DataSource"
-            nzPlaceHolder="Data Storage"
-            (ngModelChange)="handleSelectDataStorage($event)"
-          >
-            <nz-option nzValue="http" i18n-nzLabel="@@Cloud Server" nzLabel="Cloud"></nz-option>
-            <nz-option nzValue="local" i18n-nzLabel nzLabel="Localhost"></nz-option>
-          </nz-select>
-        </nz-form-control>
         <div class="text-[12px] mt-[8px] text-gray-400">
-          <p i18n>Localhost: Store the data locally. You can only use the product on the current computer.</p>
           <p i18n>
             Cloud: Store data on a cloud server to facilitate cross device use of the product. Only the client can
             connect to the cloud server. You need to download the client first.
@@ -31,7 +18,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
           </p>
         </div>
       </nz-form-item>
-      <ng-container *ngIf="validateForm.value['eoapi-common.dataStorage'] === 'http'">
+      <ng-container>
         <nz-form-item>
           <nz-form-label i18n>Host</nz-form-label>
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Host">
@@ -41,7 +28,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       </ng-container>
       <nz-form-item>
         <nz-form-control>
-          <button nz-button nzType="primary" [nzLoading]="loading" i18n>Change Data Storage</button>
+          <button nz-button nzType="primary" [nzLoading]="loading" i18n>Save and Reload</button>
         </nz-form-control>
       </nz-form-item>
     </form>
@@ -65,16 +52,13 @@ export class DataStorageComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private message: NzMessageService,
     private electronService: ElectronService,
-    private remoteService: RemoteService
+    private dataSource: DataSourceService
   ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       'eoapi-common.dataStorage': this.model['eoapi-common.dataStorage'] ?? 'local',
-      'eoapi-common.remoteServer.url': [
-        this.model['eoapi-common.remoteServer.url'] || '',
-        [Validators.required],
-      ]
+      'eoapi-common.remoteServer.url': [this.model['eoapi-common.remoteServer.url'] || '', [Validators.required]],
     });
   }
 
@@ -98,7 +82,6 @@ export class DataStorageComponent implements OnInit, OnChanges {
     const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
     const isRemote = dataStorage === 'http';
     const isValid = this.validateForm.valid;
-    const remoteUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
 
     if (!this.electronService.isElectron && isRemote) {
       return this.message.error(
@@ -109,9 +92,9 @@ export class DataStorageComponent implements OnInit, OnChanges {
     if (isValid && isRemote) {
       console.log('submit', this.validateForm.value);
       this.loading = true;
-      const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
+      const [isSuccess] = await this.dataSource.pingRmoteServerUrl();
       this.loading = false;
-      if (isSuccess===true) {
+      if (isSuccess === true) {
         this.message.success($localize`The remote data source connection is successful!`);
       }
       this.updateDataSource();
@@ -133,7 +116,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       ...this.validateForm.value,
     };
     this.modelChange.emit(this.model);
-    await this.remoteService.switchDataSource(this.model['eoapi-common.dataStorage']);
+    await this.dataSource.switchDataSource(this.model['eoapi-common.dataStorage']);
   }
 
   setFormValue(model = {}) {
