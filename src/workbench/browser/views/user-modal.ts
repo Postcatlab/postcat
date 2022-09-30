@@ -65,7 +65,7 @@ const userPassForm = new Form({
       key: 'username',
       type: 'input',
       class: '',
-      placeholder: 'Enter Enter Email/Phone/Username',
+      placeholder: 'Enter Email/Phone/Username',
       rules: ['required'],
     },
     {
@@ -225,6 +225,6 @@ const updateWorkspace = [
 export default new Component({
   id: 'user-modal',
   imports: [],
-  init: [...updateWorkspace, openSetting.wakeUp()],
+  init: [...updateWorkspace],
   children: [httpS, userS, message, event, sync, checkConnect, login, openSetting, workspaceS, addWorkspace],
 });
