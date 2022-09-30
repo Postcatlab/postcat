@@ -11,7 +11,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="e7pa3cnCallback()"
+      (nzAfterClose)="eunp0waCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -28,8 +28,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnt1w7sdCallback()"
-          [disabled]="btn7dyiksStatus()"
+          (click)="btnoisvoaCallback()"
+          [disabled]="btnv3kwlsStatus()"
           i18n
         >
           Select a member above
@@ -43,7 +43,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnfemxadCallback()"
+          (click)="btnt1ld9aCallback()"
           i18n
         >
           Add people
@@ -52,7 +52,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="eiyuienCallback($event)"
+          (eoOnRemove)="ev1rjocCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -87,17 +87,25 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async e7pa3cnCallback() {
+  async eunp0waCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnt1w7sdCallback() {
+  async btnoisvoaCallback() {
     // * click event callback
-    const data = this.inputPersonValue
+    const username = this.inputPersonValue
+    const [uData, uErr]: any = await this.api.api_userSearch({ username })
+    if (uErr) {
+      return
+    }
+
+    const [user] = uData
+    const { id } = user
+
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [aData, aErr]: any = await this.api.api_workspaceAddMember({
       workspaceID,
-      userIDs: [data]
+      userIDs: [id]
     })
     if (aErr) {
       return
@@ -119,17 +127,17 @@ export class MemberComponent implements OnInit {
     this.workspace.setWorkspaceList(wData)
     this.memberList = wData
   }
-  btn7dyiksStatus() {
+  btnv3kwlsStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnfemxadCallback() {
+  async btnt1ld9aCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async eiyuienCallback($event) {
+  async ev1rjocCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
@@ -148,10 +156,13 @@ export class MemberComponent implements OnInit {
       return
     }
 
-    const workspaceID = this.workspace.currentWorkspace
+    const { id: workspaceID } = this.workspace.currentWorkspace
+
+    const { id } = $event
+
     const [data, err]: any = await this.api.api_workspaceRemoveMember({
       workspaceID,
-      userIDs: []
+      userIDs: [id]
     })
     if (err) {
       return

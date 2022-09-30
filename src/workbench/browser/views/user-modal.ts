@@ -193,15 +193,17 @@ const event = new EventS({
   ],
 });
 
-const updateMember = [
-  workspaceS.getCurrent('workspaceID'),
-  httpS.send('api_workspaceMember', '{ workspaceID }', { err: 'wErr', data: 'wData' }), // * 获取空间成员列表
-  workspaceS.setWorkspaceList('wData'),
+const updateWorkspace = [
+  workspaceS.getCurrent('{ id: workspaceID }'),
+  // httpS.send('api_workspaceMember', '{ workspaceID }', { err: 'wErr', data: 'wData' }), // * 获取空间成员列表
+  // workspaceS.setWorkspaceList('wData'),
+  httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
+  workspaceS.setWorkspaceList('list'),
 ];
 
 export default new Component({
   id: 'user-modal',
   imports: [],
-  init: [...updateMember],
+  init: [...updateWorkspace],
   children: [httpS, userS, message, event, retry, checkConnect, login, openSetting, workspaceS, addWorkspace],
 });

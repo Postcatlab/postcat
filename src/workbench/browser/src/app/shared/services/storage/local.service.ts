@@ -450,10 +450,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_userSearch({ usernme }) {
-    if (!usernme) {
+  api_userSearch({ username }) {
+    if (!username) {
       console.log(
-        '%c Error: user - search 接口 缺失参数 usernme %c',
+        '%c Error: user - search 接口 缺失参数 username %c',
         ErrorStyle,
         ''
       )
@@ -461,7 +461,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.load(this.undefined, { usernme })
+      this.load(this.undefined, { username })
         .then(({ status, ...data }: any) => {
           console.log('%c user - search 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {

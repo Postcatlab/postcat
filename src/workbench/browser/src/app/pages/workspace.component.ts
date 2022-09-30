@@ -1,14 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 
-import { NzModalService } from 'ng-zorro-antd/modal'
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators
-} from '@angular/forms'
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'eo-workspace',
@@ -25,50 +21,23 @@ import {
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your name !">
           <nz-form-label [nzSpan]="12" i18n>Name</nz-form-label>
-          <input
-            type="text"
-            nz-input
-            formControlName="workspace"
-            placeholder=""
-            i18n-placeholder
-            nzRequired
-          />
+          <input type="text" nz-input formControlName="workspace" placeholder="" i18n-placeholder nzRequired />
         </nz-form-control>
       </nz-form-item>
     </form>
-    <button
-      nz-button
-      class=""
-      nzType="primary"
-      (click)="btndnc0r6Callback()"
-      i18n
-    >
-      Save
-    </button>
+    <button nz-button class="" nzType="primary" (click)="btna6u3h8Callback()" i18n>Save</button>
     <nz-divider></nz-divider>
     <h2 class="text-lg flex justify-between items-center">
       <span i18n>Delete Workspace</span>
     </h2>
     <div class="pb-4">
-      <span i18n
-        >After deleting a workspace, all data in the workspace will be
-        permanently deleted.</span
-      >
+      <span i18n>After deleting a workspace, all data in the workspace will be permanently deleted.</span>
     </div>
-    <button
-      nz-button
-      class=""
-      nzType="primary"
-      nzDanger
-      (click)="btnr01xw8Callback()"
-      i18n
-    >
-      Delete
-    </button>
-  </section>`
+    <button nz-button class="" nzType="primary" nzDanger (click)="btn4hpuffCallback()" i18n>Delete</button>
+  </section>`,
 })
 export class WorkspaceComponent implements OnInit {
-  validateWspNameForm
+  validateWspNameForm;
   constructor(
     public modal: NzModalService,
     public workspace: WorkspaceService,
@@ -76,36 +45,43 @@ export class WorkspaceComponent implements OnInit {
     public api: RemoteService,
     public fb: UntypedFormBuilder
   ) {
-    this.validateWspNameForm = UntypedFormGroup
+    this.validateWspNameForm = UntypedFormGroup;
   }
   async ngOnInit(): Promise<void> {
     // * Init WspName form
     this.validateWspNameForm = this.fb.group({
-      workspace: [null, [Validators.required]]
-    })
+      workspace: [null, [Validators.required]],
+    });
 
-    const { title: currentWsp } = this.workspace.currentWorkspace
+    const { title: currentWsp } = this.workspace.currentWorkspace;
 
     // * get WspName form values
     this.validateWspNameForm.patchValue({
-      workspace: currentWsp
-    })
+      workspace: currentWsp,
+    });
   }
-  async btndnc0r6Callback() {
+  async btna6u3h8Callback() {
     // * click event callback
-    const currentWsp = this.workspace.currentWorkspace
-    const { workspace: title } = this.validateWspNameForm.value
+    const { id: currentWsp } = this.workspace.currentWorkspace;
+    const { workspace: title } = this.validateWspNameForm.value;
     const [data, err]: any = await this.api.api_workspaceEdit({
       workspaceID: currentWsp,
-      title
-    })
+      title,
+    });
     if (err) {
-      return
+      this.eMessage.error('You can not change the workspace name');
+      return;
     }
 
-    this.eMessage.success(`Edit workspace name success !`)
+    this.eMessage.success(`Edit workspace name success !`);
+    const { id: workspaceID } = this.workspace.currentWorkspace;
+    const [list, wErr]: any = await this.api.api_workspaceList({});
+    if (wErr) {
+      return;
+    }
+    this.workspace.setWorkspaceList(list);
   }
-  async btnr01xw8Callback() {
+  async btn4hpuffCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -117,22 +93,22 @@ You cannot restore it once deleted!`,
           nzOkDanger: true,
           nzOkText: 'Delete',
           nzOnOk: () => resolve(true),
-          nzOnCancel: () => resolve(false)
-        })
-      })
-    const isOk = await confirm()
+          nzOnCancel: () => resolve(false),
+        });
+      });
+    const isOk = await confirm();
     if (!isOk) {
-      return
+      return;
     }
 
-    const currentWsp = this.workspace.currentWorkspace
+    const currentWsp = this.workspace.currentWorkspace;
     const [data, err]: any = await this.api.api_workspaceDelete({
-      workspaceID: currentWsp
-    })
+      workspaceID: currentWsp,
+    });
     if (err) {
-      return
+      return;
     }
 
-    this.eMessage.success(`Delete success !`)
+    this.eMessage.success(`Delete success !`);
   }
 }

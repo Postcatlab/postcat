@@ -19,7 +19,7 @@ const http = {
         { 'delete @delete': '/workspace/{workspaceID}' },
         { 'member @get': '/workspace/{workspaceID}/member/list' },
         { 'addMember @post': '/workspace/{workspaceID}/member/add', json: 'userIDs' },
-        { 'removeMember @delete': '/workspace/{workspaceID}/member/remove', query: 'userIDs' },
+        { 'removeMember @delete': '/workspace/{workspaceID}/member/remove', body: 'userIDs' },
       ],
     },
     {
@@ -28,7 +28,7 @@ const http = {
         { 'updateUserProfile @put': '/user/profile' },
         { 'readProfile @get': '/user/profile', query: '...' },
         { 'updatePsd @put': '/user/password', json: 'oldPassword, newPassword' },
-        { 'search @get': '/user/{usernme}' },
+        { 'search @get': '/user/{username}' },
       ],
     },
     {

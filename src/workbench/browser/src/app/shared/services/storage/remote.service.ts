@@ -325,7 +325,7 @@ export class RemoteService {
     return new Promise((resolve) => {
       this.http
         .delete(`/api/workspace/${workspaceID}/member/remove`, {
-          params: { userIDs },
+          body: { userIDs },
         })
         .subscribe({
           next: ({ status, data }: any) => {
@@ -440,10 +440,10 @@ export class RemoteService {
     })
   }
 
-  api_userSearch({ usernme }) {
-    if (!usernme) {
+  api_userSearch({ username }) {
+    if (!username) {
       console.log(
-        '%c Error: user - search 接口 缺失参数 usernme %c',
+        '%c Error: user - search 接口 缺失参数 username %c',
         ErrorStyle,
         ''
       )
@@ -451,7 +451,7 @@ export class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http.get(`/api/user/${usernme}`, {}).subscribe({
+      this.http.get(`/api/user/${username}`, {}).subscribe({
         next: ({ status, data }: any) => {
           console.log('%c user - search 接口请求成功 %c', SuccessStyle, '')
           if (status === 200) {

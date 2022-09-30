@@ -5,7 +5,7 @@ import { StorageUtil } from '../../../utils/storage/Storage';
   providedIn: 'root',
 })
 export class UserService {
-  userProfile: API.User;
+  userProfile = StorageUtil.get('userProfile');
   accessToken = StorageUtil.get('accessToken');
   refreshToken = StorageUtil.get('refreshToken');
   accessTokenExpiresAt = 0;
@@ -28,7 +28,7 @@ export class UserService {
 
   setUserProfile(userProfile: API.User) {
     this.userProfile = userProfile;
-    StorageUtil.set('userInfo', JSON.stringify(userProfile));
+    StorageUtil.set('userProfile', userProfile);
   }
 
   clearAuth() {

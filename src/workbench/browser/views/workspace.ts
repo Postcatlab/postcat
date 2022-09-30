@@ -40,6 +40,12 @@ const messageS = new MessageS();
 const httpS = new HTTPS();
 const workspaceS = new WorkspaceS();
 
+const updateWorkspace = [
+  workspaceS.getCurrent('{ id: workspaceID }'),
+  httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
+  workspaceS.setWorkspaceList('list'),
+];
+
 export default new Module({
   id: 'workspace',
   children: [
@@ -66,10 +72,13 @@ export default new Module({
               label: 'Save',
               event: {
                 click: [
-                  workspaceS.getCurrent('currentWsp'),
+                  workspaceS.getCurrent('{ id: currentWsp }'),
                   wpnameF.getValue('workspace', 'title'),
-                  httpS.send('api_workspaceEdit', '{ workspaceID:currentWsp, title }'),
+                  httpS.send('api_workspaceEdit', '{ workspaceID:currentWsp, title }', {
+                    errTip: `You can not change the workspace name`,
+                  }),
                   messageS.success('Edit workspace name success !'),
+                  ...updateWorkspace,
                 ],
               },
             }),

@@ -22,6 +22,7 @@ export class WorkspaceService {
       })),
       this.localWorkspace,
     ];
+    console.log(this.workspaceList);
   }
 
   setCurrentWorkspace(workspace: API.Workspace) {

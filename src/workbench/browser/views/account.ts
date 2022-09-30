@@ -4,7 +4,7 @@ const userS = new UserS();
 const http = new HTTPS();
 const message = new MessageS();
 
-const username = new Form({
+const usernameF = new Form({
   id: 'username',
   layout: '|',
   data: [
@@ -46,14 +46,14 @@ const passwordF = new Form({
 export default new Component({
   id: 'account',
   imports: [],
-  init: [username.patch('username', userS.get('userProfile?.username'))], // TODO 需要用 vm 替换
+  init: [usernameF.patch('username', userS.get('userProfile?.username'))], // TODO 需要用 vm 替换
   children: [
     new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
     new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'], id: 'eoapi-account-username' }),
     new Canvas({
       class: ['w-1/2'],
       children: [
-        username,
+        usernameF,
         new Button({
           id: 'save-username',
           class: ['w-[120px]'],
@@ -62,11 +62,10 @@ export default new Component({
           },
           event: {
             click: [
-              username.getValue('username', 'user'),
-              `const [data, err]:any = await this.api.api_userUpdateUserProfile({ username: user, avatar: '111' });
-                if (err) {
-                  return;
-                }`,
+              usernameF.getValue('username', 'user'),
+              http.send('api_userUpdateUserProfile', '{ username: user, avatar: "111" }', {
+                errTip: 'Sorry, username is be used',
+              }),
               http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
               userS.setUserProfile('pData'),
               message.success('username update success !'),

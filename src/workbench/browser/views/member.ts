@@ -36,8 +36,11 @@ const manageAccess = new ManageAccess({
       callback: [
         modalS.danger({ title: 'Warning', content: 'Are you sure you want to remove the menmber ?' }),
         // * 删除成员，并更新成员列表
-        workspaceS.getCurrent('workspaceID'),
-        httpS.send('api_workspaceRemoveMember', '{ workspaceID, userIDs: [] }'),
+        workspaceS.getCurrent('{ id: workspaceID }'),
+        ($event) => {
+          const { id } = $event;
+        },
+        httpS.send('api_workspaceRemoveMember', '{ workspaceID, userIDs: [id] }'),
         ...updateMember,
       ],
     },
@@ -63,10 +66,16 @@ const invate = new Modal({
       },
       event: {
         click: [
-          personInput.getValue('data'),
+          personInput.getValue('username'),
+          // * 根据用户名找用户ID
+          httpS.send('api_userSearch', '{ username }', { err: 'uErr', data: 'uData' }),
+          (uData) => {
+            const [user] = uData;
+            const { id } = user;
+          },
           workspaceS.getCurrent('{ id:workspaceID }'),
           // * 添加成员
-          httpS.send('api_workspaceAddMember', '{ workspaceID, userIDs:[data] }', { data: 'aData', err: 'aErr' }),
+          httpS.send('api_workspaceAddMember', '{ workspaceID, userIDs:[id] }', { data: 'aData', err: 'aErr' }),
           messageS.success('Add new member success'),
           Modal.close('invate'),
           ...updateMember,

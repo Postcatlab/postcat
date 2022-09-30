@@ -34,7 +34,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnyznwzrCallback()"
+          (click)="btnco732lCallback()"
           i18n
         >
           Cancel
@@ -59,7 +59,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="ebtzc5qCallback()"
+      (nzAfterClose)="e0idr3zCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -102,7 +102,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class=""
             nzType="primary"
             nzBlock
-            (click)="btna6ygihCallback()"
+            (click)="btn9mlrpcCallback()"
             i18n
           >
             Sign In/Up
@@ -145,7 +145,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btni5mrg8Callback()"
+          (click)="btnov6mdwCallback()"
           i18n
         >
           Cancel
@@ -154,7 +154,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn3upeqrCallback()"
+          (click)="btn50t0ktCallback()"
           i18n
         >
           Create
@@ -220,21 +220,19 @@ export class UserModalComponent implements OnInit {
       password: [null, [Validators.required]]
     })
 
-    const workspaceID = this.workspace.currentWorkspace
-    const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID
-    })
+    const { id: workspaceID } = this.workspace.currentWorkspace
+    const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
       return
     }
 
-    this.workspace.setWorkspaceList(wData)
+    this.workspace.setWorkspaceList(list)
   }
   handleRetryModalCancel(): void {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btnyznwzrCallback() {
+  async btnco732lCallback() {
     // * click event callback
   }
   handleCheckConnectModalCancel(): void {
@@ -245,13 +243,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async ebtzc5qCallback() {
+  async e0idr3zCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btna6ygihCallback() {
+  async btn9mlrpcCallback() {
     // * click event callback
 
     // * get Username form values
@@ -285,13 +283,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btni5mrg8Callback() {
+  async btnov6mdwCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn3upeqrCallback() {
+  async btn50t0ktCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 
