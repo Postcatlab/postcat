@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 @Component({
   selector: 'eo-data-storage',
   template: `
@@ -46,7 +47,12 @@ export class DataStorageComponent implements OnInit, OnChanges {
   validateForm!: FormGroup;
   loading = false;
 
-  constructor(private fb: FormBuilder, private dataSource: DataSourceService) {}
+  constructor(
+    private fb: FormBuilder,
+    private web: WebService,
+    private electron: ElectronService,
+    private dataSource: DataSourceService
+  ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -62,6 +68,11 @@ export class DataStorageComponent implements OnInit, OnChanges {
     }
   }
   async submitForm() {
+    if (!this.electron.isElectron) {
+      this.web.jumpToClient();
+      return;
+    }
+
     const isValid = this.validateForm.valid;
     if (isValid) {
       this.model = {
