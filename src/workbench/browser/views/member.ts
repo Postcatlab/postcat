@@ -69,10 +69,14 @@ const invate = new Modal({
           personInput.getValue('username'),
           // * 根据用户名找用户ID
           httpS.send('api_userSearch', '{ username }', { err: 'uErr', data: 'uData' }),
-          (uData) => {
+          `
+            if (uData.length === 0) {
+              this.eMessage.error(\`Could not find a user matching \${username}\`)
+              return;
+            }
             const [user] = uData;
             const { id } = user;
-          },
+            `,
           workspaceS.getCurrent('{ id:workspaceID }'),
           // * 添加成员
           httpS.send('api_workspaceAddMember', '{ workspaceID, userIDs:[id] }', { data: 'aData', err: 'aErr' }),

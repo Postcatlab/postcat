@@ -26,6 +26,6 @@ import { MemberComponent } from './member.component'
   ],
   declarations: [MemberComponent, ManageAccessComponent],
   exports: [],
-  providers: [NzModalService, RemoteService, EoMessageService]
+  providers: [NzModalService, RemoteService]
 })
 export class MemberModule {}
