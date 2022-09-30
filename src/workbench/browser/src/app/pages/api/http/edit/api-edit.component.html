@@ -4,7 +4,7 @@
     <button type="submit" nz-button nztype="primary" class="eo_theme_btn_success" (click)="saveApi()" i18n>Save</button>
   </div>
   <form nz-form [formGroup]="validateForm" [nzLayout]="'vertical'">
-    <nz-form-label class="mt-4" nzFor="uri">API Path</nz-form-label>
+    <nz-form-label class="mt-4" nzFor="uri" i18n>API Path</nz-form-label>
     <nz-input-group nzCompact>
       <nz-select [(ngModel)]="model.protocol" formControlName="protocol">
         <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>

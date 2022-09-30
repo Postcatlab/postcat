@@ -96,7 +96,7 @@ const addWorkspace = new Modal({
       disabled: [],
     },
     {
-      label: 'Add',
+      label: 'Save',
       type: 'primary',
       click: [
         newWorkspaceName.getValue('title'),

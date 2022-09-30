@@ -174,7 +174,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'editApiSuccess':
           case 'copyApiSuccess':
           case 'deleteApiSuccess':
-          case 'importSuccess':
           case 'updateGroupSuccess': {
             this.buildGroupTreeData();
             break;
