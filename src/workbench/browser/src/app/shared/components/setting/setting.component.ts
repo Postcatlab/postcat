@@ -85,7 +85,7 @@ export class SettingComponent implements OnInit {
           moduleID: 'eoapi-account-username',
         },
         {
-          name: $localize`:@@Account:Password`,
+          name: $localize`Password`,
           moduleID: 'eoapi-account-password',
         },
       ],
