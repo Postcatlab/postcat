@@ -1,5 +1,3 @@
-import { Alert } from 'eo/workbench/browser/elements/alert';
-import workspace from 'eo/workbench/browser/views/workspace';
 import {
   Modal,
   Form,
@@ -13,12 +11,15 @@ import {
   EventS,
   WorkspaceS,
   HTTPS,
+  Alert,
+  DataSourceS,
 } from '../elements';
 
 const userS = new UserS();
 const httpS = new HTTPS();
 const message = new MessageS();
 const workspaceS = new WorkspaceS();
+const dataSourceS = new DataSourceS();
 
 const sync = new Modal({
   id: 'sync',
@@ -172,7 +173,12 @@ const openSetting = new Modal({
     new Text({
       label: [
         { text: 'If you want to collaborate, please' },
-        { text: 'open the settings', type: 'link' },
+        {
+          text: 'open the settings',
+          event: {
+            click: [],
+          },
+        },
         { text: 'and fill in the configuration' },
       ],
     }),
@@ -216,15 +222,42 @@ const event = new EventS({
 
 const updateWorkspace = [
   workspaceS.getCurrent('{ id: workspaceID }'),
-  // httpS.send('api_workspaceMember', '{ workspaceID }', { err: 'wErr', data: 'wData' }), // * 获取空间成员列表
-  // workspaceS.setWorkspaceList('wData'),
   httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
   workspaceS.setWorkspaceList('list'),
+];
+
+const isConnect = [
+  dataSourceS.hasUrl('url'),
+  `
+  if (url === '') {
+    ${openSetting.wakeUp()}
+    return
+  }
+  `,
+  dataSourceS.isConnectRemote('status'),
+  `
+  if (!status) {
+      ${checkConnect.wakeUp()}
+      return;
+    }
+  `,
 ];
 
 export default new Component({
   id: 'user-modal',
   imports: [],
-  init: [...updateWorkspace],
-  children: [httpS, userS, message, event, sync, checkConnect, login, openSetting, workspaceS, addWorkspace],
+  init: [...updateWorkspace, ...isConnect],
+  children: [
+    httpS,
+    dataSourceS,
+    userS,
+    message,
+    event,
+    sync,
+    checkConnect,
+    login,
+    openSetting,
+    workspaceS,
+    addWorkspace,
+  ],
 });

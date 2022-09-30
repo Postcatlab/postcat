@@ -3,12 +3,13 @@ import { Render } from 'ecode/dist/render';
 
 type initType = {
   label: object | string;
+  event?: any;
 };
 
 export class Text extends Render {
   label;
-  constructor({ label }: initType) {
-    super({ children: [], elementType: 'text' });
+  constructor({ label, event }: initType) {
+    super({ children: [], event, elementType: 'text' });
     this.label = this.parserLabel(label);
   }
   parserLabel(data) {
@@ -26,7 +27,7 @@ export class Text extends Render {
     return list
       .map(({ text, type }) => {
         if (type?.link) {
-          return `<span style="color: #1890ff" i18n> ${text} </span>`;
+          return `<span style="color: #1890ff" ${this.eventCb.join(' ')} i18n> ${text} </span>`;
         }
         return `<span i18n> ${text} </span>`;
       })
@@ -39,7 +40,7 @@ export class Text extends Render {
       imports: [],
       template: `<div class="pb-4">${template}</div>`,
       data: [],
-      methods: [],
+      methods: [...this.methods],
     };
   }
 }
