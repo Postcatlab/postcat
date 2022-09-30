@@ -70,13 +70,20 @@ export class NavbarComponent implements OnInit {
     });
   }
   loginOrSign() {
+    if (this.web.isWeb) {
+      return this.web.jumpToClient($localize`Eoapi Client is required to sign in`);
+    }
     this.message.send({ type: 'login', data: {} });
   }
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });
   }
   addWorkspace() {
-    this.message.send({ type: 'addWorkspace', data: {} });
+    if (this.web.isWeb) {
+      return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
+    } else {
+      this.message.send({ type: 'addWorkspace', data: {} });
+    }
   }
 
   getModules(): Array<ModuleInfo> {

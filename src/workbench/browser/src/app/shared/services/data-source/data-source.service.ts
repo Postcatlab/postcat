@@ -6,7 +6,6 @@ import { Message } from 'eo/workbench/browser/src/app/shared/services/message/me
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 /** is show switch success tips */
@@ -30,10 +29,6 @@ export class DataSourceService {
   get isRemote() {
     return this.dataSourceType === 'http';
   }
-  /** Text corresponding to the current data source */
-  get dataSourceText() {
-    return this.isRemote ? $localize`:@@Cloud Server:Cloud` : $localize`Localhost`;
-  }
   /** get mock url */
   get mockUrl() {
     return this.isRemote
@@ -45,7 +40,6 @@ export class DataSourceService {
     private storageService: StorageService,
     private messageService: MessageService,
     private message: NzMessageService,
-    private electronService: ElectronService,
     private settingService: SettingService,
     private router: Router
   ) {
@@ -81,7 +75,7 @@ export class DataSourceService {
   }
 
   /**
-   * Test if cloud server address is available
+   * Test if cloud service address is available
    */
   async pingRmoteServerUrl(): Promise<[boolean, any]> {
     const { url: remoteUrl, token } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
@@ -161,7 +155,7 @@ export class DataSourceService {
         this.switchToHttp();
         this.refreshComponent();
       } else {
-        this.message.create('error', $localize`Cloud data source not available`);
+        this.message.create('error', $localize`Cloud Storage not available`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     } else {
@@ -172,7 +166,7 @@ export class DataSourceService {
   };
 
   showMessage() {
-    this.message.create('success', $localize`Successfully switched to ${this.dataSourceText} data source`);
+    this.message.create('success', $localize`Successfully connect to cloud`);
     localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

@@ -5,6 +5,7 @@ import { EoExtensionInfo } from '../extension.model';
 import { ExtensionService } from '../extension.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { WebService } from '../../../core/services/web/web.service';
+import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 
 @Component({
   selector: 'eo-extension-detail',
@@ -15,11 +16,9 @@ export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   introLoading = false;
   changelogLoading = false;
-  isVisible = false;
   isEnable = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
-  resourceInfo=this.web.resourceInfo;
   nzSelectedIndex = 0;
 
   changeLog = '';
@@ -28,7 +27,7 @@ export class ExtensionDetailComponent implements OnInit {
     private extensionService: ExtensionService,
     private route: ActivatedRoute,
     private router: Router,
-    private web: WebService,
+    private webService: WebService,
     public electron: ElectronService,
     private language: LanguageService
   ) {
@@ -37,21 +36,11 @@ export class ExtensionDetailComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  handleInstall() {
+  async handleInstall() {
     if (this.electron.isElectron) {
       this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
     } else {
-      const PROTOCOL = 'eoapi://';
-      (window as any).protocolCheck(
-        PROTOCOL,
-        () => {
-          // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
-          this.isVisible = true;
-        },
-        () => {
-          window.location.href = PROTOCOL;
-        }
-      );
+      this.webService.jumpToClient($localize`Eoapi Client is required to install this extension.`);
     }
   }
 
@@ -188,10 +177,6 @@ ${log}
         type: this.route.snapshot.queryParams.type,
       },
     });
-  }
-
-  handleOk(): void {
-    this.isVisible = false;
   }
 
   handleEnableExtension(isEnable) {
