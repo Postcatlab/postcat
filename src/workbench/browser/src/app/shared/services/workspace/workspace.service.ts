@@ -22,11 +22,11 @@ export class WorkspaceService {
   }
   workspaceList: API.Workspace[] = [this.localWorkspace];
 
-  constructor(
-    private messageService: MessageService,
-    private apiService: ApiService,
-    private storage: StorageService
-  ) {}
+  constructor(private messageService: MessageService, private apiService: ApiService, private storage: StorageService) {
+    setTimeout(async () => {
+      console.log('exportProjectData', await this.exportProjectData());
+    }, 2000);
+  }
 
   setWorkspaceList(data: API.Workspace[]) {
     this.workspaceList = [
@@ -38,11 +38,19 @@ export class WorkspaceService {
     ];
   }
 
+  setCurrentWorkspaceID(id: number) {
+    this.currentWorkspaceID = id;
+  }
+
   setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
     console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
     this.messageService.send({ type: 'workspaceChange', data: true });
+  }
+
+  getWorkspaceList() {
+    return this.workspaceList;
   }
 
   getGroups(projectID = 1): Promise<any[]> {

@@ -39,7 +39,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnaolz3bCallback()"
+          (click)="btncgthvsCallback()"
           i18n
         >
           Cancel
@@ -48,7 +48,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnpas6y5Callback()"
+          (click)="btnp6uqsmCallback()"
           i18n
         >
           Sync
@@ -73,7 +73,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="er12074Callback()"
+      (nzAfterClose)="e2vvr8pCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -90,7 +90,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
                   type="text"
                   nz-input
                   formControlName="username"
-                  placeholder="Enter Enter Email/Phone/Username"
+                  placeholder="Enter Email/Phone/Username"
                   i18n-placeholder
                   nzRequired
                 />
@@ -116,7 +116,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btnnjoq5fCallback()"
+            (click)="btnrr3q68Callback()"
             i18n
           >
             Sign In/Up
@@ -159,7 +159,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btn11graeCallback()"
+          (click)="btnfxp8xcCallback()"
           i18n
         >
           Cancel
@@ -168,7 +168,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btng20ixgCallback()"
+          (click)="btnl8e03jCallback()"
           i18n
         >
           Add
@@ -247,22 +247,31 @@ export class UserModalComponent implements OnInit {
     }
 
     this.workspace.setWorkspaceList(list)
-
-    // * 唤起弹窗
-    this.isOpenSettingModalVisible = true
   }
   handleSyncModalCancel(): void {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnaolz3bCallback() {
+  async btncgthvsCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnpas6y5Callback() {
+  async btnp6uqsmCallback() {
     // * click event callback
+    const eData = await this.workspace.exportProjectData()
+    const [data, err]: any = await this.api.api_workspaceUpload(eData)
+    if (err) {
+      return
+    }
+
+    const { workspace } = data
+    const { id } = workspace
+
+    const list = this.workspace.getWorkspaceList()
+    this.workspace.setWorkspaceList([...list, workspace])
+    this.workspace.setCurrentWorkspaceID(id)
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
@@ -275,13 +284,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async er12074Callback() {
+  async e2vvr8pCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnnjoq5fCallback() {
+  async btnrr3q68Callback() {
     // * click event callback
 
     // * get Username form values
@@ -315,13 +324,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn11graeCallback() {
+  async btnfxp8xcCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btng20ixgCallback() {
+  async btnl8e03jCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 
