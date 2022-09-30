@@ -47,7 +47,7 @@ export default new Module({
       id: 'workspace',
       link: true,
       imports: [],
-      init: [workspaceS.getCurrent('currentWsp'), wpnameF.patch('workspace', 'currentWsp')],
+      init: [workspaceS.getCurrent('{ title: currentWsp }'), wpnameF.patch('workspace', 'currentWsp')],
       children: [
         modalS,
         workspaceS,

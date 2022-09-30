@@ -4,6 +4,7 @@ export class ManageAccess extends Render {
   constructor({ event }) {
     super({ children: [], event });
   }
+
   render() {
     return {
       type: 'element',
@@ -17,9 +18,12 @@ export class ManageAccess extends Render {
           from: 'eo/workbench/browser/src/app/shared/shared.module',
         },
       ],
-      template: `<eo-manage-access ${this.eventCb.join(' ')}></eo-manage-access>`,
-      data: [],
+      template: `<eo-manage-access [data]="memberList" ${this.eventCb.join(' ')}></eo-manage-access>`,
+      data: [{ name: `memberList`, init: '[]' }],
       methods: [...this.methods],
     };
+  }
+  static setList(list) {
+    return `this.memberList = ${list}`;
   }
 }

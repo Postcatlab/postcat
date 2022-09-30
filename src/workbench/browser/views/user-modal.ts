@@ -14,7 +14,7 @@ import {
 } from '../elements';
 
 const userS = new UserS();
-const http = new HTTPS();
+const httpS = new HTTPS();
 const message = new MessageS();
 const workspaceS = new WorkspaceS();
 
@@ -91,7 +91,7 @@ const addWorkspace = new Modal({
         Modal.close('add-workspace'),
         newWorkspaceName.reset(),
         // * update workspace list
-        http.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
+        httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
         workspaceS.setWorkspaceList('list'),
       ],
       disabled: [],
@@ -122,10 +122,12 @@ const login = new Modal({
             click: [
               // * login
               userPassForm.getData('formData'),
-              http.send('api_authLogin', 'formData'),
+              httpS.send('api_authLogin', 'formData', {
+                errTip: 'Authentication was not successful !',
+              }),
               userS.setLoginInfo('data'),
               Modal.close('login'),
-              http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
+              httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
               userS.setUserProfile('pData'),
               retry.wakeUp(),
             ],
@@ -191,9 +193,15 @@ const event = new EventS({
   ],
 });
 
+const updateMember = [
+  workspaceS.getCurrent('workspaceID'),
+  httpS.send('api_workspaceMember', '{ workspaceID }', { err: 'wErr', data: 'wData' }), // * 获取空间成员列表
+  workspaceS.setWorkspaceList('wData'),
+];
+
 export default new Component({
   id: 'user-modal',
   imports: [],
-  init: [],
-  children: [http, userS, message, event, retry, checkConnect, login, openSetting, workspaceS, addWorkspace],
+  init: [...updateMember],
+  children: [httpS, userS, message, event, retry, checkConnect, login, openSetting, workspaceS, addWorkspace],
 });

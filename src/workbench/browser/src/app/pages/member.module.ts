@@ -6,6 +6,7 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { FormsModule } from '@angular/forms'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { ManageAccessComponent } from 'eo/workbench/browser/src/app/shared/components/manage-access/manage-access.component'
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
@@ -25,6 +26,6 @@ import { MemberComponent } from './member.component'
   ],
   declarations: [MemberComponent, ManageAccessComponent],
   exports: [],
-  providers: [NzModalService, RemoteService, WorkspaceService]
+  providers: [NzModalService, RemoteService, EoMessageService, WorkspaceService]
 })
 export class MemberModule {}

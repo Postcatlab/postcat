@@ -11,11 +11,38 @@ import {
   EventS,
   HTTPS,
   WorkspaceS,
+  MessageS,
+  ModalS,
 } from '../elements';
 
 const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
 const httpS = new HTTPS();
+const modalS = new ModalS();
 const workspaceS = new WorkspaceS();
+const messageS = new MessageS();
+
+const updateMember = [
+  workspaceS.getCurrent('{ id: currentWorkspaceID }'),
+  // * 获取空间成员列表
+  httpS.send('api_workspaceMember', '{ workspaceID: currentWorkspaceID }', { err: 'wErr', data: 'wData' }),
+  workspaceS.setWorkspaceList('wData'),
+  ManageAccess.setList('wData'),
+];
+
+const manageAccess = new ManageAccess({
+  event: {
+    eoOnRemove: {
+      params: ['$event'],
+      callback: [
+        modalS.danger({ title: 'Warning', content: 'Are you sure you want to remove the menmber ?' }),
+        // * 删除成员，并更新成员列表
+        workspaceS.getCurrent('workspaceID'),
+        httpS.send('api_workspaceRemoveMember', '{ workspaceID, userIDs: [] }'),
+        ...updateMember,
+      ],
+    },
+  },
+});
 
 const invate = new Modal({
   id: 'invate',
@@ -37,9 +64,12 @@ const invate = new Modal({
       event: {
         click: [
           personInput.getValue('data'),
-          (data) => {
-            console.log(data);
-          },
+          workspaceS.getCurrent('{ id:workspaceID }'),
+          // * 添加成员
+          httpS.send('api_workspaceAddMember', '{ workspaceID, userIDs:[data] }', { data: 'aData', err: 'aErr' }),
+          messageS.success('Add new member success'),
+          Modal.close('invate'),
+          ...updateMember,
         ],
       },
     }),
@@ -48,18 +78,6 @@ const invate = new Modal({
     close: [personInput.reset()],
   },
   footer: [],
-});
-
-const manageAccess = new ManageAccess({
-  event: {
-    remove: {
-      params: ['$event'],
-      callback: [
-        workspaceS.getCurrent('currentWsp'),
-        httpS.send('api_workspaceRemoveMember', '{ workspaceID: currentWsp }'),
-      ],
-    },
-  },
 });
 
 const addPeople = new Button({
@@ -86,17 +104,12 @@ export default new Module({
           from: 'eo/workbench/browser/src/app/shared/components/manage-access/manage-access.component',
         },
       ],
-      init: [
-        workspaceS.getCurrent('currentWsp'),
-        httpS.send('api_workspaceMember', '{ workspaceID: currentWsp }'), // * 获取空间成员列表
-        (data) => {
-          console.log(data);
-        },
-      ],
+      init: [...updateMember],
       children: [
         invate,
         httpS,
         workspaceS,
+        modalS,
         new Canvas({
           class: ['py-5', 'px-10'],
           children: [

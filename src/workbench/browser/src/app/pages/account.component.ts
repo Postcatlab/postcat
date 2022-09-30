@@ -36,7 +36,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btn6tsxlcCallback()"
+        (click)="btn9monu3Callback()"
         i18n
       >
         Save
@@ -99,7 +99,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btn6po23nCallback()"
+      (click)="btn68zx1jCallback()"
       i18n
     >
       Reset
@@ -136,7 +136,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btn6tsxlcCallback() {
+  async btn9monu3Callback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
@@ -154,7 +154,7 @@ export class AccountComponent implements OnInit {
     this.user.setUserProfile(pData)
     this.eMessage.success(`username update success !`)
   }
-  async btn6po23nCallback() {
+  async btn68zx1jCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value

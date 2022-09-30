@@ -40,7 +40,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnjrntp8Callback()"
+      (click)="btngfbi7fCallback()"
       i18n
     >
       Save
@@ -60,7 +60,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btnlncw3hCallback()"
+      (click)="btntdldp7Callback()"
       i18n
     >
       Delete
@@ -84,14 +84,14 @@ export class WorkspaceComponent implements OnInit {
       workspace: [null, [Validators.required]]
     })
 
-    const currentWsp = this.workspace.currentWorkspace
+    const { title: currentWsp } = this.workspace.currentWorkspace
 
     // * get WspName form values
     this.validateWspNameForm.patchValue({
       workspace: currentWsp
     })
   }
-  async btnjrntp8Callback() {
+  async btngfbi7fCallback() {
     // * click event callback
     const currentWsp = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -105,7 +105,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.eMessage.success(`Edit workspace name success !`)
   }
-  async btnlncw3hCallback() {
+  async btntdldp7Callback() {
     // * click event callback
 
     const confirm = () =>

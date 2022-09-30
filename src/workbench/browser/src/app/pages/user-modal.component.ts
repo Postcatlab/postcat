@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
-import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import {
@@ -34,7 +34,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn5c9yncCallback()"
+          (click)="btn7twtmmCallback()"
           i18n
         >
           Cancel
@@ -59,7 +59,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e5c9hs6Callback()"
+      (nzAfterClose)="endl711Callback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -102,7 +102,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class=""
             nzType="primary"
             nzBlock
-            (click)="btnnkh56nCallback()"
+            (click)="btnnkjt5mCallback()"
             i18n
           >
             Sign In/Up
@@ -145,7 +145,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnykp6bdCallback()"
+          (click)="btna18m06Callback()"
           i18n
         >
           Cancel
@@ -154,7 +154,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnk2pz1bCallback()"
+          (click)="btnuv74ibCallback()"
           i18n
         >
           Create
@@ -172,8 +172,8 @@ export class UserModalComponent implements OnInit {
   inputWorkspaceNameValue
   constructor(
     public api: RemoteService,
-    public user: UserService,
     public eMessage: EoMessageService,
+    public user: UserService,
     public message: MessageService,
     public modal: NzModalService,
     public fb: UntypedFormBuilder,
@@ -219,12 +219,22 @@ export class UserModalComponent implements OnInit {
       username: [null, [Validators.required]],
       password: [null, [Validators.required]]
     })
+
+    const workspaceID = this.workspace.currentWorkspace
+    const [wData, wErr]: any = await this.api.api_workspaceMember({
+      workspaceID
+    })
+    if (wErr) {
+      return
+    }
+
+    this.workspace.setWorkspaceList(wData)
   }
   handleRetryModalCancel(): void {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btn5c9yncCallback() {
+  async btn7twtmmCallback() {
     // * click event callback
   }
   handleCheckConnectModalCancel(): void {
@@ -235,19 +245,20 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e5c9hs6Callback() {
+  async endl711Callback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnnkh56nCallback() {
+  async btnnkjt5mCallback() {
     // * click event callback
 
     // * get Username form values
     const formData = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_authLogin(formData)
     if (err) {
+      this.eMessage.error('Authentication was not successful !')
       return
     }
 
@@ -274,13 +285,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnykp6bdCallback() {
+  async btna18m06Callback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnk2pz1bCallback() {
+  async btnuv74ibCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 
