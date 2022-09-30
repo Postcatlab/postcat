@@ -6,6 +6,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remo
 import { SettingComponent } from '../../shared/components/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -38,7 +39,8 @@ export class NavbarComponent implements OnInit {
     private modal: NzModalService,
     private remoteService: RemoteService,
     private message: MessageService,
-    public workspaceService: WorkspaceService
+    public workspaceService: WorkspaceService,
+    public userService: UserService
   ) {
     this.issueEnvironment = this.getEnviroment();
   }
