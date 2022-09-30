@@ -62,7 +62,7 @@ export default new Module({
         new Canvas({
           class: ['py-5', 'px-10'],
           children: [
-            new Title({ label: 'Workspace Operate' }),
+            new Title({ label: 'Manage Workspace' }),
             new Canvas({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
             new Title({ label: 'Edit Workspace' }),
@@ -97,7 +97,7 @@ export default new Module({
                     title: 'Deletion Confirmation?',
                     content: `Are you sure you want to delete the workspace ? \nYou cannot restore it once deleted!`,
                   }),
-                  workspaceS.getCurrent('currentWsp'),
+                  workspaceS.getCurrent('{ id: currentWsp }'),
                   httpS.send('api_workspaceDelete', '{ workspaceID:currentWsp }'),
                   messageS.success('Delete success !'),
                 ],

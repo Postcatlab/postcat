@@ -39,7 +39,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btnu0jtwgCallback()"
+        (click)="btnwn5pp3Callback()"
         i18n
       >
         Save
@@ -56,7 +56,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your current password !">
-            <nz-form-label [nzSpan]="12" i18n>Current password</nz-form-label>
+            <nz-form-label [nzSpan]="24" i18n>Current password</nz-form-label>
             <input
               type="password"
               nz-input
@@ -70,7 +70,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your new password !">
-            <nz-form-label [nzSpan]="12" i18n>New password</nz-form-label>
+            <nz-form-label [nzSpan]="24" i18n>New password</nz-form-label>
             <input
               type="password"
               nz-input
@@ -86,7 +86,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
           <nz-form-control
             nzErrorTip="Please input your confirm new password !"
           >
-            <nz-form-label [nzSpan]="12" i18n
+            <nz-form-label [nzSpan]="24" i18n
               >Confirm new password</nz-form-label
             >
             <input
@@ -105,7 +105,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btnp3ds72Callback()"
+      (click)="btnc1nu9rCallback()"
       i18n
     >
       Reset
@@ -142,7 +142,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnu0jtwgCallback() {
+  async btnwn5pp3Callback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
@@ -162,7 +162,7 @@ export class AccountComponent implements OnInit {
     this.user.setUserProfile(pData)
     this.eMessage.success(`username update success !`)
   }
-  async btnp3ds72Callback() {
+  async btnc1nu9rCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value

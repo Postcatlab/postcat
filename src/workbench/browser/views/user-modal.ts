@@ -46,7 +46,7 @@ const userPassForm = new Form({
       key: 'username',
       type: 'input',
       class: '',
-      placeholder: 'Enter username',
+      placeholder: 'Enter Enter Email/Phone/Username',
       rules: ['required'],
     },
     {
@@ -67,7 +67,7 @@ const newWorkspaceName = new Input({
 
 const addWorkspace = new Modal({
   id: 'add-workspace',
-  title: { text: 'Create Workspace' },
+  title: { text: 'Add Workspace' },
   children: [newWorkspaceName],
   footer: [
     {
@@ -77,7 +77,7 @@ const addWorkspace = new Modal({
       disabled: [],
     },
     {
-      label: 'Create',
+      label: 'Add',
       type: 'primary',
       click: [
         newWorkspaceName.getValue('title'),
@@ -108,7 +108,7 @@ const login = new Modal({
   },
   children: [
     new Canvas({
-      class: ['my-8'],
+      class: ['my-3'],
       children: [
         userPassForm,
         new Canvas({
@@ -118,6 +118,7 @@ const login = new Modal({
           id: 'login-btn',
           label: { text: 'Sign In/Up' },
           theme: ['block'],
+          class: ['h-10'],
           event: {
             click: [
               // * login

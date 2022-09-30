@@ -11,7 +11,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="exno0knCallback()"
+      (nzAfterClose)="evwemzjCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -28,8 +28,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           class=""
           nzType="primary"
           nzBlock
-          (click)="btn3kurrlCallback()"
-          [disabled]="btnau8z1oStatus()"
+          (click)="btnlwlv2jCallback()"
+          [disabled]="btni6ke5gStatus()"
           i18n
         >
           Select a member above
@@ -43,7 +43,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnsqykhtCallback()"
+          (click)="btnkjamleCallback()"
           i18n
         >
           Add people
@@ -52,7 +52,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="eyupteeCallback($event)"
+          (eoOnRemove)="ebcjlwdCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -87,11 +87,11 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async exno0knCallback() {
+  async evwemzjCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btn3kurrlCallback() {
+  async btnlwlv2jCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -99,6 +99,10 @@ export class MemberComponent implements OnInit {
       return
     }
 
+    if (uData.length === 0) {
+      this.eMessage.error(`Could not find a user matching ${username}`)
+      return
+    }
     const [user] = uData
     const { id } = user
 
@@ -127,17 +131,17 @@ export class MemberComponent implements OnInit {
     this.workspace.setWorkspaceList(wData)
     this.memberList = wData
   }
-  btnau8z1oStatus() {
+  btni6ke5gStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnsqykhtCallback() {
+  async btnkjamleCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async eyupteeCallback($event) {
+  async ebcjlwdCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
