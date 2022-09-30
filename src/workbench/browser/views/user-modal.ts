@@ -1,4 +1,5 @@
 import { Alert } from 'eo/workbench/browser/elements/alert';
+import workspace from 'eo/workbench/browser/views/workspace';
 import {
   Modal,
   Form,
@@ -39,7 +40,18 @@ const sync = new Modal({
     {
       label: 'Sync',
       type: 'primary',
-      click: [Modal.close('sync')],
+      click: [
+        workspaceS.exportProjectData('eData'),
+        httpS.send('api_workspaceUpload', 'eData'),
+        (data) => {
+          const { workspace } = data;
+          const { id } = workspace;
+        },
+        workspaceS.getWorkspaceList('list'),
+        workspaceS.setWorkspaceList('[...list, workspace]'),
+        workspaceS.setCurrentWorkspaceID('id'),
+        Modal.close('sync'),
+      ],
     },
   ],
 });

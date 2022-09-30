@@ -38,11 +38,19 @@ export class WorkspaceService {
     ];
   }
 
+  setCurrentWorkspaceID(id: number) {
+    this.currentWorkspaceID = id;
+  }
+
   setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
     console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
     this.messageService.send({ type: 'workspaceChange', data: true });
+  }
+
+  getWorkspaceList() {
+    return this.workspaceList;
   }
 
   getGroups(projectID = 1): Promise<any[]> {
