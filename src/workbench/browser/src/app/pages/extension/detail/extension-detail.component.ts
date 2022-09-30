@@ -40,7 +40,7 @@ export class ExtensionDetailComponent implements OnInit {
     if (this.electron.isElectron) {
       this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
     } else {
-      this.webService.jumpToClient();
+      this.webService.jumpToClient($localize`Eoapi Client is required to install this extension.`);
     }
   }
 

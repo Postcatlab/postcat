@@ -93,9 +93,9 @@ export class WebService {
     });
   }
 
-  showDownloadClientModal() {
+  showDownloadClientModal(modalTitle: string) {
     const modal = this.modalService.create({
-      nzTitle: $localize`Eoapi Client is required to install this extension.`,
+      nzTitle: modalTitle,
       nzContent: DownloadClienteComponent,
       nzOnOk() {
         modal.destroy();
@@ -104,12 +104,12 @@ export class WebService {
     return modal;
   }
 
-  jumpToClient() {
+  jumpToClient(modalTitle: string) {
     return new Promise(async (resolve, reject) => {
       const isInstalled = await this.protocolCheck();
       if (!isInstalled) {
         // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
-        this.showDownloadClientModal();
+        this.showDownloadClientModal(modalTitle);
         resolve(false);
       } else {
         window.location.href = PROTOCOL;

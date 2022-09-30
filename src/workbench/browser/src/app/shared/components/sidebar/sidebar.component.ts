@@ -66,9 +66,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
     console.log('route', route, module);
-    if (['@eo-core-workspace', '@eo-core-member'].includes(module.moduleID)) {
-      if (this.webService.isWeb) {
-        return await this.webService.jumpToClient();
+    if (this.webService.isWeb) {
+      if (module.moduleID === '@eo-core-workspace') {
+        return await this.webService.jumpToClient($localize`Eoapi Client is required to add workspace`);
+      }
+
+      if (module.moduleID === '@eo-core-member') {
+        return await this.webService.jumpToClient($localize`Eoapi Client is required to manage team`);
       }
     }
     this.router.navigate([route]);
