@@ -11,7 +11,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="ewfdyw6Callback()"
+      (nzAfterClose)="erx6au5Callback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -28,8 +28,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           class=""
           nzType="primary"
           nzBlock
-          (click)="btntvu1wdCallback()"
-          [disabled]="btnoycfphStatus()"
+          (click)="btnavxrovCallback()"
+          [disabled]="btnyr66neStatus()"
           i18n
         >
           Select a member above
@@ -43,7 +43,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnihc0w9Callback()"
+          (click)="btnv1l0qhCallback()"
           i18n
         >
           Add people
@@ -52,7 +52,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="epolveqCallback($event)"
+          (eoOnRemove)="eygi20hCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -87,11 +87,11 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async ewfdyw6Callback() {
+  async erx6au5Callback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btntvu1wdCallback() {
+  async btnavxrovCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -100,7 +100,7 @@ export class MemberComponent implements OnInit {
     }
 
     if (uData.length === 0) {
-      this.eMessage.error(`Could not find a user matching ${username}`)
+      this.eMessage.error($localize`Could not find a user matching ${username}`)
       return
     }
     const [user] = uData
@@ -115,7 +115,7 @@ export class MemberComponent implements OnInit {
       return
     }
 
-    this.eMessage.success(`Add new member success`)
+    this.eMessage.success($localize`Add new member success`)
 
     // * 关闭弹窗
     this.isInvateModalVisible = false
@@ -131,26 +131,26 @@ export class MemberComponent implements OnInit {
     this.workspace.setWorkspaceList(wData)
     this.memberList = wData
   }
-  btnoycfphStatus() {
+  btnyr66neStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnihc0w9Callback() {
+  async btnv1l0qhCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async epolveqCallback($event) {
+  async eygi20hCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
       new Promise((resolve) => {
         this.modal.confirm({
-          nzTitle: `Warning`,
-          nzContent: `Are you sure you want to remove the menmber ?`,
+          nzTitle: $localize`Warning`,
+          nzContent: $localize`Are you sure you want to remove the menmber ?`,
           nzOkDanger: true,
-          nzOkText: 'Delete',
+          nzOkText: $localize`Delete`,
           nzOnOk: () => resolve(true),
           nzOnCancel: () => resolve(false)
         })

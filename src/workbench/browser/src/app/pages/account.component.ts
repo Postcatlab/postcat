@@ -39,7 +39,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btnm2u0hbCallback()"
+        (click)="btnl893jyCallback()"
         i18n
       >
         Save
@@ -105,7 +105,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btnhddn2oCallback()"
+      (click)="btnloj52qCallback()"
       i18n
     >
       Reset
@@ -142,7 +142,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnm2u0hbCallback() {
+  async btnl893jyCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
@@ -150,7 +150,7 @@ export class AccountComponent implements OnInit {
       avatar: '111'
     })
     if (err) {
-      this.eMessage.error('Sorry, username is be used')
+      this.eMessage.error($localize`Sorry, username is be used`)
       return
     }
 
@@ -160,9 +160,9 @@ export class AccountComponent implements OnInit {
     }
 
     this.user.setUserProfile(pData)
-    this.eMessage.success(`username update success !`)
+    this.eMessage.success($localize`username update success !`)
   }
-  async btnhddn2oCallback() {
+  async btnloj52qCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
@@ -173,7 +173,7 @@ export class AccountComponent implements OnInit {
     if (err) {
       return
     }
-    this.eMessage.success(`Password reset success !`)
+    this.eMessage.success($localize`Password reset success !`)
 
     // * Clear Password form
     this.validatePasswordForm.reset()

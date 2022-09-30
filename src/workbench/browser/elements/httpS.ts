@@ -6,7 +6,7 @@ export class HTTPS extends Render {
     super({ children: [] });
   }
   errTip(tip) {
-    return tip ? `this.eMessage.error('${tip}')` : '';
+    return tip ? `this.eMessage.error($localize\`${tip}\`)` : '';
   }
   send(name, params = '', { err = 'err', data = 'data', errTip = '' } = {}) {
     return `const [${data}, ${err}]:any = await this.api.${name}(${params})

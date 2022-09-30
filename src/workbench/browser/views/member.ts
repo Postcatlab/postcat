@@ -71,7 +71,7 @@ const invate = new Modal({
           httpS.send('api_userSearch', '{ username }', { err: 'uErr', data: 'uData' }),
           `
             if (uData.length === 0) {
-              this.eMessage.error(\`Could not find a user matching \${username}\`)
+              this.eMessage.error($localize\`Could not find a user matching \${username}\`)
               return;
             }
             const [user] = uData;
