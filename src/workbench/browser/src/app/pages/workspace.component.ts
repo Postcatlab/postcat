@@ -14,12 +14,12 @@ import {
   selector: 'eo-workspace',
   template: ` <section class="py-5 px-10">
     <h2 class="text-lg flex justify-between items-center">
-      <span i18n>Workspace Operate</span>
+      <span i18n>Manage Workspace</span>
     </h2>
     <section class="py-2"><eo-api-overview></eo-api-overview></section>
     <nz-divider></nz-divider>
     <h2 class="text-lg flex justify-between items-center">
-      <span i18n>Edit Workspace</span>
+      <span class="font-bold" i18n>Edit Workspace</span>
     </h2>
     <form nz-form [formGroup]="validateWspNameForm" nzLayout="vertical">
       <nz-form-item>
@@ -40,14 +40,14 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnhgi882Callback()"
+      (click)="btnvnf52tCallback()"
       i18n
     >
       Save
     </button>
     <nz-divider></nz-divider>
     <h2 class="text-lg flex justify-between items-center">
-      <span i18n>Delete Workspace</span>
+      <span class="font-bold" i18n>Delete Workspace</span>
     </h2>
     <div class="pb-4">
       <span i18n
@@ -60,7 +60,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btnna2g5bCallback()"
+      (click)="btnxz6lmvCallback()"
       i18n
     >
       Delete
@@ -91,7 +91,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnhgi882Callback() {
+  async btnvnf52tCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -113,7 +113,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btnna2g5bCallback() {
+  async btnxz6lmvCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -133,7 +133,7 @@ You cannot restore it once deleted!`,
       return
     }
 
-    const currentWsp = this.workspace.currentWorkspace
+    const { id: currentWsp } = this.workspace.currentWorkspace
     const [data, err]: any = await this.api.api_workspaceDelete({
       workspaceID: currentWsp
     })

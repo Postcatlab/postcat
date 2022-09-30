@@ -24,15 +24,20 @@ const retry = new Modal({
   children: [
     new Text({
       label: {
-        text: 'After confirmation, a cloud space will be created and the local data will be uploaded',
+        text: 'After confirmation, the system will create a cloud space to upload the local data to the cloud.',
       },
     }),
   ],
   footer: [
     {
       label: 'Cancel',
-      click: [],
-      theme: [''],
+      type: 'default',
+      click: [Modal.close('retry')],
+    },
+    {
+      label: 'Upload',
+      type: 'primary',
+      click: [Modal.close('retry')],
     },
   ],
 });

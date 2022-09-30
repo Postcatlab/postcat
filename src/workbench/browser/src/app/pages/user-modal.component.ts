@@ -24,8 +24,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <ng-container *nzModalContent>
         <div class="pb-4">
           <span i18n
-            >After confirmation, a cloud space will be created and the local
-            data will be uploaded</span
+            >After confirmation, the system will create a cloud space to upload
+            the local data to the cloud.</span
           >
         </div>
       </ng-container>
@@ -33,11 +33,20 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         <button
           nz-button
           class=""
-          nzType="primary"
-          (click)="btnpwdbloCallback()"
+          nzType="default"
+          (click)="btnjs3tzqCallback()"
           i18n
         >
           Cancel
+        </button>
+        <button
+          nz-button
+          class=""
+          nzType="primary"
+          (click)="btnhnbbisCallback()"
+          i18n
+        >
+          Upload
         </button>
       </ng-template>
     </nz-modal>
@@ -59,7 +68,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e018mobCallback()"
+      (nzAfterClose)="e3y5lj8Callback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -102,7 +111,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btnqhrzrbCallback()"
+            (click)="btnt66qekCallback()"
             i18n
           >
             Sign In/Up
@@ -145,7 +154,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btn6ekiq9Callback()"
+          (click)="btny5ih6tCallback()"
           i18n
         >
           Cancel
@@ -154,7 +163,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn99mq8hCallback()"
+          (click)="btn86rbalCallback()"
           i18n
         >
           Add
@@ -232,8 +241,17 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btnpwdbloCallback() {
+  async btnjs3tzqCallback() {
     // * click event callback
+
+    // * 关闭弹窗
+    this.isRetryModalVisible = false
+  }
+  async btnhnbbisCallback() {
+    // * click event callback
+
+    // * 关闭弹窗
+    this.isRetryModalVisible = false
   }
   handleCheckConnectModalCancel(): void {
     // * 关闭弹窗
@@ -243,13 +261,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e018mobCallback() {
+  async e3y5lj8Callback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnqhrzrbCallback() {
+  async btnt66qekCallback() {
     // * click event callback
 
     // * get Username form values
@@ -283,13 +301,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn6ekiq9Callback() {
+  async btny5ih6tCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn99mq8hCallback() {
+  async btn86rbalCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 
