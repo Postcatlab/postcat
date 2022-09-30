@@ -65,7 +65,7 @@ export default new Module({
             new Title({ label: 'Manage Workspace' }),
             new Canvas({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
-            new Title({ label: 'Edit Workspace' }),
+            new Title({ label: 'Edit Workspace', class: ['font-bold'] }),
             wpnameF,
             new Button({
               id: 'save-btn',
@@ -83,7 +83,7 @@ export default new Module({
               },
             }),
             new Line(),
-            new Title({ label: 'Delete Workspace' }),
+            new Title({ label: 'Delete Workspace', class: ['font-bold'] }),
             new Text({
               label: [{ text: 'After deleting a workspace, all data in the workspace will be permanently deleted.' }],
             }),
