@@ -1,11 +1,14 @@
 <div class="eo_sidebar" [ngClass]="{ eo_sidebar_shrink: isCollapsed }">
-  <a (click)="clickModule(item)" *ngFor="let item of this.modules" class="sidebar_item" nz-tooltip
-    nzTooltipPlacement="right" [nzTooltipTitle]="item.moduleName"
-    [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }">
-    <i class="icon">
-      <eo-iconpark-icon [name]="item.icon" size="24px">
-      </eo-iconpark-icon>
-    </i>
-    <span class="mt-1 label" *ngIf="!sidebar.collapsed">{{ item.moduleName }}</span>
-  </a>
+  <ng-container *ngFor="let item of this.modules">
+    <nz-divider *ngIf="item.moduleID === '@eo-core-extension'" style="transform: scale(0.8); margin: 0;"></nz-divider>
+    <a (click)="clickModule(item)" class="sidebar_item" nz-tooltip nzTooltipPlacement="right"
+      [nzTooltipTitle]="item.moduleName"
+      [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }">
+      <i class="icon">
+        <eo-iconpark-icon [name]="item.icon" size="24px">
+        </eo-iconpark-icon>
+      </i>
+      <span class="mt-1 label" *ngIf="!sidebar.collapsed">{{ item.moduleName }}</span>
+    </a>
+  </ng-container>
 </div>

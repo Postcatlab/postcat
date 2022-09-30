@@ -22,11 +22,11 @@ export class WorkspaceService {
   }
   workspaceList: API.Workspace[] = [this.localWorkspace];
 
-  constructor(
-    private messageService: MessageService,
-    private apiService: ApiService,
-    private storage: StorageService
-  ) {}
+  constructor(private messageService: MessageService, private apiService: ApiService, private storage: StorageService) {
+    setTimeout(async () => {
+      console.log('exportProjectData', await this.exportProjectData());
+    }, 2000);
+  }
 
   setWorkspaceList(data: API.Workspace[]) {
     this.workspaceList = [
