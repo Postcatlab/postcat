@@ -34,7 +34,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btn26t6f1Callback()"
+          (click)="btngfp9ngCallback()"
           i18n
         >
           Cancel
@@ -43,7 +43,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btns4q0qdCallback()"
+          (click)="btn14lt9qCallback()"
           i18n
         >
           Upload
@@ -68,7 +68,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="eemn0zlCallback()"
+      (nzAfterClose)="e6xko2sCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -111,7 +111,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btn3h63pdCallback()"
+            (click)="btncwhpucCallback()"
             i18n
           >
             Sign In/Up
@@ -154,7 +154,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btn8710cfCallback()"
+          (click)="btnbrjeogCallback()"
           i18n
         >
           Cancel
@@ -163,7 +163,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnedzngdCallback()"
+          (click)="btnj89c2sCallback()"
           i18n
         >
           Add
@@ -241,13 +241,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btn26t6f1Callback() {
+  async btngfp9ngCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btns4q0qdCallback() {
+  async btn14lt9qCallback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -261,13 +261,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async eemn0zlCallback() {
+  async e6xko2sCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btn3h63pdCallback() {
+  async btncwhpucCallback() {
     // * click event callback
 
     // * get Username form values
@@ -301,13 +301,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn8710cfCallback() {
+  async btnbrjeogCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnedzngdCallback() {
+  async btnj89c2sCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 

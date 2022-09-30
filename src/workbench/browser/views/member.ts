@@ -34,7 +34,7 @@ const manageAccess = new ManageAccess({
     eoOnRemove: {
       params: ['$event'],
       callback: [
-        modalS.danger({ title: 'Warning', content: 'Are you sure you want to remove the menmber ?' }),
+        modalS.danger({ title: 'Warning', content: 'Are you sure you want to remove the member ?' }),
         // * 删除成员，并更新成员列表
         workspaceS.getCurrent('{ id: workspaceID }'),
         ($event) => {
