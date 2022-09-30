@@ -8,10 +8,11 @@ type initType = {
 
 export class Text extends Render {
   label;
-  constructor({ label, event }: initType) {
+  constructor({ label, event = {} }: initType) {
     super({ children: [], event, elementType: 'text' });
     this.label = this.parserLabel(label);
   }
+
   parserLabel(data) {
     if (_.isArray(data)) {
       return data;
@@ -25,8 +26,9 @@ export class Text extends Render {
   }
   rendertemplate(list) {
     return list
-      .map(({ text, type }) => {
-        if (type?.link) {
+      .map(({ text }) => {
+        if (this.eventCb.length > 0) {
+          // TODO
           return `<span style="color: #1890ff" ${this.eventCb.join(' ')} i18n> ${text} </span>`;
         }
         return `<span i18n> ${text} </span>`;
@@ -38,7 +40,7 @@ export class Text extends Render {
     return {
       type: 'element',
       imports: [],
-      template: `<div class="pb-4">${template}</div>`,
+      template: `${template}`,
       data: [],
       methods: [...this.methods],
     };

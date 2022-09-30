@@ -22,6 +22,23 @@ export class ModalS extends Render {
     }
     `;
   }
+  confirm({ title, content, okText = 'Yes' }) {
+    return `
+    const confirm = () => new Promise((resolve) => {
+      this.modal.confirm({
+        nzTitle: $localize\`${title}\`,
+        nzContent: $localize\`${content}\`,
+        nzOkText: $localize\`${okText}\`,
+        nzOnOk: () => resolve(true),
+        nzOnCancel: () => resolve(false)
+      });
+    })
+    const isOk = await confirm()
+    if (!isOk) {
+      return 
+    }
+    `;
+  }
   render() {
     return {
       type: 'element',

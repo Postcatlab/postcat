@@ -84,8 +84,15 @@ export default new Module({
             }),
             new Line(),
             new Title({ label: 'Delete Workspace', class: ['font-bold'] }),
-            new Text({
-              label: [{ text: 'After deleting a workspace, all data in the workspace will be permanently deleted.' }],
+            new Canvas({
+              class: ['pb-4'],
+              children: [
+                new Text({
+                  label: [
+                    { text: 'After deleting a workspace, all data in the workspace will be permanently deleted.' },
+                  ],
+                }),
+              ],
             }),
             new Button({
               id: 'del-wsp',

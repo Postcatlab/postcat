@@ -11,6 +11,9 @@ export class DataSourceS extends Render {
   hasUrl(status) {
     return `const ${status} = this.dataSource.mockUrl`;
   }
+  ping() {
+    return `const [isOk] = await this.dataSource.pingRmoteServerUrl();`;
+  }
   render() {
     return {
       type: 'element',

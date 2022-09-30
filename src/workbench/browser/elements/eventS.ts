@@ -21,8 +21,8 @@ export class EventS extends Render {
       });
       `;
   }
-  send(name) {
-    return `this.message.send({type: ${name}})`;
+  send(name, data = '{}') {
+    return `this.message.send({type: '${name}', data: ${data}})`;
   }
   render() {
     return {

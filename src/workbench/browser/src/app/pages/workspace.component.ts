@@ -40,7 +40,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnkp9heiCallback()"
+      (click)="btnz5oga4Callback()"
       i18n
     >
       Save
@@ -49,18 +49,18 @@ import {
     <h2 class="text-lg flex justify-between items-center">
       <span class="font-bold" i18n>Delete Workspace</span>
     </h2>
-    <div class="pb-4">
+    <section class="pb-4">
       <span i18n>
         After deleting a workspace, all data in the workspace will be
         permanently deleted.
       </span>
-    </div>
+    </section>
     <button
       nz-button
       class=""
       nzType="primary"
       nzDanger
-      (click)="btn0wbmqoCallback()"
+      (click)="btn16yewqCallback()"
       i18n
     >
       Delete
@@ -91,7 +91,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnkp9heiCallback() {
+  async btnz5oga4Callback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -113,7 +113,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btn0wbmqoCallback() {
+  async btn16yewqCallback() {
     // * click event callback
 
     const confirm = () =>

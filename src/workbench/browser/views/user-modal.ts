@@ -12,11 +12,13 @@ import {
   WorkspaceS,
   HTTPS,
   Alert,
+  ModalS,
   DataSourceS,
 } from '../elements';
 
 const userS = new UserS();
 const httpS = new HTTPS();
+const modalS = new ModalS();
 const message = new MessageS();
 const workspaceS = new WorkspaceS();
 const dataSourceS = new DataSourceS();
@@ -164,28 +166,6 @@ const login = new Modal({
   },
 });
 
-const openSetting = new Modal({
-  id: 'open-setting',
-  title: {
-    text: 'Open setting',
-  },
-  children: [
-    new Text({
-      label: [
-        { text: 'If you want to collaborate, please' },
-        {
-          text: 'open the settings',
-          event: {
-            click: [],
-          },
-        },
-        { text: 'and fill in the configuration' },
-      ],
-    }),
-  ],
-  footer: [],
-});
-
 const checkConnect = new Modal({
   id: 'check-connect',
   title: { text: 'Check your connection' },
@@ -194,10 +174,29 @@ const checkConnect = new Modal({
       label: `Can 't connect right now, click to retry`,
     }),
   ],
-  footer: [],
+  footer: [
+    {
+      label: 'Cancel',
+      type: 'default',
+      click: [Modal.close('check-connect')],
+    },
+    {
+      label: 'Retry',
+      type: 'primary',
+      click: [
+        dataSourceS.ping(),
+        (isOk) => {
+          if (!isOk) {
+            return;
+          }
+        },
+        Modal.close('check-connect'),
+      ],
+    },
+  ],
 });
 
-const event = new EventS({
+const eventS = new EventS({
   id: 'event',
   listen: [
     {
@@ -208,16 +207,35 @@ const event = new EventS({
       name: 'logOut',
       callback: [
         userS.getKey('refreshToken'),
-        `const [data, err]:any = await this.api.api_authLogout({ refreshToken });
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
+        `
+        const [data, err]:any = await this.api.api_authLogout({ refreshToken });
         if (err) {
           return;
         }`,
-        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         message.success('Successfully logged out !'),
       ],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },
   ],
+});
+
+const openSetting = new Modal({
+  id: 'open-setting',
+  title: {
+    text: 'Open setting',
+  },
+  children: [
+    new Text({ label: [{ text: 'If you want to collaborate, please' }] }),
+    new Text({
+      label: [{ text: 'open the settings' }],
+      event: {
+        click: [eventS.send('open-setting'), Modal.close('open-setting')],
+      },
+    }),
+    new Text({ label: [{ text: 'and fill in the configuration' }] }),
+  ],
+  footer: [],
 });
 
 const updateWorkspace = [
@@ -252,7 +270,7 @@ export default new Component({
     dataSourceS,
     userS,
     message,
-    event,
+    eventS,
     sync,
     checkConnect,
     login,
