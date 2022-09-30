@@ -94,7 +94,7 @@ export class Form extends Render implements formType {
       list
         .map(({ isShowLabel = true, ...it }) => {
           const labelTmpl = isShowLabel
-            ? `<nz-form-label [nzSpan]="${it.span || 12}" i18n>${it.label}</nz-form-label>`
+            ? `<nz-form-label [nzSpan]="${it.span || 24}" i18n>${it.label}</nz-form-label>`
             : '';
           return `
         <nz-form-item>

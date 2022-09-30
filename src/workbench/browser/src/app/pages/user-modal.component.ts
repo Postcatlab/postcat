@@ -34,7 +34,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnc6xnbaCallback()"
+          (click)="btnpwdbloCallback()"
           i18n
         >
           Cancel
@@ -59,12 +59,12 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="ezy9ze7Callback()"
+      (nzAfterClose)="e018mobCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <section class="my-8">
+        <section class="my-3">
           <form
             nz-form
             [formGroup]="validateUsernameForm"
@@ -76,7 +76,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
                   type="text"
                   nz-input
                   formControlName="username"
-                  placeholder="Enter username"
+                  placeholder="Enter Enter Email/Phone/Username"
                   i18n-placeholder
                   nzRequired
                 />
@@ -99,10 +99,10 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           <section class="h-2"></section>
           <button
             nz-button
-            class=""
+            class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btncgtdy9Callback()"
+            (click)="btnqhrzrbCallback()"
             i18n
           >
             Sign In/Up
@@ -129,7 +129,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="modalAddWorkspaceFooter"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
-      nzTitle="Create Workspace"
+      nzTitle="Add Workspace"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
@@ -145,7 +145,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btn8u7adkCallback()"
+          (click)="btn6ekiq9Callback()"
           i18n
         >
           Cancel
@@ -154,10 +154,10 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnul2kpnCallback()"
+          (click)="btn99mq8hCallback()"
           i18n
         >
-          Create
+          Add
         </button>
       </ng-template>
     </nz-modal>`
@@ -232,7 +232,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btnc6xnbaCallback() {
+  async btnpwdbloCallback() {
     // * click event callback
   }
   handleCheckConnectModalCancel(): void {
@@ -243,13 +243,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async ezy9ze7Callback() {
+  async e018mobCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btncgtdy9Callback() {
+  async btnqhrzrbCallback() {
     // * click event callback
 
     // * get Username form values
@@ -283,13 +283,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn8u7adkCallback() {
+  async btn6ekiq9Callback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnul2kpnCallback() {
+  async btn99mq8hCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 

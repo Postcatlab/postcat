@@ -24,7 +24,7 @@ import {
     <form nz-form [formGroup]="validateWspNameForm" nzLayout="vertical">
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your name !">
-          <nz-form-label [nzSpan]="12" i18n>Name</nz-form-label>
+          <nz-form-label [nzSpan]="24" i18n>Name</nz-form-label>
           <input
             type="text"
             nz-input
@@ -40,7 +40,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnsrm5qkCallback()"
+      (click)="btnhgi882Callback()"
       i18n
     >
       Save
@@ -60,7 +60,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btnxa0zu3Callback()"
+      (click)="btnna2g5bCallback()"
       i18n
     >
       Delete
@@ -91,7 +91,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnsrm5qkCallback() {
+  async btnhgi882Callback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -113,7 +113,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btnxa0zu3Callback() {
+  async btnna2g5bCallback() {
     // * click event callback
 
     const confirm = () =>
