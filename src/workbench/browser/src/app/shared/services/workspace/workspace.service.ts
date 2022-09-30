@@ -9,7 +9,13 @@ export class WorkspaceService {
     title: $localize`Local workspace`,
     id: -1,
   } as API.Workspace;
-  currentWorkspace: API.Workspace = StorageUtil.get('currentWorkspace', this.localWorkspace);
+  currentWorkspaceID: number;
+  get currentWorkspace() {
+    const target = this.workspaceList.find((n) => n.id === this.currentWorkspaceID);
+    const result = target || StorageUtil.get('currentWorkspace', this.localWorkspace);
+    this.currentWorkspaceID = result.id;
+    return result;
+  }
   workspaceList: API.Workspace[] = [this.localWorkspace];
 
   constructor() {}
@@ -22,11 +28,10 @@ export class WorkspaceService {
       })),
       this.localWorkspace,
     ];
-    console.log(this.workspaceList);
   }
 
   setCurrentWorkspace(workspace: API.Workspace) {
-    this.currentWorkspace = workspace;
+    this.currentWorkspaceID = workspace.id;
     console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
   }
