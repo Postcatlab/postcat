@@ -16,8 +16,8 @@ export class DataSourceS extends Render {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'DataSouceService', type: 'service', inject: { name: 'dataSource' }, ignore: true }],
-          from: 'eo/app/shared/services/remote/remote.service',
+          target: [{ name: 'DataSourceService', type: 'service', inject: { name: 'dataSource' }, ignore: true }],
+          from: 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service',
         },
       ],
       template: ``,
