@@ -40,7 +40,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnvnf52tCallback()"
+      (click)="btnuv56weCallback()"
       i18n
     >
       Save
@@ -60,7 +60,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btnxz6lmvCallback()"
+      (click)="btnlh7qunCallback()"
       i18n
     >
       Delete
@@ -91,7 +91,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnvnf52tCallback() {
+  async btnuv56weCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -100,11 +100,11 @@ export class WorkspaceComponent implements OnInit {
       title
     })
     if (err) {
-      this.eMessage.error('You can not change the workspace name')
+      this.eMessage.error($localize`You can not change the workspace name`)
       return
     }
 
-    this.eMessage.success(`Edit workspace name success !`)
+    this.eMessage.success($localize`Edit workspace name success !`)
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
@@ -113,17 +113,17 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btnxz6lmvCallback() {
+  async btnlh7qunCallback() {
     // * click event callback
 
     const confirm = () =>
       new Promise((resolve) => {
         this.modal.confirm({
-          nzTitle: `Deletion Confirmation?`,
-          nzContent: `Are you sure you want to delete the workspace ? 
+          nzTitle: $localize`Deletion Confirmation?`,
+          nzContent: $localize`Are you sure you want to delete the workspace ? 
 You cannot restore it once deleted!`,
           nzOkDanger: true,
-          nzOkText: 'Delete',
+          nzOkText: $localize`Delete`,
           nzOnOk: () => resolve(true),
           nzOnCancel: () => resolve(false)
         })
@@ -141,6 +141,6 @@ You cannot restore it once deleted!`,
       return
     }
 
-    this.eMessage.success(`Delete success !`)
+    this.eMessage.success($localize`Delete success !`)
   }
 }

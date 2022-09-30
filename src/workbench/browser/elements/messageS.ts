@@ -5,10 +5,10 @@ export class MessageS extends Render {
     super({ children: [] });
   }
   success(text) {
-    return `this.eMessage.success(\`${text}\`)`;
+    return `this.eMessage.success($localize\`${text}\`)`;
   }
   error(text) {
-    return `this.eMessage.error(\`${text}\`)`;
+    return `this.eMessage.error($localize\`${text}\`)`;
   }
   render() {
     return {

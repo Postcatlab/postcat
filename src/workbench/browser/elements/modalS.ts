@@ -8,10 +8,10 @@ export class ModalS extends Render {
     return `
     const confirm = () => new Promise((resolve) => {
       this.modal.confirm({
-        nzTitle: \`${title}\`,
-        nzContent: \`${content}\`,
+        nzTitle: $localize\`${title}\`,
+        nzContent: $localize\`${content}\`,
         nzOkDanger: true,
-        nzOkText: '${okText}',
+        nzOkText: $localize\`${okText}\`,
         nzOnOk: () => resolve(true),
         nzOnCancel: () => resolve(false)
       });

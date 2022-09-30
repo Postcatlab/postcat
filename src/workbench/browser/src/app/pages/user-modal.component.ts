@@ -34,7 +34,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnjs3tzqCallback()"
+          (click)="btnvsj9lcCallback()"
           i18n
         >
           Cancel
@@ -43,7 +43,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnhnbbisCallback()"
+          (click)="btnxc2kvtCallback()"
           i18n
         >
           Upload
@@ -68,7 +68,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e3y5lj8Callback()"
+      (nzAfterClose)="eu8kfbgCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -111,7 +111,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btnt66qekCallback()"
+            (click)="btn2q891iCallback()"
             i18n
           >
             Sign In/Up
@@ -154,7 +154,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btny5ih6tCallback()"
+          (click)="btnyssppeCallback()"
           i18n
         >
           Cancel
@@ -163,7 +163,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn86rbalCallback()"
+          (click)="btn7mwpvhCallback()"
           i18n
         >
           Add
@@ -211,7 +211,7 @@ export class UserModalComponent implements OnInit {
         if (err) {
           return
         }
-        this.eMessage.success(`Logout already !`)
+        this.eMessage.success($localize`Logout already !`)
         return
       }
 
@@ -241,13 +241,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btnjs3tzqCallback() {
+  async btnvsj9lcCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btnhnbbisCallback() {
+  async btnxc2kvtCallback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -261,20 +261,20 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e3y5lj8Callback() {
+  async eu8kfbgCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnt66qekCallback() {
+  async btn2q891iCallback() {
     // * click event callback
 
     // * get Username form values
     const formData = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_authLogin(formData)
     if (err) {
-      this.eMessage.error('Authentication was not successful !')
+      this.eMessage.error($localize`Authentication was not successful !`)
       return
     }
 
@@ -301,13 +301,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btny5ih6tCallback() {
+  async btnyssppeCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn86rbalCallback() {
+  async btn7mwpvhCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 
@@ -316,7 +316,7 @@ export class UserModalComponent implements OnInit {
       return
     }
 
-    this.eMessage.success(`Create new workspace success !`)
+    this.eMessage.success($localize`Create new workspace success !`)
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
