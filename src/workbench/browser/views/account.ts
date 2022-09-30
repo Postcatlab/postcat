@@ -49,7 +49,7 @@ export default new Component({
   init: [username.patch('username', userS.get('userProfile?.username'))], // TODO 需要用 vm 替换
   children: [
     new Title({ label: 'Account', class: ['font-bold', 'text-lg', 'mb-2'] }),
-    new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'] }),
+    new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'], id: 'eoapi-account-username' }),
     new Canvas({
       class: ['w-1/2'],
       children: [
@@ -76,7 +76,7 @@ export default new Component({
         new Canvas({ class: ['h-4'] }),
       ],
     }),
-    new Title({ label: 'Password', class: ['font-bold', 'text-base', 'mb-2'] }),
+    new Title({ label: 'Password', class: ['font-bold', 'text-base', 'mb-2'], id: 'eoapi-account-password' }),
     new Canvas({
       class: ['w-1/2'],
       children: [passwordF],
