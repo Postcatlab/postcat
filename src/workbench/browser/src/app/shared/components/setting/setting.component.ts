@@ -79,6 +79,16 @@ export class SettingComponent implements OnInit {
     {
       name: $localize`:@@Account:Account`,
       moduleID: 'eoapi-account',
+      children: [
+        {
+          name: $localize`:@@Account:Username`,
+          moduleID: 'eoapi-account-username',
+        },
+        {
+          name: $localize`:@@Account:Password`,
+          moduleID: 'eoapi-account-password',
+        },
+      ],
     },
     {
       name: $localize`:@@DataSource:Data Storage`,
@@ -144,6 +154,7 @@ export class SettingComponent implements OnInit {
     // console.log('this.currentConfiguration', this.currentConfiguration);
     this.selectListSelection.select(node);
     const target = document.querySelector(`#${node.moduleID}`);
+    console.log('target', target, node.moduleID);
     target?.scrollIntoView();
     setTimeout(() => {
       this.isClick = false;
