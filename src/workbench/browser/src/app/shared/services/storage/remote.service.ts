@@ -170,10 +170,18 @@ export class RemoteService {
     })
   }
 
-  api_workspaceEdit({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceEdit({ workspaceID, title }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - edit 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - edit 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!title) {
+      console.log(
+        '%c Error: workspace - edit 接口 缺失参数 title %c',
         ErrorStyle,
         ''
       )
@@ -181,7 +189,7 @@ export class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http.put(`/api/workspace/${workspanID}`, {}).subscribe({
+      this.http.put(`/api/workspace/${workspaceID}`, { title }).subscribe({
         next: ({ status, data }: any) => {
           console.log('%c workspace - edit 接口请求成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -197,10 +205,10 @@ export class RemoteService {
     })
   }
 
-  api_workspaceDelete({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceDelete({ workspaceID }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - delete 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - delete 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
       )
@@ -208,7 +216,7 @@ export class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http.delete(`/api/workspace/${workspanID}`, {}).subscribe({
+      this.http.delete(`/api/workspace/${workspaceID}`, {}).subscribe({
         next: ({ status, data }: any) => {
           console.log('%c workspace - delete 接口请求成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -224,10 +232,10 @@ export class RemoteService {
     })
   }
 
-  api_workspaceMember({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceMember({ workspaceID }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - member 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - member 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
       )
@@ -235,7 +243,7 @@ export class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http.get(`/api/workspace/${workspanID}/member/list`, {}).subscribe({
+      this.http.get(`/api/workspace/${workspaceID}/member/list`, {}).subscribe({
         next: ({ status, data }: any) => {
           console.log('%c workspace - member 接口请求成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -251,45 +259,18 @@ export class RemoteService {
     })
   }
 
-  api_workspaceAddMember({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceAddMember({ workspaceID, userIDs }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - addMember 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - addMember 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
       )
       return
     }
-
-    return new Promise((resolve) => {
-      this.http.post(`/api/workspace/${workspanID}/member/add`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log(
-            '%c workspace - addMember 接口请求成功 %c',
-            SuccessStyle,
-            ''
-          )
-          if (status === 200) {
-            return resolve([data, null])
-          }
-          resolve([null, data])
-        },
-        error: (error) => {
-          console.log(
-            '%c workspace - addMember 接口请求失败 %c',
-            ErrorStyle,
-            ''
-          )
-          resolve([null, error])
-        },
-      })
-    })
-  }
-
-  api_workspaceRemoveMember({ workspanID }) {
-    if (!workspanID) {
+    if (!userIDs) {
       console.log(
-        '%c Error: workspace - removeMember 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - addMember 接口 缺失参数 userIDs %c',
         ErrorStyle,
         ''
       )
@@ -298,7 +279,54 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http
-        .get(`/api/workspace/${workspanID}/member/remove`, {})
+        .post(`/api/workspace/${workspaceID}/member/add`, { userIDs })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log(
+              '%c workspace - addMember 接口请求成功 %c',
+              SuccessStyle,
+              ''
+            )
+            if (status === 200) {
+              return resolve([data, null])
+            }
+            resolve([null, data])
+          },
+          error: (error) => {
+            console.log(
+              '%c workspace - addMember 接口请求失败 %c',
+              ErrorStyle,
+              ''
+            )
+            resolve([null, error])
+          },
+        })
+    })
+  }
+
+  api_workspaceRemoveMember({ workspaceID, userIDs }) {
+    if (!workspaceID) {
+      console.log(
+        '%c Error: workspace - removeMember 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!userIDs) {
+      console.log(
+        '%c Error: workspace - removeMember 接口 缺失参数 userIDs %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.http
+        .delete(`/api/workspace/${workspaceID}/member/remove`, {
+          params: { userIDs },
+        })
         .subscribe({
           next: ({ status, data }: any) => {
             console.log(

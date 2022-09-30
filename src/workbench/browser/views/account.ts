@@ -63,12 +63,13 @@ export default new Component({
           event: {
             click: [
               username.getValue('username', 'user'),
-              `const [err, data]:any = await this.api.api_userUpdateUserProfile({ username: user, avatar: '111' });
+              `const [data, err]:any = await this.api.api_userUpdateUserProfile({ username: user, avatar: '111' });
                 if (err) {
                   return;
                 }`,
               http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
-              userS.setUserProfile('pData.data'),
+              userS.setUserProfile('pData'),
+              message.success('username update success !'),
             ],
           },
         }),
@@ -93,7 +94,7 @@ export default new Component({
           // * update new password
           passwordF.getValue('oldPassword', 'oldPassword'),
           passwordF.getValue('newPassword', 'newPassword'),
-          `const [err, data]:any = await this.api.api_userUpdatePsd({ oldPassword, newPassword });
+          `const [data, err]:any = await this.api.api_userUpdatePsd({ oldPassword, newPassword });
           if (err) {
             return;
           }`,

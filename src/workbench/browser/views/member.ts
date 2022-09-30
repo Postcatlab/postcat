@@ -1,6 +1,21 @@
-import { Modal, Form, Button, Input, Title, ManageAccess, Component, Canvas, Module, EventS } from '../elements';
+import {
+  Modal,
+  Form,
+  Button,
+  Input,
+  Title,
+  ManageAccess,
+  Component,
+  Canvas,
+  Module,
+  EventS,
+  HTTPS,
+  WorkspaceS,
+} from '../elements';
 
 const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
+const httpS = new HTTPS();
+const workspaceS = new WorkspaceS();
 
 const invate = new Modal({
   id: 'invate',
@@ -40,9 +55,8 @@ const manageAccess = new ManageAccess({
     remove: {
       params: ['$event'],
       callback: [
-        ($event) => {
-          console.log($event);
-        },
+        workspaceS.getCurrent('currentWsp'),
+        httpS.send('api_workspaceRemoveMember', '{ workspaceID: currentWsp }'),
       ],
     },
   },
@@ -72,9 +86,17 @@ export default new Module({
           from: 'eo/workbench/browser/src/app/shared/components/manage-access/manage-access.component',
         },
       ],
-      init: [],
+      init: [
+        workspaceS.getCurrent('currentWsp'),
+        httpS.send('api_workspaceMember', '{ workspaceID: currentWsp }'), // * 获取空间成员列表
+        (data) => {
+          console.log(data);
+        },
+      ],
       children: [
         invate,
+        httpS,
+        workspaceS,
         new Canvas({
           class: ['py-5', 'px-10'],
           children: [

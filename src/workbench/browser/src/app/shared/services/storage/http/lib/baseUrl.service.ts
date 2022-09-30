@@ -12,7 +12,6 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { url = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
     const token = StorageUtil.get('accessToken') || '';
-    console.log('token', token);
     req = req.clone({
       url: uniqueSlash(protocolReg.test(req.url) ? req.url : url + req.url),
       headers: req.headers.append('Authorization', token),

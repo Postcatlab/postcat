@@ -204,10 +204,18 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceEdit({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceEdit({ workspaceID, title }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - edit 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - edit 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!title) {
+      console.log(
+        '%c Error: workspace - edit 接口 缺失参数 title %c',
         ErrorStyle,
         ''
       )
@@ -215,7 +223,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.update(this.undefined, { workspanID })
+      this.update(this.undefined, { workspaceID, title })
         .then(({ status, ...data }: any) => {
           console.log('%c workspace - edit 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -230,10 +238,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceDelete({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceDelete({ workspaceID }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - delete 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - delete 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
       )
@@ -241,7 +249,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.remove(this.undefined, { workspanID })
+      this.remove(this.undefined, { workspaceID })
         .then(({ status, ...data }: any) => {
           console.log('%c workspace - delete 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -256,10 +264,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceMember({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceMember({ workspaceID }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - member 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - member 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
       )
@@ -267,7 +275,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.load(this.undefined, { workspanID })
+      this.load(this.undefined, { workspaceID })
         .then(({ status, ...data }: any) => {
           console.log('%c workspace - member 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -282,10 +290,18 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceAddMember({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceAddMember({ workspaceID, userIDs }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - addMember 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - addMember 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!userIDs) {
+      console.log(
+        '%c Error: workspace - addMember 接口 缺失参数 userIDs %c',
         ErrorStyle,
         ''
       )
@@ -293,7 +309,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.create(this.undefined, { workspanID })
+      this.create(this.undefined, { workspaceID, userIDs })
         .then(({ status, ...data }: any) => {
           console.log(
             '%c workspace - addMember 接口调用成功 %c',
@@ -316,10 +332,18 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceRemoveMember({ workspanID }) {
-    if (!workspanID) {
+  api_workspaceRemoveMember({ workspaceID, userIDs }) {
+    if (!workspaceID) {
       console.log(
-        '%c Error: workspace - removeMember 接口 缺失参数 workspanID %c',
+        '%c Error: workspace - removeMember 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!userIDs) {
+      console.log(
+        '%c Error: workspace - removeMember 接口 缺失参数 userIDs %c',
         ErrorStyle,
         ''
       )
@@ -327,7 +351,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.load(this.undefined, { workspanID })
+      this.remove(this.undefined, { workspaceID, userIDs })
         .then(({ status, ...data }: any) => {
           console.log(
             '%c workspace - removeMember 接口调用成功 %c',

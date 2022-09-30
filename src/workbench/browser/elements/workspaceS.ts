@@ -8,6 +8,9 @@ export class WorkspaceS extends Render {
   setWorkspaceList(list) {
     return `this.workspace.setWorkspaceList(${list})`;
   }
+  getCurrent(name) {
+    return `const ${name} = this.workspace.currentWorkspace;`;
+  }
   render() {
     return {
       type: 'element',

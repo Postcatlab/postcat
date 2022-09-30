@@ -4,13 +4,14 @@ export class ModalS extends Render {
   constructor() {
     super({ children: [] });
   }
-  danger({ title, content }) {
+  danger({ title, content, okText = 'Delete' }) {
     return `
     const confirm = () => new Promise((resolve) => {
       this.modal.confirm({
         nzTitle: \`${title}\`,
         nzContent: \`${content}\`,
         nzOkDanger: true,
+        nzOkText: '${okText}',
         nzOnOk: () => resolve(true),
         nzOnCancel: () => resolve(false)
       });

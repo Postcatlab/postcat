@@ -36,7 +36,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btn1u2068Callback()"
+        (click)="btn6tsxlcCallback()"
         i18n
       >
         Save
@@ -99,7 +99,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btnn3ocxcCallback()"
+      (click)="btn6po23nCallback()"
       i18n
     >
       Reset
@@ -118,7 +118,7 @@ export class AccountComponent implements OnInit {
     this.validateUsernameForm = UntypedFormGroup
     this.validatePasswordForm = UntypedFormGroup
   }
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // * Init Username form
     this.validateUsernameForm = this.fb.group({
       username: [null, [Validators.required]]
@@ -136,10 +136,10 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btn1u2068Callback() {
+  async btn6tsxlcCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
-    const [err, data]: any = await this.api.api_userUpdateUserProfile({
+    const [data, err]: any = await this.api.api_userUpdateUserProfile({
       username: user,
       avatar: '111'
     })
@@ -151,13 +151,14 @@ export class AccountComponent implements OnInit {
       return
     }
 
-    this.user.setUserProfile(pData.data)
+    this.user.setUserProfile(pData)
+    this.eMessage.success(`username update success !`)
   }
-  async btnn3ocxcCallback() {
+  async btn6po23nCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
-    const [err, data]: any = await this.api.api_userUpdatePsd({
+    const [data, err]: any = await this.api.api_userUpdatePsd({
       oldPassword,
       newPassword
     })

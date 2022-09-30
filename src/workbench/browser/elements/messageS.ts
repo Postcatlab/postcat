@@ -7,6 +7,9 @@ export class MessageS extends Render {
   success(text) {
     return `this.eMessage.success(\`${text}\`)`;
   }
+  error(text) {
+    return `this.eMessage.error(\`${text}\`)`;
+  }
   render() {
     return {
       type: 'element',

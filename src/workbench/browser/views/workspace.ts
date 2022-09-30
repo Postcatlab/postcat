@@ -12,14 +12,33 @@ import {
   Text,
   Canvas,
   ModalS,
-  //   EventS,
+  WorkspaceS,
+  HTTPS,
+  MessageS,
 } from '../elements';
 
 // const select = new SelectPeople({
 
 // })
 
+const wpnameF = new Form({
+  id: 'wsp-name',
+  layout: '|', // * 这个 | 的意思是竖向排列
+  data: [
+    {
+      label: 'Name',
+      key: 'workspace',
+      type: 'input',
+      class: '',
+      rules: ['required'],
+    },
+  ],
+});
+
 const modalS = new ModalS();
+const messageS = new MessageS();
+const httpS = new HTTPS();
+const workspaceS = new WorkspaceS();
 
 export default new Module({
   id: 'workspace',
@@ -28,9 +47,12 @@ export default new Module({
       id: 'workspace',
       link: true,
       imports: [],
-      init: [],
+      init: [workspaceS.getCurrent('currentWsp'), wpnameF.patch('workspace', 'currentWsp')],
       children: [
         modalS,
+        workspaceS,
+        messageS,
+        httpS,
         new Canvas({
           class: ['py-5', 'px-10'],
           children: [
@@ -38,24 +60,17 @@ export default new Module({
             new Canvas({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
             new Title({ label: 'Edit Workspace' }),
-            new Form({
-              id: 'wsp-name',
-              layout: '|', // * 这个 | 的意思是竖向排列
-              data: [
-                {
-                  label: 'Name',
-                  key: 'workspace',
-                  type: 'input',
-                  class: '',
-                  rules: ['required'],
-                },
-              ],
-            }),
+            wpnameF,
             new Button({
               id: 'save-btn',
               label: 'Save',
               event: {
-                click: [],
+                click: [
+                  workspaceS.getCurrent('currentWsp'),
+                  wpnameF.getValue('workspace', 'title'),
+                  httpS.send('api_workspaceEdit', '{ workspaceID:currentWsp, title }'),
+                  messageS.success('Edit workspace name success !'),
+                ],
               },
             }),
             new Line(),
@@ -73,9 +88,9 @@ export default new Module({
                     title: 'Deletion Confirmation?',
                     content: `Are you sure you want to delete the workspace ? \nYou cannot restore it once deleted!`,
                   }),
-                  () => {
-                    console.log('发送请求');
-                  },
+                  workspaceS.getCurrent('currentWsp'),
+                  httpS.send('api_workspaceDelete', '{ workspaceID:currentWsp }'),
+                  messageS.success('Delete success !'),
                 ],
               },
             }),
