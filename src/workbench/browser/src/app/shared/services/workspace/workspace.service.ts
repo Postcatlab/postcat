@@ -5,17 +5,28 @@ import { StorageUtil } from '../../../utils/storage/Storage';
   providedIn: 'root',
 })
 export class WorkspaceService {
-  currentWorkspace: API.Workspace;
-  workspaceList: API.Workspace[] = [];
+  localWorkspace = {
+    title: $localize`Local workspace`,
+    id: -1,
+  } as API.Workspace;
+  currentWorkspace: API.Workspace = StorageUtil.get('currentWorkspace', this.localWorkspace);
+  workspaceList: API.Workspace[] = [this.localWorkspace];
 
   constructor() {}
 
   setWorkspaceList(data: API.Workspace[]) {
-    this.workspaceList = data;
+    this.workspaceList = [
+      ...data.map((item) => ({
+        ...item,
+        type: 'online',
+      })),
+      this.localWorkspace,
+    ];
   }
 
   setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspace = workspace;
+    console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
   }
 }
