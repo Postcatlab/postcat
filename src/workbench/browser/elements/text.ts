@@ -24,7 +24,12 @@ export class Text extends Render {
   }
   rendertemplate(list) {
     return list
-      .map(({ text, type }) => `<span ${type?.link ? 'style="color:blue"' : ''} i18n>${text}</span>`)
+      .map(({ text, type }) => {
+        if (type?.link) {
+          return `<span style="color: #1890ff" i18n> ${text} </span>`;
+        }
+        return `<span i18n> ${text} </span>`;
+      })
       .join(' ');
   }
   render() {

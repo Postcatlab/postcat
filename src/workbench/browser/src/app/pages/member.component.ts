@@ -11,7 +11,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="ewbyg0mCallback()"
+      (nzAfterClose)="eqk5twfCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -28,8 +28,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnrofa5hCallback()"
-          [disabled]="btnp9vkucStatus()"
+          (click)="btnx55eh5Callback()"
+          [disabled]="btn40ql8aStatus()"
           i18n
         >
           Select a member above
@@ -43,7 +43,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btncyusrdCallback()"
+          (click)="btntynrv7Callback()"
           i18n
         >
           Add people
@@ -52,7 +52,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="eiu62vfCallback($event)"
+          (eoOnRemove)="eoin58rCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -87,11 +87,11 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async ewbyg0mCallback() {
+  async eqk5twfCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnrofa5hCallback() {
+  async btnx55eh5Callback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -131,17 +131,17 @@ export class MemberComponent implements OnInit {
     this.workspace.setWorkspaceList(wData)
     this.memberList = wData
   }
-  btnp9vkucStatus() {
+  btn40ql8aStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btncyusrdCallback() {
+  async btntynrv7Callback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async eiu62vfCallback($event) {
+  async eoin58rCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>

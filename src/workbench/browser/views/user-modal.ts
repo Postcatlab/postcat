@@ -1,3 +1,4 @@
+import { Alert } from 'eo/workbench/browser/elements/alert';
 import {
   Modal,
   Form,
@@ -18,8 +19,8 @@ const httpS = new HTTPS();
 const message = new MessageS();
 const workspaceS = new WorkspaceS();
 
-const retry = new Modal({
-  id: 'retry',
+const sync = new Modal({
+  id: 'sync',
   title: { text: 'Do you want to upload local data to the cloud ?' },
   children: [
     new Text({
@@ -27,17 +28,18 @@ const retry = new Modal({
         text: 'After confirmation, the system will create a cloud space to upload the local data to the cloud.',
       },
     }),
+    new Alert({ text: 'Subsequent local space and cloud space are no longer synchronized' }),
   ],
   footer: [
     {
       label: 'Cancel',
       type: 'default',
-      click: [Modal.close('retry')],
+      click: [Modal.close('sync')],
     },
     {
-      label: 'Upload',
+      label: 'Sync',
       type: 'primary',
-      click: [Modal.close('retry')],
+      click: [Modal.close('sync')],
     },
   ],
 });
@@ -135,7 +137,7 @@ const login = new Modal({
               Modal.close('login'),
               httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
               userS.setUserProfile('pData'),
-              retry.wakeUp(),
+              sync.wakeUp(),
             ],
           },
         }),
@@ -192,6 +194,7 @@ const event = new EventS({
         if (err) {
           return;
         }`,
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         message.success('Successfully logged out !'),
       ],
     },
@@ -210,6 +213,6 @@ const updateWorkspace = [
 export default new Component({
   id: 'user-modal',
   imports: [],
-  init: [...updateWorkspace],
-  children: [httpS, userS, message, event, retry, checkConnect, login, openSetting, workspaceS, addWorkspace],
+  init: [...updateWorkspace, openSetting.wakeUp()],
+  children: [httpS, userS, message, event, sync, checkConnect, login, openSetting, workspaceS, addWorkspace],
 });
