@@ -97,7 +97,7 @@ export default new Module({
                     title: 'Deletion Confirmation?',
                     content: `Are you sure you want to delete the workspace ? \nYou cannot restore it once deleted!`,
                   }),
-                  workspaceS.getCurrent('currentWsp'),
+                  workspaceS.getCurrent('{ id: currentWsp }'),
                   httpS.send('api_workspaceDelete', '{ workspaceID:currentWsp }'),
                   messageS.success('Delete success !'),
                 ],
