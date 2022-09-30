@@ -82,7 +82,7 @@ export class SettingComponent implements OnInit {
       ],
     },
     {
-      name: $localize`:@@DataSource:Data Storage`,
+      name: $localize`:@@Cloud:Cloud Storage`,
       moduleID: 'eoapi-common',
     },
     {

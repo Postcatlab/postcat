@@ -75,7 +75,7 @@ export class DataSourceService {
   }
 
   /**
-   * Test if cloud server address is available
+   * Test if cloud service address is available
    */
   async pingRmoteServerUrl(): Promise<[boolean, any]> {
     const { url: remoteUrl, token } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
@@ -155,7 +155,7 @@ export class DataSourceService {
         this.switchToHttp();
         this.refreshComponent();
       } else {
-        this.message.create('error', $localize`Cloud data source not available`);
+        this.message.create('error', $localize`Cloud Storage not available`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     } else {
@@ -166,7 +166,7 @@ export class DataSourceService {
   };
 
   showMessage() {
-    this.message.create('success', $localize`Successfully connect to data source`);
+    this.message.create('success', $localize`Successfully connect to cloud`);
     localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

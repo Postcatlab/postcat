@@ -72,7 +72,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
 
       if (module.moduleID === '@eo-core-member') {
-        return await this.webService.jumpToClient($localize`Eoapi Client is required to manage team`);
+        return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
       }
     }
     this.router.navigate([route]);

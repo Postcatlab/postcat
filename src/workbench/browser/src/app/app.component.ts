@@ -30,7 +30,7 @@ export class AppComponent {
           this.dataSource.switchDataSource('local');
         }, 5000);
         this.modal.info({
-          nzContent: $localize`:{can not connect}:Unable to connect to remote data sources, please check and reconnect. In order not to affect use, the app will help you jump to local`,
+          nzContent: $localize`:{can not connect}:Unable to connect to cloud service, please check and reconnect. In order not to affect use, the app will help you jump to local`,
           nzFooter: null,
           nzCentered: true,
           nzClosable: false,

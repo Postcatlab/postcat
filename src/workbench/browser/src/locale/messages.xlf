@@ -2,8 +2,8 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="6030666752196813247" datatype="html">
-        <source>Unable to connect to remote data sources, please check and reconnect. In order not to affect use, the app will help you jump to local</source>
+      <trans-unit id="3956703066183668634" datatype="html">
+        <source>Unable to connect to cloud service, please check and reconnect. In order not to affect use, the app will help you jump to local</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -38,25 +38,39 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="16cfa044bd60de96e930c4febca7c99e9a80050c" datatype="html">
+        <source>Don&apos;t have Eoapi Client?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/web/download-client.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7dbcef16b9d6dd36d68cc127fb0bfb53e790360d" datatype="html">
+        <source> Download </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/web/download-client.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3173655943326087472" datatype="html">
         <source>Windows Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="214862928328761013" datatype="html">
         <source>MacOS(Intel) Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3915802383027066440" datatype="html">
         <source>MacOS(M1) Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="29881a45dafbe5aa05cd9d0441a4c0c2fb06df92" datatype="html">
@@ -1472,7 +1486,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/modal.service.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2532913788578936100" datatype="html">
@@ -1675,32 +1689,18 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="482943acb7ee731000e8a6956a3654af77b10a08" datatype="html">
+      <trans-unit id="1095796904238125533" datatype="html">
         <source>Eoapi Client is required to install this extension.</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">80</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="16cfa044bd60de96e930c4febca7c99e9a80050c" datatype="html">
-        <source>Don&apos;t have Eoapi Client?</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">83</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7dbcef16b9d6dd36d68cc127fb0bfb53e790360d" datatype="html">
-        <source> Download </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.ts</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6031434056991752553" datatype="html">
         <source>This plugin has no documentation yet.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/detail/extension-detail.component.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8852490424970169127" datatype="html">
@@ -1908,6 +1908,24 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
           <context context-type="linenumber">87,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5285011984449382433" datatype="html">
+        <source>Eoapi Client is required to sign in</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5152280978772360415" datatype="html">
+        <source>Eoapi Client is required to add workspace</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/navbar/navbar.component.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="568c4840e9396a4e6579eafcdfd1a0bd5d060d84" datatype="html">
@@ -3444,50 +3462,57 @@ You cannot restore it once deleted!</source>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="DataSource" datatype="html">
-        <source>Data Storage</source>
+      <trans-unit id="Cloud" datatype="html">
+        <source>Cloud Storage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">9</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/setting.component.ts</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5a1d2170639328dc51c6cb97e26f9192d86a977c" datatype="html">
-        <source> Cloud: Store data on a cloud server to facilitate cross device use of the product. Only the client can connect to the cloud server. You need to download the client first. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> Learn more..<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+      <trans-unit id="633f682a5809f0aac36b9d19b32d0c4e6c90376b" datatype="html">
+        <source> Cloud Storage: Store data on cloud storage to facilitate cross device use of the product. Only the client can connect to the cloud service. You need to download the client first. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo_link&quot;&gt;"/> Learn more..<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">12,15</context>
+          <context context-type="linenumber">13,16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767" datatype="html">
         <source>Host</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="acedf8fa9132c616c31c3bec3143dd57f587e5f8" datatype="html">
         <source>Please input your Host</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e9bd2feb57286e9e2b5b6a8651c68036cc1a4866" datatype="html">
         <source>your host</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bfdcfa6aae4df84193695e3cda83ab5ff4aa6c48" datatype="html">
-        <source>Save and Reload</source>
+      <trans-unit id="da6aa9950c74cadd85a3bf26272f34f28d8338c8" datatype="html">
+        <source>Connect</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4684610696245082405" datatype="html">
+        <source>Eoapi Client is required to use cloud storage</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0feab442129ba239106e55cf029069d3d4adeadc" datatype="html">
@@ -3560,25 +3585,32 @@ You cannot restore it once deleted!</source>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8419005178838320157" datatype="html">
+        <source>Eoapi Client is required to manage member</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6297950127540572260" datatype="html">
         <source>Member</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2244471832629453998" datatype="html">
         <source>Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3139147897029202869" datatype="html">
         <source>Extensions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="59a3abb75073b478f8ec94aade779d38d5d28887" datatype="html">
@@ -3595,15 +3627,15 @@ You cannot restore it once deleted!</source>
           <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5817336481439854892" datatype="html">
-        <source>Cloud data source not available</source>
+      <trans-unit id="1657946109876066774" datatype="html">
+        <source>Cloud Storage not available</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4487578166826532425" datatype="html">
-        <source>Successfully connect to data source</source>
+      <trans-unit id="5993425438598100835" datatype="html">
+        <source>Successfully connect to cloud</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
           <context context-type="linenumber">169</context>
@@ -3613,7 +3645,7 @@ You cannot restore it once deleted!</source>
         <source>Confirm</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/modal.service.ts</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3618702844543429787" datatype="html">

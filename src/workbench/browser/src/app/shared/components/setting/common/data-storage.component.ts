@@ -6,13 +6,13 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 @Component({
   selector: 'eo-data-storage',
   template: `
-    <div class="font-bold text-lg mb-2" i18n="@@DataSource">Data Storage</div>
+    <div class="font-bold text-lg mb-2" i18n="@@Cloud">Cloud Storage</div>
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <div class="text-[12px] mt-[8px] text-gray-400">
           <p i18n>
-            Cloud: Store data on a cloud server to facilitate cross device use of the product. Only the client can
-            connect to the cloud server. You need to download the client first.
+            Cloud Storage: Store data on cloud storage to facilitate cross device use of the product. Only the client can
+            connect to the cloud service. You need to download the client first.
             <a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
           </p>
         </div>
@@ -27,7 +27,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
       </ng-container>
       <nz-form-item>
         <nz-form-control>
-          <button nz-button nzType="primary" [nzLoading]="loading" i18n>Save and Reload</button>
+          <button nz-button nzType="primary" [nzLoading]="loading" i18n>Connect</button>
         </nz-form-control>
       </nz-form-item>
     </form>
@@ -69,7 +69,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
   }
   async submitForm() {
     if (!this.electron.isElectron) {
-      this.web.jumpToClient($localize`Eoapi Client is required to use cloud data storage`);
+      this.web.jumpToClient($localize`Eoapi Client is required to use cloud storage`);
       return;
     }
 
