@@ -15,26 +15,31 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
 @Component({
   selector: 'eo-user-modal',
   template: ` <nz-modal
-      [nzFooter]="modalRetryFooter"
-      [(nzVisible)]="isRetryModalVisible"
-      (nzOnCancel)="handleRetryModalCancel()"
+      [nzFooter]="modalSyncFooter"
+      [(nzVisible)]="isSyncModalVisible"
+      (nzOnCancel)="handleSyncModalCancel()"
       nzTitle="Do you want to upload local data to the cloud ?"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <div class="pb-4">
-          <span i18n
-            >After confirmation, the system will create a cloud space to upload
-            the local data to the cloud.</span
-          >
+          <span i18n>
+            After confirmation, the system will create a cloud space to upload
+            the local data to the cloud.
+          </span>
         </div>
+        <nz-alert
+          nzType="warning"
+          nzMessage="Subsequent local space and cloud space are no longer synchronized"
+          nzShowIcon
+        ></nz-alert>
       </ng-container>
-      <ng-template #modalRetryFooter>
+      <ng-template #modalSyncFooter>
         <button
           nz-button
           class=""
           nzType="default"
-          (click)="btngfp9ngCallback()"
+          (click)="btnaolz3bCallback()"
           i18n
         >
           Cancel
@@ -43,10 +48,10 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn14lt9qCallback()"
+          (click)="btnpas6y5Callback()"
           i18n
         >
-          Upload
+          Sync
         </button>
       </ng-template>
     </nz-modal>
@@ -59,7 +64,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <div class="pb-4">
-          <span i18n>Can 't connect right now, click to retry</span>
+          <span i18n> Can 't connect right now, click to retry </span>
         </div>
       </ng-container>
     </nz-modal>
@@ -68,7 +73,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e6xko2sCallback()"
+      (nzAfterClose)="er12074Callback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -111,7 +116,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btncwhpucCallback()"
+            (click)="btnnjoq5fCallback()"
             i18n
           >
             Sign In/Up
@@ -128,9 +133,9 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <div class="pb-4">
-          <span i18n>If you want to collaborate, please</span>
-          <span style="color:blue" i18n>open the settings</span>
-          <span i18n>and fill in the configuration</span>
+          <span i18n> If you want to collaborate, please </span>
+          <span style="color: #1890ff" i18n> open the settings </span>
+          <span i18n> and fill in the configuration </span>
         </div>
       </ng-container>
     </nz-modal>
@@ -154,7 +159,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnbrjeogCallback()"
+          (click)="btn11graeCallback()"
           i18n
         >
           Cancel
@@ -163,7 +168,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnj89c2sCallback()"
+          (click)="btng20ixgCallback()"
           i18n
         >
           Add
@@ -172,7 +177,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     </nz-modal>`
 })
 export class UserModalComponent implements OnInit {
-  isRetryModalVisible
+  isSyncModalVisible
   isCheckConnectModalVisible
   isLoginModalVisible
   validateUsernameForm
@@ -188,7 +193,7 @@ export class UserModalComponent implements OnInit {
     public fb: UntypedFormBuilder,
     public workspace: WorkspaceService
   ) {
-    this.isRetryModalVisible = false
+    this.isSyncModalVisible = false
     this.isCheckConnectModalVisible = false
     this.isLoginModalVisible = false
     this.validateUsernameForm = UntypedFormGroup
@@ -211,6 +216,12 @@ export class UserModalComponent implements OnInit {
         if (err) {
           return
         }
+        this.user.setUserProfile({
+          id: -1,
+          password: '',
+          username: '',
+          workspaces: []
+        })
         this.eMessage.success($localize`Successfully logged out !`)
         return
       }
@@ -236,22 +247,25 @@ export class UserModalComponent implements OnInit {
     }
 
     this.workspace.setWorkspaceList(list)
+
+    // * 唤起弹窗
+    this.isOpenSettingModalVisible = true
   }
-  handleRetryModalCancel(): void {
+  handleSyncModalCancel(): void {
     // * 关闭弹窗
-    this.isRetryModalVisible = false
+    this.isSyncModalVisible = false
   }
-  async btngfp9ngCallback() {
+  async btnaolz3bCallback() {
     // * click event callback
 
     // * 关闭弹窗
-    this.isRetryModalVisible = false
+    this.isSyncModalVisible = false
   }
-  async btn14lt9qCallback() {
+  async btnpas6y5Callback() {
     // * click event callback
 
     // * 关闭弹窗
-    this.isRetryModalVisible = false
+    this.isSyncModalVisible = false
   }
   handleCheckConnectModalCancel(): void {
     // * 关闭弹窗
@@ -261,13 +275,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e6xko2sCallback() {
+  async er12074Callback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btncwhpucCallback() {
+  async btnnjoq5fCallback() {
     // * click event callback
 
     // * get Username form values
@@ -291,7 +305,7 @@ export class UserModalComponent implements OnInit {
     this.user.setUserProfile(pData)
 
     // * 唤起弹窗
-    this.isRetryModalVisible = true
+    this.isSyncModalVisible = true
   }
   handleOpenSettingModalCancel(): void {
     // * 关闭弹窗
@@ -301,13 +315,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnbrjeogCallback() {
+  async btn11graeCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnj89c2sCallback() {
+  async btng20ixgCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 
