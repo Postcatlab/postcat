@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
@@ -7,6 +8,7 @@ import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal
   providedIn: 'root',
 })
 export class WebService {
+  isWeb = !this.electronService.isElectron;
   resourceInfo = [
     {
       id: 'win',
@@ -31,7 +33,7 @@ export class WebService {
       link: '',
     },
   ];
-  constructor(private modalService: ModalService) {
+  constructor(private modalService: ModalService, private electronService: ElectronService) {
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {
@@ -75,14 +77,17 @@ export class WebService {
 
   async protocolCheck(): Promise<boolean> {
     return new Promise((resolve) => {
+      if (this.electronService.isElectron) {
+        return resolve(true);
+      }
       (window as any).protocolCheck(
         PROTOCOL,
         () => {
           // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
-          resolve(true);
+          resolve(false);
         },
         () => {
-          resolve(false);
+          resolve(true);
         }
       );
     });
@@ -92,11 +97,24 @@ export class WebService {
     const modal = this.modalService.create({
       nzTitle: $localize`Eoapi Client is required to install this extension.`,
       nzContent: DownloadClienteComponent,
-      nzWidth: '60%',
       nzOnOk() {
         modal.destroy();
       },
     });
     return modal;
+  }
+
+  jumpToClient() {
+    return new Promise(async (resolve, reject) => {
+      const isInstalled = await this.protocolCheck();
+      if (!isInstalled) {
+        // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
+        this.showDownloadClientModal();
+        resolve(false);
+      } else {
+        window.location.href = PROTOCOL;
+        resolve(true);
+      }
+    });
   }
 }

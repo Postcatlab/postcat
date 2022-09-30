@@ -40,13 +40,7 @@ export class ExtensionDetailComponent implements OnInit {
     if (this.electron.isElectron) {
       this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
     } else {
-      const isInstalled = await this.webService.protocolCheck();
-      if (isInstalled) {
-        // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
-        this.webService.showDownloadClientModal();
-      } else {
-        window.location.href = PROTOCOL;
-      }
+      this.webService.jumpToClient();
     }
   }
 

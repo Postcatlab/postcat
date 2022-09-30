@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { filter, takeWhile } from 'rxjs/operators';
-import { ElectronService } from '../../../core/services';
+import { ElectronService, WebService } from '../../../core/services';
 import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -22,7 +22,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private router: Router,
     public sidebar: SidebarService,
     private workspaceService: WorkspaceService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private webService: WebService
   ) {
     this.isCollapsed = this.sidebar.getCollapsed();
     this.sidebar
@@ -60,11 +61,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.getModuleIDFromRoute();
     });
   }
-  clickModule(module) {
+  async clickModule(module) {
     this.sidebar.currentModule = module;
     const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    console.log('route', route);
+    console.log('route', route, module);
+    if (['@eo-core-workspace', '@eo-core-member'].includes(module.moduleID)) {
+      if (this.webService.isWeb) {
+        return await this.webService.jumpToClient();
+      }
+    }
     this.router.navigate([route]);
   }
   ngOnDestroy(): void {
