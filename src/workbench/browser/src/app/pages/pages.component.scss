@@ -18,6 +18,12 @@
   background-color: var(--MAIN_BG);
   color: var(--MAIN_TEXT);
   overflow: hidden;
+  
+  eo-workspace {
+    display: block;
+    overflow: auto;
+    height: 100%;
+  }
 }
 .remote-notification {
   display: flex;

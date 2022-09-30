@@ -62,7 +62,7 @@ export default new Module({
         new Canvas({
           class: ['py-5', 'px-10'],
           children: [
-            new Title({ label: 'Workspace Operate' }),
+            new Title({ label: 'Manage Workspace' }),
             new Canvas({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
             new Title({ label: 'Edit Workspace' }),
