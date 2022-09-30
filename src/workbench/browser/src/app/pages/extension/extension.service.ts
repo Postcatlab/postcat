@@ -6,7 +6,7 @@ import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constant/storageKeys';
+import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 
 @Injectable({
   providedIn: 'root',

@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
+import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
+import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +31,7 @@ export class WebService {
       link: '',
     },
   ];
-  constructor() {
+  constructor(private modalService: ModalService) {
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {
@@ -68,5 +71,32 @@ export class WebService {
             );
           });
       });
+  }
+
+  async protocolCheck(): Promise<boolean> {
+    return new Promise((resolve) => {
+      (window as any).protocolCheck(
+        PROTOCOL,
+        () => {
+          // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
+          resolve(true);
+        },
+        () => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  showDownloadClientModal() {
+    const modal = this.modalService.create({
+      nzTitle: $localize`Eoapi Client is required to install this extension.`,
+      nzContent: DownloadClienteComponent,
+      nzWidth: '60%',
+      nzOnOk() {
+        modal.destroy();
+      },
+    });
+    return modal;
   }
 }
