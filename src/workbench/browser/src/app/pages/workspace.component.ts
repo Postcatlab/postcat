@@ -40,7 +40,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnn70qp6Callback()"
+      (click)="btn22nvjjCallback()"
       i18n
     >
       Save
@@ -60,7 +60,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btny2ismsCallback()"
+      (click)="btnjey5waCallback()"
       i18n
     >
       Delete
@@ -91,7 +91,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnn70qp6Callback() {
+  async btn22nvjjCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -100,11 +100,11 @@ export class WorkspaceComponent implements OnInit {
       title
     })
     if (err) {
-      this.eMessage.error($localize`You can not change the workspace name`)
+      this.eMessage.error($localize`Edit workspace failed`)
       return
     }
 
-    this.eMessage.success($localize`Edit workspace name success !`)
+    this.eMessage.success($localize`Edit workspace successfully !`)
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
@@ -113,7 +113,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btny2ismsCallback() {
+  async btnjey5waCallback() {
     // * click event callback
 
     const confirm = () =>

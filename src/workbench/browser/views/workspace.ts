@@ -75,9 +75,9 @@ export default new Module({
                   workspaceS.getCurrent('{ id: currentWsp }'),
                   wpnameF.getValue('workspace', 'title'),
                   httpS.send('api_workspaceEdit', '{ workspaceID:currentWsp, title }', {
-                    errTip: `You can not change the workspace name`,
+                    errTip: `Edit workspace failed`,
                   }),
-                  messageS.success('Edit workspace name success !'),
+                  messageS.success('Edit workspace successfully !'),
                   ...updateWorkspace,
                 ],
               },
