@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FeatureType } from '../../types';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { Router } from '@angular/router';
 
 // const optionList = [
 //   {
@@ -52,7 +52,7 @@ export class ImportApiComponent implements OnInit {
   uploadData = null;
   featureMap = window.eo?.getFeature('apimanage.import');
   constructor(
-    private messageService: MessageService,
+    private router: Router,
     private storage: StorageService,
     private eoMessage: EoMessageService,
     public extensionService: ExtensionService
@@ -90,7 +90,7 @@ export class ImportApiComponent implements OnInit {
       callback(false);
       return;
     }
-    //The datastructure may has circular reference,decycle by reset object;
+    // The datastructure may has circular reference,decycle by reset object;
     const decycle = (obj, parent?) => {
       const parentArr = parent || [obj];
       for (const i in obj) {
@@ -113,10 +113,7 @@ export class ImportApiComponent implements OnInit {
     };
     this.storage.run('projectImport', [1, decycle(data)], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        this.messageService.send({
-          type: 'importSuccess',
-          data: {},
-        });
+      this.router.navigate(['home/api']);
       }
     });
     callback(true);
