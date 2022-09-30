@@ -14,7 +14,10 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
   template: `<h2 class="text-lg flex justify-between items-center">
       <span class="font-bold text-lg mb-2" i18n>Account</span>
     </h2>
-    <h2 class="text-lg flex justify-between items-center">
+    <h2
+      class="text-lg flex justify-between items-center"
+      id="eoapi-account-username"
+    >
       <span class="font-bold text-base mb-2" i18n>Username</span>
     </h2>
     <section class="w-1/2">
@@ -36,14 +39,17 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btn9monu3Callback()"
+        (click)="btn3ys0ciCallback()"
         i18n
       >
         Save
       </button>
       <section class="h-4"></section>
     </section>
-    <h2 class="text-lg flex justify-between items-center">
+    <h2
+      class="text-lg flex justify-between items-center"
+      id="eoapi-account-password"
+    >
       <span class="font-bold text-base mb-2" i18n>Password</span>
     </h2>
     <section class="w-1/2">
@@ -99,7 +105,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btn68zx1jCallback()"
+      (click)="btn6c17h3Callback()"
       i18n
     >
       Reset
@@ -136,7 +142,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btn9monu3Callback() {
+  async btn3ys0ciCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
@@ -154,7 +160,7 @@ export class AccountComponent implements OnInit {
     this.user.setUserProfile(pData)
     this.eMessage.success(`username update success !`)
   }
-  async btn68zx1jCallback() {
+  async btn6c17h3Callback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
