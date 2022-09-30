@@ -145,7 +145,7 @@
           <context context-type="sourcefile">src/app/pages/api/api-tab.service.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target state="translated">添加 API</target>
+        <target state="translated">新请求</target>
       </trans-unit>
       <trans-unit id="1295614462098694869" datatype="html">
         <source>Preview</source>
@@ -300,7 +300,7 @@
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target state="translated">添加 API</target>
+        <target state="translated">新建 API</target>
       </trans-unit>
       <trans-unit id="653539a38f21a5bf189859ce97c43e722585bcc9" datatype="html">
         <source>New Group</source>
@@ -1960,7 +1960,7 @@
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target state="needs-translation">Search cloud workspace</target>
+        <target state="translated">搜索云空间</target>
       </trans-unit>
       <trans-unit id="4c73a5239da1efecaba8dbe9dbec7a38d6ea8366" datatype="html">
         <source>New Workspace</source>
@@ -1968,7 +1968,7 @@
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target state="needs-translation">New Workspace</target>
+        <target state="translated">新建空间</target>
       </trans-unit>
       <trans-unit id="42b2d1a93d2abc5e39d485cf0a60a06238f8339d" datatype="html">
         <source>Open Settings</source>
@@ -2118,13 +2118,13 @@
         </context-group>
         <target state="translated">登录/注册</target>
       </trans-unit>
-      <trans-unit id="83bfab05f7184d83e1584537683fdae5d994190b" datatype="html">
-        <source>Enter username</source>
+      <trans-unit id="1efc4131ca48f5fad2932ae74fe1fca1f21a797d" datatype="html">
+        <source>Enter Enter Email/Phone/Username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
-        <target state="translated">输入用户名</target>
+        <target state="translated">请输入邮箱/电话/用户名</target>
       </trans-unit>
       <trans-unit id="5fa5c05063493603a4bba6c2341641a83fb0be18" datatype="html">
         <source>Enter password</source>
@@ -2164,7 +2164,7 @@
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
-        <target state="needs-translation">open the settings</target>
+        <target state="translated">打开设置</target>
       </trans-unit>
       <trans-unit id="590b94dc2594d45b9651466bc6bb3a10b5d0fa89" datatype="html">
         <source>and fill in the configuration</source>
@@ -2174,13 +2174,13 @@
         </context-group>
         <target state="translated">并填写配置</target>
       </trans-unit>
-      <trans-unit id="753b314d9ed5f09a35ba69d1874e72f05da0ac67" datatype="html">
-        <source>Create Workspace</source>
+      <trans-unit id="f54a70e9d954132358c4a6b180f8e80c6b46e654" datatype="html">
+        <source>Add Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">132</context>
         </context-group>
-        <target state="needs-translation">Create Workspace</target>
+        <target state="needs-translation">Add Workspace</target>
       </trans-unit>
       <trans-unit id="75dcdfd41ccf4d82b3f54f5e72e74d13ef50234f" datatype="html">
         <source>Workspace Name</source>
@@ -2190,13 +2190,13 @@
         </context-group>
         <target state="translated">空间名称</target>
       </trans-unit>
-      <trans-unit id="8bb8434ba5d230d12631469005afd41076b1f508" datatype="html">
-        <source> Create </source>
+      <trans-unit id="34167c103123c3ef8f47e5305188fa4337f92a1e" datatype="html">
+        <source> Add </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">159,161</context>
         </context-group>
-        <target state="translated"> 创建 </target>
+        <target state="needs-translation"> Add </target>
       </trans-unit>
       <trans-unit id="8e00f414b4b25e2cd8e547aefc2f24f0c8431f8b" datatype="html">
         <source>Workspace Operate</source>
@@ -3508,7 +3508,7 @@
           <context context-type="sourcefile">src/app/shared/components/env/env.component.ts</context>
           <context context-type="linenumber">124</context>
         </context-group>
-        <target state="translated">添加环境</target>
+        <target state="translated">新建环境</target>
       </trans-unit>
       <trans-unit id="5120319645740096878" datatype="html">
         <source>Operate</source>

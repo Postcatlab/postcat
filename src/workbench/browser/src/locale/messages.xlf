@@ -1899,8 +1899,8 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="83bfab05f7184d83e1584537683fdae5d994190b" datatype="html">
-        <source>Enter username</source>
+      <trans-unit id="1efc4131ca48f5fad2932ae74fe1fca1f21a797d" datatype="html">
+        <source>Enter Enter Email/Phone/Username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -1948,8 +1948,8 @@
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="753b314d9ed5f09a35ba69d1874e72f05da0ac67" datatype="html">
-        <source>Create Workspace</source>
+      <trans-unit id="f54a70e9d954132358c4a6b180f8e80c6b46e654" datatype="html">
+        <source>Add Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">132</context>
@@ -1962,8 +1962,8 @@
           <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8bb8434ba5d230d12631469005afd41076b1f508" datatype="html">
-        <source> Create </source>
+      <trans-unit id="34167c103123c3ef8f47e5305188fa4337f92a1e" datatype="html">
+        <source> Add </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">159,161</context>
