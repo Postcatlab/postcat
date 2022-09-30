@@ -1,7 +1,22 @@
-import { Modal, Form, Button, Component, Canvas, Text, Input, UserS, EventS, HTTPS } from '../elements';
+import {
+  Modal,
+  Form,
+  Button,
+  Component,
+  MessageS,
+  Canvas,
+  Text,
+  Input,
+  UserS,
+  EventS,
+  WorkspaceS,
+  HTTPS,
+} from '../elements';
 
 const userS = new UserS();
 const http = new HTTPS();
+const message = new MessageS();
+const workspaceS = new WorkspaceS();
 
 const retry = new Modal({
   id: 'retry',
@@ -45,15 +60,15 @@ const userPassForm = new Form({
   ],
 });
 
+const newWorkspaceName = new Input({
+  id: 'workspace-name',
+  placeholder: 'Workspace Name',
+});
+
 const addWorkspace = new Modal({
   id: 'add-workspace',
   title: { text: 'Create Workspace' },
-  children: [
-    new Input({
-      id: 'workspace-name',
-      placeholder: 'Workspace Name',
-    }),
-  ],
+  children: [newWorkspaceName],
   footer: [
     {
       label: 'Cancel',
@@ -63,7 +78,22 @@ const addWorkspace = new Modal({
     },
     {
       label: 'Create',
-      click: [],
+      type: 'primary',
+      click: [
+        newWorkspaceName.getValue('title'),
+        `
+        const [data, err]:any = await this.api.api_workspaceCreate({title})
+        if(err) {
+          return
+        }
+        `,
+        message.success('Create new workspace success !'),
+        Modal.close('add-workspace'),
+        newWorkspaceName.reset(),
+        // * update workspace list
+        http.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
+        workspaceS.setWorkspaceList('list'),
+      ],
       disabled: [],
     },
   ],
@@ -78,7 +108,7 @@ const login = new Modal({
   },
   children: [
     new Canvas({
-      class: ['my-12'],
+      class: ['my-8'],
       children: [
         userPassForm,
         new Canvas({
@@ -93,10 +123,10 @@ const login = new Modal({
               // * login
               userPassForm.getData('formData'),
               http.send('api_authLogin', 'formData'),
-              userS.setLoginInfo('data.data'),
+              userS.setLoginInfo('data'),
               Modal.close('login'),
               http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
-              userS.setUserProfile('pData.data'),
+              userS.setUserProfile('pData'),
               retry.wakeUp(),
             ],
           },
@@ -150,10 +180,11 @@ const event = new EventS({
       name: 'logOut',
       callback: [
         userS.getKey('refreshToken'),
-        `const [err, data]:any = await this.api.api_authLogout({ refreshToken });
+        `const [data, err]:any = await this.api.api_authLogout({ refreshToken });
         if (err) {
           return;
         }`,
+        message.success('Logout already !'),
       ],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },
@@ -164,5 +195,5 @@ export default new Component({
   id: 'user-modal',
   imports: [],
   init: [],
-  children: [http, userS, event, retry, checkConnect, login, openSetting, addWorkspace],
+  children: [http, userS, message, event, retry, checkConnect, login, openSetting, workspaceS, addWorkspace],
 });

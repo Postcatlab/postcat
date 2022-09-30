@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import {
@@ -9,11 +10,12 @@ import {
   UntypedFormGroup,
   Validators
 } from '@angular/forms'
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 
 @Component({
   selector: 'eo-user-modal',
   template: ` <nz-modal
-      [nzFooter]="modalFooter"
+      [nzFooter]="modalRetryFooter"
       [(nzVisible)]="isRetryModalVisible"
       (nzOnCancel)="handleRetryModalCancel()"
       nzTitle="Do you want to upload local data to the cloud ?"
@@ -27,12 +29,12 @@ import {
           >
         </div>
       </ng-container>
-      <ng-template #modalFooter>
+      <ng-template #modalRetryFooter>
         <button
           nz-button
           class=""
           nzType="primary"
-          (click)="btnmchx5mCallback()"
+          (click)="btnj0ya3gCallback()"
           i18n
         >
           Cancel
@@ -57,12 +59,12 @@ import {
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="erbjxsyCallback()"
+      (nzAfterClose)="egkg0swCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <section class="my-12">
+        <section class="my-8">
           <form
             nz-form
             [formGroup]="validateUsernameForm"
@@ -100,7 +102,7 @@ import {
             class=""
             nzType="primary"
             nzBlock
-            (click)="btnf4mzhiCallback()"
+            (click)="btn3ptmj8Callback()"
             i18n
           >
             Sign In/Up
@@ -124,7 +126,7 @@ import {
       </ng-container>
     </nz-modal>
     <nz-modal
-      [nzFooter]="modalFooter"
+      [nzFooter]="modalAddWorkspaceFooter"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
       nzTitle="Create Workspace"
@@ -138,12 +140,12 @@ import {
           placeholder="Workspace Name"
         />
       </ng-container>
-      <ng-template #modalFooter>
+      <ng-template #modalAddWorkspaceFooter>
         <button
           nz-button
           class=""
           nzType="default"
-          (click)="btnptbqpfCallback()"
+          (click)="btn70ao28Callback()"
           i18n
         >
           Cancel
@@ -152,7 +154,7 @@ import {
           nz-button
           class=""
           nzType="primary"
-          (click)="btnws2obgCallback()"
+          (click)="btnbq7facCallback()"
           i18n
         >
           Create
@@ -171,9 +173,11 @@ export class UserModalComponent implements OnInit {
   constructor(
     public api: RemoteService,
     public user: UserService,
+    public eMessage: EoMessageService,
     public message: MessageService,
     public modal: NzModalService,
-    public fb: UntypedFormBuilder
+    public fb: UntypedFormBuilder,
+    public workspace: WorkspaceService
   ) {
     this.isRetryModalVisible = false
     this.isCheckConnectModalVisible = false
@@ -194,10 +198,11 @@ export class UserModalComponent implements OnInit {
 
       if (type === 'logOut') {
         const refreshToken = this.user.refreshToken
-        const [err, data]: any = await this.api.api_authLogout({ refreshToken })
+        const [data, err]: any = await this.api.api_authLogout({ refreshToken })
         if (err) {
           return
         }
+        this.eMessage.success(`Logout already !`)
         return
       }
 
@@ -219,7 +224,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btnmchx5mCallback() {
+  async btnj0ya3gCallback() {
     // * click event callback
   }
   handleCheckConnectModalCancel(): void {
@@ -230,33 +235,33 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async erbjxsyCallback() {
+  async egkg0swCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnf4mzhiCallback() {
+  async btn3ptmj8Callback() {
     // * click event callback
 
     // * get Username form values
     const formData = this.validateUsernameForm.value
-    const [err, data]: any = await this.api.api_authLogin(formData)
+    const [data, err]: any = await this.api.api_authLogin(formData)
     if (err) {
       return
     }
 
-    this.user.setLoginInfo(data.data)
+    this.user.setLoginInfo(data)
 
     // * 关闭弹窗
     this.isLoginModalVisible = false
 
-    const [pErr, pData]: any = await this.api.api_userReadProfile(null)
+    const [pData, pErr]: any = await this.api.api_userReadProfile(null)
     if (pErr) {
       return
     }
 
-    this.user.setUserProfile(pData.data)
+    this.user.setUserProfile(pData)
 
     // * 唤起弹窗
     this.isRetryModalVisible = true
@@ -269,13 +274,32 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnptbqpfCallback() {
+  async btn70ao28Callback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnws2obgCallback() {
+  async btnbq7facCallback() {
     // * click event callback
+    const title = this.inputWorkspaceNameValue
+
+    const [data, err]: any = await this.api.api_workspaceCreate({ title })
+    if (err) {
+      return
+    }
+
+    this.eMessage.success(`Create new workspace success !`)
+
+    // * 关闭弹窗
+    this.isAddWorkspaceModalVisible = false
+
+    this.inputWorkspaceNameValue = ''
+    const [list, wErr]: any = await this.api.api_workspaceList({})
+    if (wErr) {
+      return
+    }
+
+    this.workspace.setWorkspaceList(list)
   }
 }

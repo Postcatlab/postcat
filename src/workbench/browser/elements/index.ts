@@ -16,6 +16,7 @@ export { EventS } from './eventS';
 export { UserS } from './userS';
 export { WorkspaceS } from './workspaceS';
 export { MessageS } from './messageS';
+export { ModalS } from './modalS';
 
 // * http
 export { HTTPS } from './httpS';

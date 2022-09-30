@@ -36,7 +36,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
         nz-button
         class="w-[120px]"
         nzType="primary"
-        (click)="btnkxpfndCallback()"
+        (click)="btn1u2068Callback()"
         i18n
       >
         Save
@@ -99,7 +99,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
       nz-button
       class="w-[120px]"
       nzType="primary"
-      (click)="btnxri7oqCallback()"
+      (click)="btnn3ocxcCallback()"
       i18n
     >
       Reset
@@ -113,7 +113,7 @@ export class AccountComponent implements OnInit {
     public fb: UntypedFormBuilder,
     public user: UserService,
     public api: RemoteService,
-    public message: EoMessageService
+    public eMessage: EoMessageService
   ) {
     this.validateUsernameForm = UntypedFormGroup
     this.validatePasswordForm = UntypedFormGroup
@@ -136,7 +136,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnkxpfndCallback() {
+  async btn1u2068Callback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [err, data]: any = await this.api.api_userUpdateUserProfile({
@@ -146,14 +146,14 @@ export class AccountComponent implements OnInit {
     if (err) {
       return
     }
-    const [pErr, pData]: any = await this.api.api_userReadProfile(null)
+    const [pData, pErr]: any = await this.api.api_userReadProfile(null)
     if (pErr) {
       return
     }
 
     this.user.setUserProfile(pData.data)
   }
-  async btnxri7oqCallback() {
+  async btnn3ocxcCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
@@ -164,7 +164,7 @@ export class AccountComponent implements OnInit {
     if (err) {
       return
     }
-    this.message.success(`Password reset success !`)
+    this.eMessage.success(`Password reset success !`)
 
     // * Clear Password form
     this.validatePasswordForm.reset()

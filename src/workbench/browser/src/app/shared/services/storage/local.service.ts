@@ -144,9 +144,18 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceCreate(params) {
+  api_workspaceCreate({ title }) {
+    if (!title) {
+      console.log(
+        '%c Error: workspace - create 接口 缺失参数 title %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
     return new Promise((resolve) => {
-      this.create(this.undefined, params)
+      this.create(this.undefined, { title })
         .then(({ status, ...data }: any) => {
           console.log('%c workspace - create 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -161,9 +170,9 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceList(params) {
+  api_workspaceList({ ...items }) {
     return new Promise((resolve) => {
-      this.load(this.undefined, params)
+      this.load(this.undefined, { ...items })
         .then(({ status, ...data }: any) => {
           console.log('%c workspace - list 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {

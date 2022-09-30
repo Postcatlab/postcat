@@ -1,5 +1,4 @@
 import {
-  Modal,
   Form,
   Button,
   Input,
@@ -12,12 +11,15 @@ import {
   Line,
   Text,
   Canvas,
+  ModalS,
   //   EventS,
 } from '../elements';
 
 // const select = new SelectPeople({
 
 // })
+
+const modalS = new ModalS();
 
 export default new Module({
   id: 'workspace',
@@ -28,6 +30,7 @@ export default new Module({
       imports: [],
       init: [],
       children: [
+        modalS,
         new Canvas({
           class: ['py-5', 'px-10'],
           children: [
@@ -65,7 +68,15 @@ export default new Module({
               label: 'Delete',
               theme: ['danger'],
               event: {
-                click: [],
+                click: [
+                  modalS.danger({
+                    title: 'Deletion Confirmation?',
+                    content: `Are you sure you want to delete the workspace ? \nYou cannot restore it once deleted!`,
+                  }),
+                  () => {
+                    console.log('发送请求');
+                  },
+                ],
               },
             }),
           ],

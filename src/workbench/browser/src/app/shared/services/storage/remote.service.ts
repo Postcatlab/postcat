@@ -16,9 +16,9 @@ export class RemoteService {
   api_projectCreate(params) {
     return new Promise((resolve) => {
       this.http.post(`/api/project`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c project - create 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -43,9 +43,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.put(`/api/project/${uuid}`, { ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c project - update 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -70,9 +70,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.delete(`/api/project/${uuid}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c project - delete 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -88,9 +88,9 @@ export class RemoteService {
   api_projectExport(params) {
     return new Promise((resolve) => {
       this.http.get(`/api/project/export`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c project - export 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -103,12 +103,21 @@ export class RemoteService {
     })
   }
 
-  api_workspaceCreate(params) {
+  api_workspaceCreate({ title }) {
+    if (!title) {
+      console.log(
+        '%c Error: workspace - create 接口 缺失参数 title %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
     return new Promise((resolve) => {
-      this.http.post(`/api/workspace`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+      this.http.post(`/api/workspace`, { title }).subscribe({
+        next: ({ status, data }: any) => {
           console.log('%c workspace - create 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -121,30 +130,34 @@ export class RemoteService {
     })
   }
 
-  api_workspaceList(params) {
+  api_workspaceList({ ...items }) {
     return new Promise((resolve) => {
-      this.http.get(`/api/workspace`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
-          console.log('%c workspace - list 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
-            return resolve([data, null])
-          }
-          resolve([null, data])
-        },
-        error: (error) => {
-          console.log('%c workspace - list 接口请求失败 %c', ErrorStyle, '')
-          resolve([null, error])
-        },
-      })
+      this.http
+        .get(`/api/workspace`, {
+          params: { ...items },
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c workspace - list 接口请求成功 %c', SuccessStyle, '')
+            if (status === 200) {
+              return resolve([data, null])
+            }
+            resolve([null, data])
+          },
+          error: (error) => {
+            console.log('%c workspace - list 接口请求失败 %c', ErrorStyle, '')
+            resolve([null, error])
+          },
+        })
     })
   }
 
   api_workspaceUpload(params) {
     return new Promise((resolve) => {
       this.http.post(`/api/workspace/upload`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c workspace - upload 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -169,9 +182,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.put(`/api/workspace/${workspanID}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c workspace - edit 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -196,9 +209,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.delete(`/api/workspace/${workspanID}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c workspace - delete 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -223,9 +236,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.get(`/api/workspace/${workspanID}/member/list`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c workspace - member 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -250,13 +263,13 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.post(`/api/workspace/${workspanID}/member/add`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log(
             '%c workspace - addMember 接口请求成功 %c',
             SuccessStyle,
             ''
           )
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -287,13 +300,13 @@ export class RemoteService {
       this.http
         .get(`/api/workspace/${workspanID}/member/remove`, {})
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log(
               '%c workspace - removeMember 接口请求成功 %c',
               SuccessStyle,
               ''
             )
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
@@ -313,13 +326,13 @@ export class RemoteService {
   api_userUpdateUserProfile(params) {
     return new Promise((resolve) => {
       this.http.put(`/api/user/profile`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log(
             '%c user - updateUserProfile 接口请求成功 %c',
             SuccessStyle,
             ''
           )
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -343,13 +356,13 @@ export class RemoteService {
           params: { ...items },
         })
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log(
               '%c user - readProfile 接口请求成功 %c',
               SuccessStyle,
               ''
             )
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
@@ -384,9 +397,9 @@ export class RemoteService {
       this.http
         .put(`/api/user/password`, { oldPassword, newPassword })
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log('%c user - updatePsd 接口请求成功 %c', SuccessStyle, '')
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
@@ -411,9 +424,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.get(`/api/user/${usernme}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c user - search 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -446,9 +459,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.post(`/api/auth/login`, { username, password }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c auth - login 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -464,9 +477,9 @@ export class RemoteService {
   api_authRefresh(params) {
     return new Promise((resolve) => {
       this.http.put(`/api/auth/refresh`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c auth - refresh 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -491,9 +504,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.post(`/api/auth/logout`, { refreshToken }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c auth - logout 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -509,9 +522,9 @@ export class RemoteService {
   api_envCreate(params) {
     return new Promise((resolve) => {
       this.http.post(`/api/environment`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c env - create 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -536,9 +549,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.put(`/api/environment/${uuid}`, { ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c env - update 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -563,9 +576,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.delete(`/api/environment/${uuid}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c env - delete 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -586,9 +599,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.get(`/api/environment/${uuid}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c env - load 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -617,9 +630,9 @@ export class RemoteService {
           params: { projectID },
         })
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log('%c env - search 接口请求成功 %c', SuccessStyle, '')
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
@@ -635,9 +648,9 @@ export class RemoteService {
   api_groupCreate(params) {
     return new Promise((resolve) => {
       this.http.post(`/api/group`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c group - create 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -662,9 +675,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.put(`/api/group/${uuid}`, { ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c group - update 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -680,9 +693,9 @@ export class RemoteService {
   api_groupBulkUpdate(params) {
     return new Promise((resolve) => {
       this.http.put(`/api/group/batch`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c group - bulkUpdate 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -707,9 +720,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.delete(`/api/group?uuids=[${uuid}]`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c group - delete 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -738,9 +751,9 @@ export class RemoteService {
           params: { projectID },
         })
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log('%c group - loadAll 接口请求成功 %c', SuccessStyle, '')
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
@@ -756,9 +769,9 @@ export class RemoteService {
   api_apiCreate(params) {
     return new Promise((resolve) => {
       this.http.post(`/api/api_data`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c api - create 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -783,9 +796,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.put(`/api/api_data/${uuid}`, { ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c api - update 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -801,9 +814,9 @@ export class RemoteService {
   api_apiBulkUpdate(params) {
     return new Promise((resolve) => {
       this.http.put(`/api/api_data/batch`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c api - bulkUpdate 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -828,9 +841,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.delete(`/api/api_data?uuids=[${uuid}]`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c api - delete 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -855,9 +868,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.get(`/api/api_data/${uuid}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c api - loadApi 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -886,13 +899,13 @@ export class RemoteService {
           params: { projectID },
         })
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log(
               '%c api - LoadAllByProjectID 接口请求成功 %c',
               SuccessStyle,
               ''
             )
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
@@ -912,9 +925,9 @@ export class RemoteService {
   api_testCreate(params) {
     return new Promise((resolve) => {
       this.http.post(`/api/api_test_history`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c test - create 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -939,9 +952,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.delete(`/api/api_test_history?uuids=[${uuid}]`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c test - delete 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -970,9 +983,9 @@ export class RemoteService {
           params: { apiDataID },
         })
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log('%c test - LoadAll 接口请求成功 %c', SuccessStyle, '')
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])
@@ -988,9 +1001,9 @@ export class RemoteService {
   api_mockCreate(params) {
     return new Promise((resolve) => {
       this.http.post(`/api/mock`, params).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c mock - create 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -1011,9 +1024,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.get(`/api/mock/${uuid}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c mock - load 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -1038,9 +1051,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.delete(`/api/mock/${uuid}`, {}).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c mock - delete 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -1065,9 +1078,9 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http.put(`/api/mock/${uuid}`, { ...items }).subscribe({
-        next: ({ statusCode, ...data }: any) => {
+        next: ({ status, data }: any) => {
           console.log('%c mock - update 接口请求成功 %c', SuccessStyle, '')
-          if (statusCode === 200) {
+          if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
@@ -1096,9 +1109,9 @@ export class RemoteService {
           params: { apiDataID },
         })
         .subscribe({
-          next: ({ statusCode, ...data }: any) => {
+          next: ({ status, data }: any) => {
             console.log('%c mock - loadAll 接口请求成功 %c', SuccessStyle, '')
-            if (statusCode === 200) {
+            if (status === 200) {
               return resolve([data, null])
             }
             resolve([null, data])

@@ -5,14 +5,14 @@ export class MessageS extends Render {
     super({ children: [] });
   }
   success(text) {
-    return `this.message.success(\`${text}\`)`;
+    return `this.eMessage.success(\`${text}\`)`;
   }
   render() {
     return {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'EoMessageService', type: 'service', inject: { name: 'message' } }],
+          target: [{ name: 'EoMessageService', type: 'service', inject: { name: 'eMessage' } }],
           from: 'eo/workbench/browser/src/app/eoui/message/eo-message.service',
         },
       ],

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 
+import { NzModalService } from 'ng-zorro-antd/modal'
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -8,7 +9,7 @@ import {
 
 @Component({
   selector: 'eo-workspace',
-  template: `<section class="py-5 px-10">
+  template: ` <section class="py-5 px-10">
     <h2 class="text-lg flex justify-between items-center">
       <span i18n>Workspace Operate</span>
     </h2>
@@ -36,7 +37,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btn0yw506Callback()"
+      (click)="btn5jkmmiCallback()"
       i18n
     >
       Save
@@ -56,7 +57,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btnchlh06Callback()"
+      (click)="btnru54qoCallback()"
       i18n
     >
       Delete
@@ -65,7 +66,7 @@ import {
 })
 export class WorkspaceComponent implements OnInit {
   validateWspNameForm
-  constructor(public fb: UntypedFormBuilder) {
+  constructor(public modal: NzModalService, public fb: UntypedFormBuilder) {
     this.validateWspNameForm = UntypedFormGroup
   }
   ngOnInit(): void {
@@ -74,10 +75,28 @@ export class WorkspaceComponent implements OnInit {
       workspace: [null, [Validators.required]]
     })
   }
-  async btn0yw506Callback() {
+  async btn5jkmmiCallback() {
     // * click event callback
   }
-  async btnchlh06Callback() {
+  async btnru54qoCallback() {
     // * click event callback
+
+    const confirm = () =>
+      new Promise((resolve) => {
+        this.modal.confirm({
+          nzTitle: `Deletion Confirmation?`,
+          nzContent: `Are you sure you want to delete the workspace ? 
+You cannot restore it once deleted!`,
+          nzOkDanger: true,
+          nzOnOk: () => resolve(true),
+          nzOnCancel: () => resolve(false)
+        })
+      })
+    const isOk = await confirm()
+    if (!isOk) {
+      return
+    }
+
+    console.log('\u53D1\u9001\u8BF7\u6C42')
   }
 }

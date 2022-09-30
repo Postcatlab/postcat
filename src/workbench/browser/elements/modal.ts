@@ -28,6 +28,7 @@ export class Modal extends Render implements modalType {
     this.footer = footer;
     this.width = width;
   }
+
   wakeUp() {
     return `
     // * 唤起弹窗
@@ -59,7 +60,7 @@ export class Modal extends Render implements modalType {
       );
     const footer = footerRender(this.footer || []);
     const footerTemplate = footer?.length
-      ? `<ng-template #modalFooter>
+      ? `<ng-template #modal${this.id}Footer>
     ${footer.map((it) => it.template).join('\n')}
     </ng-template>`
       : '';
@@ -67,7 +68,11 @@ export class Modal extends Render implements modalType {
     return {
       template: `<nz-modal 
                     ${
-                      this.footer == null ? '' : footer?.length === 0 ? '[nzFooter]="null"' : '[nzFooter]="modalFooter"'
+                      this.footer == null
+                        ? ''
+                        : footer?.length === 0
+                        ? '[nzFooter]="null"'
+                        : '[nzFooter]="modal' + this.id + 'Footer"'
                     }
                     ${width}
                     [(nzVisible)]="is${this.id}ModalVisible"

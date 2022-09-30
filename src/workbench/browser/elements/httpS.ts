@@ -6,7 +6,7 @@ export class HTTPS extends Render {
     super({ children: [] });
   }
   send(name, params = '', { err = 'err', data = 'data' } = {}) {
-    return `const [${err}, ${data}]:any = await this.api.${name}(${params})
+    return `const [${data}, ${err}]:any = await this.api.${name}(${params})
     if(${err}) {
       return
     }
