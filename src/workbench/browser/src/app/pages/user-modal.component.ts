@@ -34,7 +34,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnco732lCallback()"
+          (click)="btnxb4whfCallback()"
           i18n
         >
           Cancel
@@ -59,7 +59,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e0idr3zCallback()"
+      (nzAfterClose)="eh9wtetCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -102,7 +102,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class=""
             nzType="primary"
             nzBlock
-            (click)="btn9mlrpcCallback()"
+            (click)="btnrbdaf7Callback()"
             i18n
           >
             Sign In/Up
@@ -145,7 +145,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnov6mdwCallback()"
+          (click)="btngd4s0sCallback()"
           i18n
         >
           Cancel
@@ -154,7 +154,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn50t0ktCallback()"
+          (click)="btnwi9cloCallback()"
           i18n
         >
           Create
@@ -232,7 +232,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isRetryModalVisible = false
   }
-  async btnco732lCallback() {
+  async btnxb4whfCallback() {
     // * click event callback
   }
   handleCheckConnectModalCancel(): void {
@@ -243,13 +243,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e0idr3zCallback() {
+  async eh9wtetCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btn9mlrpcCallback() {
+  async btnrbdaf7Callback() {
     // * click event callback
 
     // * get Username form values
@@ -283,13 +283,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnov6mdwCallback() {
+  async btngd4s0sCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn50t0ktCallback() {
+  async btnwi9cloCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 

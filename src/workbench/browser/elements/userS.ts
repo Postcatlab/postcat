@@ -22,7 +22,7 @@ export class UserS extends Render {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'UserService', type: 'service', inject: { name: 'user' } }],
+          target: [{ name: 'UserService', type: 'service', inject: { name: 'user' }, ignore: true }],
           from: 'eo/workbench/browser/src/app/shared/services/user/user.service',
         },
       ],
