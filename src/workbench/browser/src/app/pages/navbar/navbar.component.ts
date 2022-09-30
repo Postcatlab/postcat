@@ -5,6 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingComponent } from '../../shared/components/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -14,29 +15,8 @@ export class NavbarComponent implements OnInit {
   isMaximized = false;
   isSettingVisible = false;
 
-  currentWorkspace = {
-    title: $localize`Local workspace`,
-    type: 'offline',
-    id: -1,
-  };
   searchValue: string;
-  private workspace = [
-    {
-      title: 'online workspace 1',
-      type: 'online',
-      id: 1,
-    },
-    {
-      title: 'online workspace 2',
-      type: 'online',
-      id: 2,
-    },
-    {
-      title: $localize`Local workspace`,
-      type: 'offline',
-      id: -1,
-    },
-  ];
+
   get dataSourceType() {
     return this.remoteService.dataSourceType;
   }
@@ -57,17 +37,21 @@ export class NavbarComponent implements OnInit {
     private web: WebService,
     private modal: NzModalService,
     private remoteService: RemoteService,
-    private message: MessageService
+    private message: MessageService,
+    public workspaceService: WorkspaceService
   ) {
     this.issueEnvironment = this.getEnviroment();
   }
-  changeWorkspace(item) {}
+  changeWorkspace(item) {
+    console.log('item', item);
+    this.workspaceService.setCurrentWorkspace(item);
+  }
   searchWorkspace() {
     if (!this.searchValue) {
-      return this.workspace;
+      return this.workspaceService.workspaceList;
     }
     const searchText = this.searchValue.toLocaleLowerCase();
-    return this.workspace.filter((val) => val.title.toLocaleLowerCase().includes(searchText));
+    return this.workspaceService.workspaceList.filter((val) => val.title.toLocaleLowerCase().includes(searchText));
   }
   minimize() {
     this.electron.ipcRenderer.send('message', {
