@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
 
 @Injectable({
@@ -18,7 +19,7 @@ export class WorkspaceService {
   }
   workspaceList: API.Workspace[] = [this.localWorkspace];
 
-  constructor() {}
+  constructor(private messageService: MessageService) {}
 
   setWorkspaceList(data: API.Workspace[]) {
     this.workspaceList = [
@@ -34,5 +35,6 @@ export class WorkspaceService {
     this.currentWorkspaceID = workspace.id;
     console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
+    this.messageService.send({ type: 'workspaceChange', data: true });
   }
 }
