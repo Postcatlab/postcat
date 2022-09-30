@@ -48,13 +48,12 @@ export class WorkspaceService {
     this.currentWorkspaceID = id;
   }
 
-  setCurrentWorkspace(workspace: API.Workspace) {
+  async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
     console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
-    if (workspace.id === -1) {
-      this.dataSource.switchDataSource('local');
-    }
+    //Change data storage
+    await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');
     this.messageService.send({ type: 'workspaceChange', data: true });
   }
 
