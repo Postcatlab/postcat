@@ -10,6 +10,7 @@ export { Line } from './line';
 export { Title } from './title';
 export { Canvas } from './canvas';
 export { Overview } from './overview';
+export { Alert } from './alert';
 
 // * service
 export { EventS } from './eventS';
@@ -17,6 +18,7 @@ export { UserS } from './userS';
 export { WorkspaceS } from './workspaceS';
 export { MessageS } from './messageS';
 export { ModalS } from './modalS';
+export { DataSourceS } from './dataSourceS';
 
 // * http
 export { HTTPS } from './httpS';
