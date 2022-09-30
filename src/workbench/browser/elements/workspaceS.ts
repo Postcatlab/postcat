@@ -16,7 +16,7 @@ export class WorkspaceS extends Render {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'WorkspaceService', type: 'service', inject: { name: 'workspace' } }],
+          target: [{ name: 'WorkspaceService', type: 'service', inject: { name: 'workspace' }, ignore: true }],
           from: 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service',
         },
       ],
