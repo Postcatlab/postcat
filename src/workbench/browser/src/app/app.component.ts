@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ThemeService } from './core/services';
 import { AppService } from './app.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
@@ -14,7 +14,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 export class AppComponent {
   constructor(
     private theme: ThemeService,
-    private remoteService: RemoteService,
+    private dataSource: DataSourceService,
     private modal: NzModalService,
     private appService: AppService
   ) {
@@ -23,11 +23,11 @@ export class AppComponent {
   }
 
   async checkRemoteServerConnect() {
-    if (this.remoteService.isRemote && window.eo) {
-      const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
+    if (this.dataSource.isRemote && window.eo) {
+      const [isSuccess] = await this.dataSource.pingRmoteServerUrl();
       if (!isSuccess) {
         const timer = setTimeout(() => {
-          this.remoteService.switchDataSource('local');
+          this.dataSource.switchDataSource('local');
         }, 5000);
         this.modal.info({
           nzContent: $localize`:{can not connect}:Unable to connect to remote data sources, please check and reconnect. In order not to affect use, the app will help you jump to local`,
@@ -36,7 +36,7 @@ export class AppComponent {
           nzClosable: false,
           nzOnOk: () => {
             clearTimeout(timer);
-            timer && this.remoteService.switchDataSource('local');
+            timer && this.dataSource.switchDataSource('local');
           },
         });
       }

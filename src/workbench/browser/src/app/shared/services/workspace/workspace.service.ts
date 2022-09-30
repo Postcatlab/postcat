@@ -4,6 +4,7 @@ import { StorageUtil } from '../../../utils/storage/Storage';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,12 @@ export class WorkspaceService {
   }
   workspaceList: API.Workspace[] = [this.localWorkspace];
 
-  constructor(private messageService: MessageService, private apiService: ApiService, private storage: StorageService) {
+  constructor(
+    private messageService: MessageService,
+    private dataSource: DataSourceService,
+    private apiService: ApiService,
+    private storage: StorageService
+  ) {
     setTimeout(async () => {
       console.log('exportProjectData', await this.exportProjectData());
     }, 2000);
@@ -42,10 +48,12 @@ export class WorkspaceService {
     this.currentWorkspaceID = id;
   }
 
-  setCurrentWorkspace(workspace: API.Workspace) {
+  async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
     console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
+    //Change data storage
+    await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');
     this.messageService.send({ type: 'workspaceChange', data: true });
   }
 

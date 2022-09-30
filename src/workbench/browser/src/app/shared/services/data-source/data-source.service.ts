@@ -19,14 +19,12 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 @Injectable({
   providedIn: 'root',
 })
-export class RemoteService {
+export class DataSourceService {
+  isConnectRemote = false;
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   get dataSourceType(): DataSourceType {
     return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
-  }
-  get isElectron() {
-    return this.electronService.isElectron;
   }
   /** Is it a remote data source */
   get isRemote() {
@@ -106,11 +104,9 @@ export class RemoteService {
     }
     return [true, result];
   }
-
   switchToLocal() {
     this.storageService.toggleDataSource({ dataSourceType: 'local' });
   }
-
   switchToHttp() {
     this.storageService.toggleDataSource({ dataSourceType: 'http' });
   }
@@ -159,12 +155,13 @@ export class RemoteService {
     const isRemote = dataSource === 'http';
     if (isRemote) {
       const [isSuccess] = await this.pingRmoteServerUrl();
+      this.isConnectRemote = isSuccess;
       if (isSuccess) {
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
         this.switchToHttp();
         this.refreshComponent();
       } else {
-        this.message.create('error', $localize`Remote data source not available`);
+        this.message.create('error', $localize`Cloud data source not available`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     } else {

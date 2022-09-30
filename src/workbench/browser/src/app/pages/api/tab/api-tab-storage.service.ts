@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RemoteService } from '../../../shared/services/remote/remote.service';
+import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { storageTab, TabItem } from './tab.model';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ApiTabStorageService {
   tabOrder: Array<number> = [];
   cacheName: string;
   tabsByID = new Map<number, TabItem>();
-  constructor(private dataSource: RemoteService) {}
+  constructor(private dataSource: DataSourceService) {}
   init() {
     this.tabOrder = [];
     this.tabsByID = new Map();

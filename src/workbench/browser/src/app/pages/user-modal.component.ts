@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { NzModalService } from 'ng-zorro-antd/modal'
@@ -39,7 +40,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btncgthvsCallback()"
+          (click)="btnplw5amCallback()"
           i18n
         >
           Cancel
@@ -48,7 +49,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnp6uqsmCallback()"
+          (click)="btnks2pfsCallback()"
           i18n
         >
           Sync
@@ -73,7 +74,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e2vvr8pCallback()"
+      (nzAfterClose)="ez8mzgdCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -116,7 +117,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btnrr3q68Callback()"
+            (click)="btnjixfhaCallback()"
             i18n
           >
             Sign In/Up
@@ -134,7 +135,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <ng-container *nzModalContent>
         <div class="pb-4">
           <span i18n> If you want to collaborate, please </span>
-          <span style="color: #1890ff" i18n> open the settings </span>
+          <span i18n> open the settings </span>
           <span i18n> and fill in the configuration </span>
         </div>
       </ng-container>
@@ -159,7 +160,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnfxp8xcCallback()"
+          (click)="btntg7uysCallback()"
           i18n
         >
           Cancel
@@ -168,10 +169,10 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnl8e03jCallback()"
+          (click)="btngkkszoCallback()"
           i18n
         >
-          Add
+          Save
         </button>
       </ng-template>
     </nz-modal>`
@@ -187,6 +188,7 @@ export class UserModalComponent implements OnInit {
   constructor(
     public api: RemoteService,
     public eMessage: EoMessageService,
+    public dataSource: DataSourceService,
     public user: UserService,
     public message: MessageService,
     public modal: NzModalService,
@@ -247,18 +249,35 @@ export class UserModalComponent implements OnInit {
     }
 
     this.workspace.setWorkspaceList(list)
+    const url = this.dataSource.mockUrl
+
+    if (url === '') {
+      // * 唤起弹窗
+      this.isOpenSettingModalVisible = true
+
+      return
+    }
+
+    const status = this.dataSource.isConnectRemote
+
+    if (!status) {
+      // * 唤起弹窗
+      this.isCheckConnectModalVisible = true
+
+      return
+    }
   }
   handleSyncModalCancel(): void {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btncgthvsCallback() {
+  async btnplw5amCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnp6uqsmCallback() {
+  async btnks2pfsCallback() {
     // * click event callback
     const eData = await this.workspace.exportProjectData()
     const [data, err]: any = await this.api.api_workspaceUpload(eData)
@@ -284,13 +303,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e2vvr8pCallback() {
+  async ez8mzgdCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btnrr3q68Callback() {
+  async btnjixfhaCallback() {
     // * click event callback
 
     // * get Username form values
@@ -324,13 +343,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnfxp8xcCallback() {
+  async btntg7uysCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnl8e03jCallback() {
+  async btngkkszoCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 

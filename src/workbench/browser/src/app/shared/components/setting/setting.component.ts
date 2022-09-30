@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { debounce } from 'eo/workbench/browser/src/app/utils/index.utils';
 
@@ -31,14 +30,6 @@ export class SettingComponent implements OnInit {
   extensitonConfigurations: any[];
   objectKeys = Object.keys;
   isClick = false;
-  /** Whether the remote data source */
-  get isRemote() {
-    return this.remoteService.isRemote;
-  }
-  /** The text corresponding to the current data source */
-  get dataSourceText() {
-    return this.remoteService.dataSourceText;
-  }
   private transformer = (node: TreeNode, level: number): FlatNode & TreeNode => ({
     ...node,
     expandable: !!node.children && node.children.length > 0,
@@ -112,7 +103,7 @@ export class SettingComponent implements OnInit {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  constructor(private remoteService: RemoteService, private settingService: SettingService) {}
+  constructor( private settingService: SettingService) {}
 
   ngOnInit(): void {
     this.init();

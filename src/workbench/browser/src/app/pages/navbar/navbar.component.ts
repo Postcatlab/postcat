@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ElectronService, WebService } from '../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingComponent } from '../../shared/components/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
@@ -17,18 +16,6 @@ export class NavbarComponent implements OnInit {
   isSettingVisible = false;
 
   searchValue: string;
-
-  get dataSourceType() {
-    return this.remoteService.dataSourceType;
-  }
-  /** 是否云端数据源 */
-  get isRemote() {
-    return this.remoteService.isRemote;
-  }
-  /** 当前数据源对应的文本 */
-  get dataSourceText() {
-    return this.remoteService.dataSourceText;
-  }
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
   resourceInfo = this.web.resourceInfo;
@@ -37,7 +24,6 @@ export class NavbarComponent implements OnInit {
     public electron: ElectronService,
     private web: WebService,
     private modal: NzModalService,
-    private remoteService: RemoteService,
     private message: MessageService,
     public workspaceService: WorkspaceService,
     public userService: UserService
