@@ -20,6 +20,7 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
   providedIn: 'root',
 })
 export class RemoteService {
+  isConnectRemote = false;
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   get dataSourceType(): DataSourceType {
@@ -159,6 +160,7 @@ export class RemoteService {
     const isRemote = dataSource === 'http';
     if (isRemote) {
       const [isSuccess] = await this.pingRmoteServerUrl();
+      this.isConnectRemote = isSuccess;
       if (isSuccess) {
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
         this.switchToHttp();
