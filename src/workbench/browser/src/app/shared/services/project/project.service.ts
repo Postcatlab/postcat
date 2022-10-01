@@ -11,15 +11,8 @@ export class ProjectService {
 
   constructor(private apiService: ApiService, private storage: StorageService) {}
 
-  getWorkspaceInfo(workspaceID: number): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.storage.run('getWorkspaceInfo', [workspaceID], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.currentProjectID = result.data?.projects?.[0].uuid;
-          resolve(result.data);
-        }
-      });
-    });
+  setCurrentProjectID(projectID: number) {
+    this.currentProjectID = projectID;
   }
 
   getGroups(projectID = 1): Promise<any[]> {
