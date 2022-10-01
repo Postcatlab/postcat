@@ -18,7 +18,8 @@ export class WorkspaceService {
 
   get currentWorkspace() {
     const target = this.workspaceList.find((n) => n.id === this.currentWorkspaceID);
-    const result = target || StorageUtil.get('currentWorkspace', this.localWorkspace);
+    const result =
+      target || StorageUtil.get('currentWorkspace', this.localWorkspace);
     this.currentWorkspaceID = result.id;
     return result;
   }
@@ -59,7 +60,6 @@ export class WorkspaceService {
   async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
     this.updateProjectID(this.currentWorkspaceID);
-    console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
     //Change data storage
     await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');

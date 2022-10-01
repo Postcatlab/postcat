@@ -43,19 +43,7 @@ export class DataSourceService {
     private settingService: SettingService,
     private router: Router
   ) {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'onDataSourceChange': {
-            if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
-              localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
-            }
-            break;
-          }
-        }
-      });
+    this.pingCloudServerUrl();
   }
 
   getApiUrl(apiData: ApiData) {
@@ -78,28 +66,31 @@ export class DataSourceService {
    */
   async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
     const remoteUrl = inputUrl || this.settingService.getConfiguration('eoapi-common.remoteServer.url');
+    let result;
     if (!remoteUrl) {
-      return [false, remoteUrl];
+      result = [false, remoteUrl];
     }
 
     const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
 
-    let result;
+    let res;
     try {
       const response = await fetch(url);
-      result = await response.json();
-      if (result.statusCode !== 200) {
-        return [false, result];
+      res = await response.json();
+      if (res.statusCode !== 200) {
+        result = [false, res];
+      } else {
+        result = [true, res];
       }
     } catch (e) {
-      return [false, e];
+      result = [false, e];
     }
-    return [true, result];
+    this.isConnectRemote = result[0];
+    return result;
   }
 
   async checkRemoteAndTipModal() {
     const [isSuccess] = await this.pingCloudServerUrl();
-    this.isConnectRemote = isSuccess;
     if (!isSuccess) {
       this.messageService.send({ type: 'ping-fail', data: {} });
     }
@@ -156,16 +147,16 @@ export class DataSourceService {
     if (isRemote) {
       const [isSuccess] = await this.pingCloudServerUrl();
       if (isSuccess) {
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
         this.switchToHttp();
+        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
         this.refreshComponent();
       } else {
         this.message.error($localize`Cloud Storage not available`);
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
       }
     } else {
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
       this.switchToLocal();
+      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
       this.refreshComponent();
     }
   };

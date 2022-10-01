@@ -34,7 +34,6 @@ export class NavbarComponent implements OnInit {
     }
   }
   changeWorkspace(item) {
-    console.log('item', item);
     this.workspaceService.setCurrentWorkspace(item);
   }
   get searchWorkspace() {
