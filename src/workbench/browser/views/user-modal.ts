@@ -12,13 +12,13 @@ import {
   WorkspaceS,
   HTTPS,
   Alert,
-  ModalS,
+  // ModalS,
   DataSourceS,
 } from '../elements';
 
 const userS = new UserS();
 const httpS = new HTTPS();
-const modalS = new ModalS();
+// const modalS = new ModalS();
 const message = new MessageS();
 const workspaceS = new WorkspaceS();
 const dataSourceS = new DataSourceS();
@@ -215,6 +215,10 @@ const eventS = new EventS({
         }`,
         message.success('Successfully logged out !'),
       ],
+    },
+    {
+      name: 'ping-fail',
+      callback: [checkConnect.wakeUp()],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },
   ],

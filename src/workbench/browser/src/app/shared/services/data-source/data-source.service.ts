@@ -91,9 +91,11 @@ export class DataSourceService {
       const response = await fetch(url);
       result = await response.json();
       if (result.statusCode !== 200) {
+        this.messageService.send({ type: 'ping-fail', data: {} });
         return [false, result];
       }
     } catch (e) {
+      this.messageService.send({ type: 'ping-fail', data: {} });
       return [false, e];
     }
     return [true, result];
