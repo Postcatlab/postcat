@@ -158,6 +158,9 @@ const login = new Modal({
               Modal.close('login'),
               httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
               userS.setUserProfile('pData'),
+              // * update workspace
+              httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
+              workspaceS.setWorkspaceList('list'),
               `
               if (!data.isFirstLogin) {
                 return

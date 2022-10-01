@@ -15,7 +15,7 @@ export class WorkspaceS extends Render {
     return `const ${name} = await this.workspace.exportProjectData();`;
   }
   getWorkspaceList(name) {
-    return `const ${name} = this.workspace.getWorkspaceList()`;
+    return `const ${name} = this.workspace.getWorkspaceList().filter(it => it.id !== -1)`;
   }
   setCurrentWorkspaceID(id) {
     return `this.workspace.setCurrentWorkspaceID(${id})`;
