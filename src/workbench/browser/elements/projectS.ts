@@ -9,6 +9,9 @@ export class ProjectS extends Render {
   exportProjectData(name) {
     return `const ${name} = await this.project.exportProjectData();`;
   }
+  getWorkspaceInfo(id) {
+    return `await this.project.getWorkspaceInfo(${id});`;
+  }
   render() {
     return {
       type: 'element',

@@ -257,6 +257,7 @@ const updateWorkspace = [
   workspaceS.getCurrent('{ id: workspaceID }'),
   httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
   workspaceS.setWorkspaceList('list'),
+  projectS.getWorkspaceInfo('workspaceID'),
 ];
 
 const isConnect = [
