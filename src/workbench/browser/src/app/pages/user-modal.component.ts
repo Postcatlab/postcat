@@ -6,11 +6,7 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators
-} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 
 @Component({
@@ -24,8 +20,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n>
-          After confirmation, the system will create a cloud space to upload the
-          local data to the cloud.
+          After confirmation, the system will create a cloud space to upload the local data to the cloud.
         </span>
         <nz-alert
           nzType="warning"
@@ -34,24 +29,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         ></nz-alert>
       </ng-container>
       <ng-template #modalSyncFooter>
-        <button
-          nz-button
-          class=""
-          nzType="default"
-          (click)="btn3bd0ciCallback()"
-          i18n
-        >
-          Cancel
-        </button>
-        <button
-          nz-button
-          class=""
-          nzType="primary"
-          (click)="btncbar1yCallback()"
-          i18n
-        >
-          Sync
-        </button>
+        <button nz-button class="" nzType="default" (click)="btn3bd0ciCallback()" i18n>Cancel</button>
+        <button nz-button class="" nzType="primary" (click)="btncbar1yCallback()" i18n>Sync</button>
       </ng-template>
     </nz-modal>
     <nz-modal
@@ -65,24 +44,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         <span i18n> Can 't connect right now, click to retry </span>
       </ng-container>
       <ng-template #modalCheckConnectFooter>
-        <button
-          nz-button
-          class=""
-          nzType="default"
-          (click)="btng5cos8Callback()"
-          i18n
-        >
-          Cancel
-        </button>
-        <button
-          nz-button
-          class=""
-          nzType="primary"
-          (click)="btnmk3xcsCallback()"
-          i18n
-        >
-          Retry
-        </button>
+        <button nz-button class="" nzType="default" (click)="btng5cos8Callback()" i18n>Cancel</button>
+        <button nz-button class="" nzType="primary" (click)="btnmk3xcsCallback()" i18n>Retry</button>
       </ng-template>
     </nz-modal>
     <nz-modal
@@ -96,11 +59,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <section class="my-3">
-          <form
-            nz-form
-            [formGroup]="validateUsernameForm"
-            nzLayout="horizontal"
-          >
+          <form nz-form [formGroup]="validateUsernameForm" nzLayout="horizontal">
             <nz-form-item>
               <nz-form-control nzErrorTip="Please input your email or phone !">
                 <input
@@ -128,16 +87,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             </nz-form-item>
           </form>
           <section class="h-2"></section>
-          <button
-            nz-button
-            class="h-10"
-            nzType="primary"
-            nzBlock
-            (click)="btnlw0ogzCallback()"
-            i18n
-          >
-            Sign In/Up
-          </button>
+          <button nz-button class="h-10" nzType="primary" nzBlock (click)="btnlw0ogzCallback()" i18n>Sign In/Up</button>
         </section>
       </ng-container>
     </nz-modal>
@@ -150,9 +100,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="textb6jbajCallback()" i18n>
-          open the settings
-        </span>
+        <span style="color: #1890ff" (click)="textb6jbajCallback()" i18n> open the settings </span>
         <span i18n> and fill in the configuration </span>
       </ng-container>
     </nz-modal>
@@ -164,34 +112,13 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <input
-          nz-input
-          [(ngModel)]="inputWorkspaceNameValue"
-          i18n-placeholder
-          placeholder="Workspace Name"
-        />
+        <input nz-input [(ngModel)]="inputWorkspaceNameValue" i18n-placeholder placeholder="Workspace Name" />
       </ng-container>
       <ng-template #modalAddWorkspaceFooter>
-        <button
-          nz-button
-          class=""
-          nzType="default"
-          (click)="btn08re1yCallback()"
-          i18n
-        >
-          Cancel
-        </button>
-        <button
-          nz-button
-          class=""
-          nzType="primary"
-          (click)="btnq7o3jsCallback()"
-          i18n
-        >
-          Save
-        </button>
+        <button nz-button class="" nzType="default" (click)="btn08re1yCallback()" i18n>Cancel</button>
+        <button nz-button class="" nzType="primary" (click)="btnq7o3jsCallback()" i18n>Save</button>
       </ng-template>
-    </nz-modal>`
+    </nz-modal>`,
 })
 export class UserModalComponent implements OnInit {
   isSyncModalVisible;
@@ -234,7 +161,7 @@ export class UserModalComponent implements OnInit {
           id: -1,
           password: '',
           username: '',
-          workspaces: []
+          workspaces: [],
         });
 
         const [data, err]: any = await this.api.api_authLogout({ refreshToken });
@@ -263,7 +190,7 @@ export class UserModalComponent implements OnInit {
     // * Init Username form
     this.validateUsernameForm = this.fb.group({
       username: [null, [Validators.required]],
-      password: [null, [Validators.required]]
+      password: [null, [Validators.required]],
     });
 
     const { id: workspaceID } = this.workspace.currentWorkspace;
@@ -357,7 +284,7 @@ export class UserModalComponent implements OnInit {
     const formData = this.validateUsernameForm.value;
     const [data, err]: any = await this.api.api_authLogin(formData);
     if (err) {
-      this.eMessage.error($localize`Authentication failed !`);
+      this.eMessage.error($localize`Authentication failed! Please check your username and password.`);
       return;
     }
 
