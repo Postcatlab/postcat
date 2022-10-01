@@ -214,6 +214,8 @@ const eventS = new EventS({
       callback: [
         userS.getKey('refreshToken'),
         userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
+        // * clear workspace list
+        workspaceS.setWorkspaceList('[]'),
         `
         const [data, err]:any = await this.api.api_authLogout({ refreshToken });
         if (err) {
