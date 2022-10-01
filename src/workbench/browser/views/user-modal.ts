@@ -216,6 +216,7 @@ const eventS = new EventS({
         userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         // * clear workspace list
         workspaceS.setWorkspaceList('[]'),
+        workspaceS.setCurrentWorkspaceID('-1'),
         `
         const [data, err]:any = await this.api.api_authLogout({ refreshToken });
         if (err) {
