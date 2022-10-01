@@ -6,13 +6,15 @@ import { StorageUtil } from '../../../utils/storage/Storage';
 })
 export class UserService {
   isLogin = false;
-  userProfile = StorageUtil.get('userProfile');
+  userProfile;
   accessToken = StorageUtil.get('accessToken');
   refreshToken = StorageUtil.get('refreshToken');
   accessTokenExpiresAt = 0;
   refreshTokenExpiresAt = 0;
 
-  constructor() {}
+  constructor() {
+    this.setUserProfile(StorageUtil.get('userProfile'));
+  }
 
   getLoginInfo() {
     return {
@@ -27,9 +29,13 @@ export class UserService {
   }
 
   setUserProfile(userProfile: API.User) {
-    this.isLogin = !!this.userProfile.username;
+    console.log(userProfile);
     this.userProfile = userProfile;
+    this.setLoginStatus();
     StorageUtil.set('userProfile', userProfile);
+  }
+  private setLoginStatus(){
+    this.isLogin = !!this.userProfile.username;
   }
 
   clearAuth() {
