@@ -20,6 +20,9 @@ export class WorkspaceS extends Render {
   setCurrentWorkspaceID(id) {
     return `this.workspace.setCurrentWorkspaceID(${id})`;
   }
+  updateProjectID(id) {
+    return `await this.workspace.updateProjectID(${id});`;
+  }
   render() {
     return {
       type: 'element',
