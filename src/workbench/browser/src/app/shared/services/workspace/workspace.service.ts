@@ -15,6 +15,7 @@ export class WorkspaceService {
     id: -1,
   } as API.Workspace;
   currentWorkspaceID: number;
+  currentProjectID: number;
   get currentWorkspace() {
     const target = this.workspaceList.find((n) => n.id === this.currentWorkspaceID);
     const result = target || StorageUtil.get('currentWorkspace', this.localWorkspace);
@@ -44,8 +45,11 @@ export class WorkspaceService {
     ];
   }
 
-  setCurrentWorkspaceID(id: number) {
+  async setCurrentWorkspaceID(id: number) {
     this.currentWorkspaceID = id;
+    const [result] = await this.getWorkspaceInfo(id);
+    console.log('getWorkspaceInfo result', result);
+    this.currentProjectID = result.uuid;
   }
 
   async setCurrentWorkspace(workspace: API.Workspace) {
@@ -59,6 +63,16 @@ export class WorkspaceService {
 
   getWorkspaceList() {
     return this.workspaceList;
+  }
+
+  getWorkspaceInfo(workspaceID: number): Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.storage.run('getWorkspaceInfo', [workspaceID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        }
+      });
+    });
   }
 
   getGroups(projectID = 1): Promise<any[]> {
