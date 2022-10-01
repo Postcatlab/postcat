@@ -14,6 +14,7 @@ import {
   Alert,
   // ModalS,
   DataSourceS,
+  ProjectS,
 } from '../elements';
 
 const userS = new UserS();
@@ -22,6 +23,7 @@ const httpS = new HTTPS();
 const messageS = new MessageS();
 const workspaceS = new WorkspaceS();
 const dataSourceS = new DataSourceS();
+const projectS = new ProjectS();
 
 const sync = new Modal({
   id: 'sync',
@@ -44,7 +46,7 @@ const sync = new Modal({
       label: 'Sync',
       type: 'primary',
       click: [
-        workspaceS.exportProjectData('eData'),
+        projectS.exportProjectData('eData'),
         httpS.send('api_workspaceUpload', 'eData'),
         (data) => {
           const { workspace } = data;
@@ -284,6 +286,7 @@ export default new Component({
   init: [...updateWorkspace, ...isConnect],
   children: [
     httpS,
+    projectS,
     dataSourceS,
     userS,
     messageS,

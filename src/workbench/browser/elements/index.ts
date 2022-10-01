@@ -19,6 +19,7 @@ export { WorkspaceS } from './workspaceS';
 export { MessageS } from './messageS';
 export { ModalS } from './modalS';
 export { DataSourceS } from './dataSourceS';
+export { ProjectS } from './projectS';
 
 // * http
 export { HTTPS } from './httpS';
