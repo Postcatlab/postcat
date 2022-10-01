@@ -259,6 +259,10 @@ const isConnect = [
     return
   }
   `,
+  workspaceS.getCurrent('{ id: currentWorkspaceID }'),
+  `if( currentWorkspaceID === -1) {
+    return
+  }`,
   dataSourceS.isConnectRemote('status'),
   `
   if (!status) {
