@@ -4,14 +4,34 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { filter, map, Observable } from 'rxjs';
 import { uniqueSlash } from '../../../../../utils/api';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+
 const protocolReg = new RegExp('^(http|https)://');
+
+const interceptorPaths = ['/api_data', '/group', '/api_test_history', '/mock', '/environment'];
 
 // implements StorageInterface
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
+  get apiPrefix() {
+    return `/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}`;
+  }
+  constructor(private workspaceService: WorkspaceService, private projectService: ProjectService) {
+    super();
+  }
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { url = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
     const token = StorageUtil.get('accessToken') || '';
+
+    const targetUrl = interceptorPaths.find((n) => req.url.startsWith(n));
+    if (targetUrl) {
+      req = req.clone({
+        url: req.url.replace(targetUrl, `${this.apiPrefix}/${targetUrl}`),
+        headers: req.headers.append('Authorization', token),
+      });
+    }
     req = req.clone({
       url: uniqueSlash(protocolReg.test(req.url) ? req.url : url + req.url),
       headers: req.headers.append('Authorization', token),
