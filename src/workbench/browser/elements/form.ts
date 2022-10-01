@@ -67,6 +67,9 @@ export class Form extends Render implements formType {
   getValue(name, nick) {
     return Form.getValue(this.id, name, nick);
   }
+  isOk() {
+    return `const isOk = this.validate${this.id}Form.valid`;
+  }
   render() {
     const isLabelRequired = (rules) => (rules.includes('required') ? 'nzRequired' : '');
 

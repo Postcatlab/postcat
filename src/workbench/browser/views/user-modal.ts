@@ -19,7 +19,7 @@ import {
 const userS = new UserS();
 const httpS = new HTTPS();
 // const modalS = new ModalS();
-const message = new MessageS();
+const messageS = new MessageS();
 const workspaceS = new WorkspaceS();
 const dataSourceS = new DataSourceS();
 
@@ -109,7 +109,7 @@ const addWorkspace = new Modal({
           return
         }
         `,
-        message.success('Create new workspace successfully !'),
+        messageS.success('Create new workspace successfully !'),
         Modal.close('add-workspace'),
         newWorkspaceName.reset(),
         // * update workspace list
@@ -144,6 +144,12 @@ const login = new Modal({
           event: {
             click: [
               // * login
+              userPassForm.isOk(),
+              `
+              if(!isOk) {
+                ${messageS.error('Please check you username or password')}
+                return
+              }`,
               userPassForm.getData('formData'),
               httpS.send('api_authLogin', 'formData', {
                 errTip: 'Authentication failed !',
@@ -205,7 +211,7 @@ const eventS = new EventS({
         if (err) {
           return;
         }`,
-        message.success('Successfully logged out !'),
+        messageS.success('Successfully logged out !'),
       ],
     },
     {
@@ -265,7 +271,7 @@ export default new Component({
     httpS,
     dataSourceS,
     userS,
-    message,
+    messageS,
     eventS,
     sync,
     checkConnect,
