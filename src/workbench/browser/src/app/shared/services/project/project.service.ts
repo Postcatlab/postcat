@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectService {
-  currentProjectID: number;
+  currentProjectID = StorageUtil.get('currentProjectID');
 
   constructor(private apiService: ApiService, private storage: StorageService) {}
 
   setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
+    StorageUtil.set('currentProjectID', projectID);
   }
 
   getGroups(projectID = 1): Promise<any[]> {
