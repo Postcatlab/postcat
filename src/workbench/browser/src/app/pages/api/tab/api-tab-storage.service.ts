@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { storageTab, TabItem } from './tab.model';
 
@@ -11,11 +12,13 @@ export class ApiTabStorageService {
   tabOrder: Array<number> = [];
   cacheName: string;
   tabsByID = new Map<number, TabItem>();
-  constructor(private dataSource: DataSourceService) {}
+  constructor(private dataSource: DataSourceService, private workspace: WorkspaceService) {}
   init() {
     this.tabOrder = [];
     this.tabsByID = new Map();
-    this.cacheName = `${this.dataSource.dataSourceType}_TabCache`;
+    this.cacheName = `${
+      this.workspace.currentWorkspaceID === -1 ? 'local' : this.workspace.currentWorkspaceID
+    }_TabCache`;
   }
   addTab(tabItem) {
     if (this.tabsByID.has(tabItem.uuid)) {
