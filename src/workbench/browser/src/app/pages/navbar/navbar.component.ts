@@ -5,7 +5,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { SettingComponent } from '../../shared/components/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
-import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 @Component({
   selector: 'eo-navbar',
@@ -27,12 +26,11 @@ export class NavbarComponent implements OnInit {
     private modal: NzModalService,
     private message: MessageService,
     public workspaceService: WorkspaceService,
-    private projectService: ProjectService,
     public userService: UserService
   ) {
     this.issueEnvironment = this.getEnviroment();
-    if (this.workspaceService.currentWorkspace?.id > 0) {
-      this.projectService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
+    if (this.workspaceService.currentWorkspace?.id) {
+      this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }
   }
   changeWorkspace(item) {

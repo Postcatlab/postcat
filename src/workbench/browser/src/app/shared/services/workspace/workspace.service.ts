@@ -3,6 +3,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { StorageUtil } from '../../../utils/storage/Storage';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +27,19 @@ export class WorkspaceService {
   constructor(
     private messageService: MessageService,
     private dataSource: DataSourceService,
+    private storage: StorageService,
     private projectService: ProjectService
   ) {}
+
+  getWorkspaceInfo(workspaceID: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storage.run('getWorkspaceInfo', [workspaceID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        }
+      });
+    });
+  }
 
   setWorkspaceList(data: API.Workspace[]) {
     this.workspaceList = [
@@ -59,7 +72,8 @@ export class WorkspaceService {
 
   async updateProjectID(workspaceID: number) {
     if (workspaceID !== -1) {
-      await this.projectService.getWorkspaceInfo(workspaceID);
+      const { projects } = await this.getWorkspaceInfo(workspaceID);
+      this.projectService.setCurrentProjectID(projects.at(0).uuid);
     }
   }
 }

@@ -11,7 +11,7 @@ export class ProjectService {
 
   constructor(private apiService: ApiService, private storage: StorageService) {}
 
-  setCurrent(projectID: number) {
+  setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
   }
 
