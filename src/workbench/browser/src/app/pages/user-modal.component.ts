@@ -38,7 +38,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btn3zom7eCallback()"
+          (click)="btng9hzprCallback()"
           i18n
         >
           Cancel
@@ -47,7 +47,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn90o09nCallback()"
+          (click)="btnaavguoCallback()"
           i18n
         >
           Sync
@@ -69,7 +69,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnwkqzslCallback()"
+          (click)="btn140mumCallback()"
           i18n
         >
           Cancel
@@ -78,7 +78,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnjvpzz7Callback()"
+          (click)="btn9y18e9Callback()"
           i18n
         >
           Retry
@@ -90,7 +90,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="ebp3q2oCallback()"
+      (nzAfterClose)="envl5m4Callback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -133,7 +133,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btn2p7n5zCallback()"
+            (click)="btn564gllCallback()"
             i18n
           >
             Sign In/Up
@@ -150,7 +150,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="textpoiyx3Callback()" i18n>
+        <span style="color: #1890ff" (click)="texta4dfsmCallback()" i18n>
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
@@ -176,7 +176,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnzvi29lCallback()"
+          (click)="btnhx67qeCallback()"
           i18n
         >
           Cancel
@@ -185,7 +185,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn33xlshCallback()"
+          (click)="btn1paq1jCallback()"
           i18n
         >
           Save
@@ -299,13 +299,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btn3zom7eCallback() {
+  async btng9hzprCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btn90o09nCallback() {
+  async btnaavguoCallback() {
     // * click event callback
     const eData = await this.workspace.exportProjectData()
     const [data, err]: any = await this.api.api_workspaceUpload(eData)
@@ -316,7 +316,7 @@ export class UserModalComponent implements OnInit {
     const { workspace } = data
     const { id } = workspace
 
-    const list = this.workspace.getWorkspaceList()
+    const list = this.workspace.getWorkspaceList().filter((it) => it.id !== -1)
     this.workspace.setWorkspaceList([...list, workspace])
     this.workspace.setCurrentWorkspaceID(id)
 
@@ -327,13 +327,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnwkqzslCallback() {
+  async btn140mumCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnjvpzz7Callback() {
+  async btn9y18e9Callback() {
     // * click event callback
     this.dataSource.checkRemoteAndTipModal()
 
@@ -344,13 +344,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async ebp3q2oCallback() {
+  async envl5m4Callback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btn2p7n5zCallback() {
+  async btn564gllCallback() {
     // * click event callback
     const isOk = this.validateUsernameForm.valid
 
@@ -396,7 +396,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async textpoiyx3Callback() {
+  async texta4dfsmCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -407,13 +407,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnzvi29lCallback() {
+  async btnhx67qeCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn33xlshCallback() {
+  async btn1paq1jCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 

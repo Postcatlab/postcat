@@ -23,5 +23,5 @@ module.exports = {
     // schema: "./output/entities"
     // typeorm: "./output/typeorm"
   ],
-  remoteBase: '',
+  remoteBase: 'http://8.219.85.124:3001',
 };
