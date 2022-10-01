@@ -25,7 +25,7 @@ const updateMember = [
   workspaceS.getCurrent('{ id: currentWorkspaceID }'),
   // * 获取空间成员列表
   httpS.send('api_workspaceMember', '{ workspaceID: currentWorkspaceID }', { err: 'wErr', data: 'wData' }),
-  workspaceS.setWorkspaceList('wData'),
+  // workspaceS.setWorkspaceList('wData'),
   ManageAccess.setList('wData'),
 ];
 
