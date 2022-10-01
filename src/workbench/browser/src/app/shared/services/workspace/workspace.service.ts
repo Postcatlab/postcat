@@ -22,7 +22,11 @@ export class WorkspaceService {
   }
   workspaceList: API.Workspace[] = [this.localWorkspace];
 
-  constructor(private messageService: MessageService, private dataSource: DataSourceService) {}
+  constructor(
+    private messageService: MessageService,
+    private dataSource: DataSourceService,
+    private projectService: ProjectService
+  ) {}
 
   setWorkspaceList(data: API.Workspace[]) {
     this.workspaceList = [
@@ -36,10 +40,12 @@ export class WorkspaceService {
 
   async setCurrentWorkspaceID(id: number) {
     this.currentWorkspaceID = id;
+    await this.updateProjectID(this.currentWorkspaceID);
   }
 
   async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
+    this.updateProjectID(this.currentWorkspaceID);
     console.log('workspace', workspace);
     StorageUtil.set('currentWorkspace', workspace);
     //Change data storage
@@ -49,5 +55,11 @@ export class WorkspaceService {
 
   getWorkspaceList() {
     return this.workspaceList;
+  }
+
+  async updateProjectID(workspaceID: number) {
+    if (workspaceID !== -1) {
+      await this.projectService.getWorkspaceInfo(workspaceID);
+    }
   }
 }
