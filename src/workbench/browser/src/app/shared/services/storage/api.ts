@@ -13,7 +13,7 @@ const http = {
       name: 'workspace',
       data: [
         { 'create @post': '/workspace', json: 'title' },
-        { 'list @get': '/workspace', query: '...' },
+        { 'list @get': '/workspace/list', query: '...' },
         { 'upload @post': '/workspace/upload' },
         { 'edit @put': '/workspace/{workspaceID}', json: 'title' },
         { 'delete @delete': '/workspace/{workspaceID}' },

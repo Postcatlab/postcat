@@ -133,7 +133,7 @@ export class RemoteService {
   api_workspaceList({ ...items }) {
     return new Promise((resolve) => {
       this.http
-        .get(`/workspace`, {
+        .get(`/workspace/list`, {
           params: { ...items },
         })
         .subscribe({
