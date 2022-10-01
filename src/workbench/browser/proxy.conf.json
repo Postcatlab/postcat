@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://8.219.85.124:3001/",
+    "target": "https://290135738u.oicp.vip/",
     "secure": false,
     "pathRewrite": {
       "^/api": ""
