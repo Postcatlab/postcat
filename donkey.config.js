@@ -23,5 +23,5 @@ module.exports = {
     // schema: "./output/entities"
     // typeorm: "./output/typeorm"
   ],
-  remoteBase: '/api',
+  remoteBase: '',
 };
