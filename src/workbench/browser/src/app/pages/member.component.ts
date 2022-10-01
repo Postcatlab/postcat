@@ -11,7 +11,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="eqitxquCallback()"
+      (nzAfterClose)="e9kfi4jCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -28,8 +28,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnisbasfCallback()"
-          [disabled]="btn0v14vfStatus()"
+          (click)="btnosf6afCallback()"
+          [disabled]="btn5h06gcStatus()"
           i18n
         >
           Select a member above
@@ -43,7 +43,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn8mlippCallback()"
+          (click)="btnhzm2dwCallback()"
           i18n
         >
           Add people
@@ -52,7 +52,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="etlbob7Callback($event)"
+          (eoOnRemove)="e4s8xnbCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -81,17 +81,21 @@ export class MemberComponent implements OnInit {
     }
 
     this.workspace.setWorkspaceList(wData)
-    this.memberList = wData
+
+    // * 对成员列表进行排序
+    const Owner = wData.filter((it) => it.roleName === 'Owner')
+    const Member = wData.filter((it) => it.roleName !== 'Owner')
+    this.memberList = Owner.concat(Member)
   }
   handleInvateModalCancel(): void {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async eqitxquCallback() {
+  async e9kfi4jCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnisbasfCallback() {
+  async btnosf6afCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -129,19 +133,23 @@ export class MemberComponent implements OnInit {
     }
 
     this.workspace.setWorkspaceList(wData)
-    this.memberList = wData
+
+    // * 对成员列表进行排序
+    const Owner = wData.filter((it) => it.roleName === 'Owner')
+    const Member = wData.filter((it) => it.roleName !== 'Owner')
+    this.memberList = Owner.concat(Member)
   }
-  btn0v14vfStatus() {
+  btn5h06gcStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn8mlippCallback() {
+  async btnhzm2dwCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async etlbob7Callback($event) {
+  async e4s8xnbCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
@@ -181,6 +189,10 @@ export class MemberComponent implements OnInit {
     }
 
     this.workspace.setWorkspaceList(wData)
-    this.memberList = wData
+
+    // * 对成员列表进行排序
+    const Owner = wData.filter((it) => it.roleName === 'Owner')
+    const Member = wData.filter((it) => it.roleName !== 'Owner')
+    this.memberList = Owner.concat(Member)
   }
 }

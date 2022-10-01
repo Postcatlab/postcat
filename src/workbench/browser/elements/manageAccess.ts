@@ -24,6 +24,10 @@ export class ManageAccess extends Render {
     };
   }
   static setList(list) {
-    return `this.memberList = ${list}`;
+    return `
+    // * 对成员列表进行排序
+    const Owner = ${list}.filter(it => it.roleName === 'Owner')
+    const Member = ${list}.filter(it => it.roleName !== 'Owner')
+    this.memberList = Owner.concat(Member)`;
   }
 }
