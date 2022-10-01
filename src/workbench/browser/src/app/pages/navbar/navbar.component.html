@@ -97,11 +97,11 @@
         <ng-template #elseBlock>
           <li nz-menu-item><button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button></li>
         </ng-template>
-        <ng-template [ngIf]="userService.userProfile.username">
-          <li nz-menu-item *ngIf="userService.userProfile.username">
+        <ng-template [ngIf]="userService.isLogin">
+          <li nz-menu-item *ngIf="userService.isLogin">
             <button type="button" (click)="openSettingModal()" i18n>Account Setting</button>
           </li>
-          <li nz-menu-item *ngIf="userService.userProfile.username">
+          <li nz-menu-item *ngIf="userService.isLogin">
             <button type="button" (click)="loginOut()" i18n>Sign Out</button>
           </li>
         </ng-template>

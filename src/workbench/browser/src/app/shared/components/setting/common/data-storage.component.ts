@@ -11,8 +11,8 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
       <nz-form-item>
         <div class="text-[12px] mt-[8px] text-gray-400">
           <p i18n>
-            Cloud Storage: Store data on cloud storage to facilitate cross device use of the product. Only the client can
-            connect to the cloud service. You need to download the client first.
+            Cloud Storage: Store data on cloud storage to facilitate cross device use of the product. Only the client
+            can connect to the cloud service. You need to download the client first.
             <a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
           </p>
         </div>
@@ -80,7 +80,10 @@ export class DataStorageComponent implements OnInit, OnChanges {
         ...this.validateForm.value,
       };
       this.modelChange.emit(this.model);
-      await this.dataSource.switchDataSource('http');
+      const [isSuccess] = await this.dataSource.pingCloudServerUrl();
+      if (isSuccess) {
+        this.dataSource.connectCloudSuccess();
+      }
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {

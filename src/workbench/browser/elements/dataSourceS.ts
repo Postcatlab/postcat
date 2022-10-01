@@ -12,7 +12,7 @@ export class DataSourceS extends Render {
     return `const ${status} = this.dataSource.mockUrl`;
   }
   ping() {
-    return `const [isOk] = await this.dataSource.pingRmoteServerUrl();`;
+    return `const [isOk] = await this.dataSource.checkRemoteAndTipModal();`;
   }
   render() {
     return {

@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
@@ -39,7 +39,7 @@ export class DataSourceService {
   constructor(
     private storageService: StorageService,
     private messageService: MessageService,
-    private message: NzMessageService,
+    private message: EoMessageService,
     private settingService: SettingService,
     private router: Router
   ) {
@@ -50,7 +50,7 @@ export class DataSourceService {
         switch (inArg.type) {
           case 'onDataSourceChange': {
             if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
-              this.showMessage();
+              this.connectCloudSuccess();
             }
             break;
           }
@@ -73,11 +73,10 @@ export class DataSourceService {
     await this.router.navigate(['**']);
     await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
   }
-
   /**
    * Test if cloud service address is available
    */
-  async pingRmoteServerUrl(): Promise<[boolean, any]> {
+  async pingCloudServerUrl(): Promise<[boolean, any]> {
     const { url: remoteUrl, token } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
 
     if (!remoteUrl) {
@@ -91,14 +90,20 @@ export class DataSourceService {
       const response = await fetch(url);
       result = await response.json();
       if (result.statusCode !== 200) {
-        this.messageService.send({ type: 'ping-fail', data: {} });
         return [false, result];
       }
     } catch (e) {
-      this.messageService.send({ type: 'ping-fail', data: {} });
       return [false, e];
     }
     return [true, result];
+  }
+
+  async checkRemoteAndTipModal() {
+    const [isSuccess] = await this.pingCloudServerUrl();
+    this.isConnectRemote = isSuccess;
+    if (!isSuccess) {
+      this.messageService.send({ type: 'ping-fail', data: {} });
+    }
   }
   switchToLocal() {
     this.storageService.toggleDataSource({ dataSourceType: 'local' });
@@ -150,14 +155,13 @@ export class DataSourceService {
   switchDataSource = async (dataSource: DataSourceType) => {
     const isRemote = dataSource === 'http';
     if (isRemote) {
-      const [isSuccess] = await this.pingRmoteServerUrl();
-      this.isConnectRemote = isSuccess;
+      const [isSuccess] = await this.pingCloudServerUrl();
       if (isSuccess) {
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
         this.switchToHttp();
         this.refreshComponent();
       } else {
-        this.message.create('error', $localize`Cloud Storage not available`);
+        this.message.error($localize`Cloud Storage not available`);
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     } else {
@@ -167,8 +171,8 @@ export class DataSourceService {
     }
   };
 
-  showMessage() {
-    this.message.create('success', $localize`Successfully connect to cloud`);
+  connectCloudSuccess() {
+    this.message.success($localize`Successfully connect to cloud`);
     localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }
