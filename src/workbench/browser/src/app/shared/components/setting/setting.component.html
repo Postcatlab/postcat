@@ -29,15 +29,15 @@
   </div>
   <nz-divider nzType="vertical" class="divider"></nz-divider>
   <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
-    <eo-account [id]="treeNodes[0].moduleID"></eo-account>
+    <eo-account *ngIf="user.isLogin" id="eoapi - account"></eo-account>
+    <nz-divider *ngIf="user.isLogin"></nz-divider>
+    <!-- Cloud Storage -->
+    <eo-data-storage [(model)]="settings" id="'eoapi-common"></eo-data-storage>
     <nz-divider></nz-divider>
-    <!-- Data Storage -->
-    <eo-data-storage [(model)]="settings" [id]="treeNodes[1].moduleID"></eo-data-storage>
-    <nz-divider></nz-divider>
-    <!-- Language -->
-    <eo-language-switcher [(model)]="settings" [id]="treeNodes[2].moduleID"> </eo-language-switcher>
+    <!-- Cloud Storage -->
+    <eo-language-switcher [(model)]="settings" id="eoapi - language"> </eo-language-switcher>
     <nz-divider></nz-divider>
     <!-- About -->
-    <eo-about [id]="treeNodes[3].moduleID"></eo-about>
+    <eo-about id="eoapi - about"></eo-about>
   </div>
 </section>

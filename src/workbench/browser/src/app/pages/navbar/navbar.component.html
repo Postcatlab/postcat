@@ -84,27 +84,25 @@
       </ul>
     </nz-dropdown-menu>
     <!-- User -->
-    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="UserMenu">
+    <span class="flex items-center justify-center mx-1 icon" nzTrigger="click" nz-dropdown [nzDropdownMenu]="UserMenu">
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #UserMenu="nzDropdownMenu">
       <ul nz-menu>
-        <li *ngIf="userService.userProfile?.username; else elseBlock" nz-menu-item>
-          <button type="button">
-            {{ userService.userProfile?.username }}
-          </button>
+        <li nz-menu-item *ngIf="!userService.isLogin">
+          <button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button>
         </li>
-        <ng-template #elseBlock>
-          <li nz-menu-item><button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button></li>
-        </ng-template>
-        <ng-template [ngIf]="userService.isLogin">
-          <li nz-menu-item *ngIf="userService.isLogin">
+        <ng-container *ngIf="userService.isLogin">
+          <li class="p-[5px] text-neutral-400">
+            {{ userService.userProfile?.username }}
+          </li>
+          <li nz-menu-item>
             <button type="button" (click)="openSettingModal()" i18n>Account Setting</button>
           </li>
-          <li nz-menu-item *ngIf="userService.isLogin">
+          <li nz-menu-item>
             <button type="button" (click)="loginOut()" i18n>Sign Out</button>
           </li>
-        </ng-template>
+        </ng-container>
       </ul>
     </nz-dropdown-menu>
     <!-- Windows pc system operate -->

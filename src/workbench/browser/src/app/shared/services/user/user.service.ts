@@ -35,7 +35,7 @@ export class UserService {
     StorageUtil.set('userProfile', userProfile);
   }
   private setLoginStatus(){
-    this.isLogin = !!this.userProfile.username;
+    this.isLogin = !!this.userProfile?.username;
   }
 
   clearAuth() {

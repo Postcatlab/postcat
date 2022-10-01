@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { debounce } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 
 interface TreeNode {
   name: string;
@@ -69,6 +70,7 @@ export class SettingComponent implements OnInit {
   treeNodes = [
     {
       name: $localize`:@@Account:Account`,
+      hidden: `user.isLogin`,
       moduleID: 'eoapi-account',
       children: [
         {
@@ -103,7 +105,7 @@ export class SettingComponent implements OnInit {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  constructor( private settingService: SettingService) {}
+  constructor(private settingService: SettingService, public user: UserService) {}
 
   ngOnInit(): void {
     this.init();
@@ -151,7 +153,37 @@ export class SettingComponent implements OnInit {
       this.isClick = false;
     }, 800);
   }
+  private initTree() {
+    // Recursively generate the setup tree
+    const generateTreeData = (configurations = []) =>
+      [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
+        if (Array.isArray(curr)) {
+          return prev.concat(generateTreeData(curr));
+        }
+        const treeItem: TreeNode = {
+          name: curr.title,
+          moduleID: curr.moduleID,
+          configuration: [].concat(curr),
+        };
+        return prev.concat(treeItem);
+      }, []);
+    // All settings
+    const treeData = eoDeepCopy(
+      this.treeNodes.filter((val) => {
+        switch (val.moduleID) {
+          case 'eoapi-account': {
+            if (!this.user.isLogin) {return false;}
+          }
+        }
+        return true;
+      })
+    );
+    this.dataSource.setData(treeData);
+    this.treeControl.expandAll();
 
+    // The first item is selected by default
+    this.selectModule(this.treeControl.dataNodes.at(0));
+  }
   /**
    * Parse the configuration information of all modules
    */
@@ -170,29 +202,7 @@ export class SettingComponent implements OnInit {
         return configuration;
       });
 
-    // Recursively generate the setup tree
-    const generateTreeData = (configurations = []) =>
-      [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
-        if (Array.isArray(curr)) {
-          return prev.concat(generateTreeData(curr));
-        }
-        const treeItem: TreeNode = {
-          name: curr.title,
-          moduleID: curr.moduleID,
-          configuration: [].concat(curr),
-        };
-        return prev.concat(treeItem);
-      }, []);
-    // All settings
-    const treeData = JSON.parse(JSON.stringify(this.treeNodes));
-    // const extensions = treeData.find((n) => n.moduleID === 'eoapi-extensions');
-    // extensions.children = generateTreeData(this.extensitonConfigurations);
-    // extensions.configuration = this.extensitonConfigurations;
-    this.dataSource.setData(treeData);
-    this.treeControl.expandAll();
-
-    // The first item is selected by default
-    this.selectModule(this.treeControl.dataNodes.at(0));
+    this.initTree();
   }
 
   handleSave = () => {

@@ -50,7 +50,7 @@ export class DataSourceService {
         switch (inArg.type) {
           case 'onDataSourceChange': {
             if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
-              this.connectCloudSuccess();
+              localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
             }
             break;
           }
