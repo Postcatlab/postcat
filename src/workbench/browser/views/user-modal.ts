@@ -183,15 +183,7 @@ const checkConnect = new Modal({
     {
       label: 'Retry',
       type: 'primary',
-      click: [
-        dataSourceS.ping(),
-        (isOk) => {
-          if (!isOk) {
-            return;
-          }
-        },
-        Modal.close('check-connect'),
-      ],
+      click: [dataSourceS.ping(), Modal.close('check-connect')],
     },
   ],
 });

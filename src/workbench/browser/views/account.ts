@@ -1,7 +1,7 @@
 import { Button, Component, Form, Title, Canvas, HTTPS, UserS, MessageS } from '../elements';
 
 const userS = new UserS();
-const http = new HTTPS();
+const httpS = new HTTPS();
 const message = new MessageS();
 
 const usernameF = new Form({
@@ -56,17 +56,17 @@ export default new Component({
         usernameF,
         new Button({
           id: 'save-username',
-          class: ['w-[120px]'],
+          class: ['w-[84px]'],
           label: {
             text: 'Save',
           },
           event: {
             click: [
               usernameF.getValue('username', 'user'),
-              http.send('api_userUpdateUserProfile', '{ username: user, avatar: "111" }', {
+              httpS.send('api_userUpdateUserProfile', '{ username: user, avatar: "111" }', {
                 errTip: 'Sorry, username is be used',
               }),
-              http.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
+              httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
               userS.setUserProfile('pData'),
               message.success('Username update success !'),
             ],
@@ -82,7 +82,7 @@ export default new Component({
     }),
     new Button({
       id: 'reset-btn',
-      class: ['w-[120px]'],
+      class: ['w-[84px]'],
       label: {
         text: 'Reset',
       },
@@ -93,10 +93,7 @@ export default new Component({
           // * update new password
           passwordF.getValue('oldPassword', 'oldPassword'),
           passwordF.getValue('newPassword', 'newPassword'),
-          `const [data, err]:any = await this.api.api_userUpdatePsd({ oldPassword, newPassword });
-          if (err) {
-            return;
-          }`,
+          httpS.send('api_userUpdatePsd', '{ oldPassword, newPassword }', { errTip: 'Validation failed' }),
           message.success('Password reset success !'),
           passwordF.reset(),
         ],
@@ -104,7 +101,7 @@ export default new Component({
     }),
     new Canvas({ class: ['h-4'] }),
     userS,
-    http,
+    httpS,
     message,
   ],
 });
