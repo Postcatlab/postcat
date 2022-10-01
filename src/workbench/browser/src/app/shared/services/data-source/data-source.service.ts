@@ -76,9 +76,8 @@ export class DataSourceService {
   /**
    * Test if cloud service address is available
    */
-  async pingCloudServerUrl(): Promise<[boolean, any]> {
-    const { url: remoteUrl, token } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
-
+  async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
+    const remoteUrl = inputUrl || this.settingService.getConfiguration('eoapi-common.remoteServer.url');
     if (!remoteUrl) {
       return [false, remoteUrl];
     }

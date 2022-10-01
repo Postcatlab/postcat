@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 @Component({
   selector: 'eo-data-storage',
   template: `
@@ -49,6 +50,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
 
   constructor(
     private fb: FormBuilder,
+    private message: EoMessageService,
     private web: WebService,
     private electron: ElectronService,
     private dataSource: DataSourceService
@@ -79,10 +81,14 @@ export class DataStorageComponent implements OnInit, OnChanges {
         ...this.model,
         ...this.validateForm.value,
       };
-      this.modelChange.emit(this.model);
-      const [isSuccess] = await this.dataSource.pingCloudServerUrl();
+      const [isSuccess] = await this.dataSource.pingCloudServerUrl(
+        this.validateForm.value['eoapi-common.remoteServer.url']
+      );
       if (isSuccess) {
         this.dataSource.connectCloudSuccess();
+        this.modelChange.emit(this.model);
+      } else {
+        this.message.error($localize`Failed to connect`);
       }
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
