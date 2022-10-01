@@ -158,6 +158,11 @@ const login = new Modal({
               Modal.close('login'),
               httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
               userS.setUserProfile('pData'),
+              `
+              if (!data.isFirstLogin) {
+                return
+              }
+              `,
               sync.wakeUp(),
             ],
           },

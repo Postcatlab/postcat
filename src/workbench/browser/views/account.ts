@@ -63,7 +63,7 @@ export default new Component({
           event: {
             click: [
               usernameF.getValue('username', 'user'),
-              httpS.send('api_userUpdateUserProfile', '{ username: user, avatar: "111" }', {
+              httpS.send('api_userUpdateUserProfile', '{ username: user }', {
                 errTip: 'Sorry, username is be used',
               }),
               httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),

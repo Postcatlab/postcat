@@ -38,7 +38,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnjc084uCallback()"
+          (click)="btnzerpcbCallback()"
           i18n
         >
           Cancel
@@ -47,7 +47,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btn1hibkgCallback()"
+          (click)="btn0gq2h8Callback()"
           i18n
         >
           Sync
@@ -69,7 +69,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnd3fvdtCallback()"
+          (click)="btnnco5wjCallback()"
           i18n
         >
           Cancel
@@ -78,7 +78,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnv3ezj4Callback()"
+          (click)="btnerp86pCallback()"
           i18n
         >
           Retry
@@ -90,7 +90,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="elcupajCallback()"
+      (nzAfterClose)="etze4jrCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -133,7 +133,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
             class="h-10"
             nzType="primary"
             nzBlock
-            (click)="btn4axpqkCallback()"
+            (click)="btnxrt8kfCallback()"
             i18n
           >
             Sign In/Up
@@ -150,7 +150,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="text8agru4Callback()" i18n>
+        <span style="color: #1890ff" (click)="textvu5qlwCallback()" i18n>
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
@@ -176,7 +176,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="default"
-          (click)="btnow0exvCallback()"
+          (click)="btnytwcsgCallback()"
           i18n
         >
           Cancel
@@ -185,7 +185,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btncrilqaCallback()"
+          (click)="btno0lufgCallback()"
           i18n
         >
           Save
@@ -295,13 +295,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnjc084uCallback() {
+  async btnzerpcbCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btn1hibkgCallback() {
+  async btn0gq2h8Callback() {
     // * click event callback
     const eData = await this.workspace.exportProjectData()
     const [data, err]: any = await this.api.api_workspaceUpload(eData)
@@ -323,13 +323,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnd3fvdtCallback() {
+  async btnnco5wjCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnv3ezj4Callback() {
+  async btnerp86pCallback() {
     // * click event callback
     this.dataSource.checkRemoteAndTipModal()
 
@@ -340,18 +340,19 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async elcupajCallback() {
+  async etze4jrCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset()
   }
-  async btn4axpqkCallback() {
+  async btnxrt8kfCallback() {
     // * click event callback
     const isOk = this.validateUsernameForm.valid
 
     if (!isOk) {
-      this.eMessage.error($localize`Failed`)
+      this.eMessage.error($localize`Please check you username or password`)
+      return
     }
 
     // * get Username form values
@@ -374,6 +375,10 @@ export class UserModalComponent implements OnInit {
 
     this.user.setUserProfile(pData)
 
+    if (!data.isFirstLogin) {
+      return
+    }
+
     // * 唤起弹窗
     this.isSyncModalVisible = true
   }
@@ -381,7 +386,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async text8agru4Callback() {
+  async textvu5qlwCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -392,13 +397,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnow0exvCallback() {
+  async btnytwcsgCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btncrilqaCallback() {
+  async btno0lufgCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
 
