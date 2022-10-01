@@ -40,7 +40,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btnrp1c7kCallback()"
+      (click)="btnl7r5dyCallback()"
       i18n
     >
       Save
@@ -60,7 +60,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btn8un3adCallback()"
+      (click)="btni4gre9Callback()"
       i18n
     >
       Delete
@@ -91,7 +91,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnrp1c7kCallback() {
+  async btnl7r5dyCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -113,7 +113,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btn8un3adCallback() {
+  async btni4gre9Callback() {
     // * click event callback
 
     const confirm = () =>

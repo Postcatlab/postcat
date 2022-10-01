@@ -259,9 +259,10 @@ const updateWorkspace = [
   workspaceS.setWorkspaceList('list'),
   // workspaceS.updateProjectID('workspaceID'),
   // TODO for now
-  `
-  const { projects } = await this.workspace.getWorkspaceInfo(workspaceID);
-  this.project.setCurrentProjectID(projects.at(0).uuid);
+  `if (workspaceID !== -1) {
+    const { projects } = await this.workspace.getWorkspaceInfo(workspaceID);
+    this.project.setCurrentProjectID(projects.at(0).uuid);
+  }
   `,
 ];
 
