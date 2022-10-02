@@ -10,6 +10,7 @@ import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/pro
 const protocolReg = new RegExp('^(http|https)://');
 
 const interceptorPaths = ['/api_data', '/group', '/api_test_history', '/mock', '/environment'];
+const needWorkspaceIDPrefixPaths = ['/project'];
 
 // implements StorageInterface
 @Injectable()
@@ -25,10 +26,14 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     const { url = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
     const token = StorageUtil.get('accessToken') || '';
 
-    const targetUrl = interceptorPaths.find((n) => req.url.startsWith(n));
-    if (targetUrl) {
+    let targetUrl;
+    if ((targetUrl = interceptorPaths.find((n) => req.url.startsWith(n)))) {
       req = req.clone({
         url: req.url.replace(targetUrl, `${this.apiPrefix}/${targetUrl}`),
+      });
+    } else if ((targetUrl = needWorkspaceIDPrefixPaths.find((n) => req.url.startsWith(n)))) {
+      req = req.clone({
+        url: req.url.replace(targetUrl, `/${this.workspaceService.currentWorkspaceID}/${targetUrl}`),
       });
     }
     req = req.clone({
