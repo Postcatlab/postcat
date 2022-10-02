@@ -1,7 +1,7 @@
 <nz-list nzItemLayout="horizontal" nzBordered [nzLoading]="loading">
   <nz-list-header>
     <nz-input-group [nzPrefix]="prefixIconSearch">
-      <input type="text"  [(ngModel)]="searchValue" nz-input i18n-placeholder placeholder="Search" />
+      <input type="text" [(ngModel)]="searchValue" nz-input i18n-placeholder placeholder="Search" />
     </nz-input-group>
     <ng-template #prefixIconSearch>
       <eo-iconpark-icon name="search"></eo-iconpark-icon>
@@ -20,7 +20,7 @@
       <nz-list-item-action>
         <div class="w-[130px] flex justify-between">
           <span>{{ item.role }}</span>
-          <a (click)="handleRemove(item)">remove</a>
+          <a (click)="handleRemove(item)" i18n>Remove</a>
         </div>
       </nz-list-item-action>
     </ul>
