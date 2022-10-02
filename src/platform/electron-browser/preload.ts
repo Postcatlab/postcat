@@ -243,6 +243,11 @@ window.eo.getMockUrl = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getMockUrl' });
 };
 
+// 获取websocket服务端口
+window.eo.getWebsocketPort = () => {
+  return ipcRenderer.invoke('eo-sync', { action: 'getWebsocketPort' });
+};
+
 // 重置并初始化路由
 window.eo.resetAndInitRoutes = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'resetAndInitRoutes' });
