@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 type UserMeta = {
   username: string;
-  role: string;
+  roleName: string;
 };
 
 @Component({
