@@ -75,7 +75,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private electron: ElectronService,
     private store: Store
-  ) {}
+  ) {
+  }
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
   }
