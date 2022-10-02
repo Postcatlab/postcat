@@ -1,6 +1,4 @@
 <div class="overview_container">
-  <h1 class="fs20 fwb" i18n="@@API Index">Index</h1>
-  <nz-divider></nz-divider>
   <section class="grid grid-cols-2 gap-8 xl:grid-cols-3">
     <div class="card_item" *ngFor="let item of overviewList">
       <nz-card class="h-full" [nzActions]="[card]" [nzHoverable]="true" (click)="handleClickCard($event, item)">

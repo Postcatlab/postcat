@@ -6,10 +6,10 @@ import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -73,7 +73,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private router: Router,
     private messageService: MessageService,
     private storage: StorageService,
-    private remoteService: RemoteService,
+    private electron: ElectronService,
     private store: Store
   ) {
   }
@@ -101,7 +101,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   initTabsetData() {
     //Only electeron has local Mock
-    if (this.remoteService.isElectron) {
+    if (this.electron.isElectron) {
       this.TABS.push({
         routerLink: 'mock',
         title: 'Mock',

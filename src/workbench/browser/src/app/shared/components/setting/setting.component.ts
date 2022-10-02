@@ -1,13 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { Message, MessageService } from '../../../shared/services/message';
-import { Subject, takeUntil } from 'rxjs';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { debounce } from 'eo/workbench/browser/src/app/utils';
+import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 
 interface TreeNode {
   name: string;
@@ -31,32 +29,8 @@ interface FlatNode {
 })
 export class SettingComponent implements OnInit {
   extensitonConfigurations: any[];
-  @Input() set isShowModal(val) {
-    this.$isShowModal = val;
-    this.isShowModalChange.emit(val);
-    if (val) {
-      this.init();
-      this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
-      this.remoteServerToken = this.settings['eoapi-common.remoteServer.token'];
-      this.oldDataStorage = this.settings['eoapi-common.dataStorage'];
-    } else {
-      // this.handleSave();
-    }
-  }
-  get isShowModal() {
-    return this.$isShowModal;
-  }
-  @Output() isShowModalChange = new EventEmitter<any>();
   objectKeys = Object.keys;
   isClick = false;
-  /** Whether the remote data source */
-  get isRemote() {
-    return this.remoteService.isRemote;
-  }
-  /** The text corresponding to the current data source */
-  get dataSourceText() {
-    return this.remoteService.dataSourceText;
-  }
   private transformer = (node: TreeNode, level: number): FlatNode & TreeNode => ({
     ...node,
     expandable: !!node.children && node.children.length > 0,
@@ -81,8 +55,6 @@ export class SettingComponent implements OnInit {
   switchDataSourceLoading = false;
   /** current configuration */
   currentConfiguration = [];
-  // ! isVisible = false;
-  $isShowModal = false;
   /** current active configure */
   /** all configure */
   $settings = {};
@@ -97,17 +69,28 @@ export class SettingComponent implements OnInit {
   }
   treeNodes = [
     {
-      name: $localize`:@@DataSource:Data Storage`,
+      name: $localize`:@@Account:Account`,
+      hidden: `user.isLogin`,
+      moduleID: 'eoapi-account',
+      children: [
+        {
+          name: $localize`:@@Account:Username`,
+          moduleID: 'eoapi-account-username',
+        },
+        {
+          name: $localize`Password`,
+          moduleID: 'eoapi-account-password',
+        },
+      ],
+    },
+    {
+      name: $localize`:@@Cloud:Cloud Storage`,
       moduleID: 'eoapi-common',
     },
     {
       name: $localize`:@@Language:Language`,
       moduleID: 'eoapi-language',
     },
-    // {
-    //   name: $localize`Extensions`,
-    //   moduleID: 'eoapi-extensions',
-    // },
     {
       name: $localize`About`,
       moduleID: 'eoapi-about',
@@ -116,44 +99,18 @@ export class SettingComponent implements OnInit {
   /** local configure */
   localSettings = {};
   validateForm!: FormGroup;
-  /** remote server url */
+  /** cloud server url */
   remoteServerUrl = '';
-  /** remote server token */
-  remoteServerToken = '';
-  oldDataStorage = '';
-
   get selected() {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  private destroy$: Subject<void> = new Subject<void>();
-  constructor(
-    private messageService: MessageService,
-    private remoteService: RemoteService,
-    private settingService: SettingService
-  ) {}
+  constructor(private settingService: SettingService, public user: UserService) {}
 
   ngOnInit(): void {
     this.init();
+    this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
     // this.parseSettings();
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'toggleSettingModalVisible': {
-            console.log('inArg.data.isShow', inArg.data.isShow);
-            inArg.data.isShow ? this.handleShowModal() : this.handleCancel();
-            break;
-          }
-          case 'onDataSourceChange': {
-            // if (inArg.data.showWithSetting) {
-            //   this.remoteService.refreshComponent();
-            // }
-            break;
-          }
-        }
-      });
   }
 
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
@@ -190,12 +147,43 @@ export class SettingComponent implements OnInit {
     // console.log('this.currentConfiguration', this.currentConfiguration);
     this.selectListSelection.select(node);
     const target = document.querySelector(`#${node.moduleID}`);
+    console.log('target', target, node.moduleID);
     target?.scrollIntoView();
     setTimeout(() => {
       this.isClick = false;
     }, 800);
   }
+  private initTree() {
+    // Recursively generate the setup tree
+    const generateTreeData = (configurations = []) =>
+      [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
+        if (Array.isArray(curr)) {
+          return prev.concat(generateTreeData(curr));
+        }
+        const treeItem: TreeNode = {
+          name: curr.title,
+          moduleID: curr.moduleID,
+          configuration: [].concat(curr),
+        };
+        return prev.concat(treeItem);
+      }, []);
+    // All settings
+    const treeData = eoDeepCopy(
+      this.treeNodes.filter((val) => {
+        switch (val.moduleID) {
+          case 'eoapi-account': {
+            if (!this.user.isLogin) {return false;}
+          }
+        }
+        return true;
+      })
+    );
+    this.dataSource.setData(treeData);
+    this.treeControl.expandAll();
 
+    // The first item is selected by default
+    this.selectModule(this.treeControl.dataNodes.at(0));
+  }
   /**
    * Parse the configuration information of all modules
    */
@@ -214,53 +202,11 @@ export class SettingComponent implements OnInit {
         return configuration;
       });
 
-    // Recursively generate the setup tree
-    const generateTreeData = (configurations = []) =>
-      [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
-        if (Array.isArray(curr)) {
-          return prev.concat(generateTreeData(curr));
-        }
-        const treeItem: TreeNode = {
-          name: curr.title,
-          moduleID: curr.moduleID,
-          configuration: [].concat(curr),
-        };
-        return prev.concat(treeItem);
-      }, []);
-    // All settings
-    const treeData = JSON.parse(JSON.stringify(this.treeNodes));
-    // const extensions = treeData.find((n) => n.moduleID === 'eoapi-extensions');
-    // extensions.children = generateTreeData(this.extensitonConfigurations);
-    // extensions.configuration = this.extensitonConfigurations;
-    this.dataSource.setData(treeData);
-    this.treeControl.expandAll();
-
-    // The first item is selected by default
-    this.selectModule(this.treeControl.dataNodes.at(0));
-  }
-
-  handleShowModal() {
-    this.isShowModal = true;
+    this.initTree();
   }
 
   handleSave = () => {
-    // for (const i in this.validateForm.controls) {
-    //   if (this.validateForm.controls.hasOwnProperty(i)) {
-    //     this.validateForm.controls[i].markAsDirty();
-    //     this.validateForm.controls[i].updateValueAndValidity();
-    //   }
-    // }
-    // if (this.validateForm.status === 'INVALID') {
-    //   return;
-    // }
     this.settingService.saveSetting(this.settings);
     window.eo?.saveSettings?.({ ...this.settings });
   };
-
-  async handleCancel() {
-    this.handleSave();
-
-    this.isShowModal = false;
-    // this.isShowModalChange.emit(false);
-  }
 }

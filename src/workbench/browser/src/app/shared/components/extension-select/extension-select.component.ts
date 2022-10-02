@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
-import { parserJsonFile } from '../../../utils';
+import { parserJsonFile } from '../../../utils/index.utils';
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
 
 type optionType = {

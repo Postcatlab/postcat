@@ -11,7 +11,7 @@ import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Subject, takeUntil } from 'rxjs';
 import { ModalService } from '../../../shared/services/modal.service';
-import { isEmptyObj } from 'eo/workbench/browser/src/app/utils';
+import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';

@@ -27,7 +27,7 @@ import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzListModule } from 'ng-zorro-antd/list';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -45,6 +45,7 @@ import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/compone
 import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/split-x/split-x.component';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -58,6 +59,7 @@ const COMPONENTS = [
   EnvListComponent,
   SplitPanelComponent,
   EoMonacoEditorComponent,
+  DownloadClienteComponent,
 ];
 
 const SHARED_MODULE = [
@@ -94,7 +96,7 @@ const SHARED_MODULE = [
   NzDividerModule,
   NzModalModule,
   NzTypographyModule,
-  NzIconModule,
+  NzListModule,
 ] as const;
 
 @NgModule({

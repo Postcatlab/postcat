@@ -1,58 +1,34 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
-import { NzMessageService } from 'ng-zorro-antd/message';
-
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 @Component({
   selector: 'eo-data-storage',
   template: `
-    <div class="font-bold text-lg mb-2" i18n="@@DataSource">Data Storage</div>
+    <div class="font-bold text-lg mb-2" i18n="@@Cloud">Cloud Storage</div>
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-control>
-          <nz-select
-            formControlName="eoapi-common.dataStorage"
-            i18n-nzPlaceHolder="@@DataSource"
-            nzPlaceHolder="Data Storage"
-            (ngModelChange)="handleSelectDataStorage($event)"
-          >
-            <nz-option nzValue="http" i18n-nzLabel="@@Remote Server" nzLabel="Remote Server"></nz-option>
-            <nz-option nzValue="local" i18n-nzLabel nzLabel="Localhost"></nz-option>
-          </nz-select>
-        </nz-form-control>
         <div class="text-[12px] mt-[8px] text-gray-400">
-          <p i18n>Localhost: Store the data locally. You can only use the product on the current computer.</p>
           <p i18n>
-            Remote Server: Store data on a remote server to facilitate cross device use of the product. Only the client
-            can connect to the remote server. You need to download the client first.
-            <a href="https://eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
+            Cloud Storage: Store data on cloud storage to facilitate cross device use of the product. Only the client
+            can connect to the cloud service. You need to download the client first.
+            <a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
           </p>
         </div>
       </nz-form-item>
-      <ng-container *ngIf="validateForm.value['eoapi-common.dataStorage'] === 'http'">
+      <ng-container>
         <nz-form-item>
           <nz-form-label i18n>Host</nz-form-label>
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Host">
             <input nz-input formControlName="eoapi-common.remoteServer.url" i18n-placeholder placeholder="your host" />
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item>
-          <nz-form-label>Security Token</nz-form-label>
-          <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Security Token">
-            <input
-              nz-input
-              formControlName="eoapi-common.remoteServer.token"
-              i18n-placeholder
-              placeholder="your security token"
-            />
-          </nz-form-control>
-        </nz-form-item>
       </ng-container>
       <nz-form-item>
         <nz-form-control>
-          <button nz-button nzType="primary" [nzLoading]="loading" i18n>Change Data Storage</button>
+          <button nz-button nzType="primary" [nzLoading]="loading" i18n>Connect</button>
         </nz-form-control>
       </nz-form-item>
     </form>
@@ -69,32 +45,21 @@ export class DataStorageComponent implements OnInit, OnChanges {
   @Input() model: Record<string, any> = {};
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
-  oldDataStorageType: 'local' | 'http';
-  oldRemoteServerUrl: '';
   validateForm!: FormGroup;
   loading = false;
 
   constructor(
     private fb: FormBuilder,
-    private message: NzMessageService,
-    private electronService: ElectronService,
-    private remoteService: RemoteService
+    private message: EoMessageService,
+    private web: WebService,
+    private electron: ElectronService,
+    private dataSource: DataSourceService
   ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      'eoapi-common.dataStorage': this.model['eoapi-common.dataStorage'] ?? 'local',
-      'eoapi-common.remoteServer.url': [
-        this.model['eoapi-common.remoteServer.url'] || 'http://localhost:3000',
-        [Validators.required],
-      ],
-      'eoapi-common.remoteServer.token': [
-        this.model['eoapi-common.remoteServer.token'] || '1ab2c3d4e5f61ab2c3d4e5f6',
-        [Validators.required],
-      ],
+      'eoapi-common.remoteServer.url': [this.model['eoapi-common.remoteServer.url'] || '', [Validators.required]],
     });
-    this.oldDataStorageType = this.validateForm.value['eoapi-common.dataStorage'];
-    this.oldRemoteServerUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -104,76 +69,27 @@ export class DataStorageComponent implements OnInit, OnChanges {
       this.setFormValue(model.currentValue);
     }
   }
-
-  handleSelectDataStorage(val) {
-    if (!this.electronService.isElectron && val === 'http') {
-      this.validateForm.controls['eoapi-common.dataStorage'].setValue('local');
-      return this.message.error(
-        $localize`Only the client can connect to the remote server. You need to download the client first.`
-      );
-    }
-  }
-
-  /**
-   * 测试远程服务器地址是否可用
-   */
-  async pingRmoteServerUrl() {
-    const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
-    const remoteUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
-    const token = this.validateForm.value['eoapi-common.remoteServer.token'];
-
-    if (dataStorage !== 'http') {
-      return Promise.resolve(false);
-    }
-
-    try {
-      const url = uniqueSlash(`${remoteUrl}/system/status`);
-      const response = await fetch(url, {
-        headers: {
-          'x-api-key': token,
-        },
-      });
-      const result = await response.json();
-      console.log('result', result);
-      if (result.statusCode !== 200) {
-        throw result;
-      }
-      // await result.json();
-      // this.message.create('success', $localize`Remote server address set successfully!`);
-      return Promise.resolve(true);
-    } catch (error) {
-      console.error(error);
-      this.message.create('error', $localize`Remote server connection failed!!`);
-      return Promise.reject(false);
-    }
-  }
-
   async submitForm() {
-    const dataStorage = this.validateForm.value['eoapi-common.dataStorage'];
-    const isRemote = dataStorage === 'http';
-    const isValid = this.validateForm.valid;
-    const remoteUrl = this.validateForm.value['eoapi-common.remoteServer.url'];
-
-    if (!this.electronService.isElectron && isRemote) {
-      return this.message.error(
-        $localize`Only the client can connect to the remote server. You need to download the client first.`
-      );
-    }
-
-    if (this.oldDataStorageType === dataStorage && this.oldRemoteServerUrl === remoteUrl) {
+    if (!this.electron.isElectron) {
+      this.web.jumpToClient($localize`Eoapi Client is required to use cloud storage`);
       return;
     }
 
-    if (isValid && isRemote) {
-      console.log('submit', this.validateForm.value);
-      this.loading = true;
-      const result = await this.pingRmoteServerUrl().finally(() => (this.loading = false));
-      if (Object.is(result, true)) {
-        this.message.success($localize`The remote data source connection is successful!`);
+    const isValid = this.validateForm.valid;
+    if (isValid) {
+      this.model = {
+        ...this.model,
+        ...this.validateForm.value,
+      };
+      const [isSuccess] = await this.dataSource.pingCloudServerUrl(
+        this.validateForm.value['eoapi-common.remoteServer.url']
+      );
+      if (isSuccess) {
+        this.dataSource.connectCloudSuccess();
+        this.modelChange.emit(this.model);
+      } else {
+        this.message.error($localize`Failed to connect`);
       }
-      this.updateDataSource();
-    } else if (isValid) {
-      this.updateDataSource();
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -184,14 +100,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
     }
   }
 
-  async updateDataSource() {
-    this.model = {
-      ...this.model,
-      ...this.validateForm.value,
-    };
-    this.modelChange.emit(this.model);
-    await this.remoteService.switchDataSource(this.model['eoapi-common.dataStorage']);
-  }
+  async updateDataSource() {}
 
   setFormValue(model = {}) {
     Object.keys(model).forEach((key) => {

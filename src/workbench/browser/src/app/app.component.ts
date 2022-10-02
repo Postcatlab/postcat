@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { ThemeService } from './core/services';
-import { AppService } from './app.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { ElectronService, ThemeService } from './core/services';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
 @Component({
   selector: 'eo-root',
@@ -12,35 +10,12 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   `,
 })
 export class AppComponent {
-  constructor(
-    private theme: ThemeService,
-    private remoteService: RemoteService,
-    private modal: NzModalService,
-    private appService: AppService
-  ) {
+  constructor(private theme: ThemeService, private dataSource: DataSourceService, private electron: ElectronService) {
     this.theme.changeTheme();
-    this.checkRemoteServerConnect();
-  }
-
-  async checkRemoteServerConnect() {
-    if (this.remoteService.isRemote && window.eo) {
-      const [isSuccess] = await this.remoteService.pingRmoteServerUrl();
-      console.log('isSuccess', isSuccess);
-      if (!isSuccess) {
-        const timer = setTimeout(() => {
-          this.remoteService.switchDataSource('local');
-        }, 5000);
-        this.modal.info({
-          nzContent: $localize`:{can not connect}:Unable to connect to remote data sources, please check and reconnect. In order not to affect use, the app will help you jump to local`,
-          nzFooter: null,
-          nzCentered: true,
-          nzClosable: false,
-          nzOnOk: () => {
-            clearTimeout(timer);
-            timer && this.remoteService.switchDataSource('local');
-          },
-        });
-      }
+    //Check Connection at fisrt
+    if (!this.dataSource.isRemote || !this.electron.isElectron) {
+      return;
     }
+    this.dataSource.checkRemoteAndTipModal();
   }
 }

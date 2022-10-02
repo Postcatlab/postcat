@@ -5,6 +5,8 @@ import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 
 @Component({
   selector: 'eo-export-api',
@@ -13,8 +15,13 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
   supportList: Array<FeatureType> = [];
-  featureMap = window.eo.getFeature('apimanage.export');
-  constructor(private storage: StorageService, public extensionService: ExtensionService) {}
+  featureMap = window.eo?.getFeature('apimanage.export');
+  constructor(
+    private storage: StorageService,
+    private workspaceService: WorkspaceService,
+    private projectService: ProjectService,
+    public extensionService: ExtensionService
+  ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
       if (this.extensionService.isEnable(data.name)) {
@@ -48,10 +55,12 @@ export class ExportApiComponent implements OnInit {
 
   /**
    * Default export
+   *
    * @param callback
    */
   private exportEoapi(callback) {
-    this.storage.run('projectExport', [], (result: StorageRes) => {
+    const params = [this.workspaceService.currentWorkspaceID, this.projectService.currentProjectID];
+    this.storage.run('projectExport', params, (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         result.data.version = packageJson.version;
         this.transferTextToFile('Eoapi-export.json', result.data);
@@ -65,6 +74,7 @@ export class ExportApiComponent implements OnInit {
   /**
    * Module export
    * callback应该支持返回具体的错误信息显示
+   *
    * @param callback
    */
   private export(callback) {
@@ -73,7 +83,8 @@ export class ExportApiComponent implements OnInit {
     const filename = feature.filename || null;
     const module: ModuleInfo = window.eo.loadFeatureModule(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
-      this.storage.run('projectExport', [], (result: StorageRes) => {
+      const params = [this.workspaceService.currentWorkspaceID, this.projectService.currentProjectID];
+      this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           const output = module[action](result || {});

@@ -18,6 +18,14 @@
   background-color: var(--MAIN_BG);
   color: var(--MAIN_TEXT);
   overflow: hidden;
+
+  ::ng-deep {
+      eo-workspace, eo-member {
+      display: block;
+      overflow: auto;
+      height: 100%;
+    }
+  }
 }
 .remote-notification {
   display: flex;

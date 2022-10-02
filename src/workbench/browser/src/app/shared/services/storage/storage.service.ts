@@ -69,10 +69,6 @@ export class StorageService {
     }
 
     this.setDataStorage(type);
-    this.messageService.send({
-      type: 'onDataSourceChange',
-      data: { ...options, dataSourceType: this.dataSourceType },
-    });
   };
   toggleDataSource = (options: any = {}) => {
     const { dataSourceType } = options;

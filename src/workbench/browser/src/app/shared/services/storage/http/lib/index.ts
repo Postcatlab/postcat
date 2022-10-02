@@ -36,8 +36,8 @@ export class HttpStorage implements StorageInterface {
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
   projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
-  projectExport() {
-    return this.http.get(`/project/export`) as Observable<object>;
+  projectExport(workspaceID, projectID) {
+    return this.http.get(`/${workspaceID}/project/${projectID}/export`) as Observable<object>;
   }
   // Environment
   environmentCreate(item: Environment) {
@@ -154,5 +154,9 @@ export class HttpStorage implements StorageInterface {
   }
   apiMockLoadAllByApiDataID(apiDataID: number | string): Observable<object> {
     return this.http.get(`/mock?apiDataID=${apiDataID}`);
+  }
+
+  getWorkspaceInfo(workspaceID: number): Observable<object> {
+    return this.http.get(`/workspace/${workspaceID}`);
   }
 }

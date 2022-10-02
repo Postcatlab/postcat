@@ -1,33 +1,111 @@
-<div class="eo_navbar f_row f_js_ac">
-  <div>
+<div class="flex items-center justify-between eo_navbar">
+  <div class="flex">
     <img class="logo" src="assets/images/logo.svg" />
-    <a href="https://github.com/eolinker/eoapi" target="_blank">
+    <!-- star -->
+    <a href="https://github.com/eolinker/eoapi" target="_blank" class="can_be_click">
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
+    <!-- Select workspace -->
+    <div class="flex items-center can_be_click" nz-dropdown [nzDropdownMenu]="workspaceMenu">
+      <eo-iconpark-icon
+        class="mr-[5px]"
+        name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
+      >
+      </eo-iconpark-icon>
+      {{ workspaceService.currentWorkspace.title }}
+      <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
+    </div>
+    <nz-dropdown-menu #workspaceMenu="nzDropdownMenu">
+      <ul class="ml-[-11px]" nz-menu nzSelectable>
+        <div class="flex py-[5px] px-[12px]">
+          <input
+            nz-input
+            type="text"
+            class="flex-1 px-3 eo-search-input"
+            i18n-placeholder
+            placeholder="Search cloud workspace"
+            [(ngModel)]="searchValue"
+          />
+          <button
+            nz-tooltip
+            i18n-nzTooltipTitle
+            nzTooltipTitle="New Workspace"
+            nzType="primary"
+            nz-button
+            (click)="addWorkspace()"
+            class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0"
+          >
+            <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
+          </button>
+        </div>
+        <li
+          nz-menu-item
+          (click)="changeWorkspace(item)"
+          [nzSelected]="workspaceService.currentWorkspace?.id === item.id"
+          *ngFor="let item of searchWorkspace"
+        >
+          <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ item.id !== -1 ? 'sucess' : 'faild' }}">
+          </eo-iconpark-icon>
+          {{ item.title }}
+        </li>
+      </ul>
+    </nz-dropdown-menu>
   </div>
   <div class="flex items-center">
+    <!-- setting -->
     <span
       class="flex items-center justify-center mx-1 icon"
       i18n-nzTooltipTitle
       nz-tooltip
       [nzTooltipMouseEnterDelay]="0.7"
       nzTooltipTitle="Open Settings"
-      (click)="handleShowModal()"
+      (click)="openSettingModal()"
     >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </span>
-
-    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="menu">
+    <!-- help -->
+    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="helpMenu">
       <eo-iconpark-icon name="help"> </eo-iconpark-icon>
     </span>
-    <nz-dropdown-menu #menu="nzDropdownMenu">
+    <nz-dropdown-menu #helpMenu="nzDropdownMenu">
       <ul nz-menu>
         <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
         <a href="https://developer.eoapi.io" target="_blank" nz-menu-item i18n>Developer Support</a>
         <li nz-menu-divider></li>
-        <a href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{issueEnvironment}}" target="_blank" nz-menu-item i18n>Report Issue</a>
+        <a
+          href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
+            issueEnvironment
+          }}"
+          target="_blank"
+          nz-menu-item
+          i18n
+          >Report Issue</a
+        >
       </ul>
     </nz-dropdown-menu>
+    <!-- User -->
+    <span class="flex items-center justify-center mx-1 icon" nzTrigger="click" nz-dropdown [nzDropdownMenu]="UserMenu">
+      <eo-iconpark-icon name="me"> </eo-iconpark-icon>
+    </span>
+    <nz-dropdown-menu #UserMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item *ngIf="!userService.isLogin">
+          <button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button>
+        </li>
+        <ng-container *ngIf="userService.isLogin">
+          <li class="p-[5px] text-neutral-400">
+            {{ userService.userProfile?.username }}
+          </li>
+          <li nz-menu-item>
+            <button type="button" (click)="openSettingModal()" i18n>Account Setting</button>
+          </li>
+          <li nz-menu-item>
+            <button type="button" (click)="loginOut()" i18n>Sign Out</button>
+          </li>
+        </ng-container>
+      </ul>
+    </nz-dropdown-menu>
+    <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
       <span
         nz-tooltip
@@ -58,6 +136,7 @@
       >
       </span>
     </div>
+    <!-- Web download client -->
     <div *ngIf="!electron.isElectron">
       <div class="btn py-1.5 px-2 mx-1 flex items-center" nz-dropdown i18n [nzDropdownMenu]="download">
         <span class="flex items-center delete-icon">
@@ -76,4 +155,3 @@
     </div>
   </div>
 </div>
-<eo-setting [(isShowModal)]="isSettingVisible"></eo-setting>

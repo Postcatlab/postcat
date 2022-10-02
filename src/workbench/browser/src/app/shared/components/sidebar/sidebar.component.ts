@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { filter, takeWhile } from 'rxjs/operators';
-import { ElectronService } from '../../../core/services';
+import { ElectronService, WebService } from '../../../core/services';
 import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
+import { WorkspaceService } from '../../services/workspace/workspace.service';
+import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Component({
   selector: 'eo-sidebar',
@@ -15,7 +17,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isCollapsed = false;
   destroy = false;
   modules: Array<ModuleInfo | SidebarModuleInfo | any>;
-  constructor(private electron: ElectronService, private router: Router, public sidebar: SidebarService) {
+  constructor(
+    private electron: ElectronService,
+    private router: Router,
+    public sidebar: SidebarService,
+    private workspaceService: WorkspaceService,
+    private messageService: MessageService,
+    private webService: WebService
+  ) {
     this.isCollapsed = this.sidebar.getCollapsed();
     this.sidebar
       .onCollapsedChanged()
@@ -36,6 +45,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.getModules();
     this.getModuleIDFromRoute();
     this.watchRouterChange();
+    this.watchWorkspaceChange();
+  }
+
+  watchWorkspaceChange() {
+    this.messageService.get().subscribe((inArg: Message) => {
+      if (inArg.type === 'workspaceChange') {
+        this.getModules();
+      }
+    });
   }
 
   watchRouterChange() {
@@ -43,12 +61,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.getModuleIDFromRoute();
     });
   }
-  clickModule(module) {
+  async clickModule(module) {
     this.sidebar.currentModule = module;
-    this.sidebar.appChanged$.next();
     const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    console.log('route', route);
+    console.log('route', route, module);
+    if (this.webService.isWeb) {
+      if (module.moduleID === '@eo-core-workspace') {
+        return await this.webService.jumpToClient($localize`Eoapi Client is required to add workspace`);
+      }
+
+      if (module.moduleID === '@eo-core-member') {
+        return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
+      }
+    }
     this.router.navigate([route]);
   }
   ngOnDestroy(): void {
@@ -64,6 +90,26 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
+      ...(this.workspaceService.currentWorkspaceID === -1
+        ? []
+        : [
+            {
+              moduleName: $localize`Member`,
+              moduleID: '@eo-core-member',
+              isOffical: true,
+              icon: 'every-user',
+              activeRoute: 'home/member',
+              route: 'home/member',
+            },
+            {
+              moduleName: $localize`Workspace`,
+              moduleID: '@eo-core-workspace',
+              isOffical: true,
+              icon: 'home-5kaioboo',
+              activeRoute: 'home/workspace',
+              route: 'home/workspace',
+            },
+          ]),
       {
         moduleName: $localize`Extensions`,
         moduleID: '@eo-core-extension',
@@ -91,6 +137,5 @@ export class SidebarComponent implements OnInit, OnDestroy {
       return;
     }
     this.sidebar.currentModule = currentModule;
-    this.sidebar.appChanged$.next();
   }
 }

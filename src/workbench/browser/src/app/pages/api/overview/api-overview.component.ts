@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 
 import { EoMessageService } from '../../../eoui/message/eo-message.service';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -7,7 +6,6 @@ import { ExportApiComponent } from '../../../shared/components/export-api/export
 import { SyncApiComponent } from '../../../shared/components/sync-api/sync-api.component';
 import { ImportApiComponent } from '../../../shared/components/import-api/import-api.component';
 import { ModalService } from '../../../shared/services/modal.service';
-import { filter } from 'rxjs';
 
 const actionComponent = {
   push: SyncApiComponent,
@@ -21,7 +19,7 @@ const actionComponent = {
 })
 export class ApiOverviewComponent implements OnDestroy {
   modal: NzModalRef;
-  constructor(private modalService: ModalService, private router: Router, private message: EoMessageService) {}
+  constructor(private modalService: ModalService, private message: EoMessageService) {}
   overviewList = [
     {
       title: $localize`Import`,
@@ -53,7 +51,6 @@ export class ApiOverviewComponent implements OnDestroy {
     this.modal = this.modalService.create({
       nzTitle: desc,
       nzContent: actionComponent[type],
-      nzClosable: false,
       nzComponentParams: {},
       nzOnOk: () => {
         this.modal.componentInstance.submit((status) => {
@@ -67,10 +64,5 @@ export class ApiOverviewComponent implements OnDestroy {
       },
     });
   }
-  ngOnDestroy() {
-    //TODO router change manual close modal
-    if (this.modal) {
-      this.modal.destroy();
-    }
-  }
+  ngOnDestroy() {}
 }
