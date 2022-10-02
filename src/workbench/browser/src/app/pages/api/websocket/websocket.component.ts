@@ -82,7 +82,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     // * 通过 SocketIO 通知后端
     try {
       const port = await window.eo?.getWebsocketPort();
-      console.log('websocketPort', port);
       this.socket = io(
         `${
           APP_CONFIG.production && !this.electron.isElectron

@@ -42,9 +42,6 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit(): void {
-    setTimeout(() => {
-      console.log('this.model', this.model);
-    }, 5000);
   }
 
   contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {

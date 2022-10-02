@@ -93,7 +93,7 @@
           <button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button>
         </li>
         <ng-container *ngIf="userService.isLogin">
-          <li class="p-[5px] text-neutral-400">
+          <li class="px-[12px] py-[5px] text-neutral-400 font-bold">
             {{ userService.userProfile?.username }}
           </li>
           <li nz-menu-item>

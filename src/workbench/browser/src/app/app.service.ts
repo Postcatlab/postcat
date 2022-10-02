@@ -15,9 +15,7 @@ export class AppService {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
         const sender = event.sender;
-        console.log('req', req);
         const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType') !== false;
-        // console.log('wo接收到了哇', event, message);
         const { mockID } = req.query;
         if (Number.isInteger(Number(mockID))) {
           try {
@@ -74,7 +72,6 @@ export class AppService {
       if (Array.isArray(n.restParams) && n.restParams.length > 0) {
         const restMap = n.restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
         uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
-        // console.log('restMap', restMap, n.uri, uri);
       }
       const uriReg = new RegExp(`/?${uri}/?`);
       return n.method === req.method && uriReg.test(pathname);
