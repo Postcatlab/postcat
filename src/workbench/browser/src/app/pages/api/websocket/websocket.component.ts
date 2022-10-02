@@ -81,7 +81,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
     try {
-      const port = await window.eo.getWebsocketPort();
+      const port = await window.eo?.getWebsocketPort();
       console.log('websocketPort', port);
       this.socket = io(
         `${
