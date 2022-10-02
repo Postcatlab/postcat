@@ -39,11 +39,11 @@ if (app.isPackaged) {
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
 (async () => {
-  portfinder.basePort = 10000;
+  portfinder.basePort = 13928;
   // Use portfinder for port detection. If the port is found to be occupied, the port will be incremented by 1.
   const port = await portfinder.getPortPromise();
   // * start SocketIO
-  socket(port);
+  socket();
 })();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
