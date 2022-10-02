@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { EoExtensionInfo } from '../extension.model';
-import { ResourceInfo } from '../../../shared/models/client.model';
 import { ExtensionService } from '../extension.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { WebService } from '../../../core/services/web/web.service';
+import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 
 @Component({
   selector: 'eo-extension-detail',
@@ -15,46 +16,31 @@ export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   introLoading = false;
   changelogLoading = false;
-  isVisible = false;
   isEnable = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
-  resourceInfo = ResourceInfo;
   nzSelectedIndex = 0;
 
   changeLog = '';
   changeLogNotFound = false;
-  get isElectron() {
-    return this.electronService.isElectron;
-  }
   constructor(
     private extensionService: ExtensionService,
     private route: ActivatedRoute,
     private router: Router,
-    private electronService: ElectronService,
+    private webService: WebService,
+    public electron: ElectronService,
     private language: LanguageService
   ) {
     this.getDetail();
-    this.getInstaller();
   }
 
   ngOnInit(): void {}
 
-  handleInstall() {
-    if (this.electronService.isElectron) {
+  async handleInstall() {
+    if (this.electron.isElectron) {
       this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
     } else {
-      const PROTOCOL = 'eoapi://';
-      (window as any).protocolCheck(
-        PROTOCOL,
-        () => {
-          // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
-          this.isVisible = true;
-        },
-        () => {
-          window.location.href = PROTOCOL;
-        }
-      );
+      this.webService.jumpToClient($localize`Eoapi Client is required to install this extension.`);
     }
   }
 
@@ -159,45 +145,6 @@ ${log}
     }
   };
 
-  private findLinkInSingleAssets(assets, item) {
-    let result = '';
-    const assetIndex = assets.findIndex(
-      (asset) =>
-        new RegExp(`${item.suffix}$`, 'g').test(asset.browser_download_url) &&
-        (!item.keyword || asset.browser_download_url.includes(item.keyword))
-    );
-    if (assetIndex === -1) {
-      return result;
-    }
-    result = assets[assetIndex].browser_download_url;
-    assets.splice(assetIndex, 1);
-    return result;
-  }
-
-  private findLink(allAssets, item) {
-    let result = '';
-    allAssets.some((assets) => {
-      result = this.findLinkInSingleAssets(assets, item);
-      return result;
-    });
-    return result;
-  }
-
-  getInstaller() {
-    fetch('https://api.github.com/repos/eolinker/eoapi/releases')
-      .then((response) => response.json())
-      .then((data = []) => {
-        [...this.resourceInfo]
-          .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
-          .forEach((item) => {
-            item.link = this.findLink(
-              data.map((val) => val.assets),
-              item
-            );
-          });
-      });
-  }
-
   manageExtension(operate: string, id) {
     this.isOperating = true;
     /**
@@ -230,10 +177,6 @@ ${log}
         type: this.route.snapshot.queryParams.type,
       },
     });
-  }
-
-  handleOk(): void {
-    this.isVisible = false;
   }
 
   handleEnableExtension(isEnable) {

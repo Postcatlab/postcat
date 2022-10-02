@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ModalButtonOptions } from 'ng-zorro-antd/modal';
+import { filter } from 'rxjs';
 
 export type ModalOptions = {
   nzTitle: string;
@@ -8,9 +10,15 @@ export type ModalOptions = {
   nzFooter?: null | ModalButtonOptions[];
   [propName: string]: any;
 };
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ModalService {
-  constructor(private modalService: NzModalService) {}
+  constructor(private modal: NzModalService, private router: Router) {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
+      this.modal.closeAll();
+    });
+  }
   create(inOpts) {
     const modalOpts: ModalOptions = {
       nzTitle: 'modal title',
@@ -22,6 +30,12 @@ export class ModalService {
       },
       nzFooter: [
         {
+          label: $localize`Cancel`,
+          onClick: () => {
+            modal.destroy();
+          },
+        },
+        {
           label: $localize`Confirm`,
           type: 'primary',
           onClick: () => {
@@ -32,16 +46,10 @@ export class ModalService {
             }
           },
         },
-        {
-          label: $localize`Cancel`,
-          onClick: () => {
-            modal.destroy();
-          },
-        },
       ],
     };
     Object.assign(modalOpts, inOpts);
-    const modal = this.modalService.create(modalOpts);
+    const modal = this.modal.create(modalOpts);
     return modal;
   }
 }

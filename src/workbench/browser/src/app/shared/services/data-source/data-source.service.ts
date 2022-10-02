@@ -3,10 +3,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 /** is show switch success tips */
@@ -19,22 +18,16 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 @Injectable({
   providedIn: 'root',
 })
-export class RemoteService {
+export class DataSourceService {
+  isConnectRemote = false;
   private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   get dataSourceType(): DataSourceType {
     return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
   }
-  get isElectron() {
-    return this.electronService.isElectron;
-  }
   /** Is it a remote data source */
   get isRemote() {
     return this.dataSourceType === 'http';
-  }
-  /** Text corresponding to the current data source */
-  get dataSourceText() {
-    return this.isRemote ? $localize`:@@Remote Server:Remote Server` : $localize`Localhost`;
   }
   /** get mock url */
   get mockUrl() {
@@ -46,24 +39,11 @@ export class RemoteService {
   constructor(
     private storageService: StorageService,
     private messageService: MessageService,
-    private message: NzMessageService,
-    private electronService: ElectronService,
+    private message: EoMessageService,
     private settingService: SettingService,
     private router: Router
   ) {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'onDataSourceChange': {
-            if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
-              this.showMessage();
-            }
-            break;
-          }
-        }
-      });
+    this.pingCloudServerUrl();
   }
 
   getApiUrl(apiData: ApiData) {
@@ -81,40 +61,43 @@ export class RemoteService {
     await this.router.navigate(['**']);
     await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
   }
-
   /**
-   * Test if remote server address is available
+   * Test if cloud service address is available
    */
-  async pingRmoteServerUrl(): Promise<[boolean, any]> {
-    const { url: remoteUrl, token } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
-
+  async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
+    const remoteUrl = inputUrl || this.settingService.getConfiguration('eoapi-common.remoteServer.url');
+    let result;
     if (!remoteUrl) {
-      return [false, remoteUrl];
+      result = [false, remoteUrl];
     }
 
     const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
 
-    let result;
+    let res;
     try {
-      const response = await fetch(url, {
-        headers: {
-          'x-api-key': token,
-        },
-      });
-      result = await response.json();
-      if (result.statusCode !== 200) {
-        return [false, result];
+      const response = await fetch(url);
+      res = await response.json();
+      if (res.statusCode !== 200) {
+        result = [false, res];
+      } else {
+        result = [true, res];
       }
     } catch (e) {
-      return [false, e];
+      result = [false, e];
     }
-    return [true, result];
+    this.isConnectRemote = result[0];
+    return result;
   }
 
+  async checkRemoteAndTipModal() {
+    const [isSuccess] = await this.pingCloudServerUrl();
+    if (!isSuccess) {
+      this.messageService.send({ type: 'ping-fail', data: {} });
+    }
+  }
   switchToLocal() {
     this.storageService.toggleDataSource({ dataSourceType: 'local' });
   }
-
   switchToHttp() {
     this.storageService.toggleDataSource({ dataSourceType: 'http' });
   }
@@ -162,24 +145,24 @@ export class RemoteService {
   switchDataSource = async (dataSource: DataSourceType) => {
     const isRemote = dataSource === 'http';
     if (isRemote) {
-      const [isSuccess] = await this.pingRmoteServerUrl();
+      const [isSuccess] = await this.pingCloudServerUrl();
       if (isSuccess) {
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
         this.switchToHttp();
+        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
         this.refreshComponent();
       } else {
-        this.message.create('error', $localize`Remote data source not available`);
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+        this.message.error($localize`Cloud Storage not available`);
+        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
       }
     } else {
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
       this.switchToLocal();
+      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
       this.refreshComponent();
     }
   };
 
-  showMessage() {
-    this.message.create('success', $localize`successfully switched to ${this.dataSourceText} data source`);
+  connectCloudSuccess() {
+    this.message.success($localize`Successfully connect to cloud`);
     localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

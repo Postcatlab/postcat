@@ -12,7 +12,7 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
-  featureMap = window.eo.getFeature('apimanage.sync');
+  featureMap = window.eo?.getFeature('apimanage.sync');
   constructor(private storage: StorageService, public extensionService: ExtensionService) {}
 
   ngOnInit(): void {

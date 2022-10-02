@@ -92,9 +92,7 @@ export class ExtensionSettingComponent implements OnInit {
   @Input() localSettings: object = {};
   @Input() extensitonConfigurations = [];
   @Input() model: object = {};
-  @Input() isShowModal = false;
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  @Output() isShowModalChange: EventEmitter<any> = new EventEmitter();
   validateForm!: FormGroup;
   objectKeys = Object.keys;
 
@@ -161,7 +159,5 @@ export class ExtensionSettingComponent implements OnInit {
     this.router.navigate(['home/extension/list'], {
       queryParams: { type: 'all' },
     });
-    // this.handleCancel();
-    this.isShowModalChange.emit(false);
   }
 }

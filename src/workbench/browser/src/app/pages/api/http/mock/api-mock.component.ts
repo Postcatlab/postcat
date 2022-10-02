@@ -6,9 +6,9 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { formatUri } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { copyText } from 'eo/workbench/browser/src/app/utils';
+import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 
 @Component({
@@ -20,7 +20,7 @@ export class ApiMockComponent implements OnInit {
   @Output() eoOnInit = new EventEmitter<ApiData>();
   isVisible = false;
   get mockUrl() {
-    return this.remoteService.mockUrl;
+    return this.dataSource.mockUrl;
   }
   get modalTitle() {
     return `${
@@ -65,7 +65,7 @@ export class ApiMockComponent implements OnInit {
   constructor(
     private storageService: StorageService,
     private route: ActivatedRoute,
-    private remoteService: RemoteService,
+    private dataSource: DataSourceService,
     private message: NzMessageService
   ) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});

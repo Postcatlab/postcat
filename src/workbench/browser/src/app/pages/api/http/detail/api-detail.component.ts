@@ -8,9 +8,9 @@ import {
   StorageResStatus,
 } from '../../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../../utils/tree/tree.utils';
-import { reverseObj } from '../../../../utils';
+import { reverseObj } from '../../../../utils/index.utils';
 import { StorageService } from '../../../../shared/services/storage';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -23,7 +23,7 @@ export class ApiDetailComponent implements OnInit {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType),
   };
-  constructor(private route: ActivatedRoute, private storage: StorageService, public remoteService: RemoteService) {}
+  constructor(private route: ActivatedRoute, private storage: StorageService, public electron: ElectronService) {}
   ngOnInit(): void {
     this.init();
   }
@@ -34,7 +34,7 @@ export class ApiDetailComponent implements OnInit {
       if (id) {
         this.model = (await this.getApiByUuid(Number(id))) as ApiData;
       } else {
-        console.error("Can't no find api");
+        console.error('Can\'t no find api');
       }
     }
     this.eoOnInit.emit(this.model);

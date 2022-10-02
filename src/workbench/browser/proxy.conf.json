@@ -1,0 +1,10 @@
+{
+  "/api": {
+    "target": "https://290135738u.oicp.vip/",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "logLevel": "debug"
+  }
+}

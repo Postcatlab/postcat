@@ -1,11 +1,11 @@
-import { Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { ElectronService } from '../../core/services';
+import { Component, OnInit } from '@angular/core';
+import { ElectronService, WebService } from '../../core/services';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
-import { MessageService } from '../../shared/services/message';
-import { NzConfigService } from 'ng-zorro-antd/core/config';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
-import { ResourceInfo } from '../../shared/models/client.model';
-import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { SettingComponent } from '../../shared/components/setting/setting.component';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -14,74 +14,34 @@ import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 export class NavbarComponent implements OnInit {
   isMaximized = false;
   isSettingVisible = false;
-  messageTop;
-  @ViewChild('notificationTemplate', { static: true })
-  @ViewChildren(NzDropdownMenuComponent)
-  dropdownMenuList: QueryList<NzDropdownMenuComponent>;
-  notificationTemplate!: TemplateRef<{}>;
-  get dataSourceType() {
-    return this.remoteService.dataSourceType;
-  }
-  /** 是否远程数据源 */
-  get isRemote() {
-    return this.remoteService.isRemote;
-  }
-  /** 当前数据源对应的文本 */
-  get dataSourceText() {
-    return this.remoteService.dataSourceText;
-  }
+
+  searchValue: string;
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
-  resourceInfo = ResourceInfo;
+  resourceInfo = this.web.resourceInfo;
   issueEnvironment;
   constructor(
     public electron: ElectronService,
-    private messageService: MessageService,
-    private nzConfigService: NzConfigService,
-    private remoteService: RemoteService
+    private web: WebService,
+    private modal: NzModalService,
+    private message: MessageService,
+    public workspaceService: WorkspaceService,
+    public userService: UserService
   ) {
-    this.messageTop = this.nzConfigService.getConfig()?.message?.nzTop;
     this.issueEnvironment = this.getEnviroment();
-    this.getInstaller();
-  }
-  private findLinkInSingleAssets(assets, item) {
-    let result = '';
-    const assetIndex = assets.findIndex(
-      (asset) =>
-        new RegExp(`${item.suffix}$`, 'g').test(asset.browser_download_url) &&
-        (!item.keyword || asset.browser_download_url.includes(item.keyword))
-    );
-    if (assetIndex === -1) {
-      return result;
+    if (this.workspaceService.currentWorkspace?.id) {
+      this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }
-    result = assets[assetIndex].browser_download_url;
-    assets.splice(assetIndex, 1);
-    return result;
   }
-  private findLink(allAssets, item) {
-    let result = '';
-    allAssets.some((assets) => {
-      result = this.findLinkInSingleAssets(assets, item);
-      return result;
-    });
-    return result;
+  changeWorkspace(item) {
+    this.workspaceService.setCurrentWorkspace(item);
   }
-  getInstaller() {
-    fetch('https://api.github.com/repos/eolinker/eoapi/releases')
-      .then((response) => response.json())
-      .then((data) => {
-        if (!(data instanceof Array)) {
-          return;
-        }
-        [...this.resourceInfo]
-          .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
-          .forEach((item) => {
-            item.link = this.findLink(
-              data.map((val) => val.assets),
-              item
-            );
-          });
-      });
+  get searchWorkspace() {
+    if (!this.searchValue) {
+      return this.workspaceService.workspaceList;
+    }
+    const searchText = this.searchValue.toLocaleLowerCase();
+    return this.workspaceService.workspaceList.filter((val) => val.title.toLocaleLowerCase().includes(searchText));
   }
   minimize() {
     this.electron.ipcRenderer.send('message', {
@@ -105,10 +65,27 @@ export class NavbarComponent implements OnInit {
     } else {
       this.modules = new Map();
     }
+    this.message.get().subscribe(({ type }) => {
+      if (type === 'open-setting') {
+        this.openSettingModal();
+      }
+    });
   }
-
-  handleShowModal() {
-    this.isSettingVisible = true;
+  loginOrSign() {
+    if (this.web.isWeb) {
+      return this.web.jumpToClient($localize`Eoapi Client is required to sign in`);
+    }
+    this.message.send({ type: 'login', data: {} });
+  }
+  loginOut() {
+    this.message.send({ type: 'logOut', data: {} });
+  }
+  addWorkspace() {
+    if (this.web.isWeb) {
+      return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
+    } else {
+      this.message.send({ type: 'addWorkspace', data: {} });
+    }
   }
 
   getModules(): Array<ModuleInfo> {
@@ -119,14 +96,19 @@ export class NavbarComponent implements OnInit {
    * 打开系统设置
    */
   openSettingModal() {
-    this.messageService.send({ type: 'toggleSettingModalVisible', data: { isShow: true } });
+    this.modal.create({
+      nzClassName: 'eo-setting-modal',
+      nzContent: SettingComponent,
+      nzFooter: null,
+    });
   }
   private getEnviroment(): string {
     let result = '';
     const systemInfo = this.electron.getSystemInfo();
-    console.log(systemInfo);
     systemInfo.forEach((val) => {
-      if (['homeDir'].includes(val.id)) {return;}
+      if (['homeDir'].includes(val.id)) {
+        return;
+      }
       result += `- ${val.label}: ${val.value}\r\n`;
     });
     return encodeURIComponent(result);

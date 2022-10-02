@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { whatType } from '../../../utils';
+import { whatType } from '../../../utils/index.utils';
 import { flatData } from '../../../utils/tree/tree.utils';
 import qs from 'qs';
 import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-transfer/data-transfer.utils';

@@ -17,7 +17,6 @@
         </ng-container>
       </div>
     </div>
-    <!-- <div class="bbd"></div> -->
   </div>
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
@@ -65,10 +64,6 @@
         </nz-descriptions>
       </nz-tab>
       <nz-tab *ngIf="changeLog" i18n-nzTitle nzTitle="ChangeLog">
-        <!-- <h1>Change Log</h1>
-        <p>All notable changes to this project will be documented in this file.</p>
-        <h2>[12.0.1] - 2022-03-03</h2> -->
-        <!-- !show be markdown preview -->
         <nz-skeleton class="preview_tab" [nzLoading]="changelogLoading" [nzActive]="true">
           <eo-shadow-dom *ngIf="!changeLogNotFound" class="md-preview" [text]="changeLog"> </eo-shadow-dom>
           <nz-result nzStatus="info" i18n-nzTitle nzTitle="Changelog failed to load" *ngIf="changeLogNotFound">
@@ -81,19 +76,3 @@
     </nz-tabset>
   </section>
 </div>
-
-<nz-modal [(nzVisible)]="isVisible" i18n-nzTitle nzTitle="Eoapi Client is required to install this extension."
-  [nzOkText]="null" (nzOnCancel)="handleOk()">
-  <ng-container *nzModalContent>
-    <span i18n>Don't have Eoapi Client?</span>
-    <a nz-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n> Download </a>.
-    <nz-dropdown-menu #download="nzDropdownMenu">
-      <ul nz-menu>
-        <ng-container *ngFor="let item of resourceInfo; let index = index">
-          <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
-          <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
-        </ng-container>
-      </ul>
-    </nz-dropdown-menu>
-  </ng-container>
-</nz-modal>

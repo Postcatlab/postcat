@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import type { IpcRenderer } from 'electron';
 import { ApiData, ApiMockEntity } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remo
 export class AppService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
-  constructor(private indexedDBStorage: IndexedDBStorage, private remoteService: RemoteService) {
+  constructor(private indexedDBStorage: IndexedDBStorage, private dataSource: DataSourceService) {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
         const sender = event.sender;
@@ -53,6 +53,7 @@ export class AppService {
 
   /**
    * generate response data
+   *
    * @returns
    */
   generateResponse(responseBody: ApiData['responseBody']) {
@@ -60,13 +61,14 @@ export class AppService {
   }
   /**
    * match apiData by method and url
-   * @param {Number} projectID
-   * @param {Object} req
-   * @returns {Object}
+   *
+   * @param projectID
+   * @param req
+   * @returns
    */
   async matchApiData(projectID = 1, req) {
     const apiList = await this.getAllApi(projectID);
-    const { pathname } = new URL(req.url, this.remoteService.mockUrl);
+    const { pathname } = new URL(req.url, this.dataSource.mockUrl);
     const apiData = apiList.find((n) => {
       let uri = n.uri.trim();
       if (Array.isArray(n.restParams) && n.restParams.length > 0) {

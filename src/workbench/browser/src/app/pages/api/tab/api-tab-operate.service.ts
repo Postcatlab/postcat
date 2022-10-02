@@ -5,7 +5,7 @@ import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -44,11 +44,26 @@ export class ApiTabOperateService {
     //Restore from cache
     this.tabStorage.tabOrder = tabCache.tabOrder.filter((uuid) => tabCache.tabsByID.hasOwnProperty(uuid));
     const tabsByID = new Map();
-    Object.values(tabCache.tabsByID).forEach((tabItem) => {
+    Object.values(tabCache.tabsByID).forEach((tabItem: TabItem) => {
+      //Tabstorage has error route
+      if (this.BASIC_TABS.findIndex((val) => val.pathname === tabItem.pathname) === -1) {
+        this.tabStorage.tabOrder.splice(
+          this.tabStorage.tabOrder.findIndex((val) => val === tabItem.uuid),
+          1
+        );
+        tabCache.selectedIndex = 0;
+        return;
+      }
       tabsByID.set(tabItem.uuid, tabItem);
     });
     this.tabStorage.tabsByID = tabsByID;
 
+    if (!this.tabStorage.tabOrder?.length) {
+      this.operateTabAfterRouteChange({
+        url: this.router.url,
+      });
+      return;
+    }
     //Tab from url
     try {
       //If current url did't match exist tab,throw error
@@ -62,7 +77,6 @@ export class ApiTabOperateService {
     } catch (e) {
       console.error(e);
     }
-
     //Tab from last choose
     const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
     this.selectedIndex = tabCache.selectedIndex;

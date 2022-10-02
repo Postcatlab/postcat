@@ -14,11 +14,10 @@ import { EnvState } from './shared/store/env.state';
 
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
-import { MessageService } from './shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -35,7 +34,6 @@ import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 registerLocaleData(en);
 registerLocaleData(zh);
-
 
 @NgModule({
   declarations: [AppComponent],
@@ -54,8 +52,7 @@ registerLocaleData(zh);
     SettingService,
     ExtensionService,
     StorageService,
-    RemoteService,
-    MessageService,
+    DataSourceService,
     IndexedDBStorage,
     HttpStorage,
     NzMessageService,
@@ -66,6 +63,7 @@ registerLocaleData(zh);
       deps: ['$injector'],
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: RemoteUrlInterceptor, multi: true },
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {

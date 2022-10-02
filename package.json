@@ -1,7 +1,7 @@
 {
   "name": "eoapi",
   "souceLocale": "zh-Hans",
-  "version": "1.7.0",
+  "version": "1.8.0-beta",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/eolinker/eoapi.git",
@@ -30,7 +30,7 @@
     "test": "npm-run-all --serial test:*",
     "clear:electron:tsc": "tsc --build --clean",
     "electron:tsc": "tsc -p tsconfig.json",
-    "changelog":"conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out"
   },
   "dependencies": {

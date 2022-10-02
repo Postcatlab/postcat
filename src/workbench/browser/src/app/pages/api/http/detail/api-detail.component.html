@@ -62,7 +62,7 @@
     </nz-collapse-panel>
   </nz-collapse>
   <!-- MOCK -->
-  <nz-collapse *ngIf="remoteService.isElectron" class="eo_collapse" [nzGhost]="true">
+  <nz-collapse *ngIf="electron.isElectron" class="eo_collapse" [nzGhost]="true">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="MOCK">
       <eo-api-detail-mock class="flex pt-2.5" [apiData]="model"></eo-api-detail-mock>
     </nz-collapse-panel>

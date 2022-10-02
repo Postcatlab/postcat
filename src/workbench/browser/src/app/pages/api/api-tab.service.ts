@@ -3,7 +3,7 @@ import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { debounceTime, Subject } from 'rxjs';
 import { ApiTabComponent } from './tab/api-tab.component';
 import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
-import { isEmptyObj } from '../../utils';
+import { isEmptyObj } from '../../utils/index.utils';
 import { MessageService } from '../../shared/services/message';
 import { Router } from '@angular/router';
 @Injectable()
@@ -25,13 +25,6 @@ export class ApiTabService {
     },
     { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
     { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
-    {
-      pathname: '/home/api/overview',
-      type: 'preview',
-      module: 'overview',
-      title: $localize`:@@API Index:Index`,
-      icon: 'home',
-    },
     {
       pathname: '/home/api/ws/test',
       module: 'test',
