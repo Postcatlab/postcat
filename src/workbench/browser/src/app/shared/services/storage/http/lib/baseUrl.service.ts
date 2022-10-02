@@ -29,7 +29,6 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     if (targetUrl) {
       req = req.clone({
         url: req.url.replace(targetUrl, `${this.apiPrefix}/${targetUrl}`),
-        headers: req.headers.append('Authorization', token),
       });
     }
     req = req.clone({
