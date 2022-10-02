@@ -122,7 +122,7 @@ export class AccountComponent implements OnInit {
       this.eMessage.error($localize`Validation failed`);
       return;
     }
-    this.user.setUserProfile(data);
+    this.user.setLoginInfo(data);
 
     this.eMessage.success($localize`Password reset success !`);
 
