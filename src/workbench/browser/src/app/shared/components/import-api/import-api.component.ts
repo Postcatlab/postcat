@@ -5,6 +5,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { Router } from '@angular/router';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 
 // const optionList = [
 //   {
@@ -55,7 +56,8 @@ export class ImportApiComponent implements OnInit {
     private router: Router,
     private storage: StorageService,
     private eoMessage: EoMessageService,
-    public extensionService: ExtensionService
+    public extensionService: ExtensionService,
+    private projectService: ProjectService
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
@@ -111,9 +113,10 @@ export class ImportApiComponent implements OnInit {
       }
       return obj;
     };
-    this.storage.run('projectImport', [1, decycle(data)], (result: StorageRes) => {
+    const params = [this.projectService.currentProjectID, decycle(data)];
+    this.storage.run('projectImport', params, (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-      this.router.navigate(['home/api']);
+        this.router.navigate(['home/api']);
       }
     });
     callback(true);
