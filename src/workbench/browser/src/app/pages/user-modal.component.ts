@@ -30,8 +30,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         ></nz-alert>
       </ng-container>
       <ng-template #modalSyncFooter>
-        <button nz-button class="" nzType="default" (click)="btnpmbd1nCallback()" i18n>Cancel</button>
-        <button nz-button class="" nzType="primary" (click)="btnpmbki8Callback()" i18n>Sync</button>
+        <button nz-button class="" nzType="default" (click)="btn0mvkvpCallback()" i18n>Cancel</button>
+        <button nz-button class="" nzType="primary" (click)="btndaakqeCallback()" i18n>Sync</button>
       </ng-template>
     </nz-modal>
     <nz-modal
@@ -45,8 +45,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         <span i18n> Can 't connect right now, click to retry </span>
       </ng-container>
       <ng-template #modalCheckConnectFooter>
-        <button nz-button class="" nzType="default" (click)="btntg6zwmCallback()" i18n>Cancel</button>
-        <button nz-button class="" nzType="primary" (click)="btnm1fzbaCallback()" i18n>Retry</button>
+        <button nz-button class="" nzType="default" (click)="btn3wo93oCallback()" i18n>Cancel</button>
+        <button nz-button class="" nzType="primary" (click)="btnxryo04Callback()" i18n>Retry</button>
       </ng-template>
     </nz-modal>
     <nz-modal
@@ -54,7 +54,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="ek38zlvCallback()"
+      (nzAfterClose)="e1s4rhhCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -86,11 +86,9 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
                 />
               </nz-form-control>
             </nz-form-item>
-            <section class="h-2"></section>
-            <button nz-button type="submit" class="h-10" nzType="primary" nzBlock (click)="btnm5nctzCallback()" i18n>
-              Sign In/Up
-            </button>
           </form>
+          <section class="h-2"></section>
+          <button nz-button class="h-10" nzType="primary" nzBlock (click)="btni22neoCallback()" i18n>Sign In/Up</button>
         </section>
       </ng-container>
     </nz-modal>
@@ -103,7 +101,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="texta6kwepCallback()" i18n> open the settings </span>
+        <span style="color: #1890ff" (click)="text9zkvciCallback()" i18n> open the settings </span>
         <span i18n> and fill in the configuration </span>
       </ng-container>
     </nz-modal>
@@ -118,8 +116,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         <input nz-input [(ngModel)]="inputWorkspaceNameValue" i18n-placeholder placeholder="Workspace Name" />
       </ng-container>
       <ng-template #modalAddWorkspaceFooter>
-        <button nz-button class="" nzType="default" (click)="btn2agar3Callback()" i18n>Cancel</button>
-        <button nz-button class="" nzType="primary" (click)="btnq0bntfCallback()" i18n>Save</button>
+        <button nz-button class="" nzType="default" (click)="btn3lgkoeCallback()" i18n>Cancel</button>
+        <button nz-button class="" nzType="primary" (click)="btnhe9b6vCallback()" i18n>Save</button>
       </ng-template>
     </nz-modal>`,
 })
@@ -167,12 +165,17 @@ export class UserModalComponent implements OnInit {
           username: '',
           workspaces: [],
         });
-        this.workspace.setWorkspaceList([]);
+        {
+          this.workspace.setWorkspaceList([]);
+        }
         this.workspace.setCurrentWorkspaceID(-1);
-
-        const [data, err]: any = await this.api.api_authLogout({ refreshToken });
-        if (err) {
-          return;
+        {
+          const [data, err]: any = await this.api.api_authLogout({
+            refreshToken,
+          });
+          if (err) {
+            return;
+          }
         }
         this.eMessage.success($localize`Successfully logged out !`);
         return;
@@ -200,12 +203,12 @@ export class UserModalComponent implements OnInit {
     });
 
     const { id: workspaceID } = this.workspace.currentWorkspace;
-    const [list, wErr]: any = await this.api.api_workspaceList({});
-    if (wErr) {
+    const [data, err]: any = await this.api.api_workspaceList({});
+    if (err) {
       return;
     }
 
-    this.workspace.setWorkspaceList(list);
+    this.workspace.setWorkspaceList(data);
     if (workspaceID !== -1) {
       const { projects } = await this.workspace.getWorkspaceInfo(workspaceID);
       this.project.setCurrentProjectID(projects.at(0).uuid);
@@ -237,13 +240,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false;
   }
-  async btnpmbd1nCallback() {
+  async btn0mvkvpCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false;
   }
-  async btnpmbki8Callback() {
+  async btndaakqeCallback() {
     // * click event callback
     const eData = await this.project.exportProjectData();
     const [data, err]: any = await this.api.api_workspaceUpload(eData);
@@ -265,13 +268,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false;
   }
-  async btntg6zwmCallback() {
+  async btn3wo93oCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false;
   }
-  async btnm1fzbaCallback() {
+  async btnxryo04Callback() {
     // * click event callback
     this.dataSource.checkRemoteAndTipModal();
 
@@ -282,13 +285,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false;
   }
-  async ek38zlvCallback() {
+  async e1s4rhhCallback() {
     // * nzAfterClose event callback
 
     // * Clear Username form
     this.validateUsernameForm.reset();
   }
-  async btnm5nctzCallback() {
+  async btni22neoCallback() {
     // * click event callback
     const isOk = this.validateUsernameForm.valid;
 
@@ -310,19 +313,6 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false;
 
-    const [pData, pErr]: any = await this.api.api_userReadProfile(null);
-    if (pErr) {
-      return;
-    }
-
-    this.user.setUserProfile(pData);
-    const [list, wErr]: any = await this.api.api_workspaceList({});
-    if (wErr) {
-      return;
-    }
-
-    this.workspace.setWorkspaceList(list);
-
     if (!data.isFirstLogin) {
       return;
     }
@@ -334,7 +324,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false;
   }
-  async texta6kwepCallback() {
+  async text9zkvciCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} });
 
@@ -345,32 +335,34 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false;
   }
-  async btn2agar3Callback() {
+  async btn3lgkoeCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false;
   }
-  async btnq0bntfCallback() {
+  async btnhe9b6vCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue;
-
-    const [data, err]: any = await this.api.api_workspaceCreate({ title });
-    if (err) {
-      return;
+    {
+      const [data, err]: any = await this.api.api_workspaceCreate({ title });
+      if (err) {
+        return;
+      }
     }
-
     this.eMessage.success($localize`Create new workspace successfully !`);
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false;
 
     this.inputWorkspaceNameValue = '';
-    const [list, wErr]: any = await this.api.api_workspaceList({});
-    if (wErr) {
-      return;
-    }
+    {
+      const [data, err]: any = await this.api.api_workspaceList({});
+      if (err) {
+        return;
+      }
 
-    this.workspace.setWorkspaceList(list);
+      this.workspace.setWorkspaceList(data);
+    }
   }
 }

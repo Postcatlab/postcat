@@ -105,18 +105,12 @@ const addWorkspace = new Modal({
       type: 'primary',
       click: [
         newWorkspaceName.getValue('title'),
-        `
-        const [data, err]:any = await this.api.api_workspaceCreate({title})
-        if(err) {
-          return
-        }
-        `,
+        [httpS.send('api_workspaceCreate', '{ title }')],
         messageS.success('Create new workspace successfully !'),
         Modal.close('add-workspace'),
         newWorkspaceName.reset(),
         // * update workspace list
-        httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
-        workspaceS.setWorkspaceList('list'),
+        [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
       ],
       disabled: [],
     },
@@ -158,11 +152,12 @@ const login = new Modal({
               }),
               userS.setLoginInfo('data'),
               Modal.close('login'),
-              httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
-              userS.setUserProfile('pData'),
-              // * update workspace
-              httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
-              workspaceS.setWorkspaceList('list'),
+              [httpS.send('api_userReadProfile', null), userS.setUserProfile('data')],
+              [
+                // * update workspace
+                httpS.send('api_workspaceList', '{}'),
+                workspaceS.setWorkspaceList('data'),
+              ],
               `
               if (!data.isFirstLogin) {
                 return
@@ -217,13 +212,9 @@ const eventS = new EventS({
         userS.getKey('refreshToken'),
         userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         // * clear workspace list
-        workspaceS.setWorkspaceList('[]'),
+        [workspaceS.setWorkspaceList('[]')],
         workspaceS.setCurrentWorkspaceID('-1'),
-        `
-        const [data, err]:any = await this.api.api_authLogout({ refreshToken });
-        if (err) {
-          return;
-        }`,
+        [httpS.send('api_authLogout', '{ refreshToken }')],
         messageS.success('Successfully logged out !'),
       ],
     },
@@ -255,8 +246,7 @@ const openSetting = new Modal({
 
 const updateWorkspace = [
   workspaceS.getCurrent('{ id: workspaceID }'),
-  httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
-  workspaceS.setWorkspaceList('list'),
+  [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
   // workspaceS.updateProjectID('workspaceID'),
   // TODO for now
   `if (workspaceID !== -1) {
