@@ -365,7 +365,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     let count = 0;
     if (data.group.length > 0) {
       count++;
-      console.log('data.group', data.group);
       this.storage.run(
         'groupBulkUpdate',
         [
@@ -384,7 +383,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     }
     if (data.api.length > 0) {
       count++;
-      console.log('data.api', data.api);
       this.storage.run(
         'apiDataBulkUpdate',
         [

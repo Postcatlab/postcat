@@ -18,7 +18,6 @@ export class ExportApiComponent implements OnInit {
   featureMap = window.eo?.getFeature('apimanage.export');
   constructor(
     private storage: StorageService,
-    private workspaceService: WorkspaceService,
     private projectService: ProjectService,
     public extensionService: ExtensionService
   ) {}
@@ -59,7 +58,7 @@ export class ExportApiComponent implements OnInit {
    * @param callback
    */
   private exportEoapi(callback) {
-    const params = [this.workspaceService.currentWorkspaceID, this.projectService.currentProjectID];
+    const params = [this.projectService.currentProjectID];
     this.storage.run('projectExport', params, (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         result.data.version = packageJson.version;
@@ -83,7 +82,7 @@ export class ExportApiComponent implements OnInit {
     const filename = feature.filename || null;
     const module: ModuleInfo = window.eo.loadFeatureModule(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
-      const params = [this.workspaceService.currentWorkspaceID, this.projectService.currentProjectID];
+      const params = [this.projectService.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;

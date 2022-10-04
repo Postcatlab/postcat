@@ -46,7 +46,6 @@ export class SyncApiComponent implements OnInit {
               projectId,
               secretKey,
             });
-            console.log(output);
           } catch (e) {
             console.log(e);
           }

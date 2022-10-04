@@ -29,7 +29,6 @@ export class UserService {
   }
 
   setUserProfile(userProfile: API.User) {
-    console.log(userProfile);
     this.userProfile = userProfile;
     this.setLoginStatus();
     StorageUtil.set('userProfile', userProfile);

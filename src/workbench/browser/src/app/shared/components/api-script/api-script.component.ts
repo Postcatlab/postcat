@@ -86,7 +86,6 @@ export class ApiScriptComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   insertCode = (event) => {
-    console.log('isertCode', event);
     const { value } = event.origin;
     this.eoEditor.handleInsert(value);
   };

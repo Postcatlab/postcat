@@ -56,7 +56,7 @@
   <nz-dropdown-menu #addMenu="nzDropdownMenu">
     <ul nz-menu>
       <li nz-menu-item (click)="newTab()">HTTP</li>
-      <li nz-menu-item (click)="newTab('ws-test')">Websocket</li>
+      <li nz-menu-item (click)="newTab('/home/api/ws/test')">Websocket</li>
     </ul>
   </nz-dropdown-menu>
   <a nz-dropdown  [nzDropdownMenu]="menu">

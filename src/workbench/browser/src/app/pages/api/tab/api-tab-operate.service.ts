@@ -87,9 +87,8 @@ export class ApiTabOperateService {
    *
    * @returns tabItem
    */
-  newDefaultTab(key = 'http-test') {
-    const pathHash = ['http-test', 'http-edit', 'http-detail', 'overview', 'ws-test', 'http-mock'];
-    const tabItem = Object.assign({}, eoDeepCopy(this.BASIC_TABS[pathHash.findIndex((it) => it === key)]));
+  newDefaultTab(path?) {
+    const tabItem = Object.assign({}, eoDeepCopy(this.BASIC_TABS.find(val=>val.pathname===path)||this.BASIC_TABS[0]));
     tabItem.params = {};
     tabItem.uuid = tabItem.params.pageID = Date.now();
     Object.assign(tabItem, { isLoading: false });

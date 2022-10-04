@@ -51,7 +51,7 @@ export class DataSourceService {
     if (apiData) {
       url.searchParams.set('mockID', apiData.uuid + '');
     }
-    console.log('getApiUrl', decodeURIComponent(url.toString()));
+    // console.log('getApiUrl', decodeURIComponent(url.toString()));
     return decodeURIComponent(url.toString());
   }
 
