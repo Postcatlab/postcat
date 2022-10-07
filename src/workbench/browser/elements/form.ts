@@ -1,4 +1,5 @@
 import { Render } from 'ecode/dist/render';
+import { Button } from './button';
 import _ from 'lodash';
 
 type formType = {
@@ -20,6 +21,7 @@ type initType = {
   data: dataType[];
   layout?: '-' | '|' | '--' | 'horizontal' | 'vertical' | 'inline';
   children?: any[];
+  footer?: any[];
 };
 
 const layoutHash = new Map()
@@ -33,11 +35,13 @@ export class Form extends Render implements formType {
   id = '';
   data;
   layout;
-  constructor({ id = '', children, data = [], layout = 'horizontal' }: initType) {
+  footer;
+  constructor({ id = '', children, data = [], layout = 'horizontal', footer = [] }: initType) {
     super({ children });
     this.id = Render.toCamel(id);
     this.data = data;
     this.layout = layoutHash.get(layout);
+    this.footer = footer;
   }
   init(id) {
     const initRules = (list) =>
@@ -68,7 +72,7 @@ export class Form extends Render implements formType {
     return Form.getValue(this.id, name, nick);
   }
   isOk() {
-    return `const isOk = this.validate${this.id}Form.valid`;
+    return Form.isOk(this.id);
   }
   render() {
     const isLabelRequired = (rules) => (rules.includes('required') ? 'nzRequired' : '');
@@ -109,6 +113,10 @@ export class Form extends Render implements formType {
     `;
         })
         .join('\n');
+
+    const footerRender = (list = []) => list.map((it) => new Button(it).render());
+    const footer = footerRender(this.footer || []);
+    const footerTemplate = footer?.length ? `${footer.map((it) => it.template).join('\n')}` : '';
     return {
       imports: [
         {
@@ -128,10 +136,12 @@ export class Form extends Render implements formType {
           from: 'ng-zorro-antd/input',
         },
         ...this.children.imports,
+        ...footer.map((it) => it.imports),
       ],
       template: `
       <form nz-form [formGroup]="validate${this.id}Form" nzLayout="${this.layout}">
         ${formList(this.data)}
+        ${footerTemplate}
       </form>`,
       init: [this.init(this.id), ...this.children.init],
       data: [
@@ -141,10 +151,13 @@ export class Form extends Render implements formType {
         },
         ...this.children.data,
       ],
-      methods: [...this.methods],
+      methods: [...footer.map((it) => it.methods), ...this.methods],
     };
   }
 
+  static isOk(id) {
+    return `const isOk = this.validate${Render.toCamel(id)}Form.valid`;
+  }
   static reset(id) {
     return `
     /\/ * Clear ${id} form

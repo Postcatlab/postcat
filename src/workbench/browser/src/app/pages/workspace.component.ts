@@ -1,5 +1,3 @@
-import { Component, OnInit } from '@angular/core'
-
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
@@ -9,6 +7,7 @@ import {
   UntypedFormGroup,
   Validators
 } from '@angular/forms'
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'eo-workspace',
@@ -40,7 +39,7 @@ import {
       nz-button
       class=""
       nzType="primary"
-      (click)="btn2qc0s5Callback()"
+      (click)="btn2wi4ohCallback()"
       i18n
     >
       Save
@@ -60,7 +59,7 @@ import {
       class=""
       nzType="primary"
       nzDanger
-      (click)="btnc52itlCallback()"
+      (click)="btnak9v8aCallback()"
       i18n
     >
       Delete
@@ -91,7 +90,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btn2qc0s5Callback() {
+  async btn2wi4ohCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -113,7 +112,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btnc52itlCallback() {
+  async btnak9v8aCallback() {
     // * click event callback
 
     const confirm = () =>

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core'
-
 import { CommonModule } from '@angular/common'
 import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'

@@ -15,6 +15,7 @@ type initType = {
   theme?: ('danger' | 'block' | 'large' | 'small')[];
   event: object;
   status?: object;
+  attr?: object;
 };
 
 const themeHash = new Map()
@@ -29,8 +30,8 @@ export class Button extends Render implements buttonType {
   type;
   theme;
   class;
-  constructor({ id = '', type, theme = [], class: cls = [], event, label, status = {} }: initType) {
-    super({ event, status, children: [], elementType: 'btn' });
+  constructor({ id = '', type, attr = {}, theme = [], class: cls = [], event, label, status = {} }: initType) {
+    super({ event, status, attr, children: [], elementType: 'btn' });
     this.id = id;
     this.label = label;
     this.type = type;
@@ -49,9 +50,9 @@ export class Button extends Render implements buttonType {
         },
         ...this.children.imports,
       ],
-      template: `<button nz-button class="${this.class.join(' ')}" nzType="${this.type || 'primary'}" ${
-        this.theme
-      } ${this.eventCb.join(' ')} i18n>${label}</button>`,
+      template: `<button nz-button ${this.attr.join(' ')} class="${this.class.join(' ')}" nzType="${
+        this.type || 'primary'
+      }" ${this.theme} ${this.eventCb.join(' ')} i18n>${label}</button>`,
       data: [],
       methods: [...this.methods],
     };

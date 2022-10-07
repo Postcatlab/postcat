@@ -61,8 +61,8 @@ const sync = new Modal({
   ],
 });
 
-const userPassForm = new Form({
-  id: 'username',
+const loginForm = new Form({
+  id: 'login',
   data: [
     {
       label: 'Email/Phone',
@@ -80,6 +80,43 @@ const userPassForm = new Form({
       type: 'password',
       placeholder: 'Enter password',
       rules: ['required'],
+    },
+  ],
+  footer: [
+    {
+      id: 'login-btn',
+      label: { text: 'Sign In/Up' },
+      theme: ['block'],
+      class: ['h-10', 'mt-2'],
+      event: {
+        click: [
+          // * login
+          Form.isOk('login'),
+          `
+          if(!isOk) {
+            ${messageS.error('Please check you username or password')}
+            return
+          }`,
+          Form.getData('login', 'formData'),
+          httpS.send('api_authLogin', 'formData', {
+            errTip: 'Authentication failed !',
+          }),
+          userS.setLoginInfo('data'),
+          Modal.close('login'),
+          [httpS.send('api_userReadProfile', null), userS.setUserProfile('data')],
+          [
+            // * update workspace
+            httpS.send('api_workspaceList', '{}'),
+            workspaceS.setWorkspaceList('data'),
+          ],
+          `
+          if (!data.isFirstLogin) {
+            return
+          }
+          `,
+          sync.wakeUp(),
+        ],
+      },
     },
   ],
 });
@@ -127,53 +164,13 @@ const login = new Modal({
   children: [
     new Canvas({
       class: ['my-3'],
-      children: [
-        userPassForm,
-        new Canvas({
-          class: ['h-2'],
-        }),
-        new Button({
-          id: 'login-btn',
-          label: { text: 'Sign In/Up' },
-          theme: ['block'],
-          class: ['h-10'],
-          event: {
-            click: [
-              // * login
-              userPassForm.isOk(),
-              `
-              if(!isOk) {
-                ${messageS.error('Please check you username or password')}
-                return
-              }`,
-              userPassForm.getData('formData'),
-              httpS.send('api_authLogin', 'formData', {
-                errTip: 'Authentication failed !',
-              }),
-              userS.setLoginInfo('data'),
-              Modal.close('login'),
-              [httpS.send('api_userReadProfile', null), userS.setUserProfile('data')],
-              [
-                // * update workspace
-                httpS.send('api_workspaceList', '{}'),
-                workspaceS.setWorkspaceList('data'),
-              ],
-              `
-              if (!data.isFirstLogin) {
-                return
-              }
-              `,
-              sync.wakeUp(),
-            ],
-          },
-        }),
-      ],
+      children: [loginForm],
     }),
   ],
   footer: [],
   event: {
     //!TODO modal control self status，no need to reset
-    close: [userPassForm.reset()],
+    close: [loginForm.reset()],
   },
 });
 
