@@ -271,7 +271,7 @@ export class ApiEditUtilService {
         if (typeof result[tableName] !== 'object') {
           return;
         }
-        result[tableName] = filterArrFun(result[tableName] || []);
+        result[tableName] = filterArrFun([].concat(result[tableName]));
         if (['requestBody', 'responseBody'].includes(tableName)) {
           if (['xml', 'json'].includes(result[`${tableName}Type`])) {
             result[tableName] = listToTreeHasLevel(result[tableName]);
@@ -290,7 +290,7 @@ export class ApiEditUtilService {
    */
   formatEditingApiData(formData): ApiData {
     return this.formatApiData(formData, (result) =>
-      (result || []).filter((val) => val.name || val.description || val.example)
+      (result || []).filter((val) => val?.name || val?.description || val?.example)
     );
   }
   /**
@@ -300,6 +300,6 @@ export class ApiEditUtilService {
    * @returns apiData
    */
   formatSavingApiData(formData): ApiData {
-    return this.formatApiData(formData, (result) => (result || []).filter((val) => val.name));
+    return this.formatApiData(formData, (result) => (result || []).filter((val) => val?.name));
   }
 }

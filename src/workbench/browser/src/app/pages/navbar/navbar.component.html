@@ -7,10 +7,8 @@
     </a>
     <!-- Select workspace -->
     <div class="flex items-center can_be_click" nz-dropdown [nzDropdownMenu]="workspaceMenu">
-      <eo-iconpark-icon
-        class="mr-[5px]"
-        name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
-      >
+      <eo-iconpark-icon class="mr-[5px]"
+        name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}">
       </eo-iconpark-icon>
       {{ workspaceService.currentWorkspace.title }}
       <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
@@ -18,32 +16,15 @@
     <nz-dropdown-menu #workspaceMenu="nzDropdownMenu">
       <ul class="ml-[-11px]" nz-menu nzSelectable>
         <div class="flex py-[5px] px-[12px]">
-          <input
-            nz-input
-            type="text"
-            class="flex-1 px-3 eo-search-input"
-            i18n-placeholder
-            placeholder="Search cloud workspace"
-            [(ngModel)]="searchValue"
-          />
-          <button
-            nz-tooltip
-            i18n-nzTooltipTitle
-            nzTooltipTitle="New Workspace"
-            nzType="primary"
-            nz-button
-            (click)="addWorkspace()"
-            class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0"
-          >
+          <input nz-input type="text" class="flex-1 px-3 eo-search-input" i18n-placeholder
+            placeholder="Search cloud workspace" [(ngModel)]="searchValue" />
+          <button nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="New Workspace" nzType="primary" nz-button
+            (click)="addWorkspace()" class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0">
             <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
           </button>
         </div>
-        <li
-          nz-menu-item
-          (click)="changeWorkspace(item)"
-          [nzSelected]="workspaceService.currentWorkspace?.id === item.id"
-          *ngFor="let item of searchWorkspace"
-        >
+        <li nz-menu-item (click)="changeWorkspace(item)"
+          [nzSelected]="workspaceService.currentWorkspace?.id === item.id" *ngFor="let item of searchWorkspace">
           <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ item.id !== -1 ? 'sucess' : 'faild' }}">
           </eo-iconpark-icon>
           {{ item.title }}
@@ -53,14 +34,8 @@
   </div>
   <div class="flex items-center">
     <!-- setting -->
-    <span
-      class="flex items-center justify-center mx-1 icon"
-      i18n-nzTooltipTitle
-      nz-tooltip
-      [nzTooltipMouseEnterDelay]="0.7"
-      nzTooltipTitle="Open Settings"
-      (click)="openSettingModal()"
-    >
+    <span class="flex items-center justify-center mx-1 icon" i18n-nzTooltipTitle nz-tooltip
+      [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Open Settings" (click)="openSettingModal()">
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </span>
     <!-- help -->
@@ -72,15 +47,9 @@
         <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
         <a href="https://developer.eoapi.io" target="_blank" nz-menu-item i18n>Developer Support</a>
         <li nz-menu-divider></li>
-        <a
-          href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
+        <a href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
             issueEnvironment
-          }}"
-          target="_blank"
-          nz-menu-item
-          i18n
-          >Report Issue</a
-        >
+          }}" target="_blank" nz-menu-item i18n>Report Issue</a>
       </ul>
     </nz-dropdown-menu>
     <!-- User -->
@@ -107,33 +76,16 @@
     </nz-dropdown-menu>
     <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
-      <span
-        nz-tooltip
-        i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
-        [nzTooltipMouseEnterDelay]="0.7"
-        class="iconfont icon-jianhao mr10 fs24 cp"
-        nzTooltipPlacement="bottom"
-        (click)="minimize()"
-      >
+      <span nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="Minimize" [nzTooltipMouseEnterDelay]="0.7"
+        class="iconfont icon-jianhao mr10 fs24 cp" nzTooltipPlacement="bottom" (click)="minimize()">
       </span>
-      <span
-        nz-tooltip
-        i18n-nzTooltipTitle
-        [nzTooltipMouseEnterDelay]="0.7"
+      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7"
         [nzTooltipTitle]="isMaximized ? 'Restore' : 'Maximize'"
         class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
-        (click)="toggleMaximize()"
-      >
+        (click)="toggleMaximize()">
       </span>
-      <span
-        nz-tooltip
-        i18n-nzTooltipTitle
-        [nzTooltipMouseEnterDelay]="0.7"
-        nzTooltipTitle="Close"
-        class="iconfont icon-guanbi pr15 fs24 cp"
-        (click)="close()"
-      >
+      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Close"
+        class="iconfont icon-guanbi pr15 fs24 cp" (click)="close()">
       </span>
     </div>
     <!-- Web download client -->
