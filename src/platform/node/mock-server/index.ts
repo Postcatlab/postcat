@@ -66,11 +66,11 @@ export class MockServer {
 
     // this.app.use(this.apiProxy);
 
-    this.app.all('*', (req, res, next) => {
+    this.app.all('/mock/:mockID/*', (req, res, next) => {
       // if (!protocolReg.test(req.url)) {
       // match request type
       const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
-      if (req.query.mockID || isMatchType !== false) {
+      if (req.params.mockID || isMatchType !== false) {
         this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
         ipcMain.once('getMockApiList', (event, message) => {
           const { response = {}, statusCode = 200 } = message;
@@ -108,7 +108,7 @@ export class MockServer {
           const { port } = this.server.address() as AddressInfo;
           this.mockUrl = `http://127.0.0.1:${port}`;
           store.set('mock_port', port);
-          console.log(`mock service is started：${this.mockUrl}`);
+          console.log(`mock service is started: ${this.mockUrl}`);
           resolve(this.mockUrl);
         })
         .on('error', (error) => {

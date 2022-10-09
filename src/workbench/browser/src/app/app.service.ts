@@ -5,18 +5,19 @@ import { ApiData, ApiMockEntity } from 'eo/workbench/browser/src/app/shared/serv
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AppService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
-  constructor(private indexedDBStorage: IndexedDBStorage, private dataSource: DataSourceService) {
+  constructor(private indexedDBStorage: IndexedDBStorage, private dataSource: DataSourceService) {}
+
+  init() {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
+        console.log('req', req);
         const sender = event.sender;
         const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType') !== false;
-        const { mockID } = req.query;
+        const { mockID } = req.params;
         if (Number.isInteger(Number(mockID))) {
           try {
             const mock = await this.getMockByMockID(Number(mockID));

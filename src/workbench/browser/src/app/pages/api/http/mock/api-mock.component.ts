@@ -22,7 +22,11 @@ export class ApiMockComponent implements OnInit {
   @Output() eoOnInit = new EventEmitter<ApiData>();
   isVisible = false;
   get mockUrl() {
-    return `${this.dataSource.mockUrl}/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}/mock`;
+    const prefix =
+      this.workspaceService.currentWorkspaceID === -1
+        ? this.dataSource.mockUrl
+        : `${this.dataSource.mockUrl}/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}`;
+    return `${prefix}/mock`;
   }
   get modalTitle() {
     return `${
@@ -97,7 +101,10 @@ export class ApiMockComponent implements OnInit {
       base: 'query',
       replaceType: 'replace',
     }).url;
-    const url = new URL(`${this.mockUrl}/${mock.uuid}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    const url = new URL(
+      `${this.mockUrl}/${mock?.uuid || ''}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'),
+      'https://github.com/'
+    );
     return decodeURIComponent(url.toString());
   }
 
