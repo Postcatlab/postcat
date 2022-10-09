@@ -14,7 +14,6 @@ export class AppService {
   init() {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
-        console.log('req', req);
         const sender = event.sender;
         const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType') !== false;
         const { mockID } = req.params;
@@ -22,7 +21,7 @@ export class AppService {
           try {
             const mock = await this.getMockByMockID(Number(mockID));
             const apiData = await this.getApiData(Number(mock.apiDataID));
-            if (!mock && isEnabledMatchType) {
+            if (mock?.createWay === 'system' && isEnabledMatchType) {
               const result = await this.matchApiData(1, req);
               return sender.send('getMockApiList', result);
             } else {
@@ -67,14 +66,15 @@ export class AppService {
    */
   async matchApiData(projectID = 1, req) {
     const apiList = await this.getAllApi(projectID);
-    const { pathname } = new URL(req.url, this.dataSource.mockUrl);
+    const { pathname } = new URL(req.params[0], this.dataSource.mockUrl);
+    console.log('pathname', apiList, pathname);
     const apiData = apiList.find((n) => {
       let uri = n.uri.trim();
       if (Array.isArray(n.restParams) && n.restParams.length > 0) {
         const restMap = n.restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
         uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
       }
-      const uriReg = new RegExp(`/?${uri}/?`);
+      const uriReg = new RegExp(`^/?${uri}/?$`);
       return n.method === req.method && uriReg.test(pathname);
     });
     return apiData ? { response: this.generateResponse(apiData.responseBody) } : { statusCode: 404 };
