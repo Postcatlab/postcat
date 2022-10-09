@@ -48,7 +48,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Level Tree nodes.
    */
-  treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
+  treeNodes: GroupTreeItem[] | NzTreeNode[] | any = [];
+  apiDataLoading = true;
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
       title: $localize`:@@API Index:Index`,
@@ -100,6 +101,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.getGroups();
   });
   getGroups() {
+    this.apiDataLoading = true;
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         result.data.forEach((item) => {
@@ -114,7 +116,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           });
         });
       }
-      this.getApis();
+      this.getApis().finally(() => {
+        this.apiDataLoading = false;
+      });
     });
   }
   async getApis() {

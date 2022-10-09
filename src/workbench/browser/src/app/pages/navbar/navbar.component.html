@@ -6,7 +6,7 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <div class="flex items-center can_be_click" nz-dropdown [nzDropdownMenu]="workspaceMenu">
+    <div class="flex items-center can_be_click" nz-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
       <eo-iconpark-icon
         class="mr-[5px]"
         name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
@@ -16,14 +16,15 @@
       <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
     </div>
     <nz-dropdown-menu #workspaceMenu="nzDropdownMenu">
-      <ul class="ml-[-11px]" nz-menu nzSelectable>
+      <ul class="ml-[-11px]" nz-menu>
+        <!-- Search/Add workspace -->
         <div class="flex py-[5px] px-[12px]">
           <input
             nz-input
             type="text"
             class="flex-1 px-3 eo-search-input"
             i18n-placeholder
-            placeholder="Search cloud workspace"
+            placeholder="Search Workspace"
             [(ngModel)]="searchValue"
           />
           <button
@@ -38,7 +39,9 @@
             <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
           </button>
         </div>
+        <!-- Workspaces -->
         <li
+          style="color: #000"
           nz-menu-item
           (click)="changeWorkspace(item)"
           [nzSelected]="workspaceService.currentWorkspace?.id === item.id"
@@ -84,7 +87,7 @@
       </ul>
     </nz-dropdown-menu>
     <!-- User -->
-    <span class="flex items-center justify-center mx-1 icon" nzTrigger="click" nz-dropdown [nzDropdownMenu]="UserMenu">
+    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="UserMenu">
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #UserMenu="nzDropdownMenu">

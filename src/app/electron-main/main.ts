@@ -264,7 +264,6 @@ try {
         // 获取mock服务地址
       } else if (arg.action === 'getMockUrl') {
         returnValue = mockServer.getMockUrl();
-        returnValue = subView.appView?.sidePosition;
         // 获取websocket服务端口
       } else if (arg.action === 'getWebsocketPort') {
         returnValue = websocketPort;

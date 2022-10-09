@@ -12,6 +12,8 @@ import {
   StorageResStatus,
 } from '../../../../../shared/services/storage/index.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 
 @Component({
   selector: 'eo-api-detail-mock',
@@ -21,7 +23,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class ApiDetailMockComponent implements OnInit, OnChanges {
   @Input() apiData: ApiData;
   get mockUrl() {
-    return this.dataSource.mockUrl;
+    const prefix =
+      this.workspaceService.currentWorkspaceID === -1
+        ? this.dataSource.mockUrl
+        : `${this.dataSource.mockUrl}/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}`;
+    return `${prefix}/mock`;
   }
   mocklList: ApiMockEntity[] = [];
   listConf: object = {};
@@ -38,7 +44,9 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   constructor(
     private storageService: StorageService,
     private dataSource: DataSourceService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private workspaceService: WorkspaceService,
+    private projectService: ProjectService
   ) {}
 
   async ngOnInit() {
@@ -64,14 +72,11 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   }
 
   getApiUrl(mock?: ApiMockEntity) {
-    const uri = transferUrlAndQuery(formatUri(this.apiData.uri, this.apiData.queryParams), this.apiData.queryParams, {
+    const uri = transferUrlAndQuery(formatUri(this.apiData.uri, this.apiData.restParams), this.apiData.queryParams, {
       base: 'query',
       replaceType: 'replace',
     }).url;
-    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
-    if (mock?.createWay === 'custom' && mock.uuid) {
-      url.searchParams.set('mockID', mock.uuid + '');
-    }
+    const url = new URL(`${this.mockUrl}/${mock.uuid}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     return decodeURIComponent(url.toString());
   }
   /**

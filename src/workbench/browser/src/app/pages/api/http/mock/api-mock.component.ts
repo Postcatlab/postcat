@@ -10,6 +10,8 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 
 @Component({
   selector: 'eo-api-edit-mock',
@@ -20,7 +22,11 @@ export class ApiMockComponent implements OnInit {
   @Output() eoOnInit = new EventEmitter<ApiData>();
   isVisible = false;
   get mockUrl() {
-    return this.dataSource.mockUrl;
+    const prefix =
+      this.workspaceService.currentWorkspaceID === -1
+        ? this.dataSource.mockUrl
+        : `${this.dataSource.mockUrl}/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}`;
+    return `${prefix}/mock`;
   }
   get modalTitle() {
     return `${
@@ -66,7 +72,9 @@ export class ApiMockComponent implements OnInit {
     private storageService: StorageService,
     private route: ActivatedRoute,
     private dataSource: DataSourceService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private workspaceService: WorkspaceService,
+    private projectService: ProjectService
   ) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});
   }
@@ -93,10 +101,10 @@ export class ApiMockComponent implements OnInit {
       base: 'query',
       replaceType: 'replace',
     }).url;
-    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
-    if (mock?.createWay === 'custom' && mock.uuid) {
-      url.searchParams.set('mockID', mock.uuid + '');
-    }
+    const url = new URL(
+      `${this.mockUrl}/${mock?.uuid || ''}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'),
+      'https://github.com/'
+    );
     return decodeURIComponent(url.toString());
   }
 

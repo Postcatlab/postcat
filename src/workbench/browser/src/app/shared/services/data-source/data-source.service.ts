@@ -31,9 +31,7 @@ export class DataSourceService {
   }
   /** get mock url */
   get mockUrl() {
-    return this.isRemote
-      ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
-      : window.eo?.getMockUrl?.();
+    return this.isRemote ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') : window.eo?.getMockUrl?.();
   }
 
   constructor(
