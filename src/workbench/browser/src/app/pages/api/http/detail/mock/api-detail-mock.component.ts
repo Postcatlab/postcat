@@ -12,6 +12,8 @@ import {
   StorageResStatus,
 } from '../../../../../shared/services/storage/index.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 
 @Component({
   selector: 'eo-api-detail-mock',
@@ -21,7 +23,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class ApiDetailMockComponent implements OnInit, OnChanges {
   @Input() apiData: ApiData;
   get mockUrl() {
-    return this.dataSource.mockUrl;
+    return `${this.dataSource.mockUrl}/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}/mock`;
   }
   mocklList: ApiMockEntity[] = [];
   listConf: object = {};
@@ -38,7 +40,9 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
   constructor(
     private storageService: StorageService,
     private dataSource: DataSourceService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private workspaceService: WorkspaceService,
+    private projectService: ProjectService
   ) {}
 
   async ngOnInit() {
