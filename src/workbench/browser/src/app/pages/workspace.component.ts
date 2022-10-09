@@ -40,7 +40,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btnjphfmeCallback()"
+        (click)="btng1eobbCallback()"
         i18n
       >
         Save
@@ -60,7 +60,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnumyy0kCallback()"
+        (click)="btnlwmr5eCallback()"
         i18n
       >
         Delete
@@ -92,7 +92,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnjphfmeCallback() {
+  async btng1eobbCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -114,7 +114,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btnumyy0kCallback() {
+  async btnlwmr5eCallback() {
     // * click event callback
 
     const confirm = () =>
