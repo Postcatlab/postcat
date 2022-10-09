@@ -76,7 +76,10 @@ export class ApiDetailMockComponent implements OnInit, OnChanges {
       base: 'query',
       replaceType: 'replace',
     }).url;
-    const url = new URL(`${this.mockUrl}/${mock.uuid}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    const url = new URL(
+      `${this.mockUrl}/${mock?.uuid || ''}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'),
+      'https://github.com/'
+    );
     return decodeURIComponent(url.toString());
   }
   /**
