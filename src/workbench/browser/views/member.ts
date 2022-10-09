@@ -13,13 +13,16 @@ import {
   WorkspaceS,
   MessageS,
   ModalS,
+  DataSourceS,
 } from '../elements';
 
 const personInput = new Input({ id: 'person', placeholder: 'Search by username' });
 const httpS = new HTTPS();
 const modalS = new ModalS();
+const eventS = new EventS({ listen: [] });
 const workspaceS = new WorkspaceS();
 const messageS = new MessageS();
+const dataSourceS = new DataSourceS();
 
 const updateMember = [
   workspaceS.getCurrent('{ id: currentWorkspaceID }'),
@@ -27,6 +30,15 @@ const updateMember = [
   httpS.send('api_workspaceMember', '{ workspaceID: currentWorkspaceID }', { err: 'wErr', data: 'wData' }),
   // workspaceS.setWorkspaceList('wData'),
   ManageAccess.setList('wData'),
+];
+
+const hasUrl = [
+  dataSourceS.hasUrl('url'),
+  `
+if (url === '') {
+  ${eventS.send('need-config-remote')}
+  return
+}`,
 ];
 
 const manageAccess = new ManageAccess({
@@ -117,12 +129,14 @@ export default new Module({
           from: 'eo/workbench/browser/src/app/shared/components/manage-access/manage-access.component',
         },
       ],
-      init: [...updateMember],
+      init: [...hasUrl, ...updateMember],
       children: [
         invate,
         httpS,
         workspaceS,
         modalS,
+        eventS,
+        dataSourceS,
         new Canvas({
           class: ['py-5', 'px-10'],
           children: [

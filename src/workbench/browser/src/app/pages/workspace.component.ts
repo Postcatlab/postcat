@@ -18,52 +18,54 @@ import { Component, OnInit } from '@angular/core'
     </h2>
     <section class="py-2"><eo-api-overview></eo-api-overview></section>
     <nz-divider></nz-divider>
-    <h2 class="text-lg flex justify-between items-center">
-      <span class="font-bold" i18n>Edit Workspace</span>
-    </h2>
-    <form nz-form [formGroup]="validateWspNameForm" nzLayout="vertical">
-      <nz-form-item>
-        <nz-form-label [nzSpan]="24" nzRequired i18n>Name</nz-form-label>
-        <nz-form-control nzErrorTip="Please input your name;">
-          <input
-            type="text"
-            nz-input
-            formControlName="workspace"
-            placeholder=""
-            i18n-placeholder
-          />
-        </nz-form-control>
-      </nz-form-item>
-    </form>
-    <button
-      nz-button
-      class=""
-      nzType="primary"
-      (click)="btnbju5puCallback()"
-      i18n
-    >
-      Save
-    </button>
-    <nz-divider></nz-divider>
-    <h2 class="text-lg flex justify-between items-center">
-      <span class="font-bold" i18n>Delete Workspace</span>
-    </h2>
-    <section class="pb-4">
-      <span i18n>
-        After deleting a workspace, all data in the workspace will be
-        permanently deleted.
-      </span>
+    <section class="" *ngIf="this.workspace.currentWorkspaceID !== -1">
+      <h2 class="text-lg flex justify-between items-center">
+        <span class="font-bold" i18n>Edit Workspace</span>
+      </h2>
+      <form nz-form [formGroup]="validateWspNameForm" nzLayout="vertical">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired i18n>Name</nz-form-label>
+          <nz-form-control nzErrorTip="Please input your name;">
+            <input
+              type="text"
+              nz-input
+              formControlName="workspace"
+              placeholder=""
+              i18n-placeholder
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+      <button
+        nz-button
+        class=""
+        nzType="primary"
+        (click)="btnblqjguCallback()"
+        i18n
+      >
+        Save
+      </button>
+      <nz-divider></nz-divider>
+      <h2 class="text-lg flex justify-between items-center">
+        <span class="font-bold" i18n>Delete Workspace</span>
+      </h2>
+      <section class="pb-4">
+        <span i18n>
+          After deleting a workspace, all data in the workspace will be
+          permanently deleted.
+        </span>
+      </section>
+      <button
+        nz-button
+        class=""
+        nzType="primary"
+        nzDanger
+        (click)="btnfrorrdCallback()"
+        i18n
+      >
+        Delete
+      </button>
     </section>
-    <button
-      nz-button
-      class=""
-      nzType="primary"
-      nzDanger
-      (click)="btn3j7smsCallback()"
-      i18n
-    >
-      Delete
-    </button>
   </section>`
 })
 export class WorkspaceComponent implements OnInit {
@@ -90,7 +92,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnbju5puCallback() {
+  async btnblqjguCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -112,7 +114,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btn3j7smsCallback() {
+  async btnfrorrdCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -141,5 +143,12 @@ You cannot restore it once deleted!`,
     }
 
     this.eMessage.success($localize`Delete success !`)
+    const { id: workspaceID } = this.workspace.currentWorkspace
+    const [list, wErr]: any = await this.api.api_workspaceList({})
+    if (wErr) {
+      return
+    }
+
+    this.workspace.setWorkspaceList(list)
   }
 }

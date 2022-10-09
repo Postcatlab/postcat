@@ -14,7 +14,7 @@ const renderEvent = (list) =>
 
 export class EventS extends Render {
   listen;
-  constructor({ id, listen = [] }) {
+  constructor({ listen = [] }) {
     super({ children: [] });
     this.listen = `this.message.get().subscribe(async ({ type, data }) => {
         ${renderEvent(listen)}

@@ -46,7 +46,10 @@ const sync = new Modal({
       label: 'Sync',
       type: 'primary',
       click: [
-        projectS.exportProjectData('eData'),
+        // projectS.exportProjectData('eData'),
+        `
+        const eData = this.project.exportProjectData()
+        `,
         httpS.send('api_workspaceUpload', 'eData'),
         (data) => {
           const { workspace } = data;
@@ -200,7 +203,6 @@ const checkConnect = new Modal({
 });
 
 const eventS = new EventS({
-  id: 'event',
   listen: [
     {
       name: 'login',
@@ -221,6 +223,10 @@ const eventS = new EventS({
     {
       name: 'ping-fail',
       callback: [checkConnect.wakeUp()],
+    },
+    {
+      name: 'need-config-remote',
+      callback: [Modal.wakeUp('open-setting')],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },
   ],
