@@ -1,5 +1,6 @@
 import { Render } from 'ecode/dist/render';
-import { Button } from './button';
+import { Button } from '../button';
+import { rulesHash } from './validators';
 import _ from 'lodash';
 
 type formType = {
@@ -31,31 +32,74 @@ const layoutHash = new Map()
   .set('horizontal', 'horizontal')
   .set('vertical', 'vertical')
   .set('inline', 'inline');
+
+// * 解析规则和参数
+const parseRule = (rule) => rule.split(':').map((it) => it.trim());
+
 export class Form extends Render implements formType {
   id = '';
   data;
   layout;
   footer;
+  rules;
   constructor({ id = '', children, data = [], layout = 'horizontal', footer = [] }: initType) {
     super({ children });
     this.id = Render.toCamel(id);
     this.data = data;
     this.layout = layoutHash.get(layout);
     this.footer = footer;
+    this.rules = this.renderRules(this.data, this.id);
+  }
+  renderRules(list, id) {
+    const regInitMethod = (data, mid) =>
+      data.map(({ key, rules = [] }) => {
+        const ruleList = rules.map(parseRule);
+        const dynamicRule = ruleList.filter(([type]) => !builtInRule.includes(type));
+        return dynamicRule.length
+          ? `
+          dynamic${mid}Validator = (control: UntypedFormControl): { [s: string]: boolean } => {
+            ${dynamicRule
+              .map(([type, params]) => rulesHash[type].dynamicRule({ valid: type, params, form: `validate${mid}Form` }))
+              .join('\n')}
+            return {};
+          }`
+          : '';
+      });
+
+    const builtInRule = Object.entries(rulesHash)
+      .map(([key, data]) => ({ key, isBuiltIn: data.isBuiltIn }))
+      .filter((it) => it.isBuiltIn)
+      .map((it) => it.key);
+
+    return {
+      initRule: list.map(({ key, rules = [] }) => {
+        const ruleList = rules.map((it) => {
+          const [type, params] = parseRule(it);
+          return [type, params];
+        });
+        const staticRule = ruleList.filter(([type]) => builtInRule.includes(type));
+        const dynamicRule = ruleList.filter(([type]) => !builtInRule.includes(type));
+        return `${key}: [null,
+          ${
+            staticRule.length
+              ? '[' +
+                staticRule
+                  .map(([t, params]) => rulesHash[t].statementRule({ id, params }))
+                  .concat(dynamicRule.length ? `this.dynamic${id}Validator` : '')
+                  .join(',') +
+                ']'
+              : '[]'
+          }
+        ]`;
+      }),
+      methods: regInitMethod(list, id),
+    };
   }
   init(id) {
-    const initRules = (list) =>
-      list.map(
-        ({ key, rules = [] }) =>
-          `${key}: [null, [${rules
-            .filter(_.isString)
-            .map((it) => 'Validators.' + it)
-            .join(',')}]]`
-      );
     return `
-      /\/ * Init ${id} form 
-      this.validate${id}Form = this.fb.group({
-        ${initRules(this.data)}
+    /\/ * Init ${id} form 
+    this.validate${id}Form = this.fb.group({
+        ${this.rules.initRule.join(',')}
       });
       `;
   }
@@ -75,8 +119,6 @@ export class Form extends Render implements formType {
     return Form.isOk(this.id);
   }
   render() {
-    const isLabelRequired = (rules) => (rules.includes('required') ? 'nzRequired' : '');
-
     const formBindName = ({ key, rules = [] }) => {
       if (rules.length) {
         return `formControlName="${key}"`;
@@ -91,7 +133,7 @@ export class Form extends Render implements formType {
           return `<input type="${typeHash.get(type)}" nz-input  ${formBindName({
             key,
             rules,
-          })} placeholder="${placeholder || ''}" i18n-placeholder ${isLabelRequired(rules)} />`;
+          })} placeholder="${placeholder || ''}" i18n-placeholder  />`;
 
         default:
           return '';
@@ -99,18 +141,37 @@ export class Form extends Render implements formType {
     };
     const formList = (list) =>
       list
-        .map(({ isShowLabel = true, ...it }) => {
+        .map(({ isShowLabel = true, label, rules, key, span, type, ...it }, i) => {
+          const isLabelRequired = (ruleList) => (ruleList.includes('required') ? 'nzRequired' : '');
           const labelTmpl = isShowLabel
-            ? `<nz-form-label [nzSpan]="${it.span || 24}" i18n>${it.label}</nz-form-label>`
+            ? `<nz-form-label [nzSpan]="${span || 24}" ${isLabelRequired(rules)} i18n>${label}</nz-form-label>`
             : '';
+          const errorTip = (ruleList) =>
+            ruleList.map(parseRule).map(
+              ([ty, params]) =>
+                `<ng-container *ngIf="control.hasError('${ty}')" i18n>
+                  ${rulesHash[ty].errTip({ params, label })} 
+                </ng-container>
+              `
+            );
+
+          const renderErrTipTpl =
+            rules.length > 1
+              ? `<ng-template #${key}ErrorTpl let-control>
+                ${errorTip(rules).join('\n')}
+              </ng-template>`
+              : '';
           return `
         <nz-form-item>
-          <nz-form-control nzErrorTip="Please input your ${it.label.split('/').map(_.lowerCase).join(' or ')} !">
-            ${labelTmpl}
-            ${renderKey(it)}
-          </nz-form-control>
-        </nz-form-item>
-    `;
+          ${labelTmpl}
+          <nz-form-control ${
+            rules.length > 1 ? `[nzErrorTip]="${key}ErrorTpl"` : `nzErrorTip="${rulesHash[rules[0]].errTip({ label })}"`
+          }>
+            ${renderKey({ isShowLabel, label, rules, key, span, type })}
+            ${renderErrTipTpl}
+            </nz-form-control>
+            </nz-form-item>
+            `;
         })
         .join('\n');
 
@@ -120,7 +181,12 @@ export class Form extends Render implements formType {
     return {
       imports: [
         {
-          target: [{ name: 'UntypedFormBuilder', inject: { name: 'fb' } }, 'UntypedFormGroup', 'Validators'],
+          target: [
+            { name: 'UntypedFormBuilder', inject: { name: 'fb' } },
+            'UntypedFormControl',
+            'UntypedFormGroup',
+            'Validators',
+          ],
           from: '@angular/forms',
         },
         {
@@ -151,7 +217,7 @@ export class Form extends Render implements formType {
         },
         ...this.children.data,
       ],
-      methods: [...footer.map((it) => it.methods), ...this.methods],
+      methods: [this.rules.methods, ...footer.map((it) => it.methods), ...this.methods],
     };
   }
 

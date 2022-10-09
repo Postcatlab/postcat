@@ -7,6 +7,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { NzModalService } from 'ng-zorro-antd/modal'
 import {
   UntypedFormBuilder,
+  UntypedFormControl,
   UntypedFormGroup,
   Validators
 } from '@angular/forms'
@@ -38,7 +39,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnu9lmr3Callback()"
+          (click)="btnbrchtpCallback()"
           i18n
         >
           Cancel
@@ -47,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnufph7gCallback()"
+          (click)="btnh9rstjCallback()"
           i18n
         >
           Sync
@@ -69,7 +70,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btn8e0vstCallback()"
+          (click)="btnbo1cyrCallback()"
           i18n
         >
           Cancel
@@ -78,7 +79,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btngtf2frCallback()"
+          (click)="btn7mkhptCallback()"
           i18n
         >
           Retry
@@ -90,7 +91,7 @@ import { Component, OnInit } from '@angular/core'
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="enqgxzbCallback()"
+      (nzAfterClose)="e4kx90cCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -98,37 +99,36 @@ import { Component, OnInit } from '@angular/core'
         <section class="my-3">
           <form nz-form [formGroup]="validateLoginForm" nzLayout="horizontal">
             <nz-form-item>
-              <nz-form-control nzErrorTip="Please input your email or phone !">
+              <nz-form-control nzErrorTip="Please input your email or phone;">
                 <input
                   type="text"
                   nz-input
                   formControlName="username"
-                  placeholder="Enter Email/Phone/Username"
+                  placeholder=""
                   i18n-placeholder
-                  nzRequired
                 />
               </nz-form-control>
             </nz-form-item>
 
             <nz-form-item>
-              <nz-form-control nzErrorTip="Please input your password !">
+              <nz-form-control nzErrorTip="Please input your password;">
                 <input
                   type="password"
                   nz-input
                   formControlName="password"
-                  placeholder="Enter password"
+                  placeholder=""
                   i18n-placeholder
-                  nzRequired
                 />
               </nz-form-control>
             </nz-form-item>
 
             <button
               nz-button
+              type="submit"
               class="h-10 mt-2"
               nzType="primary"
               nzBlock
-              (click)="btnhiz1d2Callback()"
+              (click)="btnf6eeanCallback()"
               i18n
             >
               Sign In/Up
@@ -146,7 +146,7 @@ import { Component, OnInit } from '@angular/core'
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="textprc4foCallback()" i18n>
+        <span style="color: #1890ff" (click)="text647janCallback()" i18n>
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
@@ -172,7 +172,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnydjkkjCallback()"
+          (click)="btn5uc5xnCallback()"
           i18n
         >
           Cancel
@@ -181,7 +181,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnuc58z7Callback()"
+          (click)="btnb1pamiCallback()"
           i18n
         >
           Save
@@ -308,13 +308,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnu9lmr3Callback() {
+  async btnbrchtpCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnufph7gCallback() {
+  async btnh9rstjCallback() {
     // * click event callback
     const eData = await this.project.exportProjectData()
     const [data, err]: any = await this.api.api_workspaceUpload(eData)
@@ -336,13 +336,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btn8e0vstCallback() {
+  async btnbo1cyrCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btngtf2frCallback() {
+  async btn7mkhptCallback() {
     // * click event callback
     this.dataSource.checkRemoteAndTipModal()
 
@@ -353,13 +353,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async enqgxzbCallback() {
+  async e4kx90cCallback() {
     // * nzAfterClose event callback
 
     // * Clear Login form
     this.validateLoginForm.reset()
   }
-  async btnhiz1d2Callback() {
+  async btnf6eeanCallback() {
     // * click event callback
     const isOk = this.validateLoginForm.valid
 
@@ -409,7 +409,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async textprc4foCallback() {
+  async text647janCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -420,13 +420,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnydjkkjCallback() {
+  async btn5uc5xnCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnuc58z7Callback() {
+  async btnb1pamiCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
     {

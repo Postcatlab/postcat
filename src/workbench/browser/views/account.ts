@@ -16,6 +16,29 @@ const usernameF = new Form({
       rules: ['required'],
     },
   ],
+  footer: [
+    {
+      id: 'save-username',
+      class: ['w-[84px]'],
+      label: {
+        text: 'Save',
+      },
+      attr: {
+        type: 'submit',
+      },
+      event: {
+        click: [
+          Form.getValue('username', 'username', 'user'),
+          httpS.send('api_userUpdateUserProfile', '{ username: user }', {
+            errTip: 'Sorry, username is be used',
+          }),
+          httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
+          userS.setUserProfile('pData'),
+          message.success('Username update success !'),
+        ],
+      },
+    },
+  ],
 });
 
 const passwordF = new Form({
@@ -38,7 +61,30 @@ const passwordF = new Form({
       label: 'Confirm new password',
       key: 'confirmPassword',
       type: 'password',
-      rules: ['required'],
+      rules: ['required', 'isEqual:newPassword', 'minlength:6', 'maxlength:11'],
+    },
+  ],
+  footer: [
+    {
+      id: 'reset-btn',
+      class: ['w-[84px]'],
+      attr: {
+        type: 'submit',
+      },
+      label: {
+        text: 'Reset',
+      },
+      event: {
+        click: [
+          // * Diff old & new password is same
+          // * update new password
+          Form.getValue('password', 'oldPassword', 'oldPassword'),
+          Form.getValue('password', 'newPassword', 'newPassword'),
+          httpS.send('api_userUpdatePsd', '{ oldPassword, newPassword }', { errTip: 'Validation failed' }),
+          message.success('Password reset success !'),
+          Form.reset('password'),
+        ],
+      },
     },
   ],
 });
@@ -52,52 +98,12 @@ export default new Component({
     new Title({ label: 'Username', class: ['font-bold', 'text-base', 'mb-2'], id: 'eoapi-account-username' }),
     new Canvas({
       class: ['w-1/2'],
-      children: [
-        usernameF,
-        new Button({
-          id: 'save-username',
-          class: ['w-[84px]'],
-          label: {
-            text: 'Save',
-          },
-          event: {
-            click: [
-              usernameF.getValue('username', 'user'),
-              httpS.send('api_userUpdateUserProfile', '{ username: user }', {
-                errTip: 'Sorry, username is be used',
-              }),
-              httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
-              userS.setUserProfile('pData'),
-              message.success('Username update success !'),
-            ],
-          },
-        }),
-        new Canvas({ class: ['h-4'] }),
-      ],
+      children: [usernameF, new Canvas({ class: ['h-4'] })],
     }),
     new Title({ label: 'Password', class: ['font-bold', 'text-base', 'mb-2'], id: 'eoapi-account-password' }),
     new Canvas({
       class: ['w-1/2'],
       children: [passwordF],
-    }),
-    new Button({
-      id: 'reset-btn',
-      class: ['w-[84px]'],
-      label: {
-        text: 'Reset',
-      },
-      event: {
-        click: [
-          // * Diff old & new password is same
-          // * check the Current password is right ?
-          // * update new password
-          passwordF.getValue('oldPassword', 'oldPassword'),
-          passwordF.getValue('newPassword', 'newPassword'),
-          httpS.send('api_userUpdatePsd', '{ oldPassword, newPassword }', { errTip: 'Validation failed' }),
-          message.success('Password reset success !'),
-          passwordF.reset(),
-        ],
-      },
     }),
     new Canvas({ class: ['h-4'] }),
     userS,

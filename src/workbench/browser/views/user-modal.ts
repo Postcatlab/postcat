@@ -88,6 +88,9 @@ const loginForm = new Form({
       label: { text: 'Sign In/Up' },
       theme: ['block'],
       class: ['h-10', 'mt-2'],
+      attr: {
+        type: 'submit',
+      },
       event: {
         click: [
           // * login

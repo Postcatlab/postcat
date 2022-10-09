@@ -4,6 +4,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import {
   UntypedFormBuilder,
+  UntypedFormControl,
   UntypedFormGroup,
   Validators
 } from '@angular/forms'
@@ -22,15 +23,14 @@ import { Component, OnInit } from '@angular/core'
     </h2>
     <form nz-form [formGroup]="validateWspNameForm" nzLayout="vertical">
       <nz-form-item>
-        <nz-form-control nzErrorTip="Please input your name !">
-          <nz-form-label [nzSpan]="24" i18n>Name</nz-form-label>
+        <nz-form-label [nzSpan]="24" nzRequired i18n>Name</nz-form-label>
+        <nz-form-control nzErrorTip="Please input your name;">
           <input
             type="text"
             nz-input
             formControlName="workspace"
             placeholder=""
             i18n-placeholder
-            nzRequired
           />
         </nz-form-control>
       </nz-form-item>
@@ -39,7 +39,7 @@ import { Component, OnInit } from '@angular/core'
       nz-button
       class=""
       nzType="primary"
-      (click)="btn2wi4ohCallback()"
+      (click)="btnbju5puCallback()"
       i18n
     >
       Save
@@ -59,7 +59,7 @@ import { Component, OnInit } from '@angular/core'
       class=""
       nzType="primary"
       nzDanger
-      (click)="btnak9v8aCallback()"
+      (click)="btn3j7smsCallback()"
       i18n
     >
       Delete
@@ -90,7 +90,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btn2wi4ohCallback() {
+  async btnbju5puCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -112,7 +112,7 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspace.setWorkspaceList(list)
   }
-  async btnak9v8aCallback() {
+  async btn3j7smsCallback() {
     // * click event callback
 
     const confirm = () =>
