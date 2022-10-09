@@ -18,8 +18,7 @@ export class WorkspaceService {
 
   get currentWorkspace() {
     const target = this.workspaceList.find((n) => n.id === this.currentWorkspaceID);
-    const result =
-      target || StorageUtil.get('currentWorkspace', this.localWorkspace);
+    const result = target || StorageUtil.get('currentWorkspace', this.localWorkspace);
     this.currentWorkspaceID = result.id;
     return result;
   }
@@ -52,6 +51,10 @@ export class WorkspaceService {
     ];
   }
 
+  getLocalWorkspaceInfo() {
+    return this.localWorkspace;
+  }
+
   async setCurrentWorkspaceID(id: number) {
     this.currentWorkspaceID = id;
     await this.updateProjectID(this.currentWorkspaceID);
@@ -61,7 +64,7 @@ export class WorkspaceService {
     this.currentWorkspaceID = workspace.id;
     this.updateProjectID(this.currentWorkspaceID);
     StorageUtil.set('currentWorkspace', workspace);
-    //Change data storage
+    // * Change data storage
     await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');
     this.messageService.send({ type: 'workspaceChange', data: true });
   }

@@ -211,13 +211,13 @@ const eventS = new EventS({
     {
       name: 'logOut',
       callback: [
+        messageS.success('Successfully logged out !'),
         userS.getKey('refreshToken'),
         userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         // * clear workspace list
         [workspaceS.setWorkspaceList('[]')],
-        workspaceS.setCurrentWorkspaceID('-1'),
+        workspaceS.setCurrentWorkspace(workspaceS.getLocalWorkspaceInfo()),
         [httpS.send('api_authLogout', '{ refreshToken }')],
-        messageS.success('Successfully logged out !'),
       ],
     },
     {
