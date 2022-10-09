@@ -22,7 +22,7 @@
     [nzSearchValue]="searchValue" [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys"
     (nzClick)="clickTreeItem($event)" (nzExpandChange)="toggleExpand()" nzDraggable nzBlockNode
     (nzOnDrop)="treeItemDrop($event)" [nzTreeTemplate]="nzTreeTemplate"></nz-tree>
-  <nz-skeleton [nzLoading]="apiDataLoading" [nzActive]="true">
+  <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div [style.--tree-level]="node.level">
         <!-- Folder -->
