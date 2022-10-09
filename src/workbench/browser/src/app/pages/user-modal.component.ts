@@ -39,7 +39,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btns8pydhCallback()"
+          (click)="btnee9srpCallback()"
           i18n
         >
           Cancel
@@ -48,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnuz0nimCallback()"
+          (click)="btnljck0cCallback()"
           i18n
         >
           Sync
@@ -70,7 +70,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnhps1tqCallback()"
+          (click)="btnxnrworCallback()"
           i18n
         >
           Cancel
@@ -79,7 +79,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnd6iwkfCallback()"
+          (click)="btnz74fg5Callback()"
           i18n
         >
           Retry
@@ -91,7 +91,7 @@ import { Component, OnInit } from '@angular/core'
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e1dqi7bCallback()"
+      (nzAfterClose)="effh78jCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -128,7 +128,7 @@ import { Component, OnInit } from '@angular/core'
               class="h-10 mt-2"
               nzType="primary"
               nzBlock
-              (click)="btnbfvxqlCallback()"
+              (click)="btn31hjchCallback()"
               i18n
             >
               Sign In/Up
@@ -146,7 +146,7 @@ import { Component, OnInit } from '@angular/core'
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="textg8hyxlCallback()" i18n>
+        <span style="color: #1890ff" (click)="textr4v10cCallback()" i18n>
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
@@ -172,7 +172,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnbgjpwkCallback()"
+          (click)="btnrexpysCallback()"
           i18n
         >
           Cancel
@@ -181,7 +181,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn4eeveiCallback()"
+          (click)="btnvub9wfCallback()"
           i18n
         >
           Save
@@ -315,16 +315,16 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btns8pydhCallback() {
+  async btnee9srpCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnuz0nimCallback() {
+  async btnljck0cCallback() {
     // * click event callback
 
-    const eData = this.project.exportProjectData()
+    const eData = this.project.exportLocalProjectData()
 
     const [data, err]: any = await this.api.api_workspaceUpload(eData)
     if (err) {
@@ -345,13 +345,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnhps1tqCallback() {
+  async btnxnrworCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnd6iwkfCallback() {
+  async btnz74fg5Callback() {
     // * click event callback
     this.dataSource.checkRemoteAndTipModal()
 
@@ -362,13 +362,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e1dqi7bCallback() {
+  async effh78jCallback() {
     // * nzAfterClose event callback
 
     // * Clear Login form
     this.validateLoginForm.reset()
   }
-  async btnbfvxqlCallback() {
+  async btn31hjchCallback() {
     // * click event callback
     const isOk = this.validateLoginForm.valid
 
@@ -418,7 +418,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async textg8hyxlCallback() {
+  async textr4v10cCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -429,13 +429,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btnbgjpwkCallback() {
+  async btnrexpysCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async btn4eeveiCallback() {
+  async btnvub9wfCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
     {
