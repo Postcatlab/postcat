@@ -3,6 +3,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,11 @@ import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 export class ProjectService {
   currentProjectID = StorageUtil.get('currentProjectID');
 
-  constructor(private apiService: ApiService, private storage: StorageService) {}
+  constructor(
+    private apiService: ApiService,
+    private storage: StorageService,
+    private indexedDBStorage: IndexedDBStorage
+  ) {}
 
   setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
@@ -23,6 +28,21 @@ export class ProjectService {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
         }
+      });
+    });
+  }
+
+  async exportLocalProjectData(projectID = 1) {
+    return new Promise((resolve) => {
+      const apiGroupObservable = this.indexedDBStorage.groupLoadAllByProjectID(projectID);
+      apiGroupObservable.subscribe(({ data: apiGroup }: any) => {
+        const apiDataObservable = this.indexedDBStorage.apiDataLoadAllByProjectID(projectID);
+        apiDataObservable.subscribe(({ data: apiData }: any) => {
+          resolve({
+            collections: this.exportCollects(apiGroup, apiData),
+            enviroments: [],
+          });
+        });
       });
     });
   }
