@@ -232,13 +232,13 @@ const eventS = new EventS({
       callback: [
         // * clear workspace list
         workspaceS.setCurrentWorkspaceID('-1'),
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         [workspaceS.setWorkspaceList('[]')],
         workspaceS.setCurrentWorkspace(workspaceS.getLocalWorkspaceInfo()),
         messageS.success('Successfully logged out !'),
         userS.getKey('refreshToken'),
-        [httpS.send('api_authLogout', '{ refreshToken }')],
-        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         userS.clearAuth(),
+        [httpS.send('api_authLogout', '{ refreshToken }')],
       ],
     },
     {

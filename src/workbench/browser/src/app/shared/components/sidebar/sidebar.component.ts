@@ -8,6 +8,7 @@ import { SidebarModuleInfo } from './sidebar.model';
 import { WorkspaceService } from '../../services/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -77,7 +78,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     } else {
       const isLocal = this.workspace.currentWorkspaceID === -1;
-      console.log('isLocal', isLocal);
       this.dataSourceService.checkRemoteCanOperate(() => {
         this.router.navigate([route]);
       }, isLocal);
@@ -87,6 +87,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.destroy = true;
   }
   private getModules() {
+    console.log(
+      'this.workspace.currentWorkspaceID !== -1 || !this.dataSourceService.remoteServerUrl',
+      this.dataSourceService.remoteServerUrl
+    );
     const defaultModule = [
       {
         moduleName: 'API',
@@ -96,14 +100,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
-      {
-        moduleName: $localize`Member`,
-        moduleID: '@eo-core-member',
-        isOffical: true,
-        icon: 'every-user',
-        activeRoute: 'home/member',
-        route: 'home/member',
-      },
+      ...(this.workspace.currentWorkspaceID !== -1 || !this.dataSourceService.remoteServerUrl
+        ? [
+            {
+              moduleName: $localize`Member`,
+              moduleID: '@eo-core-member',
+              isOffical: true,
+              icon: 'every-user',
+              activeRoute: 'home/member',
+              route: 'home/member',
+            },
+          ]
+        : []),
       {
         moduleName: $localize`Workspace`,
         moduleID: '@eo-core-workspace',

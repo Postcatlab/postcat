@@ -88,6 +88,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       const [isSuccess] = await this.dataSource.pingCloudServerUrl(
         this.validateForm.value['eoapi-common.remoteServer.url']
       );
+      this.messageS.send({ type: 'workspaceChange', data: {} });
       if (isSuccess) {
         this.dataSource.connectCloudSuccess();
         const isLogin = this.user.isLogin;

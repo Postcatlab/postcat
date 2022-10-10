@@ -108,6 +108,14 @@ const invate = new Modal({
 const addPeople = new Button({
   id: 'add-people',
   label: 'Add people',
+  status: {
+    disabled: [
+      `
+    return (this.workspace.currentWorkspaceID !== -1) &&
+      this.workspace.authEnum.canEdit
+    `,
+    ],
+  },
   event: {
     click: [invate.wakeUp()],
   },

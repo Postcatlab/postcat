@@ -117,7 +117,7 @@ export class DataSourceService {
       }
       // 2.2 如果没有配置远程地址，则去配置
     } else {
-      this.messageService.send({ type: 'need-config-remote', data: {} });
+      this.messageService.send({ type: '`need-config-remote`', data: {} });
     }
   }
 
