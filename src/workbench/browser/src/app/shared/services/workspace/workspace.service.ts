@@ -77,8 +77,10 @@ export class WorkspaceService {
     // * Change data storage
     await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');
     this.messageService.send({ type: 'workspaceChange', data: true });
-    const workspaceInfo = await this.getWorkspaceInfo(this.currentWorkspaceID);
-    this.authEnum.canEdit = workspaceInfo.creatorID === this.userService.userProfile.id;
+    if (this.dataSource.isRemote) {
+      const workspaceInfo = await this.getWorkspaceInfo(this.currentWorkspaceID);
+      this.authEnum.canEdit = workspaceInfo.creatorID === this.userService.userProfile.id;
+    }
   }
 
   getWorkspaceList() {
