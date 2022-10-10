@@ -5,6 +5,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 @Component({
   selector: 'eo-data-storage',
   template: `
@@ -55,7 +56,8 @@ export class DataStorageComponent implements OnInit, OnChanges {
     private messageS: MessageService,
     private web: WebService,
     private electron: ElectronService,
-    private dataSource: DataSourceService
+    private dataSource: DataSourceService,
+    private user: UserService
   ) {}
 
   ngOnInit(): void {
@@ -88,7 +90,10 @@ export class DataStorageComponent implements OnInit, OnChanges {
       );
       if (isSuccess) {
         this.dataSource.connectCloudSuccess();
-        this.messageS.send({ type: 'login', data: {} });
+        const isLogin = this.user.isLogin;
+        if (!isLogin) {
+          this.messageS.send({ type: 'login', data: {} });
+        }
         this.modelChange.emit(this.model);
       } else {
         this.message.error($localize`Failed to connect`);
