@@ -76,12 +76,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
       if (module.moduleID === '@eo-core-member') {
         return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
       }
-    } else {
-      const isLocal = this.workspace.currentWorkspaceID === -1;
-      this.dataSourceService.checkRemoteCanOperate(() => {
-        this.router.navigate([route]);
-      }, isLocal);
     }
+    if (module.moduleID !== '@eo-core-member') {
+      this.router.navigate([route]);
+      return;
+    }
+    const isLocal = this.workspace.currentWorkspaceID === -1;
+    this.dataSourceService.checkRemoteCanOperate(() => {
+      this.router.navigate([route]);
+    }, isLocal);
   }
   ngOnDestroy(): void {
     this.destroy = true;

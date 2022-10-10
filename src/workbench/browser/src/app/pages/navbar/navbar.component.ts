@@ -87,7 +87,6 @@ export class NavbarComponent implements OnInit {
       return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
       // 1. 如果配置了远程地址
     } else {
-      console.log('je');
       this.dataSourceService.checkRemoteCanOperate(() => {
         this.message.send({ type: 'addWorkspace', data: {} });
       });

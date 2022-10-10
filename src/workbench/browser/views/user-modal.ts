@@ -225,6 +225,7 @@ const eventS = new EventS({
       ],
     },
     {
+      // TODO change a event name
       name: 'http-401',
       callback: [
         workspaceS.getCurrent('{ id }'),
