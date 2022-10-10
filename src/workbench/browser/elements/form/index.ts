@@ -141,7 +141,7 @@ export class Form extends Render implements formType {
     };
     const formList = (list) =>
       list
-        .map(({ isShowLabel = true, label, rules, key, span, type, ...it }, i) => {
+        .map(({ isShowLabel = true, label, rules, placeholder, key, span, type, ...it }, i) => {
           const isLabelRequired = (ruleList) => (ruleList.includes('required') ? 'nzRequired' : '');
           const labelTmpl = isShowLabel
             ? `<nz-form-label [nzSpan]="${span || 24}" ${isLabelRequired(rules)} i18n>${label}</nz-form-label>`
@@ -167,7 +167,7 @@ export class Form extends Render implements formType {
           <nz-form-control ${
             rules.length > 1 ? `[nzErrorTip]="${key}ErrorTpl"` : `nzErrorTip="${rulesHash[rules[0]].errTip({ label })}"`
           }>
-            ${renderKey({ isShowLabel, label, rules, key, span, type })}
+            ${renderKey({ isShowLabel, placeholder, label, rules, key, span, type })}
             ${renderErrTipTpl}
             </nz-form-control>
             </nz-form-item>

@@ -4,6 +4,7 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 @Component({
   selector: 'eo-data-storage',
   template: `
@@ -51,6 +52,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
   constructor(
     private fb: FormBuilder,
     private message: EoMessageService,
+    private messageS: MessageService,
     private web: WebService,
     private electron: ElectronService,
     private dataSource: DataSourceService
@@ -86,6 +88,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       );
       if (isSuccess) {
         this.dataSource.connectCloudSuccess();
+        this.messageS.send({ type: 'login', data: {} });
         this.modelChange.emit(this.model);
       } else {
         this.message.error($localize`Failed to connect`);

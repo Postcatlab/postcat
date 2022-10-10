@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'
 import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { ApiOverviewComponent } from 'eo/workbench/browser/src/app/pages/api/overview/api-overview.component'
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module'
@@ -31,6 +32,6 @@ import { WorkspaceComponent } from './workspace.component'
   ],
   declarations: [WorkspaceComponent, ApiOverviewComponent],
   exports: [],
-  providers: [NzModalService, RemoteService]
+  providers: [NzModalService, MessageService, RemoteService]
 })
 export class WorkspaceModule {}

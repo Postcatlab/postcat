@@ -1,6 +1,7 @@
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import {
   UntypedFormBuilder,
@@ -40,7 +41,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btng1eobbCallback()"
+        (click)="btnqghaj7Callback()"
         i18n
       >
         Save
@@ -60,7 +61,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnlwmr5eCallback()"
+        (click)="btnu24u2fCallback()"
         i18n
       >
         Delete
@@ -74,6 +75,7 @@ export class WorkspaceComponent implements OnInit {
     public modal: NzModalService,
     public workspace: WorkspaceService,
     public eMessage: EoMessageService,
+    public message: MessageService,
     public api: RemoteService,
     public fb: UntypedFormBuilder
   ) {
@@ -92,7 +94,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btng1eobbCallback() {
+  async btnqghaj7Callback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -101,20 +103,25 @@ export class WorkspaceComponent implements OnInit {
       title
     })
     if (err) {
+      if (err.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
       this.eMessage.error($localize`Edit workspace failed`)
       return
     }
-
     this.eMessage.success($localize`Edit workspace successfully !`)
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
-
     this.workspace.setWorkspaceList(list)
   }
-  async btnlwmr5eCallback() {
+  async btnu24u2fCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -139,16 +146,22 @@ You cannot restore it once deleted!`,
       workspaceID: currentWsp
     })
     if (err) {
+      if (err.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
-
     this.eMessage.success($localize`Delete success !`)
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
-
     this.workspace.setWorkspaceList(list)
   }
 }

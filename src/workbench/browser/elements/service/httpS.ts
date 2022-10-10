@@ -11,16 +11,21 @@ export class HTTPS extends Render {
   send(name, params = '', { err = 'err', data = 'data', errTip = '' } = {}) {
     return `const [${data}, ${err}]:any = await this.api.${name}(${params})
     if(${err}) {
+      if (${err}.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
       ${this.errTip(errTip)}
       return
-    }
-
-    `;
+    }`;
   }
   render() {
     return {
       type: 'element',
       imports: [
+        {
+          target: [{ name: 'MessageService', type: 'service', inject: { name: 'message' } }],
+          from: 'eo/workbench/browser/src/app/shared/services/message/message.service',
+        },
         {
           target: [{ name: 'RemoteService', type: 'service', inject: { name: 'api' } }],
           from: 'eo/workbench/browser/src/app/shared/services/storage/remote.service',

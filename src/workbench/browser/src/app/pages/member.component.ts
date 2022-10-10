@@ -1,8 +1,8 @@
 import { NzModalService } from 'ng-zorro-antd/modal'
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service'
 import { Component, OnInit } from '@angular/core'
 
@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="enygjf4Callback()"
+      (nzAfterClose)="eltqhn1Callback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -29,8 +29,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnrqjcy9Callback()"
-          [disabled]="btnyfds65Status()"
+          (click)="btn6g785hCallback()"
+          [disabled]="btnoolzwgStatus()"
           i18n
         >
           Select a member above
@@ -44,7 +44,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnyxuxupCallback()"
+          (click)="btnbevxajCallback()"
           i18n
         >
           Add people
@@ -53,7 +53,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="erq701nCallback($event)"
+          (eoOnRemove)="eh632gjCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -64,10 +64,10 @@ export class MemberComponent implements OnInit {
   memberList
   constructor(
     public modal: NzModalService,
+    public message: MessageService,
     public api: RemoteService,
     public eMessage: EoMessageService,
     public workspace: WorkspaceService,
-    public message: MessageService,
     public dataSource: DataSourceService
   ) {
     this.isInvateModalVisible = false
@@ -88,6 +88,10 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
 
@@ -100,15 +104,19 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async enygjf4Callback() {
+  async eltqhn1Callback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnrqjcy9Callback() {
+  async btn6g785hCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
     if (uErr) {
+      if (uErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
 
@@ -125,9 +133,12 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (aErr) {
+      if (aErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
-
     this.eMessage.success($localize`Add new member success`)
 
     // * 关闭弹窗
@@ -138,6 +149,10 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
 
@@ -146,17 +161,17 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btnyfds65Status() {
+  btnoolzwgStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnyxuxupCallback() {
+  async btnbevxajCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async erq701nCallback($event) {
+  async eh632gjCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
@@ -184,14 +199,21 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (err) {
+      if (err.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
-
     const { id: currentWorkspaceID } = this.workspace.currentWorkspace
     const [wData, wErr]: any = await this.api.api_workspaceMember({
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
 

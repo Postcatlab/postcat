@@ -5,6 +5,7 @@ import {
   Validators
 } from '@angular/forms'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { Component, OnInit } from '@angular/core'
@@ -39,7 +40,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btnpouc68Callback()"
+          (click)="btny9gxrfCallback()"
           i18n
         >
           Save
@@ -122,7 +123,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btn73bfdzCallback()"
+          (click)="btnx52mj9Callback()"
           i18n
         >
           Reset
@@ -137,6 +138,7 @@ export class AccountComponent implements OnInit {
   constructor(
     public fb: UntypedFormBuilder,
     public user: UserService,
+    public message: MessageService,
     public api: RemoteService,
     public eMessage: EoMessageService
   ) {
@@ -169,22 +171,27 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnpouc68Callback() {
+  async btny9gxrfCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
       username: user
     })
     if (err) {
+      if (err.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
       this.eMessage.error($localize`Sorry, username is be used`)
       return
     }
-
     const [pData, pErr]: any = await this.api.api_userReadProfile(null)
     if (pErr) {
+      if (pErr.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
+
       return
     }
-
     this.user.setUserProfile(pData)
     this.eMessage.success($localize`Username update success !`)
   }
@@ -200,7 +207,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btn73bfdzCallback() {
+  async btnx52mj9Callback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
@@ -209,10 +216,12 @@ export class AccountComponent implements OnInit {
       newPassword
     })
     if (err) {
+      if (err.status === 401) {
+        this.message.send({ type: 'http-401', data: {} })
+      }
       this.eMessage.error($localize`Validation failed`)
       return
     }
-
     this.eMessage.success($localize`Password reset success !`)
 
     // * Clear password form

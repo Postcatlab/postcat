@@ -82,7 +82,7 @@ const loginForm = new Form({
       key: 'password',
       type: 'password',
       placeholder: 'Enter password',
-      rules: ['required'],
+      rules: ['required', 'minlength:6'],
     },
   ],
   footer: [
@@ -185,7 +185,13 @@ const checkConnect = new Modal({
   title: { text: 'Check your connection' },
   children: [
     new Text({
-      label: `Can 't connect right now, click to retry`,
+      label: `Can 't connect right now, click to retry. Or`,
+    }),
+    new Text({
+      label: [{ text: 'config in the configuration' }],
+      event: {
+        click: [Modal.close('open-setting')],
+      },
     }),
   ],
   footer: [
@@ -209,6 +215,17 @@ const eventS = new EventS({
       callback: [login.wakeUp()],
     },
     {
+      name: 'http-401',
+      callback: [
+        // *
+        workspaceS.getCurrent('{ id }'),
+        `if (id === -1) {
+          return
+        }`,
+        login.wakeUp(),
+      ],
+    },
+    {
       name: 'logOut',
       callback: [
         messageS.success('Successfully logged out !'),
@@ -222,13 +239,18 @@ const eventS = new EventS({
     },
     {
       name: 'ping-fail',
-      callback: [checkConnect.wakeUp()],
+      callback: [messageS.error('Connect failed'), checkConnect.wakeUp()],
+    },
+    {
+      name: 'ping-success',
+      callback: [messageS.success('Connect success')],
     },
     {
       name: 'need-config-remote',
       callback: [Modal.wakeUp('open-setting')],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },
+    { name: 'retry', callback: [checkConnect.wakeUp()] },
   ],
 });
 

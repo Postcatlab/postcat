@@ -91,7 +91,9 @@ export class DataSourceService {
     const [isSuccess] = await this.pingCloudServerUrl();
     if (!isSuccess) {
       this.messageService.send({ type: 'ping-fail', data: {} });
+      return;
     }
+    this.messageService.send({ type: 'ping-success', data: {} });
   }
   switchToLocal() {
     this.storageService.toggleDataSource({ dataSourceType: 'local' });
