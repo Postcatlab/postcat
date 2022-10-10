@@ -34,7 +34,6 @@
     "@babel/runtime": "7.18.3",
     "@ngxs/store": "3.7.4",
     "ajv": "8.11.0",
-    "angular": "1.8.2",
     "js-beautify": "1.14.4",
     "lodash-es": "4.17.21",
     "markdown-it": "13.0.1",
