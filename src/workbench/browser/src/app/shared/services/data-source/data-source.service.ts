@@ -106,8 +106,8 @@ export class DataSourceService {
       const [isSuccess] = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
       if (isSuccess) {
-        if (!this.user.isLogin && !isLocalSpace) {
-          this.messageService.send({ type: 'login', data: {} });
+        if (!this.user.isLogin) {
+          !isLocalSpace && this.messageService.send({ type: 'login', data: {} });
         } else {
           canOperateCallback();
         }

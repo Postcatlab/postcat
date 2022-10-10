@@ -48,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btnfphrm6Callback()"
+        (click)="btnuwbrofCallback()"
         i18n
       >
         Save
@@ -68,7 +68,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnqvt7jeCallback()"
+        (click)="btn3qapajCallback()"
         i18n
       >
         Delete
@@ -102,7 +102,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnfphrm6Callback() {
+  async btnuwbrofCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -112,10 +112,11 @@ export class WorkspaceComponent implements OnInit {
     })
     if (err) {
       this.eMessage.error($localize`Edit workspace failed`)
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -124,17 +125,18 @@ export class WorkspaceComponent implements OnInit {
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
     }
     this.workspace.setWorkspaceList(list)
   }
-  async btnqvt7jeCallback() {
+  async btn3qapajCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -159,10 +161,11 @@ You cannot restore it once deleted!`,
       workspaceID: currentWsp
     })
     if (err) {
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -171,10 +174,11 @@ You cannot restore it once deleted!`,
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return

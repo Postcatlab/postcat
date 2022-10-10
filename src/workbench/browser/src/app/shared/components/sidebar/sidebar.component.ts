@@ -87,10 +87,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.destroy = true;
   }
   private getModules() {
-    console.log(
-      'this.workspace.currentWorkspaceID !== -1 || !this.dataSourceService.remoteServerUrl',
-      this.dataSourceService.remoteServerUrl
-    );
     const defaultModule = [
       {
         moduleName: 'API',

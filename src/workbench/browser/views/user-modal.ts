@@ -217,9 +217,16 @@ const eventS = new EventS({
       callback: [login.wakeUp()],
     },
     {
+      name: 'clear-user',
+      callback: [
+        // * clear all user data
+        userS.clearAuth(),
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
+      ],
+    },
+    {
       name: 'http-401',
       callback: [
-        // *
         workspaceS.getCurrent('{ id }'),
         `if (id === -1) {
           return

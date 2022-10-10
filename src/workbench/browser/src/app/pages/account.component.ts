@@ -40,7 +40,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btnjglhgbCallback()"
+          (click)="btnyf1xrxCallback()"
           i18n
         >
           Save
@@ -123,7 +123,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btn8ai3xdCallback()"
+          (click)="btn55ws5hCallback()"
           i18n
         >
           Reset
@@ -171,7 +171,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnjglhgbCallback() {
+  async btnyf1xrxCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
@@ -179,20 +179,22 @@ export class AccountComponent implements OnInit {
     })
     if (err) {
       this.eMessage.error($localize`Sorry, username is be used`)
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
     }
     const [pData, pErr]: any = await this.api.api_userReadProfile(null)
     if (pErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (pErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -212,7 +214,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btn8ai3xdCallback() {
+  async btn55ws5hCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
@@ -222,10 +224,11 @@ export class AccountComponent implements OnInit {
     })
     if (err) {
       this.eMessage.error($localize`Validation failed`)
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return

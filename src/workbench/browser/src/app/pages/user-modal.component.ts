@@ -39,7 +39,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnu3k70kCallback()"
+          (click)="btnjstjejCallback()"
           i18n
         >
           Cancel
@@ -48,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn81m0eeCallback()"
+          (click)="btnz33looCallback()"
           i18n
         >
           Sync
@@ -64,7 +64,7 @@ import { Component, OnInit } from '@angular/core'
     >
       <ng-container *nzModalContent>
         <span i18n> Can't connect right now, click to retry or </span>
-        <span style="color: #1890ff" (click)="textewsj3sCallback()" i18n>
+        <span style="color: #1890ff" (click)="textk1hhvuCallback()" i18n>
           config in the configuration
         </span>
       </ng-container>
@@ -73,7 +73,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnbujdq5Callback()"
+          (click)="btnt73cneCallback()"
           i18n
         >
           Cancel
@@ -82,7 +82,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn03zs3mCallback()"
+          (click)="btniwrsolCallback()"
           i18n
         >
           Retry
@@ -94,7 +94,7 @@ import { Component, OnInit } from '@angular/core'
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="ejfc7liCallback()"
+      (nzAfterClose)="e5ujwroCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -140,7 +140,7 @@ import { Component, OnInit } from '@angular/core'
               class="h-10 mt-2"
               nzType="primary"
               nzBlock
-              (click)="btngrt57oCallback()"
+              (click)="btniu3fogCallback()"
               i18n
             >
               Sign In/Up
@@ -158,7 +158,7 @@ import { Component, OnInit } from '@angular/core'
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="text0v6jsnCallback()" i18n>
+        <span style="color: #1890ff" (click)="textqe0ogbCallback()" i18n>
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
@@ -168,7 +168,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalAddWorkspaceFooter"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
-      (nzAfterClose)="eur5gxhCallback()"
+      (nzAfterClose)="eg08f8bCallback()"
       nzTitle="Add Workspace"
       i18n-nzTitle
     >
@@ -185,7 +185,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btn7b8fnrCallback()"
+          (click)="btnohl8nmCallback()"
           i18n
         >
           Cancel
@@ -194,7 +194,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btniwj7bgCallback()"
+          (click)="btnn3w8qoCallback()"
           i18n
         >
           Save
@@ -238,6 +238,17 @@ export class UserModalComponent implements OnInit {
         return
       }
 
+      if (type === 'clear-user') {
+        this.user.clearAuth()
+        this.user.setUserProfile({
+          id: -1,
+          password: '',
+          username: '',
+          workspaces: []
+        })
+        return
+      }
+
       if (type === 'http-401') {
         const { id } = this.workspace.currentWorkspace
         if (id === -1) {
@@ -272,10 +283,11 @@ export class UserModalComponent implements OnInit {
             refreshToken
           })
           if (err) {
-            if (this.user.isLogin) {
-              return
-            }
             if (err.status === 401) {
+              this.message.send({ type: 'clear-user', data: {} })
+              if (this.user.isLogin) {
+                return
+              }
               this.message.send({ type: 'http-401', data: {} })
             }
             return
@@ -329,10 +341,11 @@ export class UserModalComponent implements OnInit {
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [data, err]: any = await this.api.api_workspaceList({})
     if (err) {
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -369,23 +382,24 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnu3k70kCallback() {
+  async btnjstjejCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btn81m0eeCallback() {
+  async btnz33looCallback() {
     // * click event callback
 
     const eData = await this.project.exportLocalProjectData()
 
     const [data, err]: any = await this.api.api_workspaceUpload(eData)
     if (err) {
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -404,20 +418,20 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnbujdq5Callback() {
+  async btnt73cneCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btn03zs3mCallback() {
+  async btniwrsolCallback() {
     // * click event callback
     this.dataSource.checkRemoteAndTipModal()
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async textewsj3sCallback() {
+  async textk1hhvuCallback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -427,13 +441,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async ejfc7liCallback() {
+  async e5ujwroCallback() {
     // * nzAfterClose event callback
 
     // * Clear Login form
     this.validateLoginForm.reset()
   }
-  async btngrt57oCallback() {
+  async btniu3fogCallback() {
     // * click event callback
     const isOk = this.validateLoginForm.valid
 
@@ -447,10 +461,11 @@ export class UserModalComponent implements OnInit {
     const [data, err]: any = await this.api.api_authLogin(formData)
     if (err) {
       this.eMessage.error($localize`Authentication failed !`)
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -463,10 +478,11 @@ export class UserModalComponent implements OnInit {
     {
       const [data, err]: any = await this.api.api_userReadProfile(null)
       if (err) {
-        if (this.user.isLogin) {
-          return
-        }
         if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
           this.message.send({ type: 'http-401', data: {} })
         }
         return
@@ -476,10 +492,11 @@ export class UserModalComponent implements OnInit {
     {
       const [data, err]: any = await this.api.api_workspaceList({})
       if (err) {
-        if (this.user.isLogin) {
-          return
-        }
         if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
           this.message.send({ type: 'http-401', data: {} })
         }
         return
@@ -498,7 +515,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async text0v6jsnCallback() {
+  async textqe0ogbCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -509,11 +526,11 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async eur5gxhCallback() {
+  async eg08f8bCallback() {
     // * nzAfterClose event callback
     this.inputWorkspaceNameValue = ''
   }
-  async btn7b8fnrCallback() {
+  async btnohl8nmCallback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -521,16 +538,17 @@ export class UserModalComponent implements OnInit {
 
     this.inputWorkspaceNameValue = ''
   }
-  async btniwj7bgCallback() {
+  async btnn3w8qoCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
     {
       const [data, err]: any = await this.api.api_workspaceCreate({ title })
       if (err) {
-        if (this.user.isLogin) {
-          return
-        }
         if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
           this.message.send({ type: 'http-401', data: {} })
         }
         return
@@ -545,10 +563,11 @@ export class UserModalComponent implements OnInit {
     {
       const [data, err]: any = await this.api.api_workspaceList({})
       if (err) {
-        if (this.user.isLogin) {
-          return
-        }
         if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
           this.message.send({ type: 'http-401', data: {} })
         }
         return

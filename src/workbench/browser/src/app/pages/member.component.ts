@@ -13,7 +13,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="eynozj2Callback()"
+      (nzAfterClose)="eo0hoxtCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -30,8 +30,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnm6ptz6Callback()"
-          [disabled]="btnvl30x8Status()"
+          (click)="btncgbw4sCallback()"
+          [disabled]="btnxinsurStatus()"
           i18n
         >
           Select a member above
@@ -45,8 +45,8 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn5ploj5Callback()"
-          [disabled]="btntwfl0rStatus()"
+          (click)="btnbhs3g7Callback()"
+          [disabled]="btnxd8droStatus()"
           i18n
         >
           Add people
@@ -55,7 +55,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="er4oiw8Callback($event)"
+          (eoOnRemove)="e4tintiCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -91,10 +91,11 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -109,19 +110,20 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async eynozj2Callback() {
+  async eo0hoxtCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnm6ptz6Callback() {
+  async btncgbw4sCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
     if (uErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (uErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -140,10 +142,11 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (aErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (aErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -158,10 +161,11 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -172,17 +176,17 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btnvl30x8Status() {
+  btnxinsurStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn5ploj5Callback() {
+  async btnbhs3g7Callback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  btntwfl0rStatus() {
+  btnxd8droStatus() {
     // * disabled status status
     return
     return (
@@ -190,7 +194,7 @@ export class MemberComponent implements OnInit {
       this.workspace.authEnum.canEdit
     )
   }
-  async er4oiw8Callback($event) {
+  async e4tintiCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
@@ -218,10 +222,11 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (err) {
-      if (this.user.isLogin) {
-        return
-      }
       if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
@@ -231,10 +236,11 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
-      if (this.user.isLogin) {
-        return
-      }
       if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
         this.message.send({ type: 'http-401', data: {} })
       }
       return
