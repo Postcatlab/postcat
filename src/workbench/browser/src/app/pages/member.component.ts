@@ -13,7 +13,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="e4yk2xgCallback()"
+      (nzAfterClose)="e5iut4sCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -30,8 +30,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btn39o79bCallback()"
-          [disabled]="btnklrcofStatus()"
+          (click)="btn8h9uwbCallback()"
+          [disabled]="btn2vaa2pStatus()"
           i18n
         >
           Select a member above
@@ -45,7 +45,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnw28zy9Callback()"
+          (click)="btn8bsjceCallback()"
           i18n
         >
           Add people
@@ -54,7 +54,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="esrqv3pCallback($event)"
+          (eoOnRemove)="ej4dpyoCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -96,7 +96,6 @@ export class MemberComponent implements OnInit {
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
 
@@ -109,11 +108,11 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async e4yk2xgCallback() {
+  async e5iut4sCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btn39o79bCallback() {
+  async btn8h9uwbCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -124,7 +123,6 @@ export class MemberComponent implements OnInit {
       if (uErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
 
@@ -147,7 +145,6 @@ export class MemberComponent implements OnInit {
       if (aErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
     this.eMessage.success($localize`Add new member success`)
@@ -166,7 +163,6 @@ export class MemberComponent implements OnInit {
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
 
@@ -175,17 +171,17 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btnklrcofStatus() {
+  btn2vaa2pStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnw28zy9Callback() {
+  async btn8bsjceCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async esrqv3pCallback($event) {
+  async ej4dpyoCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
@@ -219,7 +215,6 @@ export class MemberComponent implements OnInit {
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
     const { id: currentWorkspaceID } = this.workspace.currentWorkspace
@@ -233,7 +228,6 @@ export class MemberComponent implements OnInit {
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
 

@@ -81,6 +81,7 @@ const passwordF = new Form({
           Form.getValue('password', 'oldPassword', 'oldPassword'),
           Form.getValue('password', 'newPassword', 'newPassword'),
           httpS.send('api_userUpdatePsd', '{ oldPassword, newPassword }', { errTip: 'Validation failed' }),
+          userS.setLoginInfo('data'),
           message.success('Password reset success !'),
           Form.reset('password'),
         ],

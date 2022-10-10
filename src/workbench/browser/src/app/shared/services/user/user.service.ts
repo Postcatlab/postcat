@@ -33,11 +33,12 @@ export class UserService {
     this.setLoginStatus();
     StorageUtil.set('userProfile', userProfile);
   }
-  private setLoginStatus(){
+  private setLoginStatus() {
     this.isLogin = !!this.userProfile?.username;
   }
 
   clearAuth() {
+    this.isLogin = false;
     this.userProfile = null;
     this.accessToken = this.refreshToken = '';
     StorageUtil.remove('accessToken');

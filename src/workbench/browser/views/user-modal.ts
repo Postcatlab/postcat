@@ -135,11 +135,14 @@ const addWorkspace = new Modal({
   id: 'add-workspace',
   title: { text: 'Add Workspace' },
   children: [newWorkspaceName],
+  event: {
+    close: [newWorkspaceName.reset()],
+  },
   footer: [
     {
       label: 'Cancel',
       type: 'default',
-      click: [Modal.close('add-workspace')],
+      click: [Modal.close('add-workspace'), newWorkspaceName.reset()],
       disabled: [],
     },
     {
@@ -232,9 +235,10 @@ const eventS = new EventS({
         [workspaceS.setWorkspaceList('[]')],
         workspaceS.setCurrentWorkspace(workspaceS.getLocalWorkspaceInfo()),
         messageS.success('Successfully logged out !'),
-        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         userS.getKey('refreshToken'),
         [httpS.send('api_authLogout', '{ refreshToken }')],
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
+        userS.clearAuth(),
       ],
     },
     {

@@ -11,6 +11,9 @@ export class UserS extends Render {
   getKey(name) {
     return `const ${name} = this.user.${name}`;
   }
+  clearAuth() {
+    return `this.user.clearAuth()`;
+  }
   setLoginInfo(data) {
     return `this.user.setLoginInfo(${data})`;
   }

@@ -11,13 +11,13 @@ export class HTTPS extends Render {
   send(name, params = '', { err = 'err', data = 'data', errTip = '' } = {}) {
     return `const [${data}, ${err}]:any = await this.api.${name}(${params})
     if(${err}) {
+      ${this.errTip(errTip)}
       if (this.user.isLogin) {
         return
       }
       if (${err}.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-      ${this.errTip(errTip)}
       return
     }`;
   }

@@ -48,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btne6yi08Callback()"
+        (click)="btnzng2nlCallback()"
         i18n
       >
         Save
@@ -68,7 +68,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnnahukmCallback()"
+        (click)="btnv2aje9Callback()"
         i18n
       >
         Delete
@@ -102,7 +102,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btne6yi08Callback() {
+  async btnzng2nlCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -111,13 +111,13 @@ export class WorkspaceComponent implements OnInit {
       title
     })
     if (err) {
+      this.eMessage.error($localize`Edit workspace failed`)
       if (this.user.isLogin) {
         return
       }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-      this.eMessage.error($localize`Edit workspace failed`)
       return
     }
     this.eMessage.success($localize`Edit workspace successfully !`)
@@ -130,12 +130,11 @@ export class WorkspaceComponent implements OnInit {
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
     this.workspace.setWorkspaceList(list)
   }
-  async btnnahukmCallback() {
+  async btnv2aje9Callback() {
     // * click event callback
 
     const confirm = () =>
@@ -166,7 +165,6 @@ You cannot restore it once deleted!`,
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
     this.eMessage.success($localize`Delete success !`)
@@ -179,7 +177,6 @@ You cannot restore it once deleted!`,
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
     this.workspace.setWorkspaceList(list)

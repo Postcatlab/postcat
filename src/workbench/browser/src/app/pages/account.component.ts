@@ -40,7 +40,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btn2sgbeeCallback()"
+          (click)="btngb0vsaCallback()"
           i18n
         >
           Save
@@ -123,7 +123,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btnx2wt0xCallback()"
+          (click)="btnnjqjboCallback()"
           i18n
         >
           Reset
@@ -171,20 +171,20 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btn2sgbeeCallback() {
+  async btngb0vsaCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
       username: user
     })
     if (err) {
+      this.eMessage.error($localize`Sorry, username is be used`)
       if (this.user.isLogin) {
         return
       }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-      this.eMessage.error($localize`Sorry, username is be used`)
       return
     }
     const [pData, pErr]: any = await this.api.api_userReadProfile(null)
@@ -195,7 +195,6 @@ export class AccountComponent implements OnInit {
       if (pErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-
       return
     }
     this.user.setUserProfile(pData)
@@ -213,7 +212,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btnx2wt0xCallback() {
+  async btnnjqjboCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
@@ -222,15 +221,16 @@ export class AccountComponent implements OnInit {
       newPassword
     })
     if (err) {
+      this.eMessage.error($localize`Validation failed`)
       if (this.user.isLogin) {
         return
       }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
-      this.eMessage.error($localize`Validation failed`)
       return
     }
+    this.user.setLoginInfo(data)
     this.eMessage.success($localize`Password reset success !`)
 
     // * Clear password form
