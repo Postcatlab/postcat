@@ -83,6 +83,8 @@ export class NavbarComponent implements OnInit {
   addWorkspace() {
     if (this.web.isWeb) {
       return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
+    } else if (!this.userService.isLogin) {
+      this.message.send({ type: 'login', data: {} });
     } else {
       this.message.send({ type: 'addWorkspace', data: {} });
     }
