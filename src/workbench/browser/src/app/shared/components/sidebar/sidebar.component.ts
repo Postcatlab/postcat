@@ -7,6 +7,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
 import { WorkspaceService } from '../../services/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -21,7 +22,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private electron: ElectronService,
     private router: Router,
     public sidebar: SidebarService,
-    private workspaceService: WorkspaceService,
+    private dataSourceService: DataSourceService,
     private messageService: MessageService,
     private webService: WebService
   ) {
@@ -73,8 +74,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       if (module.moduleID === '@eo-core-member') {
         return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
       }
+    } else {
+      this.dataSourceService.checkRemoteCanOperate(() => {
+        this.router.navigate([route]);
+      });
     }
-    this.router.navigate([route]);
   }
   ngOnDestroy(): void {
     this.destroy = true;

@@ -67,12 +67,12 @@ export class AppService {
   async matchApiData(projectID = 1, req) {
     const apiList = await this.getAllApi(projectID);
     const { pathname } = new URL(req.params[0], this.dataSource.mockUrl);
-    console.log('pathname', apiList, pathname);
     const apiData = apiList.find((n) => {
       let uri = n.uri.trim();
       if (Array.isArray(n.restParams) && n.restParams.length > 0) {
         const restMap = n.restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
         uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
+        console.log('restMap', restMap);
       }
       const uriReg = new RegExp(`^/?${uri}/?$`);
       return n.method === req.method && uriReg.test(pathname);
