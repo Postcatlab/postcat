@@ -70,7 +70,7 @@ export default new Module({
               attr: {
                 '*ngIf': `
                 (this.workspace.currentWorkspaceID !== -1) &&
-                (this.workspace.operationCode === 1)
+                this.workspace.authEnum.canEdit
                 `,
               },
               children: [
