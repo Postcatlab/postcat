@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
     public dataSourceService: DataSourceService
   ) {
     this.issueEnvironment = this.getEnviroment();
-    if (this.workspaceService.currentWorkspace?.id) {
+    if (this.workspaceService.currentWorkspace?.id !== -1) {
       this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }
   }
