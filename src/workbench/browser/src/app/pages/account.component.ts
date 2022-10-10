@@ -40,7 +40,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btnq0u1jwCallback()"
+          (click)="btn2sgbeeCallback()"
           i18n
         >
           Save
@@ -123,7 +123,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btntubrfdCallback()"
+          (click)="btnx2wt0xCallback()"
           i18n
         >
           Reset
@@ -171,13 +171,16 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnq0u1jwCallback() {
+  async btn2sgbeeCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
       username: user
     })
     if (err) {
+      if (this.user.isLogin) {
+        return
+      }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -186,6 +189,9 @@ export class AccountComponent implements OnInit {
     }
     const [pData, pErr]: any = await this.api.api_userReadProfile(null)
     if (pErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (pErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -207,7 +213,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btntubrfdCallback() {
+  async btnx2wt0xCallback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
@@ -216,6 +222,9 @@ export class AccountComponent implements OnInit {
       newPassword
     })
     if (err) {
+      if (this.user.isLogin) {
+        return
+      }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }

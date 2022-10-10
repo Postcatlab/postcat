@@ -1,6 +1,7 @@
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import {
@@ -47,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btn5pdhcqCallback()"
+        (click)="btne6yi08Callback()"
         i18n
       >
         Save
@@ -67,7 +68,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnhck6ljCallback()"
+        (click)="btnnahukmCallback()"
         i18n
       >
         Delete
@@ -81,6 +82,7 @@ export class WorkspaceComponent implements OnInit {
     public modal: NzModalService,
     public workspace: WorkspaceService,
     public eMessage: EoMessageService,
+    public user: UserService,
     public message: MessageService,
     public api: RemoteService,
     public fb: UntypedFormBuilder
@@ -100,7 +102,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btn5pdhcqCallback() {
+  async btne6yi08Callback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -109,6 +111,9 @@ export class WorkspaceComponent implements OnInit {
       title
     })
     if (err) {
+      if (this.user.isLogin) {
+        return
+      }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -119,6 +124,9 @@ export class WorkspaceComponent implements OnInit {
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -127,7 +135,7 @@ export class WorkspaceComponent implements OnInit {
     }
     this.workspace.setWorkspaceList(list)
   }
-  async btnhck6ljCallback() {
+  async btnnahukmCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -152,6 +160,9 @@ You cannot restore it once deleted!`,
       workspaceID: currentWsp
     })
     if (err) {
+      if (this.user.isLogin) {
+        return
+      }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -162,6 +173,9 @@ You cannot restore it once deleted!`,
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }

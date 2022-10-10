@@ -53,11 +53,10 @@ const sync = new Modal({
         httpS.send('api_workspaceUpload', 'eData'),
         (data) => {
           const { workspace } = data;
-          const { id } = workspace;
         },
         workspaceS.getWorkspaceList('list'),
         workspaceS.setWorkspaceList('[...list, workspace]'),
-        workspaceS.setCurrentWorkspaceID('id'),
+        workspaceS.setCurrentWorkspaceID('workspace'),
         Modal.close('sync'),
       ],
     },
@@ -228,12 +227,13 @@ const eventS = new EventS({
     {
       name: 'logOut',
       callback: [
-        messageS.success('Successfully logged out !'),
-        userS.getKey('refreshToken'),
-        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         // * clear workspace list
+        workspaceS.setCurrentWorkspaceID('-1'),
         [workspaceS.setWorkspaceList('[]')],
         workspaceS.setCurrentWorkspace(workspaceS.getLocalWorkspaceInfo()),
+        messageS.success('Successfully logged out !'),
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
+        userS.getKey('refreshToken'),
         [httpS.send('api_authLogout', '{ refreshToken }')],
       ],
     },

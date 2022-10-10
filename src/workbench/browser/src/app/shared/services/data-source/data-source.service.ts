@@ -44,7 +44,7 @@ export class DataSourceService {
     private message: EoMessageService,
     private settingService: SettingService,
     private router: Router,
-    public userService: UserService
+    private user: UserService
   ) {
     this.pingCloudServerUrl();
   }
@@ -101,12 +101,12 @@ export class DataSourceService {
     this.messageService.send({ type: 'ping-success', data: {} });
   }
 
-  async checkRemoteCanOperate(canOperateCallback) {
+  async checkRemoteCanOperate(canOperateCallback, isLocalSpace = false) {
     if (this.remoteServerUrl) {
       const [isSuccess] = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
       if (isSuccess) {
-        if (!this.userService.isLogin) {
+        if (!this.user.isLogin && !isLocalSpace) {
           this.messageService.send({ type: 'login', data: {} });
         } else {
           canOperateCallback();

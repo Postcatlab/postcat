@@ -1,4 +1,5 @@
 import { NzModalService } from 'ng-zorro-antd/modal'
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
@@ -12,7 +13,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="etbh2bdCallback()"
+      (nzAfterClose)="e4yk2xgCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -29,8 +30,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnvtpqrgCallback()"
-          [disabled]="btni939paStatus()"
+          (click)="btn39o79bCallback()"
+          [disabled]="btnklrcofStatus()"
           i18n
         >
           Select a member above
@@ -44,7 +45,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn86i6qdCallback()"
+          (click)="btnw28zy9Callback()"
           i18n
         >
           Add people
@@ -53,7 +54,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="ej5dcv9Callback($event)"
+          (eoOnRemove)="esrqv3pCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -64,6 +65,7 @@ export class MemberComponent implements OnInit {
   memberList
   constructor(
     public modal: NzModalService,
+    public user: UserService,
     public message: MessageService,
     public api: RemoteService,
     public eMessage: EoMessageService,
@@ -88,6 +90,9 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -104,15 +109,18 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async etbh2bdCallback() {
+  async e4yk2xgCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnvtpqrgCallback() {
+  async btn39o79bCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
     if (uErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (uErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -133,6 +141,9 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (aErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (aErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -149,6 +160,9 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -161,17 +175,17 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btni939paStatus() {
+  btnklrcofStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn86i6qdCallback() {
+  async btnw28zy9Callback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async ej5dcv9Callback($event) {
+  async esrqv3pCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
@@ -199,6 +213,9 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (err) {
+      if (this.user.isLogin) {
+        return
+      }
       if (err.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -210,6 +227,9 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (this.user.isLogin) {
+        return
+      }
       if (wErr.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }

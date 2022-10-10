@@ -24,7 +24,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     public sidebar: SidebarService,
     private dataSourceService: DataSourceService,
     private messageService: MessageService,
-    private webService: WebService
+    private webService: WebService,
+    private workspace: WorkspaceService
   ) {
     this.isCollapsed = this.sidebar.getCollapsed();
     this.sidebar
@@ -75,9 +76,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
         return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
       }
     } else {
+      const isLocal = this.workspace.currentWorkspaceID === -1;
+      console.log('isLocal', isLocal);
       this.dataSourceService.checkRemoteCanOperate(() => {
         this.router.navigate([route]);
-      });
+      }, isLocal);
     }
   }
   ngOnDestroy(): void {

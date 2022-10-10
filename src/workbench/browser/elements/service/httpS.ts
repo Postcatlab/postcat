@@ -11,6 +11,9 @@ export class HTTPS extends Render {
   send(name, params = '', { err = 'err', data = 'data', errTip = '' } = {}) {
     return `const [${data}, ${err}]:any = await this.api.${name}(${params})
     if(${err}) {
+      if (this.user.isLogin) {
+        return
+      }
       if (${err}.status === 401) {
         this.message.send({ type: 'http-401', data: {} })
       }
@@ -22,6 +25,10 @@ export class HTTPS extends Render {
     return {
       type: 'element',
       imports: [
+        {
+          target: [{ name: 'UserService', type: 'service', inject: { name: 'user' }, ignore: true }],
+          from: 'eo/workbench/browser/src/app/shared/services/user/user.service',
+        },
         {
           target: [{ name: 'MessageService', type: 'service', inject: { name: 'message' } }],
           from: 'eo/workbench/browser/src/app/shared/services/message/message.service',
