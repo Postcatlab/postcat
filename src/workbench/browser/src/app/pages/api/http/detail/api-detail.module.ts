@@ -17,11 +17,11 @@ import { ApiDetailHeaderComponent } from './header/api-detail-header.component';
 import { ApiDetailBodyComponent } from './body/api-detail-body.component';
 import { ApiDetailQueryComponent } from './query/api-detail-query.component';
 import { ApiDetailRestComponent } from './rest/api-detail-rest.component';
-import { ApiDetailMockComponent } from './mock/api-detail-mock.component';
 
 import { ApiDetailUtilService } from './api-detail-util.service';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { RouterModule } from '@angular/router';
+import { ApiMockComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.component';
 
 const NZ_COMPONETS = [NzButtonModule, NzCollapseModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
 const COMPONENTS = [
@@ -30,7 +30,7 @@ const COMPONENTS = [
   ApiDetailBodyComponent,
   ApiDetailQueryComponent,
   ApiDetailRestComponent,
-  ApiDetailMockComponent,
+  ApiMockComponent,
 ];
 @NgModule({
   declarations: [...COMPONENTS],
