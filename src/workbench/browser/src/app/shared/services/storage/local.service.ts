@@ -264,6 +264,36 @@ export default class LocalService extends localStorage {
     })
   }
 
+  api_workspaceGetInfo({ workspaceID }) {
+    if (!workspaceID) {
+      console.log(
+        '%c Error: workspace - getInfo 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.load(this.undefined, { workspaceID })
+        .then(({ status, ...data }: any) => {
+          console.log(
+            '%c workspace - getInfo 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c workspace - getInfo 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
   api_workspaceMember({ workspaceID }) {
     if (!workspaceID) {
       console.log(

@@ -185,7 +185,7 @@ const checkConnect = new Modal({
   title: { text: 'Check your connection' },
   children: [
     new Text({
-      label: `Can 't connect right now, click to retry. Or`,
+      label: `Can't connect right now, click to retry or`,
     }),
     new Text({
       label: [{ text: 'config in the configuration' }],

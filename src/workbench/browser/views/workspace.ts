@@ -68,7 +68,10 @@ export default new Module({
             new Canvas({
               class: [],
               attr: {
-                '*ngIf': `this.workspace.currentWorkspaceID !== -1`,
+                '*ngIf': `
+                (this.workspace.currentWorkspaceID !== -1) &&
+                (this.workspace.operationCode === 1)
+                `,
               },
               children: [
                 new Title({ label: 'Edit Workspace', class: ['font-bold'] }),
@@ -80,7 +83,7 @@ export default new Module({
                     click: [
                       workspaceS.getCurrent('{ id: currentWsp }'),
                       wpnameF.getValue('workspace', 'title'),
-                      httpS.send('api_workspaceEdit', '{ workspaceID:currentWsp, title }', {
+                      httpS.send('api_workspaceEdit', '{ workspaceID: currentWsp, title }', {
                         errTip: `Edit workspace failed`,
                       }),
                       messageS.success('Edit workspace successfully !'),
