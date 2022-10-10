@@ -5,6 +5,7 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,12 @@ export class WorkspaceService {
     id: -1,
   } as API.Workspace;
   currentWorkspaceID: number;
+
+  authEnum = {
+    canEdit: false,
+    canDelete: false,
+    canCreate: false,
+  };
 
   get currentWorkspace() {
     const target = this.workspaceList.find((n) => n.id === this.currentWorkspaceID);
@@ -28,7 +35,8 @@ export class WorkspaceService {
     private messageService: MessageService,
     private dataSource: DataSourceService,
     private storage: StorageService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private userService: UserService
   ) {}
 
   getWorkspaceInfo(workspaceID: number): Promise<any> {
@@ -36,6 +44,8 @@ export class WorkspaceService {
       this.storage.run('getWorkspaceInfo', [workspaceID], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
+        } else {
+          reject();
         }
       });
     });
@@ -67,6 +77,8 @@ export class WorkspaceService {
     // * Change data storage
     await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');
     this.messageService.send({ type: 'workspaceChange', data: true });
+    const workspaceInfo = await this.getWorkspaceInfo(this.currentWorkspaceID);
+    this.authEnum.canEdit = workspaceInfo.creatorID === this.userService.userProfile.id;
   }
 
   getWorkspaceList() {

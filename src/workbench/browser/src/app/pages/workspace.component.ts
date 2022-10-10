@@ -19,7 +19,13 @@ import { Component, OnInit } from '@angular/core'
     </h2>
     <section class="py-2"><eo-api-overview></eo-api-overview></section>
     <nz-divider></nz-divider>
-    <section class="" *ngIf="this.workspace.currentWorkspaceID !== -1">
+    <section
+      class=""
+      *ngIf="
+        this.workspace.currentWorkspaceID !== -1 &&
+        this.workspace.authEnum.canEdit
+      "
+    >
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Edit Workspace</span>
       </h2>
@@ -41,7 +47,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btnqghaj7Callback()"
+        (click)="btn5pdhcqCallback()"
         i18n
       >
         Save
@@ -61,7 +67,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnu24u2fCallback()"
+        (click)="btnhck6ljCallback()"
         i18n
       >
         Delete
@@ -94,7 +100,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnqghaj7Callback() {
+  async btn5pdhcqCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -121,7 +127,7 @@ export class WorkspaceComponent implements OnInit {
     }
     this.workspace.setWorkspaceList(list)
   }
-  async btnu24u2fCallback() {
+  async btnhck6ljCallback() {
     // * click event callback
 
     const confirm = () =>

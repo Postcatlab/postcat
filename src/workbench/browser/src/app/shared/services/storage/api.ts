@@ -17,6 +17,7 @@ const http = {
         { 'upload @post': '/workspace/upload' },
         { 'edit @put': '/workspace/{workspaceID}', json: 'title' },
         { 'delete @delete': '/workspace/{workspaceID}' },
+        { 'getInfo @get': '/workspace/{workspaceID}' },
         { 'member @get': '/workspace/{workspaceID}/member/list' },
         { 'addMember @post': '/workspace/{workspaceID}/member/add', json: 'userIDs' },
         { 'removeMember @delete': '/workspace/{workspaceID}/member/remove', body: 'userIDs' },
