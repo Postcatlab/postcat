@@ -88,7 +88,11 @@
       </div>
     </ng-template>
 
-    <nz-empty *ngIf="!treeNodes.length" nzNotFoundImage="simple"></nz-empty>
+    <nz-empty *ngIf="!treeNodes.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+      <ng-template #contentTpl>
+        <span class="ant-empty-normal" i18n>No Data</span>
+      </ng-template>
+    </nz-empty>
   </nz-skeleton>
 
 </div>

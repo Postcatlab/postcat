@@ -6,6 +6,7 @@ import { SettingComponent } from '../../shared/components/setting/setting.compon
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -26,7 +27,8 @@ export class NavbarComponent implements OnInit {
     private modal: NzModalService,
     private message: MessageService,
     public workspaceService: WorkspaceService,
-    public userService: UserService
+    public userService: UserService,
+    public dataSourceService: DataSourceService
   ) {
     this.issueEnvironment = this.getEnviroment();
     if (this.workspaceService.currentWorkspace?.id) {
@@ -80,13 +82,14 @@ export class NavbarComponent implements OnInit {
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });
   }
-  addWorkspace() {
+  async addWorkspace() {
     if (this.web.isWeb) {
       return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
-    } else if (!this.userService.isLogin) {
-      this.message.send({ type: 'login', data: {} });
+      // 1. 如果配置了远程地址
     } else {
-      this.message.send({ type: 'addWorkspace', data: {} });
+      this.dataSourceService.checkRemoteCanOperate(() => {
+        this.message.send({ type: 'addWorkspace', data: {} });
+      });
     }
   }
 
