@@ -72,15 +72,11 @@ export class WorkspaceService {
 
   async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
-    this.updateProjectID(this.currentWorkspaceID);
     StorageUtil.set('currentWorkspace', workspace);
     // * Change data storage
     await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');
+    this.updateProjectID(this.currentWorkspaceID);
     this.messageService.send({ type: 'workspaceChange', data: true });
-    if (this.dataSource.isRemote) {
-      const workspaceInfo = await this.getWorkspaceInfo(this.currentWorkspaceID);
-      this.authEnum.canEdit = workspaceInfo.creatorID === this.userService.userProfile.id;
-    }
   }
 
   getWorkspaceList() {
@@ -88,9 +84,13 @@ export class WorkspaceService {
   }
 
   async updateProjectID(workspaceID: number) {
-    if (workspaceID !== -1) {
-      const { projects } = await this.getWorkspaceInfo(workspaceID);
+    if (workspaceID !== -1 && this.dataSource.isRemote) {
+      const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
       this.projectService.setCurrentProjectID(projects.at(0).uuid);
+      this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
+    }
+    if (workspaceID === -1) {
+      this.projectService.setCurrentProjectID(1);
     }
   }
 }
