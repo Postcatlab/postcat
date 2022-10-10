@@ -9,6 +9,7 @@ import { ApiDetailUtilService } from '../api-detail-util.service';
 export class ApiDetailRestComponent implements OnInit {
   @Input() model: ApiEditRest[];
   listConf: object = {};
+
   constructor(private detailService: ApiDetailUtilService) {}
   ngOnInit(): void {
     this.initListConf();

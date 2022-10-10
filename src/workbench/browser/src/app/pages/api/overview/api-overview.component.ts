@@ -24,7 +24,7 @@ export class ApiOverviewComponent implements OnDestroy {
     {
       title: $localize`Import`,
       icon: 'afferent-three',
-      desc: $localize`Import API data`,
+      desc: $localize`:@@ImportAPI:Import API data`,
       type: 'import',
     },
     {

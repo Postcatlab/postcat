@@ -1,5 +1,7 @@
-<div class="p-[18px]">
-  <button nz-button nzType="primary" (click)="addOrEditModal()" i18n>Add Mock</button>
+<div>
+  <ng-container *ngIf="showToolBar">
+    <button nz-button nzType="primary" (click)="addOrEditModal()" i18n>Add Mock</button>
+  </ng-container>
 
   <div class="mt-[20px]">
     <eo-table [(model)]="mocklList" [columns]="mockListColumns" [hideEmptyLine]="true">
