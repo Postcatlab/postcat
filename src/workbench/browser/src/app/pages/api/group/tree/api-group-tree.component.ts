@@ -217,16 +217,17 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         });
         break;
       }
-      case 'importAPI':{
-        const title= $localize`:@@ImportAPI:Import API data`;
+      case 'importAPI': {
+        const title = $localize`:@@ImportAPI:Import API data`;
         const modal = this.modalService.create({
-          nzTitle:title,
+          nzTitle: title,
           nzContent: ImportApiComponent,
           nzComponentParams: {},
           nzOnOk: () => {
             modal.componentInstance.submit((status) => {
               if (status) {
                 this.message.success($localize`${title} successfully`);
+                this.buildGroupTreeData();
                 modal.destroy();
               } else {
                 this.message.error($localize`Failed to ${title}`);

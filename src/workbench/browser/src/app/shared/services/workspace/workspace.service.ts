@@ -89,5 +89,8 @@ export class WorkspaceService {
       this.projectService.setCurrentProjectID(projects.at(0).uuid);
       this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
     }
+    if (workspaceID === -1) {
+      this.projectService.setCurrentProjectID(1);
+    }
   }
 }

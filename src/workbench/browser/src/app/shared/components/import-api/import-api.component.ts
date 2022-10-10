@@ -87,7 +87,7 @@ export class ImportApiComponent implements OnInit {
     const module = await window.eo.loadFeatureModule(this.currentExtension);
     const { name, content } = this.uploadData;
     const [data, err] = module[action](content);
-    console.log('import data', structuredClone?.(data));
+    // console.log('import data', structuredClone?.(data));
     if (err) {
       console.error(err.msg);
       callback(false);
@@ -122,7 +122,7 @@ export class ImportApiComponent implements OnInit {
       } else {
         callback(false);
       }
-      console.log('projectImport result', result);
+      // console.log('projectImport result', result);
     });
   }
 }
