@@ -23,7 +23,9 @@
       <nz-list-item-action>
         <div class="w-[130px] flex justify-between">
           <span>{{ item.roleName }}</span>
-          <a (click)="handleRemove(item)" i18n>Remove</a>
+          <ng-container *ngIf="workspaceService.authEnum.canEdit && item.roleName !== 'Owner'">
+            <a (click)="handleRemove(item)" i18n>Remove</a>
+          </ng-container>
         </div>
       </nz-list-item-action>
     </ul>
