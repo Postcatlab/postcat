@@ -129,7 +129,7 @@
         <div *ngIf="model.responseTabIndex === 0" class="py-[6px] px-[12px] flex items-center">
           <!-- <span nz-icon nzType="download" nzTheme="outline">下载</span> -->
           <eo-iconpark-icon name="download" *ngIf="!isEmpty(model.testResult?.response)" class="cursor-pointer"
-            (click)="downloadFile()">
+            i18n-nzTooltipTitle nz-tooltip nzTooltipTitle="Save As File" (click)="downloadFile()">
           </eo-iconpark-icon>
         </div>
       </ng-template>
