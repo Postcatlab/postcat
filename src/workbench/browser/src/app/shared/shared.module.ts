@@ -30,6 +30,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -101,6 +102,7 @@ const SHARED_MODULE = [
   NzListModule,
   NzCollapseModule,
   NzTagModule,
+  NzPopconfirmModule,
 ] as const;
 
 @NgModule({

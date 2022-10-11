@@ -9,7 +9,7 @@ import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/s
   providedIn: 'root',
 })
 export class ProjectService {
-  currentProjectID = StorageUtil.get('currentProjectID');
+  currentProjectID = StorageUtil.get('currentProjectID', 1);
 
   constructor(
     private apiService: ApiService,

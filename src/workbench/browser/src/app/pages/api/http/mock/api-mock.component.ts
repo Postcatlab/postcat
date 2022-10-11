@@ -223,6 +223,7 @@ export class ApiMockComponent implements OnInit {
 
   async handleDeleteMockItem(index: number) {
     const target = this.mocklList[index];
+    console.log('target', target);
     await this.removeMock(Number(target.uuid));
     this.mocklList.splice(index, 1)[0];
     this.mocklList = [...this.mocklList];
