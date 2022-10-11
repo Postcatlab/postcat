@@ -159,6 +159,10 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       return;
     }
     if (bool === 'disconnect') {
+      this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
+      this.socket.off('ws-client');
+      this.wsStatus = 'disconnect';
+      this.switchEditStatus();
       // * save to test history
       this.model.response.responseBody.unshift({
         type: 'end',
@@ -170,10 +174,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       if (res) {
         this.message.send({ type: 'updateHistory', data: {} });
       }
-      this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
-      this.socket.off('ws-client');
-      this.wsStatus = 'disconnect';
-      this.switchEditStatus();
       return;
     }
     // * connecting

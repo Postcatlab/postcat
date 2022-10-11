@@ -4,6 +4,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
+import { distinct } from 'rxjs/operators'
+import { interval } from 'rxjs'
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service'
 import { Component, OnInit } from '@angular/core'
 
@@ -13,7 +15,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="ebnuw6gCallback()"
+      (nzAfterClose)="e9fkz1vCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -30,8 +32,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnvtvai5Callback()"
-          [disabled]="btnlz8johStatus()"
+          (click)="btnikelgiCallback()"
+          [disabled]="btn3zz1jbStatus()"
           i18n
         >
           Select a member above
@@ -45,8 +47,8 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn3brzhhCallback()"
-          [disabled]="btn05krhaStatus()"
+          (click)="btnv55tq9Callback()"
+          [disabled]="btnmuor2dStatus()"
           i18n
         >
           Add people
@@ -55,7 +57,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="e3g01aoCallback($event)"
+          (eoOnRemove)="enpx0g8Callback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -78,7 +80,10 @@ export class MemberComponent implements OnInit {
     this.memberList = []
   }
   async ngOnInit(): Promise<void> {
-    this.message.get().subscribe(async ({ type, data }) => {})
+    this.message
+      .get()
+      .pipe(distinct(({ type }) => type, interval(400)))
+      .subscribe(async ({ type, data }) => {})
 
     const url = this.dataSource.mockUrl
 
@@ -110,11 +115,11 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async ebnuw6gCallback() {
+  async e9fkz1vCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnvtvai5Callback() {
+  async btnikelgiCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -176,17 +181,17 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btnlz8johStatus() {
+  btn3zz1jbStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn3brzhhCallback() {
+  async btnv55tq9Callback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  btn05krhaStatus() {
+  btnmuor2dStatus() {
     // * disabled status status
     return
     return (
@@ -194,7 +199,7 @@ export class MemberComponent implements OnInit {
       this.workspace.authEnum.canEdit
     )
   }
-  async e3g01aoCallback($event) {
+  async enpx0g8Callback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>

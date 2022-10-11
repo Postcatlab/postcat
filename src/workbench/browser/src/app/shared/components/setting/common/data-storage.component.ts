@@ -107,6 +107,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
         }
       });
     }
+    this.messageS.send({ type: 'close-setting', data: {} });
   }
 
   async updateDataSource() {}

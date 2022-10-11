@@ -7,6 +7,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { distinct } from 'rxjs/operators';
+import { interval } from 'rxjs';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -101,11 +103,19 @@ export class NavbarComponent implements OnInit {
    * 打开系统设置
    */
   openSettingModal() {
-    this.modal.create({
+    const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
       nzContent: SettingComponent,
       nzFooter: null,
     });
+    this.message
+      .get()
+      .pipe(distinct(({ type }) => type, interval(400)))
+      .subscribe(({ type }) => {
+        if (type === 'close-setting') {
+          ref.close();
+        }
+      });
   }
   private getEnviroment(): string {
     let result = '';
