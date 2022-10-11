@@ -40,7 +40,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btnvywubyCallback()"
+          (click)="btngykhneCallback()"
           i18n
         >
           Save
@@ -123,7 +123,7 @@ import { Component, OnInit } from '@angular/core'
           type="submit"
           class="w-[84px]"
           nzType="primary"
-          (click)="btnjrqyxaCallback()"
+          (click)="btn12cjg5Callback()"
           i18n
         >
           Reset
@@ -171,7 +171,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnvywubyCallback() {
+  async btngykhneCallback() {
     // * click event callback
     const { username: user } = this.validateUsernameForm.value
     const [data, err]: any = await this.api.api_userUpdateUserProfile({
@@ -214,7 +214,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btnjrqyxaCallback() {
+  async btn12cjg5Callback() {
     // * click event callback
     const { oldPassword: oldPassword } = this.validatePasswordForm.value
     const { newPassword: newPassword } = this.validatePasswordForm.value
