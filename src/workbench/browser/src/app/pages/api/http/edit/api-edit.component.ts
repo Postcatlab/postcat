@@ -130,6 +130,14 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
       this.initialModel = this.apiEditUtil.getFormdataFromApiData(eoDeepCopy(result.data));
+      if(busEvent==='addApi'){
+        this.router.navigate(['/home/api/http/detail'], {
+          queryParams: {
+            pageID: Number(this.route.snapshot.queryParams.pageID),
+            uuid: result.data.uuid,
+          },
+        });
+      }
       this.messageService.send({ type: `${busEvent}Success`, data: result.data });
     } else {
       this.message.success($localize`Failed Operation`);

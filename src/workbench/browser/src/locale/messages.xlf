@@ -87,7 +87,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">198,200</context>
+          <context context-type="linenumber">201,203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
@@ -157,28 +157,28 @@
         <source>Sorry, username is be used</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/account.component.ts</context>
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5004324535947157237" datatype="html">
         <source>Username update success !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/account.component.ts</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3464585947666649901" datatype="html">
         <source>Validation failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/account.component.ts</context>
-          <context context-type="linenumber">222</context>
+          <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5189007022710851753" datatype="html">
         <source>Password reset success !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/account.component.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3312816458112607142" datatype="html">
@@ -373,6 +373,10 @@
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="Delete" datatype="html">
         <source>Delete</source>
@@ -398,7 +402,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/test/api-test-util.service.ts</context>
@@ -418,13 +422,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/monaco-editor/monaco-editor.component.ts</context>
           <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7159867e1593a49f81cc5e192ea9588c1235d8bf" datatype="html">
-        <source>No Data</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.html</context>
-          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="API Index" datatype="html">
@@ -460,7 +457,7 @@
         <source>Failed to <x id="PH" equiv-text="title"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">233</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/overview/api-overview.component.ts</context>
@@ -471,46 +468,46 @@
         <source>Deletion Confirmation?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">243</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9142685431369791033" datatype="html">
         <source>Are you sure you want to delete the data &lt;strong title=&quot;<x id="PH" equiv-text="apiInfo.name"/>&quot;&gt;<x id="PH_1" equiv-text="apiInfo.name.length &gt; 50 ? apiInfo.name.slice(0, 50) + &apos;...&apos; : apiInfo.name"/>&lt;/strong&gt; ? You cannot restore it once deleted!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
-          <context context-type="linenumber">243,245</context>
+          <context context-type="linenumber">244,246</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9124347207158517893" datatype="html">
         <source>Add Group</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
-          <context context-type="linenumber">301</context>
+          <context context-type="linenumber">302</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6661660398413994526" datatype="html">
         <source>Add Subgroup</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
-          <context context-type="linenumber">310</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5908762969513689727" datatype="html">
         <source>Edit Group</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
-          <context context-type="linenumber">319</context>
+          <context context-type="linenumber">320</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3596210590059423029" datatype="html">
         <source>Delete Group</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/group/tree/api-group-tree.component.ts</context>
-          <context context-type="linenumber">328</context>
+          <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c6b146602288a87386004d591558477a97497e60" datatype="html">
@@ -825,7 +822,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/test/api-test.component.html</context>
@@ -987,7 +984,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
@@ -1070,14 +1067,14 @@
         <source>Failed Operation</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4926605800185679045" datatype="html">
         <source>Root directory</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/edit/api-edit.component.ts</context>
-          <context context-type="linenumber">185</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc0fd905b5fa45043121b5607fa0f2e91201ff98" datatype="html">
@@ -1182,32 +1179,32 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ffd42d926de35f89e568b489cbb7e246a21dc6aa" datatype="html">
-        <source> <x id="INTERPOLATION" equiv-text="{{ scope.createWay === &apos;system&apos; ? &apos;Preview&apos; : &apos;Edit&apos; }}"/></source>
+      <trans-unit id="3e2a583f531f7dd9f089f68a6968e444c372c3e8" datatype="html">
+        <source>Preview</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
-          <context context-type="linenumber">22,23</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="feacc7017fd641efba1aeb4883e42a352d9d5b6c" datatype="html">
         <source>Are you sure you want to delete this Mock?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0faefbbecaad45187f980b09020369bfeb1dadf2" datatype="html">
         <source>Mock Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/mock/api-mock.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
@@ -1353,6 +1350,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/test/api-test.component.html</context>
           <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e5a8299188c143484099a84beb9e2e280060ff1" datatype="html">
+        <source>Save As File</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/api/http/test/api-test.component.html</context>
+          <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dea39d64fc1db8e019f6bdfc109ce7bc381f8d16" datatype="html">
@@ -1799,176 +1803,176 @@
         <source>Add people to the workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="108f091042d98597e01cef226bb4b0c5fa4a6054" datatype="html">
         <source>Search by username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9b00b99702f11733a67d2bd1fed60d2324bd2db" datatype="html">
         <source> Select a member above </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">35,37</context>
+          <context context-type="linenumber">38,40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e0db21b81ccb1f0d4f4c3ca721f91725cbcd0c6e" datatype="html">
         <source>Manage access</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="23e3d82091dfd065574541f480d36f697a819196" datatype="html">
         <source> Add people </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">49,51</context>
+          <context context-type="linenumber">53,55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8370746762893790920" datatype="html">
         <source>Could not find a user matching <x id="PH" equiv-text="username"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4514148561788509919" datatype="html">
         <source>Add new member success</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2832180029870893530" datatype="html">
         <source>Are you sure you want to remove the member ?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">211</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">134</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="647740b5fac800c65a2d4ac4eb06161c3e5181ef" datatype="html">
         <source>Search Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4c73a5239da1efecaba8dbe9dbec7a38d6ea8366" datatype="html">
         <source>New Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="42b2d1a93d2abc5e39d485cf0a60a06238f8339d" datatype="html">
         <source>Open Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="374fa86a4b3f1afa8e652b516dd7fecb4f4a207d" datatype="html">
         <source>Document</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d042886f7a0f337d411b3325c5f2990039574339" datatype="html">
         <source>Developer Support</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc4d07f70cd04d045ebe61654c22e358645e582e" datatype="html">
         <source>Report Issue</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c07f8370cb0a65f5112b18d8f4763b67ba256540" datatype="html">
         <source>Sign in for Collaboration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="164a589b3e5051bda0c45380017223f66e0e403c" datatype="html">
         <source>Account Setting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="640eec093c685babaa3265137215e3cc92ad704d" datatype="html">
         <source>Sign Out</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f55a9f3b832e00a57e5202a0c14d23499156ac83" datatype="html">
         <source>Minimize</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8" datatype="html">
         <source>Close</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dd2539b30a35f84e2956d53292902b195a411495" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;flex items-center delete-icon&quot;&gt;"/><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;down-two&quot; size=&quot;14px&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_1" ctype="x-span_1" equiv-text="&lt;span class=&quot;ml-1&quot;&gt;"/>Download<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">145,148</context>
+          <context context-type="linenumber">96,99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5285011984449382433" datatype="html">
         <source>Eoapi Client is required to sign in</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5152280978772360415" datatype="html">
         <source>Eoapi Client is required to add workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">89</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="568c4840e9396a4e6579eafcdfd1a0bd5d060d84" datatype="html">
@@ -1996,211 +2000,211 @@
         <source>Do you want to upload local data to the cloud ?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cde4f3551d16abee8238ee89ca26b0e90583e989" datatype="html">
         <source> After confirmation, the system will create a cloud space to upload the local data to the cloud. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">27,30</context>
+          <context context-type="linenumber">29,32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb" datatype="html">
         <source> Cancel </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">44,46</context>
+          <context context-type="linenumber">46,48</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">78,80</context>
+          <context context-type="linenumber">80,82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">189,191</context>
+          <context context-type="linenumber">192,194</context>
         </context-group>
       </trans-unit>
       <trans-unit id="893d1584d20197fb0b04d376a52852c0fcba9bf2" datatype="html">
         <source> Sync </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">53,55</context>
+          <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f7c0d9fa921740139867579b67d623670469313f" datatype="html">
         <source>Check your connection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bb01991628b9387ee8af9e5913ddcbb644d287eb" datatype="html">
-        <source> Can &apos;t connect right now, click to retry. Or </source>
+      <trans-unit id="36944a5636afb5a985c8a510fd53fcd2aeef3c5d" datatype="html">
+        <source> Can&apos;t connect right now, click to retry or </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f9270e50788e82eab8672afc7527751763d82cc7" datatype="html">
         <source> config in the configuration </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">67,69</context>
+          <context context-type="linenumber">69,71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9d1576ce07032e3d42ef3fc8f01593b63cbb79da" datatype="html">
         <source> Retry </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">87,89</context>
+          <context context-type="linenumber">89,91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3609db5b900061cc5c17b1b87740f499e40044ad" datatype="html">
         <source>Sign In/Up</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8c5607e2e978d653dd54f1f8aef46f660b924278" datatype="html">
         <source>Enter Email/Phone/Username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5fa5c05063493603a4bba6c2341641a83fb0be18" datatype="html">
         <source>Enter password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5d40d73a52f34da76993efc86ea44c072b032088" datatype="html">
         <source> Please input your password; </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">126,128</context>
+          <context context-type="linenumber">128,130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="599e6e1861604356a70e2327a8b98c4e69a5b2d5" datatype="html">
         <source> Min length is 6; </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">130,132</context>
+          <context context-type="linenumber">132,134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="788a3d4e16f0cf4f2e513564593cec53751e04d3" datatype="html">
         <source> Sign In/Up </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">145,147</context>
+          <context context-type="linenumber">147,149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7d8dc73633f6fafeff81b094997f70716d9cd0ff" datatype="html">
         <source>Open setting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ffde3336fe95fc4bcd83a51434274953d956ec7" datatype="html">
         <source> If you want to collaborate, please </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">160</context>
+          <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb9e1cd7df044a02bced36e72d0d3556a5d79367" datatype="html">
         <source> open the settings </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">161,163</context>
+          <context context-type="linenumber">163,165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="96231ccdf0045542cf86633457df0a1e67e1e658" datatype="html">
         <source> and fill in the configuration </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f54a70e9d954132358c4a6b180f8e80c6b46e654" datatype="html">
         <source>Add Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="75dcdfd41ccf4d82b3f54f5e72e74d13ef50234f" datatype="html">
         <source>Workspace Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6516909723763707340" datatype="html">
         <source>Successfully logged out !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">253</context>
+          <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8242579071554232999" datatype="html">
         <source>Connect failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">283</context>
+          <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
       <trans-unit id="410921040667746587" datatype="html">
         <source>Connect success</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">292</context>
+          <context context-type="linenumber">314</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7989614159698494453" datatype="html">
         <source>Please check you username or password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">433</context>
+          <context context-type="linenumber">460</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2593015668589658635" datatype="html">
         <source>Authentication failed !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">444</context>
+          <context context-type="linenumber">468</context>
         </context-group>
       </trans-unit>
       <trans-unit id="458099564098221828" datatype="html">
         <source>Create new workspace successfully !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">516</context>
+          <context context-type="linenumber">562</context>
         </context-group>
       </trans-unit>
       <trans-unit id="199a6533c807661d1b3699ef0e477125115cf87e" datatype="html">
         <source>Manage Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5047854cbff5d125827b9a6161b1899643b920c5" datatype="html">
         <source>Edit Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
         <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/env/env.component.html</context>
@@ -2211,42 +2215,42 @@
         <source> Save </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">46,48</context>
+          <context context-type="linenumber">53,55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1b54122bcfa80cffd01b5645e1a29d5d98ebe29b" datatype="html">
         <source>Delete Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="66812c0d4b64aca8408303309105a51cc43b0218" datatype="html">
         <source> After deleting a workspace, all data in the workspace will be permanently deleted. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">54,57</context>
+          <context context-type="linenumber">61,64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7acc4c320f2cec1d3d4e86dfa25ac5f5e6783b9" datatype="html">
         <source> Delete </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">66,68</context>
+          <context context-type="linenumber">73,75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1075865176616456400" datatype="html">
         <source>Edit workspace failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7717266511197693469" datatype="html">
         <source>Edit workspace successfully !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3362895267117075719" datatype="html">
@@ -2254,14 +2258,14 @@
 You cannot restore it once deleted!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">131,132</context>
+          <context context-type="linenumber">146,147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1757901365453351043" datatype="html">
         <source>Delete success !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ca3662121824914732a67203163a8b8541bc50b" datatype="html">
@@ -3471,7 +3475,7 @@ You cannot restore it once deleted!</source>
         <source>Same as the parent&apos;s field <x id="PH" equiv-text="obj[i].name"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/import-api/import-api.component.ts</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
@@ -3485,7 +3489,7 @@ You cannot restore it once deleted!</source>
         <source>Remove</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/manage-access/manage-access.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7513076467032912668" datatype="html">
@@ -3622,7 +3626,7 @@ You cannot restore it once deleted!</source>
         <source>Failed to connect</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/setting/common/data-storage.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0feab442129ba239106e55cf029069d3d4adeadc" datatype="html">
@@ -3699,28 +3703,28 @@ You cannot restore it once deleted!</source>
         <source>Eoapi Client is required to manage member</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6297950127540572260" datatype="html">
         <source>Member</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2244471832629453998" datatype="html">
         <source>Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3139147897029202869" datatype="html">
         <source>Extensions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="59a3abb75073b478f8ec94aade779d38d5d28887" datatype="html">
@@ -3811,7 +3815,7 @@ You cannot restore it once deleted!</source>
         <source>Local workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/workspace/workspace.service.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
     </body>
