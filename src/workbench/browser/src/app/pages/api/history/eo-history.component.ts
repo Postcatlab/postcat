@@ -4,6 +4,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { IndexedDBStorage } from '../../../../../../../workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
 import { MessageService } from '../../../shared/services/message';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'eo-history',
@@ -11,21 +12,26 @@ import { MessageService } from '../../../shared/services/message';
   styleUrls: ['./eo-history.component.scss'],
 })
 export class HistoryComponent implements OnInit {
-  TEXT_BY_PROTOCOL={
-    websocket:'WS'
+  TEXT_BY_PROTOCOL = {
+    websocket: 'WS',
   };
   historyList = [];
   colorHash = new Map().set('get', 'green').set('post', 'blue').set('delete', 'red').set('put', 'pink');
+  private destroy$: Subject<void> = new Subject<void>();
+
   constructor(private storage: StorageService, private router: Router, private message: MessageService) {}
   async ngOnInit() {
     const result = await this.loadAllTest();
     this.historyList = result.reverse();
-    this.message.get().subscribe(async ({ type }) => {
-      if (type === 'updateHistory') {
-        const data = await this.loadAllTest();
-        this.historyList = data.reverse();
-      }
-    });
+    this.message
+      .get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async ({ type }) => {
+        if (type === 'updateHistory') {
+          const data = await this.loadAllTest();
+          this.historyList = data.reverse();
+        }
+      });
   }
 
   loadAllTest() {
@@ -47,7 +53,7 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(data) {
-    const protocol=data.protocol==='websocket'?'ws':'http';
+    const protocol = data.protocol === 'websocket' ? 'ws' : 'http';
     this.router.navigate([`home/api/${protocol}/test`], {
       queryParams: {
         uuid: `history_${data.uuid}`,
