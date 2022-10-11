@@ -1,6 +1,14 @@
 import { MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
 import { ModuleHandler } from './handler';
-import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
+import {
+  ModuleHandlerResult,
+  ModuleInfo,
+  ModuleManagerInfo,
+  ModuleManagerInterface,
+  ModuleType,
+  ExtensionTabView,
+  SidebarView,
+} from '../types';
 import { isNotEmpty } from 'eo/shared/common/common';
 import { processEnv } from '../../constant';
 import http from 'axios';
@@ -12,7 +20,8 @@ import path from 'node:path';
 import portfinder from 'portfinder';
 import { lstat } from 'fs/promises';
 
-const extensionServerMap = new Map<string, { url: string; server: ReturnType<typeof createServer> }>();
+const extTabViewServerMap = new Map<string, ExtensionTabView>();
+const extSidebarViewServerMap = new Map<string, SidebarView>();
 
 // * npm pkg name
 const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
@@ -30,7 +39,7 @@ export class ModuleManager implements ModuleManagerInterface {
   /**
    * extension list
    */
-  private installExtension = [];
+  private installExtension: ModuleManagerInfo[] = [];
 
   /**
    * 模块集合
@@ -82,10 +91,12 @@ export class ModuleManager implements ModuleManagerInterface {
     const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
-      if (extensionServerMap.has(module.name)) {
-        extensionServerMap.get(module.name).server.close();
-        extensionServerMap.delete(module.name);
-      }
+      [extTabViewServerMap, extSidebarViewServerMap].forEach((item) => {
+        if (item.has(module.name)) {
+          item.get(module.name).server.close();
+          item.delete(module.name);
+        }
+      });
     }
     return result;
   }
@@ -316,37 +327,77 @@ export class ModuleManager implements ModuleManagerInterface {
     return newModules;
   }
 
-  async setupExtensionPageServer(extName: string) {
+  getExtFeatures(extName: string) {}
+
+  async getExtPageInfo(
+    extName: string,
+    featureName: string,
+    ServerMap: typeof extSidebarViewServerMap
+  ): Promise<SidebarView> {
     try {
       const extPath = this.moduleHandler.getModuleDir(extName);
       const stats = await lstat(extPath);
-      const pkg = require(path.join(extPath, 'package.json'));
+      const feature = require(path.join(extPath, 'package.json')).features[featureName];
       // 是否为软连接，是则为本地开发，需要提供本地开发web服务地址
       if (stats.isSymbolicLink()) {
-        if (pkg?.devServerUrl) {
-          return pkg?.devServerUrl;
+        if (feature?.debugUrl) {
+          return {
+            url: feature?.debugUrl,
+            ...feature,
+          };
         }
       }
       // 生产环境需要提供 html 入口文件地址(pageEntry字段)
-      if (pkg?.pageEntry) {
-        if (extensionServerMap.has(extName)) {
-          return extensionServerMap.get(extName).url;
+      if (feature?.url) {
+        if (ServerMap.has(extName)) {
+          return ServerMap.get(extName);
         }
         const port = await portfinder.getPortPromise();
-        const pageDir = path.parse(path.join(extPath, pkg?.pageEntry)).dir;
+        const pageDir = path.parse(path.join(extPath, feature?.url)).dir;
         console.log('extension pageDir', pageDir);
         const server = createServer({ root: pageDir });
         server.listen(port);
         const url = `http://127.0.0.1:${port}`;
-        extensionServerMap.set(extName, {
+        ServerMap.set(extName, {
+          ...feature,
           url,
           server,
         });
-        return url;
+        return ServerMap.get(extName);
       }
-      return Promise.reject('该插件package.json缺少pageEntry字段');
+      return Promise.reject('该插件package.json缺少sidebarView字段');
     } catch (error) {
       return Promise.reject(error);
     }
+  }
+
+  async getExtTabs(extName: string): Promise<ExtensionTabView[]> {
+    const result = [];
+    for (let index = 0; index < this.installExtension.length; index++) {
+      try {
+        const sidebarView = await this.getExtPageInfo(
+          this.installExtension[index].name,
+          'sidebarView',
+          extSidebarViewServerMap
+        );
+        result.push(sidebarView);
+      } catch (error) {}
+    }
+    return result;
+  }
+
+  async getSidebarViews(): Promise<SidebarView[]> {
+    const result = [];
+    for (let index = 0; index < this.installExtension.length; index++) {
+      try {
+        const sidebarView = await this.getExtPageInfo(
+          this.installExtension[index].name,
+          'sidebarView',
+          extSidebarViewServerMap
+        );
+        result.push(sidebarView);
+      } catch (error) {}
+    }
+    return result;
   }
 }

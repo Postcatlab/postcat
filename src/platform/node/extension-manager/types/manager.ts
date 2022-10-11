@@ -1,5 +1,6 @@
 import { SidePosition } from 'eo/shared/common/bounds';
 import { ModuleHandlerResult } from './handler';
+import { createServer } from 'http-server/lib/http-server';
 
 /**
  * 模块类型
@@ -130,3 +131,20 @@ export interface ModuleManagerInterface {
   getFeatures: () => Map<string, Map<string, object>>;
   setupExtensionPageServer: (extName: string) => any;
 }
+
+export type HttpServer = ReturnType<typeof createServer>;
+
+export type ExtensionTabView = {
+  name: string;
+  url: string;
+  debugUrl: string;
+  server: HttpServer;
+};
+
+export type SidebarView = {
+  icon: string;
+  title: string;
+  url: string;
+  debugUrl: string;
+  server: HttpServer;
+};
