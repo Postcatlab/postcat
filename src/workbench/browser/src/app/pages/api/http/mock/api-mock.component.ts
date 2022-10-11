@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
@@ -10,17 +10,32 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 
 @Component({
-  selector: 'eo-api-edit-mock',
+  selector: 'eo-api-mock-table',
   templateUrl: './api-mock.component.html',
   styleUrls: ['./api-mock.component.scss'],
 })
 export class ApiMockComponent implements OnInit {
   @Output() eoOnInit = new EventEmitter<ApiData>();
+  @Input() mockListColumns = [
+    { title: $localize`Name`, slot: 'name', width: '20%' },
+    { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
+    { title: 'URL', slot: 'url', width: '42%' },
+    { title: '', slot: 'action', width: '20%', fixed: true },
+  ];
+  @Input() apiDataID: number;
+  @Input() showToolBar = true;
+  apiData: ApiData;
   isVisible = false;
   get mockUrl() {
-    return this.dataSource.mockUrl;
+    const prefix =
+      this.workspaceService.currentWorkspaceID === -1
+        ? this.dataSource.mockUrl
+        : `${this.dataSource.mockUrl}/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}`;
+    return `${prefix}/mock`;
   }
   get modalTitle() {
     return `${
@@ -32,17 +47,11 @@ export class ApiMockComponent implements OnInit {
     } Mock`;
   }
   mocklList: ApiMockEntity[] = [];
-  apiData: ApiData;
   createWayMap = {
     system: $localize`System creation`,
     custom: $localize`Manual creation`,
   };
-  mockListColumns = [
-    { title: $localize`Name`, slot: 'name', width: '20%' },
-    { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
-    { title: 'URL', slot: 'url', width: '42%' },
-    { title: '', slot: 'action', width: '20%', fixed: true },
-  ];
+
   /** 当前被编辑的mock */
   currentEditMock: ApiMockEntity;
   /** 当前被编辑的mock索引 */
@@ -66,7 +75,9 @@ export class ApiMockComponent implements OnInit {
     private storageService: StorageService,
     private route: ActivatedRoute,
     private dataSource: DataSourceService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private workspaceService: WorkspaceService,
+    private projectService: ProjectService
   ) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});
   }
@@ -75,7 +86,7 @@ export class ApiMockComponent implements OnInit {
     this.init();
   }
   init() {
-    this.initMockList(Number(this.route.snapshot.queryParams.uuid));
+    this.initMockList(this.apiDataID || Number(this.route.snapshot.queryParams.uuid));
   }
 
   async initMockList(apiDataID: number) {
@@ -93,10 +104,10 @@ export class ApiMockComponent implements OnInit {
       base: 'query',
       replaceType: 'replace',
     }).url;
-    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
-    if (mock?.createWay === 'custom' && mock.uuid) {
-      url.searchParams.set('mockID', mock.uuid + '');
-    }
+    const url = new URL(
+      `${this.mockUrl}/${mock?.uuid || ''}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'),
+      'https://github.com/'
+    );
     return decodeURIComponent(url.toString());
   }
 

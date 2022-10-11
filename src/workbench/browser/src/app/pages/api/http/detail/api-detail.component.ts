@@ -23,6 +23,11 @@ export class ApiDetailComponent implements OnInit {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType),
   };
+  mockListColumns = [
+    { title: $localize`Name`, slot: 'name', width: '20%' },
+    { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
+    { title: 'URL', slot: 'url', width: '42%' },
+  ];
   constructor(private route: ActivatedRoute, private storage: StorageService, public electron: ElectronService) {}
   ngOnInit(): void {
     this.init();
@@ -34,7 +39,7 @@ export class ApiDetailComponent implements OnInit {
       if (id) {
         this.model = (await this.getApiByUuid(Number(id))) as ApiData;
       } else {
-        console.error('Can\'t no find api');
+        console.error("Can't no find api");
       }
     }
     this.eoOnInit.emit(this.model);

@@ -15,6 +15,8 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
+import { ImportApiComponent } from 'eo/workbench/browser/src/app/shared/components/import-api/import-api.component';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -48,7 +50,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Level Tree nodes.
    */
-  treeNodes: GroupTreeItem[] | NzTreeNode[] | any;
+  treeNodes: GroupTreeItem[] | NzTreeNode[] | any = [];
+  apiDataLoading = true;
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
       title: $localize`:@@API Index:Index`,
@@ -65,6 +68,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
+    private message: EoMessageService,
     private messageService: MessageService,
     private storage: StorageService,
     public electron: ElectronService,
@@ -100,6 +104,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.getGroups();
   });
   getGroups() {
+    this.apiDataLoading = true;
     this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         result.data.forEach((item) => {
@@ -114,7 +119,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           });
         });
       }
-      this.getApis();
+      this.getApis().finally(() => {
+        this.apiDataLoading = false;
+      });
     });
   }
   async getApis() {
@@ -207,6 +214,26 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       case 'addAPI': {
         this.router.navigate(['/home/api/http/edit'], {
           queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') },
+        });
+        break;
+      }
+      case 'importAPI': {
+        const title = $localize`:@@ImportAPI:Import API data`;
+        const modal = this.modalService.create({
+          nzTitle: title,
+          nzContent: ImportApiComponent,
+          nzComponentParams: {},
+          nzOnOk: () => {
+            modal.componentInstance.submit((status) => {
+              if (status) {
+                this.message.success($localize`${title} successfully`);
+                this.buildGroupTreeData();
+                modal.destroy();
+              } else {
+                this.message.error($localize`Failed to ${title}`);
+              }
+            });
+          },
         });
         break;
       }
@@ -365,7 +392,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     let count = 0;
     if (data.group.length > 0) {
       count++;
-      console.log('data.group', data.group);
       this.storage.run(
         'groupBulkUpdate',
         [
@@ -384,7 +410,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     }
     if (data.api.length > 0) {
       count++;
-      console.log('data.api', data.api);
       this.storage.run(
         'apiDataBulkUpdate',
         [

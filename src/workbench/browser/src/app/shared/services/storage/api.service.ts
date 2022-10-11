@@ -90,6 +90,13 @@ export class ApiService {
     return this.remote.api_workspaceDelete(params)
   }
 
+  api_workspaceGetInfo(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_workspaceGetInfo(params)
+    }
+    return this.remote.api_workspaceGetInfo(params)
+  }
+
   api_workspaceMember(params) {
     if (this.dataSourceType === 'local') {
       return this.local.api_workspaceMember(params)

@@ -13,16 +13,16 @@ export { Overview } from './overview';
 export { Alert } from './alert';
 
 // * service
-export { EventS } from './eventS';
-export { UserS } from './userS';
-export { WorkspaceS } from './workspaceS';
-export { MessageS } from './messageS';
-export { ModalS } from './modalS';
-export { DataSourceS } from './dataSourceS';
-export { ProjectS } from './projectS';
+export { EventS } from './service/eventS';
+export { UserS } from './service/userS';
+export { WorkspaceS } from './service/workspaceS';
+export { MessageS } from './service/messageS';
+export { ModalS } from './service/modalS';
+export { DataSourceS } from './service/dataSourceS';
+export { ProjectS } from './service/projectS';
 
 // * http
-export { HTTPS } from './httpS';
+export { HTTPS } from './service/httpS';
 
 // * 业务
 export { ManageAccess } from './manageAccess';

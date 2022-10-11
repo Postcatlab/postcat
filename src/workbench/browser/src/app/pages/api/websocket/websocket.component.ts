@@ -81,8 +81,13 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
     try {
+      const port = await window.eo?.getWebsocketPort();
       this.socket = io(
-        `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : 'ws://localhost:4301'}`,
+        `${
+          APP_CONFIG.production && !this.electron.isElectron
+            ? APP_CONFIG.REMOTE_SOCKET_URL
+            : `ws://localhost:${port || 13928}`
+        }`,
         { transports: ['websocket'] }
       );
       this.socket.on('connect_error', (error) => {
@@ -154,6 +159,10 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       return;
     }
     if (bool === 'disconnect') {
+      this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
+      this.socket.off('ws-client');
+      this.wsStatus = 'disconnect';
+      this.switchEditStatus();
       // * save to test history
       this.model.response.responseBody.unshift({
         type: 'end',
@@ -165,10 +174,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       if (res) {
         this.message.send({ type: 'updateHistory', data: {} });
       }
-      this.socket.emit('ws-server', { type: 'ws-disconnect', content: {} });
-      this.socket.off('ws-client');
-      this.wsStatus = 'disconnect';
-      this.switchEditStatus();
       return;
     }
     // * connecting

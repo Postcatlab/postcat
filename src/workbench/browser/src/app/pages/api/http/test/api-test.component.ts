@@ -302,7 +302,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.testServer.close();
   }
   private checkForm(): boolean {
-    console.log(this.validateForm);
     for (const i in this.validateForm.controls) {
       if (this.validateForm.controls.hasOwnProperty(i)) {
         this.validateForm.controls[i].markAsDirty();

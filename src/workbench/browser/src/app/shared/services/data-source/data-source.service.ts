@@ -7,6 +7,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -31,9 +32,10 @@ export class DataSourceService {
   }
   /** get mock url */
   get mockUrl() {
-    return this.isRemote
-      ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
-      : window.eo?.getMockUrl?.();
+    return window.eo?.getMockUrl?.();
+  }
+  get remoteServerUrl() {
+    return this.settingService.getConfiguration('eoapi-common.remoteServer.url');
   }
 
   constructor(
@@ -41,7 +43,8 @@ export class DataSourceService {
     private messageService: MessageService,
     private message: EoMessageService,
     private settingService: SettingService,
-    private router: Router
+    private router: Router,
+    private user: UserService
   ) {
     this.pingCloudServerUrl();
   }
@@ -51,7 +54,7 @@ export class DataSourceService {
     if (apiData) {
       url.searchParams.set('mockID', apiData.uuid + '');
     }
-    console.log('getApiUrl', decodeURIComponent(url.toString()));
+    // console.log('getApiUrl', decodeURIComponent(url.toString()));
     return decodeURIComponent(url.toString());
   }
 
@@ -65,7 +68,7 @@ export class DataSourceService {
    * Test if cloud service address is available
    */
   async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
-    const remoteUrl = inputUrl || this.settingService.getConfiguration('eoapi-common.remoteServer.url');
+    const remoteUrl = inputUrl || this.remoteServerUrl;
     let result;
     if (!remoteUrl) {
       result = [false, remoteUrl];
@@ -93,8 +96,31 @@ export class DataSourceService {
     const [isSuccess] = await this.pingCloudServerUrl();
     if (!isSuccess) {
       this.messageService.send({ type: 'ping-fail', data: {} });
+      return;
+    }
+    this.messageService.send({ type: 'ping-success', data: {} });
+  }
+
+  async checkRemoteCanOperate(canOperateCallback, isLocalSpace = false) {
+    if (this.remoteServerUrl) {
+      const [isSuccess] = await this.pingCloudServerUrl();
+      // 3.1 如果ping成功，则应该去登陆
+      if (isSuccess) {
+        if (!this.user.isLogin) {
+          !isLocalSpace && this.messageService.send({ type: 'login', data: {} });
+        } else {
+          canOperateCallback();
+        }
+        // 3.2 如果ping不成功，则应该重试
+      } else {
+        this.messageService.send({ type: 'retry', data: {} });
+      }
+      // 2.2 如果没有配置远程地址，则去配置
+    } else {
+      this.messageService.send({ type: 'need-config-remote', data: {} });
     }
   }
+
   switchToLocal() {
     this.storageService.toggleDataSource({ dataSourceType: 'local' });
   }

@@ -14,9 +14,9 @@ const renderEvent = (list) =>
 
 export class EventS extends Render {
   listen;
-  constructor({ id, listen = [] }) {
+  constructor({ listen = [] }) {
     super({ children: [] });
-    this.listen = `this.message.get().subscribe(async ({ type, data }) => {
+    this.listen = `this.message.get().pipe(distinct(({ type }) => type, interval(400))).subscribe(async ({ type, data }) => {
         ${renderEvent(listen)}
       });
       `;
@@ -31,6 +31,14 @@ export class EventS extends Render {
         {
           target: [{ name: 'MessageService', type: 'service', inject: { name: 'message' } }],
           from: 'eo/workbench/browser/src/app/shared/services/message/message.service',
+        },
+        {
+          target: [{ name: 'distinct', type: 'base' }],
+          from: 'rxjs/operators',
+        },
+        {
+          target: [{ name: 'interval', type: 'base' }],
+          from: 'rxjs',
         },
       ],
       init: [this.listen],

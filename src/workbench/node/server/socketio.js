@@ -5,7 +5,7 @@ process.on('uncaughtException', (err) => {
   console.error('uncaughtException', err);
 });
 
-const socket = (port = 4301) => {
+const socket = (port = 13928) => {
   const io = new IO.Server(port);
   io.on('connection', (socket) => {
     // send a message to the client

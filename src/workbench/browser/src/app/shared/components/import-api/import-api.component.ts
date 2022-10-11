@@ -87,6 +87,7 @@ export class ImportApiComponent implements OnInit {
     const module = await window.eo.loadFeatureModule(this.currentExtension);
     const { name, content } = this.uploadData;
     const [data, err] = module[action](content);
+    // console.log('import data', structuredClone?.(data));
     if (err) {
       console.error(err.msg);
       callback(false);
@@ -116,9 +117,12 @@ export class ImportApiComponent implements OnInit {
     const params = [this.projectService.currentProjectID, decycle(data)];
     this.storage.run('projectImport', params, (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
+        callback(true);
         this.router.navigate(['home/api']);
+      } else {
+        callback(false);
       }
+      // console.log('projectImport result', result);
     });
-    callback(true);
   }
 }

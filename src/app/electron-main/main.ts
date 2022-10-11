@@ -38,12 +38,13 @@ if (app.isPackaged) {
 
 const eoUpdater = new EoUpdater();
 const mockServer = new MockServer();
+let websocketPort = 13928;
 (async () => {
-  portfinder.basePort = 10000;
+  portfinder.basePort = websocketPort;
   // Use portfinder for port detection. If the port is found to be occupied, the port will be incremented by 1.
-  const port = await portfinder.getPortPromise();
+  websocketPort = await portfinder.getPortPromise();
   // * start SocketIO
-  socket(port);
+  socket(websocketPort);
 })();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
@@ -263,6 +264,9 @@ try {
         // 获取mock服务地址
       } else if (arg.action === 'getMockUrl') {
         returnValue = mockServer.getMockUrl();
+        // 获取websocket服务端口
+      } else if (arg.action === 'getWebsocketPort') {
+        returnValue = websocketPort;
         // 重置并初始化mock路由
       } else if (arg.action === 'hook') {
         returnValue = 'hook返回';

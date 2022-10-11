@@ -7,6 +7,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
 import { WorkspaceService } from '../../services/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -21,9 +23,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private electron: ElectronService,
     private router: Router,
     public sidebar: SidebarService,
-    private workspaceService: WorkspaceService,
+    private dataSourceService: DataSourceService,
     private messageService: MessageService,
-    private webService: WebService
+    private webService: WebService,
+    private workspace: WorkspaceService
   ) {
     this.isCollapsed = this.sidebar.getCollapsed();
     this.sidebar
@@ -65,7 +68,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebar.currentModule = module;
     const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    console.log('route', route, module);
     if (this.webService.isWeb) {
       if (module.moduleID === '@eo-core-workspace') {
         return await this.webService.jumpToClient($localize`Eoapi Client is required to add workspace`);
@@ -75,7 +77,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
       }
     }
-    this.router.navigate([route]);
+    if (module.moduleID !== '@eo-core-member') {
+      this.router.navigate([route]);
+      return;
+    }
+    const isLocal = this.workspace.currentWorkspaceID === -1;
+    this.dataSourceService.checkRemoteCanOperate(() => {
+      this.router.navigate([route]);
+    }, isLocal);
   }
   ngOnDestroy(): void {
     this.destroy = true;
@@ -90,9 +99,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
-      ...(this.workspaceService.currentWorkspaceID === -1
-        ? []
-        : [
+      ...(this.workspace.currentWorkspaceID !== -1 || !this.dataSourceService.remoteServerUrl
+        ? [
             {
               moduleName: $localize`Member`,
               moduleID: '@eo-core-member',
@@ -101,15 +109,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
               activeRoute: 'home/member',
               route: 'home/member',
             },
-            {
-              moduleName: $localize`Workspace`,
-              moduleID: '@eo-core-workspace',
-              isOffical: true,
-              icon: 'home-5kaioboo',
-              activeRoute: 'home/workspace',
-              route: 'home/workspace',
-            },
-          ]),
+          ]
+        : []),
+      {
+        moduleName: $localize`Workspace`,
+        moduleID: '@eo-core-workspace',
+        isOffical: true,
+        icon: 'home-5kaioboo',
+        activeRoute: 'home/workspace',
+        route: 'home/workspace',
+      },
       {
         moduleName: $localize`Extensions`,
         moduleID: '@eo-core-extension',

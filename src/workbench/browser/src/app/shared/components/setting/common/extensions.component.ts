@@ -151,7 +151,6 @@ export class ExtensionSettingComponent implements OnInit {
   }
 
   handleChange = () => {
-    console.log('this.model', this.model);
     this.modelChange.emit(this.model);
   };
 
