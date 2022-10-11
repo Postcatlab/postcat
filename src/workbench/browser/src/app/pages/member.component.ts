@@ -15,7 +15,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="etogbr9Callback()"
+      (nzAfterClose)="eritvfsCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -32,8 +32,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnof5tavCallback()"
-          [disabled]="btni8ry5cStatus()"
+          (click)="btnrzdn15Callback()"
+          [disabled]="btn193ksdStatus()"
           i18n
         >
           Select a member above
@@ -47,8 +47,8 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn3s1f88Callback()"
-          [disabled]="btndgaluvStatus()"
+          (click)="btnkjotm1Callback()"
+          [disabled]="btnuk14mmStatus()"
           i18n
         >
           Add people
@@ -57,7 +57,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="exsb9niCallback($event)"
+          (eoOnRemove)="e006qnoCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -115,11 +115,11 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async etogbr9Callback() {
+  async eritvfsCallback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btnof5tavCallback() {
+  async btnrzdn15Callback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -181,17 +181,17 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btni8ry5cStatus() {
+  btn193ksdStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn3s1f88Callback() {
+  async btnkjotm1Callback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  btndgaluvStatus() {
+  btnuk14mmStatus() {
     // * disabled status status
     return
     return (
@@ -199,7 +199,7 @@ export class MemberComponent implements OnInit {
       this.workspace.authEnum.canEdit
     )
   }
-  async exsb9niCallback($event) {
+  async e006qnoCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
