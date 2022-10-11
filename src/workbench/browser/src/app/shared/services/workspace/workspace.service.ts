@@ -15,7 +15,7 @@ export class WorkspaceService {
     title: $localize`Local workspace`,
     id: -1,
   } as API.Workspace;
-  currentWorkspaceID: number;
+  currentWorkspaceID: number = StorageUtil.get('currentWorkspace', this.localWorkspace).id;
 
   authEnum = {
     canEdit: false,
@@ -24,20 +24,27 @@ export class WorkspaceService {
   };
 
   get currentWorkspace() {
+    const oldWorkspaceID = this.currentWorkspaceID;
     const target = this.workspaceList.find((n) => n.id === this.currentWorkspaceID);
-    const result = target || StorageUtil.get('currentWorkspace', this.localWorkspace);
-    this.currentWorkspaceID = result.id;
+    const result = target || this.localWorkspace;
+    if (oldWorkspaceID !== this.currentWorkspaceID) {
+      this.setCurrentWorkspace(result);
+    }
     return result;
   }
   workspaceList: API.Workspace[] = [this.localWorkspace];
 
   constructor(
     private messageService: MessageService,
-    private dataSource: DataSourceService,
+    private dataSourceService: DataSourceService,
     private storage: StorageService,
     private projectService: ProjectService,
     private userService: UserService
-  ) {}
+  ) {
+    if (this.currentWorkspaceID === -1 && this.dataSourceService.isRemote) {
+      this.setCurrentWorkspace(this.localWorkspace);
+    }
+  }
 
   getWorkspaceInfo(workspaceID: number): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -78,7 +85,7 @@ export class WorkspaceService {
     this.currentWorkspaceID = workspace.id;
     StorageUtil.set('currentWorkspace', workspace);
     // * Change data storage
-    await this.dataSource.switchDataSource(workspace.id === -1 ? 'local' : 'http');
+    await this.dataSourceService.switchDataSource(workspace.id === -1 ? 'local' : 'http');
     this.updateProjectID(this.currentWorkspaceID);
     this.messageService.send({ type: 'workspaceChange', data: true });
   }
@@ -88,7 +95,7 @@ export class WorkspaceService {
   }
 
   async updateProjectID(workspaceID: number) {
-    if (workspaceID !== -1 && this.dataSource.isRemote) {
+    if (workspaceID !== -1 && this.dataSourceService.isRemote) {
       const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
       this.projectService.setCurrentProjectID(projects.at(0).uuid);
       this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
