@@ -43,6 +43,8 @@ export class WorkspaceService {
   ) {
     if (this.currentWorkspaceID === -1 && this.dataSourceService.isRemote) {
       this.setCurrentWorkspace(this.localWorkspace);
+    } else if (this.currentWorkspaceID !== -1 && !this.dataSourceService.isRemote) {
+      this.setCurrentWorkspace(this.currentWorkspace);
     }
   }
 
@@ -66,6 +68,9 @@ export class WorkspaceService {
       })),
       this.localWorkspace,
     ];
+    if (!this.workspaceList.some((n) => n.id === this.currentWorkspaceID)) {
+      this.setCurrentWorkspace(this.localWorkspace);
+    }
   }
 
   setLocalSpace() {
