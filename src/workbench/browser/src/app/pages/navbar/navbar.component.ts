@@ -6,6 +6,9 @@ import { SettingComponent } from '../../shared/components/setting/setting.compon
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { distinct } from 'rxjs/operators';
+import { interval } from 'rxjs';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -26,10 +29,11 @@ export class NavbarComponent implements OnInit {
     private modal: NzModalService,
     private message: MessageService,
     public workspaceService: WorkspaceService,
-    public userService: UserService
+    public userService: UserService,
+    public dataSourceService: DataSourceService
   ) {
     this.issueEnvironment = this.getEnviroment();
-    if (this.workspaceService.currentWorkspace?.id) {
+    if (this.workspaceService.currentWorkspace?.id !== -1) {
       this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }
   }
@@ -80,11 +84,14 @@ export class NavbarComponent implements OnInit {
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });
   }
-  addWorkspace() {
+  async addWorkspace() {
     if (this.web.isWeb) {
       return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
+      // 1. 如果配置了远程地址
     } else {
-      this.message.send({ type: 'addWorkspace', data: {} });
+      this.dataSourceService.checkRemoteCanOperate(() => {
+        this.message.send({ type: 'addWorkspace', data: {} });
+      });
     }
   }
 
@@ -96,11 +103,19 @@ export class NavbarComponent implements OnInit {
    * 打开系统设置
    */
   openSettingModal() {
-    this.modal.create({
+    const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
       nzContent: SettingComponent,
       nzFooter: null,
     });
+    this.message
+      .get()
+      .pipe(distinct(({ type }) => type, interval(400)))
+      .subscribe(({ type }) => {
+        if (type === 'close-setting') {
+          ref.close();
+        }
+      });
   }
   private getEnviroment(): string {
     let result = '';

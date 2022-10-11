@@ -21,7 +21,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c project - create 接口请求失败 %c', ErrorStyle, '')
@@ -48,7 +48,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c project - update 接口请求失败 %c', ErrorStyle, '')
@@ -75,7 +75,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c project - delete 接口请求失败 %c', ErrorStyle, '')
@@ -93,7 +93,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c project - export 接口请求失败 %c', ErrorStyle, '')
@@ -120,7 +120,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c workspace - create 接口请求失败 %c', ErrorStyle, '')
@@ -142,7 +142,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log('%c workspace - list 接口请求失败 %c', ErrorStyle, '')
@@ -160,7 +160,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c workspace - upload 接口请求失败 %c', ErrorStyle, '')
@@ -195,7 +195,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c workspace - edit 接口请求失败 %c', ErrorStyle, '')
@@ -222,10 +222,41 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c workspace - delete 接口请求失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        },
+      })
+    })
+  }
+
+  api_workspaceGetInfo({ workspaceID }) {
+    if (!workspaceID) {
+      console.log(
+        '%c Error: workspace - getInfo 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.http.get(`/workspace/${workspaceID}`, {}).subscribe({
+        next: ({ status, data }: any) => {
+          console.log(
+            '%c workspace - getInfo 接口请求成功 %c',
+            SuccessStyle,
+            ''
+          )
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, { status, ...data }])
+        },
+        error: (error) => {
+          console.log('%c workspace - getInfo 接口请求失败 %c', ErrorStyle, '')
           resolve([null, error])
         },
       })
@@ -249,7 +280,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c workspace - member 接口请求失败 %c', ErrorStyle, '')
@@ -290,7 +321,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log(
@@ -337,7 +368,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log(
@@ -363,7 +394,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log(
@@ -393,7 +424,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log('%c user - readProfile 接口请求失败 %c', ErrorStyle, '')
@@ -428,7 +459,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c user - updatePsd 接口请求失败 %c', ErrorStyle, '')
@@ -455,7 +486,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c user - search 接口请求失败 %c', ErrorStyle, '')
@@ -490,7 +521,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c auth - login 接口请求失败 %c', ErrorStyle, '')
@@ -508,7 +539,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c auth - refresh 接口请求失败 %c', ErrorStyle, '')
@@ -535,7 +566,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c auth - logout 接口请求失败 %c', ErrorStyle, '')
@@ -553,7 +584,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c env - create 接口请求失败 %c', ErrorStyle, '')
@@ -580,7 +611,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c env - update 接口请求失败 %c', ErrorStyle, '')
@@ -607,7 +638,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c env - delete 接口请求失败 %c', ErrorStyle, '')
@@ -630,7 +661,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c env - load 接口请求失败 %c', ErrorStyle, '')
@@ -661,7 +692,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log('%c env - search 接口请求失败 %c', ErrorStyle, '')
@@ -679,7 +710,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c group - create 接口请求失败 %c', ErrorStyle, '')
@@ -706,7 +737,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c group - update 接口请求失败 %c', ErrorStyle, '')
@@ -724,7 +755,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c group - bulkUpdate 接口请求失败 %c', ErrorStyle, '')
@@ -751,7 +782,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c group - delete 接口请求失败 %c', ErrorStyle, '')
@@ -782,7 +813,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log('%c group - loadAll 接口请求失败 %c', ErrorStyle, '')
@@ -800,7 +831,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c api - create 接口请求失败 %c', ErrorStyle, '')
@@ -827,7 +858,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c api - update 接口请求失败 %c', ErrorStyle, '')
@@ -845,7 +876,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c api - bulkUpdate 接口请求失败 %c', ErrorStyle, '')
@@ -872,7 +903,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c api - delete 接口请求失败 %c', ErrorStyle, '')
@@ -899,7 +930,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c api - loadApi 接口请求失败 %c', ErrorStyle, '')
@@ -934,7 +965,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log(
@@ -956,7 +987,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c test - create 接口请求失败 %c', ErrorStyle, '')
@@ -983,7 +1014,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c test - delete 接口请求失败 %c', ErrorStyle, '')
@@ -1014,7 +1045,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log('%c test - LoadAll 接口请求失败 %c', ErrorStyle, '')
@@ -1032,7 +1063,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c mock - create 接口请求失败 %c', ErrorStyle, '')
@@ -1055,7 +1086,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c mock - load 接口请求失败 %c', ErrorStyle, '')
@@ -1082,7 +1113,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c mock - delete 接口请求失败 %c', ErrorStyle, '')
@@ -1109,7 +1140,7 @@ export class RemoteService {
           if (status === 200) {
             return resolve([data, null])
           }
-          resolve([null, data])
+          resolve([null, { status, ...data }])
         },
         error: (error) => {
           console.log('%c mock - update 接口请求失败 %c', ErrorStyle, '')
@@ -1140,7 +1171,7 @@ export class RemoteService {
             if (status === 200) {
               return resolve([data, null])
             }
-            resolve([null, data])
+            resolve([null, { status, ...data }])
           },
           error: (error) => {
             console.log('%c mock - loadAll 接口请求失败 %c', ErrorStyle, '')

@@ -29,16 +29,16 @@ export class UserService {
   }
 
   setUserProfile(userProfile: API.User) {
-    console.log(userProfile);
     this.userProfile = userProfile;
     this.setLoginStatus();
     StorageUtil.set('userProfile', userProfile);
   }
-  private setLoginStatus(){
+  private setLoginStatus() {
     this.isLogin = !!this.userProfile?.username;
   }
 
   clearAuth() {
+    this.isLogin = false;
     this.userProfile = null;
     this.accessToken = this.refreshToken = '';
     StorageUtil.remove('accessToken');

@@ -2,14 +2,15 @@ import { Render } from 'ecode/dist/render';
 
 export class Canvas extends Render {
   class;
-  constructor({ children = [], class: cls }) {
-    super({ children });
+
+  constructor({ children = [], attr = {}, class: cls }) {
+    super({ children, attr });
     this.class = cls;
   }
   render() {
     return {
       type: 'element',
-      template: `<section class="${this.class.join(' ')}">${this.children.template}</section>`,
+      template: `<section class="${this.class.join(' ')}" ${this.attr.join(' ')}>${this.children.template}</section>`,
       imports: [...this.children.imports],
       init: [...this.children.init],
       data: [...this.children.data],

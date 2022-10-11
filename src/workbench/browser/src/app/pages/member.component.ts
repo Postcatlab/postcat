@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core'
-
 import { NzModalService } from 'ng-zorro-antd/modal'
+import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
+import { distinct } from 'rxjs/operators'
+import { interval } from 'rxjs'
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service'
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'eo-member',
@@ -11,7 +15,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="eue6kt6Callback()"
+      (nzAfterClose)="etogbr9Callback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -28,8 +32,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           class=""
           nzType="primary"
           nzBlock
-          (click)="btn3owc3kCallback()"
-          [disabled]="btnpzzlwpStatus()"
+          (click)="btnof5tavCallback()"
+          [disabled]="btni8ry5cStatus()"
           i18n
         >
           Select a member above
@@ -43,7 +47,8 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           nz-button
           class=""
           nzType="primary"
-          (click)="btnqvurd7Callback()"
+          (click)="btn3s1f88Callback()"
+          [disabled]="btndgaluvStatus()"
           i18n
         >
           Add people
@@ -52,7 +57,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="eabwyrfCallback($event)"
+          (eoOnRemove)="exsb9niCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -63,20 +68,41 @@ export class MemberComponent implements OnInit {
   memberList
   constructor(
     public modal: NzModalService,
+    public user: UserService,
+    public message: MessageService,
     public api: RemoteService,
     public eMessage: EoMessageService,
-    public workspace: WorkspaceService
+    public workspace: WorkspaceService,
+    public dataSource: DataSourceService
   ) {
     this.isInvateModalVisible = false
     this.inputPersonValue = ''
     this.memberList = []
   }
   async ngOnInit(): Promise<void> {
+    this.message
+      .get()
+      .pipe(distinct(({ type }) => type, interval(400)))
+      .subscribe(async ({ type, data }) => {})
+
+    const url = this.dataSource.mockUrl
+
+    if (url === '') {
+      this.message.send({ type: 'need-config-remote', data: {} })
+      return
+    }
     const { id: currentWorkspaceID } = this.workspace.currentWorkspace
     const [wData, wErr]: any = await this.api.api_workspaceMember({
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
+        this.message.send({ type: 'http-401', data: {} })
+      }
       return
     }
 
@@ -89,15 +115,22 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async eue6kt6Callback() {
+  async etogbr9Callback() {
     // * nzAfterClose event callback
     this.inputPersonValue = ''
   }
-  async btn3owc3kCallback() {
+  async btnof5tavCallback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
     if (uErr) {
+      if (uErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
+        this.message.send({ type: 'http-401', data: {} })
+      }
       return
     }
 
@@ -114,9 +147,15 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (aErr) {
+      if (aErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
+        this.message.send({ type: 'http-401', data: {} })
+      }
       return
     }
-
     this.eMessage.success($localize`Add new member success`)
 
     // * 关闭弹窗
@@ -127,6 +166,13 @@ export class MemberComponent implements OnInit {
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
+        this.message.send({ type: 'http-401', data: {} })
+      }
       return
     }
 
@@ -135,17 +181,25 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btnpzzlwpStatus() {
+  btni8ry5cStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnqvurd7Callback() {
+  async btn3s1f88Callback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  async eabwyrfCallback($event) {
+  btndgaluvStatus() {
+    // * disabled status status
+    return
+    return (
+      this.workspace.currentWorkspaceID !== -1 &&
+      this.workspace.authEnum.canEdit
+    )
+  }
+  async exsb9niCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>
@@ -173,14 +227,27 @@ export class MemberComponent implements OnInit {
       userIDs: [id]
     })
     if (err) {
+      if (err.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
+        this.message.send({ type: 'http-401', data: {} })
+      }
       return
     }
-
     const { id: currentWorkspaceID } = this.workspace.currentWorkspace
     const [wData, wErr]: any = await this.api.api_workspaceMember({
       workspaceID: currentWorkspaceID
     })
     if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} })
+        if (this.user.isLogin) {
+          return
+        }
+        this.message.send({ type: 'http-401', data: {} })
+      }
       return
     }
 

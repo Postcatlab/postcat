@@ -46,23 +46,25 @@ const sync = new Modal({
       label: 'Sync',
       type: 'primary',
       click: [
-        projectS.exportProjectData('eData'),
+        // projectS.exportProjectData('eData'),
+        `
+        const eData = await this.project.exportLocalProjectData()
+        `,
         httpS.send('api_workspaceUpload', 'eData'),
         (data) => {
           const { workspace } = data;
-          const { id } = workspace;
         },
         workspaceS.getWorkspaceList('list'),
         workspaceS.setWorkspaceList('[...list, workspace]'),
-        workspaceS.setCurrentWorkspaceID('id'),
+        workspaceS.setCurrentWorkspaceID('workspace'),
         Modal.close('sync'),
       ],
     },
   ],
 });
 
-const userPassForm = new Form({
-  id: 'username',
+const loginForm = new Form({
+  id: 'login',
   data: [
     {
       label: 'Email/Phone',
@@ -79,7 +81,47 @@ const userPassForm = new Form({
       key: 'password',
       type: 'password',
       placeholder: 'Enter password',
-      rules: ['required'],
+      rules: ['required', 'minlength:6'],
+    },
+  ],
+  footer: [
+    {
+      id: 'login-btn',
+      label: { text: 'Sign In/Up' },
+      theme: ['block'],
+      class: ['h-10', 'mt-2'],
+      attr: {
+        type: 'submit',
+      },
+      event: {
+        click: [
+          // * login
+          Form.isOk('login'),
+          `
+          if(!isOk) {
+            ${messageS.error('Please check you username or password')}
+            return
+          }`,
+          Form.getData('login', 'formData'),
+          httpS.send('api_authLogin', 'formData', {
+            errTip: 'Authentication failed !',
+          }),
+          userS.setLoginInfo('data'),
+          Modal.close('login'),
+          [httpS.send('api_userReadProfile', null), userS.setUserProfile('data')],
+          [
+            // * update workspace
+            httpS.send('api_workspaceList', '{}'),
+            workspaceS.setWorkspaceList('data'),
+          ],
+          `
+          if (!data.isFirstLogin) {
+            return
+          }
+          `,
+          sync.wakeUp(),
+        ],
+      },
     },
   ],
 });
@@ -93,11 +135,14 @@ const addWorkspace = new Modal({
   id: 'add-workspace',
   title: { text: 'Add Workspace' },
   children: [newWorkspaceName],
+  event: {
+    close: [newWorkspaceName.reset()],
+  },
   footer: [
     {
       label: 'Cancel',
       type: 'default',
-      click: [Modal.close('add-workspace')],
+      click: [Modal.close('add-workspace'), newWorkspaceName.reset()],
       disabled: [],
     },
     {
@@ -105,18 +150,12 @@ const addWorkspace = new Modal({
       type: 'primary',
       click: [
         newWorkspaceName.getValue('title'),
-        `
-        const [data, err]:any = await this.api.api_workspaceCreate({title})
-        if(err) {
-          return
-        }
-        `,
+        [httpS.send('api_workspaceCreate', '{ title }')],
         messageS.success('Create new workspace successfully !'),
         Modal.close('add-workspace'),
         newWorkspaceName.reset(),
         // * update workspace list
-        httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
-        workspaceS.setWorkspaceList('list'),
+        [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
       ],
       disabled: [],
     },
@@ -133,52 +172,13 @@ const login = new Modal({
   children: [
     new Canvas({
       class: ['my-3'],
-      children: [
-        userPassForm,
-        new Canvas({
-          class: ['h-2'],
-        }),
-        new Button({
-          id: 'login-btn',
-          label: { text: 'Sign In/Up' },
-          theme: ['block'],
-          class: ['h-10'],
-          event: {
-            click: [
-              // * login
-              userPassForm.isOk(),
-              `
-              if(!isOk) {
-                ${messageS.error('Please check you username or password')}
-                return
-              }`,
-              userPassForm.getData('formData'),
-              httpS.send('api_authLogin', 'formData', {
-                errTip: 'Authentication failed !',
-              }),
-              userS.setLoginInfo('data'),
-              Modal.close('login'),
-              httpS.send('api_userReadProfile', null, { err: 'pErr', data: 'pData' }),
-              userS.setUserProfile('pData'),
-              // * update workspace
-              httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
-              workspaceS.setWorkspaceList('list'),
-              `
-              if (!data.isFirstLogin) {
-                return
-              }
-              `,
-              sync.wakeUp(),
-            ],
-          },
-        }),
-      ],
+      children: [loginForm],
     }),
   ],
   footer: [],
   event: {
     //!TODO modal control self status，no need to reset
-    close: [userPassForm.reset()],
+    close: [loginForm.reset()],
   },
 });
 
@@ -187,7 +187,13 @@ const checkConnect = new Modal({
   title: { text: 'Check your connection' },
   children: [
     new Text({
-      label: `Can 't connect right now, click to retry`,
+      label: `Can't connect right now, click to retry or`,
+    }),
+    new Text({
+      label: [{ text: 'config in the configuration' }],
+      event: {
+        click: [Modal.close('open-setting')],
+      },
     }),
   ],
   footer: [
@@ -205,33 +211,58 @@ const checkConnect = new Modal({
 });
 
 const eventS = new EventS({
-  id: 'event',
   listen: [
     {
       name: 'login',
       callback: [login.wakeUp()],
     },
     {
+      name: 'clear-user',
+      callback: [
+        // * clear all user data
+        userS.clearAuth(),
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
+      ],
+    },
+    {
+      // TODO change a event name
+      name: 'http-401',
+      callback: [
+        workspaceS.getCurrent('{ id }'),
+        `if (id === -1) {
+          return
+        }`,
+        login.wakeUp(),
+      ],
+    },
+    {
       name: 'logOut',
       callback: [
-        userS.getKey('refreshToken'),
-        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
         // * clear workspace list
-        workspaceS.setWorkspaceList('[]'),
         workspaceS.setCurrentWorkspaceID('-1'),
-        `
-        const [data, err]:any = await this.api.api_authLogout({ refreshToken });
-        if (err) {
-          return;
-        }`,
+        userS.setUserProfile('{ id: -1, password:"", username:"", workspaces:[] }'),
+        [workspaceS.setWorkspaceList('[]')],
+        workspaceS.setCurrentWorkspace(workspaceS.getLocalWorkspaceInfo()),
         messageS.success('Successfully logged out !'),
+        userS.getKey('refreshToken'),
+        userS.clearAuth(),
+        [httpS.send('api_authLogout', '{ refreshToken }')],
       ],
     },
     {
       name: 'ping-fail',
-      callback: [checkConnect.wakeUp()],
+      callback: [messageS.error('Connect failed'), checkConnect.wakeUp()],
+    },
+    {
+      name: 'ping-success',
+      callback: [messageS.success('Connect success')],
+    },
+    {
+      name: 'need-config-remote',
+      callback: [Modal.wakeUp('open-setting')],
     },
     { name: 'addWorkspace', callback: [addWorkspace.wakeUp()] },
+    { name: 'retry', callback: [checkConnect.wakeUp()] },
   ],
 });
 
@@ -255,8 +286,7 @@ const openSetting = new Modal({
 
 const updateWorkspace = [
   workspaceS.getCurrent('{ id: workspaceID }'),
-  httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
-  workspaceS.setWorkspaceList('list'),
+  [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
   // workspaceS.updateProjectID('workspaceID'),
   // TODO for now
   `if (workspaceID !== -1) {

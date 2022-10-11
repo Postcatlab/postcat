@@ -65,50 +65,64 @@ export default new Module({
             new Title({ label: 'Manage Workspace' }),
             new Canvas({ class: ['py-2'], children: [new Overview()] }),
             new Line(),
-            new Title({ label: 'Edit Workspace', class: ['font-bold'] }),
-            wpnameF,
-            new Button({
-              id: 'save-btn',
-              label: 'Save',
-              event: {
-                click: [
-                  workspaceS.getCurrent('{ id: currentWsp }'),
-                  wpnameF.getValue('workspace', 'title'),
-                  httpS.send('api_workspaceEdit', '{ workspaceID:currentWsp, title }', {
-                    errTip: `Edit workspace failed`,
-                  }),
-                  messageS.success('Edit workspace successfully !'),
-                  ...updateWorkspace,
-                ],
-              },
-            }),
-            new Line(),
-            new Title({ label: 'Delete Workspace', class: ['font-bold'] }),
             new Canvas({
-              class: ['pb-4'],
+              class: [],
+              attr: {
+                '*ngIf': `
+                (this.workspace.currentWorkspaceID !== -1) &&
+                this.workspace.authEnum.canEdit
+                `,
+              },
               children: [
-                new Text({
-                  label: [
-                    { text: 'After deleting a workspace, all data in the workspace will be permanently deleted.' },
+                new Title({ label: 'Edit Workspace', class: ['font-bold'] }),
+                wpnameF,
+                new Button({
+                  id: 'save-btn',
+                  label: 'Save',
+                  event: {
+                    click: [
+                      workspaceS.getCurrent('{ id: currentWsp }'),
+                      wpnameF.getValue('workspace', 'title'),
+                      httpS.send('api_workspaceEdit', '{ workspaceID: currentWsp, title }', {
+                        errTip: `Edit workspace failed`,
+                      }),
+                      messageS.success('Edit workspace successfully !'),
+                      ...updateWorkspace,
+                    ],
+                  },
+                }),
+                new Line(),
+                new Title({ label: 'Delete Workspace', class: ['font-bold'] }),
+                new Canvas({
+                  class: ['pb-4'],
+                  children: [
+                    new Text({
+                      label: [
+                        { text: 'After deleting a workspace, all data in the workspace will be permanently deleted.' },
+                      ],
+                    }),
                   ],
                 }),
+                new Button({
+                  id: 'del-wsp',
+                  label: 'Delete',
+                  theme: ['danger'],
+                  event: {
+                    click: [
+                      modalS.danger({
+                        title: 'Deletion Confirmation?',
+                        content: `Are you sure you want to delete the workspace ? \nYou cannot restore it once deleted!`,
+                      }),
+                      workspaceS.getCurrent('{ id: currentWsp }'),
+                      httpS.send('api_workspaceDelete', '{ workspaceID: currentWsp }'),
+                      messageS.success('Delete success !'),
+                      // * update workspace
+                      workspaceS.setLocalSpace(),
+                      ...updateWorkspace,
+                    ],
+                  },
+                }),
               ],
-            }),
-            new Button({
-              id: 'del-wsp',
-              label: 'Delete',
-              theme: ['danger'],
-              event: {
-                click: [
-                  modalS.danger({
-                    title: 'Deletion Confirmation?',
-                    content: `Are you sure you want to delete the workspace ? \nYou cannot restore it once deleted!`,
-                  }),
-                  workspaceS.getCurrent('{ id: currentWsp }'),
-                  httpS.send('api_workspaceDelete', '{ workspaceID:currentWsp }'),
-                  messageS.success('Delete success !'),
-                ],
-              },
             }),
           ],
         }),

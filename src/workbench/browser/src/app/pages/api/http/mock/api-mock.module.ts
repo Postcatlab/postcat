@@ -10,7 +10,7 @@ import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [ApiMockComponent],
+  declarations: [],
   imports: [
     RouterModule.forChild([
       {
@@ -26,5 +26,6 @@ import { RouterModule } from '@angular/router';
     NzModalModule,
     EouiModule,
   ],
+  exports: [],
 })
 export class ApiMockModule {}

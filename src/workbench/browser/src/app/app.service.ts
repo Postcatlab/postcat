@@ -5,25 +5,23 @@ import { ApiData, ApiMockEntity } from 'eo/workbench/browser/src/app/shared/serv
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AppService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
-  constructor(private indexedDBStorage: IndexedDBStorage, private dataSource: DataSourceService) {
+  constructor(private indexedDBStorage: IndexedDBStorage, private dataSource: DataSourceService) {}
+
+  init() {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
         const sender = event.sender;
-        console.log('req', req);
         const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType') !== false;
-        // console.log('wo接收到了哇', event, message);
-        const { mockID } = req.query;
+        const { mockID } = req.params;
         if (Number.isInteger(Number(mockID))) {
           try {
             const mock = await this.getMockByMockID(Number(mockID));
             const apiData = await this.getApiData(Number(mock.apiDataID));
-            if (!mock && isEnabledMatchType) {
+            if (mock?.createWay === 'system' && isEnabledMatchType) {
               const result = await this.matchApiData(1, req);
               return sender.send('getMockApiList', result);
             } else {
@@ -68,15 +66,15 @@ export class AppService {
    */
   async matchApiData(projectID = 1, req) {
     const apiList = await this.getAllApi(projectID);
-    const { pathname } = new URL(req.url, this.dataSource.mockUrl);
+    const { pathname } = new URL(req.params[0], this.dataSource.mockUrl);
     const apiData = apiList.find((n) => {
       let uri = n.uri.trim();
       if (Array.isArray(n.restParams) && n.restParams.length > 0) {
         const restMap = n.restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
         uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
-        // console.log('restMap', restMap, n.uri, uri);
+        console.log('restMap', restMap);
       }
-      const uriReg = new RegExp(`/?${uri}/?`);
+      const uriReg = new RegExp(`^/?${uri}/?$`);
       return n.method === req.method && uriReg.test(pathname);
     });
     return apiData ? { response: this.generateResponse(apiData.responseBody) } : { statusCode: 404 };
