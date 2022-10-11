@@ -48,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btnz35uavCallback()"
+        (click)="btner5fprCallback()"
         i18n
       >
         Save
@@ -68,7 +68,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btncbyicvCallback()"
+        (click)="btnent18pCallback()"
         i18n
       >
         Delete
@@ -102,7 +102,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnz35uavCallback() {
+  async btner5fprCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -136,7 +136,7 @@ export class WorkspaceComponent implements OnInit {
     }
     this.workspace.setWorkspaceList(list)
   }
-  async btncbyicvCallback() {
+  async btnent18pCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -171,6 +171,7 @@ You cannot restore it once deleted!`,
       return
     }
     this.eMessage.success($localize`Delete success !`)
+    await this.workspace.setLocalSpace()
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {

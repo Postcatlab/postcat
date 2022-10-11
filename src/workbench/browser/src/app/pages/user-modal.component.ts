@@ -41,7 +41,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnkgnjrjCallback()"
+          (click)="btnre3dg8Callback()"
           i18n
         >
           Cancel
@@ -50,7 +50,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnp1kfdsCallback()"
+          (click)="btn3g7jvbCallback()"
           i18n
         >
           Sync
@@ -66,7 +66,7 @@ import { Component, OnInit } from '@angular/core'
     >
       <ng-container *nzModalContent>
         <span i18n> Can't connect right now, click to retry or </span>
-        <span style="color: #1890ff" (click)="textf0mtiwCallback()" i18n>
+        <span style="color: #1890ff" (click)="textetych6Callback()" i18n>
           config in the configuration
         </span>
       </ng-container>
@@ -75,7 +75,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btnvxebpiCallback()"
+          (click)="btn18e6igCallback()"
           i18n
         >
           Cancel
@@ -84,7 +84,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnugn7z7Callback()"
+          (click)="btnb276t7Callback()"
           i18n
         >
           Retry
@@ -96,7 +96,7 @@ import { Component, OnInit } from '@angular/core'
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="e6la8bsCallback()"
+      (nzAfterClose)="e5e9l0gCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -142,7 +142,7 @@ import { Component, OnInit } from '@angular/core'
               class="h-10 mt-2"
               nzType="primary"
               nzBlock
-              (click)="btnzdj4o9Callback()"
+              (click)="btn29kydpCallback()"
               i18n
             >
               Sign In/Up
@@ -160,7 +160,7 @@ import { Component, OnInit } from '@angular/core'
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="textwn46fxCallback()" i18n>
+        <span style="color: #1890ff" (click)="textroumwnCallback()" i18n>
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
@@ -170,7 +170,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalAddWorkspaceFooter"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
-      (nzAfterClose)="eqdeo6hCallback()"
+      (nzAfterClose)="ewffon5Callback()"
       nzTitle="Add Workspace"
       i18n-nzTitle
     >
@@ -187,7 +187,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="default"
-          (click)="btn64siimCallback()"
+          (click)="btnx9rh3yCallback()"
           i18n
         >
           Cancel
@@ -196,7 +196,7 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btn61bqhoCallback()"
+          (click)="btn1i0snkCallback()"
           i18n
         >
           Save
@@ -387,13 +387,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnkgnjrjCallback() {
+  async btnre3dg8Callback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async btnp1kfdsCallback() {
+  async btn3g7jvbCallback() {
     // * click event callback
 
     const eData = await this.project.exportLocalProjectData()
@@ -423,20 +423,20 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnvxebpiCallback() {
+  async btn18e6igCallback() {
     // * click event callback
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async btnugn7z7Callback() {
+  async btnb276t7Callback() {
     // * click event callback
     this.dataSource.checkRemoteAndTipModal()
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async textf0mtiwCallback() {
+  async textetych6Callback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -446,13 +446,13 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async e6la8bsCallback() {
+  async e5e9l0gCallback() {
     // * nzAfterClose event callback
 
     // * Clear Login form
     this.validateLoginForm.reset()
   }
-  async btnzdj4o9Callback() {
+  async btn29kydpCallback() {
     // * click event callback
     const isOk = this.validateLoginForm.valid
 
@@ -520,7 +520,7 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async textwn46fxCallback() {
+  async textroumwnCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -531,11 +531,11 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async eqdeo6hCallback() {
+  async ewffon5Callback() {
     // * nzAfterClose event callback
     this.inputWorkspaceNameValue = ''
   }
-  async btn64siimCallback() {
+  async btnx9rh3yCallback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -543,7 +543,7 @@ export class UserModalComponent implements OnInit {
 
     this.inputWorkspaceNameValue = ''
   }
-  async btn61bqhoCallback() {
+  async btn1i0snkCallback() {
     // * click event callback
     const title = this.inputWorkspaceNameValue
     {

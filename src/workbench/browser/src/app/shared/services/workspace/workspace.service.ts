@@ -61,6 +61,10 @@ export class WorkspaceService {
     ];
   }
 
+  setLocalSpace() {
+    this.setCurrentWorkspace(this.localWorkspace);
+  }
+
   getLocalWorkspaceInfo() {
     return this.localWorkspace;
   }

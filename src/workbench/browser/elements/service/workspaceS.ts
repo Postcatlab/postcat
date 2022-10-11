@@ -29,6 +29,9 @@ export class WorkspaceS extends Render {
   updateProjectID(id) {
     return `await this.workspace.updateProjectID(${id});`;
   }
+  setLocalSpace() {
+    return `await this.workspace.setLocalSpace()`;
+  }
   render() {
     return {
       type: 'element',
