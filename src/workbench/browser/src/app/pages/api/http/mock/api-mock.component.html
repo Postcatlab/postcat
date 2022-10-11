@@ -19,9 +19,10 @@
       </ng-template>
       <ng-template cell="action" let-scope="scope" let-index="index">
         <div class="flex">
-          <a nz-button nzType="link" *ngIf="scope.name || scope.url" [ngSwitch]="scope.createWay" (click)="addOrEditModal(index)">
-            <span  *ngSwitchCase="'system'" i18n>Preview</span>
-            <span  *ngSwitchDefault i18n>Edit</span>
+          <a nz-button nzType="link" *ngIf="scope.name || scope.url" [ngSwitch]="scope.createWay"
+            (click)="addOrEditModal(index)">
+            <span *ngSwitchCase="'system'" i18n>Preview</span>
+            <span *ngSwitchDefault i18n>Edit</span>
           </a>
           <a nz-button nzType="link" *ngIf="(scope.name || scope.url) && scope.createWay !== 'system'" nz-popconfirm
             i18n-nzPopconfirmTitle nzPopconfirmTitle="Are you sure you want to delete this Mock?"
@@ -47,7 +48,7 @@
           <nz-form-label i18n nzFor="currentEditMock.response">Response</nz-form-label>
           <nz-form-control>
             <eo-monaco-editor [(code)]="responseStr" (codeChange)="rawDataChange()" [maxLine]="15" class="h-[200px]"
-              [disabled]="currentEditMock.createWay === 'system'"
+              [config]="{ readOnly: currentEditMock.createWay === 'system' }"
               [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
           </nz-form-control>
         </nz-form-item>
