@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
@@ -75,8 +75,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private electron: ElectronService,
     private store: Store
-  ) {
-  }
+  ) {}
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
   }
@@ -137,9 +136,12 @@ export class ApiComponent implements OnInit, OnDestroy {
    * Get current API ID to show content tab
    */
   watchRouterChange() {
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.id = Number(this.route.snapshot.queryParams.uuid);
-    });
+    this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.id = Number(this.route.snapshot.queryParams.uuid);
+      });
   }
 
   onSideResize({ width }: NzResizeEvent): void {
