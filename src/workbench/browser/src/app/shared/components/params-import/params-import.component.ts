@@ -36,8 +36,8 @@ export class ParamsImportComponent {
 
   get eg() {
     switch (this.contentType) {
-      // case 'xml':
-      //   return `<name>Jack</name><age>12</age>`;
+      case 'xml':
+        return `<name>Jack</name><age>12</age>`;
       // case 'json':
       //   return `{ "name": "Jack", "age": 12 }`;
       case 'formData':
