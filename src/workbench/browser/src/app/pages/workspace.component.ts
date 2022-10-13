@@ -1,4 +1,4 @@
-import { NzModalService } from 'ng-zorro-antd/modal'
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
@@ -48,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btnof6jmpCallback()"
+        (click)="btnfx9imhCallback()"
         i18n
       >
         Save
@@ -68,7 +68,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnmisciqCallback()"
+        (click)="btnw960jpCallback()"
         i18n
       >
         Delete
@@ -102,7 +102,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnof6jmpCallback() {
+  async btnfx9imhCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -136,7 +136,7 @@ export class WorkspaceComponent implements OnInit {
     }
     this.workspace.setWorkspaceList(list)
   }
-  async btnmisciqCallback() {
+  async btnw960jpCallback() {
     // * click event callback
 
     const confirm = () =>
