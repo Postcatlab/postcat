@@ -179,6 +179,13 @@ export class Form extends Render implements formType {
     const footer = footerRender(this.footer || []);
     const footerTemplate = footer?.length ? `${footer.map((it) => it.template).join('\n')}` : '';
     return {
+      elementType: 'form',
+      resetFn: [
+        `
+      \/\/ * auto clear form 
+      this.validate${this.id}Form.reset()`,
+        ...this.children.resetFn,
+      ],
       imports: [
         {
           target: [

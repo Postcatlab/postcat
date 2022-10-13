@@ -1,4 +1,4 @@
-import { NzModalService } from 'ng-zorro-antd/modal'
+import { NzModalService, NzModalRef } from 'ng-zorro-antd/modal'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
@@ -15,7 +15,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="eritvfsCallback()"
+      (nzAfterClose)="ejpi10eCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -32,8 +32,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnrzdn15Callback()"
-          [disabled]="btn193ksdStatus()"
+          (click)="btn7ty1q2Callback()"
+          [disabled]="btnvj7r3wStatus()"
           i18n
         >
           Select a member above
@@ -47,8 +47,8 @@ import { Component, OnInit } from '@angular/core'
           nz-button
           class=""
           nzType="primary"
-          (click)="btnkjotm1Callback()"
-          [disabled]="btnuk14mmStatus()"
+          (click)="btnmlnjqqCallback()"
+          [disabled]="btnem7sukStatus()"
           i18n
         >
           Add people
@@ -57,7 +57,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="e006qnoCallback($event)"
+          (eoOnRemove)="evqg0xcCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -115,11 +115,15 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async eritvfsCallback() {
+  async ejpi10eCallback() {
     // * nzAfterClose event callback
+    {
+      // * auto clear form
+      this.inputPersonValue = ''
+    }
     this.inputPersonValue = ''
   }
-  async btnrzdn15Callback() {
+  async btn7ty1q2Callback() {
     // * click event callback
     const username = this.inputPersonValue
     const [uData, uErr]: any = await this.api.api_userSearch({ username })
@@ -181,17 +185,17 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter((it) => it.roleName !== 'Owner')
     this.memberList = Owner.concat(Member)
   }
-  btn193ksdStatus() {
+  btnvj7r3wStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btnkjotm1Callback() {
+  async btnmlnjqqCallback() {
     // * click event callback
 
     // * 唤起弹窗
     this.isInvateModalVisible = true
   }
-  btnuk14mmStatus() {
+  btnem7sukStatus() {
     // * disabled status status
     return
     return (
@@ -199,7 +203,7 @@ export class MemberComponent implements OnInit {
       this.workspace.authEnum.canEdit
     )
   }
-  async e006qnoCallback($event) {
+  async evqg0xcCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>

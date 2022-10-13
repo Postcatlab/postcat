@@ -10,9 +10,10 @@ type modalType = {
 
 const eventHash = new Map().set('open', 'nzAfterOpen').set('close', 'nzAfterClose');
 
-const eventTranlate = (event) =>
-  Object.entries(event).reduce((total, [e, cb]) => {
-    total[eventHash.get(e)] = cb;
+const eventTranlate = (list) =>
+  list.reduce((total, [e, cb]) => {
+    const key = eventHash.get(e);
+    total[key] = total[key] ? total[key].concat(cb) : [cb];
     return total;
   }, {});
 
@@ -22,7 +23,14 @@ export class Modal extends Render implements modalType {
   title;
   width;
   constructor({ id = '', event = {}, width = null, title, children, footer = null }) {
-    super({ children, event: eventTranlate(event) });
+    const close = children
+      .flat(Infinity)
+      .map((it) => it.render())
+      .filter((it) => it.resetFn)
+      .map((it) => it.resetFn)
+      .flat(Infinity)
+      .filter((it) => it);
+    super({ children, event: eventTranlate([...Object.entries({ close }), ...Object.entries(event)]) });
     this.id = Render.toCamel(id);
     this.title = title;
     this.footer = footer;

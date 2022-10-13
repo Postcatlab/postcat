@@ -25,6 +25,12 @@ export class Input extends Render {
   render() {
     return {
       type: 'element',
+      resetFn: [
+        `
+      \/\/ * auto clear form 
+      this.input${this.id}Value = ''`,
+        ...this.children.resetFn,
+      ],
       imports: [
         {
           target: [{ name: 'NzInputModule', type: 'module' }],

@@ -135,14 +135,11 @@ const addWorkspace = new Modal({
   id: 'add-workspace',
   title: { text: 'Add Workspace' },
   children: [newWorkspaceName],
-  event: {
-    close: [newWorkspaceName.reset()],
-  },
   footer: [
     {
       label: 'Cancel',
       type: 'default',
-      click: [Modal.close('add-workspace'), newWorkspaceName.reset()],
+      click: [Modal.close('add-workspace')],
       disabled: [],
     },
     {
@@ -153,7 +150,6 @@ const addWorkspace = new Modal({
         [httpS.send('api_workspaceCreate', '{ title }')],
         messageS.success('Create new workspace successfully !'),
         Modal.close('add-workspace'),
-        newWorkspaceName.reset(),
         // * update workspace list
         [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
       ],
@@ -176,11 +172,23 @@ const login = new Modal({
     }),
   ],
   footer: [],
-  event: {
-    //!TODO modal control self status，no need to reset
-    close: [loginForm.reset()],
-  },
 });
+
+// const login = modalS.component({
+//   id: 'login',
+//   title: 'Sign In/Up',
+//   children: [
+//     messageS,
+//     userS,
+//     httpS,
+//     workspaceS,
+//     new EventS({}),
+//     new Canvas({
+//       class: ['my-3'],
+//       children: [loginForm],
+//     }),
+//   ],
+// });
 
 const checkConnect = new Modal({
   id: 'check-connect',
@@ -329,6 +337,7 @@ export default new Component({
     messageS,
     eventS,
     sync,
+    // modalS,
     checkConnect,
     login,
     openSetting,
