@@ -417,12 +417,12 @@ const { resolve } = require('path');
                 tmpFileBinary,
                 blobFileName;
               try {
-                blobFileName = _ContentDisposition.parse(inputRes.headers['content-disposition'] || 'undefined')
+                blobFileName = _ContentDisposition.parse(inputRes.headers['content-disposition'] || 'test_response')
                   .parameters.filename;
               } catch (PARSE_CONTENT_DISPOSITION_ERR) {
                 try {
                   blobFileName = _ContentDisposition.parse(
-                    encodeURI(inputRes.headers['content-disposition'] || 'undefined').replace(/\?/g, '')
+                    encodeURI(inputRes.headers['content-disposition'] || 'test_response').replace(/\?/g, '')
                   ).parameters.filename;
                 } catch (URL_ENCODE_PARSE_CONTENT_DISPOSITION_ERR) {}
               }

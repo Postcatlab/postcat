@@ -41,8 +41,7 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
       }
     }
   }
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
     this.nzContextMenuService.create($event, menu);
@@ -50,7 +49,7 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
 
   downloadResponseText() {
     this.blobUrl = getBlobUrl(this.model.body, this.model.contentType);
-    const blobFileName = decodeURI(this.model.blobFileName);
+    const blobFileName = decodeURI(this.model.blobFileName || 'test_response');
     const tmpAElem = document.createElement('a');
     if ('download' in tmpAElem) {
       tmpAElem.style.visibility = 'hidden';
