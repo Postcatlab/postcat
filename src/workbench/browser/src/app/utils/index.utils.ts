@@ -122,7 +122,7 @@ const base64ToUint8Array = (inputBase64String) => {
 export const getBlobUrl = (inputStream, inputFileType) => {
   let tmpBlob;
   try {
-    inputStream = base64ToUint8Array(inputStream);
+    // inputStream = base64ToUint8Array(inputStream);
     if (typeof window.Blob === 'function') {
       tmpBlob = new Blob([inputStream], {
         type: inputFileType,

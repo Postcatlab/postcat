@@ -115,7 +115,8 @@ export class ApiGroupEditComponent implements OnInit {
       if (result.status === StorageResStatus.success) {
         //delete group api
         if (data.api.length > 0) {
-          this.apiService.bulkDelete(data.api);
+          // this.apiService.bulkDelete(data.api);
+          this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: data.api } });
         } else {
           this.messageService.send({ type: 'updateGroupSuccess', data: {} });
         }
