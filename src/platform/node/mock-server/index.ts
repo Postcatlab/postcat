@@ -90,6 +90,30 @@ export class MockServer {
       //   next();
       // }
     });
+    this.app.all('/:workspaceID/:projectID/mock/:mockID/*', (req, res, next) => {
+      // if (!protocolReg.test(req.url)) {
+      // match request type
+      const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
+      if (req.params.mockID || isMatchType !== false) {
+        this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+        ipcMain.once('getMockApiList', (event, message) => {
+          const { response = {}, statusCode = 200 } = message;
+          res.statusCode = statusCode;
+          if (res.statusCode === 404) {
+            this.send404(res, isMatchType);
+          } else {
+            res.send(response);
+          }
+          next();
+        });
+      } else {
+        this.send404(res, isMatchType);
+        next();
+      }
+      // } else {
+      //   next();
+      // }
+    });
   }
 
   /**

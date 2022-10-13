@@ -1,15 +1,20 @@
 import { tree2obj } from './utils/tree/tree.utils';
 import { Injectable } from '@angular/core';
 import type { IpcRenderer } from 'electron';
-import { ApiData, ApiMockEntity } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
+import {
+  ApiData,
+  ApiMockEntity,
+  StorageRes,
+  StorageResStatus,
+} from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
 @Injectable()
 export class AppService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
-  constructor(private indexedDBStorage: IndexedDBStorage, private dataSource: DataSourceService) {}
+  constructor(private storageService: StorageService, private dataSource: DataSourceService) {}
 
   init() {
     if (this.ipcRenderer) {
@@ -88,14 +93,12 @@ export class AppService {
    */
   getMockByMockID(mockID: number): Promise<ApiMockEntity> {
     return new Promise((resolve, reject) => {
-      this.indexedDBStorage.mockLoad(mockID).subscribe(
-        (res: any) => {
-          resolve(res.data);
-        },
-        (error: any) => {
-          reject(error);
+      this.storageService.run('mockLoad', [mockID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          return resolve(result.data);
         }
-      );
+        return reject(result);
+      });
     });
   }
   /**
@@ -106,14 +109,12 @@ export class AppService {
    */
   getApiData(apiDataID: number): Promise<ApiData> {
     return new Promise((resolve, reject) => {
-      this.indexedDBStorage.apiDataLoad(apiDataID).subscribe(
-        (res: any) => {
-          resolve(res.data);
-        },
-        (error: any) => {
-          reject(error);
+      this.storageService.run('apiDataLoad', [apiDataID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          return resolve(result.data);
         }
-      );
+        return reject(result);
+      });
     });
   }
   /**
@@ -121,14 +122,12 @@ export class AppService {
    */
   getAllApi(projectID = 1): Promise<ApiData[]> {
     return new Promise((resolve, reject) => {
-      this.indexedDBStorage.apiDataLoadAllByProjectID(projectID).subscribe(
-        (res: any) => {
-          resolve(res.data);
-        },
-        (error: any) => {
-          reject(error);
+      this.storageService.run('apiDataLoadAllByProjectID', [projectID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          return resolve(result.data);
         }
-      );
+        return reject(result);
+      });
     });
   }
 }
