@@ -41,7 +41,6 @@ const httpS = new HTTPS();
 const workspaceS = new WorkspaceS();
 
 const updateWorkspace = [
-  workspaceS.getCurrent('{ id: workspaceID }'),
   httpS.send('api_workspaceList', '{}', { err: 'wErr', data: 'list' }),
   workspaceS.setWorkspaceList('list'),
 ];

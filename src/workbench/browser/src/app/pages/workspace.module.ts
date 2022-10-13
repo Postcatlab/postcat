@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { NzModalRef, NzModalService, NzModalModule } from 'ng-zorro-antd/modal'
+import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'

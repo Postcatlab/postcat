@@ -1,4 +1,4 @@
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
+import { NzModalService } from 'ng-zorro-antd/modal'
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
@@ -48,7 +48,7 @@ import { Component, OnInit } from '@angular/core'
         nz-button
         class=""
         nzType="primary"
-        (click)="btnfx9imhCallback()"
+        (click)="btnmcu14hCallback()"
         i18n
       >
         Save
@@ -68,7 +68,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnw960jpCallback()"
+        (click)="btnnxvdxxCallback()"
         i18n
       >
         Delete
@@ -102,7 +102,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnfx9imhCallback() {
+  async btnmcu14hCallback() {
     // * click event callback
     const { id: currentWsp } = this.workspace.currentWorkspace
     const { workspace: title } = this.validateWspNameForm.value
@@ -122,7 +122,6 @@ export class WorkspaceComponent implements OnInit {
       return
     }
     this.eMessage.success($localize`Edit workspace successfully !`)
-    const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
       if (wErr.status === 401) {
@@ -136,7 +135,7 @@ export class WorkspaceComponent implements OnInit {
     }
     this.workspace.setWorkspaceList(list)
   }
-  async btnw960jpCallback() {
+  async btnnxvdxxCallback() {
     // * click event callback
 
     const confirm = () =>
@@ -172,7 +171,6 @@ You cannot restore it once deleted!`,
     }
     this.eMessage.success($localize`Delete success !`)
     await this.workspace.setLocalSpace()
-    const { id: workspaceID } = this.workspace.currentWorkspace
     const [list, wErr]: any = await this.api.api_workspaceList({})
     if (wErr) {
       if (wErr.status === 401) {

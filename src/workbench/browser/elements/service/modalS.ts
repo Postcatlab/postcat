@@ -79,7 +79,7 @@ export class ModalS extends Render {
       imports: [
         {
           target: [
-            { name: 'NzModalRef', type: 'base' },
+            // { name: 'NzModalRef', type: 'base' },
             {
               name: 'NzModalService',
               type: 'service',
