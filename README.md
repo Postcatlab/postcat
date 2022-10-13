@@ -10,7 +10,7 @@
 一个可拓展的 API 工具，简单（Easy） & 开源（OpenSource）的 API 生态系统
 </div>
 
-![](./wiki/images/zh-preview.png)
+![](https://docs.eoapi.io/images/eoapi-demo.png)
 
 [English](wiki/README.en.md)｜简体中文
 
@@ -20,7 +20,7 @@
 
 - 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
 
-- 查看 [用户使用文档](https://docs.eoapi.io) 了解更多功能
+- 查看 [用户使用文档](https://docs.eoapi.io) 了解功能
 
 - 查看 [开发者文档](https://developer.eoapi.io) 开发插件
 
@@ -45,8 +45,8 @@
 
 🌱 插件集市
 
-💻 多人协作
-- 通过远程数据源实现多人协作
+💻  [多人协作](https://docs.eoapi.io/docs/collaborate.html)
+- 通过部署云端服务实现多人协作
 
 # 源码运行/构建
 

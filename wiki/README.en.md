@@ -8,7 +8,7 @@
 A extensible API tool,Easy & Open Source API Ecosystem
 </div>
 
-![](./images/en-preview.png)
+![](https://docs.eoapi.io/images/eoapi-demo-en.png)
 
 English | [简体中文](README.md)
 
