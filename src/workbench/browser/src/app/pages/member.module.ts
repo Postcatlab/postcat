@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { NzModalService, NzModalModule, NzModalRef } from 'ng-zorro-antd/modal'
+import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { FormsModule } from '@angular/forms'
 import { NzButtonModule } from 'ng-zorro-antd/button'
