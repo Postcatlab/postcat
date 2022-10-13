@@ -17,6 +17,7 @@ import { ElectronService } from '../../../../core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/shared/components/import-api/import-api.component';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -73,6 +74,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     public electron: ElectronService,
     private apiService: ApiService,
+    private projectService: ProjectService,
     private nzModalService: NzModalService
   ) {}
   ngOnInit(): void {
@@ -101,52 +103,53 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   buildGroupTreeData = debounce(() => {
     this.groupByID = {};
     this.treeItems = [];
-    this.getGroups();
+    this.getProjectCollections();
   });
-  getGroups() {
+
+  getProjectCollections() {
     this.apiDataLoading = true;
-    this.storage.run('groupLoadAllByProjectID', [this.projectID], (result: StorageRes) => {
+    this.storage.run('projectCollections', [this.projectService.currentProjectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        result.data.forEach((item) => {
-          delete item.updatedAt;
-          this.groupByID[item.uuid] = item;
-          this.treeItems.push({
-            title: item.name,
-            key: `group-${item.uuid}`,
-            weight: item.weight || 0,
-            parentID: item.parentID ? `group-${item.parentID}` : '0',
-            isLeaf: false,
-          });
-        });
+        const { groups, apis } = result.data;
+        this.getGroups(groups);
+        this.getApis(apis);
       }
-      this.getApis().finally(() => {
-        this.apiDataLoading = false;
+      this.apiDataLoading = false;
+    });
+  }
+
+  getGroups(apiGroups = []) {
+    apiGroups.forEach((item) => {
+      delete item.updatedAt;
+      this.groupByID[item.uuid] = item;
+      this.treeItems.push({
+        title: item.name,
+        key: `group-${item.uuid}`,
+        weight: item.weight || 0,
+        parentID: item.parentID ? `group-${item.parentID}` : '0',
+        isLeaf: false,
       });
     });
   }
-  async getApis() {
-    const result: StorageRes = await this.apiService.getAll(this.projectID);
-    const { success, empty } = StorageResStatus;
-    if ([success, empty].includes(result.status)) {
-      const apiItems = {};
-      [].concat(result.data).forEach((item: ApiData) => {
-        delete item.updatedAt;
-        apiItems[item.uuid] = item;
-        this.treeItems.push({
-          title: item.name,
-          key: item.uuid.toString(),
-          weight: item.weight || 0,
-          parentID: item.groupID ? `group-${item.groupID}` : '0',
-          method: item.method,
-          isLeaf: true,
-        });
+  async getApis(apis) {
+    const apiItems = {};
+    [].concat(apis).forEach((item: ApiData) => {
+      delete item.updatedAt;
+      apiItems[item.uuid] = item;
+      this.treeItems.push({
+        title: item.name,
+        key: item.uuid.toString(),
+        weight: item.weight || 0,
+        parentID: item.groupID ? `group-${item.groupID}` : '0',
+        method: item.method,
+        isLeaf: true,
       });
-      this.apiDataItems = apiItems;
-      this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
-      this.setSelectedKeys();
-      this.generateGroupTreeData();
-      this.restoreExpandStatus();
-    }
+    });
+    this.apiDataItems = apiItems;
+    this.messageService.send({ type: 'loadApi', data: this.apiDataItems });
+    this.setSelectedKeys();
+    this.generateGroupTreeData();
+    this.restoreExpandStatus();
   }
   restoreExpandStatus() {
     const key = this.expandKeys.slice(0);

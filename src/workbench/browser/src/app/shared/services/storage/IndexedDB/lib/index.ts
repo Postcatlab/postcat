@@ -654,6 +654,24 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   groupLoadAllByProjectID(projectID: number | string): Observable<object> {
     return this.loadAllByConditions(this.group, { projectID });
   }
+  /**
+   * Load project collections
+   * @param projectID
+   * @returns
+   */
+  projectCollections(projectID: number | string): Observable<object> {
+    return new Observable((obs) => {
+      const fun = async () => {
+        const result = {
+          groups: await this.group.where({ projectID }).toArray(),
+          apis: await this.apiData.where({ projectID }).toArray(),
+        };
+        obs.next(this.resProxy(result));
+        obs.complete();
+      };
+      fun();
+    });
+  }
 
   /**
    * Delete group item.
