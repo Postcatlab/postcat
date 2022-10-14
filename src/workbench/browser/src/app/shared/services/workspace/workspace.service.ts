@@ -89,9 +89,10 @@ export class WorkspaceService {
   async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
     StorageUtil.set('currentWorkspace', workspace);
-    await this.updateProjectID(this.currentWorkspaceID);
     // * Change data storage
-    await this.dataSourceService.switchDataSource(workspace.id === -1 ? 'local' : 'http');
+    await this.dataSourceService.switchDataSource(workspace.id === -1 ? 'local' : 'http', () =>
+      this.updateProjectID(this.currentWorkspaceID)
+    );
     this.messageService.send({ type: 'workspaceChange', data: true });
   }
 

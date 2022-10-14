@@ -168,13 +168,14 @@ export class DataSourceService {
   /**
    * switch data
    */
-  switchDataSource = async (dataSource: DataSourceType) => {
+  switchDataSource = async (dataSource: DataSourceType, beforRefreshCompFn = () => {}) => {
     const isRemote = dataSource === 'http';
     if (isRemote) {
       const [isSuccess] = await this.pingCloudServerUrl();
       if (isSuccess) {
         this.switchToHttp();
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+        await beforRefreshCompFn?.();
         this.refreshComponent();
       } else {
         this.message.error($localize`Cloud Storage not available`);
@@ -183,6 +184,7 @@ export class DataSourceService {
     } else {
       this.switchToLocal();
       localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+      await beforRefreshCompFn?.();
       this.refreshComponent();
     }
   };
