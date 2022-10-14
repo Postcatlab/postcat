@@ -261,6 +261,7 @@ export class ApiTestUtilService {
   }
 
   getTestDataFromApi(inData): ApiTestData {
+    inData ||= {};
     const editToTestParams = (arr) => {
       arr = arr || [];
       arr.forEach((val) => {
@@ -269,7 +270,7 @@ export class ApiTestUtilService {
       });
     };
     ['queryParams', 'restParams', 'requestHeaders'].forEach((keyName) => {
-      editToTestParams(inData[keyName]);
+      editToTestParams(inData?.[keyName]);
     });
     //handle query and url
     const tmpResult = transferUrlAndQuery(inData.uri, inData.queryParams, {

@@ -37,7 +37,7 @@
 ::ng-deep {
   .group_tree {
     overflow: hidden auto;
-    height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 123px);
+    height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 80px);
     .ant-tree-indent-unit {
       width: 8px;
     }
@@ -48,7 +48,7 @@
       }
     }
   }
-  .web-page-body .group_tree{
+  .web-page-body .group_tree {
     height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 87px);
   }
 }
