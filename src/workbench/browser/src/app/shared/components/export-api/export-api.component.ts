@@ -76,7 +76,7 @@ export class ExportApiComponent implements OnInit {
    *
    * @param callback
    */
-  private export(callback) {
+  private async export(callback) {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
