@@ -59,7 +59,7 @@ export class Modal extends Render implements modalType {
     const footerRender = (list = []) =>
       list.map(({ label, type = '', click, disabled = [] }) =>
         new Button({
-          id: _.camelCase(label),
+          id: _.camelCase(this.id + label),
           type,
           label: { text: label },
           event: { click },
@@ -94,7 +94,11 @@ export class Modal extends Render implements modalType {
                 </ng-container>
                 ${footerTemplate}
             </nz-modal>`,
-      data: [{ name: `is${this.id}ModalVisible`, init: false, type: ['boolean'] }, ...this.children.data],
+      data: [
+        { name: `is${this.id}ModalVisible`, init: false, type: ['boolean'] },
+        ...footer.map((it) => it.data),
+        ...this.children.data,
+      ],
       init: [...this.children.init],
       imports: [
         {

@@ -15,7 +15,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="eh3xaplCallback()"
+      (nzAfterClose)="el5edksCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -29,11 +29,12 @@ import { Component, OnInit } from '@angular/core'
         <section class="h-4"></section>
         <button
           nz-button
+          [nzLoading]="isSelectBtnLoading"
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnht99peCallback()"
-          [disabled]="btn0rvkkgStatus()"
+          (click)="btnn0d0wfCallback()"
+          [disabled]="btn6570f8Status()"
           i18n
         >
           Select a member above
@@ -45,10 +46,11 @@ import { Component, OnInit } from '@angular/core'
         <span i18n>Manage access</span
         ><button
           nz-button
+          [nzLoading]="isAddPeopleBtnLoading"
           class=""
           nzType="primary"
-          (click)="btn9viqspCallback()"
-          [disabled]="btnkrflwgStatus()"
+          (click)="btnr5qq6iCallback()"
+          [disabled]="btnez4zpfStatus()"
           i18n
         >
           Add people
@@ -57,7 +59,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="eerei7cCallback($event)"
+          (eoOnRemove)="ebbz1liCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -65,6 +67,8 @@ import { Component, OnInit } from '@angular/core'
 export class MemberComponent implements OnInit {
   isInvateModalVisible
   inputPersonValue
+  isSelectBtnLoading
+  isAddPeopleBtnLoading
   memberList
   constructor(
     public modal: NzModalService,
@@ -77,6 +81,8 @@ export class MemberComponent implements OnInit {
   ) {
     this.isInvateModalVisible = false
     this.inputPersonValue = ''
+    this.isSelectBtnLoading = false
+    this.isAddPeopleBtnLoading = false
     this.memberList = []
   }
   async ngOnInit(): Promise<void> {
@@ -115,7 +121,7 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async eh3xaplCallback() {
+  async el5edksCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
@@ -123,79 +129,90 @@ export class MemberComponent implements OnInit {
     }
     this.inputPersonValue = ''
   }
-  async btnht99peCallback() {
+  async btnn0d0wfCallback() {
     // * click event callback
-    const username = this.inputPersonValue
-    const [uData, uErr]: any = await this.api.api_userSearch({ username })
-    if (uErr) {
-      if (uErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
+    this.isSelectBtnLoading = true
+    const btnSelectRunning = async () => {
+      const username = this.inputPersonValue
+      const [uData, uErr]: any = await this.api.api_userSearch({ username })
+      if (uErr) {
+        if (uErr.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
         }
-        this.message.send({ type: 'http-401', data: {} })
+        return
       }
-      return
-    }
 
-    if (uData.length === 0) {
-      this.eMessage.error($localize`Could not find a user matching ${username}`)
-      return
-    }
-    const [user] = uData
-    const { id } = user
+      if (uData.length === 0) {
+        this.eMessage.error(
+          $localize`Could not find a user matching ${username}`
+        )
+        return
+      }
+      const [user] = uData
+      const { id } = user
 
-    const { id: workspaceID } = this.workspace.currentWorkspace
-    const [aData, aErr]: any = await this.api.api_workspaceAddMember({
-      workspaceID,
-      userIDs: [id]
-    })
-    if (aErr) {
-      if (aErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
+      const { id: workspaceID } = this.workspace.currentWorkspace
+      const [aData, aErr]: any = await this.api.api_workspaceAddMember({
+        workspaceID,
+        userIDs: [id]
+      })
+      if (aErr) {
+        if (aErr.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
         }
-        this.message.send({ type: 'http-401', data: {} })
+        return
       }
-      return
-    }
-    this.eMessage.success($localize`Add new member success`)
+      this.eMessage.success($localize`Add new member success`)
 
-    // * 关闭弹窗
-    this.isInvateModalVisible = false
+      // * 关闭弹窗
+      this.isInvateModalVisible = false
 
-    const { id: currentWorkspaceID } = this.workspace.currentWorkspace
-    const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID: currentWorkspaceID
-    })
-    if (wErr) {
-      if (wErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
+      const { id: currentWorkspaceID } = this.workspace.currentWorkspace
+      const [wData, wErr]: any = await this.api.api_workspaceMember({
+        workspaceID: currentWorkspaceID
+      })
+      if (wErr) {
+        if (wErr.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
         }
-        this.message.send({ type: 'http-401', data: {} })
+        return
       }
-      return
-    }
 
-    // * 对成员列表进行排序
-    const Owner = wData.filter((it) => it.roleName === 'Owner')
-    const Member = wData.filter((it) => it.roleName !== 'Owner')
-    this.memberList = Owner.concat(Member)
+      // * 对成员列表进行排序
+      const Owner = wData.filter((it) => it.roleName === 'Owner')
+      const Member = wData.filter((it) => it.roleName !== 'Owner')
+      this.memberList = Owner.concat(Member)
+    }
+    await btnSelectRunning()
+    this.isSelectBtnLoading = false
   }
-  btn0rvkkgStatus() {
+  btn6570f8Status() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn9viqspCallback() {
+  async btnr5qq6iCallback() {
     // * click event callback
-
-    // * 唤起弹窗
-    this.isInvateModalVisible = true
+    this.isAddPeopleBtnLoading = true
+    const btnAddPeopleRunning = async () => {
+      // * 唤起弹窗
+      this.isInvateModalVisible = true
+    }
+    await btnAddPeopleRunning()
+    this.isAddPeopleBtnLoading = false
   }
-  btnkrflwgStatus() {
+  btnez4zpfStatus() {
     // * disabled status status
     return
     return (
@@ -203,7 +220,7 @@ export class MemberComponent implements OnInit {
       this.workspace.authEnum.canEdit
     )
   }
-  async eerei7cCallback($event) {
+  async ebbz1liCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>

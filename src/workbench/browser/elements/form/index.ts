@@ -222,6 +222,7 @@ export class Form extends Render implements formType {
           name: `validate${this.id}Form`,
           init: 'UntypedFormGroup',
         },
+        ...footer.map((it) => it.data),
         ...this.children.data,
       ],
       methods: [this.rules.methods, ...footer.map((it) => it.methods), ...this.methods],

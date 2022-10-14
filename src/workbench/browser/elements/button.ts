@@ -13,7 +13,7 @@ type initType = {
   class?: string[];
   type?: 'primary' | 'default';
   theme?: ('danger' | 'block' | 'large' | 'small')[];
-  event: object;
+  event: any;
   status?: object;
   attr?: object;
 };
@@ -31,8 +31,18 @@ export class Button extends Render implements buttonType {
   theme;
   class;
   constructor({ id = '', type, attr = {}, theme = [], class: cls = [], event, label, status = {} }: initType) {
+    if (event?.click && event.click.length) {
+      event.click = [
+        `this.is${Render.toCamel(id)}BtnLoading = true
+        const btn${Render.toCamel(id)}Running = async () => {`,
+        ...event.click,
+        `};
+        await btn${Render.toCamel(id)}Running()
+        this.is${Render.toCamel(id)}BtnLoading = false`,
+      ];
+    }
     super({ event, status, attr, children: [], elementType: 'btn' });
-    this.id = id;
+    this.id = Render.toCamel(id);
     this.label = label;
     this.type = type;
     this.theme = theme.map((it) => themeHash.get(it)).join(' ');
@@ -50,10 +60,10 @@ export class Button extends Render implements buttonType {
         },
         ...this.children.imports,
       ],
-      template: `<button nz-button ${this.attr.join(' ')} class="${this.class.join(' ')}" nzType="${
-        this.type || 'primary'
-      }" ${this.theme} ${this.eventCb.join(' ')} i18n>${label}</button>`,
-      data: [],
+      template: `<button nz-button [nzLoading]="is${this.id}BtnLoading" ${this.attr.join(' ')} class="${this.class.join(
+        ' '
+      )}" nzType="${this.type || 'primary'}" ${this.theme} ${this.eventCb.join(' ')} i18n>${label}</button>`,
+      data: [{ name: `is${this.id}BtnLoading`, init: false, type: ['boolean'] }],
       methods: [...this.methods],
     };
   }
