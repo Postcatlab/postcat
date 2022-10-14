@@ -101,7 +101,7 @@ export class DataSourceService {
     this.messageService.send({ type: 'ping-success', data: {} });
   }
 
-  async checkRemoteCanOperate(canOperateCallback, isLocalSpace = false) {
+  async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
     if (this.remoteServerUrl) {
       const [isSuccess] = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
@@ -109,7 +109,7 @@ export class DataSourceService {
         if (!this.user.isLogin) {
           !isLocalSpace && this.messageService.send({ type: 'login', data: {} });
         } else {
-          canOperateCallback();
+          canOperateCallback?.();
         }
         // 3.2 如果ping不成功，则应该重试
       } else {

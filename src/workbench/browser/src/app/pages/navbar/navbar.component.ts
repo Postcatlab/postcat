@@ -79,7 +79,7 @@ export class NavbarComponent implements OnInit {
     if (this.web.isWeb) {
       return this.web.jumpToClient($localize`Eoapi Client is required to sign in`);
     }
-    this.message.send({ type: 'login', data: {} });
+    this.dataSourceService.checkRemoteCanOperate();
   }
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });
