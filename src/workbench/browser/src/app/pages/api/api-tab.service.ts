@@ -256,6 +256,13 @@ export class ApiTabService {
   }
   handleDataBeforeCache(tabsByID) {
     Object.values(tabsByID).forEach((val: TabItem) => {
+      //Delete gio key
+      if (val.params) {
+        ['utm_campaign', 'utm_content', 'utm_source'].forEach((keyName) => {
+          delete val.params[keyName];
+        });
+      }
+      //Cancel cache testResult
       if (val.module === 'test' && val.content?.test?.testResult) {
         val.content.test.testResult = {
           request: {},

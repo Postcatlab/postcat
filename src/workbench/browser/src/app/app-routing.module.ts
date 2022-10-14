@@ -18,7 +18,10 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [
+    //electron user hash to keep router after page refresh
+    RouterModule.forRoot(routes, { useHash: !!(window && window.process && window.process.type) ? true : false }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
