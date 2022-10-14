@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
-    branchs:
+    branches:
       - release/1.8.2
 
 jobs:
