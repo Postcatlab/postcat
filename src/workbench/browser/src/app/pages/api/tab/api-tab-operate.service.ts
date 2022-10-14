@@ -4,7 +4,6 @@ import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 /**
  * Api tab service operate tabs array add/replace/close...
@@ -25,8 +24,7 @@ export class ApiTabOperateService {
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private message: EoMessageService,
-    private modal: ModalService
+    private message: EoMessageService
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
@@ -88,7 +86,10 @@ export class ApiTabOperateService {
    * @returns tabItem
    */
   newDefaultTab(path?) {
-    const tabItem = Object.assign({}, eoDeepCopy(this.BASIC_TABS.find(val=>val.pathname===path)||this.BASIC_TABS[0]));
+    const tabItem = Object.assign(
+      {},
+      eoDeepCopy(this.BASIC_TABS.find((val) => val.pathname === path) || this.BASIC_TABS[0])
+    );
     tabItem.params = {};
     tabItem.uuid = tabItem.params.pageID = Date.now();
     Object.assign(tabItem, { isLoading: false });
