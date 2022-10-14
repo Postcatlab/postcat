@@ -221,7 +221,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         break;
       }
       case 'importAPI': {
-        const title = $localize`:@@ImportAPI:Import API data`;
+        const title = $localize`:@@ImportAPI:Import API`;
         const modal = this.modalService.create({
           nzTitle: title,
           nzContent: ImportApiComponent,
