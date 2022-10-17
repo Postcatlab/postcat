@@ -2,7 +2,6 @@ import { Injectable, Injector } from '@angular/core';
 import { StorageResStatus } from './index.model';
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
-import { MessageService } from '../../../shared/services/message';
 import { getSettings, SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 export type DataSourceType = 'local' | 'http';
@@ -21,7 +20,6 @@ export class StorageService {
   }
   constructor(
     private injector: Injector,
-    private messageService: MessageService,
     private settingService: SettingService,
     private indexedDBStorage: IndexedDBStorage
   ) {

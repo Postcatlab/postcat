@@ -4,13 +4,13 @@ Check data Valide
 
 # Genreate JSON schema from Typescript interface
 
-1. install
+## 1. install
 
 ```
 npm install typescript-json-schema -g
 ```
 
-2. genreate
+## 2. genreate
 
 ```
 cd  src/workbench/browser/src/app/shared/services/storage
@@ -20,8 +20,8 @@ typescript-json-schema "index.model.ts" 'ApiData' -o "./indexedDB/schema/apiData
 typescript-json-schema "index.model.ts" 'Environment' -o "./indexedDB/schema/env.json"
 ```
 
-3. compare and merge
-   The generated rule verification is not strict enough and needs to be merged manually
+## 3. compare and merge
+The generated rule verification is not strict enough and needs to be merged manually
 
 # Check
 
