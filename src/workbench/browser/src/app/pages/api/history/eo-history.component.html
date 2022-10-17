@@ -1,22 +1,38 @@
 <div class="flex flex-col history-body">
   <div class="flex items-center justify-between h-10 py-2 mx-2 history-title">
     <span class="font-bold" i18n>History</span>
-    <div class="flex items-center justify-center cursor-pointer shrink-0 h-7" i18-nzTooltipTitle
-      nzTooltipTitle="Clear All" nz-tooltip nz-popconfirm i18n-nzPopconfirmTitle [nzTooltipMouseEnterDelay]="0.7"
-      [nzPopconfirmTrigger]="historyList.length ? 'click' : null" nzPopconfirmTitle="Are you sure delete all history?"
-      (nzOnConfirm)="clearAllHistory()" (nzOnCancel)="cancel()" nzPopconfirmPlacement="leftTop" nzOkText="Yes"
-      nzCancelText="No">
+    <div
+      class="flex items-center justify-center cursor-pointer shrink-0 h-7"
+      i18-nzTooltipTitle
+      nzTooltipTitle="Clear All"
+      nz-tooltip
+      nz-popconfirm
+      i18n-nzPopconfirmTitle
+      [nzTooltipMouseEnterDelay]="0.7"
+      [nzPopconfirmTrigger]="historyList.length ? 'click' : null"
+      nzPopconfirmTitle="Are you sure delete all history?"
+      (nzOnConfirm)="clearAllHistory()"
+      (nzOnCancel)="cancel()"
+      nzPopconfirmPlacement="leftTop"
+      nzOkText="Yes"
+      nzCancelText="No"
+    >
       <span class="flex items-center justify-center icon">
         <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
       </span>
     </div>
   </div>
   <section class="flex-1 px-2 overflow-auto">
-    <div *ngFor="let item of historyList" class="flex items-center h-8 p-2 text-xs cursor-pointer hover:bg-gray-100"
-      (click)="gotoTestHistory(item)">
-      <span class="block w-12 font-light method_type"
-        [ngClass]="'method_text_' + (item.request?.method || TEXT_BY_PROTOCOL[item.protocol])">{{ item.request?.method
-        || TEXT_BY_PROTOCOL[item.protocol] }}</span>
+    <div
+      *ngFor="let item of historyList"
+      class="flex items-center h-8 p-2 text-xs cursor-pointer hover:bg-gray-100"
+      (click)="gotoTestHistory(item)"
+    >
+      <span
+        class="block w-12 font-light method_type"
+        [ngClass]="'method_text_' + (item.request?.method || TEXT_BY_PROTOCOL[item?.request.protocol])"
+        >{{ item.request?.method || TEXT_BY_PROTOCOL[item?.request.protocol] }}</span
+      >
       <span class="flex-1 overflow-hidden text-gray-600 truncate">{{ item.request?.uri }}</span>
     </div>
   </section>
