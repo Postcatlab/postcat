@@ -176,11 +176,10 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param belongs
    */
   getModule(moduleID: string, belongs: boolean = false): ModuleInfo {
-    return this.moduleBelongs().get(moduleID);
-    // if (belongs) {
-    //   return this.moduleBelongs().get(moduleID);
-    // }
-    // return this.modules.get(moduleID);
+    if (belongs) {
+      return this.moduleBelongs().get(moduleID);
+    }
+    return this.modules.get(moduleID);
   }
 
   /**
