@@ -28,7 +28,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Expanded keys of tree.
    */
-  expandKeys: Array<string | number> = [];
+  expandKeys: Array<string> = [];
 
   searchValue = '';
   /**
@@ -185,6 +185,16 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'copyApiSuccess':
           case 'deleteApiSuccess':
           case 'updateGroupSuccess': {
+            const group = inArg.data?.group;
+
+            if (
+              inArg.type === 'updateGroupSuccess' &&
+              group?.parentID &&
+              !this.expandKeys.includes(`group-${group?.parentID}`)
+            ) {
+              this.expandKeys.push(`group-${group?.parentID}`);
+            }
+
             this.buildGroupTreeData();
             break;
           }
