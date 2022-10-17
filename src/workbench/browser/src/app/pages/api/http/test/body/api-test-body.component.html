@@ -21,7 +21,8 @@
 <!-- XML -->
 <!-- Raw -->
 <eo-monaco-editor [(code)]="model" (codeChange)="rawDataChange($event)" *ngIf="bodyType === 'raw'"
-  [config]="editorConfig" [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
+  [editorType]="editorType" [config]="editorConfig" [eventList]="['type', 'format', 'copy', 'search', 'replace']">
+</eo-monaco-editor>
 <!-- Binary -->
 <div class="px-5" *ngIf="bodyType === 'binary'">
   <nz-upload nzType="drag" (nzChange)="emitModelChange()" [nzBeforeUpload]="uploadBinary"
