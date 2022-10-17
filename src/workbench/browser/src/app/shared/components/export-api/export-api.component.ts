@@ -5,7 +5,6 @@ import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 
 @Component({
@@ -80,7 +79,7 @@ export class ExportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module: ModuleInfo = window.eo.loadFeatureModule(this.currentExtension);
+    const module: ModuleInfo = await window.eo.loadFeatureModule(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       const params = [this.projectService.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
