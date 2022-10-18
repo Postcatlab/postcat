@@ -660,6 +660,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
   /**
    * Load project collections
+   *
    * @param projectID
    * @returns
    */
