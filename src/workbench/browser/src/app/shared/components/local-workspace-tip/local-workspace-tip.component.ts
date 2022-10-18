@@ -14,7 +14,11 @@ import { StorageUtil } from '../../../utils/storage/Storage';
     <button class="ml-[5px]" nz-button nzType="default" nzSize="small" (click)="switchToTheCloud()" i18n>
       switch to the cloud workspace
     </button>
-    <eo-iconpark-icon name="close-small" class="absolute right-[20px] cursor-pointer"></eo-iconpark-icon>
+    <eo-iconpark-icon
+      name="close-small"
+      class="absolute right-[20px] cursor-pointer"
+      (click)="closeNotification()"
+    ></eo-iconpark-icon>
   </div>`,
   styleUrls: ['./local-workspace-tip.component.scss'],
 })
