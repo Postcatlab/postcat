@@ -115,6 +115,7 @@ export class Modal extends Render implements modalType {
         ...this.children.imports,
         ...footer.map((it) => it.imports),
       ],
+      resetFn: [...this.children.resetFn],
       methods: [...mainMethods, ...this.methods, ...footer.map((it) => it.methods), ...this.children.methods],
     };
   }

@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalSyncFooter"
       [(nzVisible)]="isSyncModalVisible"
       (nzOnCancel)="handleSyncModalCancel()"
-      (nzAfterClose)="el73p5vCallback()"
+      (nzAfterClose)="efvmzjbCallback()"
       nzTitle="Do you want to upload local data to the cloud ?"
       i18n-nzTitle
     >
@@ -43,7 +43,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isSyncCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btnh01vqlCallback()"
+          (click)="btn2litn8Callback()"
           i18n
         >
           Cancel
@@ -53,7 +53,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isSyncSyncBtnLoading"
           class=""
           nzType="primary"
-          (click)="btnqo2eajCallback()"
+          (click)="btnb92xngCallback()"
           i18n
         >
           Sync
@@ -64,7 +64,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalCheckConnectFooter"
       [(nzVisible)]="isCheckConnectModalVisible"
       (nzOnCancel)="handleCheckConnectModalCancel()"
-      (nzAfterClose)="e3bqi9iCallback()"
+      (nzAfterClose)="e00lekcCallback()"
       nzTitle="Check your connection"
       i18n-nzTitle
     >
@@ -73,7 +73,7 @@ import { Component, OnInit } from '@angular/core'
         <span
           style="color: #1890ff"
           class="cursor-pointer"
-          (click)="text6swkanCallback()"
+          (click)="textzjide9Callback()"
           i18n
         >
           config in the configuration
@@ -85,7 +85,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isCheckConnectCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btn99pmenCallback()"
+          (click)="btnk3z0ojCallback()"
           i18n
         >
           Cancel
@@ -95,7 +95,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isCheckConnectRetryBtnLoading"
           class=""
           nzType="primary"
-          (click)="btn5cqcn1Callback()"
+          (click)="btn3adr3rCallback()"
           i18n
         >
           Retry
@@ -107,7 +107,7 @@ import { Component, OnInit } from '@angular/core'
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="erez28kCallback()"
+      (nzAfterClose)="eo4ylneCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -154,7 +154,7 @@ import { Component, OnInit } from '@angular/core'
               class="h-10 mt-2"
               nzType="primary"
               nzBlock
-              (click)="btntfh8rlCallback()"
+              (click)="btnydetglCallback()"
               i18n
             >
               Sign In/Up
@@ -167,7 +167,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isOpenSettingModalVisible"
       (nzOnCancel)="handleOpenSettingModalCancel()"
-      (nzAfterClose)="eembu9aCallback()"
+      (nzAfterClose)="eznah2iCallback()"
       nzTitle="Open setting"
       i18n-nzTitle
     >
@@ -176,7 +176,7 @@ import { Component, OnInit } from '@angular/core'
         <span
           style="color: #1890ff"
           class="cursor-pointer"
-          (click)="text4h2owsCallback()"
+          (click)="textin2z9rCallback()"
           i18n
         >
           open the settings
@@ -188,7 +188,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalAddWorkspaceFooter"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
-      (nzAfterClose)="ek6czj3Callback()"
+      (nzAfterClose)="eqd4t8iCallback()"
       nzTitle="Add Workspace"
       i18n-nzTitle
     >
@@ -206,7 +206,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isAddWorkspaceCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btn1tbebiCallback()"
+          (click)="btnha8xqeCallback()"
           i18n
         >
           Cancel
@@ -216,7 +216,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isAddWorkspaceSaveBtnLoading"
           class=""
           nzType="primary"
-          (click)="btnn33owaCallback()"
+          (click)="btnj07wsgCallback()"
           i18n
         >
           Save
@@ -421,12 +421,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async el73p5vCallback() {
+  async efvmzjbCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btnh01vqlCallback() {
+  async btn2litn8Callback() {
     // * click event callback
     this.isSyncCancelBtnLoading = true
     const btnSyncCancelRunning = async () => {
@@ -436,7 +436,7 @@ export class UserModalComponent implements OnInit {
     await btnSyncCancelRunning()
     this.isSyncCancelBtnLoading = false
   }
-  async btnqo2eajCallback() {
+  async btnb92xngCallback() {
     // * click event callback
     this.isSyncSyncBtnLoading = true
     const btnSyncSyncRunning = async () => {
@@ -472,12 +472,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async e3bqi9iCallback() {
+  async e00lekcCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btn99pmenCallback() {
+  async btnk3z0ojCallback() {
     // * click event callback
     this.isCheckConnectCancelBtnLoading = true
     const btnCheckConnectCancelRunning = async () => {
@@ -487,7 +487,7 @@ export class UserModalComponent implements OnInit {
     await btnCheckConnectCancelRunning()
     this.isCheckConnectCancelBtnLoading = false
   }
-  async btn5cqcn1Callback() {
+  async btn3adr3rCallback() {
     // * click event callback
     this.isCheckConnectRetryBtnLoading = true
     const btnCheckConnectRetryRunning = async () => {
@@ -499,7 +499,7 @@ export class UserModalComponent implements OnInit {
     await btnCheckConnectRetryRunning()
     this.isCheckConnectRetryBtnLoading = false
   }
-  async text6swkanCallback() {
+  async textzjide9Callback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -509,14 +509,14 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async erez28kCallback() {
+  async eo4ylneCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
       this.validateLoginForm.reset()
     }
   }
-  async btntfh8rlCallback() {
+  async btnydetglCallback() {
     // * click event callback
     this.isLoginBtnBtnLoading = true
     const btnLoginBtnRunning = async () => {
@@ -589,12 +589,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async eembu9aCallback() {
+  async eznah2iCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async text4h2owsCallback() {
+  async textin2z9rCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -605,14 +605,14 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async ek6czj3Callback() {
+  async eqd4t8iCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
       this.inputWorkspaceNameValue = ''
     }
   }
-  async btn1tbebiCallback() {
+  async btnha8xqeCallback() {
     // * click event callback
     this.isAddWorkspaceCancelBtnLoading = true
     const btnAddWorkspaceCancelRunning = async () => {
@@ -622,7 +622,7 @@ export class UserModalComponent implements OnInit {
     await btnAddWorkspaceCancelRunning()
     this.isAddWorkspaceCancelBtnLoading = false
   }
-  async btnn33owaCallback() {
+  async btnj07wsgCallback() {
     // * click event callback
     this.isAddWorkspaceSaveBtnLoading = true
     const btnAddWorkspaceSaveRunning = async () => {
