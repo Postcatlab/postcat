@@ -797,7 +797,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/test/api-test.component.html</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
         <target state="translated">请求头部</target>
       </trans-unit>
@@ -853,7 +853,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/test/api-test.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">119</context>
         </context-group>
         <target state="translated">请求体</target>
       </trans-unit>
@@ -877,7 +877,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/test/api-test.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">115</context>
         </context-group>
         <target state="translated">返回头部</target>
       </trans-unit>
@@ -1497,7 +1497,7 @@
         <source>Save As File</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/http/test/api-test.component.html</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">133</context>
         </context-group>
         <target state="translated">保存为文件</target>
       </trans-unit>
@@ -1633,7 +1633,7 @@
         <source>Program will not close unsaved tabs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab-operate.service.ts</context>
-          <context context-type="linenumber">318</context>
+          <context context-type="linenumber">319</context>
         </context-group>
         <target state="translated">程序将不会关闭未保存的标签</target>
       </trans-unit>

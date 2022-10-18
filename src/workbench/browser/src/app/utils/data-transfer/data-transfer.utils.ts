@@ -110,11 +110,13 @@ export const xml2json = (tmpl) => {
         parent.children.push(last);
         stack.push(parent);
       }
-      xml = xml.trim().substring(str.length).trim();
+      index = xml.indexOf(str) === -1 ? 0 : xml.indexOf(str);
+      xml = xml.substring(index + str.length).trim();
+      index = null;
       continue;
     }
     // * handle start tags
-    if ((start = xml.match(startTag))) {
+    if (xml.indexOf('<') === 0 && (start = xml.match(startTag))) {
       const [str, label, attr] = start;
       if (str.slice(-2) === '/>') {
         // * single tag
@@ -135,17 +137,21 @@ export const xml2json = (tmpl) => {
         content: '',
         children: [],
       });
-      xml = xml.trim().substring(str.length);
+      index = xml.indexOf(str) === -1 ? 0 : xml.indexOf(str);
+      xml = xml.substring(index + str.length);
+      index = null;
       continue;
     }
     // * handle text content
-    if ((index = xml.indexOf('<') > 0)) {
+    if (xml.indexOf('<') > 0) {
+      index = xml.indexOf('<');
       const content = xml.slice(0, index);
       const last = stack.pop();
       last.content += content;
       stack.push(last);
-      xml = xml.substring(index);
+      xml = xml.substring(index).trim();
       index = null;
+      continue;
     }
     xml = xml.trim();
   }
@@ -185,7 +191,7 @@ export const xml2UiData = (text) => {
  * @returns
  */
 export const json2XML: (o: object, tab?) => string = (o, tab) => {
-  const toXml = function(v, name, ind) {
+  const toXml = function (v, name, ind) {
     let xml = '';
     if (v instanceof Array) {
       for (let i = 0, n = v.length; i < n; i++) {
@@ -268,7 +274,7 @@ export const text2UiData: (text: string) => uiData = (text) => {
  * @param inputOptions
  * @returns
  */
-export const uiData2Json = function(eoapiArr: ApiEditBody[], inputOptions) {
+export const uiData2Json = function (eoapiArr: ApiEditBody[], inputOptions) {
   inputOptions = inputOptions || {};
   let result = {};
   const loopFun = (inputArr, inputObject) => {

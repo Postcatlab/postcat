@@ -106,8 +106,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   ) {
     //Select demo api when first open Eoapi
     if (!window.localStorage.getItem('local_TabCache')) {
+      const utm = new URLSearchParams(window.location.search);
       this.router.navigate(['/home/api/http/test'], {
-        queryParams: { pageID: Date.now(), uuid: 1 },
+        queryParams: { pageID: Date.now(), uuid: 1, ...Object.fromEntries(utm) },
       });
       setTimeout(() => {
         const testBtn = document.getElementById('btn-test');
