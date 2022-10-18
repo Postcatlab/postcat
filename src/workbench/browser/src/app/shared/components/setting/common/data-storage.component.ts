@@ -14,8 +14,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
       <nz-form-item>
         <div class="text-[12px] mt-[8px] text-gray-400">
           <p i18n>
-            Cloud Storage: Store data on cloud storage to facilitate cross device use of the product. Only the client
-            can connect to the cloud service. You need to download the client first.
+            Cloud Storage: Store data on the cloud for team collaboration and product use across devices.
             <a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
           </p>
         </div>

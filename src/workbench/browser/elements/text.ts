@@ -29,7 +29,7 @@ export class Text extends Render {
       .map(({ text }) => {
         if (this.eventCb.length > 0) {
           // TODO
-          return `<span style="color: #1890ff" ${this.eventCb.join(' ')} i18n> ${text} </span>`;
+          return `<span style="color: #1890ff" class="cursor-pointer" ${this.eventCb.join(' ')} i18n> ${text} </span>`;
         }
         return `<span i18n> ${text} </span>`;
       })

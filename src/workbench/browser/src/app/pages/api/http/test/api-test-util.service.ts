@@ -179,6 +179,7 @@ export class ApiTestUtilService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
+    console.log(inData);
     //handle query and url
     const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
       base: 'url',
@@ -192,7 +193,7 @@ export class ApiTestUtilService {
         queryParams: tmpResult.query,
         requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
           ? inData.request.requestBody
-          : inData.request.requestBody.map((val) => (val.required = true)),
+          : inData.request?.requestBody?.map((val) => (val.required = true)),
         requestHeaders: inData.response?.headers,
         ...inData.request,
       },
@@ -261,6 +262,7 @@ export class ApiTestUtilService {
   }
 
   getTestDataFromApi(inData): ApiTestData {
+    inData ||= {};
     const editToTestParams = (arr) => {
       arr = arr || [];
       arr.forEach((val) => {
@@ -269,7 +271,7 @@ export class ApiTestUtilService {
       });
     };
     ['queryParams', 'restParams', 'requestHeaders'].forEach((keyName) => {
-      editToTestParams(inData[keyName]);
+      editToTestParams(inData?.[keyName]);
     });
     //handle query and url
     const tmpResult = transferUrlAndQuery(inData.uri, inData.queryParams, {

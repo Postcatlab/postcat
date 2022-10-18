@@ -1,6 +1,6 @@
 <div>
   <ng-container *ngIf="showToolBar">
-    <button nz-button nzType="primary" (click)="addOrEditModal()" i18n>Add Mock</button>
+    <button nz-button nzType="primary" (click)="addOrEditModal()" i18n>New Mock</button>
   </ng-container>
 
   <div class="mt-[20px]">
@@ -40,23 +40,22 @@
         <nz-form-item>
           <nz-form-label i18n nzFor="currentEditMock.name">Mock Name</nz-form-label>
           <nz-form-control>
-            <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name"
-              [readonly]="currentEditMock.createWay === 'system'" />
+            <input nz-input name="name" type="text" [(ngModel)]="currentEditMock.name" [readonly]="isSystemMock" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label i18n nzFor="currentEditMock.response">Response</nz-form-label>
           <nz-form-control>
             <eo-monaco-editor [(code)]="responseStr" (codeChange)="rawDataChange()" [maxLine]="15" class="h-[200px]"
-              [config]="{ readOnly: currentEditMock.createWay === 'system' }"
-              [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-monaco-editor>
+              [config]="{ readOnly: isSystemMock }" [eventList]="['type', 'format', 'copy', 'search', 'replace']">
+            </eo-monaco-editor>
           </nz-form-control>
         </nz-form-item>
       </form>
     </div>
   </section>
   <div *nzModalFooter class="footer">
-    <button nz-button nzType="primary" i18n (click)="handleSave()">Save</button>
+    <button *ngIf="!isSystemMock" nz-button nzType="primary" i18n (click)="handleSave()">Save</button>
     <button nz-button nzType="default" i18n (click)="handleCancel()">Cancel</button>
   </div>
 </nz-modal>

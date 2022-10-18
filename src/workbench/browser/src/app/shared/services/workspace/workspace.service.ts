@@ -22,6 +22,9 @@ export class WorkspaceService {
     canDelete: false,
     canCreate: false,
   };
+  get isLocal() {
+    return this.currentWorkspaceID === -1;
+  }
 
   get currentWorkspace() {
     const oldWorkspaceID = this.currentWorkspaceID;
@@ -41,9 +44,10 @@ export class WorkspaceService {
     private projectService: ProjectService,
     private userService: UserService
   ) {
-    if (this.currentWorkspaceID === -1 && this.dataSourceService.isRemote) {
+    //Current storage workspaceID not match remote storage,reset it;
+    if (this.isLocal && this.dataSourceService.isRemote) {
       this.setCurrentWorkspace(this.localWorkspace);
-    } else if (this.currentWorkspaceID !== -1 && !this.dataSourceService.isRemote) {
+    } else if (!this.isLocal && !this.dataSourceService.isRemote) {
       this.setCurrentWorkspace(this.currentWorkspace);
     }
   }
@@ -90,8 +94,9 @@ export class WorkspaceService {
     this.currentWorkspaceID = workspace.id;
     StorageUtil.set('currentWorkspace', workspace);
     // * Change data storage
-    await this.dataSourceService.switchDataSource(workspace.id === -1 ? 'local' : 'http');
-    this.updateProjectID(this.currentWorkspaceID);
+    await this.dataSourceService.switchDataSource(workspace.id === -1 ? 'local' : 'http', () =>
+      this.updateProjectID(this.currentWorkspaceID)
+    );
     this.messageService.send({ type: 'workspaceChange', data: true });
   }
 

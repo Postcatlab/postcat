@@ -20,37 +20,37 @@ export class ApiTestService {
     private storage: StorageService
   ) {}
   async getApi({ id }): Promise<ApiTestData> {
-    let result: ApiTestData = {} as ApiTestData;
-    if (!id) {
-      result = Object.assign(
-        {
-          projectID: 1,
-          groupID: 0,
-          uri: '',
-          protocol: RequestProtocol.HTTP,
-          method: RequestMethod.POST,
-        },
-        {
-          uuid: 0,
-          requestBodyType: 'raw',
-          requestBodyJsonType: 'object',
-          requestBody: '',
-          beforeScript: '',
-          afterScript: '',
-          queryParams: [],
-          restParams: [],
-          requestHeaders: [
-            {
-              required: true,
-              name: 'content-type',
-              value: ContentTypeByAbridge.JSON,
-            },
-          ],
-        }
-      );
-    } else {
+    let result: ApiTestData = Object.assign(
+      {
+        projectID: 1,
+        groupID: 0,
+        uri: '',
+        protocol: RequestProtocol.HTTP,
+        method: RequestMethod.POST,
+      },
+      {
+        uuid: 0,
+        requestBodyType: 'raw',
+        requestBodyJsonType: 'object',
+        requestBody: '',
+        beforeScript: '',
+        afterScript: '',
+        queryParams: [],
+        restParams: [],
+        requestHeaders: [
+          {
+            required: true,
+            name: 'content-type',
+            value: ContentTypeByAbridge.JSON,
+          },
+        ],
+      }
+    );
+    if (id) {
       const apiData = await this.apiService.get(id);
-      result = this.apiTestUtils.getTestDataFromApi(apiData);
+      if (apiData) {
+        result = this.apiTestUtils.getTestDataFromApi(apiData);
+      }
     }
     return result;
   }

@@ -9,7 +9,7 @@ import { Change } from '../../shared/store/env.state';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -55,6 +55,11 @@ export class ApiComponent implements OnInit, OnDestroy {
       routerLink: 'test',
       title: $localize`Test`,
     },
+    {
+      routerLink: 'mock',
+      title: 'Mock',
+      onlyDestop: true,
+    },
   ];
   activeUuid: number | string | null = 0;
   envInfo: any = {};
@@ -73,7 +78,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private router: Router,
     private messageService: MessageService,
     private storage: StorageService,
-    private electron: ElectronService,
+    public web: WebService,
     private store: Store
   ) {}
   get envUuid(): number | null {
@@ -98,18 +103,8 @@ export class ApiComponent implements OnInit, OnDestroy {
   onActivate(componentRef) {
     this.apiTab.onChildComponentInit(componentRef);
   }
-  initTabsetData() {
-    //Only electeron has local Mock
-    if (this.electron.isElectron) {
-      this.TABS.push({
-        routerLink: 'mock',
-        title: 'Mock',
-      });
-    }
-  }
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.queryParams.uuid);
-    this.initTabsetData();
     this.watchRouterChange();
     this.watchDataSourceChange();
     this.initEnv();
@@ -118,6 +113,9 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  goDownload(tab) {
+    this.web.showDownloadClientModal;
   }
   watchDataSourceChange(): void {
     this.messageService

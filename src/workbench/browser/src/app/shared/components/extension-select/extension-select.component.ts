@@ -41,7 +41,7 @@ export class ExtensionSelectComponent {
   parserFile = (file) =>
     new Observable((observer: Observer<boolean>) => {
       if (file.type !== 'application/json') {
-        this.message.error($localize `Only files in JSON format are supported`);
+        this.message.error($localize`Only files in JSON format are supported`);
         observer.complete();
         return;
       }

@@ -101,7 +101,7 @@ export class DataSourceService {
     this.messageService.send({ type: 'ping-success', data: {} });
   }
 
-  async checkRemoteCanOperate(canOperateCallback, isLocalSpace = false) {
+  async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
     if (this.remoteServerUrl) {
       const [isSuccess] = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
@@ -109,7 +109,7 @@ export class DataSourceService {
         if (!this.user.isLogin) {
           !isLocalSpace && this.messageService.send({ type: 'login', data: {} });
         } else {
-          canOperateCallback();
+          canOperateCallback?.();
         }
         // 3.2 如果ping不成功，则应该重试
       } else {
@@ -168,13 +168,14 @@ export class DataSourceService {
   /**
    * switch data
    */
-  switchDataSource = async (dataSource: DataSourceType) => {
+  switchDataSource = async (dataSource: DataSourceType, beforRefreshCompFn = () => {}) => {
     const isRemote = dataSource === 'http';
     if (isRemote) {
       const [isSuccess] = await this.pingCloudServerUrl();
       if (isSuccess) {
         this.switchToHttp();
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+        await beforRefreshCompFn?.();
         this.refreshComponent();
       } else {
         this.message.error($localize`Cloud Storage not available`);
@@ -183,6 +184,7 @@ export class DataSourceService {
     } else {
       this.switchToLocal();
       localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+      await beforRefreshCompFn?.();
       this.refreshComponent();
     }
   };

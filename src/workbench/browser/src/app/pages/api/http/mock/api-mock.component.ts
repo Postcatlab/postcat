@@ -42,9 +42,12 @@ export class ApiMockComponent implements OnInit {
       this.currentEditMockIndex === -1
         ? $localize`Add`
         : this.currentEditMock.createWay === 'system'
-        ? $localize`Preview`
+        ? $localize`:@@mockPreview:Preview`
         : $localize`Edit`
     } Mock`;
+  }
+  get isSystemMock() {
+    return this.currentEditMock.createWay === 'system';
   }
   mocklList: ApiMockEntity[] = [];
   createWayMap = {
