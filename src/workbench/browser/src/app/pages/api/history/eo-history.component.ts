@@ -13,7 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class HistoryComponent implements OnInit {
   TEXT_BY_PROTOCOL = {
-    websocket: 'WS',
+    ws: 'WS',
   };
   historyList = [];
   colorHash = new Map().set('get', 'green').set('post', 'blue').set('delete', 'red').set('put', 'pink');
@@ -39,6 +39,7 @@ export class HistoryComponent implements OnInit {
     return new Promise<any[]>((resolve) => {
       this.storage.run('apiTestHistoryLoadAllByProjectID', [1], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
+          console.log(result.data);
           resolve(result.data);
         } else {
           console.error(result.data);
@@ -53,7 +54,7 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(data) {
-    const protocol = data.protocol === 'websocket' ? 'ws' : 'http';
+    const protocol = data.request.protocol === 'ws' ? 'ws' : 'http';
     this.router.navigate([`home/api/${protocol}/test`], {
       queryParams: {
         uuid: `history_${data.uuid}`,

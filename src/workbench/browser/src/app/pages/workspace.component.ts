@@ -43,16 +43,20 @@ import { Component, OnInit } from '@angular/core'
             />
           </nz-form-control>
         </nz-form-item>
+
+        <section class="">
+          <button
+            nz-button
+            [nzLoading]="isSaveBtnBtnLoading"
+            class=""
+            nzType="primary"
+            (click)="btnv7lpvaCallback()"
+            i18n
+          >
+            Save
+          </button>
+        </section>
       </form>
-      <button
-        nz-button
-        class=""
-        nzType="primary"
-        (click)="btnmcu14hCallback()"
-        i18n
-      >
-        Save
-      </button>
       <nz-divider></nz-divider>
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Delete Workspace</span>
@@ -65,10 +69,11 @@ import { Component, OnInit } from '@angular/core'
       </section>
       <button
         nz-button
+        [nzLoading]="isDelWspBtnLoading"
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnnxvdxxCallback()"
+        (click)="btn2pceduCallback()"
         i18n
       >
         Delete
@@ -78,6 +83,8 @@ import { Component, OnInit } from '@angular/core'
 })
 export class WorkspaceComponent implements OnInit {
   validateWspNameForm
+  isSaveBtnBtnLoading
+  isDelWspBtnLoading
   constructor(
     public modal: NzModalService,
     public workspace: WorkspaceService,
@@ -88,6 +95,8 @@ export class WorkspaceComponent implements OnInit {
     public fb: UntypedFormBuilder
   ) {
     this.validateWspNameForm = UntypedFormGroup
+    this.isSaveBtnBtnLoading = false
+    this.isDelWspBtnLoading = false
   }
   async ngOnInit(): Promise<void> {
     // * Init WspName form
@@ -102,86 +111,97 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnmcu14hCallback() {
+  async btnv7lpvaCallback() {
     // * click event callback
-    const { id: currentWsp } = this.workspace.currentWorkspace
-    const { workspace: title } = this.validateWspNameForm.value
-    const [data, err]: any = await this.api.api_workspaceEdit({
-      workspaceID: currentWsp,
-      title
-    })
-    if (err) {
-      this.eMessage.error($localize`Edit workspace failed`)
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
-        }
-        this.message.send({ type: 'http-401', data: {} })
-      }
-      return
-    }
-    this.eMessage.success($localize`Edit workspace successfully !`)
-    const [list, wErr]: any = await this.api.api_workspaceList({})
-    if (wErr) {
-      if (wErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
-        }
-        this.message.send({ type: 'http-401', data: {} })
-      }
-      return
-    }
-    this.workspace.setWorkspaceList(list)
-  }
-  async btnnxvdxxCallback() {
-    // * click event callback
-
-    const confirm = () =>
-      new Promise((resolve) => {
-        this.modal.confirm({
-          nzTitle: $localize`Deletion Confirmation?`,
-          nzContent: $localize`Are you sure you want to delete the workspace ? 
-You cannot restore it once deleted!`,
-          nzOkDanger: true,
-          nzOkText: $localize`Delete`,
-          nzOnOk: () => resolve(true),
-          nzOnCancel: () => resolve(false)
-        })
+    this.isSaveBtnBtnLoading = true
+    const btnSaveBtnRunning = async () => {
+      const { id: currentWsp } = this.workspace.currentWorkspace
+      const { workspace: title } = this.validateWspNameForm.value
+      const [data, err]: any = await this.api.api_workspaceEdit({
+        workspaceID: currentWsp,
+        title
       })
-    const isOk = await confirm()
-    if (!isOk) {
-      return
+      if (err) {
+        this.eMessage.error($localize`Edit workspace failed`)
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
+        }
+        return
+      }
+      this.eMessage.success($localize`Edit workspace successfully !`)
+      const [list, wErr]: any = await this.api.api_workspaceList({})
+      if (wErr) {
+        if (wErr.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
+        }
+        return
+      }
+      this.workspace.setWorkspaceList(list)
     }
+    await btnSaveBtnRunning()
+    this.isSaveBtnBtnLoading = false
+  }
+  async btn2pceduCallback() {
+    // * click event callback
+    this.isDelWspBtnLoading = true
+    const btnDelWspRunning = async () => {
+      this.isDelWspBtnLoading = false
 
-    const { id: currentWsp } = this.workspace.currentWorkspace
-    const [data, err]: any = await this.api.api_workspaceDelete({
-      workspaceID: currentWsp
-    })
-    if (err) {
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
-        }
-        this.message.send({ type: 'http-401', data: {} })
+      const confirm = () =>
+        new Promise((resolve) => {
+          this.modal.confirm({
+            nzTitle: $localize`Deletion Confirmation?`,
+            nzContent: $localize`Are you sure you want to delete the workspace ? 
+You cannot restore it once deleted!`,
+            nzOkDanger: true,
+            nzOkText: $localize`Remove`,
+            nzOnOk: () => resolve(true),
+            nzOnCancel: () => resolve(false)
+          })
+        })
+      const isOk = await confirm()
+      if (!isOk) {
+        return
       }
-      return
-    }
-    this.eMessage.success($localize`Delete success !`)
-    await this.workspace.setLocalSpace()
-    const [list, wErr]: any = await this.api.api_workspaceList({})
-    if (wErr) {
-      if (wErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
+
+      const { id: currentWsp } = this.workspace.currentWorkspace
+      const [data, err]: any = await this.api.api_workspaceDelete({
+        workspaceID: currentWsp
+      })
+      if (err) {
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
         }
-        this.message.send({ type: 'http-401', data: {} })
+        return
       }
-      return
+      this.eMessage.success($localize`Delete success !`)
+      await this.workspace.setLocalSpace()
+      const [list, wErr]: any = await this.api.api_workspaceList({})
+      if (wErr) {
+        if (wErr.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
+        }
+        return
+      }
+      this.workspace.setWorkspaceList(list)
     }
-    this.workspace.setWorkspaceList(list)
+    await btnDelWspRunning()
+    this.isDelWspBtnLoading = false
   }
 }

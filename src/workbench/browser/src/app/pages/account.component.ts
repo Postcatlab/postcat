@@ -35,16 +35,19 @@ import { Component, OnInit } from '@angular/core'
           </nz-form-control>
         </nz-form-item>
 
-        <button
-          nz-button
-          type="submit"
-          class="w-[84px]"
-          nzType="primary"
-          (click)="btncme0f5Callback()"
-          i18n
-        >
-          Save
-        </button>
+        <section class="">
+          <button
+            nz-button
+            [nzLoading]="isSaveUsernameBtnLoading"
+            type="submit"
+            class="w-[84px]"
+            nzType="primary"
+            (click)="btn8h6j1dCallback()"
+            i18n
+          >
+            Save
+          </button>
+        </section>
       </form>
       <section class="h-4"></section>
     </section>
@@ -118,23 +121,28 @@ import { Component, OnInit } from '@angular/core'
           </nz-form-control>
         </nz-form-item>
 
-        <button
-          nz-button
-          type="submit"
-          class="w-[84px]"
-          nzType="primary"
-          (click)="btnnh23ujCallback()"
-          i18n
-        >
-          Reset
-        </button>
+        <section class="">
+          <button
+            nz-button
+            [nzLoading]="isResetBtnBtnLoading"
+            type="submit"
+            class="w-[84px]"
+            nzType="primary"
+            (click)="btn6e95fmCallback()"
+            i18n
+          >
+            Reset
+          </button>
+        </section>
       </form>
     </section>
     <section class="h-4"></section> `
 })
 export class AccountComponent implements OnInit {
   validateUsernameForm
+  isSaveUsernameBtnLoading
   validatePasswordForm
+  isResetBtnBtnLoading
   constructor(
     public fb: UntypedFormBuilder,
     public user: UserService,
@@ -143,7 +151,9 @@ export class AccountComponent implements OnInit {
     public eMessage: EoMessageService
   ) {
     this.validateUsernameForm = UntypedFormGroup
+    this.isSaveUsernameBtnLoading = false
     this.validatePasswordForm = UntypedFormGroup
+    this.isResetBtnBtnLoading = false
   }
   async ngOnInit(): Promise<void> {
     // * Init Username form
@@ -171,36 +181,41 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btncme0f5Callback() {
+  async btn8h6j1dCallback() {
     // * click event callback
-    const { username: user } = this.validateUsernameForm.value
-    const [data, err]: any = await this.api.api_userUpdateUserProfile({
-      username: user
-    })
-    if (err) {
-      this.eMessage.error($localize`Sorry, username is be used`)
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
+    this.isSaveUsernameBtnLoading = true
+    const btnSaveUsernameRunning = async () => {
+      const { username: user } = this.validateUsernameForm.value
+      const [data, err]: any = await this.api.api_userUpdateUserProfile({
+        username: user
+      })
+      if (err) {
+        this.eMessage.error($localize`Sorry, username is be used`)
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
         }
-        this.message.send({ type: 'http-401', data: {} })
+        return
       }
-      return
-    }
-    const [pData, pErr]: any = await this.api.api_userReadProfile(null)
-    if (pErr) {
-      if (pErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
+      const [pData, pErr]: any = await this.api.api_userReadProfile(null)
+      if (pErr) {
+        if (pErr.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
         }
-        this.message.send({ type: 'http-401', data: {} })
+        return
       }
-      return
+      this.user.setUserProfile(pData)
+      this.eMessage.success($localize`Username update success !`)
     }
-    this.user.setUserProfile(pData)
-    this.eMessage.success($localize`Username update success !`)
+    await btnSaveUsernameRunning()
+    this.isSaveUsernameBtnLoading = false
   }
 
   dynamicPasswordValidator = (
@@ -214,29 +229,34 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btnnh23ujCallback() {
+  async btn6e95fmCallback() {
     // * click event callback
-    const { oldPassword: oldPassword } = this.validatePasswordForm.value
-    const { newPassword: newPassword } = this.validatePasswordForm.value
-    const [data, err]: any = await this.api.api_userUpdatePsd({
-      oldPassword,
-      newPassword
-    })
-    if (err) {
-      this.eMessage.error($localize`Validation failed`)
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
+    this.isResetBtnBtnLoading = true
+    const btnResetBtnRunning = async () => {
+      const { oldPassword: oldPassword } = this.validatePasswordForm.value
+      const { newPassword: newPassword } = this.validatePasswordForm.value
+      const [data, err]: any = await this.api.api_userUpdatePsd({
+        oldPassword,
+        newPassword
+      })
+      if (err) {
+        this.eMessage.error($localize`Validation failed`)
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
         }
-        this.message.send({ type: 'http-401', data: {} })
+        return
       }
-      return
-    }
-    this.user.setLoginInfo(data)
-    this.eMessage.success($localize`Password reset success !`)
+      this.user.setLoginInfo(data)
+      this.eMessage.success($localize`Password reset success !`)
 
-    // * Clear password form
-    this.validatePasswordForm.reset()
+      // * Clear password form
+      this.validatePasswordForm.reset()
+    }
+    await btnResetBtnRunning()
+    this.isResetBtnBtnLoading = false
   }
 }

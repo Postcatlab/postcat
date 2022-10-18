@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalSyncFooter"
       [(nzVisible)]="isSyncModalVisible"
       (nzOnCancel)="handleSyncModalCancel()"
-      (nzAfterClose)="e88uh69Callback()"
+      (nzAfterClose)="e5e1yozCallback()"
       nzTitle="Do you want to upload local data to the cloud ?"
       i18n-nzTitle
     >
@@ -34,24 +34,27 @@ import { Component, OnInit } from '@angular/core'
         <nz-alert
           nzType="warning"
           nzMessage="Subsequent local space and cloud space are no longer synchronized"
+          i18n-nzMessage
           nzShowIcon
         ></nz-alert>
       </ng-container>
       <ng-template #modalSyncFooter>
         <button
           nz-button
+          [nzLoading]="isSyncCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btnwbr7bxCallback()"
+          (click)="btn8xmjhgCallback()"
           i18n
         >
           Cancel
         </button>
         <button
           nz-button
+          [nzLoading]="isSyncSyncBtnLoading"
           class=""
           nzType="primary"
-          (click)="btnhynewqCallback()"
+          (click)="btn0gm0ebCallback()"
           i18n
         >
           Sync
@@ -62,31 +65,38 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalCheckConnectFooter"
       [(nzVisible)]="isCheckConnectModalVisible"
       (nzOnCancel)="handleCheckConnectModalCancel()"
-      (nzAfterClose)="eyaln4yCallback()"
+      (nzAfterClose)="ekdkzxbCallback()"
       nzTitle="Check your connection"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <span i18n> Can't connect right now, click to retry or </span>
-        <span style="color: #1890ff" (click)="text69hkffCallback()" i18n>
+        <span
+          style="color: #1890ff"
+          class="cursor-pointer"
+          (click)="text9030u9Callback()"
+          i18n
+        >
           config in the configuration
         </span>
       </ng-container>
       <ng-template #modalCheckConnectFooter>
         <button
           nz-button
+          [nzLoading]="isCheckConnectCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btn3mj56oCallback()"
+          (click)="btn1fhzsrCallback()"
           i18n
         >
           Cancel
         </button>
         <button
           nz-button
+          [nzLoading]="isCheckConnectRetryBtnLoading"
           class=""
           nzType="primary"
-          (click)="btnz3bp9wCallback()"
+          (click)="btnuw11qnCallback()"
           i18n
         >
           Retry
@@ -98,7 +108,7 @@ import { Component, OnInit } from '@angular/core'
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="eadrzkmCallback()"
+      (nzAfterClose)="eivh3m6Callback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -138,17 +148,20 @@ import { Component, OnInit } from '@angular/core'
               </nz-form-control>
             </nz-form-item>
 
-            <button
-              nz-button
-              type="submit"
-              class="h-10 mt-2"
-              nzType="primary"
-              nzBlock
-              (click)="btnlj2mmaCallback()"
-              i18n
-            >
-              Sign In/Up
-            </button>
+            <section class="">
+              <button
+                nz-button
+                [nzLoading]="isLoginBtnBtnLoading"
+                type="submit"
+                class="h-10 mt-2"
+                nzType="primary"
+                nzBlock
+                (click)="btn8wwtl8Callback()"
+                i18n
+              >
+                Sign In/Up
+              </button>
+            </section>
           </form>
         </section>
       </ng-container>
@@ -157,64 +170,92 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isOpenSettingModalVisible"
       (nzOnCancel)="handleOpenSettingModalCancel()"
-      (nzAfterClose)="e4qqit2Callback()"
+      (nzAfterClose)="egrfv7sCallback()"
       nzTitle="Open setting"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" (click)="textip7brbCallback()" i18n>
+        <span
+          style="color: #1890ff"
+          class="cursor-pointer"
+          (click)="texthe7ukuCallback()"
+          i18n
+        >
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
       </ng-container>
     </nz-modal>
     <nz-modal
-      [nzFooter]="modalAddWorkspaceFooter"
+      [nzFooter]="null"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
-      (nzAfterClose)="e8tuaegCallback()"
+      (nzAfterClose)="ew5lfiaCallback()"
       nzTitle="Add Workspace"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <input
-          nz-input
-          [(ngModel)]="inputWorkspaceNameValue"
-          i18n-placeholder
-          placeholder="Workspace Name"
-        />
+        <form
+          nz-form
+          [formGroup]="validateWorkspaceNameForm"
+          nzLayout="horizontal"
+        >
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your new work name;">
+              <input
+                type="text"
+                nz-input
+                formControlName="newWorkName"
+                placeholder="Workspace Name"
+                i18n-placeholder
+              />
+            </nz-form-control>
+          </nz-form-item>
+
+          <section class="flex justify-end">
+            <button
+              nz-button
+              [nzLoading]="isCancelBtnLoading"
+              type="button"
+              class="mr-3"
+              nzType="default"
+              (click)="btndbfj87Callback()"
+              i18n
+            >
+              Cancel
+            </button>
+            <button
+              nz-button
+              [nzLoading]="isSaveBtnLoading"
+              type="submit"
+              class=""
+              nzType="primary"
+              (click)="btnm7wno5Callback()"
+              i18n
+            >
+              Save
+            </button>
+          </section>
+        </form>
       </ng-container>
-      <ng-template #modalAddWorkspaceFooter>
-        <button
-          nz-button
-          class=""
-          nzType="default"
-          (click)="btnl2opizCallback()"
-          i18n
-        >
-          Cancel
-        </button>
-        <button
-          nz-button
-          class=""
-          nzType="primary"
-          (click)="btn5w65ujCallback()"
-          i18n
-        >
-          Save
-        </button>
-      </ng-template>
     </nz-modal>`
 })
 export class UserModalComponent implements OnInit {
   isSyncModalVisible
+  isSyncCancelBtnLoading
+  isSyncSyncBtnLoading
   isCheckConnectModalVisible
+  isCheckConnectCancelBtnLoading
+  isCheckConnectRetryBtnLoading
   isLoginModalVisible
   validateLoginForm
+  isLoginBtnBtnLoading
   isOpenSettingModalVisible
   isAddWorkspaceModalVisible
-  inputWorkspaceNameValue
+  validateWorkspaceNameForm
+  isCancelBtnLoading
+  isSaveBtnLoading
   constructor(
     public user: UserService,
     public message: MessageService,
@@ -227,12 +268,19 @@ export class UserModalComponent implements OnInit {
     public workspace: WorkspaceService
   ) {
     this.isSyncModalVisible = false
+    this.isSyncCancelBtnLoading = false
+    this.isSyncSyncBtnLoading = false
     this.isCheckConnectModalVisible = false
+    this.isCheckConnectCancelBtnLoading = false
+    this.isCheckConnectRetryBtnLoading = false
     this.isLoginModalVisible = false
     this.validateLoginForm = UntypedFormGroup
+    this.isLoginBtnBtnLoading = false
     this.isOpenSettingModalVisible = false
     this.isAddWorkspaceModalVisible = false
-    this.inputWorkspaceNameValue = ''
+    this.validateWorkspaceNameForm = UntypedFormGroup
+    this.isCancelBtnLoading = false
+    this.isSaveBtnLoading = false
   }
   async ngOnInit(): Promise<void> {
     this.message
@@ -346,6 +394,11 @@ export class UserModalComponent implements OnInit {
       password: [null, [Validators.required, Validators.minLength(6)]]
     })
 
+    // * Init WorkspaceName form
+    this.validateWorkspaceNameForm = this.fb.group({
+      newWorkName: [null, [Validators.required]]
+    })
+
     const { id: workspaceID } = this.workspace.currentWorkspace
     const [data, err]: any = await this.api.api_workspaceList({})
     if (err) {
@@ -390,66 +443,83 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async e88uh69Callback() {
+  async e5e1yozCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btnwbr7bxCallback() {
+  async btn8xmjhgCallback() {
     // * click event callback
-
-    // * 关闭弹窗
-    this.isSyncModalVisible = false
-  }
-  async btnhynewqCallback() {
-    // * click event callback
-
-    const eData = await this.project.exportLocalProjectData()
-
-    const [data, err]: any = await this.api.api_workspaceUpload(eData)
-    if (err) {
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
-          return
-        }
-        this.message.send({ type: 'http-401', data: {} })
-      }
-      return
+    this.isSyncCancelBtnLoading = true
+    const btnSyncCancelRunning = async () => {
+      // * 关闭弹窗
+      this.isSyncModalVisible = false
     }
+    await btnSyncCancelRunning()
+    this.isSyncCancelBtnLoading = false
+  }
+  async btn0gm0ebCallback() {
+    // * click event callback
+    this.isSyncSyncBtnLoading = true
+    const btnSyncSyncRunning = async () => {
+      const eData = await this.project.exportLocalProjectData()
 
-    const { workspace } = data
+      const [data, err]: any = await this.api.api_workspaceUpload(eData)
+      if (err) {
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
+        }
+        return
+      }
+      const { workspace } = data
+      const list = this.workspace
+        .getWorkspaceList()
+        .filter((it) => it.id !== -1)
+      this.workspace.setWorkspaceList([...list, workspace])
+      this.workspace.setCurrentWorkspaceID(workspace)
 
-    const list = this.workspace.getWorkspaceList().filter((it) => it.id !== -1)
-    this.workspace.setWorkspaceList([...list, workspace])
-    this.workspace.setCurrentWorkspaceID(workspace)
-
-    // * 关闭弹窗
-    this.isSyncModalVisible = false
+      // * 关闭弹窗
+      this.isSyncModalVisible = false
+    }
+    await btnSyncSyncRunning()
+    this.isSyncSyncBtnLoading = false
   }
   handleCheckConnectModalCancel(): void {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async eyaln4yCallback() {
+  async ekdkzxbCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btn3mj56oCallback() {
+  async btn1fhzsrCallback() {
     // * click event callback
-
-    // * 关闭弹窗
-    this.isCheckConnectModalVisible = false
+    this.isCheckConnectCancelBtnLoading = true
+    const btnCheckConnectCancelRunning = async () => {
+      // * 关闭弹窗
+      this.isCheckConnectModalVisible = false
+    }
+    await btnCheckConnectCancelRunning()
+    this.isCheckConnectCancelBtnLoading = false
   }
-  async btnz3bp9wCallback() {
+  async btnuw11qnCallback() {
     // * click event callback
-    this.dataSource.checkRemoteAndTipModal()
+    this.isCheckConnectRetryBtnLoading = true
+    const btnCheckConnectRetryRunning = async () => {
+      this.dataSource.checkRemoteAndTipModal()
 
-    // * 关闭弹窗
-    this.isCheckConnectModalVisible = false
+      // * 关闭弹窗
+      this.isCheckConnectModalVisible = false
+    }
+    await btnCheckConnectRetryRunning()
+    this.isCheckConnectRetryBtnLoading = false
   }
-  async text69hkffCallback() {
+  async text9030u9Callback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -459,87 +529,94 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async eadrzkmCallback() {
+  async eivh3m6Callback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
       this.validateLoginForm.reset()
     }
   }
-  async btnlj2mmaCallback() {
+  async btn8wwtl8Callback() {
     // * click event callback
-    const isOk = this.validateLoginForm.valid
+    this.isLoginBtnBtnLoading = true
+    const btnLoginBtnRunning = async () => {
+      const isOk = this.validateLoginForm.valid
 
-    if (!isOk) {
-      this.eMessage.error($localize`Please check you username or password`)
-      return
-    }
+      if (!isOk) {
+        this.eMessage.error($localize`Please check you username or password`)
+        return
+      }
 
-    // * get login form values
-    const formData = this.validateLoginForm.value
-    const [data, err]: any = await this.api.api_authLogin(formData)
-    if (err) {
-      this.eMessage.error($localize`Authentication failed !`)
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
+      // * get login form values
+      const formData = this.validateLoginForm.value
+      const [data, err]: any = await this.api.api_authLogin(formData)
+      if (err) {
+        this.eMessage.error(
+          $localize`Please check the account/password, the account must be a mobile phone number or email !`
+        )
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
+        }
+        return
+      }
+      this.user.setLoginInfo(data)
+
+      // * 关闭弹窗
+      this.isLoginModalVisible = false
+
+      {
+        const [data, err]: any = await this.api.api_userReadProfile(null)
+        if (err) {
+          if (err.status === 401) {
+            this.message.send({ type: 'clear-user', data: {} })
+            if (this.user.isLogin) {
+              return
+            }
+            this.message.send({ type: 'http-401', data: {} })
+          }
           return
         }
-        this.message.send({ type: 'http-401', data: {} })
+        this.user.setUserProfile(data)
       }
-      return
-    }
-    this.user.setLoginInfo(data)
-
-    // * 关闭弹窗
-    this.isLoginModalVisible = false
-
-    {
-      const [data, err]: any = await this.api.api_userReadProfile(null)
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} })
-          if (this.user.isLogin) {
-            return
+      {
+        const [data, err]: any = await this.api.api_workspaceList({})
+        if (err) {
+          if (err.status === 401) {
+            this.message.send({ type: 'clear-user', data: {} })
+            if (this.user.isLogin) {
+              return
+            }
+            this.message.send({ type: 'http-401', data: {} })
           }
-          this.message.send({ type: 'http-401', data: {} })
+          return
         }
+        this.workspace.setWorkspaceList(data)
+      }
+
+      if (!data.isFirstLogin) {
         return
       }
-      this.user.setUserProfile(data)
-    }
-    {
-      const [data, err]: any = await this.api.api_workspaceList({})
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} })
-          if (this.user.isLogin) {
-            return
-          }
-          this.message.send({ type: 'http-401', data: {} })
-        }
-        return
-      }
-      this.workspace.setWorkspaceList(data)
-    }
 
-    if (!data.isFirstLogin) {
-      return
+      // * 唤起弹窗
+      this.isSyncModalVisible = true
     }
-
-    // * 唤起弹窗
-    this.isSyncModalVisible = true
+    await btnLoginBtnRunning()
+    this.isLoginBtnBtnLoading = false
   }
   handleOpenSettingModalCancel(): void {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async e4qqit2Callback() {
+  async egrfv7sCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async textip7brbCallback() {
+  async texthe7ukuCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -550,53 +627,72 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async e8tuaegCallback() {
+  async ew5lfiaCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
-      this.inputWorkspaceNameValue = ''
+      this.validateWorkspaceNameForm.reset()
     }
   }
-  async btnl2opizCallback() {
+  async btndbfj87Callback() {
     // * click event callback
-
-    // * 关闭弹窗
-    this.isAddWorkspaceModalVisible = false
+    this.isCancelBtnLoading = true
+    const btnCancelRunning = async () => {
+      this.isCancelBtnLoading = true
+      const btnCancelRunning = async () => {
+        // * 关闭弹窗
+        this.isAddWorkspaceModalVisible = false
+      }
+      await btnCancelRunning()
+      this.isCancelBtnLoading = false
+    }
+    await btnCancelRunning()
+    this.isCancelBtnLoading = false
   }
-  async btn5w65ujCallback() {
+  async btnm7wno5Callback() {
     // * click event callback
-    const title = this.inputWorkspaceNameValue
-    {
-      const [data, err]: any = await this.api.api_workspaceCreate({ title })
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} })
-          if (this.user.isLogin) {
+    this.isSaveBtnLoading = true
+    const btnSaveRunning = async () => {
+      this.isSaveBtnLoading = true
+      const btnSaveRunning = async () => {
+        const { newWorkName: title } = this.validateWorkspaceNameForm.value
+        const [data, err]: any = await this.api.api_workspaceCreate({ title })
+        if (err) {
+          this.eMessage.error($localize`Add workspace Failed !`)
+          if (err.status === 401) {
+            this.message.send({ type: 'clear-user', data: {} })
+            if (this.user.isLogin) {
+              return
+            }
+            this.message.send({ type: 'http-401', data: {} })
+          }
+          return
+        }
+        this.eMessage.success($localize`Create new workspace successfully !`)
+
+        // * 关闭弹窗
+        this.isAddWorkspaceModalVisible = false
+
+        {
+          const [lData, err]: any = await this.api.api_workspaceList({})
+          if (err) {
+            if (err.status === 401) {
+              this.message.send({ type: 'clear-user', data: {} })
+              if (this.user.isLogin) {
+                return
+              }
+              this.message.send({ type: 'http-401', data: {} })
+            }
             return
           }
-          this.message.send({ type: 'http-401', data: {} })
+          this.workspace.setWorkspaceList(lData)
+          this.workspace.setCurrentWorkspace(data)
         }
-        return
       }
+      await btnSaveRunning()
+      this.isSaveBtnLoading = false
     }
-    this.eMessage.success($localize`Create new workspace successfully !`)
-
-    // * 关闭弹窗
-    this.isAddWorkspaceModalVisible = false
-
-    {
-      const [data, err]: any = await this.api.api_workspaceList({})
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} })
-          if (this.user.isLogin) {
-            return
-          }
-          this.message.send({ type: 'http-401', data: {} })
-        }
-        return
-      }
-      this.workspace.setWorkspaceList(data)
-    }
+    await btnSaveRunning()
+    this.isSaveBtnLoading = false
   }
 }

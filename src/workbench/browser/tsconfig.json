@@ -30,7 +30,10 @@
     ]
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    ".angular",
+    "src/app/assets"
   ],
   "angularCompilerOptions": {
     "enableIvy": true,

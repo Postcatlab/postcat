@@ -1,4 +1,4 @@
-<div class="param_header flex items-center justify-start h-10">
+<div class="flex items-center justify-start h-10 param_header">
   <div class="flex items-center h-full">
     <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
       <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
@@ -26,7 +26,7 @@
 <!-- <eo-editor [(code)]="model" *ngIf="bodyType === 'raw'" (codeChange)="rawDataChange()"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-editor> -->
 <eo-monaco-editor *ngIf="bodyType === 'raw'" [(code)]="model"
-  [eventList]="['type', 'format', 'copy', 'search', 'replace']" (codeChange)="rawDataChange($event)">
+  [eventList]="['type', 'format', 'copy', 'search', 'replace']" [autoType]="true" (codeChange)="rawDataChange($event)">
 </eo-monaco-editor>
 <!-- Binary -->
 <textarea class="binary_textarea" rows="4" *ngIf="bodyType === 'binary'" nzBorderless i18n-placeholder

@@ -108,7 +108,8 @@
         [nzTabBarExtraContent]="extraTemplate" [nzAnimated]="false" class="mt-2.5 response_container"
         (nzSelectChange)="handleBottomTabSelect($event)">
         <nz-tab i18n-nzTitle nzTitle="Response">
-          <eo-api-test-result-response [model]="model.testResult.response"></eo-api-test-result-response>
+          <eo-api-test-result-response [model]="model.testResult.response" [uri]="model.request.uri">
+          </eo-api-test-result-response>
         </nz-tab>
         <div>
           <nz-tab i18n-nzTitle nzTitle="Response Headers">

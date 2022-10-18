@@ -53,12 +53,12 @@ window.eo.getFeature = (featureKey) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
 };
 // 加载feature模块
-window.eo.loadFeatureModule = (moduleID) => {
+window.eo.loadFeatureModule = async (moduleID) => {
   if (!featureModules.has(moduleID)) {
     try {
       const module = window.eo.getModule(moduleID);
       window.eo._currentExtensionID = moduleID;
-      const _module = require(module.baseDir);
+      const _module = await require(module.baseDir);
       featureModules.set(moduleID, _module);
     } catch (e) {
       console.log(e);

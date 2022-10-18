@@ -69,17 +69,20 @@ export class NavbarComponent implements OnInit {
     } else {
       this.modules = new Map();
     }
-    this.message.get().subscribe(({ type }) => {
-      if (type === 'open-setting') {
-        this.openSettingModal();
-      }
-    });
+    this.message
+      .get()
+      .pipe(distinct(({ type }) => type, interval(400)))
+      .subscribe(({ type }) => {
+        if (type === 'open-setting') {
+          this.openSettingModal();
+        }
+      });
   }
   loginOrSign() {
     if (this.web.isWeb) {
       return this.web.jumpToClient($localize`Eoapi Client is required to sign in`);
     }
-    this.message.send({ type: 'login', data: {} });
+    this.dataSourceService.checkRemoteCanOperate();
   }
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });

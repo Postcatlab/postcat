@@ -57,6 +57,8 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() maxLine: number;
   @Input() config: JoinedEditorOptions = {};
   @Input() editorType = 'json';
+  /** Automatically identify the type */
+  @Input() autoType = false;
   @Input() autoFormat = false;
   @Input() disabled = false;
   @Input() completions = [];
@@ -139,9 +141,13 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
       requestAnimationFrame(() => {
-        const type = whatTextType(this.$$code || '');
-        this.editorType = type;
-        window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
+        if (this.autoType) {
+          const type = whatTextType(this.$$code || '');
+          this.editorType = type;
+          window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
+        } else {
+          window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), this.editorType);
+        }
       });
     }
   }
@@ -192,8 +198,8 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
     if (code && (this.config?.readOnly || (this.isFirstFormat && this.autoFormat))) {
       (async () => {
-        this.$$code = await this.formatCode();
         this.isFirstFormat = false;
+        this.$$code = await this.formatCode();
       })();
     }
     this.$$code = code;

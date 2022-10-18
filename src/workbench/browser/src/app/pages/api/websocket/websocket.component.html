@@ -105,6 +105,7 @@
             <eo-monaco-editor
               [(code)]="model.msg"
               [config]="editorConfig"
+              [editorType]="editorConfig.language"
               [eventList]="['type', 'format', 'copy', 'search', 'replace']"
               (codeChange)="rawDataChange($event)"
             >
@@ -141,7 +142,7 @@
         }}</span> -->
       </div>
       <ul class="p-2 overflow-auto" style="height: calc(100% - 48px)">
-        <li *ngFor="let item of model.response.responseBody; let index = index" class="block w-full">
+        <li *ngFor="let item of model.response?.responseBody; let index = index" class="block w-full">
           <div (click)="expandMessage(index)" class="flex flex-col w-full text-gray-500 top-line">
             <div
               *ngIf="item.type === 'send'"

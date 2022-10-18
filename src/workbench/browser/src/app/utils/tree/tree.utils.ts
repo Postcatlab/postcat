@@ -20,7 +20,9 @@ export const listToTreeHasLevel = (
     childKey: 'children',
   }
 ) => {
-  if(whatType(list)!=='array') {return list;}
+  if (whatType(list) !== 'array') {
+    return list;
+  }
   const listDepths = [];
   //delete useless key
   const uselessKeys = ['listDepth', 'isHide', 'isShrink'];
@@ -149,7 +151,9 @@ export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key 
 };
 
 export const getExpandGroupByKey: (component, key) => string[] = (component, key) => {
-  if (!component) {return [];}
+  if (!component) {
+    return [];
+  }
   let treeNode = component.getTreeNodeByKey(key);
   if (!treeNode) {
     return;
@@ -178,6 +182,8 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
       if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
         console.log(`prev: ${prev} == curr: ${curr} == key: ${key}`);
         tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
+      } else if (curr?.example) {
+        prev[curr[key]] = curr?.example;
       }
     } catch (error) {
       console.log('error==>', `prev: ${prev} == curr: ${curr} == key: ${key}`);
