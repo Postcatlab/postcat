@@ -50,7 +50,7 @@ import { Component, OnInit } from '@angular/core'
             [nzLoading]="isSaveBtnBtnLoading"
             class=""
             nzType="primary"
-            (click)="btncmm5teCallback()"
+            (click)="btnv7lpvaCallback()"
             i18n
           >
             Save
@@ -73,7 +73,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnugsk9dCallback()"
+        (click)="btn2pceduCallback()"
         i18n
       >
         Delete
@@ -111,7 +111,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btncmm5teCallback() {
+  async btnv7lpvaCallback() {
     // * click event callback
     this.isSaveBtnBtnLoading = true
     const btnSaveBtnRunning = async () => {
@@ -149,7 +149,7 @@ export class WorkspaceComponent implements OnInit {
     await btnSaveBtnRunning()
     this.isSaveBtnBtnLoading = false
   }
-  async btnugsk9dCallback() {
+  async btn2pceduCallback() {
     // * click event callback
     this.isDelWspBtnLoading = true
     const btnDelWspRunning = async () => {
@@ -162,7 +162,7 @@ export class WorkspaceComponent implements OnInit {
             nzContent: $localize`Are you sure you want to delete the workspace ? 
 You cannot restore it once deleted!`,
             nzOkDanger: true,
-            nzOkText: $localize`Delete`,
+            nzOkText: $localize`Remove`,
             nzOnOk: () => resolve(true),
             nzOnCancel: () => resolve(false)
           })
