@@ -35,17 +35,19 @@ import { Component, OnInit } from '@angular/core'
           </nz-form-control>
         </nz-form-item>
 
-        <button
-          nz-button
-          [nzLoading]="isSaveUsernameBtnLoading"
-          type="submit"
-          class="w-[84px]"
-          nzType="primary"
-          (click)="btny4krldCallback()"
-          i18n
-        >
-          Save
-        </button>
+        <section class="">
+          <button
+            nz-button
+            [nzLoading]="isSaveUsernameBtnLoading"
+            type="submit"
+            class="w-[84px]"
+            nzType="primary"
+            (click)="btnndvr4qCallback()"
+            i18n
+          >
+            Save
+          </button>
+        </section>
       </form>
       <section class="h-4"></section>
     </section>
@@ -119,17 +121,19 @@ import { Component, OnInit } from '@angular/core'
           </nz-form-control>
         </nz-form-item>
 
-        <button
-          nz-button
-          [nzLoading]="isResetBtnBtnLoading"
-          type="submit"
-          class="w-[84px]"
-          nzType="primary"
-          (click)="btnl4kfpmCallback()"
-          i18n
-        >
-          Reset
-        </button>
+        <section class="">
+          <button
+            nz-button
+            [nzLoading]="isResetBtnBtnLoading"
+            type="submit"
+            class="w-[84px]"
+            nzType="primary"
+            (click)="btnz1jx3jCallback()"
+            i18n
+          >
+            Reset
+          </button>
+        </section>
       </form>
     </section>
     <section class="h-4"></section> `
@@ -177,7 +181,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btny4krldCallback() {
+  async btnndvr4qCallback() {
     // * click event callback
     this.isSaveUsernameBtnLoading = true
     const btnSaveUsernameRunning = async () => {
@@ -225,7 +229,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btnl4kfpmCallback() {
+  async btnz1jx3jCallback() {
     // * click event callback
     this.isResetBtnBtnLoading = true
     const btnResetBtnRunning = async () => {

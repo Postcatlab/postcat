@@ -43,13 +43,15 @@ import { Component, OnInit } from '@angular/core'
             />
           </nz-form-control>
         </nz-form-item>
+
+        <section class=""></section>
       </form>
       <button
         nz-button
         [nzLoading]="isSaveBtnBtnLoading"
         class=""
         nzType="primary"
-        (click)="btnabtvvdCallback()"
+        (click)="btn6ecvdsCallback()"
         i18n
       >
         Save
@@ -70,7 +72,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btn1rrqh8Callback()"
+        (click)="btn8egz0bCallback()"
         i18n
       >
         Delete
@@ -108,7 +110,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnabtvvdCallback() {
+  async btn6ecvdsCallback() {
     // * click event callback
     this.isSaveBtnBtnLoading = true
     const btnSaveBtnRunning = async () => {
@@ -146,7 +148,7 @@ export class WorkspaceComponent implements OnInit {
     await btnSaveBtnRunning()
     this.isSaveBtnBtnLoading = false
   }
-  async btn1rrqh8Callback() {
+  async btn8egz0bCallback() {
     // * click event callback
     this.isDelWspBtnLoading = true
     const btnDelWspRunning = async () => {

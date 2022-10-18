@@ -51,9 +51,7 @@ const sync = new Modal({
         const eData = await this.project.exportLocalProjectData()
         `,
         httpS.send('api_workspaceUpload', 'eData'),
-        (data) => {
-          const { workspace } = data;
-        },
+        `const { workspace } = data`,
         workspaceS.getWorkspaceList('list'),
         workspaceS.setWorkspaceList('[...list, workspace]'),
         workspaceS.setCurrentWorkspaceID('workspace'),
@@ -126,36 +124,58 @@ const loginForm = new Form({
   ],
 });
 
-const newWorkspaceName = new Input({
-  id: 'workspace-name',
-  placeholder: 'Workspace Name',
-});
-
 const addWorkspace = new Modal({
   id: 'add-workspace',
   title: { text: 'Add Workspace' },
-  children: [newWorkspaceName],
-  footer: [
-    {
-      label: 'Cancel',
-      type: 'default',
-      click: [Modal.close('add-workspace')],
-      disabled: [],
-    },
-    {
-      label: 'Save',
-      type: 'primary',
-      click: [
-        newWorkspaceName.getValue('title'),
-        [httpS.send('api_workspaceCreate', '{ title }')],
-        messageS.success('Create new workspace successfully !'),
-        Modal.close('add-workspace'),
-        // * update workspace list
-        [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
+  children: [
+    new Form({
+      id: 'workspace-name',
+      data: [
+        {
+          label: 'newWorkName',
+          isShowLabel: false,
+          key: 'newWorkName',
+          type: 'input',
+          placeholder: 'Workspace Name',
+          rules: ['required'],
+        },
       ],
-      disabled: [],
-    },
+      footerClass: ['flex', 'justify-end'],
+      footer: [
+        {
+          id: 'cancel',
+          label: { text: 'Cancel' },
+          type: ['default'],
+          class: ['mr-3'],
+          attr: {
+            type: 'button',
+          },
+          event: {
+            click: [Modal.close('add-workspace')],
+          },
+        },
+        {
+          id: 'save',
+          label: { text: 'Save' },
+          theme: ['default'],
+          attr: {
+            type: 'submit',
+          },
+          event: {
+            click: [
+              Form.getValue('workspace-name', 'newWorkName', 'title'),
+              [httpS.send('api_workspaceCreate', '{ title }', { errTip: 'Add workspace Failed !' })],
+              messageS.success('Create new workspace successfully !'),
+              Modal.close('add-workspace'),
+              // * update workspace list
+              [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
+            ],
+          },
+        },
+      ],
+    }),
   ],
+  footer: [],
 });
 
 // * 登录弹窗
