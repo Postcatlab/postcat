@@ -3,7 +3,7 @@ import { getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { ApiTestHistoryResponse } from '../../../../../shared/services/storage/index.model';
 import { ApiTestUtilService } from '../api-test-util.service';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 @Component({
@@ -13,6 +13,7 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
 })
 export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   @Input() model: any | ApiTestHistoryResponse;
+  @Input() uri: string;
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoEditor?: EoMonacoEditorComponent;
   codeStatus: { status: string; cap: number; class: string };
   size: string;
@@ -20,13 +21,7 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   get responseIsImg() {
     return this.model.contentType?.startsWith('image');
   }
-  get imgBlobUrl() {
-    if (this.responseIsImg) {
-      const blobUrl = getBlobUrl(this.model.body, this.model.contentType);
-      return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
-    }
-    return '';
-  }
+  imgBlobUrl: SafeUrl;
   constructor(
     private apiTest: ApiTestUtilService,
     private sanitizer: DomSanitizer,
@@ -34,10 +29,13 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(changes) {
+    console.log('this.model', this.model);
     if (changes.model && this.model) {
       this.codeStatus = this.apiTest.getHTTPStatus(this.model?.statusCode);
       if (!this.responseIsImg) {
         this.eoEditor?.formatCode();
+      } else if (this.responseIsImg) {
+        this.imgBlobUrl = this.uri;
       }
     }
   }
@@ -48,7 +46,7 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   }
 
   downloadResponseText() {
-    this.blobUrl = getBlobUrl(this.model.body, this.model.contentType);
+    this.blobUrl = this.responseIsImg ? this.uri : getBlobUrl(this.model.body, this.model.contentType);
     const blobFileName = decodeURI(this.model.blobFileName || 'test_response');
     const tmpAElem = document.createElement('a');
     if ('download' in tmpAElem) {

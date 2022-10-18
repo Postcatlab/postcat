@@ -61,6 +61,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
+  get editorType() {
+    return this.contentType.replace(/.*\//, '');
+  }
   constructor(
     private apiTest: ApiTestUtilService,
     private cdRef: ChangeDetectorRef,

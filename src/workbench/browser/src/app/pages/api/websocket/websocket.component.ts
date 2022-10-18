@@ -170,7 +170,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         isExpand: false,
       });
       const { requestTabIndex, msg, ...data } = this.model;
-      const res = await this.testService.addHistory(data, 0);
+      const res = await this.testService.addHistory({ protocol: 'websocket', ...data }, 0);
       if (res) {
         this.message.send({ type: 'updateHistory', data: {} });
       }

@@ -22,6 +22,7 @@ export class Alert extends Render {
       template: `<nz-alert
       nzType="${this.type}"
       nzMessage="${this.text}"
+      i18n-nzMessage
       ${this.icon ? 'nzShowIcon' : ''}
     ></nz-alert>`,
       data: [],

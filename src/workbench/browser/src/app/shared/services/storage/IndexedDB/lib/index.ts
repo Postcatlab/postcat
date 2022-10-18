@@ -355,6 +355,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   apiDataBulkRemove(uuids: Array<number | string>): Observable<object> {
     return this.bulkRemove(this.apiData, uuids);
   }
+  apiDataBulkRemoveByGroupIDs(groupIDs: number[]) {
+    return this.apiData.where('groupID').anyOf(groupIDs).delete();
+  }
   apiDataBulkUpdate(items: Array<ApiData>): Observable<object> {
     return this.bulkUpdate(this.apiData, items);
   }
@@ -620,7 +623,8 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuids
    */
-  groupBulkRemove(uuids: Array<number | string>): Observable<object> {
+  groupBulkRemove(uuids: Array<number>): Observable<object> {
+    this.apiDataBulkRemoveByGroupIDs(uuids);
     return this.bulkRemove(this.group, uuids);
   }
 
@@ -656,6 +660,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
   /**
    * Load project collections
+   *
    * @param projectID
    * @returns
    */
@@ -725,24 +730,25 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             resolve('');
           });
         });
-      deepFn(data.collections, 0);
-      //Add env
-      if (data.enviroments && data.enviroments.length) {
-        data.enviroments.forEach((item) => {
-          item.projectID = uuid;
-          const result = parseAndCheckEnv(item);
-          if (!result.validate) {
-            return;
-          }
-          this.environmentCreate(result.data);
-        });
-      }
-      obs.next(
-        this.resProxy({
-          errors,
-        })
-      );
-      obs.complete();
+      deepFn(data.collections, 0).then(() => {
+        //Add env
+        if (data.enviroments && data.enviroments.length) {
+          data.enviroments.forEach((item) => {
+            item.projectID = uuid;
+            const result = parseAndCheckEnv(item);
+            if (!result.validate) {
+              return;
+            }
+            this.environmentCreate(result.data);
+          });
+        }
+        obs.next(
+          this.resProxy({
+            errors,
+          })
+        );
+        obs.complete();
+      });
     });
   }
   /**

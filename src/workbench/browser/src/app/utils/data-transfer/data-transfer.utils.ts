@@ -285,9 +285,9 @@ export const uiData2Json = function (eoapiArr: ApiEditBody[], inputOptions) {
       if (!val.name) {
         continue;
       }
-      if (!val.required && !inputOptions.ignoreCheckbox) {
-        continue;
-      }
+      // if (!val.required && !inputOptions.ignoreCheckbox) {
+      //   continue;
+      // }
       const tmpKey = val.name;
       if (inputOptions.checkXmlAttr) {
         if (val.isErrorXmlAttr) {

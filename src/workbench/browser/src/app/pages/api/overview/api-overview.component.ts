@@ -30,7 +30,7 @@ export class ApiOverviewComponent implements OnDestroy {
     {
       title: $localize`Export`,
       icon: 'efferent-three',
-      desc: $localize`Export API data`,
+      desc: $localize`Export API`,
       type: 'export',
     },
     {

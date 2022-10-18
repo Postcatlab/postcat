@@ -27,8 +27,8 @@ export class AppService {
             const mock = await this.getMockByMockID(Number(mockID));
             const apiData = await this.getApiData(Number(mock.apiDataID));
             if (mock?.createWay === 'system' && isEnabledMatchType) {
-              const result = await this.matchApiData(1, req);
-              return sender.send('getMockApiList', result);
+              console.log('apiData.responseBody', apiData.responseBody);
+              return sender.send('getMockApiList', this.matchApiData(apiData));
             } else {
               mock.response = mock?.response ?? this.generateResponse(apiData.responseBody);
             }
@@ -69,19 +69,17 @@ export class AppService {
    * @param req
    * @returns
    */
-  async matchApiData(projectID = 1, req) {
-    const apiList = await this.getAllApi(projectID);
-    const { pathname } = new URL(req.params[0], this.dataSource.mockUrl);
-    const apiData = apiList.find((n) => {
-      let uri = n.uri.trim();
-      if (Array.isArray(n.restParams) && n.restParams.length > 0) {
-        const restMap = n.restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
-        uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
-        console.log('restMap', restMap);
-      }
-      const uriReg = new RegExp(`^/?${uri}/?$`);
-      return n.method === req.method && uriReg.test(pathname);
-    });
+  async matchApiData(apiData, req?) {
+    // const { restParams, method } = apiData;
+    // const { pathname } = new URL(req.params[0], this.dataSource.mockUrl);
+    // let uri = apiData.uri.trim();
+    // if (Array.isArray(restParams) && restParams.length > 0) {
+    //   const restMap = restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
+    //   uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
+    //   console.log('restMap', restMap);
+    // }
+    // const uriReg = new RegExp(`^/?${uri}/?$`);
+    // const isMatch = method === req.method && uriReg.test(pathname);
     return apiData ? { response: this.generateResponse(apiData.responseBody) } : { statusCode: 404 };
   }
 

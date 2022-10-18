@@ -26,6 +26,7 @@ export const sampleApiData: ApiData[] = [
         ],
       },
     ],
+    updatedAt:new Date(),
     requestHeaders: [],
     responseHeaders: [],
     responseBodyType: ApiBodyType.JSON,
@@ -75,6 +76,7 @@ export const sampleApiData: ApiData[] = [
     requestBody: '',
     queryParams: [{ name: 'name', required: true, example: 'disease_h5', description: '' }],
     restParams: [],
+    updatedAt:new Date(),
     requestHeaders: [],
     responseHeaders: [
       { name: 'date', required: true, description: '', example: 'Sat, 05 Feb 2022 04:30:44 GMT' },

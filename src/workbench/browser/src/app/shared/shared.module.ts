@@ -49,6 +49,7 @@ import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
+import { LocalWorkspaceTipComponent } from './components/local-workspace-tip/local-workspace-tip.component';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -63,6 +64,7 @@ const COMPONENTS = [
   SplitPanelComponent,
   EoMonacoEditorComponent,
   DownloadClienteComponent,
+  LocalWorkspaceTipComponent
 ];
 
 const SHARED_MODULE = [
