@@ -17,7 +17,7 @@ export class ApiTabStorageService {
     this.tabOrder = [];
     this.tabsByID = new Map();
     this.cacheName = `${
-      this.workspace.currentWorkspaceID === -1 ? 'local' : this.workspace.currentWorkspaceID
+      this.workspace.isLocal? 'local' : this.workspace.currentWorkspaceID
     }_TabCache`;
   }
   addTab(tabItem) {

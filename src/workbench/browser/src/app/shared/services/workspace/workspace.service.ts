@@ -22,6 +22,9 @@ export class WorkspaceService {
     canDelete: false,
     canCreate: false,
   };
+  get isLocal() {
+    return this.currentWorkspaceID === -1;
+  }
 
   get currentWorkspace() {
     const oldWorkspaceID = this.currentWorkspaceID;
@@ -41,9 +44,10 @@ export class WorkspaceService {
     private projectService: ProjectService,
     private userService: UserService
   ) {
-    if (this.currentWorkspaceID === -1 && this.dataSourceService.isRemote) {
+    //Current storage workspaceID not match remote storage,reset it;
+    if (this.isLocal && this.dataSourceService.isRemote) {
       this.setCurrentWorkspace(this.localWorkspace);
-    } else if (this.currentWorkspaceID !== -1 && !this.dataSourceService.isRemote) {
+    } else if (!this.isLocal && !this.dataSourceService.isRemote) {
       this.setCurrentWorkspace(this.currentWorkspace);
     }
   }

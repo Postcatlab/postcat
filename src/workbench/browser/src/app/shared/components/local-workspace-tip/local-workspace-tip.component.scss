@@ -1,0 +1,8 @@
+.remote-notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--remote-notification-height, 0px);
+  background-color: rgb(255, 219, 7);
+  overflow: hidden;
+}
