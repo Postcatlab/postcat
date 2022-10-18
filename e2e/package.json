@@ -4,10 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:watch":"playwright test --headed"
   },
   "devDependencies": {
-    "@playwright/test": "1.25.0",
-    "playwright": "1.25.0"
+    "@playwright/test": "^1.27.0",
+    "playwright": "^1.27.0"
   }
 }
