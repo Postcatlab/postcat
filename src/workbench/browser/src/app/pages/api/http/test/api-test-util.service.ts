@@ -193,7 +193,7 @@ export class ApiTestUtilService {
         queryParams: tmpResult.query,
         requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
           ? inData.request.requestBody
-          : inData.request.requestBody.map((val) => (val.required = true)),
+          : inData.request?.requestBody?.map((val) => (val.required = true)),
         requestHeaders: inData.response?.headers,
         ...inData.request,
       },
