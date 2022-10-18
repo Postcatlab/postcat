@@ -44,18 +44,19 @@ import { Component, OnInit } from '@angular/core'
           </nz-form-control>
         </nz-form-item>
 
-        <section class=""></section>
+        <section class="">
+          <button
+            nz-button
+            [nzLoading]="isSaveBtnBtnLoading"
+            class=""
+            nzType="primary"
+            (click)="btncmm5teCallback()"
+            i18n
+          >
+            Save
+          </button>
+        </section>
       </form>
-      <button
-        nz-button
-        [nzLoading]="isSaveBtnBtnLoading"
-        class=""
-        nzType="primary"
-        (click)="btnehv7iyCallback()"
-        i18n
-      >
-        Save
-      </button>
       <nz-divider></nz-divider>
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Delete Workspace</span>
@@ -72,7 +73,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnc0kxmkCallback()"
+        (click)="btnugsk9dCallback()"
         i18n
       >
         Delete
@@ -110,7 +111,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnehv7iyCallback() {
+  async btncmm5teCallback() {
     // * click event callback
     this.isSaveBtnBtnLoading = true
     const btnSaveBtnRunning = async () => {
@@ -148,10 +149,12 @@ export class WorkspaceComponent implements OnInit {
     await btnSaveBtnRunning()
     this.isSaveBtnBtnLoading = false
   }
-  async btnc0kxmkCallback() {
+  async btnugsk9dCallback() {
     // * click event callback
     this.isDelWspBtnLoading = true
     const btnDelWspRunning = async () => {
+      this.isDelWspBtnLoading = false
+
       const confirm = () =>
         new Promise((resolve) => {
           this.modal.confirm({

@@ -102,7 +102,7 @@ const loginForm = new Form({
           }`,
           Form.getData('login', 'formData'),
           httpS.send('api_authLogin', 'formData', {
-            errTip: 'Authentication failed !',
+            errTip: 'Please check the account/password, the account must be a mobile phone number or email !',
           }),
           userS.setLoginInfo('data'),
           Modal.close('login'),

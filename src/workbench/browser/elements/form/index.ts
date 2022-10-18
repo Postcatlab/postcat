@@ -182,7 +182,7 @@ export class Form extends Render implements formType {
     const footerRender = (list = []) =>
       new Canvas({
         class: this.footerClass,
-        children: list.map((it) => new Button(it)),
+        children: [...list.map((it) => new Button(it))],
       }).render();
     const footer = footerRender(this.footer || []);
     return {

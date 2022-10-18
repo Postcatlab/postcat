@@ -42,7 +42,7 @@ import { Component, OnInit } from '@angular/core'
             type="submit"
             class="w-[84px]"
             nzType="primary"
-            (click)="btnch5jp9Callback()"
+            (click)="btn8kqoknCallback()"
             i18n
           >
             Save
@@ -128,7 +128,7 @@ import { Component, OnInit } from '@angular/core'
             type="submit"
             class="w-[84px]"
             nzType="primary"
-            (click)="btntufmc9Callback()"
+            (click)="btnzsa1teCallback()"
             i18n
           >
             Reset
@@ -181,7 +181,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnch5jp9Callback() {
+  async btn8kqoknCallback() {
     // * click event callback
     this.isSaveUsernameBtnLoading = true
     const btnSaveUsernameRunning = async () => {
@@ -229,7 +229,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btntufmc9Callback() {
+  async btnzsa1teCallback() {
     // * click event callback
     this.isResetBtnBtnLoading = true
     const btnResetBtnRunning = async () => {

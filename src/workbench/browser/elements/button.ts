@@ -69,4 +69,7 @@ export class Button extends Render implements buttonType {
       methods: [...this.methods],
     };
   }
+  static stopLoading(id) {
+    return `this.is${Render.toCamel(id)}BtnLoading = false`;
+  }
 }
