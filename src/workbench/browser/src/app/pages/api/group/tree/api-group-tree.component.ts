@@ -100,21 +100,25 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Load all group and apiData items.
    */
-  buildGroupTreeData = debounce(() => {
+  buildGroupTreeData = debounce(async (callback) => {
     this.groupByID = {};
     this.treeItems = [];
-    this.getProjectCollections();
+    await this.getProjectCollections();
+    callback?.();
   });
 
   getProjectCollections() {
     this.apiDataLoading = true;
-    this.storage.run('projectCollections', [this.projectService.currentProjectID], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        const { groups, apis } = result.data;
-        this.getGroups(groups);
-        this.getApis(apis);
-      }
-      this.apiDataLoading = false;
+    return new Promise((resolve) => {
+      this.storage.run('projectCollections', [this.projectService.currentProjectID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          const { groups, apis } = result.data;
+          this.getGroups(groups);
+          this.getApis(apis);
+        }
+        resolve(true);
+        this.apiDataLoading = false;
+      });
     });
   }
 
@@ -235,18 +239,20 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         const modal = this.modalService.create({
           nzTitle: title,
           nzContent: ImportApiComponent,
+          nzMaskClosable: false,
           nzComponentParams: {},
-          nzOnOk: () => {
-            modal.componentInstance.submit((status) => {
-              if (status) {
-                this.message.success($localize`${title} successfully`);
-                this.buildGroupTreeData();
-                modal.destroy();
-              } else {
-                this.message.error($localize`Failed to ${title}`);
-              }
-            });
-          },
+          nzOnOk: () =>
+            new Promise((resolve) => {
+              modal.componentInstance.submit((status) => {
+                if (status) {
+                  this.message.success($localize`${title} successfully`);
+                  this.buildGroupTreeData(resolve);
+                  modal.destroy();
+                } else {
+                  this.message.error($localize`Failed to ${title}`);
+                }
+              });
+            }),
         });
         break;
       }
