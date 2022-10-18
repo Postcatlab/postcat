@@ -147,7 +147,6 @@ export class SettingComponent implements OnInit {
     // console.log('this.currentConfiguration', this.currentConfiguration);
     this.selectListSelection.select(node);
     const target = document.querySelector(`#${node.moduleID}`);
-    console.log('target', target, node.moduleID);
     target?.scrollIntoView();
     setTimeout(() => {
       this.isClick = false;
