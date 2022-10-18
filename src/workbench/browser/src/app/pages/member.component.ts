@@ -15,7 +15,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
-      (nzAfterClose)="e02csdbCallback()"
+      (nzAfterClose)="ekm43fcCallback()"
       nzTitle="Add people to the workspace"
       i18n-nzTitle
     >
@@ -33,8 +33,8 @@ import { Component, OnInit } from '@angular/core'
           class=""
           nzType="primary"
           nzBlock
-          (click)="btnd08jjaCallback()"
-          [disabled]="btnbedrurStatus()"
+          (click)="btnheskpnCallback()"
+          [disabled]="btn2qql1jStatus()"
           i18n
         >
           Select a member above
@@ -49,8 +49,8 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isAddPeopleBtnLoading"
           class=""
           nzType="primary"
-          (click)="btn6gtfxxCallback()"
-          [disabled]="btn27xsmhStatus()"
+          (click)="btnkatqlgCallback()"
+          [disabled]="btncjmmpzStatus()"
           i18n
         >
           Add people
@@ -59,7 +59,7 @@ import { Component, OnInit } from '@angular/core'
       <section class="py-5">
         <eo-manage-access
           [data]="memberList"
-          (eoOnRemove)="ehtfaahCallback($event)"
+          (eoOnRemove)="edb1m0vCallback($event)"
         ></eo-manage-access>
       </section>
     </section>`
@@ -121,7 +121,7 @@ export class MemberComponent implements OnInit {
     // * 关闭弹窗
     this.isInvateModalVisible = false
   }
-  async e02csdbCallback() {
+  async ekm43fcCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
@@ -129,7 +129,7 @@ export class MemberComponent implements OnInit {
     }
     this.inputPersonValue = ''
   }
-  async btnd08jjaCallback() {
+  async btnheskpnCallback() {
     // * click event callback
     this.isSelectBtnLoading = true
     const btnSelectRunning = async () => {
@@ -198,11 +198,11 @@ export class MemberComponent implements OnInit {
     await btnSelectRunning()
     this.isSelectBtnLoading = false
   }
-  btnbedrurStatus() {
+  btn2qql1jStatus() {
     // * disabled status status
     return this.inputPersonValue === ''
   }
-  async btn6gtfxxCallback() {
+  async btnkatqlgCallback() {
     // * click event callback
     this.isAddPeopleBtnLoading = true
     const btnAddPeopleRunning = async () => {
@@ -212,7 +212,7 @@ export class MemberComponent implements OnInit {
     await btnAddPeopleRunning()
     this.isAddPeopleBtnLoading = false
   }
-  btn27xsmhStatus() {
+  btncjmmpzStatus() {
     // * disabled status status
     return
     return (
@@ -220,7 +220,7 @@ export class MemberComponent implements OnInit {
       this.workspace.authEnum.canEdit
     )
   }
-  async ehtfaahCallback($event) {
+  async edb1m0vCallback($event) {
     // * eoOnRemove event callback
 
     const confirm = () =>

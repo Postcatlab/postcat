@@ -179,6 +179,7 @@ export class ApiTestUtilService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
+    console.log(inData);
     //handle query and url
     const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
       base: 'url',

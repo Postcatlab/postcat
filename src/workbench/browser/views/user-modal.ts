@@ -164,11 +164,15 @@ const addWorkspace = new Modal({
           event: {
             click: [
               Form.getValue('workspace-name', 'newWorkName', 'title'),
-              [httpS.send('api_workspaceCreate', '{ title }', { errTip: 'Add workspace Failed !' })],
+              httpS.send('api_workspaceCreate', '{ title }', { errTip: 'Add workspace Failed !' }),
               messageS.success('Create new workspace successfully !'),
               Modal.close('add-workspace'),
               // * update workspace list
-              [httpS.send('api_workspaceList', '{}'), workspaceS.setWorkspaceList('data')],
+              [
+                httpS.send('api_workspaceList', '{}', { data: 'lData' }),
+                workspaceS.setWorkspaceList('lData'),
+                workspaceS.setCurrentWorkspace('data'),
+              ],
             ],
           },
         },

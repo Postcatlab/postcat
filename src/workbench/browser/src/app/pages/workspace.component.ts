@@ -51,7 +51,7 @@ import { Component, OnInit } from '@angular/core'
         [nzLoading]="isSaveBtnBtnLoading"
         class=""
         nzType="primary"
-        (click)="btn9efk6sCallback()"
+        (click)="btnehv7iyCallback()"
         i18n
       >
         Save
@@ -72,7 +72,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btnq8xktfCallback()"
+        (click)="btnc0kxmkCallback()"
         i18n
       >
         Delete
@@ -110,7 +110,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btn9efk6sCallback() {
+  async btnehv7iyCallback() {
     // * click event callback
     this.isSaveBtnBtnLoading = true
     const btnSaveBtnRunning = async () => {
@@ -148,7 +148,7 @@ export class WorkspaceComponent implements OnInit {
     await btnSaveBtnRunning()
     this.isSaveBtnBtnLoading = false
   }
-  async btnq8xktfCallback() {
+  async btnc0kxmkCallback() {
     // * click event callback
     this.isDelWspBtnLoading = true
     const btnDelWspRunning = async () => {
