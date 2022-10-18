@@ -69,11 +69,14 @@ export class NavbarComponent implements OnInit {
     } else {
       this.modules = new Map();
     }
-    this.message.get().subscribe(({ type }) => {
-      if (type === 'open-setting') {
-        this.openSettingModal();
-      }
-    });
+    this.message
+      .get()
+      .pipe(distinct(({ type }) => type, interval(400)))
+      .subscribe(({ type }) => {
+        if (type === 'open-setting') {
+          this.openSettingModal();
+        }
+      });
   }
   loginOrSign() {
     if (this.web.isWeb) {
