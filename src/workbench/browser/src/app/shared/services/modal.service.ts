@@ -40,7 +40,7 @@ export class ModalService {
           type: 'primary',
           onClick: () => {
             if (inOpts.nzOnOk) {
-              inOpts.nzOnOk();
+              return inOpts.nzOnOk();
             } else {
               modal.destroy();
             }
