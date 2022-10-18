@@ -85,6 +85,10 @@
           <context context-type="sourcefile">src/app/pages/account.component.ts</context>
           <context context-type="linenumber">47,49</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
+          <context context-type="linenumber">55,57</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
         <source>Password</source>
@@ -464,7 +468,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9142685431369791033" datatype="html">
@@ -1291,7 +1295,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9bf7114db050131cebe145b5ee016e22dfd816e6" datatype="html">
@@ -1302,7 +1306,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="44ab4d791beb7c85e60a249b54671f2b55a70bc8" datatype="html">
@@ -1334,7 +1338,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b24462580fa8e8a413289136bf06000e3efca8ad" datatype="html">
@@ -1482,28 +1486,28 @@
         <source> Close Other Tags (excluding current tabs) </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
-          <context context-type="linenumber">46,48</context>
+          <context context-type="linenumber">69,71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="da5c98488cec2d000c9cb2376c766a003a866ffa" datatype="html">
         <source>Close All Tabs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="43c88f0697fab17667549beb0066577e9cde2dd9" datatype="html">
         <source> Close Tabs To the Left </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
-          <context context-type="linenumber">50,52</context>
+          <context context-type="linenumber">73,75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b8ded0a9288068fdcf4398878ae78681f8941449" datatype="html">
         <source> Close Tabs to the Right </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/tab/api-tab.component.html</context>
-          <context context-type="linenumber">54,56</context>
+          <context context-type="linenumber">81,83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7762169316697380309" datatype="html">
@@ -1553,49 +1557,49 @@
         <source> Connect </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">18,20</context>
+          <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8cc0fdb27712669bccc1c4aea7abb5f46fd07c4e" datatype="html">
         <source> Connecting </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">21,23</context>
+          <context context-type="linenumber">40,42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="680bf3f04e50db52b4e20768cc47228e602c17b5" datatype="html">
         <source> Disconnect </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">25,27</context>
+          <context context-type="linenumber">51,53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5c6f957d009255a50cbd3c113039d649bbe9655a" datatype="html">
         <source>Query Params</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ccac601bf473fa28c9ac46794f1cd40542f74347" datatype="html">
         <source>Message</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2d8204977190ca57f3a68f08f547330e55880c47" datatype="html">
         <source> Send </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">72,74</context>
+          <context context-type="linenumber">126,128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ea965d544a7dfd8185064c52cdfff553cf94d585" datatype="html">
         <source>Messages</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/api/websocket/websocket.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1163250179515496919" datatype="html">
@@ -1867,93 +1871,89 @@
           <context context-type="sourcefile">src/app/pages/member.component.ts</context>
           <context context-type="linenumber">232</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">162</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="647740b5fac800c65a2d4ac4eb06161c3e5181ef" datatype="html">
         <source>Search Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4c73a5239da1efecaba8dbe9dbec7a38d6ea8366" datatype="html">
         <source>New Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="42b2d1a93d2abc5e39d485cf0a60a06238f8339d" datatype="html">
         <source>Open Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="374fa86a4b3f1afa8e652b516dd7fecb4f4a207d" datatype="html">
         <source>Document</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d042886f7a0f337d411b3325c5f2990039574339" datatype="html">
         <source>Developer Support</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc4d07f70cd04d045ebe61654c22e358645e582e" datatype="html">
         <source>Report Issue</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c07f8370cb0a65f5112b18d8f4763b67ba256540" datatype="html">
         <source>Sign in for Collaboration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="164a589b3e5051bda0c45380017223f66e0e403c" datatype="html">
         <source>Account Setting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="640eec093c685babaa3265137215e3cc92ad704d" datatype="html">
         <source>Sign Out</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f55a9f3b832e00a57e5202a0c14d23499156ac83" datatype="html">
         <source>Minimize</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8" datatype="html">
         <source>Close</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dd2539b30a35f84e2956d53292902b195a411495" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;flex items-center delete-icon&quot;&gt;"/><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;eo-iconpark-icon name=&quot;down-two&quot; size=&quot;14px&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="&lt;/eo-iconpark-icon&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_1" ctype="x-span_1" equiv-text="&lt;span class=&quot;ml-1&quot;&gt;"/>Download<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/navbar/navbar.component.html</context>
-          <context context-type="linenumber">96,99</context>
+          <context context-type="linenumber">145,148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5285011984449382433" datatype="html">
@@ -2167,18 +2167,18 @@
           <context context-type="linenumber">546</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2593015668589658635" datatype="html">
-        <source>Authentication failed !</source>
+      <trans-unit id="426177419048639999" datatype="html">
+        <source>Please check the account/password, the account must be a mobile phone number or email !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">554</context>
+          <context context-type="linenumber">555</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1200135885416328706" datatype="html">
         <source>Add workspace Failed !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
-          <context context-type="linenumber">660</context>
+          <context context-type="linenumber">661</context>
         </context-group>
       </trans-unit>
       <trans-unit id="458099564098221828" datatype="html">
@@ -2213,46 +2213,39 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f8b53b407af242e77dc3391947f23988f3451e64" datatype="html">
-        <source> Save </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">56,58</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1b54122bcfa80cffd01b5645e1a29d5d98ebe29b" datatype="html">
         <source>Delete Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="66812c0d4b64aca8408303309105a51cc43b0218" datatype="html">
         <source> After deleting a workspace, all data in the workspace will be permanently deleted. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">64,67</context>
+          <context context-type="linenumber">65,68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7acc4c320f2cec1d3d4e86dfa25ac5f5e6783b9" datatype="html">
         <source> Delete </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">77,79</context>
+          <context context-type="linenumber">78,80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1075865176616456400" datatype="html">
         <source>Edit workspace failed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7717266511197693469" datatype="html">
         <source>Edit workspace successfully !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">134</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3362895267117075719" datatype="html">
@@ -2260,14 +2253,21 @@
 You cannot restore it once deleted!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">159,160</context>
+          <context context-type="linenumber">162,163</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4814285799071780083" datatype="html">
+        <source>Remove</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1757901365453351043" datatype="html">
         <source>Delete success !</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace.component.ts</context>
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ca3662121824914732a67203163a8b8541bc50b" datatype="html">
@@ -3803,28 +3803,28 @@ You cannot restore it once deleted!</source>
         <source>minimum temperature</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/lib/index.constant.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4661147653025473439" datatype="html">
         <source>maximun temperature</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/lib/index.constant.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8259972015663673459" datatype="html">
         <source>COVID-19 national epidemic</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/lib/index.constant.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3950552443739162649" datatype="html">
         <source>The actual parameter is string, in order to show the document expansion display</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/storage/IndexedDB/lib/index.constant.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7245969617352349881" datatype="html">
