@@ -100,7 +100,6 @@
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
-          <!-- Manually pick pageID,Because pageID always change -->
           <nz-tabset
             class="inside_page_tabset"
             [nzTabBarStyle]="{ 'padding-left': '10px' }"
@@ -108,7 +107,9 @@
             nzLinkRouter
           >
             <nz-tab *ngFor="let tab of TABS">
-              <span *ngIf="web.isWeb && tab.onlyDestop" (click)="goDownload(tab)"></span>
+              <p *ngIf="web.isWeb && tab.onlyDestop">
+                <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
+              </p>
               <span *ngIf="!web.isWeb || !tab.onlyDestop">
                 <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
                   {{ tab.title }}</a
@@ -117,7 +118,6 @@
             </nz-tab>
           </nz-tabset>
         </div>
-        <!-- <eo-split-panel direction="row"> -->
         <section class="relative" [ngStyle]="{ paddingRight: activeBar ? dyWidth + 'px' : '40px' }">
           <!-- Get router child component by activate -->
           <router-outlet (activate)="onActivate($event)"></router-outlet>
