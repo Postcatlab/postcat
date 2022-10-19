@@ -1,3 +1,26 @@
+# [1.9.0](https://github.com/eolinker/eoapi/compare/v1.8.2...v1.9.0) (2022-10-19)
+
+
+### Features
+
+* mock lead to download in web ([65c7ecf](https://github.com/eolinker/eoapi/commit/65c7ecffe795844fd24621c05e412a8af17eca09))
+
+
+
+## [1.8.2](https://github.com/eolinker/eoapi/compare/v1.8.1...v1.8.2) (2022-10-18)
+
+
+### Bug Fixes
+
+* xml2json parser bug ([e2459a2](https://github.com/eolinker/eoapi/commit/e2459a23fc74a7696f5b6f3296c512d28939f6c7))
+
+
+### Features
+
+* keep queryParams stay in page ([baad303](https://github.com/eolinker/eoapi/commit/baad3038cbffd38cfea128f92d3cc3073a786e5a))
+
+
+
 ## [1.8.1](https://github.com/eolinker/eoapi/compare/v1.8.0...v1.8.1) (2022-10-13)
 
 
