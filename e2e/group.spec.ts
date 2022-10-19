@@ -1,25 +1,36 @@
 import { test, expect } from '@playwright/test';
 test('test', async ({ page }) => {
-  page=page as import('playwright').Page;
-  await page.goto('http://www.eoapi.io');
-  await page.locator('body').click();
+  page = page as import('playwright').Page;
+  await page.goto('http://localhost:4200');
   //Add group
-  await page.locator('eo-api-group-tree:has-text("GET获取城市今日天气GET新冠全国疫情") path').nth(1).hover();
-  await page.getByText('新建分组').click();
-  await page.getByLabel('分组名称').click();
-  await page.getByLabel('分组名称').fill('test');
-  await page.getByRole('button', { name: '确认' }).click();
-  await page.waitForTimeout(1000)
-  await page.locator('body').click();
-  // await page.locator('nz-tree-node-title:has-text("test") svg').hover();
-  await page.locator('nz-tree-node-title:has-text("test") circle').nth(1).hover();
-  await page.getByText('添加子分组').click();
-  await page.getByLabel('分组名称').click();
-  await page.getByLabel('分组名称').fill('test1');
-  await page.getByRole('button', { name: '确认' }).click();
-  await page.waitForTimeout(1000)
-  await page.locator('nz-tree-node-title:has-text("test1") svg').hover();
+  await page.hover('.ant-btn-primary');
+  await page.getByText('New Group').click();
+  await page.getByLabel('Group Name').click();
+  await page.getByLabel('Group Name').fill('test');
+  await page.getByLabel('Group Name').press('Enter');
+
+  //Edit group
+  await page.locator('nz-tree-node-title:has-text("test") div').nth(1).hover();
+  await page.locator('nz-tree-node-title:has-text("test") svg').hover();
+  await page.locator('#cdk-overlay-2').getByText('Edit').click();
+  await page.getByLabel('Group Name').fill('parentGroup');
+  await page.getByLabel('Group Name').press('Enter');
+
+  //Add subGroup
+  await page.locator('nz-tree-node-title:has-text("parentGroup") div').nth(1).hover();
+  await page.locator('nz-tree-node-title:has-text("parentGroup") svg').hover();
+  await page.getByText('Add Subgroup').click();
+  await page.getByLabel('Group Name').click();
+  await page.getByLabel('Group Name').fill('subGroup');
+  await page.getByLabel('Group Name').press('Enter');
+
   //Delete group
-  await page.locator('a:has-text("删除")').click();
-  await page.getByRole('button', { name: '确认' }).click();
+  await page.locator('nz-tree-node-title:has-text("parentGroup") div').nth(1).hover();
+  await page.locator('nz-tree-node-title:has-text("parentGroup") svg').hover();
+  await page.locator('a:has-text("Delete")').click();
+  await page.getByRole('button', { name: 'Confirm' }).click();
+  
+  //TODO
+  //Sort group
+  await page.locator('nz-tree-node:nth-child(2) > .draggable > div > .tree_node').dragTo(page.locator('.absolute'));
 });

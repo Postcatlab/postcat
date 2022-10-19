@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "playwright test",
-    "test:watch":"playwright test --headed"
+    "test:watch": "playwright test --headed",
+    "record": "npx playwright codegen http://localhost:4200"
   },
   "devDependencies": {
     "@playwright/test": "^1.27.0",
