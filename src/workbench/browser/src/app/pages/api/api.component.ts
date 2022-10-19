@@ -114,8 +114,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  goDownload(tab) {
-    this.web.showDownloadClientModal;
+  goDownload($event) {
+    $event.stopPropagation();
+    this.web.jumpToClient($localize`Eoapi Client is required to use Mock.`);
   }
   watchDataSourceChange(): void {
     this.messageService
