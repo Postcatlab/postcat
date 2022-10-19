@@ -32,16 +32,14 @@ export class Button extends Render implements buttonType {
   class;
   constructor({ id = '', type, attr = {}, theme = [], class: cls = [], event, label, status = {} }: initType) {
     if (event?.click && event.click.length) {
-      const myClick = JSON.parse(JSON.stringify(event.click));
       event.click = [
         `this.is${Render.toCamel(id)}BtnLoading = true
         const btn${Render.toCamel(id)}Running = async () => {`,
-        ...myClick,
+        ...JSON.parse(JSON.stringify(event.click)),
         `};
         await btn${Render.toCamel(id)}Running()
         this.is${Render.toCamel(id)}BtnLoading = false`,
       ];
-      // console.log('==>', event.click);
     }
     super({ event, status, attr, children: [], elementType: 'btn' });
     this.id = Render.toCamel(id);
