@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalSyncFooter"
       [(nzVisible)]="isSyncModalVisible"
       (nzOnCancel)="handleSyncModalCancel()"
-      (nzAfterClose)="e5e1yozCallback()"
+      (nzAfterClose)="e1kp069Callback()"
       nzTitle="Do you want to upload local data to the cloud ?"
       i18n-nzTitle
     >
@@ -44,7 +44,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isSyncCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btn8xmjhgCallback()"
+          (click)="btnxlvs5eCallback()"
           i18n
         >
           Cancel
@@ -54,7 +54,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isSyncSyncBtnLoading"
           class=""
           nzType="primary"
-          (click)="btn0gm0ebCallback()"
+          (click)="btnqs23qhCallback()"
           i18n
         >
           Sync
@@ -65,7 +65,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="modalCheckConnectFooter"
       [(nzVisible)]="isCheckConnectModalVisible"
       (nzOnCancel)="handleCheckConnectModalCancel()"
-      (nzAfterClose)="ekdkzxbCallback()"
+      (nzAfterClose)="eqqv42eCallback()"
       nzTitle="Check your connection"
       i18n-nzTitle
     >
@@ -74,7 +74,7 @@ import { Component, OnInit } from '@angular/core'
         <span
           style="color: #1890ff"
           class="cursor-pointer"
-          (click)="text9030u9Callback()"
+          (click)="textquj3q7Callback()"
           i18n
         >
           config in the configuration
@@ -86,7 +86,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isCheckConnectCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btn1fhzsrCallback()"
+          (click)="btn9sl3yqCallback()"
           i18n
         >
           Cancel
@@ -96,7 +96,7 @@ import { Component, OnInit } from '@angular/core'
           [nzLoading]="isCheckConnectRetryBtnLoading"
           class=""
           nzType="primary"
-          (click)="btnuw11qnCallback()"
+          (click)="btn0zj9hlCallback()"
           i18n
         >
           Retry
@@ -108,7 +108,7 @@ import { Component, OnInit } from '@angular/core'
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="eivh3m6Callback()"
+      (nzAfterClose)="ekqhylkCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -156,7 +156,7 @@ import { Component, OnInit } from '@angular/core'
                 class="h-10 mt-2"
                 nzType="primary"
                 nzBlock
-                (click)="btn8wwtl8Callback()"
+                (click)="btnx5ztwgCallback()"
                 i18n
               >
                 Sign In/Up
@@ -170,7 +170,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isOpenSettingModalVisible"
       (nzOnCancel)="handleOpenSettingModalCancel()"
-      (nzAfterClose)="egrfv7sCallback()"
+      (nzAfterClose)="eolb9dgCallback()"
       nzTitle="Open setting"
       i18n-nzTitle
     >
@@ -179,7 +179,7 @@ import { Component, OnInit } from '@angular/core'
         <span
           style="color: #1890ff"
           class="cursor-pointer"
-          (click)="texthe7ukuCallback()"
+          (click)="textlxvngsCallback()"
           i18n
         >
           open the settings
@@ -191,7 +191,7 @@ import { Component, OnInit } from '@angular/core'
       [nzFooter]="null"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
-      (nzAfterClose)="ew5lfiaCallback()"
+      (nzAfterClose)="e0jfdapCallback()"
       nzTitle="Add Workspace"
       i18n-nzTitle
     >
@@ -220,7 +220,7 @@ import { Component, OnInit } from '@angular/core'
               type="button"
               class="mr-3"
               nzType="default"
-              (click)="btndbfj87Callback()"
+              (click)="btntn58x6Callback()"
               i18n
             >
               Cancel
@@ -231,7 +231,7 @@ import { Component, OnInit } from '@angular/core'
               type="submit"
               class=""
               nzType="primary"
-              (click)="btnm7wno5Callback()"
+              (click)="btne5atf5Callback()"
               i18n
             >
               Save
@@ -443,12 +443,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async e5e1yozCallback() {
+  async e1kp069Callback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btn8xmjhgCallback() {
+  async btnxlvs5eCallback() {
     // * click event callback
     this.isSyncCancelBtnLoading = true
     const btnSyncCancelRunning = async () => {
@@ -458,7 +458,7 @@ export class UserModalComponent implements OnInit {
     await btnSyncCancelRunning()
     this.isSyncCancelBtnLoading = false
   }
-  async btn0gm0ebCallback() {
+  async btnqs23qhCallback() {
     // * click event callback
     this.isSyncSyncBtnLoading = true
     const btnSyncSyncRunning = async () => {
@@ -492,12 +492,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async ekdkzxbCallback() {
+  async eqqv42eCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btn1fhzsrCallback() {
+  async btn9sl3yqCallback() {
     // * click event callback
     this.isCheckConnectCancelBtnLoading = true
     const btnCheckConnectCancelRunning = async () => {
@@ -507,7 +507,7 @@ export class UserModalComponent implements OnInit {
     await btnCheckConnectCancelRunning()
     this.isCheckConnectCancelBtnLoading = false
   }
-  async btnuw11qnCallback() {
+  async btn0zj9hlCallback() {
     // * click event callback
     this.isCheckConnectRetryBtnLoading = true
     const btnCheckConnectRetryRunning = async () => {
@@ -519,7 +519,7 @@ export class UserModalComponent implements OnInit {
     await btnCheckConnectRetryRunning()
     this.isCheckConnectRetryBtnLoading = false
   }
-  async text9030u9Callback() {
+  async textquj3q7Callback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -529,14 +529,14 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async eivh3m6Callback() {
+  async ekqhylkCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
       this.validateLoginForm.reset()
     }
   }
-  async btn8wwtl8Callback() {
+  async btnx5ztwgCallback() {
     // * click event callback
     this.isLoginBtnBtnLoading = true
     const btnLoginBtnRunning = async () => {
@@ -611,12 +611,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async egrfv7sCallback() {
+  async eolb9dgCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async texthe7ukuCallback() {
+  async textlxvngsCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -627,38 +627,48 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async ew5lfiaCallback() {
+  async e0jfdapCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
       this.validateWorkspaceNameForm.reset()
     }
   }
-  async btndbfj87Callback() {
+  async btntn58x6Callback() {
     // * click event callback
     this.isCancelBtnLoading = true
     const btnCancelRunning = async () => {
-      this.isCancelBtnLoading = true
-      const btnCancelRunning = async () => {
-        // * 关闭弹窗
-        this.isAddWorkspaceModalVisible = false
-      }
-      await btnCancelRunning()
-      this.isCancelBtnLoading = false
+      // * 关闭弹窗
+      this.isAddWorkspaceModalVisible = false
     }
     await btnCancelRunning()
     this.isCancelBtnLoading = false
   }
-  async btnm7wno5Callback() {
+  async btne5atf5Callback() {
     // * click event callback
     this.isSaveBtnLoading = true
     const btnSaveRunning = async () => {
-      this.isSaveBtnLoading = true
-      const btnSaveRunning = async () => {
-        const { newWorkName: title } = this.validateWorkspaceNameForm.value
-        const [data, err]: any = await this.api.api_workspaceCreate({ title })
+      const { newWorkName: title } = this.validateWorkspaceNameForm.value
+      const [data, err]: any = await this.api.api_workspaceCreate({ title })
+      if (err) {
+        this.eMessage.error($localize`Add workspace Failed !`)
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} })
+          if (this.user.isLogin) {
+            return
+          }
+          this.message.send({ type: 'http-401', data: {} })
+        }
+        return
+      }
+      this.eMessage.success($localize`Create new workspace successfully !`)
+
+      // * 关闭弹窗
+      this.isAddWorkspaceModalVisible = false
+
+      {
+        const [lData, err]: any = await this.api.api_workspaceList({})
         if (err) {
-          this.eMessage.error($localize`Add workspace Failed !`)
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} })
             if (this.user.isLogin) {
@@ -668,29 +678,9 @@ export class UserModalComponent implements OnInit {
           }
           return
         }
-        this.eMessage.success($localize`Create new workspace successfully !`)
-
-        // * 关闭弹窗
-        this.isAddWorkspaceModalVisible = false
-
-        {
-          const [lData, err]: any = await this.api.api_workspaceList({})
-          if (err) {
-            if (err.status === 401) {
-              this.message.send({ type: 'clear-user', data: {} })
-              if (this.user.isLogin) {
-                return
-              }
-              this.message.send({ type: 'http-401', data: {} })
-            }
-            return
-          }
-          this.workspace.setWorkspaceList(lData)
-          this.workspace.setCurrentWorkspace(data)
-        }
+        this.workspace.setWorkspaceList(lData)
+        this.workspace.setCurrentWorkspace(data)
       }
-      await btnSaveRunning()
-      this.isSaveBtnLoading = false
     }
     await btnSaveRunning()
     this.isSaveBtnLoading = false

@@ -44,15 +44,16 @@ export class Form extends Render implements formType {
   layout;
   footer;
   rules;
-  footerClass;
   constructor({ id = '', children, footerClass = [], data = [], layout = 'horizontal', footer = [] }: initType) {
     super({ children });
     this.id = Render.toCamel(id);
     this.data = data;
     this.layout = layoutHash.get(layout);
-    this.footer = footer;
     this.rules = this.renderRules(this.data, this.id);
-    this.footerClass = footerClass;
+    this.footer = new Canvas({
+      class: footerClass,
+      children: footer.map((it) => new Button(it)),
+    }).render();
   }
   renderRules(list, id) {
     const regInitMethod = (data, mid) =>
@@ -179,12 +180,6 @@ export class Form extends Render implements formType {
         })
         .join('\n');
 
-    const footerRender = (list = []) =>
-      new Canvas({
-        class: this.footerClass,
-        children: [...list.map((it) => new Button(it))],
-      }).render();
-    const footer = footerRender(this.footer || []);
     return {
       elementType: 'form',
       resetFn: [
@@ -216,12 +211,12 @@ export class Form extends Render implements formType {
           from: 'ng-zorro-antd/input',
         },
         ...this.children.imports,
-        ...footer.imports,
+        ...this.footer.imports,
       ],
       template: `
       <form nz-form [formGroup]="validate${this.id}Form" nzLayout="${this.layout}">
         ${formList(this.data)}
-        ${footer.template}
+        ${this.footer.template}
       </form>`,
       init: [this.init(this.id), ...this.children.init],
       data: [
@@ -229,10 +224,10 @@ export class Form extends Render implements formType {
           name: `validate${this.id}Form`,
           init: 'UntypedFormGroup',
         },
-        ...footer.data,
+        ...this.footer.data,
         ...this.children.data,
       ],
-      methods: [this.rules.methods, ...footer.methods, ...this.methods],
+      methods: [this.rules.methods, ...this.footer.methods, ...this.methods],
     };
   }
 
