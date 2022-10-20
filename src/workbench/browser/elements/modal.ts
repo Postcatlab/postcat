@@ -41,6 +41,7 @@ export class Modal extends Render implements modalType {
     return `
     // * 唤起弹窗
     this.is${this.id}ModalVisible = true
+    ${Render.callbackRender(this.children.createFn)}
     `;
   }
   close() {
@@ -116,6 +117,7 @@ export class Modal extends Render implements modalType {
         ...footer.map((it) => it.imports),
       ],
       resetFn: [...this.children.resetFn],
+      createFn: [...this.children.createFn],
       methods: [...mainMethods, ...this.methods, ...footer.map((it) => it.methods), ...this.children.methods],
     };
   }

@@ -10,7 +10,7 @@
       nz-tooltip
       nzTooltipPlacement="right"
       [nzTooltipTitle]="item.moduleName"
-      [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule.moduleID }"
+      [ngClass]="{ sidebar_item_active: item.moduleID === this.sidebar.currentModule?.moduleID }"
     >
       <i class="icon">
         <eo-iconpark-icon [name]="item.icon" size="24px"> </eo-iconpark-icon>

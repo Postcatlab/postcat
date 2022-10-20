@@ -31,6 +31,7 @@ export class Input extends Render {
       this.input${this.id}Value = ''`,
         ...this.children.resetFn,
       ],
+      createFn: [...this.children.createFn],
       imports: [
         {
           target: [{ name: 'NzInputModule', type: 'module' }],
