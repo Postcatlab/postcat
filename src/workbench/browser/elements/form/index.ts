@@ -13,6 +13,7 @@ type dataType = {
   isShowLabel?: boolean;
   type: 'input' | 'select' | 'date' | 'time' | 'password';
   key: string;
+  focus?: boolean;
   class?: string;
   placeholder?: string;
   rules?: (string | Record<string, string | number>)[];
@@ -44,15 +45,16 @@ export class Form extends Render implements formType {
   layout;
   footer;
   rules;
-  footerClass;
   constructor({ id = '', children, footerClass = [], data = [], layout = 'horizontal', footer = [] }: initType) {
     super({ children });
     this.id = Render.toCamel(id);
     this.data = data;
     this.layout = layoutHash.get(layout);
-    this.footer = footer;
     this.rules = this.renderRules(this.data, this.id);
-    this.footerClass = footerClass;
+    this.footer = new Canvas({
+      class: footerClass,
+      children: footer.map((it) => new Button(it)),
+    }).render();
   }
   renderRules(list, id) {
     const regInitMethod = (data, mid) =>
@@ -100,12 +102,14 @@ export class Form extends Render implements formType {
     };
   }
   init(id) {
-    return `
+    return [
+      `
     /\/ * Init ${id} form 
     this.validate${id}Form = this.fb.group({
         ${this.rules.initRule.join(',')}
       });
-      `;
+      `,
+    ];
   }
   reset() {
     return Form.reset(this.id);
@@ -122,6 +126,14 @@ export class Form extends Render implements formType {
   isOk() {
     return Form.isOk(this.id);
   }
+  focus(key) {
+    return `
+      \/\/ * auto focus
+      setTimeout(() => {
+        this.${key}${this.id}Ref?.nativeElement.focus()
+      }, 300)
+    `;
+  }
   render() {
     const formBindName = ({ key, rules = [] }) => {
       if (rules.length) {
@@ -130,11 +142,12 @@ export class Form extends Render implements formType {
       return '';
     };
     const typeHash = new Map().set('input', 'text').set('text', 'text').set('password', 'password');
-    const renderKey = ({ key, type, placeholder, rules }: any) => {
+    const renderKey = ({ key, type, placeholder, focus = false, rules }: any) => {
       switch (type) {
         case 'input':
         case 'password':
-          return `<input type="${typeHash.get(type)}" nz-input  ${formBindName({
+          return `
+          <input type="${typeHash.get(type)}" ${focus ? `#${key}${this.id}Ref` : ''} nz-input  ${formBindName({
             key,
             rules,
           })} placeholder="${placeholder || ''}" i18n-placeholder  />`;
@@ -145,7 +158,7 @@ export class Form extends Render implements formType {
     };
     const formList = (list) =>
       list
-        .map(({ isShowLabel = true, label, rules, placeholder, key, span, type, ...it }, i) => {
+        .map(({ isShowLabel = true, label, rules, placeholder, key, span, type, focus, ...it }, i) => {
           const isLabelRequired = (ruleList) => (ruleList.includes('required') ? 'nzRequired' : '');
           const labelTmpl = isShowLabel
             ? `<nz-form-label [nzSpan]="${span || 24}" ${isLabelRequired(rules)} i18n>${label}</nz-form-label>`
@@ -171,32 +184,36 @@ export class Form extends Render implements formType {
           <nz-form-control ${
             rules.length > 1 ? `[nzErrorTip]="${key}ErrorTpl"` : `nzErrorTip="${rulesHash[rules[0]].errTip({ label })}"`
           }>
-            ${renderKey({ isShowLabel, placeholder, label, rules, key, span, type })}
+            ${renderKey({ isShowLabel, placeholder, label, rules, key, span, focus, type })}
             ${renderErrTipTpl}
             </nz-form-control>
             </nz-form-item>
             `;
         })
         .join('\n');
-
-    const footerRender = (list = []) =>
-      new Canvas({
-        class: this.footerClass,
-        children: [...list.map((it) => new Button(it))],
-      }).render();
-    const footer = footerRender(this.footer || []);
+    const refList = this.data
+      .filter((it) => it.focus)
+      .map((it) => ({
+        name: `@ViewChild('${it.key}${this.id}Ref') ${it.key}${this.id}Ref`,
+        init: `ElementRef<HTMLInputElement>`,
+        bing: true,
+      }));
+    const createFn = this.data
+      .filter((it) => it.focus)
+      .map(
+        (it) => `\/\/ * auto focus
+        setTimeout(() => {
+          this.${it.key}${this.id}Ref?.nativeElement.focus()
+        }, 300)
+      `
+      );
     return {
       elementType: 'form',
-      resetFn: [
-        `
-      \/\/ * auto clear form 
-      this.validate${this.id}Form.reset()`,
-        ...this.children.resetFn,
-      ],
       imports: [
         {
           target: [
             { name: 'UntypedFormBuilder', inject: { name: 'fb' } },
+            { name: 'ReactiveFormsModule', type: 'module' },
             'UntypedFormControl',
             'UntypedFormGroup',
             'Validators',
@@ -204,35 +221,43 @@ export class Form extends Render implements formType {
           from: '@angular/forms',
         },
         {
-          target: [{ name: 'NzFormModule', type: 'module' }],
-          from: 'ng-zorro-antd/form',
+          target: ['ViewChild', 'ElementRef'],
+          from: '@angular/core',
         },
         {
-          target: [{ name: 'ReactiveFormsModule', type: 'module' }],
-          from: '@angular/forms',
+          target: [{ name: 'NzFormModule', type: 'module' }],
+          from: 'ng-zorro-antd/form',
         },
         {
           target: [{ name: 'NzInputModule', type: 'module' }],
           from: 'ng-zorro-antd/input',
         },
         ...this.children.imports,
-        ...footer.imports,
+        ...this.footer.imports,
       ],
       template: `
       <form nz-form [formGroup]="validate${this.id}Form" nzLayout="${this.layout}">
         ${formList(this.data)}
-        ${footer.template}
+        ${this.footer.template}
       </form>`,
-      init: [this.init(this.id), ...this.children.init],
+      init: [...this.init(this.id), ...this.children.init],
+      resetFn: [
+        `
+      \/\/ * auto clear form 
+      this.validate${this.id}Form.reset()`,
+        ...this.children.resetFn,
+      ],
+      createFn: [...createFn, ...this.children.createFn],
       data: [
         {
           name: `validate${this.id}Form`,
           init: 'UntypedFormGroup',
         },
-        ...footer.data,
+        ...refList,
+        ...this.footer.data,
         ...this.children.data,
       ],
-      methods: [this.rules.methods, ...footer.methods, ...this.methods],
+      methods: [this.rules.methods, ...this.footer.methods, ...this.methods],
     };
   }
 

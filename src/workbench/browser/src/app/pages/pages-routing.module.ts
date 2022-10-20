@@ -26,6 +26,10 @@ const routes: Routes = [
         loadChildren: () => import('./workspace.module').then((m) => m.WorkspaceModule),
       },
       {
+        path: 'share',
+        loadChildren: () => import('./share.module').then((m) => m.ShareModule),
+      },
+      {
         path: 'member',
         loadChildren: () => import('./member.module').then((m) => m.MemberModule),
       },

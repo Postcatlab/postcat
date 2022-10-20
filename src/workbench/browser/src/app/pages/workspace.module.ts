@@ -26,8 +26,8 @@ import { WorkspaceComponent } from './workspace.component'
     EoIconparkIconModule,
     NzDividerModule,
     NzCardModule,
-    NzFormModule,
     ReactiveFormsModule,
+    NzFormModule,
     NzInputModule,
     NzButtonModule
   ],

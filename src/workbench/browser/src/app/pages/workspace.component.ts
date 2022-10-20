@@ -10,7 +10,7 @@ import {
   UntypedFormGroup,
   Validators
 } from '@angular/forms'
-import { Component, OnInit } from '@angular/core'
+import { ViewChild, ElementRef, Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'eo-workspace',
@@ -50,7 +50,7 @@ import { Component, OnInit } from '@angular/core'
             [nzLoading]="isSaveBtnBtnLoading"
             class=""
             nzType="primary"
-            (click)="btnv7lpvaCallback()"
+            (click)="btnkklkd9Callback()"
             i18n
           >
             Save
@@ -73,7 +73,7 @@ import { Component, OnInit } from '@angular/core'
         class=""
         nzType="primary"
         nzDanger
-        (click)="btn2pceduCallback()"
+        (click)="btnbtfiktCallback()"
         i18n
       >
         Delete
@@ -111,7 +111,7 @@ export class WorkspaceComponent implements OnInit {
       workspace: currentWsp
     })
   }
-  async btnv7lpvaCallback() {
+  async btnkklkd9Callback() {
     // * click event callback
     this.isSaveBtnBtnLoading = true
     const btnSaveBtnRunning = async () => {
@@ -149,7 +149,7 @@ export class WorkspaceComponent implements OnInit {
     await btnSaveBtnRunning()
     this.isSaveBtnBtnLoading = false
   }
-  async btn2pceduCallback() {
+  async btnbtfiktCallback() {
     // * click event callback
     this.isDelWspBtnLoading = true
     const btnDelWspRunning = async () => {

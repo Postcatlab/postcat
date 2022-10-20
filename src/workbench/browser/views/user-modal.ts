@@ -70,6 +70,7 @@ const loginForm = new Form({
       key: 'username',
       type: 'input',
       class: '',
+      focus: true,
       placeholder: 'Enter Email/Phone/Username',
       rules: ['required'],
     },
@@ -136,6 +137,7 @@ const addWorkspace = new Modal({
           isShowLabel: false,
           key: 'newWorkName',
           type: 'input',
+          focus: true,
           placeholder: 'Workspace Name',
           rules: ['required'],
         },
@@ -197,22 +199,6 @@ const login = new Modal({
   ],
   footer: [],
 });
-
-// const login = modalS.component({
-//   id: 'login',
-//   title: 'Sign In/Up',
-//   children: [
-//     messageS,
-//     userS,
-//     httpS,
-//     workspaceS,
-//     new EventS({}),
-//     new Canvas({
-//       class: ['my-3'],
-//       children: [loginForm],
-//     }),
-//   ],
-// });
 
 const checkConnect = new Modal({
   id: 'check-connect',
