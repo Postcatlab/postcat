@@ -11,6 +11,8 @@ export { Title } from './title';
 export { Canvas } from './canvas';
 export { Overview } from './overview';
 export { Alert } from './alert';
+export { Tree } from './tree';
+export { Tabs } from './tabs';
 
 // * service
 export { EventS } from './service/eventS';

@@ -8,7 +8,6 @@ import { SidebarModuleInfo } from './sidebar.model';
 import { WorkspaceService } from '../../services/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -141,7 +140,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
     if (!currentModule) {
       //route error
-      this.clickModule(this.modules[0]);
+      // this.clickModule(this.modules[0]);
       console.error('route error: currentModule is undefind', currentModule);
       return;
     }

@@ -16,6 +16,7 @@ export class Canvas extends Render {
       data: [...this.children.data],
       methods: [...this.children.methods],
       resetFn: [...this.children.resetFn],
+      createFn: [...this.children.createFn],
     };
   }
 }

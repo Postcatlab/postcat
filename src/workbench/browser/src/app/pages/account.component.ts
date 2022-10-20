@@ -4,11 +4,11 @@ import {
   UntypedFormGroup,
   Validators
 } from '@angular/forms'
+import { ViewChild, ElementRef, Component, OnInit } from '@angular/core'
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service'
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service'
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service'
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service'
-import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'eo-account',
@@ -42,7 +42,7 @@ import { Component, OnInit } from '@angular/core'
             type="submit"
             class="w-[84px]"
             nzType="primary"
-            (click)="btn250atoCallback()"
+            (click)="btnxxkunjCallback()"
             i18n
           >
             Save
@@ -128,7 +128,7 @@ import { Component, OnInit } from '@angular/core'
             type="submit"
             class="w-[84px]"
             nzType="primary"
-            (click)="btnnzrvlqCallback()"
+            (click)="btncf3rvjCallback()"
             i18n
           >
             Reset
@@ -181,7 +181,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btn250atoCallback() {
+  async btnxxkunjCallback() {
     // * click event callback
     this.isSaveUsernameBtnLoading = true
     const btnSaveUsernameRunning = async () => {
@@ -229,7 +229,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btnnzrvlqCallback() {
+  async btncf3rvjCallback() {
     // * click event callback
     this.isResetBtnBtnLoading = true
     const btnResetBtnRunning = async () => {
