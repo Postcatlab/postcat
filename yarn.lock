@@ -1910,6 +1910,13 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
+"@ngrx/store@14.3.2":
+  version "14.3.2"
+  resolved "https://registry.npmjs.org/@ngrx/store/-/store-14.3.2.tgz#91333c9c4d7b54bf98d842cb94e6afa3a6ea8df2"
+  integrity sha512-XGHjr0arh6gClo8Ce+xqJLvW9PkeXPW2tCo9Z5qMtHFI/z5dUppLVKGmMgD/fQBDyoqWTK5xu+89tDkdeZfRjQ==
+  dependencies:
+    tslib "^2.0.0"
+
 "@ngtools/webpack@14.0.3":
   version "14.0.3"
   resolved "https://registry.npmmirror.com/@ngtools/webpack/-/webpack-14.0.3.tgz#799ba4eb28c0f8cca16fd7c9f774bd33240e0ca2"

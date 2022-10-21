@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'eo-share',
-  template: `<div>share</div>`,
+  template: `<section class="flex flex-col w-[300px] px-2">
+    <eo-api></eo-api>
+  </section>`
 })
 export class ShareComponent implements OnInit {
   constructor() {}
-  async ngOnInit(): Promise<void> {}
+  async ngOnInit(): Promise<void> {
+    console.log('hello')
+  }
 }

@@ -104,6 +104,11 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   ngOnInit(): void {
+    console.log('hhhhhhh', this.router.url);
+    const { url } = this.router;
+    if (url === '/home/share') {
+      return;
+    }
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchRouterChange();
     this.watchDataSourceChange();

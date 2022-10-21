@@ -17,6 +17,13 @@ export class ApiTabService {
   private changeContent$: Subject<any> = new Subject();
   BASIC_TABS: Partial<TabItem>[] = [
     {
+      pathname: '/home/share',
+      module: 'test',
+      type: 'edit',
+      title: $localize`New Request`,
+      extends: { method: '' },
+    },
+    {
       pathname: '/home/api/http/test',
       module: 'test',
       type: 'edit',

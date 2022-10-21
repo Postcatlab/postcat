@@ -81,7 +81,7 @@ const COMPONENTS = [
     SharedModule,
   ],
   declarations: [...COMPONENTS],
-  exports: [],
+  exports: [ApiComponent],
   providers: [ElectronService, ApiService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
 })
 export class ApiModule {}

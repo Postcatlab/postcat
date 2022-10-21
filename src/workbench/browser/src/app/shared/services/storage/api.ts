@@ -24,6 +24,12 @@ const http = {
       ],
     },
     {
+      name: 'share',
+      data: [
+        { '' }
+      ]
+    }
+    {
       name: 'user',
       data: [
         { 'updateUserProfile @put': '/user/profile' },
