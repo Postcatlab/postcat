@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { storageTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -20,6 +21,8 @@ export class ApiTabOperateService {
    * Tab basic info
    */
   BASIC_TABS: Partial<TabItem>[];
+  //* Allow development mode debug not exist router
+  private allowNotExistRouter =!APP_CONFIG.production;
   constructor(
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
@@ -31,7 +34,7 @@ export class ApiTabOperateService {
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
     this.tabStorage.init();
-    const tabCache = this.tabStorage.getPersistenceStorage();
+    const tabCache = this.parseChangeRouter(this.tabStorage.getPersistenceStorage());
     //No cache
     if (!tabCache || !tabCache.tabOrder?.length) {
       this.operateTabAfterRouteChange({
@@ -74,6 +77,9 @@ export class ApiTabOperateService {
       }
     } catch (e) {
       console.error(e);
+      if (this.allowNotExistRouter) {
+        return;
+      }
     }
     //Tab from last choose
     const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
@@ -402,5 +408,17 @@ export class ApiTabOperateService {
   }
   private updateChildView() {
     this.messageService.send({ type: 'tabContentInit', data: {} });
+  }
+  private parseChangeRouter(cache: storageTab) {
+    //If router not exist basic tab,filter it
+    cache.tabOrder = cache.tabOrder.filter((id) => {
+      const tabItem = cache.tabsByID[id];
+      const hasExist = this.BASIC_TABS.find((val) => val.pathname === tabItem.pathname);
+      if (!hasExist) {
+        delete cache.tabsByID[id];
+      }
+      return hasExist;
+    });
+    return cache;
   }
 }

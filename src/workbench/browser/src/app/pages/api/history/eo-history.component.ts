@@ -39,7 +39,6 @@ export class HistoryComponent implements OnInit {
     return new Promise<any[]>((resolve) => {
       this.storage.run('apiTestHistoryLoadAllByProjectID', [1], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          console.log(result.data);
           resolve(result.data);
         } else {
           console.error(result.data);
