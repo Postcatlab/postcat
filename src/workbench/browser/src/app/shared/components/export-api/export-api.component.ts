@@ -84,6 +84,7 @@ export class ExportApiComponent implements OnInit {
       const params = [this.projectService.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
+          console.log('result.data', result.data);
           result.data.version = packageJson.version;
           const output = module[action](result || {});
           this.transferTextToFile(filename, output);
