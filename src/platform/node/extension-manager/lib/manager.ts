@@ -58,7 +58,6 @@ export class ModuleManager implements ModuleManagerInterface {
     this.init();
     this.updateAll();
   }
-
   async getRemoteExtension() {
     const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
     return data.data.map(({ name, version }) => ({ name, version }));
@@ -370,7 +369,7 @@ export class ModuleManager implements ModuleManagerInterface {
       return Promise.reject(error);
     }
   }
-
+  setupExtensionPageServer(){}
   async getExtTabs(extName: string): Promise<ExtensionTabView[]> {
     const result = [];
     for (let index = 0; index < this.installExtension.length; index++) {
@@ -400,4 +399,4 @@ export class ModuleManager implements ModuleManagerInterface {
     }
     return result;
   }
-}
+ }

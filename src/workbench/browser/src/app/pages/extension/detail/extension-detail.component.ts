@@ -89,18 +89,19 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   fetchExtensionPage = async (extName: string) => {
-    try {
-      const res = await window.eo.getExtensionPagePathByName(extName);
-      console.log('extName res', res);
-      this.pagePath = res;
-    } catch (e) {
-      console.log('getExtensionPagePathByName err', e);
-      fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
-        if (res.status === 200) {
-          this.pagePath = res.url + '/child/react17/';
-        }
-      });
-    }
+    this.pagePath='http://127.0.0.1:8080';
+    // try {
+    //   const res = await window.eo.getExtensionPagePathByName(extName);
+    //   console.log('extName res', res);
+    //   this.pagePath = res;
+    // } catch (e) {
+    //   console.error('getExtensionPagePathByName err', e);
+    //   fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
+    //     if (res.status === 200) {
+    //       this.pagePath = res.url + '/child/react17/';
+    //     }
+    //   });
+    // }
   };
 
   async fetchChangelog(locale = '') {
