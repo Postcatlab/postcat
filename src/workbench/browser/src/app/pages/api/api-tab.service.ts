@@ -23,6 +23,13 @@ export class ApiTabService {
       title: $localize`New Request`,
       extends: { method: 'POST' },
     },
+    {
+      pathname: '/home/share/http/detail',
+      module: 'test',
+      type: 'edit',
+      title: $localize`New Request`,
+      extends: { method: 'POST' },
+    },
     { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
     { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
     {

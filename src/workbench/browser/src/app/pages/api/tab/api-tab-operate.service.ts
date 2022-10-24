@@ -22,7 +22,7 @@ export class ApiTabOperateService {
    */
   BASIC_TABS: Partial<TabItem>[];
   //* Allow development mode debug not exist router
-  private allowNotExistRouter =!APP_CONFIG.production;
+  private allowNotExistRouter = !APP_CONFIG.production;
   constructor(
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
@@ -68,13 +68,11 @@ export class ApiTabOperateService {
     //Tab from url
     try {
       //If current url did't match exist tab,throw error
-      const existTab = this.getSameContentTab(this.generateTabFromUrl(this.router.url));
-      if (existTab) {
-        this.operateTabAfterRouteChange({
-          url: this.router.url,
-        });
-        return;
-      }
+      this.getSameContentTab(this.generateTabFromUrl(this.router.url));
+      //If current url is valid tab url,select it
+      this.operateTabAfterRouteChange({
+        url: this.router.url,
+      });
     } catch (e) {
       console.error(e);
       if (this.allowNotExistRouter) {
@@ -410,6 +408,9 @@ export class ApiTabOperateService {
     this.messageService.send({ type: 'tabContentInit', data: {} });
   }
   private parseChangeRouter(cache: storageTab) {
+    if (!cache) {
+      return;
+    }
     //If router not exist basic tab,filter it
     cache.tabOrder = cache.tabOrder.filter((id) => {
       const tabItem = cache.tabsByID[id];
