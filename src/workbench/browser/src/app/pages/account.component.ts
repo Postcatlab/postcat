@@ -42,7 +42,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
             type="submit"
             class="w-[84px]"
             nzType="primary"
-            (click)="btnpw5r7lCallback()"
+            (click)="btng1f64fCallback()"
             i18n
           >
             Save
@@ -128,7 +128,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
             type="submit"
             class="w-[84px]"
             nzType="primary"
-            (click)="btntx9wkqCallback()"
+            (click)="btnm1wom9Callback()"
             i18n
           >
             Reset
@@ -181,7 +181,7 @@ export class AccountComponent implements OnInit {
       username: this.user.userProfile?.username
     })
   }
-  async btnpw5r7lCallback() {
+  async btng1f64fCallback() {
     // * click event callback
     this.isSaveUsernameBtnLoading = true
     const btnSaveUsernameRunning = async () => {
@@ -229,7 +229,7 @@ export class AccountComponent implements OnInit {
     }
     return {}
   }
-  async btntx9wkqCallback() {
+  async btnm1wom9Callback() {
     // * click event callback
     this.isResetBtnBtnLoading = true
     const btnResetBtnRunning = async () => {

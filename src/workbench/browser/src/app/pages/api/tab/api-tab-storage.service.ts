@@ -53,6 +53,7 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
+    return;
     //TODO remote datasource may change
     if (this.dataSource.dataSourceType === 'http') {
     }

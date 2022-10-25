@@ -92,12 +92,12 @@ export class ApiTabComponent implements OnInit, OnDestroy {
             modal.destroy();
             this.tabOperate.closeTab(index);
           },
-        }
+        },
       ],
     });
   }
   //Quick see tabs change in templete,for debug,can be deleted
-  //! just for debug
+  // ! just for debug
   getConsoleTabs() {
     const tabs = [];
     this.tabStorage.tabOrder.forEach((uuid) => {
@@ -190,7 +190,7 @@ export class ApiTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
       that.cacheData();
     });
   }

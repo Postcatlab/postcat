@@ -10,6 +10,7 @@ import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -79,7 +80,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public web: WebService,
-    private store: Store
+    private store: Store,
+    private status: StatusService
   ) {}
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -104,11 +106,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   ngOnInit(): void {
-    console.log('hhhhhhh', this.router.url);
-    const { url } = this.router;
-    if (url === '/home/share') {
-      return;
-    }
+    this.status.countShare();
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchRouterChange();
     this.watchDataSourceChange();

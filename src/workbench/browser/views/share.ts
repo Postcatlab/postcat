@@ -22,11 +22,7 @@ export default new Module({
     new Component({
       id: 'share',
       imports: [],
-      init: [
-        () => {
-          console.log('hello');
-        },
-      ],
+      init: [],
       children: [
         new Canvas({
           class: ['flex', 'flex-col', 'w-[300px]', 'px-2'],

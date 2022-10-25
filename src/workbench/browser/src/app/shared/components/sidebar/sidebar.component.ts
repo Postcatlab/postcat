@@ -8,6 +8,7 @@ import { SidebarModuleInfo } from './sidebar.model';
 import { WorkspaceService } from '../../services/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -25,7 +26,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private dataSourceService: DataSourceService,
     private messageService: MessageService,
     private webService: WebService,
-    private workspace: WorkspaceService
+    private workspace: WorkspaceService,
+    private status: StatusService
   ) {
     this.isCollapsed = this.sidebar.getCollapsed();
     this.sidebar
@@ -94,6 +96,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
         moduleName: 'API',
         moduleID: '@eo-core-apimanger',
         isOffical: true,
+        isShare: true,
+        icon: 'api',
+        activeRoute: 'home/share',
+        route: 'home/share/http/test',
+      },
+      {
+        moduleName: 'API',
+        moduleID: '@eo-core-apimanger',
+        isOffical: true,
+        isShare: true,
         icon: 'api',
         activeRoute: 'home/api',
         route: 'home/api/http/test',
@@ -133,11 +145,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.modules = window.eo.getSideModuleList();
       });
     } else {
-      this.modules = [...defaultModule];
+      this.status.countShare();
+      this.modules = [...defaultModule].filter((it) => (!this.status.isShare ? true : it.isShare));
     }
   }
   private getModuleIDFromRoute() {
     const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
+    console.log(currentModule);
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);

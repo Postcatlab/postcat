@@ -7,6 +7,26 @@ const routes: Routes = [
   {
     path: '',
     component: ShareComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'http',
+        pathMatch: 'full',
+      },
+      {
+        path: 'http',
+        children: [
+          {
+            path: 'detail',
+            loadChildren: () => import('../pages/api/http/detail/api-detail.module').then((m) => m.ApiDetailModule),
+          },
+          {
+            path: 'test',
+            loadChildren: () => import('../pages/api/http/test/api-test.module').then((m) => m.ApiTestModule),
+          },
+        ],
+      },
+    ],
   },
 ];
 

@@ -8,7 +8,5 @@ import { Component, OnInit } from '@angular/core'
 })
 export class ShareComponent implements OnInit {
   constructor() {}
-  async ngOnInit(): Promise<void> {
-    console.log('hello')
-  }
+  async ngOnInit(): Promise<void> {}
 }

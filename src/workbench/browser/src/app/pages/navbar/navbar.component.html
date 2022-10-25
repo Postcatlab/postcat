@@ -6,7 +6,13 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <div class="flex items-center can_be_click" nz-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
+    <div
+      class="flex items-center can_be_click"
+      *ngIf="!status.isShare"
+      nz-dropdown
+      nzTrigger="click"
+      [nzDropdownMenu]="workspaceMenu"
+    >
       <eo-iconpark-icon
         class="mr-[5px]"
         name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
@@ -57,6 +63,7 @@
   <div class="flex items-center">
     <!-- setting -->
     <span
+      *ngIf="!status.isShare"
       class="flex items-center justify-center mx-1 icon"
       i18n-nzTooltipTitle
       nz-tooltip
@@ -87,7 +94,13 @@
       </ul>
     </nz-dropdown-menu>
     <!-- User -->
-    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="UserMenu">
+
+    <span
+      *ngIf="!status.isShare"
+      class="flex items-center justify-center mx-1 icon"
+      nz-dropdown
+      [nzDropdownMenu]="UserMenu"
+    >
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #UserMenu="nzDropdownMenu">

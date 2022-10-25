@@ -7,6 +7,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 @Component({
@@ -30,7 +31,8 @@ export class NavbarComponent implements OnInit {
     private message: MessageService,
     public workspaceService: WorkspaceService,
     public userService: UserService,
-    public dataSourceService: DataSourceService
+    public dataSourceService: DataSourceService,
+    public status: StatusService
   ) {
     this.issueEnvironment = this.getEnviroment();
     if (this.workspaceService.currentWorkspace?.id !== -1) {

@@ -35,7 +35,6 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
-import { ModalService } from './services/modal.service';
 import { PageBlankComponent } from './components/page-blank/page-blank.component';
 import { RouterModule } from '@angular/router';
 import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
@@ -64,7 +63,7 @@ const COMPONENTS = [
   SplitPanelComponent,
   EoMonacoEditorComponent,
   DownloadClienteComponent,
-  LocalWorkspaceTipComponent
+  LocalWorkspaceTipComponent,
 ];
 
 const SHARED_MODULE = [
@@ -110,7 +109,7 @@ const SHARED_MODULE = [
 @NgModule({
   imports: [...SHARED_MODULE],
   declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
-  providers: [ModalService],
+  providers: [],
   exports: [...SHARED_MODULE, ...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe],
 })
 export class SharedModule {}
