@@ -1,8 +1,8 @@
-
-
 FROM nginx:alpine as production
 
-COPY ${webWorkdir}/dist/ /usr/share/nginx/html
-COPY ${workdir}/nginx.conf /etc/nginx/nginx.conf
+ENV NODE_ENV production
+
+COPY ./src/workbench/browser/dist/ /usr/share/nginx/html
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
