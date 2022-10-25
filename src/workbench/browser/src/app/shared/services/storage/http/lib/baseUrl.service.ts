@@ -1,4 +1,4 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
@@ -16,7 +16,13 @@ const needWorkspaceIDPrefixPaths = ['/project'];
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
   get apiPrefix() {
-    return `/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}`;
+    return `/${this.workspaceID}/${this.projectID}`;
+  }
+  get projectID() {
+    return this.projectService.currentProjectID;
+  }
+  get workspaceID() {
+    return this.workspaceService.currentWorkspaceID;
   }
   constructor(private workspaceService: WorkspaceService, private projectService: ProjectService) {
     super();
@@ -33,12 +39,23 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
       });
     } else if ((targetUrl = needWorkspaceIDPrefixPaths.find((n) => req.url.startsWith(n)))) {
       req = req.clone({
-        url: req.url.replace(targetUrl, `/${this.workspaceService.currentWorkspaceID}/${targetUrl}`),
+        url: req.url.replace(targetUrl, `/${this.workspaceID}/${targetUrl}`),
       });
     }
+    const xheaders =
+      this.workspaceID === -1
+        ? {}
+        : {
+            'X-Workspace-ID': String(this.workspaceID),
+            'X-Project-ID': String(this.projectID),
+          };
+
     req = req.clone({
       url: uniqueSlash(protocolReg.test(req.url) ? req.url : url + req.url),
-      headers: req.headers.append('Authorization', token),
+      headers: new HttpHeaders({
+        Authorization: token,
+        ...xheaders,
+      }),
     });
 
     return next.handle(req).pipe(
