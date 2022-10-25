@@ -2,11 +2,11 @@
   "name": "eo-test-server",
   "version": "1.0.0",
   "description": "Recieve eoapi tes config and response http result",
-  "main": "main.js",
+  "main": "./server/main.js",
   "scripts": {
-    "dev": "node main.js",
-    "start": "pm2 start main.js",
-    "start:io": "pm2 start socketio.js",
+    "dev": "node ./server/main.js",
+    "start": "pm2 start ./server/main.js",
+    "start:io": "pm2 start ./server/socketio.js",
     "watch": "pm2 list",
     "stop": "pm2 stop all",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,8 +15,13 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "3.3.0",
+    "crypto-js": "4.1.1",
+    "jquery": "3.6.1",
+    "jsdom": "20.0.1",
     "koa": "2.13.4",
     "koa-body": "5.0.0",
-    "pm2": "5.2.0"
+    "pm2": "5.2.0",
+    "socket.io": "4.5.3",
+    "xml2js": "0.4.23"
   }
 }
