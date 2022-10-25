@@ -21,8 +21,6 @@ English | [简体中文](README.md)
 - Read our [User Manual](https://docs.eoapi.io) for more features
 - Read our [developer documentation](https://developer.eoapi.io) to develop extensions
 
-# Try it
-<iframe width="100%" height="600px" border="0" src="https://eoapi.io/en/"></iframe>
 # Featue
 
 📃 API Documentation
