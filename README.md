@@ -24,6 +24,9 @@
 
 - 查看 [开发者文档](https://developer.eoapi.io) 开发插件
 
+# 试试看
+<iframe width="100%" height="600px" border="0" src="https://eoapi.io/"></iframe>
+
 # 功能
 
 📃 API 文档
