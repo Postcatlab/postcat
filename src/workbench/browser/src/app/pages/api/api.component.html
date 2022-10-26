@@ -126,26 +126,26 @@
             (x)="handleDrag($event)"
             [init]="[200, dyWidth, 400]"
           ></eo-split-x>
-          <div
-            *ngIF="!status.isShare"
-            class="absolute top-0 bottom-0 right-0 flex right-bar"
-            [ngClass]="{ 'left-line': !activeBar }"
-            [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
-          >
+          <ng-template *ngIf="!status.isShare">
             <div
-              class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
-              [ngClass]="activeBar ? 'active' : ''"
-              (click)="toggleRightBar()"
-              nz-tooltip
-              [nzTooltipMouseEnterDelay]="0.7"
-              [nzTooltipMouseLeaveDelay]="0"
-              i18n-nzTooltipTitle="@@Environment Setting"
-              nzTooltipTitle="Environment Setting"
+              class="absolute top-0 bottom-0 right-0 flex right-bar"
+              [ngClass]="{ 'left-line': !activeBar }"
+              [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
             >
-              <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
+              <div
+                class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
+                [ngClass]="activeBar ? 'active' : ''"
+                (click)="toggleRightBar()"
+                nz-tooltip
+                [nzTooltipMouseLeaveDelay]="0"
+                i18n-nzTooltipTitle="@@Environment Setting"
+                nzTooltipTitle="Environment Setting"
+              >
+                <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
+              </div>
+              <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
             </div>
-            <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
-          </div>
+          </ng-template>
         </section>
       </div>
     </nz-content>
