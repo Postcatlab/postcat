@@ -11,7 +11,7 @@ const cors = require('@koa/cors');
 const socketio = require('./socketio');
 
 const app = new Koa();
-const port = 4201;
+const port = process.env.TEST_SERVER_PORT || 4201;
 
 app.use(cors());
 app.use(koaBody());

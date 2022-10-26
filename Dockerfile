@@ -1,16 +1,20 @@
 FROM node:lts-alpine as builder
 
-RUN mkdir /test-server
-
 WORKDIR /test-server
+
+# api 测试服务端口
+ENV NODE_SERVER_PORT 4201
+# websocket 测试服务端口
+ENV EOAPI_WEBSOCKET_POST 4202
 
 COPY /src/workbench/node /test-server
 
 RUN yarn install
 
 EXPOSE 4201
+EXPOSE 4202
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start:all"]
 
 
 FROM nginx:alpine as production
