@@ -404,6 +404,142 @@ export default class LocalService extends localStorage {
     })
   }
 
+  api_shareCreateShare(params) {
+    return new Promise((resolve) => {
+      this.create(this.undefined, params)
+        .then(({ status, ...data }: any) => {
+          console.log(
+            '%c share - createShare 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c share - createShare 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
+  api_shareGetShareList(params) {
+    return new Promise((resolve) => {
+      this.load(this.undefined, params)
+        .then(({ status, ...data }: any) => {
+          console.log(
+            '%c share - getShareList 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c share - getShareList 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
+  api_shareDeleteShare({ uniqueID }) {
+    if (!uniqueID) {
+      console.log(
+        '%c Error: share - deleteShare 接口 缺失参数 uniqueID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.remove(this.undefined, { uniqueID })
+        .then(({ status, ...data }: any) => {
+          console.log(
+            '%c share - deleteShare 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c share - deleteShare 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
+  api_shareGetAllApi({ uniqueID }) {
+    if (!uniqueID) {
+      console.log(
+        '%c Error: share - getAllAPI 接口 缺失参数 uniqueID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.load(this.undefined, { uniqueID })
+        .then(({ status, ...data }: any) => {
+          console.log('%c share - getAllAPI 接口调用成功 %c', SuccessStyle, '')
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c share - getAllAPI 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
+  api_shareGetApiDetail({ uniqueID, apiDataUUID }) {
+    if (!uniqueID) {
+      console.log(
+        '%c Error: share - getApiDetail 接口 缺失参数 uniqueID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!apiDataUUID) {
+      console.log(
+        '%c Error: share - getApiDetail 接口 缺失参数 apiDataUUID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.load(this.undefined, { uniqueID, apiDataUUID })
+        .then(({ status, ...data }: any) => {
+          console.log(
+            '%c share - getApiDetail 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c share - getApiDetail 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
   api_userUpdateUserProfile(params) {
     return new Promise((resolve) => {
       this.update(this.undefined, params)
@@ -1139,6 +1275,23 @@ export default class LocalService extends localStorage {
         })
         .catch((error) => {
           console.log('%c mock - loadAll 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
+  api_systemStatus(params) {
+    return new Promise((resolve) => {
+      this.load(this.undefined, params)
+        .then(({ status, ...data }: any) => {
+          console.log('%c system - status 接口调用成功 %c', SuccessStyle, '')
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c system - status 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
         })
     })

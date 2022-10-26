@@ -26,9 +26,13 @@ const http = {
     {
       name: 'share',
       data: [
-        { '' }
-      ]
-    }
+        { 'createShare @post': '/shared' },
+        { 'getShareList @get': '/shared' },
+        { 'deleteShare @delete': '/shared/{uniqueID}' },
+        { 'getAllAPI @get': '/shared/{uniqueID}/collections' },
+        { 'getApiDetail @get': '/shared/{uniqueID}/api/{apiDataUUID}' },
+      ],
+    },
     {
       name: 'user',
       data: [
@@ -94,6 +98,10 @@ const http = {
         { 'update @put': '/mock/{uuid}', json: '...' },
         { 'loadAll @get': '/mock', query: 'apiDataID' },
       ],
+    },
+    {
+      name: 'system',
+      data: [{ 'status @get': '/system/status' }],
     },
   ],
 };

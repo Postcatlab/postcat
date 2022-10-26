@@ -25,7 +25,7 @@ export default new Module({
       init: [],
       children: [
         new Canvas({
-          class: ['flex', 'flex-col', 'w-[300px]', 'px-2'],
+          class: ['flex', 'flex-col'],
           children: [new ApiContent()],
         }),
       ],

@@ -43,9 +43,11 @@ export class ApiComponent implements OnInit, OnDestroy {
    */
   id: number;
   pageID: number;
+  renderTabs = [];
   TABS = [
     {
       routerLink: 'detail',
+      isShare: true,
       title: $localize`:@@API Detail:Preview`,
     },
     {
@@ -54,6 +56,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     },
     {
       routerLink: 'test',
+      isShare: true,
       title: $localize`Test`,
     },
     {
@@ -81,7 +84,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     public web: WebService,
     private store: Store,
-    private status: StatusService
+    public status: StatusService
   ) {}
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -112,6 +115,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchDataSourceChange();
     this.initEnv();
     this.watchEnvChange();
+    this.renderTabs = this.status.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -157,6 +161,12 @@ export class ApiComponent implements OnInit, OnDestroy {
     // });
   }
 
+  countPaddingRight() {
+    if (this.status.isShare) {
+      return '0px';
+    }
+    return this.activeBar ? this.dyWidth + 'px' : '40px';
+  }
   onResizeEnd() {
     this.isDragging = false;
   }

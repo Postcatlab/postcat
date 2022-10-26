@@ -8,6 +8,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 @Component({
@@ -24,6 +25,7 @@ export class NavbarComponent implements OnInit {
   modules: Map<string, ModuleInfo>;
   resourceInfo = this.web.resourceInfo;
   issueEnvironment;
+  shareLink = '';
   constructor(
     public electron: ElectronService,
     private web: WebService,
@@ -32,7 +34,8 @@ export class NavbarComponent implements OnInit {
     public workspaceService: WorkspaceService,
     public userService: UserService,
     public dataSourceService: DataSourceService,
-    public status: StatusService
+    public status: StatusService,
+    private http: RemoteService
   ) {
     this.issueEnvironment = this.getEnviroment();
     if (this.workspaceService.currentWorkspace?.id !== -1) {
@@ -65,18 +68,32 @@ export class NavbarComponent implements OnInit {
       action: 'close',
     });
   }
-  ngOnInit(): void {
+  handleCopy() {
+    const shareLink = '';
+    // TODO
+  }
+  async ngOnInit(): Promise<void> {
     if (this.electron.isElectron) {
       this.modules = window.eo.getAppModuleList();
     } else {
       this.modules = new Map();
     }
+
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
-      .subscribe(({ type }) => {
+      .subscribe(async ({ type }) => {
         if (type === 'open-setting') {
           this.openSettingModal();
+          return;
+        }
+        if (type === 'update-share-link') {
+          // * request share link
+          const [res, err]: any = await this.http.api_shareCreateShare({});
+          if (err) {
+            return;
+          }
+          this.shareLink = `${location.href}/${res.uniqueID}`;
         }
       });
   }

@@ -107,6 +107,7 @@ const loginForm = new Form({
           }),
           userS.setLoginInfo('data'),
           Modal.close('login'),
+          EventS.send('update-share-link'), // * show share button
           [httpS.send('api_userReadProfile', null), userS.setUserProfile('data')],
           [
             // * update workspace

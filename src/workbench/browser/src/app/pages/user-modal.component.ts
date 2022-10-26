@@ -22,7 +22,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="modalSyncFooter"
       [(nzVisible)]="isSyncModalVisible"
       (nzOnCancel)="handleSyncModalCancel()"
-      (nzAfterClose)="ej0yc84Callback()"
+      (nzAfterClose)="e7odmm4Callback()"
       nzTitle="Do you want to upload local data to the cloud ?"
       i18n-nzTitle
     >
@@ -44,7 +44,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           [nzLoading]="isSyncCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btng1vt59Callback()"
+          (click)="btnsgs0ckCallback()"
           i18n
         >
           Cancel
@@ -54,7 +54,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           [nzLoading]="isSyncSyncBtnLoading"
           class=""
           nzType="primary"
-          (click)="btn9a5vk6Callback()"
+          (click)="btnsf8zsrCallback()"
           i18n
         >
           Sync
@@ -65,7 +65,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="modalCheckConnectFooter"
       [(nzVisible)]="isCheckConnectModalVisible"
       (nzOnCancel)="handleCheckConnectModalCancel()"
-      (nzAfterClose)="emwpulnCallback()"
+      (nzAfterClose)="e4pgjfkCallback()"
       nzTitle="Check your connection"
       i18n-nzTitle
     >
@@ -74,7 +74,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         <span
           style="color: #1890ff"
           class="cursor-pointer"
-          (click)="text6qnrgcCallback()"
+          (click)="textiqd22iCallback()"
           i18n
         >
           config in the configuration
@@ -86,7 +86,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           [nzLoading]="isCheckConnectCancelBtnLoading"
           class=""
           nzType="default"
-          (click)="btn47hfaeCallback()"
+          (click)="btnzls4ymCallback()"
           i18n
         >
           Cancel
@@ -96,7 +96,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           [nzLoading]="isCheckConnectRetryBtnLoading"
           class=""
           nzType="primary"
-          (click)="btn4sp6jwCallback()"
+          (click)="btn0mu0b2Callback()"
           i18n
         >
           Retry
@@ -108,7 +108,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzWidth]="400"
       [(nzVisible)]="isLoginModalVisible"
       (nzOnCancel)="handleLoginModalCancel()"
-      (nzAfterClose)="eynmlemCallback()"
+      (nzAfterClose)="euu4ezrCallback()"
       nzTitle="Sign In/Up"
       i18n-nzTitle
     >
@@ -157,7 +157,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
                 class="h-10 mt-2"
                 nzType="primary"
                 nzBlock
-                (click)="btnjhen2hCallback()"
+                (click)="btnvz94ljCallback()"
                 i18n
               >
                 Sign In/Up
@@ -171,7 +171,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isOpenSettingModalVisible"
       (nzOnCancel)="handleOpenSettingModalCancel()"
-      (nzAfterClose)="e4b00ajCallback()"
+      (nzAfterClose)="e95oi5lCallback()"
       nzTitle="Open setting"
       i18n-nzTitle
     >
@@ -180,7 +180,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
         <span
           style="color: #1890ff"
           class="cursor-pointer"
-          (click)="textorokqqCallback()"
+          (click)="textqdb64pCallback()"
           i18n
         >
           open the settings
@@ -192,7 +192,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       [nzFooter]="null"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
-      (nzAfterClose)="ezm3bmzCallback()"
+      (nzAfterClose)="ebdsz2aCallback()"
       nzTitle="Add Workspace"
       i18n-nzTitle
     >
@@ -222,7 +222,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
               type="button"
               class="mr-3"
               nzType="default"
-              (click)="btn94lcb9Callback()"
+              (click)="btn66ztjiCallback()"
               i18n
             >
               Cancel
@@ -233,7 +233,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
               type="submit"
               class=""
               nzType="primary"
-              (click)="btn2ocamkCallback()"
+              (click)="btnd4wbcjCallback()"
               i18n
             >
               Save
@@ -484,12 +484,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isSyncModalVisible = false
   }
-  async ej0yc84Callback() {
+  async e7odmm4Callback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btng1vt59Callback() {
+  async btnsgs0ckCallback() {
     // * click event callback
     this.isSyncCancelBtnLoading = true
     const btnSyncCancelRunning = async () => {
@@ -499,7 +499,7 @@ export class UserModalComponent implements OnInit {
     await btnSyncCancelRunning()
     this.isSyncCancelBtnLoading = false
   }
-  async btn9a5vk6Callback() {
+  async btnsf8zsrCallback() {
     // * click event callback
     this.isSyncSyncBtnLoading = true
     const btnSyncSyncRunning = async () => {
@@ -533,12 +533,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false
   }
-  async emwpulnCallback() {
+  async e4pgjfkCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async btn47hfaeCallback() {
+  async btnzls4ymCallback() {
     // * click event callback
     this.isCheckConnectCancelBtnLoading = true
     const btnCheckConnectCancelRunning = async () => {
@@ -548,7 +548,7 @@ export class UserModalComponent implements OnInit {
     await btnCheckConnectCancelRunning()
     this.isCheckConnectCancelBtnLoading = false
   }
-  async btn4sp6jwCallback() {
+  async btn0mu0b2Callback() {
     // * click event callback
     this.isCheckConnectRetryBtnLoading = true
     const btnCheckConnectRetryRunning = async () => {
@@ -560,7 +560,7 @@ export class UserModalComponent implements OnInit {
     await btnCheckConnectRetryRunning()
     this.isCheckConnectRetryBtnLoading = false
   }
-  async text6qnrgcCallback() {
+  async textiqd22iCallback() {
     // * click event callback
 
     // * 关闭弹窗
@@ -570,14 +570,14 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isLoginModalVisible = false
   }
-  async eynmlemCallback() {
+  async euu4ezrCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
       this.validateLoginForm.reset()
     }
   }
-  async btnjhen2hCallback() {
+  async btnvz94ljCallback() {
     // * click event callback
     this.isLoginBtnBtnLoading = true
     const btnLoginBtnRunning = async () => {
@@ -609,6 +609,7 @@ export class UserModalComponent implements OnInit {
       // * 关闭弹窗
       this.isLoginModalVisible = false
 
+      this.message.send({ type: 'update-share-link', data: {} })
       {
         const [data, err]: any = await this.api.api_userReadProfile(null)
         if (err) {
@@ -654,12 +655,12 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false
   }
-  async e4b00ajCallback() {
+  async e95oi5lCallback() {
     // * nzAfterClose event callback
     {
     }
   }
-  async textorokqqCallback() {
+  async textqdb64pCallback() {
     // * click event callback
     this.message.send({ type: 'open-setting', data: {} })
 
@@ -670,14 +671,14 @@ export class UserModalComponent implements OnInit {
     // * 关闭弹窗
     this.isAddWorkspaceModalVisible = false
   }
-  async ezm3bmzCallback() {
+  async ebdsz2aCallback() {
     // * nzAfterClose event callback
     {
       // * auto clear form
       this.validateWorkspaceNameForm.reset()
     }
   }
-  async btn94lcb9Callback() {
+  async btn66ztjiCallback() {
     // * click event callback
     this.isCancelBtnLoading = true
     const btnCancelRunning = async () => {
@@ -687,7 +688,7 @@ export class UserModalComponent implements OnInit {
     await btnCancelRunning()
     this.isCancelBtnLoading = false
   }
-  async btn2ocamkCallback() {
+  async btnd4wbcjCallback() {
     // * click event callback
     this.isSaveBtnLoading = true
     const btnSaveRunning = async () => {

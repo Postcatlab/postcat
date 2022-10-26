@@ -21,7 +21,7 @@ export class ApiTabService {
       pathname: '/home/share/ws/test',
       module: 'test',
       isFixed: true,
-      type: 'edit',
+      type: 'preview',
       extends: { method: 'WS' },
       title: $localize`New Websocket`,
     },

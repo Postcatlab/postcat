@@ -27,7 +27,7 @@
             <eo-api-group-tree></eo-api-group-tree>
           </div>
         </nz-tab>
-        <nz-tab [nzTitle]="historyTitle">
+        <nz-tab [nzTitle]="historyTitle" *ngIf="!status.isShare">
           <ng-template #historyTitle>
             <span
               i18n-nzTooltipTitle
@@ -106,7 +106,7 @@
             *ngIf="this.id"
             nzLinkRouter
           >
-            <nz-tab *ngFor="let tab of TABS">
+            <nz-tab *ngFor="let tab of renderTabs">
               <p *ngIf="web.isWeb && tab.onlyDestop">
                 <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
               </p>
@@ -118,11 +118,16 @@
             </nz-tab>
           </nz-tabset>
         </div>
-        <section class="relative" [ngStyle]="{ paddingRight: activeBar ? dyWidth + 'px' : '40px' }">
+        <section class="relative" [ngStyle]="{ paddingRight: countPaddingRight() }">
           <!-- Get router child component by activate -->
           <router-outlet (activate)="onActivate($event)"></router-outlet>
-          <eo-split-x *ngIf="activeBar" (x)="handleDrag($event)" [init]="[200, dyWidth, 400]"></eo-split-x>
+          <eo-split-x
+            *ngIf="activeBar && !status.isShare"
+            (x)="handleDrag($event)"
+            [init]="[200, dyWidth, 400]"
+          ></eo-split-x>
           <div
+            *ngIF="!status.isShare"
             class="absolute top-0 bottom-0 right-0 flex right-bar"
             [ngClass]="{ 'left-line': !activeBar }"
             [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"

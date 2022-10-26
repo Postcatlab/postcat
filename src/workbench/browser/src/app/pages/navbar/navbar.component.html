@@ -61,6 +61,32 @@
     </nz-dropdown-menu>
   </div>
   <div class="flex items-center">
+    <button
+      *ngIf="!workspaceService.isLocal && userService.isLogin"
+      nz-button
+      nzType="primary"
+      class="mx-2"
+      nz-popover
+      [nzPopoverContent]="contentTemplate"
+      nzPopoverPlacement="bottomRight"
+      nzPopoverTrigger="click"
+      i18n
+    >
+      Share
+    </button>
+    <ng-template #contentTemplate>
+      <div class="w-[360px] pb-4">
+        <p i18n>Share via link</p>
+        <p i18n>This link will be updated with the API content. Everyone can access it without logging in</p>
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+          <input readonly type="text" nz-input placeholder="input search text" [value]="shareLink" />
+        </nz-input-group>
+      </div>
+    </ng-template>
+    <ng-template #suffixIconButton>
+      <button nz-button nzType="default" (click)="handleCopy()">Copy</button>
+    </ng-template>
+
     <!-- setting -->
     <span
       *ngIf="!status.isShare"
@@ -153,7 +179,7 @@
       </span>
     </div>
     <!-- Web download client -->
-    <div *ngIf="!electron.isElectron">
+    <div *ngIf="!electron.isElectron && !status.isShare">
       <div class="btn py-1.5 px-2 mx-1 flex items-center" nz-dropdown i18n [nzDropdownMenu]="download">
         <span class="flex items-center delete-icon">
           <eo-iconpark-icon name="down-two" size="14px"></eo-iconpark-icon>

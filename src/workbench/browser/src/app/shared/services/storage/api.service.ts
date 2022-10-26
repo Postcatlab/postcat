@@ -118,6 +118,41 @@ export class ApiService {
     return this.remote.api_workspaceRemoveMember(params)
   }
 
+  api_shareCreateShare(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_shareCreateShare(params)
+    }
+    return this.remote.api_shareCreateShare(params)
+  }
+
+  api_shareGetShareList(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_shareGetShareList(params)
+    }
+    return this.remote.api_shareGetShareList(params)
+  }
+
+  api_shareDeleteShare(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_shareDeleteShare(params)
+    }
+    return this.remote.api_shareDeleteShare(params)
+  }
+
+  api_shareGetAllApi(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_shareGetAllApi(params)
+    }
+    return this.remote.api_shareGetAllApi(params)
+  }
+
+  api_shareGetApiDetail(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_shareGetApiDetail(params)
+    }
+    return this.remote.api_shareGetApiDetail(params)
+  }
+
   api_userUpdateUserProfile(params) {
     if (this.dataSourceType === 'local') {
       return this.local.api_userUpdateUserProfile(params)
@@ -333,5 +368,12 @@ export class ApiService {
       return this.local.api_mockLoadAll(params)
     }
     return this.remote.api_mockLoadAll(params)
+  }
+
+  api_systemStatus(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_systemStatus(params)
+    }
+    return this.remote.api_systemStatus(params)
   }
 }

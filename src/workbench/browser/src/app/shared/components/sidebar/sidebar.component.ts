@@ -94,7 +94,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const defaultModule = [
       {
         moduleName: 'API',
-        moduleID: '@eo-core-apimanger',
+        moduleID: '@eo-core-shareapi',
         isOffical: true,
         isShare: true,
         icon: 'api',
@@ -105,7 +105,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         moduleName: 'API',
         moduleID: '@eo-core-apimanger',
         isOffical: true,
-        isShare: true,
         icon: 'api',
         activeRoute: 'home/api',
         route: 'home/api/http/test',
@@ -151,11 +150,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   private getModuleIDFromRoute() {
     const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
-    console.log(currentModule);
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);
-      console.error('route error: currentModule is undefind', currentModule);
+      console.error(`route error: currentModule is [${currentModule}]`, currentModule);
       return;
     }
     this.sidebar.currentModule = currentModule;

@@ -18,6 +18,7 @@ import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/shared/components/import-api/import-api.component';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -66,16 +67,17 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   nzSelectedKeys: number[] = [];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
+    public electron: ElectronService,
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
     private message: EoMessageService,
     private messageService: MessageService,
     private storage: StorageService,
-    public electron: ElectronService,
     private apiService: ApiService,
     private projectService: ProjectService,
-    private nzModalService: NzModalService
+    private nzModalService: NzModalService,
+    public status: StatusService
   ) {}
   ngOnInit(): void {
     this.buildGroupTreeData();

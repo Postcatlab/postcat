@@ -246,3 +246,5 @@ export function isBase64(str) {
     return false;
   }
 }
+
+export const version2Number = (version) => Number(version.replace(/[v.]/g, ''));
