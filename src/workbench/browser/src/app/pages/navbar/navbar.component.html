@@ -77,9 +77,11 @@
     <ng-template #contentTemplate>
       <div class="w-[360px] pb-4">
         <p i18n>Share via link</p>
-        <p i18n>This link will be updated with the API content. Everyone can access it without logging in</p>
+        <p i18n class="pb-2">
+          This link will be updated with the API content. Everyone can access it without logging in
+        </p>
         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-          <input readonly type="text" nz-input placeholder="input search text" [value]="shareLink" />
+          <input readonly type="text" nz-input [value]="shareLink" />
         </nz-input-group>
       </div>
     </ng-template>

@@ -78,7 +78,7 @@ export class NavbarComponent implements OnInit {
     } else {
       this.modules = new Map();
     }
-
+    this.shareLink = await this.getShareLink();
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
@@ -89,6 +89,7 @@ export class NavbarComponent implements OnInit {
         }
         if (type === 'update-share-link') {
           // * request share link
+          console.log('link');
           const [res, err]: any = await this.http.api_shareCreateShare({});
           if (err) {
             return;
@@ -96,6 +97,14 @@ export class NavbarComponent implements OnInit {
           this.shareLink = `${location.href}/${res.uniqueID}`;
         }
       });
+  }
+  async getShareLink() {
+    const [res, err]: any = await this.http.api_shareCreateShare({});
+    if (err) {
+      return;
+    }
+    console.log(`${location.href}/${res.uniqueID}`);
+    return `${location.href}/${res.uniqueID}`;
   }
   loginOrSign() {
     if (this.web.isWeb) {
