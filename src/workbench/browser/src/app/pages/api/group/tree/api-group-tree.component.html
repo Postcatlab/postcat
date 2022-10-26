@@ -44,7 +44,7 @@
     [nzExpandedKeys]="expandKeys"
     (nzClick)="clickTreeItem($event)"
     (nzExpandChange)="toggleExpand()"
-    nzDraggable
+    [nzDraggable]="isEdit"
     nzBlockNode
     (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"
@@ -57,7 +57,7 @@
           <div class="overflow-hidden f_row_ac text-ellipsis">
             <span class="text_omit node_title">{{ node.title }}</span>
           </div>
-          <span class="flex tree_node_operate">
+          <span class="flex tree_node_operate" *ngIf="isEdit">
             <button nz-dropdown [nzDropdownMenu]="groupMenu" class="flex items-center">
               <eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon>
             </button>
@@ -94,7 +94,7 @@
             >
               <eo-iconpark-icon class="mr5" name="lightning" size="15px"></eo-iconpark-icon>
             </button>
-            <button class="flex items-center" nz-dropdown [nzDropdownMenu]="apiDataMenu">
+            <button class="flex items-center" nz-dropdown [nzDropdownMenu]="apiDataMenu" *ngIf="isEdit">
               <eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon>
             </button>
             <nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
