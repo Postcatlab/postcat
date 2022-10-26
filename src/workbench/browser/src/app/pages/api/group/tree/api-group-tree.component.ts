@@ -65,6 +65,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     },
   ];
   nzSelectedKeys: number[] = [];
+  isEdit: boolean;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
@@ -80,6 +81,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     public status: StatusService
   ) {}
   ngOnInit(): void {
+    this.isEdit=!this.status.isShare;
     this.buildGroupTreeData();
     this.watchApiAction();
     this.watchRouterChange();
@@ -214,24 +216,25 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
+    const prefix=this.status.isShare?'home/share':'/home/api';
     inArg.event.stopPropagation();
     switch (inArg.eventName) {
       case 'testApi':
       case 'editApi':
       case 'detailApi': {
-        this.router.navigate([`/home/api/http/${inArg.eventName.replace('Api', '')}`], {
+        this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
           queryParams: { uuid: inArg.node.key },
         });
         break;
       }
       case 'jumpOverview': {
-        this.router.navigate(['/home/api/overview'], {
+        this.router.navigate([`${prefix}/overview`], {
           queryParams: { uuid: 'overview' },
         });
         break;
       }
       case 'addAPI': {
-        this.router.navigate(['/home/api/http/edit'], {
+        this.router.navigate([`${prefix}/http/edit`], {
           queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') },
         });
         break;

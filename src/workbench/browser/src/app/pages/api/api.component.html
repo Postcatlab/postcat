@@ -10,7 +10,7 @@
   >
     <!-- <div class="side-container"> -->
     <nz-content class="api-container-tabs">
-      <nz-tabset nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
+      <nz-tabset [ngClass]="{'share-group-tabset':status.isShare}" nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
             <span

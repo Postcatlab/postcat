@@ -2,7 +2,6 @@ nz-content {
   width: 100%;
   background-color: var(--MAIN_BG);
 }
-
 :lang(zh) {
   nz-select {
     width: 132px;
@@ -45,7 +44,6 @@ nz-divider {
     background-color: rgba(0, 0, 0, 0.05);
   }
 }
-
 ::ng-deep {
   eo-api {
     display: flex;
@@ -107,6 +105,11 @@ nz-divider {
       margin-bottom: -1px;
       align-items: center;
       justify-content: space-between;
+    }
+    .share-group-tabset{
+      .ant-tabs-nav{
+        display: none;
+      }
     }
     .content_container {
       border-top: 1px solid var(--BORDER);
