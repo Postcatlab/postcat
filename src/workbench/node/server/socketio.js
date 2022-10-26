@@ -8,7 +8,9 @@ process.on('uncaughtException', (err) => {
 const _post = process.env.EOAPI_WEBSOCKET_POST || 13928;
 
 const socket = (port = _post) => {
-  const io = new IO.Server(port);
+  const io = new IO.Server(port, {
+    transports: ['websocket'],
+  });
   io.on('connection', (socket) => {
     // send a message to the client
     socket.emit('ws-client', 'link success');

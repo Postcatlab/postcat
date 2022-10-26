@@ -6,5 +6,6 @@ export type APP_CONFIG_INSTANT = {
   EXTENSION_URL: string;
   REMOTE_SOCKET_URL: 'wss://eoapi.eolinker.com';
   SOCKET_PORT: number;
+  NODE_SERVER_PORT: number;
   MOCK_URL: string;
 };
