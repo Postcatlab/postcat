@@ -1,20 +1,26 @@
 FROM node:lts-alpine as builder
 
-ENV 
+WORKDIR /test-server
 
-WORKDIR /eoapi-web
+# api 测试服务端口
+ENV NODE_SERVER_PORT 4201
+# websocket 测试服务端口
+ENV EOAPI_WEBSOCKET_POST 4202
 
-RUN npm set registry https://registry.npmmirror.com
+COPY /src/workbench/node /test-server
 
-# cache step
-COPY package.json /sf-vue-admin/package.json
 RUN yarn install
-# build
-COPY ./ /sf-vue-admin
-RUN npm run build:prod
 
-FROM nginx as production
-RUN mkdir /web
-COPY --from=builder /sf-vue-admin/dist/ /web
-COPY --from=builder /sf-vue-admin/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 4201 4202
+
+CMD ["yarn", "start:all"]
+
+
+FROM nginx:alpine as production
+
+ENV NODE_ENV production
+
+COPY /src/workbench/browser/dist/ /usr/share/nginx/html
+COPY /nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80

@@ -104,17 +104,17 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private lang: LanguageService
   ) {
-    //Select demo api when first open Eoapi
-    if (!window.localStorage.getItem('local_TabCache')) {
-      const utm = new URLSearchParams(window.location.search);
-      this.router.navigate(['/home/api/http/test'], {
-        queryParams: { pageID: Date.now(), uuid: 1, ...Object.fromEntries(utm) },
-      });
-      setTimeout(() => {
-        const testBtn = document.getElementById('btn-test');
-        testBtn && testBtn.click();
-      }, 600);
-    }
+    // TODO Select demo api when first open Eoapi
+    // if (!window.localStorage.getItem('local_TabCache')) {
+    //   const utm = new URLSearchParams(window.location.search);
+    //   this.router.navigate(['/home/api/http/test'], {
+    //     queryParams: { pageID: Date.now(), uuid: 1, ...Object.fromEntries(utm) },
+    //   });
+    //   setTimeout(() => {
+    //     const testBtn = document.getElementById('btn-test');
+    //     testBtn && testBtn.click();
+    //   }, 600);
+    // }
 
     this.initBasicForm();
     this.testServer.init((message) => {

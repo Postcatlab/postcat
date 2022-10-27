@@ -47,19 +47,11 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         url: req.url.replace(targetUrl, `/${this.workspaceID}/${targetUrl}`),
       });
     }
-    const xheaders =
-      this.workspaceID === -1
-        ? {}
-        : {
-            'X-Workspace-ID': String(this.workspaceID),
-            'X-Project-ID': String(this.projectID),
-          };
 
     req = req.clone({
       url: uniqueSlash(protocolReg.test(req.url) ? req.url : url + req.url),
       headers: new HttpHeaders({
         Authorization: token,
-        ...xheaders,
       }),
     });
 

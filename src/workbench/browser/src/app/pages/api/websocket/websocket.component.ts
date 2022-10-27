@@ -88,7 +88,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             ? APP_CONFIG.REMOTE_SOCKET_URL
             : `ws://localhost:${port || 13928}`
         }`,
-        { transports: ['websocket'] }
+        { path: '/socket.io', transports: ['websocket'] }
       );
       this.socket.on('connect_error', (error) => {
         // * conncet socketIO is failed

@@ -179,7 +179,6 @@ export class ApiTestUtilService {
     return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
-    console.log(inData);
     //handle query and url
     const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
       base: 'url',
@@ -238,9 +237,10 @@ export class ApiTestUtilService {
    * @returns
    */
   formatSavingApiData(inData): ApiData {
+    console.log(JSON.parse(JSON.stringify(inData)));
     const result = {
       ...inData.testData,
-      responseHeaders: inData.history.response.headers || [],
+      responseHeaders: this.filterCommonHeader(inData.history.response.headers) || [],
       responseBodyType: 'json',
       responseBodyJsonType: 'object',
       responseBody: [],
@@ -249,7 +249,7 @@ export class ApiTestUtilService {
     if (result.requestBodyType === ApiBodyType.Raw) {
       Object.assign(result, this.text2Body('requestBody', result.requestBody));
     }
-    ['requestHeaders', 'requestBody', 'restParams', 'queryParams'].forEach((keyName) => {
+    ['requestHeaders', 'requestBody', 'responseHeaders', 'restParams', 'queryParams'].forEach((keyName) => {
       if (!result[keyName] || typeof result[keyName] !== 'object') {
         return;
       }
@@ -346,13 +346,40 @@ export class ApiTestUtilService {
     });
     return result;
   }
+  private filterCommonHeader(headers) {
+    const commonHeader = [
+      'content-type',
+      'accept',
+      'content-length',
+      'accept-encoding',
+      'accept-language',
+      'connection',
+      'host',
+      'date',
+      'referrer-policy',
+      'connection',
+      'location',
+      'range',
+      'transfer-encoding',
+      'content-security-policy',
+      'strict-transport-security',
+      'server',
+      'if-match',
+      'if-none-match',
+      'user-agent',
+      'vary',
+      'referrer-policy',
+    ];
+    const result = headers.filter((val) => !commonHeader.includes(val.name));
+    return result;
+  }
   private testTableData2ApiBody(arr): ApiData[] {
     const result = [];
     arr.forEach((val) => {
       if (!val.name) {
         return;
       }
-      const item = { ...val, example: val.value };
+      const item = { ...val, required: val.hasOwnProperty('required') ? val.required : true, example: val.value };
       delete item.value;
       result.push(item);
     });
