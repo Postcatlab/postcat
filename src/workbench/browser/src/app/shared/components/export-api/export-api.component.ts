@@ -6,6 +6,7 @@ import { FeatureType } from '../../types';
 import { ModuleInfo } from 'eo/platform/node/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Component({
   selector: 'eo-export-api',
@@ -14,11 +15,12 @@ import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/pro
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
   supportList: Array<FeatureType> = [];
-  featureMap = window.eo?.getFeature('apimanage.export');
+  featureMap = window.eo?.getFeature('apimanage.export') || this.webExtensionService.getFeatures('apimanage.export');
   constructor(
     private storage: StorageService,
     private projectService: ProjectService,
-    public extensionService: ExtensionService
+    public extensionService: ExtensionService,
+    public webExtensionService: WebExtensionService
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
@@ -79,7 +81,8 @@ export class ExportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module: ModuleInfo = await window.eo.loadFeatureModule(this.currentExtension);
+    const module: ModuleInfo =
+      (await window.eo?.loadFeatureModule(this.currentExtension)) || globalThis[this.currentExtension];
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       const params = [this.projectService.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
