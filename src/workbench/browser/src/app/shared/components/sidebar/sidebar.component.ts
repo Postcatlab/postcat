@@ -94,12 +94,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const defaultModule = [
       {
         moduleName: 'API',
-        moduleID: '@eo-core-shareapi',
-        isOffical: true,
+        moduleID: '@eo-core-share',
         isShare: true,
+        isOffical: true,
         icon: 'api',
-        activeRoute: 'home/share',
-        route: 'home/share/http/test',
+        activeRoute: 'home/api',
+        route: 'home/share/test',
       },
       {
         moduleName: 'API',
@@ -109,18 +109,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
-      ...(!this.workspace.isLocal || !this.dataSourceService.remoteServerUrl
-        ? [
-            {
-              moduleName: $localize`Member`,
-              moduleID: '@eo-core-member',
-              isOffical: true,
-              icon: 'every-user',
-              activeRoute: 'home/member',
-              route: 'home/member',
-            },
-          ]
-        : []),
+      {
+        moduleName: $localize`Member`,
+        moduleID: '@eo-core-member',
+        isOffical: true,
+        icon: 'every-user',
+        activeRoute: 'home/member',
+        route: 'home/member',
+      },
       {
         moduleName: $localize`Workspace`,
         moduleID: '@eo-core-workspace',
@@ -139,12 +135,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       },
     ];
     if (this.electron.isElectron) {
-      this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
+      this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())].filter((it: any) => !it.isShare);
       this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
-        this.modules = window.eo.getSideModuleList();
+        this.modules = window.eo.getSideModuleList().filter((it: any) => !it.isShare);
       });
     } else {
-      this.status.countShare();
+      if (!this.workspace.isLocal) {
+        this.status.countShare();
+      }
       this.modules = [...defaultModule].filter((it) => (!this.status.isShare ? true : it.isShare));
     }
   }

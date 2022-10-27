@@ -446,18 +446,9 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_shareDeleteShare({ uniqueID }) {
-    if (!uniqueID) {
-      console.log(
-        '%c Error: share - deleteShare 接口 缺失参数 uniqueID %c',
-        ErrorStyle,
-        ''
-      )
-      return
-    }
-
+  api_shareDeleteShare(params) {
     return new Promise((resolve) => {
-      this.remove(this.undefined, { uniqueID })
+      this.remove(this.undefined, params)
         .then(({ status, ...data }: any) => {
           console.log(
             '%c share - deleteShare 接口调用成功 %c',
@@ -476,10 +467,10 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_shareGetAllApi({ uniqueID }) {
+  api_shareDocGetAllApi({ uniqueID }) {
     if (!uniqueID) {
       console.log(
-        '%c Error: share - getAllAPI 接口 缺失参数 uniqueID %c',
+        '%c Error: shareDoc - getAllAPI 接口 缺失参数 uniqueID %c',
         ErrorStyle,
         ''
       )
@@ -489,23 +480,27 @@ export default class LocalService extends localStorage {
     return new Promise((resolve) => {
       this.load(this.undefined, { uniqueID })
         .then(({ status, ...data }: any) => {
-          console.log('%c share - getAllAPI 接口调用成功 %c', SuccessStyle, '')
+          console.log(
+            '%c shareDoc - getAllAPI 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
           if (status === 200) {
             return resolve([data, null])
           }
           resolve([null, data])
         })
         .catch((error) => {
-          console.log('%c share - getAllAPI 接口调用失败 %c', ErrorStyle, '')
+          console.log('%c shareDoc - getAllAPI 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
         })
     })
   }
 
-  api_shareGetApiDetail({ uniqueID, apiDataUUID }) {
+  api_shareDocGetApiDetail({ uniqueID, apiDataUUID }) {
     if (!uniqueID) {
       console.log(
-        '%c Error: share - getApiDetail 接口 缺失参数 uniqueID %c',
+        '%c Error: shareDoc - getApiDetail 接口 缺失参数 uniqueID %c',
         ErrorStyle,
         ''
       )
@@ -513,7 +508,7 @@ export default class LocalService extends localStorage {
     }
     if (!apiDataUUID) {
       console.log(
-        '%c Error: share - getApiDetail 接口 缺失参数 apiDataUUID %c',
+        '%c Error: shareDoc - getApiDetail 接口 缺失参数 apiDataUUID %c',
         ErrorStyle,
         ''
       )
@@ -524,7 +519,7 @@ export default class LocalService extends localStorage {
       this.load(this.undefined, { uniqueID, apiDataUUID })
         .then(({ status, ...data }: any) => {
           console.log(
-            '%c share - getApiDetail 接口调用成功 %c',
+            '%c shareDoc - getApiDetail 接口调用成功 %c',
             SuccessStyle,
             ''
           )
@@ -534,7 +529,37 @@ export default class LocalService extends localStorage {
           resolve([null, data])
         })
         .catch((error) => {
-          console.log('%c share - getApiDetail 接口调用失败 %c', ErrorStyle, '')
+          console.log(
+            '%c shareDoc - getApiDetail 接口调用失败 %c',
+            ErrorStyle,
+            ''
+          )
+          resolve([null, error])
+        })
+    })
+  }
+
+  api_shareDocGetEnv({ uniqueID }) {
+    if (!uniqueID) {
+      console.log(
+        '%c Error: shareDoc - getEnv 接口 缺失参数 uniqueID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.load(this.undefined, { uniqueID })
+        .then(({ status, ...data }: any) => {
+          console.log('%c shareDoc - getEnv 接口调用成功 %c', SuccessStyle, '')
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c shareDoc - getEnv 接口调用失败 %c', ErrorStyle, '')
           resolve([null, error])
         })
     })

@@ -19,6 +19,7 @@ import { ImportApiComponent } from 'eo/workbench/browser/src/app/shared/componen
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -78,10 +79,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private projectService: ProjectService,
     private nzModalService: NzModalService,
-    public status: StatusService
+    public status: StatusService,
+    private http: RemoteService
   ) {}
   ngOnInit(): void {
-    this.isEdit=!this.status.isShare;
+    this.isEdit = !this.status.isShare;
     this.buildGroupTreeData();
     this.watchApiAction();
     this.watchRouterChange();
@@ -111,9 +113,25 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     callback?.();
   });
 
-  getProjectCollections() {
+  async getProjectCollections() {
     this.apiDataLoading = true;
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+      if (this.status.isShare) {
+        const [res, err]: any = await this.http.api_shareDocGetAllApi({
+          uniqueID: 'eed78dce-aeb1-4c01-8092-9d9b5d73bfe3',
+        });
+        if (err) {
+          resolve(false);
+          return;
+        }
+        const { groups, apis } = res;
+        console.log(groups, apis);
+        this.getGroups(groups);
+        this.getApis(apis);
+        this.apiDataLoading = false;
+        resolve(true);
+        return;
+      }
       this.storage.run('projectCollections', [this.projectService.currentProjectID], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           const { groups, apis } = result.data;
@@ -216,7 +234,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
-    const prefix=this.status.isShare?'home/share':'/home/api';
+    const prefix = this.status.isShare ? 'home/share' : '/home/api';
     inArg.event.stopPropagation();
     switch (inArg.eventName) {
       case 'testApi':

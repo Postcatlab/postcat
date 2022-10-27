@@ -248,3 +248,13 @@ export function isBase64(str) {
 }
 
 export const version2Number = (version) => Number(version.replace(/[v.]/g, ''));
+
+export const copy = (text) => {
+  const el = document.createElement('input');
+  el.setAttribute('value', text);
+  document.body.appendChild(el);
+  el.select();
+  const flag = document.execCommand('copy');
+  document.body.removeChild(el);
+  return !!flag;
+};

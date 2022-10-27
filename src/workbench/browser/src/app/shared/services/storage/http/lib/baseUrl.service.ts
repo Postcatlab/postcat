@@ -10,7 +10,7 @@ import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 const protocolReg = new RegExp('^(http|https)://');
 
-const interceptorPaths = ['/api_data', '/group', '/api_test_history', '/mock', '/environment'];
+const interceptorPaths = ['/api_data', '/group', '/api_test_history', '/mock', '/environment', '/shared'];
 const needWorkspaceIDPrefixPaths = ['/project'];
 
 // implements StorageInterface
