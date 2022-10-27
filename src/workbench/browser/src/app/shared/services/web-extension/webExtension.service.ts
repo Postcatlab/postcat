@@ -60,7 +60,13 @@ export class WebExtensionService {
   insertScript(scriptText) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.text = scriptText;
+    const text = `
+    const __define = global.define;
+    global.define = undefined;
+    ${scriptText}
+    global.define = __define;
+    `;
+    script.text = text;
     document.head.appendChild(script);
   }
 
