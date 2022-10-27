@@ -7,12 +7,7 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators
-} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 
@@ -28,8 +23,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n>
-          After confirmation, the system will create a cloud space to upload the
-          local data to the cloud.
+          After confirmation, the system will create a cloud space to upload the local data to the cloud.
         </span>
         <nz-alert
           nzType="warning"
@@ -71,12 +65,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n> Can't connect right now, click to retry or </span>
-        <span
-          style="color: #1890ff"
-          class="cursor-pointer"
-          (click)="textiqd22iCallback()"
-          i18n
-        >
+        <span style="color: #1890ff" class="cursor-pointer" (click)="textiqd22iCallback()" i18n>
           config in the configuration
         </span>
       </ng-container>
@@ -138,13 +127,9 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
                   i18n-placeholder
                 />
                 <ng-template #passwordErrorTpl let-control>
-                  <ng-container *ngIf="control.hasError('required')" i18n>
-                    Please input your password;
-                  </ng-container>
+                  <ng-container *ngIf="control.hasError('required')" i18n> Please input your password; </ng-container>
 
-                  <ng-container *ngIf="control.hasError('minlength')" i18n>
-                    Min length is 6;
-                  </ng-container>
+                  <ng-container *ngIf="control.hasError('minlength')" i18n> Min length is 6; </ng-container>
                 </ng-template>
               </nz-form-control>
             </nz-form-item>
@@ -177,12 +162,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span
-          style="color: #1890ff"
-          class="cursor-pointer"
-          (click)="textqdb64pCallback()"
-          i18n
-        >
+        <span style="color: #1890ff" class="cursor-pointer" (click)="textqdb64pCallback()" i18n>
           open the settings
         </span>
         <span i18n> and fill in the configuration </span>
@@ -197,11 +177,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <form
-          nz-form
-          [formGroup]="validateWorkspaceNameForm"
-          nzLayout="horizontal"
-        >
+        <form nz-form [formGroup]="validateWorkspaceNameForm" nzLayout="horizontal">
           <nz-form-item>
             <nz-form-control nzErrorTip="Please input your new work name;">
               <input
@@ -241,7 +217,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
           </section>
         </form>
       </ng-container>
-    </nz-modal>`
+    </nz-modal>`,
 })
 export class UserModalComponent implements OnInit {
   isSyncModalVisible;
@@ -315,7 +291,7 @@ export class UserModalComponent implements OnInit {
             id: -1,
             password: '',
             username: '',
-            workspaces: []
+            workspaces: [],
           });
           return;
         }
@@ -348,20 +324,18 @@ export class UserModalComponent implements OnInit {
             id: -1,
             password: '',
             username: '',
-            workspaces: []
+            workspaces: [],
           });
           {
             this.workspace.setWorkspaceList([]);
           }
-          this.workspace.setCurrentWorkspace(
-            this.workspace.getLocalWorkspaceInfo()
-          );
+          this.workspace.setCurrentWorkspace(this.workspace.getLocalWorkspaceInfo());
           this.eMessage.success($localize`Successfully logged out !`);
           const refreshToken = this.user.refreshToken;
           this.user.clearAuth();
           {
             const [data, err]: any = await this.api.api_authLogout({
-              refreshToken
+              refreshToken,
             });
             if (err) {
               if (err.status === 401) {
@@ -428,12 +402,12 @@ export class UserModalComponent implements OnInit {
     // * Init Login form
     this.validateLoginForm = this.fb.group({
       username: [null, [Validators.required]],
-      password: [null, [Validators.required, Validators.minLength(6)]]
+      password: [null, [Validators.required, Validators.minLength(6)]],
     });
 
     // * Init WorkspaceName form
     this.validateWorkspaceNameForm = this.fb.group({
-      newWorkName: [null, [Validators.required]]
+      newWorkName: [null, [Validators.required]],
     });
 
     const { id: workspaceID } = this.workspace.currentWorkspace;
@@ -517,9 +491,7 @@ export class UserModalComponent implements OnInit {
         return;
       }
       const { workspace } = data;
-      const list = this.workspace
-        .getWorkspaceList()
-        .filter((it) => it.id !== -1);
+      const list = this.workspace.getWorkspaceList().filter((it) => it.id !== -1);
       this.workspace.setWorkspaceList([...list, workspace]);
       this.workspace.setCurrentWorkspaceID(workspace);
 
@@ -591,6 +563,7 @@ export class UserModalComponent implements OnInit {
       // * get login form values
       const formData = this.validateLoginForm.value;
       const [data, err]: any = await this.api.api_authLogin(formData);
+      console.log(data, err);
       if (err) {
         this.eMessage.error(
           $localize`Please check the account/password, the account must be a mobile phone number or email !`

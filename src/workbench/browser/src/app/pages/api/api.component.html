@@ -10,7 +10,12 @@
   >
     <!-- <div class="side-container"> -->
     <nz-content class="api-container-tabs">
-      <nz-tabset [ngClass]="{'share-group-tabset':status.isShare}" nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
+      <nz-tabset
+        [ngClass]="{ 'share-group-tabset': status.isShare }"
+        nzCentered
+        [nzAnimated]="false"
+        [(nzSelectedIndex)]="tabsIndex"
+      >
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
             <span
@@ -74,8 +79,14 @@
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
             </nz-select>
             <ng-template #renderTemplate>
-              <nz-divider></nz-divider>
-              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n
+              <nz-divider *ngIf="!status.isShare"></nz-divider>
+              <a
+                *ngIf="!status.isShare"
+                class="text-sx manager-env"
+                nz-button
+                nzType="link"
+                (click)="gotoEnvManager()"
+                i18n
                 >Manage Environment</a
               >
             </ng-template>
@@ -126,26 +137,25 @@
             (x)="handleDrag($event)"
             [init]="[200, dyWidth, 400]"
           ></eo-split-x>
-          <ng-template *ngIf="!status.isShare">
+          <div
+            *ngIf="!status.isShare"
+            class="absolute top-0 bottom-0 right-0 flex right-bar"
+            [ngClass]="{ 'left-line': !activeBar }"
+            [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
+          >
             <div
-              class="absolute top-0 bottom-0 right-0 flex right-bar"
-              [ngClass]="{ 'left-line': !activeBar }"
-              [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
+              class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
+              [ngClass]="activeBar ? 'active' : ''"
+              (click)="toggleRightBar()"
+              nz-tooltip
+              [nzTooltipMouseLeaveDelay]="0"
+              i18n-nzTooltipTitle="@@Environment Setting"
+              nzTooltipTitle="Environment Setting"
             >
-              <div
-                class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
-                [ngClass]="activeBar ? 'active' : ''"
-                (click)="toggleRightBar()"
-                nz-tooltip
-                [nzTooltipMouseLeaveDelay]="0"
-                i18n-nzTooltipTitle="@@Environment Setting"
-                nzTooltipTitle="Environment Setting"
-              >
-                <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
-              </div>
-              <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
+              <eo-iconpark-icon name="instruction"></eo-iconpark-icon>
             </div>
-          </ng-template>
+            <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
+          </div>
         </section>
       </div>
     </nz-content>

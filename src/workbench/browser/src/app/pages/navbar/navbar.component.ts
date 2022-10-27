@@ -100,12 +100,20 @@ export class NavbarComponent implements OnInit {
       });
   }
   async getShareLink() {
+    if (this.workspaceService.isLocal) {
+      return '';
+    }
+    if (!this.userService.isLogin) {
+      return '';
+    }
+    if (this.status.isShare) {
+      return '';
+    }
     const [res, err]: any = await this.http.api_shareCreateShare({});
     if (err) {
-      return;
+      return '';
     }
-    const { protocol, hostname, port } = location;
-    return `${protocol}//${hostname}${port ? `:${port}` : ''}/home/share/${res.uniqueID}`;
+    return `${this.dataSourceService.remoteServerUrl}/home/share/http/test?shareId=${res.uniqueID}`;
   }
   loginOrSign() {
     if (this.web.isWeb) {

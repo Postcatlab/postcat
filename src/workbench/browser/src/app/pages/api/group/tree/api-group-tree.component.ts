@@ -20,6 +20,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -80,7 +81,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private projectService: ProjectService,
     private nzModalService: NzModalService,
     public status: StatusService,
-    private http: RemoteService
+    private http: RemoteService,
+    private share: ShareService
   ) {}
   ngOnInit(): void {
     this.isEdit = !this.status.isShare;
@@ -117,9 +119,12 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.apiDataLoading = true;
     return new Promise(async (resolve) => {
       if (this.status.isShare) {
-        const [res, err]: any = await this.http.api_shareDocGetAllApi({
-          uniqueID: 'eed78dce-aeb1-4c01-8092-9d9b5d73bfe3',
-        });
+        const [res, err]: any = await this.http.api_shareDocGetAllApi(
+          {
+            uniqueID: this.share.shareId,
+          },
+          '/api'
+        );
         if (err) {
           resolve(false);
           return;
@@ -242,6 +247,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       case 'detailApi': {
         this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
           queryParams: { uuid: inArg.node.key },
+          queryParamsHandling: 'merge',
         });
         break;
       }

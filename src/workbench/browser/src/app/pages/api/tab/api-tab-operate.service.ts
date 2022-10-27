@@ -6,6 +6,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { contextIsolated } from 'process';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -66,6 +67,7 @@ export class ApiTabOperateService {
       return;
     }
     //Tab from url
+
     try {
       //If current url did't match exist tab,throw error
       this.getSameContentTab(this.generateTabFromUrl(this.router.url));
@@ -73,6 +75,7 @@ export class ApiTabOperateService {
       this.operateTabAfterRouteChange({
         url: this.router.url,
       });
+      return;
     } catch (e) {
       console.error(e);
       if (this.allowNotExistRouter) {

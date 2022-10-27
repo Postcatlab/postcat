@@ -12,6 +12,8 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -86,7 +88,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     public web: WebService,
     private store: Store,
     public status: StatusService,
-    private workspace: WorkspaceService
+    private workspace: WorkspaceService,
+    private http: RemoteService,
+    private share: ShareService
   ) {}
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -211,6 +215,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.envUuid = Number(localStorage.getItem('env:selected'));
     // * load All env
     this.getAllEnv().then((result: any[]) => {
+      console.log('envList', result);
       this.envList = result || [];
     });
   }
@@ -243,7 +248,16 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   private getAllEnv(uuid?: number) {
     const projectID = 1;
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+      if (this.status.isShare) {
+        const [data, err]: any = await this.http.api_shareDocGetEnv({
+          uniqueID: this.share.shareId,
+        });
+        if (err) {
+          return resolve([]);
+        }
+        return resolve(data || []);
+      }
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           return resolve(result.data || []);

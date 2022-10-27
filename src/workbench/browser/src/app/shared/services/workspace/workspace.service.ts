@@ -44,7 +44,7 @@ export class WorkspaceService {
     private projectService: ProjectService,
     private userService: UserService,
     private storageService: StorageService,
-    private router: Router,
+    private router: Router
   ) {
     // Current storage workspaceID not match remote storage,reset it;
     this.setCurrentWorkspace(this.currentWorkspace);
@@ -99,7 +99,12 @@ export class WorkspaceService {
       },
     });
     this.switchDataSource(workspace.id === -1 ? 'local' : 'http');
-    this.updateProjectID(this.currentWorkspaceID);
+    await this.updateProjectID(this.currentWorkspaceID);
+    //refresh componnet
+    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
+    await this.router.navigate(['**']);
+    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
+
     this.messageService.send({ type: 'workspaceChange', data: true });
   }
   /**
@@ -114,10 +119,6 @@ export class WorkspaceService {
       this.switchToLocal();
       localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
     }
-    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
-    // console.log('this.router', pathname, Object.fromEntries(searchParams.entries()));
-    await this.router.navigate(['**']);
-    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
   };
   switchToLocal() {
     this.storageService.toggleDataSource({ dataSourceType: 'local' });
@@ -125,9 +126,7 @@ export class WorkspaceService {
   switchToHttp() {
     this.storageService.toggleDataSource({ dataSourceType: 'http' });
   }
-  async refreshComponent() {
-
-  }
+  async refreshComponent() {}
 
   getWorkspaceList() {
     return this.workspaceList;
@@ -139,6 +138,7 @@ export class WorkspaceService {
       return;
     }
     const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
+    console.log(projects);
     this.projectService.setCurrentProjectID(projects.at(0).uuid);
     this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({
   selector: 'eo-pages',
@@ -7,7 +8,11 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
   styleUrls: ['./pages.component.scss'],
 })
 export class PagesComponent implements OnInit {
-  isShowNotification = false;
-  constructor(public electron: ElectronService) {}
-  ngOnInit(): void {}
+  isShowNotification;
+  constructor(public electron: ElectronService, private status: StatusService) {
+    this.isShowNotification = false;
+  }
+  ngOnInit(): void {
+    this.electron.isElectron && this.status.countShare();
+  }
 }

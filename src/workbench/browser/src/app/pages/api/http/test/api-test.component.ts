@@ -35,6 +35,7 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
 import { isEmpty } from 'lodash-es';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 interface testViewModel {
@@ -102,6 +103,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private apiTestUtil: ApiTestUtilService,
     private testServer: TestServerService,
     private messageService: MessageService,
+    public statusS: StatusService,
     private lang: LanguageService
   ) {
     // TODO Select demo api when first open Eoapi

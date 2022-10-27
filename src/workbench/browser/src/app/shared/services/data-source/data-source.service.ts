@@ -61,34 +61,18 @@ export class DataSourceService {
     if (!remoteUrl) {
       return false;
     }
-    const [, err]: any = await this.http.api_systemStatus({}, remoteUrl);
-    this.isConnectRemote = !err;
-    return !err;
+    const [, err]: any = await this.http.api_systemStatus({});
+    if (err) {
+      // ! TODO delete the retry
+      const [, nErr]: any = await this.http.api_systemStatus({}, '/api');
+      if (nErr) {
+        this.isConnectRemote = false;
+        return false;
+      }
+    }
+    this.isConnectRemote = true;
+    return this.isConnectRemote;
   }
-  // async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
-  //   const remoteUrl = inputUrl || this.remoteServerUrl;
-  //   let result;
-  //   if (!remoteUrl) {
-  //     result = [false, remoteUrl];
-  //   }
-
-  //   const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
-
-  //   let res;
-  //   try {
-  //     const response = await fetch(url);
-  //     res = await response.json();
-  //     if (res.statusCode !== 200) {
-  //       result = [false, res];
-  //     } else {
-  //       result = [true, res];
-  //     }
-  //   } catch (e) {
-  //     result = [false, e];
-  //   }
-  //   this.isConnectRemote = result[0];
-  //   return result;
-  // }
 
   async checkRemoteAndTipModal() {
     const isSuccess = await this.pingCloudServerUrl();
