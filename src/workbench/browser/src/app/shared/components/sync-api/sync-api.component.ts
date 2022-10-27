@@ -4,6 +4,7 @@ import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
 import { FeatureType } from '../../types';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Component({
   selector: 'eo-sync-api',
@@ -12,8 +13,12 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
-  featureMap = window.eo?.getFeature('apimanage.sync');
-  constructor(private storage: StorageService, public extensionService: ExtensionService) {}
+  featureMap = window.eo?.getFeature('apimanage.sync') || this.webExtensionService.getFeatures('apimanage.sync');
+  constructor(
+    private storage: StorageService,
+    public extensionService: ExtensionService,
+    public webExtensionService: WebExtensionService
+  ) {}
 
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureType, key: string) => {
@@ -32,7 +37,7 @@ export class SyncApiComponent implements OnInit {
   async submit() {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension);
+    const module = window.eo.loadFeatureModule(this.currentExtension) || globalThis[this.currentExtension];
     // TODO 临时取值方式需要修改
     const { token: secretKey, projectId } = window.eo?.getModuleSettings(
       'eoapi-feature-push-eolink.eolink.remoteServer'

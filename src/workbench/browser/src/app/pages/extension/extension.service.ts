@@ -7,6 +7,7 @@ import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,12 @@ export class ExtensionService {
   extensionIDs: Array<string> = [];
   HOST = '';
   localExtensions: Map<string, ModuleInfo>;
-  constructor(private http: HttpClient, private electron: ElectronService, private language: LanguageService) {
+  constructor(
+    private http: HttpClient,
+    private electron: ElectronService,
+    private language: LanguageService,
+    private webExtensionService: WebExtensionService
+  ) {
     this.localExtensions = this.getExtensions();
     this.extensionIDs = this.updateExtensionIDs();
     this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
@@ -58,8 +64,9 @@ export class ExtensionService {
     let result = {} as ModuleInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
-    if (this.localExtensions.has(id)) {
-      Object.assign(result, this.localExtensions.get(id), { installed: true });
+    const localExt = this.webExtensionService.getExtensionByName(name);
+    if (this.localExtensions.has(id) || localExt) {
+      Object.assign(result, this.localExtensions.get(id), { ...localExt?.pkgInfo, installed: true });
     }
     result = this.translateModule(result);
     return result;

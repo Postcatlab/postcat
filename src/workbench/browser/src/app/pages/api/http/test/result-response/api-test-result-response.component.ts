@@ -45,7 +45,9 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   }
 
   downloadResponseText() {
-    this.blobUrl = this.responseIsImg ? this.uri : getBlobUrl(this.model.body, this.model.contentType);
+    this.blobUrl = this.responseIsImg ? this.uri : getBlobUrl(window.btoa(this.model.body), this.model.contentType);
+    console.log('blobUrl', ((window as any).blobUrl = this.blobUrl));
+    (window as any).modelVody = this.model.body;
     const blobFileName = decodeURI(this.model.blobFileName || 'test_response');
     const tmpAElem = document.createElement('a');
     if ('download' in tmpAElem) {

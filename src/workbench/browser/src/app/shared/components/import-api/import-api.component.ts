@@ -6,6 +6,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { Router } from '@angular/router';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 // const optionList = [
 //   {
@@ -51,15 +52,17 @@ export class ImportApiComponent implements OnInit {
   supportList: Array<FeatureType> = [];
   currentExtension = '';
   uploadData = null;
-  featureMap = window.eo?.getFeature('apimanage.import');
+  featureMap = window.eo?.getFeature('apimanage.import') || this.webExtensionService.getFeatures('apimanage.import');
   constructor(
     private router: Router,
     private storage: StorageService,
     private eoMessage: EoMessageService,
     public extensionService: ExtensionService,
+    public webExtensionService: WebExtensionService,
     private projectService: ProjectService
   ) {}
   ngOnInit(): void {
+    console.log('this.featureMap', this.featureMap);
     this.featureMap?.forEach((data: FeatureType, key: string) => {
       if (this.extensionService.isEnable(data.name)) {
         this.supportList.push({
@@ -84,8 +87,9 @@ export class ImportApiComponent implements OnInit {
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = await window.eo.loadFeatureModule(this.currentExtension);
+    const module = (await window.eo?.loadFeatureModule(this.currentExtension)) || globalThis[this.currentExtension];
     const { name, content } = this.uploadData;
+    console.log('module', module, action, module[action]);
     const [data, err] = module[action](content);
     // console.log('import data', structuredClone?.(data));
     if (err) {
