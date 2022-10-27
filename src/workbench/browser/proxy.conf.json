@@ -2,9 +2,6 @@
   "/api": {
     "target": "http://8.219.85.124:3001/",
     "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    },
     "logLevel": "debug"
   }
 }

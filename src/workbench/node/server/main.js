@@ -16,6 +16,8 @@ const port = process.env.TEST_SERVER_PORT || 4201;
 app.use(cors());
 app.use(koaBody());
 
+console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+
 app.use(async (ctx, next) => {
   if (ctx.method !== 'POST') {
     ctx.body = 'Hello World';

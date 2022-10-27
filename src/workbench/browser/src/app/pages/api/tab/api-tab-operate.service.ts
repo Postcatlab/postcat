@@ -174,7 +174,7 @@ export class ApiTabOperateService {
     const params: any = {};
     const basicTab = this.BASIC_TABS.find((val) => urlArr[0].includes(val.pathname));
     if (!basicTab) {
-      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route: ${url}`);
     }
     // Parse query params
     new URLSearchParams(urlArr[1]).forEach((value, key) => {

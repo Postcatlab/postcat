@@ -5,14 +5,9 @@ import { ShareComponent } from './share.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: ShareComponent,
     children: [
-      {
-        path: '',
-        redirectTo: 'http',
-        pathMatch: 'full',
-      },
       {
         path: 'http',
         children: [
