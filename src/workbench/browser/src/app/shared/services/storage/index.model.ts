@@ -62,7 +62,7 @@ export interface Environment extends StorageModel {
   /**
    * Env parameters
    */
-  parameters?: { name: string; value: string }[];
+  parameters?: { name: string; value: string; description: string }[];
 }
 
 /**
