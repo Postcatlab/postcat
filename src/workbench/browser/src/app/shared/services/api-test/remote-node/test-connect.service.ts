@@ -2,7 +2,8 @@ import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 
 import { requestDataOpts, TestServer } from '../test-server.model';
 import { DEFAULT_UNIT_TEST_RESULT, eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
-import { ELETRON_APP_CONFIG } from 'eo/enviroment';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+
 @Injectable()
 export class TestServerRemoteService implements TestServer {
   receiveMessage: (message) => void;
@@ -21,11 +22,15 @@ export class TestServerRemoteService implements TestServer {
         this.xhrByTabID[message.id]?.abort();
       }
     }
-    if (message.action !== 'ajax') {return;}
+    if (message.action !== 'ajax') {
+      return;
+    }
   }
   ajax(message) {
     const xhr = new XMLHttpRequest();
-    const url = `${window.location.protocol}//${window.location.hostname}:${ELETRON_APP_CONFIG.NODE_SERVER_PORT}/api/unit`;
+    const url = `${window.location.protocol}//${window.location.hostname}:${
+      APP_CONFIG.NODE_SERVER_PORT || window.location.port
+    }/api/unit`;
     xhr.open('POST', url);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.onreadystatechange = (e) => {
@@ -33,7 +38,7 @@ export class TestServerRemoteService implements TestServer {
         if (xhr.status === 200) {
           this.receiveMessage(this.formatResponseData(JSON.parse(xhr.responseText).data));
         } else {
-          this.receiveMessage(Object.assign({id:message.id},DEFAULT_UNIT_TEST_RESULT));
+          this.receiveMessage(Object.assign({ id: message.id }, DEFAULT_UNIT_TEST_RESULT));
         }
       }
     };

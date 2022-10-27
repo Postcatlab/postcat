@@ -1,6 +1,9 @@
 const fs = require('fs');
 const { execSync } = require('child_process');
 class webPlatformBuilder {
+  constructor(environment) {
+    this.environment = environment;
+  }
   resetBuildConfig(json) {
     delete json.projects.eoapi.i18n.sourceLocale.baseHref;
     Object.keys(json.projects.eoapi.i18n.locales).forEach((val) => {
@@ -9,7 +12,7 @@ class webPlatformBuilder {
     return json;
   }
   executeBuild() {
-    execSync('ng build -c production', { stdio: 'inherit' });
+    execSync(`ng build -c ${this.environment}`, { stdio: 'inherit' });
     fs.writeFile(
       './dist/index.html',
       `<!DOCTYPE html>
@@ -22,7 +25,7 @@ class webPlatformBuilder {
          try{
           lang=JSON.parse(window.localStorage.getItem("LOCAL_SETTINGS_KEY"))["eoapi-language"]=='en-US'?'en':'zh';
          }catch(e){
-          
+
          }
          let baseDir="/"+lang+'/'
          let search={};
@@ -53,10 +56,10 @@ class appPlatformBuilder {
   }
 }
 class PlatformBuilder {
-  constructor(platForm) {
+  constructor(platForm, environment) {
     switch (platForm) {
       case 'web': {
-        this.instance = new webPlatformBuilder();
+        this.instance = new webPlatformBuilder(environment);
         break;
       }
       case 'app': {
@@ -79,5 +82,6 @@ class PlatformBuilder {
   }
 }
 let platform = process.argv[2] || 'app';
-let platformBuilder = new PlatformBuilder(platform);
+let environment = process.argv[3] || 'production';
+let platformBuilder = new PlatformBuilder(platform, environment);
 platformBuilder.build();
