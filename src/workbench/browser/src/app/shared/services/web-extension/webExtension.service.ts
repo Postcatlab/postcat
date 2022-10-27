@@ -49,10 +49,8 @@ export class WebExtensionService {
   }
 
   unInstallExtension(extName: string) {
-    StorageUtil.set(
-      extKey,
-      this.installedList.filter((n) => n.name !== extName)
-    );
+    this.installedList = this.installedList.filter((n) => n.name !== extName);
+    StorageUtil.set(extKey, this.installedList);
   }
 
   getExtensionByName(extName: string) {
