@@ -89,7 +89,8 @@ export class DataStorageComponent implements OnInit, OnChanges {
       );
       this.messageS.send({ type: 'workspaceChange', data: {} });
       if (isSuccess) {
-        this.dataSource.connectCloudSuccess();
+        this.message.success($localize`Successfully connect to cloud`);
+        localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
         const isLogin = this.user.isLogin;
         if (!isLogin) {
           this.messageS.send({ type: 'login', data: {} });

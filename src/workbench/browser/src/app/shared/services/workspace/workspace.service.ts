@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
-import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
-
+import { Router } from '@angular/router';
+/** is show switch success tips */
+export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 @Injectable({
   providedIn: 'root',
 })
@@ -36,20 +38,16 @@ export class WorkspaceService {
     return result;
   }
   workspaceList: API.Workspace[] = [this.localWorkspace];
-
   constructor(
     private messageService: MessageService,
-    private dataSourceService: DataSourceService,
     private storage: StorageService,
     private projectService: ProjectService,
-    private userService: UserService
+    private userService: UserService,
+    private storageService: StorageService,
+    private router: Router,
   ) {
     // Current storage workspaceID not match remote storage,reset it;
-    if (this.isLocal && this.dataSourceService.isRemote) {
-      this.setCurrentWorkspace(this.localWorkspace);
-    } else if (!this.isLocal && !this.dataSourceService.isRemote) {
-      this.setCurrentWorkspace(this.currentWorkspace);
-    }
+    this.setCurrentWorkspace(this.currentWorkspace);
   }
 
   getWorkspaceInfo(workspaceID: number): Promise<any> {
@@ -94,10 +92,41 @@ export class WorkspaceService {
     this.currentWorkspaceID = workspace.id;
     StorageUtil.set('currentWorkspace', workspace);
     // * Change data storage
-    await this.dataSourceService.switchDataSource(workspace.id === -1 ? 'local' : 'http', () =>
-      this.updateProjectID(this.currentWorkspaceID)
-    );
+    this.messageService.send({
+      type: 'changeStorage',
+      data: {
+        type: workspace.id === -1 ? 'local' : 'http',
+      },
+    });
+    this.switchDataSource(workspace.id === -1 ? 'local' : 'http');
+    this.updateProjectID(this.currentWorkspaceID);
     this.messageService.send({ type: 'workspaceChange', data: true });
+  }
+  /**
+   * switch data
+   */
+  private switchDataSource = async (dataSource: DataSourceType) => {
+    const isRemote = dataSource === 'http';
+    if (isRemote) {
+      this.switchToHttp();
+      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+    } else {
+      this.switchToLocal();
+      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+    }
+    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
+    // console.log('this.router', pathname, Object.fromEntries(searchParams.entries()));
+    await this.router.navigate(['**']);
+    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
+  };
+  switchToLocal() {
+    this.storageService.toggleDataSource({ dataSourceType: 'local' });
+  }
+  switchToHttp() {
+    this.storageService.toggleDataSource({ dataSourceType: 'http' });
+  }
+  async refreshComponent() {
+
   }
 
   getWorkspaceList() {
@@ -105,13 +134,12 @@ export class WorkspaceService {
   }
 
   async updateProjectID(workspaceID: number) {
-    if (workspaceID !== -1 && this.dataSourceService.isRemote) {
-      const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
-      this.projectService.setCurrentProjectID(projects.at(0).uuid);
-      this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
-    }
     if (workspaceID === -1) {
       this.projectService.setCurrentProjectID(1);
+      return;
     }
+    const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
+    this.projectService.setCurrentProjectID(projects.at(0).uuid);
+    this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
   }
 }
