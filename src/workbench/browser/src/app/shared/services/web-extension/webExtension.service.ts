@@ -64,7 +64,8 @@ export class WebExtensionService {
     const __define = global.define;
     global.define = undefined;
     ${scriptText}
-    global.define = __define;
+
+    ;global.define = __define;
     `;
     script.text = text;
     document.head.appendChild(script);
