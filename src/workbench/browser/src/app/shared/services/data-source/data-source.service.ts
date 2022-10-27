@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { Subject } from 'rxjs';
+import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-
-/** is show switch success tips */
-export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
 /**
  * @description
@@ -40,11 +35,9 @@ export class DataSourceService {
   }
 
   constructor(
-    private storageService: StorageService,
     private messageService: MessageService,
     private message: EoMessageService,
     private settingService: SettingService,
-    private router: Router,
     private user: UserService,
     private http: RemoteService
   ) {
@@ -60,12 +53,6 @@ export class DataSourceService {
     return decodeURIComponent(url.toString());
   }
 
-  async refreshComponent() {
-    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
-    // console.log('this.router', pathname, Object.fromEntries(searchParams.entries()));
-    await this.router.navigate(['**']);
-    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
-  }
   /**
    * Test if cloud service address is available
    */
@@ -132,13 +119,6 @@ export class DataSourceService {
     }
   }
 
-  switchToLocal() {
-    this.storageService.toggleDataSource({ dataSourceType: 'local' });
-  }
-  switchToHttp() {
-    this.storageService.toggleDataSource({ dataSourceType: 'http' });
-  }
-
   getSettings() {
     try {
       return JSON.parse(localStorage.getItem('localSettings') || '{}');
@@ -175,33 +155,4 @@ export class DataSourceService {
     }
     return undefined;
   };
-
-  /**
-   * switch data
-   */
-  switchDataSource = async (dataSource: DataSourceType, beforRefreshCompFn = () => {}) => {
-    const isRemote = dataSource === 'http';
-    if (isRemote) {
-      const isSuccess = await this.pingCloudServerUrl();
-      if (isSuccess) {
-        this.switchToHttp();
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
-        await beforRefreshCompFn?.();
-        this.refreshComponent();
-      } else {
-        this.message.error($localize`Cloud Storage not available`);
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
-      }
-    } else {
-      this.switchToLocal();
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
-      await beforRefreshCompFn?.();
-      this.refreshComponent();
-    }
-  };
-
-  connectCloudSuccess() {
-    this.message.success($localize`Successfully connect to cloud`);
-    localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
-  }
 }

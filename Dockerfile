@@ -11,8 +11,7 @@ COPY /src/workbench/node /test-server
 
 RUN yarn install
 
-EXPOSE 4201
-EXPOSE 4202
+EXPOSE 4201 4202
 
 CMD ["yarn", "start:all"]
 
