@@ -61,7 +61,7 @@ export class ExtensionDetailComponent implements OnInit {
 
     this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
 
-    if (!this.extensionDetail?.installed) {
+    if (!this.extensionDetail?.installed || this.webService.isWeb) {
       await this.fetchReadme(this.language.systemLanguage);
     }
     this.isNotLoaded = false;

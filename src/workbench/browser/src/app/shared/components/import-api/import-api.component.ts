@@ -64,12 +64,12 @@ export class ImportApiComponent implements OnInit {
   ngOnInit(): void {
     console.log('this.featureMap', this.featureMap);
     this.featureMap?.forEach((data: FeatureType, key: string) => {
-      // if (this.extensionService.isEnable(data.name)) {
-      this.supportList.push({
-        key,
-        ...data,
-      });
-      // }
+      if (this.extensionService.isEnable(data.name)) {
+        this.supportList.push({
+          key,
+          ...data,
+        });
+      }
     });
     {
       const { key } = this.supportList.at(0);
