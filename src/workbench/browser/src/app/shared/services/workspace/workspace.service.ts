@@ -44,7 +44,7 @@ export class WorkspaceService {
     private projectService: ProjectService,
     private userService: UserService
   ) {
-    //Current storage workspaceID not match remote storage,reset it;
+    // Current storage workspaceID not match remote storage,reset it;
     if (this.isLocal && this.dataSourceService.isRemote) {
       this.setCurrentWorkspace(this.localWorkspace);
     } else if (!this.isLocal && !this.dataSourceService.isRemote) {

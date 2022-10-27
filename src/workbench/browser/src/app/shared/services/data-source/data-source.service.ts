@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -44,7 +45,8 @@ export class DataSourceService {
     private message: EoMessageService,
     private settingService: SettingService,
     private router: Router,
-    private user: UserService
+    private user: UserService,
+    private http: RemoteService
   ) {
     this.pingCloudServerUrl();
   }
@@ -67,33 +69,42 @@ export class DataSourceService {
   /**
    * Test if cloud service address is available
    */
-  async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
+  async pingCloudServerUrl(inputUrl?): Promise<boolean> {
     const remoteUrl = inputUrl || this.remoteServerUrl;
-    let result;
     if (!remoteUrl) {
-      result = [false, remoteUrl];
+      return false;
     }
-
-    const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
-
-    let res;
-    try {
-      const response = await fetch(url);
-      res = await response.json();
-      if (res.statusCode !== 200) {
-        result = [false, res];
-      } else {
-        result = [true, res];
-      }
-    } catch (e) {
-      result = [false, e];
-    }
-    this.isConnectRemote = result[0];
-    return result;
+    const [, err]: any = await this.http.api_systemStatus({}, remoteUrl);
+    this.isConnectRemote = !err;
+    return !err;
   }
+  // async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
+  //   const remoteUrl = inputUrl || this.remoteServerUrl;
+  //   let result;
+  //   if (!remoteUrl) {
+  //     result = [false, remoteUrl];
+  //   }
+
+  //   const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
+
+  //   let res;
+  //   try {
+  //     const response = await fetch(url);
+  //     res = await response.json();
+  //     if (res.statusCode !== 200) {
+  //       result = [false, res];
+  //     } else {
+  //       result = [true, res];
+  //     }
+  //   } catch (e) {
+  //     result = [false, e];
+  //   }
+  //   this.isConnectRemote = result[0];
+  //   return result;
+  // }
 
   async checkRemoteAndTipModal() {
-    const [isSuccess] = await this.pingCloudServerUrl();
+    const isSuccess = await this.pingCloudServerUrl();
     if (!isSuccess) {
       this.messageService.send({ type: 'ping-fail', data: {} });
       return;
@@ -103,7 +114,7 @@ export class DataSourceService {
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
     if (this.remoteServerUrl) {
-      const [isSuccess] = await this.pingCloudServerUrl();
+      const isSuccess = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
       if (isSuccess) {
         if (!this.user.isLogin) {
@@ -171,7 +182,7 @@ export class DataSourceService {
   switchDataSource = async (dataSource: DataSourceType, beforRefreshCompFn = () => {}) => {
     const isRemote = dataSource === 'http';
     if (isRemote) {
-      const [isSuccess] = await this.pingCloudServerUrl();
+      const isSuccess = await this.pingCloudServerUrl();
       if (isSuccess) {
         this.switchToHttp();
         localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');

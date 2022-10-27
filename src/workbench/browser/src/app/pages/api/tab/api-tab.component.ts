@@ -7,6 +7,7 @@ import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/
 import { ModalService } from '../../../shared/services/modal.service';
 import { KeyValue } from '@angular/common';
 import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 @Component({
   selector: 'eo-api-tab',
   templateUrl: './api-tab.component.html',
@@ -23,7 +24,8 @@ export class ApiTabComponent implements OnInit, OnDestroy {
     public tabStorage: ApiTabStorageService,
     public tabOperate: ApiTabOperateService,
     private modal: ModalService,
-    private router: Router
+    private router: Router,
+    public status: StatusService
   ) {}
   ngOnInit(): void {
     this.tabOperate.init(this.list);

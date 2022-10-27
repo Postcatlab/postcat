@@ -139,18 +139,25 @@ export class ApiService {
     return this.remote.api_shareDeleteShare(params)
   }
 
-  api_shareGetAllApi(params) {
+  api_shareDocGetAllApi(params) {
     if (this.dataSourceType === 'local') {
-      return this.local.api_shareGetAllApi(params)
+      return this.local.api_shareDocGetAllApi(params)
     }
-    return this.remote.api_shareGetAllApi(params)
+    return this.remote.api_shareDocGetAllApi(params)
   }
 
-  api_shareGetApiDetail(params) {
+  api_shareDocGetApiDetail(params) {
     if (this.dataSourceType === 'local') {
-      return this.local.api_shareGetApiDetail(params)
+      return this.local.api_shareDocGetApiDetail(params)
     }
-    return this.remote.api_shareGetApiDetail(params)
+    return this.remote.api_shareDocGetApiDetail(params)
+  }
+
+  api_shareDocGetEnv(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_shareDocGetEnv(params)
+    }
+    return this.remote.api_shareDocGetEnv(params)
   }
 
   api_userUpdateUserProfile(params) {

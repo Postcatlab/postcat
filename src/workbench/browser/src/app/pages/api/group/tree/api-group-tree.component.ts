@@ -83,7 +83,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private http: RemoteService
   ) {}
   ngOnInit(): void {
-    this.isEdit=!this.status.isShare;
+    this.isEdit = !this.status.isShare;
     this.buildGroupTreeData();
     this.watchApiAction();
     this.watchRouterChange();
@@ -117,11 +117,19 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.apiDataLoading = true;
     return new Promise(async (resolve) => {
       if (this.status.isShare) {
-        const [, err]: any = await this.http.api_shareGetAllApi({ uniqueID: '' });
+        const [res, err]: any = await this.http.api_shareDocGetAllApi({
+          uniqueID: 'eed78dce-aeb1-4c01-8092-9d9b5d73bfe3',
+        });
         if (err) {
+          resolve(false);
           return;
         }
+        const { groups, apis } = res;
+        console.log(groups, apis);
+        this.getGroups(groups);
+        this.getApis(apis);
         this.apiDataLoading = false;
+        resolve(true);
         return;
       }
       this.storage.run('projectCollections', [this.projectService.currentProjectID], (result: StorageRes) => {
@@ -226,7 +234,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
-    const prefix=this.status.isShare?'home/share':'/home/api';
+    const prefix = this.status.isShare ? 'home/share' : '/home/api';
     inArg.event.stopPropagation();
     switch (inArg.eventName) {
       case 'testApi':

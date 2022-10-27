@@ -11,6 +11,8 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
+import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -35,7 +37,8 @@ export class NavbarComponent implements OnInit {
     public userService: UserService,
     public dataSourceService: DataSourceService,
     public status: StatusService,
-    private http: RemoteService
+    private http: RemoteService,
+    private eoMessage: EoMessageService
   ) {
     this.issueEnvironment = this.getEnviroment();
     if (this.workspaceService.currentWorkspace?.id !== -1) {
@@ -69,8 +72,11 @@ export class NavbarComponent implements OnInit {
     });
   }
   handleCopy() {
-    const shareLink = '';
+    const isOk = copy(this.shareLink);
     // TODO
+    if (isOk) {
+      this.eoMessage.success('Copied');
+    }
   }
   async ngOnInit(): Promise<void> {
     if (this.electron.isElectron) {
@@ -89,12 +95,7 @@ export class NavbarComponent implements OnInit {
         }
         if (type === 'update-share-link') {
           // * request share link
-          console.log('link');
-          const [res, err]: any = await this.http.api_shareCreateShare({});
-          if (err) {
-            return;
-          }
-          this.shareLink = `${location.href}/${res.uniqueID}`;
+          this.shareLink = await this.getShareLink();
         }
       });
   }
@@ -103,8 +104,8 @@ export class NavbarComponent implements OnInit {
     if (err) {
       return;
     }
-    console.log(`${location.href}/${res.uniqueID}`);
-    return `${location.href}/${res.uniqueID}`;
+    const { protocol, hostname, port } = location;
+    return `${protocol}//${hostname}${port ? `:${port}` : ''}/home/share/${res.uniqueID}`;
   }
   loginOrSign() {
     if (this.web.isWeb) {
