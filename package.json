@@ -14,13 +14,8 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps && npx patch-package",
     "start": "npm-run-all -p start:workbench electron:serve",
-<<<<<<< .merge_file_a15084
-    "start:web": "cd src/workbench/browser && npm run ng:serve",
-    "start:testServer": "cd src/workbench/node/server && yarn dev",
-=======
     "serve:web": "cd src/workbench/browser && npm run ng:serve",
     "start:testServer": "cd src/workbench/node && yarn dev",
->>>>>>> .merge_file_a27512
     "start:workbench": "cd src/workbench/browser && yarn start",
     "build:workbench": "cd src/workbench/browser && yarn build",
     "docker:build:workbench": "cd src/workbench/browser && yarn build:docker:web",
