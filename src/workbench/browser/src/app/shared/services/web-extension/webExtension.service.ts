@@ -21,7 +21,9 @@ const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
 export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
 
-  constructor(private message: NzMessageService, private webService: WebService) {
+  constructor(private message: NzMessageService, private webService: WebService) {}
+
+  init() {
     if (this.webService.isWeb) {
       defaultExtensions.forEach((n) => {
         const isInstall = this.getExtensionByName(n);
