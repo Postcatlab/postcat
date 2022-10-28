@@ -16,9 +16,7 @@ const sharePaths = ['/shared-docs'];
 const noPrefix = ['https://', 'http://'];
 
 // implements StorageInterface
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
   get apiPrefix() {
     return `/${this.workspaceID}/${this.projectID}/`;

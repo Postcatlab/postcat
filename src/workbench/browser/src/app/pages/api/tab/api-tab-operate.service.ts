@@ -6,7 +6,6 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { contextIsolated } from 'process';
 import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 /**
@@ -427,7 +426,7 @@ export class ApiTabOperateService {
     //If router not exist basic tab,filter it
     cache.tabOrder = cache.tabOrder.filter((id) => {
       const tabItem = cache.tabsByID[id];
-      if (!tabItem) return false;
+      if (!tabItem) {return false;}
       const hasExist = this.BASIC_TABS.find((val) => val.pathname === tabItem.pathname);
       if (!hasExist) {
         delete cache.tabsByID[id];

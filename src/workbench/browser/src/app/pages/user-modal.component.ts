@@ -434,7 +434,7 @@ export class UserModalComponent implements OnInit {
 
     if (url === '') {
       // * 唤起弹窗
-      this.isOpenSettingModalVisible = true;
+      // this.isOpenSettingModalVisible = true;
       {
       }
 
