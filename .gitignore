@@ -54,3 +54,4 @@ Thumbs.db
 # *-lock.json
 -error.log
 .vercel
+nginx-test.conf

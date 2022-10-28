@@ -130,6 +130,7 @@ export class ExtensionSettingComponent implements OnInit {
 
   handleSave = () => {
     this.settingService.saveSetting(this.localSettings);
+    window.eo?.saveSettings?.({ ...this.localSettings });
     this.message.create('success', `Save Success`);
   };
 }
