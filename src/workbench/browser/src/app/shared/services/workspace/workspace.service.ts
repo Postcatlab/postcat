@@ -126,7 +126,6 @@ export class WorkspaceService {
   switchToHttp() {
     this.storageService.toggleDataSource({ dataSourceType: 'http' });
   }
-  async refreshComponent() {}
 
   getWorkspaceList() {
     return this.workspaceList;

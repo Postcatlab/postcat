@@ -63,7 +63,6 @@ registerLocaleData(zh);
       deps: ['$injector'],
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
-    // { provide: HTTP_INTERCEPTORS, useClass: RemoteUrlInterceptor, multi: true },
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {

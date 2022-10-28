@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 const ErrorStyle =
-  'background-color: #a73836; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;'
+  'background-color: #a73836; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;';
 
 const SuccessStyle =
-  'background-color: #316745; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;'
+  'background-color: #316745; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;';
 
 @Injectable({
   providedIn: 'root',
@@ -21,22 +21,22 @@ export class RemoteService {
             '%c project:create - api_projectCreate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c project:create - api_projectCreate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_projectUpdate({ uuid, ...items }, prefix = '') {
@@ -45,8 +45,8 @@ export class RemoteService {
         '%c Error: project - update 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -56,22 +56,22 @@ export class RemoteService {
             '%c project:update - api_projectUpdate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c project:update - api_projectUpdate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_projectDelete({ uuid }, prefix = '') {
@@ -80,8 +80,8 @@ export class RemoteService {
         '%c Error: project - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -91,22 +91,22 @@ export class RemoteService {
             '%c project:delete - api_projectDelete 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c project:delete - api_projectDelete 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_projectExport(params, prefix = '') {
@@ -117,22 +117,22 @@ export class RemoteService {
             '%c project:export - api_projectExport 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c project:export - api_projectExport 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_workspaceCreate({ title }, prefix = '') {
@@ -141,8 +141,8 @@ export class RemoteService {
         '%c Error: workspace - create 接口 缺失参数 title %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -152,22 +152,22 @@ export class RemoteService {
             '%c workspace:create - api_workspaceCreate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c workspace:create - api_workspaceCreate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_workspaceList({ ...items }, prefix = '') {
@@ -182,22 +182,22 @@ export class RemoteService {
               '%c workspace:list - api_workspaceList 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c workspace:list - api_workspaceList 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_workspaceUpload(params, prefix = '') {
@@ -208,22 +208,22 @@ export class RemoteService {
             '%c workspace:upload - api_workspaceUpload 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c workspace:upload - api_workspaceUpload 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_workspaceEdit({ workspaceID, title }, prefix = '') {
@@ -232,16 +232,16 @@ export class RemoteService {
         '%c Error: workspace - edit 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
     if (!title) {
       console.log(
         '%c Error: workspace - edit 接口 缺失参数 title %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -251,22 +251,22 @@ export class RemoteService {
             '%c workspace:edit - api_workspaceEdit 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c workspace:edit - api_workspaceEdit 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_workspaceDelete({ workspaceID }, prefix = '') {
@@ -275,8 +275,8 @@ export class RemoteService {
         '%c Error: workspace - delete 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -286,22 +286,22 @@ export class RemoteService {
             '%c workspace:delete - api_workspaceDelete 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c workspace:delete - api_workspaceDelete 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_workspaceGetInfo({ workspaceID }, prefix = '') {
@@ -310,8 +310,8 @@ export class RemoteService {
         '%c Error: workspace - getInfo 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -321,22 +321,22 @@ export class RemoteService {
             '%c workspace:getInfo - api_workspaceGetInfo 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c workspace:getInfo - api_workspaceGetInfo 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_workspaceMember({ workspaceID }, prefix = '') {
@@ -345,8 +345,8 @@ export class RemoteService {
         '%c Error: workspace - member 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -358,22 +358,22 @@ export class RemoteService {
               '%c workspace:member - api_workspaceMember 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c workspace:member - api_workspaceMember 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_workspaceAddMember({ workspaceID, userIDs }, prefix = '') {
@@ -382,16 +382,16 @@ export class RemoteService {
         '%c Error: workspace - addMember 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
     if (!userIDs) {
       console.log(
         '%c Error: workspace - addMember 接口 缺失参数 userIDs %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -403,22 +403,22 @@ export class RemoteService {
               '%c workspace:addMember - api_workspaceAddMember 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c workspace:addMember - api_workspaceAddMember 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_workspaceRemoveMember({ workspaceID, userIDs }, prefix = '') {
@@ -427,16 +427,16 @@ export class RemoteService {
         '%c Error: workspace - removeMember 接口 缺失参数 workspaceID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
     if (!userIDs) {
       console.log(
         '%c Error: workspace - removeMember 接口 缺失参数 userIDs %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -450,22 +450,22 @@ export class RemoteService {
               '%c workspace:removeMember - api_workspaceRemoveMember 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c workspace:removeMember - api_workspaceRemoveMember 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_shareCreateShare(params, prefix = '') {
@@ -476,22 +476,22 @@ export class RemoteService {
             '%c share:createShare - api_shareCreateShare 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c share:createShare - api_shareCreateShare 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_shareGetShareList(params, prefix = '') {
@@ -502,22 +502,22 @@ export class RemoteService {
             '%c share:getShareList - api_shareGetShareList 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c share:getShareList - api_shareGetShareList 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_shareDeleteShare(params, prefix = '') {
@@ -528,22 +528,22 @@ export class RemoteService {
             '%c share:deleteShare - api_shareDeleteShare 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c share:deleteShare - api_shareDeleteShare 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_shareDocGetAllApi({ uniqueID }, prefix = '') {
@@ -552,8 +552,8 @@ export class RemoteService {
         '%c Error: shareDoc - getAllAPI 接口 缺失参数 uniqueID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -565,22 +565,22 @@ export class RemoteService {
               '%c shareDoc:getAllAPI - api_shareDocGetAllApi 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c shareDoc:getAllAPI - api_shareDocGetAllApi 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_shareDocGetApiDetail({ uniqueID, apiDataUUID }, prefix = '') {
@@ -589,16 +589,16 @@ export class RemoteService {
         '%c Error: shareDoc - getApiDetail 接口 缺失参数 uniqueID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
     if (!apiDataUUID) {
       console.log(
         '%c Error: shareDoc - getApiDetail 接口 缺失参数 apiDataUUID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -610,22 +610,22 @@ export class RemoteService {
               '%c shareDoc:getApiDetail - api_shareDocGetApiDetail 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c shareDoc:getApiDetail - api_shareDocGetApiDetail 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_shareDocGetEnv({ uniqueID }, prefix = '') {
@@ -634,8 +634,8 @@ export class RemoteService {
         '%c Error: shareDoc - getEnv 接口 缺失参数 uniqueID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -647,22 +647,22 @@ export class RemoteService {
               '%c shareDoc:getEnv - api_shareDocGetEnv 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c shareDoc:getEnv - api_shareDocGetEnv 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_userUpdateUserProfile(params, prefix = '') {
@@ -673,22 +673,22 @@ export class RemoteService {
             '%c user:updateUserProfile - api_userUpdateUserProfile 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c user:updateUserProfile - api_userUpdateUserProfile 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_userReadProfile({ ...items }, prefix = '') {
@@ -703,22 +703,22 @@ export class RemoteService {
               '%c user:readProfile - api_userReadProfile 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c user:readProfile - api_userReadProfile 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_userUpdatePsd({ oldPassword, newPassword }, prefix = '') {
@@ -727,16 +727,16 @@ export class RemoteService {
         '%c Error: user - updatePsd 接口 缺失参数 oldPassword %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
     if (!newPassword) {
       console.log(
         '%c Error: user - updatePsd 接口 缺失参数 newPassword %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -748,22 +748,22 @@ export class RemoteService {
               '%c user:updatePsd - api_userUpdatePsd 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c user:updatePsd - api_userUpdatePsd 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_userSearch({ username }, prefix = '') {
@@ -772,8 +772,8 @@ export class RemoteService {
         '%c Error: user - search 接口 缺失参数 username %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -783,22 +783,22 @@ export class RemoteService {
             '%c user:search - api_userSearch 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c user:search - api_userSearch 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_authLogin({ username, password }, prefix = '') {
@@ -807,16 +807,16 @@ export class RemoteService {
         '%c Error: auth - login 接口 缺失参数 username %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
     if (!password) {
       console.log(
         '%c Error: auth - login 接口 缺失参数 password %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -826,22 +826,22 @@ export class RemoteService {
             '%c auth:login - api_authLogin 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c auth:login - api_authLogin 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_authRefresh(params, prefix = '') {
@@ -852,22 +852,22 @@ export class RemoteService {
             '%c auth:refresh - api_authRefresh 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c auth:refresh - api_authRefresh 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_authLogout({ refreshToken }, prefix = '') {
@@ -876,8 +876,8 @@ export class RemoteService {
         '%c Error: auth - logout 接口 缺失参数 refreshToken %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -887,22 +887,22 @@ export class RemoteService {
             '%c auth:logout - api_authLogout 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c auth:logout - api_authLogout 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_envCreate(params, prefix = '') {
@@ -913,22 +913,22 @@ export class RemoteService {
             '%c env:create - api_envCreate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c env:create - api_envCreate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_envUpdate({ uuid, ...items }, prefix = '') {
@@ -937,8 +937,8 @@ export class RemoteService {
         '%c Error: env - update 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -948,22 +948,22 @@ export class RemoteService {
             '%c env:update - api_envUpdate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c env:update - api_envUpdate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_envDelete({ uuid }, prefix = '') {
@@ -972,8 +972,8 @@ export class RemoteService {
         '%c Error: env - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -983,28 +983,28 @@ export class RemoteService {
             '%c env:delete - api_envDelete 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c env:delete - api_envDelete 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_envLoad({ uuid }, prefix = '') {
     if (!uuid) {
-      console.log('%c Error: env - load 接口 缺失参数 uuid %c', ErrorStyle, '')
-      return
+      console.log('%c Error: env - load 接口 缺失参数 uuid %c', ErrorStyle, '');
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1014,22 +1014,22 @@ export class RemoteService {
             '%c env:load - api_envLoad 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c env:load - api_envLoad 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_envSearch({ projectID }, prefix = '') {
@@ -1038,8 +1038,8 @@ export class RemoteService {
         '%c Error: env - search 接口 缺失参数 projectID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1053,22 +1053,22 @@ export class RemoteService {
               '%c env:search - api_envSearch 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c env:search - api_envSearch 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_groupCreate(params, prefix = '') {
@@ -1079,22 +1079,22 @@ export class RemoteService {
             '%c group:create - api_groupCreate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c group:create - api_groupCreate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_groupUpdate({ uuid, ...items }, prefix = '') {
@@ -1103,8 +1103,8 @@ export class RemoteService {
         '%c Error: group - update 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1114,22 +1114,22 @@ export class RemoteService {
             '%c group:update - api_groupUpdate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c group:update - api_groupUpdate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_groupBulkUpdate(params, prefix = '') {
@@ -1140,22 +1140,22 @@ export class RemoteService {
             '%c group:bulkUpdate - api_groupBulkUpdate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c group:bulkUpdate - api_groupBulkUpdate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_groupDelete({ uuid }, prefix = '') {
@@ -1164,8 +1164,8 @@ export class RemoteService {
         '%c Error: group - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1175,22 +1175,22 @@ export class RemoteService {
             '%c group:delete - api_groupDelete 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c group:delete - api_groupDelete 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_groupLoadAll({ projectID }, prefix = '') {
@@ -1199,8 +1199,8 @@ export class RemoteService {
         '%c Error: group - loadAll 接口 缺失参数 projectID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1214,22 +1214,22 @@ export class RemoteService {
               '%c group:loadAll - api_groupLoadAll 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c group:loadAll - api_groupLoadAll 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_apiCreate(params, prefix = '') {
@@ -1240,22 +1240,22 @@ export class RemoteService {
             '%c api:create - api_apiCreate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c api:create - api_apiCreate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_apiUpdate({ uuid, ...items }, prefix = '') {
@@ -1264,8 +1264,8 @@ export class RemoteService {
         '%c Error: api - update 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1275,22 +1275,22 @@ export class RemoteService {
             '%c api:update - api_apiUpdate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c api:update - api_apiUpdate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_apiBulkUpdate(params, prefix = '') {
@@ -1301,22 +1301,22 @@ export class RemoteService {
             '%c api:bulkUpdate - api_apiBulkUpdate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c api:bulkUpdate - api_apiBulkUpdate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_apiDelete({ uuid }, prefix = '') {
@@ -1325,8 +1325,8 @@ export class RemoteService {
         '%c Error: api - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1336,22 +1336,22 @@ export class RemoteService {
             '%c api:delete - api_apiDelete 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c api:delete - api_apiDelete 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_apiLoadApi({ uuid }, prefix = '') {
@@ -1360,8 +1360,8 @@ export class RemoteService {
         '%c Error: api - loadApi 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1371,22 +1371,22 @@ export class RemoteService {
             '%c api:loadApi - api_apiLoadApi 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c api:loadApi - api_apiLoadApi 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_apiLoadAllByProjectId({ projectID }, prefix = '') {
@@ -1395,8 +1395,8 @@ export class RemoteService {
         '%c Error: api - LoadAllByProjectID 接口 缺失参数 projectID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1410,22 +1410,22 @@ export class RemoteService {
               '%c api:LoadAllByProjectID - api_apiLoadAllByProjectId 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c api:LoadAllByProjectID - api_apiLoadAllByProjectId 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_testCreate(params, prefix = '') {
@@ -1436,22 +1436,22 @@ export class RemoteService {
             '%c test:create - api_testCreate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c test:create - api_testCreate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_testDelete({ uuid }, prefix = '') {
@@ -1460,8 +1460,8 @@ export class RemoteService {
         '%c Error: test - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1473,22 +1473,22 @@ export class RemoteService {
               '%c test:delete - api_testDelete 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c test:delete - api_testDelete 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_testLoadAll({ apiDataID }, prefix = '') {
@@ -1497,8 +1497,8 @@ export class RemoteService {
         '%c Error: test - LoadAll 接口 缺失参数 apiDataID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1512,22 +1512,22 @@ export class RemoteService {
               '%c test:LoadAll - api_testLoadAll 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c test:LoadAll - api_testLoadAll 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_mockCreate(params, prefix = '') {
@@ -1538,28 +1538,28 @@ export class RemoteService {
             '%c mock:create - api_mockCreate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c mock:create - api_mockCreate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_mockLoad({ uuid }, prefix = '') {
     if (!uuid) {
-      console.log('%c Error: mock - load 接口 缺失参数 uuid %c', ErrorStyle, '')
-      return
+      console.log('%c Error: mock - load 接口 缺失参数 uuid %c', ErrorStyle, '');
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1569,22 +1569,22 @@ export class RemoteService {
             '%c mock:load - api_mockLoad 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c mock:load - api_mockLoad 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_mockDelete({ uuid }, prefix = '') {
@@ -1593,8 +1593,8 @@ export class RemoteService {
         '%c Error: mock - delete 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1604,22 +1604,22 @@ export class RemoteService {
             '%c mock:delete - api_mockDelete 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c mock:delete - api_mockDelete 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_mockUpdate({ uuid, ...items }, prefix = '') {
@@ -1628,8 +1628,8 @@ export class RemoteService {
         '%c Error: mock - update 接口 缺失参数 uuid %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1639,22 +1639,22 @@ export class RemoteService {
             '%c mock:update - api_mockUpdate 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c mock:update - api_mockUpdate 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 
   api_mockLoadAll({ apiDataID }, prefix = '') {
@@ -1663,8 +1663,8 @@ export class RemoteService {
         '%c Error: mock - loadAll 接口 缺失参数 apiDataID %c',
         ErrorStyle,
         ''
-      )
-      return
+      );
+      return;
     }
 
     return new Promise((resolve) => {
@@ -1678,22 +1678,22 @@ export class RemoteService {
               '%c mock:loadAll - api_mockLoadAll 接口请求成功 %c',
               SuccessStyle,
               ''
-            )
+            );
             if ([200, 201].includes(status)) {
-              return resolve([data, null])
+              return resolve([data, null]);
             }
-            resolve([null, { status, ...data }])
+            resolve([null, { status, ...data }]);
           },
           error: (error) => {
             console.log(
               '%c mock:loadAll - api_mockLoadAll 接口请求失败 %c',
               ErrorStyle,
               ''
-            )
-            resolve([null, error])
+            );
+            resolve([null, error]);
           },
-        })
-    })
+        });
+    });
   }
 
   api_systemStatus(params, prefix = '') {
@@ -1704,21 +1704,21 @@ export class RemoteService {
             '%c system:status - api_systemStatus 接口请求成功 %c',
             SuccessStyle,
             ''
-          )
+          );
           if ([200, 201].includes(status)) {
-            return resolve([data, null])
+            return resolve([data, null]);
           }
-          resolve([null, { status, ...data }])
+          resolve([null, { status, ...data }]);
         },
         error: (error) => {
           console.log(
             '%c system:status - api_systemStatus 接口请求失败 %c',
             ErrorStyle,
             ''
-          )
-          resolve([null, error])
+          );
+          resolve([null, error]);
         },
-      })
-    })
+      });
+    });
   }
 }

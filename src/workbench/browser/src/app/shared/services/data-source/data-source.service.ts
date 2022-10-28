@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
@@ -37,13 +36,16 @@ export class DataSourceService {
 
   constructor(
     private messageService: MessageService,
-    private message: EoMessageService,
     private settingService: SettingService,
     private user: UserService,
     private http: RemoteService,
     private web: WebService
   ) {
-    this.pingCloudServerUrl();
+    // Check Connection at fisrt
+    if (!this.isRemote) {
+      return;
+    }
+    this.checkRemoteAndTipModal();
   }
 
   getApiUrl(apiData: ApiData) {
@@ -63,10 +65,10 @@ export class DataSourceService {
     if (!remoteUrl) {
       return false;
     }
-    const [, err]: any = await this.http.api_systemStatus({});
+    const [, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}`);
     if (err) {
       // ! TODO delete the retry
-      const [, nErr]: any = await this.http.api_systemStatus({}, '/api');
+      const [, nErr]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
       if (nErr) {
         this.isConnectRemote = false;
         return false;
