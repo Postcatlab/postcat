@@ -83,7 +83,7 @@ export class MemberComponent implements OnInit {
       .pipe(distinct(({ type }) => type, interval(400)))
       .subscribe(async ({ type, data }) => {});
 
-    const url = this.dataSource.mockUrl;
+    const url = this.dataSource.remoteServerUrl;
 
     if (url === '') {
       this.message.send({ type: 'need-config-remote', data: {} });
