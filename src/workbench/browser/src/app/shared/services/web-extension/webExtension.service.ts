@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { FeatureType } from 'eo/workbench/browser/src/app/shared/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
@@ -20,14 +21,16 @@ const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
 export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
 
-  constructor(private message: NzMessageService) {
-    defaultExtensions.forEach((n) => {
-      const isInstall = this.getExtensionByName(n);
-      isInstall || this.installedList.push({ name: n } as any);
-    });
-    this.installedList.forEach((n) => {
-      this.installExtension(n.name);
-    });
+  constructor(private message: NzMessageService, private webService: WebService) {
+    if (this.webService.isWeb) {
+      defaultExtensions.forEach((n) => {
+        const isInstall = this.getExtensionByName(n);
+        isInstall || this.installedList.push({ name: n } as any);
+      });
+      this.installedList.forEach((n) => {
+        this.installExtension(n.name);
+      });
+    }
   }
 
   async installExtension(extName: string) {
