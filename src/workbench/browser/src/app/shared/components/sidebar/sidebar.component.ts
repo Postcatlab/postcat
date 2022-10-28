@@ -96,15 +96,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
   private getModules() {
     const defaultModule = [
-      {
-        moduleName: 'API',
-        moduleID: '@eo-core-share',
-        isShare: true,
-        isOffical: true,
-        icon: 'api',
-        activeRoute: 'home/share',
-        route: 'home/share/http/test',
-      },
+      // {
+      //   moduleName: 'API',
+      //   moduleID: '@eo-core-share',
+      //   isShare: true,
+      //   isOffical: true,
+      //   icon: 'api',
+      //   activeRoute: 'home/share',
+      //   route: 'home/share/http/test',
+      // },
       {
         moduleName: 'API',
         moduleID: '@eo-core-apimanger',
@@ -149,7 +149,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       });
     } else {
       const isShare = this.status.isShare;
-      this.modules = defaultModule.filter((it) => (isShare ? it.isShare : it.isShare ? it.isShare === isShare : true));
+      this.modules = defaultModule.filter((it: any) =>
+        isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true
+      );
     }
   }
   private getModuleIDFromRoute() {
