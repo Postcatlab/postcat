@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { lastValueFrom } from 'rxjs';
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -36,12 +36,14 @@ export class ExtensionService {
   }
   private translateModule(module: ModuleInfo) {
     const lang = this.language.systemLanguage;
-    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
-    if (!locale) {
-      return module;
-    }
-    module = new TranslateService(module, locale).translate();
+    console.log(module.features);
     return module;
+    // const locale = module.i18n?.find((val) => val.locale === lang)?.package;
+    // if (!locale) {
+    //   return module;
+    // }
+    // module = new TranslateService(module, locale).translate();
+    // return module;
   }
   public async requestList() {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));

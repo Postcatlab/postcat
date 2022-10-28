@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
-import { FeatureType } from '../../types';
-import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ModuleInfo,FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 
 @Component({
@@ -12,12 +11,12 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
-  supportList: Array<FeatureType> = [];
+  supportList: Array<any> = [];
   featureMap = window.eo.getFeature('apimanage.export');
   constructor(private storage: StorageService, public extensionService: ExtensionService) {}
   ngOnInit(): void {
-    this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(data.name)) {
+    this.featureMap?.forEach((data: FeatureInfo, key: string) => {
+      if (this.extensionService.isEnable(data.extensionName)) {
         this.supportList.push({
           key,
           ...data,
@@ -48,6 +47,7 @@ export class ExportApiComponent implements OnInit {
 
   /**
    * Default export
+   *
    * @param callback
    */
   private exportEoapi(callback) {
@@ -65,6 +65,7 @@ export class ExportApiComponent implements OnInit {
   /**
    * Module export
    * callback应该支持返回具体的错误信息显示
+   *
    * @param callback
    */
   private export(callback) {

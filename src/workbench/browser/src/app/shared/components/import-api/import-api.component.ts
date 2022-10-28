@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FeatureType } from '../../types';
+import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
@@ -47,10 +47,10 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
   ></extension-select>`,
 })
 export class ImportApiComponent implements OnInit {
-  supportList: Array<FeatureType> = [];
+  supportList: Array<any> = [];
   currentExtension = '';
   uploadData = null;
-  featureMap = window.eo.getFeature('apimanage.import');
+  featureMap = window.eo.getFeature('apimanage.import') || window.eo.getFeature('importAPI');
   constructor(
     private messageService: MessageService,
     private storage: StorageService,
@@ -58,8 +58,8 @@ export class ImportApiComponent implements OnInit {
     public extensionService: ExtensionService
   ) {}
   ngOnInit(): void {
-    this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(data.name)) {
+    this.featureMap?.forEach((data: FeatureInfo, key: string) => {
+      if (this.extensionService.isEnable(data.extensionName)) {
         this.supportList.push({
           key,
           ...data,

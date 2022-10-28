@@ -53,18 +53,11 @@ export class CoreHandler {
       // Check that the file exists locally
       moduleInfo.introduction =
         readFile(path.join(baseDir, `README.${lang}.md`)) || readFile(path.join(baseDir, `README.md`));
+        
       moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
-      if (moduleInfo.preload?.length > 0) {
-        moduleInfo.preload = path.join(moduleInfo.baseDir, moduleInfo.preload);
-      }
-      if (moduleInfo.main_node?.length > 0) {
-        moduleInfo.main_node = path.join(moduleInfo.baseDir, moduleInfo.main_node);
-      }
+
       if (moduleInfo.logo?.length > 0 && !moduleInfo.logo.startsWith('http') && !moduleInfo.logo.includes('icon-')) {
         moduleInfo.logo = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.logo);
-      }
-      if (!moduleInfo.belongs || !isNotEmpty(moduleInfo.belongs)) {
-        moduleInfo.belongs = ['default'];
       }
       if (typeof moduleInfo.author === 'object') {
         moduleInfo.author = moduleInfo.author['name'] || '';

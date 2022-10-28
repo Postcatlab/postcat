@@ -1,4 +1,4 @@
-import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ModuleInfo } from "eo/platform/node/extension-manager/types";
 /**
  * Single extension i18 service,chain call
  */

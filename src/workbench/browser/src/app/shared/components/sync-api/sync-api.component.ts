@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
-import { FeatureType } from '../../types';
+import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 
 @Component({
@@ -16,8 +16,8 @@ export class SyncApiComponent implements OnInit {
   constructor(private storage: StorageService, public extensionService: ExtensionService) {}
 
   ngOnInit(): void {
-    this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(data.name)) {
+    this.featureMap?.forEach((data: FeatureInfo, key: string) => {
+      if (this.extensionService.isEnable(data.extensionName)) {
         this.supportList.push({
           key,
           ...data,

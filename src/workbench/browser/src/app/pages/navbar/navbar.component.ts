@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ElectronService } from '../../core/services';
-import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { MessageService } from '../../shared/services/message';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/remote/remote.service';
@@ -101,11 +101,7 @@ export class NavbarComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    if (this.isElectron) {
-      this.modules = window.eo.getAppModuleList();
-    } else {
       this.modules = new Map();
-    }
   }
 
   handleShowModal() {

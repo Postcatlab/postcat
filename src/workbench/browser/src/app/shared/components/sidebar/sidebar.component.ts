@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { filter, takeWhile } from 'rxjs/operators';
-import { ElectronService } from '../../../core/services';
-import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
+import { filter } from 'rxjs/operators';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
@@ -15,18 +14,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isCollapsed = false;
   destroy = false;
   modules: Array<ModuleInfo | SidebarModuleInfo | any>;
-  constructor(private electron: ElectronService, private router: Router, public sidebar: SidebarService) {
+  constructor(private router: Router, public sidebar: SidebarService) {
     this.isCollapsed = this.sidebar.getCollapsed();
-    this.sidebar
-      .onCollapsedChanged()
-      .pipe(takeWhile(() => !this.destroy))
-      .subscribe((isCollapsed) => {
-        this.isCollapsed = isCollapsed;
-        if (this.electron.isElectron) {
-          const sideWidth: number = isCollapsed ? 50 : 90;
-          window.eo.autoResize(sideWidth);
-        }
-      });
   }
   toggleCollapsed(): void {
     this.sidebar.toggleCollapsed();
@@ -81,14 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/app-vue3',
       },
     ];
-    if (this.electron.isElectron) {
-      this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
-      this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
-        this.modules = window.eo.getSideModuleList();
-      });
-    } else {
-      this.modules = [...defaultModule];
-    }
+    this.modules = [...defaultModule];
   }
   private getModuleIDFromRoute() {
     const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));

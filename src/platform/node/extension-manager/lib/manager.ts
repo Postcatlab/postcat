@@ -5,12 +5,11 @@ import {
   ModuleInfo,
   ModuleManagerInfo,
   ModuleManagerInterface,
-  ModuleType,
   ExtensionTabView,
   SidebarView,
+  FeatureInfo,
 } from '../types';
 import { isNotEmpty } from 'eo/shared/common/common';
-import { processEnv } from '../../constant';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
 import { promises, readFileSync } from 'fs';
@@ -49,7 +48,7 @@ export class ModuleManager implements ModuleManagerInterface {
   /**
    * 功能点集合
    */
-  private readonly features: Map<string, Map<string, object>>;
+  private readonly features: Map<string, Map<string, FeatureInfo>>;
 
   constructor() {
     this.moduleHandler = new ModuleHandler({ baseDir: baseDir });
@@ -141,44 +140,13 @@ export class ModuleManager implements ModuleManagerInterface {
       this.refresh(module);
     });
   }
-  /**
-   * 获取应用级app列表
-   */
-  getAppModuleList(): Array<ModuleInfo> {
-    const output: Array<ModuleInfo> = [];
-    const modules: Map<string, ModuleInfo> = this.moduleBelongs();
-    modules?.forEach((module: ModuleInfo) => {
-      if (module.isApp) {
-        (module.main = processEnv === 'development' && module.main_debug ? module.main_debug : module.main),
-          output.push(module);
-      }
-    });
-    return output;
-  }
-
-  /**
-   * 获取边栏应用列表
-   */
-  getSideModuleList(moduleID: string): Array<ModuleInfo> {
-    const output: Array<ModuleInfo> = [];
-    const modules: Map<string, ModuleInfo> = this.moduleBelongs();
-    modules.get(moduleID)?.sideItems?.forEach((_moduleID: string) => {
-      if (modules.has(_moduleID)) {
-        output.push(modules.get(_moduleID));
-      }
-    });
-    return output;
-  }
 
   /**
    * 获取所有模块列表
    * belongs为true，返回关联子模块集合
    * @param belongs
    */
-  getModules(belongs: boolean = false): Map<string, ModuleInfo> {
-    if (belongs) {
-      return this.moduleBelongs();
-    }
+  getModules(): Map<string, ModuleInfo> {
     return this.modules;
   }
 
@@ -195,10 +163,7 @@ export class ModuleManager implements ModuleManagerInterface {
    * belongs为true，返回关联子模块集合
    * @param belongs
    */
-  getModule(moduleID: string, belongs: boolean = false): ModuleInfo {
-    if (belongs) {
-      return this.moduleBelongs().get(moduleID);
-    }
+  getModule(moduleID: string): ModuleInfo {
     return this.modules.get(moduleID);
   }
 
@@ -231,7 +196,7 @@ export class ModuleManager implements ModuleManagerInterface {
         if (!this.features.has(key)) {
           this.features.set(key, new Map());
         }
-        this.features.get(key).set(moduleInfo.moduleID, { name: moduleInfo.name, ...value });
+        this.features.get(key).set(moduleInfo.moduleID, { extensionName: moduleInfo.name, ...value });
       });
     }
   }
@@ -282,49 +247,6 @@ export class ModuleManager implements ModuleManagerInterface {
     });
   }
 
-  /**
-   * 获取模块到上层模块后的模块列表
-   * @returns
-   */
-  private moduleBelongs(): Map<string, ModuleInfo> {
-    const newModules: Map<string, ModuleInfo> = new Map();
-    const sideItems = new Map();
-    this.modules?.forEach((module: ModuleInfo) => {
-      // 如果包含自己则是主应用
-      // 后期加入权限限制是否能成为顶层应用
-      const belongs: string[] = module.belongs || ['default'];
-      module.isApp = belongs.includes(module.moduleID);
-      newModules.set(module.moduleID, module);
-      belongs.forEach((belong: string) => {
-        // let _modules: string[];
-        if (module.moduleType === ModuleType.app) {
-          /*
-          if (!sideItems.has(belong)) {
-            _modules = [];
-          } else {
-            _modules = sideItems.get(belong);
-          }
-          */
-          const _modules: string[] = sideItems.get(belong) || [];
-          // 如果指定上层是自己，自己放最前面
-          if (module.moduleID === belong) {
-            _modules.unshift(module.moduleID);
-          } else {
-            _modules.push(module.moduleID);
-          }
-          sideItems.set(belong, _modules);
-        }
-      });
-    });
-    sideItems?.forEach((value: Array<string>, key: string) => {
-      const _current: ModuleInfo = newModules.get(key);
-      if (_current && _current.isApp) {
-        _current.sideItems = value;
-        newModules.set(key, _current);
-      }
-    });
-    return newModules;
-  }
 
   getExtFeatures(extName: string) {}
 
@@ -369,7 +291,7 @@ export class ModuleManager implements ModuleManagerInterface {
       return Promise.reject(error);
     }
   }
-  setupExtensionPageServer(){}
+  setupExtensionPageServer() {}
   async getExtTabs(extName: string): Promise<ExtensionTabView[]> {
     const result = [];
     for (let index = 0; index < this.installExtension.length; index++) {
@@ -399,4 +321,4 @@ export class ModuleManager implements ModuleManagerInterface {
     }
     return result;
   }
- }
+}

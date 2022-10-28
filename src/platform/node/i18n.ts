@@ -1,4 +1,4 @@
-import { I18nLocale, ModuleInfo } from 'eo/platform/node/extension-manager';
+import {ModuleInfo } from 'eo/platform/node/extension-manager';
 
 interface LooseObject {
   [key: string]: any;

@@ -36,14 +36,6 @@ window.eo.getModules = () => {
 window.eo.getModule = (moduleID) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID } });
 };
-// 获取App应用列表
-window.eo.getAppModuleList = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getAppModuleList' });
-};
-// 获取边栏应用列表
-window.eo.getSideModuleList = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getSideModuleList' });
-};
 // 获取所有功能点列表
 window.eo.getFeatures = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
@@ -76,13 +68,6 @@ if (apiAccessRules.includes('hook')) {
     return ipcRenderer.sendSync('eo-sync', { action: 'hook', data });
   };
 }
-// 临时测试用
-window.eo.tempApi = (params) => {
-  return ipcRenderer.sendSync('eo-sync', params);
-};
-window.eo.autoResize = (sideWidth) => {
-  ipcRenderer.send('eo-sync', { action: 'autoResize', data: { sideWidth: sideWidth } });
-};
 window.eo.getModules = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
 };
@@ -144,9 +129,6 @@ window.eo.uninstallModule = (name, isLocal = false) => {
       uninstallTask.delete(name);
     });
   return result;
-};
-window.eo.openApp = (inputArg) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'openApp', data: inputArg });
 };
 window.eo.getInstallTask = () => installTask;
 window.eo.getUninstallTask = () => uninstallTask;
