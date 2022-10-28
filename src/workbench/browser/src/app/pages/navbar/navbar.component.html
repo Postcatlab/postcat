@@ -62,7 +62,7 @@
   </div>
   <div class="flex items-center can_be_click">
     <button
-      *ngIf="!workspaceService.isLocal && userService.isLogin"
+      *ngIf="!workspaceService.isLocal && !status.isShare"
       nz-button
       nzType="primary"
       class="mx-2"
