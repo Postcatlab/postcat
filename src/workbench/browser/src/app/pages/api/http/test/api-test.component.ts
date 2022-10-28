@@ -382,6 +382,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!message.response.statusCode) {
       return;
     }
+    if (this.statusS.isShare) {
+      return;
+    }
     this.addHistory(message.history, Number(queryParams.uuid));
   }
   setTestSecondsTimmer() {
