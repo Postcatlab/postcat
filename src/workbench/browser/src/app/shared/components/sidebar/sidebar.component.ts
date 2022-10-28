@@ -98,8 +98,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         isShare: true,
         isOffical: true,
         icon: 'api',
-        activeRoute: 'home/api',
-        route: 'home/share/test',
+        activeRoute: 'home/share',
+        route: 'home/share/http/test',
       },
       {
         moduleName: 'API',

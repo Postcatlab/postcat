@@ -4,6 +4,9 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Router } from '@angular/router';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -12,10 +15,22 @@ export class ApiService {
     private messageService: MessageService,
     private message: EoMessageService,
     private router: Router,
-    private storage: StorageService
+    private storage: StorageService,
+    private status: StatusService,
+    private http: RemoteService,
+    private share: ShareService
   ) {}
   get(uuid): Promise<ApiData> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+      if (this.status) {
+        const [data, err]: any = await this.http.api_shareDocGetAllApi({
+          uniqueID: this.share.shareId,
+        });
+        if (err) {
+          return;
+        }
+        return resolve(data);
+      }
       this.storage.run('apiDataLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
