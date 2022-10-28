@@ -19,15 +19,19 @@ export class WorkspaceService {
     id: -1,
   } as API.Workspace;
   currentWorkspaceID: number =
-    Number(this.route.snapshot.queryParams.spaceID) || StorageUtil.get('currentWorkspace', this.localWorkspace).id;
-  isRemote = this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
+    Number(this.route.snapshot.queryParams?.spaceID) ||
+    StorageUtil.get('currentWorkspace', this.localWorkspace)?.id ||
+    -1;
+  isRemote =
+    window.location.pathname.includes('/home/share') ||
+    this.settingService.settings['eoapi-common.dataStorage'] === 'http';
   authEnum = {
     canEdit: false,
     canDelete: false,
     canCreate: false,
   };
   get isLocal() {
-    return this.currentWorkspaceID === -1;
+    return !window.location.pathname.includes('/home/share') && this.currentWorkspaceID === -1;
   }
 
   get currentWorkspace() {
@@ -50,8 +54,10 @@ export class WorkspaceService {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    if (this.isRemote) {
+      this.switchToHttp();
+    }
     StorageUtil.set('currentWorkspace', this.currentWorkspaceID);
-
     // Current storage workspaceID not match remote storage,reset it;
     if ((this.isLocal && this.isRemote) || (!this.isLocal && !this.isRemote)) {
       this.setCurrentWorkspace(this.currentWorkspace);

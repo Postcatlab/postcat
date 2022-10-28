@@ -185,8 +185,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!this.initialModel) {
       this.initialModel = eoDeepCopy(this.model);
     }
-    this.cdRef.detectChanges();
     this.eoOnInit.emit(this.model);
+    this.cdRef.detectChanges();
   }
   clickTest() {
     if (!this.checkForm()) {
@@ -379,10 +379,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
 
     //If test sucess,addHistory
     //Only has statusCode need save report
-    if (!message.response.statusCode) {
-      return;
-    }
-    if (this.statusS.isShare) {
+    if (!message.response.statusCode||this.statusS.isShare) {
       return;
     }
     this.addHistory(message.history, Number(queryParams.uuid));
