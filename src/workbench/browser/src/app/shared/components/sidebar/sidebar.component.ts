@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { filter, takeWhile } from 'rxjs/operators';
-import { ElectronService, WebService } from '../../../core/services';
+import { ElectronService } from '../../../core/services';
 import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
 import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -25,7 +25,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     public sidebar: SidebarService,
     private dataSourceService: DataSourceService,
     private messageService: MessageService,
-    private webService: WebService,
     private workspace: WorkspaceService,
     private status: StatusService
   ) {
@@ -69,15 +68,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebar.currentModule = module;
     const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    // if (this.webService.isWeb) {
-    //   if (module.moduleID === '@eo-core-workspace') {
-    //     return await this.webService.jumpToClient($localize`Eoapi Client is required to add workspace`);
-    //   }
-
-    //   if (module.moduleID === '@eo-core-member') {
-    //     return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
-    //   }
-    // }
     if (module.moduleID !== '@eo-core-member') {
       if (this.status.isShare) {
         this.router.navigate([route], { queryParamsHandling: 'merge' });

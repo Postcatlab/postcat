@@ -8,13 +8,12 @@ import {
   StorageResStatus,
 } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 
 @Injectable()
 export class AppService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
-  constructor(private storageService: StorageService, private dataSource: DataSourceService) {}
+  constructor(private storageService: StorageService) {}
 
   init() {
     if (this.ipcRenderer) {
