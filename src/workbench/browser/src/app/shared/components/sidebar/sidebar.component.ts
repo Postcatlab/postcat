@@ -113,7 +113,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
-      ...(!this.workspace.isLocal || !this.dataSourceService.remoteServerUrl
+      ...(!this.workspace.isLocal
         ? [
             {
               moduleName: $localize`Member`,

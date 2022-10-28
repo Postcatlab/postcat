@@ -7,6 +7,7 @@ import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/in
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 
 /**
  * @description
@@ -39,7 +40,8 @@ export class DataSourceService {
     private message: EoMessageService,
     private settingService: SettingService,
     private user: UserService,
-    private http: RemoteService
+    private http: RemoteService,
+    private web: WebService
   ) {
     this.pingCloudServerUrl();
   }
@@ -84,6 +86,12 @@ export class DataSourceService {
   }
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
+    if (this.web.isWeb) {
+      if (!this.user.isLogin) {
+        this.messageService.send({ type: 'login', data: {} });
+      }
+      return;
+    }
     if (this.remoteServerUrl) {
       const isSuccess = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
