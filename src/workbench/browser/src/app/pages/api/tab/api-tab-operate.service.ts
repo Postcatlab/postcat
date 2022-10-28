@@ -6,9 +6,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { contextIsolated } from 'process';
 import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -30,9 +29,9 @@ export class ApiTabOperateService {
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private space: WorkspaceService,
     private message: EoMessageService,
-    private share: ShareService
+    private share: ShareService,
+    private status: StatusService
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
@@ -137,8 +136,14 @@ export class ApiTabOperateService {
     if (!tab) {
       return;
     }
+    if (this.status.isShare) {
+      this.router.navigate([tab.pathname], {
+        queryParams: { pageID: tab.uuid, ...tab.params, shareId: this.share.shareId },
+      });
+      return;
+    }
     this.router.navigate([tab.pathname], {
-      queryParams: { pageID: tab.uuid, ...tab.params, shareId: this.share.shareId },
+      queryParams: { pageID: tab.uuid, ...tab.params },
     });
   }
   /**
