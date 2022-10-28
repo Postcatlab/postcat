@@ -10,7 +10,7 @@ export class EoUpdater {
     //   url: 'https://packages.eoapi.io',
     // });
     // 是否自动更新
-    // autoUpdater.autoDownload = window.eo.getModuleSettings('common.app.autoUpdate') !== false;
+    // autoUpdater.autoDownload = window.eo.getExtensionSettings('common.app.autoUpdate') !== false;
     if (appVersion.includes('beta')) autoUpdater.channel = 'beta';
     console.log('appVersion', appVersion, autoUpdater.channel);
   }

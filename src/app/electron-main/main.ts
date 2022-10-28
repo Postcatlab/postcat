@@ -180,35 +180,6 @@ try {
       }
     }
   });
-  ipcMain.on('eo-storage', (event, args) => {
-    let returnValue: any;
-    if (args.type === 'default' || args.type === 'remote') {
-      eoBrowserWindow.win.webContents.send('eo-storage', args);
-      returnValue = null;
-    } else if (args.type === 'sync') {
-      deleteFile(storageTemp);
-      eoBrowserWindow.win.webContents.send('eo-storage', args);
-      let data = readJson(storageTemp);
-      let count: number = 0;
-      while (data === null) {
-        if (count > 1500) {
-          data = {
-            // status: StorageResStatus.error,
-            status: 500,
-            data: 'storage sync load error',
-          };
-          break;
-        }
-        data = readJson(storageTemp);
-        ++count;
-      }
-      deleteFile(storageTemp);
-      returnValue = data;
-    } else if (args.type === 'result') {
-      let view = subView.appView ? subView.appView?.view.webContents : eoBrowserWindow.win.webContents;
-      view.send('storageCallback', args.result);
-    }
-  });
   // 这里可以封装成类+方法匹配调用，不用多个if else
   ['on', 'handle'].forEach((eventName) =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
@@ -241,8 +212,8 @@ try {
         returnValue = configuration.deleteModuleSettings(arg.data.moduleID);
       } else if (arg.action === 'getSettings') {
         returnValue = configuration.getSettings();
-      } else if (arg.action === 'getModuleSettings') {
-        returnValue = configuration.getModuleSettings(arg.data.moduleID);
+      } else if (arg.action === 'getExtensionSettings') {
+        returnValue = configuration.getExtensionSettings(arg.data.moduleID);
       } else if (arg.action === 'getMockUrl') {
         // 获取mock服务地址
         returnValue = mockServer.getMockUrl();

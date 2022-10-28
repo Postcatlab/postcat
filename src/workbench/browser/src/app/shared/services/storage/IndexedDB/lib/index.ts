@@ -32,7 +32,7 @@ const getApiUrl = (apiData: ApiData) => {
 
   /** get mock url */
   const mockUrl = isRemote
-    ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
+    ? window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
     : window.eo?.getMockUrl?.();
 
   const url = new URL(uniqueSlash(`${mockUrl}/${apiData.uri}`), 'https://github.com/');

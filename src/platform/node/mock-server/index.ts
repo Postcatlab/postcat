@@ -67,7 +67,7 @@ export class MockServer {
     this.app.all('*', (req, res, next) => {
       // if (!protocolReg.test(req.url)) {
       // match request type
-      const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
+      const isMatchType = this.configuration.getExtensionSettings<boolean>('eoapi-features.mock.matchType');
       if (req.query.mockID || isMatchType !== false) {
         this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
         ipcMain.once('getMockApiList', (event, message) => {

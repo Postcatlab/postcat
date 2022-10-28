@@ -27,7 +27,9 @@ export interface ModuleInfo {
   description: string;
 
   //* Eoapi extend
-  title:string;
+  //Entry js file,node enviroment
+  node: string;
+  title: string;
   // extension logo
   logo: string;
   //Contribution Feature

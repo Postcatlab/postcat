@@ -115,7 +115,7 @@ export class ModuleHandler extends CoreHandler {
         return;
       }
       npmCli.commands[command](moduleList, (err, data) => {
-        console.log('command', command);
+        // console.log('command', command);
         process.chdir(this.baseDir);
         if (err) {
           return reject(err);
@@ -135,9 +135,7 @@ export class ModuleHandler extends CoreHandler {
         args = args.concat(`--proxy=${this.proxy}`);
       }
     }
-    console.log(args);
     const npm = spawn('npm', args, { cwd: this.baseDir });
-    // console.log('2==>', npm);
     let output = '';
     npm.stdout
       .on('data', (data: string) => {

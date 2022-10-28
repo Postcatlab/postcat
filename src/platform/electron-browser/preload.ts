@@ -23,38 +23,32 @@ const featureModules = new Map();
 window.eo = {
   name: 'Eoapi public api',
   version: '1.0.0',
-};
-// 边栏显示
-// window.eo.sidePosition = ipcRenderer.sendSync('eo-sync', { action: 'getSidePosition' }) || 'left';
-// 获取模块列表
-window.eo.getModules = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
-};
-// 获取某个模块
-window.eo.getModule = (id) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { id: id } });
-};
-// 获取所有功能点列表
-window.eo.getFeatures = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
-};
-// 获取某个功能点
-window.eo.getFeature = (featureKey) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
-};
-// 加载feature模块
-window.eo.loadFeatureModule = (id) => {
-  if (!featureModules.has(id)) {
-    try {
-      const module = window.eo.getModule(id);
-      window.eo._currentExtensionID = id;
-      const _module = require(module.baseDir);
-      featureModules.set(id, _module);
-    } catch (e) {
-      console.log(e);
+  // 获取模块列表
+  getModules() {
+    return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
+  },
+  getModule (id) {
+    return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { id: id } });
+  },
+  getFeatures(){
+    return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
+  },
+  getFeature(featureKey) {
+    return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
+  },
+  loadFeatureModule(id){
+    if (!featureModules.has(id)) {
+      try {
+        const module = window.eo.getModule(id);
+        window.eo._currentExtensionID = id;
+        const _module = require(module.baseDir);
+        featureModules.set(id, _module);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }
-  return featureModules.get(id);
+    return featureModules.get(id);
+  },
 };
 // 卸载feature模块
 window.eo.unloadFeatureModule = (id) => {
@@ -145,41 +139,6 @@ window.eo.getExtensionPagePathByName = (extName: string) => {
   return ipcRenderer.invoke('eo-sync', { action: 'getExtensionPagePathByName', data: { extName } });
 };
 
-window.eo.storage = (args, callback: any) => {
-  const key = `${args.action}_${Date.now()}`;
-  storageCallback.set(key, callback);
-  args.type = 'default';
-  args.callback = key;
-  ipcRenderer.send('eo-storage', args);
-};
-window.eo.storageSync = (args) => {
-  console.log('run preload storageSync');
-  args.type = 'sync';
-  return ipcRenderer.sendSync('eo-storage', args);
-};
-// window.eo.storageRemote = (args) => {
-//   console.log('run preload storageRemote');
-//   args.type = 'remote';
-//   const shareObject = window.require('@electron/remote').getGlobal('shareObject');
-//   shareObject.storageResult = null;
-//   ipcRenderer.send('eo-storage', args);
-//   let output: any = shareObject.storageResult;
-//   let count: number = 0;
-//   while (output === null) {
-//     if (count > 1500) {
-//       output = {
-//         status: 'error',
-//         data: 'storage remote load error',
-//       };
-//       break;
-//     }
-//     output = shareObject.storageResult;
-//     ++count;
-//   }
-//   shareObject.storageResult = null;
-//   return output;
-// };
-
 window.eo.saveSettings = (settings) => {
   // console.log('window.eo.saveSettings', settings);
   return ipcRenderer.sendSync('eo-sync', { action: 'saveSettings', data: { settings } });
@@ -205,8 +164,8 @@ window.eo.getSettings = () => {
 };
 window.eo.i18n = new I18N();
 
-window.eo.getModuleSettings = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });
+window.eo.getExtensionSettings = (moduleID) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getExtensionSettings', data: { moduleID: moduleID } });
 };
 // 注册单个mock路由
 window.eo.registerMockRoute = ({ method, path, data }) => {

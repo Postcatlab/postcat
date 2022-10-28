@@ -39,7 +39,7 @@ export class RemoteService {
   /** get mock url */
   get mockUrl() {
     return this.isRemote
-      ? window.eo?.getModuleSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
+      ? window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
       : window.eo?.getMockUrl?.();
   }
 
