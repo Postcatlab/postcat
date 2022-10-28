@@ -148,10 +148,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.modules = window.eo.getSideModuleList().filter((it: any) => !it.isShare);
       });
     } else {
-      if (!this.workspace.isLocal) {
-        this.status.countShare();
-      }
-      this.modules = [...defaultModule].filter((it) => (!this.status.isShare ? true : it.isShare));
+      const isShare = this.workspace.isLocal ? true : this.status.countShare();
+      this.modules = defaultModule.filter((it) => (!isShare ? true : it.isShare));
+      console.log('this.modules', isShare, this.modules);
     }
   }
   private getModuleIDFromRoute() {

@@ -13,8 +13,9 @@ export class StatusService {
     const { url } = this.router;
     if (url.includes('/home/share')) {
       this.isShare = true;
-      return;
+      return true;
     }
     this.isShare = false;
+    return false;
   }
 }
