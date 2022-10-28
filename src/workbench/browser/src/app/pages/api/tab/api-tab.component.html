@@ -14,24 +14,24 @@
         [ngClass]="{ 'fixed-tab-item-container': tabStorage.tabsByID.get(uuid)?.isFixed }"
       >
         <!-- loading -->
-        <nz-spin nzSimple class="mr10" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid).isLoading"></nz-spin>
+        <nz-spin nzSimple class="mr10" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid)?.isLoading"></nz-spin>
         <eo-iconpark-icon
           class="mr5"
-          name="{{ tabStorage.tabsByID.get(uuid).icon }}"
+          name="{{ tabStorage.tabsByID.get(uuid)?.icon }}"
           size="14px"
-          *ngIf="tabStorage.tabsByID.get(uuid).icon"
+          *ngIf="tabStorage.tabsByID.get(uuid)?.icon"
         ></eo-iconpark-icon>
         <span
-          class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid).extends.method }}"
-          *ngIf="tabStorage.tabsByID.get(uuid).extends?.method"
-          >{{ tabStorage.tabsByID.get(uuid).extends.method }}</span
+          class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends.method }}"
+          *ngIf="tabStorage.tabsByID.get(uuid)?.extends?.method"
+          >{{ tabStorage.tabsByID.get(uuid)?.extends.method }}</span
         >
-        <span class="text_omit tab_text" [title]="tabStorage.tabsByID.get(uuid).title">
-          {{ tabStorage.tabsByID.get(uuid).title }}</span
+        <span class="text_omit tab_text" [title]="tabStorage.tabsByID.get(uuid)?.title">
+          {{ tabStorage.tabsByID.get(uuid)?.title }}</span
         >
         <!-- Close/HasEdit -->
         <div class="flex items-center tab-item-button-group">
-          <span class="tab-has-edit-icon eo-tab-theme-icon" *ngIf="tabStorage.tabsByID.get(uuid).hasChanged"></span>
+          <span class="tab-has-edit-icon eo-tab-theme-icon" *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged"></span>
           <button
             aria-label="Close tab"
             (click)="closeTab({ $event: $event, index: i, tab: tabStorage.tabsByID.get(uuid) })"

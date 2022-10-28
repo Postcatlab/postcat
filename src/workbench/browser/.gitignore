@@ -12,6 +12,7 @@ src/**/*.js
 !src/ng1/**/*.js
 !src/assets/libs/*.js
 *.js.map
+proxy.conf.json
 
 # dependencies
 node_modules

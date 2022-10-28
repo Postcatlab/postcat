@@ -135,6 +135,7 @@ export class ApiTabOperateService {
     }
     this.router.navigate([tab.pathname], {
       queryParams: { pageID: tab.uuid, ...tab.params },
+      queryParamsHandling: 'merge',
     });
   }
   /**

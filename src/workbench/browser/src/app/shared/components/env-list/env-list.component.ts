@@ -12,7 +12,7 @@ import { StorageService } from '../../services/storage';
       <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
     <p *ngIf="!gloablParams.length" class="text-gray-500" i18n>No Global variables</p>
-    <div class="pt-2.5" *ngIf="env.uuid">
+    <div class="pt-2.5" *ngIf="env?.uuid">
       <span class="text-gray-400" i18n>Environment Host</span>
       <div>
         <p class="text-gray-500 text-ellipsis overflow-hidden" class="h-8">{{ env.hostUri }}</p>
