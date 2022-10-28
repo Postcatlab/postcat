@@ -116,23 +116,26 @@ export class NavbarComponent implements OnInit {
     return `${this.dataSourceService.remoteServerUrl}/home/share/http/test?shareId=${res.uniqueID}`;
   }
   loginOrSign() {
-    if (this.web.isWeb) {
-      return this.web.jumpToClient($localize`Eoapi Client is required to sign in`);
-    }
+    // if (this.web.isWeb) {
+    //   return this.web.jumpToClient($localize`Eoapi Client is required to sign in`);
+    // }
     this.dataSourceService.checkRemoteCanOperate();
   }
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });
   }
   async addWorkspace() {
-    if (this.web.isWeb) {
-      return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
-      // 1. 如果配置了远程地址
-    } else {
-      this.dataSourceService.checkRemoteCanOperate(() => {
-        this.message.send({ type: 'addWorkspace', data: {} });
-      });
-    }
+    // if (this.web.isWeb) {
+    //   return this.web.jumpToClient($localize`Eoapi Client is required to add workspace`);
+    //   // 1. 如果配置了远程地址
+    // } else {
+    //   this.dataSourceService.checkRemoteCanOperate(() => {
+    //     this.message.send({ type: 'addWorkspace', data: {} });
+    //   });
+    // }
+    this.dataSourceService.checkRemoteCanOperate(() => {
+      this.message.send({ type: 'addWorkspace', data: {} });
+    });
   }
 
   getModules(): Array<ModuleInfo> {
