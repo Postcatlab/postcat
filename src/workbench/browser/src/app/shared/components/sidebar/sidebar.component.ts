@@ -79,6 +79,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     //   }
     // }
     if (module.moduleID !== '@eo-core-member') {
+      if (this.status.isShare) {
+        this.router.navigate([route], { queryParamsHandling: 'merge' });
+        return;
+      }
       this.router.navigate([route]);
       return;
     }
