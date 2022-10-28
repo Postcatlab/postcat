@@ -7,6 +7,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { contextIsolated } from 'process';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -28,7 +29,8 @@ export class ApiTabOperateService {
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private message: EoMessageService
+    private message: EoMessageService,
+    private share: ShareService
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
@@ -92,10 +94,10 @@ export class ApiTabOperateService {
    *
    * @returns tabItem
    */
-  newDefaultTab(path?) {
+  newDefaultTab(routerStr?) {
     const tabItem = Object.assign(
       {},
-      eoDeepCopy(this.BASIC_TABS.find((val) => val.pathname === path) || this.BASIC_TABS[0])
+      eoDeepCopy(this.BASIC_TABS.find((val) => val.pathname.includes(routerStr)) || this.BASIC_TABS[0])
     );
     tabItem.params = {};
     tabItem.uuid = tabItem.params.pageID = Date.now();
@@ -134,8 +136,7 @@ export class ApiTabOperateService {
       return;
     }
     this.router.navigate([tab.pathname], {
-      queryParams: { pageID: tab.uuid, ...tab.params },
-      queryParamsHandling: 'merge',
+      queryParams: { pageID: tab.uuid, ...tab.params, shareId: this.share.shareId },
     });
   }
   /**
@@ -418,6 +419,7 @@ export class ApiTabOperateService {
     //If router not exist basic tab,filter it
     cache.tabOrder = cache.tabOrder.filter((id) => {
       const tabItem = cache.tabsByID[id];
+      if (!tabItem) return false;
       const hasExist = this.BASIC_TABS.find((val) => val.pathname === tabItem.pathname);
       if (!hasExist) {
         delete cache.tabsByID[id];
