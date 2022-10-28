@@ -34,17 +34,6 @@ export class ExtensionService {
     const installList = this.getInstalledList();
     return installList.includes(name);
   }
-  private translateModule(module: ModuleInfo) {
-    const lang = this.language.systemLanguage;
-    console.log(module.features);
-    return module;
-    // const locale = module.i18n?.find((val) => val.locale === lang)?.package;
-    // if (!locale) {
-    //   return module;
-    // }
-    // module = new TranslateService(module, locale).translate();
-    // return module;
-  }
   public async requestList() {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
     const installList = this.getInstalledList();
@@ -130,5 +119,17 @@ export class ExtensionService {
     return Array.from(this.localExtensions.keys())
       .filter((it) => it)
       .filter((it) => !this.ignoreList.includes(it));
+  }
+  private translateModule(module: ModuleInfo) {
+    const lang = this.language.systemLanguage;
+
+    //If extension from web,transalte package content from http moduleInfo
+    //Locale extension will translate from local i18n file
+    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
+    if (!locale) {
+      return module;
+    }
+    module = new TranslateService(module, locale).translate();
+    return module;
   }
 }

@@ -1,7 +1,7 @@
-import {ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 
 interface LooseObject {
-  [key: string]: any;
+  [key: string]: any; 
 }
 const localeStorage: LooseObject = {};
 /**

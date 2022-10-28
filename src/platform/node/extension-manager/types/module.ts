@@ -20,7 +20,7 @@ export interface ModuleInfo {
   //Unique npm package name
   name: string;
   version: string;
-  author: string|{name:'string'};
+  author: string | { name: 'string' };
   //Entry js file,webRender enviroment
   main: string;
   // extension description
@@ -53,6 +53,12 @@ export interface ModuleInfo {
   introduction: string;
   //file location
   baseDir: string;
+
+  //*Only exist in HTTP request(from extension server) moduleInfo
+  i18n: {
+    locale: string;
+    package: any | object;
+  }[];
   //!Will Deprecated
   // 模块ID，用于关联
   moduleID: string;
