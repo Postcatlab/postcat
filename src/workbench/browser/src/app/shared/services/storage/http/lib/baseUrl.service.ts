@@ -13,6 +13,7 @@ const protocolReg = new RegExp('^(http|https)://');
 const interceptorPaths = ['/api_data', '/group', '/api_test_history', '/mock', '/environment', '/shared'];
 const needWorkspaceIDPrefixPaths = ['/project'];
 const sharePaths = ['/shared-docs'];
+const noPrefix = ['https://'];
 
 // implements StorageInterface
 @Injectable({
@@ -53,7 +54,9 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
       });
     }
     req = req.clone({
-      url: uniqueSlash(url + this.prefix + req.url).replace(/(\/api){1,}/g, '/api'),
+      url: noPrefix.find((n) => req.url.startsWith(n))
+        ? req.url
+        : uniqueSlash(url + this.prefix + req.url).replace(/(\/api){1,}/g, '/api'),
       headers: new HttpHeaders({
         Authorization: token,
       }),
