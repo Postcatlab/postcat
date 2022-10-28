@@ -163,8 +163,8 @@ export class ModuleManager implements ModuleManagerInterface {
    * belongs为true，返回关联子模块集合
    * @param belongs
    */
-  getModule(moduleID: string): ModuleInfo {
-    return this.modules.get(moduleID);
+  getModule(id: string): ModuleInfo {
+    return this.modules.get(id);
   }
 
   /**
@@ -182,7 +182,7 @@ export class ModuleManager implements ModuleManagerInterface {
    */
   private set(moduleInfo: ModuleInfo) {
     // 避免重置
-    this.modules.set(moduleInfo.moduleID, moduleInfo);
+    this.modules.set(moduleInfo.name, moduleInfo);
     this.setFeatures(moduleInfo);
   }
 
@@ -196,7 +196,7 @@ export class ModuleManager implements ModuleManagerInterface {
         if (!this.features.has(key)) {
           this.features.set(key, new Map());
         }
-        this.features.get(key).set(moduleInfo.moduleID, { extensionName: moduleInfo.name, ...value });
+        this.features.get(key).set(moduleInfo.name, { extensionID: moduleInfo.name, ...value });
       });
     }
   }
@@ -207,7 +207,7 @@ export class ModuleManager implements ModuleManagerInterface {
    */
   private delete(moduleInfo: ModuleInfo) {
     // 避免删除核心
-    this.modules.delete(moduleInfo.moduleID);
+    this.modules.delete(moduleInfo.name);
     this.deleteFeatures(moduleInfo);
   }
 
@@ -219,7 +219,7 @@ export class ModuleManager implements ModuleManagerInterface {
     if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
       for (const key in moduleInfo.features) {
         if (this.features.has(key)) {
-          this.features.get(key).delete(moduleInfo.moduleID);
+          this.features.get(key).delete(moduleInfo.name);
         }
       }
     }
@@ -230,7 +230,7 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param moduleInfo
    */
   private setup(moduleInfo: ModuleInfo) {
-    if (moduleInfo && isNotEmpty(moduleInfo.moduleID)) {
+    if (moduleInfo && isNotEmpty(moduleInfo.name)) {
       this.set(moduleInfo);
     }
   }
@@ -239,10 +239,10 @@ export class ModuleManager implements ModuleManagerInterface {
    * 读取本地package.json文件得到本地安装的模块列表，依次获取模块信息加入模块列表
    */
   private init() {
-    const moduleNames: string[] = this.moduleHandler.list();
-    moduleNames.forEach((moduleName: string) => {
+    const names: string[] = this.moduleHandler.list();
+    names.forEach((name: string) => {
       // 这里要加上try catch，避免异常
-      const moduleInfo: ModuleInfo = this.moduleHandler.info(moduleName);
+      const moduleInfo: ModuleInfo = this.moduleHandler.info(name);
       this.setup(moduleInfo);
     });
   }

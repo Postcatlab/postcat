@@ -8,7 +8,7 @@ export type FeatureInfo = {
   action: string;
 
   //*Field for browser generate by code,not actually in package.json
-  extensionName: string;
+  extensionID: string;
   //!Will deprecated
   label: string;
 };
@@ -26,7 +26,8 @@ export interface ModuleInfo {
   // extension description
   description: string;
 
-  //* Eoapi extend title
+  //* Eoapi extend
+  title:string;
   // extension logo
   logo: string;
   //Contribution Feature

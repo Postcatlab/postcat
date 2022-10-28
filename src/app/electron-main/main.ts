@@ -213,15 +213,10 @@ try {
   ['on', 'handle'].forEach((eventName) =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
       let returnValue: any;
-      if (arg.action === 'getApiAccessRules') {
-        // 后期加入权限生成，根据moduleID，上层moduleID，应用范围等
-        // 或者是像Android, 跳出权限列表让用户自己选择确认放开的权限。
-        const output: string[] = ['getModules', 'hook'];
-        returnValue = output;
-      } else if (arg.action === 'getModules') {
-        returnValue = moduleManager.getModules(true);
+      if (arg.action === 'getModules') {
+        returnValue = moduleManager.getModules();
       } else if (arg.action === 'getModule') {
-        returnValue = moduleManager.getModule(arg.data.moduleID);
+        returnValue = moduleManager.getModule(arg.data.id);
       } else if (arg.action === 'installModule') {
         const data = await moduleManager.installExt(arg.data);
         if (data.code === 0) {
@@ -251,8 +246,6 @@ try {
       } else if (arg.action === 'getMockUrl') {
         // 获取mock服务地址
         returnValue = mockServer.getMockUrl();
-      } else if (arg.action === 'hook') {
-        returnValue = 'hook返回';
       } else if (arg.action === 'getExtensionPagePathByName') {
         returnValue = moduleManager.setupExtensionPageServer(arg.data.extName);
       } else {

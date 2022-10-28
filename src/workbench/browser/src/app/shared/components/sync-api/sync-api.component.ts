@@ -12,12 +12,12 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
-  featureMap = window.eo.getFeature('apimanage.sync');
+  featureMap = window.eo.getFeature('apimanage.sync') || window.eo.getFeature('syncAPI');
   constructor(private storage: StorageService, public extensionService: ExtensionService) {}
 
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.extensionService.isEnable(data.extensionName)) {
+      if (this.extensionService.isEnable(data.extensionID)) {
         this.supportList.push({
           key,
           ...data,

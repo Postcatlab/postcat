@@ -42,8 +42,8 @@ export interface ModuleManagerInterface {
   uninstall: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   refresh: (module: ModuleManagerInfo) => void;
   refreshAll: () => void;
-  getModule: (moduleID: string, belongs?: boolean) => ModuleInfo;
-  getModules: (belongs?: boolean) => Map<string, ModuleInfo>;
+  getModule: (id: string) => ModuleInfo;
+  getModules: () => Map<string, ModuleInfo>;
   getFeature: (featureKey: string) => Map<string, object>;
   getFeatures: () => Map<string, Map<string, object>>;
   setupExtensionPageServer: (extName: string) => any;

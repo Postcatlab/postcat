@@ -13,9 +13,7 @@ class ExtensionList {
     this.list = list;
   }
   search(keyword: string) {
-    return this.list.filter(
-      (it) => it.moduleID.includes(keyword) || it.name.includes(keyword) || it.keywords?.includes(keyword)
-    );
+    return this.list.filter((it) => it.name.includes(keyword) || it.keywords?.includes(keyword));
   }
 }
 @Component({
@@ -87,7 +85,7 @@ export class ExtensionListComponent implements OnInit {
       .navigate(['home/extension/detail'], {
         queryParams: {
           type: this.route.snapshot.queryParams.type,
-          id: item.moduleID,
+          id: item.name,
           name: item.name,
           tab: event?.target?.dataset?.id === 'details' ? 1 : 0,
         },

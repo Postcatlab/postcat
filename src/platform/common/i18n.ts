@@ -4,7 +4,7 @@ import { ModuleInfo } from "eo/platform/node/extension-manager/types";
  */
 export class TranslateService {
   // Default key in package.json translate replace directly
-  defaultKeys = ['moduleName', 'description', 'author', 'logo'];
+  defaultKeys = ['moduleName','title','description', 'author', 'logo'];
   constructor(private module: ModuleInfo, private locale) {}
   translate() {
     return this.translateDefaultKey().translateVariableKey().get();

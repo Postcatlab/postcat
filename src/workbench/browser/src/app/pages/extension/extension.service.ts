@@ -28,7 +28,7 @@ export class ExtensionService {
   }
   getInstalledList() {
     // Local extension exception for ignore list
-    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.moduleID));
+    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.name));
   }
   isInstalled(name) {
     const installList = this.getInstalledList();

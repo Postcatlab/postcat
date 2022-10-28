@@ -23,21 +23,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getModules();
-    this.getModuleIDFromRoute();
+    this.getIDFromRoute();
     this.watchRouterChange();
   }
 
   watchRouterChange() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.getModuleIDFromRoute();
+      this.getIDFromRoute();
     });
   }
   clickModule(module) {
     this.sidebar.currentModule = module;
     this.sidebar.appChanged$.next();
-    const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
+    const nextApp = this.modules.find((val) => val.id === module.id);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    console.log('route', route);
     this.router.navigate([route]);
   }
   ngOnDestroy(): void {
@@ -46,24 +45,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private getModules() {
     const defaultModule = [
       {
-        moduleName: 'API',
-        moduleID: '@eo-core-apimanger',
+        title: 'API',
+        id: '@eo-core-apimanger',
         isOffical: true,
         icon: 'api',
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
       {
-        moduleName: $localize`Extensions`,
-        moduleID: '@eo-core-extension',
+        title: $localize`Extensions`,
+        id: '@eo-core-extension',
         isOffical: true,
         icon: 'puzzle',
         activeRoute: 'home/extension',
         route: 'home/extension/list',
       },
       {
-        moduleName: $localize`Vue3`,
-        moduleID: '@eo-core-vue3',
+        title: $localize`Vue3`,
+        id: '@eo-core-vue3',
         isOffical: true,
         icon: 'puzzle',
         activeRoute: 'home/app-vue3',
@@ -72,7 +71,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     ];
     this.modules = [...defaultModule];
   }
-  private getModuleIDFromRoute() {
+  private getIDFromRoute() {
     const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
     if (!currentModule) {
       //route error

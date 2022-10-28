@@ -106,11 +106,9 @@ export class ExtensionSettingComponent implements OnInit {
 
   private init() {
     const controls = {};
-    console.log('model', this.model, controls);
-
     /** Generate settings model based on configuration configuration */
+    console.log(this.extensitonConfigurations);
     this.extensitonConfigurations.forEach((item) => {
-      console.log('item', item);
       if (Array.isArray(item)) {
         item.forEach((n) => {
           n.properties = this.appendModuleID(n.properties, n.moduleID);

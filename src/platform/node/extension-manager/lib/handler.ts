@@ -86,11 +86,11 @@ export class ModuleHandler extends CoreHandler {
    */
   private operatePackage(result: any[], moduleList: string[], action: Action) {
     if (Array.isArray(result)) {
-      const moduleNames = moduleList.map((n) => n.split('@')[0]);
+      const names = moduleList.map((n) => n.split('@')[0]);
       const packagePath = path.join(this.baseDir, 'package.json');
       result.forEach(([name]) => {
         const [pkgName, pkgVersion] = name.split('@');
-        if (moduleNames.includes(pkgName)) {
+        if (names.includes(pkgName)) {
           const packageJSON = fs.readFileSync(packagePath);
           const packageObj = JSON.parse(packageJSON.toString());
           const dependencieKeys = Object.keys(packageObj.dependencies);

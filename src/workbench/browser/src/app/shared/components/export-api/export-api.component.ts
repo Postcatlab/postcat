@@ -7,16 +7,16 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 
 @Component({
   selector: 'eo-export-api',
-  template: ` <extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
+  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
   supportList: Array<any> = [];
-  featureMap = window.eo.getFeature('apimanage.export');
+  featureMap = window.eo.getFeature('apimanage.export') ||window.eo.getFeature('exportAPI');
   constructor(private storage: StorageService, public extensionService: ExtensionService) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.extensionService.isEnable(data.extensionName)) {
+      if (this.extensionService.isEnable(data.extensionID)) {
         this.supportList.push({
           key,
           ...data,
@@ -44,24 +44,6 @@ export class ExportApiComponent implements OnInit {
       window.URL.revokeObjectURL(url);
     }, 0);
   }
-
-  /**
-   * Default export
-   *
-   * @param callback
-   */
-  private exportEoapi(callback) {
-    this.storage.run('projectExport', [], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        result.data.version = packageJson.version;
-        this.transferTextToFile('Eoapi-export.json', result.data);
-        callback(true);
-      } else {
-        callback(false);
-      }
-    });
-  }
-
   /**
    * Module export
    * callback应该支持返回具体的错误信息显示

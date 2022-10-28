@@ -1,7 +1,5 @@
 import { I18N } from './i18n';
 const { ipcRenderer } = require('electron');
-// 可以加上条件判断，根据不同模块id哪些允许放出
-const apiAccessRules = ipcRenderer.sendSync('eo-sync', { action: 'getApiAccessRules' }) || [];
 // 正在安装中的插件任务列表
 const installTask = new Map();
 // 正在卸载中的插件任务列表
@@ -33,8 +31,8 @@ window.eo.getModules = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
 };
 // 获取某个模块
-window.eo.getModule = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID } });
+window.eo.getModule = (id) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { id: id } });
 };
 // 获取所有功能点列表
 window.eo.getFeatures = () => {
@@ -45,29 +43,24 @@ window.eo.getFeature = (featureKey) => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
 };
 // 加载feature模块
-window.eo.loadFeatureModule = (moduleID) => {
-  if (!featureModules.has(moduleID)) {
+window.eo.loadFeatureModule = (id) => {
+  if (!featureModules.has(id)) {
     try {
-      const module = window.eo.getModule(moduleID);
-      window.eo._currentExtensionID = moduleID;
+      const module = window.eo.getModule(id);
+      window.eo._currentExtensionID = id;
       const _module = require(module.baseDir);
-      featureModules.set(moduleID, _module);
+      featureModules.set(id, _module);
     } catch (e) {
       console.log(e);
     }
   }
-  return featureModules.get(moduleID);
+  return featureModules.get(id);
 };
 // 卸载feature模块
-window.eo.unloadFeatureModule = (moduleID) => {
-  featureModules.delete(moduleID);
+window.eo.unloadFeatureModule = (id) => {
+  featureModules.delete(id);
 };
-// Hook请求返回
-if (apiAccessRules.includes('hook')) {
-  window.eo.hook = (data) => {
-    return ipcRenderer.sendSync('eo-sync', { action: 'hook', data });
-  };
-}
+
 window.eo.getModules = () => {
   return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
 };
