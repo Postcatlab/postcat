@@ -90,6 +90,7 @@ export class DataSourceService {
       if (!this.user.isLogin) {
         this.messageService.send({ type: 'login', data: {} });
       }
+      canOperateCallback?.();
       return;
     }
     if (this.remoteServerUrl) {

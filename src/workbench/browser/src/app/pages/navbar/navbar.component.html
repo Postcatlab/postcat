@@ -6,10 +6,17 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <div *ngIf="!status.isShare" class="flex items-center can_be_click" nz-dropdown nzTrigger="click"
-      [nzDropdownMenu]="workspaceMenu">
-      <eo-iconpark-icon class="mr-[5px]"
-        name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}">
+    <div
+      *ngIf="!status.isShare"
+      class="flex items-center can_be_click"
+      nz-dropdown
+      nzTrigger="click"
+      [nzDropdownMenu]="workspaceMenu"
+    >
+      <eo-iconpark-icon
+        class="mr-[5px]"
+        name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
+      >
       </eo-iconpark-icon>
       {{ workspaceService.currentWorkspace.title }}
       <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
@@ -18,16 +25,34 @@
       <ul class="ml-[-11px]" nz-menu>
         <!-- Search/Add workspace -->
         <div class="flex py-[5px] px-[12px]">
-          <input nz-input type="text" class="flex-1 px-3 eo-search-input" i18n-placeholder
-            placeholder="Search Workspace" [(ngModel)]="searchValue" />
-          <button nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="New Workspace" nzType="primary" nz-button
-            (click)="addWorkspace()" class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0">
+          <input
+            nz-input
+            type="text"
+            class="flex-1 px-3 eo-search-input"
+            i18n-placeholder
+            placeholder="Search Workspace"
+            [(ngModel)]="searchValue"
+          />
+          <button
+            nz-tooltip
+            i18n-nzTooltipTitle
+            nzTooltipTitle="New Workspace"
+            nzType="primary"
+            nz-button
+            (click)="addWorkspace()"
+            class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0"
+          >
             <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
           </button>
         </div>
         <!-- Workspaces -->
-        <li style="color: #000" nz-menu-item (click)="changeWorkspace(item)"
-          [nzSelected]="workspaceService.currentWorkspace?.id === item.id" *ngFor="let item of searchWorkspace">
+        <li
+          style="color: #000"
+          nz-menu-item
+          (click)="changeWorkspace(item)"
+          [nzSelected]="workspaceService.currentWorkspace?.id === item.id"
+          *ngFor="let item of searchWorkspace"
+        >
           <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ item.id !== -1 ? 'sucess' : 'faild' }}">
           </eo-iconpark-icon>
           {{ item.title }}
@@ -36,8 +61,17 @@
     </nz-dropdown-menu>
   </div>
   <div class="flex items-center can_be_click">
-    <button *ngIf="!workspaceService.isLocal && userService.isLogin" nz-button nzType="primary" class="mx-2" nz-popover
-      [nzPopoverContent]="contentTemplate" nzPopoverPlacement="bottomRight" nzPopoverTrigger="click" i18n>
+    <button
+      *ngIf="!workspaceService.isLocal && userService.isLogin"
+      nz-button
+      nzType="primary"
+      class="mx-2"
+      nz-popover
+      [nzPopoverContent]="contentTemplate"
+      nzPopoverPlacement="bottomRight"
+      nzPopoverTrigger="click"
+      i18n
+    >
       Share
     </button>
     <ng-template #contentTemplate>
@@ -54,10 +88,20 @@
     <ng-template #suffixIconButton>
       <button nz-button nzType="default" (click)="handleCopy()">Copy</button>
     </ng-template>
-
+    <nz-select *ngIf="" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
+      <nz-option nzValue="en-US" nzLabel="English"></nz-option>
+      <nz-option nzValue="zh-Hans" nzLabel="中文"></nz-option>
+    </nz-select>
     <!-- setting -->
-    <span *ngIf="!status.isShare" class="flex items-center justify-center mx-1 icon" i18n-nzTooltipTitle nz-tooltip
-      [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Open Settings" (click)="openSettingModal()">
+    <span
+      *ngIf="!status.isShare"
+      class="flex items-center justify-center mx-1 icon"
+      i18n-nzTooltipTitle
+      nz-tooltip
+      [nzTooltipMouseEnterDelay]="0.7"
+      nzTooltipTitle="Open Settings"
+      (click)="openSettingModal()"
+    >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </span>
     <!-- help -->
@@ -69,15 +113,25 @@
         <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
         <a href="https://developer.eoapi.io" target="_blank" nz-menu-item i18n>Developer Support</a>
         <li nz-menu-divider></li>
-        <a href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
+        <a
+          href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
             issueEnvironment
-          }}" target="_blank" nz-menu-item i18n>Report Issue</a>
+          }}"
+          target="_blank"
+          nz-menu-item
+          i18n
+          >Report Issue</a
+        >
       </ul>
     </nz-dropdown-menu>
     <!-- User -->
 
-    <span *ngIf="!status.isShare" class="flex items-center justify-center mx-1 icon" nz-dropdown
-      [nzDropdownMenu]="UserMenu">
+    <span
+      *ngIf="!status.isShare"
+      class="flex items-center justify-center mx-1 icon"
+      nz-dropdown
+      [nzDropdownMenu]="UserMenu"
+    >
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #UserMenu="nzDropdownMenu">
@@ -100,16 +154,33 @@
     </nz-dropdown-menu>
     <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
-      <span nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="Minimize" [nzTooltipMouseEnterDelay]="0.7"
-        class="iconfont icon-jianhao mr10 fs24 cp" nzTooltipPlacement="bottom" (click)="minimize()">
+      <span
+        nz-tooltip
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Minimize"
+        [nzTooltipMouseEnterDelay]="0.7"
+        class="iconfont icon-jianhao mr10 fs24 cp"
+        nzTooltipPlacement="bottom"
+        (click)="minimize()"
+      >
       </span>
-      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7"
+      <span
+        nz-tooltip
+        i18n-nzTooltipTitle
+        [nzTooltipMouseEnterDelay]="0.7"
         [nzTooltipTitle]="isMaximized ? 'Restore' : 'Maximize'"
         class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
-        (click)="toggleMaximize()">
+        (click)="toggleMaximize()"
+      >
       </span>
-      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Close"
-        class="iconfont icon-guanbi pr15 fs24 cp" (click)="close()">
+      <span
+        nz-tooltip
+        i18n-nzTooltipTitle
+        [nzTooltipMouseEnterDelay]="0.7"
+        nzTooltipTitle="Close"
+        class="iconfont icon-guanbi pr15 fs24 cp"
+        (click)="close()"
+      >
       </span>
     </div>
     <!-- Web download client -->

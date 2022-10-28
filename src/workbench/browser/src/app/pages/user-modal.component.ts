@@ -10,6 +10,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 
 @Component({
   selector: 'eo-user-modal',
@@ -246,7 +247,8 @@ export class UserModalComponent implements OnInit {
     public dataSource: DataSourceService,
     public modal: NzModalService,
     public fb: UntypedFormBuilder,
-    public workspace: WorkspaceService
+    public workspace: WorkspaceService,
+    private web: WebService
   ) {
     this.isSyncModalVisible = false;
     this.isSyncCancelBtnLoading = false;
@@ -447,6 +449,9 @@ export class UserModalComponent implements OnInit {
 
     if (!status) {
       // * 唤起弹窗
+      if (this.web.isWeb) {
+        return;
+      }
       this.isCheckConnectModalVisible = true;
       {
       }

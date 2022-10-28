@@ -13,6 +13,7 @@ import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit {
   resourceInfo = this.web.resourceInfo;
   issueEnvironment;
   shareLink = '';
+  langValue;
   constructor(
     public electron: ElectronService,
     private web: WebService,
@@ -38,9 +40,12 @@ export class NavbarComponent implements OnInit {
     public dataSourceService: DataSourceService,
     public status: StatusService,
     private http: RemoteService,
-    private eoMessage: EoMessageService
+    private eoMessage: EoMessageService,
+    private lang: LanguageService
   ) {
     this.issueEnvironment = this.getEnviroment();
+    this.langValue = this.lang.systemLanguage;
+    console.log(this.langValue);
     if (this.workspaceService.currentWorkspace?.id !== -1) {
       this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }
@@ -140,6 +145,9 @@ export class NavbarComponent implements OnInit {
 
   getModules(): Array<ModuleInfo> {
     return Array.from(this.modules.values());
+  }
+  handleSwitchLang(event) {
+    this.lang.changeLanguage(event);
   }
 
   /**
