@@ -117,7 +117,13 @@ export class NavbarComponent implements OnInit {
     if (err) {
       return '';
     }
-    return `${this.dataSourceService.remoteServerUrl}/home/share/http/test?shareId=${res.uniqueID}`;
+    const langHash = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
+    return `${this.dataSourceService.remoteServerUrl}/${langHash.get(
+      this.lang.systemLanguage
+    )}/home/share/http/test?shareId=${res.uniqueID}`.replace(
+      /\/{2,}(zh|en)\/home\/share/,
+      `/${langHash.get(this.lang.systemLanguage)}/home/share`
+    );
   }
   loginOrSign() {
     this.dataSourceService.checkRemoteCanOperate();

@@ -41,11 +41,7 @@ export class DataSourceService {
     private http: RemoteService,
     private web: WebService
   ) {
-    // Check Connection at fisrt
-    if (!this.isRemote) {
-      return;
-    }
-    this.checkRemoteAndTipModal();
+    this.pingCloudServerUrl();
   }
 
   getApiUrl(apiData: ApiData) {
@@ -65,7 +61,7 @@ export class DataSourceService {
     if (!remoteUrl) {
       return false;
     }
-    const [, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}`);
+    const [, err]: any = await this.http.api_systemStatus({}, remoteUrl);
     if (err) {
       // ! TODO delete the retry
       const [, nErr]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);

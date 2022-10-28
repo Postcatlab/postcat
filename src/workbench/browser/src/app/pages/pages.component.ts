@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({
   selector: 'eo-pages',
@@ -9,7 +8,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 })
 export class PagesComponent implements OnInit {
   isShowNotification;
-  constructor(public electron: ElectronService, private status: StatusService) {
+  constructor(public electron: ElectronService) {
     this.isShowNotification = false;
   }
   ngOnInit(): void {

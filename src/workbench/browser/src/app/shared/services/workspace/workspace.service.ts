@@ -6,7 +6,8 @@ import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/pro
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 @Injectable({
@@ -17,8 +18,9 @@ export class WorkspaceService {
     title: $localize`Local workspace`,
     id: -1,
   } as API.Workspace;
-  currentWorkspaceID: number = StorageUtil.get('currentWorkspace', this.localWorkspace).id;
-
+  currentWorkspaceID: number =
+    Number(this.route.snapshot.queryParams.spaceID) || StorageUtil.get('currentWorkspace', this.localWorkspace).id;
+  isRemote = this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
   authEnum = {
     canEdit: false,
     canDelete: false,
@@ -43,11 +45,18 @@ export class WorkspaceService {
     private storage: StorageService,
     private projectService: ProjectService,
     private userService: UserService,
+    private settingService: SettingService,
     private storageService: StorageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
+    StorageUtil.set('currentWorkspace', this.currentWorkspaceID);
+
     // Current storage workspaceID not match remote storage,reset it;
-    this.setCurrentWorkspace(this.currentWorkspace);
+    if ((this.isLocal && this.isRemote) || (!this.isLocal && !this.isRemote)) {
+      this.setCurrentWorkspace(this.currentWorkspace);
+    }
+    //TODO currentworkspace not spaceID,redirect it
   }
 
   getWorkspaceInfo(workspaceID: number): Promise<any> {
@@ -101,9 +110,8 @@ export class WorkspaceService {
     this.switchDataSource(workspace.id === -1 ? 'local' : 'http');
     await this.updateProjectID(this.currentWorkspaceID);
     //refresh componnet
-    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
     await this.router.navigate(['**']);
-    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
+    await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
 
     this.messageService.send({ type: 'workspaceChange', data: true });
   }

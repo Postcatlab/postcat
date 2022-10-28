@@ -430,7 +430,7 @@ export class UserModalComponent implements OnInit {
       this.project.setCurrentProjectID(projects.at(0).uuid);
     }
 
-    const url = this.dataSource.mockUrl;
+    const url = this.dataSource.remoteServerUrl;
 
     if (url === '') {
       // * 唤起弹窗
