@@ -17,7 +17,6 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 })
 export class DataSourceService {
   isConnectRemote = false;
-  private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   get dataSourceType(): DataSourceType {
     return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
