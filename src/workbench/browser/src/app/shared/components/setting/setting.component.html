@@ -4,11 +4,8 @@
     <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
         <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
-        <nz-tree-node-option
-          [nzDisabled]="node.disabled"
-          [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)"
-        >
+        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
+          (nzClick)="selectModule(node)">
           {{ node.name }}
         </nz-tree-node-option>
       </nz-tree-node>
@@ -17,11 +14,8 @@
         <nz-tree-node-toggle>
           <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
         </nz-tree-node-toggle>
-        <nz-tree-node-option
-          [nzDisabled]="node.disabled"
-          [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)"
-        >
+        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
+          (nzClick)="selectModule(node)">
           {{ node.name }}
         </nz-tree-node-option>
       </nz-tree-node>
@@ -29,11 +23,15 @@
   </div>
   <nz-divider nzType="vertical" class="divider"></nz-divider>
   <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
-    <eo-account *ngIf="user.isLogin" id="eoapi-account"></eo-account>
-    <nz-divider *ngIf="user.isLogin"></nz-divider>
+    <ng-container *ngIf="user.isLogin">
+      <eo-account id="eoapi-account"></eo-account>
+      <nz-divider></nz-divider>
+    </ng-container>
     <!-- Cloud Storage -->
-    <eo-data-storage [(model)]="settings" id="eoapi-common"></eo-data-storage>
-    <nz-divider></nz-divider>
+    <ng-container *ngIf="!webService.isWeb">
+      <eo-data-storage [(model)]="settings" id="eoapi-common"></eo-data-storage>
+      <nz-divider></nz-divider>
+    </ng-container>
     <!-- Cloud Storage -->
     <eo-language-switcher [(model)]="settings" id="eoapi-language"> </eo-language-switcher>
     <nz-divider></nz-divider>

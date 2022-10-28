@@ -73,12 +73,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 export class ExtensionSettingComponent implements OnInit {
   @Input() configuration = {} as any;
+  @Input() extName: string;
   localSettings = {} as Record<string, any>;
   validateForm!: FormGroup;
   objectKeys = Object.keys;
-  get properties() {
-    return this.configuration?.properties || {};
-  }
+  properties = {};
 
   constructor(
     public languageService: LanguageService,
@@ -92,12 +91,22 @@ export class ExtensionSettingComponent implements OnInit {
   }
 
   private init() {
+    this.formatProperties();
     this.localSettings = this.settingService.getSettings();
     const controls = {};
 
-    this.setSettingsModel(this.configuration.properties, controls);
+    this.setSettingsModel(this.properties, controls);
 
     this.validateForm = this.fb.group(controls);
+  }
+
+  formatProperties() {
+    const prefix = `${this.extName}.`;
+    this.properties = Object.entries(this.configuration?.properties).reduce((prev, [key, value]) => {
+      const newKey = key.startsWith(prefix) ? key : `${prefix}${key}`;
+      prev[newKey] = value;
+      return prev;
+    }, {});
   }
 
   /**
@@ -121,7 +130,6 @@ export class ExtensionSettingComponent implements OnInit {
 
   handleSave = () => {
     this.settingService.saveSetting(this.localSettings);
-    window.eo?.saveSettings?.({ ...this.localSettings });
     this.message.create('success', `Save Success`);
   };
 }

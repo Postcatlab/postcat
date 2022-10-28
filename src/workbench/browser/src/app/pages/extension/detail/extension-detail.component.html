@@ -35,7 +35,8 @@
       <!-- Setting -->
       <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle
         nzTitle="Settings">
-        <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"></eo-extension-setting>
+        <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"
+          [extName]="extensionDetail.name"></eo-extension-setting>
       </nz-tab>
       <!-- Details -->
       <nz-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
