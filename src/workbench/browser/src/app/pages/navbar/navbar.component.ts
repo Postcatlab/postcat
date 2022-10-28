@@ -45,7 +45,6 @@ export class NavbarComponent implements OnInit {
   ) {
     this.issueEnvironment = this.getEnviroment();
     this.langValue = this.lang.systemLanguage;
-    console.log(this.langValue);
     if (this.workspaceService.currentWorkspace?.id !== -1) {
       this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }
