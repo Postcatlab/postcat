@@ -13,6 +13,5 @@ export class PagesComponent implements OnInit {
     this.isShowNotification = false;
   }
   ngOnInit(): void {
-    this.electron.isElectron && this.status.countShare();
   }
 }

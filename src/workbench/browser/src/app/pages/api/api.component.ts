@@ -115,9 +115,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   ngOnInit(): void {
-    if (!this.workspace.isLocal) {
-      this.status.countShare();
-    }
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchRouterChange();
     this.watchDataSourceChange();

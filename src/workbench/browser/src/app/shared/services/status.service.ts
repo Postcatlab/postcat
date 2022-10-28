@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StatusService {
-  isShare = true;
+  isShare = this.countShare();
   constructor(private router: Router) {
-    this.isShare = true;
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
+      this.countShare();
+    });
   }
   countShare() {
     const { url } = this.router;

@@ -64,6 +64,7 @@ export class ApiTabService {
       ];
 
   constructor(private messageService: MessageService, private router: Router, private status: StatusService) {
+    console.log(this.status.isShare);
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
     });
