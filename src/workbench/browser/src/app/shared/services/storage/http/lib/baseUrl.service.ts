@@ -13,7 +13,7 @@ const protocolReg = new RegExp('^(http|https)://');
 const interceptorPaths = ['/api_data', '/group', '/api_test_history', '/mock', '/environment', '/shared'];
 const needWorkspaceIDPrefixPaths = ['/project'];
 const sharePaths = ['/shared-docs'];
-const noPrefix = ['https://'];
+const noPrefix = ['https://', 'http'];
 
 // implements StorageInterface
 @Injectable({

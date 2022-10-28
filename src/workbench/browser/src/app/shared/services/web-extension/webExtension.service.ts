@@ -12,6 +12,7 @@ type ExtensionItem = {
 };
 
 const extKey = 'ext_installed_list';
+const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,10 @@ export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
 
   constructor(private message: NzMessageService) {
+    defaultExtensions.forEach((n) => {
+      const isInstall = this.getExtensionByName(n);
+      isInstall || this.installedList.push({ name: n } as any);
+    });
     this.installedList.forEach((n) => {
       this.installExtension(n.name);
     });
