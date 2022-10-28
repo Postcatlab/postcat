@@ -88,7 +88,7 @@
     <ng-template #suffixIconButton>
       <button nz-button nzType="default" (click)="handleCopy()">Copy</button>
     </ng-template>
-    <nz-select *ngIf="" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
+    <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
       <nz-option nzValue="en-US" nzLabel="English"></nz-option>
       <nz-option nzValue="zh-Hans" nzLabel="中文"></nz-option>
     </nz-select>
