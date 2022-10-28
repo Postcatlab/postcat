@@ -23,8 +23,9 @@ export class ApiService {
   get(uuid): Promise<ApiData> {
     return new Promise(async (resolve) => {
       if (this.status.isShare) {
-        const [data, err]: any = await this.http.api_shareDocGetAllApi({
+        const [data, err]: any = await this.http.api_shareDocGetApiDetail({
           uniqueID: this.share.shareId,
+          apiDataUUID: uuid,
         });
         if (err) {
           return;
