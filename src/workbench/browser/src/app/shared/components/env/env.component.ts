@@ -61,7 +61,6 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getAllEnv();
-    console.log('kio');
     this.changeStoreEnv(localStorage.getItem('env:selected'));
   }
   ngOnDestroy() {
@@ -112,6 +111,8 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.envInfo = result.data ?? {};
+          const parameters = this.envInfo.parameters ?? [];
+          this.envInfo.parameters = typeof parameters === 'string' ? JSON.parse(parameters) : parameters;
           this.activeUuid = result.data?.uuid ?? null;
           resolve(true);
         }
