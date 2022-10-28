@@ -29,6 +29,7 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(changes) {
+    console.log('this.model', this.model);
     if (changes.model && this.model) {
       this.codeStatus = this.apiTest.getHTTPStatus(this.model?.statusCode);
       if (!this.responseIsImg) {
@@ -45,7 +46,17 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   }
 
   downloadResponseText() {
-    this.blobUrl = this.responseIsImg ? this.uri : getBlobUrl(this.model.body, this.model.contentType);
+    let code = this.model.body;
+    try {
+      if (['longText', 'stream'].includes(this.model.responseType)) {
+        code = window.atob(code);
+      } else {
+        code = JSON.stringify(typeof code === 'string' ? JSON.parse(code) : code, null, 4);
+      }
+    } catch {
+      code = String(code);
+    }
+    this.blobUrl = this.responseIsImg ? this.uri : getBlobUrl(code, this.model.contentType);
     const blobFileName = decodeURI(this.model.blobFileName || 'test_response');
     const tmpAElem = document.createElement('a');
     if ('download' in tmpAElem) {
