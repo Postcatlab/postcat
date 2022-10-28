@@ -15,9 +15,9 @@ export class AppComponent {
     private theme: ThemeService,
     private dataSource: DataSourceService,
     private electron: ElectronService,
-    // 仅仅是为了初始化插件默认安装逻辑
     private webExtensionService: WebExtensionService
   ) {
+    this.webExtensionService.init();
     this.theme.changeTheme();
     //Check Connection at fisrt
     if (!this.dataSource.isRemote || !this.electron.isElectron) {
