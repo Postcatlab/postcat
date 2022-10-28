@@ -29,7 +29,6 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnChanges(changes) {
-    console.log('this.model', this.model);
     if (changes.model && this.model) {
       this.codeStatus = this.apiTest.getHTTPStatus(this.model?.statusCode);
       if (!this.responseIsImg) {
