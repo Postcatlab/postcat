@@ -162,7 +162,7 @@ export class WorkspaceComponent implements OnInit {
             nzContent: $localize`Are you sure you want to delete the workspace ? 
 You cannot restore it once deleted!`,
             nzOkDanger: true,
-            nzOkText: $localize`Remove`,
+            nzOkText: $localize`Delete`,
             nzOnOk: () => resolve(true),
             nzOnCancel: () => resolve(false)
           });
