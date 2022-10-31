@@ -69,8 +69,8 @@ export class ApiTabOperateService {
       });
       return;
     }
-    //Tab from url
 
+    //Tab from url
     try {
       //If current url did't match exist tab,throw error
       this.getSameContentTab(this.generateTabFromUrl(this.router.url));
@@ -231,8 +231,9 @@ export class ApiTabOperateService {
    */
   operateTabAfterRouteChange(res: { url: string }) {
     const pureTab = this.getBasicInfoFromUrl(res.url);
-    const nextTab = this.generateTabFromUrl(res.url);
     const existTab = this.getSameContentTab(pureTab);
+
+    const nextTab = this.generateTabFromUrl(res.url);
     //!Every tab must has pageID
     //If lack pageID,Jump to exist tab item to keep same  pageID and so on
     if (!pureTab.uuid) {

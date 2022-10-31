@@ -43,13 +43,6 @@ export class ApiTabService {
           title: $localize`New Request`,
           extends: { method: 'POST' },
         },
-        {
-          pathname: '/home/share/http/detail',
-          module: 'test',
-          type: 'edit',
-          title: $localize`New Request`,
-          extends: { method: 'POST' },
-        },
         { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
         { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
         {
@@ -64,7 +57,6 @@ export class ApiTabService {
       ];
 
   constructor(private messageService: MessageService, private router: Router, private status: StatusService) {
-    console.log(this.status.isShare);
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
     });
