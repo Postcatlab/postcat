@@ -33,7 +33,9 @@ export class LanguageService {
         data: this.systemLanguage,
       });
     } else {
-      window.location.href = `/${localePath}`;
+      const url = window.location.href;
+      const langHash = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
+      window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${langHash.get(localeID)}/home/`));
     }
   }
 }

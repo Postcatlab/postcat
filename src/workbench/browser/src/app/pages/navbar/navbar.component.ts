@@ -147,8 +147,7 @@ export class NavbarComponent implements OnInit {
     return Array.from(this.modules.values());
   }
   handleSwitchLang(event) {
-    const url = location.href;
-    window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${event}/home/`));
+    this.lang.changeLanguage(event);
   }
 
   /**
