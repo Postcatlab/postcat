@@ -11,6 +11,7 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -248,7 +249,8 @@ export class UserModalComponent implements OnInit {
     public modal: NzModalService,
     public fb: UntypedFormBuilder,
     public workspace: WorkspaceService,
-    private web: WebService
+    private web: WebService,
+    private status: StatusService
   ) {
     this.isSyncModalVisible = false;
     this.isSyncCancelBtnLoading = false;
@@ -539,8 +541,10 @@ export class UserModalComponent implements OnInit {
   }
   async textiqd22iCallback() {
     // * click event callback
+    this.message.send({ type: 'open-setting', data: {} });
 
     // * 关闭弹窗
+    this.isCheckConnectModalVisible = false;
     this.isOpenSettingModalVisible = false;
   }
   handleLoginModalCancel(): void {
@@ -687,7 +691,7 @@ export class UserModalComponent implements OnInit {
 
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
-
+      this.message.send({ type: 'update-share-link', data: {} });
       {
         const [lData, err]: any = await this.api.api_workspaceList({});
         if (err) {

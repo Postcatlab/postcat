@@ -86,6 +86,7 @@ export class DataSourceService {
     if (this.web.isWeb) {
       if (!this.user.isLogin) {
         this.messageService.send({ type: 'login', data: {} });
+        return;
       }
       canOperateCallback?.();
       return;

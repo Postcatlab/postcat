@@ -221,7 +221,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.envUuid = Number(localStorage.getItem('env:selected'));
     // * load All env
     this.getAllEnv().then((result: any[]) => {
-      console.log('envList', result);
       this.envList = result || [];
     });
   }
