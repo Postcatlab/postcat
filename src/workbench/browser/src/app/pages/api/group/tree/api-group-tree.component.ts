@@ -109,7 +109,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Load all group and apiData items.
    */
   buildGroupTreeData = debounce(async (callback) => {
-    console.log(new Error());
     this.groupByID = {};
     this.treeItems = [];
     await this.getProjectCollections();
@@ -217,7 +216,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'deleteApiSuccess':
           case 'updateGroupSuccess': {
             const group = inArg.data?.group;
-
             if (
               inArg.type === 'updateGroupSuccess' &&
               group?.parentID &&
@@ -225,7 +223,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             ) {
               this.expandKeys.push(`group-${group?.parentID}`);
             }
-
             this.buildGroupTreeData();
             break;
           }
