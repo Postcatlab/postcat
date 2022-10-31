@@ -109,6 +109,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Load all group and apiData items.
    */
   buildGroupTreeData = debounce(async (callback) => {
+    console.log(new Error());
     this.groupByID = {};
     this.treeItems = [];
     await this.getProjectCollections();
@@ -130,7 +131,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           return;
         }
         const { groups, apis } = res;
-        console.log(groups, apis);
         this.getGroups(groups);
         this.getApis(apis);
         this.apiDataLoading = false;

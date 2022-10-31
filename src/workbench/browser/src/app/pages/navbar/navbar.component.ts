@@ -83,8 +83,7 @@ export class NavbarComponent implements OnInit {
     const isOk = copy(this.shareLink);
     if (isOk) {
       this.isCopy = true;
-      this.eoMessage.success('Copied');
-      interval(3000).subscribe(() => {
+      interval(7000).subscribe(() => {
         this.isCopy = false;
       });
     }

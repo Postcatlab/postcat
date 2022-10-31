@@ -79,7 +79,7 @@ export class DataSourceService {
       this.messageService.send({ type: 'ping-fail', data: {} });
       return;
     }
-    this.messageService.send({ type: 'ping-success', data: {} });
+    // this.messageService.send({ type: 'ping-success', data: {} });
   }
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
