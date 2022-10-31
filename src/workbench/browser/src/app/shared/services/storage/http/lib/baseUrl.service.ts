@@ -1,12 +1,21 @@
-import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpHeaders,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
-import { filter, map, tap, Observable } from 'rxjs';
+import { filter, map, tap, Observable, catchError, of } from 'rxjs';
 import { uniqueSlash } from '../../../../../utils/api';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 const protocolReg = new RegExp('^(http|https)://');
 
@@ -28,7 +37,11 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     return this.workspaceService.currentWorkspaceID;
   }
   prefix;
-  constructor(private workspaceService: WorkspaceService, private projectService: ProjectService) {
+  constructor(
+    private workspaceService: WorkspaceService,
+    private projectService: ProjectService,
+    private messageService: MessageService
+  ) {
     super();
     this.prefix = '/api';
   }
@@ -69,6 +82,14 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
           const { data } = event.body;
           this.prefix = version2Number(data) < version2Number('v1.9.0') ? '' : '/api';
         }
+      }),
+      catchError((err: any) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            this.messageService.send({ type: 'login', data: {} });
+          }
+        }
+        return of(err);
       })
     );
   }
