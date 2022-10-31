@@ -688,7 +688,6 @@ const { resolve } = require('path');
       });
     }
     main(inputTestData) {
-      console.log('inputTestData', inputTestData);
       global.eoLang = _EO_LANG_OBJ[inputTestData.lang || 'en'];
       let unitCommonClass = this;
       return new Promise((resolve, reject) => {
