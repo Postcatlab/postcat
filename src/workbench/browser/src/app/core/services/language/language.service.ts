@@ -26,7 +26,7 @@ export class LanguageService {
       return;
     }
     this.systemLanguage = localeID;
-    const localePath = (this.languages.find((val) => val.value === localeID) || this.languages[0]).path;
+    // const localePath = (this.languages.find((val) => val.value === localeID) || this.languages[0]).path;
     if (this.electron.isElectron) {
       this.electron.ipcRenderer.send('message', {
         action: 'changeLanguage',

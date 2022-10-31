@@ -415,6 +415,9 @@ export class UserModalComponent implements OnInit {
     });
 
     const { id: workspaceID } = this.workspace.currentWorkspace;
+    if (this.status.isShare) {
+      return;
+    }
     const [data, err]: any = await this.api.api_workspaceList({});
     if (err) {
       if (err.status === 401) {
