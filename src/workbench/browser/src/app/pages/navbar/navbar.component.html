@@ -86,7 +86,8 @@
       </div>
     </ng-template>
     <ng-template #suffixIconButton>
-      <button nz-button nzType="default" (click)="handleCopy()">Copy</button>
+      <button nz-button nzType="default" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
+      <button nz-button nzType="default" *ngIf="isCopy" class="text-green-600">Copied</button>
     </ng-template>
     <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
       <nz-option nzValue="en-US" nzLabel="English"></nz-option>

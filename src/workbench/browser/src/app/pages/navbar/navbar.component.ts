@@ -30,6 +30,7 @@ export class NavbarComponent implements OnInit {
   issueEnvironment;
   shareLink = '';
   langValue;
+  isCopy = false;
   constructor(
     public electron: ElectronService,
     private web: WebService,
@@ -76,10 +77,16 @@ export class NavbarComponent implements OnInit {
     });
   }
   handleCopy() {
+    if (this.isCopy) {
+      return;
+    }
     const isOk = copy(this.shareLink);
-    // TODO
     if (isOk) {
+      this.isCopy = true;
       this.eoMessage.success('Copied');
+      interval(3000).subscribe(() => {
+        this.isCopy = false;
+      });
     }
   }
   async ngOnInit(): Promise<void> {

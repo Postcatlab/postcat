@@ -246,15 +246,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   private getAllEnv(uuid?: number) {
     const projectID = 1;
     return new Promise(async (resolve) => {
-      if (this.status.isShare) {
-        const [data, err]: any = await this.http.api_shareDocGetEnv({
-          uniqueID: this.share.shareId,
-        });
-        if (err) {
-          return resolve([]);
-        }
-        return resolve(data || []);
-      }
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           return resolve(result.data || []);
