@@ -90,8 +90,8 @@
       <button nz-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
     </ng-template>
     <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
-      <nz-option nzValue="en-US" nzLabel="English"></nz-option>
-      <nz-option nzValue="zh-Hans" nzLabel="中文"></nz-option>
+      <nz-option nzValue="en" nzLabel="English"></nz-option>
+      <nz-option nzValue="zh" nzLabel="中文"></nz-option>
     </nz-select>
     <!-- setting -->
     <span
