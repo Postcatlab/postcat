@@ -15,3 +15,7 @@ tests/**/coverage/
 *.ntvs*
 *.njsproj
 *.sln
+
+.vercel
+docker-compose.dev.yml
+Dockerfile.dev
