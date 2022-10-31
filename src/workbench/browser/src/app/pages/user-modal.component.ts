@@ -539,8 +539,10 @@ export class UserModalComponent implements OnInit {
   }
   async textiqd22iCallback() {
     // * click event callback
+    this.message.send({ type: 'open-setting', data: {} });
 
     // * 关闭弹窗
+    this.isCheckConnectModalVisible = false;
     this.isOpenSettingModalVisible = false;
   }
   handleLoginModalCancel(): void {
