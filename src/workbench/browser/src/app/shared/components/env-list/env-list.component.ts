@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { getGlobals } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { Environment, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { StorageService } from '../../services/storage';
 
@@ -29,7 +32,12 @@ import { StorageService } from '../../services/storage';
 export class EnvListComponent implements OnInit {
   env: Environment | any = {};
   gloablParams: any = [];
-  constructor(private storage: StorageService) {}
+  constructor(
+    private storage: StorageService,
+    private share: ShareService,
+    private status: StatusService,
+    private http: RemoteService
+  ) {}
   async ngOnInit() {
     this.gloablParams = this.getGlobalParams();
     const uuid = Number(localStorage.getItem('env:selected')) || null;
@@ -41,7 +49,16 @@ export class EnvListComponent implements OnInit {
   }
   getAllEnv(uuid?: number) {
     const projectID = 1;
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+      if (this.status.isShare) {
+        const [data, err]: any = await this.http.api_shareDocGetEnv({
+          uniqueID: this.share.shareId,
+        });
+        if (err) {
+          return resolve([]);
+        }
+        return resolve(data || []);
+      }
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           return resolve(result.data || []);

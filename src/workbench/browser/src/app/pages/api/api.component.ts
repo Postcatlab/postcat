@@ -196,10 +196,19 @@ export class ApiComponent implements OnInit, OnDestroy {
     localStorage.setItem(DY_WIDTH_KEY, String(this.dyWidth));
   }
   handleEnvSelectStatus(event: boolean) {}
-  private changeStoreEnv(uuid) {
+  private async changeStoreEnv(uuid) {
     if (uuid == null) {
       this.store.dispatch(new Change(null));
       return;
+    }
+    if (this.status.isShare) {
+      const [data, err]: any = await this.http.api_shareDocGetEnv({
+        uniqueID: this.share.shareId,
+      });
+      if (err) {
+        return;
+      }
+      return this.store.dispatch(new Change(data));
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
@@ -246,6 +255,15 @@ export class ApiComponent implements OnInit, OnDestroy {
   private getAllEnv(uuid?: number) {
     const projectID = 1;
     return new Promise(async (resolve) => {
+      if (this.status.isShare) {
+        const [data, err]: any = await this.http.api_shareDocGetEnv({
+          uniqueID: this.share.shareId,
+        });
+        if (err) {
+          return resolve([]);
+        }
+        return resolve(data || []);
+      }
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           return resolve(result.data || []);
