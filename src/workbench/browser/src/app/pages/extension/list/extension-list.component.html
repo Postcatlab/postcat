@@ -29,7 +29,8 @@
               (ngModelChange)="handleEnableExtension($event, it)"></nz-switch>
           </div>
           <div *ngIf="type !== 'installed'">
-            <span *ngIf="extensionService.localExtensions.has(it.moduleID)"
+            <span
+              *ngIf="extensionService.localExtensions.has(it.moduleID) || extensionService.localExtensions.has(it.name)"
               class="p-1 text-xs text-green-700 border-green-700 rounded-sm bd_all whitespace-nowrap"
               i18n>Installed</span>
           </div>
