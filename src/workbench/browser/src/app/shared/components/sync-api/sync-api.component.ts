@@ -30,7 +30,7 @@ export class SyncApiComponent implements OnInit {
       }
     });
     {
-      const { key } = this.supportList.at(0);
+      const { key } = this.supportList?.at(0);
       this.currentExtension = key || '';
     }
   }

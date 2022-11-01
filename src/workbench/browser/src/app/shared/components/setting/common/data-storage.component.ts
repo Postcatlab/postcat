@@ -73,11 +73,6 @@ export class DataStorageComponent implements OnInit, OnChanges {
     }
   }
   async submitForm() {
-    if (!this.electron.isElectron) {
-      this.web.jumpToClient($localize`Eoapi Client is required to use cloud storage`);
-      return;
-    }
-
     const isValid = this.validateForm.valid;
     if (isValid) {
       this.model = {

@@ -39,11 +39,7 @@ export class ExtensionDetailComponent implements OnInit {
   ngOnInit(): void {}
 
   async handleInstall() {
-    // if (this.electron.isElectron) {
     this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
-    // } else {
-    //   this.webService.jumpToClient($localize`Eoapi Client is required to install this extension.`);
-    // }
   }
 
   async getDetail() {
@@ -149,12 +145,6 @@ ${log}
 
   manageExtension(operate: string, id) {
     this.isOperating = true;
-    /**
-     * * WARNING:Sending a synchronous message will block the whole
-     * renderer process until the reply is received, so use this method only as a last
-     * resort. It's much better to use the asynchronous version, `invoke()`.
-     */
-
     setTimeout(async () => {
       switch (operate) {
         case 'install': {
