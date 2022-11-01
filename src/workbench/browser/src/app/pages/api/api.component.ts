@@ -208,7 +208,8 @@ export class ApiComponent implements OnInit, OnDestroy {
       if (err) {
         return;
       }
-      return this.store.dispatch(new Change(data));
+      const result = data.find((val) => val.uuid === Number(uuid));
+      return this.store.dispatch(new Change(result));
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
