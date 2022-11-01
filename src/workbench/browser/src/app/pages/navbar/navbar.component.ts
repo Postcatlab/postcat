@@ -12,7 +12,6 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 @Component({
   selector: 'eo-navbar',
@@ -41,7 +40,6 @@ export class NavbarComponent implements OnInit {
     public dataSourceService: DataSourceService,
     public status: StatusService,
     private http: RemoteService,
-    private eoMessage: EoMessageService,
     private lang: LanguageService
   ) {
     this.issueEnvironment = this.getEnviroment();
