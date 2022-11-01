@@ -43,7 +43,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     private messageService: MessageService
   ) {
     super();
-    this.prefix = '/api';
+    this.prefix = '/';
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -80,7 +80,8 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         // ! TODO delete
         if (req.url.includes('/system/status')) {
           const { data } = event.body;
-          this.prefix = version2Number(data) < version2Number('v1.9.0') ? '' : '/api';
+          this.prefix = version2Number(data) >= version2Number('v1.9.0') ? '/api' : '/';
+          console.log(data,this.prefix);
         }
       }),
       catchError((err: any) => {

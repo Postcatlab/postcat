@@ -346,7 +346,7 @@ export class ApiTestUtilService {
     });
     return result;
   }
-  private filterCommonHeader(headers) {
+  private filterCommonHeader(headers=[]) {
     const commonHeader = [
       'content-type',
       'accept',

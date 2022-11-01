@@ -22,7 +22,7 @@ export class HistoryComponent implements OnInit {
   constructor(private storage: StorageService, private router: Router, private message: MessageService) {}
   async ngOnInit() {
     const result = await this.loadAllTest();
-    this.historyList = result.reverse();
+    this.historyList = result?.reverse();
     this.message
       .get()
       .pipe(takeUntil(this.destroy$))
