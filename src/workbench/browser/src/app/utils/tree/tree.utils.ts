@@ -180,7 +180,6 @@ export const tree2obj = (list: any[] = [], opts: TreeToObjOpts = {}, initObj = {
       curr = typeof curr === 'string' ? JSON.parse(curr) : curr;
       prev[curr[key]] = curr[valueKey] || fieldTypeMap.get(curr.type);
       if (Array.isArray(curr[childKey]) && curr[childKey].length > 0) {
-        console.log(`prev: ${prev} == curr: ${curr} == key: ${key}`);
         tree2obj(curr[childKey], opts, (prev[curr[key]] = {}));
       } else if (curr?.example) {
         prev[curr[key]] = curr?.example;

@@ -152,7 +152,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     }
   }
   ngOnInit() {
-    // console.log(this.codeEdtor.getSupportedActions());
     // To get the Ace instance:
     this.buttonList = this.electron.isElectron
       ? this.eventList

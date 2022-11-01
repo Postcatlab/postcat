@@ -119,12 +119,22 @@ const base64ToUint8Array = (inputBase64String) => {
   }
   return tmpOutputArray;
 };
+// 字符串转ArrayBuffer
+const s2ab = (s) => {
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i !== s.length; ++i) {
+    view[i] = s.charCodeAt(i) & 0xff;
+  }
+  return buf;
+};
+
 export const getBlobUrl = (inputStream, inputFileType) => {
   let tmpBlob;
   try {
     // inputStream = base64ToUint8Array(inputStream);
     if (typeof window.Blob === 'function') {
-      tmpBlob = new Blob([inputStream], {
+      tmpBlob = new Blob([s2ab(inputStream)], {
         type: inputFileType,
       });
     } else {
@@ -246,3 +256,15 @@ export function isBase64(str) {
     return false;
   }
 }
+
+export const version2Number = (version) => Number(version.replace(/[v.]/g, ''));
+
+export const copy = (text) => {
+  const el = document.createElement('input');
+  el.setAttribute('value', text);
+  document.body.appendChild(el);
+  el.select();
+  const flag = document.execCommand('copy');
+  document.body.removeChild(el);
+  return !!flag;
+};

@@ -161,41 +161,6 @@ const COMMON_DATA: TreeNode[] = [
     ],
   },
   {
-    name: $localize`Environment Management`,
-    children: [
-      {
-        name: $localize`Get enviroment host`,
-        caption: 'eo.env.http.baseUrl.get',
-        value: 'eo.env.http.baseUrl.get()',
-        note: {
-          code: 'eo.env.http.baseUrl.get()',
-          desc: $localize`Get enviroment host`,
-          output: $localize`The host prefix set in the environment`,
-        },
-      },
-      {
-        name: $localize`Get an environment variables`,
-        caption: 'eo.env.param.get',
-        value: 'eo.env.param.get("param_key")',
-        note: {
-          code: 'eo.env.param.get("param_key")',
-          desc: $localize`Get an environment variables`,
-          input: [commonInputs[0]],
-        },
-      },
-      {
-        name: $localize`Set an environment variables`,
-        caption: 'eo.env.param.set',
-        value: 'eo.env.param.set("param_key","param_value")',
-        note: {
-          code: 'eo.env.param.set("param_key","param_value")',
-          desc: $localize`Set an environment variables`,
-          input: [...commonInputs],
-        },
-      },
-    ],
-  },
-  {
     name: $localize`Encode and Decode`,
     children: [
       {

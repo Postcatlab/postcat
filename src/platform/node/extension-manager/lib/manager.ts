@@ -1,12 +1,26 @@
 import { MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
 import { ModuleHandler } from './handler';
-import { ModuleHandlerResult, ModuleInfo, ModuleManagerInfo, ModuleManagerInterface, ModuleType } from '../types';
+import {
+  ModuleHandlerResult,
+  ModuleInfo,
+  ModuleManagerInfo,
+  ModuleManagerInterface,
+  ExtensionTabView,
+  SidebarView,
+  FeatureInfo,
+} from '../types';
 import { isNotEmpty } from 'eo/shared/common/common';
-import { processEnv } from '../../constant';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
 import { promises, readFileSync } from 'fs';
 import { ELETRON_APP_CONFIG } from '../../../../enviroment';
+import { createServer } from 'http-server/lib/http-server';
+import path from 'node:path';
+import portfinder from 'portfinder';
+import { lstat } from 'fs/promises';
+
+const extTabViewServerMap = new Map<string, ExtensionTabView>();
+const extSidebarViewServerMap = new Map<string, SidebarView>();
 
 // * npm pkg name
 const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
@@ -24,7 +38,7 @@ export class ModuleManager implements ModuleManagerInterface {
   /**
    * extension list
    */
-  private installExtension = [];
+  private installExtension: ModuleManagerInfo[] = [];
 
   /**
    * 模块集合
@@ -34,7 +48,7 @@ export class ModuleManager implements ModuleManagerInterface {
   /**
    * 功能点集合
    */
-  private readonly features: Map<string, Map<string, object>>;
+  private readonly features: Map<string, Map<string, FeatureInfo>>;
 
   constructor() {
     this.moduleHandler = new ModuleHandler({ baseDir: baseDir });
@@ -43,7 +57,6 @@ export class ModuleManager implements ModuleManagerInterface {
     this.init();
     this.updateAll();
   }
-
   async getRemoteExtension() {
     const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
     return data.data.map(({ name, version }) => ({ name, version }));
@@ -76,6 +89,12 @@ export class ModuleManager implements ModuleManagerInterface {
     const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
+      [extTabViewServerMap, extSidebarViewServerMap].forEach((item) => {
+        if (item.has(module.name)) {
+          item.get(module.name).server.close();
+          item.delete(module.name);
+        }
+      });
     }
     return result;
   }
@@ -121,44 +140,13 @@ export class ModuleManager implements ModuleManagerInterface {
       this.refresh(module);
     });
   }
-  /**
-   * 获取应用级app列表
-   */
-  getAppModuleList(): Array<ModuleInfo> {
-    const output: Array<ModuleInfo> = [];
-    const modules: Map<string, ModuleInfo> = this.moduleBelongs();
-    modules?.forEach((module: ModuleInfo) => {
-      if (module.isApp) {
-        (module.main = processEnv === 'development' && module.main_debug ? module.main_debug : module.main),
-          output.push(module);
-      }
-    });
-    return output;
-  }
-
-  /**
-   * 获取边栏应用列表
-   */
-  getSideModuleList(moduleID: string): Array<ModuleInfo> {
-    const output: Array<ModuleInfo> = [];
-    const modules: Map<string, ModuleInfo> = this.moduleBelongs();
-    modules.get(moduleID)?.sideItems?.forEach((_moduleID: string) => {
-      if (modules.has(_moduleID)) {
-        output.push(modules.get(_moduleID));
-      }
-    });
-    return output;
-  }
 
   /**
    * 获取所有模块列表
    * belongs为true，返回关联子模块集合
    * @param belongs
    */
-  getModules(belongs: boolean = false): Map<string, ModuleInfo> {
-    if (belongs) {
-      return this.moduleBelongs();
-    }
+  getModules(): Map<string, ModuleInfo> {
     return this.modules;
   }
 
@@ -175,11 +163,8 @@ export class ModuleManager implements ModuleManagerInterface {
    * belongs为true，返回关联子模块集合
    * @param belongs
    */
-  getModule(moduleID: string, belongs: boolean = false): ModuleInfo {
-    if (belongs) {
-      return this.moduleBelongs().get(moduleID);
-    }
-    return this.modules.get(moduleID);
+  getModule(id: string): ModuleInfo {
+    return this.modules.get(id);
   }
 
   /**
@@ -197,7 +182,7 @@ export class ModuleManager implements ModuleManagerInterface {
    */
   private set(moduleInfo: ModuleInfo) {
     // 避免重置
-    this.modules.set(moduleInfo.moduleID, moduleInfo);
+    this.modules.set(moduleInfo.name, moduleInfo);
     this.setFeatures(moduleInfo);
   }
 
@@ -211,7 +196,7 @@ export class ModuleManager implements ModuleManagerInterface {
         if (!this.features.has(key)) {
           this.features.set(key, new Map());
         }
-        this.features.get(key).set(moduleInfo.moduleID, { name: moduleInfo.name, ...value });
+        this.features.get(key).set(moduleInfo.name, { extensionID: moduleInfo.name, ...value });
       });
     }
   }
@@ -222,7 +207,7 @@ export class ModuleManager implements ModuleManagerInterface {
    */
   private delete(moduleInfo: ModuleInfo) {
     // 避免删除核心
-    this.modules.delete(moduleInfo.moduleID);
+    this.modules.delete(moduleInfo.name);
     this.deleteFeatures(moduleInfo);
   }
 
@@ -234,7 +219,7 @@ export class ModuleManager implements ModuleManagerInterface {
     if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
       for (const key in moduleInfo.features) {
         if (this.features.has(key)) {
-          this.features.get(key).delete(moduleInfo.moduleID);
+          this.features.get(key).delete(moduleInfo.name);
         }
       }
     }
@@ -245,7 +230,7 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param moduleInfo
    */
   private setup(moduleInfo: ModuleInfo) {
-    if (moduleInfo && isNotEmpty(moduleInfo.moduleID)) {
+    if (moduleInfo && isNotEmpty(moduleInfo.name)) {
       this.set(moduleInfo);
     }
   }
@@ -254,55 +239,86 @@ export class ModuleManager implements ModuleManagerInterface {
    * 读取本地package.json文件得到本地安装的模块列表，依次获取模块信息加入模块列表
    */
   private init() {
-    const moduleNames: string[] = this.moduleHandler.list();
-    moduleNames.forEach((moduleName: string) => {
+    const names: string[] = this.moduleHandler.list();
+    names.forEach((name: string) => {
       // 这里要加上try catch，避免异常
-      const moduleInfo: ModuleInfo = this.moduleHandler.info(moduleName);
+      const moduleInfo: ModuleInfo = this.moduleHandler.info(name);
       this.setup(moduleInfo);
     });
   }
 
-  /**
-   * 获取模块到上层模块后的模块列表
-   * @returns
-   */
-  private moduleBelongs(): Map<string, ModuleInfo> {
-    const newModules: Map<string, ModuleInfo> = new Map();
-    const sideItems = new Map();
-    this.modules?.forEach((module: ModuleInfo) => {
-      // 如果包含自己则是主应用
-      // 后期加入权限限制是否能成为顶层应用
-      const belongs: string[] = module.belongs || ['default'];
-      module.isApp = belongs.includes(module.moduleID);
-      newModules.set(module.moduleID, module);
-      belongs.forEach((belong: string) => {
-        // let _modules: string[];
-        if (module.moduleType === ModuleType.app) {
-          /*
-          if (!sideItems.has(belong)) {
-            _modules = [];
-          } else {
-            _modules = sideItems.get(belong);
-          }
-          */
-          const _modules: string[] = sideItems.get(belong) || [];
-          // 如果指定上层是自己，自己放最前面
-          if (module.moduleID === belong) {
-            _modules.unshift(module.moduleID);
-          } else {
-            _modules.push(module.moduleID);
-          }
-          sideItems.set(belong, _modules);
+
+  getExtFeatures(extName: string) {}
+
+  async getExtPageInfo(
+    extName: string,
+    featureName: string,
+    ServerMap: typeof extSidebarViewServerMap
+  ): Promise<SidebarView> {
+    try {
+      const extPath = this.moduleHandler.getModuleDir(extName);
+      const stats = await lstat(extPath);
+      const feature = require(path.join(extPath, 'package.json')).features[featureName];
+      // 是否为软连接，是则为本地开发，需要提供本地开发web服务地址
+      if (stats.isSymbolicLink()) {
+        if (feature?.debugUrl) {
+          return {
+            url: feature?.debugUrl,
+            ...feature,
+          };
         }
-      });
-    });
-    sideItems?.forEach((value: Array<string>, key: string) => {
-      const _current: ModuleInfo = newModules.get(key);
-      if (_current && _current.isApp) {
-        _current.sideItems = value;
-        newModules.set(key, _current);
       }
-    });
-    return newModules;
+      // 生产环境需要提供 html 入口文件地址(pageEntry字段)
+      if (feature?.url) {
+        if (ServerMap.has(extName)) {
+          return ServerMap.get(extName);
+        }
+        const port = await portfinder.getPortPromise();
+        const pageDir = path.parse(path.join(extPath, feature?.url)).dir;
+        console.log('extension pageDir', pageDir);
+        const server = createServer({ root: pageDir });
+        server.listen(port);
+        const url = `http://127.0.0.1:${port}`;
+        ServerMap.set(extName, {
+          ...feature,
+          url,
+          server,
+        });
+        return ServerMap.get(extName);
+      }
+      return Promise.reject('该插件package.json缺少sidebarView字段');
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+  setupExtensionPageServer() {}
+  async getExtTabs(extName: string): Promise<ExtensionTabView[]> {
+    const result = [];
+    for (let index = 0; index < this.installExtension.length; index++) {
+      try {
+        const sidebarView = await this.getExtPageInfo(
+          this.installExtension[index].name,
+          'sidebarView',
+          extSidebarViewServerMap
+        );
+        result.push(sidebarView);
+      } catch (error) {}
+    }
+    return result;
+  }
+
+  async getSidebarViews(): Promise<SidebarView[]> {
+    const result = [];
+    for (let index = 0; index < this.installExtension.length; index++) {
+      try {
+        const sidebarView = await this.getExtPageInfo(
+          this.installExtension[index].name,
+          'sidebarView',
+          extSidebarViewServerMap
+        );
+        result.push(sidebarView);
+      } catch (error) {}
+    }
+    return result;
   }
 }

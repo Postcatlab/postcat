@@ -2,6 +2,7 @@ name: Release
 
 on:
   push:
+    # branches: [for debug]
     tags:
       - 'v*.*.*'
 

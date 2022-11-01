@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import { StorageService } from '../../services/storage';
 import packageJson from '../../../../../../../../package.json';
-import { FeatureType } from '../../types';
+import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Component({
   selector: 'eo-sync-api',
@@ -12,12 +13,17 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
-  featureMap = window.eo?.getFeature('apimanage.sync');
-  constructor(private storage: StorageService, public extensionService: ExtensionService) {}
+  featureMap =
+    this.webExtensionService.getFeatures('syncAPI') || this.webExtensionService.getFeatures('apimanage.sync');
+  constructor(
+    private storage: StorageService,
+    public extensionService: ExtensionService,
+    public webExtensionService: WebExtensionService
+  ) {}
 
   ngOnInit(): void {
-    this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(data.name)) {
+    this.featureMap?.forEach((data: FeatureInfo, key: string) => {
+      if (this.extensionService.isEnable(data.extensionID)) {
         this.supportList.push({
           key,
           ...data,
@@ -25,16 +31,16 @@ export class SyncApiComponent implements OnInit {
       }
     });
     {
-      const { key } = this.supportList.at(0);
+      const { key } = this.supportList?.at(0);
       this.currentExtension = key || '';
     }
   }
   async submit() {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension);
+    const module = window.eo.loadFeatureModule(this.currentExtension) || globalThis[this.currentExtension];
     // TODO 临时取值方式需要修改
-    const { token: secretKey, projectId } = window.eo?.getModuleSettings(
+    const { token: secretKey, projectId } = window.eo?.getExtensionSettings(
       'eoapi-feature-push-eolink.eolink.remoteServer'
     );
     if (module && module[action] && typeof module[action] === 'function') {

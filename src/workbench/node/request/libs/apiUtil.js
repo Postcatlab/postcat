@@ -140,12 +140,6 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
             throw `codeError_自定义全局变量 ${inputKey} 仅支持储存 string、number、bool 类型数据，您试图为其赋值为 ${tmpType.toLowerCase()} 类型`;
           }
         }
-        if (inputSanboxVar.eo.env.envParam.hasOwnProperty(inputKey)) {
-          inputSanboxVar.eo.info(
-            `温馨提示：当前已存在同名环境变量 ${inputKey}，eo.globals.set 可能无法达到预期效果`,
-            'warning'
-          );
-        }
       },
       unset: (inputKey) => {
         delete global.eoTestGlobals[inputKey];
@@ -159,20 +153,6 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
     },
     env: {
       envParam: inputEnv.envParam,
-      param: {
-        get: (inputKey) => {
-          return inputSanboxVar.eo.env.envParam[inputKey];
-        },
-        set: (inputKey, inputVal) => {
-          inputSanboxVar.eo.env.envParam[inputKey] = inputVal;
-        },
-        unset: (inputKey) => {
-          delete inputSanboxVar.eo.env.envParam[inputKey];
-        },
-        clear: () => {
-          inputSanboxVar.eo.env.envParam = {};
-        },
-      },
     },
     crypt: {
       md5: _LibsEncrypt.md5,
@@ -254,14 +234,6 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
   };
   ['http'].map((val) => {
     tmpResult.env[val] = _LibsCommon.deepCopy(inputEnv[val]) || {};
-    tmpResult.env[val].baseUrl = {
-      get: () => {
-        return inputSanboxVar.eo.env[val].baseUrlParam;
-      },
-      set: (inputVal) => {
-        inputSanboxVar.eo.env[val].baseUrlParam = inputVal;
-      },
-    };
   });
   return tmpResult;
 };
@@ -284,7 +256,7 @@ privateFun.constructUiCodeBasicFn = (inputSanboxVar, inputEnv, inputOpts = {}) =
       data: tmpInputTestData,
       env: Object.assign({}, inputSanboxVar.eo.env, {
         envAuth: inputEnv.envAuth,
-        http: Object.assign({}, inputSanboxVar.eo.env.http, {
+        http: Object.assign({}, {
           requestScript: '',
           responseScript: '',
         }),

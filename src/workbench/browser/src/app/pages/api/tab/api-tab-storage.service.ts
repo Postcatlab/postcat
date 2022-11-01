@@ -16,9 +16,7 @@ export class ApiTabStorageService {
   init() {
     this.tabOrder = [];
     this.tabsByID = new Map();
-    this.cacheName = `${
-      this.workspace.isLocal? 'local' : this.workspace.currentWorkspaceID
-    }_TabCache`;
+    this.cacheName = `${this.workspace.isLocal ? 'local' : this.workspace.currentWorkspaceID}_TabCache`;
   }
   addTab(tabItem) {
     if (this.tabsByID.has(tabItem.uuid)) {
@@ -55,8 +53,10 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
-    //! remote datasource may change
-    // if (this.dataSource.dataSourceType === 'http') {return;}
+    //TODO remote datasource may change
+    if (this.dataSource.dataSourceType === 'http') {
+    }
+
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach((val) => {
       if (val.type === 'preview') {
@@ -77,24 +77,11 @@ export class ApiTabStorageService {
       })
     );
   }
-  parseChangeRouter(cache: storageTab) {
-    const map = {
-      '/home/api/edit': '/home/api/http/edit',
-      '/home/api/test': '/home/api/http/test',
-      '/home/api/detail': '/home/api/http/detail',
-      '/home/api/mock': '/home/api/http/mock',
-    };
-    cache.tabOrder.forEach((id) => {
-      const tabItem = cache.tabsByID[id];
-      tabItem.pathname = map[tabItem.pathname] || tabItem.pathname;
-    });
-    return cache;
-  }
+
   getPersistenceStorage(): storageTab {
     let result: any = null;
     try {
       result = JSON.parse(window.localStorage.getItem(this.cacheName) as string);
-      result = this.parseChangeRouter(result);
     } catch (e) {}
     return result;
   }

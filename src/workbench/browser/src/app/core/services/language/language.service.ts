@@ -26,14 +26,16 @@ export class LanguageService {
       return;
     }
     this.systemLanguage = localeID;
-    const localePath = (this.languages.find((val) => val.value === localeID) || this.languages[0]).path;
+    // const localePath = (this.languages.find((val) => val.value === localeID) || this.languages[0]).path;
     if (this.electron.isElectron) {
       this.electron.ipcRenderer.send('message', {
         action: 'changeLanguage',
         data: this.systemLanguage,
       });
     } else {
-      window.location.href = `/${localePath}`;
+      const url = window.location.href;
+      const langHash = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
+      window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${langHash.get(localeID)}/home/`));
     }
   }
 }

@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components';
+import { APP_BASE_HREF } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -23,5 +24,9 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { useHash: !!(window && window.process && window.process.type) ? true : false }),
   ],
   exports: [RouterModule],
+  // 👇 设置基础路由
+  providers: [
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppRoutingModule {}

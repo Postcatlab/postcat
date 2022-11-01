@@ -6,7 +6,13 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <div class="flex items-center can_be_click" nz-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
+    <div
+      *ngIf="!status.isShare"
+      class="flex items-center can_be_click"
+      nz-dropdown
+      nzTrigger="click"
+      [nzDropdownMenu]="workspaceMenu"
+    >
       <eo-iconpark-icon
         class="mr-[5px]"
         name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
@@ -54,9 +60,42 @@
       </ul>
     </nz-dropdown-menu>
   </div>
-  <div class="flex items-center">
+  <div class="flex items-center can_be_click">
+    <button
+      *ngIf="!workspaceService.isLocal && !status.isShare"
+      nz-button
+      nzType="default"
+      class="mx-2 btn_scondary"
+      nz-popover
+      [nzPopoverContent]="contentTemplate"
+      nzPopoverPlacement="bottomRight"
+      nzPopoverTrigger="click"
+      i18n
+    >
+      Share
+    </button>
+    <ng-template #contentTemplate>
+      <div class="w-[360px] pb-4">
+        <p i18n class="font-bold">Share via link</p>
+        <p i18n class="pb-2 text-xs text-gray-400">
+          This link will be updated with the API content. Everyone can access it without logging in
+        </p>
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+          <input readonly type="text" nz-input [value]="shareLink" />
+        </nz-input-group>
+      </div>
+    </ng-template>
+    <ng-template #suffixIconButton>
+      <button nz-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
+      <button nz-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
+    </ng-template>
+    <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
+      <nz-option nzValue="en-US" nzLabel="English"></nz-option>
+      <nz-option nzValue="zh-Hans" nzLabel="中文"></nz-option>
+    </nz-select>
     <!-- setting -->
     <span
+      *ngIf="!status.isShare"
       class="flex items-center justify-center mx-1 icon"
       i18n-nzTooltipTitle
       nz-tooltip
@@ -73,7 +112,6 @@
     <nz-dropdown-menu #helpMenu="nzDropdownMenu">
       <ul nz-menu>
         <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
-        <a href="https://developer.eoapi.io" target="_blank" nz-menu-item i18n>Developer Support</a>
         <li nz-menu-divider></li>
         <a
           href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
@@ -87,7 +125,13 @@
       </ul>
     </nz-dropdown-menu>
     <!-- User -->
-    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="UserMenu">
+
+    <span
+      *ngIf="!status.isShare"
+      class="flex items-center justify-center mx-1 icon"
+      nz-dropdown
+      [nzDropdownMenu]="UserMenu"
+    >
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #UserMenu="nzDropdownMenu">
@@ -140,7 +184,7 @@
       </span>
     </div>
     <!-- Web download client -->
-    <div *ngIf="!electron.isElectron">
+    <div *ngIf="!electron.isElectron && !status.isShare">
       <div class="btn py-1.5 px-2 mx-1 flex items-center" nz-dropdown i18n [nzDropdownMenu]="download">
         <span class="flex items-center delete-icon">
           <eo-iconpark-icon name="down-two" size="14px"></eo-iconpark-icon>

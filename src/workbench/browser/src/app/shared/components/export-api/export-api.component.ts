@@ -2,27 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
-import { FeatureType } from '../../types';
-import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ModuleInfo, FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Component({
   selector: 'eo-export-api',
-  template: ` <extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
+  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
-  supportList: Array<FeatureType> = [];
-  featureMap = window.eo?.getFeature('apimanage.export');
+  supportList: Array<any> = [];
+  featureMap =
+    this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
   constructor(
     private storage: StorageService,
     private projectService: ProjectService,
-    public extensionService: ExtensionService
+    public extensionService: ExtensionService,
+    public webExtensionService: WebExtensionService
   ) {}
   ngOnInit(): void {
-    this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(data.name)) {
+    this.featureMap?.forEach((data: FeatureInfo, key: string) => {
+      if (this.extensionService.isEnable(data.extensionID)) {
         this.supportList.push({
           key,
           ...data,
@@ -30,7 +32,7 @@ export class ExportApiComponent implements OnInit {
       }
     });
     {
-      const { key } = this.supportList.at(0);
+      const { key } = this.supportList?.at(0);
       this.currentExtension = key || '';
     }
   }
@@ -50,25 +52,6 @@ export class ExportApiComponent implements OnInit {
       window.URL.revokeObjectURL(url);
     }, 0);
   }
-
-  /**
-   * Default export
-   *
-   * @param callback
-   */
-  private exportEoapi(callback) {
-    const params = [this.projectService.currentProjectID];
-    this.storage.run('projectExport', params, (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        result.data.version = packageJson.version;
-        this.transferTextToFile('Eoapi-export.json', result.data);
-        callback(true);
-      } else {
-        callback(false);
-      }
-    });
-  }
-
   /**
    * Module export
    * callback应该支持返回具体的错误信息显示
@@ -79,11 +62,13 @@ export class ExportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module: ModuleInfo = await window.eo.loadFeatureModule(this.currentExtension);
+    const module: ModuleInfo =
+      (await window.eo?.loadFeatureModule(this.currentExtension)) || globalThis[this.currentExtension];
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       const params = [this.projectService.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
+          console.log('result.data', result.data);
           result.data.version = packageJson.version;
           const output = module[action](result || {});
           this.transferTextToFile(filename, output);

@@ -13,7 +13,7 @@ import {
   ModalS,
   WorkspaceS,
   HTTPS,
-  MessageS,
+  ApiContent,
 } from '../elements';
 
 export default new Module({
@@ -21,7 +21,14 @@ export default new Module({
   children: [
     new Component({
       id: 'share',
-      children: [],
+      imports: [],
+      init: [],
+      children: [
+        new Canvas({
+          class: ['flex', 'flex-col'],
+          children: [new ApiContent()],
+        }),
+      ],
     }),
   ],
 });

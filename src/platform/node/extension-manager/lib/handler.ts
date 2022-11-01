@@ -86,11 +86,11 @@ export class ModuleHandler extends CoreHandler {
    */
   private operatePackage(result: any[], moduleList: string[], action: Action) {
     if (Array.isArray(result)) {
-      const moduleNames = moduleList.map((n) => n.split('@')[0]);
+      const names = moduleList.map((n) => n.split('@')[0]);
       const packagePath = path.join(this.baseDir, 'package.json');
       result.forEach(([name]) => {
         const [pkgName, pkgVersion] = name.split('@');
-        if (moduleNames.includes(pkgName)) {
+        if (names.includes(pkgName)) {
           const packageJSON = fs.readFileSync(packagePath);
           const packageObj = JSON.parse(packageJSON.toString());
           const dependencieKeys = Object.keys(packageObj.dependencies);
@@ -115,7 +115,7 @@ export class ModuleHandler extends CoreHandler {
         return;
       }
       npmCli.commands[command](moduleList, (err, data) => {
-        console.log('command', command);
+        // console.log('command', command);
         process.chdir(this.baseDir);
         if (err) {
           return reject(err);
@@ -135,9 +135,7 @@ export class ModuleHandler extends CoreHandler {
         args = args.concat(`--proxy=${this.proxy}`);
       }
     }
-    console.log(args);
     const npm = spawn('npm', args, { cwd: this.baseDir });
-    // console.log('2==>', npm);
     let output = '';
     npm.stdout
       .on('data', (data: string) => {

@@ -16,9 +16,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
     <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="form">
       <nz-form-item nz-col class="fg1" *ngFor="let field of objectKeys(properties)">
-        <ng-container *ngIf="properties[field]?.label">
+        <ng-container *ngIf="properties[field]?.title || properties[field]?.label">
           <nz-form-label nzFor="{{ field }}" [nzRequired]="properties[field]?.required" class="label">
-            {{ properties[field]?.label }}
+            {{ properties[field]?.title || properties[field]?.label }}
           </nz-form-label>
         </ng-container>
         <!-- 二级说明 -->
@@ -28,7 +28,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
         >
           {{ properties[field]?.description }}
         </div>
-        <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ properties[field]?.label }}" class="form-control">
+        <nz-form-control
+          i18n-nzErrorTip
+          nzErrorTip="Please Enter {{ properties[field]?.title || properties[field]?.label }}"
+          class="form-control"
+        >
           <!-- 字符串类型 -->
           <!-- <ng-container *ngIf="properties[field]?.type === 'string'"> -->
           <input
@@ -37,7 +41,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
             id="{{ field }}"
             [disabled]="properties[field]?.disabled"
             i18n-placeholder
-            placeholder="{{ properties[field]?.placeholder ?? 'Please Enter ' + properties[field]?.label }}"
+            placeholder="{{
+              (properties[field]?.placeholder ?? 'Please Enter ' + properties[field]?.title) || properties[field]?.label
+            }}"
             formControlName="{{ field }}"
             [(ngModel)]="localSettings[field]"
           />
@@ -73,12 +79,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 export class ExtensionSettingComponent implements OnInit {
   @Input() configuration = {} as any;
+  @Input() extName: string;
   localSettings = {} as Record<string, any>;
   validateForm!: FormGroup;
   objectKeys = Object.keys;
-  get properties() {
-    return this.configuration?.properties || {};
-  }
+  properties = {};
 
   constructor(
     public languageService: LanguageService,
@@ -92,12 +97,22 @@ export class ExtensionSettingComponent implements OnInit {
   }
 
   private init() {
+    this.formatProperties();
     this.localSettings = this.settingService.getSettings();
     const controls = {};
 
-    this.setSettingsModel(this.configuration.properties, controls);
+    this.setSettingsModel(this.properties, controls);
 
     this.validateForm = this.fb.group(controls);
+  }
+
+  formatProperties() {
+    const prefix = `${this.extName}.`;
+    this.properties = Object.entries(this.configuration?.properties).reduce((prev, [key, value]) => {
+      const newKey = key.startsWith(prefix) ? key : `${prefix}${key}`;
+      prev[newKey] = value;
+      return prev;
+    }, {});
   }
 
   /**

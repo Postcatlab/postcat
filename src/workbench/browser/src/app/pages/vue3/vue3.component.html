@@ -1,0 +1,5 @@
+<div style="transform: translate(0)">
+  <micro-app [attr.name]="name" [attr.url]='url' shadowDOM [data]='microAppData' (created)='handleCreate()'
+    default-page='/' (beforemount)='handleBeforeMount()' (mounted)='handleMount()' (unmount)='handleUnmount()'
+    (error)='handleError()' (datachange)='handleDataChange($event)'></micro-app>
+</div>

@@ -29,6 +29,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+
 
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
@@ -74,6 +76,7 @@ const COMPONENTS = [
     NzSpinModule,
     EouiModule,
     EnvModule,
+    NzBadgeModule,
     NzCardModule,
     NzModalModule,
     NzSelectModule,
@@ -81,7 +84,7 @@ const COMPONENTS = [
     SharedModule,
   ],
   declarations: [...COMPONENTS],
-  exports: [],
+  exports: [ApiComponent],
   providers: [ElectronService, ApiService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
 })
 export class ApiModule {}

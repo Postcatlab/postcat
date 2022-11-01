@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  eoapi:
+    # build: 从当前路径构建镜像
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: eolinker/eoapi:1.9.0
+    container_name: eoapi
+    restart: always
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '8000:80'
+    networks:
+      - eoapi_net
+
+  eoapi-test-server:
+    # build: 从当前路径构建镜像
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: eolinker/eoapi-test-server:1.9.0
+    container_name: eoapi-test-server
+    restart: always
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '4201:4201'
+      - '4202:4202'
+    networks:
+      - eoapi_net
+
+networks:
+  eoapi_net:
+    name: eoapi_net

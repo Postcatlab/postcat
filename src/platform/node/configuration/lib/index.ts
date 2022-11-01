@@ -88,7 +88,7 @@ export class Configuration implements ConfigurationInterface {
    * @param section
    * @returns
    */
-  getModuleSettings<T = any>(section?: string): T {
+   getExtensionSettings<T = any>(section?: string): T {
     return this.getConfiguration(section);
   }
 

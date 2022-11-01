@@ -2,11 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { lastValueFrom } from 'rxjs';
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,31 +18,31 @@ export class ExtensionService {
   extensionIDs: Array<string> = [];
   HOST = '';
   localExtensions: Map<string, ModuleInfo>;
-  constructor(private http: HttpClient, private electron: ElectronService, private language: LanguageService) {
+  constructor(
+    private http: HttpClient,
+    private electron: ElectronService,
+    private language: LanguageService,
+    private webExtensionService: WebExtensionService
+  ) {
     this.localExtensions = this.getExtensions();
     this.extensionIDs = this.updateExtensionIDs();
     this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
   }
   private getExtensions() {
-    // Local extension
-    return window.eo?.getModules() || new Map();
+    if (this.electron.isElectron) {
+      return window.eo?.getModules() || new Map();
+    } else {
+      const webeExts = this.webExtensionService.installedList.map((n) => [n.name, n.pkgInfo]);
+      return new Map(webeExts as any);
+    }
   }
   getInstalledList() {
     // Local extension exception for ignore list
-    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.moduleID));
+    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.name));
   }
   isInstalled(name) {
     const installList = this.getInstalledList();
     return installList.includes(name);
-  }
-  private translateModule(module: ModuleInfo) {
-    const lang = this.language.systemLanguage;
-    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
-    if (!locale) {
-      return module;
-    }
-    module = new TranslateService(module, locale).translate();
-    return module;
   }
   public async requestList() {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
@@ -128,5 +129,17 @@ export class ExtensionService {
     return Array.from(this.localExtensions.keys())
       .filter((it) => it)
       .filter((it) => !this.ignoreList.includes(it));
+  }
+  private translateModule(module: ModuleInfo) {
+    const lang = this.language.systemLanguage;
+
+    //If extension from web,transalte package content from http moduleInfo
+    //Locale extension will translate from local i18n file
+    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
+    if (!locale) {
+      return module;
+    }
+    module = new TranslateService(module, locale).translate();
+    return module;
   }
 }

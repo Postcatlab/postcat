@@ -28,3 +28,4 @@ export { HTTPS } from './service/httpS';
 
 // * 业务
 export { ManageAccess } from './manageAccess';
+export { ApiContent } from './apiContent';

@@ -7,7 +7,10 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
   styleUrls: ['./pages.component.scss'],
 })
 export class PagesComponent implements OnInit {
-  isShowNotification = false;
-  constructor(public electron: ElectronService) {}
-  ngOnInit(): void {}
+  isShowNotification;
+  constructor(public electron: ElectronService) {
+    this.isShowNotification = false;
+  }
+  ngOnInit(): void {
+  }
 }
