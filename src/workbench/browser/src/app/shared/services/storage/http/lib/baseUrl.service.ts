@@ -89,7 +89,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
             this.messageService.send({ type: 'login', data: {} });
           }
         }
-        return of(err);
+        return err;
       })
     );
   }
