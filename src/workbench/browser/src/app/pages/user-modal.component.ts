@@ -571,16 +571,15 @@ export class UserModalComponent implements OnInit {
         this.eMessage.error($localize`Please check you username or password`);
         return;
       }
-
       // * get login form values
       const formData = this.validateLoginForm.value;
       const [data, err]: any = await this.api.api_authLogin(formData);
-      console.log(data, err);
       if (err) {
         this.eMessage.error(
           $localize`Please check the account/password, the account must be a mobile phone number or email !`
         );
-        if (err.status === 401) {
+        if ([401, 403].includes(err.status)) {
+          this.isLoginBtnBtnLoading = false;
           this.message.send({ type: 'clear-user', data: {} });
           if (this.user.isLogin) {
             return;
