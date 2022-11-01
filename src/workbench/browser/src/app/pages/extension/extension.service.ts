@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { lastValueFrom } from 'rxjs';
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -34,20 +34,11 @@ export class ExtensionService {
   }
   getInstalledList() {
     // Local extension exception for ignore list
-    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.moduleID));
+    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.name));
   }
   isInstalled(name) {
     const installList = this.getInstalledList();
     return installList.includes(name);
-  }
-  private translateModule(module: ModuleInfo) {
-    const lang = this.language.systemLanguage;
-    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
-    if (!locale) {
-      return module;
-    }
-    module = new TranslateService(module, locale).translate();
-    return module;
   }
   public async requestList() {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
@@ -135,5 +126,17 @@ export class ExtensionService {
     return Array.from(this.localExtensions.keys())
       .filter((it) => it)
       .filter((it) => !this.ignoreList.includes(it));
+  }
+  private translateModule(module: ModuleInfo) {
+    const lang = this.language.systemLanguage;
+
+    //If extension from web,transalte package content from http moduleInfo
+    //Locale extension will translate from local i18n file
+    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
+    if (!locale) {
+      return module;
+    }
+    module = new TranslateService(module, locale).translate();
+    return module;
   }
 }

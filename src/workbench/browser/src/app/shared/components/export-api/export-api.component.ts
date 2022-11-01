@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../../shared/services/storage';
 import { StorageRes, StorageResStatus } from '../../services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
-import { FeatureType } from '../../types';
-import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ModuleInfo, FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Component({
   selector: 'eo-export-api',
-  template: ` <extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
+  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
-  supportList: Array<FeatureType> = [];
-  featureMap = window.eo?.getFeature('apimanage.export') || this.webExtensionService.getFeatures('apimanage.export');
+  supportList: Array<any> = [];
+  featureMap =
+    this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
   constructor(
     private storage: StorageService,
     private projectService: ProjectService,
@@ -23,8 +23,8 @@ export class ExportApiComponent implements OnInit {
     public webExtensionService: WebExtensionService
   ) {}
   ngOnInit(): void {
-    this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(data.name)) {
+    this.featureMap?.forEach((data: FeatureInfo, key: string) => {
+      if (this.extensionService.isEnable(data.extensionID)) {
         this.supportList.push({
           key,
           ...data,
@@ -52,25 +52,6 @@ export class ExportApiComponent implements OnInit {
       window.URL.revokeObjectURL(url);
     }, 0);
   }
-
-  /**
-   * Default export
-   *
-   * @param callback
-   */
-  private exportEoapi(callback) {
-    const params = [this.projectService.currentProjectID];
-    this.storage.run('projectExport', params, (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        result.data.version = packageJson.version;
-        this.transferTextToFile('Eoapi-export.json', result.data);
-        callback(true);
-      } else {
-        callback(false);
-      }
-    });
-  }
-
   /**
    * Module export
    * callback应该支持返回具体的错误信息显示

@@ -21,6 +21,8 @@ export class ExtensionDetailComponent implements OnInit {
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   nzSelectedIndex = 0;
+  pagePath = '';
+  extName = '';
 
   changeLog = '';
   changeLogNotFound = false;
@@ -43,8 +45,10 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   async getDetail() {
-    const extName = this.route.snapshot.queryParams.name;
-    this.isOperating = window.eo?.getExtIsInTask(extName, ({ type, status }) => {
+    this.extName = this.route.snapshot.queryParams.name;
+
+    this.fetchExtensionPage(this.extName);
+    this.isOperating = window.eo?.getExtIsInTask(this.extName, ({ type, status }) => {
       if (type === 'install' && status === 'success') {
         this.extensionDetail.installed = true;
       }
@@ -53,7 +57,7 @@ export class ExtensionDetailComponent implements OnInit {
       }
       this.isOperating = false;
     });
-    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, extName);
+    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, this.extName);
 
     this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
 
@@ -68,6 +72,22 @@ export class ExtensionDetailComponent implements OnInit {
     }
     this.fetchChangelog(this.language.systemLanguage);
   }
+
+  fetchExtensionPage = async (extName: string) => {
+    this.pagePath='http://127.0.0.1:8080';
+    // try {
+    //   const res = await window.eo.getExtensionPagePathByName(extName);
+    //   console.log('extName res', res);
+    //   this.pagePath = res;
+    // } catch (e) {
+    //   console.error('getExtensionPagePathByName err', e);
+    //   fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
+    //     if (res.status === 200) {
+    //       this.pagePath = res.url + '/child/react17/';
+    //     }
+    //   });
+    // }
+  };
 
   async fetchChangelog(locale = '') {
     //Default locale en-US

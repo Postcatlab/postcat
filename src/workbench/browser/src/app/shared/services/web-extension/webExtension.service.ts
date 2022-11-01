@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { FeatureType } from 'eo/workbench/browser/src/app/shared/types';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
+import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
 
 type ExtensionItem = {
   name: string;
@@ -88,10 +88,13 @@ export class WebExtensionService {
     return res.json();
   }
 
-  getFeatures(featureName: string): Map<string, FeatureType> {
-    const featureMap = new Map<string, FeatureType>([]);
+  getFeatures(featureName: string): Map<string, FeatureInfo> {
+    if (window.eo) {
+      return window.eo?.getFeature(featureName);
+    }
+    const featureMap = new Map<string, FeatureInfo>([]);
     this.installedList.forEach((item) => {
-      const feature: FeatureType = item.pkgInfo?.features?.[featureName];
+      const feature: FeatureInfo = item.pkgInfo?.features?.[featureName];
       if (feature) {
         featureMap.set(item.name, feature);
       }

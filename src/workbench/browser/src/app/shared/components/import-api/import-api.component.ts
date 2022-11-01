@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FeatureType } from '../../types';
+import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
@@ -49,10 +49,11 @@ import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/service
   ></extension-select>`,
 })
 export class ImportApiComponent implements OnInit {
-  supportList: Array<FeatureType> = [];
+  supportList: Array<any> = [];
   currentExtension = '';
   uploadData = null;
-  featureMap = window.eo?.getFeature('apimanage.import') || this.webExtensionService.getFeatures('apimanage.import');
+  featureMap =
+    this.webExtensionService.getFeatures('importAPI') || this.webExtensionService.getFeatures('apimanage.import');
   constructor(
     private router: Router,
     private storage: StorageService,
@@ -62,9 +63,9 @@ export class ImportApiComponent implements OnInit {
     private projectService: ProjectService
   ) {}
   ngOnInit(): void {
-    console.log('this.featureMap', this.featureMap);
-    this.featureMap?.forEach((data: FeatureType, key: string) => {
-      if (this.extensionService.isEnable(data.name)) {
+    this.featureMap?.forEach((data: FeatureInfo, key: string) => {
+      console.log(this.featureMap);
+      if (this.extensionService.isEnable(data.extensionID)) {
         this.supportList.push({
           key,
           ...data,

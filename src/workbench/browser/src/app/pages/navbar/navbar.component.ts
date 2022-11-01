@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService, WebService } from '../../core/services';
-import { ModuleInfo } from 'eo/platform/node/extension-manager';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SettingComponent } from '../../shared/components/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
@@ -89,11 +89,7 @@ export class NavbarComponent implements OnInit {
     }
   }
   async ngOnInit(): Promise<void> {
-    if (this.electron.isElectron) {
-      this.modules = window.eo.getAppModuleList();
-    } else {
       this.modules = new Map();
-    }
     this.shareLink = await this.getShareLink();
     this.message
       .get()

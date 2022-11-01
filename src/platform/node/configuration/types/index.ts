@@ -6,7 +6,7 @@ export interface ConfigurationInterface {
   saveModuleSettings: (moduleID: string, settings: ConfigurationValueInterface) => boolean;
   deleteModuleSettings: (moduleID: string) => boolean;
   getSettings: () => ConfigurationValueInterface;
-  getModuleSettings: (moduleID: string) => ConfigurationValueInterface;
+  getExtensionSettings: (moduleID: string) => ConfigurationValueInterface;
 }
 
 export interface ConfigurationValueInterface {

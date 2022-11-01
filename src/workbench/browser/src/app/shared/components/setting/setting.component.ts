@@ -127,7 +127,7 @@ export class SettingComponent implements OnInit {
    * @returns
    */
   getModuleTitle(module: any): string {
-    const title = module?.moduleName ?? module?.contributes?.title ?? module?.title;
+    const title = module?.moduleName ??  module?.title;
     return title;
   }
 
