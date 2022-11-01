@@ -19,7 +19,7 @@ export class AppService {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
         const sender = event.sender;
-        const isEnabledMatchType = window.eo?.getModuleSettings?.('eoapi-features.mock.matchType') !== false;
+        const isEnabledMatchType = window.eo?.getExtensionSettings?.('eoapi-features.mock.matchType') !== false;
         const { mockID } = req.params;
         if (Number.isInteger(Number(mockID))) {
           try {

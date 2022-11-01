@@ -69,7 +69,7 @@ export class MockServer {
     this.app.all('/mock/:mockID/*', (req, res, next) => {
       // if (!protocolReg.test(req.url)) {
       // match request type
-      const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
+      const isMatchType = this.configuration.getExtensionSettings<boolean>('eoapi-features.mock.matchType');
       if (req.params.mockID || isMatchType !== false) {
         this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
         ipcMain.once('getMockApiList', (event, message) => {
@@ -93,7 +93,7 @@ export class MockServer {
     this.app.all('/:workspaceID/:projectID/mock/:mockID/*', (req, res, next) => {
       // if (!protocolReg.test(req.url)) {
       // match request type
-      const isMatchType = this.configuration.getModuleSettings<boolean>('eoapi-features.mock.matchType');
+      const isMatchType = this.configuration.getExtensionSettings<boolean>('eoapi-features.mock.matchType');
       if (req.params.mockID || isMatchType !== false) {
         this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
         ipcMain.once('getMockApiList', (event, message) => {
