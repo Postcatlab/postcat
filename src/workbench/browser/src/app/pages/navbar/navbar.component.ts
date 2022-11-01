@@ -83,13 +83,13 @@ export class NavbarComponent implements OnInit {
     const isOk = copy(this.shareLink);
     if (isOk) {
       this.isCopy = true;
-      interval(7000).subscribe(() => {
+      interval(700).subscribe(() => {
         this.isCopy = false;
       });
     }
   }
   async ngOnInit(): Promise<void> {
-      this.modules = new Map();
+    this.modules = new Map();
     this.shareLink = await this.getShareLink();
     this.message
       .get()

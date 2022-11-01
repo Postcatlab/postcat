@@ -47,8 +47,12 @@ export class EnvListComponent implements OnInit {
       return;
     }
     const envList: any = await this.getAllEnv();
-    this.env = envList.find((it: any) => it.uuid === uuid);
-    console.log('env', this.env);
+    this.env = envList
+      .map((it) => ({
+        ...it,
+        parameters: it.parameters.filter((item) => item.name || item.value),
+      }))
+      .find((it: any) => it.uuid === uuid);
   }
   getAllEnv(uuid?: number) {
     const projectID = 1;
