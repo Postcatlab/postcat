@@ -9,6 +9,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
+import { debug } from 'console';
 import { throttle } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 type EventListener = HTMLElement['removeEventListener'] | HTMLElement['addEventListener'];

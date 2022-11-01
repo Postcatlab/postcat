@@ -219,7 +219,6 @@ export class ApiTabService {
             currentHasChanged = false;
           }
         }
-        console.log(inData.when,currentHasChanged);
         //* Share change status within all content page
         replaceTab.extends.hasChanged = currentTab.extends?.hasChanged || {};
         replaceTab.extends.hasChanged[contentID] = currentHasChanged;
