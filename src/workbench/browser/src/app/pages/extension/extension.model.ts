@@ -1,4 +1,4 @@
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types/index';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 
 export enum ExtensionGroupType {
   all = 'all',

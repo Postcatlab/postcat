@@ -10,7 +10,12 @@
   >
     <!-- <div class="side-container"> -->
     <nz-content class="api-container-tabs">
-      <nz-tabset nzCentered [nzAnimated]="false" [(nzSelectedIndex)]="tabsIndex">
+      <nz-tabset
+        [ngClass]="{ 'share-group-tabset': status.isShare }"
+        nzCentered
+        [nzAnimated]="false"
+        [(nzSelectedIndex)]="tabsIndex"
+      >
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
             <span
@@ -27,7 +32,7 @@
             <eo-api-group-tree></eo-api-group-tree>
           </div>
         </nz-tab>
-        <nz-tab [nzTitle]="historyTitle">
+        <nz-tab [nzTitle]="historyTitle" *ngIf="!status.isShare">
           <ng-template #historyTitle>
             <span
               i18n-nzTooltipTitle
@@ -74,8 +79,14 @@
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
             </nz-select>
             <ng-template #renderTemplate>
-              <nz-divider></nz-divider>
-              <a class="text-sx manager-env" nz-button nzType="link" (click)="gotoEnvManager()" i18n
+              <nz-divider *ngIf="!status.isShare"></nz-divider>
+              <a
+                *ngIf="!status.isShare"
+                class="text-sx manager-env"
+                nz-button
+                nzType="link"
+                (click)="gotoEnvManager()"
+                i18n
                 >Manage Environment</a
               >
             </ng-template>
@@ -106,23 +117,28 @@
             *ngIf="this.id"
             nzLinkRouter
           >
-            <nz-tab *ngFor="let tab of TABS">
+            <nz-tab *ngFor="let tab of renderTabs">
               <p *ngIf="web.isWeb && tab.onlyDestop">
                 <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
               </p>
-              <span *ngIf="!web.isWeb || !tab.onlyDestop">
+              <div *ngIf="!web.isWeb || !tab.onlyDestop">
                 <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
-                  {{ tab.title }}</a
-                >
-              </span>
+                  {{ tab.title }} <nz-badge *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]" nzStatus="success"></nz-badge
+                ></a>
+              </div>
             </nz-tab>
           </nz-tabset>
         </div>
-        <section class="relative" [ngStyle]="{ paddingRight: activeBar ? dyWidth + 'px' : '40px' }">
+        <section class="relative" [ngStyle]="{ paddingRight: countPaddingRight() }">
           <!-- Get router child component by activate -->
           <router-outlet (activate)="onActivate($event)"></router-outlet>
-          <eo-split-x *ngIf="activeBar" (x)="handleDrag($event)" [init]="[200, dyWidth, 400]"></eo-split-x>
+          <eo-split-x
+            *ngIf="activeBar && !status.isShare"
+            (x)="handleDrag($event)"
+            [init]="[200, dyWidth, 400]"
+          ></eo-split-x>
           <div
+            *ngIf="!status.isShare"
             class="absolute top-0 bottom-0 right-0 flex right-bar"
             [ngClass]="{ 'left-line': !activeBar }"
             [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
@@ -132,7 +148,6 @@
               [ngClass]="activeBar ? 'active' : ''"
               (click)="toggleRightBar()"
               nz-tooltip
-              [nzTooltipMouseEnterDelay]="0.7"
               [nzTooltipMouseLeaveDelay]="0"
               i18n-nzTooltipTitle="@@Environment Setting"
               nzTooltipTitle="Environment Setting"

@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { Subject } from 'rxjs';
+import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
-import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
-
-/** is show switch success tips */
-export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 
 /**
  * @description
@@ -21,7 +17,6 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 })
 export class DataSourceService {
   isConnectRemote = false;
-  private destroy$: Subject<void> = new Subject<void>();
   /** data source type @type { DataSourceType }  */
   get dataSourceType(): DataSourceType {
     return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
@@ -39,12 +34,11 @@ export class DataSourceService {
   }
 
   constructor(
-    private storageService: StorageService,
     private messageService: MessageService,
-    private message: EoMessageService,
     private settingService: SettingService,
-    private router: Router,
-    private user: UserService
+    private user: UserService,
+    private http: RemoteService,
+    private web: WebService
   ) {
     this.pingCloudServerUrl();
   }
@@ -58,52 +52,47 @@ export class DataSourceService {
     return decodeURIComponent(url.toString());
   }
 
-  async refreshComponent() {
-    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
-    // console.log('this.router', pathname, Object.fromEntries(searchParams.entries()));
-    await this.router.navigate(['**']);
-    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
-  }
   /**
    * Test if cloud service address is available
    */
-  async pingCloudServerUrl(inputUrl?): Promise<[boolean, any]> {
+  async pingCloudServerUrl(inputUrl?): Promise<boolean> {
     const remoteUrl = inputUrl || this.remoteServerUrl;
-    let result;
     if (!remoteUrl) {
-      result = [false, remoteUrl];
+      return false;
     }
-
-    const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
-
-    let res;
-    try {
-      const response = await fetch(url);
-      res = await response.json();
-      if (res.statusCode !== 200) {
-        result = [false, res];
-      } else {
-        result = [true, res];
+    const [, err]: any = await this.http.api_systemStatus({}, remoteUrl);
+    if (err) {
+      // ! TODO delete the retry
+      const [, nErr]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
+      if (nErr) {
+        this.isConnectRemote = false;
+        return false;
       }
-    } catch (e) {
-      result = [false, e];
     }
-    this.isConnectRemote = result[0];
-    return result;
+    this.isConnectRemote = true;
+    return this.isConnectRemote;
   }
 
   async checkRemoteAndTipModal() {
-    const [isSuccess] = await this.pingCloudServerUrl();
+    const isSuccess = await this.pingCloudServerUrl();
     if (!isSuccess) {
       this.messageService.send({ type: 'ping-fail', data: {} });
       return;
     }
-    this.messageService.send({ type: 'ping-success', data: {} });
+    // this.messageService.send({ type: 'ping-success', data: {} });
   }
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
+    if (this.web.isWeb) {
+      if (!this.user.isLogin) {
+        this.messageService.send({ type: 'login', data: {} });
+        return;
+      }
+      canOperateCallback?.();
+      return;
+    }
     if (this.remoteServerUrl) {
-      const [isSuccess] = await this.pingCloudServerUrl();
+      const isSuccess = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
       if (isSuccess) {
         if (!this.user.isLogin) {
@@ -119,13 +108,6 @@ export class DataSourceService {
     } else {
       this.messageService.send({ type: 'need-config-remote', data: {} });
     }
-  }
-
-  switchToLocal() {
-    this.storageService.toggleDataSource({ dataSourceType: 'local' });
-  }
-  switchToHttp() {
-    this.storageService.toggleDataSource({ dataSourceType: 'http' });
   }
 
   getSettings() {
@@ -164,33 +146,4 @@ export class DataSourceService {
     }
     return undefined;
   };
-
-  /**
-   * switch data
-   */
-  switchDataSource = async (dataSource: DataSourceType, beforRefreshCompFn = () => {}) => {
-    const isRemote = dataSource === 'http';
-    if (isRemote) {
-      const [isSuccess] = await this.pingCloudServerUrl();
-      if (isSuccess) {
-        this.switchToHttp();
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
-        await beforRefreshCompFn?.();
-        this.refreshComponent();
-      } else {
-        this.message.error($localize`Cloud Storage not available`);
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
-      }
-    } else {
-      this.switchToLocal();
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
-      await beforRefreshCompFn?.();
-      this.refreshComponent();
-    }
-  };
-
-  connectCloudSuccess() {
-    this.message.success($localize`Successfully connect to cloud`);
-    localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
-  }
 }

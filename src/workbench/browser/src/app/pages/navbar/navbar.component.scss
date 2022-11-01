@@ -34,9 +34,6 @@
   left: 0;
   top: 0;
   padding: 0 8px;
-  // background-color: var(--NAVBAR_BG);
-  // color: var(--NAVBAR_TEXT);
-  // border-bottom: 1px solid var(--NAVBAR_BORDER_BOTTOM);
   border-bottom: 1px solid var(--BORDER);
   height: var(--NAVBAR_HEIGHT);
   .logo {
@@ -72,3 +69,8 @@
     font-size: 12px;
   }
 }
+.btn_scondary{
+  color:var(--BTN_PRIMARY_BG);
+  border-color:var(--BTN_PRIMARY_BG);
+}
+

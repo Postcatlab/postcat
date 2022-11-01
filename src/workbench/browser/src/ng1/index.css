@@ -5301,9 +5301,6 @@ input::-ms-reveal {
   color: #ccc;
 }
 
-.eo-tab-theme-icon {
-  color: var(--MAIN_THEME_COLOR);
-}
 
 .eo-tab-icon {
   color: #fff;

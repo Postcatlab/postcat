@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, LocationStrategy } from '@angular/common';
 import { PagesRoutingModule } from './pages-routing.module';
 import { SettingModule } from '../shared/components/setting/setting.module';
 import { PagesComponent } from './pages.component';
@@ -9,6 +9,7 @@ import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
 import { UserModalComponent } from './user-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+
 
 @NgModule({
   imports: [PagesRoutingModule, SettingModule, EouiModule, CommonModule, NzAlertModule, SharedModule, NavbarModule],

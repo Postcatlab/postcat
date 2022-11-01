@@ -15,6 +15,7 @@ import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
 
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -60,7 +61,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     private electron: ElectronService,
     private testService: ApiTestService,
     private modal: ModalService,
-    private message: MessageService
+    private message: MessageService,
+    private status: StatusService
   ) {
     this.initBasicForm();
   }
@@ -88,7 +90,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             ? APP_CONFIG.REMOTE_SOCKET_URL
             : `ws://localhost:${port || 13928}`
         }`,
-        { transports: ['websocket'] }
+        { path: '/socket.io', transports: ['websocket'] }
       );
       this.socket.on('connect_error', (error) => {
         // * conncet socketIO is failed
@@ -170,6 +172,9 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         isExpand: false,
       });
       const { requestTabIndex, msg, ...data } = this.model;
+      if (this.status.isShare) {
+        return;
+      }
       const res = await this.testService.addHistory({ protocol: 'websocket', ...data }, 0);
       if (res) {
         this.message.send({ type: 'updateHistory', data: {} });

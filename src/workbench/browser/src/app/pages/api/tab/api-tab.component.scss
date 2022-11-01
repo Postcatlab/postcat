@@ -76,8 +76,14 @@
       width: 100%;
       font-style: italic;
       .tab-has-edit-icon {
-        width: 8px;
-        height: 8px;
+        .ant-badge-status-dot{
+          width: 8px;
+          height: 8px;
+        }
+        .ant-badge-status-text{
+          display: none;
+        }
+  
       }
       .tab-item-button-group {
         position: absolute;

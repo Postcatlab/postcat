@@ -6,6 +6,7 @@ import { ExtensionService } from '../extension.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { WebService } from '../../../core/services/web/web.service';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Component({
   selector: 'eo-extension-detail',
@@ -20,6 +21,8 @@ export class ExtensionDetailComponent implements OnInit {
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   nzSelectedIndex = 0;
+  pagePath = '';
+  extName = '';
 
   changeLog = '';
   changeLogNotFound = false;
@@ -29,7 +32,8 @@ export class ExtensionDetailComponent implements OnInit {
     private router: Router,
     private webService: WebService,
     public electron: ElectronService,
-    private language: LanguageService
+    private language: LanguageService,
+    private webExtensionService: WebExtensionService
   ) {
     this.getDetail();
   }
@@ -37,16 +41,14 @@ export class ExtensionDetailComponent implements OnInit {
   ngOnInit(): void {}
 
   async handleInstall() {
-    if (this.electron.isElectron) {
-      this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
-    } else {
-      this.webService.jumpToClient($localize`Eoapi Client is required to install this extension.`);
-    }
+    this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
   }
 
   async getDetail() {
-    const extName = this.route.snapshot.queryParams.name;
-    this.isOperating = window.eo?.getExtIsInTask(extName, ({ type, status }) => {
+    this.extName = this.route.snapshot.queryParams.name;
+
+    this.fetchExtensionPage(this.extName);
+    this.isOperating = window.eo?.getExtIsInTask(this.extName, ({ type, status }) => {
       if (type === 'install' && status === 'success') {
         this.extensionDetail.installed = true;
       }
@@ -55,11 +57,11 @@ export class ExtensionDetailComponent implements OnInit {
       }
       this.isOperating = false;
     });
-    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, extName);
+    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, this.extName);
 
     this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
 
-    if (!this.extensionDetail?.installed) {
+    if (!this.extensionDetail?.installed || this.webService.isWeb) {
       await this.fetchReadme(this.language.systemLanguage);
     }
     this.isNotLoaded = false;
@@ -70,6 +72,22 @@ export class ExtensionDetailComponent implements OnInit {
     }
     this.fetchChangelog(this.language.systemLanguage);
   }
+
+  fetchExtensionPage = async (extName: string) => {
+    this.pagePath='http://127.0.0.1:8080';
+    // try {
+    //   const res = await window.eo.getExtensionPagePathByName(extName);
+    //   console.log('extName res', res);
+    //   this.pagePath = res;
+    // } catch (e) {
+    //   console.error('getExtensionPagePathByName err', e);
+    //   fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
+    //     if (res.status === 200) {
+    //       this.pagePath = res.url + '/child/react17/';
+    //     }
+    //   });
+    // }
+  };
 
   async fetchChangelog(locale = '') {
     //Default locale en-US
@@ -147,23 +165,27 @@ ${log}
 
   manageExtension(operate: string, id) {
     this.isOperating = true;
-    /**
-     * * WARNING:Sending a synchronous message will block the whole
-     * renderer process until the reply is received, so use this method only as a last
-     * resort. It's much better to use the asynchronous version, `invoke()`.
-     */
     setTimeout(async () => {
       switch (operate) {
         case 'install': {
-          this.extensionDetail.installed = await this.extensionService.install(id);
-          this.handleEnableExtension(true);
-          this.getDetail();
+          if (this.electron.isElectron) {
+            this.extensionDetail.installed = await this.extensionService.install(id);
+            this.handleEnableExtension(true);
+            this.getDetail();
+          } else {
+            this.extensionDetail.installed = await this.webExtensionService.installExtension(this.extensionDetail.name);
+          }
           break;
         }
         case 'uninstall': {
-          this.extensionDetail.installed = !(await this.extensionService.uninstall(id));
-          this.handleEnableExtension(false);
-          this.fetchReadme(this.language.systemLanguage);
+          if (this.electron.isElectron) {
+            this.extensionDetail.installed = !(await this.extensionService.uninstall(id));
+            this.handleEnableExtension(false);
+            this.fetchReadme(this.language.systemLanguage);
+          } else {
+            this.webExtensionService.unInstallExtension(this.extensionDetail.name);
+            this.extensionDetail.installed = false;
+          }
           break;
         }
       }

@@ -22,7 +22,7 @@ export class EventS extends Render {
       `;
   }
   send(name, data = '{}') {
-    return `this.message.send({type: '${name}', data: ${data}})`;
+    return EventS.send(name, (data = '{}'));
   }
   render() {
     return {
@@ -46,5 +46,8 @@ export class EventS extends Render {
       data: [],
       methods: [],
     };
+  }
+  static send(name, data = '{}') {
+    return `this.message.send({ type: '${name}', data: ${data} })`;
   }
 }

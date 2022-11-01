@@ -22,7 +22,7 @@ export class HistoryComponent implements OnInit {
   constructor(private storage: StorageService, private router: Router, private message: MessageService) {}
   async ngOnInit() {
     const result = await this.loadAllTest();
-    this.historyList = result.reverse();
+    this.historyList = (result||[]).reverse();
     this.message
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -39,7 +39,6 @@ export class HistoryComponent implements OnInit {
     return new Promise<any[]>((resolve) => {
       this.storage.run('apiTestHistoryLoadAllByProjectID', [1], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          console.log(result.data);
           resolve(result.data);
         } else {
           console.error(result.data);

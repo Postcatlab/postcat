@@ -1,7 +1,6 @@
 import * as path from 'path';
 import { ModuleHandlerOptions, ModuleInfo } from '../types';
 import { fileExists, readFile, readJson } from 'eo/shared/node/file';
-import { isNotEmpty } from 'eo/shared/common/common';
 import { getLocaleData } from 'eo/platform/node/i18n';
 import { LanguageService } from 'eo/app/electron-main/language.service';
 import { TranslateService } from 'eo/platform/common/i18n';
@@ -53,24 +52,20 @@ export class CoreHandler {
       // Check that the file exists locally
       moduleInfo.introduction =
         readFile(path.join(baseDir, `README.${lang}.md`)) || readFile(path.join(baseDir, `README.md`));
-      moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
-      if (moduleInfo.preload?.length > 0) {
-        moduleInfo.preload = path.join(moduleInfo.baseDir, moduleInfo.preload);
+      if(moduleInfo.main){
+        moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
       }
-      if (moduleInfo.main_node?.length > 0) {
-        moduleInfo.main_node = path.join(moduleInfo.baseDir, moduleInfo.main_node);
+      if(moduleInfo.node){
+        moduleInfo.node = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.node);
       }
       if (moduleInfo.logo?.length > 0 && !moduleInfo.logo.startsWith('http') && !moduleInfo.logo.includes('icon-')) {
         moduleInfo.logo = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.logo);
-      }
-      if (!moduleInfo.belongs || !isNotEmpty(moduleInfo.belongs)) {
-        moduleInfo.belongs = ['default'];
       }
       if (typeof moduleInfo.author === 'object') {
         moduleInfo.author = moduleInfo.author['name'] || '';
       }
     } catch (e) {
-      console.log(`Get module ${moduleInfo?.moduleID} error:${e}`);
+      console.log(`Get module ${moduleInfo?.name} error:${e}`);
       moduleInfo = {} as ModuleInfo;
     }
     return moduleInfo;

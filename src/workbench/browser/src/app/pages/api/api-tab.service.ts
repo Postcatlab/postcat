@@ -6,6 +6,7 @@ import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { isEmptyObj } from '../../utils/index.utils';
 import { MessageService } from '../../shared/services/message';
 import { Router } from '@angular/router';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 @Injectable()
 export class ApiTabService {
   componentRef;
@@ -15,27 +16,47 @@ export class ApiTabService {
     return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
-  BASIC_TABS: Partial<TabItem>[] = [
-    {
-      pathname: '/home/api/http/test',
-      module: 'test',
-      type: 'edit',
-      title: $localize`New Request`,
-      extends: { method: 'POST' },
-    },
-    { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
-    { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
-    {
-      pathname: '/home/api/ws/test',
-      module: 'test',
-      isFixed: true,
-      type: 'edit',
-      extends: { method: 'WS' },
-      title: $localize`New Websocket`,
-    },
-    { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' },
-  ];
-  constructor(private messageService: MessageService, private router: Router) {
+  BASIC_TABS: Partial<TabItem>[] = this.status.isShare
+    ? [
+        {
+          pathname: '/home/share/http/test',
+          module: 'test',
+          type: 'edit',
+          title: $localize`New Request`,
+          extends: { method: 'POST' },
+        },
+        { pathname: '/home/share/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+        {
+          pathname: '/home/share/ws/test',
+          module: 'test',
+          isFixed: true,
+          type: 'preview',
+          extends: { method: 'WS' },
+          title: $localize`New Websocket`,
+        },
+      ]
+    : [
+        {
+          pathname: '/home/api/http/test',
+          module: 'test',
+          type: 'edit',
+          title: $localize`New Request`,
+          extends: { method: 'POST' },
+        },
+        { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
+        { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+        {
+          pathname: '/home/api/ws/test',
+          module: 'test',
+          isFixed: true,
+          type: 'edit',
+          extends: { method: 'WS' },
+          title: $localize`New Websocket`,
+        },
+        { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' },
+      ];
+
+  constructor(private messageService: MessageService, private router: Router, private status: StatusService) {
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
     });
@@ -124,9 +145,9 @@ export class ApiTabService {
     }
     this.bindChildComponentChangeEvent();
 
-    if (!this.componentRef.init) {
+    if (!this.componentRef?.init) {
       this.changeContent$.next({ when: 'init', url });
-      console.warn('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
+      console.error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
       return;
     }
     //?Why should use getCurrentTab()?
@@ -183,7 +204,7 @@ export class ApiTabService {
             `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
           );
         }
-        let currentHasChanged = currentTab.hasChanged;
+        let currentHasChanged = currentTab.extends?.hasChanged?.[contentID] || false;
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes

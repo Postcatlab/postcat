@@ -6,6 +6,7 @@ import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 
 interface TreeNode {
   name: string;
@@ -83,10 +84,14 @@ export class SettingComponent implements OnInit {
         },
       ],
     },
-    {
-      name: $localize`:@@Cloud:Cloud Storage`,
-      moduleID: 'eoapi-common',
-    },
+    ...(this.webService.isWeb
+      ? []
+      : [
+          {
+            name: $localize`:@@Cloud:Cloud Storage`,
+            moduleID: 'eoapi-common',
+          },
+        ]),
     {
       name: $localize`:@@Language:Language`,
       moduleID: 'eoapi-language',
@@ -105,7 +110,7 @@ export class SettingComponent implements OnInit {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  constructor(private settingService: SettingService, public user: UserService) {}
+  constructor(private settingService: SettingService, public user: UserService, public webService: WebService) {}
 
   ngOnInit(): void {
     this.init();
@@ -122,7 +127,7 @@ export class SettingComponent implements OnInit {
    * @returns
    */
   getModuleTitle(module: any): string {
-    const title = module?.moduleName ?? module?.contributes?.title ?? module?.title;
+    const title = module?.moduleName ??  module?.title;
     return title;
   }
 
@@ -171,7 +176,9 @@ export class SettingComponent implements OnInit {
       this.treeNodes.filter((val) => {
         switch (val.moduleID) {
           case 'eoapi-account': {
-            if (!this.user.isLogin) {return false;}
+            if (!this.user.isLogin) {
+              return false;
+            }
           }
         }
         return true;

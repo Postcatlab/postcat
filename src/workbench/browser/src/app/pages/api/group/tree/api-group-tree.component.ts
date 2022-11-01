@@ -18,6 +18,9 @@ import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/shared/components/import-api/import-api.component';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -64,20 +67,25 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     },
   ];
   nzSelectedKeys: number[] = [];
+  isEdit: boolean;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
+    public electron: ElectronService,
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
     private message: EoMessageService,
     private messageService: MessageService,
     private storage: StorageService,
-    public electron: ElectronService,
     private apiService: ApiService,
     private projectService: ProjectService,
-    private nzModalService: NzModalService
+    private nzModalService: NzModalService,
+    public status: StatusService,
+    private http: RemoteService,
+    private share: ShareService
   ) {}
   ngOnInit(): void {
+    this.isEdit = !this.status.isShare;
     this.buildGroupTreeData();
     this.watchApiAction();
     this.watchRouterChange();
@@ -107,9 +115,27 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     callback?.();
   });
 
-  getProjectCollections() {
+  async getProjectCollections() {
     this.apiDataLoading = true;
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+      if (this.status.isShare) {
+        const [res, err]: any = await this.http.api_shareDocGetAllApi(
+          {
+            uniqueID: this.share.shareId,
+          },
+          '/api'
+        );
+        if (err) {
+          resolve(false);
+          return;
+        }
+        const { groups, apis } = res;
+        this.getGroups(groups);
+        this.getApis(apis);
+        this.apiDataLoading = false;
+        resolve(true);
+        return;
+      }
       this.storage.run('projectCollections', [this.projectService.currentProjectID], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           const { groups, apis } = result.data;
@@ -190,7 +216,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'deleteApiSuccess':
           case 'updateGroupSuccess': {
             const group = inArg.data?.group;
-
             if (
               inArg.type === 'updateGroupSuccess' &&
               group?.parentID &&
@@ -198,7 +223,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
             ) {
               this.expandKeys.push(`group-${group?.parentID}`);
             }
-
             this.buildGroupTreeData();
             break;
           }
@@ -212,24 +236,25 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
+    const prefix = this.status.isShare ? 'home/share' : '/home/api';
     inArg.event.stopPropagation();
     switch (inArg.eventName) {
       case 'testApi':
       case 'editApi':
       case 'detailApi': {
-        this.router.navigate([`/home/api/http/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key },
+        this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
+          queryParams: { uuid: inArg.node.key,shareId: this.share.shareId},
         });
         break;
       }
       case 'jumpOverview': {
-        this.router.navigate(['/home/api/overview'], {
+        this.router.navigate([`${prefix}/overview`], {
           queryParams: { uuid: 'overview' },
         });
         break;
       }
       case 'addAPI': {
-        this.router.navigate(['/home/api/http/edit'], {
+        this.router.navigate([`${prefix}/http/edit`], {
           queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') },
         });
         break;

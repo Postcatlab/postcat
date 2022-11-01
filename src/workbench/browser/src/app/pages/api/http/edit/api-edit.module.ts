@@ -31,6 +31,7 @@ import { ApiParamsExtraSettingComponent } from './extra-setting/api-params-extra
 import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
 import { RouterModule } from '@angular/router';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 const NZ_COMPONETS = [
   NzDropDownModule,
@@ -46,6 +47,7 @@ const NZ_COMPONETS = [
   NzDividerModule,
   NzAffixModule,
   NzPopconfirmModule,
+  NzBadgeModule
 ];
 const COMPONENTS = [
   ApiEditComponent,

@@ -24,6 +24,22 @@ const http = {
       ],
     },
     {
+      name: 'share',
+      data: [
+        { 'createShare @post': '/shared' },
+        { 'getShareList @get': '/shared' },
+        { 'deleteShare @delete': '/shared' },
+      ],
+    },
+    {
+      name: 'shareDoc',
+      data: [
+        { 'getAllAPI @get': '/shared-docs/{uniqueID}/collections' },
+        { 'getApiDetail @get': '/shared-docs/{uniqueID}/api/{apiDataUUID}' },
+        { 'getEnv @get': '/shared-docs/{uniqueID}/environments' },
+      ],
+    },
+    {
       name: 'user',
       data: [
         { 'updateUserProfile @put': '/user/profile' },
@@ -88,6 +104,10 @@ const http = {
         { 'update @put': '/mock/{uuid}', json: '...' },
         { 'loadAll @get': '/mock', query: 'apiDataID' },
       ],
+    },
+    {
+      name: 'system',
+      data: [{ 'status @get': '/system/status' }],
     },
   ],
 };

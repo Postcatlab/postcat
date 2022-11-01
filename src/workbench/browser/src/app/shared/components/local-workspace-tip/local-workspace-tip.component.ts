@@ -35,12 +35,14 @@ export class LocalWorkspaceTipComponent implements OnInit {
   get isShowNotification() {
     const isShow =
       this.workspace.isLocal && this.user.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
-    this.setIsShow(isShow);
+    this.isShow !== isShow && this.setIsShow(isShow);
     return isShow;
   }
   setIsShow(status: boolean) {
     this.isShow = status;
-    this.isShowChange.emit(status);
+    setTimeout(() => {
+      this.isShowChange.emit(status);
+    }, 0);
   }
   ngOnInit(): void {}
 

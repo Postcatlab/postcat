@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { filter, takeWhile } from 'rxjs/operators';
-import { ElectronService, WebService } from '../../../core/services';
-import { ModuleInfo } from '../../../../../../../platform/node/extension-manager';
+import { filter } from 'rxjs/operators';
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
 import { WorkspaceService } from '../../services/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -19,25 +19,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
   destroy = false;
   modules: Array<ModuleInfo | SidebarModuleInfo | any>;
   constructor(
-    private electron: ElectronService,
     private router: Router,
     public sidebar: SidebarService,
     private dataSourceService: DataSourceService,
     private messageService: MessageService,
-    private webService: WebService,
-    private workspace: WorkspaceService
+    private workspace: WorkspaceService,
+    private status: StatusService
   ) {
     this.isCollapsed = this.sidebar.getCollapsed();
-    this.sidebar
-      .onCollapsedChanged()
-      .pipe(takeWhile(() => !this.destroy))
-      .subscribe((isCollapsed) => {
-        this.isCollapsed = isCollapsed;
-        if (this.electron.isElectron) {
-          const sideWidth: number = isCollapsed ? 50 : 90;
-          window.eo.autoResize(sideWidth);
-        }
-      });
   }
   toggleCollapsed(): void {
     this.sidebar.toggleCollapsed();
@@ -45,7 +34,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getModules();
-    this.getModuleIDFromRoute();
+    this.getIDFromRoute();
     this.watchRouterChange();
     this.watchWorkspaceChange();
   }
@@ -60,29 +49,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   watchRouterChange() {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.getModuleIDFromRoute();
+      this.getIDFromRoute();
     });
   }
   async clickModule(module) {
     this.sidebar.currentModule = module;
-    const nextApp = this.modules.find((val) => val.moduleID === module.moduleID);
+    const nextApp = this.modules.find((val) => val.id === module.id);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    if (this.webService.isWeb) {
-      if (module.moduleID === '@eo-core-workspace') {
-        return await this.webService.jumpToClient($localize`Eoapi Client is required to add workspace`);
-      }
-
-      if (module.moduleID === '@eo-core-member') {
-        return await this.webService.jumpToClient($localize`Eoapi Client is required to manage member`);
-      }
-    }
-    if (module.moduleID !== '@eo-core-member') {
-      this.router.navigate([route]);
+    if (module.id !== '@eo-core-member') {
+      this.router.navigate([route], { queryParamsHandling: 'merge' });
       return;
     }
     const isLocal = this.workspace.currentWorkspaceID === -1;
     this.dataSourceService.checkRemoteCanOperate(() => {
-      this.router.navigate([route]);
+      this.router.navigate([route], { queryParamsHandling: 'merge' });
     }, isLocal);
   }
   ngOnDestroy(): void {
@@ -91,18 +71,27 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private getModules() {
     const defaultModule = [
       {
-        moduleName: 'API',
-        moduleID: '@eo-core-apimanger',
+        title: 'API',
+        id: '@eo-core-share',
+        isShare: true,
+        isOffical: true,
+        icon: 'api',
+        activeRoute: 'home/share',
+        route: 'home/share/http/test',
+      },
+      {
+        title: 'API',
+        id: '@eo-core-apimanger',
         isOffical: true,
         icon: 'api',
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
-      ...(!this.workspace.isLocal || !this.dataSourceService.remoteServerUrl
+      ...(!this.workspace.isLocal
         ? [
             {
-              moduleName: $localize`Member`,
-              moduleID: '@eo-core-member',
+              title: $localize`Member`,
+              id: '@eo-core-member',
               isOffical: true,
               icon: 'every-user',
               activeRoute: 'home/member',
@@ -111,37 +100,41 @@ export class SidebarComponent implements OnInit, OnDestroy {
           ]
         : []),
       {
-        moduleName: $localize`Workspace`,
-        moduleID: '@eo-core-workspace',
+        title: $localize`Workspace`,
+        id: '@eo-core-workspace',
         isOffical: true,
         icon: 'home-5kaioboo',
         activeRoute: 'home/workspace',
         route: 'home/workspace',
       },
       {
-        moduleName: $localize`Extensions`,
-        moduleID: '@eo-core-extension',
+        title: $localize`Extensions`,
+        id: '@eo-core-extension',
         isOffical: true,
         icon: 'puzzle',
         activeRoute: 'home/extension',
         route: 'home/extension/list',
       },
+      // {
+      //   title: $localize`Vue3`,
+      //   id: '@eo-core-vue3',
+      //   isOffical: true,
+      //   icon: 'puzzle',
+      //   activeRoute: 'home/app-vue3',
+      //   route: 'home/app-vue3',
+      // },
     ];
-    if (this.electron.isElectron) {
-      this.modules = [...defaultModule, ...Array.from(window.eo.getSideModuleList())];
-      this.electron.ipcRenderer.on('moduleUpdate', (event, args) => {
-        this.modules = window.eo.getSideModuleList();
-      });
-    } else {
-      this.modules = [...defaultModule];
-    }
+    const isShare = this.status.isShare;
+    this.modules = defaultModule.filter((it: any) =>
+      isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true
+    );
   }
-  private getModuleIDFromRoute() {
+  private getIDFromRoute() {
     const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);
-      console.error('route error: currentModule is undefind', currentModule);
+      console.warn(`route error: currentModule is [${currentModule}]`, currentModule);
       return;
     }
     this.sidebar.currentModule = currentModule;

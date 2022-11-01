@@ -11,6 +11,9 @@ import { treeToListHasLevel } from '../../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../../utils/index.utils';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -28,7 +31,14 @@ export class ApiDetailComponent implements OnInit {
     { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
     { title: 'URL', slot: 'url', width: '42%' },
   ];
-  constructor(private route: ActivatedRoute, private storage: StorageService, public electron: ElectronService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private storage: StorageService,
+    private status: StatusService,
+    public electron: ElectronService,
+    private http: RemoteService,
+    private share: ShareService
+  ) {}
   ngOnInit(): void {
     this.init();
   }
@@ -39,13 +49,30 @@ export class ApiDetailComponent implements OnInit {
       if (id) {
         this.model = (await this.getApiByUuid(Number(id))) as ApiData;
       } else {
-        console.error("Can't no find api");
+        console.error(`Can't no find api`);
       }
     }
     this.eoOnInit.emit(this.model);
   }
   getApiByUuid(id: number) {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+      if (this.status.isShare) {
+        const [data, err]: any = await this.http.api_shareDocGetApiDetail({
+          apiDataUUID: id,
+          uniqueID: this.share.shareId,
+        });
+        if (err) {
+          return;
+        }
+        ['requestBody', 'responseBody'].forEach((tableName) => {
+          if (['xml', 'json'].includes(data[`${tableName}Type`])) {
+            data[tableName] = treeToListHasLevel(data[tableName]);
+          }
+        });
+        this.model = data;
+        resolve(this.model);
+        return;
+      }
       this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           ['requestBody', 'responseBody'].forEach((tableName) => {

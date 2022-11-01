@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { storageTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -20,18 +23,22 @@ export class ApiTabOperateService {
    * Tab basic info
    */
   BASIC_TABS: Partial<TabItem>[];
+  //* Allow development mode debug not exist router
+  private allowNotExistRouter = !APP_CONFIG.production;
   constructor(
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private message: EoMessageService
+    private message: EoMessageService,
+    private share: ShareService,
+    private status: StatusService
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
   init(BASIC_TABS) {
     this.BASIC_TABS = BASIC_TABS;
     this.tabStorage.init();
-    const tabCache = this.tabStorage.getPersistenceStorage();
+    const tabCache = this.parseChangeRouter(this.tabStorage.getPersistenceStorage());
     //No cache
     if (!tabCache || !tabCache.tabOrder?.length) {
       this.operateTabAfterRouteChange({
@@ -62,18 +69,21 @@ export class ApiTabOperateService {
       });
       return;
     }
+
     //Tab from url
     try {
       //If current url did't match exist tab,throw error
-      const existTab = this.getSameContentTab(this.generateTabFromUrl(this.router.url));
-      if (existTab) {
-        this.operateTabAfterRouteChange({
-          url: this.router.url,
-        });
-        return;
-      }
+      this.getSameContentTab(this.generateTabFromUrl(this.router.url));
+      //If current url is valid tab url,select it
+      this.operateTabAfterRouteChange({
+        url: this.router.url,
+      });
+      return;
     } catch (e) {
       console.error(e);
+      if (this.allowNotExistRouter) {
+        return;
+      }
     }
     //Tab from last choose
     const targetTab = this.getTabByIndex(tabCache.selectedIndex || 0);
@@ -85,10 +95,10 @@ export class ApiTabOperateService {
    *
    * @returns tabItem
    */
-  newDefaultTab(path?) {
+  newDefaultTab(routerStr?) {
     const tabItem = Object.assign(
       {},
-      eoDeepCopy(this.BASIC_TABS.find((val) => val.pathname === path) || this.BASIC_TABS[0])
+      eoDeepCopy(this.BASIC_TABS.find((val) => val.pathname.includes(routerStr)) || this.BASIC_TABS[0])
     );
     tabItem.params = {};
     tabItem.uuid = tabItem.params.pageID = Date.now();
@@ -124,6 +134,12 @@ export class ApiTabOperateService {
    */
   navigateTabRoute(tab: TabItem) {
     if (!tab) {
+      return;
+    }
+    if (this.status.isShare) {
+      this.router.navigate([tab.pathname], {
+        queryParams: { pageID: tab.uuid, ...tab.params, shareId: this.share.shareId },
+      });
       return;
     }
     this.router.navigate([tab.pathname], {
@@ -170,7 +186,7 @@ export class ApiTabOperateService {
     const params: any = {};
     const basicTab = this.BASIC_TABS.find((val) => urlArr[0].includes(val.pathname));
     if (!basicTab) {
-      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+      throw new Error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route: ${url}`);
     }
     // Parse query params
     new URLSearchParams(urlArr[1]).forEach((value, key) => {
@@ -215,8 +231,9 @@ export class ApiTabOperateService {
    */
   operateTabAfterRouteChange(res: { url: string }) {
     const pureTab = this.getBasicInfoFromUrl(res.url);
-    const nextTab = this.generateTabFromUrl(res.url);
     const existTab = this.getSameContentTab(pureTab);
+
+    const nextTab = this.generateTabFromUrl(res.url);
     //!Every tab must has pageID
     //If lack pageID,Jump to exist tab item to keep same  pageID and so on
     if (!pureTab.uuid) {
@@ -402,5 +419,23 @@ export class ApiTabOperateService {
   }
   private updateChildView() {
     this.messageService.send({ type: 'tabContentInit', data: {} });
+  }
+  private parseChangeRouter(cache: storageTab) {
+    if (!cache) {
+      return;
+    }
+    //If router not exist basic tab,filter it
+    cache.tabOrder = cache.tabOrder.filter((id) => {
+      const tabItem = cache.tabsByID[id];
+      if (!tabItem) {
+        return false;
+      }
+      const hasExist = this.BASIC_TABS.find((val) => val.pathname === tabItem.pathname);
+      if (!hasExist) {
+        delete cache.tabsByID[id];
+      }
+      return hasExist;
+    });
+    return cache;
   }
 }

@@ -44,6 +44,7 @@ import { TestServerRemoteService } from 'eo/workbench/browser/src/app/shared/ser
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { RouterModule } from '@angular/router';
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/pages/api/api-shared.module';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 const NZ_COMPONETS = [
   NzDropDownModule,
@@ -63,7 +64,7 @@ const NZ_COMPONETS = [
   NzAlertModule,
   NzTypographyModule,
   NzUploadModule,
-  ApiSharedModule,
+  NzBadgeModule
 ];
 const COMPONENTS = [
   ApiTestComponent,
@@ -89,6 +90,7 @@ const COMPONENTS = [
     CommonModule,
     ...NZ_COMPONETS,
     EouiModule,
+    ApiSharedModule,
     SharedModule,
     ParamsImportModule,
   ],

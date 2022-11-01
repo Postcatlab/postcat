@@ -9,11 +9,11 @@ export interface SidebarModuleInfo {
   /**
    * unique extension id
    **/
-  moduleID: string;
+  id: string;
   /**
    * showname
    **/
-  moduleName: string;
+  title: string;
   /**
    * is offcial app
    **/

@@ -53,13 +53,11 @@ export class ExtensionComponent implements OnInit {
   ngOnInit(): void {
     this.watchRouterChange();
     this.setSelectedKeys();
-    if (this.electron.isElectron) {
-      this.treeNodes.push({
-        key: 'installed',
-        title: $localize`Installed`,
-        isLeaf: true,
-      });
-    }
+    this.treeNodes.push({
+      key: 'installed',
+      title: $localize`Installed`,
+      isLeaf: true,
+    });
   }
 
   onSeachChange(keyword) {

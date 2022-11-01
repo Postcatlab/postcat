@@ -1,7 +1,5 @@
 import { I18N } from './i18n';
 const { ipcRenderer } = require('electron');
-// 可以加上条件判断，根据不同模块id哪些允许放出
-const apiAccessRules = ipcRenderer.sendSync('eo-sync', { action: 'getApiAccessRules' }) || [];
 // 正在安装中的插件任务列表
 const installTask = new Map();
 // 正在卸载中的插件任务列表
@@ -25,67 +23,38 @@ const featureModules = new Map();
 window.eo = {
   name: 'Eoapi public api',
   version: '1.0.0',
-};
-// 边栏显示
-// window.eo.sidePosition = ipcRenderer.sendSync('eo-sync', { action: 'getSidePosition' }) || 'left';
-// 获取模块列表
-window.eo.getModules = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
-};
-// 获取某个模块
-window.eo.getModule = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { moduleID: moduleID } });
-};
-// 获取App应用列表
-window.eo.getAppModuleList = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getAppModuleList' });
-};
-// 获取边栏应用列表
-window.eo.getSideModuleList = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getSideModuleList' });
-};
-// 获取所有功能点列表
-window.eo.getFeatures = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
-};
-// 获取某个功能点
-window.eo.getFeature = (featureKey) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
-};
-// 加载feature模块
-window.eo.loadFeatureModule = async (moduleID) => {
-  if (!featureModules.has(moduleID)) {
-    try {
-      const module = window.eo.getModule(moduleID);
-      window.eo._currentExtensionID = moduleID;
-      const _module = await require(module.baseDir);
-      featureModules.set(moduleID, _module);
-    } catch (e) {
-      console.log(e);
+  // 获取模块列表
+  getModules() {
+    return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
+  },
+  getModule (id) {
+    return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { id: id } });
+  },
+  getFeatures(){
+    return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
+  },
+  getFeature(featureKey) {
+    return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
+  },
+  loadFeatureModule(id){
+    if (!featureModules.has(id)) {
+      try {
+        const module = window.eo.getModule(id);
+        window.eo._currentExtensionID = id;
+        const _module = require(module.baseDir);
+        featureModules.set(id, _module);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }
-  return featureModules.get(moduleID);
+    return featureModules.get(id);
+  },
 };
 // 卸载feature模块
-window.eo.unloadFeatureModule = (moduleID) => {
-  featureModules.delete(moduleID);
+window.eo.unloadFeatureModule = (id) => {
+  featureModules.delete(id);
 };
-// Hook请求返回
-if (apiAccessRules.includes('hook')) {
-  window.eo.hook = (data) => {
-    return ipcRenderer.sendSync('eo-sync', { action: 'hook', data });
-  };
-}
-// 临时测试用
-window.eo.tempApi = (params) => {
-  return ipcRenderer.sendSync('eo-sync', params);
-};
-window.eo.autoResize = (sideWidth) => {
-  ipcRenderer.send('eo-sync', { action: 'autoResize', data: { sideWidth: sideWidth } });
-};
-window.eo.getModules = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
-};
+
 window.eo.installModule = (name, isLocal = false) => {
   installTask.set(name, []);
   const result = ipcRenderer.invoke('eo-sync', { action: 'installModule', data: { name, isLocal } });
@@ -145,9 +114,6 @@ window.eo.uninstallModule = (name, isLocal = false) => {
     });
   return result;
 };
-window.eo.openApp = (inputArg) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'openApp', data: inputArg });
-};
 window.eo.getInstallTask = () => installTask;
 window.eo.getUninstallTask = () => uninstallTask;
 window.eo.getExtIsInTask = (name, callback) => {
@@ -166,40 +132,9 @@ window.eo.getExtIsInTask = (name, callback) => {
   return false;
 };
 
-window.eo.storage = (args, callback: any) => {
-  const key = `${args.action}_${Date.now()}`;
-  storageCallback.set(key, callback);
-  args.type = 'default';
-  args.callback = key;
-  ipcRenderer.send('eo-storage', args);
+window.eo.getExtensionPagePathByName = (extName: string) => {
+  return ipcRenderer.invoke('eo-sync', { action: 'getExtensionPagePathByName', data: { extName } });
 };
-window.eo.storageSync = (args) => {
-  console.log('run preload storageSync');
-  args.type = 'sync';
-  return ipcRenderer.sendSync('eo-storage', args);
-};
-// window.eo.storageRemote = (args) => {
-//   console.log('run preload storageRemote');
-//   args.type = 'remote';
-//   const shareObject = window.require('@electron/remote').getGlobal('shareObject');
-//   shareObject.storageResult = null;
-//   ipcRenderer.send('eo-storage', args);
-//   let output: any = shareObject.storageResult;
-//   let count: number = 0;
-//   while (output === null) {
-//     if (count > 1500) {
-//       output = {
-//         status: 'error',
-//         data: 'storage remote load error',
-//       };
-//       break;
-//     }
-//     output = shareObject.storageResult;
-//     ++count;
-//   }
-//   shareObject.storageResult = null;
-//   return output;
-// };
 
 window.eo.saveSettings = (settings) => {
   // console.log('window.eo.saveSettings', settings);
@@ -226,8 +161,8 @@ window.eo.getSettings = () => {
 };
 window.eo.i18n = new I18N();
 
-window.eo.getModuleSettings = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModuleSettings', data: { moduleID: moduleID } });
+window.eo.getExtensionSettings = (moduleID) => {
+  return ipcRenderer.sendSync('eo-sync', { action: 'getExtensionSettings', data: { moduleID: moduleID } });
 };
 // 注册单个mock路由
 window.eo.registerMockRoute = ({ method, path, data }) => {

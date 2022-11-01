@@ -187,64 +187,20 @@ try {
       }
     }
   });
-  ipcMain.on('eo-storage', (event, args) => {
-    let returnValue: any;
-    if (args.type === 'default' || args.type === 'remote') {
-      eoBrowserWindow.win.webContents.send('eo-storage', args);
-      returnValue = null;
-    } else if (args.type === 'sync') {
-      deleteFile(storageTemp);
-      eoBrowserWindow.win.webContents.send('eo-storage', args);
-      let data = readJson(storageTemp);
-      let count: number = 0;
-      while (data === null) {
-        if (count > 1500) {
-          data = {
-            // status: StorageResStatus.error,
-            status: 500,
-            data: 'storage sync load error',
-          };
-          break;
-        }
-        data = readJson(storageTemp);
-        ++count;
-      }
-      deleteFile(storageTemp);
-      returnValue = data;
-    } else if (args.type === 'result') {
-      let view = subView.appView ? subView.appView?.view.webContents : eoBrowserWindow.win.webContents;
-      view.send('storageCallback', args.result);
-    }
-  });
   // 这里可以封装成类+方法匹配调用，不用多个if else
   ['on', 'handle'].forEach((eventName) =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
       let returnValue: any;
-      if (arg.action === 'getApiAccessRules') {
-        // 后期加入权限生成，根据moduleID，上层moduleID，应用范围等
-        // 或者是像Android, 跳出权限列表让用户自己选择确认放开的权限。
-        const output: string[] = ['getModules', 'getAppModuleList', 'getSlideModuleList', 'hook'];
-        returnValue = output;
-      } else if (arg.action === 'getModules') {
-        returnValue = moduleManager.getModules(true);
+      if (arg.action === 'getModules') {
+        returnValue = moduleManager.getModules();
       } else if (arg.action === 'getModule') {
-        returnValue = moduleManager.getModule(arg.data.moduleID);
-      } else if (arg.action === 'getAppModuleList') {
-        returnValue = moduleManager.getAppModuleList();
+        returnValue = moduleManager.getModule(arg.data.id);
       } else if (arg.action === 'installModule') {
         const data = await moduleManager.installExt(arg.data);
-        if (data.code === 0) {
-          //subView.mainView.view.webContents.send('moduleUpdate');
-        }
         returnValue = Object.assign(data, { modules: moduleManager.getModules() });
       } else if (arg.action === 'uninstallModule') {
         const data = await moduleManager.uninstall(arg.data);
-        if (data.code === 0) {
-          // subView.mainView.view.webContents.send('moduleUpdate');
-        }
         returnValue = Object.assign(data, { modules: moduleManager.getModules() });
-      } else if (arg.action === 'getSideModuleList') {
-        returnValue = moduleManager.getSideModuleList(subView.appView?.mainModuleID || 'default');
       } else if (arg.action === 'getFeatures') {
         returnValue = moduleManager.getFeatures();
       } else if (arg.action === 'getFeature') {
@@ -257,19 +213,16 @@ try {
         returnValue = configuration.deleteModuleSettings(arg.data.moduleID);
       } else if (arg.action === 'getSettings') {
         returnValue = configuration.getSettings();
-      } else if (arg.action === 'getModuleSettings') {
-        returnValue = configuration.getModuleSettings(arg.data.moduleID);
-      } else if (arg.action === 'getSidePosition') {
-        returnValue = subView.appView?.sidePosition;
-        // 获取mock服务地址
+      } else if (arg.action === 'getExtensionSettings') {
+        returnValue = configuration.getExtensionSettings(arg.data.moduleID);
       } else if (arg.action === 'getMockUrl') {
+        // 获取mock服务地址
         returnValue = mockServer.getMockUrl();
-        // 获取websocket服务端口
       } else if (arg.action === 'getWebsocketPort') {
+        // 获取websocket服务端口
         returnValue = websocketPort;
-        // 重置并初始化mock路由
-      } else if (arg.action === 'hook') {
-        returnValue = 'hook返回';
+      } else if (arg.action === 'getExtensionPagePathByName') {
+        returnValue = moduleManager.setupExtensionPageServer(arg.data.extName);
       } else {
         returnValue = 'Invalid data';
       }
