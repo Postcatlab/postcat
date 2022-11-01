@@ -29,8 +29,12 @@ export class ExtensionService {
     this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
   }
   private getExtensions() {
-    // Local extension
-    return window.eo?.getModules() || new Map();
+    if (this.electron.isElectron) {
+      return window.eo?.getModules() || new Map();
+    } else {
+      const webeExts = this.webExtensionService.installedList.map((n) => [n.name, n.pkgInfo]);
+      return new Map(webeExts as any);
+    }
   }
   getInstalledList() {
     // Local extension exception for ignore list

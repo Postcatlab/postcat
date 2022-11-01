@@ -83,9 +83,7 @@ window.eo.tempApi = (params) => {
 window.eo.autoResize = (sideWidth) => {
   ipcRenderer.send('eo-sync', { action: 'autoResize', data: { sideWidth: sideWidth } });
 };
-window.eo.getModules = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
-};
+
 window.eo.installModule = (name, isLocal = false) => {
   installTask.set(name, []);
   const result = ipcRenderer.invoke('eo-sync', { action: 'installModule', data: { name, isLocal } });
