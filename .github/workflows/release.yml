@@ -2,9 +2,9 @@ name: Release
 
 on:
   push:
-    branches: [feat/share]
-    # tags:
-    #   - 'v*.*.*'
+    # branches: [for debug]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   release:
