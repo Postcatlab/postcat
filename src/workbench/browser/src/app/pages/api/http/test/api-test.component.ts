@@ -117,7 +117,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     //     testBtn && testBtn.click();
     //   }, 600);
     // }
-
     this.initBasicForm();
     this.testServer.init((message) => {
       this.receiveMessage(message);
@@ -142,6 +141,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     if (!this.model || isEmptyObj(this.model)) {
       this.model = this.resetModel();
       let id = this.route.snapshot.queryParams.uuid;
+      console.log('kkkkk', id);
       const initTimes = this.initTimes;
       let requestInfo = null;
       if (id && id.includes('history_')) {
@@ -379,7 +379,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
 
     //If test sucess,addHistory
     //Only has statusCode need save report
-    if (!message.response.statusCode||this.statusS.isShare) {
+    if (!message.response.statusCode || this.statusS.isShare) {
       return;
     }
     this.addHistory(message.history, Number(queryParams.uuid));

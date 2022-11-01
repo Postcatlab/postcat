@@ -21,11 +21,10 @@
           size="14px"
           *ngIf="tabStorage.tabsByID.get(uuid)?.icon"
         ></eo-iconpark-icon>
-        <span
-          class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends.method }}"
-          *ngIf="tabStorage.tabsByID.get(uuid)?.extends?.method"
-          >{{ tabStorage.tabsByID.get(uuid)?.extends.method }}</span
-        >
+        <!-- {{ tabStorage.tabsByID.get(uuid) | json }} -->
+        <span class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends.method || 'WS' }}">{{
+          tabStorage.tabsByID.get(uuid)?.extends.method || 'WS'
+        }}</span>
         <span class="text_omit tab_text" [title]="tabStorage.tabsByID.get(uuid)?.title">
           {{ tabStorage.tabsByID.get(uuid)?.title }}</span
         >

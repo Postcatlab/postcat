@@ -26,6 +26,15 @@ const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'ws',
+        children: [
+          {
+            path: 'test',
+            loadChildren: () => import('../pages/api/websocket/websocket.module').then((m) => m.WebsocketModule),
+          },
+        ],
+      },
     ],
   },
 ];

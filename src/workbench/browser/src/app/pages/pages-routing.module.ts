@@ -27,8 +27,6 @@ const routes: Routes = [
       },
       {
         path: 'share',
-        // redirectTo: 'api',
-        // pathMatch: 'full',
         loadChildren: () => import('./share.module').then((m) => m.ShareModule),
       },
       {

@@ -427,7 +427,9 @@ export class ApiTabOperateService {
     //If router not exist basic tab,filter it
     cache.tabOrder = cache.tabOrder.filter((id) => {
       const tabItem = cache.tabsByID[id];
-      if (!tabItem) {return false;}
+      if (!tabItem) {
+        return false;
+      }
       const hasExist = this.BASIC_TABS.find((val) => val.pathname === tabItem.pathname);
       if (!hasExist) {
         delete cache.tabsByID[id];
