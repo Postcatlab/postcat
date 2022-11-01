@@ -68,9 +68,8 @@ export class ExtensionService {
     let result = {} as ModuleInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
-    const localExt = this.webExtensionService.getExtensionByName(name);
-    if (this.localExtensions.has(id) || localExt) {
-      Object.assign(result, this.localExtensions.get(id), { ...localExt?.pkgInfo, installed: true });
+    if (this.localExtensions.has(id)) {
+      Object.assign(result, this.localExtensions.get(id), { installed: true });
     }
     result = this.translateModule(result);
     return result;
