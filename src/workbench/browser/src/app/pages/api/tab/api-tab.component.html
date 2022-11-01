@@ -22,15 +22,15 @@
           *ngIf="tabStorage.tabsByID.get(uuid)?.icon"
         ></eo-iconpark-icon>
         <!-- {{ tabStorage.tabsByID.get(uuid) | json }} -->
-        <span class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends.method || 'WS' }}">{{
-          tabStorage.tabsByID.get(uuid)?.extends.method || 'WS'
+        <span class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends?.method || 'WS' }}">{{
+          tabStorage.tabsByID.get(uuid)?.extends?.method || 'WS'
         }}</span>
         <span class="text_omit tab_text" [title]="tabStorage.tabsByID.get(uuid)?.title">
           {{ tabStorage.tabsByID.get(uuid)?.title }}</span
         >
         <!-- Close/HasEdit -->
         <div class="flex items-center tab-item-button-group">
-          <span class="tab-has-edit-icon eo-tab-theme-icon" *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged"></span>
+          <nz-badge class="tab-has-edit-icon" *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged" nzStatus="success"></nz-badge>
           <button
             aria-label="Close tab"
             (click)="closeTab({ $event: $event, index: i, tab: tabStorage.tabsByID.get(uuid) })"

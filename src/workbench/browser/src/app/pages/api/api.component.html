@@ -121,11 +121,11 @@
               <p *ngIf="web.isWeb && tab.onlyDestop">
                 <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
               </p>
-              <span *ngIf="!web.isWeb || !tab.onlyDestop">
+              <div *ngIf="!web.isWeb || !tab.onlyDestop">
                 <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
-                  {{ tab.title }}</a
-                >
-              </span>
+                  {{ tab.title }} <nz-badge *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]" nzStatus="success"></nz-badge
+                ></a>
+              </div>
             </nz-tab>
           </nz-tabset>
         </div>

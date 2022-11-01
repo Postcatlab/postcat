@@ -64,8 +64,8 @@
     <button
       *ngIf="!workspaceService.isLocal && !status.isShare"
       nz-button
-      nzType="primary"
-      class="mx-2"
+      nzType="default"
+      class="mx-2 btn_scondary"
       nz-popover
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="bottomRight"
@@ -86,7 +86,7 @@
       </div>
     </ng-template>
     <ng-template #suffixIconButton>
-      <button nz-button nzType="default" *ngIf="!isCopy" class="text-[#158565]" (click)="handleCopy()">Copy</button>
+      <button nz-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
       <button nz-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
     </ng-template>
     <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">

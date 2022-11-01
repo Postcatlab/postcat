@@ -204,7 +204,7 @@ export class ApiTabService {
             `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
           );
         }
-        let currentHasChanged = currentTab.hasChanged;
+        let currentHasChanged = currentTab.extends?.hasChanged?.[contentID] || false;
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes
@@ -219,6 +219,7 @@ export class ApiTabService {
             currentHasChanged = false;
           }
         }
+        console.log(inData.when,currentHasChanged);
         //* Share change status within all content page
         replaceTab.extends.hasChanged = currentTab.extends?.hasChanged || {};
         replaceTab.extends.hasChanged[contentID] = currentHasChanged;

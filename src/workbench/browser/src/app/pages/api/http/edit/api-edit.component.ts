@@ -24,6 +24,7 @@ import { ApiParamsNumPipe } from '../../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
 import { EoMessageService } from '../../../../eoui/message/eo-message.service';
+import { after } from 'lodash-es';
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -83,6 +84,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.model = result;
       }
     }
+    //! Rest may generate from url
+    this.watchUri();
     //Storage origin api data
     if (!this.initialModel) {
       if (!id) {
@@ -92,9 +95,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.initialModel = eoDeepCopy(this.model);
       }
     }
+
     this.initBasicForm();
     this.watchBasicForm();
-    this.watchUri();
     this.changeGroupID$.next(this.model.groupID);
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
@@ -130,7 +133,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
       this.initialModel = this.apiEditUtil.getFormdataFromApiData(eoDeepCopy(result.data));
-      console.log('hellohello');
       if (busEvent === 'addApi') {
         this.router.navigate(['/home/api/http/detail'], {
           queryParams: {

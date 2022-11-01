@@ -83,14 +83,15 @@
         <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
           <ng-template #bodyTitleTmp>
             <span i18n>Body</span>
-            <span
-              class="eo-tab-theme-icon"
+            <nz-badge
+              class="ml-1"
               *ngIf="
                 ['formData', 'json', 'xml'].includes(model.request.requestBodyType)
                   ? bindGetApiParamNum(model.request.requestBody)
                   : model.request.requestBody?.length
               "
-            ></span>
+              nzStatus="success"
+            ></nz-badge>
           </ng-template>
           <eo-api-test-body
             class="eo_theme_iblock bbd"
@@ -133,7 +134,7 @@
         <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
           <ng-template #preScriptTitleTmp>
             <span i18n>Pre-request Script</span>
-            <span class="eo-tab-theme-icon" *ngIf="model.beforeScript?.trim()"></span>
+            <nz-badge class="ml-1" *ngIf="model.beforeScript?.trim()" nzStatus="success"></nz-badge>
           </ng-template>
           <eo-api-script
             *ngIf="model.requestTabIndex === 4"
@@ -147,7 +148,7 @@
         <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
           <ng-template #suffixScriptTitleTmp>
             <span i18n>After-response Script</span>
-            <span class="eo-tab-theme-icon" *ngIf="model.afterScript?.trim()"></span>
+            <nz-badge class="ml-1" *ngIf="model.afterScript?.trim()" nzStatus="success"></nz-badge>
           </ng-template>
           <eo-api-script
             *ngIf="model.requestTabIndex === 5"
