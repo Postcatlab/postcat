@@ -64,7 +64,6 @@ export class ImportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      console.log(this.featureMap);
       if (this.extensionService.isEnable(data.extensionID)) {
         this.supportList.push({
           key,
@@ -73,7 +72,7 @@ export class ImportApiComponent implements OnInit {
       }
     });
     {
-      const { key } = this.supportList?.at(0);
+      const { key } = this.supportList.at(0);
       this.currentExtension = key || '';
     }
   }

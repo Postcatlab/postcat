@@ -29,8 +29,12 @@ export class ExtensionService {
     this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
   }
   private getExtensions() {
-    // Local extension
-    return window.eo?.getModules() || new Map();
+    if (this.electron.isElectron) {
+      return window.eo?.getModules() || new Map();
+    } else {
+      const webeExts = this.webExtensionService.installedList.map((n) => [n.name, n.pkgInfo]);
+      return new Map(webeExts as any);
+    }
   }
   getInstalledList() {
     // Local extension exception for ignore list
@@ -55,9 +59,8 @@ export class ExtensionService {
     let result = {} as ModuleInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
-    const localExt = this.webExtensionService.getExtensionByName(name);
-    if (this.localExtensions.has(id) || localExt) {
-      Object.assign(result, this.localExtensions.get(id), { ...localExt?.pkgInfo, installed: true });
+    if (this.localExtensions.has(id)) {
+      Object.assign(result, this.localExtensions.get(id), { installed: true });
     }
     result = this.translateModule(result);
     return result;

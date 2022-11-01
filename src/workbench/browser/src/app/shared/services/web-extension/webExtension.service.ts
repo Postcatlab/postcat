@@ -3,6 +3,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
 import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
+import { ConsoleSqlOutline } from '@ant-design/icons-angular/icons';
 
 type ExtensionItem = {
   name: string;
@@ -90,7 +91,7 @@ export class WebExtensionService {
 
   getFeatures(featureName: string): Map<string, FeatureInfo> {
     if (window.eo) {
-      return window.eo?.getFeature(featureName);
+      return window.eo.getFeature(featureName);
     }
     const featureMap = new Map<string, FeatureInfo>([]);
     this.installedList.forEach((item) => {
@@ -99,6 +100,7 @@ export class WebExtensionService {
         featureMap.set(item.name, feature);
       }
     });
+    if(featureMap.size===0) {return;}
     return featureMap;
   }
 }
