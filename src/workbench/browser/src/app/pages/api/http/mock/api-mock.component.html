@@ -31,7 +31,7 @@
             [ngSwitch]="scope.createWay"
             (click)="addOrEditModal(index)"
           >
-            <span *ngSwitchCase="'system'" i18n>Preview</span>
+            <span *ngSwitchCase="'system'" i18n="@@mockPreview">Preview</span>
             <span *ngSwitchDefault i18n>Edit</span>
           </a>
           <a
