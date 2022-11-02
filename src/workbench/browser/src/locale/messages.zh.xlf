@@ -54,7 +54,7 @@
         <source>Windows Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <target state="translated">Windows 客户端</target>
       </trans-unit>
@@ -62,7 +62,7 @@
         <source>MacOS(Intel) Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <target state="translated">MacOS(Intel) 客户端</target>
       </trans-unit>
@@ -70,7 +70,7 @@
         <source>MacOS(M1) Client</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/services/web/web.service.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target state="translated">MacOS(M1) 客户端</target>
       </trans-unit>
@@ -4133,6 +4133,14 @@ You cannot restore it once deleted!</source>
           <context context-type="linenumber">219</context>
         </context-group>
         <target state="translated">测试服务连接失败，请提交 Issue 联系社区</target>
+      </trans-unit>
+      <trans-unit id="2684546755759864807" datatype="html">
+        <source>Need to deploy cloud services</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+        <target state="translated">需要部署云服务</target>
       </trans-unit>
       <trans-unit id="5346199427882602762" datatype="html">
         <source>Store data on the cloud for team collaboration and product use across devices.</source>

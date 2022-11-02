@@ -100,7 +100,6 @@ const COMPONENTS = [
     {
       provide: TestServerService,
       useFactory: (electron: ElectronService, web: WebService, locale) => {
-        console.log(web.isVercel);
         if (electron.isElectron) {
           return new TestServerLocalNodeService(electron, locale);
         } else if (!web.isVercel) {
