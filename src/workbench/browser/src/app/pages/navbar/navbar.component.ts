@@ -13,6 +13,7 @@ import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -117,13 +118,9 @@ export class NavbarComponent implements OnInit {
     if (err) {
       return '';
     }
-    const langHash = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
-    return `${this.dataSourceService?.remoteServerUrl || window.location.host}/${langHash.get(
-      this.lang.systemLanguage
-    )}/home/share/http/test?shareId=${res.uniqueID}`.replace(
-      /\/{2,}(zh|en)\/home\/share/,
-      `/${langHash.get(this.lang.systemLanguage)}/home/share`
-    );
+    const host = (this.dataSourceService?.remoteServerUrl || window.location.host).replace(/(?<!:)\/{2,}/g, '/');
+    const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
+    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
   }
   loginOrSign() {
     this.dataSourceService.checkRemoteCanOperate();

@@ -14,9 +14,11 @@ export class LanguageService {
     this.setting.getSettings()?.['eoapi-language'] ||
     this.languages.find((val) => window.location.href.includes(`/${val.path}`))?.value ||
     (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
-
+  langHashMap = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
   constructor(private electron: ElectronService, private setting: SettingService) {}
-
+  get langHash() {
+    return this.langHashMap.get(this.systemLanguage);
+  }
   init() {
     this.changeLanguage(this.setting.getSettings()?.['eoapi-language']);
   }
@@ -34,8 +36,7 @@ export class LanguageService {
       });
     } else {
       const url = window.location.href;
-      const langHash = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
-      window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${langHash.get(localeID)}/home/`));
+      window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${this.langHashMap.get(localeID)}/home/`));
     }
   }
 }
