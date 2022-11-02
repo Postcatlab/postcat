@@ -66,53 +66,33 @@ export class MockServer {
 
     // this.app.use(this.apiProxy);
 
-    this.app.all('/mock/:mockID/*', (req, res, next) => {
+    this.app.all('*', (req, res, next) => {
       // if (!protocolReg.test(req.url)) {
       // match request type
-      const isMatchType = this.configuration.getExtensionSettings<boolean>('eoapi-features.mock.matchType');
-      if (req.params.mockID || isMatchType !== false) {
-        this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
-        ipcMain.once('getMockApiList', (event, message) => {
-          const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
-          res.statusCode = statusCode;
-          if (res.statusCode === 404) {
-            this.send404(res, isMatchType);
-          } else {
-            res.send(response);
-          }
-          next();
-        });
-      } else {
-        this.send404(res, isMatchType);
+      this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+      ipcMain.once('getMockApiList', (event, message) => {
+        const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
+        res.statusCode = statusCode;
+        if (res.statusCode === 404) {
+          this.send404(res);
+        } else {
+          res.send(response);
+        }
         next();
-      }
-      // } else {
-      //   next();
-      // }
+      });
     });
-    this.app.all('/:workspaceID/:projectID/mock/:mockID/*', (req, res, next) => {
-      // if (!protocolReg.test(req.url)) {
-      // match request type
-      const isMatchType = this.configuration.getExtensionSettings<boolean>('eoapi-features.mock.matchType');
-      if (req.params.mockID || isMatchType !== false) {
-        this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
-        ipcMain.once('getMockApiList', (event, message) => {
-          const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
-          res.statusCode = statusCode;
-          if (res.statusCode === 404) {
-            this.send404(res, isMatchType);
-          } else {
-            res.send(response);
-          }
-          next();
-        });
-      } else {
-        this.send404(res, isMatchType);
+    this.app.all(`/mock-(\d+)/*`, (req, res, next) => {
+      this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+      ipcMain.once('getMockApiList', (event, message) => {
+        const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
+        res.statusCode = statusCode;
+        if (res.statusCode === 404) {
+          this.send404(res);
+        } else {
+          res.send(response);
+        }
         next();
-      }
-      // } else {
-      //   next();
-      // }
+      });
     });
   }
 
