@@ -27,7 +27,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { ByteToStringPipe } from './result-response/get-size.pipe';
 
 import { TestServerService } from '../../../../shared/services/api-test/test-server.service';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
 import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/shared/services/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from 'eo/workbench/browser/src/app/shared/services/api-test/serverless-node/test-connect.service';
 
@@ -64,7 +64,7 @@ const NZ_COMPONETS = [
   NzAlertModule,
   NzTypographyModule,
   NzUploadModule,
-  NzBadgeModule
+  NzBadgeModule,
 ];
 const COMPONENTS = [
   ApiTestComponent,
@@ -99,11 +99,11 @@ const COMPONENTS = [
     ApiTestService,
     {
       provide: TestServerService,
-      useFactory: (electron: ElectronService, locale) => {
-        const isVercel = window.location.href.includes('vercel') || window.location.host.includes('eoapi.io');
+      useFactory: (electron: ElectronService, web: WebService, locale) => {
+        console.log(web.isVercel);
         if (electron.isElectron) {
           return new TestServerLocalNodeService(electron, locale);
-        } else if (!isVercel) {
+        } else if (!web.isVercel) {
           return new TestServerRemoteService(locale);
         } else {
           return new TestServerServerlessService(locale);

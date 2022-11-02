@@ -10,6 +10,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
 })
 export class WebService {
   isWeb = !this.electronService.isElectron;
+  isVercel = window.location.href.includes('vercel') || window.location.host.includes('eoapi.io');
   resourceInfo = [
     {
       id: 'win',

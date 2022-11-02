@@ -11,9 +11,11 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <div class="text-[12px] mt-[8px] text-gray-400">
-          <p i18n>
-            Cloud Storage: Store data on the cloud for team collaboration and product use across devices.
-            <a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
+          <p>
+            <span i18n>
+              Cloud Storage: Store data on the cloud for team collaboration and product use across devices.</span
+            >
+            <a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
           </p>
         </div>
       </nz-form-item>

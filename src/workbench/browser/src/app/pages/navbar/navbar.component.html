@@ -115,6 +115,7 @@
         >
       </ul>
     </nz-dropdown-menu>
+    <span class="mx-1 line"></span>
     <!-- setting -->
     <span
       *ngIf="!status.isShare"
@@ -127,10 +128,7 @@
     >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </span>
-
-    <span class="mx-1 line"></span>
     <!-- User -->
-
     <span *ngIf="!status.isShare" class="flex items-center justify-center icon" nz-dropdown [nzDropdownMenu]="UserMenu">
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
