@@ -28,7 +28,7 @@ class webPlatformBuilder {
 
          }
          let baseDir="/"+lang+'/';
-         let pathname=window.location.pathname.replace(/(\/zh\/)|(\/en\/)/,'');
+         let pathname=window.location.pathname.replace(/(\\/zh\\/)|(\\/en\\/)/,'');
          let search={};
          if(window.location.search){
           window.location.href=baseDir+pathname+window.location.search;
