@@ -3,6 +3,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +34,12 @@ export class WebService {
       link: '',
     },
   ];
-  constructor(private modalService: ModalService, private electronService: ElectronService) {
+  constructor(
+    private modalService: ModalService,
+    private settingService: SettingService,
+    private electronService: ElectronService
+  ) {
+    this.settingService.putSettings({'eoapi-common.remoteServer.url':window.location.origin});
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {

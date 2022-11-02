@@ -16,6 +16,7 @@ import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/w
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 
 const protocolReg = new RegExp('^(http|https)://');
 
@@ -40,10 +41,12 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   constructor(
     private workspaceService: WorkspaceService,
     private projectService: ProjectService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private web: WebService
   ) {
     super();
-    this.prefix = '/';
+    //* Web deploy from v1.9.1
+    this.prefix = this.web.isWeb?'/api/':'/';
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -81,7 +84,6 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         if (req.url.includes('/system/status')) {
           const { data } = event.body;
           this.prefix = version2Number(data) >= version2Number('v1.9.0') ? '/api' : '/';
-          console.log(data,this.prefix);
         }
       }),
       catchError((err: any) => {
