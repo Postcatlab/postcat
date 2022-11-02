@@ -39,7 +39,9 @@ export class WebService {
     private settingService: SettingService,
     private electronService: ElectronService
   ) {
-    this.settingService.putSettings({'eoapi-common.remoteServer.url':window.location.origin});
+    if (this.isWeb) {
+      this.settingService.putSettings({ 'eoapi-common.remoteServer.url': window.location.origin });
+    }
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {
