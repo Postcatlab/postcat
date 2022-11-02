@@ -109,7 +109,7 @@ const COMPONENTS = [
           return new TestServerServerlessService(locale);
         }
       },
-      deps: [ElectronService, LOCALE_ID],
+      deps: [ElectronService, WebService, LOCALE_ID],
     },
   ],
 })
