@@ -10,6 +10,12 @@
     color: var(--BTN_PRIMARY_BG);
   }
 }
+.line {
+  height: 20px;
+  width: 1px;
+  display: block;
+  background: var(--BORDER);
+}
 .icon {
   -webkit-app-region: no-drag;
   width: 30px;
