@@ -40,7 +40,6 @@ export class DataSourceService {
     private http: RemoteService,
     private web: WebService
   ) {
-    console.log('init');
     this.pingCloudServerUrl();
   }
 
