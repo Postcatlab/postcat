@@ -90,6 +90,7 @@ export class DataSourceService {
         nzContent: `<span>`+$localize`Store data on the cloud for team collaboration and product use across devices.`+`</span>`+
       `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">`+$localize`Learn more..`+`</a>`,
         nzOnOk: () => console.log('Info OK'),
+        nzMaskClosable: true
       });
       return;
     }
