@@ -172,12 +172,12 @@
         (nzSelectChange)="handleBottomTabSelect($event)"
       >
         <nz-tab i18n-nzTitle nzTitle="Response">
-          <eo-api-test-result-response [model]="model.testResult.response" [uri]="model.request.uri">
+          <eo-api-test-result-response [model]="model.testResult?.response" [uri]="model.request.uri">
           </eo-api-test-result-response>
         </nz-tab>
         <div>
           <nz-tab i18n-nzTitle nzTitle="Response Headers">
-            <eo-api-test-result-header [model]="model.testResult.response.headers"></eo-api-test-result-header>
+            <eo-api-test-result-header [model]="model.testResult?.response?.headers"></eo-api-test-result-header>
           </nz-tab>
         </div>
         <nz-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
@@ -189,7 +189,7 @@
           </eo-api-test-result-request-body>
         </nz-tab>
         <nz-tab i18n-nzTitle nzTitle="Request Headers">
-          <eo-api-test-result-header [model]="model.testResult.request.requestHeaders"> </eo-api-test-result-header>
+          <eo-api-test-result-header [model]="model.testResult?.request?.requestHeaders"> </eo-api-test-result-header>
         </nz-tab>
       </nz-tabset>
       <ng-template #extraTemplate>
