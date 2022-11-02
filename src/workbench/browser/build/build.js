@@ -27,12 +27,13 @@ class webPlatformBuilder {
          }catch(e){
 
          }
-         let baseDir="/"+lang+'/'
+         let baseDir="/"+lang+'/';
+         let pathname=window.location.pathname.replace(/(\/zh\/)|(\/en\/)/,'');
          let search={};
          if(window.location.search){
-          window.location.href=baseDir+window.location.search;
+          window.location.href=baseDir+pathname+window.location.search;
          }else{
-         window.location.href=baseDir;
+         window.location.href=baseDir+pathname;
          }
         </script>
       </head>
