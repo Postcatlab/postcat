@@ -151,7 +151,6 @@ export class WorkspaceService {
       return;
     }
     const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
-    console.log(projects);
     this.projectService.setCurrentProjectID(projects.at(0).uuid);
     this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
   }
