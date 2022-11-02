@@ -6,6 +6,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 /**
  * @description
@@ -36,6 +37,7 @@ export class DataSourceService {
     private messageService: MessageService,
     private settingService: SettingService,
     private user: UserService,
+    private modal: NzModalService,
     private http: RemoteService,
     private web: WebService
   ) {
@@ -82,6 +84,15 @@ export class DataSourceService {
   }
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
+    if (this.web.isVercel) {
+      this.modal.info({
+        nzTitle: 'Need to deploy cloud services',
+        nzContent: `<span>`+$localize`Store data on the cloud for team collaboration and product use across devices.`+`</span>`+
+      `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">`+$localize`Learn more..`+`</a>`,
+        nzOnOk: () => console.log('Info OK'),
+      });
+      return;
+    }
     if (this.web.isWeb) {
       if (!this.user.isLogin) {
         this.messageService.send({ type: 'login', data: {} });
