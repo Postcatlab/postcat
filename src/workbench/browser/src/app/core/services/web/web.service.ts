@@ -10,6 +10,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
 })
 export class WebService {
   isWeb = !this.electronService.isElectron;
+  isVercel = window.location.href.includes('vercel') || window.location.host.includes('eoapi.io');
   resourceInfo = [
     {
       id: 'win',
@@ -39,7 +40,9 @@ export class WebService {
     private settingService: SettingService,
     private electronService: ElectronService
   ) {
-    this.settingService.putSettings({'eoapi-common.remoteServer.url':window.location.origin});
+    if (this.isWeb) {
+      this.settingService.putSettings({ 'eoapi-common.remoteServer.url': window.location.origin });
+    }
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {

@@ -91,22 +91,13 @@
     </ng-template>
     <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
       <nz-option nzValue="en-US" nzLabel="English"></nz-option>
-      <nz-option nzValue="zh-Hans" nzLabel="中文"></nz-option>
+      <nz-option nzValue="zh-Hans" nzLabel="简体中文"></nz-option>
     </nz-select>
-    <!-- setting -->
-    <span
-      *ngIf="!status.isShare"
-      class="flex items-center justify-center mx-1 icon"
-      i18n-nzTooltipTitle
-      nz-tooltip
-      [nzTooltipMouseEnterDelay]="0.7"
-      nzTooltipTitle="Open Settings"
-      (click)="openSettingModal()"
-    >
-      <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
-    </span>
+
+    <span class="mx-1 line"></span>
+
     <!-- help -->
-    <span class="flex items-center justify-center mx-1 icon" nz-dropdown [nzDropdownMenu]="helpMenu">
+    <span class="flex items-center justify-center icon" nz-dropdown [nzDropdownMenu]="helpMenu">
       <eo-iconpark-icon name="help"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #helpMenu="nzDropdownMenu">
@@ -124,14 +115,21 @@
         >
       </ul>
     </nz-dropdown-menu>
-    <!-- User -->
-
+    <span class="mx-1 line"></span>
+    <!-- setting -->
     <span
       *ngIf="!status.isShare"
-      class="flex items-center justify-center mx-1 icon"
-      nz-dropdown
-      [nzDropdownMenu]="UserMenu"
+      class="flex items-center justify-center icon"
+      i18n-nzTooltipTitle
+      nz-tooltip
+      [nzTooltipMouseEnterDelay]="0.7"
+      nzTooltipTitle="Open Settings"
+      (click)="openSettingModal()"
     >
+      <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
+    </span>
+    <!-- User -->
+    <span *ngIf="!status.isShare" class="flex items-center justify-center icon" nz-dropdown [nzDropdownMenu]="UserMenu">
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
     <nz-dropdown-menu #UserMenu="nzDropdownMenu">

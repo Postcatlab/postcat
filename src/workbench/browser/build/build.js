@@ -12,6 +12,7 @@ class webPlatformBuilder {
     return json;
   }
   executeBuild() {
+    //！ Can't use pathname to redirect,will cause the dead loop;
     execSync(`ng build -c ${this.environment}`, { stdio: 'inherit' });
     fs.writeFile(
       './dist/index.html',
@@ -27,7 +28,7 @@ class webPlatformBuilder {
          }catch(e){
 
          }
-         let baseDir="/"+lang+'/'
+         let baseDir="/"+lang+'/';
          let search={};
          if(window.location.search){
           window.location.href=baseDir+window.location.search;
