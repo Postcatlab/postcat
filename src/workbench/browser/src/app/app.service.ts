@@ -8,28 +8,76 @@ import {
   StorageResStatus,
 } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
+
+const mockReg = /\/mock-(\d+)/;
 
 @Injectable()
 export class AppService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
-  constructor(private storageService: StorageService) {}
+  constructor(
+    private indexedDBStorage: IndexedDBStorage,
+    private storageService: StorageService,
+    private settingService: SettingService
+  ) {}
 
   init() {
     if (this.ipcRenderer) {
       this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
         const sender = event.sender;
-        const isEnabledMatchType = window.eo?.getExtensionSettings?.('eoapi-features.mock.matchType') !== false;
-        const { mockID } = req.params;
-        if (Number.isInteger(Number(mockID))) {
+        const isRemoteMock = mockReg.test(req.url);
+        const { mockID } = req.query;
+
+        if (isRemoteMock) {
+          const [_, projectID] = req.url.match(mockReg);
+          const { url = '' } = this.settingService.getConfiguration('eoapi-common.remoteServer') || {};
+          const response = await fetch(uniqueSlash(`${url}/mock/match`), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+              projectID,
+              mockID,
+              req: {
+                ...req,
+                url: req.url.replace(/^\/mock-\d+/, ''),
+              },
+            }),
+          });
+
+          const { data } = await response.json();
+          return sender.send('getMockApiList', data);
+        }
+
+        if (!Number.isNaN(Number(mockID))) {
           try {
             const mock = await this.getMockByMockID(Number(mockID));
+            if (mock === null) {
+              return {
+                statusCode: 404,
+                response: {
+                  message: `mockID为${mockID}的mock不存在`,
+                },
+              };
+            }
             const apiData = await this.getApiData(Number(mock.apiDataID));
-            if (mock?.createWay === 'system' && isEnabledMatchType) {
+            if (apiData === null) {
+              return { statusCode: 404 };
+            }
+            if (mock?.createWay === 'system') {
               console.log('apiData.responseBody', apiData.responseBody);
-              return sender.send('getMockApiList', this.matchApiData(apiData));
+              return sender.send('getMockApiList', this.matchApiData(apiData, req));
             } else {
-              mock.response = mock?.response ?? this.generateResponse(apiData.responseBody);
+              const result = await this.matchApiData(apiData, req);
+              if (result.statusCode === 404) {
+                return result;
+              }
+              mock.response ??= this.generateResponse(apiData.responseBody);
             }
             sender.send('getMockApiList', mock);
           } catch (error) {
@@ -40,14 +88,9 @@ export class AppService {
             });
           }
           // Whether the matching request mode is enabled
-        } else if (isEnabledMatchType) {
-          const response = await this.matchApiData(1, req);
-          sender.send('getMockApiList', response);
         } else {
-          sender.send('getMockApiList', {
-            response: { message: $localize`No mock found with ID ${mockID}` },
-            url: req.url,
-          });
+          const response = await this.batchMatchApiData(1, req);
+          sender.send('getMockApiList', response);
         }
       });
     }
@@ -68,18 +111,35 @@ export class AppService {
    * @param req
    * @returns
    */
-  async matchApiData(apiData, req?) {
-    // const { restParams, method } = apiData;
-    // const { pathname } = new URL(req.params[0], this.dataSource.mockUrl);
-    // let uri = apiData.uri.trim();
-    // if (Array.isArray(restParams) && restParams.length > 0) {
-    //   const restMap = restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
-    //   uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
-    //   console.log('restMap', restMap);
-    // }
-    // const uriReg = new RegExp(`^/?${uri}/?$`);
-    // const isMatch = method === req.method && uriReg.test(pathname);
-    return apiData ? { response: this.generateResponse(apiData.responseBody) } : { statusCode: 404 };
+  async matchApiData(apiData: ApiData, req?) {
+    const { restParams, queryParams, method } = apiData;
+    const { pathname } = new URL(req.url, 'http://localhost:3040');
+    let uri = apiData.uri.trim();
+    let isQueryMatch = true;
+    if (Array.isArray(restParams) && restParams.length > 0) {
+      const restMap = restParams.reduce((p, c) => ((p[c.name] = c.example), p), {});
+      uri = uri.replace(/\{(.+?)\}/g, (match, p) => restMap[p] ?? match);
+      console.log('restMap', restMap);
+    }
+    if (Array.isArray(queryParams) && queryParams.length > 0) {
+      const query = req.query;
+      isQueryMatch = queryParams.every((n) => n.example === query[n.name]);
+    }
+    const uriReg = new RegExp(`^/?${uri}/?$`);
+    const isMatch = method === req.method && uriReg.test(pathname) && isQueryMatch;
+    return isMatch ? { response: this.generateResponse(apiData.responseBody) } : { statusCode: 404 };
+  }
+
+  async batchMatchApiData(projectID = 1, req) {
+    const apiDatas = await this.getAllApi(projectID);
+    let result;
+    for (const api of apiDatas) {
+      result = await this.matchApiData(api, req);
+      if (result?.statusCode !== 404) {
+        return result;
+      }
+    }
+    return result;
   }
 
   /**
@@ -90,12 +150,14 @@ export class AppService {
    */
   getMockByMockID(mockID: number): Promise<ApiMockEntity> {
     return new Promise((resolve, reject) => {
-      this.storageService.run('mockLoad', [mockID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          return resolve(result.data);
+      this.indexedDBStorage.mockLoad(mockID).subscribe(
+        (res: any) => {
+          resolve(res.data);
+        },
+        (error: any) => {
+          reject(error);
         }
-        return reject(result);
-      });
+      );
     });
   }
   /**
@@ -104,14 +166,16 @@ export class AppService {
    * @param apiDataID
    * @returns
    */
-  getApiData(apiDataID: number): Promise<ApiData> {
+  getApiData(apiDataID: number, isRemoteMock = false): Promise<ApiData> {
     return new Promise((resolve, reject) => {
-      this.storageService.run('apiDataLoad', [apiDataID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          return resolve(result.data);
+      this.indexedDBStorage.apiDataLoad(apiDataID).subscribe(
+        (res: any) => {
+          resolve(res.data);
+        },
+        (error: any) => {
+          reject(error);
         }
-        return reject(result);
-      });
+      );
     });
   }
   /**
