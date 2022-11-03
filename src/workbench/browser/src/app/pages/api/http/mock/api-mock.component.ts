@@ -34,8 +34,8 @@ export class ApiMockComponent implements OnInit {
     const prefix =
       this.workspaceService.currentWorkspaceID === -1
         ? this.dataSource.mockUrl
-        : `${this.dataSource.mockUrl}/${this.workspaceService.currentWorkspaceID}/${this.projectService.currentProjectID}`;
-    return `${prefix}/mock`;
+        : `${this.dataSource.mockUrl}/mock-${this.projectService.currentProjectID}`;
+    return `${prefix}`;
   }
   get modalTitle() {
     return `${
@@ -107,10 +107,11 @@ export class ApiMockComponent implements OnInit {
       base: 'query',
       replaceType: 'replace',
     }).url;
-    const url = new URL(
-      `${this.mockUrl}/${mock?.uuid || ''}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'),
-      'https://github.com/'
-    );
+    const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    if (mock?.createWay === 'custom' && mock.uuid) {
+      console.log('mock', mock);
+      url.searchParams.set('mockID', mock.uuid + '');
+    }
     return decodeURIComponent(url.toString());
   }
 

@@ -66,53 +66,33 @@ export class MockServer {
 
     // this.app.use(this.apiProxy);
 
-    this.app.all('/mock/:mockID/*', (req, res, next) => {
-      // if (!protocolReg.test(req.url)) {
-      // match request type
-      const isMatchType = this.configuration.getExtensionSettings<boolean>('eoapi-features.mock.matchType');
-      if (req.params.mockID || isMatchType !== false) {
-        this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
-        ipcMain.once('getMockApiList', (event, message) => {
-          const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
-          res.statusCode = statusCode;
-          if (res.statusCode === 404) {
-            this.send404(res, isMatchType);
-          } else {
-            res.send(response);
-          }
-          next();
-        });
-      } else {
-        this.send404(res, isMatchType);
-        next();
-      }
-      // } else {
-      //   next();
-      // }
+    this.app.all(`/mock-(\d+)/*`, (req, res, next) => {
+      this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+      ipcMain.once('getMockApiList', (event, message) => {
+        const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
+        res.statusCode = statusCode;
+        if (res.statusCode === 404) {
+          this.send404(res);
+        } else {
+          res.send(response);
+        }
+      });
     });
-    this.app.all('/:workspaceID/:projectID/mock/:mockID/*', (req, res, next) => {
+
+    this.app.all('*', (req, res, next) => {
       // if (!protocolReg.test(req.url)) {
       // match request type
-      const isMatchType = this.configuration.getExtensionSettings<boolean>('eoapi-features.mock.matchType');
-      if (req.params.mockID || isMatchType !== false) {
-        this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
-        ipcMain.once('getMockApiList', (event, message) => {
-          const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
-          res.statusCode = statusCode;
-          if (res.statusCode === 404) {
-            this.send404(res, isMatchType);
-          } else {
-            res.send(response);
-          }
-          next();
-        });
-      } else {
-        this.send404(res, isMatchType);
+      this.view.webContents.send('getMockApiList', JSON.parse(jsonStringify(req)));
+      ipcMain.once('getMockApiList', (event, message) => {
+        const { response = {}, statusCode = 200 } = message?.__zone_symbol__value || message;
+        res.statusCode = statusCode;
+        if (res.statusCode === 404) {
+          this.send404(res, response);
+        } else {
+          res.send(response);
+        }
         next();
-      }
-      // } else {
-      //   next();
-      // }
+      });
     });
   }
 
@@ -160,14 +140,15 @@ export class MockServer {
   /**
    * response 404
    */
-  send404(res: Response, isMatchType = false) {
+  send404(res: Response, response: any = {}) {
     res.statusCode = 404;
     res.send({
       code: 404,
-      message: '没有该API或缺少mockID',
-      tips: isMatchType
-        ? '未匹配到文档中的API，请检查请求方式和请求URL是否正确'
-        : '当前未开启匹配请求方式, 开启后，系统会匹配和 API 文档请求方式（GET、POST...）一致的 Mock',
+      message: response.message || '没有该API或缺少mockID',
+      tips: '未匹配到文档中的API，请检查请求方式、请求URL或mockID是否正确。',
+      // tips: isMatchType
+      //   ? '未匹配到文档中的API，请检查请求方式和请求URL是否正确'
+      //   : '当前未开启匹配请求方式, 开启后，系统会匹配和 API 文档请求方式（GET、POST...）一致的 Mock',
     });
   }
 }
