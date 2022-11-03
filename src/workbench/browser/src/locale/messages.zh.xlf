@@ -3818,7 +3818,7 @@ You cannot restore it once deleted!</source>
           <context context-type="sourcefile">src/app/shared/components/local-workspace-tip/local-workspace-tip.component.ts</context>
           <context context-type="linenumber">13</context>
         </context-group>
-        <target state="translated">当前数据存储在本地，如果您想要协作，请使用</target>
+        <target state="translated">当前数据存储在本地，如果您想要协作，请</target>
       </trans-unit>
       <trans-unit id="ab58403d1a13df020e14421f092181b91c833145" datatype="html">
         <source> switch to the cloud workspace </source>
