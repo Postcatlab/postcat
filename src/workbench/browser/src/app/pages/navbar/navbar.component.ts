@@ -118,7 +118,9 @@ export class NavbarComponent implements OnInit {
     if (err) {
       return '';
     }
-    const host = (this.dataSourceService?.remoteServerUrl || window.location.host).replace(/(?<!:)\/{2,}/g, '/');
+    const host = (this.dataSourceService?.remoteServerUrl || window.location.host)
+      .replace(/(?<!:)\/{2,}/g, '/')
+      .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
     return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
   }
