@@ -15,6 +15,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services/elec
 import { editor } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
 import { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
+import { defaultCompletions } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/defaultCompletions';
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
@@ -224,7 +225,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
             endColumn: word.endColumn,
           };
           return {
-            suggestions: this.completions.map((n) => ({ ...n, range })),
+            suggestions: [...this.completions, ...defaultCompletions].map((n) => ({ ...n, range })),
           } as any;
         },
       });
