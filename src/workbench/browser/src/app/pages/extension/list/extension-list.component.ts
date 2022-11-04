@@ -54,7 +54,7 @@ export class ExtensionListComponent implements OnInit {
     const timeStart = Date.now();
     try {
       if (this.type === 'installed') {
-        const installedList = new ExtensionList(this.extensionService.getInstalledList());
+    const installedList = new ExtensionList(this.extensionService.getInstalledList());
         return installedList.search(keyword).map((n) => {
           n.isEnable = this.extensionService.isEnable(n.name);
           return n;
@@ -66,11 +66,6 @@ export class ExtensionListComponent implements OnInit {
       }
       return new ExtensionList(res.data).search(keyword);
     } catch (error) {
-      this.modal.confirm({
-        nzTitle: $localize`Extension list failed to load`,
-        nzOkText: $localize`Retry`,
-        nzOnOk: () => this.getPluginList(keyword),
-      });
     } finally {
       clearTimeout(timer);
       const timeout = Date.now() - timeStart > 300 ? 0 : 300;
