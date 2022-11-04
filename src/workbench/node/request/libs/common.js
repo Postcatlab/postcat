@@ -89,7 +89,7 @@ privateFun.infiniteLoopDetector = function () {
       // 非首次执行，此处可以优化，性能太低
       if (Date.now() - map[id] > CONFIG.MAX_TIME_LOOP) {
         delete map[id];
-        throw new Error('Loop runing too long!', 'InfiniteLoopError');
+        throw new Error('Loop running too long!', 'InfiniteLoopError');
       }
     } else {
       // 首次运行，记录循环开始的时间。之所有把非首次运行的判断写在前面的if里是因为上面会执行更多次
