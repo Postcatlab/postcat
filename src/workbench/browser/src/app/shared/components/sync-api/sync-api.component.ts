@@ -37,12 +37,11 @@ export class SyncApiComponent implements OnInit {
       this.currentExtension = key || '';
     }
   }
-  async submit() {
+  async submit(callback) {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = window.eo.loadFeatureModule(this.currentExtension) || globalThis[this.currentExtension];
-    // TODO 临时取值方式需要修改
-    const { token: secretKey, projectId } = this.settingService.getConfiguration('eoapi-push-eolink');
+    const { token: secretKey, projectId } = this.settingService.getConfiguration(this.currentExtension);
     if (module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
@@ -52,8 +51,10 @@ export class SyncApiComponent implements OnInit {
               projectId,
               secretKey,
             });
+            callback(true);
           } catch (e) {
             console.log(e);
+            callback(false);
           }
         }
       });
