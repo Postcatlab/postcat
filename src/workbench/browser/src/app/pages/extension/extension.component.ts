@@ -22,6 +22,11 @@ export class ExtensionComponent implements OnInit {
       title: $localize`Official`,
       isLeaf: true,
     },
+    {
+      key: 'installed',
+      title: $localize`Installed`,
+      isLeaf: true,
+    },
   ];
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
@@ -53,11 +58,6 @@ export class ExtensionComponent implements OnInit {
   ngOnInit(): void {
     this.watchRouterChange();
     this.setSelectedKeys();
-    this.treeNodes.push({
-      key: 'installed',
-      title: $localize`Installed`,
-      isLeaf: true,
-    });
   }
 
   onSeachChange(keyword) {
