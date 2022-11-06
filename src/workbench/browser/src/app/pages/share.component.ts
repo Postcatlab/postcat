@@ -10,8 +10,8 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 export class ShareComponent implements OnInit {
   constructor(private route: ActivatedRoute, private share: ShareService, private status: StatusService) {}
   async ngOnInit(): Promise<void> {
-    this.route.queryParams.subscribe(({ shareId }) => {
-      this.share.setShareId(shareId);
+    this.route.queryParams.subscribe(({ shareID }) => {
+      this.share.setshareID(shareID);
     });
   }
 }

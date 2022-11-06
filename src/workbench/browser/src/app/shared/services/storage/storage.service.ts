@@ -2,11 +2,10 @@ import { Injectable, Injector } from '@angular/core';
 import { StorageResStatus } from './index.model';
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
-import { getSettings, SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 export type DataSourceType = 'local' | 'http';
-/** is show local data source tips */
-export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 
 /**
  * @description
@@ -15,16 +14,18 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
 @Injectable({ providedIn: 'root' })
 export class StorageService {
   private instance;
-  get dataSourceType(): DataSourceType {
-    return getSettings()['eoapi-common.dataStorage'] || 'local';
-  }
+  dataSourceType: DataSourceType;
   constructor(
     private injector: Injector,
     private settingService: SettingService,
-    private indexedDBStorage: IndexedDBStorage
+    private indexedDBStorage: IndexedDBStorage,
+    private message: MessageService
   ) {
-    console.log('StorageService init');
-    this.setStorage( this.dataSourceType);
+    this.message.get().subscribe((inArg: Message) => {
+      if (inArg.type === 'switchDataSource') {
+        this.setStorage(inArg.data);
+      }
+    });
   }
   /**
    * Handle data from IndexedDB
@@ -68,7 +69,8 @@ export class StorageService {
 
     this.setDataStorage(type);
   };
-  toggleDataSource = (options: any = {}) => {
+
+  private toggleDataSource = (options: any = {}) => {
     const { dataSourceType } = options;
     this.setStorage(dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http'), options);
   };

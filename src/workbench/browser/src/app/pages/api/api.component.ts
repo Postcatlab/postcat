@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { Message, MessageService } from '../../shared/services/message';
+import { MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Change } from '../../shared/store/env.state';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
@@ -117,7 +117,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchRouterChange();
-    this.watchDataSourceChange();
     this.initEnv();
     this.watchEnvChange();
     this.renderTabs = this.status.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
@@ -129,18 +128,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   goDownload($event) {
     $event.stopPropagation();
     this.web.jumpToClient($localize`Eoapi Client is required to use Mock.`);
-  }
-  watchDataSourceChange(): void {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'switchDataSource':
-            this.storage.toggleDataSource(inArg.data);
-            break;
-        }
-      });
   }
 
   /**
@@ -203,7 +190,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
     if (this.status.isShare) {
       const [data, err]: any = await this.http.api_shareDocGetEnv({
-        uniqueID: this.share.shareId,
+        uniqueID: this.share.shareID,
       });
       if (err) {
         return;
@@ -257,7 +244,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     return new Promise(async (resolve) => {
       if (this.status.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetEnv({
-          uniqueID: this.share.shareId,
+          uniqueID: this.share.shareID,
         });
         if (err) {
           return resolve([]);

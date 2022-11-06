@@ -138,7 +138,7 @@ export class ApiTabOperateService {
     }
     if (this.status.isShare) {
       this.router.navigate([tab.pathname], {
-        queryParams: { pageID: tab.uuid, ...tab.params, shareId: this.share.shareId },
+        queryParams: { pageID: tab.uuid, ...tab.params, shareID: this.share.shareID },
       });
       return;
     }

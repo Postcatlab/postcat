@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
@@ -7,7 +7,9 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { NzModalService } from 'ng-zorro-antd/modal';
-
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
+/** is show local data source tips */
+export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 /**
  * @description
  * A message queue global send and get message
@@ -17,14 +19,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 })
 export class DataSourceService {
   isConnectRemote = false;
-  /** data source type @type { DataSourceType }  */
-  get dataSourceType(): DataSourceType {
-    return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
-  }
-  /** Is it a remote data source */
-  get isRemote() {
-    return this.dataSourceType === 'http';
-  }
   /** get mock url */
   get mockUrl() {
     return window.eo?.getMockUrl?.();
@@ -37,13 +31,18 @@ export class DataSourceService {
     private messageService: MessageService,
     private settingService: SettingService,
     private user: UserService,
+    private storage: StorageService,
     private modal: NzModalService,
     private http: RemoteService,
     private web: WebService
   ) {
     this.pingCloudServerUrl();
+    this.messageService.get().subscribe((inArg: Message) => {
+      if (inArg.type === 'switchDataSource') {
+        this.switchDataSource(inArg.data);
+      }
+    });
   }
-
   getApiUrl(apiData: ApiData) {
     const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (apiData) {
@@ -87,10 +86,15 @@ export class DataSourceService {
     if (this.web.isVercel) {
       this.modal.info({
         nzTitle: $localize`Need to deploy cloud services`,
-        nzContent: `<span>`+$localize`Store data on the cloud for team collaboration and product use across devices.`+`</span>`+
-      `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">`+$localize`Learn more..`+`</a>`,
+        nzContent:
+          `<span>` +
+          $localize`Store data on the cloud for team collaboration and product use across devices.` +
+          `</span>` +
+          `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">` +
+          $localize`Learn more..` +
+          `</a>`,
         nzOnOk: () => console.log('Info OK'),
-        nzMaskClosable: true
+        nzMaskClosable: true,
       });
       return;
     }
@@ -120,41 +124,15 @@ export class DataSourceService {
       this.messageService.send({ type: 'need-config-remote', data: {} });
     }
   }
-
-  getSettings() {
-    try {
-      return JSON.parse(localStorage.getItem('localSettings') || '{}');
-    } catch (error) {
-      return {};
-    }
-  }
-
   /**
-   * Get the value of the corresponding configuration according to the key path
-   *
-   * @param key
-   * @returns
+   * switch data
    */
-  getConfiguration = (keyPath: string) => {
-    const localSettings = this.getSettings();
-    if (Reflect.has(localSettings, keyPath)) {
-      return Reflect.get(localSettings, keyPath);
+  switchDataSource = async (dataSource: DataSourceType) => {
+    const isRemote = dataSource === 'http';
+    if (isRemote) {
+      localStorage.setItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION, 'false');
+    } else {
+      localStorage.setItem(IS_SHOW_REMOTE_SERVER_NOTIFICATION, 'true');
     }
-
-    const keys = Object.keys(localSettings);
-    const filterKeys = keys.filter((n) => n.startsWith(keyPath));
-    if (filterKeys.length) {
-      return filterKeys.reduce((pb, ck) => {
-        const keyArr = ck.replace(`${keyPath}.`, '').split('.');
-        const targetKey = keyArr.pop();
-        const target = keyArr.reduce((p, v) => {
-          p[v] ??= {};
-          return p[v];
-        }, pb);
-        target[targetKey] = localSettings[ck];
-        return pb;
-      }, {});
-    }
-    return undefined;
   };
 }

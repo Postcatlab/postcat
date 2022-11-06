@@ -45,9 +45,6 @@ export class NavbarComponent implements OnInit {
   ) {
     this.issueEnvironment = this.getEnviroment();
     this.langValue = this.lang.systemLanguage;
-    if (this.workspaceService.currentWorkspace?.id !== -1) {
-      this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
-    }
   }
   changeWorkspace(item) {
     this.workspaceService.setCurrentWorkspace(item);
@@ -122,7 +119,7 @@ export class NavbarComponent implements OnInit {
       .replace(/(?<!:)\/{2,}/g, '/')
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
+    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareID=${res.uniqueID}`;
   }
   loginOrSign() {
     this.dataSourceService.checkRemoteCanOperate();

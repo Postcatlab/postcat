@@ -5,18 +5,18 @@ import { StorageUtil } from '../../utils/storage/Storage';
   providedIn: 'root',
 })
 export class ShareService {
-  shareId;
+  shareID;
   constructor() {
-    this.shareId = this.getShareId() || '';
+    this.shareID = this.getshareID() || '';
   }
-  setShareId(data) {
-    this.shareId = data;
-    StorageUtil.set('shareId', data);
+  setshareID(data) {
+    this.shareID = data;
+    StorageUtil.set('shareID', data);
   }
-  getShareId() {
-    return StorageUtil.get('shareId');
+  getshareID() {
+    return StorageUtil.get('shareID');
   }
-  resetShareId() {
-    StorageUtil.set('shareId', '');
+  resetshareID() {
+    StorageUtil.set('shareID', '');
   }
 }

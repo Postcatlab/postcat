@@ -121,7 +121,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       if (this.status.isShare) {
         const [res, err]: any = await this.http.api_shareDocGetAllApi(
           {
-            uniqueID: this.share.shareId,
+            uniqueID: this.share.shareID,
           },
           '/api'
         );
@@ -243,7 +243,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       case 'editApi':
       case 'detailApi': {
         this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key,shareId: this.share.shareId},
+          queryParams: { uuid: inArg.node.key,shareID: this.share.shareID},
         });
         break;
       }

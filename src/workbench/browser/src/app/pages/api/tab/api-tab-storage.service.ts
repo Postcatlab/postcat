@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
-import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { storageTab, TabItem } from './tab.model';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class ApiTabStorageService {
   tabOrder: Array<number> = [];
   cacheName: string;
   tabsByID = new Map<number, TabItem>();
-  constructor(private dataSource: DataSourceService, private workspace: WorkspaceService) {}
+  constructor(private workspace: WorkspaceService) {}
   init() {
     this.tabOrder = [];
     this.tabsByID = new Map();
@@ -54,7 +53,7 @@ export class ApiTabStorageService {
    */
   setPersistenceStorage(selectedIndex, opts) {
     //TODO remote datasource may change
-    if (this.dataSource.dataSourceType === 'http') {
+    if (!this.workspace.isLocal) {
     }
 
     let tabsByID = Object.fromEntries(this.tabsByID);
