@@ -96,6 +96,10 @@ yarn add @angular/cli --global
 
 本项目采用 Apache-2.0 协议，可查看 [LICENSE.md](LICENSE) 了解更详细内容。
 
+#支持我们
+
+如果你觉得项目还不错，记得 Star 支持一下噢！你们的支持对 Eoapi 真的很重要！
+
 # 联系我们
 
 如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/eoapi/issues) 联系我们，十分感谢！
