@@ -38,7 +38,7 @@ export interface ModuleInfo {
   features?: {
     configuration: ModuleConfiguration;
     i18n?: I18nLocale;
-    extensionTabView: ExtensionTabView;
+    extensionTabView: ExtensionTabView[];
     sidebarView: SidebarView;
     importAPI: FeatureInfo;
     exportAPI: FeatureInfo;
@@ -91,12 +91,7 @@ interface ModuleConfigurationField {
   description?: string;
   required?: boolean;
 }
-export type ExtensionTabView = {
-  name: string;
-  url: string;
-  debugUrl: string;
-  server: HttpServer;
-};
+export type ExtensionTabView = SidebarView;
 
 type HttpServer = ReturnType<typeof createServer>;
 export type SidebarView = {
@@ -104,6 +99,7 @@ export type SidebarView = {
   title: string;
   url: string;
   debugUrl: string;
+  extName: string;
   server: HttpServer;
 };
 

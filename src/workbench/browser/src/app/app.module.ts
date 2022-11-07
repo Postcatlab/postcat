@@ -33,12 +33,12 @@ import { registerLocaleData } from '@angular/common';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
-import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
+
 registerLocaleData(en);
 registerLocaleData(zh);
 
 @NgModule({
-  declarations: [AppComponent, Vue3Component],
+  declarations: [AppComponent],
   imports: [
     CommonModule,
     FormsModule,

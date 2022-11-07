@@ -27,16 +27,16 @@ window.eo = {
   getModules() {
     return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
   },
-  getModule (id) {
+  getModule(id) {
     return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { id: id } });
   },
-  getFeatures(){
+  getFeatures() {
     return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
   },
   getFeature(featureKey) {
     return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
   },
-  loadFeatureModule(id){
+  loadFeatureModule(id) {
     if (!featureModules.has(id)) {
       try {
         const module = window.eo.getModule(id);
@@ -132,8 +132,15 @@ window.eo.getExtIsInTask = (name, callback) => {
   return false;
 };
 
-window.eo.getExtensionPagePathByName = (extName: string) => {
-  return ipcRenderer.invoke('eo-sync', { action: 'getExtensionPagePathByName', data: { extName } });
+window.eo.getExtTabs = (extName: string) => {
+  return ipcRenderer.invoke('eo-sync', { action: 'getExtTabs', data: { extName } });
+};
+
+window.eo.getSidebarView = (extName: string) => {
+  return ipcRenderer.invoke('eo-sync', { action: 'getSidebarView', data: { extName } });
+};
+window.eo.getSidebarViews = (extName: string) => {
+  return ipcRenderer.invoke('eo-sync', { action: 'getSidebarViews', data: { extName } });
 };
 
 window.eo.saveSettings = (settings) => {

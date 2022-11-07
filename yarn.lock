@@ -1910,10 +1910,10 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
-"@micro-zoe/micro-app@1.0.0-alpha.9":
-  version "1.0.0-alpha.9"
-  resolved "https://registry.npmmirror.com/@micro-zoe/micro-app/-/micro-app-1.0.0-alpha.9.tgz#e6dbe7130fa2091fa9c88e370da33f093807622f"
-  integrity sha512-/wIzf3jVzDVeg6eb0f2Fj08Mp2OKwucfHldJaUSb/KeC1LdA1yKNEAqXAfUDzmcQ7RAPrGuM5fGZNJSlj3nPSQ==
+"@micro-zoe/micro-app@1.0.0-alpha.10":
+  version "1.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/@micro-zoe/micro-app/-/micro-app-1.0.0-alpha.10.tgz#3e797ac1fff89767c5a3035f05924edf8677cf4d"
+  integrity sha512-8pILuTZyoFOm0itZ6a78AkNqfsyZhGpNkH5oMk+22Bz3xyRlplRpvjujjtEgkg06rCFHWYwvttiV03UQ2aqh1Q==
 
 "@ngtools/webpack@14.0.3":
   version "14.0.3"

@@ -11,12 +11,8 @@
         </div>
         <span class="font-bold text-[14px]">{{ extensionDetail.title || extensionDetail.moduleName }}</span>
         <ng-container *ngIf="extensionDetail?.installed">
-          <nz-switch
-            [(ngModel)]="isEnable"
-            nzSize="small"
-            class="ml-2.5"
-            (ngModelChange)="handleEnableExtension($event)"
-          >
+          <nz-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5"
+            (ngModelChange)="handleEnableExtension($event)">
           </nz-switch>
         </ng-container>
       </div>
@@ -25,27 +21,19 @@
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
     <div>
-      <button
-        nz-button
-        [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
-        [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
-        class="mt-[8px]"
-        [nzLoading]="isOperating"
-        (click)="handleInstall()"
-      >
+      <button nz-button [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
+        [nzType]="extensionDetail?.installed ? 'default' : 'primary'" class="mt-[8px]" [nzLoading]="isOperating"
+        (click)="handleInstall()">
         <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
         <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
       </button>
     </div>
 
-    <nz-tabset
-      [(nzSelectedIndex)]="nzSelectedIndex"
-      [nzAnimated]="false"
+    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzAnimated]="false"
       [class]="{ settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration }"
-      (nzSelectChange)="handleTabChange($event)"
-    >
-      <nz-tab *ngIf="pagePath" i18n-nzTitle nzTitle="CustomTab">
-        <eo-custom-tab [url]="pagePath" [name]="extName"></eo-custom-tab>
+      (nzSelectChange)="handleTabChange($event)">
+      <nz-tab *ngFor="let item of customTabs " i18n-nzTitle nzTitle="CustomTab">
+        <eo-custom-tab [url]="item.url" [name]="extName + '--' + item.name"></eo-custom-tab>
       </nz-tab>
       <!-- Setting -->
       <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle

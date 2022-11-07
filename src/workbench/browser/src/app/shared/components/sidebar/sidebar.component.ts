@@ -37,6 +37,23 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.getIDFromRoute();
     this.watchRouterChange();
     this.watchWorkspaceChange();
+    this.initSidebarViews();
+  }
+
+  async initSidebarViews() {
+    const sidebarViews = await window.eo?.getSidebarViews();
+    sidebarViews.forEach((item) => {
+      this.modules.push({
+        title: item.title,
+        id: item.extName,
+        isShare: false,
+        isOffical: false,
+        icon: item.icon,
+        activeRoute: `home/extensionSidebarView/${item.extName}`,
+        route: `home/extensionSidebarView/${item.extName}`,
+      });
+    });
+    sidebarViews.length && this.getIDFromRoute();
   }
 
   watchWorkspaceChange() {
@@ -130,7 +147,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     );
   }
   private getIDFromRoute() {
-    const currentModule = this.modules.find((val) => this.router.url.includes(val.activeRoute));
+    const urlArr = new URL(this.router.url, 'http://localhost').pathname.split('/');
+    const currentModule = this.modules.find((val) => val.activeRoute.split('/').every((n) => urlArr.includes(n)));
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);
