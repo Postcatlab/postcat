@@ -14,6 +14,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -31,16 +32,19 @@ export class ApiDetailComponent implements OnInit {
     { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
     { title: 'URL', slot: 'url', width: '42%' },
   ];
+  rightExtras = [];
   constructor(
     private route: ActivatedRoute,
     private storage: StorageService,
     private status: StatusService,
     public electron: ElectronService,
     private http: RemoteService,
-    private share: ShareService
+    private share: ShareService,
+    private webExtensionService: WebExtensionService
   ) {}
   ngOnInit(): void {
     this.init();
+    this.initExtension();
   }
   async init() {
     if (!this.model) {
@@ -53,6 +57,29 @@ export class ApiDetailComponent implements OnInit {
       }
     }
     this.eoOnInit.emit(this.model);
+  }
+  async initExtension() {
+    const apiPreviewTab = this.webExtensionService.getFeatures('apiPreviewTab');
+    apiPreviewTab.forEach(async (value, key) => {
+      const module = await window.eo?.loadFeatureModule(key);
+      console.log('apiPreviewTab', apiPreviewTab);
+      console.log('module', module);
+      const rightExtra = value.rightExtra?.reduce((prev, curr) => {
+        const eventObj = curr.events?.reduce((event, currEvent) => {
+          event[currEvent.name] = (...rest) => {
+            module?.[currEvent.handler]?.(...rest);
+          };
+          return event;
+        }, {});
+        prev.push({
+          ...curr,
+          ...eventObj,
+        });
+        return prev;
+      }, []);
+      this.rightExtras.push(...rightExtra);
+    });
+    console.log('this.rightExtras', this.rightExtras);
   }
   getApiByUuid(id: number) {
     return new Promise(async (resolve) => {

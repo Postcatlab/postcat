@@ -87,10 +87,11 @@ export class ModuleManager implements ModuleManagerInterface {
     const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
-      if (extServerMap.has(module.name)) {
-        extServerMap.get(module.name).server.close();
-        extServerMap.delete(module.name);
-      }
+      extServerMap.forEach((item) => {
+        if (item.extName === module.name) {
+          extServerMap.delete(item.key);
+        }
+      });
     }
     return result;
   }
@@ -248,7 +249,7 @@ export class ModuleManager implements ModuleManagerInterface {
     return require(path.join(extPath, 'package.json')).features;
   }
 
-  async getExtPageInfo(extName: string, feature: SidebarView): Promise<SidebarView> {
+  async getExtPageInfo(extName: string, feature: SidebarView, key: string): Promise<SidebarView> {
     try {
       const extPath = this.moduleHandler.getModuleDir(extName);
       const stats = await lstat(extPath);
@@ -265,8 +266,8 @@ export class ModuleManager implements ModuleManagerInterface {
       }
       // 生产环境需要提供 html 入口文件地址(features.sidebarView.main)
       if (feature?.url) {
-        if (extServerMap.has(extName)) {
-          return extServerMap.get(extName);
+        if (extServerMap.has(key)) {
+          return extServerMap.get(key);
         }
         const port = await portfinder.getPortPromise();
         const pageDir = path.parse(path.join(extPath, feature?.url)).dir;
@@ -274,13 +275,13 @@ export class ModuleManager implements ModuleManagerInterface {
         const server = createServer({ root: pageDir });
         server.listen(port);
         const url = `http://127.0.0.1:${port}`;
-        extServerMap.set(extName, {
+        extServerMap.set(key, {
           ...feature,
           url,
-          server,
+          key,
           extName,
         });
-        return extServerMap.get(extName);
+        return extServerMap.get(key);
       }
       return Promise.reject('该插件package.json缺少sidebarView字段');
     } catch (error) {
@@ -292,7 +293,7 @@ export class ModuleManager implements ModuleManagerInterface {
     try {
       const features = this.getExtFeatures(extName);
       const list = features.extensionTabView.map((item) => {
-        return this.getExtPageInfo(extName, item as unknown as SidebarView);
+        return this.getExtPageInfo(extName, item, `${extName}-extensionTabView-${item.name}`);
       });
       const result = await Promise.all(list);
       return result;
@@ -304,26 +305,19 @@ export class ModuleManager implements ModuleManagerInterface {
   async getSidebarView(extName: string): Promise<SidebarView> {
     try {
       const feature = this.getExtFeatures(extName);
-      const sidebarView = await this.getExtPageInfo(extName, feature.sidebarView);
+      const sidebarView = await this.getExtPageInfo(extName, feature.sidebarView, `${extName}-sidebarView`);
       return sidebarView;
     } catch (error) {
-      return error;
+      throw new Error(error);
     }
   }
 
   async getSidebarViews(): Promise<SidebarView[]> {
     const result = [];
 
-    // TODO 调试用
-    if (!this.installExtension.find((n) => n.name === 'eoapi-extension-samples-vue3')) {
-      this.installExtension.push({ name: 'eoapi-extension-samples-vue3' });
-    }
-
-    for (let index = 0; index < this.installExtension.length; index++) {
+    for (const [extName] of this.modules) {
       try {
-        const extName = this.installExtension[index].name;
-        const feature = this.getExtFeatures(extName);
-        const sidebarView = await this.getExtPageInfo(extName, feature.sidebarView);
+        const sidebarView = await this.getSidebarView(extName);
         result.push(sidebarView);
       } catch (error) {}
     }

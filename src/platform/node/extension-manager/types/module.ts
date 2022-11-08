@@ -13,6 +13,7 @@ export type FeatureInfo = {
   extensionID: string;
   //!Will deprecated
   label: string;
+  rightExtra: any[];
 };
 
 /**
@@ -96,11 +97,14 @@ export type ExtensionTabView = SidebarView;
 type HttpServer = ReturnType<typeof createServer>;
 export type SidebarView = {
   icon: string;
+  name: string;
+  /** uniqueKey */
+  key: string;
   title: string;
   url: string;
   debugUrl: string;
   extName: string;
-  server: HttpServer;
+  server?: HttpServer;
 };
 
 export interface I18nLocale {

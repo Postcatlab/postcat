@@ -3,6 +3,7 @@ import { EventCenterForMicroApp } from '@micro-zoe/micro-app';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import microApp from '@micro-zoe/micro-app';
 import { ActivatedRoute } from '@angular/router';
+import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 
 (window as any).eventCenterForAppNameVite = new EventCenterForMicroApp('appname-custom-tab');
 
@@ -31,9 +32,14 @@ export class CustomTabComponent implements OnInit {
   @Input() url = ``;
   microAppData = { msg: '来自基座的数据' };
 
-  constructor(private storage: StorageService, public route: ActivatedRoute) {}
+  constructor(private storage: StorageService, public route: ActivatedRoute, private modalService: ModalService) {}
 
   ngOnInit(): void {
+    this.injectData();
+    this.initSidebarViewByRoute();
+  }
+
+  initSidebarViewByRoute() {
     this.route.params.subscribe(async (data) => {
       if (data.extName && window.eo?.getSidebarView) {
         this.name = data.extName;
@@ -41,6 +47,10 @@ export class CustomTabComponent implements OnInit {
         this.url = sidebar.url;
       }
     });
+  }
+
+  injectData() {
+    window.eo.modalService = this.modalService;
   }
 
   /**
