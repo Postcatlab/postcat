@@ -42,7 +42,7 @@ English | [简体中文](README.md)
 
 🌱 Extension Marketplace
 
-💻 Collaboration
+💻  [Collaboration](https://docs.eoapi.io/docs/collaborate.html)
 - Collaboration via remote data sources
 
 # Build and run
