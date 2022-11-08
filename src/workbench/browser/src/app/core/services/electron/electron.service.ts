@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import pkg from '../../../../../../../../package.json';
 import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
 import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 type DescriptionsItem = {
   readonly id: string;
@@ -112,6 +113,17 @@ export class ElectronService {
         item.value = systemInfo[item.id];
       }
     });
+
+    // remote server version
+    const serverVersion = StorageUtil.get('server_version');
+    if (serverVersion) {
+      descriptions.push({
+        id: 'server',
+        label: 'Server',
+        value: serverVersion,
+      });
+    }
+
     return descriptions;
   }
 }

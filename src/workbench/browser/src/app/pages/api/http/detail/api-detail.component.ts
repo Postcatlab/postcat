@@ -44,7 +44,7 @@ export class ApiDetailComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.init();
-    this.initExtension();
+    this.initExtensionExtra();
   }
   async init() {
     if (!this.model) {
@@ -58,7 +58,7 @@ export class ApiDetailComponent implements OnInit {
     }
     this.eoOnInit.emit(this.model);
   }
-  async initExtension() {
+  async initExtensionExtra() {
     const apiPreviewTab = this.webExtensionService.getFeatures('apiPreviewTab');
     apiPreviewTab.forEach(async (value, key) => {
       const module = await window.eo?.loadFeatureModule(key);
