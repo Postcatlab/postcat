@@ -87,7 +87,7 @@ const generateEoExcuteSnippet = (bodyType) => {
   };
   const result = `//${localizes.apidefind}
   var ${variables.id}_api_demo_1 = {
-      "url": "https://api.eolink.com", //${localizes.url}
+      "url": "https://www.eoapi.io", //${localizes.url}
       "name": "${variables.name} API Demo", //${localizes.name}
       "method": "POST",
       "headers": {
