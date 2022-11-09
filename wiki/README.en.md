@@ -43,7 +43,7 @@ English | [简体中文](README.md)
 🌱 Extension Marketplace
 
 💻  [Collaboration](https://docs.eoapi.io/docs/collaborate.html)
-- Collaboration via remote data sources
+- Collaboration via [self-hosted cloud server](https://github.com/eolinker/eoapi-remote-server)
 
 # Build and run
 
