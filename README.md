@@ -13,7 +13,7 @@
 ![](https://docs.eoapi.io/images/eoapi-demo.png)
 
 [English](wiki/README.en.md)｜简体中文
-# 快来试试这个！
+# 在线试试！
 [https://eoapi.io](https://eoapi.io/)
 
 体验过程中的数据将存到网页本地存储(indexedb).试用后建议你下载桌面端会得到更好的使用体验～
