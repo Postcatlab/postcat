@@ -22,6 +22,11 @@ const socket = (port = _post) => {
       ws.on('message', null);
       ws = null;
     };
+    socket.on('grpc-server', ({ data }) => {
+      // * 创建 grpc 客户端服务
+      // 端口管理、编译文件、创建服务、运行插件代码、销毁服务
+      console.log('grpc server');
+    });
     // receive a message from the client
     socket.on('ws-server', ({ type, content }) => {
       if (type === 'connect') {

@@ -15,6 +15,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -40,11 +41,14 @@ export class ApiDetailComponent implements OnInit {
     public electron: ElectronService,
     private http: RemoteService,
     private share: ShareService,
+    private message: MessageService,
     private webExtensionService: WebExtensionService
   ) {}
   ngOnInit(): void {
     this.init();
     this.initExtensionExtra();
+    // * 通过 socketIO 告知 Node 端，建立 grpc 连接
+    this.message.send({ type: 'msg-grpc', data: {} });
   }
   async init() {
     if (!this.model) {
@@ -80,6 +84,9 @@ export class ApiDetailComponent implements OnInit {
       this.rightExtras.push(...rightExtra);
     });
     console.log('this.rightExtras', this.rightExtras);
+  }
+  handleClick() {
+    console.log('click icon');
   }
   getApiByUuid(id: number) {
     return new Promise(async (resolve) => {
