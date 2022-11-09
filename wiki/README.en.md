@@ -12,9 +12,11 @@ A extensible API tool,Easy & Open Source API Ecosystem
 
 English | [简体中文](README.md)
 
-# Getting started
+# Try it!
+[https://eoapi.io](https://eoapi.io/)
 
-- Try the [live demo](https://demo.eoapi.io/)
+The data will be stored locally(indexedb) on the web page.I suggest that you should install and try it out for the best demo experience.
+# Getting started
 
 - You can download it on [Releases](https://github.com/eolinker/eoapi/releases) available for macOS, Windows
 

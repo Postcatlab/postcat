@@ -13,10 +13,11 @@
 ![](https://docs.eoapi.io/images/eoapi-demo.png)
 
 [English](wiki/README.en.md)｜简体中文
+# 快来试试这个！
+[https://eoapi.io](https://eoapi.io/)
 
+体验过程中的数据将存到网页本地存储(indexedb).试用后建议你下载桌面端会得到更好的使用体验～
 # 快速开始
-
-- 访问 [在线示例](https://eoapi.io/) 快速体验产品特性
 
 - 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
 
