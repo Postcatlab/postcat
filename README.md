@@ -5,18 +5,26 @@
 </p>
 </p>
 
-<h1 align="center">Eoapi</h1>
 <div align="center">
 一个可拓展的 API 工具，简单（Easy） & 开源（OpenSource）的 API 生态系统
 </div>
+<p align="center" style="color:grey;font-size:12px;">Eoapi（发音：一欧 API）</p>
+<hr>
+<p align="center">
+  <a href="https://github.com/eolinker/eoapi"><img src="https://img.shields.io/github/license/eolinker/eoapi?sanitize=true" alt="License"></a>
+  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/v/release/eolinker/eoapi?sanitize=true" alt="Version"></a>
+  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/downloads/eolinker/eoapi/total?sanitize=true" alt="Downloads"></a>
+  <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
+</p>
+
+[English](wiki/README.en.md)｜简体中文
 
 ![](https://docs.eoapi.io/images/eoapi-demo.png)
 
-[English](wiki/README.en.md)｜简体中文
 # 在线试试！
 [https://eoapi.io](https://eoapi.io/)
 
-体验过程中的数据将存到网页本地存储(indexedb).试用后建议你下载桌面端会得到更好的使用体验～
+功能体验过程中的数据将储存在 Web 的本地存储（indexedb）。试用后建议下载桌面端体验更佳～
 # 快速开始
 
 - 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
