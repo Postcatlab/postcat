@@ -27,8 +27,8 @@ The data will be stored locally(indexedb) on the web page.I suggest that you sho
 
 📃 API Documentation
 
-- HTTP protocol
-- Various formats of request body: FormData, XML, JSON, Raw
+- HTTP,Websocket protocol
+- Various formats of request body: FormData, XML, JSON, Raw,Binary
 
 ⚡ API Test
 
@@ -36,7 +36,7 @@ The data will be stored locally(indexedb) on the web page.I suggest that you sho
 - Test local API
 
 🎭 Mock
-- Mock document interface return value
+- Mock API document response
 
 🌐 Test environment management
 
@@ -46,7 +46,9 @@ The data will be stored locally(indexedb) on the web page.I suggest that you sho
 
 💻  [Collaboration](https://docs.eoapi.io/docs/collaborate.html)
 - Collaboration via [self-hosted cloud server](https://github.com/eolinker/eoapi-remote-server)
+- API Share
 
+🌐 Internationalization
 # Build and run
 
 ## Prerequisites
