@@ -6,7 +6,6 @@
 <div align="center">
 A extensible API tool,Easy & Open Source API Ecosystem
 </div>
-<p align="center" style="color:grey;font-size:12px;">Eoapi（pronounced: E-O-API</p>
 <hr>
 <p align="center">
   <a href="https://github.com/eolinker/eoapi"><img src="https://img.shields.io/github/license/eolinker/eoapi?sanitize=true" alt="License"></a>
@@ -18,6 +17,9 @@ A extensible API tool,Easy & Open Source API Ecosystem
 English | [简体中文](README.md)
 
 ![](https://docs.eoapi.io/images/eoapi-demo-en.png)
+
+> Eoapi（pronounced: E-O-API)
+
 # Try it!
 
 [https://eoapi.io](https://eoapi.io/)
