@@ -29,8 +29,8 @@
 
 📃 API 文档
 
-- HTTP 协议
-- 各种格式请求体：FormData、XML、JSON、Raw
+- HTTP、Websocket 协议
+- 各种格式请求体：FormData、XML、JSON、Raw、Binary
 
 ⚡ API 测试
 
@@ -40,15 +40,20 @@
 🎭 Mock
 - 模拟文档接口返回值
 
-📶 可离线使用
+📖 环境管理
 
-🌐 测试环境管理
+📶 可离线使用
 
 🌱 插件集市
 
 💻  [多人协作](https://docs.eoapi.io/docs/collaborate.html)
 - 通过部署云端服务实现多人协作
+- API 分享
+- 可本地/内网部署
 
+🌐 国际化
+# 功能规划
+[Github 项目看板](https://github.com/orgs/eolinker/projects/1/views/16)
 # 源码运行/构建
 
 ## 环境
