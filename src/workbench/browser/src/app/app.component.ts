@@ -24,11 +24,10 @@ export class AppComponent {
   }
 
   injectGlobalData() {
+    window.eo ??= {};
     window.eo.modalService = this.modalService;
     window.eo.navigate = (commands: any[], extras?: NavigationExtras) => {
-      setTimeout(() => {
-        this.router.navigate(commands, extras);
-      });
+      this.router.navigate(commands, extras);
     };
     // window.eo.getConfiguration = this.modalService;
   }
