@@ -107,16 +107,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.isSocketConnect = false;
     }
   }
-  socket2Node() {
-    if (!this.socket) {
-      return;
-    }
-    this.message.get().subscribe(({ type, data }) => {
-      if (type === 'msg-grpc') {
-        this.socket.emit('grpc-server', data);
-      }
-    });
-  }
 
   expandMessage(index) {
     const status = this.model.response.responseBody[index].isExpand;

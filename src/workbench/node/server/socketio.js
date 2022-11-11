@@ -1,5 +1,6 @@
 const IO = require('socket.io');
 const WebSocket = require('ws');
+const grpcClient = require('./grpc_client.js');
 
 process.on('uncaughtException', (err) => {
   console.error('uncaughtException', err);
@@ -22,10 +23,14 @@ const socket = (port = _post) => {
       ws.on('message', null);
       ws = null;
     };
-    socket.on('grpc-server', ({ data }) => {
-      // * 创建 grpc 客户端服务
-      // 端口管理、编译文件、创建服务、运行插件代码、销毁服务
-      console.log('grpc server');
+    socket.on('grpc-server', async (data) => {
+      // * 创建 grpc 客户端发起请求
+      // 端口管理、编译文件、运行插件代码、销毁服务
+      const { params, callback } = JSON.parse(data);
+      console.log('grpc server', params, callback);
+      const { next } = callback;
+      const res = await grpcClient(params, { next: next ? eval(next) : null });
+      socket.emit('grpc-client', JSON.stringify(res));
     });
     // receive a message from the client
     socket.on('ws-server', ({ type, content }) => {
