@@ -17,7 +17,13 @@ const grpcFunc = ({ PROTO_PATH, name, url, params }, { next }) => {
     });
 
     const targetClient = grpc.loadPackageDefinition(packageDefinition)[name];
-    const client = new targetClient.Greeter(url, grpc.credentials.createInsecure());
+
+    // service OpenDlpService{
+    //   // API文档中的敏感API扫描
+    //   rpc SensitiveAPIScan(SensitiveAPIScanRequest) returns (SensitiveAPIScanResponse) {};
+    // }
+
+    const client = new targetClient.OpenDlpService(url, grpc.credentials.createInsecure());
     if (next) {
       next(client, resolve);
       return;
