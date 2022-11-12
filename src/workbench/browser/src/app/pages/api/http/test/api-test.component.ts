@@ -13,7 +13,7 @@ import {
 import { MessageService } from '../../../../shared/services/message';
 
 import { interval, Subscription, Observable, Subject } from 'rxjs';
-import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 import { TestServerService } from '../../../../shared/services/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
@@ -31,7 +31,7 @@ import {
 } from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
 import { isEmpty } from 'lodash-es';
@@ -106,17 +106,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     public statusS: StatusService,
     private lang: LanguageService
   ) {
-    // TODO Select demo api when first open Eoapi
-    // if (!window.localStorage.getItem('local_TabCache')) {
-    //   const utm = new URLSearchParams(window.location.search);
-    //   this.router.navigate(['/home/api/http/test'], {
-    //     queryParams: { pageID: Date.now(), uuid: 1, ...Object.fromEntries(utm) },
-    //   });
-    //   setTimeout(() => {
-    //     const testBtn = document.getElementById('btn-test');
-    //     testBtn && testBtn.click();
-    //   }, 600);
-    // }
     this.initBasicForm();
     this.testServer.init((message) => {
       this.receiveMessage(message);
@@ -222,12 +211,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       replaceType: 'replace',
     }).url;
   }
-  changeUri() {
-    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url',
-      replaceType: 'replace',
-    }).query;
-  }
   watchBasicForm() {
     this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((x) => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
@@ -235,6 +218,17 @@ export class ApiTestComponent implements OnInit, OnDestroy {
         this.modelChange.emit(this.model);
       }, 0);
     });
+    //watch uri
+    this.validateForm
+      .get('uri')
+      ?.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe((url) => {
+        this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+          base: 'url',
+          replaceType: 'replace',
+        }).query;
+        this.model.request.restParams = generateRestFromUrl(this.model.request.uri, this.model.request.restParams);
+      });
   }
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);

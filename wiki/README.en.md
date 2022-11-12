@@ -18,7 +18,7 @@ English | [简体中文](README.md)
 
 ![](https://docs.eoapi.io/images/eoapi-demo-en.png)
 
-> Eoapi（pronounced: E-O-API)
+> Eoapi (pronounced: E-O-API)
 
 # Try it!
 
