@@ -5,10 +5,10 @@
       <nz-tag [nzColor]="'#0aa07a'">{{ model.method | uppercase }}</nz-tag>
       <span class="mt-2.5 dp_b text_omit">{{ model.uri }}</span>
     </div>
-    <div class="mt-4">
+    <div class="flex mt-4">
       <ng-container *ngFor="let item of rightExtras">
         <span nz-tooltip [nzTooltipTitle]="item.tooltip">
-          <div class="cursor-pointer" (click)="item.click()">
+          <div class="cursor-pointer" (click)="item.click(model)">
             <eo-iconpark-icon [name]="item.icon" size="24px"> </eo-iconpark-icon>
           </div>
         </span>
@@ -39,15 +39,11 @@
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Body">
       <div class="my-2.5">
         <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.requestBodyType] }}</nz-tag>
-        <nz-tag *ngIf="model.requestBodyType === 'json'" nzColor="default" i18n
-          >The outermost structure is: {{ CONST.JSON_ROOT_TYPE[model.requestBodyJsonType] }}</nz-tag
-        >
+        <nz-tag *ngIf="model.requestBodyType === 'json'" nzColor="default" i18n>The outermost structure is: {{
+          CONST.JSON_ROOT_TYPE[model.requestBodyJsonType] }}</nz-tag>
       </div>
-      <eo-api-detail-body
-        [bodyType]="model.requestBodyType"
-        [model]="model.requestBody"
-        [jsonRootType]="model.requestBodyJsonType"
-      ></eo-api-detail-body>
+      <eo-api-detail-body [bodyType]="model.requestBodyType" [model]="model.requestBody"
+        [jsonRootType]="model.requestBodyJsonType"></eo-api-detail-body>
     </nz-collapse-panel>
   </nz-collapse>
   <!-- Response headers -->
@@ -61,26 +57,18 @@
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Response">
       <div class="my-2.5">
         <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.responseBodyType] }}</nz-tag>
-        <nz-tag *ngIf="model.responseBodyType === 'json'" nzColor="default" i18n
-          >The outermost structure is: {{ CONST.JSON_ROOT_TYPE[model.responseBodyJsonType] }}</nz-tag
-        >
+        <nz-tag *ngIf="model.responseBodyType === 'json'" nzColor="default" i18n>The outermost structure is: {{
+          CONST.JSON_ROOT_TYPE[model.responseBodyJsonType] }}</nz-tag>
       </div>
-      <eo-api-detail-body
-        [bodyType]="model.responseBodyType"
-        [model]="model.responseBody"
-        [jsonRootType]="model.responseBodyJsonType"
-      ></eo-api-detail-body>
+      <eo-api-detail-body [bodyType]="model.responseBodyType" [model]="model.responseBody"
+        [jsonRootType]="model.responseBodyJsonType"></eo-api-detail-body>
     </nz-collapse-panel>
   </nz-collapse>
   <!-- MOCK -->
   <nz-collapse *ngIf="electron.isElectron" class="eo_collapse" [nzGhost]="true">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="MOCK">
-      <eo-api-mock-table
-        class="!p-0"
-        [apiDataID]="model.uuid"
-        [mockListColumns]="mockListColumns"
-        [showToolBar]="false"
-      >
+      <eo-api-mock-table class="!p-0" [apiDataID]="model.uuid" [mockListColumns]="mockListColumns"
+        [showToolBar]="false">
       </eo-api-mock-table>
     </nz-collapse-panel>
   </nz-collapse>

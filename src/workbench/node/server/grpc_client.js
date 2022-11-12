@@ -1,10 +1,11 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const fs = require('fs');
+const path = require('path');
 
-const genProto = (name, code) => fs.writeFileSync(`./${name}.proto`, code);
+const genProto = (name, code) => fs.writeFileSync(path.join(__dirname, `./${name}.proto`), code);
 
-const deleteProto = (name) => fs.unlinkSync(`./${name}.proto`);
+const deleteProto = (name) => fs.unlinkSync(path.join(__dirname, `./${name}.proto`));
 
 const grpcFunc = ({ PROTO_PATH, name, url, params }, { next }) => {
   return new Promise((resolve) => {
@@ -15,9 +16,9 @@ const grpcFunc = ({ PROTO_PATH, name, url, params }, { next }) => {
       defaults: true,
       oneofs: true,
     });
-
-    const targetClient = grpc.loadPackageDefinition(packageDefinition)[name];
-
+    const targetClient = name
+      .split('.')
+      .reduce((prev, curr) => prev[curr], grpc.loadPackageDefinition(packageDefinition));
     // service OpenDlpService{
     //   // API文档中的敏感API扫描
     //   rpc SensitiveAPIScan(SensitiveAPIScanRequest) returns (SensitiveAPIScanResponse) {};
@@ -36,7 +37,7 @@ const grpcClient = async ({ url, name, proto, params }, func) => {
   genProto(`./${random + name}`, proto);
   const [res, err] = await grpcFunc(
     {
-      PROTO_PATH: `./${random + name}.proto`,
+      PROTO_PATH: path.join(__dirname, `./${random + name}.proto`),
       url,
       name,
       params,
