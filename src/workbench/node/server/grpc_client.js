@@ -7,7 +7,7 @@ const genProto = (name, code) => fs.writeFileSync(path.join(__dirname, `./${name
 
 const deleteProto = (name) => fs.unlinkSync(path.join(__dirname, `./${name}.proto`));
 
-const grpcFunc = ({ PROTO_PATH, name, url, params }, { next }) => {
+const grpcFunc = ({ PROTO_PATH, name, url, context = {}, params }, { next }) => {
   return new Promise((resolve) => {
     const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
       keepCase: true,
@@ -26,13 +26,13 @@ const grpcFunc = ({ PROTO_PATH, name, url, params }, { next }) => {
 
     const client = new targetClient.OpenDlpService(url, grpc.credentials.createInsecure());
     if (next) {
-      next(client, resolve);
+      next(client, context, resolve);
       return;
     }
   });
 };
 
-const grpcClient = async ({ url, name, proto, params }, func) => {
+const grpcClient = async ({ url, name, proto, context, params }, func) => {
   const random = Date.now();
   genProto(`./${random + name}`, proto);
   const [res, err] = await grpcFunc(
@@ -40,6 +40,7 @@ const grpcClient = async ({ url, name, proto, params }, func) => {
       PROTO_PATH: path.join(__dirname, `./${random + name}.proto`),
       url,
       name,
+      context,
       params,
     },
     func
