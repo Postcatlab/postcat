@@ -108,21 +108,3 @@ const socket = (port = _post) => {
 };
 
 module.exports = socket;
-
-const docs = {}
-const [res, err]: any = await Grpc.send(
-  {
-    proto,
-    url: "localhost:50051",
-    name: "helloworld",
-    context: {
-      docs
-    }
-  },
-  {
-    next: (client: any, context, resolve: any) => {
-      client.sayHello(context.docs, (err: any, response: any) => {
-       // ...
-      });
-    },
-  }
