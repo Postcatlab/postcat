@@ -183,7 +183,6 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
           method: history.requestInfo.method,
           protocol: PROTOCOL[history.requestInfo.apiProtocol],
           requestHeaders: history.requestInfo.headers,
-          requestBodyJsonType: 'object',
           requestBodyType: REQUEST_BODY_TYPE[history.requestInfo.requestType],
           requestBody: history.requestInfo.params,
         },
