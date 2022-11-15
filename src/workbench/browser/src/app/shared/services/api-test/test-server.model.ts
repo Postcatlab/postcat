@@ -6,7 +6,7 @@ export interface ApiTestRes {
   status: 'finish' | 'error';
   id: string;
   response: ApiTestHistoryResponse | any;
-  report?: any;
+  request?: any;
   globals?: object;
   general?: ApiTestResGeneral;
   /**
