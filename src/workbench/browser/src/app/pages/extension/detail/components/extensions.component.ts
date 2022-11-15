@@ -11,7 +11,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       class="bg-white sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]"
       style="border-color: var(--BORDER)"
     >
-      <button nz-button nzType="primary" (click)="handleSave()">Save</button>
+      <button eo-ng-button nzType="primary" (click)="handleSave()">Save</button>
     </div>
 
     <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="form">

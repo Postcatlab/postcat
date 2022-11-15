@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SettingComponent } from './setting.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { EoNgButtonModule } from 'eo-ng-button';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
@@ -34,7 +34,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 const icons: IconDefinition[] = [CaretDownFill];
 const ANTDMODULES = [
   NzModalModule,
-  NzButtonModule,
+  EoNgButtonModule,
   NzListModule,
   NzInputModule,
   NzIconModule.forRoot(icons),

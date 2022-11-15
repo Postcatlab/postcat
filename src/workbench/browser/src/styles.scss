@@ -3,6 +3,9 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
+@import '../../../node_modules/eo-ng-button/styles.scss';
+
 html,
 body {
   margin: 0;
@@ -63,6 +66,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
     border-color: #158565;
   }
 }
+
 ::-webkit-scrollbar {
   width: 16px;
   height: 16px;

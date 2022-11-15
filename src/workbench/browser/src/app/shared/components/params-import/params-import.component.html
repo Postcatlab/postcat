@@ -1,4 +1,4 @@
-<button [disabled]="disabled" type="button" class="menu" (click)="showModal('json')">
+<button eo-ng-button [disabled]="disabled" nzType="text" type="button" class="menu" (click)="showModal('json')">
   <eo-iconpark-icon name="afferent-three" size="14px"></eo-iconpark-icon>
   <span class="fs12 ml5" i18n>Import</span>
 </button>
@@ -29,9 +29,9 @@
     ></eo-monaco-editor>
   </div>
   <div *nzModalFooter>
-    <button nz-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
-    <button nz-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
-    <button nz-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
-    <button nz-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
+    <button eo-ng-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
+    <button eo-ng-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
+    <button eo-ng-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
+    <button eo-ng-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
   </div>
 </nz-modal>

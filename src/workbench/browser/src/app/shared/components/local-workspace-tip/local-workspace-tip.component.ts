@@ -11,7 +11,7 @@ import { StorageUtil } from '../../../utils/storage/Storage';
   template: ` <div *ngIf="isShowNotification" class="remote-notification">
     <eo-iconpark-icon name="link-cloud-faild" class="text-[13px] mr-[5px]"></eo-iconpark-icon>
     <span i18n>The current data is stored locally,If you want to collaborate,Please</span>
-    <button class="ml-[5px]" nz-button nzType="default" nzSize="small" (click)="switchToTheCloud()" i18n>
+    <button class="ml-[5px]" eo-ng-button nzType="default" nzSize="small" (click)="switchToTheCloud()" i18n>
       switch to the cloud workspace
     </button>
     <eo-iconpark-icon

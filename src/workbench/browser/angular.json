@@ -31,6 +31,7 @@
             ],
             "styles": [
               { "input": "src/assets/theme/classic_forest.scss", "bundleName": "classic_forest", "inject": false },
+              "src/assets/theme/eoui.less",
               "src/assets/theme/antd.less",
               "src/styles.scss",
               "src/assets/font/iconfont.css",
