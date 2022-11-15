@@ -7,7 +7,7 @@ const genProto = (name, code) => fs.writeFileSync(path.join(__dirname, `./${name
 
 const deleteProto = (name) => fs.unlinkSync(path.join(__dirname, `./${name}.proto`));
 
-const grpcFunc = ({ PROTO_PATH, name, url, context = {}, params }, { next }) => {
+const grpcFunc = ({ PROTO_PATH, packages, method, url, params }) => {
   return new Promise((resolve) => {
     const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
       keepCase: true,
@@ -16,41 +16,37 @@ const grpcFunc = ({ PROTO_PATH, name, url, context = {}, params }, { next }) => 
       defaults: true,
       oneofs: true,
     });
-    const targetClient = name
+    const targetClient = packages
       .split('.')
       .reduce((prev, curr) => prev[curr], grpc.loadPackageDefinition(packageDefinition));
-    // service OpenDlpService{
-    //   // API文档中的敏感API扫描
-    //   rpc SensitiveAPIScan(SensitiveAPIScanRequest) returns (SensitiveAPIScanResponse) {};
-    // }
 
     const client = new targetClient.OpenDlpService(url, grpc.credentials.createInsecure());
-    if (next) {
-      next(client, context, resolve);
-      return;
-    }
+    client[method](params, (err, response) => {
+      if (err) {
+        return resolve([null, err]);
+      } else {
+        return resolve([response, null]);
+      }
+    });
   });
 };
 
-const grpcClient = async ({ url, name, proto, context, params }, func) => {
-  const random = Date.now();
-  genProto(`./${random + name}`, proto);
-  const [res, err] = await grpcFunc(
-    {
-      PROTO_PATH: path.join(__dirname, `./${random + name}.proto`),
-      url,
-      name,
-      context,
-      params,
-    },
-    func
-  );
+const grpcClient = async ({ url, packages, proto, method, params }) => {
+  const random = `${Date.now()}Proto`;
+  genProto(random, proto);
+  const [res, err] = await grpcFunc({
+    PROTO_PATH: path.join(__dirname, `./${random}.proto`),
+    url,
+    packages,
+    params,
+    method,
+  });
   if (err) {
-    deleteProto(`./${random + name}`);
+    deleteProto(random);
     return [null, err];
   }
-  deleteProto(`./${random + name}`);
-  return res;
+  deleteProto(random);
+  return [res, null];
 };
 
 module.exports = grpcClient;

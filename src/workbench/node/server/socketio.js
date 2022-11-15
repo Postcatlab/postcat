@@ -26,10 +26,7 @@ const socket = (port = _post) => {
     socket.on('grpc-server', async (data) => {
       // * 创建 grpc 客户端发起请求
       // 端口管理、编译文件、运行插件代码、销毁服务
-      const { params, callback } = JSON.parse(data);
-      console.log('grpc server', params, callback);
-      const { next } = callback;
-      const res = await grpcClient(params, { next: next ? eval(next) : null });
+      const [res, err] = await grpcClient(JSON.parse(data));
       socket.emit('grpc-client', JSON.stringify(res));
     });
     // receive a message from the client
