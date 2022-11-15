@@ -3,12 +3,12 @@ import { EventCenterForMicroApp } from '@micro-zoe/micro-app';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import microApp from '@micro-zoe/micro-app';
 import { ActivatedRoute } from '@angular/router';
-import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { GlobalProvider } from './globalProvider';
 
-(window as any).eventCenterForAppNameVite = new EventCenterForMicroApp('appname-custom-tab');
+(window as any).eventCenterForAppNameVite = new EventCenterForMicroApp('appname-extension-app');
 
 @Component({
-  selector: 'eo-custom-tab',
+  selector: 'extension-app',
   template: `
     <div style="transform: translate(0)">
       <micro-app
@@ -27,15 +27,15 @@ import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal
     </div>
   `,
 })
-export class CustomTabComponent implements OnInit {
+export class ExtensionAppComponent implements OnInit {
   @Input() name = ``;
   @Input() url = ``;
   microAppData = { msg: '来自基座的数据' };
 
-  constructor(private storage: StorageService, public route: ActivatedRoute, private modalService: ModalService) {}
+  constructor(private storage: StorageService, public route: ActivatedRoute, private globalProvider: GlobalProvider) {}
 
   ngOnInit(): void {
-    this.injectData();
+    this.globalProvider.injectGlobalData();
     this.initSidebarViewByRoute();
   }
 
@@ -47,10 +47,6 @@ export class CustomTabComponent implements OnInit {
         this.url = sidebar.url;
       }
     });
-  }
-
-  injectData() {
-    window.eo.modalService = this.modalService;
   }
 
   /**

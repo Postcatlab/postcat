@@ -33,7 +33,7 @@
       [class]="{ settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration }"
       (nzSelectChange)="handleTabChange($event)">
       <nz-tab *ngFor="let item of customTabs " i18n-nzTitle nzTitle="CustomTab">
-        <eo-custom-tab [url]="item.url" [name]="extName + '--' + item.name"></eo-custom-tab>
+        <extension-app [url]="item.url" [name]="extName + '--' + item.name"></extension-app>
       </nz-tab>
       <!-- Setting -->
       <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle
