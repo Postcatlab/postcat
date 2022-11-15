@@ -23,7 +23,7 @@ import { Component, OnInit } from '@angular/core';
         <input nz-input [(ngModel)]="inputPersonValue" i18n-placeholder placeholder="Search by username" />
         <section class="h-4"></section>
         <button
-          nz-button
+          eo-ng-button
           [nzLoading]="isSelectBtnLoading"
           class=""
           nzType="primary"
@@ -40,7 +40,7 @@ import { Component, OnInit } from '@angular/core';
       <h2 class="text-lg flex justify-between items-center">
         <span i18n>Manage access</span
         ><button
-          nz-button
+          eo-ng-button
           [nzLoading]="isAddPeopleBtnLoading"
           class=""
           nzType="primary"

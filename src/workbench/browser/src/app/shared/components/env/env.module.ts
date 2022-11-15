@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { EnvComponent } from './env.component';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { EoNgButtonModule } from 'eo-ng-button';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -18,7 +18,7 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
 
 const ANTDMODULES = [
   NzModalModule,
-  NzButtonModule,
+  EoNgButtonModule,
   NzListModule,
   NzInputModule,
   NzFormModule,

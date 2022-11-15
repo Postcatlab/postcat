@@ -23,7 +23,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 
         <section class="">
           <button
-            nz-button
+            eo-ng-button
             [nzLoading]="isSaveUsernameBtnLoading"
             type="submit"
             class="w-[84px]"
@@ -76,7 +76,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
 
         <section class="">
           <button
-            nz-button
+            eo-ng-button
             [nzLoading]="isResetBtnBtnLoading"
             type="submit"
             class="w-[84px]"
