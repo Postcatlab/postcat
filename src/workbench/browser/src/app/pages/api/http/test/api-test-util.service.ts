@@ -196,7 +196,7 @@ export class ApiTestUtilService {
         requestHeaders: inData.response?.headers,
         ...inData.request,
       },
-      response: JSON.parse(JSON.stringify(inData)),
+      response: eoDeepCopy(inData),
     };
     return result;
   }
