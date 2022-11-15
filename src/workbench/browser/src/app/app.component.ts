@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ThemeService } from './core/services';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
-import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { NavigationExtras, Router } from '@angular/router';
+import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/components/extension-app/globalProvider';
 
 @Component({
   selector: 'eo-root',
@@ -15,20 +14,10 @@ export class AppComponent {
   constructor(
     private theme: ThemeService,
     private webExtensionService: WebExtensionService,
-    private modalService: ModalService,
-    private router: Router
+    private globalProvider: GlobalProvider
   ) {
     this.webExtensionService.init();
     this.theme.changeTheme();
-    this.injectGlobalData();
-  }
-
-  injectGlobalData() {
-    window.eo ??= {};
-    window.eo.modalService = this.modalService;
-    window.eo.navigate = (commands: any[], extras?: NavigationExtras) => {
-      this.router.navigate(commands, extras);
-    };
-    // window.eo.getConfiguration = this.modalService;
+    this.globalProvider.injectGlobalData();
   }
 }
