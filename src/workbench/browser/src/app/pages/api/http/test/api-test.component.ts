@@ -342,7 +342,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     console.log('[api test componnet]receiveMessage', message);
     const tmpHistory = {
       general: message.general,
-      request: message.report?.request || {},
+      request: message.request || {},
       response: message.response || {},
     };
     let queryParams: { pageID: string; uuid?: string };

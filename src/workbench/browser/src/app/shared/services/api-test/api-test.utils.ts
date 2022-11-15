@@ -166,12 +166,10 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
       globals,
       general: report.general,
       response,
-      report: {
-        request: {
-          requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
-          requestBodyType: REQUEST_BODY_TYPE[report.request.requestType],
-          requestBody: report.request.body,
-        },
+      request: {
+        requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
+        requestBodyType: REQUEST_BODY_TYPE[report.request.requestType],
+        requestBody: report.request.body,
       },
       history: {
         general: report.general,
@@ -188,10 +186,10 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
         },
       },
     });
-  if (result.report.request.requestBodyType === 'formData') {
-    result.report.request.requestBody = [];
+  if (result.request.requestBodyType === 'formData') {
+    result.request.requestBody = [];
     for (const keyName in report.request.body) {
-      result.report.request.requestBody.push({
+      result.request.requestBody.push({
         name: keyName,
         value: report.request.body[keyName],
       });
