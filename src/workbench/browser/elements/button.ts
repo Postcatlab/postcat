@@ -55,12 +55,12 @@ export class Button extends Render implements buttonType {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'NzButtonModule', type: 'module' }],
+          target: [{ name: 'EoNgButtonModule', type: 'module' }],
           from: 'ng-zorro-antd/button',
         },
         ...this.children.imports,
       ],
-      template: `<button nz-button [nzLoading]="is${this.id}BtnLoading" ${this.attr.join(' ')} class="${this.class.join(
+      template: `<button eo-ng-button [nzLoading]="is${this.id}BtnLoading" ${this.attr.join(' ')} class="${this.class.join(
         ' '
       )}" nzType="${this.type || 'primary'}" ${this.theme} ${this.eventCb.join(' ')} i18n>${label}</button>`,
       data: [{ name: `is${this.id}BtnLoading`, init: false, type: ['boolean'] }],

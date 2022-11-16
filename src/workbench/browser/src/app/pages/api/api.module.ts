@@ -15,7 +15,7 @@ import { SyncApiComponent } from '../../shared/components/sync-api/sync-api.comp
 import { ImportApiComponent } from '../../shared/components/import-api/import-api.component';
 import { ExtensionSelectComponent } from '../../shared/components/extension-select/extension-select.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { EoNgButtonModule } from 'eo-ng-button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
@@ -62,7 +62,7 @@ const COMPONENTS = [
     ReactiveFormsModule,
     CommonModule,
     ApiRoutingModule,
-    NzButtonModule,
+    EoNgButtonModule,
     NzTabsModule,
     NzLayoutModule,
     NzTreeModule,

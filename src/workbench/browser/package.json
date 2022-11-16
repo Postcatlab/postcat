@@ -36,6 +36,7 @@
     "@micro-zoe/micro-app": "1.0.0-alpha.9",
     "@ngxs/store": "3.7.4",
     "ajv": "8.11.0",
+    "eo-ng-button": "0.0.52",
     "js-beautify": "1.14.4",
     "lodash-es": "4.17.21",
     "markdown-it": "13.0.1",
