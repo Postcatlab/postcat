@@ -37,7 +37,7 @@
               />
             </nz-form-control>
           </nz-form-item>
-          <button type="submit" id="btn-test" eo-ng-button nzType="primary" class="ml10 w_100" (click)="clickTest()">
+          <button type="submit" id="btn-test" nz-button nzType="primary" class="ml10 w_100" (click)="clickTest()">
             <span *ngIf="status !== 'testing'" i18n><span>Send</span></span>
             <span *ngIf="status === 'testing'" i18n>Abort</span>
             <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
@@ -48,7 +48,7 @@
               !statusS.isShare &&
               (!route.snapshot.queryParams.uuid || route.snapshot.queryParams.uuid.includes('history_'))
             "
-            eo-ng-button
+            nz-button
             nzType="default"
             (click)="saveApi()"
             class="ml10"

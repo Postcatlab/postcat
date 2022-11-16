@@ -14,7 +14,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
-import { EoNgButtonModule } from 'eo-ng-button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -74,7 +74,7 @@ const SHARED_MODULE = [
   NzFormModule,
   NzDrawerModule,
   NzRadioModule,
-  EoNgButtonModule,
+  NzButtonModule,
   NzToolTipModule,
   NzResultModule,
   NzDropDownModule,

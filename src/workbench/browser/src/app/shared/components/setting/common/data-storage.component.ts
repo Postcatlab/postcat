@@ -29,7 +29,7 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
       </ng-container>
       <nz-form-item>
         <nz-form-control>
-          <button eo-ng-button nzType="primary" [nzLoading]="loading" i18n>Connect</button>
+          <button nz-button nzType="primary" [nzLoading]="loading" i18n>Connect</button>
         </nz-form-control>
       </nz-form-item>
     </form>

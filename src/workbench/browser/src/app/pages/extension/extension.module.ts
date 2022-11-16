@@ -7,7 +7,7 @@ import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
 import { ExtensionDetailModule } from './detail/extension-detail.module';
 
-import { EoNgButtonModule } from 'eo-ng-button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -30,7 +30,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzTagModule,
     NzDescriptionsModule,
     NzInputModule,
-    EoNgButtonModule,
+    NzButtonModule,
     ExtensionRoutingModule,
     CommonModule,
     NzDividerModule,

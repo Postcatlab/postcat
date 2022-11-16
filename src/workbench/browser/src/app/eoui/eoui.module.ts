@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { EoNgButtonModule } from 'eo-ng-button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
@@ -14,7 +14,7 @@ import { EoMessageComponent } from './message/eo-message.component';
 import { CellDirective } from './table/eo-table/cell.directive';
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
 
-const antdModules = [NzTableModule, EoNgButtonModule, NzInputModule, NzSelectModule];
+const antdModules = [NzTableModule, NzButtonModule, NzInputModule, NzSelectModule];
 
 @NgModule({
   declarations: [EoTableComponent, EoMessageComponent, CellDirective],
