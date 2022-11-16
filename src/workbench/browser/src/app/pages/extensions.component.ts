@@ -13,7 +13,7 @@ export class ExtensionsComponent implements OnInit {
     this.socket.socket2Node();
     const self = this;
     window.eo.Grpc = {
-      send: (params, callback) =>
+      send: (params) =>
         new Promise((resolve) => {
           console.log('send msg-grpc');
           self.message.get().subscribe(({ type, data }) => {
@@ -23,7 +23,7 @@ export class ExtensionsComponent implements OnInit {
               return;
             }
           });
-          self.message.send({ type: 'msg-grpc', data: { params, callback } });
+          self.message.send({ type: 'msg-grpc', data: params });
         }),
     };
   }

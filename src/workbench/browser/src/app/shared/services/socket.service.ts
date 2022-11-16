@@ -25,7 +25,7 @@ export class SocketService {
         console.log('get msg-grpc', data);
         this.socket.on('grpc-client', (response) => {
           console.log('grpc-client', response);
-          this.message.send({ type: 'msg-grpc-back', data: JSON.parse(response) });
+          this.message.send({ type: 'msg-grpc-back', data: response });
         });
         this.socket.emit('grpc-server', data);
       }
