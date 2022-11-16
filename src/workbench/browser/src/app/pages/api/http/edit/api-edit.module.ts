@@ -10,7 +10,7 @@ import { ParamsImportModule } from '../../../../shared/components/params-import/
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { EoNgButtonModule } from 'eo-ng-button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
@@ -37,7 +37,7 @@ const NZ_COMPONETS = [
   NzDropDownModule,
   NzModalModule,
   NzInputModule,
-  NzButtonModule,
+  EoNgButtonModule,
   NzFormModule,
   NzSelectModule,
   NzTreeSelectModule,
