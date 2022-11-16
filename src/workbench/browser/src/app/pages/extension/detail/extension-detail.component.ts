@@ -38,7 +38,7 @@ export class ExtensionDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDetail();
-    this.getCustomTabs();
+    // this.getCustomTabs();
   }
 
   async getCustomTabs() {
