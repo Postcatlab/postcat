@@ -5,14 +5,16 @@ import { resolve } from 'path';
 
 @Component({
   selector: 'eo-extensions',
-  template: `<micro-app [attr.name]="'Hello'" [attr.url]="'http://localhost:4009'" default-page="/"></micro-app>`,
+  template: `
+    <!-- <micro-app [attr.name]="'Hello'" [attr.url]="'http://localhost:4009'" default-page="/"></micro-app> -->
+  `,
 })
 export class ExtensionsComponent implements OnInit {
   constructor(public message: MessageService, private socket: SocketService) {}
   async ngOnInit(): Promise<void> {
     this.socket.socket2Node();
     const self = this;
-    window.eo.Grpc = {
+    window.eo.gRPC = {
       send: (params) =>
         new Promise((resolve) => {
           console.log('send msg-grpc');
