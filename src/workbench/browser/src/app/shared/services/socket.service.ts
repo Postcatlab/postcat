@@ -12,15 +12,16 @@ export class SocketService {
   constructor(private message: MessageService, private electron: ElectronService) {
     // * 通过 SocketIO 通知后端
     try {
-      const port = window.eo?.getWebsocketPort();
-      this.socket = io(
-        `${
-          APP_CONFIG.production && !this.electron.isElectron
-            ? APP_CONFIG.REMOTE_SOCKET_URL
-            : `ws://localhost:${port || 13928}`
-        }`,
-        { path: '/socket.io', transports: ['websocket'] }
-      );
+      window.eo?.getWebsocketPort().then((port) => {
+        this.socket = io(
+          `${
+            APP_CONFIG.production && !this.electron.isElectron
+              ? APP_CONFIG.REMOTE_SOCKET_URL
+              : `ws://localhost:${port || 13928}`
+          }`,
+          { path: '/socket.io', transports: ['websocket'] }
+        );
+      });
     } catch (e) {
       console.log('Connect not allow', e);
     }
