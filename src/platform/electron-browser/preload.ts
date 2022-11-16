@@ -1,4 +1,3 @@
-import { EoUpdater } from 'eo/app/electron-main/updater';
 import { I18N } from './i18n';
 const { ipcRenderer } = require('electron');
 // 正在安装中的插件任务列表
