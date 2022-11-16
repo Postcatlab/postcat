@@ -4,7 +4,6 @@ export class ManageAccess extends Render {
   constructor({ event }) {
     super({ children: [], event });
   }
-
   render() {
     return {
       type: 'element',

@@ -209,7 +209,6 @@ export interface ApiTestHistoryFrame {
     protocol: string;
     method: string;
     requestHeaders: any | ApiTestHeaders[];
-    requestBodyJsonType: JsonRootType | string;
     requestBodyType: string | 'formData' | 'raw';
     requestBody: any | object[] | string;
   };

@@ -3,18 +3,30 @@
     <img width="200" src="./images/logo.png">
   </a>
 </p>
-<h1 align="center">Eoapi</h1>
 <div align="center">
 A extensible API tool,Easy & Open Source API Ecosystem
 </div>
-
-![](https://docs.eoapi.io/images/eoapi-demo-en.png)
+<hr>
+<p align="center">
+  <a href="https://github.com/eolinker/eoapi"><img src="https://img.shields.io/github/license/eolinker/eoapi?sanitize=true" alt="License"></a>
+  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/v/release/eolinker/eoapi?sanitize=true" alt="Version"></a>
+  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/downloads/eolinker/eoapi/total?sanitize=true" alt="Downloads"></a>
+  <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
+</p>
 
 English | [简体中文](README.md)
 
-# Getting started
+![](https://docs.eoapi.io/images/eoapi-demo-en.png)
 
-- Try the [live demo](https://demo.eoapi.io/)
+> Eoapi (pronounced: E-O-API)
+
+# Try it!
+
+[https://eoapi.io](https://eoapi.io/)
+
+The data will be stored locally(indexedb) on the web page.I suggest that you should install and try it out for the best demo experience.
+
+# Getting started
 
 - You can download it on [Releases](https://github.com/eolinker/eoapi/releases) available for macOS, Windows
 
@@ -25,8 +37,8 @@ English | [简体中文](README.md)
 
 📃 API Documentation
 
-- HTTP protocol
-- Various formats of request body: FormData, XML, JSON, Raw
+- HTTP,Websocket protocol
+- Various formats of request body: FormData, XML, JSON, Raw,Binary
 
 ⚡ API Test
 
@@ -34,7 +46,8 @@ English | [简体中文](README.md)
 - Test local API
 
 🎭 Mock
-- Mock document interface return value
+
+- Mock API document response
 
 🌐 Test environment management
 
@@ -42,8 +55,12 @@ English | [简体中文](README.md)
 
 🌱 Extension Marketplace
 
-💻  [Collaboration](https://docs.eoapi.io/docs/collaborate.html)
-- Collaboration via remote data sources
+💻 [Collaboration](https://docs.eoapi.io/docs/collaborate.html)
+
+- Collaboration via [self-hosted cloud server](https://github.com/eolinker/eoapi-remote-server)
+- API Share
+
+🌐 Internationalization
 
 # Build and run
 

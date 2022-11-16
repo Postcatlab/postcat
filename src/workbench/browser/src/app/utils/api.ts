@@ -1,4 +1,5 @@
 import { ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 /**
  * get rest param from url,format like {restName}
@@ -68,4 +69,25 @@ export const transferUrlAndQuery = (
     url,
     query: result,
   };
+};
+
+/**
+ * Generate Rest Param From Url
+ */
+export const generateRestFromUrl = (url, rest): ApiEditRest[] => {
+  const result = rest;
+  const rests = getRest(url);
+  rests.forEach((newRest) => {
+    if (result.find((val: ApiEditRest) => val.name === newRest)) {
+      return;
+    }
+    const restItem: ApiEditRest = {
+      name: newRest,
+      required: true,
+      example: '',
+      description: '',
+    };
+    result.splice(result.length - 1, 0, restItem);
+  });
+  return result;
 };
