@@ -15,8 +15,6 @@
   "author": "eoapi",
   "license": "ISC",
   "dependencies": {
-    "@grpc/grpc-js": "1.7.3",
-    "@grpc/proto-loader": "0.7.3",
     "@koa/cors": "3.3.0",
     "crypto-js": "4.1.1",
     "jquery": "3.6.1",

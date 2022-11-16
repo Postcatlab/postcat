@@ -47,8 +47,6 @@ export class ApiDetailComponent implements OnInit {
   ngOnInit(): void {
     this.init();
     this.initExtensionExtra();
-    // * 通过 socketIO 告知 Node 端，建立 grpc 连接
-    this.message.send({ type: 'msg-grpc', data: {} });
   }
   async init() {
     if (!this.model) {
