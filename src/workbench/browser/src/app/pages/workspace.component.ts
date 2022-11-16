@@ -29,7 +29,7 @@ import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
         <section class="">
           <button
-            eo-ng-button
+            nz-button
             [nzLoading]="isSaveBtnBtnLoading"
             class=""
             nzType="primary"
@@ -48,7 +48,7 @@ import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
         <span i18n> After deleting a workspace, all data in the workspace will be permanently deleted. </span>
       </section>
       <button
-        eo-ng-button
+        nz-button
         [nzLoading]="isDelWspBtnLoading"
         class=""
         nzType="primary"

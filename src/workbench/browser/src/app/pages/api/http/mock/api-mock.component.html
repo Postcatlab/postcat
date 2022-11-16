@@ -1,6 +1,6 @@
 <div>
   <ng-container *ngIf="showToolBar">
-    <button eo-ng-button nzType="primary" (click)="addOrEditModal()" i18n>New Mock</button>
+    <button nz-button nzType="primary" (click)="addOrEditModal()" i18n>New Mock</button>
   </ng-container>
 
   <div class="mt-[20px]">
@@ -25,7 +25,7 @@
       <ng-template cell="action" let-scope="scope" let-index="index">
         <div class="flex">
           <a
-            eo-ng-button
+            nz-button
             nzType="link"
             *ngIf="scope.name || scope.url"
             [ngSwitch]="scope.createWay"
@@ -35,7 +35,7 @@
             <span *ngSwitchDefault i18n>Edit</span>
           </a>
           <a
-            eo-ng-button
+            nz-button
             nzType="link"
             *ngIf="(scope.name || scope.url) && scope.createWay !== 'system'"
             nz-popconfirm
@@ -80,7 +80,7 @@
     </div>
   </section>
   <div *nzModalFooter class="footer">
-    <button *ngIf="!isSystemMock" eo-ng-button nzType="primary" i18n (click)="handleSave()">Save</button>
-    <button eo-ng-button nzType="default" i18n (click)="handleCancel()">Cancel</button>
+    <button *ngIf="!isSystemMock" nz-button nzType="primary" i18n (click)="handleSave()">Save</button>
+    <button nz-button nzType="default" i18n (click)="handleCancel()">Cancel</button>
   </div>
 </nz-modal>

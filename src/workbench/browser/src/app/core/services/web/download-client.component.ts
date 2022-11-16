@@ -5,7 +5,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
   selector: 'eo-download-client',
   template: `
     <span i18n>Don't have Eoapi Client?</span>
-    <a eo-ng-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n> Download </a>.
+    <a nz-button nzType="link" nz-dropdown [nzDropdownMenu]="download" i18n> Download </a>.
     <nz-dropdown-menu #download="nzDropdownMenu">
       <ul nz-menu>
         <ng-container *ngFor="let item of resourceInfo; let index = index">

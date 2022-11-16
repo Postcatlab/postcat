@@ -36,7 +36,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
       </ng-container>
       <ng-template #modalSyncFooter>
         <button
-          eo-ng-button
+          nz-button
           [nzLoading]="isSyncCancelBtnLoading"
           class=""
           nzType="default"
@@ -46,7 +46,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
           Cancel
         </button>
         <button
-          eo-ng-button
+          nz-button
           [nzLoading]="isSyncSyncBtnLoading"
           class=""
           nzType="primary"
@@ -73,7 +73,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
       </ng-container>
       <ng-template #modalCheckConnectFooter>
         <button
-          eo-ng-button
+          nz-button
           [nzLoading]="isCheckConnectCancelBtnLoading"
           class=""
           nzType="default"
@@ -83,7 +83,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
           Cancel
         </button>
         <button
-          eo-ng-button
+          nz-button
           [nzLoading]="isCheckConnectRetryBtnLoading"
           class=""
           nzType="primary"
@@ -138,7 +138,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 
             <section class="">
               <button
-                eo-ng-button
+                nz-button
                 [nzLoading]="isLoginBtnBtnLoading"
                 type="submit"
                 class="h-10 mt-2"
@@ -195,7 +195,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 
           <section class="flex justify-end">
             <button
-              eo-ng-button
+              nz-button
               [nzLoading]="isCancelBtnLoading"
               type="button"
               class="mr-3"
@@ -206,7 +206,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
               Cancel
             </button>
             <button
-              eo-ng-button
+              nz-button
               [nzLoading]="isSaveBtnLoading"
               type="submit"
               class=""
