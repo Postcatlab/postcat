@@ -22,22 +22,12 @@ export class SocketService {
     }
     this.message.get().subscribe(({ type, data }) => {
       if (type === 'msg-grpc') {
-        const {
-          params,
-          callback: { next },
-        } = data;
-        const res = JSON.stringify({
-          params,
-          callback: {
-            next: next.toString(),
-          },
-        });
-        console.log('get msg-grpc', res);
+        console.log('get msg-grpc', data);
         this.socket.on('grpc-client', (response) => {
           console.log('grpc-client', response);
           this.message.send({ type: 'msg-grpc-back', data: JSON.parse(response) });
         });
-        this.socket.emit('grpc-server', res);
+        this.socket.emit('grpc-server', data);
       }
     });
   }
