@@ -26,7 +26,9 @@ const socket = (port = _post) => {
     socket.on('grpc-server', async (data) => {
       // * 创建 grpc 客户端发起请求
       // 端口管理、编译文件、运行插件代码、销毁服务
+      console.log('====> data', data);
       const [res, err] = await grpcClient(data);
+      console.log('====>', res);
       socket.emit('grpc-client', res);
     });
     // receive a message from the client
@@ -35,6 +37,7 @@ const socket = (port = _post) => {
         return;
       }
       if (type === 'ws-disconnect') {
+        ws.close();
         ws = null;
         return;
       }
