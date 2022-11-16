@@ -6,7 +6,7 @@
   </div>
   <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
   <!-- <nz-divider nzType="vertical"></nz-divider> -->
-  <div *ngIf="['formData','json','xml'].includes(bodyType)" class="inline-flex items-center mt-1">
+  <div *ngIf="['formData','json','xml'].includes(bodyType)" class="inline-flex items-center px-2 mt-1">
     <params-import [baseData]="model" [contentType]="bodyType" (baseDataChange)="handleParamsImport($event)"
       (beforeHandleImport)="beforeHandleImport($event)" [rootType]="jsonRootType"></params-import>
   </div>

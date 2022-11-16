@@ -38,7 +38,7 @@
             i18n-nzTooltipTitle
             nzTooltipTitle="New Workspace"
             nzType="primary"
-            eo-ng-button
+            nz-button
             (click)="addWorkspace()"
             class="flex w-[20px] items-center justify-center ml-3 text-base shrink-0"
           >
@@ -63,7 +63,7 @@
   <div class="flex items-center can_be_click">
     <button
       *ngIf="!workspaceService.isLocal && !status.isShare"
-      eo-ng-button
+      nz-button
       nzType="default"
       class="mx-2 btn_scondary"
       nz-popover
@@ -86,8 +86,8 @@
       </div>
     </ng-template>
     <ng-template #suffixIconButton>
-      <button eo-ng-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
-      <button eo-ng-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
+      <button nz-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
+      <button nz-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
     </ng-template>
     <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
       <nz-option nzValue="en-US" nzLabel="English"></nz-option>

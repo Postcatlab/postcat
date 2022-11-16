@@ -6,7 +6,7 @@ import { Ng1Module } from '../../../../ng1/ng1.module';
 import { EouiModule } from '../../../../eoui/eoui.module';
 import { SharedModule } from '../../../../shared/shared.module';
 
-import { EoNgButtonModule } from 'eo-ng-button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -23,7 +23,7 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { RouterModule } from '@angular/router';
 import { ApiMockComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.component';
 
-const NZ_COMPONETS = [EoNgButtonModule, NzCollapseModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
+const NZ_COMPONETS = [NzButtonModule, NzCollapseModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
 const COMPONENTS = [
   ApiDetailComponent,
   ApiDetailHeaderComponent,

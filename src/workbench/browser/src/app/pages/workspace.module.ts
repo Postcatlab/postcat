@@ -9,7 +9,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { EoNgButtonModule } from 'eo-ng-button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 import { WorkspaceRoutingModule } from './workspace-routing.module';
 import { WorkspaceComponent } from './workspace.component';
@@ -25,7 +25,7 @@ import { WorkspaceComponent } from './workspace.component';
     ReactiveFormsModule,
     NzFormModule,
     NzInputModule,
-    EoNgButtonModule,
+    NzButtonModule,
   ],
   declarations: [WorkspaceComponent, ApiOverviewComponent],
   exports: [],
