@@ -25,13 +25,13 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
   // 👇 设置基础路由
-  providers: [
-    {
-      provide: APP_BASE_HREF,
-      // @ts-ignore
-      useValue: window.__MICRO_APP_BASE_ROUTE__ || '/',
-    },
-  ],
+  // providers: [
+  //   {
+  //     provide: APP_BASE_HREF,
+  //     // @ts-ignore
+  //     useValue: window.__MICRO_APP_BASE_ROUTE__ || '/',
+  //   },
+  // ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppRoutingModule {}

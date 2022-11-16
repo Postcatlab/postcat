@@ -221,7 +221,9 @@ export class ApiTestUtilService {
     const result = {};
     const bodyInfo = text2UiData(inData);
     if (bodyInfo.textType !== 'raw') {
-      result[`${keyName}`] = listToTreeHasLevel(bodyInfo.data);
+      result[`${keyName}`] = listToTreeHasLevel(bodyInfo.data, {
+        filterKeys: ['value'],
+      });
     } else {
       result[`${keyName}`] = bodyInfo.data;
     }
@@ -346,7 +348,7 @@ export class ApiTestUtilService {
     });
     return result;
   }
-  private filterCommonHeader(headers=[]) {
+  private filterCommonHeader(headers = []) {
     const commonHeader = [
       'content-type',
       'accept',
