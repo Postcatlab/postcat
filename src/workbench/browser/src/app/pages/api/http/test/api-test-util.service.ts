@@ -198,6 +198,7 @@ export class ApiTestUtilService {
       },
       response: eoDeepCopy(inData),
     };
+    (result.testData.requestHeaders||[]).map((val) => (val.required = true));
     return result;
   }
   /**
