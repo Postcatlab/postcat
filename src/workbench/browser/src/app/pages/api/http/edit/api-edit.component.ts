@@ -24,7 +24,6 @@ import { ApiParamsNumPipe } from '../../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
 import { EoMessageService } from '../../../../eoui/message/eo-message.service';
-import { after } from 'lodash-es';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 @Component({
   selector: 'eo-api-edit-edit',
