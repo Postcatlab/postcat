@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
 
@@ -42,7 +41,8 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
             [disabled]="properties[field]?.disabled"
             i18n-placeholder
             placeholder="{{
-              (properties[field]?.placeholder ?? 'Please Enter ' + properties[field]?.title) || properties[field]?.label
+              (properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.title || '')) ||
+                properties[field]?.label
             }}"
             formControlName="{{ field }}"
             [(ngModel)]="localSettings[field]"
@@ -85,12 +85,7 @@ export class ExtensionSettingComponent implements OnInit {
   objectKeys = Object.keys;
   properties = {};
 
-  constructor(
-    public languageService: LanguageService,
-    private fb: FormBuilder,
-    private settingService: SettingService,
-    private message: EoMessageService
-  ) {}
+  constructor(private fb: FormBuilder, private settingService: SettingService, private message: EoMessageService) {}
 
   ngOnInit(): void {
     this.init();
