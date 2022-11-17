@@ -63,7 +63,7 @@ export class ExportApiComponent implements OnInit {
     const action = feature.action || null;
     const filename = feature.filename || null;
     const module: ModuleInfo =
-      (await window.eo?.loadFeatureModule(this.currentExtension)) || globalThis[this.currentExtension];
+      (await window.eo?.loadFeatureModule?.(this.currentExtension)) || globalThis[this.currentExtension];
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       const params = [this.projectService.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
