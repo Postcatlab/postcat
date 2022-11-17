@@ -1,8 +1,19 @@
 <section class="detail_page">
-  <div class="mt-4">
-    <nz-tag [nzColor]="'#108ee9'">{{ model.protocol | uppercase }}</nz-tag>
-    <nz-tag [nzColor]="'#0aa07a'">{{ model.method | uppercase }}</nz-tag>
-    <span class="mt-2.5 dp_b text_omit">{{ model.uri }}</span>
+  <div class="flex justify-between">
+    <div class="mt-4" (click)="handleClick()">
+      <nz-tag [nzColor]="'#108ee9'">{{ model.protocol | uppercase }}</nz-tag>
+      <nz-tag [nzColor]="'#0aa07a'">{{ model.method | uppercase }}</nz-tag>
+      <span class="mt-2.5 dp_b text_omit">{{ model.uri }}</span>
+    </div>
+    <div class="flex mt-4">
+      <ng-container *ngFor="let item of rightExtras">
+        <span nz-tooltip [nzTooltipTitle]="item.tooltip">
+          <div class="cursor-pointer" (click)="item.click(originModel)">
+            <eo-iconpark-icon [name]="item.icon" size="20px"> </eo-iconpark-icon>
+          </div>
+        </span>
+      </ng-container>
+    </div>
   </div>
   <p class="api_name text_omit">{{ model.name }}</p>
   <!-- Request headers -->

@@ -44,14 +44,20 @@
       [class]="{ settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration }"
       (nzSelectChange)="handleTabChange($event)"
     >
-      <!-- <nz-tab *ngIf="pagePath" i18n-nzTitle nzTitle="CustomTab">
-        <eo-custom-tab [url]="pagePath" [name]="extName"></eo-custom-tab>
+      <!-- CustomTab -->
+      <!-- <nz-tab *ngFor="let item of customTabs " i18n-nzTitle nzTitle="CustomTab">
+        <extension-app [url]="item.url" [name]="extName + '--' + item.name"></extension-app>
       </nz-tab> -->
       <!-- Setting -->
-      <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle
-        nzTitle="Settings">
-        <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"
-          [extName]="extensionDetail.name"></eo-extension-setting>
+      <nz-tab
+        *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed"
+        i18n-nzTitle
+        nzTitle="Settings"
+      >
+        <eo-extension-setting
+          [configuration]="extensionDetail?.features?.configuration"
+          [extName]="extensionDetail.name"
+        ></eo-extension-setting>
       </nz-tab>
       <!-- Details -->
       <nz-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">

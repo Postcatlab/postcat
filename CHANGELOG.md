@@ -1,8 +1,63 @@
-# [1.9.0](https://github.com/eolinker/eoapi/compare/v1.8.2...v1.9.0) (2022-10-19)
+# [1.10.0](https://github.com/eolinker/eoapi/compare/v1.9.1...v1.10.0) (2022-11-16)
+
+
+### Bug Fixes
+
+* close [#184](https://github.com/eolinker/eoapi/issues/184)  Rest not change with uri ([92b28f7](https://github.com/eolinker/eoapi/commit/92b28f7b4a11af751f23bfa22324f91ec0dc76f5))
+* eo.execute example error ([e9dea16](https://github.com/eolinker/eoapi/commit/e9dea168f70d901db500fc78c30adcb1a4594d83))
+* eo.execute example error ([6ae8cb1](https://github.com/eolinker/eoapi/commit/6ae8cb121016127ed47e1659a352912d155e6327))
+* route error ([cb5773a](https://github.com/eolinker/eoapi/commit/cb5773ab37dfd02521011a2641e17d5265c34d5c))
+* save data from test extra data ([15ecc6f](https://github.com/eolinker/eoapi/commit/15ecc6fddb7c34ab1ad97d9d8583e9498a2ca2c3))
+* sync extensin load way ([46f9626](https://github.com/eolinker/eoapi/commit/46f96263d2eb37b3d66f164609c6b73c4845ad65))
+* sync extensin load way ([ede1dfa](https://github.com/eolinker/eoapi/commit/ede1dfa58b4ec96b3d985c7b2bfa523c3a4949fa))
+* use absolute proto path ([72af03b](https://github.com/eolinker/eoapi/commit/72af03bb36ef4c3e2a66bcf02946f77cd84bdf11))
+* web translate extension ([01ad2a8](https://github.com/eolinker/eoapi/commit/01ad2a8f9aa15b81323e7950b121cbea6ec425f5))
+* web translate extension ([90385ef](https://github.com/eolinker/eoapi/commit/90385efa18184a92f34a734c51053223b536681a))
+* window.eo is undefine in web ([2bf3001](https://github.com/eolinker/eoapi/commit/2bf3001678bd4327b060b88ac0ea4aba69b17a12))
 
 
 ### Features
 
+* add default completions ([e4bd73b](https://github.com/eolinker/eoapi/commit/e4bd73bc4363fffe6bf278d2411f4147621129c8))
+* add default completions ([9d803b1](https://github.com/eolinker/eoapi/commit/9d803b19c588ad47e82a0132e2e3e6a862a0f48f))
+* add server version for about ([446107b](https://github.com/eolinker/eoapi/commit/446107b0a637daca32d75f222548dc3fde2c36c8))
+* extension support sidebarViews & customTabs ([b598bf8](https://github.com/eolinker/eoapi/commit/b598bf8f3609179ddaaa0640d82691296df067c2))
+* grpc add context params ([c65d0cd](https://github.com/eolinker/eoapi/commit/c65d0cdb949e7d9a4e3f18a48fade59db3a91520))
+* support API sercurity check extension ([9f7b59c](https://github.com/eolinker/eoapi/commit/9f7b59c274d9eb4ccc06e8b5984d77ed27fbe5c0))
+* translate error ([21bfe57](https://github.com/eolinker/eoapi/commit/21bfe5725ae727fe99cd3b8bc3136c10831fc421))
+* translate error ([173de84](https://github.com/eolinker/eoapi/commit/173de84cb8befd0c91008508fbef2b58f6c212eb))
+
+
+
+## [1.9.1](https://github.com/eolinker/eoapi/compare/v1.9.0...v1.9.1) (2022-11-03)
+
+
+### Features
+
+* change redirect path ([9a081d8](https://github.com/eolinker/eoapi/commit/9a081d8bf6b918949a8183d4d00524ff26a19e36))
+* click mask to close modal ([50bc0cc](https://github.com/eolinker/eoapi/commit/50bc0cc1ebd44f031dd821038c00c8c534708a2f))
+* translate ([b770c1d](https://github.com/eolinker/eoapi/commit/b770c1d3c841bfbe9b001c0a4327a47e80cb08db))
+* vercel deploy ([309ec54](https://github.com/eolinker/eoapi/commit/309ec54e8e2ea3ee7ba945cd807e659f4e593e32))
+
+
+
+# [1.9.0](https://github.com/eolinker/eoapi/compare/v1.8.2...v1.9.0) (2022-11-02)
+
+
+### Bug Fixes
+
+* **api-tab:** cache not remove ([acf9820](https://github.com/eolinker/eoapi/commit/acf98203658e54de476380557780aeacd796a6fa))
+* compatible moduleID & name ([a9e3d1b](https://github.com/eolinker/eoapi/commit/a9e3d1b1fa9dfab0a4af38b943e2ab1d27dbbf46))
+* init error ([0e32e46](https://github.com/eolinker/eoapi/commit/0e32e467cc08a6de44196b4f3bc8484c5ddf5df9))
+* joint api error ([91dd7d9](https://github.com/eolinker/eoapi/commit/91dd7d96c4d2c969e3414aa129aae810820c875d))
+* save api do not save common response headers [#165](https://github.com/eolinker/eoapi/issues/165) ([2a64e7d](https://github.com/eolinker/eoapi/commit/2a64e7d3a2fade91c825f692b518ac6a76882823))
+* share link error ([f2707bf](https://github.com/eolinker/eoapi/commit/f2707bf122ebe433265e00effeaa6acca8068cb0))
+* translate mock error ([ba09dd1](https://github.com/eolinker/eoapi/commit/ba09dd1c0c2289fc8cb0255d127aecd9d1a4fbed))
+
+
+### Features
+
+* add share module ([7ef92c1](https://github.com/eolinker/eoapi/commit/7ef92c1d37c50d3dd65bde54e33b709f33777512))
 * mock lead to download in web ([65c7ecf](https://github.com/eolinker/eoapi/commit/65c7ecffe795844fd24621c05e412a8af17eca09))
 
 

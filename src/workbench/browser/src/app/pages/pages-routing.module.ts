@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { PageBlankComponent } from '../shared/components/page-blank/page-blank.component';
-import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
+import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -37,6 +38,10 @@ const routes: Routes = [
       {
         path: 'extension',
         loadChildren: () => import('./extension/extension.module').then((m) => m.ExtensionModule),
+      },
+      {
+        path: 'extensionSidebarView/:extName',
+        component: ExtensionAppComponent,
       },
       // {
       //   path: 'app-vue3',
