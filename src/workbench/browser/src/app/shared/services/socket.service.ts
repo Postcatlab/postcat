@@ -9,24 +9,25 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 })
 export class SocketService {
   socket;
-  constructor(private message: MessageService, private electron: ElectronService) {
+  constructor(private message: MessageService, private electron: ElectronService) {}
+  async connectSocket() {
     // * 通过 SocketIO 通知后端
     try {
-      window.eo?.getWebsocketPort().then((port) => {
-        this.socket = io(
-          `${
-            APP_CONFIG.production && !this.electron.isElectron
-              ? APP_CONFIG.REMOTE_SOCKET_URL
-              : `ws://localhost:${port || 13928}`
-          }`,
-          { path: '/socket.io', transports: ['websocket'] }
-        );
-      });
+      const port = await window.eo?.getWebsocketPort();
+      this.socket = io(
+        `${
+          APP_CONFIG.production && !this.electron.isElectron
+            ? APP_CONFIG.REMOTE_SOCKET_URL
+            : `ws://localhost:${port || 13928}`
+        }`,
+        { path: '/socket.io', transports: ['websocket'] }
+      );
     } catch (e) {
       console.log('Connect not allow', e);
     }
   }
-  socket2Node() {
+  async socket2Node() {
+    await this.connectSocket();
     if (!this.socket) {
       return;
     }

@@ -4,13 +4,13 @@ import { SocketService } from 'eo/workbench/browser/src/app/shared/services/sock
 
 @Component({
   selector: 'eo-extensions',
-  template: ``,
+  template: `<span></span>`,
 })
 export class ExtensionsComponent implements OnInit {
   constructor(public message: MessageService, private socket: SocketService) {}
   async ngOnInit(): Promise<void> {
     // * 通过 socketIO 告知 Node 端，建立 grpc 连接
-    this.socket.socket2Node();
+    await this.socket.socket2Node();
     const self = this;
     window.eo.gRPC = {
       send: (params) =>

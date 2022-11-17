@@ -29,6 +29,6 @@ import { WorkspaceComponent } from './workspace.component';
   ],
   declarations: [WorkspaceComponent, ApiOverviewComponent],
   exports: [],
-  providers: [NzModalService, MessageService],
+  providers: [NzModalService],
 })
 export class WorkspaceModule {}

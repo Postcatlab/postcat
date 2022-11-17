@@ -15,6 +15,6 @@ import { MemberComponent } from './member.component';
   imports: [MemberRoutingModule, CommonModule, NzModalModule, NzInputModule, FormsModule, NzButtonModule, SharedModule],
   declarations: [MemberComponent, ManageAccessComponent],
   exports: [],
-  providers: [NzModalService, MessageService],
+  providers: [NzModalService],
 })
 export class MemberModule {}
