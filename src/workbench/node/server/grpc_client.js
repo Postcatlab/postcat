@@ -34,7 +34,6 @@ const grpcFunc = ({ PROTO_PATH, packages, service, method, url, params }) => {
 const grpcClient = async ({ url, packages, service, proto, method, params }) => {
   const random = `${Date.now()}Proto`;
   genProto(random, proto);
-  console.log('before', { url, packages, proto, method, params });
   const [res, err] = await grpcFunc({
     PROTO_PATH: path.join(__dirname, `./${random}.proto`),
     url,
@@ -43,7 +42,6 @@ const grpcClient = async ({ url, packages, service, proto, method, params }) => 
     method,
     service,
   });
-  console.log('after', res);
   if (err) {
     deleteProto(random);
     return [null, err];
