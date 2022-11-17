@@ -30,7 +30,7 @@ export class ExtensionService {
   }
   private getExtensions() {
     if (this.electron.isElectron) {
-      return window.eo?.getModules() || new Map();
+      return window.eo?.getModules?.() || new Map();
     } else {
       const webeExts = this.webExtensionService.installedList.map((n) => [n.name, n.pkgInfo]);
       return new Map(webeExts as any);
