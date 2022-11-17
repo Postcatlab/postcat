@@ -15,7 +15,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { cloneDeep } from 'lodash-es';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -24,6 +24,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 export class ApiDetailComponent implements OnInit {
   @Input() model: ApiData | any;
   @Output() eoOnInit = new EventEmitter<ApiData>();
+  originModel: ApiData | any;
   CONST = {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType),
@@ -41,7 +42,6 @@ export class ApiDetailComponent implements OnInit {
     public electron: ElectronService,
     private http: RemoteService,
     private share: ShareService,
-    private message: MessageService,
     private webExtensionService: WebExtensionService
   ) {}
   ngOnInit(): void {
@@ -96,6 +96,7 @@ export class ApiDetailComponent implements OnInit {
         if (err) {
           return;
         }
+        this.originModel = cloneDeep(data);
         ['requestBody', 'responseBody'].forEach((tableName) => {
           if (['xml', 'json'].includes(data[`${tableName}Type`])) {
             data[tableName] = treeToListHasLevel(data[tableName]);
@@ -107,6 +108,7 @@ export class ApiDetailComponent implements OnInit {
       }
       this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
+          this.originModel = cloneDeep(result.data);
           ['requestBody', 'responseBody'].forEach((tableName) => {
             if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
               result.data[tableName] = treeToListHasLevel(result.data[tableName]);

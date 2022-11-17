@@ -8,7 +8,7 @@
     <div class="flex mt-4">
       <ng-container *ngFor="let item of rightExtras">
         <span nz-tooltip [nzTooltipTitle]="item.tooltip">
-          <div class="cursor-pointer" (click)="item.click(model)">
+          <div class="cursor-pointer" (click)="item.click(originModel)">
             <eo-iconpark-icon [name]="item.icon" size="20px"> </eo-iconpark-icon>
           </div>
         </span>

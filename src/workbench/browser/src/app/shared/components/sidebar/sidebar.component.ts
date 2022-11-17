@@ -41,8 +41,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   async initSidebarViews() {
-    const sidebarViews = await window.eo?.getSidebarViews();
-    sidebarViews.forEach((item) => {
+    const sidebarViews = await window.eo?.getSidebarViews?.();
+    sidebarViews?.forEach((item) => {
       this.modules.push({
         title: item.title,
         id: item.extName,
@@ -53,7 +53,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: `home/extensionSidebarView/${item.extName}`,
       });
     });
-    sidebarViews.length && this.getIDFromRoute();
+    sidebarViews?.length && this.getIDFromRoute();
   }
 
   watchWorkspaceChange() {
