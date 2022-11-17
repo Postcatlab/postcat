@@ -127,7 +127,7 @@ export class SettingComponent implements OnInit {
    * @returns
    */
   getModuleTitle(module: any): string {
-    const title = module?.moduleName ??  module?.title;
+    const title = module?.moduleName ?? module?.title;
     return title;
   }
 
@@ -195,7 +195,7 @@ export class SettingComponent implements OnInit {
    */
   private init() {
     this.settings = this.localSettings = this.settingService.getSettings();
-    const modules = window.eo?.getModules() || new Map([]);
+    const modules = window.eo?.getModules?.() || new Map([]);
     this.extensitonConfigurations = [...modules.values()]
       .filter((n) => n.features?.configuration)
       .map((n) => {

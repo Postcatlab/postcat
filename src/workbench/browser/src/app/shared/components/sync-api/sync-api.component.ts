@@ -25,7 +25,7 @@ export class SyncApiComponent implements OnInit {
 
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.extensionService.isEnable(data.extensionID)) {
+      if (this.webExtensionService.isEnable(key)) {
         this.supportList.push({
           key,
           ...data,
@@ -40,7 +40,7 @@ export class SyncApiComponent implements OnInit {
   async submit(callback) {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension) || globalThis[this.currentExtension];
+    const module = window.eo.loadFeatureModule(this.currentExtension);
     const { token: secretKey, projectId } = this.settingService.getConfiguration(this.currentExtension);
     if (module && module[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], async (result: StorageRes) => {

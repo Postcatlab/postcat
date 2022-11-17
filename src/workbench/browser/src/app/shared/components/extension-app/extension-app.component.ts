@@ -43,7 +43,7 @@ export class ExtensionAppComponent implements OnInit {
     this.route.params.subscribe(async (data) => {
       if (data.extName && window.eo?.getSidebarView) {
         this.name = data.extName;
-        const sidebar = await window.eo?.getSidebarView(data.extName);
+        const sidebar = await window.eo?.getSidebarView?.(data.extName);
         this.url = sidebar.url;
       }
     });

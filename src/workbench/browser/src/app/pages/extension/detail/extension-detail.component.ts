@@ -63,7 +63,7 @@ export class ExtensionDetailComponent implements OnInit {
   async getDetail() {
     this.extName = this.route.snapshot.queryParams.name;
 
-    this.isOperating = window.eo?.getExtIsInTask(this.extName, ({ type, status }) => {
+    this.isOperating = window.eo?.getExtIsInTask?.(this.extName, ({ type, status }) => {
       if (type === 'install' && status === 'success') {
         this.extensionDetail.installed = true;
       }

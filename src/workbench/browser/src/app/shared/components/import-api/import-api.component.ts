@@ -64,7 +64,7 @@ export class ImportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.extensionService.isEnable(data.extensionID)) {
+      if (this.webExtensionService.isEnable(key)) {
         this.supportList.push({
           key,
           ...data,
@@ -87,7 +87,7 @@ export class ImportApiComponent implements OnInit {
     // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = (await window.eo?.loadFeatureModule(this.currentExtension)) || globalThis[this.currentExtension];
+    const module = await window.eo?.loadFeatureModule?.(this.currentExtension);
     const { name, content } = this.uploadData;
     console.log('module', module, action, module[action]);
     const [data, err] = module[action](content);
