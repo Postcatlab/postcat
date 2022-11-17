@@ -28,7 +28,6 @@ import {
   DataStorageComponent,
   LanguageSwticherComponent,
   AboutComponent,
-  ExtensionSettingComponent,
 } from 'eo/workbench/browser/src/app/shared/components/setting/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 const icons: IconDefinition[] = [CaretDownFill];
@@ -59,7 +58,6 @@ const ANTDMODULES = [
     LanguageSwticherComponent,
     AccountComponent,
     AboutComponent,
-    ExtensionSettingComponent,
   ],
   imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent, SelectThemeComponent],

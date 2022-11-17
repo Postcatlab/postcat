@@ -13,6 +13,7 @@ export type FeatureInfo = {
   extensionID: string;
   //!Will deprecated
   label: string;
+  rightExtra: any[];
 };
 
 /**
@@ -38,7 +39,7 @@ export interface ModuleInfo {
   features?: {
     configuration: ModuleConfiguration;
     i18n?: I18nLocale;
-    extensionTabView: ExtensionTabView;
+    extensionTabView: ExtensionTabView[];
     sidebarView: SidebarView;
     importAPI: FeatureInfo;
     exportAPI: FeatureInfo;
@@ -91,20 +92,19 @@ interface ModuleConfigurationField {
   description?: string;
   required?: boolean;
 }
-export type ExtensionTabView = {
-  name: string;
-  url: string;
-  debugUrl: string;
-  server: HttpServer;
-};
+export type ExtensionTabView = SidebarView;
 
 type HttpServer = ReturnType<typeof createServer>;
 export type SidebarView = {
   icon: string;
+  name: string;
+  /** uniqueKey */
+  key: string;
   title: string;
   url: string;
   debugUrl: string;
-  server: HttpServer;
+  extName: string;
+  server?: HttpServer;
 };
 
 export interface I18nLocale {

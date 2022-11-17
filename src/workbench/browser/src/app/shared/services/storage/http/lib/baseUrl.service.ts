@@ -10,7 +10,7 @@ import {
 import { Injectable } from '@angular/core';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
-import { filter, map, tap, Observable, catchError, of } from 'rxjs';
+import { filter, map, tap, Observable, catchError } from 'rxjs';
 import { uniqueSlash } from '../../../../../utils/api';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
@@ -46,7 +46,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   ) {
     super();
     //* Web deploy from v1.9.1
-    this.prefix = this.web.isWeb?'/api/':'/';
+    this.prefix = this.web.isWeb ? '/api/' : '/';
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -84,6 +84,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         if (req.url.includes('/system/status')) {
           const { data } = event.body;
           this.prefix = version2Number(data) >= version2Number('v1.9.0') ? '/api' : '/';
+          StorageUtil.set('server_version', data);
         }
       }),
       catchError((err: any) => {
