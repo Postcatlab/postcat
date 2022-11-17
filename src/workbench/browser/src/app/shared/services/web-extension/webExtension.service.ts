@@ -89,6 +89,13 @@ export class WebExtensionService {
     return res.json();
   }
 
+  importModule = async (extName: string) => {
+    if (!window[extName]) {
+      await this.installExtension(extName);
+    }
+    return window[extName];
+  };
+
   getFeatures(featureName: string): Map<string, FeatureInfo> {
     if (window?.eo?.getFeature) {
       return window.eo.getFeature(featureName);
