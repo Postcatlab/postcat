@@ -3,9 +3,9 @@ const protoLoader = require('@grpc/proto-loader');
 const fs = require('fs');
 const path = require('path');
 
-const genProto = (name, code) => fs.writeFileSync(path.join(__dirname, `./${name}.proto`), code);
+const genProto = (name, code) => fs.writeFileSync(`./${name}.proto`, code);
 
-const deleteProto = (name) => fs.unlinkSync(path.join(__dirname, `./${name}.proto`));
+const deleteProto = (name) => fs.unlinkSync(`./${name}.proto`);
 
 const grpcFunc = ({ PROTO_PATH, packages, service, method, url, params }) => {
   return new Promise((resolve) => {
@@ -35,7 +35,7 @@ const grpcClient = async ({ url, packages, service, proto, method, params }) => 
   const random = `${Date.now()}Proto`;
   genProto(random, proto);
   const [res, err] = await grpcFunc({
-    PROTO_PATH: path.join(__dirname, `./${random}.proto`),
+    PROTO_PATH: `./${random}.proto`,
     url,
     packages,
     params,
