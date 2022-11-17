@@ -280,6 +280,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.socket.close();
+    this.unListen();
   }
   checkTabCanLeave = () => {
     if (this.wsStatus === 'disconnect') {
