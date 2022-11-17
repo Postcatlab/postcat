@@ -24,7 +24,7 @@ export class ExportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.extensionService.isEnable(data.extensionID)) {
+      if (this.webExtensionService.isEnable(key)) {
         this.supportList.push({
           key,
           ...data,

@@ -63,10 +63,11 @@ export class ApiDetailComponent implements OnInit {
   async initExtensionExtra() {
     const apiPreviewTab = this.webExtensionService.getFeatures('apiPreviewTab');
     console.log('apiPreviewTab', apiPreviewTab);
-    apiPreviewTab.forEach(async (value, key) => {
+    apiPreviewTab?.forEach(async (value, key) => {
+      if (!this.webExtensionService.isEnable(key)) {
+        return;
+      }
       const module = await window.eo?.loadFeatureModule?.(key);
-      console.log('apiPreviewTab', apiPreviewTab);
-      console.log('module', module);
       const rightExtra = value.rightExtra?.reduce((prev, curr) => {
         const eventObj = curr.events?.reduce((event, currEvent) => {
           event[currEvent.name] = (...rest) => {
