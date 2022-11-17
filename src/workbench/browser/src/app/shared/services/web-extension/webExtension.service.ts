@@ -90,7 +90,7 @@ export class WebExtensionService {
   }
 
   getFeatures(featureName: string): Map<string, FeatureInfo> {
-    if (window.eo) {
+    if (window?.eo?.getFeature) {
       return window.eo.getFeature(featureName);
     }
     const featureMap = new Map<string, FeatureInfo>([]);
