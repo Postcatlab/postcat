@@ -64,7 +64,7 @@ export class ApiDetailComponent implements OnInit {
     const apiPreviewTab = this.webExtensionService.getFeatures('apiPreviewTab');
     console.log('apiPreviewTab', apiPreviewTab);
     apiPreviewTab?.forEach(async (value, key) => {
-      if (!this.webExtensionService.isEnable(key)) {
+      if (!this.webExtensionService?.isEnable(key)) {
         return;
       }
       const module = await window.eo?.loadFeatureModule?.(key);
