@@ -1,4 +1,4 @@
-import { tree2obj } from './utils/tree/tree.utils';
+import { tree2obj } from '../../../utils/tree/tree.utils';
 import { Injectable } from '@angular/core';
 import type { IpcRenderer } from 'electron';
 import {
@@ -14,8 +14,8 @@ import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 
 const mockReg = /\/mock-(\d+)/;
 
-@Injectable()
-export class AppService {
+@Injectable({ providedIn: 'root' })
+export class MockService {
   private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
   constructor(
