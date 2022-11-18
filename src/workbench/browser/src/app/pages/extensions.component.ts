@@ -17,7 +17,8 @@ export class ExtensionsComponent implements OnInit {
         new Promise((resolve) => {
           self.message.get().subscribe(({ type, data }) => {
             if (type === 'msg-grpc-back') {
-              resolve([data, null]);
+              // data: [res, err]
+              resolve(data);
               return;
             }
           });
