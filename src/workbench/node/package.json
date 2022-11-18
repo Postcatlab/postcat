@@ -16,6 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "3.3.0",
+    "@grpc/grpc-js": "1.7.3",
+    "@grpc/proto-loader": "0.7.3",
     "crypto-js": "4.1.1",
     "jquery": "3.6.1",
     "jsdom": "20.0.1",

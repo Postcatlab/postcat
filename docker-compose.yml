@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    image: eolinker/eoapi:1.9.1
+    image: eolinker/eoapi:1.10.0
     container_name: eoapi
     restart: always
     extra_hosts:
@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: builder
-    image: eolinker/eoapi-test-server:1.9.0
+    image: eolinker/eoapi-test-server:1.10.0
     container_name: eoapi-test-server
     restart: always
     extra_hosts:
