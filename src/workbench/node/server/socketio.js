@@ -27,7 +27,7 @@ const socket = (port = _post) => {
       // * 创建 grpc 客户端发起请求
       // 端口管理、编译文件、运行插件代码、销毁服务
       const [res, err] = await grpcClient(data);
-      socket.emit('grpc-client', res);
+      socket.emit('grpc-client', [res, err]);
     });
     // receive a message from the client
     socket.on('ws-server', ({ type, content }) => {
