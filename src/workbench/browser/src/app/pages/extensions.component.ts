@@ -15,9 +15,11 @@ export class ExtensionsComponent implements OnInit {
     window.eo.gRPC = {
       send: (params) =>
         new Promise((resolve) => {
-          self.message.get().subscribe(({ type, data }) => {
+          const subscription = self.message.get().subscribe(({ type, data }) => {
             if (type === 'msg-grpc-back') {
-              resolve([data, null]);
+              // data: [res, err]
+              subscription.unsubscribe();
+              resolve(data);
               return;
             }
           });
