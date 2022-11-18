@@ -42,11 +42,12 @@ const grpcClient = async ({ url, packages, service, proto, method, params }) => 
     method,
     service,
   });
-  if (err) {
-    deleteProto(random);
-    return [null, err];
-  }
-  deleteProto(random);
+  console.log(process.cwd())
+  // if (err) {
+  //   deleteProto(random);
+  //   return [null, err];
+  // }
+  // deleteProto(random);
   return [res, null];
 };
 
