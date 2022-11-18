@@ -9,6 +9,8 @@ ENV EOAPI_WEBSOCKET_POST 4202
 
 COPY /src/workbench/node /test-server
 
+RUN npm config set registry https://registry.npmmirror.com
+RUN yarn config set registry https://registry.npmmirror.com
 RUN yarn install
 
 EXPOSE 4201 4202
