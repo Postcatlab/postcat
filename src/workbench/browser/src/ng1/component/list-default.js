@@ -313,7 +313,7 @@ function listDefaultController($scope, $element) {
                         },`
                   }'icon-chevron-down':!$ctrl.mainObject.item.default[${thKey}].asc,'icon-chevron-up':$ctrl.mainObject.item.default[${thKey}].asc}"></span>${
                     listItem.sortAndFilterConf
-                      ? `<sort-And-Filter-List-Default-Component other-obj="{isBatch:$ctrl.otherObject.batchMenu?$ctrl.otherObject.batchMenu.isOperating:$ctrl.otherObject.batch.isOperating}" class="po_ab eo_to_top_11 ml5 mr5 ${
+                      ? `<sort-And-Filter-List-Default-Component other-obj="{isBatch:$ctrl.otherObject.batchMenu?$ctrl.otherObject.batchMenu.isOperating:$ctrl.otherObject.batch.isOperating}" class="po_ab eo_to_top_11 ml5 mr-[5px] ${
                           listItem.sortAndFilterConf.containerClass || ""
                         }" main-obj="$ctrl.mainObject.item.default[${thKey}].sortAndFilterConf" filter-fun="$ctrl.mainObject.item.default[${thKey}].filterFun(arg)" sort-fun="$ctrl.fun.autoSortFun({$event:$event,item:$ctrl.mainObject.item.default[${thKey}],listItem:$ctrl.mainObject.item.default[${thKey}]},arg)"></sort-And-Filter-List-Default-Component>`
                       : ``

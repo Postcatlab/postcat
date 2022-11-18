@@ -90,7 +90,9 @@
                 >Manage Environment</a
               >
             </ng-template>
-            <span
+            <button
+              eo-ng-button
+              nzType="text"
               class="flex items-center justify-center mx-1 icon"
               i18n-nzTooltipTitle
               nz-tooltip
@@ -104,7 +106,7 @@
               nzPopoverTrigger="click"
             >
               <eo-iconpark-icon name="eyes"></eo-iconpark-icon>
-            </span>
+            </button>
             <ng-template #envParams>
               <env-list></env-list>
             </ng-template>
@@ -149,6 +151,8 @@
           >
             <button
               type="button"
+              eo-ng-button
+              nzType="text"
               class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
               [ngClass]="activeBar ? 'active' : ''"
               (click)="toggleRightBar()"

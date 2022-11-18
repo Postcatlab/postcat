@@ -162,7 +162,7 @@ ${log}
     }
   };
 
-  manageExtension(operate: string, id) {
+  private manageExtension(operate: string, id) {
     this.isOperating = true;
     setTimeout(async () => {
       switch (operate) {

@@ -478,7 +478,7 @@ function selectDefaultController($scope, $element) {
       : `$ctrl.output[$ctrl.modelKey]==item.${vm.input.value}`;
     const quoteType = {
       square: `<span class="sd_check_box square_checkbox iconfont  fwb cg" ng-class="{'icon-duihao':${judgeHtml}}"></span>`,
-      round: `<span class="sd_check_box iconfont fs24 mr5" ng-class="{'icon-danxuanxuanzhong':${judgeHtml},'icon-danxuanweixuanzhong':!(${judgeHtml})}"></span>`,
+      round: `<span class="sd_check_box iconfont fs24 mr-[5px]" ng-class="{'icon-danxuanxuanzhong':${judgeHtml},'icon-danxuanweixuanzhong':!(${judgeHtml})}"></span>`,
     };
     let checkboxHtml = '';
     if (vm.mainObject.showCheckbox) {

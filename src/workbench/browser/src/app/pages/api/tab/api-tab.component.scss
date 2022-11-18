@@ -31,28 +31,6 @@
           max-width: calc(100% - 135px);
           flex: none;
         }
-        .ant-tabs-nav-add {
-          background-color: rgba(0, 0, 0, 0);
-          border: 0 none;
-          &:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-          }
-        }
-        .ant-tabs-nav-more {
-          min-width: 40px;
-          min-height: 40px;
-          margin-left: 2px;
-          padding: 0 8px;
-          &:hover {
-            color: #00785a;
-            background-color: rgba(0, 0, 0, 0.1);
-          }
-
-          &:active,
-          &:focus {
-            color: #00785a;
-          }
-        }
         .ant-tabs-tab {
           .ant-tabs-tab-remove {
             color: rgba(0, 0, 0, 0);

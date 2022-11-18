@@ -59,7 +59,7 @@
           </div>
           <span class="flex tree_node_operate" *ngIf="isEdit">
             <button nz-dropdown [nzDropdownMenu]="groupMenu" class="flex items-center">
-              <eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon>
+              <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
             </button>
             <nz-dropdown-menu #groupMenu="nzDropdownMenu">
               <ul nz-menu>
@@ -82,7 +82,7 @@
         <!-- Leaf -->
         <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
           <div class="overflow-hidden f_row_ac text-ellipsis">
-            <b class="method_text method_text_{{ node.origin.method }} mr5" *ngIf="node.origin.method">{{
+            <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method
             }}</b>
             <span class="text_omit node_title">{{ node.title }}</span>
@@ -92,10 +92,10 @@
               class="flex items-center"
               (click)="operateApiEvent({ event: $event, eventName: 'testApi', node: node })"
             >
-              <eo-iconpark-icon class="mr5" name="lightning" size="15px"></eo-iconpark-icon>
+              <eo-iconpark-icon class="mr-[5px]" name="lightning" size="15px"></eo-iconpark-icon>
             </button>
             <button class="flex items-center" nz-dropdown [nzDropdownMenu]="apiDataMenu" *ngIf="isEdit">
-              <eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon>
+              <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
             </button>
             <nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
               <ul nz-menu>

@@ -10,19 +10,19 @@
   <nz-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <div
-        class="flex items-center tab-item-container"
+        class="flex items-center tab-item-container h-100"
         [ngClass]="{ 'fixed-tab-item-container': tabStorage.tabsByID.get(uuid)?.isFixed }"
       >
         <!-- loading -->
         <nz-spin nzSimple class="mr10" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid)?.isLoading"></nz-spin>
         <eo-iconpark-icon
-          class="mr5"
+          class="mr-[5px]"
           name="{{ tabStorage.tabsByID.get(uuid)?.icon }}"
           size="14px"
           *ngIf="tabStorage.tabsByID.get(uuid)?.icon"
         ></eo-iconpark-icon>
         <!-- {{ tabStorage.tabsByID.get(uuid) | json }} -->
-        <span class="mr5 method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends?.method || 'WS' }}">{{
+        <span class="mr-[5px] method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends?.method || 'WS' }}">{{
           tabStorage.tabsByID.get(uuid)?.extends?.method || 'WS'
         }}</span>
         <span class="text_omit tab_text" [title]="tabStorage.tabsByID.get(uuid)?.title">
@@ -30,7 +30,11 @@
         >
         <!-- Close/HasEdit -->
         <div class="flex items-center tab-item-button-group">
-          <nz-badge class="tab-has-edit-icon" *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged" nzStatus="success"></nz-badge>
+          <nz-badge
+            class="tab-has-edit-icon"
+            *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged"
+            nzStatus="success"
+          ></nz-badge>
           <button
             aria-label="Close tab"
             (click)="closeTab({ $event: $event, index: i, tab: tabStorage.tabsByID.get(uuid) })"
@@ -44,42 +48,44 @@
   </nz-tab>
 </nz-tabset>
 <ng-template #extraTemplate>
-  <button
-    (click)="newTab()"
-    nz-dropdown
-    [nzDropdownMenu]="addMenu"
-    class="ant-tabs-nav-add {{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
-  >
-    <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
-  </button>
-  <nz-dropdown-menu #addMenu="nzDropdownMenu">
-    <ul nz-menu>
-      <li nz-menu-item (click)="newTab()">HTTP</li>
-      <li nz-menu-item (click)="newTab('ws')">Websocket</li>
-    </ul>
-  </nz-dropdown-menu>
-  <a nz-dropdown [nzDropdownMenu]="menu">
-    <button class="ant-tabs-nav-more">
-      <eo-iconpark-icon class="mr5" name="more" size="16px"></eo-iconpark-icon>
+  <div class="flex items-center ml-[10px] h-full">
+    <button
+      eo-ng-button
+      nzType="text"
+      (click)="newTab()"
+      nz-dropdown
+      [nzDropdownMenu]="addMenu"
+      class="{{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
+    >
+      <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
     </button>
-  </a>
-  <nz-dropdown-menu #menu="nzDropdownMenu">
-    <ul nz-menu>
-      <li nz-menu-item (click)="closeTabByOperate('closeOther')" [nzDisabled]="tabStorage.tabOrder.length === 1" i18n>
-        Close Other Tags (excluding current tabs)
-      </li>
-      <li nz-menu-item (click)="closeTabByOperate('closeAll')" i18n>Close All Tabs</li>
-      <li nz-menu-item (click)="closeTabByOperate('closeLeft')" [nzDisabled]="tabOperate.selectedIndex === 0" i18n>
-        Close Tabs To the Left
-      </li>
-      <li
-        nz-menu-item
-        [nzDisabled]="tabStorage.tabOrder.length - 1 === tabOperate.selectedIndex"
-        (click)="closeTabByOperate('closeRight')"
-        i18n
-      >
-        Close Tabs to the Right
-      </li>
-    </ul>
-  </nz-dropdown-menu>
+    <nz-dropdown-menu #addMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="newTab()">HTTP</li>
+        <li nz-menu-item (click)="newTab('ws')">Websocket</li>
+      </ul>
+    </nz-dropdown-menu>
+    <button eo-ng-button nzType="text" nz-dropdown [nzDropdownMenu]="menu">
+      <eo-iconpark-icon  name="more" size="16px"></eo-iconpark-icon>
+    </button>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="closeTabByOperate('closeOther')" [nzDisabled]="tabStorage.tabOrder.length === 1" i18n>
+          Close Other Tags (excluding current tabs)
+        </li>
+        <li nz-menu-item (click)="closeTabByOperate('closeAll')" i18n>Close All Tabs</li>
+        <li nz-menu-item (click)="closeTabByOperate('closeLeft')" [nzDisabled]="tabOperate.selectedIndex === 0" i18n>
+          Close Tabs To the Left
+        </li>
+        <li
+          nz-menu-item
+          [nzDisabled]="tabStorage.tabOrder.length - 1 === tabOperate.selectedIndex"
+          (click)="closeTabByOperate('closeRight')"
+          i18n
+        >
+          Close Tabs to the Right
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+  </div>
 </ng-template>

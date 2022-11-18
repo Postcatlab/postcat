@@ -48,7 +48,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
       <div class="po_ab eo_to_right_0" ng-switch-default>
           <div class="po_ab enlarge_btn_container_lbcc eo_theme_iblock">
               <button type="button" ng-click="$ctrl.fun.watchUi('full_screen')"
-                  ng-if="$ctrl.mainObject.setting.ableToSetFullScreen" class="eo_theme_btn_info mr5 enlarge_btn_lbcc"
+                  ng-if="$ctrl.mainObject.setting.ableToSetFullScreen" class="eo_theme_btn_info mr-[5px] enlarge_btn_lbcc"
                   form-undisabled="true">
                   <span class="iconfont icon-quanping"></span>
                   <span>全屏</span>
@@ -1481,7 +1481,7 @@ function listBlockController($rootScope, $element, $scope) {
     if (inputVal.sortAndFilterConf) {
       tmpSortAndFilterHtml = `${
         inputVal.sortAndFilterConf
-          ? `<sort-And-Filter-List-Default-Component class="po_ab eo_to_right_0 mr5" main-obj="$ctrl.mainObject.tdList[${inputKey}].sortAndFilterConf" filter-fun="$ctrl.fun.filterCallback('${
+          ? `<sort-And-Filter-List-Default-Component class="po_ab eo_to_right_0 mr-[5px]" main-obj="$ctrl.mainObject.tdList[${inputKey}].sortAndFilterConf" filter-fun="$ctrl.fun.filterCallback('${
               inputVal.filterKey || inputVal.mark
             }',arg)" sort-fun="$ctrl.fun.sortCallback(arg)"></sort-And-Filter-List-Default-Component>`
           : ''

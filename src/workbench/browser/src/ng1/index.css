@@ -6870,7 +6870,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   margin-right: 0;
 }
 
-.mr5 {
+.mr-[5px] {
   margin-right: 5px;
 }
 
@@ -6894,7 +6894,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   margin-right: 40px;
 }
 
-.mr50 {
+.mr-[5px]0 {
   margin-right: 50px;
 }
 
@@ -12930,7 +12930,7 @@ menu-common-component .common_menu_ul .menu-mr15 {
 menu-common-component .common_menu_ul .menu-mr10 {
   margin-right: 10px;
 }
-menu-common-component .common_menu_ul .menu-mr5 {
+menu-common-component .common_menu_ul .menu-mr-[5px] {
   margin-right: 5px;
 }
 menu-common-component .common_menu_ul .menu-mr0 {

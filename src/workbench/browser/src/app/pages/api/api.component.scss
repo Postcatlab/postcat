@@ -126,7 +126,7 @@ nz-divider {
     }
     .ant-tabs-nav,
     .ant-tabs-extra-content {
-      height: 35px;
+      height: 42px;
     }
 
     .param_header {
@@ -170,15 +170,8 @@ nz-divider {
     }
 
     .env-icon {
-      color: rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-      // transition: all 0.4s ease;
       &.active {
         color: #00785a;
-      }
-      &:hover {
-        color: #00785a;
-        background-color: rgba(0, 0, 0, 0.05);
       }
     }
   }
