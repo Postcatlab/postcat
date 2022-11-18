@@ -5,7 +5,6 @@ on:
     # branches: [for debug]
     tags:
       - 'v*.*.*'
-    branch: [main]
 jobs:
   release:
     name: build and release electron app
@@ -14,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-12, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Check out git repository
@@ -49,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Release for MacOS
-        if: matrix.os == macos-12'
+        if: matrix.os == macos-latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
