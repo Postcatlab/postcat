@@ -5,6 +5,7 @@ on:
     # branches: [for debug]
     tags:
       - 'v*.*.*'
+    branch: [main]
 jobs:
   release:
     name: build and release electron app
@@ -13,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-12, ubuntu-latest]
 
     steps:
       - name: Check out git repository
