@@ -15,21 +15,21 @@ export type TreeToObjOpts = {
 export const listToTreeHasLevel = (
   list,
   opts: {
-    childKey: string;
-  } = {
-    childKey: 'children',
-  }
+    childKey?: string;
+    filterKeys?: string[];
+  }={}
 ) => {
   if (whatType(list) !== 'array') {
     return list;
   }
+  opts.childKey=opts.childKey||'children';
   const listDepths = [];
   //delete useless key
-  const uselessKeys = ['listDepth', 'isHide', 'isShrink'];
+  const filterKeys = ['listDepth', 'isHide', 'isShrink',...(opts.filterKeys||[])];
   list = list.map((item) => {
     listDepths.push(item.listDepth);
     return Object.keys(item).reduce(
-      (pre, itemKey) => (uselessKeys.includes(itemKey) ? pre : { ...pre, [itemKey]: item[itemKey] }),
+      (pre, itemKey) => (filterKeys.includes(itemKey) ? pre : { ...pre, [itemKey]: item[itemKey] }),
       {}
     );
   });

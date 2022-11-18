@@ -1,4 +1,4 @@
-import { ModuleInfo } from "eo/platform/node/extension-manager/types";
+import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 
 /**
  * 模块管理器配置
@@ -37,6 +37,9 @@ export interface ModuleManagerInfo {
  * getModules 获取所有模块列表，或返回有模块关联子模块的信息
  */
 export interface ModuleManagerInterface {
+  getSidebarView(extName: any): any;
+  getSidebarViews(extName: any): any;
+  getExtTabs(extName: any): any;
   installExt: any;
   install: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
   uninstall: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
@@ -46,5 +49,4 @@ export interface ModuleManagerInterface {
   getModules: () => Map<string, ModuleInfo>;
   getFeature: (featureKey: string) => Map<string, object>;
   getFeatures: () => Map<string, Map<string, object>>;
-  setupExtensionPageServer: (extName: string) => any;
 }

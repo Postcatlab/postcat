@@ -25,7 +25,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { AppService } from './app.service';
+import { MockService } from './shared/services/mock/mock.service';
 
 //I18n
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
@@ -33,12 +33,12 @@ import { registerLocaleData } from '@angular/common';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
-import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
+
 registerLocaleData(en);
 registerLocaleData(zh);
 
 @NgModule({
-  declarations: [AppComponent, Vue3Component],
+  declarations: [AppComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -53,7 +53,7 @@ registerLocaleData(zh);
     NgxsModule.forRoot([EnvState]),
   ],
   providers: [
-    AppService,
+    MockService,
     SettingService,
     ExtensionService,
     StorageService,
@@ -84,8 +84,8 @@ registerLocaleData(zh);
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
-  constructor(private upgrade: UpgradeModule, private lang: LanguageService, private appService: AppService) {
-    this.appService.init();
+  constructor(private upgrade: UpgradeModule, private lang: LanguageService, private mockService: MockService) {
+    this.mockService.init();
     if (APP_CONFIG.production) {
       this.lang.init();
     }

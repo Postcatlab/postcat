@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiOverviewComponent } from 'eo/workbench/browser/src/app/pages/api/overview/api-overview.component';
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -29,6 +28,6 @@ import { WorkspaceComponent } from './workspace.component';
   ],
   declarations: [WorkspaceComponent, ApiOverviewComponent],
   exports: [],
-  providers: [NzModalService, MessageService],
+  providers: [NzModalService],
 })
 export class WorkspaceModule {}

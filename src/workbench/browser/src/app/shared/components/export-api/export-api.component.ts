@@ -24,7 +24,7 @@ export class ExportApiComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.extensionService.isEnable(data.extensionID)) {
+      if (this.webExtensionService.isEnable(key)) {
         this.supportList.push({
           key,
           ...data,
@@ -62,8 +62,7 @@ export class ExportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
-    const module: ModuleInfo =
-      (await window.eo?.loadFeatureModule(this.currentExtension)) || globalThis[this.currentExtension];
+    const module: ModuleInfo = await window.eo?.loadFeatureModule?.(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
       const params = [this.projectService.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {

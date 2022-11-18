@@ -221,8 +221,12 @@ try {
       } else if (arg.action === 'getWebsocketPort') {
         // 获取websocket服务端口
         returnValue = websocketPort;
-      } else if (arg.action === 'getExtensionPagePathByName') {
-        returnValue = moduleManager.setupExtensionPageServer(arg.data.extName);
+      } else if (arg.action === 'getExtTabs') {
+        returnValue = moduleManager.getExtTabs(arg.data.extName);
+      } else if (arg.action === 'getSidebarView') {
+        returnValue = moduleManager.getSidebarView(arg.data.extName);
+      } else if (arg.action === 'getSidebarViews') {
+        returnValue = moduleManager.getSidebarViews(arg.data.extName);
       } else {
         returnValue = 'Invalid data';
       }

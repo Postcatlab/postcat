@@ -21,8 +21,8 @@ export class ExtensionDetailComponent implements OnInit {
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   nzSelectedIndex = 0;
-  pagePath = '';
   extName = '';
+  customTabs = [];
 
   changeLog = '';
   changeLogNotFound = false;
@@ -34,11 +34,27 @@ export class ExtensionDetailComponent implements OnInit {
     public electron: ElectronService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.getDetail();
+    // this.getCustomTabs();
   }
 
-  ngOnInit(): void {}
+  async getCustomTabs() {
+    try {
+      const res = await window.eo.getExtTabs(this.extName);
+      console.log('extName res', res);
+      this.customTabs = res;
+    } catch (e) {
+      console.error('getExtensionPagePathByName err', e);
+      fetch(`https://unpkg.com/${this.extName}/page/index.html`).then((res) => {
+        if (res.status === 200) {
+          // this.pagePath = res.url + '/child/react17/';
+        }
+      });
+    }
+  }
 
   async handleInstall() {
     this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
@@ -47,8 +63,7 @@ export class ExtensionDetailComponent implements OnInit {
   async getDetail() {
     this.extName = this.route.snapshot.queryParams.name;
 
-    this.fetchExtensionPage(this.extName);
-    this.isOperating = window.eo?.getExtIsInTask(this.extName, ({ type, status }) => {
+    this.isOperating = window.eo?.getExtIsInTask?.(this.extName, ({ type, status }) => {
       if (type === 'install' && status === 'success') {
         this.extensionDetail.installed = true;
       }
@@ -72,22 +87,6 @@ export class ExtensionDetailComponent implements OnInit {
     }
     this.fetchChangelog(this.language.systemLanguage);
   }
-
-  fetchExtensionPage = async (extName: string) => {
-    this.pagePath='http://127.0.0.1:8080';
-    // try {
-    //   const res = await window.eo.getExtensionPagePathByName(extName);
-    //   console.log('extName res', res);
-    //   this.pagePath = res;
-    // } catch (e) {
-    //   console.error('getExtensionPagePathByName err', e);
-    //   fetch(`https://unpkg.com/${extName}/page/index.html`).then((res) => {
-    //     if (res.status === 200) {
-    //       this.pagePath = res.url + '/child/react17/';
-    //     }
-    //   });
-    // }
-  };
 
   async fetchChangelog(locale = '') {
     //Default locale en-US

@@ -148,6 +148,7 @@ export class WorkspaceService {
   async updateProjectID(workspaceID: number) {
     if (workspaceID === -1) {
       this.projectService.setCurrentProjectID(1);
+      StorageUtil.remove('server_version');
       return;
     }
     const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);

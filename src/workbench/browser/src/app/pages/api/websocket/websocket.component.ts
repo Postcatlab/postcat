@@ -83,7 +83,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
     try {
-      const port = await window.eo?.getWebsocketPort();
+      const port = await window.eo?.getWebsocketPort?.();
       this.socket = io(
         `${
           APP_CONFIG.production && !this.electron.isElectron
@@ -280,6 +280,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.socket.close();
+    this.unListen();
   }
   checkTabCanLeave = () => {
     if (this.wsStatus === 'disconnect') {

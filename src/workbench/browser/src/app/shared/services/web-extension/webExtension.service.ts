@@ -3,7 +3,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
 import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
-import { ConsoleSqlOutline } from '@ant-design/icons-angular/icons';
+import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 
 type ExtensionItem = {
   name: string;
@@ -21,6 +21,7 @@ const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
 })
 export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
+  disabledExtensionNames = [];
 
   constructor(private message: NzMessageService, private webService: WebService) {}
 
@@ -68,6 +69,18 @@ export class WebExtensionService {
     return this.installedList.find((n) => n.name === extName);
   }
 
+  isEnable(name: string) {
+    return !this.getDisabledExtensionNames().includes(name);
+  }
+
+  getDisabledExtensionNames() {
+    try {
+      return (this.disabledExtensionNames = JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]'));
+    } catch (error) {
+      return [];
+    }
+  }
+
   insertScript(scriptText) {
     const script = document.createElement('script');
     script.type = 'text/javascript';
@@ -89,8 +102,15 @@ export class WebExtensionService {
     return res.json();
   }
 
+  importModule = async (extName: string) => {
+    if (!window[extName]) {
+      await this.installExtension(extName);
+    }
+    return window[extName];
+  };
+
   getFeatures(featureName: string): Map<string, FeatureInfo> {
-    if (window.eo) {
+    if (window.eo?.getFeature) {
       return window.eo.getFeature(featureName);
     }
     const featureMap = new Map<string, FeatureInfo>([]);
@@ -100,7 +120,9 @@ export class WebExtensionService {
         featureMap.set(item.name, feature);
       }
     });
-    if(featureMap.size===0) {return;}
+    if (featureMap.size === 0) {
+      return;
+    }
     return featureMap;
   }
 }

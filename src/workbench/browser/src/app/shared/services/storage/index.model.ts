@@ -219,7 +219,7 @@ export interface ApiTestHistoryFrame {
    * @type {object}
    */
   response: {
-    headers: object[];
+    headers: any[];
     statusCode: number;
     body: string;
     contentType: string;

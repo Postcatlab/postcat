@@ -8,6 +8,6 @@
  * @link https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
  */
 
-exports.default = function notarizing(context) {
+ exports.default = function notarizing(context) {
   return context;
 };

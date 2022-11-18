@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponent, ToolbarComponent, SidebarComponent } from './components';
 import { ClickStopPropagationDirective } from './directives';
@@ -49,6 +49,7 @@ import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/com
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
 import { LocalWorkspaceTipComponent } from './components/local-workspace-tip/local-workspace-tip.component';
+import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -64,6 +65,7 @@ const COMPONENTS = [
   EoMonacoEditorComponent,
   DownloadClienteComponent,
   LocalWorkspaceTipComponent,
+  ExtensionAppComponent,
 ];
 
 const SHARED_MODULE = [
@@ -111,5 +113,6 @@ const SHARED_MODULE = [
   declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [],
   exports: [...SHARED_MODULE, ...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}
