@@ -15,6 +15,7 @@
       "schematics": { "@schematics/angular:application": { "strict": true } },
       "architect": {
         "build": {
+          "inlineStyleLanguage": "scss",
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "localize": true,
@@ -123,6 +124,7 @@
           "options": { "browserTarget": "eoapi:build" }
         },
         "test": {
+          "inlineStyleLanguage": "scss",
           "builder": "@angular-builders/custom-webpack:karma",
           "options": {
             "main": "src/test.ts",

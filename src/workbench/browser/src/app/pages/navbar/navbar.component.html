@@ -73,26 +73,17 @@
     </nz-select>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- help -->
-    <eo-ng-dropdown btnType="text" [title]="helpTemplateTitle" [menus]="helpMenus" trigger="hover"></eo-ng-dropdown>
-    <ng-template #helpTemplateTitle>
-      <eo-iconpark-icon name="help"> </eo-iconpark-icon>
-    </ng-template>
-
-    <!-- <eo-nz-dropdown-menu #helpMenu="nzDropdownMenu">
+    <eo-ng-dropdown btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus" trigger="hover">
+      <ng-template #helpTitle>
+        <eo-iconpark-icon name="help"></eo-iconpark-icon>
+      </ng-template>
+    </eo-ng-dropdown>
+    <ng-template #helpTemplateItem let-item="item">
       <ul nz-menu>
-        <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
+        <a href="{{ item.href }}" target="_blank" nz-menu-item i18n>{{ item.title }}</a>
         <li nz-menu-divider></li>
-        <a
-          href="https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
-            issueEnvironment
-          }}"
-          target="_blank"
-          nz-menu-item
-          i18n
-          >Report Issue</a
-        >
       </ul>
-    </eo-nz-dropdown-menu> -->
+    </ng-template>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
     <button
@@ -163,13 +154,15 @@
     </div>
     <!-- Web download client -->
     <div *ngIf="!electron.isElectron && !status.isShare">
-      <!-- <div class="download-btn py-1.5 px-2 mx-1 flex items-center" eo-nz-dropdown i18n [nzDropdownMenu]="download">
-        <span class="flex items-center icon">
-          <eo-iconpark-icon name="down-two" size="14px"></eo-iconpark-icon>
-        </span>
-        <span class="ml-1">Download</span>
-      </div>
-      <eo-nz-dropdown-menu #download="nzDropdownMenu">
+      <eo-ng-dropdown class="download-btn" [title]="downloadTitle">
+        <ng-template class="flex items-center" #downloadTitle>
+          <span class="icon">
+            <eo-iconpark-icon name="down-two" size="14px"></eo-iconpark-icon>
+          </span>
+          <span class="ml-1">Download</span>
+        </ng-template>
+      </eo-ng-dropdown>
+      <!-- <eo-nz-dropdown-menu #download="nzDropdownMenu">
         <ul nz-menu>
           <ng-container *ngFor="let item of resourceInfo; let index = index">
             <a [href]="item.link" nz-menu-item>{{ item.name }}</a>

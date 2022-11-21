@@ -1,7 +1,7 @@
 .ant-input-group.ant-input-group-compact {
   display: flex;
 }
-.ant-form-item{
+.ant-form-item {
   margin-bottom: 0;
 }
 .ant-select {
@@ -31,7 +31,30 @@ eo-api-test-rest {
     // height: calc(100% - 52px);
     overflow-y: auto;
   }
-  ::ng-deep .top_container {
+
+  .bottom_container {
+    height: 100%;
+  }
+}
+.env_front_uri {
+  max-width: 240px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 10px;
+  background-color: var(--TABLE_HEADER_BG);
+  border: 1px solid #d9d9d9;
+  flex-shrink: 0;
+}
+div.ant-typography {
+  margin-bottom: 0;
+}
+:host ::ng-deep {
+  .response_container {
+    .ant-tabs-tabpane {
+      min-height: 208px;
+    }
+  }
+  .top_container {
     height: 100%;
 
     form {
@@ -44,7 +67,8 @@ eo-api-test-rest {
         height: 100%;
         overflow: hidden;
       }
-      .ant-tabs-nav,.param_header {
+      .ant-tabs-nav,
+      .param_header {
         // position: sticky;
         // top: 0;
         // z-index: 10;
@@ -54,31 +78,8 @@ eo-api-test-rest {
         overflow: hidden;
         height: 100%;
       }
-      eo-api-test-body[ng-reflect-body-type=formData] {
+      eo-api-test-body[ng-reflect-body-type='formData'] {
       }
-    }
-  }
-  .bottom_container {
-    height: 100%;
-  }
-
-}
-.env_front_uri {
-  max-width: 240px;
-  height: 32px;
-  line-height: 32px;
-  padding: 0 10px;
-  background-color: var(--TABLE_HEADER_BG);
-  border: 1px solid #d9d9d9;
-  flex-shrink: 0;
-}
-div.ant-typography{
-  margin-bottom: 0;
-}
-::ng-deep {
-  .response_container{
-    .ant-tabs-tabpane{
-      min-height: 208px;
     }
   }
 }

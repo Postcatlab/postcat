@@ -24,9 +24,17 @@ export class NavbarComponent implements OnInit {
   OS_TYPE = navigator.platform.toLowerCase();
   modules: Map<string, ModuleInfo>;
   resourceInfo = this.web.resourceInfo;
-  issueEnvironment;
 
-  helpMenus=[];
+  helpMenus = [
+    {
+      title: 'Document',
+      href: 'https://docs.eoapi.io',
+    },
+    {
+      title: 'Report Issue',
+      href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnviroment()}`,
+    },
+  ];
   constructor(
     public electron: ElectronService,
     private web: WebService,
@@ -36,9 +44,8 @@ export class NavbarComponent implements OnInit {
     public userService: UserService,
     public dataSourceService: DataSourceService,
     public status: StatusService,
-    public workspaceService: WorkspaceService,
+    public workspaceService: WorkspaceService
   ) {
-    this.issueEnvironment = this.getEnviroment();
     if (this.workspaceService.currentWorkspace?.id !== -1) {
       this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }

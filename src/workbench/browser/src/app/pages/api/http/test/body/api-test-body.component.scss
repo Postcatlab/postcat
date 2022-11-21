@@ -4,7 +4,7 @@
   height: 100%;
   overflow: hidden;
 }
-::ng-deep {
+:host ::ng-deep {
   .content-type-select {
     margin-left: -4px;
   }

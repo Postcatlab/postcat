@@ -35,15 +35,6 @@
   }
 }
 
-.no-radius-select {
-  ::ng-deep {
-    .ant-select-selector {
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
-    }
-  }
-}
-
 .send_icon {
   background-color: rgba(166, 154, 189, 0.1);
 }
@@ -61,6 +52,12 @@
 }
 
 :host ::ng-deep {
+  .no-radius-select {
+    .ant-select-selector {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
   .ant-form-item {
     margin-bottom: 0;
   }

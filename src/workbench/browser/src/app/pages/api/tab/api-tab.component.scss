@@ -2,8 +2,7 @@
   max-width: 90px;
   font-weight: 500;
 }
-::ng-deep {
-  eo-api-tab {
+:host ::ng-deep {
     width: calc(100% - 200px);
     .ant-tabs-card.ant-tabs-top {
       > .ant-tabs-nav {
@@ -81,5 +80,4 @@
     .fixed-tab-item-container {
       font-style: initial;
     }
-  }
 }

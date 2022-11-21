@@ -1,15 +1,3 @@
-.download-btn {
-  border-radius: 3px;
-  background-color: rgba(0,120,90, .2);
-  color: #333;
-  font-size: 0.9em;
-  font-weight: 500;
-  height: 30px;
-  cursor: pointer;
-  .icon {
-    color: var(--BTN_PRIMARY_BG);
-  }
-}
 .eo_navbar {
   -webkit-app-region: drag;
   position: sticky;
@@ -23,38 +11,22 @@
   .logo {
     width: 90px;
   }
-  .tips_wrap {
-    position: relative;
-
-    &:hover {
-      .trigger_item {
-        display: inline-flex;
-      }
-    }
-  }
 }
 
 .can_be_click {
   -webkit-app-region: no-drag;
 }
-.switch-data-source-box {
-  width: 200px;
-  display: grid;
-  padding: 10px 14px;
-  grid-template-columns: 34px auto;
-  background-color: white;
-  .title {
-    margin-bottom: 0;
-    color: black;
-    font-weight: 700;
-  }
-  .desc {
-    margin-bottom: 4px;
-    font-size: 12px;
+:host ::ng-deep {
+  .download-btn {
+    button {
+      background-color: rgba(0, 120, 90, 0.2);
+      color: #333;
+    }
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    .icon {
+      color: var(--BTN_PRIMARY_BG);
+    }
   }
 }
-.btn_scondary{
-  color:var(--BTN_PRIMARY_BG);
-  border-color:var(--BTN_PRIMARY_BG);
-}
-

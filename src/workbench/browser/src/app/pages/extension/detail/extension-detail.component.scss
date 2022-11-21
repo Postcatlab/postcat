@@ -4,7 +4,7 @@
 .ant-divider-vertical {
   margin: 0 16px;
 }
-::ng-deep {
+:host ::ng-deep {
   .ant-skeleton {
     display: block;
   }

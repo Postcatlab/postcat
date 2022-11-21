@@ -10,20 +10,7 @@ import { ElectronService } from '../../../../core/services';
       </nz-descriptions>
     </div>
   `,
-  styles: [
-    `
-      .about ::ng-deep .ant-descriptions-item-label {
-        width: 112px;
-        position: relative;
-        padding-right: 16px;
-        justify-content: flex-end;
-      }
-      .about ::ng-deep .ant-descriptions-item-label::after {
-        position: absolute;
-        right: 0;
-      }
-    `,
-  ],
+  styleUrls:['./about.component.scss'] ,
 })
 export class AboutComponent implements OnInit {
   list = this.electron.getSystemInfo();

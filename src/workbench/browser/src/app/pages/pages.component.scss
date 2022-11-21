@@ -18,23 +18,22 @@
   background-color: var(--MAIN_BG);
   color: var(--MAIN_TEXT);
   overflow: hidden;
-
-  ::ng-deep {
-      eo-workspace, eo-member {
-      display: block;
-      overflow: auto;
-      height: 100%;
-    }
-  }
 }
-
-::ng-deep {
+:host ::ng-deep {
+  eo-workspace,
+  eo-member {
+    display: block;
+    overflow: auto;
+    height: 100%;
+  }
   eo-api {
     height: 100%;
 
     router-outlet + * {
       display: block;
-      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - var(--API_TABS_HEIGHT));
+      height: calc(
+        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - var(--API_TABS_HEIGHT)
+      );
       overflow: auto;
     }
     router-outlet + eo-api-test {
@@ -43,9 +42,7 @@
 
     .has_tab_page + * {
       router-outlet + * {
-        height: calc(
-          100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 74px
-        );
+        height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 74px);
       }
     }
   }
@@ -57,4 +54,3 @@
     }
   }
 }
-
