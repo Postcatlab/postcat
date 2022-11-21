@@ -19,6 +19,7 @@ import { EoNgButtonModule } from 'eo-ng-button';
 import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { EoNgSwitchModule } from 'eo-ng-switch';
+import { EoNgTreeModule } from 'eo-ng-tree';
 
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
@@ -84,6 +85,7 @@ const SHARED_MODULE = [
   EoNgCheckboxModule,
   EoNgSelectModule,
   EoNgSwitchModule,
+  EoNgTreeModule,
   NzToolTipModule,
   NzResultModule,
   NzDropDownModule,

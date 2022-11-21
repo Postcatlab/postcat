@@ -1,22 +1,9 @@
 <header class="flex pt-2">
-  <input
-    nz-input
-    type="text"
-    class="flex-1 px-3 eo-search-input"
-    i18n-placeholder="@@Search"
-    placeholder="Search"
-    [(ngModel)]="searchValue"
-  />
-  <button
-    *ngIf="!status.isShare"
-    nzType="primary"
-    eo-ng-button
-    class="flex w-[32px] items-center justify-center ml-3 text-base shrink-0"
-    nz-dropdown
-    [nzDropdownMenu]="menu"
-    nzPlacement="bottomRight"
-    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
-  >
+  <input nz-input type="text" class="flex-1 px-3 eo-search-input" i18n-placeholder="@@Search" placeholder="Search"
+    [(ngModel)]="searchValue" />
+  <button *ngIf="!status.isShare" nzType="primary" eo-ng-button
+    class="flex w-[32px] items-center justify-center ml-3 text-base shrink-0" nz-dropdown [nzDropdownMenu]="menu"
+    nzPlacement="bottomRight" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
     <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
   </button>
   <nz-dropdown-menu #menu="nzDropdownMenu">
@@ -34,21 +21,10 @@
 
 <!-- Custom Group -->
 <div class="group_container group-tree pt10">
-  <nz-tree
-    *ngIf="treeNodes.length"
-    [nzData]="treeNodes"
-    [nzSelectedKeys]="nzSelectedKeys"
-    #apiGroup
-    [nzSearchValue]="searchValue"
-    [nzHideUnMatched]="true"
-    [nzExpandedKeys]="expandKeys"
-    (nzClick)="clickTreeItem($event)"
-    (nzExpandChange)="toggleExpand()"
-    [nzDraggable]="isEdit"
-    nzBlockNode
-    (nzOnDrop)="treeItemDrop($event)"
-    [nzTreeTemplate]="nzTreeTemplate"
-  ></nz-tree>
+  <eo-ng-tree-default *ngIf="treeNodes.length" [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup
+    [nzSearchValue]="searchValue" [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys"
+    (nzClick)="clickTreeItem($event)" (nzExpandChange)="toggleExpand()" [nzDraggable]="isEdit" nzBlockNode
+    (nzOnDrop)="treeItemDrop($event)" [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div [style.--tree-level]="node.level">
@@ -84,14 +60,12 @@
           <div class="overflow-hidden f_row_ac text-ellipsis">
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method
-            }}</b>
+              }}</b>
             <span class="text_omit node_title">{{ node.title }}</span>
           </div>
           <div class="flex tree_node_operate">
-            <button
-              class="flex items-center"
-              (click)="operateApiEvent({ event: $event, eventName: 'testApi', node: node })"
-            >
+            <button class="flex items-center"
+              (click)="operateApiEvent({ event: $event, eventName: 'testApi', node: node })">
               <eo-iconpark-icon class="mr-[5px]" name="lightning" size="15px"></eo-iconpark-icon>
             </button>
             <button class="flex items-center" nz-dropdown [nzDropdownMenu]="apiDataMenu" *ngIf="isEdit">
@@ -102,16 +76,12 @@
                 <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'editApi', node: node })">
                   <a i18n>Edit</a>
                 </li>
-                <li
-                  nz-menu-item
-                  (click)="operateApiEvent({ event: $event, eventName: 'copyApi', node: apiDataItems[node.key] })"
-                >
+                <li nz-menu-item
+                  (click)="operateApiEvent({ event: $event, eventName: 'copyApi', node: apiDataItems[node.key] })">
                   <a i18n="@@Copy">Copy</a>
                 </li>
-                <li
-                  nz-menu-item
-                  (click)="operateApiEvent({ event: $event, eventName: 'deleteApi', node: apiDataItems[node.key] })"
-                >
+                <li nz-menu-item
+                  (click)="operateApiEvent({ event: $event, eventName: 'deleteApi', node: apiDataItems[node.key] })">
                   <a i18n="@@Delete">Delete</a>
                 </li>
               </ul>
