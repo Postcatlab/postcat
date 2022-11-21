@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ShareComponent } from './share.component';
+import { ShareComponent } from './share-project.component';
 
 const routes: Routes = [
   {
@@ -18,11 +18,11 @@ const routes: Routes = [
         children: [
           {
             path: 'detail',
-            loadChildren: () => import('../pages/api/http/detail/api-detail.module').then((m) => m.ApiDetailModule),
+            loadChildren: () => import('../api/http/detail/api-detail.module').then((m) => m.ApiDetailModule),
           },
           {
             path: 'test',
-            loadChildren: () => import('../pages/api/http/test/api-test.module').then((m) => m.ApiTestModule),
+            loadChildren: () => import('../api/http/test/api-test.module').then((m) => m.ApiTestModule),
           },
         ],
       },
@@ -31,7 +31,7 @@ const routes: Routes = [
         children: [
           {
             path: 'test',
-            loadChildren: () => import('../pages/api/websocket/websocket.module').then((m) => m.WebsocketModule),
+            loadChildren: () => import('../api/websocket/websocket.module').then((m) => m.WebsocketModule),
           },
         ],
       },

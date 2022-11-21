@@ -6,10 +6,10 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <div
+    <!-- <div
       *ngIf="!status.isShare"
       class="flex items-center can_be_click"
-      nz-dropdown
+      eo-nz-dropdown
       nzTrigger="click"
       [nzDropdownMenu]="workspaceMenu"
     >
@@ -21,9 +21,8 @@
       {{ workspaceService.currentWorkspace.title }}
       <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
     </div>
-    <nz-dropdown-menu #workspaceMenu="nzDropdownMenu">
+    <eo-nz-dropdown-menu #workspaceMenu="nzDropdownMenu">
       <ul class="ml-[-11px]" nz-menu>
-        <!-- Search/Add workspace -->
         <div class="flex py-[5px] px-[12px]">
           <input
             nz-input
@@ -45,7 +44,6 @@
             <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
           </button>
         </div>
-        <!-- Workspaces -->
         <li
           style="color: #000"
           nz-menu-item
@@ -58,49 +56,29 @@
           {{ item.title }}
         </li>
       </ul>
-    </nz-dropdown-menu>
+    </eo-nz-dropdown-menu> -->
   </div>
+
   <div class="flex items-center can_be_click">
-    <button
-      *ngIf="!workspaceService.isLocal && !status.isShare"
-      eo-ng-button
-      nzType="default"
-      class="mx-2 btn_scondary"
-      nz-popover
-      [nzPopoverContent]="contentTemplate"
-      nzPopoverPlacement="bottomRight"
-      nzPopoverTrigger="click"
-      i18n
+    <eo-get-share-link></eo-get-share-link>
+    <!-- Change Language -->
+    <nz-select
+      *ngIf="status.isShare"
+      [(ngModel)]="lang.systemLanguage"
+      nzBorderless
+      (ngModelChange)="handleSwitchLang($event)"
     >
-      Share
-    </button>
-    <ng-template #contentTemplate>
-      <div class="w-[360px] pb-4">
-        <p i18n class="font-bold">Share via link</p>
-        <p i18n class="pb-2 text-xs text-gray-400">
-          This link will be updated with the API content. Everyone can access it without logging in
-        </p>
-        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-          <input readonly type="text" nz-input [value]="shareLink" />
-        </nz-input-group>
-      </div>
-    </ng-template>
-    <ng-template #suffixIconButton>
-      <button eo-ng-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
-      <button eo-ng-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
-    </ng-template>
-    <nz-select *ngIf="status.isShare" [(ngModel)]="langValue" nzBorderless (ngModelChange)="handleSwitchLang($event)">
       <nz-option nzValue="en-US" nzLabel="English"></nz-option>
       <nz-option nzValue="zh-Hans" nzLabel="简体中文"></nz-option>
     </nz-select>
-
-    <span class="mx-1 line"></span>
-
+    <nz-divider nzType="vertical"></nz-divider>
     <!-- help -->
-    <span class="flex items-center justify-center icon" nz-dropdown [nzDropdownMenu]="helpMenu">
+    <eo-ng-dropdown btnType="text" [title]="helpTemplateTitle" [menus]="helpMenus" trigger="hover"></eo-ng-dropdown>
+    <ng-template #helpTemplateTitle>
       <eo-iconpark-icon name="help"> </eo-iconpark-icon>
-    </span>
-    <nz-dropdown-menu #helpMenu="nzDropdownMenu">
+    </ng-template>
+
+    <!-- <eo-nz-dropdown-menu #helpMenu="nzDropdownMenu">
       <ul nz-menu>
         <a href="https://docs.eoapi.io" target="_blank" nz-menu-item i18n>Document</a>
         <li nz-menu-divider></li>
@@ -114,10 +92,12 @@
           >Report Issue</a
         >
       </ul>
-    </nz-dropdown-menu>
-    <span class="mx-1 line"></span>
+    </eo-nz-dropdown-menu> -->
+    <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
-    <span
+    <button
+      eo-ng-button
+      nzType="text"
       *ngIf="!status.isShare"
       class="flex items-center justify-center icon"
       i18n-nzTooltipTitle
@@ -127,12 +107,12 @@
       (click)="openSettingModal()"
     >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
-    </span>
+    </button>
     <!-- User -->
-    <span *ngIf="!status.isShare" class="flex items-center justify-center icon" nz-dropdown [nzDropdownMenu]="UserMenu">
+    <!-- <span *ngIf="!status.isShare" class="flex items-center justify-center icon" eo-nz-dropdown [nzDropdownMenu]="UserMenu">
       <eo-iconpark-icon name="me"> </eo-iconpark-icon>
     </span>
-    <nz-dropdown-menu #UserMenu="nzDropdownMenu">
+    <eo-nz-dropdown-menu #UserMenu="nzDropdownMenu">
       <ul nz-menu>
         <li nz-menu-item *ngIf="!userService.isLogin">
           <button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button>
@@ -149,7 +129,7 @@
           </li>
         </ng-container>
       </ul>
-    </nz-dropdown-menu>
+    </eo-nz-dropdown-menu> -->
     <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
       <span
@@ -183,20 +163,20 @@
     </div>
     <!-- Web download client -->
     <div *ngIf="!electron.isElectron && !status.isShare">
-      <div class="btn py-1.5 px-2 mx-1 flex items-center" nz-dropdown i18n [nzDropdownMenu]="download">
-        <span class="flex items-center delete-icon">
+      <!-- <div class="download-btn py-1.5 px-2 mx-1 flex items-center" eo-nz-dropdown i18n [nzDropdownMenu]="download">
+        <span class="flex items-center icon">
           <eo-iconpark-icon name="down-two" size="14px"></eo-iconpark-icon>
         </span>
         <span class="ml-1">Download</span>
       </div>
-      <nz-dropdown-menu #download="nzDropdownMenu">
+      <eo-nz-dropdown-menu #download="nzDropdownMenu">
         <ul nz-menu>
           <ng-container *ngFor="let item of resourceInfo; let index = index">
             <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
             <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
           </ng-container>
         </ul>
-      </nz-dropdown-menu>
+      </eo-nz-dropdown-menu> -->
     </div>
   </div>
 </div>

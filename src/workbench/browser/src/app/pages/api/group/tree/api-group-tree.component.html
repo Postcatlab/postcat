@@ -7,19 +7,19 @@
     placeholder="Search"
     [(ngModel)]="searchValue"
   />
-  <button
+  <!-- <button
     *ngIf="!status.isShare"
     nzType="primary"
     eo-ng-button
     class="flex w-[32px] items-center justify-center ml-3 text-base shrink-0"
-    nz-dropdown
+    eo-nz-dropdown
     [nzDropdownMenu]="menu"
     nzPlacement="bottomRight"
     (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
   >
     <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
   </button>
-  <nz-dropdown-menu #menu="nzDropdownMenu">
+  <eo-nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
         <a i18n="@@AddAPI">New API</a>
@@ -29,7 +29,7 @@
         <a i18n>Import API</a>
       </li>
     </ul>
-  </nz-dropdown-menu>
+  </eo-nz-dropdown-menu> -->
 </header>
 
 <!-- Custom Group -->
@@ -58,10 +58,10 @@
             <span class="text_omit node_title">{{ node.title }}</span>
           </div>
           <span class="flex tree_node_operate" *ngIf="isEdit">
-            <button nz-dropdown [nzDropdownMenu]="groupMenu" class="flex items-center">
+            <!-- <button eo-nz-dropdown [nzDropdownMenu]="groupMenu" class="flex items-center">
               <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
             </button>
-            <nz-dropdown-menu #groupMenu="nzDropdownMenu">
+            <eo-nz-dropdown-menu #groupMenu="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI', node: node })">
                   <a i18n>Add API</a>
@@ -76,7 +76,7 @@
                   <a i18n="@@Delete">Delete</a>
                 </li>
               </ul>
-            </nz-dropdown-menu>
+            </eo-nz-dropdown-menu> -->
           </span>
         </div>
         <!-- Leaf -->
@@ -94,10 +94,10 @@
             >
               <eo-iconpark-icon class="mr-[5px]" name="lightning" size="15px"></eo-iconpark-icon>
             </button>
-            <button class="flex items-center" nz-dropdown [nzDropdownMenu]="apiDataMenu" *ngIf="isEdit">
+            <!-- <button class="flex items-center" eo-nz-dropdown [nzDropdownMenu]="apiDataMenu" *ngIf="isEdit">
               <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
             </button>
-            <nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
+            <eo-nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'editApi', node: node })">
                   <a i18n>Edit</a>
@@ -115,7 +115,7 @@
                   <a i18n="@@Delete">Delete</a>
                 </li>
               </ul>
-            </nz-dropdown-menu>
+            </eo-nz-dropdown-menu> -->
           </div>
         </div>
       </div>

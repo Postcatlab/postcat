@@ -17,7 +17,7 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { EoNgButtonModule } from 'eo-ng-button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { EoNgDropdownModule } from 'eo-ng-dropdown';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -50,6 +50,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
 import { LocalWorkspaceTipComponent } from './components/local-workspace-tip/local-workspace-tip.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -67,19 +68,14 @@ const COMPONENTS = [
   LocalWorkspaceTipComponent,
   ExtensionAppComponent,
 ];
-
-const SHARED_MODULE = [
-  CommonModule,
-  FormsModule,
-  RouterModule,
-  ReactiveFormsModule,
+const SHARED_UI_MODULE = [
   NzFormModule,
   NzDrawerModule,
   NzRadioModule,
   EoNgButtonModule,
   NzToolTipModule,
   NzResultModule,
-  NzDropDownModule,
+  EoNgDropdownModule,
   NzSpinModule,
   NzCardModule,
   NzNotificationModule,
@@ -93,6 +89,7 @@ const SHARED_MODULE = [
   NzAvatarModule,
   NzTabsModule,
   NzSkeletonModule,
+  NzSelectModule,
   NzPopoverModule,
   NzCodeEditorModule,
   NzResizableModule,
@@ -107,12 +104,13 @@ const SHARED_MODULE = [
   NzTagModule,
   NzPopconfirmModule,
 ] as const;
+const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;
 
 @NgModule({
-  imports: [...SHARED_MODULE],
+  imports: [...SHARED_MODULE,...SHARED_UI_MODULE],
   declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [],
-  exports: [...SHARED_MODULE, ...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe],
+  exports: [...SHARED_MODULE, ...COMPONENTS,...SHARED_UI_MODULE,  ClickStopPropagationDirective, ApiParamsNumPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}

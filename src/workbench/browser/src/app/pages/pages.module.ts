@@ -12,7 +12,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { ExtensionsComponent } from './extensions.component';
 
 @NgModule({
-  imports: [PagesRoutingModule, SettingModule, EouiModule, CommonModule, NzAlertModule, SharedModule, NavbarModule],
+  imports: [PagesRoutingModule, SettingModule, EouiModule, CommonModule, NzAlertModule, SharedModule,NavbarModule],
   declarations: [PagesComponent, UserModalComponent, ExtensionsComponent],
   exports: [],
   providers: [NzModalService],

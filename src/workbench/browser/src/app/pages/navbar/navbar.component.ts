@@ -4,16 +4,13 @@ import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SettingComponent } from '../../shared/components/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
-import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { WorkspaceService } from '../../shared/services/workspace/workspace.service';
+import { LanguageService } from '../../core/services/language/language.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -28,23 +25,20 @@ export class NavbarComponent implements OnInit {
   modules: Map<string, ModuleInfo>;
   resourceInfo = this.web.resourceInfo;
   issueEnvironment;
-  shareLink = '';
-  langValue;
-  isCopy = false;
+
+  helpMenus=[];
   constructor(
     public electron: ElectronService,
     private web: WebService,
     private modal: NzModalService,
     private message: MessageService,
-    public workspaceService: WorkspaceService,
+    public lang: LanguageService,
     public userService: UserService,
     public dataSourceService: DataSourceService,
     public status: StatusService,
-    private http: RemoteService,
-    private lang: LanguageService
+    public workspaceService: WorkspaceService,
   ) {
     this.issueEnvironment = this.getEnviroment();
-    this.langValue = this.lang.systemLanguage;
     if (this.workspaceService.currentWorkspace?.id !== -1) {
       this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
     }
@@ -75,21 +69,9 @@ export class NavbarComponent implements OnInit {
       action: 'close',
     });
   }
-  handleCopy() {
-    if (this.isCopy) {
-      return;
-    }
-    const isOk = copy(this.shareLink);
-    if (isOk) {
-      this.isCopy = true;
-      interval(700).subscribe(() => {
-        this.isCopy = false;
-      });
-    }
-  }
+
   async ngOnInit(): Promise<void> {
     this.modules = new Map();
-    this.shareLink = await this.getShareLink();
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
@@ -98,32 +80,9 @@ export class NavbarComponent implements OnInit {
           this.openSettingModal();
           return;
         }
-        if (type === 'update-share-link') {
-          // * request share link
-          this.shareLink = await this.getShareLink();
-        }
       });
   }
-  async getShareLink() {
-    if (this.workspaceService.isLocal) {
-      return '';
-    }
-    if (!this.userService.isLogin) {
-      return '';
-    }
-    if (this.status.isShare) {
-      return '';
-    }
-    const [res, err]: any = await this.http.api_shareCreateShare({});
-    if (err) {
-      return '';
-    }
-    const host = (this.dataSourceService?.remoteServerUrl || window.location.host)
-      .replace(/(?<!:)\/{2,}/g, '/')
-      .replace(/(\/$)/, '');
-    const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
-  }
+
   loginOrSign() {
     this.dataSourceService.checkRemoteCanOperate();
   }

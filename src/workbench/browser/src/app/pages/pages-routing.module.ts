@@ -29,7 +29,7 @@ const routes: Routes = [
       },
       {
         path: 'share',
-        loadChildren: () => import('./share.module').then((m) => m.ShareModule),
+        loadChildren: () => import('./share-project/share-project.module').then((m) => m.ShareProjectModule),
       },
       {
         path: 'member',

@@ -14,7 +14,6 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
@@ -36,7 +35,6 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzDividerModule,
     NzTreeModule,
     NzSwitchModule,
-    NzDropDownModule,
     NzSkeletonModule,
     NzCardModule,
     NzAvatarModule,

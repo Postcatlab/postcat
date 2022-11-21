@@ -1,14 +1,11 @@
 import { NgModule } from '@angular/core';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NavbarComponent } from 'eo/workbench/browser/src/app/pages/navbar/navbar.component';
 import { SettingModule } from 'eo/workbench/browser/src/app/shared/components/setting/setting.module';
-import { CommonModule } from '@angular/common';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import { ShareProjectModule } from '../share-project/share-project.module';
 
 @NgModule({
-  imports: [CommonModule, NzDropDownModule, NzSelectModule, NzToolTipModule, SettingModule, SharedModule],
+  imports: [SettingModule, ShareProjectModule, SharedModule],
   declarations: [NavbarComponent],
   exports: [NavbarComponent],
 })

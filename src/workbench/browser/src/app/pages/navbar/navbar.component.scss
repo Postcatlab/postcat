@@ -1,4 +1,4 @@
-.btn {
+.download-btn {
   border-radius: 3px;
   background-color: rgba(0,120,90, .2);
   color: #333;
@@ -6,31 +6,9 @@
   font-weight: 500;
   height: 30px;
   cursor: pointer;
-  .delete-icon {
+  .icon {
     color: var(--BTN_PRIMARY_BG);
   }
-}
-.line {
-  height: 20px;
-  width: 1px;
-  display: block;
-  background: var(--BORDER);
-}
-.icon {
-  -webkit-app-region: no-drag;
-  width: 30px;
-  height: 30px;
-  font-size: 1.5em;
-  color: rgba(0,0,0,0.5);
-  cursor: pointer;
-  border-radius: 3px;
-  transition: all .4s ease;
-  &:hover {
-    background-color: rgba(0,0,0,0.05);
-  }
-}
- .iconfont{
-  -webkit-app-region: no-drag;
 }
 .eo_navbar {
   -webkit-app-region: drag;

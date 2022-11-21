@@ -4638,7 +4638,7 @@
 "env-paths@^2.2.0", "env-paths@^2.2.1":
   "version" "2.2.1"
 
-"eo-ng-button@0.0.64":
+"eo-ng-button@^0.0.64":
   "integrity" "sha512-ti5h/IxXweaJ5LjtwaPDOrMohvrlkvC74Qn3j4H2og2wuJ/o4MxGE9oc9g0ps6xbtYdn2n/IalyPJj5ai3Yu4Q=="
   "resolved" "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.64.tgz"
   "version" "0.0.64"
@@ -4689,7 +4689,7 @@
     "@micro-zoe/micro-app" "1.0.0-alpha.10"
     "@ngxs/store" "3.7.4"
     "ajv" "8.11.0"
-    "eo-ng-button" "^0.0.63"
+    "eo-ng-button" "0.0.64"
     "eo-ng-dropdown" "^0.0.63"
     "js-beautify" "1.14.4"
     "lodash-es" "4.17.21"
