@@ -14,7 +14,13 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+
 import { EoNgButtonModule } from 'eo-ng-button';
+import { EoNgCheckboxModule } from 'eo-ng-checkbox';
+import { EoNgSelectModule } from 'eo-ng-select';
+import { EoNgSwitchModule } from 'eo-ng-switch';
+import { EoNgTreeModule } from 'eo-ng-tree';
+
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
@@ -62,7 +68,6 @@ const COMPONENTS = [
   SplitXComponent,
   EoMonacoEditorComponent,
   EnvListComponent,
-  SplitPanelComponent,
   EoMonacoEditorComponent,
   DownloadClienteComponent,
   LocalWorkspaceTipComponent,
@@ -73,6 +78,10 @@ const SHARED_UI_MODULE = [
   NzDrawerModule,
   NzRadioModule,
   EoNgButtonModule,
+  EoNgCheckboxModule,
+  EoNgSelectModule,
+  EoNgSwitchModule,
+  EoNgTreeModule,
   NzToolTipModule,
   NzResultModule,
   EoNgDropdownModule,

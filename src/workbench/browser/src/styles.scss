@@ -1,10 +1,21 @@
-
 // @import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @import '../../../node_modules/eo-ng-button/styles.scss';
+
+@import '../../../node_modules/eo-ng-tree/styles.scss';
+@import '../../../node_modules/eo-ng-checkbox/styles.scss';
+@import '../../../node_modules/eo-ng-select/styles.scss';
+:root {
+  --ICONPARK_SIZE: 15px;
+  --MR_ICON: 5px;
+}
+.iconpark-icon {
+  height: var(--ICONPARK_SIZE);
+  vertical-align: middle;
+  width: var(--ICONPARK_SIZE);
+}
 
 html,
 body {
@@ -12,7 +23,7 @@ body {
   padding: 0;
 
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif,"Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif, 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
 }
 :root {
   --NAVBAR_HEIGHT: 50px;
@@ -21,7 +32,14 @@ body {
   --API_TABS_HEIGHT: 36px;
 }
 
-img, svg, video, canvas, audio, iframe, embed, object {
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
   display: unset;
   vertical-align: unset;
 }
@@ -53,7 +71,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 .method_text_OPTIONS {
   color: var(--BLACK_TAG_BG);
 }
-.eo-search-input{
+.eo-search-input {
   height: 32px;
   border-color: transparent;
   background-color: rgba(0, 0, 0, 0.05);
@@ -81,7 +99,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
   border-width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background-color:var(--SCROLL_BAR_BG);
+  background-color: var(--SCROLL_BAR_BG);
   border-color: var(--BORDER);
   border-style: solid;
   border-left-width: 1px;

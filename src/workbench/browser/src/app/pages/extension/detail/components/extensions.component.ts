@@ -52,7 +52,7 @@ import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-m
           <!-- 布尔类型 -->
           <ng-container *ngIf="properties[field]?.type === 'boolean'">
             <label
-              nz-checkbox
+              eo-ng-checkbox
               [(ngModel)]="localSettings[field]"
               id="{{ field }}"
               [nzDisabled]="properties[field]?.disabled"
