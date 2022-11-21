@@ -34,6 +34,9 @@ import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
+import { WujieModule } from '@xmagic/ngx-wujie';
+
+
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -41,6 +44,7 @@ registerLocaleData(zh);
   declarations: [AppComponent],
   imports: [
     CommonModule,
+    WujieModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,

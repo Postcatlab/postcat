@@ -10,10 +10,21 @@ import { UserModalComponent } from './user-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { ExtensionsComponent } from './extensions.component';
+import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
+import { WujieModule } from '@xmagic/ngx-wujie';
 
 @NgModule({
-  imports: [PagesRoutingModule, SettingModule, EouiModule, CommonModule, NzAlertModule, SharedModule,NavbarModule],
-  declarations: [PagesComponent, UserModalComponent, ExtensionsComponent],
+  imports: [
+    PagesRoutingModule,
+    WujieModule,
+    SettingModule,
+    EouiModule,
+    CommonModule,
+    NzAlertModule,
+    SharedModule,
+    NavbarModule,
+  ],
+  declarations: [PagesComponent, Vue3Component, UserModalComponent, ExtensionsComponent],
   exports: [],
   providers: [NzModalService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

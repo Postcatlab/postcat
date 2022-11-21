@@ -71,8 +71,8 @@ class EoBrowserWindow {
   private watch() {
     // Reload page when load page url error
     this.win.webContents.on('did-fail-load', (event, errorCode) => {
-      console.error('did-fail-load', errorCode);
-      this.loadURL();
+      console.error('did-fail-load', event,errorCode);
+      // this.loadURL();
     });
     this.win.on('closed', () => {
       // Dereference the window object, usually you would store window

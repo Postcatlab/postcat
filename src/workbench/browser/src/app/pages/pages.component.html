@@ -1,6 +1,7 @@
 <eo-navbar></eo-navbar>
 <eo-user-modal></eo-user-modal>
 <eo-extensions></eo-extensions>
+
 <div
   class="page-body"
   [ngClass]="{ 'web-page-body': !electron.isElectron, 'pc-page-body': electron.isElectron }"
@@ -10,7 +11,14 @@
   <div class="home_container f_row">
     <eo-sidebar></eo-sidebar>
     <div class="home fg1">
-      <router-outlet></router-outlet>
+      <ngx-wujie
+        width="100%"
+        height="100%"
+        name="test"
+        url="http://127.0.0.1:8080"
+        [sync]="true"
+      ></ngx-wujie>
+      <!-- <router-outlet></router-outlet> -->
     </div>
   </div>
 </div>
