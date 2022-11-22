@@ -3,12 +3,13 @@
 
     <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="basic_info_container">
       <nz-input-group nzCompact>
-        <nz-select class="w_100" [(ngModel)]="model.request.protocol" formControlName="protocol">
-          <nz-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"> </nz-option>
-        </nz-select>
-        <nz-select class="!w-[106px] flex-none" [(ngModel)]="model.request.method" formControlName="method">
-          <nz-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></nz-option>
-        </nz-select>
+        <eo-ng-select class="w_100" [(ngModel)]="model.request.protocol" formControlName="protocol">
+          <eo-ng-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value">
+          </eo-ng-option>
+        </eo-ng-select>
+        <eo-ng-select class="!w-[106px] flex-none" [(ngModel)]="model.request.method" formControlName="method">
+          <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
+        </eo-ng-select>
         <div *ngIf="env.hostUri" nz-typography nzEllipsis class="env_front_uri" nzTooltipTitle="{{ env.hostUri }}"
           nzTooltipPlacement="bottom" nz-tooltip>
           {{ env.hostUri }}

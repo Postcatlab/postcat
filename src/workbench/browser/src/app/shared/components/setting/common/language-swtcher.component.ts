@@ -5,14 +5,14 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
   selector: 'eo-language-switcher',
   template: `
     <div class="font-bold text-lg mb-2" i18n="@@Language">Language</div>
-    <nz-select
+    <eo-ng-select
       i18n-nzPlaceHolder="@@Language"
       nzPlaceHolder="Language"
       [ngModel]="model['eoapi-language']"
       (ngModelChange)="handleChange($event)"
       [nzCustomTemplate]="defaultTemplate"
     >
-      <nz-option
+      <eo-ng-option
         *ngFor="let item of languageService.languages"
         nzCustomContent
         [nzValue]="item.value"
@@ -20,8 +20,8 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
       >
         <eo-iconpark-icon name="language"></eo-iconpark-icon>
         {{ item.name }}
-      </nz-option>
-    </nz-select>
+      </eo-ng-option>
+    </eo-ng-select>
     <ng-template #defaultTemplate let-selected>
       <eo-iconpark-icon name="language"></eo-iconpark-icon>
       {{ selected.nzLabel }}

@@ -39,11 +39,11 @@
             [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave" (beforeClose)="apiTab.beforeTabClose($event)"
             #apiTabComponent></eo-api-tab>
           <div class="flex items-center fix-mt">
-            <nz-select [(ngModel)]="envUuid" [(nzOpen)]="isOpen" (nzOpenChange)="handleEnvSelectStatus($event)"
+            <eo-ng-select [(ngModel)]="envUuid" [(nzOpen)]="isOpen" (nzOpenChange)="handleEnvSelectStatus($event)"
               [nzDropdownRender]="renderTemplate" nzAllowClear i18n-nzPlaceHolder="Environment Dropdown placeholder"
               nzPlaceHolder="Environment" #envSelect>
               <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
-            </nz-select>
+            </eo-ng-select>
             <ng-template #renderTemplate>
               <nz-divider *ngIf="!status.isShare"></nz-divider>
               <a *ngIf="!status.isShare" class="text-sx manager-env" eo-ng-button nzType="link"

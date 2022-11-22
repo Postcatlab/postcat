@@ -9,10 +9,10 @@
     </params-import>
   </div>
   <!--Select content-type-->
-  <nz-select *ngIf="['raw'].includes(bodyType)" class="fs12 content-type-select"
+  <eo-ng-select *ngIf="['raw'].includes(bodyType)" class="fs12 content-type-select"
     (ngModelChange)="changeContentType($event)" [(ngModel)]="contentType" nzBorderless>
-    <nz-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.name"></nz-option>
-  </nz-select>
+    <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.name"></eo-ng-option>
+  </eo-ng-select>
 </div>
 <!-- FormData -->
 <list-block-common-component *ngIf="['formData'].includes(bodyType)" [mainObject]="listConf" [(list)]="model">

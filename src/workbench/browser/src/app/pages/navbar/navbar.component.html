@@ -62,15 +62,11 @@
   <div class="flex items-center can_be_click">
     <eo-get-share-link></eo-get-share-link>
     <!-- Change Language -->
-    <nz-select
-      *ngIf="status.isShare"
-      [(ngModel)]="lang.systemLanguage"
-      nzBorderless
-      (ngModelChange)="handleSwitchLang($event)"
-    >
-      <nz-option nzValue="en-US" nzLabel="English"></nz-option>
-      <nz-option nzValue="zh-Hans" nzLabel="简体中文"></nz-option>
-    </nz-select>
+    <eo-ng-select *ngIf="status.isShare" [(ngModel)]="lang.systemLanguage" nzBorderless
+      (ngModelChange)="handleSwitchLang($event)">
+      <eo-ng-option nzValue="en-US" nzLabel="English"></eo-ng-option>
+      <eo-ng-option nzValue="zh-Hans" nzLabel="简体中文"></eo-ng-option>
+    </eo-ng-select>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- help -->
     <eo-ng-dropdown btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus" trigger="hover">
@@ -86,17 +82,9 @@
     </ng-template>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
-    <button
-      eo-ng-button
-      nzType="text"
-      *ngIf="!status.isShare"
-      class="flex items-center justify-center icon"
-      i18n-nzTooltipTitle
-      nz-tooltip
-      [nzTooltipMouseEnterDelay]="0.7"
-      nzTooltipTitle="Open Settings"
-      (click)="openSettingModal()"
-    >
+    <button eo-ng-button nzType="text" *ngIf="!status.isShare" class="flex items-center justify-center icon"
+      i18n-nzTooltipTitle nz-tooltip [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Open Settings"
+      (click)="openSettingModal()">
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </button>
     <!-- User -->
@@ -123,33 +111,16 @@
     </eo-nz-dropdown-menu> -->
     <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
-      <span
-        nz-tooltip
-        i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
-        [nzTooltipMouseEnterDelay]="0.7"
-        class="iconfont icon-jianhao mr10 fs24 cp"
-        nzTooltipPlacement="bottom"
-        (click)="minimize()"
-      >
+      <span nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="Minimize" [nzTooltipMouseEnterDelay]="0.7"
+        class="iconfont icon-jianhao mr10 fs24 cp" nzTooltipPlacement="bottom" (click)="minimize()">
       </span>
-      <span
-        nz-tooltip
-        i18n-nzTooltipTitle
-        [nzTooltipMouseEnterDelay]="0.7"
+      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7"
         [nzTooltipTitle]="isMaximized ? 'Restore' : 'Maximize'"
         class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
-        (click)="toggleMaximize()"
-      >
+        (click)="toggleMaximize()">
       </span>
-      <span
-        nz-tooltip
-        i18n-nzTooltipTitle
-        [nzTooltipMouseEnterDelay]="0.7"
-        nzTooltipTitle="Close"
-        class="iconfont icon-guanbi pr15 fs24 cp"
-        (click)="close()"
-      >
+      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Close"
+        class="iconfont icon-guanbi pr15 fs24 cp" (click)="close()">
       </span>
     </div>
     <!-- Web download client -->
