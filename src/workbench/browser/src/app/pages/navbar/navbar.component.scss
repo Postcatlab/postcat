@@ -17,14 +17,11 @@
   -webkit-app-region: no-drag;
 }
 :host ::ng-deep {
-  .download-btn {
+  .download-dropdown {
     button {
       background-color: rgba(0, 120, 90, 0.2);
       color: #333;
     }
-    font-size: 0.9em;
-    font-weight: 500;
-    cursor: pointer;
     .icon {
       color: var(--BTN_PRIMARY_BG);
     }

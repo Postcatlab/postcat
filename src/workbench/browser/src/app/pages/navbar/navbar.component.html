@@ -69,78 +69,107 @@
     </eo-ng-select>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- help -->
-    <eo-ng-dropdown btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus" trigger="hover">
+    <eo-ng-dropdown btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus">
       <ng-template #helpTitle>
         <eo-iconpark-icon name="help"></eo-iconpark-icon>
       </ng-template>
     </eo-ng-dropdown>
     <ng-template #helpTemplateItem let-item="item">
-      <ul nz-menu>
-        <a href="{{ item.href }}" target="_blank" nz-menu-item i18n>{{ item.title }}</a>
+      <ul>
+        <a href="{{ item.href }}" target="_blank" i18n>{{ item.title }}</a>
         <li nz-menu-divider></li>
       </ul>
     </ng-template>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
-    <button eo-ng-button nzType="text" *ngIf="!status.isShare" class="flex items-center justify-center icon"
-      i18n-nzTooltipTitle nz-tooltip [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Open Settings"
-      (click)="openSettingModal()">
+    <button
+      eo-ng-button
+      nzType="text"
+      *ngIf="!status.isShare"
+      class="flex items-center justify-center icon"
+      i18n-nzTooltipTitle
+      nz-tooltip
+      [nzTooltipMouseEnterDelay]="0.4"
+      nzTooltipTitle="Open Settings"
+      (click)="openSettingModal()"
+    >
       <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
     </button>
     <!-- User -->
-    <!-- <span *ngIf="!status.isShare" class="flex items-center justify-center icon" eo-nz-dropdown [nzDropdownMenu]="UserMenu">
-      <eo-iconpark-icon name="me"> </eo-iconpark-icon>
-    </span>
-    <eo-nz-dropdown-menu #UserMenu="nzDropdownMenu">
-      <ul nz-menu>
-        <li nz-menu-item *ngIf="!userService.isLogin">
+    <eo-ng-dropdown
+      *ngIf="!status.isShare"
+      [title]="userTitle"
+      class="flex items-center justify-center icon"
+      [menus]="[{}]"
+      [itemTmp]="userMenu"
+    >
+      <ng-template class="flex items-center" #userTitle>
+        <eo-iconpark-icon name="me"> </eo-iconpark-icon>
+      </ng-template>
+    </eo-ng-dropdown>
+    <ng-template #userMenu>
+      <ul>
+        <li *ngIf="!userService.isLogin">
           <button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button>
         </li>
         <ng-container *ngIf="userService.isLogin">
           <li class="px-[12px] py-[5px] text-neutral-400 font-bold">
             {{ userService.userProfile?.username }}
           </li>
-          <li nz-menu-item (click)="openSettingModal()">
+          <li (click)="openSettingModal()">
             <button type="button" i18n>Account Setting</button>
           </li>
-          <li nz-menu-item (click)="loginOut()">
+          <li (click)="loginOut()">
             <button type="button" i18n>Sign Out</button>
           </li>
         </ng-container>
       </ul>
-    </eo-nz-dropdown-menu> -->
+    </ng-template>
     <!-- Windows pc system operate -->
-    <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
-      <span nz-tooltip i18n-nzTooltipTitle nzTooltipTitle="Minimize" [nzTooltipMouseEnterDelay]="0.7"
-        class="iconfont icon-jianhao mr10 fs24 cp" nzTooltipPlacement="bottom" (click)="minimize()">
-      </span>
-      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7"
-        [nzTooltipTitle]="isMaximized ? 'Restore' : 'Maximize'"
-        class="iconfont icon-{{ isMaximized ? 'copy' : 'duoxuanweixuanzhong' }} mr10 fs24 cp"
-        (click)="toggleMaximize()">
-      </span>
-      <span nz-tooltip i18n-nzTooltipTitle [nzTooltipMouseEnterDelay]="0.7" nzTooltipTitle="Close"
-        class="iconfont icon-guanbi pr15 fs24 cp" (click)="close()">
-      </span>
-    </div>
+    <!-- <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron"> -->
+    <button eo-ng-button nzType="text">
+      <eo-iconpark-icon
+        nz-tooltip
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Minimize"
+        [nzTooltipMouseEnterDelay]="0.4"
+        size="24px"
+        name="minus"
+      ></eo-iconpark-icon>
+    </button>
+
+    <eo-iconpark-icon
+      nz-tooltip
+      class="ml-[5px]"
+      i18n-nzTooltipTitle
+      nzTooltipTitle="Minimize"
+      [nzTooltipMouseEnterDelay]="0.4"
+      size="24px"
+      [name]="isMaximized ? 'off-screen-two' : 'full-screen'"
+    ></eo-iconpark-icon>
+    <span
+      nz-tooltip
+      i18n-nzTooltipTitle
+      [nzTooltipMouseEnterDelay]="0.4"
+      nzTooltipTitle="Close"
+      class="iconfont icon-guanbi pr15 fs24 cp"
+      (click)="close()"
+    >
+    </span>
+    <!-- </div> -->
     <!-- Web download client -->
-    <div *ngIf="!electron.isElectron && !status.isShare">
-      <eo-ng-dropdown class="download-btn" [title]="downloadTitle">
-        <ng-template class="flex items-center" #downloadTitle>
-          <span class="icon">
-            <eo-iconpark-icon name="down-two" size="14px"></eo-iconpark-icon>
-          </span>
-          <span class="ml-1">Download</span>
+    <div class="ml-2.5" *ngIf="!electron.isElectron && !status.isShare">
+      <eo-ng-dropdown class="download-dropdown" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
+        <ng-template #downloadTitle>
+          <div class="flex items-center">
+            <eo-iconpark-icon class="icon" name="down-two" size="14px"></eo-iconpark-icon>
+            <span class="ml-1">Download</span>
+          </div>
         </ng-template>
       </eo-ng-dropdown>
-      <!-- <eo-nz-dropdown-menu #download="nzDropdownMenu">
-        <ul nz-menu>
-          <ng-container *ngFor="let item of resourceInfo; let index = index">
-            <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
-            <li nz-menu-divider *ngIf="index !== resourceInfo.length - 1"></li>
-          </ng-container>
-        </ul>
-      </eo-nz-dropdown-menu> -->
+      <ng-template #downloadMenu let-item="item">
+        <a [href]="item.link">{{ item.name }}</a>
+      </ng-template>
     </div>
   </div>
 </div>

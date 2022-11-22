@@ -5,7 +5,7 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
 import { ShareProjectModule } from '../share-project/share-project.module';
 
 @NgModule({
-  imports: [SettingModule, ShareProjectModule, SharedModule],
+  imports: [SettingModule,ShareProjectModule, SharedModule],
   declarations: [NavbarComponent],
   exports: [NavbarComponent],
 })

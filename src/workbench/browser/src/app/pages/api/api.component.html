@@ -7,7 +7,7 @@
         [(nzSelectedIndex)]="tabsIndex">
         <nz-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
-            <span i18n-nzTooltipTitle nzTooltipTitle="Collections" nz-tooltip [nzTooltipMouseEnterDelay]="0.7"
+            <span i18n-nzTooltipTitle nzTooltipTitle="Collections" nz-tooltip [nzTooltipMouseEnterDelay]="0.4"
               class="text-lg tab-content">
               <eo-iconpark-icon name="folder-open"></eo-iconpark-icon>
             </span>
@@ -18,7 +18,7 @@
         </nz-tab>
         <nz-tab [nzTitle]="historyTitle" *ngIf="!status.isShare">
           <ng-template #historyTitle>
-            <span i18n-nzTooltipTitle nzTooltipTitle="History" nz-tooltip [nzTooltipMouseEnterDelay]="0.7"
+            <span i18n-nzTooltipTitle nzTooltipTitle="History" nz-tooltip [nzTooltipMouseEnterDelay]="0.4"
               class="text-lg tab-content">
               <eo-iconpark-icon name="history"></eo-iconpark-icon>
             </span>
