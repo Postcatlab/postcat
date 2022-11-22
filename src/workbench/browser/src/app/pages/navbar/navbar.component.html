@@ -93,7 +93,7 @@
       nzTooltipTitle="Open Settings"
       (click)="openSettingModal()"
     >
-      <eo-iconpark-icon name="setting-two"></eo-iconpark-icon>
+      <eo-iconpark-icon name="setting"></eo-iconpark-icon>
     </button>
     <!-- User -->
     <eo-ng-dropdown
@@ -104,7 +104,7 @@
       [itemTmp]="userMenu"
     >
       <ng-template class="flex items-center" #userTitle>
-        <eo-iconpark-icon name="me"> </eo-iconpark-icon>
+        <eo-iconpark-icon name="people"> </eo-iconpark-icon>
       </ng-template>
     </eo-ng-dropdown>
     <ng-template #userMenu>
@@ -162,7 +162,7 @@
       <eo-ng-dropdown class="download-dropdown" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
         <ng-template #downloadTitle>
           <div class="flex items-center">
-            <eo-iconpark-icon class="icon" name="down-two" size="14px"></eo-iconpark-icon>
+            <eo-iconpark-icon class="icon" name="arrow-down" size="14px"></eo-iconpark-icon>
             <span class="ml-1">Download</span>
           </div>
         </ng-template>

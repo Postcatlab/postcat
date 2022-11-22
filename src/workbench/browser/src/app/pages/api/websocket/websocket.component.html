@@ -107,14 +107,14 @@
             <div *ngIf="item.type === 'start'"
               class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
               <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente start_icon">
-                <eo-iconpark-icon name="check-small" size="10"></eo-iconpark-icon>
+                <eo-iconpark-icon name="check" size="10"></eo-iconpark-icon>
               </span>
               <div class="px-2">{{ item.title }}</div>
             </div>
             <div *ngIf="item.type === 'end'"
               class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
               <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente end_icon">
-                <eo-iconpark-icon name="close-small" size="10"></eo-iconpark-icon>
+                <eo-iconpark-icon name="close" size="10"></eo-iconpark-icon>
               </span>
               <div class="px-2">{{ item.title || item.msg }}</div>
             </div>

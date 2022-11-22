@@ -239,7 +239,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     const prefix = this.status.isShare ? 'home/share' : '/home/api';
     inArg.event.stopPropagation();
     switch (inArg.eventName) {
-      case 'testApi':
       case 'editApi':
       case 'detailApi': {
         this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {

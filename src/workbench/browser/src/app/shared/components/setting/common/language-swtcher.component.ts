@@ -18,12 +18,11 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
         [nzValue]="item.value"
         [nzLabel]="item.name"
       >
-        <eo-iconpark-icon name="language"></eo-iconpark-icon>
         {{ item.name }}
       </eo-ng-option>
     </eo-ng-select>
     <ng-template #defaultTemplate let-selected>
-      <eo-iconpark-icon name="language"></eo-iconpark-icon>
+      <eo-iconpark-icon name="translate" size="18px"></eo-iconpark-icon>
       {{ selected.nzLabel }}
     </ng-template>
   `,

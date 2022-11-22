@@ -22,7 +22,7 @@ type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' 
 const eventHash = new Map()
   .set('format', {
     label: $localize`Format`,
-    icon: 'magic',
+    icon: 'code',
   })
   .set('copy', {
     label: $localize`:@@Copy:Copy`,
@@ -34,7 +34,7 @@ const eventHash = new Map()
   })
   .set('replace', {
     label: $localize`Replace`,
-    icon: 'file-text-one',
+    icon: 'file-text',
   });
 
 @Component({
