@@ -16,15 +16,28 @@
   vertical-align: middle;
   width: var(--ICONPARK_SIZE);
 }
-nz-resize-handle.right-sidebar-resize-handles {
-  background-color: var(--BORDER);
-  cursor: col-resize;
-  width: 1px;
+nz-resize-handle {
+  display: block;
   top: 0;
-  left: 0;
+  background-color: var(--BORDER);
   &:hover {
     background-color: var(--MAIN_THEME_COLOR);
-    width: 3px;
+  }
+  &.vertical {
+    cursor: col-resize;
+    width: 1px;
+    left: 0;
+    &:hover {
+      width: 3px;
+    }
+  }
+  &.horizontal {
+    width: 100%;
+    cursor: row-resize;
+    height: 1px;
+    &:hover {
+      height: 3px;
+    }
   }
 }
 html,

@@ -36,8 +36,11 @@ import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/shared/serv
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
 import { isEmpty } from 'lodash-es';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
+const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
+
 interface testViewModel {
   request: ApiTestData;
   beforeScript: string;
@@ -81,9 +84,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
 
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
+  height = Number.isNaN(localHeight) ? 300 : localHeight;
 
   isRequestBodyLoaded = false;
-  initHeight = localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY) || '45%';
   REQUEST_METHOD = objectToArray(RequestMethod);
   REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   MAX_TEST_SECONDS = 60;
@@ -273,11 +276,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   changeBodyType($event) {
     this.initContentType();
   }
-  handleEoDrag([leftEl]: [HTMLDivElement, HTMLDivElement]) {
-    if (leftEl.style.height) {
-      localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, leftEl.style.height);
-    }
-  }
   handleBottomTabSelect(tab) {
     if (tab.index === 2) {
       this.isRequestBodyLoaded = true;
@@ -396,6 +394,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   downloadFile() {
     this.apiTestResultResponseComponent.downloadResponseText();
+  }
+
+  onResize({ height }: NzResizeEvent): void {
+    this.height = height;
+    localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, String(height));
   }
   /**
    * Change test status

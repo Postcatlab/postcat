@@ -30,6 +30,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   contentHeight = 200;
   isDragging = false;
   animateId = -1;
+  animationId: number;
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: ApiTabComponent) {
     // For lifecycle error, use timeout
@@ -164,6 +165,14 @@ export class ApiComponent implements OnInit, OnDestroy {
     });
   }
 
+  onRightPanelResize({ width }: NzResizeEvent): void {
+    cancelAnimationFrame(this.animationId);
+    this.animationId = requestAnimationFrame(() => {
+      this.dyWidth = width;
+      localStorage.setItem(DY_WIDTH_KEY, String(width));
+    });
+  }
+
   countPaddingRight() {
     if (this.status.isShare) {
       return '0px';
@@ -188,11 +197,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.activeBar = status;
   }
 
-  handleDrag(e) {
-    const distance = e;
-    this.dyWidth = distance;
-    localStorage.setItem(DY_WIDTH_KEY, String(this.dyWidth));
-  }
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {
     if (uuid == null) {

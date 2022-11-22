@@ -45,6 +45,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { RouterModule } from '@angular/router';
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/pages/api/api-shared.module';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzResizableService } from 'ng-zorro-antd/resizable';
 
 const NZ_COMPONETS = [
   NzDropDownModule,
@@ -97,6 +98,7 @@ const COMPONENTS = [
   providers: [
     ApiTestUtilService,
     ApiTestService,
+    NzResizableService,
     {
       provide: TestServerService,
       useFactory: (electron: ElectronService, web: WebService, locale) => {

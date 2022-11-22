@@ -27,7 +27,7 @@
         </nz-tab>
       </nz-tabset>
     </nz-content>
-    <nz-resize-handle class="right-sidebar-resize-handles" nzDirection="right">
+    <nz-resize-handle class="vertical" nzDirection="right">
     </nz-resize-handle>
     <!-- </div> -->
   </nz-sider>
@@ -80,10 +80,13 @@
         <section class="relative" [ngStyle]="{ paddingRight: countPaddingRight() }">
           <!-- Get router child component by activate -->
           <router-outlet (activate)="onActivate($event)"></router-outlet>
-          <eo-split-x *ngIf="activeBar && !status.isShare" (x)="handleDrag($event)" [init]="[200, dyWidth, 400]">
-          </eo-split-x>
+
           <div *ngIf="!status.isShare" class="absolute top-0 bottom-0 right-0 flex right-bar"
-            [ngClass]="{ 'left-line': !activeBar }" [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }">
+            [ngClass]="{ 'left-line': !activeBar }" [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
+            nz-resizable [style.width.px]="dyWidth" [nzMaxWidth]="500" [nzMinWidth]="200"
+            (nzResize)="onRightPanelResize($event)">
+            <nz-resize-handle *ngIf="activeBar && !status.isShare" class="vertical" nzDirection="left">
+            </nz-resize-handle>
             <button type="button" eo-ng-button nzType="text"
               class="flex items-center justify-center w-[40px] p-2 h-10 env-icon" [ngClass]="activeBar ? 'active' : ''"
               (click)="toggleRightBar()" nz-tooltip [nzTooltipMouseLeaveDelay]="0"
