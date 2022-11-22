@@ -16,9 +16,9 @@
     </div>
   </div>
   <!-- Test Alert Tip -->
-  <nz-alert class="eo_alert_bar" *ngFor="let item of model.reportList"
+  <eo-ng-feedback-alert class="eo_alert_bar" *ngFor="let item of model.reportList"
     [nzType]="item.type === 'interrupt' ? 'error' : 'info'" [nzMessage]="item.content?.toString()" nzShowIcon>
-  </nz-alert>
+  </eo-ng-feedback-alert>
   <!-- Response -->
   <div *ngIf="model.responseType">
     <ng-container *ngIf="responseIsImg; else stream">

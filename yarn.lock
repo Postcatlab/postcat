@@ -434,7 +434,7 @@
   dependencies:
     "@ctrl/tinycolor" "^3.3.1"
 
-"@ant-design/icons-angular@14.1.0", "@ant-design/icons-angular@^14.1.0":
+"@ant-design/icons-angular@^14.1.0":
   version "14.1.0"
   resolved "https://registry.npmmirror.com/@ant-design/icons-angular/-/icons-angular-14.1.0.tgz#7612507aae28872ce3ccd139857452426cc30be3"
   integrity sha512-SvWi8p4L+cCfTGtezeUq1s8kahZEO1UVf7ZR615Fix3c2l9OnAJi+niDkq2fZHjpiarFrt8HoZ2EhMAMN7jfbg==
@@ -5723,6 +5723,20 @@ eo-ng-dropdown@0.0.71:
   dependencies:
     tslib "^2.3.0"
 
+eo-ng-feedback@0.0.71:
+  version "0.0.71"
+  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.0.71.tgz#6200b5db5dff938b1787d0dba90fec8e15d939ea"
+  integrity sha512-MZerMII0yb0yMKilZrbUhYJTqrKOC6Gznbuw7ZqHKhBHL9VU84HtNbYa3T+fPuGVb7geOZUhfKwfEmREdGme+Q==
+  dependencies:
+    tslib "^2.3.0"
+
+eo-ng-input@0.0.71:
+  version "0.0.71"
+  resolved "https://registry.npmmirror.com/eo-ng-input/-/eo-ng-input-0.0.71.tgz#6708f272b5050bcc31e1d1b7ecb6b071a05f5532"
+  integrity sha512-kZQcsAKHZu6uVC8BvqtQC/fREoqXuZSuwzYcHGM0DOKvqzhB6f/uteKmFX1zAZjY5hd82krTLp/X8J4dqDqsaA==
+  dependencies:
+    tslib "^2.3.0"
+
 eo-ng-select@0.0.71:
   version "0.0.71"
   resolved "https://registry.npmmirror.com/eo-ng-select/-/eo-ng-select-0.0.71.tgz#c23e49e6941607841540525bd02aa62c028d912a"
@@ -9513,10 +9527,10 @@ netmask@^2.0.2:
   resolved "https://registry.npmmirror.com/netmask/-/netmask-2.0.2.tgz#8b01a07644065d536383835823bc52004ebac5e7"
   integrity sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==
 
-ng-zorro-antd@14.2.0:
-  version "14.2.0"
-  resolved "https://registry.npmmirror.com/ng-zorro-antd/-/ng-zorro-antd-14.2.0.tgz#1e4c85f2e6da8fefc19366ede0bc976094522636"
-  integrity sha512-8L4skaucFYqzI/jghvyRRA31cvcOLbKoY1iA+p0wd267Ya1pF2MTn5VAVCH8vhfszesPvWPI6LBT7VIv6swZZg==
+ng-zorro-antd@14.0.0:
+  version "14.0.0"
+  resolved "https://registry.npmmirror.com/ng-zorro-antd/-/ng-zorro-antd-14.0.0.tgz#31ae2120a866fca33f348c7e65fc612f788732a7"
+  integrity sha512-KqWyplJDvlHEarWhyAlexFGovQIhMHkwOmsJk0MmC0NFgU+WA9GgclZG3Z6sK8q9o0XXz7zPKmMzufcJyM+ghQ==
   dependencies:
     "@angular/cdk" "^14.1.0"
     "@ant-design/icons-angular" "^14.1.0"

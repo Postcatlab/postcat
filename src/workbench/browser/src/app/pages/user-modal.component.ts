@@ -27,12 +27,12 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
         <span i18n>
           After confirmation, the system will create a cloud space to upload the local data to the cloud.
         </span>
-        <nz-alert
+        <eo-ng-feedback-alert
           nzType="warning"
           nzMessage="Subsequent local space and cloud space are no longer synchronized"
           i18n-nzMessage
           nzShowIcon
-        ></nz-alert>
+        ></eo-ng-feedback-alert>
       </ng-container>
       <ng-template #modalSyncFooter>
         <button

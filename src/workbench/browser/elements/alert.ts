@@ -15,16 +15,16 @@ export class Alert extends Render {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'NzAlertModule', type: 'module' }],
-          from: 'ng-zorro-antd/alert',
+          target: [{ name: 'EoNgFeedbackAlertModule', type: 'module' }],
+          from: 'eo-ng-feedback',
         },
       ],
-      template: `<nz-alert
+      template: `<eo-ng-feedback-alert
       nzType="${this.type}"
       nzMessage="${this.text}"
       i18n-nzMessage
       ${this.icon ? 'nzShowIcon' : ''}
-    ></nz-alert>`,
+    ></eo-ng-feedback-alert>`,
       data: [],
       methods: [],
     };

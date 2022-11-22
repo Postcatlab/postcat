@@ -22,21 +22,17 @@ import { AccountComponent } from 'eo/workbench/browser/src/app/pages/account.com
 
 import { SelectThemeComponent } from 'eo/workbench/browser/src/app/shared/components/toolbar/select-theme/select-theme.component';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
-import { IconDefinition } from '@ant-design/icons-angular';
-import { CaretDownFill } from '@ant-design/icons-angular/icons';
 import {
   DataStorageComponent,
   LanguageSwticherComponent,
   AboutComponent,
 } from 'eo/workbench/browser/src/app/shared/components/setting/common';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-const icons: IconDefinition[] = [CaretDownFill];
+
 const ANTDMODULES = [
   NzModalModule,
   EoNgButtonModule,
   NzListModule,
   NzInputModule,
-  NzIconModule.forRoot(icons),
   NzFormModule,
   NzSelectModule,
   NzDividerModule,

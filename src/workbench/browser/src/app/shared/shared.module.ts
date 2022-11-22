@@ -21,6 +21,7 @@ import { EoNgSelectModule } from 'eo-ng-select';
 import { EoNgSwitchModule } from 'eo-ng-switch';
 import { EoNgTreeModule } from 'eo-ng-tree';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
+import { EoNgFeedbackAlertModule } from 'eo-ng-feedback';
 
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
@@ -82,6 +83,7 @@ const SHARED_UI_MODULE = [
   EoNgSelectModule,
   EoNgSwitchModule,
   EoNgTreeModule,
+  EoNgFeedbackAlertModule,
   NzToolTipModule,
   NzResultModule,
   EoNgDropdownModule,
