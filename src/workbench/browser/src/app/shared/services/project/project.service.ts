@@ -39,10 +39,10 @@ export class ProjectService {
         const apiDataObservable = this.indexedDBStorage.apiDataLoadAllByProjectID(projectID);
         apiDataObservable.subscribe(({ data: apiData }: any) => {
           const envObservable = this.indexedDBStorage.environmentLoadAllByProjectID(projectID);
-          envObservable.subscribe(({ data: enviroments }: any) => {
+          envObservable.subscribe(({ data: environments }: any) => {
             resolve({
               collections: this.exportCollects(apiGroup, apiData),
-              enviroments,
+              environments,
             });
           });
         });
@@ -57,12 +57,12 @@ export class ProjectService {
     if ([success, empty].includes(result.status)) {
       return {
         collections: this.exportCollects(apiGroup, result.data),
-        enviroments: [],
+        environments: [],
       };
     }
     return {
       collections: [],
-      enviroments: [],
+      environments: [],
     };
   }
 

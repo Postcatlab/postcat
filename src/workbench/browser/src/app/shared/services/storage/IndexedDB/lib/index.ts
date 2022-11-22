@@ -732,8 +732,8 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         });
       deepFn(data.collections, 0).then(() => {
         //Add env
-        if (data.enviroments && data.enviroments.length) {
-          data.enviroments.forEach((item) => {
+        if (data.environments && data.environments.length) {
+          data.environments.forEach((item) => {
             item.projectID = uuid;
             const result = parseAndCheckEnv(item);
             if (!result.validate) {

@@ -24,9 +24,9 @@
   }
   &.sidebar_item_active {
     background-color: var(--SEC_BG);
-    color: #00785a;
+    color: var(--MAIN_THEME_COLOR);
     i.icon {
-      color: #00785a;
+      color: var(--MAIN_THEME_COLOR);
     }
     .label {
       color: rgba(0,0,0,0.8);

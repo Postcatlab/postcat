@@ -12,7 +12,7 @@ import { isNotEmpty } from 'eo/shared/common/common';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';
 import { promises, readFileSync } from 'fs';
-import { ELETRON_APP_CONFIG } from '../../../../enviroment';
+import { ELETRON_APP_CONFIG } from '../../../../environment';
 import { createServer } from 'http-server/lib/http-server';
 import path from 'node:path';
 import portfinder from 'portfinder';

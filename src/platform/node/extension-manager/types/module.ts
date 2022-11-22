@@ -24,13 +24,13 @@ export interface ModuleInfo {
   name: string;
   version: string;
   author: string | { name: 'string' };
-  //Entry js file,webRender enviroment
+  //Entry js file,webRender environment
   main: string;
   // extension description
   description: string;
 
   //* Eoapi extend
-  //Entry js file,node enviroment
+  //Entry js file,node environment
   node: string;
   title: string;
   // extension logo

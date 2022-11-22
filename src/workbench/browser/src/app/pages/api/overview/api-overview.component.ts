@@ -23,28 +23,26 @@ export class ApiOverviewComponent implements OnDestroy {
   overviewList = [
     {
       title: $localize`Import`,
-      icon: 'afferent-three',
+      icon: 'afferent',
       desc: $localize`:@@ImportAPI:Import API`,
       type: 'import',
     },
     {
       title: $localize`Export`,
-      icon: 'efferent-three',
+      icon: 'efferent',
       desc: $localize`Export API`,
       type: 'export',
     },
     {
       title: $localize`Push`,
-      icon: 'send',
+      icon: 'play-cycle',
       desc: $localize`Push/Sync API to other platforms`,
       type: 'push',
     },
   ];
 
   handleClickCard = (event, item) => {
-    if (event.target?.classList?.contains?.('ant-card-actions') || event.target?.closest('.ant-card-actions')) {
-      this.clickCard(item);
-    }
+    this.clickCard(item);
   };
 
   clickCard({ title, desc, type }) {
