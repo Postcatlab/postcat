@@ -157,13 +157,11 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   onSideResize({ width }: NzResizeEvent): void {
     this.isDragging = true;
-    // cancelAnimationFrame(this.animateId);
-    // this.animateId = requestAnimationFrame(() => {
-    this.siderWidth = width;
-    requestAnimationFrame(() => {
+    cancelAnimationFrame(this.animateId);
+    this.animateId = requestAnimationFrame(() => {
+      this.siderWidth = width;
       localStorage.setItem(LEFT_SIDER_WIDTH_KEY, String(width));
     });
-    // });
   }
 
   countPaddingRight() {
