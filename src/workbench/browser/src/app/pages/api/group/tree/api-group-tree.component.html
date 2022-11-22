@@ -1,12 +1,12 @@
 <header class="flex pt-2">
   <input nz-input type="text" class="flex-1 px-3 eo-search-input" i18n-placeholder="@@Search" placeholder="Search"
     [(ngModel)]="searchValue" />
-  <button *ngIf="!status.isShare" nzType="primary" eo-ng-button
+  <!-- <button *ngIf="!status.isShare" nzType="primary" eo-ng-button
     class="flex w-[32px] items-center justify-center ml-3 text-base shrink-0" nz-dropdown [nzDropdownMenu]="menu"
     nzPlacement="bottomRight" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
     <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
   </button>
-  <eo-nz-dropdown-menu #menu="nzDropdownMenu">
+  <eo-ng-dropdown #menu="nzDropdownMenu">
     <ul nz-menu>
       <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
         <a i18n="@@AddAPI">New API</a>
@@ -16,7 +16,7 @@
         <a i18n>Import API</a>
       </li>
     </ul>
-  </eo-nz-dropdown-menu> -->
+  </eo-ng-dropdown>  -->
 </header>
 
 <!-- Custom Group -->

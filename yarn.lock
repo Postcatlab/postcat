@@ -5734,20 +5734,6 @@ eo-ng-button@0.0.71:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-button@^0.0.64:
-  version "0.0.64"
-  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.64.tgz#b1700fe5b6c393685020c72c536533ee599f1ebd"
-  integrity sha512-ti5h/IxXweaJ5LjtwaPDOrMohvrlkvC74Qn3j4H2og2wuJ/o4MxGE9oc9g0ps6xbtYdn2n/IalyPJj5ai3Yu4Q==
-  dependencies:
-    tslib "^2.3.0"
-
-eo-ng-checkbox@0.0.66:
-  version "0.0.66"
-  resolved "https://registry.npmmirror.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.66.tgz#7108e67c7145c0afc8224daeae3468da8132a7dc"
-  integrity sha512-diALqGPTTj2+IOsznrPqDF6TS4b6MOT2YFOtrJHduBOK+75a/OcsD1sTX2SZY6aCgnm9UECkN7+iTvaLHohB+Q==
-  dependencies:
-    tslib "^2.3.0"
-
 eo-ng-checkbox@0.0.71:
   version "0.0.71"
   resolved "https://registry.npmmirror.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.71.tgz#a711c3552764df6aa061156a3f9e6cc4bca555db"
@@ -5762,31 +5748,10 @@ eo-ng-dropdown@0.0.71:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-dropdown@^0.0.63:
-  version "0.0.63"
-  resolved "https://registry.npmmirror.com/eo-ng-dropdown/-/eo-ng-dropdown-0.0.63.tgz#759fbefaa954632de3d4485a26f514df1a390ff1"
-  integrity sha512-vaACuCUn3RN+3jCwbIrWXk5BrAK+cYv+B6EkdXjFDfI6WhWmzBgke8o29DI/a7dMwP1WW1y1i0zggtmo5BXxDw==
-  dependencies:
-    tslib "^2.3.0"
-
-eo-ng-select@0.0.66:
-  version "0.0.66"
-  resolved "https://registry.npmmirror.com/eo-ng-select/-/eo-ng-select-0.0.66.tgz#3cf6c0e36c4cc81b39473fe81443c35df43d0548"
-  integrity sha512-n01y8OfjRKPzm/AlxPaHkXMu4qdzLRe77WhKMbkEj8ojmfF3BgCTBtH9UUJTLyuNBOE/zToeh4tuYQD6Qx8g6Q==
-  dependencies:
-    tslib "^2.3.0"
-
 eo-ng-select@0.0.71:
   version "0.0.71"
   resolved "https://registry.npmmirror.com/eo-ng-select/-/eo-ng-select-0.0.71.tgz#c23e49e6941607841540525bd02aa62c028d912a"
   integrity sha512-oTLjTgJwA0fF8TBNUE7qjLQ8Vv1TYS4lCbGkng0hFtTGn6/APC68LLqMoi+7nXxAnWo8qzzCgjS+HdBlenYBMQ==
-  dependencies:
-    tslib "^2.3.0"
-
-eo-ng-switch@0.0.66:
-  version "0.0.66"
-  resolved "https://registry.npmmirror.com/eo-ng-switch/-/eo-ng-switch-0.0.66.tgz#cea85aa3f1d1efef581c1bee44cfa44938373c6b"
-  integrity sha512-1PQA2EpYlC9p76piwdqjVFHWNqLdW5DXfuCLoR3JLrz9rUUdT9Ua/x2st+T6Y0ITiIFy8C96pUg7f8Yk2stM4A==
   dependencies:
     tslib "^2.3.0"
 

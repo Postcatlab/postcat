@@ -20,10 +20,10 @@ import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { EoNgSwitchModule } from 'eo-ng-switch';
 import { EoNgTreeModule } from 'eo-ng-tree';
+import { EoNgDropdownModule } from 'eo-ng-dropdown';
 
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
-import { EoNgDropdownModule } from 'eo-ng-dropdown';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -116,10 +116,10 @@ const SHARED_UI_MODULE = [
 const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;
 
 @NgModule({
-  imports: [...SHARED_MODULE,...SHARED_UI_MODULE],
+  imports: [...SHARED_MODULE, ...SHARED_UI_MODULE],
   declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [],
-  exports: [...SHARED_MODULE, ...COMPONENTS,...SHARED_UI_MODULE,  ClickStopPropagationDirective, ApiParamsNumPipe],
+  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ClickStopPropagationDirective, ApiParamsNumPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}
