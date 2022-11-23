@@ -50,7 +50,6 @@ export class WorkspaceService {
     private projectService: ProjectService,
     private userService: UserService,
     private settingService: SettingService,
-    private storageService: StorageService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -135,10 +134,10 @@ export class WorkspaceService {
     }
   };
   switchToLocal() {
-    this.storageService.toggleDataSource({ dataSourceType: 'local' });
+    this.storage.toggleDataSource({ dataSourceType: 'local' });
   }
   switchToHttp() {
-    this.storageService.toggleDataSource({ dataSourceType: 'http' });
+    this.storage.toggleDataSource({ dataSourceType: 'http' });
   }
 
   getWorkspaceList() {

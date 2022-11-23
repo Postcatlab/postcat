@@ -22,7 +22,7 @@ import {
   ContentTypeByAbridge,
 } from '../../../../../shared/services/api-test/api-test.model';
 import { ApiTestUtilService } from '../api-test-util.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
@@ -68,7 +68,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     private apiTest: ApiTestUtilService,
     private cdRef: ChangeDetectorRef,
     elementRef: ElementRef,
-    private message: EoMessageService
+    private message: EoNgFeedbackMessageService
   ) {
     this.el = elementRef.nativeElement;
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {

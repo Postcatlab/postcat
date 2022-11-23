@@ -5,10 +5,7 @@ import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/components/e
 
 @Component({
   selector: 'eo-root',
-  template: `
-    <eo-message></eo-message>
-    <router-outlet></router-outlet>
-  `,
+  template: ` <router-outlet></router-outlet> `,
 })
 export class AppComponent {
   constructor(

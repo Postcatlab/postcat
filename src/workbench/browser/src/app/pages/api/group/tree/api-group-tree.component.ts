@@ -16,7 +16,7 @@ import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/shared/components/import-api/import-api.component';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
@@ -74,7 +74,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
-    private message: EoMessageService,
+    private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private storage: StorageService,
     private apiService: ApiService,
@@ -242,7 +242,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       case 'editApi':
       case 'detailApi': {
         this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key,shareId: this.share.shareId},
+          queryParams: { uuid: inArg.node.key, shareId: this.share.shareId },
         });
         break;
       }

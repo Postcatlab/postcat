@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { parserJsonFile } from '../../../utils/index.utils';
-import { EoMessageService } from '../../../eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
 type optionType = {
   label: string;
@@ -23,7 +23,7 @@ export class ExtensionSelectComponent {
   @Output() uploadChange = new EventEmitter<any>();
   filename = '';
 
-  constructor(private message: EoMessageService) {}
+  constructor(private message: EoNgFeedbackMessageService) {}
 
   selectExtension({ key, properties }) {
     this.extensionChange.emit(key);

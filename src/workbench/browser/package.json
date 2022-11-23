@@ -9,7 +9,7 @@
     "build": "node ./build/build.js",
     "build:web": "node ./build/build.js web",
     "build:docker:web": "node ./build/build.js web docker",
-    "ng:serve": "ng serve -c dev -o --proxy-config=proxy.conf.json",
+    "ng:serve": "ng serve -c dev -o",
     "lang:gen": "ng extract-i18n --output-path src/locale",
     "test": "ng test --watch=false",
     "test:watch": "ng test",

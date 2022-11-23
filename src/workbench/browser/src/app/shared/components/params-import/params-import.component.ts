@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { whatType } from '../../../utils/index.utils';
 import { flatData } from '../../../utils/tree/tree.utils';
 import qs from 'qs';
@@ -19,7 +19,7 @@ export class ParamsImportComponent {
   @Output() beforeHandleImport = new EventEmitter<any>();
   isVisible = false;
   paramCode = '';
-  constructor(private message: EoMessageService) {}
+  constructor(private message: EoNgFeedbackMessageService) {}
 
   get contentTypeTitle() {
     switch (this.contentType) {
