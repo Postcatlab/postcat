@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { SettingModule } from '../../modules/setting/setting.module';
-import { ShareProjectModule } from '../../pages/share-project/share-project.module';
 import { SharedModule } from '../../shared/shared.module';
+import { GetShareLinkComponent } from './get-share-link.component';
 import { NavbarComponent } from './navbar.component';
+import { SelectWorkspaceComponent } from './select-workspace.component';
 
 @NgModule({
-  imports: [SettingModule, ShareProjectModule, SharedModule],
-  declarations: [NavbarComponent],
+  imports: [SharedModule],
+  declarations: [NavbarComponent, GetShareLinkComponent, SelectWorkspaceComponent],
   exports: [NavbarComponent],
 })
 export class NavbarModule {}

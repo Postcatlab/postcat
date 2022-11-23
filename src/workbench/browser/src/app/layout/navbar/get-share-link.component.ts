@@ -1,19 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '../../../shared/services/message';
-import { RemoteService } from '../../../shared/services/storage/remote.service';
-import { UserService } from '../../../services/user/user.service';
-import { WorkspaceService } from '../../workspace/workspace.service';
+import { MessageService } from '../../shared/services/message';
+import { RemoteService } from '../../shared/services/storage/remote.service';
+import { UserService } from '../../services/user/user.service';
+import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
-import { StatusService } from '../../../shared/services/status.service';
+import { DataSourceService } from '../../shared/services/data-source/data-source.service';
+import { StatusService } from '../../shared/services/status.service';
 import { distinct, interval } from 'rxjs';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { WebService } from '../../../core/services';
+import { WebService } from '../../core/services';
 @Component({
   selector: 'eo-get-share-link',
-  templateUrl: './get-share-link.component.html',
-  styleUrls: ['./get-share-link.component.scss'],
+  template: `<button
+      *ngIf="!workspaceService.isLocal && !status.isShare"
+      eo-ng-button
+      nzType="default"
+      class="mx-2 btn_scondary"
+      nz-popover
+      [nzPopoverContent]="contentTemplate"
+      nzPopoverPlacement="bottomRight"
+      nzPopoverTrigger="click"
+      i18n
+    >
+      Share
+    </button>
+    <ng-template #contentTemplate>
+      <div class="w-[360px] pb-4">
+        <p i18n class="font-bold">Share via link</p>
+        <p i18n class="pb-2 text-xs text-gray-400">
+          This link will be updated with the API content. Everyone can access it without logging in
+        </p>
+        <div class="flex items-center justify-between">
+          <input readonly type="text" eo-ng-input [value]="shareLink" class="mr-3" />
+          <button eo-ng-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
+          <button eo-ng-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
+        </div>
+      </div>
+    </ng-template> `,
 })
 export class GetShareLinkComponent implements OnInit {
   shareLink = '';

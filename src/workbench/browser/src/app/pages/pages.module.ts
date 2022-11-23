@@ -6,7 +6,6 @@ import { SharedModule } from '../shared/shared.module';
 import { UserModalComponent } from './user-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ExtensionsComponent } from './extensions.component';
-import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
 import { WujieModule } from '@xmagic/ngx-wujie';
 import { NavbarModule } from '../layout/navbar/navbar.module';
 import { SettingModule } from '../modules/setting/setting.module';
@@ -24,7 +23,6 @@ import { ToolbarModule } from '../layout/toolbar/toolbar.module';
     PageBlankComponent,
     PageNotFoundComponent,
     LocalWorkspaceTipComponent,
-    Vue3Component,
     UserModalComponent,
     ExtensionsComponent,
   ],

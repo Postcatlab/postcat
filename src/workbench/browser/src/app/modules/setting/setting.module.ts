@@ -18,10 +18,10 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { AccountComponent } from 'eo/workbench/browser/src/app/pages/account.component';
 
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { AboutComponent, DataStorageComponent, LanguageSwticherComponent } from './common';
+import { AccountComponent } from '../../pages/account.component';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -42,7 +42,7 @@ const ANTDMODULES = [
   NzDescriptionsModule,
 ];
 @NgModule({
-  declarations: [SettingComponent, DataStorageComponent, LanguageSwticherComponent, AccountComponent, AboutComponent],
+  declarations: [SettingComponent, AccountComponent, DataStorageComponent, LanguageSwticherComponent, AboutComponent],
   imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent],
 })
