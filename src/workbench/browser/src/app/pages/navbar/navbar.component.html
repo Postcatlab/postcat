@@ -1,4 +1,4 @@
-<div class="flex items-center justify-between eo_navbar">
+<div class="flex items-center justify-between eo_navbar">  
   <div class="flex">
     <img class="logo" src="assets/images/logo.svg" />
     <!-- star -->
@@ -6,13 +6,7 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <!-- <div
-      *ngIf="!status.isShare"
-      class="flex items-center can_be_click"
-      eo-nz-dropdown
-      nzTrigger="click"
-      [nzDropdownMenu]="workspaceMenu"
-    >
+    <div *ngIf="!status.isShare" class="flex items-center can_be_click" eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
       <eo-iconpark-icon
         class="mr-[5px]"
         name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
@@ -21,7 +15,7 @@
       {{ workspaceService.currentWorkspace.title }}
       <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
     </div>
-    <eo-nz-dropdown-menu #workspaceMenu="nzDropdownMenu">
+    <eo-ng-dropdown-menu #workspaceMenu>
       <ul class="ml-[-11px]" nz-menu>
         <div class="flex py-[5px] px-[12px]">
           <input
@@ -56,7 +50,7 @@
           {{ item.title }}
         </li>
       </ul>
-    </eo-nz-dropdown-menu> -->
+    </eo-ng-dropdown-menu>
   </div>
 
   <div class="flex items-center can_be_click">
@@ -79,10 +73,8 @@
       </ng-template>
     </eo-ng-dropdown>
     <ng-template #helpTemplateItem let-item="item">
-      <ul>
-        <a href="{{ item.href }}" target="_blank" i18n>{{ item.title }}</a>
-        <li nz-menu-divider></li>
-      </ul>
+      <a href="{{ item.href }}" target="_blank" i18n>{{ item.title }}</a>
+      <li nz-menu-divider></li>
     </ng-template>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
@@ -100,35 +92,34 @@
       <eo-iconpark-icon name="setting"></eo-iconpark-icon>
     </button>
     <!-- User -->
-    <eo-ng-dropdown
+    <button
+      eo-ng-button
+      nzType="text"
+      eo-ng-dropdown
       *ngIf="!status.isShare"
-      [title]="userTitle"
       class="flex items-center justify-center icon"
-      [menus]="[{}]"
-      [itemTmp]="userMenu"
+      [nzDropdownMenu]="userMenu"
     >
-      <ng-template class="flex items-center" #userTitle>
-        <eo-iconpark-icon name="people"> </eo-iconpark-icon>
-      </ng-template>
-    </eo-ng-dropdown>
-    <ng-template #userMenu>
-      <ul>
-        <li *ngIf="!userService.isLogin">
+      <eo-iconpark-icon name="people"> </eo-iconpark-icon>
+    </button>
+    <eo-ng-dropdown-menu #userMenu>
+      <ul nz-menu>
+        <li nz-menu-item *ngIf="!userService.isLogin">
           <button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button>
         </li>
         <ng-container *ngIf="userService.isLogin">
           <li class="px-[12px] py-[5px] text-neutral-400 font-bold">
             {{ userService.userProfile?.username }}
           </li>
-          <li (click)="openSettingModal()">
+          <li nz-menu-item (click)="openSettingModal()">
             <button type="button" i18n>Account Setting</button>
           </li>
-          <li (click)="loginOut()">
+          <li nz-menu-item (click)="loginOut()">
             <button type="button" i18n>Sign Out</button>
           </li>
         </ng-container>
       </ul>
-    </ng-template>
+    </eo-ng-dropdown-menu>
     <!-- Web download client -->
     <div class="ml-2.5" *ngIf="!electron.isElectron && !status.isShare">
       <eo-ng-dropdown class="download-dropdown" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
@@ -145,35 +136,35 @@
     </div>
     <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
-    <button eo-ng-button nzType="text">
-      <nz-divider nzType="vertical"></nz-divider>
-      <eo-iconpark-icon
-        nz-tooltip
-        i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
-        [nzTooltipMouseEnterDelay]="0.4"
-        name="minus"
-      ></eo-iconpark-icon>
-    </button>
-    <button eo-ng-button nzType="text">
-      <eo-iconpark-icon
-        nz-tooltip
-        i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
-        [nzTooltipMouseEnterDelay]="0.4"
-        [name]="isMaximized ? 'off-screen' : 'full-screen'"
-      ></eo-iconpark-icon>
-    </button>
-    <button eo-ng-button nzType="text">
-      <eo-iconpark-icon
-        nz-tooltip
-        i18n-nzTooltipTitle
-        [nzTooltipMouseEnterDelay]="0.4"
-        nzTooltipTitle="Close"
-        name="close"
-        (click)="close()"
-      ></eo-iconpark-icon>
-    </button>
+      <button eo-ng-button nzType="text">
+        <nz-divider nzType="vertical"></nz-divider>
+        <eo-iconpark-icon
+          nz-tooltip
+          i18n-nzTooltipTitle
+          nzTooltipTitle="Minimize"
+          [nzTooltipMouseEnterDelay]="0.4"
+          name="minus"
+        ></eo-iconpark-icon>
+      </button>
+      <button eo-ng-button nzType="text">
+        <eo-iconpark-icon
+          nz-tooltip
+          i18n-nzTooltipTitle
+          nzTooltipTitle="Minimize"
+          [nzTooltipMouseEnterDelay]="0.4"
+          [name]="isMaximized ? 'off-screen' : 'full-screen'"
+        ></eo-iconpark-icon>
+      </button>
+      <button eo-ng-button nzType="text">
+        <eo-iconpark-icon
+          nz-tooltip
+          i18n-nzTooltipTitle
+          [nzTooltipMouseEnterDelay]="0.4"
+          nzTooltipTitle="Close"
+          name="close"
+          (click)="close()"
+        ></eo-iconpark-icon>
+      </button>
     </div>
   </div>
 </div>

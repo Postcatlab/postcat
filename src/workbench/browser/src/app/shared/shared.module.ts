@@ -58,6 +58,9 @@ import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/serv
 import { LocalWorkspaceTipComponent } from './components/local-workspace-tip/local-workspace-tip.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -79,6 +82,7 @@ const SHARED_UI_MODULE = [
   NzDrawerModule,
   NzRadioModule,
   EoNgButtonModule,
+  NzBadgeModule,
   EoNgCheckboxModule,
   EoNgSelectModule,
   EoNgSwitchModule,
@@ -96,6 +100,7 @@ const SHARED_UI_MODULE = [
   NzInputModule,
   NzCheckboxModule,
   EouiModule,
+  NzUploadModule,
   NzTreeModule,
   NzAvatarModule,
   NzTabsModule,
@@ -111,6 +116,7 @@ const SHARED_UI_MODULE = [
   NzModalModule,
   NzTypographyModule,
   NzListModule,
+  NzLayoutModule,
   NzCollapseModule,
   NzTagModule,
   NzPopconfirmModule,
