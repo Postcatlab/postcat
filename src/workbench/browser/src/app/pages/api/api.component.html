@@ -41,8 +41,7 @@
           <div class="flex items-center fix-mt">
             <eo-ng-select [(ngModel)]="envUuid" [(nzOpen)]="isOpen" (nzOpenChange)="handleEnvSelectStatus($event)"
               [nzDropdownRender]="renderTemplate" nzAllowClear i18n-nzPlaceHolder="Environment Dropdown placeholder"
-              nzPlaceHolder="Environment" #envSelect>
-              <nz-option *ngFor="let item of envList" [nzValue]="item.uuid" [nzLabel]="item.name"></nz-option>
+              [nzOptions]="envList" nzPlaceHolder="Environment" #envSelect>
             </eo-ng-select>
             <ng-template #renderTemplate>
               <nz-divider *ngIf="!status.isShare"></nz-divider>
@@ -77,23 +76,24 @@
             </nz-tab>
           </nz-tabset>
         </div>
-        <section class="relative" [ngStyle]="{ paddingRight: countPaddingRight() }">
+        <section class="relative">
           <!-- Get router child component by activate -->
-          <router-outlet (activate)="onActivate($event)"></router-outlet>
+          <div style="width: calc(100% - {{dyWidth}}px)">
+            <router-outlet (activate)="onActivate($event)"></router-outlet>
+          </div>
 
-          <div *ngIf="!status.isShare" class="absolute top-0 bottom-0 right-0 flex right-bar"
-            [ngClass]="{ 'left-line': !activeBar }" [ngStyle]="{ width: activeBar ? dyWidth + 'px' : '40px' }"
-            nz-resizable [style.width.px]="dyWidth" [nzMaxWidth]="500" [nzMinWidth]="200"
-            (nzResize)="onRightPanelResize($event)">
-            <nz-resize-handle *ngIf="activeBar && !status.isShare" class="vertical" nzDirection="left">
+          <div *ngIf="!status.isShare" class="absolute top-0 bottom-0 right-0 flex right-bar" nz-resizable
+            [style.width.px]="dyWidth" [nzMaxWidth]="500" [nzMinWidth]="34" (nzResize)="onRightPanelResize($event)">
+            <nz-resize-handle *ngIf="!status.isShare" class="absolute bottom-0 z-10 vertical" nzDirection="left">
             </nz-resize-handle>
             <button type="button" eo-ng-button nzType="text"
-              class="flex items-center justify-center w-[40px] p-2 h-10 env-icon" [ngClass]="activeBar ? 'active' : ''"
-              (click)="toggleRightBar()" nz-tooltip [nzTooltipMouseLeaveDelay]="0"
-              i18n-nzTooltipTitle="@@Environment Setting" nzTooltipTitle="Environment Setting">
+              class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
+              [ngClass]="dyWidth > 100 ? 'active' : ''" (click)="toggleRightBar('open')" nz-tooltip
+              [nzTooltipMouseLeaveDelay]="0" i18n-nzTooltipTitle="@@Environment Setting"
+              nzTooltipTitle="Environment Setting">
               <eo-iconpark-icon name="application"></eo-iconpark-icon>
             </button>
-            <eo-env *ngIf="activeBar" class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
+            <eo-env class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env>
           </div>
         </section>
       </div>
