@@ -3,13 +3,13 @@ nz-content {
   background-color: var(--MAIN_BG);
 }
 :lang(zh) {
-  nz-select {
+  .ant-select {
     width: 132px;
   }
 }
 
 :lang(en) {
-  nz-select {
+  .ant-select {
     width: 162px;
   }
 }

@@ -11,9 +11,9 @@ import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -71,7 +71,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   ];
   activeUuid: number | string | null = 0;
   envInfo: any = {};
-  envList: Array<any> = [];
+  envList: NzSelectOptionInterface[] = [];
 
   isOpen = false;
   activeBar = false;
@@ -89,7 +89,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     public web: WebService,
     private store: Store,
     public status: StatusService,
-    private workspace: WorkspaceService,
     private http: RemoteService,
     private share: ShareService
   ) {}
@@ -196,7 +195,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
     this.activeBar = status;
   }
-
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {
     if (uuid == null) {
@@ -244,7 +242,7 @@ export class ApiComponent implements OnInit, OnDestroy {
             break;
           }
           case 'deleteEnv': {
-            const list = this.envList.filter((it) => it.uuid !== Number(data));
+            const list = this.envList.filter((it) => it.value !== Number(data));
             this.envList = list;
             if (this.envUuid === Number(data)) {
               this.envUuid = null;
@@ -264,11 +262,13 @@ export class ApiComponent implements OnInit, OnDestroy {
         if (err) {
           return resolve([]);
         }
-        return resolve(data || []);
+        const result = (data || []).map((item) => ({ label: item.name, value: item.uuid }));
+        return resolve(result);
       }
       this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          return resolve(result.data || []);
+          const data = (result.data || []).map((item) => ({ label: item.name, value: item.uuid }));
+          return resolve(data);
         }
         return resolve([]);
       });

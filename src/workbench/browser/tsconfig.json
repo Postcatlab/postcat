@@ -5,6 +5,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "module": "es2020",
+    "skipLibCheck": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -37,7 +38,6 @@
   ],
   "angularCompilerOptions": {
     "enableIvy": true,
-    "skipLibCheck":true,
     "strictTemplates": true,
     "fullTemplateTypeCheck": true,
     "annotateForClosureCompiler": true,
