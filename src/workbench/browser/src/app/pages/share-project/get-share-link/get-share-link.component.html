@@ -1,4 +1,5 @@
 <button
+  *ngIf="!workspaceService.isLocal && !status.isShare"
   eo-ng-button
   nzType="default"
   class="mx-2 btn_scondary"
