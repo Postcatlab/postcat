@@ -14,7 +14,8 @@ export class ThemeService {
       this.themeChanges$.next({ name, previous: this.currentTheme });
       this.currentTheme = name;
     }
-    this.insertCss(`${this.currentTheme}.css`);
+    this.loadCss(`${this.currentTheme}.css`);
+    this.loadCss(`light.css`,'eoapi_theme_bg');
   }
   getThemes() {
     return THEMES;
@@ -22,19 +23,15 @@ export class ThemeService {
   onThemeChange = function() {
     return this.themeChanges$.pipe(share());
   };
-
-  private insertCss(address: string) {
-    const head = this.document.getElementsByTagName('head')[0];
-    const themeLink = this.document.getElementById('eoapi_theme') as HTMLLinkElement;
-    if (themeLink) {
-      themeLink.href = address;
-    } else {
-      const style = this.document.createElement('link');
-      style.id = 'eoapi_theme';
+  private loadCss(href: string, id: string='eoapi_theme_main'): Promise<Event> {
+    return new Promise((resolve, reject) => {
+      const style = document.createElement('link');
       style.rel = 'stylesheet';
-      style.href = address;
-
-      head.appendChild(style);
-    }
+      style.href = href;
+      style.id = id;
+      style.onload = resolve;
+      style.onerror = reject;
+      document.head.append(style);
+    });
   }
 }

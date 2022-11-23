@@ -32,6 +32,10 @@
             ],
             "styles": [
               { "input": "src/assets/theme/blue.css", "bundleName": "blue", "inject": false },
+              { "input": "src/assets/theme/dark.css", "bundleName": "dark", "inject": false },
+              { "input": "src/assets/theme/light.css", "bundleName": "light", "inject": false },
+              { "input": "src/assets/theme/orange.css", "bundleName": "orange", "inject": false },
+              { "input": "src/assets/theme/purple.css", "bundleName": "purple", "inject": false },
               "src/eoui.less",
               "src/antd.less",
               "src/styles.scss",

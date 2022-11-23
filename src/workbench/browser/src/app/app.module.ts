@@ -33,11 +33,17 @@ import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
-import { WujieModule } from '@xmagic/ngx-wujie';
 import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { ThemeService } from './core/services/theme.service';
 import { UserService } from './services/user/user.service';
 
+import { NzConfig, NzConfigService, NZ_CONFIG } from 'ng-zorro-antd/core/config';
+const ngZorroConfig: NzConfig = {
+  // 注意组件名称没有 nz 前缀
+  theme: {
+    primaryColor: getComputedStyle(document.documentElement).getPropertyValue('--MAIN_THEME_COLOR').replace(' ', '')
+  },
+};
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -45,7 +51,6 @@ registerLocaleData(zh);
   declarations: [AppComponent],
   imports: [
     CommonModule,
-    WujieModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
@@ -68,6 +73,7 @@ registerLocaleData(zh);
     ThemeService,
     UserService,
     NzModalService,
+    { provide: NZ_CONFIG, useValue: ngZorroConfig },
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),
@@ -91,7 +97,11 @@ registerLocaleData(zh);
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
-  constructor(private upgrade: UpgradeModule, private lang: LanguageService, private mockService: MockService) {
+  constructor(
+    private upgrade: UpgradeModule,
+    private lang: LanguageService,
+    private mockService: MockService
+  ) {
     this.mockService.init();
     if (APP_CONFIG.production) {
       this.lang.init();
