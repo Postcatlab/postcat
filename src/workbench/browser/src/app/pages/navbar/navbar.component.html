@@ -25,7 +25,7 @@
       <ul class="ml-[-11px]" nz-menu>
         <div class="flex py-[5px] px-[12px]">
           <input
-            nz-input
+            eo-ng-input
             type="text"
             class="flex-1 px-3 eo-search-input"
             i18n-placeholder
@@ -145,35 +145,35 @@
     </div>
     <!-- Windows pc system operate -->
     <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
-    <button eo-ng-button nzType="text">
-      <nz-divider nzType="vertical"></nz-divider>
-      <eo-iconpark-icon
-        nz-tooltip
-        i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
-        [nzTooltipMouseEnterDelay]="0.4"
-        name="minus"
-      ></eo-iconpark-icon>
-    </button>
-    <button eo-ng-button nzType="text">
-      <eo-iconpark-icon
-        nz-tooltip
-        i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
-        [nzTooltipMouseEnterDelay]="0.4"
-        [name]="isMaximized ? 'off-screen' : 'full-screen'"
-      ></eo-iconpark-icon>
-    </button>
-    <button eo-ng-button nzType="text">
-      <eo-iconpark-icon
-        nz-tooltip
-        i18n-nzTooltipTitle
-        [nzTooltipMouseEnterDelay]="0.4"
-        nzTooltipTitle="Close"
-        name="close"
-        (click)="close()"
-      ></eo-iconpark-icon>
-    </button>
+      <button eo-ng-button nzType="text">
+        <nz-divider nzType="vertical"></nz-divider>
+        <eo-iconpark-icon
+          nz-tooltip
+          i18n-nzTooltipTitle
+          nzTooltipTitle="Minimize"
+          [nzTooltipMouseEnterDelay]="0.4"
+          name="minus"
+        ></eo-iconpark-icon>
+      </button>
+      <button eo-ng-button nzType="text">
+        <eo-iconpark-icon
+          nz-tooltip
+          i18n-nzTooltipTitle
+          nzTooltipTitle="Minimize"
+          [nzTooltipMouseEnterDelay]="0.4"
+          [name]="isMaximized ? 'off-screen' : 'full-screen'"
+        ></eo-iconpark-icon>
+      </button>
+      <button eo-ng-button nzType="text">
+        <eo-iconpark-icon
+          nz-tooltip
+          i18n-nzTooltipTitle
+          [nzTooltipMouseEnterDelay]="0.4"
+          nzTooltipTitle="Close"
+          name="close"
+          (click)="close()"
+        ></eo-iconpark-icon>
+      </button>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <nz-list nzItemLayout="horizontal" nzBordered [nzLoading]="loading">
   <nz-list-header>
     <nz-input-group [nzPrefix]="prefixIconSearch">
-      <input type="text" [(ngModel)]="searchValue" nz-input i18n-placeholder placeholder="Search" />
+      <input type="text" [(ngModel)]="searchValue" eo-ng-input i18n-placeholder placeholder="Search" />
     </nz-input-group>
     <ng-template #prefixIconSearch>
       <eo-iconpark-icon name="search"></eo-iconpark-icon>
@@ -15,7 +15,7 @@
       <nz-list-item-meta-title>
         <div class="flex flex-col">
           <a class="link">{{ item.username }}</a>
-          <span>{{item.email || item.mobilePhone}}</span>
+          <span>{{ item.email || item.mobilePhone }}</span>
         </div>
       </nz-list-item-meta-title>
     </nz-list-item-meta>

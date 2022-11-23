@@ -147,7 +147,7 @@ export class Form extends Render implements formType {
         case 'input':
         case 'password':
           return `
-          <input type="${typeHash.get(type)}" ${focus ? `#${key}${this.id}Ref` : ''} nz-input  ${formBindName({
+          <input type="${typeHash.get(type)}" ${focus ? `#${key}${this.id}Ref` : ''} eo-ng-input  ${formBindName({
             key,
             rules,
           })} placeholder="${placeholder || ''}" i18n-placeholder  />`;
