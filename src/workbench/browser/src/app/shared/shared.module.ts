@@ -20,6 +20,7 @@ import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { EoNgSwitchModule } from 'eo-ng-switch';
 import { EoNgTreeModule } from 'eo-ng-tree';
+import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
 import { EoNgFeedbackAlertModule } from 'eo-ng-feedback';
 
@@ -88,6 +89,8 @@ const SHARED_UI_MODULE = [
   EoNgSelectModule,
   EoNgSwitchModule,
   EoNgTreeModule,
+  EoNgInputModule,
+  EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,
   NzToolTipModule,
   NzResultModule,
