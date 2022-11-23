@@ -13,6 +13,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { EoNgTabsModule } from 'eo-ng-tabs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 
 import { EoNgButtonModule } from 'eo-ng-button';
@@ -23,7 +24,7 @@ import { EoNgTreeModule } from 'eo-ng-tree';
 import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
-import { EoNgFeedbackAlertModule } from 'eo-ng-feedback';
+import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
@@ -40,7 +41,6 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -92,8 +92,10 @@ const SHARED_UI_MODULE = [
   EoNgTreeModule,
   EoNgInputModule,
   EoNgRadioModule,
+  EoNgTabsModule,
   EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,
+  EoNgFeedbackTooltipModule,
   NzToolTipModule,
   NzResultModule,
   EoNgDropdownModule,

@@ -7,7 +7,7 @@
           class="extension relative h-full w-full border rounded-md flex items-center justify-center"
           nzTooltipPlacement="bottom"
           [nzTooltipTitle]="item.title || item.label"
-          nz-tooltip
+          eoNgFeedbackTooltip
           [nzTooltipMouseEnterDelay]="0.4"
         >
           <span *ngIf="!item.icon">{{ item.title || item.label }}</span>

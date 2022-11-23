@@ -10,9 +10,9 @@ export class Tabs extends Render {
     return list
       .map(
         ({ title, hash, body }) =>
-          `<nz-tab nzTitle="${title}" i18n-nzTitle>
+          `<eo-ng-tab nzTitle="${title}" i18n-nzTitle>
       ${body.map((it) => it.render().template).join(' ')}
-      </nz-tab>`
+      </eo-ng-tab>`
       )
       .join(' ');
   }
@@ -27,9 +27,9 @@ export class Tabs extends Render {
         },
         ...children.map((it) => it.imports),
       ],
-      template: `<nz-tabset>
+      template: `<eo-ng-tabset>
         ${this.forEachTabs(this.children)}
-      </nz-tabset>`,
+      </eo-ng-tabset>`,
       resetFn: [...children.map((it) => it.resetFn)],
       createFn: [...children.map((it) => it.creatFn)],
       data: [...children.map((it) => it.data)],

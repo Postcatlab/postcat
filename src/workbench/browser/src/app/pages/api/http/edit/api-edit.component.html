@@ -49,9 +49,9 @@
   <!-- 请求参数 -->
   <nz-collapse class="eo_collapse mt-2.5" [nzGhost]="true">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
-      <nz-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
+      <eo-ng-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
         <!-- Request Headers -->
-        <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+        <eo-ng-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
           <ng-template #headerTitleTmp>
             <span i18n>Request Headers</span>
             <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.requestHeaders)">{{
@@ -63,9 +63,9 @@
             (modelChange)="emitChangeFun()"
             [model]="model.requestHeaders"
           ></eo-api-edit-header>
-        </nz-tab>
+        </eo-ng-tab>
         <!-- Request Body -->
-        <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
+        <eo-ng-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
           <ng-template #bodyTitleTmp>
             <span i18n>Body</span>
             <nz-badge
@@ -87,8 +87,8 @@
             [(jsonRootType)]="model.requestBodyJsonType"
           >
           </eo-api-edit-body>
-        </nz-tab>
-        <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+        </eo-ng-tab>
+        <eo-ng-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
             <span i18n>Query</span>
             <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.queryParams)">{{
@@ -100,8 +100,8 @@
             class="eo_theme_iblock bbd bld brd"
             [model]="model.queryParams"
           ></eo-api-edit-query>
-        </nz-tab>
-        <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
+        </eo-ng-tab>
+        <eo-ng-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
           <ng-template #restTitleTmp>
             <span i18n>REST</span>
             <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.restParams)">{{
@@ -113,15 +113,15 @@
             [model]="model.restParams"
             (modelChange)="emitChangeFun()"
           ></eo-api-edit-rest>
-        </nz-tab>
-      </nz-tabset>
+        </eo-ng-tab>
+      </eo-ng-tabset>
     </nz-collapse-panel>
   </nz-collapse>
   <!-- 响应内容 -->
   <nz-collapse class="eo_collapse mt-2.5" [nzGhost]="true">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Response">
-      <nz-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
-        <nz-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">
+      <eo-ng-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
+        <eo-ng-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">
           <ng-template #responseHeaderTitleTmp>
             <span i18n>Response Headers</span>
             <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.responseHeaders)">{{
@@ -134,8 +134,8 @@
             (modelChange)="emitChangeFun()"
           >
           </eo-api-edit-header>
-        </nz-tab>
-        <nz-tab [nzTitle]="responseTitleTmp" [nzForceRender]="true">
+        </eo-ng-tab>
+        <eo-ng-tab [nzTitle]="responseTitleTmp" [nzForceRender]="true">
           <ng-template #responseTitleTmp>
             <span i18n>Response</span>
             <nz-badge
@@ -157,8 +157,8 @@
             [(jsonRootType)]="model.responseBodyJsonType"
           >
           </eo-api-edit-body>
-        </nz-tab>
-      </nz-tabset>
+        </eo-ng-tab>
+      </eo-ng-tabset>
     </nz-collapse-panel>
   </nz-collapse>
 </div>

@@ -9,18 +9,18 @@
     (nzResizeEnd)="onResizeEnd()"
   >
     <nz-content class="api-container-tabs">
-      <nz-tabset
+      <eo-ng-tabset
         [ngClass]="{ 'share-group-tabset': status.isShare }"
         nzCentered
         [nzAnimated]="false"
         [(nzSelectedIndex)]="tabsIndex"
       >
-        <nz-tab [nzTitle]="apiTitle">
+        <eo-ng-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
             <span
               i18n-nzTooltipTitle
               nzTooltipTitle="Collections"
-              nz-tooltip
+              eoNgFeedbackTooltip
               [nzTooltipMouseEnterDelay]="0.4"
               class="text-lg tab-content"
             >
@@ -30,13 +30,13 @@
           <div class="inner-content">
             <eo-api-group-tree></eo-api-group-tree>
           </div>
-        </nz-tab>
-        <nz-tab [nzTitle]="historyTitle" *ngIf="!status.isShare">
+        </eo-ng-tab>
+        <eo-ng-tab [nzTitle]="historyTitle" *ngIf="!status.isShare">
           <ng-template #historyTitle>
             <span
               i18n-nzTooltipTitle
               nzTooltipTitle="History"
-              nz-tooltip
+              eoNgFeedbackTooltip
               [nzTooltipMouseEnterDelay]="0.4"
               class="text-lg tab-content"
             >
@@ -44,8 +44,8 @@
             </span>
           </ng-template>
           <eo-history></eo-history>
-        </nz-tab>
-      </nz-tabset>
+        </eo-ng-tab>
+      </eo-ng-tabset>
     </nz-content>
     <nz-resize-handle class="vertical" nzDirection="right"> </nz-resize-handle>
   </nz-sider>
@@ -91,7 +91,7 @@
               nzType="text"
               class="flex items-center justify-center mx-1 icon"
               i18n-nzTooltipTitle
-              nz-tooltip
+              eoNgFeedbackTooltip
               [nzTooltipMouseEnterDelay]="0.8"
               [nzTooltipMouseLeaveDelay]="0"
               nzTooltipTitle="Environment Quick Look"
@@ -109,13 +109,13 @@
           </div>
         </div>
         <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
-          <nz-tabset
+          <eo-ng-tabset
             class="inside_page_tabset"
             [nzTabBarStyle]="{ 'padding-left': '10px' }"
             *ngIf="this.id"
             nzLinkRouter
           >
-            <nz-tab *ngFor="let tab of renderTabs">
+            <eo-ng-tab *ngFor="let tab of renderTabs">
               <p *ngIf="web.isWeb && tab.onlyDestop">
                 <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
               </p>
@@ -128,8 +128,8 @@
                   ></nz-badge>
                 </a>
               </div>
-            </nz-tab>
-          </nz-tabset>
+            </eo-ng-tab>
+          </eo-ng-tabset>
         </div>
         <section class="relative">
           <!-- Get router child component by activate -->
@@ -156,7 +156,7 @@
                 class="flex items-center justify-center"
                 [ngClass]="dyWidth > 100 ? 'active' : ''"
                 (click)="toggleRightBar('open')"
-                nz-tooltip
+                eoNgFeedbackTooltip
                 [nzTooltipMouseLeaveDelay]="0"
                 i18n-nzTooltipTitle="@@Environment Setting"
                 nzTooltipTitle="Environment Setting"

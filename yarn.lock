@@ -5758,6 +5758,13 @@ eo-ng-switch@0.0.73:
   dependencies:
     tslib "^2.3.0"
 
+eo-ng-tabs@0.0.73:
+  version "0.0.73"
+  resolved "https://registry.npmjs.org/eo-ng-tabs/-/eo-ng-tabs-0.0.73.tgz#79db8b46f2847301a075382420ea441e28beb6e3"
+  integrity sha512-XYbINNaCPSfoCXrB3dws5ecqHb5hTPAEOToWU/emoQ2mQ5wq3D83H7wFnCo4Ff0/SYTVWWxQNvBOKw9RxuEmMQ==
+  dependencies:
+    tslib "^2.3.0"
+
 eo-ng-tree@0.0.73:
   version "0.0.73"
   resolved "https://registry.npmmirror.com/eo-ng-tree/-/eo-ng-tree-0.0.73.tgz#e33093b4a367d550823befc5bb7ca4ff7e821f33"

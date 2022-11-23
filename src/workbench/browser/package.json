@@ -43,6 +43,7 @@
     "eo-ng-radio": "0.0.73",
     "eo-ng-select": "0.0.73",
     "eo-ng-switch": "0.0.73",
+    "eo-ng-tabs": "0.0.73",
     "eo-ng-tree": "0.0.73",
     "js-beautify": "1.14.4",
     "lodash-es": "4.17.21",

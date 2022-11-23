@@ -1,5 +1,5 @@
 <!-- {{getConsoleTabs()|json}} -->
-<nz-tabset
+<eo-ng-tabset
   [(nzSelectedIndex)]="tabOperate.selectedIndex"
   nzType="editable-card"
   [nzHideAdd]="true"
@@ -7,7 +7,7 @@
   (nzSelectChange)="selectChange($event)"
   [nzTabBarExtraContent]="extraTemplate"
 >
-  <nz-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
+  <eo-ng-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <div
         class="flex items-center tab-item-container h-100"
@@ -45,8 +45,8 @@
         </div>
       </div>
     </ng-template>
-  </nz-tab>
-</nz-tabset>
+  </eo-ng-tab>
+</eo-ng-tabset>
 <ng-template #extraTemplate>
   <div class="flex items-center ml-[10px] h-full">
     <button
@@ -66,7 +66,7 @@
       </ul>
     </eo-ng-dropdown-menu>
     <button eo-ng-button nzType="text" eo-ng-dropdown [nzDropdownMenu]="menu">
-      <eo-iconpark-icon  name="more" size="16px"></eo-iconpark-icon>
+      <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu>

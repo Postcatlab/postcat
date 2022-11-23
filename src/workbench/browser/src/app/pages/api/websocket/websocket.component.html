@@ -56,18 +56,18 @@
   </header>
   <eo-split-panel [topStyle]="{ height: '300px' }" style="height: calc(100% - 56px)">
     <div top class="h-full">
-      <nz-tabset
+      <eo-ng-tabset
         [nzTabBarStyle]="{ 'padding-left': '10px' }"
         [nzAnimated]="false"
         [(nzSelectedIndex)]="model.requestTabIndex"
         class="h-full"
       >
         <!-- Request Headers -->
-        <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+        <eo-ng-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
           <ng-template #headerTitleTmp>
             <span
               i18n="@@RequestHeaders"
-              nz-tooltip
+              eoNgFeedbackTooltip
               [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
               >Headers</span
             >
@@ -82,10 +82,13 @@
             (modelChange)="emitChangeFun('requestHeaders')"
           >
           </eo-api-test-header>
-        </nz-tab>
-        <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+        </eo-ng-tab>
+        <eo-ng-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
-            <span i18n nz-tooltip [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
+            <span
+              i18n
+              eoNgFeedbackTooltip
+              [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
               >Query Params</span
             >
             <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.queryParams)">{{
@@ -98,8 +101,8 @@
             [model]="model.request.queryParams"
             (modelChange)="emitChangeFun('queryParams')"
           ></eo-api-test-query>
-        </nz-tab>
-        <nz-tab [nzTitle]="messageTmp">
+        </eo-ng-tab>
+        <eo-ng-tab [nzTitle]="messageTmp">
           <ng-template #messageTmp i18n>Message</ng-template>
           <div style="height: calc(100% - 48px)">
             <eo-monaco-editor
@@ -128,8 +131,8 @@
               </button>
             </div>
           </div>
-        </nz-tab>
-      </nz-tabset>
+        </eo-ng-tab>
+      </eo-ng-tabset>
       <div class="h-8 top-line"></div>
       <!-- body -->
     </div>

@@ -11,8 +11,12 @@
         </div>
         <span class="font-bold text-[14px]">{{ extensionDetail.title || extensionDetail.moduleName }}</span>
         <ng-container *ngIf="extensionDetail?.installed">
-          <eo-ng-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5"
-            (ngModelChange)="handleEnableExtension($event)">
+          <eo-ng-switch
+            [(ngModel)]="isEnable"
+            nzSize="small"
+            class="ml-2.5"
+            (ngModelChange)="handleEnableExtension($event)"
+          >
           </eo-ng-switch>
         </ng-container>
       </div>
@@ -21,37 +25,50 @@
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
     <div>
-      <button eo-ng-button [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
-        [nzType]="extensionDetail?.installed ? 'default' : 'primary'" class="mt-[8px]" [nzLoading]="isOperating"
-        (click)="handleInstall()">
+      <button
+        eo-ng-button
+        [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
+        [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
+        class="mt-[8px]"
+        [nzLoading]="isOperating"
+        (click)="handleInstall()"
+      >
         <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
         <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
       </button>
     </div>
 
-    <nz-tabset [(nzSelectedIndex)]="nzSelectedIndex" [nzAnimated]="false"
+    <eo-ng-tabset
+      [(nzSelectedIndex)]="nzSelectedIndex"
+      [nzAnimated]="false"
       [class]="{ settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration }"
-      (nzSelectChange)="handleTabChange($event)">
+      (nzSelectChange)="handleTabChange($event)"
+    >
       <!-- CustomTab -->
-      <!-- <nz-tab *ngFor="let item of customTabs " i18n-nzTitle nzTitle="CustomTab">
+      <!-- <eo-ng-tab *ngFor="let item of customTabs " i18n-nzTitle nzTitle="CustomTab">
         <extension-app [url]="item.url" [name]="extName + '--' + item.name"></extension-app>
-      </nz-tab> -->
+      </eo-ng-tab> -->
       <!-- Setting -->
-      <nz-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle
-        nzTitle="Settings">
-        <eo-extension-setting [configuration]="extensionDetail?.features?.configuration"
-          [extName]="extensionDetail.name"></eo-extension-setting>
-      </nz-tab>
+      <eo-ng-tab
+        *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed"
+        i18n-nzTitle
+        nzTitle="Settings"
+      >
+        <eo-extension-setting
+          [configuration]="extensionDetail?.features?.configuration"
+          [extName]="extensionDetail.name"
+        ></eo-extension-setting>
+      </eo-ng-tab>
       <!-- Details -->
-      <nz-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
+      <eo-ng-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
         <div class="h-full overflow-auto preview_tab">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
             <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
             </eo-shadow-dom>
           </nz-skeleton>
         </div>
-      </nz-tab>
-      <nz-tab i18n-nzTitle nzTitle="Support">
+      </eo-ng-tab>
+      <eo-ng-tab i18n-nzTitle nzTitle="Support">
         <nz-descriptions [nzColumn]="1" nzTitle="">
           <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
@@ -67,8 +84,8 @@
             <a [href]="extensionDetail.bugs.url" target="_blank">{{ extensionDetail.bugs.url }}</a>
           </nz-descriptions-item>
         </nz-descriptions>
-      </nz-tab>
-      <nz-tab *ngIf="changeLog" i18n-nzTitle nzTitle="ChangeLog">
+      </eo-ng-tab>
+      <eo-ng-tab *ngIf="changeLog" i18n-nzTitle nzTitle="ChangeLog">
         <nz-skeleton class="preview_tab" [nzLoading]="changelogLoading" [nzActive]="true">
           <eo-shadow-dom *ngIf="!changeLogNotFound" class="md-preview" [text]="changeLog"> </eo-shadow-dom>
           <nz-result nzStatus="info" i18n-nzTitle nzTitle="Changelog failed to load" *ngIf="changeLogNotFound">
@@ -77,7 +94,7 @@
             </div>
           </nz-result>
         </nz-skeleton>
-      </nz-tab>
-    </nz-tabset>
+      </eo-ng-tab>
+    </eo-ng-tabset>
   </section>
 </div>
