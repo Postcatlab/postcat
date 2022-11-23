@@ -15,7 +15,7 @@ import { StorageUtil } from '../../../utils/storage/Storage';
       switch to the cloud workspace
     </button>
     <eo-iconpark-icon
-      name="close-small"
+      name="close"
       class="absolute right-[20px] cursor-pointer"
       (click)="closeNotification()"
     ></eo-iconpark-icon>

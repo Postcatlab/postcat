@@ -13,14 +13,13 @@ import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share
 export class ApiService {
   constructor(
     private messageService: MessageService,
-    // private message: EoNgFeedbackMessageService,
+    private message: EoNgFeedbackMessageService,
     private router: Router,
     private storage: StorageService,
     private status: StatusService,
     private http: RemoteService,
     private share: ShareService
-  ) {
-  }
+  ) {}
   get(uuid): Promise<ApiData> {
     return new Promise(async (resolve) => {
       if (this.status.isShare) {
@@ -37,7 +36,7 @@ export class ApiService {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
         } else {
-          // this.message.error(`Can't find this Api`);
+          this.message.error(`Can't find this Api`);
         }
       });
     });
