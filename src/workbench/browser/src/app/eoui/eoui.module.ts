@@ -8,7 +8,6 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
 import { EoTableComponent } from './table/eo-table/eo-table.component';
-import { EoMessageComponent } from './message/eo-message.component';
 
 // ! Directive
 import { CellDirective } from './table/eo-table/cell.directive';
@@ -17,8 +16,8 @@ import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark
 const antdModules = [NzTableModule, EoNgButtonModule, NzInputModule, NzSelectModule];
 
 @NgModule({
-  declarations: [EoTableComponent, EoMessageComponent, CellDirective],
+  declarations: [EoTableComponent, CellDirective],
   imports: [CommonModule, FormsModule, EoIconparkIconModule, ...antdModules],
-  exports: [EoTableComponent, EoMessageComponent, CellDirective],
+  exports: [EoTableComponent, CellDirective],
 })
 export class EouiModule {}

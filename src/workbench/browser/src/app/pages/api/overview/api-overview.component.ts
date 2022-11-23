@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 
-import { EoMessageService } from '../../../eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { ExportApiComponent } from '../../../shared/components/export-api/export-api.component';
 import { SyncApiComponent } from '../../../shared/components/sync-api/sync-api.component';
@@ -19,7 +19,7 @@ const actionComponent = {
 })
 export class ApiOverviewComponent implements OnDestroy {
   modal: NzModalRef;
-  constructor(private modalService: ModalService, private message: EoMessageService) {}
+  constructor(private modalService: ModalService, private message: EoNgFeedbackMessageService) {}
   overviewList = [
     {
       title: $localize`Import`,

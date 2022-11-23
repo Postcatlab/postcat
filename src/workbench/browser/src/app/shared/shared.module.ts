@@ -38,6 +38,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -87,6 +88,7 @@ const SHARED_UI_MODULE = [
   EoNgSelectModule,
   EoNgSwitchModule,
   EoNgTreeModule,
+  EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,
   NzToolTipModule,
   NzResultModule,

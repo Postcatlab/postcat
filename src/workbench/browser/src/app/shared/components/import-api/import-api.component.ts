@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
@@ -57,7 +57,7 @@ export class ImportApiComponent implements OnInit {
   constructor(
     private router: Router,
     private storage: StorageService,
-    private eoMessage: EoMessageService,
+    private eoMessage: EoNgFeedbackMessageService,
     public extensionService: ExtensionService,
     public webExtensionService: WebExtensionService,
     private projectService: ProjectService

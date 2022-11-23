@@ -1,16 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
-import { EoMessageService } from '../../../eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoTableComponent } from '../../../eoui/table/eo-table/eo-table.component';
 import { Change } from '../../store/env.state';
 import { StorageService } from '../../services/storage';
 
 import { Subject } from 'rxjs';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({
   selector: 'eo-env',
@@ -39,11 +36,8 @@ export class EnvComponent implements OnInit, OnDestroy {
   constructor(
     private storage: StorageService,
     private messageService: MessageService,
-    private message: EoMessageService,
-    private store: Store,
-    private http: RemoteService,
-    private share: ShareService,
-    private status: StatusService
+    private message: EoNgFeedbackMessageService,
+    private store: Store
   ) {}
 
   get envUuid(): number {

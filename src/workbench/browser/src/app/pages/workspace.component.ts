@@ -1,6 +1,6 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
@@ -68,7 +68,7 @@ export class WorkspaceComponent implements OnInit {
   constructor(
     public modal: NzModalService,
     public workspace: WorkspaceService,
-    public eMessage: EoMessageService,
+    public eMessage: EoNgFeedbackMessageService,
     public user: UserService,
     public message: MessageService,
     public api: RemoteService,

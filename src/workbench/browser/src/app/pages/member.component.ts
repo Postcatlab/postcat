@@ -2,7 +2,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
@@ -67,7 +67,7 @@ export class MemberComponent implements OnInit {
     public user: UserService,
     public message: MessageService,
     public api: RemoteService,
-    public eMessage: EoMessageService,
+    public eMessage: EoNgFeedbackMessageService,
     public workspace: WorkspaceService,
     public dataSource: DataSourceService
   ) {
