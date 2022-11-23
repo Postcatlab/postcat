@@ -1,4 +1,4 @@
-import { ApiTestBody, ApiTestBodyType, ApiTestHeaders, ApiTestQuery } from './../api-test/api-test.model';
+import { ApiTestBody, ApiTestBodyType, ApiTestHeaders, ApiTestQuery } from '../../../pages/api/service/api-test/api-test.model';
 import { Observable } from 'rxjs';
 
 /**

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../../shared/services/message';
 import { RemoteService } from '../../../shared/services/storage/remote.service';
-import { UserService } from '../../../shared/services/user/user.service';
-import { WorkspaceService } from '../../../shared/services/workspace/workspace.service';
+import { UserService } from '../../../services/user/user.service';
+import { WorkspaceService } from '../../workspace/workspace.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';

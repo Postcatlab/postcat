@@ -42,6 +42,7 @@
     "eo-ng-input": "0.0.73",
     "eo-ng-select": "0.0.73",
     "eo-ng-switch": "0.0.73",
+    "eo-ng-table": "0.0.73",
     "eo-ng-tree": "0.0.73",
     "js-beautify": "1.14.4",
     "lodash-es": "4.17.21",

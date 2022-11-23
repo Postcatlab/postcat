@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({

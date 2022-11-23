@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal';
-import { ApiOverviewComponent } from 'eo/workbench/browser/src/app/pages/api/overview/api-overview.component';
-import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
+import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +11,7 @@ import { EoNgButtonModule } from 'eo-ng-button';
 
 import { WorkspaceRoutingModule } from './workspace-routing.module';
 import { WorkspaceComponent } from './workspace.component';
+import { ApiOverviewComponent } from './workspace/overview/api-overview.component';
 
 @NgModule({
   imports: [
@@ -26,7 +26,7 @@ import { WorkspaceComponent } from './workspace.component';
     NzInputModule,
     EoNgButtonModule,
   ],
-  declarations: [WorkspaceComponent, ApiOverviewComponent],
+  declarations: [WorkspaceComponent,ApiOverviewComponent],
   exports: [],
   providers: [NzModalService],
 })

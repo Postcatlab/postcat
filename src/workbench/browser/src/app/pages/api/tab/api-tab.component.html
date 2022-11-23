@@ -57,7 +57,7 @@
       [nzDropdownMenu]="addMenu"
       class="{{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
     >
-      <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
+      <eo-iconpark-icon name="plus"></eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #addMenu="nzDropdownMenu">
       <ul nz-menu>
@@ -66,7 +66,7 @@
       </ul>
     </eo-ng-dropdown-menu>
     <button eo-ng-button nzType="text" eo-ng-dropdown [nzDropdownMenu]="menu">
-      <eo-iconpark-icon  name="more" size="16px"></eo-iconpark-icon>
+      <eo-iconpark-icon name="more"></eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu>

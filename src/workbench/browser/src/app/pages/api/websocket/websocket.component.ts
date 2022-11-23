@@ -12,9 +12,9 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Subject, takeUntil } from 'rxjs';
 import { ModalService } from '../../../shared/services/modal.service';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { ApiParamsNumPipe } from '../../../shared/pipes/api-param-num.pipe';
+import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe';
 
-import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 interface testViewModel {
   requestTabIndex: number;

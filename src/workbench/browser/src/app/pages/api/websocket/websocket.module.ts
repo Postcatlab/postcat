@@ -13,7 +13,7 @@ import { ApiEditUtilService } from '../http/edit/api-edit-util.service';
 import { WebsocketComponent } from './websocket.component';
 import { WebsocketRoutingModule } from './websocket.routing.module';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
-import { ApiSharedModule } from 'eo/workbench/browser/src/app/pages/api/api-shared.module';
+import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared/api-shared.module';
 import { ApiTestModule } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.module';
 
 const ANTDS = [EoNgButtonModule, NzInputModule, NzSelectModule, NzTabsModule];

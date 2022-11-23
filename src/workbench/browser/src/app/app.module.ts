@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
+import { EouiModule } from 'eo/workbench/browser/src/app/modules/eo-ui/eoui.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,14 +18,13 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { MockService } from './shared/services/mock/mock.service';
+import { MockService } from './services/mock.service';
 
 //I18n
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
@@ -36,6 +35,8 @@ import zh from '@angular/common/locales/zh';
 
 import { WujieModule } from '@xmagic/ngx-wujie';
 import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
+import { ThemeService } from './core/services/theme.service';
+import { UserService } from './services/user/user.service';
 
 registerLocaleData(en);
 registerLocaleData(zh);
@@ -59,12 +60,13 @@ registerLocaleData(zh);
   ],
   providers: [
     MockService,
-    SettingService,
     ExtensionService,
     StorageService,
     IndexedDBStorage,
     HttpStorage,
     NzMessageService,
+    ThemeService,
+    UserService,
     NzModalService,
     {
       provide: '$scope',

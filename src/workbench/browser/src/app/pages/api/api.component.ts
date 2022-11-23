@@ -12,7 +12,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { storageTab, TabItem } from './tab.model';
 

@@ -1,7 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PageNotFoundComponent } from './shared/components';
 import { APP_BASE_HREF } from '@angular/common';
+import { PageNotFoundComponent } from './layout/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {

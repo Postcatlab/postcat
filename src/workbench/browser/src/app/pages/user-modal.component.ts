@@ -1,15 +1,15 @@
-import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
+import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 

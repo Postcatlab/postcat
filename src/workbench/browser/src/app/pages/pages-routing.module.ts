@@ -2,9 +2,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
-import { PageBlankComponent } from '../shared/components/page-blank/page-blank.component';
+import { PageBlankComponent } from '../layout/page-blank/page-blank.component';
 import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
 import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
+import { NzResultModule } from 'ng-zorro-antd/result';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'workspace',
-        loadChildren: () => import('./workspace.module').then((m) => m.WorkspaceModule),
+        loadChildren: () => import('./workspace/workspace.module').then((m) => m.EoWorkspaceModule),
       },
       {
         path: 'share',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { NavigationExtras, Router } from '@angular/router';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 @Injectable({ providedIn: 'root' })

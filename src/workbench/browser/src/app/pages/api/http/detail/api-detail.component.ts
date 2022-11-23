@@ -13,7 +13,7 @@ import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { cloneDeep } from 'lodash-es';
 @Component({

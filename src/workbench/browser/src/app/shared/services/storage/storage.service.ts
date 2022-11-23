@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { StorageResStatus } from './index.model';
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
-import { getSettings, SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 
 export type DataSourceType = 'local' | 'http';
 /** is show local data source tips */

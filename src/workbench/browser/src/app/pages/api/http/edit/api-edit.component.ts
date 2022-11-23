@@ -20,7 +20,7 @@ import {
 
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { listToTree, getExpandGroupByKey } from '../../../../utils/tree/tree.utils';
-import { ApiParamsNumPipe } from '../../../../shared/pipes/api-param-num.pipe';
+import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';

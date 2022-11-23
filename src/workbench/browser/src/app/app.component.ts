@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ThemeService } from './core/services';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/components/extension-app/globalProvider';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'eo-root',

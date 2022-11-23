@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { ApiTestHistoryResponse } from '../../../../../shared/services/storage/index.model';
 import { ApiTestUtilService } from '../api-test-util.service';
-import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
+import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 

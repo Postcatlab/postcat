@@ -15,24 +15,24 @@ import { MessageService } from '../../../../shared/services/message';
 import { interval, Subscription, Observable, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
-import { TestServerService } from '../../../../shared/services/api-test/test-server.service';
+import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 
 import { EnvState } from '../../../../shared/store/env.state';
-import { ApiParamsNumPipe } from '../../../../shared/pipes/api-param-num.pipe';
+import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestService } from './api-test.service';
-import { ApiTestRes } from 'eo/workbench/browser/src/app/shared/services/api-test/test-server.model';
+import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
 import {
   BEFORE_DATA,
   AFTER_DATA,
   beforeScriptCompletions,
   afterScriptCompletions,
-} from 'eo/workbench/browser/src/app/shared/components/api-script/constant';
+} from 'eo/workbench/browser/src/app/modules/api-shared/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.utils';
+import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
 import { isEmpty } from 'lodash-es';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';

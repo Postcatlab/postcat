@@ -15,12 +15,12 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from '../../../../core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import { ImportApiComponent } from 'eo/workbench/browser/src/app/shared/components/import-api/import-api.component';
+import { ImportApiComponent } from 'eo/workbench/browser/src/app/pages/workspace/import-api/import-api.component';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',

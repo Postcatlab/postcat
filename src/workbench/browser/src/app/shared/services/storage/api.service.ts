@@ -3,7 +3,7 @@ import { MessageService } from '../../../shared/services/message'
 import {
   getSettings,
   SettingService,
-} from 'eo/workbench/browser/src/app/core/services/settings/settings.service'
+} from 'eo/workbench/browser/src/app/modules/setting/settings.service'
 import RemoteService from './remote.service'
 import LocalService from './local.service'
 

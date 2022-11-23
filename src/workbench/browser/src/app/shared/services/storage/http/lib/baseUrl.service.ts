@@ -8,12 +8,12 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { filter, map, tap, Observable, catchError } from 'rxjs';
 import { uniqueSlash } from '../../../../../utils/api';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
-import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
+import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';

@@ -1,9 +1,9 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
+import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';

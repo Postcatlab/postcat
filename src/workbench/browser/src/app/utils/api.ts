@@ -1,4 +1,4 @@
-import { ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
+import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 /**

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
 @Component({

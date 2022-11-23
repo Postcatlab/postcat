@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { Ng1Module } from '../../../../ng1/ng1.module';
-import { EouiModule } from '../../../../eoui/eoui.module';
+import { EouiModule } from '../../../../modules/eo-ui/eoui.module';
 import { SharedModule } from '../../../../shared/shared.module';
 
 import { EoNgButtonModule } from 'eo-ng-button';

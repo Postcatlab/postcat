@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { Ng1Module } from '../../../../ng1/ng1.module';
-import { EouiModule } from '../../../../eoui/eoui.module';
+import { EouiModule } from '../../../../modules/eo-ui/eoui.module';
 import { SharedModule } from '../../../../shared/shared.module';
-import { ParamsImportModule } from '../../../../shared/components/params-import/params-import.module';
 
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -32,6 +31,7 @@ import { ApiEditUtilService } from './api-edit-util.service';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
 import { RouterModule } from '@angular/router';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { ApiSharedModule } from '../../../../modules/api-shared/api-shared.module';
 
 const NZ_COMPONETS = [
   NzDropDownModule,
@@ -72,8 +72,8 @@ const COMPONENTS = [
     CommonModule,
     ...NZ_COMPONETS,
     EouiModule,
+    ApiSharedModule,
     SharedModule,
-    ParamsImportModule,
   ],
   providers: [ApiEditUtilService, ApiEditService],
 })

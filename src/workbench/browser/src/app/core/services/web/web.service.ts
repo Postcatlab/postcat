@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
+import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 
 @Injectable({
   providedIn: 'root',

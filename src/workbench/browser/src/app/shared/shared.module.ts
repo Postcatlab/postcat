@@ -1,6 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PageNotFoundComponent, ToolbarComponent, SidebarComponent } from './components';
 import { ClickStopPropagationDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -14,7 +13,6 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
-
 import { EoNgButtonModule } from 'eo-ng-button';
 import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 import { EoNgSelectModule } from 'eo-ng-select';
@@ -22,14 +20,12 @@ import { EoNgSwitchModule } from 'eo-ng-switch';
 import { EoNgTreeModule } from 'eo-ng-tree';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
 import { EoNgFeedbackAlertModule } from 'eo-ng-feedback';
-
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -38,45 +34,33 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
-
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzMessageModule } from 'ng-zorro-antd/message';
-import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
-import { PageBlankComponent } from './components/page-blank/page-blank.component';
-import { RouterModule } from '@angular/router';
-import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
-import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
-import { ApiScriptComponent } from './components/api-script/api-script.component';
-import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
-import { NzTreeModule } from 'ng-zorro-antd/tree';
-import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
-import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/components/split-panel/split.panel.component';
-import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/split-x/split-x.component';
-import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
-import { LocalWorkspaceTipComponent } from './components/local-workspace-tip/local-workspace-tip.component';
-import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { EouiModule } from 'eo/workbench/browser/src/app/modules/eo-ui/eoui.module';
+
+import { RouterModule } from '@angular/router';
+import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
+import { EnvListComponent } from 'eo/workbench/browser/src/app/modules/env/env-list/env-list.component';
+import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/components/split-panel/split.panel.component';
+import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/split-x/split-x.component';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
+import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
+import { ExtensionSelectComponent } from './components/extension-select/extension-select.component';
 
 const COMPONENTS = [
-  ToolbarComponent,
   ShadowDomEncapsulationComponent,
-  SidebarComponent,
-  PageNotFoundComponent,
-  ApiScriptComponent,
   SplitPanelComponent,
   SplitXComponent,
-  EoMonacoEditorComponent,
   EnvListComponent,
-  EoMonacoEditorComponent,
   DownloadClienteComponent,
-  LocalWorkspaceTipComponent,
   ExtensionAppComponent,
+  ExtensionSelectComponent,
 ];
 const SHARED_UI_MODULE = [
   NzFormModule,
@@ -108,9 +92,7 @@ const SHARED_UI_MODULE = [
   NzSkeletonModule,
   NzSelectModule,
   NzPopoverModule,
-  NzCodeEditorModule,
   NzResizableModule,
-  EoIconparkIconModule,
   NzInputNumberModule,
   NzSwitchModule,
   NzDividerModule,
@@ -126,9 +108,9 @@ const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsMod
 
 @NgModule({
   imports: [...SHARED_MODULE, ...SHARED_UI_MODULE],
-  declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
+  declarations: [...COMPONENTS, ClickStopPropagationDirective, EnvListComponent],
   providers: [],
-  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ClickStopPropagationDirective, ApiParamsNumPipe],
+  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ClickStopPropagationDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}

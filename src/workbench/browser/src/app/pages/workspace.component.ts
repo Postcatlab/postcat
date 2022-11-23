@@ -1,7 +1,7 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/shared/services/workspace/workspace.service';
+import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
+import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';

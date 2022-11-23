@@ -6,7 +6,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 /**
  * Api tab service operate tabs array add/replace/close...

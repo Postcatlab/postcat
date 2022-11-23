@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { LANGUAGES } from 'eo/workbench/browser/src/app/core/services/language/language.model';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 
 @Injectable({
   providedIn: 'root',

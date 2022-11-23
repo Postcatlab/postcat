@@ -20,12 +20,12 @@ import {
   ApiTestBody,
   ApiTestBodyType,
   ContentTypeByAbridge,
-} from '../../../../../shared/services/api-test/api-test.model';
+} from '../../../service/api-test/api-test.model';
 import { ApiTestUtilService } from '../api-test-util.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
+import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 
 @Component({

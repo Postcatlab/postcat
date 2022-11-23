@@ -1,5 +1,5 @@
 import Dexie, { Table } from 'dexie';
-import { getSettings } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { getSettings } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';

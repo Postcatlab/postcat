@@ -3,7 +3,7 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angu
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestRest } from '../../../../../shared/services/api-test/api-test.model';
+import { ApiTestRest } from '../../../service/api-test/api-test.model';
 import { ApiTestUtilService } from '../api-test-util.service';
 @Component({
   selector: 'eo-api-test-rest',

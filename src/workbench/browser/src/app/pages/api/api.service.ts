@@ -6,7 +6,7 @@ import { StorageService } from '../../shared/services/storage';
 import { Router } from '@angular/router';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
+import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 @Injectable({
   providedIn: 'root',
 })
