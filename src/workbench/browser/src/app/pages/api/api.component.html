@@ -84,16 +84,16 @@
 
           <div *ngIf="!status.isShare" class="absolute top-0 bottom-0 right-0 flex right-bar" nz-resizable
             [style.width.px]="dyWidth" [nzMaxWidth]="500" [nzMinWidth]="34" (nzResize)="onRightPanelResize($event)">
-            <nz-resize-handle *ngIf="!status.isShare" class="vertical" nzDirection="left">
+            <nz-resize-handle *ngIf="!status.isShare" class="absolute bottom-0 z-10 vertical" nzDirection="left">
             </nz-resize-handle>
             <button type="button" eo-ng-button nzType="text"
               class="flex items-center justify-center w-[40px] p-2 h-10 env-icon"
-              [ngClass]="activeBar || dyWidth > 200 ? 'active' : ''" (click)="toggleRightBar(200)" nz-tooltip
+              [ngClass]="dyWidth > 200 ? 'active' : ''" (click)="toggleRightBar('open')" nz-tooltip
               [nzTooltipMouseLeaveDelay]="0" i18n-nzTooltipTitle="@@Environment Setting"
               nzTooltipTitle="Environment Setting">
               <eo-iconpark-icon name="application"></eo-iconpark-icon>
             </button>
-            <eo-env class="flex-auto" (statusChange)="toggleRightBar(false)"></eo-env>
+            <eo-env class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env>
           </div>
         </section>
       </div>

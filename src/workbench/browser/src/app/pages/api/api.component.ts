@@ -75,7 +75,7 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   isOpen = false;
   activeBar = false;
-  dyWidth = localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : 250;
+  dyWidth = this.getLocalDyWidth();
 
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
@@ -188,12 +188,15 @@ export class ApiComponent implements OnInit, OnDestroy {
     // * close select
     this.isOpen = false;
   }
-  toggleRightBar(status = null) {
-    if (status == null) {
-      this.activeBar = !this.activeBar;
-      return;
+  toggleRightBar(operate: 'open' | 'close') {
+    if (operate === 'open') {
+      this.dyWidth = this.getLocalDyWidth();
+    } else {
+      this.dyWidth = 34;
     }
-    this.activeBar = status;
+  }
+  getLocalDyWidth() {
+    return localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : 250;
   }
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {
