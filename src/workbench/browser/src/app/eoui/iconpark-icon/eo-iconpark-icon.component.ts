@@ -8,6 +8,9 @@ import { Component, Input } from '@angular/core';
   </svg>`,
   styles: [
     `
+      ::ng-deep eo-iconpark-icon {
+        line-height: initial;
+      }
     `,
   ],
 })

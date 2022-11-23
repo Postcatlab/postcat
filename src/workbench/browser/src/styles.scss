@@ -9,40 +9,7 @@
 @import '../../../node_modules/eo-ng-feedback/styles.scss';
 @import '../../../node_modules/eo-ng-checkbox/styles.scss';
 @import '../../../node_modules/eo-ng-select/styles.scss';
-:root {
-  --ICONPARK_SIZE: 15px;
-  --MR_ICON: 5px;
-}
-.iconpark-icon {
-  height: var(--ICONPARK_SIZE);
-  vertical-align: middle;
-  width: var(--ICONPARK_SIZE);
-}
-nz-resize-handle {
-  display: block;
-  flex: none;
-  top: 0;
-  background-color: var(--BORDER);
-  &:hover {
-    background-color: var(--MAIN_THEME_COLOR);
-  }
-  &.vertical {
-    cursor: col-resize;
-    width: 1px;
-    left: 0;
-    &:hover {
-      width: 3px;
-    }
-  }
-  &.horizontal {
-    width: 100%;
-    cursor: row-resize;
-    height: 1px;
-    &:hover {
-      height: 3px;
-    }
-  }
-}
+
 html,
 body {
   margin: 0;

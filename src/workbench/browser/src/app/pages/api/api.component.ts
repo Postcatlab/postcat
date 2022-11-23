@@ -27,7 +27,7 @@ const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KE
 export class ApiComponent implements OnInit, OnDestroy {
   isFirstTime = true;
   siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
-  contentHeight = 200;
+  RIGHT_BAR_WIDTH = 50;
   isDragging = false;
   animateId = -1;
   animationId: number;
@@ -192,7 +192,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     if (operate === 'open') {
       this.dyWidth = this.getLocalDyWidth();
     } else {
-      this.dyWidth = 34;
+      this.dyWidth = this.RIGHT_BAR_WIDTH;
     }
   }
   getLocalDyWidth() {
