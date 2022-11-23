@@ -83,7 +83,7 @@
           </div>
 
           <div *ngIf="!status.isShare" class="absolute top-0 bottom-0 right-0 flex right-bar" nz-resizable
-            [style.width.px]="dyWidth" [nzMaxWidth]="500" [nzMinWidth]="40" (nzResize)="onRightPanelResize($event)">
+            [style.width.px]="dyWidth" [nzMaxWidth]="500" [nzMinWidth]="34" (nzResize)="onRightPanelResize($event)">
             <nz-resize-handle *ngIf="!status.isShare" class="vertical" nzDirection="left">
             </nz-resize-handle>
             <button type="button" eo-ng-button nzType="text"

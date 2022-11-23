@@ -20,6 +20,7 @@
 }
 nz-resize-handle {
   display: block;
+  flex: none;
   top: 0;
   background-color: var(--BORDER);
   &:hover {

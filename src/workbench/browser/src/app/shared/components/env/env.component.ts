@@ -8,9 +8,6 @@ import { Change } from '../../store/env.state';
 import { StorageService } from '../../services/storage';
 
 import { Subject } from 'rxjs';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 
 @Component({
   selector: 'eo-env',
@@ -40,10 +37,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private messageService: MessageService,
     private message: EoMessageService,
-    private store: Store,
-    private http: RemoteService,
-    private share: ShareService,
-    private status: StatusService
+    private store: Store
   ) {}
 
   get envUuid(): number {
