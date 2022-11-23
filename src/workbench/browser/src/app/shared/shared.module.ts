@@ -88,7 +88,6 @@ const SHARED_UI_MODULE = [
   EoNgSelectModule,
   EoNgSwitchModule,
   EoNgTreeModule,
-  EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,
   NzToolTipModule,
   NzResultModule,

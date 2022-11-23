@@ -35,7 +35,7 @@ import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
 import { WujieModule } from '@xmagic/ngx-wujie';
-
+import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 
 registerLocaleData(en);
 registerLocaleData(zh);
@@ -48,6 +48,7 @@ registerLocaleData(zh);
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
+    EoNgFeedbackMessageModule,
     BrowserAnimationsModule,
     CoreModule,
     AppRoutingModule,

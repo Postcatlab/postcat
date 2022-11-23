@@ -16,7 +16,6 @@ import { ExtensionSelectComponent } from '../../shared/components/extension-sele
 
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
 import { ApiTabComponent } from './tab/api-tab.component';
-import { ApiService } from './api.service';
 import { ElectronService } from '../../core/services';
 import { HistoryComponent } from './history/eo-history.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
@@ -48,6 +47,6 @@ const COMPONENTS = [
   ],
   declarations: [...COMPONENTS],
   exports: [ApiComponent],
-  providers: [ElectronService, ApiService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
+  providers: [ElectronService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
 })
 export class ApiModule {}

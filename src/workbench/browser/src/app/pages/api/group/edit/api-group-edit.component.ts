@@ -5,7 +5,6 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MessageService } from '../../../../shared/services/message';
 import { StorageService } from '../../../../shared/services/storage';
 import { GroupApiDataModel, GroupTreeItem } from '../../../../shared/models';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 
 @Component({
   selector: 'eo-api-group-edit',
@@ -24,7 +23,6 @@ export class ApiGroupEditComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private modalRef: NzModalRef,
-    private apiService: ApiService,
     private storage: StorageService
   ) {}
 
@@ -115,7 +113,6 @@ export class ApiGroupEditComponent implements OnInit {
       if (result.status === StorageResStatus.success) {
         //delete group api
         if (data.api.length > 0) {
-          // this.apiService.bulkDelete(data.api);
           this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: data.api } });
         } else {
           this.messageService.send({ type: 'updateGroupSuccess', data: {} });
