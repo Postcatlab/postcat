@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 @Component({
@@ -51,7 +51,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
 
   constructor(
     private fb: FormBuilder,
-    private message: EoMessageService,
+    private message: EoNgFeedbackMessageService,
     private messageS: MessageService,
     private dataSource: DataSourceService,
     private user: UserService

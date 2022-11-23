@@ -3,7 +3,7 @@ import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
 @Component({
   selector: 'eo-account',
@@ -101,7 +101,7 @@ export class AccountComponent implements OnInit {
     public user: UserService,
     public message: MessageService,
     public api: RemoteService,
-    public eMessage: EoMessageService
+    public eMessage: EoNgFeedbackMessageService
   ) {
     this.validateUsernameForm = UntypedFormGroup;
     this.isSaveUsernameBtnLoading = false;

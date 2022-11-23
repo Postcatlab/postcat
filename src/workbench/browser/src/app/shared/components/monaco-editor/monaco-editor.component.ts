@@ -9,7 +9,7 @@ import {
   OnInit,
   ElementRef,
 } from '@angular/core';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { debounce, isBase64, whatTextType } from '../../../utils/index.utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { editor } from 'monaco-editor';
@@ -116,7 +116,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     return Number.isNaN(Number(val));
   }
 
-  constructor(private message: EoMessageService, private electron: ElectronService, elementRef: ElementRef) {
+  constructor(private message: EoNgFeedbackMessageService, private electron: ElectronService, elementRef: ElementRef) {
     this.el = elementRef.nativeElement;
   }
 

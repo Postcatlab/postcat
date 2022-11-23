@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
 import { storageTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { ShareService } from 'eo/workbench/browser/src/app/shared/services/share.service';
@@ -29,7 +29,7 @@ export class ApiTabOperateService {
     private tabStorage: ApiTabStorageService,
     private messageService: MessageService,
     private router: Router,
-    private message: EoMessageService,
+    private message: EoNgFeedbackMessageService,
     private share: ShareService,
     private status: StatusService
   ) {}
@@ -333,7 +333,7 @@ export class ApiTabOperateService {
     this.tabStorage.resetTabsByOrdr(tabsObj.left);
     this.selectedIndex = tabsObj.selectedIndex;
     if (tabsObj.needTips) {
-      this.message.warn($localize`Program will not close unsaved tabs`);
+      this.message.warning($localize`Program will not close unsaved tabs`);
     }
   }
   /**

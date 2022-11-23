@@ -1,7 +1,7 @@
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { distinct } from 'rxjs/operators';
@@ -243,7 +243,7 @@ export class UserModalComponent implements OnInit {
     public user: UserService,
     public message: MessageService,
     public api: RemoteService,
-    public eMessage: EoMessageService,
+    public eMessage: EoNgFeedbackMessageService,
     public project: ProjectService,
     public dataSource: DataSourceService,
     public modal: NzModalService,

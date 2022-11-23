@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
@@ -27,7 +27,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
   @Output() isShowChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private eoMessage: EoMessageService,
+    private eoMessage: EoNgFeedbackMessageService,
     private message: MessageService,
     private workspace: WorkspaceService,
     private user: UserService
@@ -48,7 +48,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
 
   switchToTheCloud = () => {
     if (this.workspace.workspaceList[0].id === this.workspace.localWorkspace.id) {
-      this.eoMessage.warn($localize`You don't have cloud space yet, please create one`);
+      this.eoMessage.warning($localize`You don't have cloud space yet, please create one`);
       this.message.send({ type: 'addWorkspace', data: {} });
       return;
     }

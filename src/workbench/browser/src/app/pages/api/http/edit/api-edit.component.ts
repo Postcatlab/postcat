@@ -23,7 +23,7 @@ import { listToTree, getExpandGroupByKey } from '../../../../utils/tree/tree.uti
 import { ApiParamsNumPipe } from '../../../../shared/pipes/api-param-num.pipe';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
-import { EoMessageService } from '../../../../eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 @Component({
   selector: 'eo-api-edit-edit',
@@ -56,7 +56,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
-    private message: EoMessageService,
+    private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private storage: StorageService,
     private apiEdit: ApiEditService

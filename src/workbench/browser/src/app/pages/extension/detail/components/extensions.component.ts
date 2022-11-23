@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { EoMessageService } from 'eo/workbench/browser/src/app/eoui/message/eo-message.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
 @Component({
   selector: 'eo-extension-setting',
@@ -85,7 +85,11 @@ export class ExtensionSettingComponent implements OnInit {
   objectKeys = Object.keys;
   properties = {};
 
-  constructor(private fb: FormBuilder, private settingService: SettingService, private message: EoMessageService) {}
+  constructor(
+    private fb: FormBuilder,
+    private settingService: SettingService,
+    private message: EoNgFeedbackMessageService
+  ) {}
 
   ngOnInit(): void {
     this.init();
