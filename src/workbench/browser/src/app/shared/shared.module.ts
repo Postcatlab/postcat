@@ -12,14 +12,18 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { EoNgTabsModule } from 'eo-ng-tabs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { EoNgButtonModule } from 'eo-ng-button';
 import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { EoNgSwitchModule } from 'eo-ng-switch';
 import { EoNgTreeModule } from 'eo-ng-tree';
+import { EoNgInputModule } from 'eo-ng-input';
+import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
-import { EoNgFeedbackAlertModule } from 'eo-ng-feedback';
+import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
+
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -72,7 +76,12 @@ const SHARED_UI_MODULE = [
   EoNgSelectModule,
   EoNgSwitchModule,
   EoNgTreeModule,
+  EoNgInputModule,
+  EoNgRadioModule,
+  EoNgTabsModule,
+  EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,
+  EoNgFeedbackTooltipModule,
   NzToolTipModule,
   NzResultModule,
   EoNgDropdownModule,

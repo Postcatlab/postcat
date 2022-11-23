@@ -1,4 +1,4 @@
-<div class="flex items-center justify-between eo_navbar">  
+<div class="flex items-center justify-between eo_navbar">
   <div class="flex">
     <img class="logo" src="assets/images/logo.svg" />
     <!-- star -->
@@ -6,7 +6,13 @@
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
     <!-- Select workspace -->
-    <div *ngIf="!status.isShare" class="flex items-center can_be_click" eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
+    <div
+      *ngIf="!status.isShare"
+      class="flex items-center can_be_click"
+      eo-ng-dropdown
+      nzTrigger="click"
+      [nzDropdownMenu]="workspaceMenu"
+    >
       <eo-iconpark-icon
         class="mr-[5px]"
         name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
@@ -27,7 +33,7 @@
             [(ngModel)]="searchValue"
           />
           <button
-            nz-tooltip
+            eoNgFeedbackTooltip
             i18n-nzTooltipTitle
             nzTooltipTitle="New Workspace"
             nzType="primary"
@@ -84,7 +90,7 @@
       *ngIf="!status.isShare"
       class="flex items-center justify-center icon"
       i18n-nzTooltipTitle
-      nz-tooltip
+      eoNgFeedbackTooltip
       [nzTooltipMouseEnterDelay]="0.4"
       nzTooltipTitle="Open Settings"
       (click)="openSettingModal()"
@@ -139,7 +145,7 @@
       <button eo-ng-button nzType="text">
         <nz-divider nzType="vertical"></nz-divider>
         <eo-iconpark-icon
-          nz-tooltip
+          eoNgFeedbackTooltip
           i18n-nzTooltipTitle
           nzTooltipTitle="Minimize"
           [nzTooltipMouseEnterDelay]="0.4"
@@ -148,7 +154,7 @@
       </button>
       <button eo-ng-button nzType="text">
         <eo-iconpark-icon
-          nz-tooltip
+          eoNgFeedbackTooltip
           i18n-nzTooltipTitle
           nzTooltipTitle="Minimize"
           [nzTooltipMouseEnterDelay]="0.4"
@@ -157,7 +163,7 @@
       </button>
       <button eo-ng-button nzType="text">
         <eo-iconpark-icon
-          nz-tooltip
+          eoNgFeedbackTooltip
           i18n-nzTooltipTitle
           [nzTooltipMouseEnterDelay]="0.4"
           nzTooltipTitle="Close"

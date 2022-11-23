@@ -16,7 +16,7 @@
           class="env_front_uri"
           nzTooltipTitle="{{ env.hostUri }}"
           nzTooltipPlacement="bottom"
-          nz-tooltip
+          eoNgFeedbackTooltip
         >
           {{ env.hostUri }}
         </div>
@@ -59,13 +59,13 @@
       </nz-input-group>
     </form>
     <!-- Request Info -->
-    <nz-tabset
+    <eo-ng-tabset
       [nzTabBarStyle]="{ 'padding-left': '10px' }"
       [nzAnimated]="false"
       [(nzSelectedIndex)]="model.requestTabIndex"
     >
       <!-- Request Headers -->
-      <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
         <ng-template #headerTitleTmp>
           <span i18n="@@RequestHeaders">Headers</span>
           <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.requestHeaders)">{{
@@ -77,9 +77,9 @@
           [(model)]="model.request.requestHeaders"
           (modelChange)="emitChangeFun('requestHeaders')"
         ></eo-api-test-header>
-      </nz-tab>
+      </eo-ng-tab>
       <!--Request Info -->
-      <nz-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
         <ng-template #bodyTitleTmp>
           <span i18n>Body</span>
           <nz-badge
@@ -103,8 +103,8 @@
           [supportType]="['formData', 'raw', 'binary']"
         >
         </eo-api-test-body>
-      </nz-tab>
-      <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
         <ng-template #queryTitleTmp>
           <span i18n>Query</span>
           <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.queryParams)">{{
@@ -116,8 +116,8 @@
           [model]="model.request.queryParams"
           (modelChange)="emitChangeFun('queryParams')"
         ></eo-api-test-query>
-      </nz-tab>
-      <nz-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
         <ng-template #restTitleTmp>
           <span i18n>REST</span>
           <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.restParams)">{{
@@ -129,8 +129,8 @@
           [(model)]="model.request.restParams"
           (modelChange)="emitChangeFun('restParams')"
         ></eo-api-test-rest>
-      </nz-tab>
-      <nz-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
         <ng-template #preScriptTitleTmp>
           <span i18n>Pre-request Script</span>
           <nz-badge class="ml-1" *ngIf="model.beforeScript?.trim()" nzStatus="success"></nz-badge>
@@ -143,8 +143,8 @@
           [completions]="beforeScriptCompletions"
           class="eo_theme_iblock bbd"
         ></eo-api-script>
-      </nz-tab>
-      <nz-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
+      </eo-ng-tab>
+      <eo-ng-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
         <ng-template #suffixScriptTitleTmp>
           <span i18n>After-response Script</span>
           <nz-badge class="ml-1" *ngIf="model.afterScript?.trim()" nzStatus="success"></nz-badge>
@@ -157,8 +157,8 @@
           [completions]="afterScriptCompletions"
           class="eo_theme_iblock bbd"
         ></eo-api-script>
-      </nz-tab>
-    </nz-tabset>
+      </eo-ng-tab>
+    </eo-ng-tabset>
   </div>
 
   <div
@@ -170,7 +170,7 @@
   >
     <nz-resize-handle class="absolute z-10 horizontal" nzDirection="top"> </nz-resize-handle>
     <!-- Response -->
-    <nz-tabset
+    <eo-ng-tabset
       [nzTabBarStyle]="{ 'padding-left': '10px' }"
       [(nzSelectedIndex)]="model.responseTabIndex"
       [nzTabBarExtraContent]="extraTemplate"
@@ -178,27 +178,27 @@
       class="response_container"
       (nzSelectChange)="handleBottomTabSelect($event)"
     >
-      <nz-tab i18n-nzTitle nzTitle="Response">
+      <eo-ng-tab i18n-nzTitle nzTitle="Response">
         <eo-api-test-result-response [model]="model.testResult?.response" [uri]="model.request.uri">
         </eo-api-test-result-response>
-      </nz-tab>
+      </eo-ng-tab>
       <div>
-        <nz-tab i18n-nzTitle nzTitle="Response Headers">
+        <eo-ng-tab i18n-nzTitle nzTitle="Response Headers">
           <eo-api-test-result-header [model]="model.testResult?.response?.headers"></eo-api-test-result-header>
-        </nz-tab>
+        </eo-ng-tab>
       </div>
-      <nz-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
+      <eo-ng-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
         <!-- TODO use isRequestBodyLoaded -->
         <eo-api-test-result-request-body
           *ngIf="model.responseTabIndex === 2"
           [model]="model.testResult.request.requestBody || ''"
         >
         </eo-api-test-result-request-body>
-      </nz-tab>
-      <nz-tab i18n-nzTitle nzTitle="Request Headers">
+      </eo-ng-tab>
+      <eo-ng-tab i18n-nzTitle nzTitle="Request Headers">
         <eo-api-test-result-header [model]="model.testResult?.request?.requestHeaders"> </eo-api-test-result-header>
-      </nz-tab>
-    </nz-tabset>
+      </eo-ng-tab>
+    </eo-ng-tabset>
     <ng-template #extraTemplate>
       <div *ngIf="model.responseTabIndex === 0" class="py-[6px] px-[12px] flex items-center">
         <button eo-ng-button nzType="text">
@@ -207,7 +207,7 @@
             *ngIf="!isEmpty(model.testResult?.response)"
             class="cursor-pointer"
             i18n-nzTooltipTitle
-            nz-tooltip
+            eoNgFeedbackTooltip
             nzTooltipTitle="Save As File"
             (click)="downloadFile()"
           >

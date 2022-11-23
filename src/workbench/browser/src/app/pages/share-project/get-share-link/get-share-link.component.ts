@@ -27,10 +27,13 @@ export class GetShareLinkComponent implements OnInit {
     private lang: LanguageService,
     public workspaceService: WorkspaceService,
     private http: RemoteService
-  ) {
-  }
+  ) {}
   handleCopy() {
     if (this.isCopy) {
+      return;
+    }
+    if (!this.shareLink) {
+      this.isCopy = false;
       return;
     }
     const isOk = copy(this.shareLink);

@@ -32,18 +32,8 @@
   .group-tree {
     overflow: hidden auto;
     height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 80px);
-    .ant-tree-indent-unit {
-      width: 8px;
-    }
-    .ant-tree {
-      .ant-tree-node-content-wrapper {
-        padding: 0 2px;
-        width: 0;
-      }
-    }
   }
 }
-
 
 .ant-dropdown-menu {
   min-width: 100px;

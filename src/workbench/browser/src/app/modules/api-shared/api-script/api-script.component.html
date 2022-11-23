@@ -3,12 +3,24 @@
     <div class="flex justify-between p-3">
       <div i18n>Snippets</div>
       <div>
-        <a href="https://docs.eoapi.io/docs/script-function.html" class="text-blue-400" target="_blank"
-          rel="noopener noreferrer" i18n>Learn more</a>
+        <a
+          href="https://docs.eoapi.io/docs/script-function.html"
+          class="text-blue-400"
+          target="_blank"
+          rel="noopener noreferrer"
+          i18n
+          >Learn more</a
+        >
       </div>
     </div>
-    <eo-ng-tree-default #nzTreeComponent nzBlockNode [nzData]="dataSource" [nzExpandedKeys]="expandedKeys"
-      (nzClick)="nzClick($event)" [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
+    <eo-ng-tree-default
+      #nzTreeComponent
+      nzBlockNode
+      [nzData]="dataSource"
+      [nzExpandedKeys]="expandedKeys"
+      (nzClick)="nzClick($event)"
+      [nzTreeTemplate]="nzTreeTemplate"
+    ></eo-ng-tree-default>
     <ng-template #nzTreeTemplate let-node>
       <ng-template [ngIf]="!node.isLeaf">
         <span class="text-sm">{{ node.title }}</span>
@@ -17,8 +29,13 @@
         <div (click)="insertCode(node)">
           <span class="text-xs text-blue-400">{{ node.title }}</span>
           <ng-container *ngIf="node.origin.note">
-            <span [nzTooltipTitle]="titleTemplate" [nzTooltipPlacement]="['topLeft', 'leftTop']" class="text-blue-400"
-              nzTooltipColor="black" nz-tooltip>
+            <span
+              [nzTooltipTitle]="titleTemplate"
+              [nzTooltipPlacement]="['topLeft', 'leftTop']"
+              class="text-blue-400"
+              nzTooltipColor="black"
+              eoNgFeedbackTooltip
+            >
               [?]
             </span>
             <ng-template #titleTemplate let-thing>
@@ -43,9 +60,13 @@
     </ng-template>
   </div>
   <div class="flex-1 overflow-hidden">
-    <eo-monaco-editor [(code)]="code" [config]="{language: 'javascript'}"
-      [eventList]="['format', 'copy', 'search', 'replace']" (codeChange)="handleChange($event)"
-      [completions]="completions">
+    <eo-monaco-editor
+      [(code)]="code"
+      [config]="{ language: 'javascript' }"
+      [eventList]="['format', 'copy', 'search', 'replace']"
+      (codeChange)="handleChange($event)"
+      [completions]="completions"
+    >
     </eo-monaco-editor>
   </div>
 </div>

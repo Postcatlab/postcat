@@ -4,12 +4,12 @@
     <a
       (click)="clickModule(item)"
       class="sidebar-item"
-      nz-tooltip
+      eoNgFeedbackTooltip
       nzTooltipPlacement="right"
       [nzTooltipTitle]="item.title"
       [ngClass]="{ 'sidebar-item-active': item.id === this.sidebar.currentModule?.id }"
     >
-        <eo-iconpark-icon [name]="item.icon" size="24px"> </eo-iconpark-icon>
+      <eo-iconpark-icon [name]="item.icon" size="24px"> </eo-iconpark-icon>
       <span class="mt-1 label" *ngIf="!sidebar.collapsed">{{ item.title }}</span>
     </a>
   </ng-container>

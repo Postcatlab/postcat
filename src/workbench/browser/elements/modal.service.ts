@@ -57,13 +57,13 @@ export class Modal extends Render implements modalType {
         {
           target: [
             {
-              name: 'NzModalService',
+              name: 'EoNgFeedbackModalService',
               type: 'service',
               inject: { name: 'modal' },
             },
-            { name: 'NzModalModule', type: 'module' },
+            { name: 'EoNgFeedbackModalModule', type: 'module' },
           ],
-          from: 'ng-zorro-antd/modal',
+          from: 'eo-ng-feedback',
         },
         {
           target: [
@@ -74,7 +74,7 @@ export class Modal extends Render implements modalType {
           ],
           from: '@angular/core',
         },
-        { name: 'NzModalModule', type: 'module' },
+        { name: 'EoNgFeedbackModalModule', type: 'module' },
         ...this.children.imports,
       ],
       methods: [...this.methods, ...this.children.methods],
