@@ -17,7 +17,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
       <form nz-form [formGroup]="validateUsernameForm" nzLayout="vertical">
         <nz-form-item>
           <nz-form-control nzErrorTip="Please input your username;">
-            <input type="text" nz-input formControlName="username" placeholder="" i18n-placeholder />
+            <input type="text" eo-ng-input formControlName="username" placeholder="" i18n-placeholder />
           </nz-form-control>
         </nz-form-item>
 
@@ -45,21 +45,21 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
         <nz-form-item>
           <nz-form-label [nzSpan]="24" nzRequired i18n>Current password</nz-form-label>
           <nz-form-control nzErrorTip="Please input your current password;">
-            <input type="password" nz-input formControlName="oldPassword" placeholder="" i18n-placeholder />
+            <input type="password" eo-ng-input formControlName="oldPassword" placeholder="" i18n-placeholder />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="24" nzRequired i18n>New password</nz-form-label>
           <nz-form-control nzErrorTip="Please input your new password;">
-            <input type="password" nz-input formControlName="newPassword" placeholder="" i18n-placeholder />
+            <input type="password" eo-ng-input formControlName="newPassword" placeholder="" i18n-placeholder />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="24" nzRequired i18n>Confirm new password</nz-form-label>
           <nz-form-control [nzErrorTip]="confirmPasswordErrorTpl">
-            <input type="password" nz-input formControlName="confirmPassword" placeholder="" i18n-placeholder />
+            <input type="password" eo-ng-input formControlName="confirmPassword" placeholder="" i18n-placeholder />
             <ng-template #confirmPasswordErrorTpl let-control>
               <ng-container *ngIf="control.hasError('required')" i18n>
                 Please input your confirm new password;

@@ -36,7 +36,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
           <!-- <ng-container *ngIf="properties[field]?.type === 'string'"> -->
           <input
             type="text"
-            nz-input
+            eo-ng-input
             id="{{ field }}"
             [disabled]="properties[field]?.disabled"
             i18n-placeholder

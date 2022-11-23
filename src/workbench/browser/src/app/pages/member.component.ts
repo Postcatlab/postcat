@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <input nz-input [(ngModel)]="inputPersonValue" i18n-placeholder placeholder="Search by username" />
+        <input eo-ng-input [(ngModel)]="inputPersonValue" i18n-placeholder placeholder="Search by username" />
         <section class="h-4"></section>
         <button
           eo-ng-button

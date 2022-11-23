@@ -23,7 +23,7 @@ import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
         <nz-form-item>
           <nz-form-label [nzSpan]="24" nzRequired i18n>Name</nz-form-label>
           <nz-form-control nzErrorTip="Please input your name;">
-            <input type="text" nz-input formControlName="workspace" placeholder="" i18n-placeholder />
+            <input type="text" eo-ng-input formControlName="workspace" placeholder="" i18n-placeholder />
           </nz-form-control>
         </nz-form-item>
 

@@ -23,7 +23,12 @@ import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/u
         <nz-form-item>
           <nz-form-label i18n>Host</nz-form-label>
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Host">
-            <input nz-input formControlName="eoapi-common.remoteServer.url" i18n-placeholder placeholder="your host" />
+            <input
+              eo-ng-input
+              formControlName="eoapi-common.remoteServer.url"
+              i18n-placeholder
+              placeholder="your host"
+            />
           </nz-form-control>
         </nz-form-item>
       </ng-container>

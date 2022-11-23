@@ -2,27 +2,53 @@
   <header class="p-[10px]">
     <form nz-form [formGroup]="validateForm" class="flex">
       <div>
-        <eo-ng-select class="!w-[106px] no-radius-select" [disabled]="['connecting', 'connected'].includes(wsStatus)"
-          [(ngModel)]="model.request.protocol" formControlName="protocol">
+        <eo-ng-select
+          class="!w-[106px] no-radius-select"
+          [disabled]="['connecting', 'connected'].includes(wsStatus)"
+          [(ngModel)]="model.request.protocol"
+          formControlName="protocol"
+        >
           <eo-ng-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
       </div>
       <nz-form-item nz-col class="flex-1">
         <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
-          <input type="text" i18n-placeholder placeholder="Enter URL" formControlName="uri" (change)="changeUri()"
-            [(ngModel)]="model.request.uri" class="left-1" name="uri" nz-input />
+          <input
+            type="text"
+            i18n-placeholder
+            placeholder="Enter URL"
+            formControlName="uri"
+            (change)="changeUri()"
+            [(ngModel)]="model.request.uri"
+            class="left-1"
+            name="uri"
+            eo-ng-input
+          />
         </nz-form-control>
       </nz-form-item>
       <div class="flex px-1">
-        <button class="mx-1 w-28" *ngIf="wsStatus === 'disconnect'" eo-ng-button nzType="primary" i18n
-          (click)="handleConnect('connecting')">
+        <button
+          class="mx-1 w-28"
+          *ngIf="wsStatus === 'disconnect'"
+          eo-ng-button
+          nzType="primary"
+          i18n
+          (click)="handleConnect('connecting')"
+        >
           Connect
         </button>
         <button i18n class="mx-1 w-28" *ngIf="wsStatus === 'connecting'" disabled eo-ng-button nzType="default">
           Connecting
         </button>
-        <button class="mx-1 w-28" *ngIf="wsStatus === 'connected'" eo-ng-button nzDanger i18n nzType="default"
-          (click)="handleConnect('disconnect')">
+        <button
+          class="mx-1 w-28"
+          *ngIf="wsStatus === 'connected'"
+          eo-ng-button
+          nzDanger
+          i18n
+          nzType="default"
+          (click)="handleConnect('disconnect')"
+        >
           Disconnect
         </button>
       </div>
@@ -30,37 +56,59 @@
   </header>
   <eo-split-panel [topStyle]="{ height: '300px' }" style="height: calc(100% - 56px)">
     <div top class="h-full">
-      <nz-tabset [nzTabBarStyle]="{ 'padding-left': '10px' }" [nzAnimated]="false"
-        [(nzSelectedIndex)]="model.requestTabIndex" class="h-full">
+      <nz-tabset
+        [nzTabBarStyle]="{ 'padding-left': '10px' }"
+        [nzAnimated]="false"
+        [(nzSelectedIndex)]="model.requestTabIndex"
+        class="h-full"
+      >
         <!-- Request Headers -->
         <nz-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
           <ng-template #headerTitleTmp>
-            <span i18n="@@RequestHeaders" nz-tooltip
-              [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''">Headers</span>
+            <span
+              i18n="@@RequestHeaders"
+              nz-tooltip
+              [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
+              >Headers</span
+            >
             <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.requestHeaders)">{{
               model.request.requestHeaders | apiParamsNum
-              }}</span>
+            }}</span>
           </ng-template>
-          <eo-api-test-header [disabled]="['connecting', 'connected'].includes(wsStatus)" class="eo_theme_iblock bbd"
-            [(model)]="model.request.requestHeaders" (modelChange)="emitChangeFun('requestHeaders')">
+          <eo-api-test-header
+            [disabled]="['connecting', 'connected'].includes(wsStatus)"
+            class="eo_theme_iblock bbd"
+            [(model)]="model.request.requestHeaders"
+            (modelChange)="emitChangeFun('requestHeaders')"
+          >
           </eo-api-test-header>
         </nz-tab>
         <nz-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
           <ng-template #queryTitleTmp>
-            <span i18n nz-tooltip
-              [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''">Query Params</span>
+            <span i18n nz-tooltip [nzTooltipTitle]="wsStatus !== 'disconnect' ? 'Editable only before connection' : ''"
+              >Query Params</span
+            >
             <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.queryParams)">{{
               model.request.queryParams | apiParamsNum
-              }}</span>
+            }}</span>
           </ng-template>
-          <eo-api-test-query class="eo_theme_iblock bbd" [disabled]="['connecting', 'connected'].includes(wsStatus)"
-            [model]="model.request.queryParams" (modelChange)="emitChangeFun('queryParams')"></eo-api-test-query>
+          <eo-api-test-query
+            class="eo_theme_iblock bbd"
+            [disabled]="['connecting', 'connected'].includes(wsStatus)"
+            [model]="model.request.queryParams"
+            (modelChange)="emitChangeFun('queryParams')"
+          ></eo-api-test-query>
         </nz-tab>
         <nz-tab [nzTitle]="messageTmp">
           <ng-template #messageTmp i18n>Message</ng-template>
           <div style="height: calc(100% - 48px)">
-            <eo-monaco-editor [(code)]="model.msg" [config]="editorConfig" [editorType]="editorConfig.language"
-              [eventList]="['type', 'format', 'copy', 'search', 'replace']" (codeChange)="rawDataChange($event)">
+            <eo-monaco-editor
+              [(code)]="model.msg"
+              [config]="editorConfig"
+              [editorType]="editorConfig.language"
+              [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+              (codeChange)="rawDataChange($event)"
+            >
             </eo-monaco-editor>
             <div class="flex justify-between p-2">
               <eo-ng-select [(ngModel)]="editorConfig.language">
@@ -68,8 +116,14 @@
                 <eo-ng-option nzValue="xml" nzLabel="xml"></eo-ng-option>
                 <eo-ng-option nzValue="json" nzLabel="json"></eo-ng-option>
               </eo-ng-select>
-              <button eo-ng-button class="mx-1" nzType="primary" i18n
-                [disabled]="wsStatus !== 'connected' || !model.msg" (click)="handleSendMsg()">
+              <button
+                eo-ng-button
+                class="mx-1"
+                nzType="primary"
+                i18n
+                [disabled]="wsStatus !== 'connected' || !model.msg"
+                (click)="handleSendMsg()"
+              >
                 Send
               </button>
             </div>
@@ -90,29 +144,37 @@
       <ul class="p-2 overflow-auto" style="height: calc(100% - 48px)">
         <li *ngFor="let item of model.response?.responseBody; let index = index" class="block w-full">
           <div (click)="expandMessage(index)" class="flex flex-col w-full text-gray-500 top-line">
-            <div *ngIf="item.type === 'send'"
-              class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer">
+            <div
+              *ngIf="item.type === 'send'"
+              class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer"
+            >
               <span class="flex justify-center w-4 h-4 rounded shrink-0 items-cente send_icon">
                 <eo-iconpark-icon name="arrow-up" size="10"></eo-iconpark-icon>
               </span>
               <div class="px-2">{{ item.msg }}</div>
             </div>
-            <div *ngIf="item.type === 'get'"
-              class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer">
+            <div
+              *ngIf="item.type === 'get'"
+              class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer"
+            >
               <span class="flex justify-center w-4 h-4 rounded shrink-0 items-cente get_icon">
                 <eo-iconpark-icon name="arrow-down" size="10"></eo-iconpark-icon>
               </span>
               <div class="px-2">{{ item.msg }}</div>
             </div>
-            <div *ngIf="item.type === 'start'"
-              class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
+            <div
+              *ngIf="item.type === 'start'"
+              class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer"
+            >
               <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente start_icon">
                 <eo-iconpark-icon name="check" size="10"></eo-iconpark-icon>
               </span>
               <div class="px-2">{{ item.title }}</div>
             </div>
-            <div *ngIf="item.type === 'end'"
-              class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
+            <div
+              *ngIf="item.type === 'end'"
+              class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer"
+            >
               <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente end_icon">
                 <eo-iconpark-icon name="close" size="10"></eo-iconpark-icon>
               </span>
@@ -120,10 +182,17 @@
             </div>
           </div>
 
-          <eo-monaco-editor *ngIf="item.isExpand && item.type !== 'start'" [code]="item.msg" [disabled]="true" [config]="{
+          <eo-monaco-editor
+            *ngIf="item.isExpand && item.type !== 'start'"
+            [code]="item.msg"
+            [disabled]="true"
+            [config]="{
               language: 'json',
               readOnly: true
-            }" [eventList]="['type', 'format', 'copy', 'search']" (codeChange)="rawDataChange($event)">
+            }"
+            [eventList]="['type', 'format', 'copy', 'search']"
+            (codeChange)="rawDataChange($event)"
+          >
           </eo-monaco-editor>
           <ng-container *ngIf="item.isExpand && item.type === 'start'">
             <div *ngFor="let k of Object.keys(item.msg); let index = index" class="headers">

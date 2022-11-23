@@ -42,18 +42,18 @@
     "eo-ng-input": "0.0.73",
     "eo-ng-select": "0.0.73",
     "eo-ng-switch": "0.0.73",
-    "eo-ng-tree": "0.0.71",
+    "eo-ng-tree": "0.0.73",
     "js-beautify": "1.14.4",
     "lodash-es": "4.17.21",
     "markdown-it": "13.0.1",
-    "monaco-editor": "0.33.0",
-    "ng-zorro-antd": "14.0.0",
+    "monaco-editor": "0.34.1",
+    "ng-zorro-antd": "14.2.0",
     "qs": "6.11.0",
     "rxjs": "7.5.5",
     "socket.io-client": "4.5.1",
     "tslib": "^2.4.0",
     "wujie": "1.0.0",
-    "zone.js": "~0.11.6"
+    "zone.js": "~0.12.0"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "14.1.0",

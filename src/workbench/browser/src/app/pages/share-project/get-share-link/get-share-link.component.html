@@ -1,28 +1,28 @@
 <button
-*ngIf="!workspaceService.isLocal && !status.isShare"
-eo-ng-button
-nzType="default"
-class="mx-2 btn_scondary"
-nz-popover
-[nzPopoverContent]="contentTemplate"
-nzPopoverPlacement="bottomRight"
-nzPopoverTrigger="click"
-i18n
+  *ngIf="!workspaceService.isLocal && !status.isShare"
+  eo-ng-button
+  nzType="default"
+  class="mx-2 btn_scondary"
+  nz-popover
+  [nzPopoverContent]="contentTemplate"
+  nzPopoverPlacement="bottomRight"
+  nzPopoverTrigger="click"
+  i18n
 >
-Share
+  Share
 </button>
 <ng-template #contentTemplate>
-<div class="w-[360px] pb-4">
-  <p i18n class="font-bold">Share via link</p>
-  <p i18n class="pb-2 text-xs text-gray-400">
-    This link will be updated with the API content. Everyone can access it without logging in
-  </p>
-  <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-    <input readonly type="text" nz-input [value]="shareLink" />
-  </nz-input-group>
-</div>
+  <div class="w-[360px] pb-4">
+    <p i18n class="font-bold">Share via link</p>
+    <p i18n class="pb-2 text-xs text-gray-400">
+      This link will be updated with the API content. Everyone can access it without logging in
+    </p>
+    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+      <input readonly type="text" eo-ng-input [value]="shareLink" />
+    </nz-input-group>
+  </div>
 </ng-template>
 <ng-template #suffixIconButton>
-<button eo-ng-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
-<button eo-ng-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
+  <button eo-ng-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
+  <button eo-ng-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
 </ng-template>

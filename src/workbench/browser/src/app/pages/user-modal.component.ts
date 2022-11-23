@@ -111,7 +111,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
                 <input
                   type="text"
                   #usernameLoginRef
-                  nz-input
+                  eo-ng-input
                   formControlName="username"
                   placeholder="Enter Email/Phone/Username"
                   i18n-placeholder
@@ -123,7 +123,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
               <nz-form-control [nzErrorTip]="passwordErrorTpl">
                 <input
                   type="password"
-                  nz-input
+                  eo-ng-input
                   formControlName="password"
                   placeholder="Enter password"
                   i18n-placeholder
@@ -185,7 +185,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
               <input
                 type="text"
                 #newWorkNameWorkspaceNameRef
-                nz-input
+                eo-ng-input
                 formControlName="newWorkName"
                 placeholder="Workspace Name"
                 i18n-placeholder
