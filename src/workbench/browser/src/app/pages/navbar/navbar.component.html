@@ -62,8 +62,12 @@
   <div class="flex items-center can_be_click">
     <eo-get-share-link></eo-get-share-link>
     <!-- Change Language -->
-    <eo-ng-select *ngIf="status.isShare" [(ngModel)]="lang.systemLanguage" nzBorderless
-      (ngModelChange)="handleSwitchLang($event)">
+    <eo-ng-select
+      *ngIf="status.isShare"
+      [(ngModel)]="lang.systemLanguage"
+      nzBorderless
+      (ngModelChange)="handleSwitchLang($event)"
+    >
       <eo-ng-option nzValue="en-US" nzLabel="English"></eo-ng-option>
       <eo-ng-option nzValue="zh-Hans" nzLabel="简体中文"></eo-ng-option>
     </eo-ng-select>
@@ -125,38 +129,6 @@
         </ng-container>
       </ul>
     </ng-template>
-    <!-- Windows pc system operate -->
-    <!-- <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron"> -->
-    <button eo-ng-button nzType="text">
-      <eo-iconpark-icon
-        nz-tooltip
-        i18n-nzTooltipTitle
-        nzTooltipTitle="Minimize"
-        [nzTooltipMouseEnterDelay]="0.4"
-        size="24px"
-        name="minus"
-      ></eo-iconpark-icon>
-    </button>
-
-    <eo-iconpark-icon
-      nz-tooltip
-      class="ml-[5px]"
-      i18n-nzTooltipTitle
-      nzTooltipTitle="Minimize"
-      [nzTooltipMouseEnterDelay]="0.4"
-      size="24px"
-      [name]="isMaximized ? 'off-screen-two' : 'full-screen'"
-    ></eo-iconpark-icon>
-    <span
-      nz-tooltip
-      i18n-nzTooltipTitle
-      [nzTooltipMouseEnterDelay]="0.4"
-      nzTooltipTitle="Close"
-      class="iconfont icon-guanbi pr15 fs24 cp"
-      (click)="close()"
-    >
-    </span>
-    <!-- </div> -->
     <!-- Web download client -->
     <div class="ml-2.5" *ngIf="!electron.isElectron && !status.isShare">
       <eo-ng-dropdown class="download-dropdown" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
@@ -170,6 +142,38 @@
       <ng-template #downloadMenu let-item="item">
         <a [href]="item.link">{{ item.name }}</a>
       </ng-template>
+    </div>
+    <!-- Windows pc system operate -->
+    <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
+    <button eo-ng-button nzType="text">
+      <nz-divider nzType="vertical"></nz-divider>
+      <eo-iconpark-icon
+        nz-tooltip
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Minimize"
+        [nzTooltipMouseEnterDelay]="0.4"
+        name="minus"
+      ></eo-iconpark-icon>
+    </button>
+    <button eo-ng-button nzType="text">
+      <eo-iconpark-icon
+        nz-tooltip
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Minimize"
+        [nzTooltipMouseEnterDelay]="0.4"
+        [name]="isMaximized ? 'off-screen' : 'full-screen'"
+      ></eo-iconpark-icon>
+    </button>
+    <button eo-ng-button nzType="text">
+      <eo-iconpark-icon
+        nz-tooltip
+        i18n-nzTooltipTitle
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzTooltipTitle="Close"
+        name="close"
+        (click)="close()"
+      ></eo-iconpark-icon>
+    </button>
     </div>
   </div>
 </div>

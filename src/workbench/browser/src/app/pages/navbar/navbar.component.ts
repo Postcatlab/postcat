@@ -18,7 +18,6 @@ import { LanguageService } from '../../core/services/language/language.service';
 })
 export class NavbarComponent implements OnInit {
   isMaximized = false;
-  isSettingVisible = false;
 
   searchValue: string;
   OS_TYPE = navigator.platform.toLowerCase();
@@ -32,8 +31,8 @@ export class NavbarComponent implements OnInit {
     },
     {
       title: 'Report Issue',
-      href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnviroment()}`,
-    },
+      href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
+    }
   ];
   constructor(
     public electron: ElectronService,
@@ -127,7 +126,7 @@ export class NavbarComponent implements OnInit {
         }
       });
   }
-  private getEnviroment(): string {
+  private getEnvironment(): string {
     let result = '';
     const systemInfo = this.electron.getSystemInfo();
     systemInfo.forEach((val) => {

@@ -23,7 +23,7 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 
       &.success {
-        background-color: #00785a;
+        background-color: var(--GREEN_NORMAL);
         color: #fff;
       }
       &.warn {

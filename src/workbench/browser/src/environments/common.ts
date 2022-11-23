@@ -1,4 +1,4 @@
-import { ELETRON_APP_CONFIG } from 'eo/enviroment';
+import { ELETRON_APP_CONFIG } from 'eo/environment';
 export const COMMON_CONFIG = Object.assign({}, ELETRON_APP_CONFIG);
 export type APP_CONFIG_INSTANT = {
   production: boolean;

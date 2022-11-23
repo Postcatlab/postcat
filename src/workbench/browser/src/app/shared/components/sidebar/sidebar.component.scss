@@ -1,14 +1,14 @@
-.eo_sidebar {
+.eo-sidebar {
   border-right: 1px solid var(--BORDER);
   overflow: auto;
   width: 90px;
   height: 100%;
   transition: width .3s cubic-bezier(.2,0,0,1) 0s;
 }
-.eo_sidebar_shrink {
+.eo-sidebar-shrink {
   width: 50px;
 }
-.sidebar_item {
+.sidebar-item {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -22,12 +22,9 @@
   &:hover {
     background-color: var(--SEC_BG);
   }
-  &.sidebar_item_active {
+  &.sidebar-item-active {
     background-color: var(--SEC_BG);
-    color: #00785a;
-    i.icon {
-      color: #00785a;
-    }
+    color: var(--MAIN_THEME_COLOR);
     .label {
       color: rgba(0,0,0,0.8);
     }
