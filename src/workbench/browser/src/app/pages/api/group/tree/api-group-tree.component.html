@@ -7,12 +7,19 @@
     placeholder="Search"
     [(ngModel)]="searchValue"
   />
-  <!-- <button *ngIf="!status.isShare" nzType="primary" eo-ng-button
-    class="flex w-[32px] items-center justify-center ml-3 text-base shrink-0" nz-dropdown [nzDropdownMenu]="menu"
-    nzPlacement="bottomRight" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
+  <button
+    *ngIf="!status.isShare"
+    nzType="primary"
+    eo-ng-button
+    class="flex w-[32px] items-center justify-center ml-3 text-base shrink-0"
+    eo-ng-dropdown
+    [nzDropdownMenu]="menu"
+    nzPlacement="bottomRight"
+    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
+  >
     <eo-iconpark-icon name="plus" size="16px"></eo-iconpark-icon>
   </button>
-  <eo-ng-dropdown #menu="nzDropdownMenu">
+  <eo-ng-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
         <a i18n="@@AddAPI">New API</a>
@@ -22,7 +29,7 @@
         <a i18n>Import API</a>
       </li>
     </ul>
-  </eo-ng-dropdown>  -->
+  </eo-ng-dropdown-menu>
 </header>
 
 <!-- Custom Group -->
@@ -51,25 +58,15 @@
             <span class="text_omit node_title">{{ node.title }}</span>
           </div>
           <span class="flex tree_node_operate" *ngIf="isEdit">
-            <!-- <button eo-nz-dropdown [nzDropdownMenu]="groupMenu" class="flex items-center">
-              <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
-            </button>
-            <eo-nz-dropdown-menu #groupMenu="nzDropdownMenu">
-              <ul nz-menu>
-                <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI', node: node })">
-                  <a i18n>Add API</a>
-                </li>
-                <li nz-menu-item (click)="addSubGroup(node)">
-                  <a i18n>Add Subgroup</a>
-                </li>
-                <li nz-menu-item (click)="editGroup(node)">
-                  <a i18n>Edit</a>
-                </li>
-                <li nz-menu-item (click)="deleteGroup(node)">
-                  <a i18n="@@Delete">Delete</a>
-                </li>
-              </ul>
-            </eo-nz-dropdown-menu> -->
+            <eo-ng-dropdown
+              class="flex items-center"
+              [dataResource]="{ group: node }"
+              [title]="moreTemplate"
+              eo-nz-dropdown
+              [menus]="groupItemsMenu"
+              *ngIf="isEdit"
+            >
+            </eo-ng-dropdown>
           </span>
         </div>
         <!-- Leaf -->
@@ -81,24 +78,15 @@
             <span class="text_omit node_title">{{ node.title }}</span>
           </div>
           <div class="flex tree_node_operate">
-            <!-- <button class="flex items-center" eo-nz-dropdown [nzDropdownMenu]="apiDataMenu" *ngIf="isEdit">
-              <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
-            </button>
-            <eo-nz-dropdown-menu #apiDataMenu="nzDropdownMenu">
-              <ul nz-menu>
-                <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'editApi', node: node })">
-                  <a i18n>Edit</a>
-                </li>
-                <li nz-menu-item
-                  (click)="operateApiEvent({ event: $event, eventName: 'copyApi', node: apiDataItems[node.key] })">
-                  <a i18n="@@Copy">Copy</a>
-                </li>
-                <li nz-menu-item
-                  (click)="operateApiEvent({ event: $event, eventName: 'deleteApi', node: apiDataItems[node.key] })">
-                  <a i18n="@@Delete">Delete</a>
-                </li>
-              </ul>
-            </eo-nz-dropdown-menu> -->
+            <eo-ng-dropdown
+              class="flex items-center"
+              [dataResource]="{ group: node, api: apiDataItems[node.key] }"
+              [title]="moreTemplate"
+              eo-nz-dropdown
+              [menus]="apiItemsMenu"
+              *ngIf="isEdit"
+            >
+            </eo-ng-dropdown>
           </div>
         </div>
       </div>
@@ -107,3 +95,7 @@
     <nz-empty *ngIf="!treeNodes.length" nzNotFoundImage="simple"> </nz-empty>
   </nz-skeleton>
 </div>
+
+<ng-template #moreTemplate>
+  <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
+</ng-template>

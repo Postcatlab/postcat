@@ -68,6 +68,39 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   ];
   nzSelectedKeys: number[] = [];
   isEdit: boolean;
+
+  apiItemsMenu = [
+    {
+      title: $localize`Edit`,
+      click: (inArg) => this.operateApiEvent({ eventName: 'editApi', node: inArg.data.group }),
+    },
+    {
+      title: $localize`:@Copy:Copy`,
+      click: (inArg) => this.operateApiEvent({ eventName: 'copyApi', node: inArg.data.api }),
+    },
+    {
+      title: $localize`:@Delete:Delete`,
+      click: (inArg) => this.operateApiEvent({ eventName: 'deleteApi', node: inArg.data.api }),
+    },
+  ];
+  groupItemsMenu = [
+    {
+      title: $localize`Add API`,
+      click: (inArg) => this.operateApiEvent({ eventName: 'addAPI', node: inArg.data.group }),
+    },
+    {
+      title: $localize`Add Subgroup`,
+      click: (inArg) => this.addSubGroup(inArg.data.group),
+    },
+    {
+      title: $localize`Edit`,
+      click: (inArg) => this.editGroup(inArg.data.group),
+    },
+    {
+      title: $localize`:@@Delete:Delete`,
+      click: (inArg) => this.deleteGroup(inArg.data.group),
+    },
+  ];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
@@ -237,7 +270,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
     const prefix = this.status.isShare ? 'home/share' : '/home/api';
-    inArg.event.stopPropagation();
+    inArg.event?.stopPropagation();
     switch (inArg.eventName) {
       case 'editApi':
       case 'detailApi': {

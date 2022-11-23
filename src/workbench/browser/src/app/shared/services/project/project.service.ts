@@ -15,7 +15,8 @@ export class ProjectService {
     private apiService: ApiService,
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage
-  ) {}
+  ) {
+  }
 
   setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;

@@ -28,11 +28,13 @@ export class NavbarComponent implements OnInit {
     {
       title: 'Document',
       href: 'https://docs.eoapi.io',
+      click: ($event) => {},
     },
     {
       title: 'Report Issue',
       href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
-    }
+      click: ($event) => {},
+    },
   ];
   constructor(
     public electron: ElectronService,
