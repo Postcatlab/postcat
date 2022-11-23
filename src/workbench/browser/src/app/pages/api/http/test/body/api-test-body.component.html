@@ -1,7 +1,7 @@
 <div class="flex items-center justify-start h-10 param_header">
-  <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
-    <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
-  </nz-radio-group>
+  <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
+    <label *ngFor="let item of CONST.API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
+  </eo-ng-radio-group>
   <nz-divider *ngIf="['formData', 'raw'].includes(bodyType)" nzType="vertical"></nz-divider>
   <!-- Import -->
   <div *ngIf="['formData'].includes(bodyType)" class="inline-flex items-center">
@@ -9,8 +9,13 @@
     </params-import>
   </div>
   <!--Select content-type-->
-  <eo-ng-select *ngIf="['raw'].includes(bodyType)" class="fs12 content-type-select"
-    (ngModelChange)="changeContentType($event)" [(ngModel)]="contentType" nzBorderless>
+  <eo-ng-select
+    *ngIf="['raw'].includes(bodyType)"
+    class="fs12 content-type-select"
+    (ngModelChange)="changeContentType($event)"
+    [(ngModel)]="contentType"
+    nzBorderless
+  >
     <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.name"></eo-ng-option>
   </eo-ng-select>
 </div>
@@ -20,13 +25,24 @@
 <!-- JSON -->
 <!-- XML -->
 <!-- Raw -->
-<eo-monaco-editor [(code)]="model" (codeChange)="rawDataChange($event)" *ngIf="bodyType === 'raw'"
-  [editorType]="editorType" [config]="editorConfig" [eventList]="['type', 'format', 'copy', 'search', 'replace']">
+<eo-monaco-editor
+  [(code)]="model"
+  (codeChange)="rawDataChange($event)"
+  *ngIf="bodyType === 'raw'"
+  [editorType]="editorType"
+  [config]="editorConfig"
+  [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+>
 </eo-monaco-editor>
 <!-- Binary -->
 <div class="px-5" *ngIf="bodyType === 'binary'">
-  <nz-upload nzType="drag" (nzChange)="emitModelChange()" [nzBeforeUpload]="uploadBinary"
-    [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }" [(nzFileList)]="binaryFiles">
+  <nz-upload
+    nzType="drag"
+    (nzChange)="emitModelChange()"
+    [nzBeforeUpload]="uploadBinary"
+    [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }"
+    [(nzFileList)]="binaryFiles"
+  >
     <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
   </nz-upload>
 </div>

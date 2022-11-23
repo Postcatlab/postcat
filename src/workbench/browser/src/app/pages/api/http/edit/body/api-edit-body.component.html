@@ -1,8 +1,8 @@
 <div class="flex items-center justify-start h-10 param_header">
   <div class="flex items-center h-full">
-    <nz-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
-      <label *ngFor="let item of CONST.API_BODY_TYPE" nz-radio [nzValue]="item.value">{{ item.key }}</label>
-    </nz-radio-group>
+    <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
+      <label *ngFor="let item of CONST.API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
+    </eo-ng-radio-group>
   </div>
   <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
   <!-- <nz-divider nzType="vertical"></nz-divider> -->
