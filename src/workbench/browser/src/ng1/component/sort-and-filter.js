@@ -3,7 +3,7 @@
  * @description 排序和筛选
  */
 angular.module('eolinker').component('sortAndFilterListDefaultComponent', {
-  template: `<div class="f_row_ac" ng-hide="$ctrl.otherObj.isBatch">
+  template: `<div class="flex items-center" ng-hide="$ctrl.otherObj.isBatch">
   <div
     class="po_re eo-more-btn-container container_scfldc"
     ng-if="$ctrl.mainObj.canFilter||$ctrl.mainObj.canSort||$ctrl.mainObj.canAutomaticSort"

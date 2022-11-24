@@ -35,6 +35,7 @@
     "@ngxs/store": "3.7.4",
     "@xmagic/ngx-wujie": "1.0.0-rc.20",
     "ajv": "8.11.0",
+    "eo-ng-auto-complete": "0.0.75",
     "eo-ng-button": "0.0.75",
     "eo-ng-checkbox": "0.0.75",
     "eo-ng-dropdown": "0.0.75",

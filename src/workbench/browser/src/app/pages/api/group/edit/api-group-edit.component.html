@@ -1,5 +1,5 @@
 <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" (ngSubmit)="submit()" *ngIf="!isDelete">
-  <nz-form-item nz-col class="fg1">
+  <nz-form-item nz-col class="flex-1">
     <nz-form-label nzFor="name" i18n>Group Name</nz-form-label>
     <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter group name">
       <input type="text" autofocus eo-ng-input id="name" formControlName="name" [(ngModel)]="group.name" />

@@ -60,7 +60,7 @@ export class ExtensionComponent implements OnInit {
     this.setSelectedKeys();
   }
 
-  onSeachChange(keyword) {
+  onSearchChange(keyword) {
     this.messageService.send({ type: 'searchPluginByKeyword', data: keyword });
   }
 

@@ -18,6 +18,9 @@
     border-radius: 3px;
   }
 }
+.border-all{
+  border: 1px solid var(--BORDER);
+}
 @media (max-width: 1279.9px) {
   .grid-cols-4 {
     grid-template-columns: repeat(3, minmax(0, 1fr));

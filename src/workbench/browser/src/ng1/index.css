@@ -5952,7 +5952,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   overflow-y: auto;
 }
 
-.text_omit {
+.text-omit {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6106,7 +6106,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   min-width: 1100px;
 }
 
-.mw_100 {
+.mw-full {
   min-width: 100px;
 }
 
@@ -6122,7 +6122,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   min-width: 110px;
 }
 
-.maw_100 {
+.maw-full {
   max-width: 100px;
 }
 
@@ -6130,7 +6130,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   max-width: 200px;
 }
 
-.maw_100percent {
+.maw-fullpercent {
   max-width: 100%;
 }
 
@@ -6323,7 +6323,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   width: 220px;
 }
 
-.w_100 {
+.w-full {
   width: 100px !important;
 }
 
@@ -6335,7 +6335,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   width: 65%;
 }
 
-.w_100percent {
+.w-fullpercent {
   width: 100% !important;
 }
 
@@ -6606,7 +6606,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   flex-direction: row;
 }
 
-.f_row_ac {
+.flex items-center {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -6706,7 +6706,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   border-radius: 3px;
 }
 
-.fg1 {
+.flex-1 {
   flex: 1;
 }
 
@@ -6922,7 +6922,7 @@ online-service-global-component .editormd .editormd-menu > li > a {
   margin-left: 15px;
 }
 
-.ml10 {
+.ml-[10px] {
   margin-left: 10px;
 }
 
@@ -8844,7 +8844,7 @@ multi-tab-component {
 .apimanagement_scss_api_list table tbody tr .url-box {
   width: calc(100% - 55px);
 }
-.apimanagement_scss_api_list table tbody tr .w_100percent {
+.apimanagement_scss_api_list table tbody tr .w-fullpercent {
   width: 100%;
 }
 .apimanagement_scss_api_list table tbody tr .url-box,
@@ -12921,7 +12921,7 @@ menu-common-component .common_menu_ul .search-div-advanced:hover .advanced-btn, 
 menu-common-component .common_menu_ul .menu-ml15 {
   margin-left: 15px;
 }
-menu-common-component .common_menu_ul .menu-ml10 {
+menu-common-component .common_menu_ul .menu-ml-[10px] {
   margin-left: 10px;
 }
 menu-common-component .common_menu_ul .menu-mr15 {
@@ -13237,13 +13237,13 @@ select-default-common-component .tile_container_div .common_class_tile_item {
   text-overflow: ellipsis;
   cursor: pointer;
 }
-select-default-common-component .tile_container_div.f_row_ac {
+select-default-common-component .tile_container_div.flex items-center {
   margin-top: -10px;
 }
-select-default-common-component .tile_container_div.f_row_ac .common_class_tile_item {
+select-default-common-component .tile_container_div.flex items-center .common_class_tile_item {
   margin-right: 20px;
 }
-select-default-common-component .tile_container_div.f_row_ac .common_class_tile_item {
+select-default-common-component .tile_container_div.flex items-center .common_class_tile_item {
   margin-top: 10px;
 }
 select-default-common-component .tile_container_div.f_column .common_class_tile_item + .common_class_tile_item {
@@ -13827,11 +13827,11 @@ tab-select-common-component .no_btn {
   padding: 0;
 }
 
-.tsc_ul.f_row_ac {
+.tsc_ul.flex items-center {
   margin-top: -10px;
 }
-.tsc_ul.f_row_ac .tsc_item_li,
-.tsc_ul.f_row_ac .checkbox_tscc {
+.tsc_ul.flex items-center .tsc_item_li,
+.tsc_ul.flex items-center .checkbox_tscc {
   margin-top: 10px;
 }
 

@@ -12,7 +12,7 @@
       <eo-ng-select class="w-[106px]" [(ngModel)]="model.method" formControlName="method">
         <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
       </eo-ng-select>
-      <nz-form-item nz-col class="fg1">
+      <nz-form-item nz-col class="flex-1">
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
           <input type="text" [(ngModel)]="model.uri" name="uri" id="uri" eo-ng-input formControlName="uri" />
         </nz-form-control>
@@ -35,7 +35,7 @@
           </eo-ng-tree-select>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nz-col class="fg1">
+      <nz-form-item nz-col class="flex-1">
         <nz-form-control
           i18n-nzErrorTip
           nzErrorTip="Please enter API name"
@@ -59,7 +59,7 @@
             }}</span>
           </ng-template>
           <eo-api-edit-header
-            class="eo_theme_iblock bbd bld brd"
+            class="eo_theme_iblock"
             (modelChange)="emitChangeFun()"
             [model]="model.requestHeaders"
           ></eo-api-edit-header>
@@ -80,7 +80,7 @@
             ></nz-badge>
           </ng-template>
           <eo-api-edit-body
-            class="eo_theme_iblock bbd bld brd"
+            class="eo_theme_iblock"
             [(bodyType)]="model.requestBodyType"
             [(model)]="model.requestBody"
             (modelChange)="emitChangeFun()"
@@ -98,7 +98,7 @@
           </ng-template>
           <eo-api-edit-query
             (modelChange)="emitChangeFun()"
-            class="eo_theme_iblock bbd bld brd"
+            class="eo_theme_iblock"
             [model]="model.queryParams"
           ></eo-api-edit-query>
         </eo-ng-tab>
@@ -110,7 +110,7 @@
             }}</span>
           </ng-template>
           <eo-api-edit-rest
-            class="eo_theme_iblock bbd bld brd"
+            class="eo_theme_iblock"
             [model]="model.restParams"
             (modelChange)="emitChangeFun()"
           ></eo-api-edit-rest>
@@ -130,7 +130,7 @@
             }}</span>
           </ng-template>
           <eo-api-edit-header
-            class="eo_theme_iblock bbd bld brd"
+            class="eo_theme_iblock"
             [model]="model.responseHeaders"
             (modelChange)="emitChangeFun()"
           >
@@ -150,7 +150,7 @@
             ></nz-badge>
           </ng-template>
           <eo-api-edit-body
-            class="eo_theme_iblock bbd bld brd"
+            class="eo_theme_iblock"
             [(bodyType)]="model.responseBodyType"
             [(model)]="model.responseBody"
             (modelChange)="emitChangeFun()"

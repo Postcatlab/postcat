@@ -8,7 +8,7 @@ angular.module('eolinker').component('selectDefaultCommonComponent', {
   <div class="container-div" ng-if="$ctrl.type==='default'" ng-click="$ctrl.fun.domClick($event)"
       ng-class="{'container-focus':$ctrl.data.containerFocus,'multiple_select':$ctrl.multiple==='true'}">
       <div class="po_re">
-          <p class="text-p preview-text-p f_row_ac f_js" ng-class="{'disabled_preview_text_p':$ctrl.disabled}"
+          <p class="text-p preview-text-p flex items-center f_js" ng-class="{'disabled_preview_text_p':$ctrl.disabled}"
               eo-attr-tip-placeholder="{{$ctrl.input.attrPlaceholder}}">
               <span ng-show="$ctrl.data.text">{{$ctrl.data.text}}</span>
               <span class="eo-status-tips"
@@ -27,7 +27,7 @@ angular.module('eolinker').component('selectDefaultCommonComponent', {
               <span ng-if="$ctrl.multiple==='true'" class="sd_all_check_box sd_check_box iconfont square_checkbox fwb cg cp"
                   ng-class="{'icon-duihao':$ctrl.data.batch.selectAll}"></span>
               <span class="iconfont icon-sousuo"></span>
-              <input class="input-search fg1" type="text" autocomplete="off" ng-model="$ctrl.data.q" placeholder="搜索"
+              <input class="input-search flex-1" type="text" autocomplete="off" ng-model="$ctrl.data.q" placeholder="搜索"
                   ng-change="$ctrl.fun.searchChange()" ng-mousedown="$ctrl.fun.searchActiveStatus(true)"
                   ng-blur="$ctrl.fun.searchActiveStatus(false)">
           </p>
@@ -40,7 +40,7 @@ angular.module('eolinker').component('selectDefaultCommonComponent', {
   </div>
   <!-- 平铺选择框 -->
   <inner-html-common-directive class="tile_container_div f_wrap"
-      ng-class="{'f_row_ac':$ctrl.mainObject.direction!=='column','f_column':$ctrl.mainObject.direction==='column'}"
+      ng-class="{'flex items-center':$ctrl.mainObject.direction!=='column','f_column':$ctrl.mainObject.direction==='column'}"
       ng-if="$ctrl.type==='tile'" ng-click="$ctrl.fun.listMouseDown($event)" html="$ctrl.data.tileHtml">
   </inner-html-common-directive>
   <div class="tab-focus-div eo-static-hidden" tabindex="0" ng-focus="$ctrl.fun.divFocus()"></div>`,
@@ -461,7 +461,7 @@ function selectDefaultController($scope, $element) {
 
   fun.initHtml = () => {
     let itemHtml = '';
-    const deafultText = `<span class="item_text text_omit">{{item.${vm.input.key}}}</span>`;
+    const deafultText = `<span class="item_text text-omit">{{item.${vm.input.key}}}</span>`;
     switch (vm.mainObject.itemType) {
       case 'html': {
         itemHtml = vm.mainObject.itemHtml;
@@ -486,7 +486,7 @@ function selectDefaultController($scope, $element) {
     }
     switch (vm.type) {
       case 'tile': {
-        vm.data.tileHtml = `<button type="button" class="select-btn-item common_class_tile_item  f_row_ac f_wrap ${
+        vm.data.tileHtml = `<button type="button" class="select-btn-item common_class_tile_item  flex items-center f_wrap ${
           vm.mainObject.itemClass || ''
         }"
                     ${vm.mainObject.itemExpression || ''} 

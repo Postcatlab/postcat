@@ -39,8 +39,7 @@
               "src/eoui.less",
               "src/antd.less",
               "src/styles.scss",
-              "src/assets/font/iconfont.css",
-              "src/ng1/index.css"
+              "src/assets/font/iconfont.css"
             ],
             "scripts": [
               "src/ng1/lib/angular/angular.js",

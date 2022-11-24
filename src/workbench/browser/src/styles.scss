@@ -101,3 +101,8 @@ object {
 .electron-can-be-click {
   -webkit-app-region: no-drag;
 }
+.text-omit {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

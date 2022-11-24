@@ -22,6 +22,9 @@ import { EoNgTreeModule } from 'eo-ng-tree';
 import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
+import { EoNgTableModule } from 'eo-ng-table';
+import { EoNgAutoCompleteModule } from 'eo-ng-auto-complete';
+
 import {
   EoNgFeedbackAlertModule,
   EoNgFeedbackDrawerModule,
@@ -80,10 +83,12 @@ const SHARED_UI_MODULE = [
   EoNgCheckboxModule,
   EoNgSelectModule,
   EoNgSwitchModule,
+  EoNgTableModule,
   EoNgTreeModule,
   EoNgInputModule,
   EoNgRadioModule,
   EoNgTabsModule,
+  EoNgAutoCompleteModule,
   EoNgFeedbackDrawerModule,
   EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,

@@ -26,7 +26,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
         thKey: $localize`Required`,
         type: 'html',
         html: '{{item.required?"True":"False"}}',
-        class: 'w_100',
+        class: 'w-full',
       },
       {
         thKey: $localize`:@@Description:Description`,

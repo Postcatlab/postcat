@@ -10,3 +10,13 @@
   </div>
   <list-block-common-component [mainObject]="listConf" [(list)]="model"></list-block-common-component>
 </fieldset>
+<eo-ng-table
+  [nzDataItem]="table1.paramItem"
+  [nzTbody]="table1.formDataTbody"
+  [nzThead]="table1.formDataThead"
+  [(nzData)]="table1.formData"
+  nzCheckboxKey="paramNotNull"
+  nzPrimaryKey="paramKey"
+  [nzScroll]="{ x: '1020px' }"
+  [nzDraggable]="true"
+></eo-ng-table>
