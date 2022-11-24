@@ -1,4 +1,4 @@
-<div class="eo-sidebar" [ngClass]="{ 'eo-sidebar-shrink': isCollapsed }">
+<div class="eo-sidebar" [ngClass]="{ 'eo-sidebar-shrink': sidebar.collapsed }">
   <ng-container *ngFor="let item of this.modules">
     <nz-divider *ngIf="item.id === '@eo-core-extension'" style="transform: scale(0.8); margin: 5px 0"></nz-divider>
     <a
@@ -7,7 +7,7 @@
       eoNgFeedbackTooltip
       nzTooltipPlacement="right"
       [nzTooltipTitle]="item.title"
-      [ngClass]="{ 'sidebar-item-active': item.id === this.sidebar.currentModule?.id }"
+      [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentModule?.id }"
     >
       <eo-iconpark-icon [name]="item.icon" size="24px"> </eo-iconpark-icon>
       <span class="mt-1 label" *ngIf="!sidebar.collapsed">{{ item.title }}</span>
