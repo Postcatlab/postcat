@@ -1,15 +1,20 @@
 <header class="flex pt-2">
-  <input
-    eo-ng-input
-    type="text"
-    class="flex-1 px-3 eo-search-input"
-    i18n-placeholder="@@Search"
-    placeholder="Search"
-    [(ngModel)]="searchValue"
-  />
+  <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="rounded-full">
+    <input
+      eo-ng-input
+      type="text"
+      class="flex-1 px-3"
+      i18n-placeholder="@@Search"
+      placeholder="Search"
+      [(ngModel)]="searchValue"
+    />
+  </eo-ng-input-group>
+  <ng-template #prefixTemplateUser
+    ><svg class="iconpark-icon"><use href="#search"></use></svg
+  ></ng-template>
   <button
     *ngIf="!status.isShare"
-    nzType="primary"
+    nzType="default"
     eo-ng-button
     class="ml-3"
     eo-ng-dropdown
