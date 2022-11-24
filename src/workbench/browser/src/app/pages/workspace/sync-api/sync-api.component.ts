@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { StorageService } from '../../../shared/services/storage';
 import packageJson from '../../../../../../../../package.json';
-import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
+import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';

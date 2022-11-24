@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { filter } from 'rxjs/operators';
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';

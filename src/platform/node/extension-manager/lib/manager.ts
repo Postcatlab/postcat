@@ -7,7 +7,7 @@ import {
   ModuleManagerInterface,
   SidebarView,
   FeatureInfo,
-} from '../types';
+} from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { isNotEmpty } from 'eo/shared/common/common';
 import http from 'axios';
 import { DATA_DIR } from '../../../../shared/electron-main/constant';

@@ -1,5 +1,4 @@
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
-
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager'
 interface LooseObject {
   [key: string]: any;
 }

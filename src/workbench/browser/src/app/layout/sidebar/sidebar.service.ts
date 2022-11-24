@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { SidebarModuleInfo } from './sidebar.model';
 
 @Injectable({

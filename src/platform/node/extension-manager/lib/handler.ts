@@ -1,6 +1,6 @@
 let fixPath = require('fix-path');
 import * as path from 'path';
-import { ModuleHandlerOptions, ModuleHandlerResult } from '../types';
+import { ModuleHandlerOptions, ModuleHandlerResult } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { fileExists, writeJson } from 'eo/shared/node/file';
 import { CoreHandler } from './core';
 import * as fs from 'fs';

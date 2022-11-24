@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { lastValueFrom } from 'rxjs';
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';

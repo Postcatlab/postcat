@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService, WebService } from '../../core/services';
-import { ModuleInfo } from 'eo/platform/node/extension-manager/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SettingComponent } from '../../modules/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';

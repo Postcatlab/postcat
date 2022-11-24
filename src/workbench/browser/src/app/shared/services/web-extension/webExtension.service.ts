@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
-import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
+import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 
 type ExtensionItem = {
