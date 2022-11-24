@@ -127,6 +127,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  setParentStyle(node) {
+    console.log('node', node);
+  }
   /**
    * Generate group tree nodes.
    */

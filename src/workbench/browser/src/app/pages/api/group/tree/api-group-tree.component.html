@@ -31,15 +31,15 @@
     (nzOnDrop)="treeItemDrop($event)" [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
-      <div [style.--tree-level]="node.level" class="w-full">
+      <div [style.--tree-level]="node.level + 1" myTree [node]="node">
         <!-- Folder -->
         <div class="flex items-center justify-between tree_node" *ngIf="!node.isLeaf">
-          <div class="flex items-center overflow-hidden text-ellipsis">
+          <div class="flex items-center" [style.width]="'calc(100% - 24px * var(--tree-level))'">
             <div class="width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div>
             <svg class="iconpark-icon">
               <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
             </svg>
-            <span class="text_omit node_title ml-[4px]">{{ node.title }}</span>
+            <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
           <span class="flex tree_node_operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
             <ng-container *ngIf="isEdit">
@@ -59,11 +59,11 @@
         </div>
         <!-- Leaf -->
         <div class="flex items-center justify-between tree_node" *ngIf="!node.origin?.isFixed && node.isLeaf">
-          <div class="flex items-center overflow-hidden text-ellipsis">
+          <div class="flex items-center" [style.width]="'calc(100% - 22px)'">
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method
               }}</b>
-            <span class="text-omit node_title ml-[4px]">{{ node.title }}</span>
+            <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
           <div class="flex tree_node_operate">
             <ng-container *ngIf="isEdit">
