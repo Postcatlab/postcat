@@ -1,34 +1,37 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "../../../",
     "outDir": "./dist/out-tsc",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "es2020",
-    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": false,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "baseUrl": "../../../",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "es2020",
+    "lib": [
+      "es2021",
+      "es2020",
+      "dom"
+    ],
     "paths": {
       "eo/*": [
         "./src/*"
       ]
     },
     "allowJs": true,
-    "target": "es6",
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": [
-      "es2017",
-      "es2016",
-      "es2015",
-      "ESNext",
-      "dom"
-    ]
   },
   "exclude": [
     "node_modules",
@@ -44,6 +47,8 @@
     "strictInjectionParameters": true,
     "skipTemplateCodegen": false,
     "skipMetadataEmit": false,
-    "disableTypeScriptVersionCheck": true
+    "disableTypeScriptVersionCheck": true,
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInputAccessModifiers": true,
   }
 }
