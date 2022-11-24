@@ -74,7 +74,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   envList: NzSelectOptionInterface[] = [];
 
   isOpen = false;
-  activeBar = false;
   dyWidth = this.getLocalDyWidth();
 
   tabsIndex = 0;
@@ -172,12 +171,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     });
   }
 
-  countPaddingRight() {
-    if (this.status.isShare) {
-      return '0px';
-    }
-    return this.activeBar ? this.dyWidth + 'px' : '40px';
-  }
   onResizeEnd() {
     this.isDragging = false;
   }
@@ -241,7 +234,7 @@ export class ApiComponent implements OnInit, OnDestroy {
             break;
           }
           case 'toggleEnv': {
-            this.activeBar = data;
+            this.toggleRightBar(data ? 'open' : 'close');
             break;
           }
           case 'deleteEnv': {
