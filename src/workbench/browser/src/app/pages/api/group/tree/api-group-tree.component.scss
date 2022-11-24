@@ -33,6 +33,9 @@
     // width: 100%;
     flex: auto;
   }
+  .ant-tree-indent-unit {
+    width: 24px;
+  }
   .ant-tree-switcher {
     width: 24px;
   }
@@ -48,7 +51,7 @@
 .method_text {
   max-width: 50px;
   min-width: 32px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
 }
 
