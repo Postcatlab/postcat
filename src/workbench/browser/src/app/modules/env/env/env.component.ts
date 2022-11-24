@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { EoTableComponent } from '../../eo-ui/table/eo-table/eo-table.component';
-import { Change } from '../../../shared/store/env.state';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { StorageService } from '../../../shared/services/storage';
 
 import { Subject } from 'rxjs';
@@ -37,7 +36,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private messageService: MessageService,
     private message: EoNgFeedbackMessageService,
-    private store: Store
+    private store: StoreService
   ) {}
 
   get envUuid(): number {
@@ -191,13 +190,13 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   private changeStoreEnv(uuid) {
     if (uuid == null) {
-      this.store.dispatch(new Change(null));
+      this.store.changeEnv(null);
       return;
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.dispatch(new Change(data));
+        this.store.changeEnv(data);
       }
     });
   }

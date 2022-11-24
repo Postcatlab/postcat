@@ -2,10 +2,8 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { Store } from '@ngxs/store';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
-import { Change } from '../../shared/store/env.state';
 import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
@@ -14,6 +12,7 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -87,7 +86,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public web: WebService,
-    private store: Store,
+    private store: StoreService,
     public status: StatusService,
     private http: RemoteService,
     private share: ShareService
@@ -201,7 +200,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {
     if (uuid == null) {
-      this.store.dispatch(new Change(null));
+      this.store.changeEnv(null);
       return;
     }
     if (this.status.isShare) {
@@ -212,12 +211,12 @@ export class ApiComponent implements OnInit, OnDestroy {
         return;
       }
       const result = data.find((val) => val.uuid === Number(uuid));
-      return this.store.dispatch(new Change(result));
+      return this.store.changeEnv(result);
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.dispatch(new Change(data));
+        this.store.changeEnv(data);
       }
     });
   }

@@ -8,10 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //Other module
 import { CoreModule } from './core/core.module';
-import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EnvState } from './shared/store/env.state';
 
 // NG1 Upgrade
 import { UpgradeModule } from '@angular/upgrade/static';
@@ -55,7 +53,6 @@ registerLocaleData(zh);
     HttpClientModule,
     UpgradeModule,
     EouiModule,
-    NgxsModule.forRoot([EnvState]),
   ],
   providers: [
     MockService,
@@ -70,8 +67,8 @@ registerLocaleData(zh);
     {
       provide: NZ_CONFIG,
       useFactory: (theme): NzConfig => ({
-          theme: theme.DESIGN_TOKEN,
-        }),
+        theme: theme.DESIGN_TOKEN,
+      }),
       deps: [ThemeService],
     },
     {

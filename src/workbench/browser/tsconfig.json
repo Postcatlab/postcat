@@ -36,6 +36,7 @@
     ".angular",
     "src/app/assets"
   ],
+  "useDefineForClassFields": true,
   "angularCompilerOptions": {
     "enableIvy": true,
     "strictTemplates": true,

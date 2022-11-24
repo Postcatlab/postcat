@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Select } from '@ngxs/store';
 
 import {
   ApiBodyType,
@@ -19,7 +18,8 @@ import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestUtilService } from './api-test-util.service';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 
-import { EnvState } from '../../../../shared/store/env.state';
+import { computed, reaction } from 'mobx';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestService } from './api-test.service';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
@@ -70,12 +70,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   @Output() afterTested = new EventEmitter<any>();
   @Output() eoOnInit = new EventEmitter<testViewModel>();
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent; // 通过组件类型获取
-  @Select(EnvState) env$: Observable<any>;
   validateForm!: FormGroup;
-  env: any = {
-    parameters: [],
-    hostUri: '',
-  };
   BEFORE_DATA = BEFORE_DATA;
   AFTER_DATA = AFTER_DATA;
 
@@ -96,7 +91,11 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
+  @computed get getEnv() {
+    return this.store.getEnv;
+  }
   constructor(
+    private store: StoreService,
     private cdRef: ChangeDetectorRef,
     private fb: FormBuilder,
     public route: ActivatedRoute,
@@ -312,7 +311,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       id: JSON.stringify(this.route.snapshot.queryParams),
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
-        env: this.env,
+        env: this.getEnv,
         globals: getGlobals(),
         beforeScript: this.model.beforeScript,
         afterScript: this.model.afterScript,
@@ -430,10 +429,9 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
   }
   private watchEnvChange() {
-    this.env$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      const { env } = data;
-      if (env) {
-        this.env = env;
+    reaction(
+      () => this.getEnv,
+      (env: any) => {
         if (env.uuid) {
           this.validateForm.controls.uri.setValidators([]);
           this.validateForm.controls.uri.updateValueAndValidity();
@@ -441,7 +439,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
           this.validateForm.controls.uri.setValidators([Validators.required]);
         }
       }
-    });
+    );
   }
   private resetModel() {
     return {
