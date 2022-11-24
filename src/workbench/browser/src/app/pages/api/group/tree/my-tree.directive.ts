@@ -1,14 +1,14 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 
 @Directive({
   selector: '[myTree]',
 })
-export class MyTreeDirective implements OnInit {
+export class MyTreeDirective implements OnChanges {
   @Input() node?: any;
 
   constructor(private readonly el: ElementRef) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     const treeNode = this.el.nativeElement.closest('nz-tree-node-title');
     if (treeNode) {
       treeNode.style.display = 'block';

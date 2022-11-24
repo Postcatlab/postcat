@@ -31,12 +31,12 @@
     (nzOnDrop)="treeItemDrop($event)" [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
-      <div [style.--tree-level]="node.level + 1" myTree [node]="node">
+      <div [style.--tree-level]="node.level || 1" myTree [node]="node">
         <!-- Folder -->
         <div class="flex items-center justify-between tree_node" *ngIf="!node.isLeaf">
-          <div class="flex items-center" [style.width]="'calc(100% - 24px * var(--tree-level))'">
+          <div class="flex items-center" [style.width]="'calc(100% - 8px * var(--tree-level))'">
             <div class="width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div>
-            <svg class="iconpark-icon">
+            <svg class="iconpark-icon mr-[5px] flex-shrink-0">
               <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
             </svg>
             <span class="text-[12px] truncate">{{ node.title }}</span>

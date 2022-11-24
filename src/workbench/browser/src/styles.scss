@@ -40,7 +40,8 @@ object {
   color: var(--BLUE_TAG_BG);
 }
 .method_text_POST {
-  color: var(--GREEN_TAG_BG);
+  // color: var(--GREEN_TAG_BG);
+  @apply text-green-700;
 }
 .method_text_DELETE {
   color: var(--RED_TAG_BG);
@@ -96,7 +97,6 @@ object {
   border-bottom-width: 0px;
   border-right-width: 0px;
 }
-
 
 .electron-can-be-click {
   -webkit-app-region: no-drag;
