@@ -24,7 +24,7 @@
 </header>
 
 <!-- Custom Group -->
-<div class="group_container group-tree pt10">
+<div class="group_container group-tree pt-[10px]">
   <eo-ng-tree-default *ngIf="treeNodes.length" [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup
     [nzSearchValue]="searchValue" [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys"
     (nzClick)="clickTreeItem($event)" (nzExpandChange)="toggleExpand()" [nzDraggable]="isEdit" nzBlockNode
@@ -33,8 +33,8 @@
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div [style.--tree-level]="node.level" class="w-full">
         <!-- Folder -->
-        <div class="tree_node flex items-center" *ngIf="!node.isLeaf">
-          <div class="overflow-hidden f_row_ac text-ellipsis">
+        <div class="flex items-center justify-between tree_node" *ngIf="!node.isLeaf">
+          <div class="flex items-center overflow-hidden text-ellipsis">
             <div class="width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div>
             <svg class="iconpark-icon">
               <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
@@ -42,40 +42,43 @@
             <span class="text_omit node_title ml-[4px]">{{ node.title }}</span>
           </div>
           <span class="flex tree_node_operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
-            <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="groupMenu">
-              <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
-            </span>
+            <ng-container *ngIf="isEdit">
+              <div nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
+                <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
+              </div>
 
-            <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu" *ngIf="isEdit">
-              <ul nz-menu>
-                <li nz-menu-item *ngFor="let item of groupItemsMenu;" (click)="item.click({ group: node  })">
-                  {{ item.title }}
-                </li>
-              </ul>
-            </eo-ng-dropdown-menu>
+              <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item *ngFor="let item of groupItemsMenu;" (click)="item.click({ group: node  })">
+                    {{ item.title }}
+                  </li>
+                </ul>
+              </eo-ng-dropdown-menu>
+            </ng-container>
           </span>
         </div>
         <!-- Leaf -->
-        <div class="tree_node flex items-center" *ngIf="!node.origin?.isFixed && node.isLeaf">
-          <div class="overflow-hidden flex items-center text-ellipsis">
+        <div class="flex items-center justify-between tree_node" *ngIf="!node.origin?.isFixed && node.isLeaf">
+          <div class="flex items-center overflow-hidden text-ellipsis">
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method
               }}</b>
             <span class="text-omit node_title ml-[4px]">{{ node.title }}</span>
           </div>
           <div class="flex tree_node_operate">
-
-            <span eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="apiMenu" (click)="$event.stopPropagation()">
-              <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
-            </span>
-            <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu" *ngIf="isEdit">
-              <ul nz-menu>
-                <li nz-menu-item *ngFor="let item of apiItemsMenu;"
-                  (click)="item.click({ group: node, api: apiDataItems[node.key] })">
-                  {{ item.title }}
-                </li>
-              </ul>
-            </eo-ng-dropdown-menu>
+            <ng-container *ngIf="isEdit">
+              <div eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="apiMenu" (click)="$event.stopPropagation()">
+                <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
+              </div>
+              <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item *ngFor="let item of apiItemsMenu;"
+                    (click)="item.click({ group: node, api: apiDataItems[node.key] })">
+                    {{ item.title }}
+                  </li>
+                </ul>
+              </eo-ng-dropdown-menu>
+            </ng-container>
           </div>
         </div>
       </div>
