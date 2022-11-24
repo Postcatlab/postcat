@@ -2,23 +2,23 @@ angular.module('eolinker').component('listBlockCommonComponent', {
   template: `<script type="text/ng-template" id="paramDetail_Template_js">
   <div class="container_pdtj" style="padding-left: -{-(item.listDepth||0)*29+20-}-px" {eoData}-show="item.isClick">
       <p class="f_row" {eoData}-if="item.minLength">
-          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.minLen}}：</span>
+          <span class="title-span mw-full">{{ $ctrl.listBlockVarible.minLen}}：</span>
           <span  class="wb_all">-{-item.minLength-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.maxLength">
-          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.maxLen}}：</span>
+          <span class="title-span mw-full">{{ $ctrl.listBlockVarible.maxLen}}：</span>
           <span  class="wb_all">-{-item.maxLength-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.minimum">
-          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.minValue}}：</span>
+          <span class="title-span mw-full">{{ $ctrl.listBlockVarible.minValue}}：</span>
           <span  class="wb_all">-{-item.minimum-}-</span>
       </p>
       <p class="f_row" {eoData}-if="item.maximum">
-          <span class="title-span mw_100">{{ $ctrl.listBlockVarible.maxValue}}：</span>
+          <span class="title-span mw-full">{{ $ctrl.listBlockVarible.maxValue}}：</span>
           <span  class="wb_all">-{-item.maximum-}-</span>
       </p>
       <div class="f_row" {eoData}-if="item.enum.length>0&&item.enum[0].value">
-  <span class="title-span mw_100">{{ $ctrl.listBlockVarible.valueExampple}}：</span>
+  <span class="title-span mw-full">{{ $ctrl.listBlockVarible.valueExampple}}：</span>
           <table>
               <tr {eoData}-repeat="childItem in item.enum track by $index">
                   <td class="value-td">
@@ -32,7 +32,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
                       <span class="divide-span">|</span>
                       <span>-{-childItem.description-}-</span>
                   </td>
-                  <td class="default-td mw_100 f_ac" {eoData}-if="item.default">
+                  <td class="default-td mw-full f_ac" {eoData}-if="item.default">
                           <span class="divide-span">|</span>
                           <span>默认值</span>
                       </td>
@@ -109,7 +109,7 @@ angular.module('eolinker').component('listBlockCommonComponent', {
               </uib-pagination>
           </div>
       </div>
-      <button class="eo-operate-btn lh_30 w_100percent btd mr0"
+      <button class="eo-operate-btn lh_30 w-fullpercent btd mr0"
           ng-if="$ctrl.list.length>$ctrl.data.MAX_OMIT_LIST_LENTH*$ctrl.data.listPartIndex"
           ng-click="$ctrl.fun.watchUi('show_more_list')">展开更多...</button>
   </div>

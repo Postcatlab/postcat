@@ -3,7 +3,7 @@
     <div class="mt-4" (click)="handleClick()">
       <nz-tag [nzColor]="'#108ee9'">{{ model.protocol | uppercase }}</nz-tag>
       <nz-tag [nzColor]="'#0aa07a'">{{ model.method | uppercase }}</nz-tag>
-      <span class="mt-2.5 dp_b text_omit">{{ model.uri }}</span>
+      <span class="mt-2.5 dp_b text-omit">{{ model.uri }}</span>
     </div>
     <div class="flex mt-4">
       <ng-container *ngFor="let item of rightExtras">
@@ -19,7 +19,7 @@
       </ng-container>
     </div>
   </div>
-  <p class="api_name text_omit">{{ model.name }}</p>
+  <p class="api_name text-omit">{{ model.name }}</p>
   <!-- Request headers -->
   <nz-collapse *ngIf="model.requestHeaders && model.requestHeaders.length" class="eo_collapse" [nzGhost]="true">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request Headers">

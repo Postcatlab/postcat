@@ -10,7 +10,7 @@
   <div *ngIf="model?.statusCode"
     class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
     <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
-    <div class="f_row_ac fs12">
+    <div class="flex items-center fs12">
       <span class="mr15" id="size">Size: {{ model.responseLength | byteToString }}</span>
       <span id="time">Time: {{ model.testDeny }}ms</span>
     </div>
@@ -22,7 +22,7 @@
   <!-- Response -->
   <div *ngIf="model.responseType">
     <ng-container *ngIf="responseIsImg; else stream">
-      <img class="maw_100percent" [src]="imgBlobUrl" />
+      <img class="max-w-full" [src]="imgBlobUrl" />
     </ng-container>
     <ng-template #stream>
       <ng-container *ngIf="model.responseType === 'stream' && model.responseLength > 500000; else longText">
@@ -51,7 +51,7 @@
       </ng-container>
     </ng-template>
     <ng-template #other>
-      <eo-monaco-editor class="mt20" [autoFormat]="true" [code]="model.body" [config]="{ readOnly: true }"
+      <eo-monaco-editor class="mt-[20px]" [autoFormat]="true" [code]="model.body" [config]="{ readOnly: true }"
         [isBase64]="['longText', 'stream'].includes(model.responseType)"
         [eventList]="['type', 'format', 'copy', 'search']"></eo-monaco-editor>
     </ng-template>

@@ -77,7 +77,7 @@
           </ng-template>
           <eo-api-test-header
             [disabled]="['connecting', 'connected'].includes(wsStatus)"
-            class="eo_theme_iblock bbd"
+            class="eo_theme_iblock"
             [(model)]="model.request.requestHeaders"
             (modelChange)="emitChangeFun('requestHeaders')"
           >
@@ -96,7 +96,7 @@
             }}</span>
           </ng-template>
           <eo-api-test-query
-            class="eo_theme_iblock bbd"
+            class="eo_theme_iblock"
             [disabled]="['connecting', 'connected'].includes(wsStatus)"
             [model]="model.request.queryParams"
             (modelChange)="emitChangeFun('queryParams')"

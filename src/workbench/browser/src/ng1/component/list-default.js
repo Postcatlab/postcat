@@ -398,7 +398,7 @@ function listDefaultController($scope, $element) {
                             >${
                               vm.mainObject.setting.canOpenLink &&
                               !listItem.cancelLink
-                                ? `<a onclick="return false" class="list_td_link text_omit"  ng-href="{{$ctrl.fun.getNewTabHref({item:item})}}">${listItem.html}</a>`
+                                ? `<a onclick="return false" class="list_td_link text-omit"  ng-href="{{$ctrl.fun.getNewTabHref({item:item})}}">${listItem.html}</a>`
                                 : listItem.html
                             }</td>\n`;
           }

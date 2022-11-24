@@ -238,13 +238,13 @@ angular
                     tmpHasChild = true;
                     tmpHtml += `<div class="${
                       val.class || ''
-                    } had_child_item_edr item_edr text_omit lh_30 cp f_row f_js_ac" ng-mouseenter="$ctrl.fnChangeChildsBlockDisplay(true,$event,{target:${
+                    } had_child_item_edr item_edr text-omit lh_30 cp f_row f_js_ac" ng-mouseenter="$ctrl.fnChangeChildsBlockDisplay(true,$event,{target:${
                       val.value
                     },index:${key}})" ng-mouseleave="$ctrl.fnChangeChildsBlockDisplay(false,$event)"><span>${
                       val.key
                     }</span><span class="iconfont icon-chevron-right"></span></div>`;
                   } else {
-                    tmpHtml += `<div class="${val.class || ''} item_edr text_omit lh_30 cp" $_child_mouseleave  ${
+                    tmpHtml += `<div class="${val.class || ''} item_edr text-omit lh_30 cp" $_child_mouseleave  ${
                       val.expression || ''
                     } ${val.hasOwnProperty('value') ? `eo-attr-value=${val.value}` : ''}>${val.key}</div>`;
                   }
@@ -258,7 +258,7 @@ angular
                 /\$_child_mouseleave/g,
                 'ng-mouseenter="$ctrl.fnChangeChildsBlockDisplay(false)"'
               );
-              tmpHtml = `<div>${tmpHtml}</div><div class="childs_container_edr eo-block-container" target="child" ng-style="$ctrl.data.childStyle" ng-if="$ctrl.data.childs.length"><div target="child" ng-repeat="item in $ctrl.data.childs" class="item_edr text_omit lh_30 cp plr10" eo-attr-value="{{$index}}">{{item.key}}</div></div>`;
+              tmpHtml = `<div>${tmpHtml}</div><div class="childs_container_edr eo-block-container" target="child" ng-style="$ctrl.data.childStyle" ng-if="$ctrl.data.childs.length"><div target="child" ng-repeat="item in $ctrl.data.childs" class="item_edr text-omit lh_30 cp plr10" eo-attr-value="{{$index}}">{{item.key}}</div></div>`;
             } else {
               tmpHtml = tmpHtml.replace(/\$_child_mouseleave/g, '');
             }

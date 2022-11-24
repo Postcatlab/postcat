@@ -21,9 +21,9 @@
     ></nz-tree>
     <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
       <div class="pl-[18px] tree_node" *ngIf="node.origin?.isFixed">
-        <div class="f_row_ac">
+        <div class="flex items-center">
           <eo-iconpark-icon name="home" class="mr10"></eo-iconpark-icon>
-          <span class="text_omit node_title">{{ node.title }}</span>
+          <span class="text-omit node_title">{{ node.title }}</span>
         </div>
       </div>
     </ng-template>
@@ -41,8 +41,8 @@
   <ng-template #nzTreeTemplate let-node let-origin="origin">
     <div class="pl-[18px]">
       <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
-        <div class="overflow-hidden f_row_ac text-ellipsis">
-          <span class="text_omit node_title">{{ node.title }}</span>
+        <div class="overflow-hidden flex items-center text-ellipsis">
+          <span class="text-omit node_title">{{ node.title }}</span>
         </div>
       </div>
     </div>
@@ -50,6 +50,6 @@
       style="bottom: -3px; left: 4px; right: 0px;"></div> -->
   </ng-template>
 </section>
-<section class="px-4 right fg1">
+<section class="px-4 right flex-1">
   <router-outlet></router-outlet>
 </section>

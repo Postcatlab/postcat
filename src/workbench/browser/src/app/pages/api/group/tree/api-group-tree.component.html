@@ -53,9 +53,9 @@
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div [style.--tree-level]="node.level">
         <!-- Folder -->
-        <div class="tree_node f_row f_js_ac" *ngIf="!node.isLeaf">
-          <div class="overflow-hidden f_row_ac text-ellipsis">
-            <span class="text_omit node_title">{{ node.title }}</span>
+        <div class="tree_node flex items-center" *ngIf="!node.isLeaf">
+          <div class="overflow-hidden flex items-center text-ellipsis">
+            <span class="text-omit node_title">{{ node.title }}</span>
           </div>
           <span class="flex tree_node_operate" *ngIf="isEdit">
             <eo-ng-dropdown
@@ -70,12 +70,12 @@
           </span>
         </div>
         <!-- Leaf -->
-        <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
-          <div class="overflow-hidden f_row_ac text-ellipsis">
+        <div class="tree_node flex items-center" *ngIf="!node.origin?.isFixed && node.isLeaf">
+          <div class="overflow-hidden flex items-center text-ellipsis">
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method
             }}</b>
-            <span class="text_omit node_title">{{ node.title }}</span>
+            <span class="text-omit node_title">{{ node.title }}</span>
           </div>
           <div class="flex tree_node_operate">
             <eo-ng-dropdown

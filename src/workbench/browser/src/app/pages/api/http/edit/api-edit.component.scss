@@ -17,3 +17,7 @@ eo-api-edit-rest {
   @apply sticky top-0 z-10 py-2.5 bg-white;
 }
 
+.eo_theme_iblock{
+  border:1px solid var(--BORDER);
+  border-top: 0 none;
+}
