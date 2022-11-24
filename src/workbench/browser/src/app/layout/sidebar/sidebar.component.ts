@@ -15,7 +15,6 @@ import { StatusService } from 'eo/workbench/browser/src/app/shared/services/stat
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  isCollapsed = false;
   destroy = false;
   modules: Array<ModuleInfo | SidebarModuleInfo | any>;
   constructor(
@@ -26,7 +25,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private workspace: WorkspaceService,
     private status: StatusService
   ) {
-    this.isCollapsed = this.sidebar.getCollapsed();
   }
   toggleCollapsed(): void {
     this.sidebar.toggleCollapsed();

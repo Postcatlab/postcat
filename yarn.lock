@@ -5702,73 +5702,73 @@ env-paths@^2.2.0, env-paths@^2.2.1:
   resolved "https://registry.npmmirror.com/env-paths/-/env-paths-2.2.1.tgz#420399d416ce1fbe9bc0a07c62fa68d67fd0f8f2"
   integrity sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==
 
-eo-ng-button@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.73.tgz#38fee2b5020d1cd0f2cfa5a86c1d577656a85b26"
-  integrity sha512-nlxGpk0Q2qMmo9IxAm7KBlqfIxkfxODp5VsPV0j8F+CAEcQZ4AR17NeHrqhg6DxrOKiPm1ZrTrxj6iQVsm82Vg==
+eo-ng-button@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.75.tgz#3c2d8e8c0482ffe46b2f67c15f937bf88dfc3e98"
+  integrity sha512-A03HNkLVilQVJ5Alz5d4GlKZz/A2cJan6PXJojQMI2T44mrXfpMCqrhY4agzp3GJ8tnzsLmtAjGqXiHej89SVw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-checkbox@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.73.tgz#4053408c8cd9f72b5168542249b5fe81fc5930c7"
-  integrity sha512-MgGOY4gUCbeveB2N5kkOhr6jfWzk/rj1vWVhzU9Ij7S7f0qXRrYwWVmBF6PsnywE7NvXZLOYvTP5lTc8sathdQ==
+eo-ng-checkbox@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.75.tgz#797436ab263e44072a3bdc6f9ccf2b08b78a2c74"
+  integrity sha512-Zz92Gy3k9gDLam1mVm/0LxkuK7uDHOcFHqNh3iSF4JukRGqDqs2S1TbhdGTZdsvK8wT7MoOpq93phW/dKz21Tw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-dropdown@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-dropdown/-/eo-ng-dropdown-0.0.73.tgz#b266a037da132f6d281a8ff2ddb0103912fd9fa6"
-  integrity sha512-3lTKHY1q7j3qLqJahm5a0W4SUKnqs7OpnR8P2gOk4LljQ2d8qu1rpoCAvwlTzslY9FCPYdg1wfuJts6MBTWj6Q==
+eo-ng-dropdown@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-dropdown/-/eo-ng-dropdown-0.0.75.tgz#94b5d8fdc82e4d48949790736c005d88db19642b"
+  integrity sha512-+6aLdQB55UO2Ly6fYCPIEBdyYNJtfbg2BwrOxNlkTS7qEfeTokzC+V8c7m/a7NmIP/rBlh7R/t3RUpV2eaQmyw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-feedback@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.0.73.tgz#c8becce3f8b2685e224e60f7a3cb789ba3e7f862"
-  integrity sha512-iMRQgwTM03XoP8IWfgVHxRSnm0yBFYF2pBGc+N3QSR/XIIDn4Xhyt0UmhfnsHObwRiNNFbUEChrua9d+FAW2cw==
+eo-ng-feedback@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.0.75.tgz#ca4ef61397e72d77fb3eb2558ba7b560b4ee23b3"
+  integrity sha512-4XrDZblc8Fei2tNKBcBv91R3ha1nLWe+vvUvjPDRkSIo4adcztx7GMQT9/1TYmG1ZbHYjSUmaHYCZKZ6xDNggw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-input@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-input/-/eo-ng-input-0.0.73.tgz#93b5aad6d9c9919d41cec4abafca884b77002b22"
-  integrity sha512-N1aX5iPLvHnJaSScDlSgGWZsIa7GDGosOQddxWjrQeHWxQndYvYzsd6xMT6mxCloa+waWVgg1IHyepzfKgYz7g==
+eo-ng-input@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-input/-/eo-ng-input-0.0.75.tgz#c36c669cca4a397744da08a8e8900f22a10b040a"
+  integrity sha512-J0U2BM7wnpUF5RICF4brG/gfxuP1AnT7QIdzWHAzKvpqIZnwQ0+nLneqele27/VmjzqpeHaJ8qGn4Itb9GfQBw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-radio@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-radio/-/eo-ng-radio-0.0.73.tgz#a7a5869d06e31897006e5f200fe1461649ad0cec"
-  integrity sha512-xcDt9VKwdVk1d6ufC4BmcCowOtWrNUCjTYqM3gsPBXrglj6BiDPPt5JfpQd6C/T7MPoRRuYX+GukA40PmLDg/w==
+eo-ng-radio@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-radio/-/eo-ng-radio-0.0.75.tgz#0c2f19910a62019c2524888a3ddeed770d644cdb"
+  integrity sha512-3ZCKSR5eMrTNG/QyvvFT9wPSnWzREzy7aD3uzDUOgn7DdurKcJ1ysw96jHYyH0LInIZioUxUdDwZkj3EX/rbEw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-select@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-select/-/eo-ng-select-0.0.73.tgz#54a5f466ff7d145491fb8575aca860637d5ef163"
-  integrity sha512-RNY1HzgyMNsfIHfOkWWTxwS+Re7D2rahlYQmiXYIoXcdvvptZg/Z2guLwAB4hyZrgu9albmk4Qve8MkR3isHdQ==
+eo-ng-select@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-select/-/eo-ng-select-0.0.75.tgz#f7b0a48c5c405cfcb91e88fd31e1678d17ea4b16"
+  integrity sha512-uAEQJYiL6MT4/l9MTQjDzqQVIjYz99DiiF8OhMum76dbESkXQUWodmg2i8p8ql0/8ACIkZUNRvHmwNhBifg0Cw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-switch@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-switch/-/eo-ng-switch-0.0.73.tgz#52ab93f44052ef90557f641dbd50d2daa8fb6545"
-  integrity sha512-Z1EDB2pFDXMGDO5gaWKOI9oVJ2AOdIBvDFolvx5F5oGtX05ZIO+LCCQDw9UVOd+MKUGvzK7gPvrbynx7MayKOQ==
+eo-ng-switch@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-switch/-/eo-ng-switch-0.0.75.tgz#95a07b054a333e39a3abd3f062fd5acb34d8fd68"
+  integrity sha512-jaUdn7V1XlP7RKKYOWH/rP953guQbglaMi88M5lX6c+D5Rl0cxk7v5TZUkHhntq/q9gcnPdkRDYdrRvytrDqsg==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-table@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-table/-/eo-ng-table-0.0.73.tgz#d0be1184547aca6c5b217166a6ebe5d9ca6534db"
-  integrity sha512-Ro+WNx+ud4BZjGY8yCQ1huwZp8KxxUQavTHbDfru8IJiBg1U2hmyb6kWcbBKVjQMrGlK5+D+grm+8Jox1xbdoQ==
+eo-ng-table@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-table/-/eo-ng-table-0.0.75.tgz#61aabfc0f1e638c7feb91a0bf94df98ec9800e7f"
+  integrity sha512-xmJlxXSQcIwhO+rDoCTQy75o9wDMdzWAYn992H8l9XarzU2gi5sZ7O+BE9urvjf2g4rLb8/+P6G4wmgsUD9VEA==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-tabs@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-tabs/-/eo-ng-tabs-0.0.73.tgz#79db8b46f2847301a075382420ea441e28beb6e3"
-  integrity sha512-XYbINNaCPSfoCXrB3dws5ecqHb5hTPAEOToWU/emoQ2mQ5wq3D83H7wFnCo4Ff0/SYTVWWxQNvBOKw9RxuEmMQ==
+eo-ng-tabs@0.0.75:
+  version "0.0.75"
+  resolved "https://registry.npmmirror.com/eo-ng-tabs/-/eo-ng-tabs-0.0.75.tgz#05a8f7ceea16e65a795a1595cff6715b0738f40b"
+  integrity sha512-uZSAWY1O6SG7pdQ1JQj8aTBE01phgOPjdwRr1MYSpYODBW/PEfYPEtWy1K+pl51iRY5sIssqrVWEbJpg1ah2eA==
   dependencies:
     tslib "^2.3.0"
 

@@ -1,4 +1,4 @@
-<!-- <nz-drawer
+<nz-drawer
   [nzVisible]="visible"
   [nzMaskClosable]="true"
   [nzMaskStyle]="{ 'background-color': 'transparent'}"
@@ -7,7 +7,7 @@
   nzTitle="主题"
   (nzOnClose)="close()"
 >
-  <ng-container *nzDrawerContent> -->
+  <ng-container *nzDrawerContent>
     <eo-ng-radio-group [(ngModel)]="currentTheme" ngDefaultControl>
       <div class="m-mode" *ngFor="let group of THEMES">
         <div class="fs14 fwb mode-title mtb10">{{ group.title }}</div>
@@ -36,6 +36,6 @@
         </div>
       </div>
     </eo-ng-radio-group>
-    <!-- </ng-container>
-    </nz-drawer> -->
+    </ng-container>
+    </nz-drawer>
     

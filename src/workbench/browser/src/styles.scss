@@ -1,4 +1,3 @@
-// @import url('ng-zorro-antd/ng-zorro-antd.min.css');
 // @import "tailwindcss/base";
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -72,9 +71,6 @@ object {
   &::placeholder {
     color: rgba(0, 0, 0, 0.5);
     font-size: 0.9em;
-  }
-  &:hover {
-    border-color: #158565;
   }
 }
 

@@ -5,7 +5,7 @@
     </ng-template>
   </nz-empty>
 </div>
-<div class="p15" *ngIf="model && (model | json) !== '{}'">
+<div class="p-[20px]" *ngIf="model && (model | json) !== '{}'">
   <!-- Status Bar -->
   <div *ngIf="model?.statusCode"
     class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
