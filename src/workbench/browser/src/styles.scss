@@ -96,3 +96,8 @@ object {
   border-bottom-width: 0px;
   border-right-width: 0px;
 }
+
+
+.electron-can-be-click {
+  -webkit-app-region: no-drag;
+}

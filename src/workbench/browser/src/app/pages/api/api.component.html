@@ -124,7 +124,8 @@
                   {{ tab.title }}
                   <nz-badge
                     *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
-                    nzStatus="success"
+                    class="ant-badge-primary"
+                    nzStatus="default"
                   ></nz-badge>
                 </a>
               </div>

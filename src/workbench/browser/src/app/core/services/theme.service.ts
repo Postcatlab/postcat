@@ -7,6 +7,11 @@ import { THEMES } from '../../layout/toolbar/select-theme/theme.model';
 @Injectable()
 export class ThemeService {
   currentTheme = 'blue';
+  DESIGN_TOKEN = {
+    primaryColor: getComputedStyle(this.document.documentElement)
+      .getPropertyValue('--MAIN_THEME_COLOR')
+      .replace(' ', ''),
+  };
   private themeChanges$ = new ReplaySubject(1);
   constructor(@Inject(DOCUMENT) private document: Document) {}
   changeTheme(name?: string): void {
@@ -15,7 +20,7 @@ export class ThemeService {
       this.currentTheme = name;
     }
     this.loadCss(`${this.currentTheme}.css`);
-    this.loadCss(`light.css`,'eoapi_theme_bg');
+    this.loadCss(`light.css`, 'eoapi_theme_bg');
   }
   getThemes() {
     return THEMES;
@@ -23,7 +28,7 @@ export class ThemeService {
   onThemeChange = function() {
     return this.themeChanges$.pipe(share());
   };
-  private loadCss(href: string, id: string='eoapi_theme_main'): Promise<Event> {
+  private loadCss(href: string, id: string = 'eoapi_theme_main'): Promise<Event> {
     return new Promise((resolve, reject) => {
       const style = document.createElement('link');
       style.rel = 'stylesheet';

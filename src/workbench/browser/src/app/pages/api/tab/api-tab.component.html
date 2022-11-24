@@ -31,9 +31,9 @@
         <!-- Close/HasEdit -->
         <div class="flex items-center tab-item-button-group">
           <nz-badge
-            class="tab-has-edit-icon"
+            class="tab-has-edit-icon ant-badge-primary"
             *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged"
-            nzStatus="success"
+            nzStatus="default"
           ></nz-badge>
           <button
             aria-label="Close tab"

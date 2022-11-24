@@ -2,65 +2,14 @@
   <div class="flex">
     <img class="logo" src="assets/images/logo.svg" />
     <!-- star -->
-    <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center can_be_click">
+    <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center electron-can-be-click">
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
-    <!-- Select workspace -->
-    <div
-      *ngIf="!status.isShare"
-      class="flex items-center can_be_click"
-      eo-ng-dropdown
-      nzTrigger="click"
-      [nzDropdownMenu]="workspaceMenu"
-    >
-      <eo-iconpark-icon
-        class="mr-[5px]"
-        name="link-cloud-{{ workspaceService.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
-      >
-      </eo-iconpark-icon>
-      {{ workspaceService.currentWorkspace.title }}
-      <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
-    </div>
-    <eo-ng-dropdown-menu #workspaceMenu>
-      <ul class="ml-[-11px]" nz-menu>
-        <div class="flex py-[5px] px-[12px]">
-          <input
-            eo-ng-input
-            type="text"
-            class="flex-1 px-3 eo-search-input"
-            i18n-placeholder
-            placeholder="Search Workspace"
-            [(ngModel)]="searchValue"
-          />
-          <button
-            eoNgFeedbackTooltip
-            i18n-nzTooltipTitle
-            nzTooltipTitle="New Workspace"
-            nzType="primary"
-            eo-ng-button
-            (click)="addWorkspace()"
-            class="ml-3 flex items-center"
-          >
-            <eo-iconpark-icon name="plus"></eo-iconpark-icon>
-          </button>
-        </div>
-        <li
-          style="color: #000"
-          nz-menu-item
-          (click)="changeWorkspace(item)"
-          [nzSelected]="workspaceService.currentWorkspace?.id === item.id"
-          *ngFor="let item of searchWorkspace"
-        >
-          <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ item.id !== -1 ? 'sucess' : 'faild' }}">
-          </eo-iconpark-icon>
-          {{ item.title }}
-        </li>
-      </ul>
-    </eo-ng-dropdown-menu>
+    <eo-select-workspace class="flex" *ngIf="!status.isShare"></eo-select-workspace>
   </div>
 
-  <div class="flex items-center can_be_click">
-    <eo-get-share-link></eo-get-share-link>
+  <div class="flex items-center electron-can-be-click">
+    <eo-get-share-link *ngIf="!workspaceService.isLocal && !status.isShare"></eo-get-share-link>
     <!-- Change Language -->
     <eo-ng-select
       *ngIf="status.isShare"
@@ -128,7 +77,7 @@
     </eo-ng-dropdown-menu>
     <!-- Web download client -->
     <div class="ml-2.5" *ngIf="!electron.isElectron && !status.isShare">
-      <eo-ng-dropdown class="download-dropdown" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
+      <eo-ng-dropdown class="download-btn" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
         <ng-template #downloadTitle>
           <div class="flex items-center">
             <eo-iconpark-icon class="icon" name="arrow-down" size="14px"></eo-iconpark-icon>
@@ -141,36 +90,6 @@
       </ng-template>
     </div>
     <!-- Windows pc system operate -->
-    <div *ngIf="!OS_TYPE.includes('mac') && electron.isElectron">
-      <button eo-ng-button nzType="text">
-        <nz-divider nzType="vertical"></nz-divider>
-        <eo-iconpark-icon
-          eoNgFeedbackTooltip
-          i18n-nzTooltipTitle
-          nzTooltipTitle="Minimize"
-          [nzTooltipMouseEnterDelay]="0.4"
-          name="minus"
-        ></eo-iconpark-icon>
-      </button>
-      <button eo-ng-button nzType="text">
-        <eo-iconpark-icon
-          eoNgFeedbackTooltip
-          i18n-nzTooltipTitle
-          nzTooltipTitle="Minimize"
-          [nzTooltipMouseEnterDelay]="0.4"
-          [name]="isMaximized ? 'off-screen' : 'full-screen'"
-        ></eo-iconpark-icon>
-      </button>
-      <button eo-ng-button nzType="text">
-        <eo-iconpark-icon
-          eoNgFeedbackTooltip
-          i18n-nzTooltipTitle
-          [nzTooltipMouseEnterDelay]="0.4"
-          nzTooltipTitle="Close"
-          name="close"
-          (click)="close()"
-        ></eo-iconpark-icon>
-      </button>
-    </div>
+    <eo-win-operate></eo-win-operate>
   </div>
 </div>

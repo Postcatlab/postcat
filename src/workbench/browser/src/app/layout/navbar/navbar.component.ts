@@ -17,11 +17,6 @@ import { LanguageService } from '../../core/services/language/language.service';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  isMaximized = false;
-
-  searchValue: string;
-  OS_TYPE = navigator.platform.toLowerCase();
-  modules: Map<string, ModuleInfo>;
   resourceInfo = this.web.resourceInfo;
 
   helpMenus = [
@@ -46,40 +41,9 @@ export class NavbarComponent implements OnInit {
     public dataSourceService: DataSourceService,
     public status: StatusService,
     public workspaceService: WorkspaceService
-  ) {
-    if (this.workspaceService.currentWorkspace?.id !== -1) {
-      this.workspaceService.getWorkspaceInfo(this.workspaceService.currentWorkspace.id);
-    }
-  }
-  changeWorkspace(item) {
-    this.workspaceService.setCurrentWorkspace(item);
-  }
-  get searchWorkspace() {
-    if (!this.searchValue) {
-      return this.workspaceService.workspaceList;
-    }
-    const searchText = this.searchValue.toLocaleLowerCase();
-    return this.workspaceService.workspaceList.filter((val) => val.title.toLocaleLowerCase().includes(searchText));
-  }
-  minimize() {
-    this.electron.ipcRenderer.send('message', {
-      action: 'minimize',
-    });
-  }
-  toggleMaximize() {
-    this.electron.ipcRenderer.send('message', {
-      action: this.isMaximized ? 'restore' : 'maximize',
-    });
-    this.isMaximized = !this.isMaximized;
-  }
-  close() {
-    this.electron.ipcRenderer.send('message', {
-      action: 'close',
-    });
-  }
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    this.modules = new Map();
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
@@ -97,15 +61,7 @@ export class NavbarComponent implements OnInit {
   loginOut() {
     this.message.send({ type: 'logOut', data: {} });
   }
-  async addWorkspace() {
-    this.dataSourceService.checkRemoteCanOperate(() => {
-      this.message.send({ type: 'addWorkspace', data: {} });
-    });
-  }
 
-  getModules(): Array<ModuleInfo> {
-    return Array.from(this.modules.values());
-  }
   handleSwitchLang(event) {
     this.lang.changeLanguage(event);
   }
