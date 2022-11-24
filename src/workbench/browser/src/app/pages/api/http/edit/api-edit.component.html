@@ -69,12 +69,13 @@
           <ng-template #bodyTitleTmp>
             <span i18n>Body</span>
             <nz-badge
-              class="ml-1"
+              class="ml-1 ant-badge-primary"
               *ngIf="
                 ['formData', 'json', 'xml'].includes(model.requestBodyType)
                   ? bindGetApiParamNum(model.requestBody)
                   : model.requestBody?.length
               "
+              
               nzStatus="success"
             ></nz-badge>
           </ng-template>
@@ -139,7 +140,7 @@
           <ng-template #responseTitleTmp>
             <span i18n>Response</span>
             <nz-badge
-              class="ml-1"
+              class="ml-1 ant-badge-primary"
               *ngIf="
                 ['formData', 'json', 'xml'].includes(model.responseBodyType)
                   ? bindGetApiParamNum(model.responseBody)

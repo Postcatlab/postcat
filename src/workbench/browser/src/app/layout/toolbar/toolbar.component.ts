@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SidebarService } from '../sidebar/sidebar.service';
+import { SelectThemeComponent } from './select-theme/select-theme.component';
+import { EoNgFeedbackDrawerService } from 'eo-ng-feedback';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,10 +12,9 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
-  showThemeDrawer: any = false;
   sideBarCollapsed: boolean;
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(public sidebar: SidebarService) {
+  constructor(public sidebar: SidebarService, private drawerService: EoNgFeedbackDrawerService) {
     this.sideBarCollapsed = this.sidebar.getCollapsed();
     this.sidebar
       .onCollapsedChanged()
@@ -26,7 +27,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.sidebar.toggleCollapsed();
   }
   changeTheme() {
-    this.showThemeDrawer = true;
+    this.drawerService.create({
+      nzTitle: 'Theme',
+      nzSize: 'default',
+      nzContent: SelectThemeComponent,
+    });
   }
   ngOnInit(): void {}
   ngOnDestroy(): void {

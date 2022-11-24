@@ -13,11 +13,8 @@
   }
 }
 
-.can_be_click {
-  -webkit-app-region: no-drag;
-}
 :host ::ng-deep {
-  .download-dropdown {
+  .download-btn {
     button {
       background-color: rgba(0, 120, 90, 0.2);
       color: #333;

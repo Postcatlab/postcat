@@ -37,13 +37,7 @@ import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { ThemeService } from './core/services/theme.service';
 import { UserService } from './services/user/user.service';
 
-import { NzConfig, NzConfigService, NZ_CONFIG } from 'ng-zorro-antd/core/config';
-const ngZorroConfig: NzConfig = {
-  // 注意组件名称没有 nz 前缀
-  theme: {
-    primaryColor: getComputedStyle(document.documentElement).getPropertyValue('--MAIN_THEME_COLOR').replace(' ', '')
-  },
-};
+import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -73,7 +67,13 @@ registerLocaleData(zh);
     ThemeService,
     UserService,
     NzModalService,
-    { provide: NZ_CONFIG, useValue: ngZorroConfig },
+    {
+      provide: NZ_CONFIG,
+      useFactory: (theme): NzConfig => ({
+          theme: theme.DESIGN_TOKEN,
+        }),
+      deps: [ThemeService],
+    },
     {
       provide: '$scope',
       useFactory: (i) => i.get('$rootScope'),
@@ -97,11 +97,7 @@ registerLocaleData(zh);
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
-  constructor(
-    private upgrade: UpgradeModule,
-    private lang: LanguageService,
-    private mockService: MockService
-  ) {
+  constructor(private upgrade: UpgradeModule, private lang: LanguageService, private mockService: MockService) {
     this.mockService.init();
     if (APP_CONFIG.production) {
       this.lang.init();

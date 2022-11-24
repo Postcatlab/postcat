@@ -13,7 +13,6 @@ import { WebService } from '../../core/services';
 @Component({
   selector: 'eo-get-share-link',
   template: `<button
-      *ngIf="!workspaceService.isLocal && !status.isShare"
       eo-ng-button
       nzType="default"
       class="mx-2 btn_scondary"
