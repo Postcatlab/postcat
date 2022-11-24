@@ -22,7 +22,12 @@ import { EoNgTreeModule } from 'eo-ng-tree';
 import { EoNgInputModule } from 'eo-ng-input';
 import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
-import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
+import {
+  EoNgFeedbackAlertModule,
+  EoNgFeedbackDrawerModule,
+  EoNgFeedbackTooltipModule,
+  EoNgFeedbackMessageModule,
+} from 'eo-ng-feedback';
 
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzResultModule } from 'ng-zorro-antd/result';
@@ -79,6 +84,7 @@ const SHARED_UI_MODULE = [
   EoNgInputModule,
   EoNgRadioModule,
   EoNgTabsModule,
+  EoNgFeedbackDrawerModule,
   EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,
   EoNgFeedbackTooltipModule,

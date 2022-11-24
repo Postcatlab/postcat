@@ -16,7 +16,7 @@ import { LocalWorkspaceTipComponent } from '../layout/local-workspace-tip/local-
 import { ToolbarModule } from '../layout/toolbar/toolbar.module';
 
 @NgModule({
-  imports: [PagesRoutingModule, WujieModule, SettingModule, CommonModule, SharedModule, NavbarModule,ToolbarModule],
+  imports: [PagesRoutingModule, WujieModule, SettingModule, CommonModule, SharedModule, NavbarModule, ToolbarModule],
   declarations: [
     PagesComponent,
     SidebarComponent,
