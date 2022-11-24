@@ -1,15 +1,20 @@
-<header class="flex pt-2">
-  <input
-    eo-ng-input
-    type="text"
-    class="flex-1 px-3 eo-search-input"
-    i18n-placeholder="@@Search"
-    placeholder="Search"
-    [(ngModel)]="searchValue"
-  />
+<header class="flex pt-2 px-[10px]">
+  <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="rounded-full">
+    <input
+      eo-ng-input
+      type="text"
+      class="flex-1 px-3"
+      i18n-placeholder="@@Search"
+      placeholder="Search"
+      [(ngModel)]="searchValue"
+    />
+  </eo-ng-input-group>
+  <ng-template #prefixTemplateUser
+    ><svg class="iconpark-icon"><use href="#search"></use></svg
+  ></ng-template>
   <button
     *ngIf="!status.isShare"
-    nzType="primary"
+    nzType="default"
     eo-ng-button
     class="ml-3"
     eo-ng-dropdown
@@ -54,8 +59,12 @@
       <div [style.--tree-level]="node.level">
         <!-- Folder -->
         <div class="tree_node flex items-center" *ngIf="!node.isLeaf">
-          <div class="overflow-hidden flex items-center text-ellipsis">
-            <span class="text-omit node_title">{{ node.title }}</span>
+          <div class="overflow-hidden f_row_ac text-ellipsis">
+            <div class="width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div>
+            <svg class="iconpark-icon">
+              <use [attr.href]="'#' + (node.isExpanded ? 'folder-open' : 'folder-close')"></use>
+            </svg>
+            <span class="text_omit node_title ml-[4px]">{{ node.title }}</span>
           </div>
           <span class="flex tree_node_operate" *ngIf="isEdit">
             <eo-ng-dropdown
@@ -65,6 +74,7 @@
               eo-nz-dropdown
               [menus]="groupItemsMenu"
               *ngIf="isEdit"
+              (click)="$event.stopPropagation()"
             >
             </eo-ng-dropdown>
           </span>
@@ -75,7 +85,7 @@
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method
             }}</b>
-            <span class="text-omit node_title">{{ node.title }}</span>
+            <span class="text-omit node_title ml-[4px]">{{ node.title }}</span>
           </div>
           <div class="flex tree_node_operate">
             <eo-ng-dropdown
@@ -85,6 +95,7 @@
               eo-nz-dropdown
               [menus]="apiItemsMenu"
               *ngIf="isEdit"
+              (click)="$event.stopPropagation()"
             >
             </eo-ng-dropdown>
           </div>
