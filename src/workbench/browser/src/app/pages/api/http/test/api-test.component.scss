@@ -17,6 +17,7 @@
 .ant-tabs-nav {
   margin-left: 10px;
 }
+
 eo-api-test-header,
 eo-api-test-body,
 eo-api-test-query,
@@ -49,7 +50,12 @@ div.ant-typography {
   margin-bottom: 0;
 }
 :host ::ng-deep {
+  .ant-tabs-content-holder {
+    height: calc(100% - 35px);
+    overflow: auto;
+  }
   .response_container {
+    @apply h-full overflow-hidden;
     .ant-tabs-tabpane {
       min-height: 208px;
     }

@@ -72,33 +72,33 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   apiItemsMenu = [
     {
       title: $localize`Edit`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'editApi', node: inArg.data.group }),
+      click: (inArg) => this.operateApiEvent({ eventName: 'editApi', node: inArg.group }),
     },
     {
       title: $localize`:@Copy:Copy`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'copyApi', node: inArg.data.api }),
+      click: (inArg) => this.operateApiEvent({ eventName: 'copyApi', node: inArg.api }),
     },
     {
       title: $localize`:@Delete:Delete`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'deleteApi', node: inArg.data.api }),
+      click: (inArg) => this.operateApiEvent({ eventName: 'deleteApi', node: inArg.api }),
     },
   ];
   groupItemsMenu = [
     {
       title: $localize`Add API`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'addAPI', node: inArg.data.group }),
+      click: (inArg) => this.operateApiEvent({ eventName: 'addAPI', node: inArg.group }),
     },
     {
       title: $localize`Add Subgroup`,
-      click: (inArg) => this.addSubGroup(inArg.data.group),
+      click: (inArg) => this.addSubGroup(inArg.group),
     },
     {
       title: $localize`Edit`,
-      click: (inArg) => this.editGroup(inArg.data.group),
+      click: (inArg) => this.editGroup(inArg.group),
     },
     {
       title: $localize`:@@Delete:Delete`,
-      click: (inArg) => this.deleteGroup(inArg.data.group),
+      click: (inArg) => this.deleteGroup(inArg.group),
     },
   ];
   private destroy$: Subject<void> = new Subject<void>();
@@ -127,6 +127,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  setParentStyle(node) {
+    console.log('node', node);
+  }
+  onSearchFunc: NzTreeComponent['nzSearchFunc'] = (node) => {
+    const origin = this.apiGroup.getTreeNodeByKey(node.key).origin;
+    return node.title.includes(this.searchValue) || origin.uri?.includes(this.searchValue);
+  };
   /**
    * Generate group tree nodes.
    */
@@ -200,6 +207,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       delete item.updatedAt;
       apiItems[item.uuid] = item;
       this.treeItems.push({
+        uri: item.uri,
         title: item.name,
         key: item.uuid.toString(),
         weight: item.weight || 0,

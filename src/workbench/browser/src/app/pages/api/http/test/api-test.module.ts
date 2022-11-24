@@ -87,7 +87,7 @@ const COMPONENTS = [
     CommonModule,
     ...NZ_COMPONETS,
     ApiSharedModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     ApiTestUtilService,

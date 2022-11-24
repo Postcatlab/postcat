@@ -77,7 +77,7 @@ export class WebService {
           .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
           .forEach((item) => {
             item.link = this.findLink(
-              data.map((val) => val.assets),
+              data?.map?.((val) => val.assets),
               item
             );
           });

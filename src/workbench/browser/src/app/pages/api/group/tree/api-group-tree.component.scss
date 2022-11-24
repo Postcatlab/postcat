@@ -7,27 +7,27 @@
     background-color: rgba(0, 0, 0, 0.1);
   }
   .ant-tree-treenode {
-    padding: initial !important;
-    align-items: center !important;
-    margin: 0px 0px !important;
-    border-radius: initial !important;
-    height: 40px !important;
+    padding: initial;
+    align-items: center;
+    margin: 0px 0px;
+    border-radius: initial;
+    height: 40px;
   }
   eo-ng-tree-default-node:active {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0.1);
   }
   .ant-tree-node-content-wrapper:hover {
-    background-color: initial !important;
+    background-color: initial;
   }
   nz-tree-node-title {
-    background-color: initial !important;
-    position: relative !important;
+    background-color: initial;
+    position: relative;
   }
   .ant-tree-treenode-selected {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: rgba(0, 0, 0, 0.1);
   }
   .dragging::after {
-    animation: initial !important;
+    animation: initial;
   }
   .ant-tree-node-content-wrapper {
     // width: 100%;
