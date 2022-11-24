@@ -1,14 +1,19 @@
 <section class="flex-shrink-0 p-0 left">
   <div class="mb-2">
-    <input
-      type="text"
-      eo-ng-input
-      class="flex-1 w-full px-3 eo-search-input"
-      i18n-placeholder="@@Search"
-      placeholder="Search"
-      [(ngModel)]="keyword"
-      (ngModelChange)="onSeachChange($event)"
-    />
+    <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="rounded-full">
+      <input
+        type="text"
+        eo-ng-input
+        class="flex-1 w-full px-3"
+        i18n-placeholder="@@Search"
+        placeholder="Search"
+        [(ngModel)]="keyword"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </eo-ng-input-group>
+    <ng-template #prefixTemplateUser
+      ><svg class="iconpark-icon"><use href="#search"></use></svg
+    ></ng-template>
   </div>
   <!-- Fixed Group -->
   <div class="group_container">
