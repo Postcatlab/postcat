@@ -130,6 +130,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   setParentStyle(node) {
     console.log('node', node);
   }
+  onSearchFunc: NzTreeComponent['nzSearchFunc'] = (node) => {
+    const origin = this.apiGroup.getTreeNodeByKey(node.key).origin;
+    return node.title.includes(this.searchValue) || origin.uri?.includes(this.searchValue);
+  };
   /**
    * Generate group tree nodes.
    */
@@ -203,6 +207,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       delete item.updatedAt;
       apiItems[item.uuid] = item;
       this.treeItems.push({
+        uri: item.uri,
         title: item.name,
         key: item.uuid.toString(),
         weight: item.weight || 0,

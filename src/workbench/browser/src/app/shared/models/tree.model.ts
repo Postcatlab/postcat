@@ -17,6 +17,13 @@ export interface GroupTreeItem {
   key: string;
 
   /**
+   * Api uri
+   *
+   * @type {string}
+   */
+  uri?: string;
+
+  /**
    * Weight
    *
    * @type {number}

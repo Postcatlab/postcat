@@ -26,7 +26,7 @@
 <!-- Custom Group -->
 <div class="group_container group-tree pt-[10px]">
   <eo-ng-tree-default *ngIf="treeNodes.length" [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup
-    [nzSearchValue]="searchValue" [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys"
+    [nzSearchValue]="searchValue" [nzSearchFunc]="onSearchFunc" [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys"
     (nzClick)="clickTreeItem($event)" (nzExpandChange)="toggleExpand()" [nzDraggable]="isEdit" nzBlockNode
     (nzOnDrop)="treeItemDrop($event)" [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
