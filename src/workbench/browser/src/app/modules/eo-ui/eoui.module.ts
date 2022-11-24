@@ -14,12 +14,14 @@ import { CellDirective } from './table/eo-table/cell.directive';
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { EoMonacoEditorComponent } from './monaco-editor/monaco-editor.component';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
+import { EoTableProComponent } from './table-pro/table-pro.component';
+import { EoNgTableModule } from 'eo-ng-table';
 
-const antdModules = [NzTableModule, NzCodeEditorModule,EoNgButtonModule, NzInputModule, NzSelectModule];
-const COMPONENTS = [EoTableComponent, CellDirective, EoMonacoEditorComponent];
+const antdModules = [NzTableModule, NzCodeEditorModule, EoNgButtonModule, NzInputModule, NzSelectModule];
+const COMPONENTS = [EoTableComponent, EoTableProComponent, CellDirective, EoMonacoEditorComponent];
 @NgModule({
   declarations: [...COMPONENTS],
-  imports: [CommonModule, FormsModule, EoIconparkIconModule, ...antdModules],
+  imports: [CommonModule, EoNgTableModule, FormsModule, EoIconparkIconModule, ...antdModules],
   exports: [...COMPONENTS, EoIconparkIconModule],
 })
 export class EouiModule {}
