@@ -4,11 +4,11 @@ import { ToolbarComponent } from './toolbar.component';
 import { SharedModule } from '../../shared/shared.module';
 import { SelectThemeComponent } from './select-theme/select-theme.component';
 
-const COMPONENTS = [ToolbarComponent, ToolbarComponent,SelectThemeComponent];
+const COMPONENTS = [ToolbarComponent, SelectThemeComponent];
 @NgModule({
   declarations: [...COMPONENTS],
-  imports: [CommonModule,SharedModule],
+  imports: [CommonModule, SharedModule],
   providers: [],
-  exports: [...COMPONENTS]
+  exports: [...COMPONENTS],
 })
 export class ToolbarModule {}
