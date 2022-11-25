@@ -15,7 +15,7 @@ import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe';
 
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -62,7 +62,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     private testService: ApiTestService,
     private modal: ModalService,
     private message: MessageService,
-    private status: StatusService
+    private store: StoreService
   ) {
     this.initBasicForm();
   }
@@ -172,7 +172,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         isExpand: false,
       });
       const { requestTabIndex, msg, ...data } = this.model;
-      if (this.status.isShare) {
+      if (this.store.isShare) {
         return;
       }
       const res = await this.testService.addHistory({ protocol: 'websocket', ...data }, 0);

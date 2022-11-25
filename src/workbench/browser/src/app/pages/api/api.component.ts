@@ -8,7 +8,6 @@ import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -84,8 +83,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public web: WebService,
-    private store: StoreService,
-    public status: StatusService,
+    public store: StoreService,
     private http: RemoteService
   ) {}
   get envUuid(): number | null {
@@ -116,7 +114,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchDataSourceChange();
     this.initEnv();
     this.watchEnvChange();
-    this.renderTabs = this.status.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
+    this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -194,7 +192,7 @@ export class ApiComponent implements OnInit, OnDestroy {
       this.store.setEnv(null);
       return;
     }
-    if (this.status.isShare) {
+    if (this.store.isShare) {
       const [data, err]: any = await this.http.api_shareDocGetEnv({
         uniqueID: this.store.shareId,
       });
@@ -248,7 +246,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   private getAllEnv(uuid?: number) {
     const projectID = 1;
     return new Promise(async (resolve) => {
-      if (this.status.isShare) {
+      if (this.store.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetEnv({
           uniqueID: this.store.shareId,
         });

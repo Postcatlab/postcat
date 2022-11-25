@@ -10,7 +10,6 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
@@ -249,8 +248,7 @@ export class UserModalComponent implements OnInit {
     public modal: NzModalService,
     public fb: UntypedFormBuilder,
     public workspace: WorkspaceService,
-    private web: WebService,
-    private status: StatusService
+    private web: WebService
   ) {
     this.isSyncModalVisible = false;
     this.isSyncCancelBtnLoading = false;
@@ -415,7 +413,7 @@ export class UserModalComponent implements OnInit {
     });
 
     const { id: workspaceID } = this.workspace.currentWorkspace;
-    if (this.status.isShare) {
+    if (this.store.isShare) {
       return;
     }
     const [data, err]: any = await this.api.api_workspaceList({});

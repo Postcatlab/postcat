@@ -1,13 +1,28 @@
 <header class="flex pt-2 px-[10px]">
   <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="rounded-full">
-    <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search"
-      [(ngModel)]="searchValue" />
+    <input
+      eo-ng-input
+      type="text"
+      class="flex-1 px-3"
+      i18n-placeholder="@@Search"
+      placeholder="Search"
+      [(ngModel)]="searchValue"
+    />
   </eo-ng-input-group>
-  <ng-template #prefixTemplateUser><svg class="iconpark-icon">
-      <use href="#search"></use>
-    </svg></ng-template>
-  <button *ngIf="!status.isShare" nzType="default" eo-ng-button class="ml-3" eo-ng-dropdown [nzDropdownMenu]="menu"
-    nzPlacement="bottomRight" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
+  <ng-template #prefixTemplateUser
+    ><svg class="iconpark-icon">
+      <use href="#search"></use></svg
+  ></ng-template>
+  <button
+    *ngIf="!store.isShare"
+    nzType="default"
+    eo-ng-button
+    class="ml-3"
+    eo-ng-dropdown
+    [nzDropdownMenu]="menu"
+    nzPlacement="bottomRight"
+    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
+  >
     <eo-iconpark-icon name="plus"></eo-iconpark-icon>
   </button>
   <eo-ng-dropdown-menu #menu="nzDropdownMenu">
@@ -25,10 +40,22 @@
 
 <!-- Custom Group -->
 <div class="group_container group-tree pt-[10px]">
-  <eo-ng-tree-default *ngIf="treeNodes.length" [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup
-    [nzSearchValue]="searchValue" [nzSearchFunc]="onSearchFunc" [nzHideUnMatched]="true" [nzExpandedKeys]="expandKeys"
-    (nzClick)="clickTreeItem($event)" (nzExpandChange)="toggleExpand()" [nzDraggable]="isEdit" nzBlockNode
-    (nzOnDrop)="treeItemDrop($event)" [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
+  <eo-ng-tree-default
+    *ngIf="treeNodes.length"
+    [nzData]="treeNodes"
+    [nzSelectedKeys]="nzSelectedKeys"
+    #apiGroup
+    [nzSearchValue]="searchValue"
+    [nzSearchFunc]="onSearchFunc"
+    [nzHideUnMatched]="true"
+    [nzExpandedKeys]="expandKeys"
+    (nzClick)="clickTreeItem($event)"
+    (nzExpandChange)="toggleExpand()"
+    [nzDraggable]="isEdit"
+    nzBlockNode
+    (nzOnDrop)="treeItemDrop($event)"
+    [nzTreeTemplate]="nzTreeTemplate"
+  ></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div [style.--tree-level]="node.level || 1" myTree [node]="node">
@@ -49,7 +76,7 @@
 
               <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li nz-menu-item *ngFor="let item of groupItemsMenu;" (click)="item.click({ group: node  })">
+                  <li nz-menu-item *ngFor="let item of groupItemsMenu" (click)="item.click({ group: node })">
                     {{ item.title }}
                   </li>
                 </ul>
@@ -63,7 +90,7 @@
             <div class="width-box" *ngIf="node.level === 0"></div>
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method
-              }}</b>
+            }}</b>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
           <div class="flex tree_node_operate">
@@ -73,8 +100,11 @@
               </div>
               <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li nz-menu-item *ngFor="let item of apiItemsMenu;"
-                    (click)="item.click({ group: node, api: apiDataItems[node.key] })">
+                  <li
+                    nz-menu-item
+                    *ngFor="let item of apiItemsMenu"
+                    (click)="item.click({ group: node, api: apiDataItems[node.key] })"
+                  >
                     {{ item.title }}
                   </li>
                 </ul>

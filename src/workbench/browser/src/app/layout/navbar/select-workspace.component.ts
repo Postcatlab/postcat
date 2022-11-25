@@ -1,12 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { DataSourceService } from '../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../shared/services/message';
-import { StatusService } from '../../shared/services/status.service';
 
 @Component({
   selector: 'eo-select-workspace',
-  template: ` <button eo-ng-button nzType="text" class="flex items-center" eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
+  template: ` <button
+      eo-ng-button
+      nzType="text"
+      class="flex items-center"
+      eo-ng-dropdown
+      [nzDropdownMenu]="workspaceMenu"
+    >
       <eo-iconpark-icon
         class="mr-[5px]"
         name="link-cloud-{{ workspace.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
@@ -56,7 +62,7 @@ export class SelectWorkspaceComponent implements OnInit {
   searchValue: string;
 
   constructor(
-    public status: StatusService,
+    public store: StoreService,
     private dataSourceService: DataSourceService,
     private message: MessageService,
     public workspace: WorkspaceService

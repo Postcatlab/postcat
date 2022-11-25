@@ -5,14 +5,14 @@
     <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center electron-can-be-click">
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
-    <eo-select-workspace class="flex" *ngIf="!status.isShare"></eo-select-workspace>
+    <eo-select-workspace class="flex" *ngIf="!store.isShare"></eo-select-workspace>
   </div>
 
   <div class="flex items-center electron-can-be-click">
-    <eo-get-share-link *ngIf="!workspaceService.isLocal && !status.isShare"></eo-get-share-link>
+    <eo-get-share-link *ngIf="!workspaceService.isLocal && !store.isShare"></eo-get-share-link>
     <!-- Change Language -->
     <eo-ng-select
-      *ngIf="status.isShare"
+      *ngIf="store.isShare"
       [(ngModel)]="lang.systemLanguage"
       nzBorderless
       (ngModelChange)="handleSwitchLang($event)"
@@ -36,7 +36,7 @@
     <button
       eo-ng-button
       nzType="text"
-      *ngIf="!status.isShare"
+      *ngIf="!store.isShare"
       class="flex items-center justify-center icon"
       i18n-nzTooltipTitle
       eoNgFeedbackTooltip
@@ -52,7 +52,7 @@
       eo-ng-button
       nzType="text"
       eo-ng-dropdown
-      *ngIf="!status.isShare"
+      *ngIf="!store.isShare"
       class="flex items-center justify-center icon"
       [nzDropdownMenu]="userMenu"
     >
@@ -77,7 +77,7 @@
       </ul>
     </eo-ng-dropdown-menu>
     <!-- Web download client -->
-    <div class="ml-2.5" *ngIf="!electron.isElectron && !status.isShare">
+    <div class="ml-2.5" *ngIf="!electron.isElectron && !store.isShare">
       <eo-ng-dropdown class="download-btn" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
         <ng-template #downloadTitle>
           <div class="flex items-center">

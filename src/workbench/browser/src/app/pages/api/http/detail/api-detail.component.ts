@@ -11,11 +11,10 @@ import { treeToListHasLevel } from '../../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../../utils/index.utils';
 import { StorageService } from '../../../../shared/services/storage';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { cloneDeep } from 'lodash-es';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service'
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -38,7 +37,6 @@ export class ApiDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private storage: StorageService,
-    private status: StatusService,
     public electron: ElectronService,
     private http: RemoteService,
     private store: StoreService,
@@ -90,7 +88,7 @@ export class ApiDetailComponent implements OnInit {
   }
   getApiByUuid(id: number) {
     return new Promise(async (resolve) => {
-      if (this.status.isShare) {
+      if (this.store.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetApiDetail({
           apiDataUUID: id,
           uniqueID: this.store.shareId,

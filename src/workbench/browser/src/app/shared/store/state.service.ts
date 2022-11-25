@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 /** is show switch success tips */
@@ -10,6 +12,7 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 })
 export class StoreService {
   // * observable data
+  @observable url = '';
   @observable shareId = StorageUtil.get('shareId') || '';
   @observable userProfile = StorageUtil.get('userProfile') || null;
   @observable.shallow
@@ -34,6 +37,10 @@ export class StoreService {
     return !!this.userProfile?.username;
   }
 
+  @computed get isShare() {
+    return this.url.includes('/home/share');
+  }
+
   @computed get getUserProfile() {
     return this.userProfile;
   }
@@ -42,8 +49,9 @@ export class StoreService {
     return this.loginInfo;
   }
 
-  constructor() {
+  constructor(private router: Router) {
     makeObservable(this); // don't forget to add this if the class has observable fields
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(this.routeListener);
   }
 
   // * actions
@@ -78,4 +86,8 @@ export class StoreService {
     this.setUserProfile(null);
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
+
+  @action private routeListener = (event: NavigationEnd) => {
+    this.url = event.urlAfterRedirects;
+  };
 }

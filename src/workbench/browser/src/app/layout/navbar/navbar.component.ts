@@ -4,7 +4,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { SettingComponent } from '../../modules/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { WorkspaceService } from '../../pages/workspace/workspace.service';
@@ -38,7 +37,6 @@ export class NavbarComponent implements OnInit {
     public lang: LanguageService,
     public store: StoreService,
     public dataSourceService: DataSourceService,
-    public status: StatusService,
     public workspaceService: WorkspaceService
   ) {}
 

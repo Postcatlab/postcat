@@ -7,7 +7,7 @@ import { SidebarModuleInfo } from './sidebar.model';
 import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service'
 
 @Component({
   selector: 'eo-sidebar',
@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private dataSourceService: DataSourceService,
     private messageService: MessageService,
     private workspace: WorkspaceService,
-    private status: StatusService
+    private store: StoreService
   ) {
   }
   toggleCollapsed(): void {
@@ -139,7 +139,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/app-vue3',
       },
     ];
-    const isShare = this.status.isShare;
+    const isShare = this.store.isShare;
     this.modules = defaultModule.filter((it: any) =>
       isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true
     );
