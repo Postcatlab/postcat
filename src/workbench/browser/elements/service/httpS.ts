@@ -14,7 +14,7 @@ export class HTTPS extends Render {
       ${this.errTip(errTip)}
       if (${err}.status === 401) {
         this.message.send({ type: 'clear-user', data: {} })
-        if (this.store.getIsLogin) {
+        if (this.store.isLogin) {
           return
         }
         this.message.send({ type: 'http-401', data: {} })

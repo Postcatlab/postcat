@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
+/** is show switch success tips */
+export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -27,7 +30,7 @@ export class StoreService {
     return this.env;
   }
 
-  @computed get getIsLogin() {
+  @computed get isLogin() {
     return !!this.userProfile?.username;
   }
 

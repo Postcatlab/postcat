@@ -29,7 +29,7 @@
   </div>
   <nz-divider nzType="vertical" class="divider"></nz-divider>
   <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
-    <ng-container *ngIf="store.getIsLogin">
+    <ng-container *ngIf="store.isLogin">
       <eo-account id="eoapi-account"></eo-account>
       <nz-divider></nz-divider>
     </ng-container>

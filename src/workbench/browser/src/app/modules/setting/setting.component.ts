@@ -176,7 +176,7 @@ export class SettingComponent implements OnInit {
       this.treeNodes.filter((val) => {
         switch (val.moduleID) {
           case 'eoapi-account': {
-            if (!this.store.getIsLogin) {
+            if (!this.store.isLogin) {
               return false;
             }
           }

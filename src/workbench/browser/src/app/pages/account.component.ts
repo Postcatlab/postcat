@@ -141,7 +141,7 @@ export class AccountComponent implements OnInit {
         this.eMessage.error($localize`Sorry, username is already in use`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -152,7 +152,7 @@ export class AccountComponent implements OnInit {
       if (pErr) {
         if (pErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -186,7 +186,7 @@ export class AccountComponent implements OnInit {
         this.eMessage.error($localize`Validation failed`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });

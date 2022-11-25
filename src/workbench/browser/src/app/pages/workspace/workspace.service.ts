@@ -8,6 +8,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { ActivatedRoute, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 @Injectable({
@@ -31,6 +32,7 @@ export class WorkspaceService {
     canCreate: false,
   };
   get isLocal() {
+    console.log(666);
     return !window.location.pathname.includes('/home/share') && this.currentWorkspaceID === -1;
   }
 

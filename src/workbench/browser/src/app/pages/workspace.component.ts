@@ -105,7 +105,7 @@ export class WorkspaceComponent implements OnInit {
         this.eMessage.error($localize`Edit workspace failed`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -117,7 +117,7 @@ export class WorkspaceComponent implements OnInit {
       if (wErr) {
         if (wErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -159,7 +159,7 @@ You cannot restore it once deleted!`,
       if (err) {
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -172,7 +172,7 @@ You cannot restore it once deleted!`,
       if (wErr) {
         if (wErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });

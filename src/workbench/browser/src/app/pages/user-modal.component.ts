@@ -344,7 +344,7 @@ export class UserModalComponent implements OnInit {
             if (err) {
               if (err.status === 401) {
                 this.message.send({ type: 'clear-user', data: {} });
-                if (this.store.getIsLogin) {
+                if (this.store.isLogin) {
                   return;
                 }
                 this.message.send({ type: 'http-401', data: {} });
@@ -422,7 +422,7 @@ export class UserModalComponent implements OnInit {
     if (err) {
       if (err.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.getIsLogin) {
+        if (this.store.isLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });
@@ -493,7 +493,7 @@ export class UserModalComponent implements OnInit {
       if (err) {
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -581,7 +581,7 @@ export class UserModalComponent implements OnInit {
         if ([401, 403].includes(err.status)) {
           this.isLoginBtnBtnLoading = false;
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -599,7 +599,7 @@ export class UserModalComponent implements OnInit {
         if (err) {
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} });
-            if (this.store.getIsLogin) {
+            if (this.store.isLogin) {
               return;
             }
             this.message.send({ type: 'http-401', data: {} });
@@ -613,7 +613,7 @@ export class UserModalComponent implements OnInit {
         if (err) {
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} });
-            if (this.store.getIsLogin) {
+            if (this.store.isLogin) {
               return;
             }
             this.message.send({ type: 'http-401', data: {} });
@@ -682,7 +682,7 @@ export class UserModalComponent implements OnInit {
         this.eMessage.error($localize`Add workspace Failed !`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -699,7 +699,7 @@ export class UserModalComponent implements OnInit {
         if (err) {
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} });
-            if (this.store.getIsLogin) {
+            if (this.store.isLogin) {
               return;
             }
             this.message.send({ type: 'http-401', data: {} });

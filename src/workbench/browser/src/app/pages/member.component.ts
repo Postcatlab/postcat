@@ -96,7 +96,7 @@ export class MemberComponent implements OnInit {
     if (wErr) {
       if (wErr.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.getIsLogin) {
+        if (this.store.isLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });
@@ -130,7 +130,7 @@ export class MemberComponent implements OnInit {
       if (uErr) {
         if (uErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -153,7 +153,7 @@ export class MemberComponent implements OnInit {
       if (aErr) {
         if (aErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -172,7 +172,7 @@ export class MemberComponent implements OnInit {
       if (wErr) {
         if (wErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.getIsLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -243,7 +243,7 @@ export class MemberComponent implements OnInit {
     if (err) {
       if (err.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.getIsLogin) {
+        if (this.store.isLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });
@@ -257,7 +257,7 @@ export class MemberComponent implements OnInit {
     if (wErr) {
       if (wErr.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.getIsLogin) {
+        if (this.store.isLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });

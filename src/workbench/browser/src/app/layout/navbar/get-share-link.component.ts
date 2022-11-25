@@ -71,7 +71,7 @@ export class GetShareLinkComponent implements OnInit {
     if (this.workspaceService.isLocal) {
       return '';
     }
-    if (!this.store.getIsLogin) {
+    if (!this.store.isLogin) {
       return '';
     }
     if (this.status.isShare) {

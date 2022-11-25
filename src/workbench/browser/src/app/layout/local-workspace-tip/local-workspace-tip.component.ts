@@ -34,9 +34,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
   ) {}
   get isShowNotification() {
     const isShow =
-      this.workspace.isLocal &&
-      this.store.getIsLogin &&
-      StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
+      this.workspace.isLocal && this.store.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
     this.isShow !== isShow && this.setIsShow(isShow);
     return isShow;
   }
