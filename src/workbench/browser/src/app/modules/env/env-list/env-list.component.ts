@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { getGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
-import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { Environment, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
@@ -36,7 +36,7 @@ export class EnvListComponent implements OnInit {
   gloablParams: any = [];
   constructor(
     private storage: StorageService,
-    private share: ShareService,
+    private store: StoreService,
     private status: StatusService,
     private http: RemoteService
   ) {}
@@ -56,17 +56,21 @@ export class EnvListComponent implements OnInit {
   }
   getAllEnv(uuid?: number) {
     const projectID = 1;
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       if (this.status.isShare) {
-        const [data, err]: any = await this.http.api_shareDocGetEnv({
-          uniqueID: this.share.shareId,
-        });
-        if (err) {
-          return resolve([]);
-        }
-        return resolve(data || []);
+        this.http
+          .api_shareDocGetEnv({
+            uniqueID: this.store.shareId,
+          })
+          .then(([data, err]) => {
+            if (err) {
+              return resolve([]);
+            }
+            return resolve(data || []);
+          });
+        return;
       }
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
+      this.storage.run('environmentLoadAllByProjectID', [projectID], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           return resolve(result.data || []);
         }

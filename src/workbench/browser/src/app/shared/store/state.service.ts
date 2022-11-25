@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
+import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StoreService {
-  // observable data
+  // * observable data
   @observable.shallow env = {
     hostUri: '',
     parameters: [],
     frontURI: '',
   };
 
-  // computed data
-  @computed get getEnv() {
+  @observable shareId = StorageUtil.get('shareId') || '';
+
+  // * computed data
+  @computed
+  get getEnv() {
     return this.env;
   }
 
@@ -22,7 +25,7 @@ export class StoreService {
     makeObservable(this); // don't forget to add this if the class has observable fields
   }
 
-  // actions
+  // * actions
   @action changeEnv(data) {
     this.env =
       data == null
@@ -32,5 +35,10 @@ export class StoreService {
             frontURI: '',
           }
         : data;
+  }
+
+  @action setShareId(data = '') {
+    this.shareId = data;
+    StorageUtil.set('shareId', data);
   }
 }

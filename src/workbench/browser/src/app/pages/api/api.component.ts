@@ -10,7 +10,6 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
@@ -87,8 +86,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     public web: WebService,
     private store: StoreService,
     public status: StatusService,
-    private http: RemoteService,
-    private share: ShareService
+    private http: RemoteService
   ) {}
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -198,7 +196,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
     if (this.status.isShare) {
       const [data, err]: any = await this.http.api_shareDocGetEnv({
-        uniqueID: this.share.shareId,
+        uniqueID: this.store.shareId,
       });
       if (err) {
         return;
@@ -252,7 +250,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     return new Promise(async (resolve) => {
       if (this.status.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetEnv({
-          uniqueID: this.share.shareId,
+          uniqueID: this.store.shareId,
         });
         if (err) {
           return resolve([]);

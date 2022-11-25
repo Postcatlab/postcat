@@ -6,8 +6,8 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 /**
  * Api tab service operate tabs array add/replace/close...
  * Tab change by  url change(router event)
@@ -30,7 +30,7 @@ export class ApiTabOperateService {
     private messageService: MessageService,
     private router: Router,
     private message: EoNgFeedbackMessageService,
-    private share: ShareService,
+    private store: StoreService,
     private status: StatusService
   ) {}
   //Init tab info
@@ -138,7 +138,7 @@ export class ApiTabOperateService {
     }
     if (this.status.isShare) {
       this.router.navigate([tab.pathname], {
-        queryParams: { pageID: tab.uuid, ...tab.params, shareId: this.share.shareId },
+        queryParams: { pageID: tab.uuid, ...tab.params, shareId: this.store.shareId },
       });
       return;
     }
