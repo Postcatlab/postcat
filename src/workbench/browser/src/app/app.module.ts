@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { EouiModule } from 'eo/workbench/browser/src/app/modules/eo-ui/eoui.module';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -89,7 +89,7 @@ registerLocaleData(zh);
     },
   ],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [],
 })
 export class AppModule {
   constructor(private upgrade: UpgradeModule, private lang: LanguageService, private mockService: MockService) {

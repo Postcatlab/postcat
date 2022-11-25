@@ -6,7 +6,6 @@ import { SharedModule } from '../shared/shared.module';
 import { UserModalComponent } from './user-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ExtensionsComponent } from './extensions.component';
-import { WujieModule } from '@xmagic/ngx-wujie';
 import { NavbarModule } from '../layout/navbar/navbar.module';
 import { SettingModule } from '../modules/setting/setting.module';
 import { PageBlankComponent } from '../layout/page-blank/page-blank.component';
@@ -16,7 +15,7 @@ import { LocalWorkspaceTipComponent } from '../layout/local-workspace-tip/local-
 import { ToolbarModule } from '../layout/toolbar/toolbar.module';
 
 @NgModule({
-  imports: [PagesRoutingModule, WujieModule, SettingModule, CommonModule, SharedModule, NavbarModule, ToolbarModule],
+  imports: [PagesRoutingModule, SettingModule, CommonModule, SharedModule, NavbarModule, ToolbarModule],
   declarations: [
     PagesComponent,
     SidebarComponent,
