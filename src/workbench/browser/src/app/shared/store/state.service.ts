@@ -15,8 +15,7 @@ export class StoreService {
   @observable url = '';
   @observable shareId = StorageUtil.get('shareId') || '';
   @observable userProfile = StorageUtil.get('userProfile') || null;
-  @observable.shallow
-  env = {
+  @observable.shallow env = {
     hostUri: '',
     parameters: [],
     frontURI: '',
