@@ -6,7 +6,7 @@ import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
 import { isEmptyObj } from '../../utils/index.utils';
 import { MessageService } from '../../shared/services/message';
 import { Router } from '@angular/router';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 @Injectable()
 export class ApiTabService {
   componentRef;
@@ -16,7 +16,7 @@ export class ApiTabService {
     return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
-  BASIC_TABS: Partial<TabItem>[] = this.status.isShare
+  BASIC_TABS: Partial<TabItem>[] = this.store.isShare
     ? [
         {
           pathname: '/home/share/http/test',
@@ -56,7 +56,7 @@ export class ApiTabService {
         { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' },
       ];
 
-  constructor(private messageService: MessageService, private router: Router, private status: StatusService) {
+  constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
     this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
       this.afterContentChanged(inData);
     });

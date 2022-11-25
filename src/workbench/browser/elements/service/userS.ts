@@ -6,26 +6,26 @@ export class UserS extends Render {
     super({ children: [] });
   }
   get(name, eq = false) {
-    return `${eq ? '=' : ''} this.user.${name}`;
+    return `${eq ? '=' : ''} this.store.${name}`;
   }
   getKey(name) {
-    return `const ${name} = this.user.${name}`;
+    return `const ${name} = this.store.${name}`;
   }
   clearAuth() {
-    return `this.user.clearAuth()`;
+    return `this.store.clearAuth()`;
   }
   setLoginInfo(data) {
-    return `this.user.setLoginInfo(${data})`;
+    return `this.store.setLoginInfo(${data})`;
   }
   setUserProfile(data) {
-    return `this.user.setUserProfile(${data})`;
+    return `this.store.setUserProfile(${data})`;
   }
   render() {
     return {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'UserService', type: 'service', inject: { name: 'user' }, ignore: true }],
+          target: [{ name: 'StoreService', type: 'service', inject: { name: 'user' }, ignore: true }],
           from: 'eo/workbench/browser/src/app/shared/services/user/user.service',
         },
       ],

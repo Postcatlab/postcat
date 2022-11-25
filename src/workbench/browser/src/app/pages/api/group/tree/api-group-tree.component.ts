@@ -18,9 +18,9 @@ import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/pages/workspace/import-api/import-api.component';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
@@ -104,6 +104,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
+    public store: StoreService,
     private router: Router,
     private route: ActivatedRoute,
     private modalService: ModalService,
@@ -113,12 +114,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private projectService: ProjectService,
     private nzModalService: NzModalService,
-    public status: StatusService,
-    private http: RemoteService,
-    private share: ShareService
+    private http: RemoteService
   ) {}
   ngOnInit(): void {
-    this.isEdit = !this.status.isShare;
+    this.isEdit = !this.store.isShare;
     this.buildGroupTreeData();
     this.watchApiAction();
     this.watchRouterChange();
@@ -158,10 +157,10 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   async getProjectCollections() {
     this.apiDataLoading = true;
     return new Promise(async (resolve) => {
-      if (this.status.isShare) {
+      if (this.store.isShare) {
         const [res, err]: any = await this.http.api_shareDocGetAllApi(
           {
-            uniqueID: this.share.shareId,
+            uniqueID: this.store.shareId,
           },
           '/api'
         );
@@ -277,13 +276,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
-    const prefix = this.status.isShare ? 'home/share' : '/home/api';
+    const prefix = this.store.isShare ? 'home/share' : '/home/api';
     inArg.event?.stopPropagation();
     switch (inArg.eventName) {
       case 'editApi':
       case 'detailApi': {
         this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key, shareId: this.share.shareId },
+          queryParams: { uuid: inArg.node.key, shareId: this.store.shareId },
         });
         break;
       }

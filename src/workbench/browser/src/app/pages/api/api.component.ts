@@ -8,9 +8,7 @@ import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
@@ -85,10 +83,8 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public web: WebService,
-    private store: StoreService,
-    public status: StatusService,
-    private http: RemoteService,
-    private share: ShareService
+    public store: StoreService,
+    private http: RemoteService
   ) {}
   get envUuid(): number | null {
     return Number(localStorage.getItem('env:selected')) || 0;
@@ -118,7 +114,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchDataSourceChange();
     this.initEnv();
     this.watchEnvChange();
-    this.renderTabs = this.status.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
+    this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -193,23 +189,23 @@ export class ApiComponent implements OnInit, OnDestroy {
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {
     if (uuid == null) {
-      this.store.changeEnv(null);
+      this.store.setEnv(null);
       return;
     }
-    if (this.status.isShare) {
+    if (this.store.isShare) {
       const [data, err]: any = await this.http.api_shareDocGetEnv({
-        uniqueID: this.share.shareId,
+        uniqueID: this.store.shareId,
       });
       if (err) {
         return;
       }
       const result = data.find((val) => val.uuid === Number(uuid));
-      return this.store.changeEnv(result);
+      return this.store.setEnv(result);
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.changeEnv(data);
+        this.store.setEnv(data);
       }
     });
   }
@@ -250,9 +246,9 @@ export class ApiComponent implements OnInit, OnDestroy {
   private getAllEnv(uuid?: number) {
     const projectID = 1;
     return new Promise(async (resolve) => {
-      if (this.status.isShare) {
+      if (this.store.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetEnv({
-          uniqueID: this.share.shareId,
+          uniqueID: this.store.shareId,
         });
         if (err) {
           return resolve([]);

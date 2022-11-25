@@ -3,13 +3,12 @@ import { ElectronService, WebService } from '../../core/services';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SettingComponent } from '../../modules/setting/setting.component';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { LanguageService } from '../../core/services/language/language.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -36,9 +35,8 @@ export class NavbarComponent implements OnInit {
     private modal: NzModalService,
     private message: MessageService,
     public lang: LanguageService,
-    public userService: UserService,
+    public store: StoreService,
     public dataSourceService: DataSourceService,
-    public status: StatusService,
     public workspaceService: WorkspaceService
   ) {}
 

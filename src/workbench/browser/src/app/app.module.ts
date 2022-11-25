@@ -33,7 +33,6 @@ import zh from '@angular/common/locales/zh';
 
 import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { ThemeService } from './core/services/theme.service';
-import { UserService } from './services/user/user.service';
 
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 registerLocaleData(en);
@@ -62,7 +61,6 @@ registerLocaleData(zh);
     HttpStorage,
     NzMessageService,
     ThemeService,
-    UserService,
     NzModalService,
     {
       provide: NZ_CONFIG,

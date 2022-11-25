@@ -4,9 +4,9 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
 import { Router } from '@angular/router';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,15 +16,14 @@ export class ApiService {
     private message: EoNgFeedbackMessageService,
     private router: Router,
     private storage: StorageService,
-    private status: StatusService,
     private http: RemoteService,
-    private share: ShareService
+    private store: StoreService
   ) {}
   get(uuid): Promise<ApiData> {
     return new Promise(async (resolve) => {
-      if (this.status.isShare) {
+      if (this.store.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetApiDetail({
-          uniqueID: this.share.shareId,
+          uniqueID: this.store.shareId,
           apiDataUUID: uuid,
         });
         if (err) {

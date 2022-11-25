@@ -1,5 +1,4 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -8,6 +7,7 @@ import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { Component, OnInit } from '@angular/core';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-member',
@@ -64,7 +64,7 @@ export class MemberComponent implements OnInit {
   memberList;
   constructor(
     public modal: NzModalService,
-    public user: UserService,
+    public store: StoreService,
     public message: MessageService,
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService,
@@ -96,7 +96,7 @@ export class MemberComponent implements OnInit {
     if (wErr) {
       if (wErr.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.user.isLogin) {
+        if (this.store.isLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });
@@ -130,7 +130,7 @@ export class MemberComponent implements OnInit {
       if (uErr) {
         if (uErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -153,7 +153,7 @@ export class MemberComponent implements OnInit {
       if (aErr) {
         if (aErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -172,7 +172,7 @@ export class MemberComponent implements OnInit {
       if (wErr) {
         if (wErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -243,7 +243,7 @@ export class MemberComponent implements OnInit {
     if (err) {
       if (err.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.user.isLogin) {
+        if (this.store.isLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });
@@ -257,7 +257,7 @@ export class MemberComponent implements OnInit {
     if (wErr) {
       if (wErr.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.user.isLogin) {
+        if (this.store.isLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });

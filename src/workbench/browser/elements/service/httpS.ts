@@ -14,7 +14,7 @@ export class HTTPS extends Render {
       ${this.errTip(errTip)}
       if (${err}.status === 401) {
         this.message.send({ type: 'clear-user', data: {} })
-        if (this.user.isLogin) {
+        if (this.store.isLogin) {
           return
         }
         this.message.send({ type: 'http-401', data: {} })
@@ -27,7 +27,7 @@ export class HTTPS extends Render {
       type: 'element',
       imports: [
         {
-          target: [{ name: 'UserService', type: 'service', inject: { name: 'user' }, ignore: true }],
+          target: [{ name: 'StoreService', type: 'service', inject: { name: 'user' }, ignore: true }],
           from: 'eo/workbench/browser/src/app/shared/services/user/user.service',
         },
         {

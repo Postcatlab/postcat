@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ShareService } from 'eo/workbench/browser/src/app/pages/share-project/share.service';
-import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-share',
   template: `<section class="flex flex-col"><eo-api></eo-api></section>`,
 })
 export class ShareComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private share: ShareService, private status: StatusService) {}
+  constructor(private route: ActivatedRoute, private store: StoreService) {}
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(({ shareId }) => {
-      this.share.setShareId(shareId);
+      this.store.setShareId(shareId);
     });
   }
 }

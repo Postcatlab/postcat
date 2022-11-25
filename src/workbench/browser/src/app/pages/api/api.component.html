@@ -10,7 +10,7 @@
   >
     <nz-content class="api-container-tabs">
       <eo-ng-tabset
-        [ngClass]="{ 'share-group-tabset': status.isShare }"
+        [ngClass]="{ 'share-group-tabset': store.isShare }"
         nzCentered
         [nzAnimated]="false"
         [(nzSelectedIndex)]="tabsIndex"
@@ -31,7 +31,7 @@
             <eo-api-group-tree></eo-api-group-tree>
           </div>
         </eo-ng-tab>
-        <eo-ng-tab [nzTitle]="historyTitle" *ngIf="!status.isShare">
+        <eo-ng-tab [nzTitle]="historyTitle" *ngIf="!store.isShare">
           <ng-template #historyTitle>
             <span
               i18n-nzTooltipTitle
@@ -75,9 +75,9 @@
             >
             </eo-ng-select>
             <ng-template #renderTemplate>
-              <nz-divider *ngIf="!status.isShare"></nz-divider>
+              <nz-divider *ngIf="!store.isShare"></nz-divider>
               <a
-                *ngIf="!status.isShare"
+                *ngIf="!store.isShare"
                 class="text-sx manager-env"
                 eo-ng-button
                 nzType="link"
@@ -139,7 +139,7 @@
           </div>
 
           <div
-            *ngIf="!status.isShare"
+            *ngIf="!store.isShare"
             class="absolute top-0 bottom-0 right-0 flex right-bar"
             nz-resizable
             [style.width.px]="dyWidth"
@@ -147,11 +147,7 @@
             [nzMinWidth]="RIGHT_BAR_WIDTH"
             (nzResize)="onRightPanelResize($event)"
           >
-            <nz-resize-handle
-              *ngIf="!status.isShare"
-              class="bottom-0 z-10 vertical container-draggable"
-              nzDirection="left"
-            >
+            <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical" nzDirection="left">
             </nz-resize-handle>
             <div class="flex flex-col p-2">
               <button

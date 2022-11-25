@@ -1,11 +1,11 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace',
@@ -69,7 +69,7 @@ export class WorkspaceComponent implements OnInit {
     public modal: NzModalService,
     public workspace: WorkspaceService,
     public eMessage: EoNgFeedbackMessageService,
-    public user: UserService,
+    public store: StoreService,
     public message: MessageService,
     public api: RemoteService,
     public fb: UntypedFormBuilder
@@ -105,7 +105,7 @@ export class WorkspaceComponent implements OnInit {
         this.eMessage.error($localize`Edit workspace failed`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -117,7 +117,7 @@ export class WorkspaceComponent implements OnInit {
       if (wErr) {
         if (wErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -159,7 +159,7 @@ You cannot restore it once deleted!`,
       if (err) {
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -172,7 +172,7 @@ You cannot restore it once deleted!`,
       if (wErr) {
         if (wErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.isLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
