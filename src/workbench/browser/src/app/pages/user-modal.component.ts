@@ -1,4 +1,3 @@
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -12,6 +11,7 @@ import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -240,7 +240,7 @@ export class UserModalComponent implements OnInit {
   isCancelBtnLoading;
   isSaveBtnLoading;
   constructor(
-    public user: UserService,
+    public store: StoreService,
     public message: MessageService,
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService,
@@ -290,8 +290,8 @@ export class UserModalComponent implements OnInit {
         }
 
         if (type === 'clear-user') {
-          this.user.clearAuth();
-          this.user.setUserProfile({
+          this.store.clearAuth();
+          this.store.setUserProfile({
             id: -1,
             password: '',
             username: '',
@@ -324,7 +324,7 @@ export class UserModalComponent implements OnInit {
 
         if (type === 'logOut') {
           this.workspace.setCurrentWorkspaceID(-1);
-          this.user.setUserProfile({
+          this.store.setUserProfile({
             id: -1,
             password: '',
             username: '',
@@ -335,8 +335,8 @@ export class UserModalComponent implements OnInit {
           }
           this.workspace.setCurrentWorkspace(this.workspace.getLocalWorkspaceInfo());
           this.eMessage.success($localize`Successfully logged out !`);
-          const refreshToken = this.user.refreshToken;
-          this.user.clearAuth();
+          const refreshToken = this.store.getLoginInfo.refreshToken;
+          this.store.clearAuth();
           {
             const [data, err]: any = await this.api.api_authLogout({
               refreshToken,
@@ -344,7 +344,7 @@ export class UserModalComponent implements OnInit {
             if (err) {
               if (err.status === 401) {
                 this.message.send({ type: 'clear-user', data: {} });
-                if (this.user.isLogin) {
+                if (this.store.getIsLogin) {
                   return;
                 }
                 this.message.send({ type: 'http-401', data: {} });
@@ -422,7 +422,7 @@ export class UserModalComponent implements OnInit {
     if (err) {
       if (err.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
-        if (this.user.isLogin) {
+        if (this.store.getIsLogin) {
           return;
         }
         this.message.send({ type: 'http-401', data: {} });
@@ -493,7 +493,7 @@ export class UserModalComponent implements OnInit {
       if (err) {
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.getIsLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -581,39 +581,39 @@ export class UserModalComponent implements OnInit {
         if ([401, 403].includes(err.status)) {
           this.isLoginBtnBtnLoading = false;
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.getIsLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
         }
         return;
       }
-      this.user.setLoginInfo(data);
+      this.store.setLoginInfo(data);
 
       // * 关闭弹窗
       this.isLoginModalVisible = false;
 
       this.message.send({ type: 'update-share-link', data: {} });
       {
-        const [data, err]: any = await this.api.api_userReadProfile(null);
+        const [data, err]: any = await this.api.api_userReadProfile({});
         if (err) {
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} });
-            if (this.user.isLogin) {
+            if (this.store.getIsLogin) {
               return;
             }
             this.message.send({ type: 'http-401', data: {} });
           }
           return;
         }
-        this.user.setUserProfile(data);
+        this.store.setUserProfile(data);
       }
       {
         const [data, err]: any = await this.api.api_workspaceList({});
         if (err) {
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} });
-            if (this.user.isLogin) {
+            if (this.store.getIsLogin) {
               return;
             }
             this.message.send({ type: 'http-401', data: {} });
@@ -682,7 +682,7 @@ export class UserModalComponent implements OnInit {
         this.eMessage.error($localize`Add workspace Failed !`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.getIsLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -699,7 +699,7 @@ export class UserModalComponent implements OnInit {
         if (err) {
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} });
-            if (this.user.isLogin) {
+            if (this.store.getIsLogin) {
               return;
             }
             this.message.send({ type: 'http-401', data: {} });

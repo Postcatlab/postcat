@@ -7,13 +7,19 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
 })
 export class StoreService {
   // * observable data
-  @observable.shallow env = {
+  @observable shareId = StorageUtil.get('shareId') || '';
+  @observable userProfile = StorageUtil.get('userProfile') || null;
+  @observable.shallow
+  env = {
     hostUri: '',
     parameters: [],
     frontURI: '',
   };
 
-  @observable shareId = StorageUtil.get('shareId') || '';
+  @observable.shallow loginInfo = {
+    accessToken: StorageUtil.get('accessToken') || null,
+    refreshToken: StorageUtil.get('refreshToken') || null,
+  };
 
   // * computed data
   @computed
@@ -21,12 +27,24 @@ export class StoreService {
     return this.env;
   }
 
+  @computed get getIsLogin() {
+    return !!this.userProfile?.username;
+  }
+
+  @computed get getUserProfile() {
+    return this.userProfile;
+  }
+
+  @computed get getLoginInfo() {
+    return this.loginInfo;
+  }
+
   constructor() {
     makeObservable(this); // don't forget to add this if the class has observable fields
   }
 
   // * actions
-  @action changeEnv(data) {
+  @action setEnv(data) {
     this.env =
       data == null
         ? {
@@ -40,5 +58,21 @@ export class StoreService {
   @action setShareId(data = '') {
     this.shareId = data;
     StorageUtil.set('shareId', data);
+  }
+
+  @action setUserProfile(data: API.User = null) {
+    this.userProfile = data;
+    StorageUtil.set('userProfile', data);
+  }
+
+  @action setLoginInfo(data = null) {
+    this.loginInfo = data;
+    StorageUtil.set('accessToken', data.accessToken);
+    StorageUtil.set('refreshToken', data.refreshToken);
+  }
+
+  @action clearAuth() {
+    this.setUserProfile(null);
+    this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
 }

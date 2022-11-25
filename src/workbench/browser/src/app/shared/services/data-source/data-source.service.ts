@@ -3,10 +3,10 @@ import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/sto
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 /**
  * @description
@@ -36,7 +36,7 @@ export class DataSourceService {
   constructor(
     private messageService: MessageService,
     private settingService: SettingService,
-    private user: UserService,
+    private store: StoreService,
     private modal: NzModalService,
     private http: RemoteService,
     private web: WebService
@@ -87,15 +87,20 @@ export class DataSourceService {
     if (this.web.isVercel) {
       this.modal.info({
         nzTitle: $localize`Need to deploy cloud services`,
-        nzContent: `<span>`+$localize`Store data on the cloud for team collaboration and product use across devices.`+`</span>`+
-      `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">`+$localize`Learn more..`+`</a>`,
+        nzContent:
+          `<span>` +
+          $localize`Store data on the cloud for team collaboration and product use across devices.` +
+          `</span>` +
+          `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">` +
+          $localize`Learn more..` +
+          `</a>`,
         nzOnOk: () => console.log('Info OK'),
-        nzMaskClosable: true
+        nzMaskClosable: true,
       });
       return;
     }
     if (this.web.isWeb) {
-      if (!this.user.isLogin) {
+      if (!this.store.getIsLogin) {
         this.messageService.send({ type: 'login', data: {} });
         return;
       }
@@ -106,7 +111,7 @@ export class DataSourceService {
       const isSuccess = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
       if (isSuccess) {
-        if (!this.user.isLogin) {
+        if (!this.store.getIsLogin) {
           !isLocalSpace && this.messageService.send({ type: 'login', data: {} });
         } else {
           canOperateCallback?.();

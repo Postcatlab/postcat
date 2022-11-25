@@ -1,9 +1,9 @@
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-account',
@@ -98,7 +98,7 @@ export class AccountComponent implements OnInit {
   isResetBtnBtnLoading;
   constructor(
     public fb: UntypedFormBuilder,
-    public user: UserService,
+    public store: StoreService,
     public message: MessageService,
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService
@@ -126,7 +126,7 @@ export class AccountComponent implements OnInit {
 
     // * get Username form values
     this.validateUsernameForm.patchValue({
-      username: this.user.userProfile?.username,
+      username: this.store.getUserProfile?.username,
     });
   }
   async btnw9ec5mCallback() {
@@ -141,7 +141,7 @@ export class AccountComponent implements OnInit {
         this.eMessage.error($localize`Sorry, username is already in use`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.getIsLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
@@ -152,14 +152,14 @@ export class AccountComponent implements OnInit {
       if (pErr) {
         if (pErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.getIsLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
         }
         return;
       }
-      this.user.setUserProfile(pData);
+      this.store.setUserProfile(pData);
       this.eMessage.success($localize`Username update success !`);
     };
     await btnSaveUsernameRunning();
@@ -186,14 +186,14 @@ export class AccountComponent implements OnInit {
         this.eMessage.error($localize`Validation failed`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
-          if (this.user.isLogin) {
+          if (this.store.getIsLogin) {
             return;
           }
           this.message.send({ type: 'http-401', data: {} });
         }
         return;
       }
-      this.user.setLoginInfo(data);
+      this.store.setLoginInfo(data);
       this.eMessage.success($localize`Password reset success !`);
 
       // * Clear password form

@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 @Component({
   selector: 'eo-data-storage',
   template: `
@@ -58,8 +57,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private messageS: MessageService,
-    private dataSource: DataSourceService,
-    private user: UserService
+    private dataSource: DataSourceService
   ) {}
 
   ngOnInit(): void {

@@ -60,12 +60,12 @@
     </button>
     <eo-ng-dropdown-menu #userMenu>
       <ul nz-menu>
-        <li nz-menu-item *ngIf="!userService.isLogin">
+        <li nz-menu-item *ngIf="!store.getIsLogin">
           <button type="button" (click)="loginOrSign()" i18n>Sign in for Collaboration</button>
         </li>
-        <ng-container *ngIf="userService.isLogin">
+        <ng-container *ngIf="store.getIsLogin">
           <li class="px-[12px] py-[5px] text-neutral-400 font-bold">
-            {{ userService.userProfile?.username }}
+            {{ store.getUserProfile?.username }}
           </li>
           <li nz-menu-item (click)="openSettingModal()">
             <button type="button" i18n>Account Setting</button>

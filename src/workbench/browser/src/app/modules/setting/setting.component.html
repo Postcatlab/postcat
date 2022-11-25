@@ -4,8 +4,11 @@
     <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
       <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
         <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
-        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)">
+        <nz-tree-node-option
+          [nzDisabled]="node.disabled"
+          [nzSelected]="selectListSelection.isSelected(node)"
+          (nzClick)="selectModule(node)"
+        >
           {{ node.name }}
         </nz-tree-node-option>
       </nz-tree-node>
@@ -14,8 +17,11 @@
         <nz-tree-node-toggle>
           <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
         </nz-tree-node-toggle>
-        <nz-tree-node-option [nzDisabled]="node.disabled" [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)">
+        <nz-tree-node-option
+          [nzDisabled]="node.disabled"
+          [nzSelected]="selectListSelection.isSelected(node)"
+          (nzClick)="selectModule(node)"
+        >
           {{ node.name }}
         </nz-tree-node-option>
       </nz-tree-node>
@@ -23,7 +29,7 @@
   </div>
   <nz-divider nzType="vertical" class="divider"></nz-divider>
   <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
-    <ng-container *ngIf="user.isLogin">
+    <ng-container *ngIf="store.getIsLogin">
       <eo-account id="eoapi-account"></eo-account>
       <nz-divider></nz-divider>
     </ng-container>

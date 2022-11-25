@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../shared/services/message';
 import { RemoteService } from '../../shared/services/storage/remote.service';
-import { UserService } from '../../services/user/user.service';
 import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
@@ -10,6 +9,7 @@ import { StatusService } from '../../shared/services/status.service';
 import { distinct, interval } from 'rxjs';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { WebService } from '../../core/services';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 @Component({
   selector: 'eo-get-share-link',
   template: `<button
@@ -42,7 +42,7 @@ export class GetShareLinkComponent implements OnInit {
   shareLink = '';
   isCopy = false;
   constructor(
-    private userService: UserService,
+    private store: StoreService,
     public dataSourceService: DataSourceService,
     public status: StatusService,
     private web: WebService,
@@ -71,7 +71,7 @@ export class GetShareLinkComponent implements OnInit {
     if (this.workspaceService.isLocal) {
       return '';
     }
-    if (!this.userService.isLogin) {
+    if (!this.store.getIsLogin) {
       return '';
     }
     if (this.status.isShare) {

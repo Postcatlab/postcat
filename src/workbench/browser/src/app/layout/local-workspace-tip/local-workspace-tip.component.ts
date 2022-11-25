@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { StorageUtil } from '../../utils/storage/Storage';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-local-workspace-tip',
@@ -30,11 +30,13 @@ export class LocalWorkspaceTipComponent implements OnInit {
     private eoMessage: EoNgFeedbackMessageService,
     private message: MessageService,
     private workspace: WorkspaceService,
-    private user: UserService
+    private store: StoreService
   ) {}
   get isShowNotification() {
     const isShow =
-      this.workspace.isLocal && this.user.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
+      this.workspace.isLocal &&
+      this.store.getIsLogin &&
+      StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
     this.isShow !== isShow && this.setIsShow(isShow);
     return isShow;
   }

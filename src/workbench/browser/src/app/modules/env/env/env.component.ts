@@ -190,13 +190,13 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   private changeStoreEnv(uuid) {
     if (uuid == null) {
-      this.store.changeEnv(null);
+      this.store.setEnv(null);
       return;
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.changeEnv(data);
+        this.store.setEnv(data);
       }
     });
   }

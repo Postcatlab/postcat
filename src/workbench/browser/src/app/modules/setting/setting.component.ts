@@ -5,8 +5,8 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 interface TreeNode {
   name: string;
@@ -71,7 +71,7 @@ export class SettingComponent implements OnInit {
   treeNodes = [
     {
       name: $localize`:@@Account:Account`,
-      hidden: `user.isLogin`,
+      hidden: 'user.isLogin',
       moduleID: 'eoapi-account',
       children: [
         {
@@ -110,7 +110,7 @@ export class SettingComponent implements OnInit {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  constructor(private settingService: SettingService, public user: UserService, public webService: WebService) {}
+  constructor(private settingService: SettingService, public store: StoreService, public webService: WebService) {}
 
   ngOnInit(): void {
     this.init();
@@ -176,7 +176,7 @@ export class SettingComponent implements OnInit {
       this.treeNodes.filter((val) => {
         switch (val.moduleID) {
           case 'eoapi-account': {
-            if (!this.user.isLogin) {
+            if (!this.store.getIsLogin) {
               return false;
             }
           }

@@ -5,9 +5,9 @@ import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/sto
 import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { UserService } from 'eo/workbench/browser/src/app/services/user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 @Injectable({
@@ -48,7 +48,7 @@ export class WorkspaceService {
     private messageService: MessageService,
     private storage: StorageService,
     private projectService: ProjectService,
-    private userService: UserService,
+    private store: StoreService,
     private settingService: SettingService,
     private router: Router,
     private route: ActivatedRoute
@@ -152,6 +152,6 @@ export class WorkspaceService {
     }
     const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
     this.projectService.setCurrentProjectID(projects.at(0).uuid);
-    this.authEnum.canEdit = creatorID === this.userService.userProfile.id;
+    this.authEnum.canEdit = creatorID === this.store.getUserProfile.id;
   }
 }

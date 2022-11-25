@@ -191,7 +191,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {
     if (uuid == null) {
-      this.store.changeEnv(null);
+      this.store.setEnv(null);
       return;
     }
     if (this.status.isShare) {
@@ -202,12 +202,12 @@ export class ApiComponent implements OnInit, OnDestroy {
         return;
       }
       const result = data.find((val) => val.uuid === Number(uuid));
-      return this.store.changeEnv(result);
+      return this.store.setEnv(result);
     }
     this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.changeEnv(data);
+        this.store.setEnv(data);
       }
     });
   }
