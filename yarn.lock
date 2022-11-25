@@ -1383,7 +1383,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.18.6", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.8.4":
   version "7.20.1"
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.20.1.tgz#1148bb33ab252b165a06698fde7576092a78b4a9"
   integrity sha512-mrzLkl6U9YLF8qpqI7TB82PESyEGjm/0Ly91jG575eVxMMlb8fYfOXFZIJ8XfLrJZQbm7dlKry2bJmXBUEkdFg==
@@ -2685,13 +2685,6 @@
   dependencies:
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
-
-"@xmagic/ngx-wujie@1.0.0-rc.20":
-  version "1.0.0-rc.20"
-  resolved "https://registry.npmmirror.com/@xmagic/ngx-wujie/-/ngx-wujie-1.0.0-rc.20.tgz#eb25566377897d52d696cecece552d09a4cc9615"
-  integrity sha512-mHPeaPnkstwD6HLmi18XrNxhNrEGFYVt1UABz4cfvfOzTWGIcxyfpmLJd8M67ofBfmsakTncTcLft99SPrG2EA==
-  dependencies:
-    tslib "^2.3.0"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -5758,10 +5751,10 @@ eo-ng-switch@0.0.77:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-table@0.0.77:
-  version "0.0.77"
-  resolved "https://registry.npmmirror.com/eo-ng-table/-/eo-ng-table-0.0.77.tgz#a14a4a0bdcd8da81bd67bc14e43b064d0fb6c7c1"
-  integrity sha512-a5rLif2IaNQl4VgaktBI4ROWTCBzubjrkkxJSQOQ4H2qNgbIb+uQtCKh/AiIJaEFKt8VK9tPEJ+IKmQS1He3lg==
+eo-ng-table@0.0.78:
+  version "0.0.78"
+  resolved "https://registry.yarnpkg.com/eo-ng-table/-/eo-ng-table-0.0.78.tgz#be832d021ee0faf3ea6a17d189fc695010b8a7df"
+  integrity sha512-MZVvbbg4bIV5qlMKNDTpGkMYLelaG4gisQ2RPMG/GKXvtMA7iI7b0NKYaq163XJ1xCY2HtYubTQaGnpKzUYHmQ==
   dependencies:
     tslib "^2.3.0"
 
@@ -14251,13 +14244,6 @@ ws@~8.2.3:
   version "8.2.3"
   resolved "https://registry.npmmirror.com/ws/-/ws-8.2.3.tgz#63a56456db1b04367d0b721a0b80cae6d8becbba"
   integrity sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==
-
-wujie@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmmirror.com/wujie/-/wujie-1.0.0.tgz#e15f58b4c9b044ef323eca289729473f17d7f354"
-  integrity sha512-XlyP3Fi2hW03cQL7Q8g9+IljigYHYj0GhsI2JxLbEZb64FXLc7OENZKvrrm3XeTztvP2XAHAHVJJH6WHrjkgcw==
-  dependencies:
-    "@babel/runtime" "^7.18.6"
 
 xdg-basedir@^3.0.0:
   version "3.0.0"

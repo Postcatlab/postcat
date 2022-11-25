@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 import { PageNotFoundComponent } from './layout/page-not-found/page-not-found.component';
@@ -32,6 +32,6 @@ const routes: Routes = [
   //     useValue: window.__MICRO_APP_BASE_ROUTE__ || '/',
   //   },
   // ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [],
 })
 export class AppRoutingModule {}

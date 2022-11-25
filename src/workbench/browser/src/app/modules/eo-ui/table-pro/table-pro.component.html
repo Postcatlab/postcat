@@ -5,3 +5,9 @@
   [nzTbody]="tbodyConf"
   [nzThead]="theadConf"
 ></eo-ng-table>
+
+<ng-template #enumsTmp let-item="item" let-rowItem="rowItem">
+  <div class="{{ rowItem.enums[item[rowItem.keyNmae]].class }}">
+    {{ rowItem.enums[item[rowItem.keyNmae]].title }}
+  </div>
+</ng-template>

@@ -46,8 +46,8 @@
           <eo-history></eo-history>
         </eo-ng-tab>
       </eo-ng-tabset>
+      <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
     </nz-content>
-    <nz-resize-handle class="vertical" nzDirection="right"> </nz-resize-handle>
   </nz-sider>
   <nz-layout class="right-layout">
     <nz-content>
@@ -147,7 +147,11 @@
             [nzMinWidth]="RIGHT_BAR_WIDTH"
             (nzResize)="onRightPanelResize($event)"
           >
-            <nz-resize-handle *ngIf="!status.isShare" class="absolute bottom-0 z-10 vertical" nzDirection="left">
+            <nz-resize-handle
+              *ngIf="!status.isShare"
+              class="bottom-0 z-10 vertical container-draggable"
+              nzDirection="left"
+            >
             </nz-resize-handle>
             <div class="flex flex-col p-2">
               <button

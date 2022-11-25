@@ -19,6 +19,7 @@ import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
 import { EnvModule } from '../../modules/env/env.module';
 import { MyTreeDirective } from 'eo/workbench/browser/src/app/pages/api/group/tree/my-tree.directive';
+import { NzResizableService } from 'ng-zorro-antd/resizable';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ApiTabComponent, HistoryComponent];
 @NgModule({
@@ -33,6 +34,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   ],
   declarations: [...COMPONENTS, MyTreeDirective],
   exports: [ApiComponent],
-  providers: [ElectronService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
+  providers: [ElectronService,NzResizableService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
 })
 export class ApiModule {}

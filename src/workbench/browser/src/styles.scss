@@ -2,12 +2,20 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import '../../../node_modules/eo-ng-button/styles.scss';
-
-@import '../../../node_modules/eo-ng-tree/styles.scss';
-@import '../../../node_modules/eo-ng-feedback/styles.scss';
 @import '../../../node_modules/eo-ng-checkbox/styles.scss';
 @import '../../../node_modules/eo-ng-select/styles.scss';
+
+@import '../../../node_modules/eo-ng-button/styles.scss';
+@import '../../../node_modules/eo-ng-radio/styles.scss';
+@import '../../../node_modules/eo-ng-checkbox/styles.scss';
+@import '../../../node_modules/eo-ng-input/styles.scss';
+@import '../../../node_modules/eo-ng-auto-complete/styles.scss';
+
+
+@import '../../../node_modules/eo-ng-tabs/styles.scss';
+@import '../../../node_modules/eo-ng-tree/styles.scss';
+@import '../../../node_modules/eo-ng-table/styles.scss';
+
 
 html,
 body {
