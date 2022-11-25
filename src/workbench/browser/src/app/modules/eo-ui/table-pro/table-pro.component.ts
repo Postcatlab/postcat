@@ -41,10 +41,13 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
             body.keyNmae = col.key;
             body.key = this.enumsTmp;
             body.enums = col.enums.reduce((a, v) => ({ ...a, [v.value]: { title: v.title, class: v.class } }), {});
-            header.filterOpts = col.enums.map((item) => ({ text: item.title, value: item.value }));
           }
           break;
         }
+      }
+      if (col.filters) {
+        header.filterFn = col.filterFn;
+        header.filterOpts = col.enums.map((item) => ({ text: item.title, value: item.value }));
       }
       this.theadConf.push(header);
       this.tbodyConf.push(body);

@@ -53,14 +53,30 @@
     <nz-content>
       <div class="inner-content">
         <div class="flex items-center tabs-bar">
-          <eo-api-tab
+          <!-- API Tab -->
+          <eo-tab
             class="flex-1"
             [list]="apiTab.BASIC_TABS"
+            [tabStorageKey]="(workspace.isLocal ? 'local' : workspace.currentWorkspaceID) + '_TabCache'"
             [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
             [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
             (beforeClose)="apiTab.beforeTabClose($event)"
+            [addDropDown]="newTabTemplate"
+            [titleLabel]="titleLabel"
             #apiTabComponent
-          ></eo-api-tab>
+          ></eo-tab>
+          <eo-ng-dropdown-menu #newTabTemplate>
+            <ul nz-menu>
+              <li nz-menu-item (click)="apiTabComponent.newTab()">HTTP</li>
+              <li nz-menu-item (click)="apiTabComponent.newTab('ws')">Websocket</li>
+            </ul>
+          </eo-ng-dropdown-menu>
+          <ng-template #titleLabel let-item="item">
+            <span class="mr-[5px] method-text method_text_{{ item?.extends?.method || 'WS' }}">
+              {{ item?.extends?.method || 'WS' }}</span
+            >
+          </ng-template>
+          <!-- Env Select -->
           <div class="flex items-center fix-mt">
             <eo-ng-select
               [(ngModel)]="envUuid"

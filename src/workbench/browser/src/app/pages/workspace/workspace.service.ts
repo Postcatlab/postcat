@@ -32,7 +32,6 @@ export class WorkspaceService {
     canCreate: false,
   };
   get isLocal() {
-    console.log(666);
     return !window.location.pathname.includes('/home/share') && this.currentWorkspaceID === -1;
   }
 

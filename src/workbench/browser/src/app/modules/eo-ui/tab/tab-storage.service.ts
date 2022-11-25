@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
-import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { storageTab, TabItem } from './tab.model';
 
 @Injectable()
@@ -8,15 +6,15 @@ import { storageTab, TabItem } from './tab.model';
  * Storage tab data
  * All data chagne in this service
  */
-export class ApiTabStorageService {
+export class TabStorageService {
   tabOrder: Array<number> = [];
-  cacheName: string;
+  tabStorageKey: string;
   tabsByID = new Map<number, TabItem>();
-  constructor(private dataSource: DataSourceService, private workspace: WorkspaceService) {}
-  init() {
+  constructor() {}
+  init(inArg: { tabStorageKey: string }) {
     this.tabOrder = [];
     this.tabsByID = new Map();
-    this.cacheName = `${this.workspace.isLocal ? 'local' : this.workspace.currentWorkspaceID}_TabCache`;
+    this.tabStorageKey = inArg.tabStorageKey;
   }
   addTab(tabItem) {
     if (this.tabsByID.has(tabItem.uuid)) {
@@ -53,10 +51,6 @@ export class ApiTabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
-    //TODO remote datasource may change
-    if (this.dataSource.dataSourceType === 'http') {
-    }
-
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach((val) => {
       if (val.type === 'preview') {
@@ -69,7 +63,7 @@ export class ApiTabStorageService {
       tabsByID = opts.handleDataBeforeCache(tabsByID);
     }
     window.localStorage.setItem(
-      this.cacheName,
+      this.tabStorageKey,
       JSON.stringify({
         selectedIndex,
         tabOrder: this.tabOrder,
@@ -81,7 +75,7 @@ export class ApiTabStorageService {
   getPersistenceStorage(): storageTab {
     let result: any = null;
     try {
-      result = JSON.parse(window.localStorage.getItem(this.cacheName) as string);
+      result = JSON.parse(window.localStorage.getItem(this.tabStorageKey) as string);
     } catch (e) {}
     return result;
   }

@@ -22,9 +22,15 @@
           *ngIf="tabStorage.tabsByID.get(uuid)?.icon"
         ></eo-iconpark-icon>
         <!-- {{ tabStorage.tabsByID.get(uuid) | json }} -->
-        <span class="mr-[5px] method-text method_text_{{ tabStorage.tabsByID.get(uuid)?.extends?.method || 'WS' }}">{{
-          tabStorage.tabsByID.get(uuid)?.extends?.method || 'WS'
-        }}</span>
+        <ng-container
+          *nzStringTemplateOutlet="
+            titleLabel;
+            context: {
+              item: tabStorage.tabsByID.get(uuid)
+            }
+          "
+        >
+        </ng-container>
         <span class="text-omit tab-text" [title]="tabStorage.tabsByID.get(uuid)?.title">
           {{ tabStorage.tabsByID.get(uuid)?.title }}</span
         >
@@ -37,11 +43,12 @@
           ></nz-badge>
           <button
             aria-label="Close tab"
+            eo-ng-button
             (click)="closeTab({ $event: $event, index: i, tab: tabStorage.tabsByID.get(uuid) })"
-            type="button"
-            nz-tab-close-button=""
             class="ant-tabs-tab-remove"
-          ></button>
+          >
+            <eo-iconpark-icon name="close"></eo-iconpark-icon>
+          </button>
         </div>
       </div>
     </ng-template>
@@ -54,17 +61,11 @@
       nzType="text"
       (click)="newTab()"
       eo-ng-dropdown
-      [nzDropdownMenu]="addMenu"
+      [nzDropdownMenu]="addDropDown"
       class="{{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
     >
       <eo-iconpark-icon name="plus"></eo-iconpark-icon>
     </button>
-    <eo-ng-dropdown-menu #addMenu="nzDropdownMenu">
-      <ul nz-menu>
-        <li nz-menu-item (click)="newTab()">HTTP</li>
-        <li nz-menu-item (click)="newTab('ws')">Websocket</li>
-      </ul>
-    </eo-ng-dropdown-menu>
     <button eo-ng-button nzType="text" eo-ng-dropdown [nzDropdownMenu]="menu">
       <eo-iconpark-icon name="more"></eo-iconpark-icon>
     </button>

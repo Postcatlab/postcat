@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { debounceTime, Subject } from 'rxjs';
-import { ApiTabComponent } from './tab/api-tab.component';
-import { TabItem } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { EoTabComponent } from '../../modules/eo-ui/tab/tab.component';
+import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { isEmptyObj } from '../../utils/index.utils';
 import { MessageService } from '../../shared/services/message';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 @Injectable()
 export class ApiTabService {
   componentRef;
-  apiTabComponent: ApiTabComponent;
+  apiTabComponent: EoTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
   get currentComponentTab(): Partial<TabItem> {
     return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname));

@@ -1,34 +1,45 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
+import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
-import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/pages/api/tab/tab.model';
+import { TabStorageService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-storage.service';
+import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { ModalService } from '../../../shared/services/modal.service';
 import { KeyValue } from '@angular/common';
 import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 @Component({
-  selector: 'eo-api-tab',
-  templateUrl: './api-tab.component.html',
-  styleUrls: ['./api-tab.component.scss'],
+  selector: 'eo-tab',
+  templateUrl: './tab.component.html',
+  styleUrls: ['./tab.component.scss'],
 })
-export class ApiTabComponent implements OnInit, OnDestroy {
+export class EoTabComponent implements OnInit, OnDestroy {
   @Input() list: Partial<TabItem>[];
-  @Input() handleDataBeforeCache;
-  @Input() checkTabCanLeave;
+  @Input() tabStorageKey:string="DEFAULT_TAB_STORAGE_KEY";
+
+  @Input () addDropDown?:NzDropdownMenuComponent;
+  @Input () titleLabel?:TemplateRef<void>;
+
+  @Input() checkTabCanLeave?:()=>boolean;
+  @Input() handleDataBeforeCache?:<T>({tabsByID:T})=>T;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
   constructor(
-    public tabStorage: ApiTabStorageService,
-    public tabOperate: ApiTabOperateService,
+    public tabStorage: TabStorageService,
+    public tabOperate: TabOperateService,
     private modal: ModalService,
     private router: Router,
     public store: StoreService
   ) {}
   ngOnInit(): void {
-    this.tabOperate.init(this.list);
+    this.tabStorage.init({
+      tabStorageKey:this.tabStorageKey
+    });
+    this.tabOperate.init({
+      basicTabs:this.list
+    });
     this.watchRouterChange();
     this.watchPageLeave();
   }

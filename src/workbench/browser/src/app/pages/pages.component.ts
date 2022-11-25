@@ -54,7 +54,9 @@ export class PagesComponent implements OnInit {
         { title: 'string', value: 'string'},
         { title: 'number', value: 'number' },
       ], //筛选项&渲染
-      onFilter: () => {},
+      filterFn: (item) => {
+        console.log(item)
+      },
     },
     {
       title: '状态',
@@ -65,8 +67,7 @@ export class PagesComponent implements OnInit {
       enums: [
         { title: '已解决', value: 'solved', class: 'text-black'  },
         { title: '处理中', value: 'pending' },
-      ], //筛选项&渲染
-      onFilter: () => {},
+      ] //筛选项&渲染
     },
     {
       type: 'btnList',

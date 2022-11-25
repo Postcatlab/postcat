@@ -1,10 +1,36 @@
-import { RouterModule, Routes } from '@angular/router';
-import { NgModule } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterModule,
+  RouterStateSnapshot,
+  Routes,
+  UrlTree,
+} from '@angular/router';
+import { Injectable, NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { PageBlankComponent } from '../layout/page-blank/page-blank.component';
 import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
+import { Observable } from 'rxjs';
+import { StoreService } from '../shared/store/state.service';
 // import { Vue3Component } from 'eo/workbench/browser/src/app/pages/vue3/vue3.component';
+
+@Injectable()
+class RedirectProjectID implements CanActivate {
+  constructor(private store: StoreService, private router: Router) {}
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    const urlTree = this.router.parseUrl(state.url);
+    if(!urlTree.queryParams.shareId&& this.store.shareId){
+      urlTree.queryParams.shareId = this.store.shareId;
+      return urlTree;
+    }
+    return true;
+  }
+}
 
 const routes: Routes = [
   {
@@ -30,6 +56,8 @@ const routes: Routes = [
       },
       {
         path: 'share',
+        canActivate: [RedirectProjectID],
+        runGuardsAndResolvers: 'always',
         loadChildren: () => import('./share-project/share-project.module').then((m) => m.ShareProjectModule),
       },
       {
@@ -59,6 +87,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+  providers: [RedirectProjectID],
   exports: [RouterModule],
 })
 export class PagesRoutingModule {}

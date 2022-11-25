@@ -9,19 +9,16 @@ import { ApiComponent } from './api.component';
 import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';
 
 import { ApiGroupTreeComponent } from './group/tree/api-group-tree.component';
-import { ApiTabComponent } from './tab/api-tab.component';
 import { ElectronService } from '../../core/services';
 import { HistoryComponent } from './history/eo-history.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
-import { ApiTabStorageService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-storage.service';
-import { ApiTabOperateService } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab-operate.service';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
 import { EnvModule } from '../../modules/env/env.module';
 import { MyTreeDirective } from 'eo/workbench/browser/src/app/pages/api/group/tree/my-tree.directive';
 import { NzResizableService } from 'ng-zorro-antd/resizable';
 
-const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, ApiTabComponent, HistoryComponent];
+const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
   imports: [
     HttpClientModule,
@@ -34,6 +31,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   ],
   declarations: [...COMPONENTS, MyTreeDirective],
   exports: [ApiComponent],
-  providers: [ElectronService,NzResizableService, ApiTabService, ApiTabOperateService, ApiTabStorageService, IndexedDBStorage],
+  providers: [ElectronService, NzResizableService, ApiTabService, IndexedDBStorage],
 })
 export class ApiModule {}

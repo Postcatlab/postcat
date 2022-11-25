@@ -4,13 +4,14 @@ import { StorageRes, StorageResStatus } from '../../shared/services/storage/inde
 import { filter, Subject, takeUntil } from 'rxjs';
 import { Message, MessageService } from '../../shared/services/message';
 import { StorageService } from '../../shared/services/storage';
-import { ApiTabComponent } from 'eo/workbench/browser/src/app/pages/api/tab/api-tab.component';
+import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { WorkspaceService } from '../workspace/workspace.service';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -29,7 +30,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   animateId = -1;
   animationId: number;
   @ViewChild('apiTabComponent')
-  set apiTabComponent(value: ApiTabComponent) {
+  set apiTabComponent(value: EoTabComponent) {
     // For lifecycle error, use timeout
     this.apiTab.apiTabComponent = value;
     if (this.isFirstTime) {
@@ -83,6 +84,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public web: WebService,
+    public workspace:WorkspaceService,
     public store: StoreService,
     private http: RemoteService
   ) {}

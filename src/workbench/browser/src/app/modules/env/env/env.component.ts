@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { EoTableComponent } from '../../eo-ui/table/eo-table/eo-table.component';
+// import { EoTableComponent } from '../../eo-ui/table/eo-table/eo-table.component';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { StorageService } from '../../../shared/services/storage';
 
@@ -14,7 +14,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./env.component.scss'],
 })
 export class EnvComponent implements OnInit, OnDestroy {
-  @ViewChild('table') table: EoTableComponent; // * child component ref
+  // @ViewChild('table') table: EoTableComponent; // * child component ref
   @Output() private statusChange: EventEmitter<any> = new EventEmitter();
   varName = $localize`{{Variable Name}}`;
   modalTitle = $localize`:@@New Environment:New Environment`;
