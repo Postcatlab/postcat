@@ -175,7 +175,7 @@
     [style.--bottom-height]="height - 15 + 'px'"
     (nzResize)="onResize($event)"
   >
-    <nz-resize-handle class="z-10 horizontal" nzDirection="top"> </nz-resize-handle>
+    <nz-resize-handle class="z-10 horizontal container-draggable" nzDirection="top"> </nz-resize-handle>
     <!-- Response -->
     <eo-ng-tabset
       [nzTabBarStyle]="{ 'padding-left': '10px' }"

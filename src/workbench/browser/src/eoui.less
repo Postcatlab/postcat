@@ -140,29 +140,3 @@
   width: var(--ICONPARK_SIZE);
 }
 
-nz-resize-handle.container-draggable {
-  display: block;
-  flex: none;
-  top: 0;
-  z-index: 10;
-  background-color: var(--BORDER);
-  &:hover {
-    background-color: var(--MAIN_THEME_COLOR);
-  }
-  &.vertical {
-    cursor: col-resize;
-    width: 1px;
-    right: 0;
-    &:hover {
-      width: 3px;
-    }
-  }
-  &.horizontal {
-    width: 100%;
-    cursor: row-resize;
-    height: 1px;
-    &:hover {
-      height: 3px;
-    }
-  }
-}
