@@ -90,9 +90,10 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     this.mock.bulkAdd(apiData);
   }
 
-  private resProxy(data): ResultType {
+  private resProxy(data, error?, status?: StorageResStatus): ResultType {
     const result = {
-      status: StorageResStatus.success,
+      status: status || (error ? StorageResStatus.error : StorageResStatus.success),
+      error,
       data,
     };
     return result as ResultType;
@@ -698,9 +699,14 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
   projectImport(uuid: number, data): Observable<object> {
     return new Observable((obs) => {
-      const errors = {
+      const error = {
         apiData: [],
       };
+      if (!data || !data.collections) {
+        obs.next(this.resProxy(null, [`can't find collections`], StorageResStatus.empty));
+        obs.complete();
+        return;
+      }
       //Add api and group
       const deepFn = (collections, parentID) =>
         new Promise((resolve) => {
@@ -712,7 +718,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
               item.groupID = parentID;
               const result = parseAndCheckApiData(item);
               if (!result.validate) {
-                errors.apiData.push(item.name || item.uri);
+                error.apiData.push(item.name || item.uri);
                 return;
               }
               this.apiDataCreate(result.data);
@@ -742,11 +748,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             this.environmentCreate(result.data);
           });
         }
-        obs.next(
-          this.resProxy({
-            errors,
-          })
-        );
+        obs.next(this.resProxy(null,error,StorageResStatus.success));
         obs.complete();
       });
     });

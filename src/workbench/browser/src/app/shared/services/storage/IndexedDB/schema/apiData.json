@@ -32,7 +32,7 @@
         },
         "example": {
           "description": "param example",
-          "type": "string"
+          "type":"string"
         },
         "maxLength": {
           "description": "最大长度",
