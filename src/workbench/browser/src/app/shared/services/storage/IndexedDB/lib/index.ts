@@ -763,7 +763,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   projectExport(): Observable<object> {
     return new Observable((obs) => {
       const fun = async () => {
-        const result = {};
+        const result = { version: '1.0.0' };
         const tables = ['environment', 'group', 'project', 'apiData', 'mock'];
         for (const tableName of tables) {
           if (tableName === 'project') {
