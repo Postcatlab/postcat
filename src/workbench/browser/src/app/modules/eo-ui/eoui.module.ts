@@ -13,6 +13,8 @@ import { EoTableProComponent } from './table-pro/table-pro.component';
 import { EoNgTableModule } from 'eo-ng-table';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
 import { TabComponentModule } from './tab/tab.module';
+import { EoNgFeedbackTooltipModule } from 'eo-ng-feedback';
+import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 
 const antdModules = [
   NzCodeEditorModule,
@@ -20,11 +22,12 @@ const antdModules = [
   EoNgButtonModule,
   NzInputModule,
   NzSelectModule,
+  EoNgFeedbackTooltipModule
 ];
 const COMPONENTS = [EoTableProComponent, EoMonacoEditorComponent];
 @NgModule({
   declarations: [...COMPONENTS],
-  imports: [CommonModule,EoNgTableModule, FormsModule, EoIconparkIconModule, ...antdModules],
+  imports: [CommonModule,EoNgCheckboxModule,EoNgTableModule, FormsModule, EoIconparkIconModule, ...antdModules],
   exports: [...COMPONENTS,TabComponentModule, EoIconparkIconModule],
 })
 export class EouiModule {}

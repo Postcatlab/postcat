@@ -1,13 +1,63 @@
 {{ nzData | json }}
+{{ setting.isLevel }}
 <eo-ng-table
+  class="full-screen-container"
   [nzDataItem]="{ status: 'solved' }"
   [(nzData)]="nzData"
+  [nzIsLevel]="setting.isLevel"
+  [nzDraggable]="setting.isDraggable"
   [nzTbody]="tbodyConf"
+  nzPrimaryKey="setting.primaryKey"
+  nzChildKey="children"
   [nzThead]="theadConf"
 ></eo-ng-table>
-
-<ng-template #enumsTmp let-item="item" let-rowItem="rowItem">
+<!-- Enum template -->
+<ng-template #enums let-item="item" let-rowItem="rowItem">
   <div class="{{ rowItem.enums[item[rowItem.keyNmae]].class }}">
     {{ rowItem.enums[item[rowItem.keyNmae]].title }}
+  </div>
+</ng-template>
+<!-- Operation Button -->
+<div *ngFor="let btnItem of iconBtns">
+  <ng-template #iconBtnTmp let-item="item" let-apis="apis" let-index="index">
+    <button
+      eo-ng-button
+      nzType="text"
+      (click)="btnClick(btnItem, index, item, apis)"
+      eoNgFeedbackTooltip
+      nzTooltipTitle="{{ btnItem.title }}"
+      class="mr-btnbase eo-list-btn"
+    >
+      <svg class="iconpark-icon"><use [attr.href]="'#' + btnItem.icon"></use></svg>
+    </button>
+  </ng-template>
+</div>
+<!-- Tool Button -->
+<ng-template #toolBtnTmp dir="rtl">
+  <div class="eo-table-tool-bar">
+    <!-- Show Column -->
+    <eo-ng-dropdown
+      *ngIf="setting?.toolButton?.columnVisible"
+      [title]="dropdownTitleTmp"
+      [itemTmp]="dropdownMenTmp"
+      [menus]="columnVisibleMenus"
+    >
+    </eo-ng-dropdown>
+    <ng-template #dropdownTitleTmp>
+      <svg class="iconpark-icon"><use href="#view-list-781pg17c"></use></svg>
+    </ng-template>
+    <ng-template #dropdownMenTmp let-item="item">
+      <label
+        (click)="stopPropagation($event)"
+        (ngModelChange)="toggleColumnVisible($event, item)"
+        eo-ng-checkbox
+        [(ngModel)]="item.checked"
+        >{{ item.title }}</label
+      >
+    </ng-template>
+    <!-- Full screen -->
+    <button *ngIf="setting?.toolButton?.fullScreen" eo-ng-button nzType="text" (click)="screenAll(0)">
+      <svg class="iconpark-icon"><use href="#full-screen"></use></svg>
+    </button>
   </div>
 </ng-template>

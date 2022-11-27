@@ -88,6 +88,7 @@ export class ImportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = await window.eo?.loadFeatureModule?.(this.currentExtension);
+    console.log(this.currentExtension)
     const { name, content } = this.uploadData;
     const [data, err] = module[action](content);
     // console.log('import data', structuredClone?.(data));

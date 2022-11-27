@@ -3,3 +3,14 @@
     height: 40px;
   }
 }
+.eo-table-tool-bar {
+}
+.eo-ng-table-full-screen {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--MAIN_BG);
+  z-index: 11;
+}
