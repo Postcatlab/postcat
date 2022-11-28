@@ -12,7 +12,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import { getExpandGroupByKey, listToTree } from '../../../../utils/tree/tree.utils';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { ModalService } from '../../../../shared/services/modal.service';
-import { StorageService } from '../../../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ElectronService } from '../../../../core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/pages/workspace/import-api/import-api.component';

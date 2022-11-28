@@ -2,7 +2,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
@@ -68,7 +67,6 @@ export class MemberComponent implements OnInit {
     public message: MessageService,
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService,
-    public workspace: WorkspaceService,
     public dataSource: DataSourceService
   ) {
     this.isInvateModalVisible = false;
@@ -89,7 +87,7 @@ export class MemberComponent implements OnInit {
       this.message.send({ type: 'need-config-remote', data: {} });
       return;
     }
-    const { id: currentWorkspaceID } = this.workspace.currentWorkspace;
+    const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
     const [wData, wErr]: any = await this.api.api_workspaceMember({
       workspaceID: currentWorkspaceID,
     });
@@ -145,7 +143,7 @@ export class MemberComponent implements OnInit {
       const [user] = uData;
       const { id } = user;
 
-      const { id: workspaceID } = this.workspace.currentWorkspace;
+      const { id: workspaceID } = this.store.getCurrentWorkspaceInfo;
       const [aData, aErr]: any = await this.api.api_workspaceAddMember({
         workspaceID,
         userIDs: [id],
@@ -165,7 +163,7 @@ export class MemberComponent implements OnInit {
       // * 关闭弹窗
       this.isInvateModalVisible = false;
 
-      const { id: currentWorkspaceID } = this.workspace.currentWorkspace;
+      const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
       const [wData, wErr]: any = await this.api.api_workspaceMember({
         workspaceID: currentWorkspaceID,
       });
@@ -210,8 +208,7 @@ export class MemberComponent implements OnInit {
   }
   btny703n5Status() {
     // * disabled status status
-    return;
-    return this.workspace.currentWorkspaceID !== -1 && this.workspace.authEnum.canEdit;
+    return !this.store.isLocal && this.store.authEnum.canEdit;
   }
   async e97uoiuCallback($event) {
     // * eoOnRemove event callback
@@ -232,7 +229,7 @@ export class MemberComponent implements OnInit {
       return;
     }
 
-    const { id: workspaceID } = this.workspace.currentWorkspace;
+    const { id: workspaceID } = this.store.getCurrentWorkspaceInfo;
 
     const { id } = $event;
 
@@ -250,7 +247,7 @@ export class MemberComponent implements OnInit {
       }
       return;
     }
-    const { id: currentWorkspaceID } = this.workspace.currentWorkspace;
+    const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
     const [wData, wErr]: any = await this.api.api_workspaceMember({
       workspaceID: currentWorkspaceID,
     });

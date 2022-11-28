@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import {
   ApiTestData,
   ApiTestHistoryFrame,

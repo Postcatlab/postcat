@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 type UserMeta = {
   username: string;
@@ -18,7 +18,7 @@ export class ManageAccessComponent implements OnInit {
   @Input() loading = false;
   @Output() eoOnRemove = new EventEmitter<UserMeta>();
   searchValue: string;
-  constructor(public workspaceService: WorkspaceService) {}
+  constructor(public store: StoreService) {}
   get seachMember() {
     if (!this.searchValue) {
       return this.data;

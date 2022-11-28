@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiData, StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from '../../shared/services/message';
-import { StorageService } from '../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { Router } from '@angular/router';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -16,8 +16,7 @@ export class ApiService {
     private message: EoNgFeedbackMessageService,
     private router: Router,
     private storage: StorageService,
-    private http: RemoteService,
-    private store: StoreService
+    private http: RemoteService
   ) {}
   get(uuid): Promise<ApiData> {
     return new Promise(async (resolve) => {

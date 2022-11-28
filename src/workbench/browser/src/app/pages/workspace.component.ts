@@ -1,5 +1,4 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
@@ -15,7 +14,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
     </h2>
     <section class="py-2"><eo-api-overview></eo-api-overview></section>
     <nz-divider></nz-divider>
-    <section class="" *ngIf="workspace.currentWorkspaceID !== -1 && workspace.authEnum.canEdit">
+    <section class="" *ngIf="!store.isLocal && store.authEnum.canEdit">
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Edit Workspace</span>
       </h2>
@@ -67,7 +66,6 @@ export class WorkspaceComponent implements OnInit {
   isDelWspBtnLoading;
   constructor(
     public modal: NzModalService,
-    public workspace: WorkspaceService,
     public eMessage: EoNgFeedbackMessageService,
     public store: StoreService,
     public message: MessageService,
@@ -84,8 +82,8 @@ export class WorkspaceComponent implements OnInit {
       workspace: [null, [Validators.required]],
     });
 
-    const { title: currentWsp } = this.workspace.currentWorkspace;
-    this.workspace.updateProjectID(this.workspace.currentWorkspaceID);
+    const { title: currentWsp, id } = this.store.getCurrentWorkspaceInfo;
+    this.store.updateProjectID(id);
     // * get WspName form values
     this.validateWspNameForm.patchValue({
       workspace: currentWsp,
@@ -95,7 +93,7 @@ export class WorkspaceComponent implements OnInit {
     // * click event callback
     this.isSaveBtnBtnLoading = true;
     const btnSaveBtnRunning = async () => {
-      const { id: currentWsp } = this.workspace.currentWorkspace;
+      const { id: currentWsp } = this.store.getCurrentWorkspaceInfo;
       const { workspace: title } = this.validateWspNameForm.value;
       const [data, err]: any = await this.api.api_workspaceEdit({
         workspaceID: currentWsp,
@@ -124,7 +122,7 @@ export class WorkspaceComponent implements OnInit {
         }
         return;
       }
-      this.workspace.setWorkspaceList(list);
+      this.store.setWorkspaceList(list);
     };
     await btnSaveBtnRunning();
     this.isSaveBtnBtnLoading = false;
@@ -152,7 +150,7 @@ You cannot restore it once deleted!`,
         return;
       }
 
-      const { id: currentWsp } = this.workspace.currentWorkspace;
+      const { id: currentWsp } = this.store.getCurrentWorkspaceInfo;
       const [data, err]: any = await this.api.api_workspaceDelete({
         workspaceID: currentWsp,
       });
@@ -167,7 +165,7 @@ You cannot restore it once deleted!`,
         return;
       }
       this.eMessage.success($localize`Delete success !`);
-      await this.workspace.setLocalSpace();
+      await this.store.setCurrentWorkspace(this.store.getLocalWorkspaceInfo);
       const [list, wErr]: any = await this.api.api_workspaceList({});
       if (wErr) {
         if (wErr.status === 401) {
@@ -179,7 +177,7 @@ You cannot restore it once deleted!`,
         }
         return;
       }
-      this.workspace.setWorkspaceList(list);
+      this.store.setWorkspaceList(list);
     };
     await btnDelWspRunning();
     this.isDelWspBtnLoading = false;

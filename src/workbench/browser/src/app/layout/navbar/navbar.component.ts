@@ -6,7 +6,6 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
-import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { LanguageService } from '../../core/services/language/language.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 @Component({
@@ -36,8 +35,7 @@ export class NavbarComponent implements OnInit {
     private message: MessageService,
     public lang: LanguageService,
     public store: StoreService,
-    public dataSourceService: DataSourceService,
-    public workspaceService: WorkspaceService
+    public dataSourceService: DataSourceService
   ) {}
 
   async ngOnInit(): Promise<void> {

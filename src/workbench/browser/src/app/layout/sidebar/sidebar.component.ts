@@ -4,10 +4,9 @@ import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension
 import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
-import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service'
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -22,10 +21,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     public sidebar: SidebarService,
     private dataSourceService: DataSourceService,
     private messageService: MessageService,
-    private workspace: WorkspaceService,
     private store: StoreService
-  ) {
-  }
+  ) {}
   toggleCollapsed(): void {
     this.sidebar.toggleCollapsed();
   }
@@ -75,10 +72,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.router.navigate([route], { queryParamsHandling: 'merge' });
       return;
     }
-    const isLocal = this.workspace.currentWorkspaceID === -1;
     this.dataSourceService.checkRemoteCanOperate(() => {
       this.router.navigate([route], { queryParamsHandling: 'merge' });
-    }, isLocal);
+    }, this.store.isLocal);
   }
   ngOnDestroy(): void {
     this.destroy = true;
@@ -102,7 +98,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/api',
         route: 'home/api/http/test',
       },
-      ...(!this.workspace.isLocal
+      ...(!this.store.isLocal
         ? [
             {
               title: $localize`Member`,

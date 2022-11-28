@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from '../../shared/services/message';
 import { RemoteService } from '../../shared/services/storage/remote.service';
-import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DataSourceService } from '../../shared/services/data-source/data-source.service';
@@ -46,7 +45,6 @@ export class GetShareLinkComponent implements OnInit {
     private web: WebService,
     private message: MessageService,
     private lang: LanguageService,
-    public workspaceService: WorkspaceService,
     private http: RemoteService
   ) {}
   handleCopy() {
@@ -66,7 +64,7 @@ export class GetShareLinkComponent implements OnInit {
     }
   }
   async getShareLink() {
-    if (this.workspaceService.isLocal) {
+    if (this.store.isLocal) {
       return '';
     }
     if (!this.store.isLogin) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 
@@ -15,8 +15,7 @@ export class ProjectService {
     private apiService: ApiService,
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage
-  ) {
-  }
+  ) {}
 
   setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
