@@ -3,24 +3,29 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   QueryList,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { head, isUndefined, omitBy } from 'lodash-es';
+import _ from 'lodash';
+import { isUndefined, omit, omitBy } from 'lodash-es';
+import { eoDeepCopy, isEmptyValue } from '../../../utils/index.utils';
 
 @Component({
   selector: 'eo-ng-table-pro',
   templateUrl: './table-pro.component.html',
   styleUrls: ['./table-pro.component.scss'],
 })
-export class EoTableProComponent implements OnInit, AfterViewInit {
+export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() columns;
   @Input() nzData;
   @Input() setting: {
+    isEdit?: boolean;
     isLevel?: boolean;
     primaryKey?: string;
     rowSortable?: boolean;
@@ -45,13 +50,16 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
   @ViewChild('toolBtnTmp', { read: TemplateRef, static: false })
   toolBtnTmp: TemplateRef<any>;
 
+  @ViewChild('iconBtnDelete', { read: TemplateRef, static: false })
+  iconBtnDelete: TemplateRef<any>;
+
   tbodyConf = [];
   theadConf = [];
   iconBtns = [];
 
   columnVisibleMenus = [];
   private isFullScreenStatus = false;
-  private BNT_MUI = {
+  BNT_MUI = {
     add: {
       icon: 'plus',
       title: $localize`Add Row`,
@@ -74,14 +82,34 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
     },
   };
   constructor() {}
-  ngOnInit(): void {
-    this.generateBtnTemplate();
+  ngOnInit(): void {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.columns?.firstChange) {
+      this.setting.isEdit = this.autoSetIsEdit();
+      console.log(this.setting.isEdit);
+      this.generateBtnTemplate();
+    }
+    if (changes.nzData) {
+      if (this.setting.isEdit) {
+        this.nzData.push(eoDeepCopy(this.nzDataItem));
+      }
+    }
+  }
+  getPureNzData() {
+    const result = this.nzData.map((val) => omit(val, ['eoKey']));
+    return result.filter((val) => !isEmptyValue(val));
   }
   ngAfterViewInit() {
     this.initConfig();
   }
   handleDataChange(data) {
     this.nzDataChange.emit(data);
+  }
+  autoSetIsEdit() {
+    if (_.has(this.setting, 'isEdit')) {
+      return this.setting.isEdit;
+    }
+    return this.columns.some((col) => ['select', 'autoComplete', 'input'].includes(col.type));
   }
   initConfig() {
     let btnIndex = 0;
@@ -103,8 +131,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
     }
     //Set ColumnVisible
     this.setting.toolButton = this.setting.toolButton || {};
-    if (!this.setting.toolButton.hasOwnProperty('columnVisible')) {
-      this.setting.toolButton.columnVisible = true;
+    if (!_.has(this.setting.toolButton, 'columnVisible')) {
+      this.setting.toolButton.columnVisible = this.columns.length >= 7 ? true : false;
     }
     this.columns.forEach((col) => {
       const colID = col.id || col.key;
@@ -131,12 +159,21 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
             const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
             const defaultBtn = this.BNT_MUI[btn.action];
             if (defaultBtn) {
-              if (btn.action === 'insert') {
-                newBtn.title = this.iconBtnTmp.get(btnIndex++);
-              } else {
-                newBtn.icon = btn.icon || defaultBtn.icon;
-                newBtn.title = defaultBtn.title;
-                newBtn.action = defaultBtn.action;
+              switch (btn.action) {
+                case 'insert': {
+                  newBtn.title = this.iconBtnTmp.get(btnIndex++);
+                  break;
+                }
+                case 'delete': {
+                  newBtn.title = this.iconBtnDelete;
+                  break;
+                }
+                default: {
+                  newBtn.icon = btn.icon || defaultBtn.icon;
+                  newBtn.title = defaultBtn.title;
+                  newBtn.action = defaultBtn.action;
+                  break;
+                }
               }
             }
             switch (btn.type) {
@@ -190,7 +227,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
           checked: this.columnVisibleStatus[colID],
         });
         if (!col.showFn) {
-          body.showFn = header.showFn = () => this.columnVisibleStatus[colID];
+          body.showFn = header.showFn = (item) => this.columnVisibleStatus[colID];
         }
       }
       if (col.showFn) {

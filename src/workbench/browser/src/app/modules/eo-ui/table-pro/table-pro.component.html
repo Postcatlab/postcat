@@ -1,6 +1,6 @@
-{{ nzData | json }}
+<!-- {{ nzData | json }} -->
 <eo-ng-table
-  class="full-screen-container"
+  class="full-screen-container "
   [nzDataItem]="nzDataItem"
   [(nzData)]="nzData"
   [nzIsLevel]="setting.isLevel"
@@ -34,6 +34,20 @@
     </button>
   </ng-template>
 </div>
+<ng-template #iconBtnDelete let-apis="apis" let-index="index" let-item="item">
+  <ng-container *ngIf="!apis.checkIsCurrentLevelLastItem(item)">
+    <button
+      eo-ng-button
+      nzType="text"
+      eoNgFeedbackTooltip
+      nzTooltipTitle="{{ BNT_MUI['delete'].title }}"
+      (click)="apis.deleteRow(index)"
+    >
+      <svg class="iconpark-icon"><use [attr.href]="'#' + BNT_MUI['delete'].icon"></use></svg>
+    </button>
+  </ng-container>
+</ng-template>
+
 <!-- Tool Button -->
 <ng-template #toolBtnTmp dir="rtl">
   <div class="eo-table-tool-bar">

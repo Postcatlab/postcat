@@ -148,3 +148,8 @@ nz-resize-handle.container-draggable {
   }
 }
 
+.table-border-all{
+  .eo-ng-table{
+    border: 1px solid var(--BORDER);
+  }
+}

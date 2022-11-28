@@ -17,6 +17,10 @@ import { eoDeepCopy } from '../../../utils/index.utils';
 export class EnvComponent implements OnInit, OnDestroy {
   // @ViewChild('table') table: EoTableComponent; // * child component ref
   @Output() private statusChange: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild('envParams')
+  envParamsComponent: any;
+
   varName = $localize`{{Variable Name}}`;
   modalTitle = $localize`:@@New Environment:New Environment`;
   isVisible = false;
@@ -25,7 +29,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   envInfo: any = {};
   envList: any[] = [];
   activeUuid = 0;
-  envDataItem={ name: '', value: '', description: '' };
+  envDataItem = { name: '', value: '', description: '' };
   envListColumns = [
     { title: $localize`Name`, type: 'input', key: 'name' },
     { title: $localize`Value`, type: 'input', key: 'value' },
@@ -137,40 +141,40 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleSaveEnv(uuid: string | number | undefined = undefined) {
     // * update list after call save api
-    const { parameters, name, ...other } = this.envInfo;
+    const { name, ...other } = this.envInfo;
     if (!name) {
       this.message.error($localize`Name is not allowed to be empty`);
       return;
     }
-    const data = parameters?.filter((it) => it.name || it.value);
+    const parameters = this.envParamsComponent.getPureNzData()?.filter((it) => it.name || it.value);
     if (uuid != null) {
+      this.storage.run('environmentUpdate', [{ ...other, name, parameters }, uuid], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.message.success($localize`Edited successfully`);
+          await this.getAllEnv(this.activeUuid);
+          if (this.envUuid === Number(uuid)) {
+            this.envUuid = Number(uuid);
+          }
+          this.handleCancel();
+        } else {
+          this.message.error($localize`Failed to edit`);
+        }
+      });
+    } else {
       this.storage.run(
-        'environmentUpdate',
-        [{ ...other, name, parameters: data }, uuid],
+        'environmentCreate',
+        [Object.assign({}, this.envInfo, { parameters })],
         async (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
-            this.message.success($localize`Edited successfully`);
-            await this.getAllEnv(this.activeUuid);
-            if (this.envUuid === Number(uuid)) {
-              this.envUuid = Number(uuid);
-            }
+            this.message.success($localize`Added successfully`);
+            this.activeUuid = Number(result.data.uuid);
+            await this.getAllEnv();
             this.handleCancel();
           } else {
-            this.message.error($localize`Failed to edit`);
+            this.message.error($localize`Failed to add`);
           }
         }
       );
-    } else {
-      this.storage.run('environmentCreate', [this.envInfo], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.message.success($localize`Added successfully`);
-          this.activeUuid = Number(result.data.uuid);
-          await this.getAllEnv();
-          this.handleCancel();
-        } else {
-          this.message.error($localize`Failed to add`);
-        }
-      });
     }
   }
 
