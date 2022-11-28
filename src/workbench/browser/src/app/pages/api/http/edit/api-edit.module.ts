@@ -13,7 +13,6 @@ import { EoNgButtonModule } from 'eo-ng-button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -41,13 +40,12 @@ const NZ_COMPONETS = [
   NzFormModule,
   NzSelectModule,
   NzTreeSelectModule,
-  NzCollapseModule,
   NzTabsModule,
   NzRadioModule,
   NzDividerModule,
   NzAffixModule,
   NzPopconfirmModule,
-  NzBadgeModule
+  NzBadgeModule,
 ];
 const COMPONENTS = [
   ApiEditComponent,

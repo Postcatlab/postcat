@@ -43,7 +43,6 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzListModule } from 'ng-zorro-antd/list';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
@@ -120,7 +119,6 @@ const SHARED_UI_MODULE = [
   NzTypographyModule,
   NzListModule,
   NzLayoutModule,
-  NzCollapseModule,
   NzTagModule,
   NzPopconfirmModule,
 ] as const;

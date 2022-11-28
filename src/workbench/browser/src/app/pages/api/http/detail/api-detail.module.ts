@@ -19,11 +19,10 @@ import { ApiDetailQueryComponent } from './query/api-detail-query.component';
 import { ApiDetailRestComponent } from './rest/api-detail-rest.component';
 
 import { ApiDetailUtilService } from './api-detail-util.service';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { RouterModule } from '@angular/router';
 import { ApiMockComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.component';
 
-const NZ_COMPONETS = [EoNgButtonModule, NzCollapseModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
+const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
 const COMPONENTS = [
   ApiDetailComponent,
   ApiDetailHeaderComponent,
