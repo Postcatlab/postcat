@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
@@ -17,14 +16,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 })
 export class DataSourceService {
   isConnectRemote = false;
-  /** data source type @type { DataSourceType }  */
-  get dataSourceType(): DataSourceType {
-    return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
-  }
-  /** Is it a remote data source */
-  get isRemote() {
-    return this.dataSourceType === 'http';
-  }
+
   /** get mock url */
   get mockUrl() {
     return window.eo?.getMockUrl?.();

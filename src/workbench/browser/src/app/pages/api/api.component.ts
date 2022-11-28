@@ -84,7 +84,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     public web: WebService,
-    public workspace:WorkspaceService,
+    public workspace: WorkspaceService,
     public store: StoreService,
     private http: RemoteService
   ) {}
@@ -113,7 +113,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchRouterChange();
-    this.watchDataSourceChange();
     this.initEnv();
     this.watchEnvChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
@@ -126,19 +125,6 @@ export class ApiComponent implements OnInit, OnDestroy {
     $event.stopPropagation();
     this.web.jumpToClient($localize`Eoapi Client is required to use Mock.`);
   }
-  watchDataSourceChange(): void {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'switchDataSource':
-            this.storage.toggleDataSource(inArg.data);
-            break;
-        }
-      });
-  }
-
   /**
    * Get current API ID to show content tab
    */
