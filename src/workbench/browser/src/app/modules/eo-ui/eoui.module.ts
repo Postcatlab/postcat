@@ -6,6 +6,8 @@ import { EoNgButtonModule } from 'eo-ng-button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
+import { EoNgCollapseModule } from './collapse/collapse.module';
+
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { EoMonacoEditorComponent } from './monaco-editor/monaco-editor.component';
 import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
@@ -22,12 +24,13 @@ const antdModules = [
   EoNgButtonModule,
   NzInputModule,
   NzSelectModule,
-  EoNgFeedbackTooltipModule
+  EoNgFeedbackTooltipModule,
+  EoNgCollapseModule,
 ];
 const COMPONENTS = [EoTableProComponent, EoMonacoEditorComponent];
 @NgModule({
   declarations: [...COMPONENTS],
-  imports: [CommonModule,EoNgCheckboxModule,EoNgTableModule, FormsModule, EoIconparkIconModule, ...antdModules],
-  exports: [...COMPONENTS,TabComponentModule, EoIconparkIconModule],
+  imports: [CommonModule, EoNgCheckboxModule, EoNgTableModule, FormsModule, EoIconparkIconModule, ...antdModules],
+  exports: [...COMPONENTS, ...antdModules, TabComponentModule, EoIconparkIconModule],
 })
 export class EouiModule {}
