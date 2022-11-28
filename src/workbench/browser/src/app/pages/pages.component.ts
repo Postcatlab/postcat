@@ -36,7 +36,6 @@ export class PagesComponent implements OnInit {
       type: 'input',
       key: 'description', //单元格值对应的字段键
       placeholder: '请输入...',
-      width: 150,
       columnShow: 'fixed', //['fixed'|boolean]固定显示，不能被列表项操作,默认 true
       errorTip: '这是错误提示', //string | TemplateRef<void>
     },
@@ -48,20 +47,17 @@ export class PagesComponent implements OnInit {
       type: 'select', //默认 Text/checkbox/sort/input/btn/autoComplete
       filterable: true,
       columnShow: false,
-      resizeable: false, //如果 setting.columnResizable 为 true，默认 true
       enums: [
         { title: 'string', value: 'string' },
         { title: 'number', value: 'number' },
       ], //筛选项&渲染
-      filterFn: true, //不传或 true 则使用自定义过滤函数,
-      showFn: (item) => {
-      },
+      filterFn: true, //不传或 true 则使用自定义过滤函数
     },
     {
       title: '状态',
       type: 'text', //默认 Text/checkbox/sort/input/btn/autoComplete
       key: 'status',
-      width: 300,
+      width: 150,
       sortable: true, //排序
       filterable: true,
       enums: [
@@ -72,6 +68,8 @@ export class PagesComponent implements OnInit {
     },
     {
       type: 'btnList',
+      width: 170,
+      resizeable: false, //如果 setting.columnResizable 为 true，默认 true
       right: true, //是否固定在右边
       btns: [
         {

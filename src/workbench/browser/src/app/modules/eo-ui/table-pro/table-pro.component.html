@@ -1,20 +1,22 @@
 {{ nzData | json }}
-{{ setting.isLevel }}
 <eo-ng-table
   class="full-screen-container"
-  [nzDataItem]="{ status: 'solved' }"
+  [nzDataItem]="nzDataItem"
   [(nzData)]="nzData"
   [nzIsLevel]="setting.isLevel"
-  [nzDraggable]="setting.isDraggable"
+  [nzDraggable]="setting.rowSortable"
   [nzTbody]="tbodyConf"
+  [nzExpand]="nzExpand"
   nzPrimaryKey="setting.primaryKey"
   nzChildKey="children"
+  [nzCheckAddRow]="checkAdd"
+  (nzDataChange)="handleDataChange($event)"
   [nzThead]="theadConf"
 ></eo-ng-table>
 <!-- Enum template -->
 <ng-template #enums let-item="item" let-rowItem="rowItem">
-  <div class="{{ rowItem.enums[item[rowItem.keyNmae]].class }}">
-    {{ rowItem.enums[item[rowItem.keyNmae]].title }}
+  <div class="{{ rowItem.enums[item[rowItem.keyName]].class }}">
+    {{ rowItem.enums[item[rowItem.keyName]].title }}
   </div>
 </ng-template>
 <!-- Operation Button -->

@@ -20,7 +20,16 @@ import { head, isUndefined, omitBy } from 'lodash-es';
 export class EoTableProComponent implements OnInit, AfterViewInit {
   @Input() columns;
   @Input() nzData;
-  @Input() setting;
+  @Input() setting: {
+    isLevel?: boolean;
+    primaryKey?: string;
+    rowSortable?: boolean;
+    toolButton?: {
+      columnVisible?: boolean;
+      fullScreen?: boolean;
+    };
+  } = {};
+  @Input() nzDataItem?;
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
   @Output() nzTrClick = new EventEmitter();
@@ -46,12 +55,12 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
     add: {
       icon: 'plus',
       title: $localize`Add Row`,
-      action: 'addRow',
+      action: 'add',
     },
     addChild: {
       icon: 'plus',
       title: $localize`Add Child Row`,
-      action: 'addChildRow',
+      action: 'addChild',
     },
     insert: {
       icon: 'arrow-down',
@@ -61,7 +70,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
     delete: {
       icon: 'delete',
       title: $localize`Delete`,
-      action: 'deleteRow',
+      action: 'delete',
     },
   };
   constructor() {}
@@ -70,6 +79,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     this.initConfig();
+  }
+  handleDataChange(data) {
+    this.nzDataChange.emit(data);
   }
   initConfig() {
     let btnIndex = 0;
@@ -97,8 +109,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
     this.columns.forEach((col) => {
       const colID = col.id || col.key;
       //Set component
-      const header = omitBy({ title: col.title }, isUndefined);
-      const body: any = omitBy({ key: col.key, type: col.type }, isUndefined);
+      const header = omitBy({ title: col.title, right: col.right, resizeable: col.resizeable }, isUndefined);
+      const body: any = omitBy({ key: col.key, type: col.type, right: col.right }, isUndefined);
       switch (col.type) {
         case 'select': {
           body.opts = col.enums.map((item) => ({ label: item.title, value: item.value }));
@@ -106,10 +118,14 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
         }
         case 'input':
         case 'autoComplete': {
-          body.placeholder = col.placeholder;
+          body.placeholder = col.placeholder || (typeof col.title === 'string' ? col.title : '');
           break;
         }
         case 'btnList': {
+          //Add toolBtn to btnList
+          //TODO Add last when has two btnList
+          header.title = this.toolBtnTmp;
+
           body.type = 'btn';
           body.btns = col.btns.map((btn) => {
             const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
@@ -137,7 +153,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
         case 'text':
         default: {
           if (col.enums) {
-            body.keyNmae = col.key;
+            body.keyName = col.key;
             body.key = this.enums;
             body.enums = col.enums.reduce((a, v) => ({ ...a, [v.value]: { title: v.title, class: v.class } }), {});
           }
@@ -160,6 +176,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
         header.filterOpts = col.enums.map((item) => ({ text: item.title, value: item.value }));
       }
       //Set Sort
+      if (col.sortable) {
+        header.showSort = true;
+        header.sortDirections = ['ascend', 'descend', null];
+      }
 
       //Set Column visibe
       if (col.columnShow !== 'fixed' && col.type !== 'btnList') {
@@ -180,12 +200,6 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
       this.tbodyConf.push(body);
     });
 
-    //Set toolBtn
-    this.theadConf.push({
-      title: this.toolBtnTmp,
-      width: 170,
-      right: true,
-    });
     console.log(this.columnVisibleMenus, this.theadConf, this.tbodyConf);
   }
   btnClick(btnItem, index, item, apis) {
@@ -207,55 +221,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
       }
     }
   }
-  private generateBtnTemplate() {
-    const BNT_MUI = {
-      add: {
-        icon: 'plus',
-        title: $localize`Add Row`,
-        action: 'addRow',
-      },
-      addChild: {
-        icon: 'plus',
-        title: $localize`Add Child Row`,
-        action: 'addChildRow',
-      },
-      insert: {
-        icon: 'arrow-down',
-        title: $localize`Add Row Down`,
-        action: 'insertRow',
-      },
-      delete: {
-        icon: 'delete',
-        title: $localize`Delete`,
-        action: 'deleteRow',
-      },
-    };
-    this.columns.forEach((col, index) => {
-      if (col.type !== 'btnList') {
-        return;
-      }
-      col.btns.forEach((btn, btnIndex) => {
-        //only dropdown/action='insert' need table-pro custom template
-        if (btn.type !== 'dropdown' && btn.action !== 'insert') {
-          return;
-        }
-        const iconBtn: any = { index, btnIndex };
-        if (btn.icon) {
-          iconBtn.icon = btn.icon;
-        }
-        const defaultBtn = BNT_MUI[btn.action];
-        if (defaultBtn) {
-          iconBtn.icon = btn.icon || defaultBtn.icon;
-          iconBtn.title = defaultBtn.title;
-          iconBtn.action = defaultBtn.action;
-        }
-        if (btn.click) {
-          iconBtn.customClick = true;
-        }
-        this.iconBtns.push(iconBtn);
-      });
-    });
-  }
+
   screenAll(index: number = 0) {
     this.isFullScreenStatus = !this.isFullScreenStatus;
     const domElem = document.getElementsByClassName('full-screen-container')[index];
@@ -276,7 +242,34 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
     this.columnVisibleStatus[item.key] = event;
     this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
   }
-  checkAdd() {
+  checkAdd(item) {
     return true;
+  }
+  private generateBtnTemplate() {
+    this.columns.forEach((col, index) => {
+      if (col.type !== 'btnList') {
+        return;
+      }
+      col.btns.forEach((btn, btnIndex) => {
+        //only dropdown/action='insert' need table-pro custom template
+        if (btn.type !== 'dropdown' && btn.action !== 'insert') {
+          return;
+        }
+        const iconBtn: any = { index, btnIndex };
+        if (btn.icon) {
+          iconBtn.icon = btn.icon;
+        }
+        const defaultBtn = this.BNT_MUI[btn.action];
+        if (defaultBtn) {
+          iconBtn.icon = btn.icon || defaultBtn.icon;
+          iconBtn.title = defaultBtn.title;
+          iconBtn.action = defaultBtn.action;
+        }
+        if (btn.click) {
+          iconBtn.customClick = true;
+        }
+        this.iconBtns.push(iconBtn);
+      });
+    });
   }
 }

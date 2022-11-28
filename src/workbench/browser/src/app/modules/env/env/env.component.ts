@@ -7,6 +7,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { StorageService } from '../../../shared/services/storage';
 
 import { Subject } from 'rxjs';
+import { eoDeepCopy } from '../../../utils/index.utils';
 
 @Component({
   selector: 'eo-env',
@@ -24,11 +25,22 @@ export class EnvComponent implements OnInit, OnDestroy {
   envInfo: any = {};
   envList: any[] = [];
   activeUuid = 0;
+  envDataItem={ name: '', value: '', description: '' };
   envListColumns = [
-    { title: $localize`Name`, key: 'name', isEdit: true },
-    { title: $localize`Value`, key: 'value', isEdit: true },
-    { title: $localize`:@@Description:Description`, key: 'description', isEdit: true },
-    { title: $localize`Operate`, slot: 'action', width: '15%' },
+    { title: $localize`Name`, type: 'input', key: 'name' },
+    { title: $localize`Value`, type: 'input', key: 'value' },
+    { title: $localize`:@@Description:Description`, type: 'input', key: 'description' },
+    {
+      title: $localize`Operate`,
+      type: 'btnList',
+      width: 170,
+      right: true,
+      btns: [
+        {
+          action: 'delete',
+        },
+      ],
+    },
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -91,11 +103,6 @@ export class EnvComponent implements OnInit, OnDestroy {
       }
     });
   }
-  handleDeleteParams(index) {
-    // * delete params in table
-    const data = JSON.parse(JSON.stringify(this.envInfo.parameters));
-    this.envInfo.parameters = data.filter((it, i) => i !== index);
-  }
   handleEditEnv(uuid) {
     this.modalTitle = $localize`Edit Environment`;
     this.handleShowModal();
@@ -105,6 +112,7 @@ export class EnvComponent implements OnInit, OnDestroy {
         if (result.status === StorageResStatus.success) {
           this.envInfo = result.data ?? {};
           const parameters = this.envInfo.parameters ?? [];
+          //! Compatible some error data
           this.envInfo.parameters = typeof parameters === 'string' ? JSON.parse(parameters) : parameters;
           this.activeUuid = result.data?.uuid ?? null;
           resolve(true);
@@ -168,16 +176,13 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleCancel(): void {
     this.isVisible = false;
-    // this.envList = [];
     this.envInfo = {};
     this.messageService.send({ type: 'updateEnv', data: {} });
   }
 
   handleShowModal() {
-    // this.handleAddEnv(null);
     this.isVisible = true;
     this.isOpen = false;
-    // this.getAllEnv(this.envUuid);
   }
 
   handleEnvSelectStatus(event: boolean) {
