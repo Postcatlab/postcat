@@ -10,13 +10,14 @@ import { GlobalProvider } from './globalProvider';
 @Component({
   selector: 'extension-app',
   template: `
-    <div style="transform: translate(0)" class="w-[90vw] h-[90vh] overflow-auto">
+    <div style="transform: translate(0)">
       <ngx-wujie
         *ngIf="url"
         width="100%"
         height="100%"
         [name]="name"
-        url="http://127.0.0.1:8080/"
+        [exec]="true"
+        url="https://www.baidu.com/"
         (beforeLoad)="onBeforeLoad($event)"
         (beforeMount)="onBeforeMount($event)"
         (afterMount)="onAfterMount($event)"
