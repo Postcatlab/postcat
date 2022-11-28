@@ -5688,80 +5688,80 @@ env-paths@^2.2.0, env-paths@^2.2.1:
   resolved "https://registry.npmmirror.com/env-paths/-/env-paths-2.2.1.tgz#420399d416ce1fbe9bc0a07c62fa68d67fd0f8f2"
   integrity sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==
 
-eo-ng-auto-complete@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-auto-complete/-/eo-ng-auto-complete-0.0.79.tgz#3df8a966ab3cfb281b2deeb414f919c394f298fb"
-  integrity sha512-sxuvQ0u7QAeGCvYVre7c9TNAC8ThEObPZ9LurIDuxcrGWmNocxUQ62mQlL4Zzt1byC8HvdwrJwETSusYRvIRnw==
+eo-ng-auto-complete@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-auto-complete/-/eo-ng-auto-complete-0.0.80.tgz#f08b7c6930f27100993966c72e4c3f032b4fbed4"
+  integrity sha512-bzJkeHfjTpqBkkgfotFLdHMnXt887HZErppN2UCZ/UtAMD6HHWCCl1BSWE047unQ3R+AowfcXBbg1r1LXixWew==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-button@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-button/-/eo-ng-button-0.0.79.tgz#0a83450fb771cf957005a3ee0a9a04376090e4df"
-  integrity sha512-B0rezvH5ccViG3WTRJ3yVDA7PlwStSs+D2GWUG3KxiyDvpMI4zT84DYIUxECbFwoXEh3MSK3ADoyubFhgRpKRw==
+eo-ng-button@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-button/-/eo-ng-button-0.0.80.tgz#762d539017ac7a2c0f9c65832231add75ef993a8"
+  integrity sha512-CZvsjvyT0lahqu80lJiKo85wWaXc5e7yRaLaQLgJIetnWmmj6YjDNrWT5sggA4sB0kldQo7QiLAnpnUa3yEgLA==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-checkbox@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.79.tgz#78a56072d6c9be48c5406f8bfba87e72634ac316"
-  integrity sha512-A8IVnqu1jaQzg0OXIduFQ91Whvnbem55k2vCDZyx1LSCheUHh/Yw/6L14lg4PRw1UjfYTFHUqa4xqpNzVUClZQ==
+eo-ng-checkbox@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.80.tgz#4c1cc45a24afe1ce293156abb0f7af460fec18c8"
+  integrity sha512-iS/uMwMBMz2JOwEo87xlMLnkMN8o4lC2p2piKoFSWh38oHUu0atH9AiJaVRykww790ckNqzwvsQxE4ra0NWKqQ==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-dropdown@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-dropdown/-/eo-ng-dropdown-0.0.79.tgz#703f1bfe5a26071386865217d6f16655f2cda266"
-  integrity sha512-h8Wl+bdEMTQrcn2pq9Wb4puMc31MZCoN2+4hmNxF3jky0uhYG0FadQ/DYtrvRs2q8WNERmop1y3fN+XI1oc7Pw==
+eo-ng-dropdown@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-dropdown/-/eo-ng-dropdown-0.0.80.tgz#2c870214014a24b8936bba771a79c7b244fbe828"
+  integrity sha512-gAfKMzJu0u3Bx2WfdGhkuvT5L70DgOj7hDM1RKnNoglgXOsVJUXNLLJrQ+6kTfw2m3b+SZJmiCLAAYxunVyH6g==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-feedback@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-feedback/-/eo-ng-feedback-0.0.79.tgz#3822aeb739ec62bb9bb9e11390fe84dccbd6ab9e"
-  integrity sha512-KUziFXOUxt5kPT/R1P2DeSh0lBw2p/S/RmAX+J9D8c7HCoVv4BcqtSU/G7qHT2UEzLofIru9/Y3RXia1F6QxpA==
+eo-ng-feedback@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-feedback/-/eo-ng-feedback-0.0.80.tgz#d5abcb69182988fa509b847ae6355d9c52571a0b"
+  integrity sha512-1ujb7jWkirvi3i9lo0XOqoN0U0SL3de+/cWaTE11B8Y02eSUhncyXNCYGIsZ1YpYQW9D8awvfCbsNJyt/jqddg==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-input@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-input/-/eo-ng-input-0.0.79.tgz#6b9c706365c48fa226ba3ec6b55d9c2ebd50a8e3"
-  integrity sha512-OiDPlHsfAR6rdQ0Nr1QpAGHAoeszRVKax/o36bTg/CPDjJR/VYOiU0xA291b0E5e0R6PgTtuXQ81nZvtly1irw==
+eo-ng-input@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-input/-/eo-ng-input-0.0.80.tgz#0e3d53be42ef71510479abcb04f3da9f08486e8c"
+  integrity sha512-78kejNY/mcnXfZmdLjWiEif7ONaLMW3+CXwTZvqkSv3rk02wGM13setJ4aJlbsW8sY/QuUgABZ9OxOuhR6OOMA==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-radio@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-radio/-/eo-ng-radio-0.0.79.tgz#f9cc43b149de7514c7d539220bcdc4eda8b45263"
-  integrity sha512-zILE1H9uK2T6wjZ1uIMxDvNS9Fnn4FmPruBFbVnB784W5+tUpu0hq783qyJCmKzLfSVnSRRXLVzOhqoDzOoj4Q==
+eo-ng-radio@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-radio/-/eo-ng-radio-0.0.80.tgz#46ee6d42f2534d401fe940b22c52e43c7093d3e1"
+  integrity sha512-8mmavggBAeOivY1JlEbknvER5VMCUcQTiqUb+uTUaSOSPsMtq2xucZ2NKoMdX5TEiX+/bnhnOk8hr1uiFWwnLA==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-select@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-select/-/eo-ng-select-0.0.79.tgz#58ed1e0b86aa9ae948ac16402e2efbb747294539"
-  integrity sha512-479UG7BXPrmtRyxNN1Xq2IxvNUY8k/9pxOrmtde80BPio74XRBesy4Fkcvdgu1ARw5KLSP7qzwqRPxvEzXliKQ==
+eo-ng-select@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-select/-/eo-ng-select-0.0.80.tgz#dfc4cfd50bd5d567abef8cd06b07df2b276e30a0"
+  integrity sha512-WTgJ3TNx9qogc4lfM6j2DIffFvy2aA2EeHjq5bA+6iuVELkowSsrYKqXJfWuQT84Fmjfw+GScgTmNcr8vl1L0A==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-switch@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-switch/-/eo-ng-switch-0.0.79.tgz#afd3999527cb2e359b0adba3c720b9b47fe54b0c"
-  integrity sha512-Y1HJ3CZ3oBp5BGlU27tHT7jXW6NgfyS+XB7i+WDgrZ2ageSp1VjckC+HjfYJgjfMGgezQZ/R/7xeYPYI39SNyw==
+eo-ng-switch@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-switch/-/eo-ng-switch-0.0.80.tgz#ee9e206ad5872be23ea7125f4027d61eaf30bff1"
+  integrity sha512-yzgbyuQVBXG2q49GSIhDqcCvmFU1cqY0JW6HzeO0FZhcOY8EmbARI91WIh7FbPLzjtZNqNyUnFodIWYs7Um9fg==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-table@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-table/-/eo-ng-table-0.0.79.tgz#47f2ffcc582cd450c09a846819092ab37367c610"
-  integrity sha512-TmDYbgL33eE9TC5uS9Ew03ZxaFasa1tYArd3gdbMGxV7rUU7slkxQyIzruEXnyqWPVU7Np7OqNQrrnXia/XRBw==
+eo-ng-table@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-table/-/eo-ng-table-0.0.80.tgz#689c429505532b648b03f3628622676377a07f5d"
+  integrity sha512-GfJpFHYPxAGlKh8xKFDcxxqOdsrEQVWx5joY4NDKsF3Qd6Wiact6sqEgu6Ms7OnbY0OTQYrsQSwv52P0ovsrVg==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-tabs@0.0.79:
-  version "0.0.79"
-  resolved "https://registry.yarnpkg.com/eo-ng-tabs/-/eo-ng-tabs-0.0.79.tgz#e4d27b07e75adf0873cc8aef0454a7968ed7cd63"
-  integrity sha512-1G29Vbnfox1YcNF7I4I6N3JbAeZ9WHCxw1kp4/66Ige70+VPTyUeDU+sFN9iRdLhGz2B49R5d1pKHLGXwiAPvQ==
+eo-ng-tabs@0.0.80:
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/eo-ng-tabs/-/eo-ng-tabs-0.0.80.tgz#217aa75b561e4ce7e3b37204fac7f84991ce816b"
+  integrity sha512-nGzaaaiH3GTh1KciqJ0uzD69o2FBFPxTPeRK3/fuXVtj3tCIPwpqoV/MoHuqJ/yNy6wa5zj/gbm06qNsyvKkvA==
   dependencies:
     tslib "^2.3.0"
 

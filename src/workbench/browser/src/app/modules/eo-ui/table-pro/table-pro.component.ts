@@ -22,7 +22,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
   @Input() nzData;
   @Input() setting;
   @Input() nzExpand = false;
-  @Input() columnVisibleStatus={};
+  @Input() columnVisibleStatus = {};
   @Output() nzTrClick = new EventEmitter();
   @Output() nzDataChange = new EventEmitter();
   @Output() columnVisibleStatusChange = new EventEmitter();
@@ -42,6 +42,28 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
 
   columnVisibleMenus = [];
   private isFullScreenStatus = false;
+  private BNT_MUI = {
+    add: {
+      icon: 'plus',
+      title: $localize`Add Row`,
+      action: 'addRow',
+    },
+    addChild: {
+      icon: 'plus',
+      title: $localize`Add Child Row`,
+      action: 'addChildRow',
+    },
+    insert: {
+      icon: 'arrow-down',
+      title: $localize`Add Row Down`,
+      action: 'insertRow',
+    },
+    delete: {
+      icon: 'delete',
+      title: $localize`Delete`,
+      action: 'deleteRow',
+    },
+  };
   constructor() {}
   ngOnInit(): void {
     this.generateBtnTemplate();
@@ -90,16 +112,21 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
         case 'btnList': {
           body.type = 'btn';
           body.btns = col.btns.map((btn) => {
-            const newBtn: any = {};
-            if (['btn', 'dropdown'].includes(btn.type)) {
-              newBtn.type = btn.type;
-            } else {
-              newBtn.type = this.iconBtnTmp.get(btnIndex++);
+            const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
+            const defaultBtn = this.BNT_MUI[btn.action];
+            if (defaultBtn) {
+              if (btn.action === 'insert') {
+                newBtn.title = this.iconBtnTmp.get(btnIndex++);
+              } else {
+                newBtn.icon = btn.icon || defaultBtn.icon;
+                newBtn.title = defaultBtn.title;
+                newBtn.action = defaultBtn.action;
+              }
             }
             switch (btn.type) {
               case 'dropdown': {
-                newBtn.opts = btn.menus;
                 newBtn.title = this.iconBtnTmp.get(btnIndex++);
+                newBtn.opts = btn.menus;
                 break;
               }
             }
@@ -208,6 +235,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit {
         return;
       }
       col.btns.forEach((btn, btnIndex) => {
+        //only dropdown/action='insert' need table-pro custom template
+        if (btn.type !== 'dropdown' && btn.action !== 'insert') {
+          return;
+        }
         const iconBtn: any = { index, btnIndex };
         if (btn.icon) {
           iconBtn.icon = btn.icon;
