@@ -36,7 +36,7 @@
   <!-- Body -->
   <nz-collapse *ngIf="model.requestBody?.length" class="w-full mt-[20px]">
     <nz-collapse-panel [nzActive]=" true" i18n-nzHeader nzHeader="Body">
-      <div class="my-2.5">
+      <div class="m-2.5">
         <nz-tag nzColor="default">{{ CONST.BODY_TYPE[model.requestBodyType] }}</nz-tag>
         <nz-tag *ngIf="model.requestBodyType === 'json'" nzColor="default" i18n>The outermost structure is: {{
           CONST.JSON_ROOT_TYPE[model.requestBodyJsonType] }}</nz-tag>

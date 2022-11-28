@@ -8,3 +8,8 @@
   font-weight: bold;
   font-size: 16px;
 }
+:host ::ng-deep{
+  // .ant-collapse-content{
+  //   padding: calc(var(--PADDING_Y) / 2);
+  // }
+}

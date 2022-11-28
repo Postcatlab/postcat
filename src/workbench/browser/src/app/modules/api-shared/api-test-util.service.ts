@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
-import { ApiTestHeaders, ContentTypeByAbridge } from '../../service/api-test/api-test.model';
-import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../../../shared/services/storage/index.model';
-import { eoDeepCopy } from '../../../../utils/index.utils';
-import { uiData2Json, text2UiData, json2XML } from '../../../../utils/data-transfer/data-transfer.utils';
+import { ApiTestHeaders, ContentTypeByAbridge } from '../../pages/api/service/api-test/api-test.model';
+import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../shared/services/storage/index.model';
+import { eoDeepCopy } from '../../utils/index.utils';
+import { uiData2Json, text2UiData, json2XML } from '../../utils/data-transfer/data-transfer.utils';
 
 @Injectable()
 export class ApiTestUtilService {

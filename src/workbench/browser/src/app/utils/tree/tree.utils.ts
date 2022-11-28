@@ -43,6 +43,7 @@ export const listToTreeHasLevel = (
       const parent = list[listDepths.lastIndexOf(listDepth - 1, key)];
       if (!parent) {
         console.error(`can't find the parent`);
+        return;
       }
       parent[opts.childKey] = parent[opts.childKey] || [];
       parent[opts.childKey].push(item);

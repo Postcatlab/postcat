@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApiTestUtilService } from '../../../pages/api/http/test/api-test-util.service';
+import { ApiTestUtilService } from '../api-test-util.service';
 
 import { ApiTestQueryComponent } from './api-test-query.component';
 

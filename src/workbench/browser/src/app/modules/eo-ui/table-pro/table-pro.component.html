@@ -1,13 +1,15 @@
 <!-- {{ nzData | json }} -->
+<!-- {{ setting | json }} -->
 <eo-ng-table
-  class="full-screen-container "
+  class="full-screen-container"
   [nzDataItem]="nzDataItem"
   [(nzData)]="nzData"
   [nzIsLevel]="setting.isLevel"
   [nzDraggable]="setting.rowSortable"
   [nzTbody]="tbodyConf"
   [nzExpand]="nzExpand"
-  nzPrimaryKey="setting.primaryKey"
+  [nzExpand]="true"
+  [nzPrimaryKey]="setting.primaryKey"
   nzChildKey="children"
   [nzCheckAddRow]="checkAdd"
   (nzDataChange)="handleDataChange($event)"
@@ -34,7 +36,7 @@
     </button>
   </ng-template>
 </div>
-<ng-template #iconBtnDelete let-apis="apis" let-index="index" let-item="item">
+<ng-template #iconBtnDelete let-apis="apis" let-index="index" let-last="last" let-item="item">
   <ng-container *ngIf="!apis.checkIsCurrentLevelLastItem(item)">
     <button
       eo-ng-button

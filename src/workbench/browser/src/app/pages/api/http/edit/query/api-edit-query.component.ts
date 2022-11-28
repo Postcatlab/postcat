@@ -8,25 +8,35 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
+import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiEditQuery } from '../../../../../shared/services/storage/index.model';
-import { ApiEditUtilService } from '../api-edit-util.service';
 
 @Component({
   selector: 'eo-api-edit-query',
-  templateUrl: './api-edit-query.component.html',
-  styleUrls: ['./api-edit-query.component.scss'],
+  template: `<div class="param_header flex items-center h-10">
+      <params-import [(baseData)]="model" contentType="query" modalTitle="Query"></params-import>
+    </div>
+    <eo-ng-table-pro
+      [columns]="listConf.columns"
+      [nzDataItem]="itemStructure"
+      [setting]="listConf.setting"
+      [(nzData)]="model"
+    ></eo-ng-table-pro>`
 })
 export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() model: ApiEditQuery[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  listConf: object = {};
-  private itemStructure: ApiEditQuery = {
+  listConf: any = {
+    column: [],
+    setting: {},
+  };
+  itemStructure: ApiEditQuery = {
     name: '',
     required: true,
     example: '',
     description: '',
   };
-  constructor(private editService: ApiEditUtilService, private cdRef: ChangeDetectorRef) {}
+  constructor(private apiTable: ApiTableService, private cdRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.initListConf();
@@ -35,24 +45,13 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
     // prevent AngularJS error when dragging and sorting item
     this.cdRef.detectChanges();
   }
-  ngOnChanges(changes) {
-    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
-      if (!this.model.length || this.model[this.model.length - 1].name) {
-        this.model.push(Object.assign({}, this.itemStructure));
-      }
-    }
-  }
+  ngOnChanges(changes) {}
   private initListConf() {
-    this.listConf = this.editService.initListConf({
-      dragCacheVar: 'DRAG_VAR_API_EDIT_QUERY',
-      itemStructure: this.itemStructure,
-      nzOnOkMoreSetting: (inputArg) => {
-        this.model[inputArg.$index] = inputArg.item;
-        this.modelChange.emit(this.model);
-      },
-      watchFormLastChange: () => {
-        this.modelChange.emit(this.model);
-      },
+    const config = this.apiTable.initTable({
+      in: 'header',
+      isEdit: true,
     });
+    this.listConf.columns = config.columns;
+    this.listConf.setting = config.setting;
   }
 }

@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -15,6 +16,7 @@ import {
 import _ from 'lodash';
 import { isUndefined, omit, omitBy } from 'lodash-es';
 import { eoDeepCopy, isEmptyValue } from '../../../utils/index.utils';
+import { TableProSetting } from './table-pro.model';
 
 @Component({
   selector: 'eo-ng-table-pro',
@@ -24,16 +26,7 @@ import { eoDeepCopy, isEmptyValue } from '../../../utils/index.utils';
 export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() columns;
   @Input() nzData;
-  @Input() setting: {
-    isEdit?: boolean;
-    isLevel?: boolean;
-    primaryKey?: string;
-    rowSortable?: boolean;
-    toolButton?: {
-      columnVisible?: boolean;
-      fullScreen?: boolean;
-    };
-  } = {};
+  @Input() setting: TableProSetting = {};
   @Input() nzDataItem?;
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
@@ -81,17 +74,27 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       action: 'delete',
     },
   };
-  constructor() {}
+  constructor(private cdRef: ChangeDetectorRef) {}
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.columns?.firstChange) {
+    if (changes.columns && changes.columns.currentValue?.length) {
       this.setting.isEdit = this.autoSetIsEdit();
-      console.log(this.setting.isEdit);
       this.generateBtnTemplate();
+      //First init may template may not be ready
+      if (this.iconBtnTmp) {
+        this.initConfig();
+      }
     }
     if (changes.nzData) {
-      if (this.setting.isEdit) {
-        this.nzData.push(eoDeepCopy(this.nzDataItem));
+      if (this.setting.isEdit && !this.setting.manualAdd) {
+        if (!this.nzDataItem) {
+          console.error(`EO_ERROR: Can't find nzDataItem`);
+          return;
+        }
+        if (!this.nzData) {return;}
+        if (!this.nzData.length || this.nzData[this.nzData.length - 1][this.setting.primaryKey]) {
+          this.nzData.push(eoDeepCopy(this.nzDataItem));
+        }
       }
     }
   }
@@ -109,9 +112,11 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     if (_.has(this.setting, 'isEdit')) {
       return this.setting.isEdit;
     }
-    return this.columns.some((col) => ['select', 'autoComplete', 'input'].includes(col.type));
+    return this.columns.some((col) => ['select', 'checkbox', 'autoComplete', 'input'].includes(col.type));
   }
   initConfig() {
+    const theaderConf = [];
+    const tbodyConf = [];
     let btnIndex = 0;
     //Set level
     if (this.setting.isLevel) {
@@ -122,10 +127,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
 
     //Set RowSortable
     if (this.setting.rowSortable) {
-      this.theadConf.push({
+      theaderConf.push({
         width: 60,
       });
-      this.tbodyConf.push({
+      tbodyConf.push({
         type: 'sort',
       });
     }
@@ -142,6 +147,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       switch (col.type) {
         case 'select': {
           body.opts = col.enums.map((item) => ({ label: item.title, value: item.value }));
+          break;
+        }
+        case 'checkbox': {
+          header.type = 'checkbox';
           break;
         }
         case 'input':
@@ -203,6 +212,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       }
       //Set filter
       if (col.filterable) {
+        if (this.setting.isEdit) {
+          console.warn(`[EO_WARN]: editable table use filterable may perform poorly`);
+        }
         header.filterMultiple = true;
         //Use custom filter
         if (!col.filterFn || col.filterFn === true) {
@@ -214,6 +226,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       }
       //Set Sort
       if (col.sortable) {
+        if (this.setting.isEdit) {
+          console.warn(`[EO_WARN]: editable table use sortable may perform poorly`);
+        }
         header.showSort = true;
         header.sortDirections = ['ascend', 'descend', null];
       }
@@ -233,11 +248,12 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       if (col.showFn) {
         body.showFn = header.showFn = col.showFn;
       }
-      this.theadConf.push(header);
-      this.tbodyConf.push(body);
+      theaderConf.push(header);
+      tbodyConf.push(body);
     });
-
-    console.log(this.columnVisibleMenus, this.theadConf, this.tbodyConf);
+    this.theadConf = theaderConf;
+    this.tbodyConf = tbodyConf;
+    console.log(this.theadConf, this.tbodyConf);
   }
   btnClick(btnItem, index, item, apis) {
     console.log(btnItem, index, item, apis);

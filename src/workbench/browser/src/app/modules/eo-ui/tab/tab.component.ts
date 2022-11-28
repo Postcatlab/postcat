@@ -16,13 +16,13 @@ import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 })
 export class EoTabComponent implements OnInit, OnDestroy {
   @Input() list: Partial<TabItem>[];
-  @Input() tabStorageKey:string="DEFAULT_TAB_STORAGE_KEY";
+  @Input() tabStorageKey='DEFAULT_TAB_STORAGE_KEY';
 
-  @Input () addDropDown?:NzDropdownMenuComponent;
-  @Input () titleLabel?:TemplateRef<void>;
+  @Input () addDropDown?: NzDropdownMenuComponent;
+  @Input () titleLabel?: TemplateRef<void>;
 
-  @Input() checkTabCanLeave?:()=>boolean;
-  @Input() handleDataBeforeCache?:<T>({tabsByID:T})=>T;
+  @Input() checkTabCanLeave?: () => boolean;
+  @Input() handleDataBeforeCache?: <T>({tabsByID:T}) => T;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
@@ -34,14 +34,15 @@ export class EoTabComponent implements OnInit, OnDestroy {
     public store: StoreService
   ) {}
   ngOnInit(): void {
+    this.watchRouterChange();
+    this.watchPageLeave();
+
     this.tabStorage.init({
       tabStorageKey:this.tabStorageKey
     });
     this.tabOperate.init({
       basicTabs:this.list
     });
-    this.watchRouterChange();
-    this.watchPageLeave();
   }
   async newTab(key = undefined) {
     if (this.checkTabCanLeave && !(await this.checkTabCanLeave())) {
@@ -203,7 +204,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function (e) {
+    window.addEventListener('beforeunload', function(e) {
       that.cacheData();
     });
   }

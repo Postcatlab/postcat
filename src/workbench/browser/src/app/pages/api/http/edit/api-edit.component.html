@@ -47,7 +47,7 @@
               model.requestHeaders | apiParamsNum
               }}</span>
           </ng-template>
-          <eo-api-edit-header class="eo_theme_iblock" (modelChange)="emitChangeFun()" [model]="model.requestHeaders">
+          <eo-api-edit-header (modelChange)="emitChangeFun()" [model]="model.requestHeaders">
           </eo-api-edit-header>
         </eo-ng-tab>
         <!-- Request Body -->
@@ -60,7 +60,7 @@
                   : model.requestBody?.length
               " nzStatus="success"></nz-badge>
           </ng-template>
-          <eo-api-edit-body class="eo_theme_iblock" [(bodyType)]="model.requestBodyType" [(model)]="model.requestBody"
+          <eo-api-edit-body [(bodyType)]="model.requestBodyType" [(model)]="model.requestBody"
             (modelChange)="emitChangeFun()" [supportType]="['formData', 'json', 'xml', 'raw', 'binary']"
             [(jsonRootType)]="model.requestBodyJsonType">
           </eo-api-edit-body>
@@ -72,7 +72,7 @@
               model.queryParams | apiParamsNum
               }}</span>
           </ng-template>
-          <eo-api-edit-query (modelChange)="emitChangeFun()" class="eo_theme_iblock" [model]="model.queryParams">
+          <eo-api-edit-query (modelChange)="emitChangeFun()" [model]="model.queryParams">
           </eo-api-edit-query>
         </eo-ng-tab>
         <eo-ng-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
@@ -82,7 +82,7 @@
               model.restParams | apiParamsNum
               }}</span>
           </ng-template>
-          <eo-api-edit-rest class="eo_theme_iblock" [model]="model.restParams" (modelChange)="emitChangeFun()">
+          <eo-api-edit-rest [model]="model.restParams" (modelChange)="emitChangeFun()">
           </eo-api-edit-rest>
         </eo-ng-tab>
       </eo-ng-tabset>
@@ -99,7 +99,7 @@
               model.responseHeaders | apiParamsNum
               }}</span>
           </ng-template>
-          <eo-api-edit-header class="eo_theme_iblock" [model]="model.responseHeaders" (modelChange)="emitChangeFun()">
+          <eo-api-edit-header [model]="model.responseHeaders" (modelChange)="emitChangeFun()">
           </eo-api-edit-header>
         </eo-ng-tab>
         <eo-ng-tab [nzTitle]="responseTitleTmp" [nzForceRender]="true">
@@ -111,7 +111,7 @@
                   : model.responseBody?.length
               " nzStatus="success"></nz-badge>
           </ng-template>
-          <eo-api-edit-body class="eo_theme_iblock" [(bodyType)]="model.responseBodyType" [(model)]="model.responseBody"
+          <eo-api-edit-body [(bodyType)]="model.responseBodyType" [(model)]="model.responseBody"
             (modelChange)="emitChangeFun()" [supportType]="['json', 'xml', 'raw', 'binary']"
             [(jsonRootType)]="model.responseBodyJsonType">
           </eo-api-edit-body>

@@ -11,8 +11,6 @@ import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-// NG1 Upgrade
-import { UpgradeModule } from '@angular/upgrade/static';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
@@ -50,7 +48,6 @@ registerLocaleData(zh);
     CoreModule,
     AppRoutingModule,
     HttpClientModule,
-    UpgradeModule,
     EouiModule,
   ],
   providers: [
@@ -92,11 +89,10 @@ registerLocaleData(zh);
   schemas: [],
 })
 export class AppModule {
-  constructor(private upgrade: UpgradeModule, private lang: LanguageService, private mockService: MockService) {
+  constructor(private lang: LanguageService, private mockService: MockService) {
     this.mockService.init();
     if (APP_CONFIG.production) {
       this.lang.init();
     }
-    this.upgrade.bootstrap(document.body, ['eolinker']);
   }
 }

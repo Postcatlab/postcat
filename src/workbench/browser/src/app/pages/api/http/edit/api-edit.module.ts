@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { Ng1Module } from '../../../../ng1/ng1.module';
 import { EouiModule } from '../../../../modules/eo-ui/eoui.module';
 import { SharedModule } from '../../../../shared/shared.module';
 
@@ -66,7 +65,6 @@ const COMPONENTS = [
     ]),
     FormsModule,
     ReactiveFormsModule,
-    Ng1Module,
     CommonModule,
     ...NZ_COMPONETS,
     EouiModule,

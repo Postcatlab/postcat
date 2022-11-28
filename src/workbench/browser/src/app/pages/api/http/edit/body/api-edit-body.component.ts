@@ -1,14 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
-import {
-  ApiParamsTypeFormData,
-  ApiParamsTypeJsonOrXml,
-  ApiEditBody,
-  ApiBodyType,
-  JsonRootType,
-} from '../../../../../shared/services/storage/index.model';
+import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
 import { ApiEditUtilService } from '../api-edit-util.service';
 @Component({
   selector: 'eo-api-edit-body',
@@ -23,13 +19,16 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Output() jsonRootTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  listConf: any = {};
+  listConf: any = {
+    column: [],
+    setting: {},
+  };
   cache: any = {};
 
   CONST: any = {
     JSON_ROOT_TYPE: Object.keys(JsonRootType).map((val) => ({ key: val, value: JsonRootType[val] })),
   };
-  private itemStructure: ApiEditBody = {
+  itemStructure: ApiEditBody = {
     name: '',
     type: 'string',
     required: true,
@@ -40,7 +39,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private apiEdit: ApiEditUtilService) {
+  constructor(private apiEdit: ApiEditUtilService,private apiTable: ApiTableService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
       this.beforeChangeBodyByType(val[0]);
     });
@@ -50,7 +49,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
       this.modelChange.emit(model);
     });
   }
-  beforeChangeBodyByType(type) {
+  private beforeChangeBodyByType(type) {
     switch (type) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
@@ -76,7 +75,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
-    this.setListConf();
+    this.initListConf();
     this.setModel();
     if (type === 'init') {
       return;
@@ -129,59 +128,26 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (['formData', 'json'].includes(this.bodyType)) {
       if (!this.model.length || this.model[this.model.length - 1].name) {
-        this.model.push(Object.assign({ listDepth: 0 }, this.itemStructure));
+        this.model.push(eoDeepCopy(this.itemStructure));
       }
     }
     if (this.bodyType === 'xml') {
       if (!this.model.length) {
-        this.model.push(Object.assign({ listDepth: 0 }, this.itemStructure));
+        this.model.push(eoDeepCopy(this.itemStructure));
       }
       this.model[0].type = 'object';
     }
   }
 
-  private setListConf() {
-    // reset table config
-    this.listConf.setting = Object.assign({}, this.cache.listConfSetting);
-    const typeIndex = this.listConf.tdList.findIndex((val) => val.mark === 'type');
-    let TYPE_CONST: any = [];
-    switch (this.bodyType) {
-      case ApiBodyType['Form-data']: {
-        TYPE_CONST = ApiParamsTypeFormData;
-        this.listConf.setting.isLevel = false;
-        break;
-      }
-      case ApiBodyType.JSON: {
-        TYPE_CONST = ApiParamsTypeJsonOrXml;
-        this.listConf.setting.isLevel = true;
-        break;
-      }
-      case ApiBodyType.XML: {
-        TYPE_CONST = ApiParamsTypeJsonOrXml;
-        this.listConf.setting.isLevel = true;
-        this.listConf.setting.unSortIndex = 0;
-        this.listConf.setting.munalHideOperateColumn = true;
-        this.listConf.setting.isStaticFirstIndex = 0;
-        break;
-      }
-    }
-    this.listConf.tdList[typeIndex].selectQuery = Object.keys(TYPE_CONST).map((val) => ({
-      key: val,
-      value: TYPE_CONST[val],
-    }));
-  }
   private initListConf() {
-    this.listConf = this.apiEdit.initBodyListConf({
-      title: '参数',
-      itemStructure: this.itemStructure,
-      nzOnOkMoreSetting: (result) => {
-        this.model[result.$index] = result.item;
-        this.modelChange.emit(this.model);
-      },
-      watchFormLastChange: () => {
-        this.modelChange.emit(this.model);
-      },
+    const config = this.apiTable.initTable({
+      in: 'body',
+      format:this.bodyType as ApiBodyType,
+      isEdit: true,
+    },{
+      manualAdd:true
     });
-    this.cache.listConfSetting = Object.assign({}, this.listConf.setting);
+    this.listConf.columns = config.columns;
+    this.listConf.setting = config.setting;
   }
 }
