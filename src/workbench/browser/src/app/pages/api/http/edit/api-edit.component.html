@@ -36,7 +36,7 @@
     </nz-input-group>
   </form>
   <!-- 请求参数 -->
-  <nz-collapse class="eo_collapse mt-2.5">
+  <nz-collapse class="eo_collapse mt-[20px]">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request">
       <eo-ng-tabset [nzAnimated]="false" [(nzSelectedIndex)]="nzSelectedIndex">
         <!-- Request Headers -->
@@ -89,7 +89,7 @@
     </nz-collapse-panel>
   </nz-collapse>
   <!-- 响应内容 -->
-  <nz-collapse class="eo_collapse mt-2.5">
+  <nz-collapse class="eo_collapse mt-[20px]">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Response">
       <eo-ng-tabset [nzAnimated]="false" [nzSelectedIndex]="1">
         <eo-ng-tab [nzTitle]="responseHeaderTitleTmp" [nzForceRender]="true">

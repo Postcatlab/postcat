@@ -18,6 +18,9 @@
   color: var(--MAIN_TEXT);
   background-color: var(--MAIN_BG);
   border-top: 1px solid var(--BORDER);
+  > .ant-collapse-content-box {
+    padding: 0px;
+  }
 }
 .ant-collapse > .ant-collapse-item {
   border-bottom-color: var(--BORDER);
