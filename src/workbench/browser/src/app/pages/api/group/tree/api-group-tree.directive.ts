@@ -6,20 +6,24 @@ import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 export class ApiGroupTreeDirective implements OnChanges {
   @Input() node?: any;
 
+  treeNodeTitle: HTMLDivElement;
   constructor(private readonly el: ElementRef) {}
 
   ngOnChanges(): void {
-    const treeNodeTitle = this.el.nativeElement.closest('nz-tree-node-title');
-    if (treeNodeTitle) {
-      treeNodeTitle.style.display = 'block';
-      treeNodeTitle.style.width = `calc(100% - 24px * ${this.node.level + 1})`;
-      const treenode = treeNodeTitle.closest('.ant-tree-treenode');
-      treenode.addEventListener('click', (e) => {
-        const isIndent = e.target.closest('.ant-tree-indent');
-        if (isIndent) {
-          treeNodeTitle.click(e);
-        }
-      });
+    this.treeNodeTitle = this.el.nativeElement.closest('nz-tree-node-title');
+    if (this.treeNodeTitle) {
+      this.treeNodeTitle.style.display = 'block';
+      this.treeNodeTitle.style.width = `calc(100% - 24px * ${this.node.level + 1})`;
+      const treenode = this.treeNodeTitle.closest('.ant-tree-treenode');
+      treenode.removeEventListener('click', this.clickTitle);
+      treenode.addEventListener('click', this.clickTitle);
     }
   }
+
+  clickTitle = (e) => {
+    const isIndent = e.target.closest('.ant-tree-indent');
+    if (isIndent) {
+      this.treeNodeTitle.click();
+    }
+  };
 }
