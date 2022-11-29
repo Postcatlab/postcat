@@ -9,9 +9,21 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { EoNgSwitchModule } from 'eo-ng-switch';
+import { EoNgTabsModule } from 'eo-ng-tabs';
 
 @NgModule({
-  imports: [SharedModule, FormsModule, CommonModule,NzAvatarModule,NzResultModule,NzInputNumberModule,NzDescriptionsModule],
+  imports: [
+    SharedModule,
+    FormsModule,
+    CommonModule,
+    NzAvatarModule,
+    NzResultModule,
+    NzInputNumberModule,
+    NzDescriptionsModule,
+    EoNgSwitchModule,
+    EoNgTabsModule
+  ],
   declarations: [ExtensionSettingComponent, ExtensionDetailComponent],
   schemas: [],
 })

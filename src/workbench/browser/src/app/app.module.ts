@@ -1,8 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //Other module
 import { CoreModule } from './core/core.module';
@@ -12,8 +10,7 @@ import { AppComponent } from './app.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -26,25 +23,28 @@ import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
-import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { ThemeService } from './core/services/theme.service';
 
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
-import { NzOverlayModule } from 'ng-zorro-antd/core/overlay';
+import {
+  EoNgFeedbackAlertModule,
+  EoNgFeedbackDrawerModule,
+  EoNgFeedbackTooltipModule,
+  EoNgFeedbackMessageModule,
+} from 'eo-ng-feedback';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 registerLocaleData(en);
 registerLocaleData(zh);
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    EoNgFeedbackMessageModule,
     BrowserAnimationsModule,
-    CoreModule,
+    HttpClientModule,
     AppRoutingModule,
+    NzModalModule,
+    EoNgFeedbackTooltipModule,
+    EoNgFeedbackMessageModule,
   ],
   providers: [
     MockService,
@@ -53,7 +53,6 @@ registerLocaleData(zh);
     IndexedDBStorage,
     HttpStorage,
     ThemeService,
-    NzModalService,
     {
       provide: NZ_CONFIG,
       useFactory: (theme): NzConfig => ({

@@ -12,9 +12,9 @@ import {
 } from '@angular/core';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 
-import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import {  NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
-import type { TreeNode, FlatNode } from './constant';
+import type {  FlatNode } from './constant';
 
 @Component({
   selector: 'eo-api-script',

@@ -16,6 +16,7 @@
     "e2e": "yarn build:prod && playwright test -c e2e/playwright.config.ts e2e/",
     "e2e:web": "npx playwright test e2e/cases/",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "analyze": "ng build -c web --stats-json&&webpack-bundle-analyzer dist/en/stats.json",
     "lint": "ng lint"
   },
   "dependencies": {
@@ -95,7 +96,8 @@
     "tailwindcss": "3.1.4",
     "ts-node": "10.8.1",
     "typescript": "~4.7.4",
-    "webpack": "5.73.0"
+    "webpack": "5.73.0",
+    "webpack-bundle-analyzer": "4.7.0"
   },
   "engines": {
     "node": ">=14.17.0"

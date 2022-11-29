@@ -31,6 +31,7 @@ import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit
 import { RouterModule } from '@angular/router';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { ApiSharedModule } from '../../../../modules/api-shared/api-shared.module';
+import { EoNgTreeModule } from 'eo-ng-tree';
 
 const NZ_COMPONETS = [
   NzDropDownModule,
@@ -46,7 +47,8 @@ const NZ_COMPONETS = [
   NzAffixModule,
   NzPopconfirmModule,
   NzBadgeModule,
-  NzCollapseModule
+  NzCollapseModule,
+  EoNgTreeModule
 ];
 const COMPONENTS = [
   ApiEditComponent,

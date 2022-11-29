@@ -18,6 +18,12 @@ import { EnvModule } from '../../modules/env/env.module';
 import { ApiGroupTreeDirective } from 'eo/workbench/browser/src/app/pages/api/group/tree/api-group-tree.directive';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 import { EoTabModule } from '../../modules/eo-ui/tab/tab.module';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { EoNgTabsModule } from 'eo-ng-tabs';
+import { EoNgTreeModule } from 'eo-ng-tree';
+
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
@@ -30,7 +36,12 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     EnvModule,
     SharedModule,
     EoTabModule,
-    NzResizableModule
+    NzResizableModule,
+    NzEmptyModule,
+    NzBadgeModule,
+    NzLayoutModule,
+    EoNgTabsModule,
+    EoNgTreeModule
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],

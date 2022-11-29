@@ -1,5 +1,4 @@
 :host {
-  --body-height: calc(100vh - var(--NAV_TOP) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0px));
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -20,6 +19,7 @@
   overflow: hidden;
 }
 :host ::ng-deep {
+  --body-height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0px));
   eo-workspace,
   eo-member {
     display: block;

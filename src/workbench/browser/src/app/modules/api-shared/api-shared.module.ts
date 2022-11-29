@@ -12,6 +12,9 @@ import { SharedModule } from '../../shared/shared.module';
 import { ApiTableService } from './api-table.service';
 import { EoMonacoEditorModule } from '../eo-ui/monaco-editor/monaco.module';
 import { EoTableProModule } from '../eo-ui/table-pro/table-pro.module';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { EoNgTabsModule } from 'eo-ng-tabs';
+import { EoNgTreeModule } from 'eo-ng-tree';
 const COMPONENTS = [
   ApiTestHeaderComponent,
   ApiScriptComponent,
@@ -19,11 +22,12 @@ const COMPONENTS = [
   ApiTestQueryComponent,
   ApiTestResultHeaderComponent,
 ];
+const SHARE_UI = [EoTableProModule, EoNgTabsModule];
 
 @NgModule({
-  imports: [SharedModule, EoMonacoEditorModule, EoTableProModule],
+  imports: [SharedModule, EoMonacoEditorModule, EoNgTreeModule, NzEmptyModule, ...SHARE_UI],
   declarations: [...COMPONENTS, ApiParamsNumPipe],
   providers: [ApiTestUtilService, ApiTableService, ApiTestService],
-  exports: [...COMPONENTS, ApiParamsNumPipe, EoMonacoEditorModule, EoTableProModule],
+  exports: [...COMPONENTS, ApiParamsNumPipe, EoMonacoEditorModule, ...SHARE_UI],
 })
 export class ApiSharedModule {}
