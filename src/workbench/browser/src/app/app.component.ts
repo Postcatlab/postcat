@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
-import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/components/extension-app/globalProvider';
+import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
 import { ThemeService } from './core/services/theme.service';
 
 @Component({

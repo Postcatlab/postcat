@@ -3,7 +3,7 @@ import { EventCenterForMicroApp } from '@micro-zoe/micro-app';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import microApp from '@micro-zoe/micro-app';
 import { ActivatedRoute } from '@angular/router';
-import { GlobalProvider } from './globalProvider';
+import { GlobalProvider } from '../../services/globalProvider';
 
 (window as any).eventCenterForAppNameVite = new EventCenterForMicroApp('appname-extension-app');
 

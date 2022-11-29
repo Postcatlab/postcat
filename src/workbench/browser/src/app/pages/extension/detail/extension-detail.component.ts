@@ -22,7 +22,6 @@ export class ExtensionDetailComponent implements OnInit {
   extensionDetail: EoExtensionInfo;
   nzSelectedIndex = 0;
   extName = '';
-  customTabs = [];
 
   changeLog = '';
   changeLogNotFound = false;
@@ -38,22 +37,6 @@ export class ExtensionDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDetail();
-    // this.getCustomTabs();
-  }
-
-  async getCustomTabs() {
-    try {
-      const res = await window.eo.getExtTabs(this.extName);
-      console.log('extName res', res);
-      this.customTabs = res;
-    } catch (e) {
-      console.error('getExtensionPagePathByName err', e);
-      fetch(`https://unpkg.com/${this.extName}/page/index.html`).then((res) => {
-        if (res.status === 200) {
-          // this.pagePath = res.url + '/child/react17/';
-        }
-      });
-    }
   }
 
   async handleInstall() {

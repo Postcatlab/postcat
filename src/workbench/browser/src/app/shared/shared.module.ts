@@ -30,15 +30,13 @@ import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/compone
 import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/split-x/split-x.component';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
-import { ExtensionSelectComponent } from './components/extension-select/extension-select.component';
 import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 
 const COMPONENTS = [
   SplitPanelComponent,
   SplitXComponent,
   DownloadClienteComponent,
-  ExtensionAppComponent,
-  ExtensionSelectComponent,
+  ExtensionAppComponent
 ];
 const SHARED_UI_MODULE = [
   NzFormModule,
