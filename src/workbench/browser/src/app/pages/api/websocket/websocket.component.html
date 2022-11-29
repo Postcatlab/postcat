@@ -82,14 +82,14 @@
   </div>
   <!-- body -->
   <!-- response -->
-  <section>
+  <section style.height="calc(100% - {{ height }}px - 55px)">
     <div class="flex items-center justify-between p-3">
       <span class="font-bold" i18n>Messages</span>
       <!-- <span class="px-2 py-1 font-semibold status" [ngClass]="'status_' + renderStatus(wsStatus)">{{
           renderStatus(wsStatus)
         }}</span> -->
     </div>
-    <ul class="p-2 overflow-auto" style="height: calc(100% - 48px)">
+    <ul class="p-2 overflow-auto" style="height: calc(100% - 55px)">
       <li *ngFor="let item of model.response?.responseBody; let index = index" class="block w-full">
         <div (click)="expandMessage(index)" class="flex flex-col w-full text-gray-500 top-line">
           <div *ngIf="item.type === 'send'"
