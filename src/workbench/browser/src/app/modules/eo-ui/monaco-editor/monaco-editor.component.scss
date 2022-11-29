@@ -1,12 +1,9 @@
-.eo-editor {
-  min-height: var(--eo-editor-height, 70px);
-}
 :host {
   display: flex;
   flex-direction: column;
   height: 100%;
   // overflow: hidden;
-  border: 1px solid var(--BORDER);
+  // border: 1px solid var(--BORDER);
 }
 .button_list {
   border-bottom: 1px solid var(--BORDER);
@@ -37,20 +34,3 @@
   }
 }
 
-:host ::ng-deep eo-editor {
-  height: 100%;
-  & > div {
-    height: 100%;
-  }
-  .ace_editor {
-    min-height: inherit !important;
-  }
-  .ace-editor {
-    height: calc(100% - 52px);
-    min-height: inherit;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      width: 0;
-    }
-  }
-}

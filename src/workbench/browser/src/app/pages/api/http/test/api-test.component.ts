@@ -15,7 +15,7 @@ import { interval, Subscription, Observable, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 import { TestServerService } from '../../service/api-test/test-server.service';
-import { ApiTestUtilService } from './api-test-util.service';
+import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 
 import { computed, reaction } from 'mobx';

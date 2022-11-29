@@ -1,38 +1,30 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiEditHeaders } from '../../../../../shared/services/storage/index.model';
-import { ApiDetailUtilService } from '../api-detail-util.service';
 
 @Component({
   selector: 'eo-api-detail-header',
-  templateUrl: './api-detail-header.component.html',
-  styleUrls: ['./api-detail-header.component.scss'],
+  template: `<eo-ng-table-pro
+    [columns]="listConf.columns"
+    [setting]="listConf.setting"
+    [(nzData)]="model"
+  ></eo-ng-table-pro>`,
 })
-export class ApiDetailHeaderComponent implements OnInit, OnChanges {
+export class ApiDetailHeaderComponent implements OnInit {
   @Input() model: ApiEditHeaders[];
-  listConf: object = {};
-  private itemStructure: ApiEditHeaders = {
-    name: '',
-    required: true,
-    example: '',
-    enum: [],
-    description: '',
-  };
-  constructor(private detailService: ApiDetailUtilService) {}
+  listConf: any = {};
+  constructor(private apiTable: ApiTableService) {}
 
   ngOnInit(): void {
     this.initListConf();
   }
-  ngOnChanges(changes) {
-    // if (changes.model&&!changes.model.previousValue&&changes.model.currentValue) {
-    //   this.model.push(Object.assign({}, this.itemStructure));
-    // }
-  }
   private initListConf() {
-    this.listConf = this.detailService.initListConf({
-      dragCacheVar: 'DRAG_VAR_API_EDIT_HEADER',
-      title: $localize`:@@Header:Header`,
-      nameTitle: $localize`Key`,
-      itemStructure: this.itemStructure,
+    const config = this.apiTable.initTable({
+      in: 'header',
+      module: 'preview',
+      isEdit: false,
     });
+    this.listConf.columns = config.columns;
+    this.listConf.setting = config.setting;
   }
 }

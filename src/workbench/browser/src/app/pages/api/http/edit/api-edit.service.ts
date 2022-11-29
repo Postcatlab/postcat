@@ -63,7 +63,7 @@ export class ApiEditService {
     } else {
       result = await this.apiService.get(id);
     }
-    return this.apiEditUtil.getFormdataFromApiData(result);
+    return this.apiEditUtil.parseApiStorage2UI(result);
   }
   editApi(apiData): Promise<StorageRes> {
     const busEvent = apiData.uuid ? 'editApi' : 'addApi';

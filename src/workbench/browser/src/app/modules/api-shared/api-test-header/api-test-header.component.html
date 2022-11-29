@@ -8,14 +8,10 @@
       modalTitle="Header"
     ></params-import>
   </div>
-  <eo-ng-table
-    [nzDataItem]="model"
-    [nzTbody]="table1.formDataTbody"
-    [nzThead]="table1.formDataThead"
-    [(nzData)]="model"
-    nzCheckboxKey="paramNotNull"
-    nzPrimaryKey="paramKey"
-    [nzScroll]="{ x: '1020px' }"
-    [nzDraggable]="true"
-  ></eo-ng-table>
 </fieldset>
+<eo-ng-table-pro
+  [columns]="listConf.columns"
+  [nzDataItem]="itemStructure"
+  [setting]="listConf.setting"
+  [(nzData)]="model"
+></eo-ng-table-pro>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
+import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { Subject } from 'rxjs';
 import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
-import { ApiDetailUtilService } from '../api-detail-util.service';
 @Component({
   selector: 'eo-api-detail-body',
   templateUrl: './api-detail-body.component.html',
@@ -16,17 +16,8 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     JSON_ROOT_TYPE: Object.keys(JsonRootType).map((val) => ({ key: val, value: JsonRootType[val] })),
   };
 
-  private itemStructure: ApiEditBody = {
-    name: '',
-    type: 'string',
-    required: true,
-    example: '',
-    enum: [],
-    description: '',
-  };
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private apiDetail: ApiDetailUtilService) {
-    this.initListConf();
+  constructor(private apiTable: ApiTableService) {
   }
   beforeChangeBodyByType(type) {
     switch (type) {
@@ -43,6 +34,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnInit(): void {
     this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType).map((val) => ({ key: val, value: ApiBodyType[val] }));
+    this.initListConf();
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -54,8 +46,13 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   private initListConf() {
-    this.listConf = this.apiDetail.initBodyListConf({
-      itemStructure: this.itemStructure,
+    const config = this.apiTable.initTable({
+      in: 'body',
+      module:'preview',
+      format:this.bodyType as ApiBodyType,
+      isEdit:false
     });
+    this.listConf.columns = config.columns;
+    this.listConf.setting = config.setting;
   }
 }

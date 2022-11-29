@@ -35,6 +35,7 @@ export class StorageService {
     const handleResult = {
       status: StorageResStatus.invalid,
       data: undefined,
+      error:null,
       callback,
     };
     // console.log('this.instance', this.instance, action);
@@ -45,11 +46,13 @@ export class StorageService {
       (res: any) => {
         handleResult.status = res.status;
         handleResult.data = res.data;
+        handleResult.error = res.error;
         callback(handleResult);
       },
       (error: any) => {
         console.log('EOERROR:', action, error);
         handleResult.status = StorageResStatus.error;
+        handleResult.error = error;
         callback(handleResult);
       }
     );

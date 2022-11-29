@@ -16,8 +16,11 @@
   eo-ng-tree-default-node:active {
     background-color: rgba(0, 0, 0, 0.1);
   }
-  .ant-tree-node-content-wrapper:hover {
-    background-color: initial;
+  .ant-tree-node-content-wrapper {
+    @apply h-[40px] leading-[40px];
+    &:hover {
+      background-color: initial;
+    }
   }
   nz-tree-node-title {
     background-color: initial;

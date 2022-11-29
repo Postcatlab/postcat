@@ -98,9 +98,7 @@
 .ant-tabs-tab {
   padding: 8px 0;
 }
-.ant-collapse-content > .ant-collapse-content-box {
-  padding: 0px;
-}
+
 .ant-tabs-tab {
   margin: 0 0 0 var(--PADDING); //编剧调整为主题的 padding
 }
@@ -140,3 +138,34 @@
   width: var(--ICONPARK_SIZE);
 }
 
+
+// 一些产品调整的样式
+.ant-tabs-tab {
+  padding-top: var(--PADDING_Y);
+  padding-bottom: calc(var(--PADDING_Y) / 2);
+}
+.ant-collapse-content > .ant-collapse-content-box {
+  padding: 0px;
+}
+.ant-tabs-tab {
+  margin: 0 0 0 10px; //编剧调整为主题的 padding
+}
+.ant-tabs-tab + .ant-tabs-tab {
+  margin: 0 0 0 var(--MARGIN);
+}
+.ant-tabs-bottom > .ant-tabs-nav,
+.ant-tabs-bottom > div > .ant-tabs-nav,
+.ant-tabs-top > .ant-tabs-nav,
+.ant-tabs-top > div > .ant-tabs-nav {
+  margin: 0;
+}
+
+.ant-btn-icon-only {
+  width: 16px;
+  height: 16px;
+  padding: 2px 0;
+  vertical-align: -2px;
+}
+.ant-btn-sm {
+  padding: 0 9px;
+}

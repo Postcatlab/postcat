@@ -2,7 +2,6 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { Ng1Module } from '../../../../ng1/ng1.module';
 import { SharedModule } from '../../../../shared/shared.module';
 
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -12,7 +11,6 @@ import { EoNgButtonModule } from 'eo-ng-button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -28,8 +26,6 @@ import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/s
 import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/serverless-node/test-connect.service';
 
-import { ApiTestUtilService } from './api-test-util.service';
-import { ApiTestService } from './api-test.service';
 
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
@@ -42,6 +38,7 @@ import { RouterModule } from '@angular/router';
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared/api-shared.module';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzResizableService } from 'ng-zorro-antd/resizable';
+import { ApiTestService } from './api-test.service';
 
 const NZ_COMPONETS = [
   NzDropDownModule,
@@ -51,7 +48,6 @@ const NZ_COMPONETS = [
   NzFormModule,
   NzSelectModule,
   NzTreeSelectModule,
-  NzCollapseModule,
   NzTabsModule,
   NzRadioModule,
   NzDividerModule,
@@ -81,14 +77,12 @@ const COMPONENTS = [
     ]),
     FormsModule,
     ReactiveFormsModule,
-    Ng1Module,
     CommonModule,
     ...NZ_COMPONETS,
     ApiSharedModule,
     SharedModule,
   ],
   providers: [
-    ApiTestUtilService,
     ApiTestService,
     NzResizableService,
     {

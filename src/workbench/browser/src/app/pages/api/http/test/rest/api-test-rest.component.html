@@ -1,1 +1,6 @@
-<list-block-common-component [mainObject]="listConf" [(list)]="model"></list-block-common-component>
+<eo-ng-table-pro
+  [columns]="listConf.columns"
+  [nzDataItem]="itemStructure"
+  [setting]="listConf.setting"
+  [(nzData)]="model"
+></eo-ng-table-pro>

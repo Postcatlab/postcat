@@ -18,21 +18,25 @@
 </div>
 <div *ngIf="bodyType === 'json'" class="px-4">
   <p class="fs12 c999 mb5" i18n>JSON Root Type:</p>
-  <eo-ng-select class="w-[100px] mb10" [(ngModel)]="jsonRootType" (ngModelChange)="jsonRootTypeDataChange(jsonRootType)">
+  <eo-ng-select
+    class="w-[100px] mb10"
+    [(ngModel)]="jsonRootType"
+    (ngModelChange)="jsonRootTypeDataChange(jsonRootType)"
+  >
     <eo-ng-option *ngFor="let item of CONST.JSON_ROOT_TYPE" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
   </eo-ng-select>
 </div>
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
-<list-block-common-component
+<eo-ng-table-pro
   *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-  [mainObject]="listConf"
-  [(list)]="model"
-></list-block-common-component>
+  [columns]="listConf.columns"
+  [nzDataItem]="itemStructure"
+  [setting]="listConf.setting"
+  [(nzData)]="model"
+></eo-ng-table-pro>
 <!-- Raw -->
-<!-- <eo-editor [(code)]="model" *ngIf="bodyType === 'raw'" (codeChange)="rawDataChange()"
-  [eventList]="['type', 'format', 'copy', 'search', 'replace']"></eo-editor> -->
 <eo-monaco-editor
   *ngIf="bodyType === 'raw'"
   [(code)]="model"

@@ -15,7 +15,7 @@ import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/s
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
 import { EnvModule } from '../../modules/env/env.module';
-import { MyTreeDirective } from 'eo/workbench/browser/src/app/pages/api/group/tree/my-tree.directive';
+import { ApiGroupTreeDirective } from 'eo/workbench/browser/src/app/pages/api/group/tree/api-group-tree.directive';
 import { NzResizableService } from 'ng-zorro-antd/resizable';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
@@ -29,7 +29,7 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     EnvModule,
     SharedModule,
   ],
-  declarations: [...COMPONENTS, MyTreeDirective],
+  declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],
   providers: [ElectronService, NzResizableService, ApiTabService, IndexedDBStorage],
 })

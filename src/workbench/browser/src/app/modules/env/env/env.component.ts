@@ -7,6 +7,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
 import { Subject } from 'rxjs';
+import { eoDeepCopy } from '../../../utils/index.utils';
 
 @Component({
   selector: 'eo-env',
@@ -16,6 +17,10 @@ import { Subject } from 'rxjs';
 export class EnvComponent implements OnInit, OnDestroy {
   // @ViewChild('table') table: EoTableComponent; // * child component ref
   @Output() private statusChange: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild('envParams')
+  envParamsComponent: any;
+
   varName = $localize`{{Variable Name}}`;
   modalTitle = $localize`:@@New Environment:New Environment`;
   isVisible = false;
@@ -24,11 +29,22 @@ export class EnvComponent implements OnInit, OnDestroy {
   envInfo: any = {};
   envList: any[] = [];
   activeUuid = 0;
+  envDataItem = { name: '', value: '', description: '' };
   envListColumns = [
-    { title: $localize`Name`, key: 'name', isEdit: true },
-    { title: $localize`Value`, key: 'value', isEdit: true },
-    { title: $localize`:@@Description:Description`, key: 'description', isEdit: true },
-    { title: $localize`Operate`, slot: 'action', width: '15%' },
+    { title: $localize`Name`, type: 'input', key: 'name' },
+    { title: $localize`Value`, type: 'input', key: 'value' },
+    { title: $localize`:@@Description:Description`, type: 'input', key: 'description' },
+    {
+      title: $localize`Operate`,
+      type: 'btnList',
+      width: 170,
+      right: true,
+      btns: [
+        {
+          action: 'delete',
+        },
+      ],
+    },
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -91,11 +107,6 @@ export class EnvComponent implements OnInit, OnDestroy {
       }
     });
   }
-  handleDeleteParams(index) {
-    // * delete params in table
-    const data = JSON.parse(JSON.stringify(this.envInfo.parameters));
-    this.envInfo.parameters = data.filter((it, i) => i !== index);
-  }
   handleEditEnv(uuid) {
     this.modalTitle = $localize`Edit Environment`;
     this.handleShowModal();
@@ -105,6 +116,7 @@ export class EnvComponent implements OnInit, OnDestroy {
         if (result.status === StorageResStatus.success) {
           this.envInfo = result.data ?? {};
           const parameters = this.envInfo.parameters ?? [];
+          //! Compatible some error data
           this.envInfo.parameters = typeof parameters === 'string' ? JSON.parse(parameters) : parameters;
           this.activeUuid = result.data?.uuid ?? null;
           resolve(true);
@@ -129,55 +141,52 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleSaveEnv(uuid: string | number | undefined = undefined) {
     // * update list after call save api
-    const { parameters, name, ...other } = this.envInfo;
+    const { name, ...other } = this.envInfo;
     if (!name) {
       this.message.error($localize`Name is not allowed to be empty`);
       return;
     }
-    const data = parameters?.filter((it) => it.name || it.value);
+    const parameters = this.envParamsComponent.getPureNzData()?.filter((it) => it.name || it.value);
     if (uuid != null) {
+      this.storage.run('environmentUpdate', [{ ...other, name, parameters }, uuid], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.message.success($localize`Edited successfully`);
+          await this.getAllEnv(this.activeUuid);
+          if (this.envUuid === Number(uuid)) {
+            this.envUuid = Number(uuid);
+          }
+          this.handleCancel();
+        } else {
+          this.message.error($localize`Failed to edit`);
+        }
+      });
+    } else {
       this.storage.run(
-        'environmentUpdate',
-        [{ ...other, name, parameters: data }, uuid],
+        'environmentCreate',
+        [Object.assign({}, this.envInfo, { parameters })],
         async (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
-            this.message.success($localize`Edited successfully`);
-            await this.getAllEnv(this.activeUuid);
-            if (this.envUuid === Number(uuid)) {
-              this.envUuid = Number(uuid);
-            }
+            this.message.success($localize`Added successfully`);
+            this.activeUuid = Number(result.data.uuid);
+            await this.getAllEnv();
             this.handleCancel();
           } else {
-            this.message.error($localize`Failed to edit`);
+            this.message.error($localize`Failed to add`);
           }
         }
       );
-    } else {
-      this.storage.run('environmentCreate', [this.envInfo], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.message.success($localize`Added successfully`);
-          this.activeUuid = Number(result.data.uuid);
-          await this.getAllEnv();
-          this.handleCancel();
-        } else {
-          this.message.error($localize`Failed to add`);
-        }
-      });
     }
   }
 
   handleCancel(): void {
     this.isVisible = false;
-    // this.envList = [];
     this.envInfo = {};
     this.messageService.send({ type: 'updateEnv', data: {} });
   }
 
   handleShowModal() {
-    // this.handleAddEnv(null);
     this.isVisible = true;
     this.isOpen = false;
-    // this.getAllEnv(this.envUuid);
   }
 
   handleEnvSelectStatus(event: boolean) {

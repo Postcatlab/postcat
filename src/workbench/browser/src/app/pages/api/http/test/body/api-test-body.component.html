@@ -20,8 +20,13 @@
   </eo-ng-select>
 </div>
 <!-- FormData -->
-<list-block-common-component *ngIf="['formData'].includes(bodyType)" [mainObject]="listConf" [(list)]="model">
-</list-block-common-component>
+<eo-ng-table-pro
+  *ngIf="['formData'].includes(bodyType)"
+  [columns]="listConf.columns"
+  [nzDataItem]="itemStructure"
+  [setting]="listConf.setting"
+  [(nzData)]="model"
+></eo-ng-table-pro>
 <!-- JSON -->
 <!-- XML -->
 <!-- Raw -->

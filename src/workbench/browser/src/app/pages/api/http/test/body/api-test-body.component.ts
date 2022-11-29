@@ -6,7 +6,6 @@ import {
   EventEmitter,
   OnChanges,
   OnDestroy,
-  ChangeDetectorRef,
   ViewChild,
   AfterViewInit,
   ElementRef,
@@ -21,12 +20,13 @@ import {
   ApiTestBodyType,
   ContentTypeByAbridge,
 } from '../../../service/api-test/api-test.model';
-import { ApiTestUtilService } from '../api-test-util.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
+import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-test-body',
@@ -43,14 +43,17 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   @Output() contentTypeChange: EventEmitter<ContentTypeByAbridge> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   isReload = true;
-  listConf: any = {};
+  listConf: any = {
+    column: [],
+    setting: {},
+  };
   binaryFiles: NzUploadFile[] = [];
   CONST: any = {};
   cache: any = {};
   editorConfig: EditorOptions = {
     language: 'json',
   };
-  private itemStructure: ApiTestBody = {
+  itemStructure: ApiTestBody = {
     required: true,
     name: '',
     type: 'string',
@@ -65,8 +68,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     return this.contentType.replace(/.*\//, '');
   }
   constructor(
-    private apiTest: ApiTestUtilService,
-    private cdRef: ChangeDetectorRef,
+    private apiTable: ApiTableService,
     elementRef: ElementRef,
     private message: EoNgFeedbackMessageService
   ) {
@@ -214,38 +216,14 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     }));
   }
   private initListConf() {
-    this.listConf = this.apiTest.initBodyListConf({
-      title: $localize`Param`,
-      itemStructure: this.itemStructure,
-      watchFormLastChange: () => {
-        this.modelChange.emit(this.model);
-      },
-      importFile: (inputArg) => {
-        if (inputArg.file.length === 0) {
-          return;
-        }
-        inputArg.item.value = '';
-        inputArg.item.files = [];
-        for (const file of inputArg.file) {
-          if (file.size > 2 * 1024 * 1024) {
-            inputArg.item.value = '';
-            this.message.error($localize`File size must be less than 2M`);
-            return;
-          }
-        }
-        for (const file of inputArg.file) {
-          inputArg.item.value = file.name + ',' + inputArg.item.value;
-          transferFileToDataUrl(file).then((result: { name: string; content: string }) => {
-            inputArg.item.files.splice(0, 0, {
-              name: file.name,
-              dataUrl: result.content,
-            });
-          });
-        }
-        inputArg.item.value = inputArg.item.value.slice(0, inputArg.item.value.length - 1);
-        this.modelChange.emit(this.model);
-      },
+    const config = this.apiTable.initTable({
+      in: 'body',
+      format:this.bodyType as ApiBodyType,
+      isEdit: true,
+    },{
+      manualAdd:true
     });
-    this.cache.listConfSetting = Object.assign({}, this.listConf.setting);
+    this.listConf.columns = config.columns;
+    this.listConf.setting = config.setting;
   }
 }

@@ -11,7 +11,7 @@ import {
   StorageResStatus,
 } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ApiTestHistory } from '../../../../shared/services/storage/index.model';
-import { ApiTestUtilService } from './api-test-util.service';
+import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
 @Injectable()
 export class ApiTestService {
   constructor(

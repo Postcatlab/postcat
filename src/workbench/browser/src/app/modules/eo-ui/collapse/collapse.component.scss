@@ -1,0 +1,30 @@
+.ant-collapse {
+  border-radius: var(--DEFAULT_BORDER_RADIUS);
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  align-items: center;
+}
+.ant-collapse-item:last-child .ant-collapse-content,
+.ant-collapse-item:last-child,
+.ant-collapse-item:last-child .ant-collapse-header {
+  border-radius: 0 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS);
+}
+.ant-collapse-item:last-child .ant-collapse-content,
+.ant-collapse-item:last-child,
+.ant-collapse-item:last-child .ant-collapse-header {
+  border-radius: 0 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS);
+}
+.ant-collapse-content {
+  color: var(--MAIN_TEXT);
+  background-color: var(--MAIN_BG);
+  border-top: 1px solid var(--BORDER);
+  > .ant-collapse-content-box {
+    padding: 0px;
+  }
+}
+.ant-collapse > .ant-collapse-item {
+  border-bottom-color: var(--BORDER);
+}
+.ant-collapse {
+  border-color: var(--BORDER);
+}
