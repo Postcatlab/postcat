@@ -46,7 +46,6 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
@@ -99,7 +98,6 @@ const SHARED_UI_MODULE = [
   NzCardModule,
   NzNotificationModule,
   NzEmptyModule,
-  NzMessageModule,
   NzDescriptionsModule,
   NzInputModule,
   NzCheckboxModule,
