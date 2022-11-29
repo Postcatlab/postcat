@@ -16,6 +16,7 @@ import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe
 
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -46,6 +47,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   Object = Object;
   socket = null;
   model: testViewModel;
+  height = 300;
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
     { value: 'wss', key: 'WSS' },
@@ -106,6 +108,11 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       console.log('Connect not allow', e);
       this.isSocketConnect = false;
     }
+  }
+
+  onResize({ height }: NzResizeEvent): void {
+    this.height = height;
+    // localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, String(height));
   }
 
   expandMessage(index) {
