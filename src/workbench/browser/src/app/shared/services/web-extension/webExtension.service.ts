@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
 type ExtensionItem = {
   name: string;
@@ -23,7 +23,7 @@ export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
   disabledExtensionNames = [];
 
-  constructor(private message: NzMessageService, private webService: WebService) {}
+  constructor(private message: EoNgFeedbackMessageService, private webService: WebService) {}
 
   init() {
     if (this.webService.isWeb) {

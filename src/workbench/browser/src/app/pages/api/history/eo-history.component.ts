@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { IndexedDBStorage } from '../../../../../../../workbench/browser/src/app/shared/services/storage/IndexedDB/lib/index';
 import { MessageService } from '../../../shared/services/message';
@@ -22,7 +22,7 @@ export class HistoryComponent implements OnInit {
   constructor(private storage: StorageService, private router: Router, private message: MessageService) {}
   async ngOnInit() {
     const result = await this.loadAllTest();
-    this.historyList = (result||[]).reverse();
+    this.historyList = (result || []).reverse();
     this.message
       .get()
       .pipe(takeUntil(this.destroy$))

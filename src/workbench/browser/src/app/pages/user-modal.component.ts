@@ -1,16 +1,15 @@
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -243,11 +242,10 @@ export class UserModalComponent implements OnInit {
     public message: MessageService,
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService,
-    public project: ProjectService,
+    public effect: EffectService,
     public dataSource: DataSourceService,
     public modal: NzModalService,
     public fb: UntypedFormBuilder,
-    public workspace: WorkspaceService,
     private web: WebService
   ) {
     this.isSyncModalVisible = false;
@@ -299,8 +297,7 @@ export class UserModalComponent implements OnInit {
         }
 
         if (type === 'http-401') {
-          const { id } = this.workspace.currentWorkspace;
-          if (id === -1) {
+          if (this.store.isLocal) {
             return;
           }
 
@@ -321,17 +318,13 @@ export class UserModalComponent implements OnInit {
         }
 
         if (type === 'logOut') {
-          this.workspace.setCurrentWorkspaceID(-1);
           this.store.setUserProfile({
             id: -1,
             password: '',
             username: '',
             workspaces: [],
           });
-          {
-            this.workspace.setWorkspaceList([]);
-          }
-          this.workspace.setCurrentWorkspace(this.workspace.getLocalWorkspaceInfo());
+          this.store.setWorkspaceList([]);
           this.eMessage.success($localize`Successfully logged out !`);
           const refreshToken = this.store.getLoginInfo.refreshToken;
           this.store.clearAuth();
@@ -412,7 +405,7 @@ export class UserModalComponent implements OnInit {
       newWorkName: [null, [Validators.required]],
     });
 
-    const { id: workspaceID } = this.workspace.currentWorkspace;
+    const { id: workspaceID } = this.store.getCurrentWorkspaceInfo;
     if (this.store.isShare) {
       return;
     }
@@ -427,10 +420,10 @@ export class UserModalComponent implements OnInit {
       }
       return;
     }
-    this.workspace.setWorkspaceList(data);
+    this.store.setWorkspaceList(data);
     if (workspaceID !== -1) {
-      const { projects } = await this.workspace.getWorkspaceInfo(workspaceID);
-      this.project.setCurrentProjectID(projects.at(0).uuid);
+      const { projects } = await this.effect.getWorkspaceInfo(workspaceID);
+      this.effect.setCurrentProjectID(projects.at(0).uuid);
     }
 
     const url = this.dataSource.remoteServerUrl;
@@ -444,7 +437,7 @@ export class UserModalComponent implements OnInit {
       return;
     }
 
-    const { id: currentWorkspaceID } = this.workspace.currentWorkspace;
+    const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
     if (currentWorkspaceID === -1) {
       return;
     }
@@ -485,7 +478,7 @@ export class UserModalComponent implements OnInit {
     // * click event callback
     this.isSyncSyncBtnLoading = true;
     const btnSyncSyncRunning = async () => {
-      const eData = await this.project.exportLocalProjectData();
+      const eData = await this.effect.exportLocalProjectData();
 
       const [data, err]: any = await this.api.api_workspaceUpload(eData);
       if (err) {
@@ -499,9 +492,9 @@ export class UserModalComponent implements OnInit {
         return;
       }
       const { workspace } = data;
-      const list = this.workspace.getWorkspaceList().filter((it) => it.id !== -1);
-      this.workspace.setWorkspaceList([...list, workspace]);
-      this.workspace.setCurrentWorkspaceID(workspace);
+      const list = this.store.getWorkspaceList.filter((it) => it.id !== -1);
+      this.store.setWorkspaceList([...list, workspace]);
+      this.store.setCurrentWorkspace(workspace);
 
       // * 关闭弹窗
       this.isSyncModalVisible = false;
@@ -618,7 +611,7 @@ export class UserModalComponent implements OnInit {
           }
           return;
         }
-        this.workspace.setWorkspaceList(data);
+        this.store.setWorkspaceList(data);
       }
 
       if (!data.isFirstLogin) {
@@ -704,8 +697,8 @@ export class UserModalComponent implements OnInit {
           }
           return;
         }
-        this.workspace.setWorkspaceList(lData);
-        this.workspace.setCurrentWorkspace(data);
+        this.store.setWorkspaceList(lData);
+        this.store.setCurrentWorkspace(data);
       }
     };
     await btnSaveRunning();

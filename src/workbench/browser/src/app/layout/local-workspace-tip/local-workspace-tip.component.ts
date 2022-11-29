@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
 import { StorageUtil } from '../../utils/storage/Storage';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
@@ -29,12 +28,11 @@ export class LocalWorkspaceTipComponent implements OnInit {
   constructor(
     private eoMessage: EoNgFeedbackMessageService,
     private message: MessageService,
-    private workspace: WorkspaceService,
     private store: StoreService
   ) {}
   get isShowNotification() {
     const isShow =
-      this.workspace.isLocal && this.store.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
+      this.store.isLocal && this.store.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
     this.isShow !== isShow && this.setIsShow(isShow);
     return isShow;
   }
@@ -47,12 +45,12 @@ export class LocalWorkspaceTipComponent implements OnInit {
   ngOnInit(): void {}
 
   switchToTheCloud = () => {
-    if (this.workspace.workspaceList[0].id === this.workspace.localWorkspace.id) {
+    if (this.store.getWorkspaceList[0].id === this.store.getLocalWorkspaceInfo.id) {
       this.eoMessage.warning($localize`You don't have cloud space yet, please create one`);
       this.message.send({ type: 'addWorkspace', data: {} });
       return;
     }
-    this.workspace.setCurrentWorkspace(this.workspace.workspaceList[0]);
+    this.store.setCurrentWorkspace(this.store.getWorkspaceList[0]);
   };
 
   closeNotification() {

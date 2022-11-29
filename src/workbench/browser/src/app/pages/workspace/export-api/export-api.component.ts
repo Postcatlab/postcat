@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageService } from '../../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import packageJson from '../../../../../../../../package.json';
 import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
-import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service'
 
 @Component({
   selector: 'eo-export-api',
@@ -18,7 +18,7 @@ export class ExportApiComponent implements OnInit {
     this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
   constructor(
     private storage: StorageService,
-    private projectService: ProjectService,
+    private effect: EffectService,
     public extensionService: ExtensionService,
     public webExtensionService: WebExtensionService
   ) {}
@@ -64,7 +64,7 @@ export class ExportApiComponent implements OnInit {
     const filename = feature.filename || null;
     const module: ModuleInfo = await window.eo?.loadFeatureModule?.(this.currentExtension);
     if (action && filename && module && module[action] && typeof module[action] === 'function') {
-      const params = [this.projectService.currentProjectID];
+      const params = [this.effect.currentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           console.log('result.data', result.data);

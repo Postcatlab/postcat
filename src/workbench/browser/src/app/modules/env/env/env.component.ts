@@ -4,7 +4,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 // import { EoTableComponent } from '../../eo-ui/table/eo-table/eo-table.component';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { StorageService } from '../../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
 import { Subject } from 'rxjs';
 import { eoDeepCopy } from '../../../utils/index.utils';

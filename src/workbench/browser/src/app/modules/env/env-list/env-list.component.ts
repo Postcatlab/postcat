@@ -3,7 +3,7 @@ import { getGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-t
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { Environment, StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
-import { StorageService } from '../../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
 @Component({
   selector: 'env-list',

@@ -46,7 +46,7 @@
           <eo-history></eo-history>
         </eo-ng-tab>
       </eo-ng-tabset>
-      <nz-resize-handle class="vertical  container-draggable" nzDirection="right"> </nz-resize-handle>
+      <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
     </nz-content>
   </nz-sider>
   <nz-layout class="right-layout">
@@ -57,7 +57,7 @@
           <eo-tab
             class="flex-1"
             [list]="apiTab.BASIC_TABS"
-            [tabStorageKey]="(workspace.isLocal ? 'local' : workspace.currentWorkspaceID) + '_TabCache'"
+            [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspaceInfo.id) + '_TabCache'"
             [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
             [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
             (beforeClose)="apiTab.beforeTabClose($event)"
@@ -163,7 +163,11 @@
             [nzMinWidth]="RIGHT_BAR_WIDTH"
             (nzResize)="onRightPanelResize($event)"
           >
-            <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical  container-draggable" nzDirection="left">
+            <nz-resize-handle
+              *ngIf="!store.isShare"
+              class="bottom-0 z-10 vertical container-draggable"
+              nzDirection="left"
+            >
             </nz-resize-handle>
             <div class="flex flex-col p-2">
               <button

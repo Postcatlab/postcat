@@ -7,11 +7,11 @@ import { ActivatedRoute } from '@angular/router';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { formatUri } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { WorkspaceService } from 'eo/workbench/browser/src/app/pages/workspace/workspace.service';
-import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 @Component({
   selector: 'eo-api-mock-table',
@@ -31,10 +31,9 @@ export class ApiMockComponent implements OnInit {
   apiData: ApiData;
   isVisible = false;
   get mockUrl() {
-    const prefix =
-      this.workspaceService.currentWorkspaceID === -1
-        ? this.dataSource.mockUrl
-        : `${this.dataSource.mockUrl}/mock-${this.projectService.currentProjectID}`;
+    const prefix = this.store.isLocal
+      ? this.dataSource.mockUrl
+      : `${this.dataSource.mockUrl}/mock-${this.effect.currentProjectID}`;
     return `${prefix}`;
   }
   get modalTitle() {
@@ -78,9 +77,9 @@ export class ApiMockComponent implements OnInit {
     private storageService: StorageService,
     private route: ActivatedRoute,
     private dataSource: DataSourceService,
-    private message: NzMessageService,
-    private workspaceService: WorkspaceService,
-    private projectService: ProjectService
+    private message: EoNgFeedbackMessageService,
+    private effect: EffectService,
+    private store: StoreService
   ) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});
   }

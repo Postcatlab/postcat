@@ -3,7 +3,7 @@ import { Group, StorageRes, StorageResStatus } from '../../../../shared/services
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MessageService } from '../../../../shared/services/message';
-import { StorageService } from '../../../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { GroupApiDataModel, GroupTreeItem } from '../../../../shared/models';
 
 @Component({

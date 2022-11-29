@@ -48,7 +48,7 @@ const sync = new Modal({
       click: [
         // projectS.exportProjectData('eData'),
         `
-        const eData = await this.project.exportLocalProjectData()
+        const eData = await this.effect.exportLocalProjectData()
         `,
         httpS.send('api_workspaceUpload', 'eData'),
         `const { workspace } = data`,

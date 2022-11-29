@@ -9,7 +9,7 @@ import {
 } from '../../../../shared/services/storage/index.model';
 import { treeToListHasLevel } from '../../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../../utils/index.utils';
-import { StorageService } from '../../../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';

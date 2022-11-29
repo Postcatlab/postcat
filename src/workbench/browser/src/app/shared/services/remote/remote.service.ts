@@ -3,11 +3,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { Router } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -46,7 +46,7 @@ export class RemoteService {
   constructor(
     private storageService: StorageService,
     private messageService: MessageService,
-    private message: NzMessageService,
+    private message: EoNgFeedbackMessageService,
     private electronService: ElectronService,
     private settingService: SettingService,
     private router: Router

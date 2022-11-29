@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { WorkspaceService } from '../../pages/workspace/workspace.service';
 import { DataSourceService } from '../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../shared/services/message';
 
@@ -13,12 +13,8 @@ import { MessageService } from '../../shared/services/message';
       eo-ng-dropdown
       [nzDropdownMenu]="workspaceMenu"
     >
-      <eo-iconpark-icon
-        class="mr-[5px]"
-        name="link-cloud-{{ workspace.currentWorkspace?.id !== -1 ? 'sucess' : 'faild' }}"
-      >
-      </eo-iconpark-icon>
-      {{ workspace.currentWorkspace.title }}
+      <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ store.isLocal ? 'sucess' : 'faild' }}"> </eo-iconpark-icon>
+      {{ store.getCurrentWorkspaceInfo.title }}
       <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #workspaceMenu>
@@ -48,7 +44,7 @@ import { MessageService } from '../../shared/services/message';
           style="color: #000"
           nz-menu-item
           (click)="changeWorkspace(item)"
-          [nzSelected]="workspace.currentWorkspace?.id === item.id"
+          [nzSelected]="store.getCurrentWorkspaceInfo?.id === item.id"
           *ngFor="let item of searchWorkspace"
         >
           <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ item.id !== -1 ? 'sucess' : 'faild' }}">
@@ -63,18 +59,18 @@ export class SelectWorkspaceComponent implements OnInit {
 
   constructor(
     public store: StoreService,
+    private effect: EffectService,
     private dataSourceService: DataSourceService,
-    private message: MessageService,
-    public workspace: WorkspaceService
+    private message: MessageService
   ) {
-    if (this.workspace.currentWorkspace?.id !== -1) {
-      this.workspace.getWorkspaceInfo(this.workspace.currentWorkspace.id);
+    if (!this.store.isLocal) {
+      this.effect.getWorkspaceInfo(this.store.getCurrentWorkspaceInfo.id);
     }
   }
 
   ngOnInit(): void {}
   changeWorkspace(item) {
-    this.workspace.setCurrentWorkspace(item);
+    this.store.setCurrentWorkspace(item);
   }
   async addWorkspace() {
     this.dataSourceService.checkRemoteCanOperate(() => {
@@ -84,9 +80,9 @@ export class SelectWorkspaceComponent implements OnInit {
 
   get searchWorkspace() {
     if (!this.searchValue) {
-      return this.workspace.workspaceList;
+      return this.store.getWorkspaceList;
     }
     const searchText = this.searchValue.toLocaleLowerCase();
-    return this.workspace.workspaceList.filter((val) => val.title.toLocaleLowerCase().includes(searchText));
+    return this.store.getWorkspaceList.filter((val) => val.title.toLocaleLowerCase().includes(searchText));
   }
 }

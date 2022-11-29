@@ -7,7 +7,7 @@ import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { MessageService } from '../../../../shared/services/message';
-import { StorageService } from '../../../../shared/services/storage';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
 import {
   Group,
