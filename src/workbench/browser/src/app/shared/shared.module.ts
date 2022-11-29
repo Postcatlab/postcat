@@ -26,7 +26,6 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { RouterModule } from '@angular/router';
-import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
 import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/components/split-panel/split.panel.component';
 import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/split-x/split-x.component';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
@@ -35,7 +34,6 @@ import { ExtensionSelectComponent } from './components/extension-select/extensio
 import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 
 const COMPONENTS = [
-  ShadowDomEncapsulationComponent,
   SplitPanelComponent,
   SplitXComponent,
   DownloadClienteComponent,

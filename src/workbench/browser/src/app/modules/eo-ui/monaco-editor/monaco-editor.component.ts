@@ -15,7 +15,7 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services/elec
 import { editor } from 'monaco-editor';
 import * as monaco from 'monaco-editor';
 import { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
-import { defaultCompletions } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/defaultCompletions';
+import { defaultCompletions } from './defaultCompletions';
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 

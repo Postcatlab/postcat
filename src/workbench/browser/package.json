@@ -16,7 +16,7 @@
     "e2e": "yarn build:prod && playwright test -c e2e/playwright.config.ts e2e/",
     "e2e:web": "npx playwright test e2e/cases/",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
-    "analyze": "ng build -c web --stats-json&&webpack-bundle-analyzer dist/en/stats.json",
+    "analyze": "ng build -c production --stats-json&&webpack-bundle-analyzer dist/en/stats.json",
     "lint": "ng lint"
   },
   "dependencies": {

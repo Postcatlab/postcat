@@ -11,6 +11,7 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { EoNgSwitchModule } from 'eo-ng-switch';
 import { EoNgTabsModule } from 'eo-ng-tabs';
+import { ShadowDomEncapsulationModule } from '../../../modules/eo-ui/shadow/shadow-dom-encapsulation.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { EoNgTabsModule } from 'eo-ng-tabs';
     NzInputNumberModule,
     NzDescriptionsModule,
     EoNgSwitchModule,
-    EoNgTabsModule
+    EoNgTabsModule,
+    ShadowDomEncapsulationModule,
   ],
   declarations: [ExtensionSettingComponent, ExtensionDetailComponent],
   schemas: [],
