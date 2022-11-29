@@ -7,9 +7,6 @@ import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
 import { ExtensionDetailModule } from './detail/extension-detail.module';
 
-import { EoNgButtonModule } from 'eo-ng-button';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
