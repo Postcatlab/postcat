@@ -14,8 +14,8 @@ import {
   ViewChildren,
 } from '@angular/core';
 import _ from 'lodash';
-import { isUndefined, omit, omitBy } from 'lodash-es';
-import { eoDeepCopy, isEmptyValue } from '../../../utils/index.utils';
+import { isUndefined, omitBy } from 'lodash-es';
+import { eoDeepCopy } from '../../../utils/index.utils';
 import { filterTableData } from '../../../utils/tree/tree.utils';
 import { TableProSetting } from './table-pro.model';
 
@@ -147,13 +147,16 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set ColumnVisible
     this.setting.toolButton = this.setting.toolButton || {};
     if (!_.has(this.setting.toolButton, 'columnVisible')) {
-      this.setting.toolButton.columnVisible = this.columns.length >= 7 ? true : false;
+      this.setting.toolButton.columnVisible = this.columns.length >= 5 ? true : false;
     }
     this.columns.forEach((col) => {
       const colID = col.id || col.key;
       //Set component
-      const header = omitBy({ title: col.title,left:col.left, right: col.right, resizeable: col.resizeable }, isUndefined);
-      const body: any = omitBy({ key: col.key,left:col.left, type: col.type, right: col.right }, isUndefined);
+      const header = omitBy(
+        { title: col.title, left: col.left, right: col.right, resizeable: col.resizeable },
+        isUndefined
+      );
+      const body: any = omitBy({ key: col.key, left: col.left, type: col.type, right: col.right }, isUndefined);
       switch (col.type) {
         case 'select': {
           body.opts = col.enums.map((item) => ({ label: item.title, value: item.value }));
@@ -161,6 +164,12 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         }
         case 'checkbox': {
           header.type = 'checkbox';
+          body.type='checkbox';
+          delete body.key;
+          body.valueRef={
+            true: '0',
+            false: '1'
+          };
           break;
         }
         case 'input':
@@ -173,7 +182,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           //TODO Add last when has two btnList
           header.title = this.toolBtnTmp;
           //Disable resizeable prevent x-scroll bar
-          header.resizeable=false;
+          header.resizeable = false;
           body.type = 'btn';
           body.btns = col.btns.map((btn) => {
             const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
@@ -243,10 +252,13 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         header.showSort = true;
         header.sortDirections = ['ascend', 'descend', null];
       }
-
       //Set Column visibe
+
+      if (col.showFn) {
+        body.showFn = header.showFn = col.showFn;
+      }
       if (col.columnShow !== 'fixed' && col.type !== 'btnList') {
-        this.columnVisibleStatus[colID] = 1;
+        this.columnVisibleStatus[colID] = col.columnShow===false?0:1;
         this.columnVisibleMenus.push({
           title: col.title,
           key: colID,
@@ -256,9 +268,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           body.showFn = header.showFn = (item) => this.columnVisibleStatus[colID];
         }
       }
-      if (col.showFn) {
-        body.showFn = header.showFn = col.showFn;
-      }
+
       theaderConf.push(header);
       tbodyConf.push(body);
     });

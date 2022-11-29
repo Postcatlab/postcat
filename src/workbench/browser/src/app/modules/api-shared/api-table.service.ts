@@ -1,27 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
+import { ModalService } from '../../shared/services/modal.service';
 import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml } from '../../shared/services/storage/index.model';
+import { eoDeepCopy } from '../../utils/index.utils';
 import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 @Injectable()
 export class ApiTableService {
-  modalService: any;
-  constructor() {}
-  showMore(inputArg, opts: { nzOnOk: (result: any) => void; changeFun; title: string }) {
+  constructor(private modalService: ModalService) {}
+  showMore(item) {
     const modal = this.modalService.create({
-      nzTitle: $localize`${opts.title} Detail`,
+      nzTitle: $localize`Advanced Settings`,
       nzContent: ApiParamsExtraSettingComponent,
       nzWidth: '60%',
       nzComponentParams: {
-        model: JSON.parse(JSON.stringify(inputArg.item)),
+        model: eoDeepCopy(item),
       },
       nzOnOk() {
-        if (opts.nzOnOk) {
-          opts.nzOnOk({
-            $index: inputArg.$index,
-            item: modal.componentInstance.model,
-          });
-        }
         modal.destroy();
       },
     });
@@ -56,14 +51,14 @@ export class ApiTableService {
         title: $localize`Required`,
         type: 'checkbox',
         key: 'required',
-        width: 120,
+        width: 100,
       },
       description: {
         title: $localize`:@@Description:Description`,
         type: 'input',
         key: 'description',
         placeholder: $localize`:@@Description:Description`,
-        width: 150,
+        width: 300,
       },
       example: {
         title: $localize`Example`,
@@ -74,7 +69,7 @@ export class ApiTableService {
       },
       editOperate: {
         type: 'btnList',
-        width: 250,
+        width: 120,
         right: true,
         btns: [
           {
@@ -82,7 +77,9 @@ export class ApiTableService {
           },
           {
             icon: 'more',
-            click: () => {},
+            click: (item) => {
+              this.showMore(item);
+            },
           },
           {
             action: 'delete',
