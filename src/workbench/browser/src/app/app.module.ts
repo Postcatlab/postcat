@@ -14,7 +14,6 @@ import { AppComponent } from './app.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
@@ -56,7 +55,6 @@ registerLocaleData(zh);
     StorageService,
     IndexedDBStorage,
     HttpStorage,
-    NzMessageService,
     ThemeService,
     NzModalService,
     {
