@@ -264,9 +264,6 @@ export class UserModalComponent implements OnInit {
     this.isSaveBtnLoading = false;
   }
   async ngOnInit(): Promise<void> {
-    this.eMessage.success('Hello', {
-      nzDuration: 100000,
-    });
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
