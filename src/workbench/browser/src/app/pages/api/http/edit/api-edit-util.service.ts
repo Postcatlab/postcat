@@ -37,9 +37,7 @@ export class ApiEditUtilService {
    * @returns apiData
    */
   formatEditingApiData(formData): ApiData {
-    return this.parseApiUI2Storage(formData, (result) =>
-      (result || []).filter((val) => val?.name || val?.description || val?.example)
-    );
+    return this.parseApiUI2Storage(formData, (val) => val?.name || val?.description || val?.example);
   }
   /**
    * Handle api data to be saved
@@ -48,6 +46,6 @@ export class ApiEditUtilService {
    * @returns apiData
    */
   formatSavingApiData(formData): ApiData {
-    return this.parseApiUI2Storage(formData, (result) => (result || []).filter((val) => val?.name));
+    return this.parseApiUI2Storage(formData, (val) => val?.name);
   }
 }

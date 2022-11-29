@@ -107,9 +107,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     if (!this.nzData) {
       return;
     }
-    return filterTableData(this.nzData,{
-      childKey:this.childKey,
-      primaryKey:this.setting.primaryKey
+    return filterTableData(this.nzData, {
+      childKey: this.childKey,
+      primaryKey: this.setting.primaryKey,
     });
   }
   ngAfterViewInit() {
@@ -138,7 +138,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set RowSortable
     if (this.setting.rowSortable) {
       theaderConf.push({
-        width: 60,
+        width: 40,
       });
       tbodyConf.push({
         type: 'sort',
@@ -152,8 +152,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     this.columns.forEach((col) => {
       const colID = col.id || col.key;
       //Set component
-      const header = omitBy({ title: col.title, right: col.right, resizeable: col.resizeable }, isUndefined);
-      const body: any = omitBy({ key: col.key, type: col.type, right: col.right }, isUndefined);
+      const header = omitBy({ title: col.title,left:col.left, right: col.right, resizeable: col.resizeable }, isUndefined);
+      const body: any = omitBy({ key: col.key,left:col.left, type: col.type, right: col.right }, isUndefined);
       switch (col.type) {
         case 'select': {
           body.opts = col.enums.map((item) => ({ label: item.title, value: item.value }));
@@ -172,7 +172,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           //Add toolBtn to btnList
           //TODO Add last when has two btnList
           header.title = this.toolBtnTmp;
-
+          //Disable resizeable prevent x-scroll bar
+          header.resizeable=false;
           body.type = 'btn';
           body.btns = col.btns.map((btn) => {
             const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
@@ -296,13 +297,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       domElem.className = domElem.className.replace(' eo-ng-table-full-screen', '');
     }
   }
-  stopPropagation(event: any) {
-    if (event.stopPropagation) {
-      event.stopPropagation();
-    }
-  }
-  toggleColumnVisible(event: any, item: any) {
-    this.columnVisibleStatus[item.key] = event;
+  toggleColumnVisible($event: any, item?: any) {
+    $event.stopPropagation();
+    this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
     this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
   }
   checkAdd(item) {

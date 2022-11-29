@@ -11,6 +11,7 @@
   [nzExpand]="true"
   [nzPrimaryKey]="setting.primaryKey"
   [nzChildKey]="childKey"
+  [nzScroll]="{ x: '1200px' }"
   [nzCheckAddRow]="checkAdd"
   (nzDataChange)="handleDataChange($event)"
   [nzThead]="theadConf"
@@ -54,25 +55,22 @@
 <ng-template #toolBtnTmp dir="rtl">
   <div class="eo-table-tool-bar">
     <!-- Show Column -->
-    <eo-ng-dropdown
+    <button
+      eo-ng-dropdown
+      eo-ng-button
+      nzType="text"
       *ngIf="setting?.toolButton?.columnVisible"
-      [title]="dropdownTitleTmp"
-      [itemTmp]="dropdownMenTmp"
-      [menus]="columnVisibleMenus"
+      [nzDropdownMenu]="dropdownMenTmp"
     >
-    </eo-ng-dropdown>
-    <ng-template #dropdownTitleTmp>
       <svg class="iconpark-icon"><use href="#view-list-781pg17c"></use></svg>
-    </ng-template>
-    <ng-template #dropdownMenTmp let-item="item">
-      <label
-        (click)="stopPropagation($event)"
-        (ngModelChange)="toggleColumnVisible($event, item)"
-        eo-ng-checkbox
-        [(ngModel)]="item.checked"
-        >{{ item.title }}</label
-      >
-    </ng-template>
+    </button>
+    <eo-ng-dropdown-menu #dropdownMenTmp>
+      <ul nz-menu>
+        <li nz-menu-item *ngFor="let item of columnVisibleMenus" (click)="toggleColumnVisible($event, item)">
+          <label eo-ng-checkbox [(ngModel)]="item.checked">{{ item.title }}</label>
+        </li>
+      </ul>
+    </eo-ng-dropdown-menu>
     <!-- Full screen -->
     <button *ngIf="setting?.toolButton?.fullScreen" eo-ng-button nzType="text" (click)="screenAll(0)">
       <svg class="iconpark-icon"><use href="#full-screen"></use></svg>

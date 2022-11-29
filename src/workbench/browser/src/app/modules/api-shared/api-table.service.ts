@@ -39,6 +39,7 @@ export class ApiTableService {
     const columnMUI = {
       name: {
         title: $localize`Param Name`,
+        left:true,
         type: 'input',
         columnShow:'fixed',
         key: 'name',
@@ -105,6 +106,7 @@ export class ApiTableService {
       setting: {
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
+        rowSortable:inArg.isEdit?true:false,
         isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
         toolButton: {
           columnVisible: true,

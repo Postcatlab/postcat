@@ -32,6 +32,7 @@ export const filterTableData = (
     filterFn?: (item: any) => boolean;
   }
 ) => {
+  opts.childKey=opts.childKey||'children';
   const result = inData.map((val) => omit(val, ['eoKey']));
   if (!opts.filterFn) {
     opts.filterFn = (item) => item[opts.primaryKey];
