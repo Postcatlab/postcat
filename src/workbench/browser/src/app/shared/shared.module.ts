@@ -13,11 +13,7 @@ import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgDropdownModule } from 'eo-ng-dropdown';
 import { EoNgAutoCompleteModule } from 'eo-ng-auto-complete';
 
-import {
-  EoNgFeedbackAlertModule,
-  EoNgFeedbackTooltipModule,
-  EoNgFeedbackMessageModule,
-} from 'eo-ng-feedback';
+import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -26,18 +22,11 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { RouterModule } from '@angular/router';
-import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/components/split-panel/split.panel.component';
-import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/split-x/split-x.component';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 
-const COMPONENTS = [
-  SplitPanelComponent,
-  SplitXComponent,
-  DownloadClienteComponent,
-  ExtensionAppComponent
-];
+const COMPONENTS = [DownloadClienteComponent, ExtensionAppComponent];
 const SHARED_UI_MODULE = [
   NzFormModule,
   EoNgButtonModule,
