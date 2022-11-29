@@ -14,7 +14,7 @@ import { HistoryComponent } from './history/eo-history.component';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
-import { EnvModule } from '../../modules/env/env.module';
+// import { EnvModule } from '../../modules/env/env.module';
 import { ApiGroupTreeDirective } from 'eo/workbench/browser/src/app/pages/api/group/tree/api-group-tree.directive';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 import { EoTabModule } from '../../modules/eo-ui/tab/tab.module';
@@ -33,7 +33,7 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     ReactiveFormsModule,
     CommonModule,
     ApiRoutingModule,
-    EnvModule,
+    // EnvModule,
     SharedModule,
     EoTabModule,
     NzResizableModule,
