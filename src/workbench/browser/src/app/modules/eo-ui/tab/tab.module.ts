@@ -18,4 +18,4 @@ import { NzOutletModule } from 'ng-zorro-antd/core/outlet';
   providers: [TabOperateService, TabStorageService],
   exports: [EoTabComponent],
 })
-export class TabComponentModule {}
+export class EoTabModule {}

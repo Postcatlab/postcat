@@ -12,9 +12,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { EouiModule } from '../eo-ui/eoui.module';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import { EoTableProModule } from '../eo-ui/table-pro/table-pro.module';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -26,10 +26,11 @@ const ANTDMODULES = [
   NzDividerModule,
   NzPopconfirmModule,
   NzToolTipModule,
+  EoTableProModule
 ];
 @NgModule({
   declarations: [EnvComponent],
-  imports: [FormsModule, CommonModule, EouiModule, SharedModule, ...ANTDMODULES],
+  imports: [FormsModule, CommonModule, SharedModule, ...ANTDMODULES],
   exports: [EnvComponent],
 })
 export class EnvModule {}

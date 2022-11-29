@@ -16,7 +16,8 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/api/api-tab.service';
 import { EnvModule } from '../../modules/env/env.module';
 import { ApiGroupTreeDirective } from 'eo/workbench/browser/src/app/pages/api/group/tree/api-group-tree.directive';
-import { NzResizableService } from 'ng-zorro-antd/resizable';
+import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
+import { EoTabModule } from '../../modules/eo-ui/tab/tab.module';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
@@ -28,6 +29,8 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     ApiRoutingModule,
     EnvModule,
     SharedModule,
+    EoTabModule,
+    NzResizableModule
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],

@@ -9,9 +9,10 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
 
 import { MemberRoutingModule } from './member-routing.module';
 import { MemberComponent } from './member.component';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 
 @NgModule({
-  imports: [MemberRoutingModule, CommonModule, NzModalModule, NzInputModule, FormsModule, EoNgButtonModule, SharedModule],
+  imports: [MemberRoutingModule, CommonModule, NzAvatarModule,NzModalModule, NzInputModule, FormsModule, EoNgButtonModule, SharedModule],
   declarations: [MemberComponent, ManageAccessComponent],
   exports: [],
   providers: [NzModalService],

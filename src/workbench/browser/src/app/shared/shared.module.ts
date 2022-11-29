@@ -3,14 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ClickStopPropagationDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { EoNgTabsModule } from 'eo-ng-tabs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
@@ -32,27 +25,14 @@ import {
   EoNgFeedbackMessageModule,
 } from 'eo-ng-feedback';
 
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzResultModule } from 'ng-zorro-antd/result';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzListModule } from 'ng-zorro-antd/list';
-import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NzMessageModule } from 'ng-zorro-antd/message';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzTreeModule } from 'ng-zorro-antd/tree';
-import { EouiModule } from 'eo/workbench/browser/src/app/modules/eo-ui/eoui.module';
 
 import { RouterModule } from '@angular/router';
 import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
@@ -63,6 +43,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
 import { ExtensionSelectComponent } from './components/extension-select/extension-select.component';
+import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 
 const COMPONENTS = [
   ShadowDomEncapsulationComponent,
@@ -75,8 +56,6 @@ const COMPONENTS = [
 ];
 const SHARED_UI_MODULE = [
   NzFormModule,
-  NzDrawerModule,
-  NzRadioModule,
   EoNgButtonModule,
   NzBadgeModule,
   EoNgCheckboxModule,
@@ -92,34 +71,17 @@ const SHARED_UI_MODULE = [
   EoNgFeedbackMessageModule,
   EoNgFeedbackAlertModule,
   EoNgFeedbackTooltipModule,
-  NzToolTipModule,
-  NzResultModule,
   EoNgDropdownModule,
-  NzSpinModule,
-  NzCardModule,
   NzNotificationModule,
   NzEmptyModule,
-  NzMessageModule,
-  NzDescriptionsModule,
-  NzInputModule,
-  NzCheckboxModule,
-  EouiModule,
-  NzUploadModule,
-  NzTreeModule,
-  NzAvatarModule,
+  EoIconparkIconModule,
   NzTabsModule,
   NzSkeletonModule,
-  NzSelectModule,
   NzPopoverModule,
-  NzResizableModule,
-  NzInputNumberModule,
-  NzSwitchModule,
   NzDividerModule,
   NzModalModule,
-  NzTypographyModule,
   NzListModule,
   NzLayoutModule,
-  NzTagModule,
   NzPopconfirmModule,
 ] as const;
 const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;

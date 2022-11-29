@@ -1,9 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { EouiModule } from 'eo/workbench/browser/src/app/modules/eo-ui/eoui.module';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //Other module
@@ -33,6 +31,7 @@ import { EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { ThemeService } from './core/services/theme.service';
 
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
+import { NzOverlayModule } from 'ng-zorro-antd/core/overlay';
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -47,8 +46,6 @@ registerLocaleData(zh);
     BrowserAnimationsModule,
     CoreModule,
     AppRoutingModule,
-    HttpClientModule,
-    EouiModule,
   ],
   providers: [
     MockService,

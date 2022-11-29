@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { EouiModule } from '../../../../modules/eo-ui/eoui.module';
 import { SharedModule } from '../../../../shared/shared.module';
 
 import { EoNgButtonModule } from 'eo-ng-button';
@@ -21,8 +20,9 @@ import { ApiDetailUtilService } from './api-detail-util.service';
 import { RouterModule } from '@angular/router';
 import { ApiMockComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.component';
 import { ApiSharedModule } from '../../../../modules/api-shared/api-shared.module';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
-const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule];
+const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule,NzCollapseModule];
 const COMPONENTS = [
   ApiDetailComponent,
   ApiDetailHeaderComponent,
@@ -45,7 +45,6 @@ const COMPONENTS = [
     ReactiveFormsModule,
     CommonModule,
     ...NZ_COMPONETS,
-    EouiModule,
     SharedModule,
   ],
   providers: [ApiDetailUtilService],

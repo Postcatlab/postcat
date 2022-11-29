@@ -26,7 +26,6 @@ import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/s
 import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/local-node/test-connect.service';
 import { TestServerServerlessService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/serverless-node/test-connect.service';
 
-
 import { ApiTestComponent } from './api-test.component';
 import { ApiTestBodyComponent } from './body/api-test-body.component';
 import { ApiTestRestComponent } from './rest/api-test-rest.component';
@@ -37,7 +36,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { RouterModule } from '@angular/router';
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared/api-shared.module';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { NzResizableService } from 'ng-zorro-antd/resizable';
+import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 import { ApiTestService } from './api-test.service';
 
 const NZ_COMPONETS = [
@@ -81,6 +80,7 @@ const COMPONENTS = [
     ...NZ_COMPONETS,
     ApiSharedModule,
     SharedModule,
+    NzResizableModule,
   ],
   providers: [
     ApiTestService,

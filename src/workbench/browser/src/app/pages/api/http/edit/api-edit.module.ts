@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { EouiModule } from '../../../../modules/eo-ui/eoui.module';
 import { SharedModule } from '../../../../shared/shared.module';
 
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -17,6 +16,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+
 
 import { ApiEditComponent } from './api-edit.component';
 import { ApiEditHeaderComponent } from './header/api-edit-header.component';
@@ -45,6 +46,7 @@ const NZ_COMPONETS = [
   NzAffixModule,
   NzPopconfirmModule,
   NzBadgeModule,
+  NzCollapseModule
 ];
 const COMPONENTS = [
   ApiEditComponent,
@@ -67,7 +69,6 @@ const COMPONENTS = [
     ReactiveFormsModule,
     CommonModule,
     ...NZ_COMPONETS,
-    EouiModule,
     ApiSharedModule,
     SharedModule,
   ],
