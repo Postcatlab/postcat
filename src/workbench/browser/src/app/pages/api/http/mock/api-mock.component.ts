@@ -10,8 +10,8 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { copyText } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service'
 
 @Component({
   selector: 'eo-api-mock-table',
@@ -33,7 +33,7 @@ export class ApiMockComponent implements OnInit {
   get mockUrl() {
     const prefix = this.store.isLocal
       ? this.dataSource.mockUrl
-      : `${this.dataSource.mockUrl}/mock-${this.projectService.currentProjectID}`;
+      : `${this.dataSource.mockUrl}/mock-${this.effect.currentProjectID}`;
     return `${prefix}`;
   }
   get modalTitle() {
@@ -78,7 +78,7 @@ export class ApiMockComponent implements OnInit {
     private route: ActivatedRoute,
     private dataSource: DataSourceService,
     private message: NzMessageService,
-    private projectService: ProjectService,
+    private effect: EffectService,
     private store: StoreService
   ) {
     this.rawChange$.pipe(debounceTime(700), takeUntil(this.destroy$)).subscribe(() => {});

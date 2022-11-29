@@ -4,18 +4,26 @@ import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { reaction } from 'mobx';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProjectService {
+export class EffectService {
   currentProjectID = StorageUtil.get('currentProjectID', 1);
 
   constructor(
     private apiService: ApiService,
     private storage: StorageService,
-    private indexedDBStorage: IndexedDBStorage
-  ) {}
+    private indexedDBStorage: IndexedDBStorage,
+    private store: StoreService
+  ) {
+    reaction(
+      () => this.store.currentWorkspaceID,
+      (workspaceID) => this.updateProjectID(workspaceID)
+    );
+  }
 
   setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
@@ -75,5 +83,30 @@ export class ProjectService {
         children: this.exportCollects(apiGroup, apiData, item.uuid),
       }))
       .concat(apiDataFilters);
+  }
+
+  getWorkspaceInfo(workspaceID: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storage.run('getWorkspaceInfo', [workspaceID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
+  async updateProjectID(workspaceID: number) {
+    if (workspaceID === -1) {
+      this.setCurrentProjectID(1);
+      StorageUtil.remove('server_version');
+      return;
+    }
+    const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
+    this.setCurrentProjectID(projects.at(0).uuid);
+    this.store.setAuthEnum({
+      canEdit: creatorID === this.store.getUserProfile.id,
+    });
   }
 }

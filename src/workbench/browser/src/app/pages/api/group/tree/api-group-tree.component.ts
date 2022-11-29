@@ -17,9 +17,9 @@ import { ElectronService } from '../../../../core/services';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/pages/workspace/import-api/import-api.component';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 @Component({
   selector: 'eo-api-group-tree',
@@ -112,9 +112,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private storage: StorageService,
     private apiService: ApiService,
-    private projectService: ProjectService,
     private nzModalService: NzModalService,
-    private http: RemoteService
+    private http: RemoteService,
+    private effect: EffectService
   ) {}
   ngOnInit(): void {
     this.isEdit = !this.store.isShare;
@@ -175,7 +175,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         resolve(true);
         return;
       }
-      this.storage.run('projectCollections', [this.projectService.currentProjectID], (result: StorageRes) => {
+      this.storage.run('projectCollections', [this.effect.currentProjectID], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           const { groups, apis } = result.data;
           this.getGroups(groups);

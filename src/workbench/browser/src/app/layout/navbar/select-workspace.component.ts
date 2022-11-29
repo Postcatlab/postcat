@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { DataSourceService } from '../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../shared/services/message';
@@ -58,11 +59,12 @@ export class SelectWorkspaceComponent implements OnInit {
 
   constructor(
     public store: StoreService,
+    private effect: EffectService,
     private dataSourceService: DataSourceService,
     private message: MessageService
   ) {
     if (!this.store.isLocal) {
-      this.store.getWorkspaceInfo(this.store.getCurrentWorkspaceInfo.id);
+      this.effect.getWorkspaceInfo(this.store.getCurrentWorkspaceInfo.id);
     }
   }
 

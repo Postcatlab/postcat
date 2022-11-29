@@ -12,11 +12,11 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/set
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { filter, map, tap, Observable, catchError } from 'rxjs';
 import { uniqueSlash } from '../../../../../utils/api';
-import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service'
 
 const protocolReg = new RegExp('^(http|https)://');
 
@@ -32,7 +32,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     return `/${this.workspaceID}/${this.projectID}/`;
   }
   get projectID() {
-    return this.projectService.currentProjectID;
+    return this.effect.currentProjectID;
   }
   get workspaceID() {
     return this.store.getCurrentWorkspaceInfo.id;
@@ -40,7 +40,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   prefix;
   constructor(
     private store: StoreService,
-    private projectService: ProjectService,
+    private effect: EffectService,
     private messageService: MessageService,
     private web: WebService
   ) {

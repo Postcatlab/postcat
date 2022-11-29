@@ -16,7 +16,8 @@ export class ApiService {
     private message: EoNgFeedbackMessageService,
     private router: Router,
     private storage: StorageService,
-    private http: RemoteService
+    private http: RemoteService,
+    private store: StoreService
   ) {}
   get(uuid): Promise<ApiData> {
     return new Promise(async (resolve) => {

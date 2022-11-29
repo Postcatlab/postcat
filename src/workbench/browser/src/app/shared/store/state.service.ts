@@ -6,7 +6,6 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { ProjectService } from 'eo/workbench/browser/src/app/pages/workspace/project.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 /** is show switch success tips */
@@ -92,7 +91,6 @@ export class StoreService {
   constructor(
     private setting: SettingService,
     private storage: StorageService,
-    private project: ProjectService,
     private router: Router,
     private route: ActivatedRoute,
     private message: MessageService
@@ -146,6 +144,10 @@ export class StoreService {
     }
   }
 
+  @action setAuthEnum(data) {
+    this.authEnum = Object.assign(this.authEnum, data);
+  }
+
   @action setDataSource() {
     if (!this.isLocal) {
       this.storage.toggleDataSource({ dataSourceType: 'http' });
@@ -156,33 +158,9 @@ export class StoreService {
     }
   }
 
-  @action getWorkspaceInfo(workspaceID: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.storage.run('getWorkspaceInfo', [workspaceID], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          reject();
-        }
-      });
-    });
-  }
-
-  @action async updateProjectID(workspaceID: number) {
-    if (workspaceID === -1) {
-      this.project.setCurrentProjectID(1);
-      StorageUtil.remove('server_version');
-      return;
-    }
-    const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
-    this.project.setCurrentProjectID(projects.at(0).uuid);
-    this.authEnum.canEdit = creatorID === this.getUserProfile.id;
-  }
-
   @action async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspaceID = workspace.id;
     StorageUtil.set('currentWorkspace', workspace);
-    await this.updateProjectID(this.currentWorkspaceID);
     // refresh component
     await this.router.navigate(['**']);
     await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });

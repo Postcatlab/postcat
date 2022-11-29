@@ -5,6 +5,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 @Component({
   selector: 'eo-workspace',
@@ -70,7 +71,8 @@ export class WorkspaceComponent implements OnInit {
     public store: StoreService,
     public message: MessageService,
     public api: RemoteService,
-    public fb: UntypedFormBuilder
+    public fb: UntypedFormBuilder,
+    private effect: EffectService
   ) {
     this.validateWspNameForm = UntypedFormGroup;
     this.isSaveBtnBtnLoading = false;
@@ -83,7 +85,7 @@ export class WorkspaceComponent implements OnInit {
     });
 
     const { title: currentWsp, id } = this.store.getCurrentWorkspaceInfo;
-    this.store.updateProjectID(id);
+    this.effect.updateProjectID(id);
     // * get WspName form values
     this.validateWspNameForm.patchValue({
       workspace: currentWsp,
