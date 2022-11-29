@@ -10,12 +10,14 @@ import {
   ElementRef,
 } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { debounce, isBase64, whatTextType } from '../../../utils/index.utils';
+import { debounce, whatTextType } from '../../../utils/index.utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
-import { editor } from 'monaco-editor';
-import * as monaco from 'monaco-editor';
+import type { editor, IDisposable } from 'monaco-editor';
+import type MonacoEditor from 'monaco-editor';
 import { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 import { defaultCompletions } from './defaultCompletions';
+
+declare const monaco: typeof MonacoEditor;
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
@@ -68,7 +70,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   $$isBase64 = false;
   isFirstFormat = true;
   codeEdtor: editor.IStandaloneCodeEditor;
-  completionItemProvider: monaco.IDisposable;
+  completionItemProvider: IDisposable;
   buttonList: any[] = [];
   typeList = [
     {
@@ -254,7 +256,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
           return;
         }
 
-        const lineHeight = this.codeEdtor.getOption(editor.EditorOption.lineHeight);
+        const lineHeight = this.codeEdtor.getOption(monaco.editor.EditorOption.lineHeight);
         const lineCount = this.codeEdtor.getModel()?.getLineCount() || 1;
         const height = this.codeEdtor.getTopForLineNumber(Math.min(lineCount, this.maxLine)) + lineHeight;
 
