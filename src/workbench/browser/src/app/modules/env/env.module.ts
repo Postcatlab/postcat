@@ -15,6 +15,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { EoTableProModule } from '../eo-ui/table-pro/table-pro.module';
+import { EnvListComponent } from './env-list/env-list.component';
 
 const ANTDMODULES = [
   NzModalModule,
@@ -29,8 +30,8 @@ const ANTDMODULES = [
   EoTableProModule
 ];
 @NgModule({
-  declarations: [EnvComponent],
+  declarations: [EnvComponent,EnvListComponent],
   imports: [FormsModule, CommonModule, SharedModule, ...ANTDMODULES],
-  exports: [EnvComponent],
+  exports: [EnvComponent,EnvListComponent],
 })
 export class EnvModule {}

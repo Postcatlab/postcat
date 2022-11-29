@@ -14,6 +14,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
+const DEFAULT_DY_WIDTH = 250;
 
 const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KEY), 10);
 @Component({
@@ -164,13 +165,18 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   toggleRightBar(operate: 'open' | 'close') {
     if (operate === 'open') {
-      this.dyWidth = this.getLocalDyWidth();
+      let dyWitdth = this.getLocalDyWidth();
+      if (dyWitdth === this.RIGHT_BAR_WIDTH) {
+        dyWitdth = DEFAULT_DY_WIDTH;
+        localStorage.setItem(DY_WIDTH_KEY, dyWitdth.toString());
+      }
+      this.dyWidth = dyWitdth;
     } else {
       this.dyWidth = this.RIGHT_BAR_WIDTH;
     }
   }
   getLocalDyWidth() {
-    return localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : 250;
+    return localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : DEFAULT_DY_WIDTH;
   }
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {
