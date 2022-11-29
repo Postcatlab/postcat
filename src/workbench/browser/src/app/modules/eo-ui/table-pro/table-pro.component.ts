@@ -37,7 +37,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('enums', { read: TemplateRef, static: false })
   enums: TemplateRef<any>;
 
-  @ViewChildren('iconBtnTmp', { read: TemplateRef })
+  @ViewChildren('iconBtnTmp', { read: TemplateRef})
   iconBtnTmp: QueryList<TemplateRef<any>>;
 
   @ViewChild('toolBtnTmp', { read: TemplateRef, static: false })
@@ -91,7 +91,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           console.error(`EO_ERROR: Can't find nzDataItem`);
           return;
         }
-        if (!this.nzData) {return;}
+        if (!this.nzData) {
+          return;
+        }
         if (!this.nzData.length || this.nzData[this.nzData.length - 1][this.setting.primaryKey]) {
           this.nzData.push(eoDeepCopy(this.nzDataItem));
         }

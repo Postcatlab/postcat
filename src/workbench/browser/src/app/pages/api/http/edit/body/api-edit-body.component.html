@@ -46,14 +46,14 @@
 >
 </eo-monaco-editor>
 <!-- Binary -->
-<textarea
-  class="binary_textarea"
-  rows="4"
-  *ngIf="bodyType === 'binary'"
-  nzBorderless
-  i18n-placeholder
-  (ngModelChange)="rawDataChange($event)"
-  placeholder="Binary Description"
-  eo-ng-input
-  [(ngModel)]="model"
-></textarea>
+<div class="p-[10px]">
+  <textarea
+    rows="4"
+    *ngIf="bodyType === 'binary'"
+    i18n-placeholder
+    (ngModelChange)="rawDataChange($event)"
+    placeholder="Binary Description"
+    eo-ng-input
+    [(ngModel)]="model"
+  ></textarea>
+</div>
