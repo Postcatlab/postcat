@@ -11,16 +11,13 @@
   <div class="flex items-center electron-can-be-click">
     <eo-get-share-link *ngIf="!store.isLocal && !store.isShare"></eo-get-share-link>
     <!-- Change Language -->
-    <eo-ng-select
-      *ngIf="store.isShare"
-      [(ngModel)]="lang.systemLanguage"
-      nzBorderless
-      (ngModelChange)="handleSwitchLang($event)"
-    >
-      <eo-ng-option nzValue="en-US" nzLabel="English"></eo-ng-option>
-      <eo-ng-option nzValue="zh-Hans" nzLabel="简体中文"></eo-ng-option>
-    </eo-ng-select>
-    <nz-divider nzType="vertical"></nz-divider>
+    <ng-container *ngIf="store.isShare">
+      <eo-ng-select [(ngModel)]="lang.systemLanguage" nzBorderless (ngModelChange)="handleSwitchLang($event)">
+        <eo-ng-option nzValue="en-US" nzLabel="English"></eo-ng-option>
+        <eo-ng-option nzValue="zh-Hans" nzLabel="简体中文"></eo-ng-option>
+      </eo-ng-select>
+      <nz-divider nzType="vertical"></nz-divider>
+    </ng-container>
     <!-- help -->
     <eo-ng-dropdown btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus">
       <ng-template #helpTitle>
@@ -33,29 +30,14 @@
     </ng-template>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
-    <button
-      eo-ng-button
-      nzType="text"
-      *ngIf="!store.isShare"
-      class="flex items-center justify-center icon"
-      i18n-nzTooltipTitle
-      eoNgFeedbackTooltip
-      [nzTooltipMouseEnterDelay]="0.4"
-      nzTooltipPlacement="bottom"
-      nzTooltipTitle="Open Settings"
-      (click)="openSettingModal()"
-    >
+    <button eo-ng-button nzType="text" *ngIf="!store.isShare" class="flex items-center justify-center icon"
+      i18n-nzTooltipTitle eoNgFeedbackTooltip [nzTooltipMouseEnterDelay]="0.4" nzTooltipPlacement="bottom"
+      nzTooltipTitle="Open Settings" (click)="openSettingModal()">
       <eo-iconpark-icon name="setting"></eo-iconpark-icon>
     </button>
     <!-- User -->
-    <button
-      eo-ng-button
-      nzType="text"
-      eo-ng-dropdown
-      *ngIf="!store.isShare"
-      class="flex items-center justify-center icon"
-      [nzDropdownMenu]="userMenu"
-    >
+    <button eo-ng-button nzType="text" eo-ng-dropdown *ngIf="!store.isShare"
+      class="flex items-center justify-center icon" [nzDropdownMenu]="userMenu">
       <eo-iconpark-icon name="people"> </eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #userMenu>
