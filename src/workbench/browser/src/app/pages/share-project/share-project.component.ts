@@ -4,7 +4,9 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 @Component({
   selector: 'eo-share',
-  template: `<section class="flex flex-col"><eo-api></eo-api></section>`,
+  template: `<section class="flex flex-col">
+    <eo-api></eo-api>
+    </section>`,
 })
 export class ShareComponent implements OnInit {
   constructor(private route: ActivatedRoute, private store: StoreService) {}
