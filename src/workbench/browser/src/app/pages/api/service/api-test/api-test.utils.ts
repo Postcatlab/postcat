@@ -1,4 +1,3 @@
-import { listToTreeHasLevel } from '../../../../utils/tree/tree.utils';
 import { formatDate } from '@angular/common';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 import { ApiBodyType, ApiData } from '../../../../shared/services/storage/index.model';
@@ -41,26 +40,22 @@ export const eoFormatRequestData = (
     if (!Array.isArray(inArr)) {
       return [];
     }
-    const result = [];
-    inArr.forEach((val) => {
-      if (!val.name) {
-        return;
-      }
-      result.push({
+    return inArr
+      .filter((val) => val.name)
+      .map((val) => ({
         checkbox: val.required,
         headerName: val.name,
         headerValue: val.value,
-      });
-    });
-    return result;
+      }));
   };
   const formatBody = (inData) => {
-    let result;
     switch (inData.requestBodyType) {
-      case ApiBodyType['Form-data']:
-      case ApiBodyType.JSON:
-      case ApiBodyType.XML: {
-        result = [];
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        return inData.requestBody;
+        break;
+      }
+      case ApiBodyType['Form-data']: {
         const typeMUI = {
           string: '0',
           file: '1',
@@ -70,38 +65,19 @@ export const eoFormatRequestData = (
           number: '14',
           null: '15',
         };
-        inData.requestBody.forEach((val) => {
-          if (!val.name) {
-            return;
-          }
-          result.push({
+        return inData.requestBody
+          .filter((val) => val.name)
+          .map((val) => ({
             checkbox: val.required,
-            listDepth: val.listDepth || 0,
+            listDepth: 0,
             paramKey: val.name,
-            files: val.files?.map((val) => val.dataUrl),
+            files: val.files?.map((file) => file.dataUrl),
             paramType: typeMUI[val.type],
             paramInfo: val.value === undefined ? val.example : val.value,
-          });
-        });
-        result = listToTreeHasLevel(result, {
-          childKey: 'childList',
-        });
-        break;
-      }
-      case ApiBodyType.Binary:
-      case ApiBodyType.Raw: {
-        result = inData.requestBody;
+          }));
         break;
       }
     }
-    return result;
-  };
-  const formatEnv = (env) => {
-    const result = {
-      paramList: (env.parameters || []).map((val) => ({ paramKey: val.name, paramValue: val.value })),
-      frontURI: env.hostUri,
-    };
-    return result;
   };
   const result: TestLocalNodeData = {
     lang: opts.lang,
@@ -116,7 +92,10 @@ export const eoFormatRequestData = (
     params: formatBody(data),
     auth: { status: '0' },
     advancedSetting: { requestRedirect: 1, checkSSL: 0, sendEoToken: 1, sendNocacheToken: 0 },
-    env: formatEnv(opts.env),
+    env: {
+      paramList: (opts.env.parameters || []).map((val) => ({ paramKey: val.name, paramValue: val.value })),
+      frontURI: opts.env.hostUri,
+    },
     beforeInject: opts.beforeScript,
     afterInject: opts.afterScript,
     testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', locale),
@@ -166,11 +145,7 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
       globals,
       general: report.general,
       response,
-      request: {
-        requestHeaders: report.request.headers.map((val) => ({ name: val.key, value: val.value })),
-        requestBodyType: REQUEST_BODY_TYPE[report.request.requestType],
-        requestBody: report.request.body,
-      },
+      //For add test history
       history: {
         general: report.general,
         response,
@@ -186,15 +161,6 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
         },
       },
     });
-  if (result.request.requestBodyType === 'formData') {
-    result.request.requestBody = [];
-    for (const keyName in report.request.body) {
-      result.request.requestBody.push({
-        name: keyName,
-        value: report.request.body[keyName],
-      });
-    }
-  }
   if (result.history.request.requestBodyType === 'formData') {
     result.history.request.requestBody = result.history.request.requestBody.map((val) => ({
       name: val.key,

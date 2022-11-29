@@ -7,7 +7,6 @@ import {
   StorageRes,
   StorageResStatus,
 } from '../../../../shared/services/storage/index.model';
-import { treeToListHasLevel } from '../../../../utils/tree/tree.utils';
 import { reverseObj } from '../../../../utils/index.utils';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
@@ -97,11 +96,6 @@ export class ApiDetailComponent implements OnInit {
           return;
         }
         this.originModel = cloneDeep(data);
-        ['requestBody', 'responseBody'].forEach((tableName) => {
-          if (['xml', 'json'].includes(data[`${tableName}Type`])) {
-            data[tableName] = treeToListHasLevel(data[tableName]);
-          }
-        });
         this.model = data;
         resolve(this.model);
         return;
@@ -109,11 +103,6 @@ export class ApiDetailComponent implements OnInit {
       this.storage.run('apiDataLoad', [id], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.originModel = cloneDeep(result.data);
-          ['requestBody', 'responseBody'].forEach((tableName) => {
-            if (['xml', 'json'].includes(result.data[`${tableName}Type`])) {
-              result.data[tableName] = treeToListHasLevel(result.data[tableName]);
-            }
-          });
           this.model = result.data;
           resolve(this.model);
         }

@@ -16,6 +16,7 @@ import {
 import _ from 'lodash';
 import { isUndefined, omit, omitBy } from 'lodash-es';
 import { eoDeepCopy, isEmptyValue } from '../../../utils/index.utils';
+import { filterTableData } from '../../../utils/tree/tree.utils';
 import { TableProSetting } from './table-pro.model';
 
 @Component({
@@ -37,7 +38,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('enums', { read: TemplateRef, static: false })
   enums: TemplateRef<any>;
 
-  @ViewChildren('iconBtnTmp', { read: TemplateRef})
+  @ViewChildren('iconBtnTmp', { read: TemplateRef })
   iconBtnTmp: QueryList<TemplateRef<any>>;
 
   @ViewChild('toolBtnTmp', { read: TemplateRef, static: false })
@@ -49,6 +50,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   tbodyConf = [];
   theadConf = [];
   iconBtns = [];
+
+  childKey = 'children';
 
   columnVisibleMenus = [];
   private isFullScreenStatus = false;
@@ -101,8 +104,13 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
   getPureNzData() {
-    const result = this.nzData.map((val) => omit(val, ['eoKey']));
-    return result.filter((val) => !isEmptyValue(val));
+    if (!this.nzData) {
+      return;
+    }
+    return filterTableData(this.nzData,{
+      childKey:this.childKey,
+      primaryKey:this.setting.primaryKey
+    });
   }
   ngAfterViewInit() {
     this.initConfig();

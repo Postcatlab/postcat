@@ -74,9 +74,11 @@
       <eo-ng-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
         <ng-template #headerTitleTmp>
           <span i18n="@@RequestHeaders">Headers</span>
-          <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.requestHeaders)">{{
-            model.request.requestHeaders | apiParamsNum
-          }}</span>
+          <nz-badge
+            *ngIf="bindGetApiParamNum(model.request.requestHeaders)"
+            class="ml-1 ant-badge-primary"
+            nzStatus="success"
+          ></nz-badge>
         </ng-template>
         <eo-api-test-header
           class="eo_theme_iblock"
@@ -113,9 +115,11 @@
       <eo-ng-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
         <ng-template #queryTitleTmp>
           <span i18n>Query</span>
-          <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.queryParams)">{{
-            model.request.queryParams | apiParamsNum
-          }}</span>
+          <nz-badge
+            *ngIf="bindGetApiParamNum(model.request.queryParams)"
+            class="ml-1 ant-badge-primary"
+            nzStatus="success"
+          ></nz-badge>
         </ng-template>
         <eo-api-test-query
           class="eo_theme_iblock"
@@ -126,9 +130,11 @@
       <eo-ng-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
         <ng-template #restTitleTmp>
           <span i18n>REST</span>
-          <span class="eo-tab-icon ml-[4px]" *ngIf="bindGetApiParamNum(model.request.restParams)">{{
-            model.request.restParams | apiParamsNum
-          }}</span>
+          <nz-badge
+            *ngIf="bindGetApiParamNum(model.request.restParams)"
+            class="ml-1 ant-badge-primary"
+            nzStatus="success"
+          ></nz-badge>
         </ng-template>
         <eo-api-test-rest
           class="eo_theme_iblock"

@@ -237,7 +237,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
    * Judge has edit manualy
    */
   isFormChange(): boolean {
-    return false;
     //Has exist api can't save
     //TODO If has test case,test data will be saved to test case
     // if (this.model.request.uuid) {
@@ -338,7 +337,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     console.log('[api test componnet]receiveMessage', message);
     const tmpHistory = {
       general: message.general,
-      request: message.request || {},
+      request: message.history.request || {},
       response: message.response || {},
     };
     let queryParams: { pageID: string; uuid?: string };

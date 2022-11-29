@@ -12,6 +12,7 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared/api-shared.module';
 import { ApiTestModule } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.module';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 const ANTDS = [EoNgButtonModule, NzTabsModule];
 
@@ -23,6 +24,7 @@ const ANTDS = [EoNgButtonModule, NzTabsModule];
     SharedModule,
     ApiTestModule,
     NzResizableModule,
+    NzBadgeModule,
     ...ANTDS,
   ],
   declarations: [WebsocketComponent],

@@ -3,6 +3,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { ApiData } from '../../../../shared/services/storage/index.model';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { omit } from 'lodash-es';
+import { filterTableData } from '../../../../utils/tree/tree.utils';
 @Injectable()
 export class ApiEditUtilService {
   constructor(private modalService: ModalService) {}
@@ -21,8 +22,9 @@ export class ApiEditUtilService {
         if (typeof result[tableName] !== 'object') {
           return;
         }
-        result[tableName] = omit(result[tableName], ['eoKey']);
-        result[tableName] = filterArrFun([].concat(result[tableName]));
+        result[tableName] = filterTableData(result[tableName], {
+          filterFn: filterArrFun,
+        });
       }
     );
     return result;

@@ -108,7 +108,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
-    this.setListConf();
+    this.initListConf();
     this.setModel();
     if (type === 'init') {
       return;
@@ -192,36 +192,12 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
         break;
       }
     }
-    if (['formData'].includes(this.bodyType)) {
-      if (!this.model.length || this.model[this.model.length - 1].name) {
-        this.model.push(Object.assign({ listDepth: 0 }, this.itemStructure));
-      }
-    }
-  }
-  private setListConf() {
-    // reset table config
-    this.listConf.setting = Object.assign({}, this.cache.listConfSetting);
-    const typeIndex = this.listConf.tdList.findIndex((val) => val.mark === 'type');
-    let TYPE_CONST: any = [];
-    switch (this.bodyType) {
-      case ApiTestBodyType['Form-data']: {
-        TYPE_CONST = ApiTestParamsTypeFormData;
-        this.listConf.setting.isLevel = false;
-        break;
-      }
-    }
-    this.listConf.tdList[typeIndex].selectQuery = Object.keys(TYPE_CONST).map((val) => ({
-      key: val,
-      value: TYPE_CONST[val],
-    }));
   }
   private initListConf() {
     const config = this.apiTable.initTable({
       in: 'body',
       format:this.bodyType as ApiBodyType,
       isEdit: true,
-    },{
-      manualAdd:true
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

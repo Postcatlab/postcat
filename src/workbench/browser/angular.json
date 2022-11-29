@@ -38,7 +38,6 @@
               { "input": "src/assets/theme/purple.css", "bundleName": "purple", "inject": false },
               "src/antd.less",
               "src/eoui.less",
-              "../../../node_modules/eo-ng-feedback/styles.scss",
               "src/styles.scss",
               "src/assets/font/iconfont.css"
             ],

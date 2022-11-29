@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { listToTreeHasLevel } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { ApiTestHeaders, ContentTypeByAbridge } from '../../pages/api/service/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../shared/services/storage/index.model';
 import { eoDeepCopy } from '../../utils/index.utils';
 import { uiData2Json, text2UiData, json2XML } from '../../utils/data-transfer/data-transfer.utils';
+import { omit } from 'lodash-es';
 
 @Injectable()
 export class ApiTestUtilService {
@@ -198,7 +198,7 @@ export class ApiTestUtilService {
       },
       response: eoDeepCopy(inData),
     };
-    (result.testData.requestHeaders||[]).map((val) => (val.required = true));
+    (result.testData.requestHeaders || []).map((val) => (val.required = true));
     return result;
   }
   /**
@@ -222,9 +222,7 @@ export class ApiTestUtilService {
     const result = {};
     const bodyInfo = text2UiData(inData);
     if (bodyInfo.textType !== 'raw') {
-      result[`${keyName}`] = listToTreeHasLevel(bodyInfo.data, {
-        filterKeys: ['value'],
-      });
+      result[`${keyName}`] = omit(result[`${keyName}`], ['value']);
     } else {
       result[`${keyName}`] = bodyInfo.data;
     }

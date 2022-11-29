@@ -6,7 +6,7 @@
   </div>
   <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
   <!-- <nz-divider nzType="vertical"></nz-divider> -->
-  <div *ngIf="['formData', 'json', 'xml'].includes(bodyType)" class="inline-flex items-center mt-1">
+  <div *ngIf="['formData', 'json', 'xml'].includes(bodyType)" class="inline-flex items-center">
     <params-import
       [baseData]="model"
       [contentType]="bodyType"
@@ -16,8 +16,7 @@
     ></params-import>
   </div>
 </div>
-<div *ngIf="bodyType === 'json'" class="px-4">
-  <p class="fs12 c999 mb5" i18n>JSON Root Type:</p>
+<div *ngIf="bodyType === 'json'" class="px-4 py-2">
   <eo-ng-select
     class="w-[100px] mb10"
     [(ngModel)]="jsonRootType"

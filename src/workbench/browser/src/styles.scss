@@ -11,11 +11,10 @@
 @import '../../../node_modules/eo-ng-input/styles.scss';
 @import '../../../node_modules/eo-ng-auto-complete/styles.scss';
 
-
 @import '../../../node_modules/eo-ng-tabs/styles.scss';
 @import '../../../node_modules/eo-ng-tree/styles.scss';
 @import '../../../node_modules/eo-ng-table/styles.scss';
-
+@import '../../../node_modules/eo-ng-feedback/styles.scss';
 
 html,
 body {
@@ -130,10 +129,10 @@ nz-resize-handle.container-draggable {
       width: 3px;
     }
   }
-  &.nz-resizable-handle-left{
+  &.nz-resizable-handle-left {
     left: 0;
   }
-  &.nz-resizable-handle-right{
+  &.nz-resizable-handle-right {
     right: 0;
   }
 
@@ -147,8 +146,8 @@ nz-resize-handle.container-draggable {
   }
 }
 
-.table-border-all{
-  .eo-ng-table{
+.table-border-all {
+  .eo-ng-table {
     border: 1px solid var(--BORDER);
   }
 }

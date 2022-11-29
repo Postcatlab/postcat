@@ -1,4 +1,9 @@
-import { Environment, ApiTestHistoryResponse, ApiTestResGeneral, ApiTestHistoryFrame } from '../../../../shared/services/storage/index.model';
+import {
+  Environment,
+  ApiTestHistoryResponse,
+  ApiTestResGeneral,
+  ApiTestHistoryFrame,
+} from '../../../../shared/services/storage/index.model';
 /**
  * Test response from  test server to ui
  */
@@ -6,7 +11,6 @@ export interface ApiTestRes {
   status: 'finish' | 'error';
   id: string;
   response: ApiTestHistoryResponse | any;
-  request?: any;
   globals?: object;
   general?: ApiTestResGeneral;
   /**

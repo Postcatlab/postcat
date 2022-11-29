@@ -40,6 +40,7 @@ export class ApiTableService {
       name: {
         title: $localize`Param Name`,
         type: 'input',
+        columnShow:'fixed',
         key: 'name',
         placeholder: $localize`Param Name`,
         width: 300,
