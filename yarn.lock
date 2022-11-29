@@ -5705,63 +5705,63 @@ env-paths@^2.2.0, env-paths@^2.2.1:
 
 eo-ng-auto-complete@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-auto-complete/-/eo-ng-auto-complete-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-auto-complete/-/eo-ng-auto-complete-0.0.82.tgz#5a612a6bc19234a9f3d143ec44eb6dab3e404efc"
   integrity sha512-u4VtwzAoqtFXuJjeIE0Z1H7iR0QAq0zlM8rr8kmyT1dokQczs8TIYXqRfxfZU40z8HqYRRmWoLVC2+cybaOJ6w==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-button@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-button/-/eo-ng-button-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-button/-/eo-ng-button-0.0.82.tgz#35dd2e765d3ed7f5e8ba5590f5a695b515f212a0"
   integrity sha512-iAxeTJL/vAIFXzNDuDhXkBmnVOvyPxwfr/CJUqdYt+e7GBigNya+2gEOEigwE4ftN0CDbjbk5rJmS05J6EIvUQ==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-checkbox@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-checkbox/-/eo-ng-checkbox-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-checkbox/-/eo-ng-checkbox-0.0.82.tgz#5ad670889906f93ca6932b2703ae784b9c2c9b28"
   integrity sha512-cme9azFSnD2CbucB6YCl6T7gXgVy9/l/UJjrW8o/Qm6VTVLYoh2P6dVPXTiVveDBF1IcgX0nuTO+x23nxvsiTg==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-dropdown@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-dropdown/-/eo-ng-dropdown-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-dropdown/-/eo-ng-dropdown-0.0.82.tgz#ae9eca0f45311e8f6e864438f85782c86a9ab221"
   integrity sha512-8I3mxXXummVacQ6Ana2DyGXSiEJT+UvyJWjSTUnzKnphlR6CeNBpH+367nYmsQ/mnXNb1y5Li9llowT3QvuITw==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-feedback@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-feedback/-/eo-ng-feedback-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-feedback/-/eo-ng-feedback-0.0.82.tgz#36eaa7eb3fe9b4d3b69d26945a9c4c80af3ea69f"
   integrity sha512-Rsf//znlDwUBkF+qqn+7fQKzceqkl7uxJOW3VAFfCAoQEEpt9hYgEdNVpBEK05c4cOSRfJOyvSmnUAHPfCK+bA==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-input@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-input/-/eo-ng-input-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-input/-/eo-ng-input-0.0.82.tgz#7534276502f4b3123a896e6a922749ff84bfd352"
   integrity sha512-BEvkPvME5uBG3fbdvwBxuOCkCypD5PJedJ32e7leIYKrGlX350nrguVKLoIQQCNYzpW0mO4ja4plujynIIYZWQ==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-radio@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-radio/-/eo-ng-radio-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-radio/-/eo-ng-radio-0.0.82.tgz#d6afc59b4e80316db73910d82d1ec98d2561d5ba"
   integrity sha512-3NVaoBWGaQ251i9okkU9rd+s3RFmfOdQdN/icSFS1Kqk59d8iCjy5J6lA1P7UrkpzXO7rxN6vG4YVYNGaOawvg==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-select@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-select/-/eo-ng-select-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-select/-/eo-ng-select-0.0.82.tgz#02d63400d7ac4159fdeea2ce6619ff52a39d128a"
   integrity sha512-0WQjjie/8UKF7sWiT6UOpWOCFsWv6b9xyxmR9vtst3wutXz3Icj9hGJ1ky3wbiicXuyp+pYRGCr8951mp/Or0Q==
   dependencies:
     tslib "^2.3.0"
 
 eo-ng-switch@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-switch/-/eo-ng-switch-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-switch/-/eo-ng-switch-0.0.82.tgz#0c04dc77e0687062704c6f33d0e150676ff45ba3"
   integrity sha512-yJ0Q1ycDvV3itH3Omx8D8vZLz1oBp7CSOLL4bn4m3GQ/BG5iur9cOhXhAQkhfTfVegVXTIi+wAwc6JPH5xm10A==
   dependencies:
     tslib "^2.3.0"
@@ -5775,7 +5775,7 @@ eo-ng-table@0.0.82:
 
 eo-ng-tabs@0.0.82:
   version "0.0.82"
-  resolved "https://registry.npmjs.org/eo-ng-tabs/-/eo-ng-tabs-0.0.82.tgz"
+  resolved "https://registry.yarnpkg.com/eo-ng-tabs/-/eo-ng-tabs-0.0.82.tgz#fbf77b89a5a19a8562e9625ca8ab13ebe07e53f7"
   integrity sha512-EwL3PJoGgFzXFbW0ZLoMSJ+SeRLlwmZSw6UvK59kkP1RhsxEncy0H4ux5O15nmO87rHQyYtwZTVurgiz7Iu24w==
   dependencies:
     tslib "^2.3.0"
