@@ -7,7 +7,7 @@ import { ShareComponent } from './share-project.component';
 import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
-  imports: [ShareRoutingModule, CommonModule, SharedModule, ApiModule],
+  imports: [ShareRoutingModule, CommonModule, SharedModule,ApiModule],
   declarations: [ShareComponent],
   providers: [],
 })

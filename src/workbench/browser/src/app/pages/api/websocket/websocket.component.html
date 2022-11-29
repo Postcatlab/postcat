@@ -101,23 +101,20 @@
           </div>
           <div *ngIf="item.type === 'get'"
             class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer">
-            <span class="flex justify-center w-4 h-4 rounded shrink-0 items-cente get_icon">
-              <eo-iconpark-icon name="arrow-down" size="10"></eo-iconpark-icon>
-            </span>
+            <eo-iconpark-icon class="box-border flex items-center justify-center w-4 h-4 rounded-full get_icon"
+              name="arrow-down" size="10"></eo-iconpark-icon>
             <div class="px-2">{{ item.msg }}</div>
           </div>
           <div *ngIf="item.type === 'start'"
             class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
-            <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente start_icon">
-              <eo-iconpark-icon name="check" size="10"></eo-iconpark-icon>
-            </span>
+            <eo-iconpark-icon class="box-border flex items-center justify-center w-4 h-4 rounded-full start_icon"
+              name="check" size="10"></eo-iconpark-icon>
             <div class="px-2">{{ item.title }}</div>
           </div>
           <div *ngIf="item.type === 'end'"
             class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
-            <span class="box-border flex justify-center w-4 h-4 rounded-full items-cente end_icon">
-              <eo-iconpark-icon name="close" size="10"></eo-iconpark-icon>
-            </span>
+            <eo-iconpark-icon class="box-border flex items-center justify-center w-4 h-4 rounded-full end_icon"
+              name="close" size="10"></eo-iconpark-icon>
             <div class="px-2">{{ item.title || item.msg }}</div>
           </div>
         </div>
