@@ -696,7 +696,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   groupUpdate(item: Group, uuid: number | string): Observable<object> {
     return this.update(this.group, item, uuid);
   }
-  projectImport(uuid: number, data): Observable<object> {
+  projectImport(uuid: number, data, groupID = 0): Observable<object> {
     return new Observable((obs) => {
       const errors = {
         apiData: [],
@@ -730,7 +730,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             resolve('');
           });
         });
-      deepFn(data.collections, 0).then(() => {
+      deepFn(data.collections, groupID).then(() => {
         //Add env
         if (data.enviroments && data.enviroments.length) {
           data.enviroments.forEach((item) => {

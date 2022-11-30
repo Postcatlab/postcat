@@ -29,8 +29,13 @@ export class GlobalProvider {
       this.router.navigate(commands, extras);
     };
     window.eo.getGroup = this.getGroup;
+    window.eo.importProject = this.importProject;
     // window.eo.getConfiguration = this.modalService;
   }
+
+  getCurrentProjectID = () => {
+    return this.projectService.currentProjectID;
+  };
 
   list2tree = (data = [], parentID = 0) => {
     return data
@@ -38,7 +43,7 @@ export class GlobalProvider {
       .map(({ uuid, name }) => ({ id: uuid, name, children: this.list2tree(data, uuid) }));
   };
 
-  getGroup = (projectID = this.projectService.currentProjectID) => {
+  getGroup = (projectID = this.getCurrentProjectID()) => {
     return new Promise(async (resolve) => {
       this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
         console.log('result', result);
@@ -56,6 +61,26 @@ export class GlobalProvider {
           };
           resolve(res);
         }
+      });
+    });
+  };
+
+  importProject = (params = {}) => {
+    const { projectID, groupID, ...rest } = {
+      projectID: this.getCurrentProjectID(), //没有传 projectID 默认获取当前项目
+      groupID: 0, //没传 groupID 默认加入根分组
+      collections: [], //分组、API 数据
+      environments: [], //环境数据
+      ...params,
+    };
+    return new Promise((resolve) => {
+      this.storage.run('projectImport', [projectID, rest, groupID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result);
+        } else {
+          resolve(result);
+        }
+        // console.log('projectImport result', result);
       });
     });
   };

@@ -21,7 +21,7 @@ const routes: Routes = [
       },
       {
         path: 'api',
-        loadChildren: () => import('./extension/extension.module').then((m) => m.ExtensionModule),
+        loadChildren: () => import('./api/api.module').then((m) => m.ApiModule),
       },
       {
         path: 'workspace',
