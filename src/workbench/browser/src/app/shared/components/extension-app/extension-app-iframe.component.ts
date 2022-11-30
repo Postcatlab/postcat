@@ -4,7 +4,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import microApp from '@micro-zoe/micro-app';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalProvider } from './globalProvider';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 (window as any).eventCenterForAppNameVite = new EventCenterForMicroApp('appname-extension-app');
 
@@ -12,7 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   selector: 'extension-app-iframe',
   template: `
     <iframe
-      *ngIf="url"
+      *ngIf="safeUrl"
       width="100%"
       height="100%"
       class="border-none"
@@ -31,7 +31,7 @@ export class ExtensionAppIframeComponent implements OnInit {
   @Input() name = ``;
   @Input() url = ``;
   microAppData = { msg: '来自基座的数据' };
-  safeUrl: any;
+  safeUrl: SafeResourceUrl;
 
   constructor(public sanitizer: DomSanitizer, public route: ActivatedRoute, private globalProvider: GlobalProvider) {}
 
@@ -42,6 +42,7 @@ export class ExtensionAppIframeComponent implements OnInit {
 
   initSidebarViewByRoute() {
     this.route.params.subscribe(async (data) => {
+      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:3001');
       if (data.extName && window.eo?.getSidebarView) {
         this.name = data.extName;
         const sidebar = await window.eo?.getSidebarView?.(data.extName);
