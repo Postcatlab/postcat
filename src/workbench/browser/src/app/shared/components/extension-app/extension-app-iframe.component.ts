@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { EventCenterForMicroApp } from '@micro-zoe/micro-app';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import microApp from '@micro-zoe/micro-app';
@@ -13,6 +13,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   template: `
     <iframe
       *ngIf="safeUrl"
+      #extensionApp
       width="100%"
       height="100%"
       class="border-none"
@@ -23,15 +24,19 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       (afterMount)="onAfterMount($event)"
       (beforeUnmount)="onBeforeUnmount($event)"
       (afterUnmount)="onAfterUnmount($event)"
-      (event)="onEvent($event)"
+      (load)="onLoad()"
     ></iframe>
   `,
 })
 export class ExtensionAppIframeComponent implements OnInit {
+  @ViewChild('extensionApp') extensionApp: ElementRef;
+
   @Input() name = ``;
   @Input() url = ``;
+
   microAppData = { msg: '来自基座的数据' };
   safeUrl: SafeResourceUrl;
+  retryCount = 0;
 
   constructor(public sanitizer: DomSanitizer, public route: ActivatedRoute, private globalProvider: GlobalProvider) {}
 
@@ -40,9 +45,47 @@ export class ExtensionAppIframeComponent implements OnInit {
     this.initSidebarViewByRoute();
   }
 
+  onLoad(): void {
+    this.injectByContentWindow();
+    console.log('麻了');
+  }
+  // 方式一(手动将全局变量挂载到子应用Window上)
+  injectByContentWindow = () => {
+    // 这里只是为了确保变量一定成功被挂载到子应用Window上
+    setTimeout(() => {
+      if (this.retryCount++ > 5) {
+        return;
+      }
+      const iframeWin = this.extensionApp?.nativeElement?.contentWindow;
+      if (iframeWin) {
+        iframeWin.__POWERED_BY_EOAPI__ = true;
+        iframeWin.eo = window.eo;
+        // 这里主要为了解决iframe页面刷新后，window对象被重新实例化导致主应用挂载的变量丢失
+        iframeWin.addEventListener('pagehide', () => {
+          // iframe页面刷新后需要重新对其设置全局变量
+          this.injectByContentWindow();
+        });
+        this.retryCount = 0;
+      } else {
+        this.injectByContentWindow();
+      }
+    });
+  };
+  // 方式二（由于加载顺序不固定，注入的脚步可能会被干掉）
+  insetScript = () => {
+    const iframeDoc = this.extensionApp.nativeElement.contentDocument;
+    const script = iframeDoc.createElement('script');
+    script.textContent = `
+                  window.__POWERED_BY_EOAPI__ = true;
+                  window.eo = window.parent.eo
+                  `;
+
+    iframeDoc.head.prepend(script);
+  };
+
   initSidebarViewByRoute() {
     this.route.params.subscribe(async (data) => {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:3001');
+      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:3001/');
       if (data.extName && window.eo?.getSidebarView) {
         this.name = data.extName;
         const sidebar = await window.eo?.getSidebarView?.(data.extName);
