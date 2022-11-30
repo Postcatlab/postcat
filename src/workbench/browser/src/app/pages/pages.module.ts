@@ -12,7 +12,7 @@ import { ToolbarModule } from '../layouts/toolbar/toolbar.module';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  imports: [PagesRoutingModule, SettingModule, CommonModule, NavbarModule, ToolbarModule, SharedModule],
+  imports: [PagesRoutingModule, SettingModule,CommonModule, NavbarModule, ToolbarModule, SharedModule],
   declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ExtensionsComponent],
   exports: [],
   providers: [],

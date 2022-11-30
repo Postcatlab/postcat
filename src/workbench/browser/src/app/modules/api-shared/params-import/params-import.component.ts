@@ -1,9 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { whatType } from '../../../utils/index.utils';
-import { flatData } from '../../../utils/tree/tree.utils';
+import { eoDeepCopy, whatType } from '../../../utils/index.utils';
 import qs from 'qs';
-import { form2json, parseTree, xml2UiData, isXML } from '../../../utils/data-transfer/data-transfer.utils';
+import { form2json, xml2json, isXML, json2Table } from '../../../utils/data-transfer/data-transfer.utils';
 @Component({
   selector: 'params-import',
   templateUrl: './params-import.component.html',
@@ -96,7 +95,7 @@ export class ParamsImportComponent {
         }
         json[key] = value;
       });
-      paramCode = JSON.parse(JSON.stringify(json));
+      paramCode = json;
     }
     if (this.contentType === 'xml') {
       const status = isXML(this.paramCode);
@@ -104,7 +103,7 @@ export class ParamsImportComponent {
         this.message.error($localize`XML format invalid`);
         return;
       }
-      paramCode = JSON.parse(JSON.stringify(xml2UiData(this.paramCode)));
+      paramCode = xml2json(this.paramCode);
       // console.log('-->', paramCode);
     }
     if (this.contentType === 'raw') {
@@ -112,7 +111,7 @@ export class ParamsImportComponent {
     }
 
     const tailData = this.baseData.slice(-1);
-    let resultData = JSON.parse(JSON.stringify(this.baseData.reverse().slice(1).reverse()));
+    let resultData = eoDeepCopy(this.baseData.reverse().slice(1).reverse());
     if (rootType !== whatType(paramCode)) {
       // TODO Perhaps should be handled about format compatibility later.
       console.warn('The code that you input is no-equal to the root type.');
@@ -126,7 +125,7 @@ export class ParamsImportComponent {
       paramCode = data || {};
     }
     // * tree to array for table render
-    const cacheData = flatData(Object.entries(paramCode).map(([key, value]) => parseTree(key, value)));
+    const cacheData = json2Table(paramCode);
 
     // TODO delete useless attribute in cacheData
     switch (type) {

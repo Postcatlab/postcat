@@ -7,7 +7,11 @@ import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 @Injectable()
 export class ApiTableService {
-  constructor(private modalService: ModalService) {}
+  constructor(private modalService: ModalService) {
+    setTimeout(() => {
+      this.showMore({ name: 'test', required: true, type: 'string', description: 'test', example: 'test' });
+    }, 1000);
+  }
   showMore(item) {
     const modal = this.modalService.create({
       nzTitle: $localize`Advanced Settings`,
@@ -34,12 +38,12 @@ export class ApiTableService {
     const columnMUI = {
       name: {
         title: $localize`Param Name`,
-        left:true,
+        left: true,
         type: 'input',
-        columnShow:'fixed',
+        columnShow: 'fixed',
         key: 'name',
         placeholder: $localize`Param Name`,
-        width: 300,
+        width: 150,
       },
       type: {
         title: $localize`Type`,
@@ -78,7 +82,7 @@ export class ApiTableService {
           {
             icon: 'more',
             click: (item) => {
-              this.showMore(item);
+              this.showMore(item.data);
             },
           },
           {
@@ -103,7 +107,7 @@ export class ApiTableService {
       setting: {
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
-        rowSortable:inArg.isEdit?true:false,
+        rowSortable: inArg.isEdit ? true : false,
         isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
         toolButton: {
           columnVisible: true,

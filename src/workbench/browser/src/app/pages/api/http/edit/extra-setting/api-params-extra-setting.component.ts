@@ -12,56 +12,43 @@ import {
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
   @Input() model: { type: string | ApiParamsTypeJsonOrXml } & BasiApiEditParams;
-  listConfBasicInfo = {
-    setting: {
-      readonly: true,
+  listConfBasicInfo = [
+    {
+      title: $localize`Param Name`,
+      key: 'name',
     },
-    tdList: [
-      {
-        thKey: $localize`Param Name`,
-        type: 'text',
-        modelKey: 'name',
-      },
-      {
-        thKey: $localize`Required`,
-        type: 'html',
-        html: '{{item.required?"True":"False"}}',
-        class: 'w-full',
-      },
-      {
-        thKey: $localize`:@@Description:Description`,
-        type: 'text',
-        modelKey: 'description',
-      },
-      {
-        thKey: $localize`Type`,
-        type: 'text',
-        modelKey: 'type',
-      },
-    ],
-  };
-  listConfLenthInterval = {
-    setting: {
-      munalAddRow: true,
+    {
+      title: $localize`Type`,
+      key: 'type',
     },
-    tdList: [
-      {
-        thKey: $localize`Minimum length`,
-        type: 'input',
-        modelKey: 'minLength',
-        class: 'w_50percent',
-        itemExpression: `min="0"`,
-        inputType: 'number',
-      },
-      {
-        thKey: $localize`Maximum Length`,
-        type: 'input',
-        modelKey: 'maxLength',
-        itemExpression: `min="0"`,
-        inputType: 'number',
-      },
-    ],
-  };
+    {
+      title: $localize`Required`,
+      key: 'required',
+      enums: [
+        { title: $localize`Yes`, value: true },
+        { title: $localize`No`, value: false },
+      ],
+    },
+    {
+      title: $localize`:@@Description:Description`,
+      key: 'description',
+    },
+  ];
+  listConfLenthInterval = [
+    {
+      title: $localize`Minimum length`,
+      type: 'input',
+      key: 'minLength',
+      itemExpression: `min="0"`,
+      inputType: 'number',
+    },
+    {
+      title: $localize`Maximum Length`,
+      type: 'input',
+      key: 'maxLength',
+      inputType: 'number',
+    },
+  ];
   listConfValueInterval = {
     setting: {
       munalAddRow: true,
@@ -128,9 +115,9 @@ export class ApiParamsExtraSettingComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
-    if (this.model && (!this.model.enum || !this.model.enum.length)) {
-      this.model.enum = this.model.enum || [];
-      this.model.enum.push(Object.assign({}, this.itemStructureEnums));
-    }
+    // if (this.model && (!this.model.enum || !this.model.enum.length)) {
+    //   this.model.enum = this.model.enum || [];
+    //   this.model.enum.push(Object.assign({}, this.itemStructureEnums));
+    // }
   }
 }

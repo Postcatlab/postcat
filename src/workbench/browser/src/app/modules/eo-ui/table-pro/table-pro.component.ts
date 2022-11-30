@@ -13,7 +13,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { isUndefined, omitBy } from 'lodash-es';
 import { eoDeepCopy } from '../../../utils/index.utils';
 import { filterTableData } from '../../../utils/tree/tree.utils';
@@ -29,6 +29,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() nzData;
   @Input() setting: TableProSetting = {};
   @Input() nzDataItem?;
+  @Input() nzScroll={ x: '1200px'};
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
   @Output() nzTrClick = new EventEmitter();
@@ -156,7 +157,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         { title: col.title, left: col.left, right: col.right, resizeable: col.resizeable },
         isUndefined
       );
-      const body: any = omitBy({ key: col.key, left: col.left, type: col.type, right: col.right }, isUndefined);
+      const body: any = omitBy({ key: col.key, left: col.left, type: col.type, right: col.right,errorTip:col.errorTip }, isUndefined);
       switch (col.type) {
         case 'select': {
           body.opts = col.enums.map((item) => ({ label: item.title, value: item.value }));
@@ -164,12 +165,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         }
         case 'checkbox': {
           header.type = 'checkbox';
-          body.type='checkbox';
-          delete body.key;
-          body.valueRef={
-            true: '0',
-            false: '1'
-          };
+          body.type = 'checkbox';
           break;
         }
         case 'input':
@@ -258,7 +254,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         body.showFn = header.showFn = col.showFn;
       }
       if (col.columnShow !== 'fixed' && col.type !== 'btnList') {
-        this.columnVisibleStatus[colID] = col.columnShow===false?0:1;
+        this.columnVisibleStatus[colID] = col.columnShow === false ? 0 : 1;
         this.columnVisibleMenus.push({
           title: col.title,
           key: colID,

@@ -1,4 +1,7 @@
-<!-- {{ nzData | json }} -->
+<!-- <span class="color-[#999]">nzData:</span>
+<div class="mx-2">{{ nzData | json }}</div>
+<span class="color-[#999]">nzDataItem:</span>
+<div class="mx-2">{{ nzDataItem | json }}</div> -->
 <!-- {{ setting | json }} -->
 <!-- {{columnVisibleStatus|json}} -->
 <eo-ng-table
@@ -12,7 +15,7 @@
   [nzExpand]="true"
   [nzPrimaryKey]="setting.primaryKey"
   [nzChildKey]="childKey"
-  [nzScroll]="{ x: '1200px' }"
+  [nzScroll]="nzScroll"
   [nzCheckAddRow]="checkAdd"
   (nzDataChange)="handleDataChange($event)"
   [nzThead]="theadConf"
@@ -29,8 +32,10 @@
     <button
       eo-ng-button
       nzType="text"
+
       (click)="btnClick(btnItem, index, item, apis)"
       eoNgFeedbackTooltip
+      i18n-nzTooltipTitle
       nzTooltipTitle="{{ btnItem.title }}"
       class="mr-btnbase eo-list-btn"
     >
@@ -43,6 +48,7 @@
     <button
       eo-ng-button
       nzType="text"
+      i18n-nzTooltipTitle
       eoNgFeedbackTooltip
       nzTooltipTitle="{{ BNT_MUI['delete'].title }}"
       (click)="apis.deleteRow(index)"
@@ -60,6 +66,9 @@
       eo-ng-dropdown
       eo-ng-button
       nzType="text"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      nzTooltipTitle="Column Visible"
       *ngIf="setting?.toolButton?.columnVisible"
       [nzDropdownMenu]="dropdownMenTmp"
     >
@@ -73,7 +82,15 @@
       </ul>
     </eo-ng-dropdown-menu>
     <!-- Full screen -->
-    <button *ngIf="setting?.toolButton?.fullScreen" eo-ng-button nzType="text" (click)="screenAll(0)">
+    <button
+      eoNgFeedbackTooltip
+      i18n-nzTooltipTitle
+      nzTooltipTitle="Full Screen"
+      *ngIf="setting?.toolButton?.fullScreen"
+      eo-ng-button
+      nzType="text"
+      (click)="screenAll(0)"
+    >
       <svg class="iconpark-icon"><use href="#full-screen"></use></svg>
     </button>
   </div>
