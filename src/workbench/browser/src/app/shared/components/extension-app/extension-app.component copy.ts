@@ -11,20 +11,19 @@ import { GlobalProvider } from './globalProvider';
   selector: 'extension-app',
   template: `
     <div style="transform: translate(0)">
-      <ngx-wujie
+      <micro-app
         *ngIf="url"
-        width="100%"
-        height="100%"
-        [name]="name"
-        [exec]="true"
-        url="https://www.baidu.com/"
-        (beforeLoad)="onBeforeLoad($event)"
-        (beforeMount)="onBeforeMount($event)"
-        (afterMount)="onAfterMount($event)"
-        (beforeUnmount)="onBeforeUnmount($event)"
-        (afterUnmount)="onAfterUnmount($event)"
-        (event)="onEvent($event)"
-      ></ngx-wujie>
+        [attr.name]="name"
+        [attr.url]="'https://vue3-antd-admin.vercel.app/'"
+        default-page="/"
+        [data]="microAppData"
+        (created)="handleCreate()"
+        (beforemount)="handleBeforeMount()"
+        (mounted)="handleMount()"
+        (unmount)="handleUnmount()"
+        (error)="handleError()"
+        (datachange)="handleDataChange($event)"
+      ></micro-app>
     </div>
   `,
 })
@@ -53,39 +52,35 @@ export class ExtensionAppComponent implements OnInit {
   /**
    * vite 子应用因为沙箱关闭，数据通信功能失效
    */
-  onBeforeLoad(e): void {
-    console.log('child-vite 创建了', e);
+  handleCreate(): void {
+    console.log('child-vite 创建了');
   }
 
-  onBeforeMount(e): void {
-    console.log('child-vite 即将被渲染', e);
+  handleBeforeMount(): void {
+    console.log('child-vite 即将被渲染');
   }
 
-  onAfterMount(e): void {
-    console.log('child-vite 已经渲染完成', e);
-    // this.storage.run('groupLoadAllByProjectID', [1], (result) => {
-    //   if (result.status === 200) {
-    //     this.microAppData = result.data;
-    //     // 发送数据给子应用 my-app，setData第二个参数只接受对象类型
-    //     microApp.setData(this.name, { data: this.microAppData });
-    //     console.log('this.microAppData', this.microAppData);
-    //   }
-    // });
+  handleMount(): void {
+    console.log('child-vite 已经渲染完成');
+    this.storage.run('groupLoadAllByProjectID', [1], (result) => {
+      if (result.status === 200) {
+        this.microAppData = result.data;
+        // 发送数据给子应用 my-app，setData第二个参数只接受对象类型
+        microApp.setData(this.name, { data: this.microAppData });
+        console.log('this.microAppData', this.microAppData);
+      }
+    });
     // setTimeout(() => {
     //   this.microAppData = { msg: '来自基座的新数据' };
     // }, 2000);
   }
 
-  onBeforeUnmount(e): void {
-    console.log('child-vite 卸载了', e);
+  handleUnmount(): void {
+    console.log('child-vite 卸载了');
   }
 
-  onAfterUnmount(e): void {
-    console.log('child-vite 卸载完成', e);
-  }
-
-  onEvent(e) {
-    console.log('onEvent', e);
+  handleError(): void {
+    console.log('child-vite 加载出错了');
   }
 
   handleDataChange(e): void {

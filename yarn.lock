@@ -14988,10 +14988,10 @@ ws@~8.2.3:
   resolved "https://registry.npmmirror.com/ws/-/ws-8.2.3.tgz"
   integrity sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==
 
-wujie@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmmirror.com/wujie/-/wujie-1.0.0.tgz#e15f58b4c9b044ef323eca289729473f17d7f354"
-  integrity sha512-XlyP3Fi2hW03cQL7Q8g9+IljigYHYj0GhsI2JxLbEZb64FXLc7OENZKvrrm3XeTztvP2XAHAHVJJH6WHrjkgcw==
+wujie@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/wujie/-/wujie-1.0.1.tgz#f554bcd73016872fdf20644af10d5145cca4fa45"
+  integrity sha512-pzul3z3L48IBUb6yijcAn/ecwdF00uT4ER5aOSZR5hZ46BP1UK2q+ZAa2aq9sJD9tbmQArM/YRCfCB0fkXi/iQ==
   dependencies:
     "@babel/runtime" "^7.18.6"
 

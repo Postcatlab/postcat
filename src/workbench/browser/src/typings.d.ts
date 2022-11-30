@@ -1,6 +1,6 @@
 /* SystemJS module definition */
 declare const nodeModule: NodeModule;
-import * as monaco from 'monaco-editor';
+import type monaco from 'monaco-editor';
 
 interface NodeModule {
   id: string;
@@ -17,5 +17,6 @@ declare global {
     MozBlobBuilder: any;
     MSBlobBuilder: any;
     monaco: typeof monaco;
+    __POWERED_BY_EOAPI__: boolean;
   }
 }

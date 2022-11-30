@@ -46,7 +46,7 @@
     "rxjs": "7.5.5",
     "socket.io-client": "4.5.1",
     "tslib": "^2.4.0",
-    "wujie": "1.0.0",
+    "wujie": "1.0.1",
     "zone.js": "~0.11.6"
   },
   "devDependencies": {

@@ -4,36 +4,36 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import microApp from '@micro-zoe/micro-app';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalProvider } from './globalProvider';
+import { DomSanitizer } from '@angular/platform-browser';
 
 (window as any).eventCenterForAppNameVite = new EventCenterForMicroApp('appname-extension-app');
 
 @Component({
-  selector: 'extension-app',
+  selector: 'extension-app-iframe',
   template: `
-    <div style="transform: translate(0)" class="w-[90vw] h-[90vh] overflow-auto">
-      {{ url }}
-      <ngx-wujie
-        *ngIf="url"
-        width="100%"
-        height="100%"
-        [name]="name"
-        url="http://127.0.0.1:3001/"
-        (beforeLoad)="onBeforeLoad($event)"
-        (beforeMount)="onBeforeMount($event)"
-        (afterMount)="onAfterMount($event)"
-        (beforeUnmount)="onBeforeUnmount($event)"
-        (afterUnmount)="onAfterUnmount($event)"
-        (event)="onEvent($event)"
-      ></ngx-wujie>
-    </div>
+    <iframe
+      *ngIf="url"
+      width="100%"
+      height="100%"
+      class="border-none"
+      [name]="name"
+      [src]="safeUrl"
+      (beforeLoad)="onBeforeLoad($event)"
+      (beforeMount)="onBeforeMount($event)"
+      (afterMount)="onAfterMount($event)"
+      (beforeUnmount)="onBeforeUnmount($event)"
+      (afterUnmount)="onAfterUnmount($event)"
+      (event)="onEvent($event)"
+    ></iframe>
   `,
 })
-export class ExtensionAppComponent implements OnInit {
+export class ExtensionAppIframeComponent implements OnInit {
   @Input() name = ``;
   @Input() url = ``;
   microAppData = { msg: '来自基座的数据' };
+  safeUrl: any;
 
-  constructor(private storage: StorageService, public route: ActivatedRoute, private globalProvider: GlobalProvider) {}
+  constructor(public sanitizer: DomSanitizer, public route: ActivatedRoute, private globalProvider: GlobalProvider) {}
 
   ngOnInit(): void {
     this.globalProvider.injectGlobalData();
@@ -46,6 +46,7 @@ export class ExtensionAppComponent implements OnInit {
         this.name = data.extName;
         const sidebar = await window.eo?.getSidebarView?.(data.extName);
         this.url = sidebar.url;
+        this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
       }
     });
   }

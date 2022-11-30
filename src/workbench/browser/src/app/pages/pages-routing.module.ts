@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 import { PageBlankComponent } from '../shared/components/page-blank/page-blank.component';
-import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
+import { ExtensionAppIframeComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app-iframe.component';
 
 const routes: Routes = [
   {
@@ -41,7 +41,7 @@ const routes: Routes = [
       },
       {
         path: 'extensionSidebarView/:extName',
-        component: ExtensionAppComponent,
+        component: ExtensionAppIframeComponent,
       },
       // {
       //   path: 'app-vue3',
