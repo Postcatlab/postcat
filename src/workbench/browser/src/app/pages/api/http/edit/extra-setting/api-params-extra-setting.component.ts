@@ -37,16 +37,13 @@ export class ApiParamsExtraSettingComponent implements OnInit {
   listConfLenthInterval = [
     {
       title: $localize`Minimum length`,
-      type: 'input',
-      key: 'minLength',
-      itemExpression: `min="0"`,
-      inputType: 'number',
+      type: 'inputNumber',
+      key: 'minLength'
     },
     {
       title: $localize`Maximum Length`,
-      type: 'input',
-      key: 'maxLength',
-      inputType: 'number',
+      type: 'inputNumber',
+      key: 'maxLength'
     },
   ];
   listConfValueInterval = {

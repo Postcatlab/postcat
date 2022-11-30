@@ -29,24 +29,28 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() nzData;
   @Input() setting: TableProSetting = {};
   @Input() nzDataItem?;
-  @Input() nzScroll={ x: '1200px'};
+  @Input() nzScroll = { x: '1200px' };
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
   @Output() nzTrClick = new EventEmitter();
   @Output() nzDataChange = new EventEmitter();
   @Output() columnVisibleStatusChange = new EventEmitter();
 
-  @ViewChild('enums', { read: TemplateRef, static: false })
+  @ViewChild('enums', { read: TemplateRef })
   enums: TemplateRef<any>;
 
   @ViewChildren('iconBtnTmp', { read: TemplateRef })
   iconBtnTmp: QueryList<TemplateRef<any>>;
 
-  @ViewChild('toolBtnTmp', { read: TemplateRef, static: false })
+  @ViewChild('toolBtnTmp', { read: TemplateRef })
   toolBtnTmp: TemplateRef<any>;
 
-  @ViewChild('iconBtnDelete', { read: TemplateRef, static: false })
+  @ViewChild('iconBtnDelete', { read: TemplateRef })
   iconBtnDelete: TemplateRef<any>;
+
+  @ViewChild('numberInput', { read: TemplateRef })
+  numberInput: TemplateRef<any>;
+
 
   tbodyConf = [];
   theadConf = [];
@@ -123,7 +127,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     if (_.has(this.setting, 'isEdit')) {
       return this.setting.isEdit;
     }
-    return this.columns.some((col) => ['select', 'checkbox', 'autoComplete', 'input'].includes(col.type));
+    return this.columns.some((col) =>
+      ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'].includes(col.type)
+    );
   }
   initConfig() {
     const theaderConf = [];
@@ -157,7 +163,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         { title: col.title, left: col.left, right: col.right, resizeable: col.resizeable },
         isUndefined
       );
-      const body: any = omitBy({ key: col.key, left: col.left, type: col.type, right: col.right,errorTip:col.errorTip }, isUndefined);
+      const body: any = omitBy(
+        { key: col.key, left: col.left, type: col.type, right: col.right, errorTip: col.errorTip },
+        isUndefined
+      );
       switch (col.type) {
         case 'select': {
           body.opts = col.enums.map((item) => ({ label: item.title, value: item.value }));
@@ -166,6 +175,13 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         case 'checkbox': {
           header.type = 'checkbox';
           body.type = 'checkbox';
+          break;
+        }
+        case 'inputNumber': {
+          body.keyName = col.key;
+          body.key=this.numberInput;
+          body.type='';
+          body.placeholder = col.placeholder || col.title || '';
           break;
         }
         case 'input':

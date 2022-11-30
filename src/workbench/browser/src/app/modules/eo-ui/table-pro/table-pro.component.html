@@ -32,7 +32,6 @@
     <button
       eo-ng-button
       nzType="text"
-
       (click)="btnClick(btnItem, index, item, apis)"
       eoNgFeedbackTooltip
       i18n-nzTooltipTitle
@@ -94,4 +93,14 @@
       <svg class="iconpark-icon"><use href="#full-screen"></use></svg>
     </button>
   </div>
+</ng-template>
+
+<!-- Input Number -->
+<ng-template #numberInput let-item="item" let-rowItem="rowItem">
+  <nz-input-number
+    class="w-full"
+    (change)="handleDataChange($event)"
+    min="0"
+    [(ngModel)]="item[rowItem.keyName]"
+  ></nz-input-number>
 </ng-template>
