@@ -1,15 +1,11 @@
 <!-- FormData -->
 <!-- JSON -->
 <!-- XML -->
-<eo-ng-table-pro
-  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
-  [columns]="listConf.columns"
-  [setting]="listConf.setting"
-  [(nzData)]="model"
-></eo-ng-table-pro>
+<eo-ng-table-pro *ngIf="['formData', 'json', 'xml'].includes(bodyType)" [columns]="listConf.columns"
+  [setting]="listConf.setting" [(nzData)]="model"></eo-ng-table-pro>
 <!-- Raw -->
 <eo-monaco-editor [(code)]="model" *ngIf="bodyType === 'raw'" [config]="{readOnly: true}" [autoType]="true"
   [eventList]="['type', 'format', 'copy',  'search', 'replace']">
 </eo-monaco-editor>
 <!-- Binary -->
-<pre class="mx-2.5" *ngIf="bodyType === 'binary'">{{model}}</pre>
+<pre class="mx-2.5 mb-0" *ngIf="bodyType === 'binary'">{{model}}</pre>
