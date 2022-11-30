@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    loadChildren: () => import('./layout/page-not-found/page-not-find.module').then((m) => m.PageNotFindModule),
+    loadChildren: () => import('./layouts/page-not-found/page-not-find.module').then((m) => m.PageNotFindModule),
   },
 ];
 @NgModule({
