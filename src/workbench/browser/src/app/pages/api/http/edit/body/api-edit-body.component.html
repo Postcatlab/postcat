@@ -34,6 +34,7 @@
   [nzDataItem]="itemStructure"
   [setting]="listConf.setting"
   [(nzData)]="model"
+  (nzDataChange)="tableChange($event)"
 ></eo-ng-table-pro>
 <!-- Raw -->
 <eo-monaco-editor
@@ -41,7 +42,7 @@
   [(code)]="model"
   [eventList]="['type', 'format', 'copy', 'search', 'replace']"
   [autoType]="true"
-  (codeChange)="rawDataChange($event)"
+  (codeChange)="rawChange($event)"
 >
 </eo-monaco-editor>
 <!-- Binary -->
@@ -50,7 +51,7 @@
     rows="4"
     *ngIf="bodyType === 'binary'"
     i18n-placeholder
-    (ngModelChange)="rawDataChange($event)"
+    (ngModelChange)="rawChange($event)"
     placeholder="Binary Description"
     eo-ng-input
     [(ngModel)]="model"

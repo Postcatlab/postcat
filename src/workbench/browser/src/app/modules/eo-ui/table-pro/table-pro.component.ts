@@ -286,7 +286,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    console.log(this.theadConf, this.tbodyConf);
+    // console.log(this.theadConf, this.tbodyConf);
   }
   btnClick(btnItem, index, item, apis) {
     console.log(btnItem, index, item, apis);

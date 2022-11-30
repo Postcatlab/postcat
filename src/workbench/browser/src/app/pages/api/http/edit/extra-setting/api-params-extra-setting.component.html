@@ -1,42 +1,56 @@
-<eo-ng-table-pro class="table-border-all" [nzData]="[model]" [columns]="listConfBasicInfo" [nzScroll]="{ x: '800px' }">
+{{ model | json }}
+<eo-ng-table-pro class="table-border-all" [nzData]="model" [columns]="listConfBasicInfo" [nzScroll]="{ x: '800px' }">
 </eo-ng-table-pro>
 
 <eo-ng-table-pro
-  class="table-border-all"
-  *ngIf="['string'].includes(model.type)"
-  [nzData]="[model]"
+  class="table-border-all mt-[15px]"
+  *ngIf="['string'].includes(model[0].type)"
+  [nzData]="model"
   [columns]="listConfLenthInterval"
+  [nzScroll]="{ x: '800px' }"
+  [setting]="{ manualAdd: true}"
+>
+</eo-ng-table-pro>
+
+<eo-ng-table-pro
+  class="table-border-all mt-[15px]"
+  *ngIf="['int', 'float', 'double', 'short', 'long', 'number'].includes(model[0].type)"
+  [nzData]="model"
+  [columns]="listConfValueInterval"
+  [nzScroll]="{ x: '800px' }"
+  [setting]="{ manualAdd: true }"
+>
+</eo-ng-table-pro>
+
+<eo-ng-table-pro
+  class="table-border-all mt-[15px]"
+  [nzData]="model[0].enum"
+  [nzDataItem]="itemStructureEnums"
+  [columns]="listConfEnums"
   [nzScroll]="{ x: '800px' }"
 >
 </eo-ng-table-pro>
 
-<!-- <list-block-common-component
-  class="eo-block-container"
-  [list]="[model]"
-  [mainObject]="listConfBasicInfo"
-></list-block-common-component>
-<list-block-common-component
-  *ngIf="['string'].includes(model.type)"
-  class="eo-block-container mt-[20px]"
-  [list]="[model]"
-  [mainObject]="listConfLenthInterval"
-></list-block-common-component>
-<list-block-common-component
-  *ngIf="['int', 'float', 'double', 'short', 'long', 'number'].includes(model.type)"
-  class="eo-block-container mt-[20px]"
-  [list]="[model]"
-  [mainObject]="listConfValueInterval"
-></list-block-common-component>
-<list-block-common-component
-  class="eo-block-container mt-[20px]"
-  [list]="model.enum"
-  [mainObject]="listConfEnums"
-></list-block-common-component>
-<div class="eo-block-container mt-[20px]">
-  <div class="thead_div">
-    <div class="plr5" i18n>Example</div>
-  </div>
-  <div class="m10">
-    <textarea rows="4" i18n-placeholder placeholder="Param Example" eo-ng-input [(ngModel)]="model.example"></textarea>
-  </div>
-</div> -->
+<div class="mt-[20px] ant-table">
+  <table class="border-all">
+    <thead class="ant-table-thead">
+      <tr class="ant-table-row">
+        <th class="ant-table-cell">Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="p-[10px]">
+          <textarea
+            rows="4"
+            i18n-placeholder
+            placeholder="Param Example"
+            eo-ng-input
+            [(ngModel)]="model[0].example"
+          ></textarea>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div></div>
+</div>
