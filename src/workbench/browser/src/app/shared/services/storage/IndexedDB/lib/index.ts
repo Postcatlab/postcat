@@ -704,6 +704,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       //Add api and group
       const deepFn = (collections, parentID) =>
         new Promise((resolve) => {
+          if (collections.length === 0) {
+            resolve('');
+          }
           collections.forEach(async (item) => {
             item.projectID = uuid;
             //Judge item is api or group

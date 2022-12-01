@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import apispacePkg from '../apispace.json';
 
 class ExtensionList {
   list = [];
@@ -13,7 +14,11 @@ class ExtensionList {
     this.list = list;
   }
   search(keyword: string) {
-    return this.list.filter((it) => it.name.includes(keyword) || it.keywords?.includes(keyword));
+    const list = this.list.filter((it) => it.name.includes(keyword) || it.keywords?.includes(keyword));
+    if (!list.some((n) => n.name === 'eoapi-api-space-debug')) {
+      list.push(apispacePkg);
+    }
+    return list;
   }
 }
 @Component({
@@ -54,7 +59,7 @@ export class ExtensionListComponent implements OnInit {
     const timeStart = Date.now();
     try {
       if (this.type === 'installed') {
-    const installedList = new ExtensionList(this.extensionService.getInstalledList());
+        const installedList = new ExtensionList(this.extensionService.getInstalledList());
         return installedList.search(keyword).map((n) => {
           n.isEnable = this.extensionService.isEnable(n.name);
           return n;

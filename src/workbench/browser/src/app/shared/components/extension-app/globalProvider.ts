@@ -6,6 +6,7 @@ import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/service
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage';
 import { ProjectService } from 'eo/workbench/browser/src/app/shared/services/project/project.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { SidebarView } from 'eo/platform/node/extension-manager/types';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
@@ -24,7 +25,11 @@ export class GlobalProvider {
     window.eo ??= {};
     window.eo.modalService = this.modalService;
     window.eo.getExtensionSettings = this.settingService.getConfiguration;
+    /** prload 里面同时有的方法 start */
+    window.eo.getSidebarViews ??= this.getSidebarViews;
+    window.eo.getSidebarView ??= this.getSidebarView;
     window.eo.loadFeatureModule ??= this.webExtensionService.importModule;
+    /** prload 里面同时有的方法 end */
     window.eo.navigate = (commands: any[], extras?: NavigationExtras) => {
       this.router.navigate(commands, extras);
     };
@@ -32,6 +37,24 @@ export class GlobalProvider {
     window.eo.importProject = this.importProject;
     // window.eo.getConfiguration = this.modalService;
   }
+  getSidebarView = (extName) => {
+    return this.getSidebarViews()[0];
+  };
+
+  getSidebarViews = (): SidebarView[] => {
+    const result = [];
+    const sidebarView = this.webExtensionService.getFeatures('sidebarView');
+    sidebarView?.size && result.push(...sidebarView.values());
+    return result;
+  };
+
+  serializationData = (data) => {
+    try {
+      return JSON.parse(JSON.stringify(data));
+    } catch (error) {
+      return error;
+    }
+  };
 
   getCurrentProjectID = () => {
     return this.projectService.currentProjectID;
@@ -73,14 +96,27 @@ export class GlobalProvider {
       environments: [], //环境数据
       ...params,
     };
+    console.log('projectID, rest, groupID', projectID, rest, groupID);
     return new Promise((resolve) => {
       this.storage.run('projectImport', [projectID, rest, groupID], (result: StorageRes) => {
+        console.log('result', result);
         if (result.status === StorageResStatus.success) {
-          resolve(result);
+          resolve(
+            this.serializationData({
+              status: 0,
+              ...result,
+            })
+          );
         } else {
-          resolve(result);
+          resolve(
+            this.serializationData({
+              status: -1,
+              data: null,
+              error: result,
+            })
+          );
         }
-        // console.log('projectImport result', result);
+        console.log('projectImport result', result);
       });
     });
   };

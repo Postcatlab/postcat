@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { OnDestroy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { EventCenterForMicroApp } from '@micro-zoe/micro-app';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import microApp from '@micro-zoe/micro-app';
@@ -28,7 +28,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     ></iframe>
   `,
 })
-export class ExtensionAppIframeComponent implements OnInit {
+export class ExtensionAppIframeComponent implements OnInit, OnDestroy {
   @ViewChild('extensionApp') extensionApp: ElementRef;
 
   @Input() name = ``;
@@ -37,13 +37,34 @@ export class ExtensionAppIframeComponent implements OnInit {
   microAppData = { msg: '来自基座的数据' };
   safeUrl: SafeResourceUrl;
   retryCount = 0;
+  iframeWin: Window;
 
   constructor(public sanitizer: DomSanitizer, public route: ActivatedRoute, private globalProvider: GlobalProvider) {}
 
   ngOnInit(): void {
     this.globalProvider.injectGlobalData();
     this.initSidebarViewByRoute();
+
+    window.addEventListener('message', this.receiveMessage, false);
   }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('message', this.receiveMessage, false);
+  }
+
+  receiveMessage = async (event) => {
+    const { data, origin } = event;
+    if (data.msgID && window.eo[data.name]) {
+      const res = await window.eo[data.name](...data.data);
+      this.iframeWin.postMessage(
+        {
+          msgID: data.msgID,
+          data: res,
+        },
+        origin
+      );
+    }
+  };
 
   onLoad(): void {
     this.injectByContentWindow();
@@ -56,15 +77,16 @@ export class ExtensionAppIframeComponent implements OnInit {
       if (this.retryCount++ > 5) {
         return;
       }
-      const iframeWin = this.extensionApp?.nativeElement?.contentWindow;
-      if (iframeWin) {
-        iframeWin.__POWERED_BY_EOAPI__ = true;
-        iframeWin.eo = window.eo;
-        // 这里主要为了解决iframe页面刷新后，window对象被重新实例化导致主应用挂载的变量丢失
-        iframeWin.addEventListener('pagehide', () => {
-          // iframe页面刷新后需要重新对其设置全局变量
-          this.injectByContentWindow();
-        });
+      this.iframeWin = this.extensionApp?.nativeElement?.contentWindow;
+      if (this.iframeWin) {
+        this.iframeWin.postMessage('EOAPI_MESSAGE', '*');
+        // this.iframeWin.__POWERED_BY_EOAPI__ = true;
+        // this.iframeWin.eo = window.eo;
+        // // 这里主要为了解决iframe页面刷新后，window对象被重新实例化导致主应用挂载的变量丢失
+        // this.iframeWin.addEventListener('pagehide', () => {
+        //   // iframe页面刷新后需要重新对其设置全局变量
+        //   this.injectByContentWindow();
+        // });
         this.retryCount = 0;
       } else {
         this.injectByContentWindow();
@@ -85,7 +107,7 @@ export class ExtensionAppIframeComponent implements OnInit {
 
   initSidebarViewByRoute() {
     this.route.params.subscribe(async (data) => {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:3001/');
+      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://localhost:3000/');
       if (data.extName && window.eo?.getSidebarView) {
         this.name = data.extName;
         const sidebar = await window.eo?.getSidebarView?.(data.extName);

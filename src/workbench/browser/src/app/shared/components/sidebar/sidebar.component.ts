@@ -42,6 +42,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   async initSidebarViews() {
     const sidebarViews = await window.eo?.getSidebarViews?.();
+    console.log('sidebarViews', sidebarViews);
     sidebarViews?.forEach((item) => {
       this.modules.push({
         title: item.title,
@@ -132,14 +133,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/extension',
         route: 'home/extension/list',
       },
-      {
-        title: $localize`apiSpace`,
-        id: '@eo-core-vue3',
-        isOffical: true,
-        icon: 'puzzle',
-        activeRoute: 'home/extensionSidebarView/apispace',
-        route: 'home/extensionSidebarView/apispace',
-      },
+      // {
+      //   title: $localize`apiSpace`,
+      //   id: '@eo-core-vue3',
+      //   isOffical: true,
+      //   icon: 'puzzle',
+      //   activeRoute: 'home/extensionSidebarView/apispace',
+      //   route: 'home/extensionSidebarView/apispace',
+      // },
     ];
     const isShare = this.status.isShare;
     this.modules = defaultModule.filter((it: any) =>

@@ -42,8 +42,8 @@ const routes: Routes = [
       },
       {
         path: 'extensionSidebarView/:extName',
-        component: ExtensionAppIframeComponent,
-        // component: ExtensionAppComponent,
+        // component: ExtensionAppIframeComponent,
+        component: ExtensionAppComponent,
       },
       // {
       //   path: 'app-vue3',
