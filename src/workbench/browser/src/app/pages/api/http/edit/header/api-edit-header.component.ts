@@ -3,8 +3,6 @@ import {
   OnInit,
   Input,
   ChangeDetectorRef,
-  AfterViewChecked,
-  OnChanges,
   Output,
   EventEmitter,
 } from '@angular/core';
@@ -25,6 +23,7 @@ import { ApiEditHeaders } from '../../../../../shared/services/storage/index.mod
       [nzDataItem]="itemStructure"
       [setting]="listConf.setting"
       [(nzData)]="model"
+      (nzDataChange)="modelChange.emit($event)"
     ></eo-ng-table-pro> `,
 })
 export class ApiEditHeaderComponent implements OnInit {

@@ -21,6 +21,7 @@ import { ApiEditQuery } from '../../../../../shared/services/storage/index.model
       [nzDataItem]="itemStructure"
       [setting]="listConf.setting"
       [(nzData)]="model"
+      (nzDataChange)="modelChange.emit($event)"
     ></eo-ng-table-pro>`
 })
 export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecked {

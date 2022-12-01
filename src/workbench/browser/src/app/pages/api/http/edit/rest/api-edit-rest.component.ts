@@ -17,6 +17,7 @@ import { ApiEditRest } from '../../../../../shared/services/storage/index.model'
     [nzDataItem]="itemStructure"
     [setting]="listConf.setting"
     [(nzData)]="model"
+    (nzDataChange)="modelChange.emit($event)"
   ></eo-ng-table-pro>`,
 })
 export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked {

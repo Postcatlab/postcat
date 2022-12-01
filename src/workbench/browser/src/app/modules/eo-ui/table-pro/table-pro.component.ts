@@ -120,7 +120,6 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
   ngAfterViewInit() {
-    console.log('ngAfterViewInit');
     this.initConfig();
   }
   handleDataChange(data) {
@@ -210,7 +209,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set RowSortable
     if (this.setting.rowSortable) {
       theaderConf.push({
-        width: 40,
+        width: 30,
       });
       tbodyConf.push({
         type: 'sort',
@@ -345,13 +344,14 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    // console.log(this.theadConf, this.tbodyConf);
+    console.log(this.theadConf, this.tbodyConf);
   }
   private deleteButtonShowFn(item, index, apis) {
     //The last row can't be deleted
     return item.level !== 0 || !apis.checkIsCurrentLevelLastItem(item);
   }
   private generateBtnTemplate() {
+    this.iconBtns=[];
     this.columns.forEach((col, index) => {
       if (col.type !== 'btnList') {
         return;

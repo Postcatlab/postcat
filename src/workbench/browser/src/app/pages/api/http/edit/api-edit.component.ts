@@ -155,7 +155,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Judge has edit manualy
    */
   isFormChange(): boolean {
-    return false;
     if (!this.initialModel || !this.model) {
       return false;
     }
@@ -178,7 +177,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   private resetRestFromUrl(url: string) {
-    this.model.restParams = generateRestFromUrl(url, this.model.restParams);
+    //Need On push reset params
+    this.model.restParams = [...generateRestFromUrl(url, this.model.restParams)];
   }
   private getApiGroup() {
     this.groups = [];

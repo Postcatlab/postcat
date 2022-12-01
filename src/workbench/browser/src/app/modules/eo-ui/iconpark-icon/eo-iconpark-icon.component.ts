@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
   styles: [
     `
       ::ng-deep eo-iconpark-icon {
-        line-height: initial;
+        display:flex;
         vertical-align:middle;
       }
     `,
