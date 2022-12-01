@@ -3,6 +3,11 @@
     <button eo-ng-button nzType="primary" (click)="addMock()" i18n>New Mock</button>
   </ng-container>
   <div class="mt-[20px]">
-    <eo-api-mock-table #mockTable [apiDataID]="apiDataID" [apiData]="apiData" isEdit="true"></eo-api-mock-table>
+    <eo-api-mock-table
+      class="table-border-all"
+      #mockTable
+      [apiData]="apiData"
+      isEdit="true"
+    ></eo-api-mock-table>
   </div>
 </div>

@@ -188,7 +188,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     return false;
   }
   private onColumnChanges() {
-    this.nzScroll = Object.assign({ x: this.columns.length * 200 }, this.nzScroll);
+    this.nzScroll = Object.assign({ x: this.columns.length * 100 }, this.nzScroll);
     this.setting.isEdit = this.autoSetIsEdit();
     this.generateBtnTemplate();
     //SetTimeout be sure the icon child template ready

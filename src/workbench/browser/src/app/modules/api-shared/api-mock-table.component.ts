@@ -8,11 +8,7 @@ import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/api/htt
 
 @Component({
   selector: 'eo-api-mock-table',
-  template: ` <eo-ng-table-pro
-      class="table-border-all"
-      [columns]="mockListColumns"
-      [nzData]="mockList"
-    ></eo-ng-table-pro>
+  template: ` <eo-ng-table-pro [columns]="mockListColumns" [nzData]="mockList"></eo-ng-table-pro>
     <ng-template #urlCell let-item="item" let-index="index">
       <span i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip (click)="copyText(item.url)">
         <span class="text-omit">{{ item.url }}</span>
@@ -21,7 +17,6 @@ import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/api/htt
 })
 export class ApiMockTableComponent implements OnInit, OnChanges {
   @Input() canEdit = true;
-  @Input() apiDataID: number;
   @Input() apiData: ApiData;
 
   @ViewChild('urlCell', { read: TemplateRef, static: true })
@@ -37,9 +32,8 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     private apiMock: ApiMockService
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initTable();
-    this.mockList = await this.apiMock.getMocks(this.apiDataID);
     this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
   }
   async handleDeleteMockItem(item, index) {
@@ -75,15 +69,15 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
                 nzContent: ApiMockEditComponent,
                 nzComponentParams: {
                   model: item.data,
-                  isEdit:false
+                  isEdit: false,
                 },
                 nzFooter: [
                   {
                     label: $localize`Cancel`,
                     onClick: () => {
                       modal.destroy();
-                    }
-                  }
+                    },
+                  },
                 ],
               });
             },
@@ -118,8 +112,9 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
       },
     ];
   }
-  ngOnChanges(changes) {
+  async ngOnChanges(changes) {
     if (changes?.apiData?.currentValue) {
+      this.mockList = await this.apiMock.getMocks(this.apiData.uuid);
       this.setMocksUrl();
     }
   }
