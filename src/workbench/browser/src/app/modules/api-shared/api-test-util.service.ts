@@ -4,7 +4,7 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { ApiTestHeaders, ContentTypeByAbridge } from '../../pages/api/service/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../shared/services/storage/index.model';
 import { eoDeepCopy } from '../../utils/index.utils';
-import { uiData2Json, text2UiData, json2XML } from '../../utils/data-transfer/data-transfer.utils';
+import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { omit } from 'lodash-es';
 
 @Injectable()
@@ -218,11 +218,15 @@ export class ApiTestUtilService {
     });
     return result;
   }
-  private text2Body(keyName, inData = '') {
+
+  /**
+   * Transfer test raw  text to api table data
+   */
+  private text2EditBody(keyName, text: string = '') {
     const result = {};
-    const bodyInfo = text2UiData(inData);
+    const bodyInfo = text2table(text);
     if (bodyInfo.textType !== 'raw') {
-      result[`${keyName}`] = omit(result[`${keyName}`], ['value']);
+      result[`${keyName}`] = bodyInfo.data.map((val) => omit(val, ['value', 'eoKey']));
     } else {
       result[`${keyName}`] = bodyInfo.data;
     }
@@ -238,7 +242,7 @@ export class ApiTestUtilService {
    * @returns
    */
   formatSavingApiData(inData): ApiData {
-    console.log(JSON.parse(JSON.stringify(inData)));
+    console.log('formatSavingApiData',eoDeepCopy(inData));
     const result = {
       ...inData.testData,
       responseHeaders: this.filterCommonHeader(inData.history.response.headers) || [],
@@ -248,16 +252,16 @@ export class ApiTestUtilService {
     };
     delete result.uuid;
     if (result.requestBodyType === ApiBodyType.Raw) {
-      Object.assign(result, this.text2Body('requestBody', result.requestBody));
+      Object.assign(result, this.text2EditBody('requestBody', result.requestBody));
     }
     ['requestHeaders', 'requestBody', 'responseHeaders', 'restParams', 'queryParams'].forEach((keyName) => {
       if (!result[keyName] || typeof result[keyName] !== 'object') {
         return;
       }
-      result[keyName] = this.testTableData2ApiBody(result[keyName]);
+      result[keyName] = this.testTable2body(result[keyName]);
     });
     if (inData.history.response.responseType === 'text') {
-      Object.assign(result, this.text2Body('responseBody', inData.history.response.body));
+      Object.assign(result, this.text2EditBody('responseBody', inData.history.response.body));
     }
     return result;
   }
@@ -285,15 +289,15 @@ export class ApiTestUtilService {
     switch (inData.requestBodyType) {
       case ApiBodyType.JSON: {
         inData.requestBody = JSON.stringify(
-          uiData2Json(inData.requestBody, {
+          table2json(inData.requestBody, {
             rootType: inData.requestBodyJsonType,
           })
         );
         break;
       }
       case ApiBodyType.XML: {
-        inData.requestBody = json2XML(
-          uiData2Json(inData.requestBody, {
+        inData.requestBody = json2xml(
+          table2json(inData.requestBody, {
             rootType: inData.requestBodyJsonType,
           })
         );
@@ -374,7 +378,7 @@ export class ApiTestUtilService {
     const result = headers.filter((val) => !commonHeader.includes(val.name));
     return result;
   }
-  private testTableData2ApiBody(arr): ApiData[] {
+  private testTable2body(arr): ApiData[] {
     const result = [];
     arr.forEach((val) => {
       if (!val.name) {

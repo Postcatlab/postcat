@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, LOCALE_ID } from '@angular/core';
 
 //Other module
-import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -27,8 +26,6 @@ import { ThemeService } from './core/services/theme.service';
 
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import {
-  EoNgFeedbackAlertModule,
-  EoNgFeedbackDrawerModule,
   EoNgFeedbackTooltipModule,
   EoNgFeedbackMessageModule,
 } from 'eo-ng-feedback';

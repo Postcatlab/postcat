@@ -39,7 +39,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
-  constructor(private apiEdit: ApiEditUtilService,private apiTable: ApiTableService) {
+  constructor(private apiEdit: ApiEditUtilService, private apiTable: ApiTableService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
       this.beforeChangeBodyByType(val[0]);
     });
@@ -69,7 +69,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     this.jsonRootTypeChange.emit(jsonRootType);
     this.modelChange.emit(this.model);
   }
-  rawDataChange(code) {
+  rawChange(code) {
     this.rawChange$.next(code);
   }
   changeBodyType(type?) {
@@ -104,7 +104,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   beforeHandleImport(result) {
     this.jsonRootType = Array.isArray(result) ? 'array' : 'object';
   }
-
+  tableChange($event) {
+    console.log('handleDataChange');
+    this.modelChange.emit(this.model);
+  }
   handleParamsImport(data) {
     this.model = data;
     this.modelChange.emit(data);
@@ -140,13 +143,19 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private initListConf() {
-    const config = this.apiTable.initTable({
-      in: 'body',
-      format:this.bodyType as ApiBodyType,
-      isEdit: true,
-    },{
-      manualAdd:true
-    });
+    const config = this.apiTable.initTable(
+      {
+        in: 'body',
+        format: this.bodyType as ApiBodyType,
+        isEdit: true,
+      },
+      {
+        manualAdd: true,
+        changeFn: () => {
+          this.tableChange(this.model);
+        },
+      }
+    );
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
   }

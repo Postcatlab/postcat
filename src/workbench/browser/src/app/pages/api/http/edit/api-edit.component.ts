@@ -155,6 +155,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * Judge has edit manualy
    */
   isFormChange(): boolean {
+    return false;
     if (!this.initialModel || !this.model) {
       return false;
     }

@@ -5752,10 +5752,10 @@ eo-ng-radio@0.0.82:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-select@0.0.82:
-  version "0.0.82"
-  resolved "https://registry.yarnpkg.com/eo-ng-select/-/eo-ng-select-0.0.82.tgz#02d63400d7ac4159fdeea2ce6619ff52a39d128a"
-  integrity sha512-0WQjjie/8UKF7sWiT6UOpWOCFsWv6b9xyxmR9vtst3wutXz3Icj9hGJ1ky3wbiicXuyp+pYRGCr8951mp/Or0Q==
+eo-ng-select@0.0.83:
+  version "0.0.83"
+  resolved "https://registry.yarnpkg.com/eo-ng-select/-/eo-ng-select-0.0.83.tgz#6c7c8efe157a7c9d2e5705997f34dbfb407f897a"
+  integrity sha512-J0QX7R8x0W8sjw8Lk9YUAkiFpDDf1H0u862IRly6cb9QfhnsxXNJ7BQW/b9R+AG+vAOq5MRL9bqMBFWmOuOP5w==
   dependencies:
     tslib "^2.3.0"
 
@@ -5766,10 +5766,10 @@ eo-ng-switch@0.0.82:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-table@0.0.82:
-  version "0.0.82"
-  resolved "https://registry.yarnpkg.com/eo-ng-table/-/eo-ng-table-0.0.82.tgz#f5fef0a8a25eb92acbe90b6ba22d83bf1f64d667"
-  integrity sha512-TCN4RO+WrfslJbdTpLCMUNZWzgfIDVLt4J5eO0BC+g1LLSX0aRiEZrsTdG6YZB4vaSuAw7spsyYke10baP73Ew==
+eo-ng-table@0.0.85:
+  version "0.0.85"
+  resolved "https://registry.yarnpkg.com/eo-ng-table/-/eo-ng-table-0.0.85.tgz#03a69c827e0ffdf1839a9a425760057bf8e55eb5"
+  integrity sha512-GaMpaHqHkiMDxwF0osZntc5iaXVxD+gzHVus9yo8M4xdwP/5rmgoWhfI0co96L/a1S3K91p4K67HKOv5GxQZ4g==
   dependencies:
     tslib "^2.3.0"
 

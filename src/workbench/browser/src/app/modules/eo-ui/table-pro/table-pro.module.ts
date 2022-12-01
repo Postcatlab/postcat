@@ -7,10 +7,20 @@ import { EoNgFeedbackTooltipModule } from 'eo-ng-feedback';
 import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 import { FormsModule } from '@angular/forms';
 import { EoNgButtonModule } from 'eo-ng-button';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 @NgModule({
   declarations: [EoTableProComponent],
-  imports: [CommonModule,FormsModule,EoNgTableModule,EoNgButtonModule,EoNgDropdownModule,EoNgCheckboxModule,EoNgFeedbackTooltipModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    EoNgTableModule,
+    EoNgButtonModule,
+    EoNgDropdownModule,
+    EoNgCheckboxModule,
+    EoNgFeedbackTooltipModule,
+    NzInputNumberModule,
+  ],
   exports: [EoTableProComponent],
 })
 export class EoTableProModule {}

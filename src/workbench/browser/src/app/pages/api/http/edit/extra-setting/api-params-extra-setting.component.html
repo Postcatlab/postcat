@@ -1,1 +1,56 @@
-just test
+{{ model | json }}
+<eo-ng-table-pro class="table-border-all" [nzData]="model" [columns]="listConfBasicInfo" [nzScroll]="{ x: '800px' }">
+</eo-ng-table-pro>
+
+<eo-ng-table-pro
+  class="table-border-all mt-[15px]"
+  *ngIf="['string'].includes(model[0].type)"
+  [nzData]="model"
+  [columns]="listConfLenthInterval"
+  [nzScroll]="{ x: '800px' }"
+  [setting]="{ manualAdd: true}"
+>
+</eo-ng-table-pro>
+
+<eo-ng-table-pro
+  class="table-border-all mt-[15px]"
+  *ngIf="['int', 'float', 'double', 'short', 'long', 'number'].includes(model[0].type)"
+  [nzData]="model"
+  [columns]="listConfValueInterval"
+  [nzScroll]="{ x: '800px' }"
+  [setting]="{ manualAdd: true }"
+>
+</eo-ng-table-pro>
+
+<eo-ng-table-pro
+  class="table-border-all mt-[15px]"
+  [nzData]="model[0].enum"
+  [nzDataItem]="itemStructureEnums"
+  [columns]="listConfEnums"
+  [nzScroll]="{ x: '800px' }"
+>
+</eo-ng-table-pro>
+
+<div class="mt-[20px] ant-table">
+  <table class="border-all">
+    <thead class="ant-table-thead">
+      <tr class="ant-table-row">
+        <th class="ant-table-cell">Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="p-[10px]">
+          <textarea
+            rows="4"
+            i18n-placeholder
+            placeholder="Param Example"
+            eo-ng-input
+            [(ngModel)]="model[0].example"
+          ></textarea>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div></div>
+</div>

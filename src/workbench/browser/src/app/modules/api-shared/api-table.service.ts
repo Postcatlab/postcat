@@ -1,24 +1,27 @@
 import { Injectable } from '@angular/core';
+import { omit } from 'lodash-es';
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
 import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml } from '../../shared/services/storage/index.model';
-import { eoDeepCopy } from '../../utils/index.utils';
 import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
   showMore(item) {
-    const modal = this.modalService.create({
-      nzTitle: $localize`Advanced Settings`,
-      nzContent: ApiParamsExtraSettingComponent,
-      nzWidth: '60%',
-      nzComponentParams: {
-        model: eoDeepCopy(item),
-      },
-      nzOnOk() {
-        modal.destroy();
-      },
+    return new Promise((resolve) => {
+      const modal = this.modalService.create({
+        nzTitle: $localize`Advanced Settings`,
+        nzContent: ApiParamsExtraSettingComponent,
+        nzWidth: '60%',
+        nzComponentParams: {
+          model: [omit(item, ['children'])],
+        },
+        nzOnOk() {
+          resolve(modal.componentInstance.model);
+          modal.destroy();
+        },
+      });
     });
   }
   initTable(
@@ -34,12 +37,12 @@ export class ApiTableService {
     const columnMUI = {
       name: {
         title: $localize`Param Name`,
-        left:true,
+        left: true,
         type: 'input',
-        columnShow:'fixed',
+        columnShow: 'fixed',
         key: 'name',
         placeholder: $localize`Param Name`,
-        width: 300,
+        width: 150,
       },
       type: {
         title: $localize`Type`,
@@ -78,7 +81,14 @@ export class ApiTableService {
           {
             icon: 'more',
             click: (item) => {
-              this.showMore(item);
+              this.showMore(item.data).then((res) => {
+                Object.assign(item.data, res[0]);
+                if (!opts.changeFn) {
+                  console.error('changeFn is not defined');
+                  return;
+                }
+                opts.changeFn();
+              });
             },
           },
           {
@@ -103,7 +113,7 @@ export class ApiTableService {
       setting: {
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
-        rowSortable:inArg.isEdit?true:false,
+        rowSortable: inArg.isEdit ? true : false,
         isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
         toolButton: {
           columnVisible: true,
@@ -156,7 +166,6 @@ export class ApiTableService {
       }
       return column;
     });
-    console.log('initTable', result);
     return result;
   }
 }

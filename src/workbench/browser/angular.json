@@ -8,7 +8,7 @@
       "root": "",
       "i18n": {
         "sourceLocale": { "code": "en", "baseHref": "" },
-        "locales": { "zh": { "translation": "src/locale/messages.zh.xlf", "baseHref": "" } }
+        "locales": { "zh": { "translation": "locale/messages.zh.xlf", "baseHref": "" } }
       },
       "sourceRoot": "src",
       "projectType": "application",

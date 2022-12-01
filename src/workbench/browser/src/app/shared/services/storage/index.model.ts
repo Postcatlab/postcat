@@ -544,10 +544,6 @@ export enum ApiParamsTypeJsonOrXml {
 
 export interface ParamsEnum {
   /**
-   * is default param value
-   */
-  default: boolean;
-  /**
    * param value
    */
   value: string;

@@ -12,125 +12,84 @@ import {
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
   @Input() model: { type: string | ApiParamsTypeJsonOrXml } & BasiApiEditParams;
-  listConfBasicInfo = {
-    setting: {
-      readonly: true,
+  listConfBasicInfo = [
+    {
+      title: $localize`Param Name`,
+      key: 'name',
     },
-    tdList: [
-      {
-        thKey: $localize`Param Name`,
-        type: 'text',
-        modelKey: 'name',
-      },
-      {
-        thKey: $localize`Required`,
-        type: 'html',
-        html: '{{item.required?"True":"False"}}',
-        class: 'w-full',
-      },
-      {
-        thKey: $localize`:@@Description:Description`,
-        type: 'text',
-        modelKey: 'description',
-      },
-      {
-        thKey: $localize`Type`,
-        type: 'text',
-        modelKey: 'type',
-      },
-    ],
-  };
-  listConfLenthInterval = {
-    setting: {
-      munalAddRow: true,
+    {
+      title: $localize`Type`,
+      key: 'type',
     },
-    tdList: [
-      {
-        thKey: $localize`Minimum length`,
-        type: 'input',
-        modelKey: 'minLength',
-        class: 'w_50percent',
-        itemExpression: `min="0"`,
-        inputType: 'number',
-      },
-      {
-        thKey: $localize`Maximum Length`,
-        type: 'input',
-        modelKey: 'maxLength',
-        itemExpression: `min="0"`,
-        inputType: 'number',
-      },
-    ],
-  };
-  listConfValueInterval = {
-    setting: {
-      munalAddRow: true,
+    {
+      title: $localize`Required`,
+      key: 'required',
+      enums: [
+        { title: $localize`Yes`, value: true },
+        { title: $localize`No`, value: false },
+      ],
     },
-    tdList: [
-      {
-        thKey: $localize`Minimum`,
-        type: 'input',
-        modelKey: 'minimum',
-        class: 'w_50percent',
-        itemExpression: `min="0"`,
-        inputType: 'number',
-      },
-      {
-        thKey: $localize`Maximum`,
-        type: 'input',
-        modelKey: 'maximum',
-        itemExpression: `min="0"`,
-        inputType: 'number',
-      },
-    ],
-  };
+    {
+      title: $localize`:@@Description:Description`,
+      key: 'description',
+    },
+  ];
+  listConfLenthInterval = [
+    {
+      title: $localize`Minimum length`,
+      type: 'inputNumber',
+      key: 'minLength',
+    },
+    {
+      title: $localize`Maximum Length`,
+      type: 'inputNumber',
+      key: 'maxLength',
+    },
+  ];
+  listConfValueInterval = [
+    {
+      title: $localize`Minimum`,
+      type: 'inputNumber',
+      key: 'minimum',
+    },
+    {
+      title: $localize`Maximum`,
+      type: 'inputNumber',
+      key: 'maximum',
+    },
+  ];
   itemStructureEnums: ParamsEnum = {
-    default: false,
     value: '',
     description: '',
   };
-  listConfEnums = {
-    setting: {},
-    itemStructure: this.itemStructureEnums,
-    tdList: [
-      {
-        thKey: $localize`Default`,
-        type: 'radio',
-        modelKey: 'default',
-        isCanBeCancle: true,
-        class: 'w_80',
-      },
-      {
-        thKey: $localize`Value enum`,
-        type: 'input',
-        modelKey: 'value',
-        placeholder: $localize`enum`,
-        itemExpression: `ng-class="{'eo-input-error':!item.value&&item.description}"`,
-      },
-      {
-        thKey: $localize`Description`,
-        type: 'input',
-        modelKey: 'description',
-        placeholder: $localize`Description`,
-      },
-      {
-        type: 'btn',
-        class: 'w_250',
-        btnList: [
-          {
-            key: $localize`:@@Delete:Delete`,
-            operateName: 'delete',
-          },
-        ],
-      },
-    ],
-  };
+  listConfEnums = [
+    {
+      title: $localize`Value Enum`,
+      type: 'input',
+      key: 'value',
+      placeholder: $localize`enum`
+    },
+    {
+      title: $localize`Description`,
+      type: 'input',
+      key: 'description',
+      placeholder: $localize`Description`,
+    },
+    {
+      type: 'btnList',
+      width:100,
+      btns: [
+        {
+          action: 'delete'
+        },
+      ],
+    },
+  ];
 
   constructor() {}
   ngOnInit(): void {
-    if (this.model && (!this.model.enum || !this.model.enum.length)) {
-      this.model.enum = this.model.enum || [];
-      this.model.enum.push(Object.assign({}, this.itemStructureEnums));
+    if (this.model[0] && (!this.model[0].enum || !this.model[0].enum.length)) {
+      this.model[0].enum = this.model[0].enum || [];
     }
   }
 }

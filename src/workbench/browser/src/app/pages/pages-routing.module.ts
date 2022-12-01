@@ -10,7 +10,7 @@ import {
 import { Injectable, NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
-import { PageBlankComponent } from '../layout/page-blank/page-blank.component';
+import { PageBlankComponent } from '../layouts/page-blank/page-blank.component';
 import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
 import { Observable } from 'rxjs';
 import { StoreService } from '../shared/store/state.service';

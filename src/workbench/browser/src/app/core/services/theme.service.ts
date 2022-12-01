@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { share } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
-import { THEMES } from '../../layout/toolbar/select-theme/theme.model';
+import { THEMES } from '../../layouts/toolbar/select-theme/theme.model';
 
 @Injectable()
 export class ThemeService {
