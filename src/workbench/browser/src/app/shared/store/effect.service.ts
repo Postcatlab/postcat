@@ -5,13 +5,13 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { reaction } from 'mobx';
+import { reaction, observable } from 'mobx';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EffectService {
-  currentProjectID = StorageUtil.get('currentProjectID', 1);
+  @observable currentProjectID = StorageUtil.get('currentProjectID', 1);
 
   constructor(
     private apiService: ApiService,

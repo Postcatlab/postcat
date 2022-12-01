@@ -45,8 +45,7 @@ export class StoreService {
   };
 
   // * computed data
-  @computed
-  get getEnv() {
+  @computed get getEnv() {
     return this.env;
   }
 
