@@ -44,9 +44,8 @@ export class ApiTestQueryComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   private initListConf() {
-    const config = this.apiTable.initTable({
+    const config = this.apiTable.initTestTable({
       in: 'header',
-      isEdit: true,
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

@@ -2,12 +2,45 @@ export enum ApiTestParamsTypeFormData {
   text = 'string',
   file = 'file',
 }
-export enum ContentTypeByAbridge {
-  Text = 'text/plain',
-  JSON = 'application/json',
-  XML = 'application/xml',
-  HTML = 'text/html',
-}
+export const CONTENT_TYPE_BY_ABRIDGE = [
+  {
+    title: 'Auto',
+    value: '',
+  },
+  {
+    title: 'application/x-www-form-urlencoded',
+    value: 'application/x-www-form-urlencoded',
+  },
+  {
+    title: 'multipart/form-data',
+    value: 'multipart/form-data',
+  },
+  {
+    title: 'Text(text/plain)',
+    value: 'text/plain',
+  },
+  {
+    title: 'JSON(application/json)',
+    value: 'application/json',
+  },
+  {
+    title: 'Javascript(application/javascript)',
+    value: 'application/javascript',
+  },
+  {
+    title: 'XML(application/xml)',
+    value: 'application/xml',
+  },
+  {
+    title: 'XML(text/xml)',
+    value: 'text/xml',
+  },
+  {
+    title: 'HTML(text/html)',
+    value: 'text/html',
+  },
+] as const;
+export type ContentType = typeof CONTENT_TYPE_BY_ABRIDGE[number]['value'];
 interface BasiApiTestParams {
   /**
    * send this param when test

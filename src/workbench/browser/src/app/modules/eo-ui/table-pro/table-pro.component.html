@@ -5,7 +5,7 @@
 <!-- {{ setting | json }} -->
 <!-- {{columnVisibleStatus|json}} -->
 <eo-ng-table
-  class="full-screen-container"
+  class="{{randomClass}}"
   [nzDataItem]="nzDataItem"
   [(nzData)]="nzData"
   [nzIsLevel]="setting.isLevel"
@@ -78,7 +78,7 @@
       *ngIf="setting?.toolButton?.fullScreen"
       eo-ng-button
       nzType="text"
-      (click)="screenAll(0)"
+      (click)="screenAll()"
     >
       <svg class="iconpark-icon"><use href="#full-screen"></use></svg>
     </button>

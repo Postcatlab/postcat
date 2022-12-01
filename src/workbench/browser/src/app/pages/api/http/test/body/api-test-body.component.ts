@@ -15,10 +15,10 @@ import { Observable, Observer, Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
 import {
-  ApiTestParamsTypeFormData,
   ApiTestBody,
   ApiTestBodyType,
-  ContentTypeByAbridge,
+  ContentType,
+  CONTENT_TYPE_BY_ABRIDGE,
 } from '../../../service/api-test/api-test.model';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -26,7 +26,6 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-test-body',
@@ -36,11 +35,11 @@ import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storag
 export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
-  @Input() contentType: ContentTypeByAbridge;
+  @Input() contentType: ContentType;
   @Input() bodyType: ApiTestBodyType | string;
   @Output() bodyTypeChange: EventEmitter<any> = new EventEmitter();
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  @Output() contentTypeChange: EventEmitter<ContentTypeByAbridge> = new EventEmitter();
+  @Output() contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   isReload = true;
   listConf: any = {
@@ -48,7 +47,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     setting: {},
   };
   binaryFiles: NzUploadFile[] = [];
-  CONST: any = {};
+  CONST: any = {
+    CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE,
+  };
   cache: any = {};
   editorConfig: EditorOptions = {
     language: 'json',
@@ -67,11 +68,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   get editorType() {
     return this.contentType.replace(/.*\//, '');
   }
-  constructor(
-    private apiTable: ApiTableService,
-    elementRef: ElementRef,
-    private message: EoNgFeedbackMessageService
-  ) {
+  constructor(private apiTable: ApiTableService, elementRef: ElementRef, private message: EoNgFeedbackMessageService) {
     this.el = elementRef.nativeElement;
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
       this.beforeChangeBodyByType(val[0]);
@@ -83,12 +80,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     });
   }
 
-  ngAfterViewInit(): void {
-    // this.resizeObserver = new ResizeObserver(() => {
-    //   this.eoMonacoEditor?.rerenderEditor();
-    // });
-    // this.resizeObserver.observe(this.el);
-  }
+  ngAfterViewInit(): void {}
   beforeChangeBodyByType(type) {
     switch (type) {
       case ApiTestBodyType.Binary:
@@ -120,10 +112,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     this.CONST.API_BODY_TYPE = Object.keys(ApiTestBodyType)
       .filter((val) => this.supportType.includes(ApiTestBodyType[val]))
       .map((val) => ({ key: val, value: ApiTestBodyType[val] }));
-    this.CONST.CONTENT_TYPE = Object.keys(ContentTypeByAbridge).map((name) => ({
-      name,
-      value: ContentTypeByAbridge[name],
-    }));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -194,10 +182,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     }
   }
   private initListConf() {
-    const config = this.apiTable.initTable({
+    const config = this.apiTable.initTestTable({
       in: 'body',
-      format:this.bodyType as ApiBodyType,
-      isEdit: true,
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

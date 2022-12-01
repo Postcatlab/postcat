@@ -75,6 +75,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren('iconBtnTmp', { read: TemplateRef })
   iconBtnTmp: QueryList<TemplateRef<any>>;
 
+  columnVisibleMenus = [];
   @ViewChild('toolBtnTmp', { read: TemplateRef })
   toolBtnTmp: TemplateRef<any>;
 
@@ -86,7 +87,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
 
   childKey = 'children';
 
-  columnVisibleMenus = [];
+  randomClass=`full-screen-container_${Date.now()}`;
+
   private isFullScreenStatus = false;
   private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
   constructor(private cdRef: ChangeDetectorRef) {}
@@ -160,9 +162,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  screenAll(index: number = 0) {
+  screenAll() {
     this.isFullScreenStatus = !this.isFullScreenStatus;
-    const domElem = document.getElementsByClassName('full-screen-container')[index];
+    const domElem = document.getElementsByClassName(this.randomClass)[0];
     if (this.isFullScreenStatus) {
       if (!domElem.className.includes('eo-ng-table-full-screen')) {
         domElem.className += ' eo-ng-table-full-screen';
@@ -209,7 +211,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set RowSortable
     if (this.setting.rowSortable) {
       theaderConf.push({
-        width: 30,
+        width: 25,
       });
       tbodyConf.push({
         type: 'sort',
@@ -344,7 +346,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    console.log(this.theadConf, this.tbodyConf);
+    // console.log(this.theadConf, this.tbodyConf);
   }
   private deleteButtonShowFn(item, index, apis) {
     //The last row can't be deleted

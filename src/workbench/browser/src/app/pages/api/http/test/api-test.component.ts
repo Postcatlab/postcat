@@ -11,7 +11,7 @@ import {
 } from '../../../../shared/services/storage/index.model';
 import { MessageService } from '../../../../shared/services/message';
 
-import { interval, Subscription, Observable, Subject } from 'rxjs';
+import { interval, Subscription, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 import { TestServerService } from '../../service/api-test/test-server.service';
@@ -30,7 +30,9 @@ import {
   afterScriptCompletions,
 } from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
+import {
+  ContentType,
+} from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
@@ -45,7 +47,7 @@ interface testViewModel {
   beforeScript: string;
   afterScript: string;
   testStartTime?: number;
-  contentType: ContentTypeByAbridge;
+  contentType: ContentType;
   requestTabIndex: number;
   responseTabIndex: number;
   testResult: {
@@ -227,7 +229,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
           base: 'url',
           replaceType: 'replace',
         }).query;
-        this.model.request.restParams = generateRestFromUrl(this.model.request.uri, this.model.request.restParams);
+        this.model.request.restParams = [...generateRestFromUrl(this.model.request.uri, this.model.request.restParams)];
       });
   }
   bindGetApiParamNum(params) {
@@ -265,6 +267,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
 
   changeContentType(contentType) {
+    console.log('changeContentType', contentType);
     this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(
       contentType,
       this.model.request.requestHeaders
@@ -422,8 +425,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private initContentType() {
     if (this.model.request.requestBodyType === ApiBodyType.Raw) {
-      this.model.contentType =
-        this.apiTestUtil.getContentType(this.model.request.requestHeaders) || ContentTypeByAbridge.Text;
+      this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestHeaders) || 'text/plain';
     }
   }
   private watchEnvChange() {
@@ -441,7 +443,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private resetModel() {
     return {
-      contentType: ContentTypeByAbridge.JSON,
+      contentType: 'application/json',
       requestTabIndex: 1,
       responseTabIndex: 0,
       request: {},
