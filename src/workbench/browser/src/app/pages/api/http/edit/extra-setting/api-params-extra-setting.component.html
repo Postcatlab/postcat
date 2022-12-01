@@ -1,4 +1,4 @@
-{{ model | json }}
+<!-- {{ model | json }} -->
 <eo-ng-table-pro class="table-border-all" [nzData]="model" [columns]="listConfBasicInfo" [nzScroll]="{ x: '800px' }">
 </eo-ng-table-pro>
 
@@ -7,8 +7,7 @@
   *ngIf="['string'].includes(model[0].type)"
   [nzData]="model"
   [columns]="listConfLenthInterval"
-  [nzScroll]="{ x: '800px' }"
-  [setting]="{ manualAdd: true}"
+  [setting]="{ manualAdd: true }"
 >
 </eo-ng-table-pro>
 
@@ -17,7 +16,6 @@
   *ngIf="['int', 'float', 'double', 'short', 'long', 'number'].includes(model[0].type)"
   [nzData]="model"
   [columns]="listConfValueInterval"
-  [nzScroll]="{ x: '800px' }"
   [setting]="{ manualAdd: true }"
 >
 </eo-ng-table-pro>
@@ -27,7 +25,6 @@
   [nzData]="model[0].enum"
   [nzDataItem]="itemStructureEnums"
   [columns]="listConfEnums"
-  [nzScroll]="{ x: '800px' }"
 >
 </eo-ng-table-pro>
 

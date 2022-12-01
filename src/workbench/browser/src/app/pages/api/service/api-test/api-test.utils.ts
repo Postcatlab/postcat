@@ -53,7 +53,6 @@ export const eoFormatRequestData = (
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
         return inData.requestBody;
-        break;
       }
       case ApiBodyType['Form-data']: {
         const typeMUI = {

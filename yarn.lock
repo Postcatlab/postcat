@@ -5766,10 +5766,10 @@ eo-ng-switch@0.0.82:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-table@0.0.85:
-  version "0.0.85"
-  resolved "https://registry.yarnpkg.com/eo-ng-table/-/eo-ng-table-0.0.85.tgz#03a69c827e0ffdf1839a9a425760057bf8e55eb5"
-  integrity sha512-GaMpaHqHkiMDxwF0osZntc5iaXVxD+gzHVus9yo8M4xdwP/5rmgoWhfI0co96L/a1S3K91p4K67HKOv5GxQZ4g==
+eo-ng-table@0.0.86:
+  version "0.0.86"
+  resolved "https://registry.yarnpkg.com/eo-ng-table/-/eo-ng-table-0.0.86.tgz#f4ebd5651489cc2b93c296f846be0e56eaa68a78"
+  integrity sha512-vqwIHEURN2I4qEnL8bsZK2otn0uLXnG7NL7IuNHf5H9yUV6ywTY+vGOzkSxgxHos7f7wxOj+jTjuIm61zHAHrA==
   dependencies:
     tslib "^2.3.0"
 

@@ -7,7 +7,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
 import { Subject } from 'rxjs';
-import { eoDeepCopy } from '../../../utils/index.utils';
 
 @Component({
   selector: 'eo-env',

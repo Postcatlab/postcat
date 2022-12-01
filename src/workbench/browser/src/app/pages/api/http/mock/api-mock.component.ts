@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
@@ -20,16 +20,15 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 })
 export class ApiMockComponent implements OnInit {
   @Output() eoOnInit = new EventEmitter<ApiData>();
-  @Input() mockListColumns = [
-    { title: $localize`Name`, slot: 'name', width: '20%' },
-    { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
-    { title: 'URL', slot: 'url', width: '42%' },
-    { title: '', slot: 'action', width: '20%', fixed: true },
-  ];
   @Input() apiDataID: number;
   @Input() showToolBar = true;
   apiData: ApiData;
   isVisible = false;
+
+  @ViewChild('urlCell', { read: TemplateRef, static: true })
+  urlCell: TemplateRef<any>;
+
+  mockListColumns = [];
   get mockUrl() {
     const prefix = this.store.isLocal
       ? this.dataSource.mockUrl
@@ -86,6 +85,31 @@ export class ApiMockComponent implements OnInit {
 
   ngOnInit() {
     this.init();
+    this.mockListColumns = [
+      { title: $localize`Name`, key: 'name', width: 200 },
+      { title: $localize`Created Type`, key: 'createWay', width: 120 },
+      { title: 'URL', slot: this.urlCell},
+      {
+        type: 'btnList',
+        btns: [
+          {
+            title:$localize`Preview`,
+            icon: 'preview-open',
+            click: (item, index) => {
+              this.addOrEditModal(index);
+            },
+          },
+          {
+            action: 'delete',
+            showFn: (item) => item.data.createWay !== 'system',
+            confirm: true,
+            confirmFn: (item, index) => {
+              this.handleDeleteMockItem(index);
+            },
+          },
+        ],
+      },
+    ];
   }
   init() {
     this.initMockList(this.apiDataID || Number(this.route.snapshot.queryParams.uuid));
@@ -108,7 +132,6 @@ export class ApiMockComponent implements OnInit {
     }).url;
     const url = new URL(`${this.mockUrl}/${uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
     if (mock?.createWay === 'custom' && mock.uuid) {
-      console.log('mock', mock);
       url.searchParams.set('mockID', mock.uuid + '');
     }
     return decodeURIComponent(url.toString());
@@ -226,7 +249,7 @@ export class ApiMockComponent implements OnInit {
 
   async handleDeleteMockItem(index: number) {
     const target = this.mocklList[index];
-    console.log('target', target);
+    console.log(target);
     await this.removeMock(Number(target.uuid));
     this.mocklList.splice(index, 1)[0];
     this.mocklList = [...this.mocklList];

@@ -27,11 +27,6 @@ export class ApiDetailComponent implements OnInit {
     BODY_TYPE: reverseObj(ApiBodyType),
     JSON_ROOT_TYPE: reverseObj(JsonRootType),
   };
-  mockListColumns = [
-    { title: $localize`Name`, slot: 'name', width: '20%' },
-    { title: $localize`Created Type`, slot: 'createWay', width: '18%' },
-    { title: 'URL', slot: 'url', width: '42%' },
-  ];
   rightExtras = [];
   constructor(
     private route: ActivatedRoute,

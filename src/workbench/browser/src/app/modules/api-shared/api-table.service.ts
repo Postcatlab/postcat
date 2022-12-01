@@ -39,7 +39,7 @@ export class ApiTableService {
         title: $localize`Param Name`,
         left: true,
         type: 'input',
-        columnShow: 'fixed',
+        columnVisible: 'fixed',
         key: 'name',
         placeholder: $localize`Param Name`,
         width: 150,
@@ -72,7 +72,6 @@ export class ApiTableService {
       },
       editOperate: {
         type: 'btnList',
-        width: 120,
         right: true,
         btns: [
           {
@@ -80,6 +79,7 @@ export class ApiTableService {
           },
           {
             icon: 'more',
+            title: $localize`Advanced Settings`,
             click: (item) => {
               this.showMore(item.data).then((res) => {
                 Object.assign(item.data, res[0]);
@@ -98,7 +98,6 @@ export class ApiTableService {
       },
       previewOperate: {
         type: 'btnList',
-        width: 100,
         right: true,
         btns: [
           {

@@ -30,9 +30,14 @@
 <div *ngFor="let btnItem of iconBtns">
   <ng-template #iconBtnTmp let-item="item" let-apis="apis" let-index="index">
     <button
+      *ngIf="btnItem.showFn ? btnItem.showFn(item, index, apis) : true"
       eo-ng-button
       nzType="text"
-      (click)="btnClick(btnItem, index, item, apis)"
+      nz-popconfirm
+      i18n-nzPopconfirmTitle
+      [nzPopconfirmTitle]="btnItem.confirmTitle"
+      [nzCondition]="!btnItem.confirm"
+      (nzOnConfirm)="btnClick(btnItem, index, item, apis)"
       eoNgFeedbackTooltip
       i18n-nzTooltipTitle
       nzTooltipTitle="{{ btnItem.title }}"
@@ -42,21 +47,6 @@
     </button>
   </ng-template>
 </div>
-<ng-template #iconBtnDelete let-apis="apis" let-index="index" let-last="last" let-item="item">
-  <ng-container *ngIf="!apis.checkIsCurrentLevelLastItem(item)">
-    <button
-      eo-ng-button
-      nzType="text"
-      i18n-nzTooltipTitle
-      eoNgFeedbackTooltip
-      nzTooltipTitle="{{ BNT_MUI['delete'].title }}"
-      (click)="apis.deleteRow(index)"
-    >
-      <svg class="iconpark-icon"><use [attr.href]="'#' + BNT_MUI['delete'].icon"></use></svg>
-    </button>
-  </ng-container>
-</ng-template>
-
 <!-- Tool Button -->
 <ng-template #toolBtnTmp dir="rtl">
   <div class="eo-table-tool-bar">

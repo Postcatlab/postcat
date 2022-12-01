@@ -13,7 +13,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import _ from 'lodash-es';
+import _, { omit } from 'lodash-es';
 import { isUndefined, omitBy } from 'lodash-es';
 import { eoDeepCopy } from '../../../utils/index.utils';
 import { filterTableData } from '../../../utils/tree/tree.utils';
@@ -29,7 +29,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() nzData;
   @Input() setting: TableProSetting = {};
   @Input() nzDataItem?;
-  @Input() nzScroll = { x: '1200px' };
+  @Input() nzScroll = {};
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
   @Output() nzTrClick = new EventEmitter();
@@ -39,59 +39,55 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('enums', { read: TemplateRef })
   enums: TemplateRef<any>;
 
+  iconBtns = [];
+  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert'];
+  //Generate By iconBtns
   @ViewChildren('iconBtnTmp', { read: TemplateRef })
   iconBtnTmp: QueryList<TemplateRef<any>>;
 
   @ViewChild('toolBtnTmp', { read: TemplateRef })
   toolBtnTmp: TemplateRef<any>;
 
-  @ViewChild('iconBtnDelete', { read: TemplateRef })
-  iconBtnDelete: TemplateRef<any>;
-
   @ViewChild('numberInput', { read: TemplateRef })
   numberInput: TemplateRef<any>;
 
-
   tbodyConf = [];
   theadConf = [];
-  iconBtns = [];
 
   childKey = 'children';
 
   columnVisibleMenus = [];
   private isFullScreenStatus = false;
-  BNT_MUI = {
+  private TABLE_DEFAULT_BTN = {
     add: {
       icon: 'plus',
       title: $localize`Add Row`,
-      action: 'add',
+      //eo-ng-table fun action
+      fnName: 'add',
     },
     addChild: {
       icon: 'plus',
       title: $localize`Add Child Row`,
-      action: 'addChild',
+      fnName: 'addChild',
     },
     insert: {
       icon: 'arrow-down',
       title: $localize`Add Row Down`,
-      action: 'insertRow',
+      fnName: 'insertRow',
     },
     delete: {
       icon: 'delete',
       title: $localize`Delete`,
-      action: 'delete',
+      fnName: 'deleteRow',
+      confirmTitle: $localize`Are you sure you want to delete?`,
     },
   };
+  private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
   constructor(private cdRef: ChangeDetectorRef) {}
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.columns && changes.columns.currentValue?.length) {
-      this.setting.isEdit = this.autoSetIsEdit();
-      this.generateBtnTemplate();
-      //First init may template may not be ready
-      if (this.iconBtnTmp) {
-        this.initConfig();
-      }
+      this.onColumnChanges();
     }
     if (changes.nzData) {
       if (this.setting.isEdit && !this.setting.manualAdd) {
@@ -127,14 +123,72 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     if (_.has(this.setting, 'isEdit')) {
       return this.setting.isEdit;
     }
-    return this.columns.some((col) =>
-      ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'].includes(col.type)
-    );
+    return this.columns.some((col) => this.IS_EDIT_COLUMN_TYPE.includes(col.type));
   }
-  initConfig() {
+
+  btnClick(btnItem, index, item, apis) {
+    console.log('eo-table-pro:btnClick:', btnItem, index, item, apis);
+    if (btnItem.click) {
+      btnItem.click(item, index, apis);
+      return;
+    }
+    if (btnItem.confirmFn) {
+      btnItem.confirmFn(item, index, apis);
+      return;
+    }
+    if (btnItem.fnName) {
+      switch (btnItem.fnName) {
+        case 'insertRow': {
+          apis[btnItem.fnName](index, 'down', false);
+          break;
+        }
+        default: {
+          apis[btnItem.fnName](index);
+          break;
+        }
+      }
+    }
+  }
+
+  screenAll(index: number = 0) {
+    this.isFullScreenStatus = !this.isFullScreenStatus;
+    const domElem = document.getElementsByClassName('full-screen-container')[index];
+    if (this.isFullScreenStatus) {
+      if (!domElem.className.includes('eo-ng-table-full-screen')) {
+        domElem.className += ' eo-ng-table-full-screen';
+      }
+    } else {
+      domElem.className = domElem.className.replace(' eo-ng-table-full-screen', '');
+    }
+  }
+  toggleColumnVisible($event: any, item?: any) {
+    $event.stopPropagation();
+    this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
+    this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
+  }
+  checkAdd(item) {
+    return true;
+  }
+  //* Use pro custom template to generate icon btn
+  private needCustomTempalte(btn) {
+    if (btn.type === 'dropdown' || btn.icon || this.BTN_TYPE_NEED_CUSTOMER.includes(btn.action)) {
+      return true;
+    }
+    return false;
+  }
+  private onColumnChanges() {
+    this.nzScroll = { x: this.columns.length * 200 };
+    this.setting.isEdit = this.autoSetIsEdit();
+    this.generateBtnTemplate();
+    //First init may template may not be ready
+    if (this.iconBtnTmp) {
+      this.initConfig();
+    }
+  }
+  private initConfig() {
     const theaderConf = [];
     const tbodyConf = [];
-    let btnIndex = 0;
+    let tmpIndex = 0;
     //Set level
     if (this.setting.isLevel) {
       if (!this.setting.primaryKey) {
@@ -154,7 +208,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set ColumnVisible
     this.setting.toolButton = this.setting.toolButton || {};
     if (!_.has(this.setting.toolButton, 'columnVisible')) {
-      this.setting.toolButton.columnVisible = this.columns.length >= 5 ? true : false;
+      this.setting.toolButton.columnVisible = this.columns.length >= 6 ? true : false;
     }
     this.columns.forEach((col) => {
       const colID = col.id || col.key;
@@ -164,7 +218,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         isUndefined
       );
       const body: any = omitBy(
-        { key: col.key, left: col.left, type: col.type, right: col.right, errorTip: col.errorTip },
+        { key: col.slot || col.key, left: col.left, type: col.type, right: col.right, errorTip: col.errorTip },
         isUndefined
       );
       switch (col.type) {
@@ -179,8 +233,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         }
         case 'inputNumber': {
           body.keyName = col.key;
-          body.key=this.numberInput;
-          body.type='';
+          body.key = this.numberInput;
+          body.type = '';
           body.placeholder = col.placeholder || col.title || '';
           break;
         }
@@ -197,29 +251,21 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           header.resizeable = false;
           body.type = 'btn';
           body.btns = col.btns.map((btn) => {
+            const defaultBtn = this.TABLE_DEFAULT_BTN[btn.action];
             const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
-            const defaultBtn = this.BNT_MUI[btn.action];
-            if (defaultBtn) {
-              switch (btn.action) {
-                case 'insert': {
-                  newBtn.title = this.iconBtnTmp.get(btnIndex++);
-                  break;
-                }
-                case 'delete': {
-                  newBtn.title = this.iconBtnDelete;
-                  break;
-                }
-                default: {
-                  newBtn.icon = btn.icon || defaultBtn.icon;
-                  newBtn.title = defaultBtn.title;
-                  newBtn.action = defaultBtn.action;
-                  break;
-                }
+            //Use custom btn template
+            if (this.needCustomTempalte(btn)) {
+              newBtn.title = this.iconBtnTmp.get(tmpIndex++);
+            } else {
+              //User eo-ng-table defualt icon template
+              newBtn.icon = btn.icon || defaultBtn?.icon;
+              newBtn.title = btn.title || defaultBtn?.title;
+              if (defaultBtn) {
+                newBtn.action = defaultBtn.fnName;
               }
             }
             switch (btn.type) {
               case 'dropdown': {
-                newBtn.title = this.iconBtnTmp.get(btnIndex++);
                 newBtn.opts = btn.menus;
                 break;
               }
@@ -239,7 +285,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
       //Set resizeable
-      if (col.width) {
+      if (col.type === 'btnList') {
+        header.width = col.width || body.btns.length * 20 + 50;
+      } else if (col.width) {
         header.width = col.width;
       }
       //Set filter
@@ -269,8 +317,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       if (col.showFn) {
         body.showFn = header.showFn = col.showFn;
       }
-      if (col.columnShow !== 'fixed' && col.type !== 'btnList') {
-        this.columnVisibleStatus[colID] = col.columnShow === false ? 0 : 1;
+      if (col.columnVisible !== 'fixed' && col.type !== 'btnList') {
+        this.columnVisibleStatus[colID] = col.columnVisible === false ? 0 : 1;
         this.columnVisibleMenus.push({
           title: col.title,
           key: colID,
@@ -286,69 +334,48 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    // console.log(this.theadConf, this.tbodyConf);
+    console.log(this.theadConf, this.tbodyConf);
   }
-  btnClick(btnItem, index, item, apis) {
-    console.log(btnItem, index, item, apis);
-    if (btnItem.customClick) {
-      this.columns[btnItem.index].btns[btnItem.btnIndex].click(index, item, apis);
-      return;
-    }
-    if (btnItem.action) {
-      switch (btnItem.action) {
-        case 'insertRow': {
-          apis[btnItem.action](index, 'down', false);
-          break;
-        }
-        default: {
-          apis[btnItem.action](index);
-          break;
-        }
-      }
-    }
-  }
-
-  screenAll(index: number = 0) {
-    this.isFullScreenStatus = !this.isFullScreenStatus;
-    const domElem = document.getElementsByClassName('full-screen-container')[index];
-    if (this.isFullScreenStatus) {
-      if (!domElem.className.includes('eo-ng-table-full-screen')) {
-        domElem.className += ' eo-ng-table-full-screen';
-      }
-    } else {
-      domElem.className = domElem.className.replace(' eo-ng-table-full-screen', '');
-    }
-  }
-  toggleColumnVisible($event: any, item?: any) {
-    $event.stopPropagation();
-    this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
-    this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
-  }
-  checkAdd(item) {
-    return true;
+  private leveDeleteShowFn(item, index, apis) {
+    return !apis.checkIsCurrentLevelLastItem(item);
   }
   private generateBtnTemplate() {
     this.columns.forEach((col, index) => {
       if (col.type !== 'btnList') {
         return;
       }
-      col.btns.forEach((btn, btnIndex) => {
-        //only dropdown/action='insert' need table-pro custom template
-        if (btn.type !== 'dropdown' && btn.action !== 'insert') {
+      //Operate btnList
+      col.btns.forEach((btn) => {
+        if (!this.needCustomTempalte(btn)) {
           return;
         }
-        const iconBtn: any = { index, btnIndex };
+        //Use eo-ng-table default template
+        const iconBtn: any = omitBy(
+          {
+            action: btn.action,
+            showFn: btn.showFn,
+            confirm: btn.confirm,
+            click: btn.click,
+            confirmFn: btn.confirmFn,
+            confirmTitle: btn.confirmTitles,
+          },
+          isUndefined
+        );
         if (btn.icon) {
           iconBtn.icon = btn.icon;
         }
-        const defaultBtn = this.BNT_MUI[btn.action];
-        if (defaultBtn) {
-          iconBtn.icon = btn.icon || defaultBtn.icon;
-          iconBtn.title = defaultBtn.title;
-          iconBtn.action = defaultBtn.action;
+        if (btn.action === 'delete') {
+          iconBtn.showFn = iconBtn.showFn || this.leveDeleteShowFn;
         }
-        if (btn.click) {
-          iconBtn.customClick = true;
+        const defaultBtn = this.TABLE_DEFAULT_BTN[btn.action];
+
+        iconBtn.icon = btn.icon || defaultBtn?.icon;
+        iconBtn.title = btn.title || defaultBtn?.title;
+        if (btn.confirm) {
+          iconBtn.confirmTitle = btn.confirmTitle || defaultBtn?.confirmTitle;
+        }
+        if (defaultBtn) {
+          iconBtn.fnName = defaultBtn.fnName;
         }
         this.iconBtns.push(iconBtn);
       });

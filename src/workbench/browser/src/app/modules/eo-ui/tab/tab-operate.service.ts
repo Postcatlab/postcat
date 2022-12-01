@@ -23,7 +23,8 @@ export class TabOperateService {
   BASIC_TABS: Partial<TabItem>[];
   //* Allow development mode debug not exist router
   private allowNotExistRouter = !APP_CONFIG.production;
-  private disabledCache = true;
+  //* Cache page data in tab
+  private disabledCache = false;
   constructor(
     private tabStorage: TabStorageService,
     private messageService: MessageService,

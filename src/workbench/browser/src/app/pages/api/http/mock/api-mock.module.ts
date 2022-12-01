@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ApiMockComponent } from './api-mock.component';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -7,6 +6,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule } from '@angular/forms';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { RouterModule } from '@angular/router';
+import { EoTableProModule } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.module';
 
 @NgModule({
   declarations: [],
@@ -17,7 +17,8 @@ import { RouterModule } from '@angular/router';
         component: ApiMockComponent,
       },
     ]),
-    CommonModule,
+    FormsModule,
+    EoTableProModule,
     SharedModule,
     NzFormModule,
     NzInputModule,
