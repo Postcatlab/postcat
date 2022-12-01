@@ -23,6 +23,7 @@ export class TabOperateService {
   BASIC_TABS: Partial<TabItem>[];
   //* Allow development mode debug not exist router
   private allowNotExistRouter = !APP_CONFIG.production;
+  private disabledCache = true;
   constructor(
     private tabStorage: TabStorageService,
     private messageService: MessageService,
@@ -31,9 +32,11 @@ export class TabOperateService {
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
-  init(inArg:{basicTabs:Partial<TabItem>[]}) {
+  init(inArg: { basicTabs: Partial<TabItem>[] }) {
     this.BASIC_TABS = inArg.basicTabs;
-    const tabCache = this.parseChangeRouter(this.tabStorage.getPersistenceStorage());
+    const tabStorage = this.disabledCache ? null : this.tabStorage.getPersistenceStorage();
+
+    const tabCache = this.parseChangeRouter(tabStorage);
     //No cache
     if (!tabCache || !tabCache.tabOrder?.length) {
       this.operateTabAfterRouteChange({
@@ -133,7 +136,7 @@ export class TabOperateService {
     }
     const queryParams = { pageID: tab.uuid, ...tab.params };
     this.router.navigate([tab.pathname], {
-      queryParams: queryParams,
+      queryParams,
     });
   }
   /**
