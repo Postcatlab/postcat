@@ -39,25 +39,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('enums', { read: TemplateRef })
   enums: TemplateRef<any>;
 
-  iconBtns = [];
-  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert'];
-  //Generate By iconBtns
-  @ViewChildren('iconBtnTmp', { read: TemplateRef })
-  iconBtnTmp: QueryList<TemplateRef<any>>;
-
-  @ViewChild('toolBtnTmp', { read: TemplateRef })
-  toolBtnTmp: TemplateRef<any>;
-
-  @ViewChild('numberInput', { read: TemplateRef })
-  numberInput: TemplateRef<any>;
-
-  tbodyConf = [];
-  theadConf = [];
-
-  childKey = 'children';
-
-  columnVisibleMenus = [];
-  private isFullScreenStatus = false;
+  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert','edit'];
+  //Default buttom template match action
   private TABLE_DEFAULT_BTN = {
     add: {
       icon: 'plus',
@@ -75,6 +58,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       title: $localize`Add Row Down`,
       fnName: 'insertRow',
     },
+    edit: {
+      icon: 'edit',
+      title: $localize`Edit`,
+    },
     delete: {
       icon: 'delete',
       title: $localize`Delete`,
@@ -82,6 +69,24 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       confirmTitle: $localize`Are you sure you want to delete?`,
     },
   };
+  iconBtns = [];
+  //Generate By iconBtns
+  @ViewChildren('iconBtnTmp', { read: TemplateRef })
+  iconBtnTmp: QueryList<TemplateRef<any>>;
+
+  @ViewChild('toolBtnTmp', { read: TemplateRef })
+  toolBtnTmp: TemplateRef<any>;
+
+  @ViewChild('numberInput', { read: TemplateRef })
+  numberInput: TemplateRef<any>;
+
+  tbodyConf = [];
+  theadConf = [];
+
+  childKey = 'children';
+
+  columnVisibleMenus = [];
+  private isFullScreenStatus = false;
   private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
   constructor(private cdRef: ChangeDetectorRef) {}
   ngOnInit(): void {}
@@ -137,6 +142,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       return;
     }
     if (btnItem.fnName) {
+      if (!apis[btnItem.fnName]) {
+        console.error(`EO_ERROR: Can't find ${btnItem.fnName} function`);
+        return;
+      }
       switch (btnItem.fnName) {
         case 'insertRow': {
           apis[btnItem.fnName](index, 'down', false);

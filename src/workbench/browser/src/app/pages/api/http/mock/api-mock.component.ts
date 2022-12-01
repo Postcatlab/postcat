@@ -88,13 +88,19 @@ export class ApiMockComponent implements OnInit {
     this.mockListColumns = [
       { title: $localize`Name`, key: 'name', width: 200 },
       { title: $localize`Created Type`, key: 'createWay', width: 120 },
-      { title: 'URL', slot: this.urlCell},
+      { title: 'URL', slot: this.urlCell },
       {
         type: 'btnList',
         btns: [
           {
-            title:$localize`Preview`,
+            title: $localize`Preview`,
             icon: 'preview-open',
+            click: (item, index) => {
+              this.addOrEditModal(index);
+            },
+          },
+          {
+            action: 'edit',
             click: (item, index) => {
               this.addOrEditModal(index);
             },
@@ -249,7 +255,6 @@ export class ApiMockComponent implements OnInit {
 
   async handleDeleteMockItem(index: number) {
     const target = this.mocklList[index];
-    console.log(target);
     await this.removeMock(Number(target.uuid));
     this.mocklList.splice(index, 1)[0];
     this.mocklList = [...this.mocklList];
