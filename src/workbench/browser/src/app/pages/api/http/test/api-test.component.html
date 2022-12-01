@@ -1,7 +1,7 @@
 <div class="test_wrap">
   <div class="top_container scroll_container" style.height="calc(100% - {{ height }}px)">
     <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="basic_info_container">
-      <nz-input-group nzCompact>
+      <eo-ng-input-group nzCompact>
         <eo-ng-select class="w-[100px]" [(ngModel)]="model.request.protocol" formControlName="protocol">
           <eo-ng-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value">
           </eo-ng-option>
@@ -62,7 +62,7 @@
         >
           Save as API
         </button>
-      </nz-input-group>
+      </eo-ng-input-group>
     </form>
     <!-- Request Info -->
     <eo-ng-tabset

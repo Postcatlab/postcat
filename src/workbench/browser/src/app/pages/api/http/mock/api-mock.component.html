@@ -1,47 +1,8 @@
 <div>
-  <ng-container *ngIf="showToolBar">
-    <button eo-ng-button nzType="primary" (click)="addOrEditModal()" i18n>New Mock</button>
+  <ng-container *ngIf="canEdit">
+    <button eo-ng-button nzType="primary" (click)="addMock()" i18n>New Mock</button>
   </ng-container>
-
   <div class="mt-[20px]">
-    <eo-ng-table-pro class="table-border-all" [columns]="mockListColumns" [nzData]="mocklList"></eo-ng-table-pro>
-    <ng-template #urlCell let-item="item" let-index="index">
-      <span i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip (click)="copyText(item.url)">
-        <span class="text-omit">{{ item.url }}</span>
-      </span>
-    </ng-template>
+    <eo-api-mock-table #mockTable [apiDataID]="apiDataID" [apiData]="apiData" isEdit="true"></eo-api-mock-table>
   </div>
 </div>
-
-<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()">
-  <section *nzModalContent class="flex">
-    <div class="w-full main-content">
-      <form nz-form nzLayout="vertical">
-        <nz-form-item>
-          <nz-form-label i18n nzFor="currentEditMock.name">Mock Name</nz-form-label>
-          <nz-form-control>
-            <input eo-ng-input name="name" type="text" [(ngModel)]="currentEditMock.name" [readonly]="isSystemMock" />
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label i18n nzFor="currentEditMock.response">Response</nz-form-label>
-          <nz-form-control>
-            <eo-monaco-editor
-              [(code)]="responseStr"
-              (codeChange)="rawDataChange()"
-              [maxLine]="15"
-              class="h-[200px] border-all"
-              [config]="{ readOnly: isSystemMock }"
-              [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-            >
-            </eo-monaco-editor>
-          </nz-form-control>
-        </nz-form-item>
-      </form>
-    </div>
-  </section>
-  <div *nzModalFooter class="footer">
-    <button *ngIf="!isSystemMock" eo-ng-button nzType="primary" i18n (click)="handleSave()">Save</button>
-    <button eo-ng-button nzType="default" i18n (click)="handleCancel()">Cancel</button>
-  </div>
-</nz-modal>

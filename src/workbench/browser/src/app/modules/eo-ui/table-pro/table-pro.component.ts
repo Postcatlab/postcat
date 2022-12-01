@@ -39,7 +39,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('enums', { read: TemplateRef })
   enums: TemplateRef<any>;
 
-  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert','edit'];
+  private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit'];
   //Default buttom template match action
   private TABLE_DEFAULT_BTN = {
     add: {
@@ -70,6 +70,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     },
   };
   iconBtns = [];
+
   //Generate By iconBtns
   @ViewChildren('iconBtnTmp', { read: TemplateRef })
   iconBtnTmp: QueryList<TemplateRef<any>>;
@@ -91,7 +92,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(private cdRef: ChangeDetectorRef) {}
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.columns && changes.columns.currentValue?.length) {
+    if (changes?.columns?.currentValue?.length) {
       this.onColumnChanges();
     }
     if (changes.nzData) {
@@ -119,6 +120,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
   ngAfterViewInit() {
+    console.log('ngAfterViewInit');
     this.initConfig();
   }
   handleDataChange(data) {
@@ -186,13 +188,13 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     return false;
   }
   private onColumnChanges() {
-    this.nzScroll = { x: this.columns.length * 200 };
+    this.nzScroll = Object.assign({ x: this.columns.length * 200 }, this.nzScroll);
     this.setting.isEdit = this.autoSetIsEdit();
     this.generateBtnTemplate();
-    //First init may template may not be ready
-    if (this.iconBtnTmp) {
+    //SetTimeout be sure the icon child template ready
+    setTimeout(() => {
       this.initConfig();
-    }
+    }, 0);
   }
   private initConfig() {
     const theaderConf = [];
@@ -343,10 +345,11 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    console.log(this.theadConf, this.tbodyConf);
+    // console.log(this.theadConf, this.tbodyConf);
   }
-  private leveDeleteShowFn(item, index, apis) {
-    return !apis.checkIsCurrentLevelLastItem(item);
+  private deleteButtonShowFn(item, index, apis) {
+    //The last row can't be deleted
+    return item.level !== 0 || !apis.checkIsCurrentLevelLastItem(item);
   }
   private generateBtnTemplate() {
     this.columns.forEach((col, index) => {
@@ -374,7 +377,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           iconBtn.icon = btn.icon;
         }
         if (btn.action === 'delete') {
-          iconBtn.showFn = iconBtn.showFn || this.leveDeleteShowFn;
+          iconBtn.showFn = iconBtn.showFn || this.deleteButtonShowFn;
         }
         const defaultBtn = this.TABLE_DEFAULT_BTN[btn.action];
 

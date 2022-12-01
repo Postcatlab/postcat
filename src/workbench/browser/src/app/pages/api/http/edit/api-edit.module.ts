@@ -4,19 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from '../../../../shared/shared.module';
 
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzInputModule } from 'ng-zorro-antd/input';
 import { EoNgButtonModule } from 'eo-ng-button';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzAffixModule } from 'ng-zorro-antd/affix';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 
 import { ApiEditComponent } from './api-edit.component';
@@ -32,20 +20,11 @@ import { RouterModule } from '@angular/router';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { ApiSharedModule } from '../../../../modules/api-shared/api-shared.module';
 import { EoNgTreeModule } from 'eo-ng-tree';
+import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 const NZ_COMPONETS = [
-  NzDropDownModule,
-  NzModalModule,
-  NzInputModule,
   EoNgButtonModule,
-  NzFormModule,
-  NzSelectModule,
-  NzTreeSelectModule,
-  NzTabsModule,
-  NzRadioModule,
-  NzDividerModule,
-  NzAffixModule,
-  NzPopconfirmModule,
   NzBadgeModule,
   NzCollapseModule,
   EoNgTreeModule
@@ -67,6 +46,7 @@ const COMPONENTS = [
         component: ApiEditComponent,
       },
     ]),
+    EoMonacoEditorModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,

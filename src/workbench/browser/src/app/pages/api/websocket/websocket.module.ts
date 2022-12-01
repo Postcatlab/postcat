@@ -13,11 +13,13 @@ import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared
 import { ApiTestModule } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.module';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
 
 const ANTDS = [EoNgButtonModule, NzTabsModule];
 
 @NgModule({
   imports: [
+    EoMonacoEditorModule,
     WebsocketRoutingModule,
     ApiSharedModule,
     CommonModule,

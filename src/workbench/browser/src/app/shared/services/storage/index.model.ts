@@ -1,4 +1,9 @@
-import { ApiTestBody, ApiTestBodyType, ApiTestHeaders, ApiTestQuery } from '../../../pages/api/service/api-test/api-test.model';
+import {
+  ApiTestBody,
+  ApiTestBodyType,
+  ApiTestHeaders,
+  ApiTestQuery,
+} from '../../../pages/api/service/api-test/api-test.model';
 import { Observable } from 'rxjs';
 
 /**
@@ -563,6 +568,10 @@ export type ApiEditMock = {
   /** 0 is system default mock; 1 is user custom mock */
   createWay: 'system' | 'custom';
 };
+export const REQURIED_ENUMS = [
+  { title: $localize`Yes`, value: true },
+  { title: $localize`No`, value: false },
+];
 
 export interface BasiApiEditParams {
   /**

@@ -3,12 +3,12 @@ import {
   ApiParamsTypeJsonOrXml,
   ParamsEnum,
   BasiApiEditParams,
+  REQURIED_ENUMS,
 } from '../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
-  templateUrl: './api-params-extra-setting.component.html',
-  styleUrls: ['./api-params-extra-setting.component.scss'],
+  templateUrl: './api-params-extra-setting.component.html'
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
   @Input() model: { type: string | ApiParamsTypeJsonOrXml } & BasiApiEditParams;
@@ -24,10 +24,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     {
       title: $localize`Required`,
       key: 'required',
-      enums: [
-        { title: $localize`Yes`, value: true },
-        { title: $localize`No`, value: false },
-      ],
+      enums:REQURIED_ENUMS,
     },
     {
       title: $localize`:@@Description:Description`,

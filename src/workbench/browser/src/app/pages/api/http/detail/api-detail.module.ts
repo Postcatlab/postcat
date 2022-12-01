@@ -18,9 +18,9 @@ import { ApiDetailRestComponent } from './rest/api-detail-rest.component';
 
 import { ApiDetailUtilService } from './api-detail-util.service';
 import { RouterModule } from '@angular/router';
-import { ApiMockComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.component';
 import { ApiSharedModule } from '../../../../modules/api-shared/api-shared.module';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
 
 const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule,NzCollapseModule];
 const COMPONENTS = [
@@ -28,8 +28,7 @@ const COMPONENTS = [
   ApiDetailHeaderComponent,
   ApiDetailBodyComponent,
   ApiDetailQueryComponent,
-  ApiDetailRestComponent,
-  ApiMockComponent,
+  ApiDetailRestComponent
 ];
 @NgModule({
   declarations: [...COMPONENTS],
@@ -43,6 +42,7 @@ const COMPONENTS = [
     FormsModule,
     ApiSharedModule,
     ReactiveFormsModule,
+    EoMonacoEditorModule,
     CommonModule,
     ...NZ_COMPONETS,
     SharedModule,

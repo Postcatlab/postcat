@@ -4,19 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from '../../../../shared/shared.module';
 
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { EoNgButtonModule } from 'eo-ng-button';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { ByteToStringPipe } from './result-response/get-size.pipe';
@@ -38,24 +29,19 @@ import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 import { ApiTestService } from './api-test.service';
+import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { ApiScriptComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/api-script.component';
+import { EoNgTreeModule } from 'eo-ng-tree';
 
-const NZ_COMPONETS = [
-  NzDropDownModule,
-  NzModalModule,
-  NzInputModule,
-  EoNgButtonModule,
-  NzFormModule,
-  NzSelectModule,
-  NzTreeSelectModule,
+const UI_COMPONETS = [
   NzTabsModule,
-  NzRadioModule,
+  EoNgTreeModule,
   NzDividerModule,
   NzEmptyModule,
-  NzPopconfirmModule,
-  NzToolTipModule,
   NzTypographyModule,
   NzUploadModule,
   NzBadgeModule,
+  EoMonacoEditorModule
 ];
 const COMPONENTS = [
   ApiTestComponent,
@@ -63,6 +49,7 @@ const COMPONENTS = [
   ApiTestRestComponent,
   ApiTestResultResponseComponent,
   ApiTestResultRequestBodyComponent,
+  ApiScriptComponent
 ];
 @NgModule({
   declarations: [...COMPONENTS, ByteToStringPipe],
@@ -77,7 +64,7 @@ const COMPONENTS = [
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    ...NZ_COMPONETS,
+    ...UI_COMPONETS,
     ApiSharedModule,
     SharedModule,
     NzResizableModule,

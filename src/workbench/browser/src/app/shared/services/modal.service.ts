@@ -41,14 +41,13 @@ export class ModalService {
           onClick: () => {
             if (inOpts.nzOnOk) {
               return inOpts.nzOnOk();
-            } else {
-              modal.destroy();
             }
           },
         },
       ],
     };
     Object.assign(modalOpts, inOpts);
+    console.log(modalOpts);
     const modal = this.modal.create(modalOpts);
     return modal;
   }

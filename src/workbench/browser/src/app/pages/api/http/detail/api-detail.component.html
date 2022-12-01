@@ -79,7 +79,7 @@
   <!-- MOCK -->
   <nz-collapse *ngIf="electron.isElectron" class="w-full mt-[20px]">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="MOCK">
-      <eo-api-mock-table class="!p-0" [apiDataID]="model.uuid" [showToolBar]="false"> </eo-api-mock-table>
+      <eo-api-mock-table class="!p-0" [canEdit]="false"> </eo-api-mock-table>
     </nz-collapse-panel>
   </nz-collapse>
 </section>

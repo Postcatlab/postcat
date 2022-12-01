@@ -28,7 +28,7 @@ import {
   AFTER_DATA,
   beforeScriptCompletions,
   afterScriptCompletions,
-} from 'eo/workbench/browser/src/app/modules/api-shared/api-script/constant';
+} from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ContentTypeByAbridge } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';

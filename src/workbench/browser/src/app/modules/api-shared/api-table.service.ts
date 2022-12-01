@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { omit } from 'lodash-es';
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
-import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml } from '../../shared/services/storage/index.model';
+import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, REQURIED_ENUMS } from '../../shared/services/storage/index.model';
 import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 @Injectable()
@@ -55,6 +55,7 @@ export class ApiTableService {
         type: 'checkbox',
         key: 'required',
         width: 100,
+        enums: REQURIED_ENUMS
       },
       description: {
         title: $localize`:@@Description:Description`,
@@ -148,7 +149,7 @@ export class ApiTableService {
         }
         case 'editOperate': {
           if (result.setting.isLevel) {
-            column.btns.splice(1, 0, { action: 'addChild' });
+            column.btns.unshift({ action: 'addChild' });
           }
           break;
         }
