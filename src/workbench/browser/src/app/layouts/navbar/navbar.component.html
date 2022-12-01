@@ -30,29 +30,40 @@
     </ng-template>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
-    <button eo-ng-button nzType="text" *ngIf="!store.isShare" class="flex items-center justify-center icon"
-      i18n-nzTooltipTitle eoNgFeedbackTooltip [nzTooltipMouseEnterDelay]="0.4" nzTooltipPlacement="bottom"
-      nzTooltipTitle="Open Settings" (click)="openSettingModal()">
+    <button
+      eo-ng-button
+      nzType="text"
+      *ngIf="!store.isShare"
+      class="flex items-center justify-center icon"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      [nzTooltipMouseEnterDelay]="0.4"
+      nzTooltipPlacement="bottom"
+      nzTooltipTitle="Open Settings"
+      (click)="openSettingModal()"
+    >
       <eo-iconpark-icon name="setting"></eo-iconpark-icon>
     </button>
     <!-- User -->
-    <button eo-ng-button nzType="text" eo-ng-dropdown *ngIf="!store.isShare"
-      class="flex items-center justify-center icon" [nzDropdownMenu]="userMenu">
+    <button
+      eo-ng-button
+      nzType="text"
+      eo-ng-dropdown
+      *ngIf="!store.isShare"
+      class="flex items-center justify-center icon"
+      [nzDropdownMenu]="userMenu"
+    >
       <eo-iconpark-icon name="people"> </eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #userMenu>
       <ul nz-menu>
         <li nz-menu-item *ngIf="!store.isLogin" (click)="loginOrSign()" i18n>Sign in for Collaboration</li>
         <ng-container *ngIf="store.isLogin">
-          <li class="px-[12px] py-[5px] text-neutral-400 font-bold">
+          <li nz-menu-item class="px-[12px] py-[5px] text-neutral-400 font-bold">
             {{ store.getUserProfile?.username }}
           </li>
-          <li nz-menu-item (click)="openSettingModal()">
-            <button type="button" i18n>Account Setting</button>
-          </li>
-          <li nz-menu-item (click)="loginOut()">
-            <button type="button" i18n>Sign Out</button>
-          </li>
+          <li nz-menu-item (click)="openSettingModal()" i18n>Account Setting</li>
+          <li nz-menu-item (click)="loginOut()" i18n>Sign Out</li>
         </ng-container>
       </ul>
     </eo-ng-dropdown-menu>

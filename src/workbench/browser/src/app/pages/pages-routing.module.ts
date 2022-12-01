@@ -62,7 +62,7 @@ const routes: Routes = [
       },
       {
         path: 'member',
-        loadChildren: () => import('./member.module').then((m) => m.MemberModule),
+        loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),
       },
       {
         path: 'extension',
