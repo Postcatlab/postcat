@@ -57,7 +57,9 @@ export class ModuleManager implements ModuleManagerInterface {
   }
   async getRemoteExtension() {
     const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
-    return data.data.map(({ name, version }) => ({ name, version }));
+    return data.data
+      .map(({ name, version }) => ({ name, version }))
+      .concat({ name: 'eoapi-apispace', version: '0.1.3' });
   }
 
   async installExt({ name }) {
@@ -70,7 +72,7 @@ export class ModuleManager implements ModuleManagerInterface {
    * @param module
    */
   async install(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
-    const result = await this.moduleHandler.install([module], module.isLocal || false);
+    const result = await this.moduleHandler.install([module], module?.isLocal || false);
     if (result.code === 0) {
       const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
       this.set(moduleInfo);
@@ -88,7 +90,7 @@ export class ModuleManager implements ModuleManagerInterface {
     if (result.code === 0) {
       this.delete(moduleInfo);
       extServerMap.forEach((item) => {
-        if (item.extName === module.name) {
+        if (item.extensionID === module.name) {
           extServerMap.delete(item.key);
         }
       });
@@ -260,12 +262,19 @@ export class ModuleManager implements ModuleManagerInterface {
           return {
             ...feature,
             url: feature.debugUrl,
-            extName,
+            extensionID: extName,
           };
         }
       }
       // 生产环境需要提供 html 入口文件地址(features.sidebarView.main)
       if (feature?.url) {
+        if (/http(s)?:\/\//.test(feature?.url)) {
+          return {
+            ...feature,
+            key,
+            extensionID: extName,
+          };
+        }
         if (extServerMap.has(key)) {
           return extServerMap.get(key);
         }
@@ -279,7 +288,7 @@ export class ModuleManager implements ModuleManagerInterface {
           ...feature,
           url,
           key,
-          extName,
+          extensionID: extName,
         });
         return extServerMap.get(key);
       }

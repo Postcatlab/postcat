@@ -78,7 +78,7 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
         this.url = sidebar.url;
         this.type = sidebar.useIframe ? 'iframe' : 'micro-app';
         if (sidebar.useIframe) {
-          const dynamickUrl = this.settingService.getConfiguration('eoapi-api-space-debug.dynamicUrl');
+          const dynamickUrl = this.settingService.getConfiguration('eoapi-apispace.dynamicUrl');
           console.log('sidebar 动态配置的地址', dynamickUrl);
           this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dynamickUrl || this.url);
         }

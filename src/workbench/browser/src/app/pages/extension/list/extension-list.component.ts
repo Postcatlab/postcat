@@ -15,7 +15,7 @@ class ExtensionList {
   }
   search(keyword: string) {
     const list = this.list.filter((it) => it.name.includes(keyword) || it.keywords?.includes(keyword));
-    if (!list.some((n) => n.name === 'eoapi-api-space-debug')) {
+    if (!list.some((n) => n.name === 'eoapi-apispace')) {
       list.push(apispacePkg);
     }
     return list;

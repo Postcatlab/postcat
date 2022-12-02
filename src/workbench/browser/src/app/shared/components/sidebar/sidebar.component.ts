@@ -8,6 +8,7 @@ import { WorkspaceService } from '../../services/workspace/workspace.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { StatusService } from 'eo/workbench/browser/src/app/shared/services/status.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 
 @Component({
   selector: 'eo-sidebar',
@@ -37,6 +38,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.getIDFromRoute();
     this.watchRouterChange();
     this.watchWorkspaceChange();
+    this.watchLocalExtensionsChange();
     this.initSidebarViews();
   }
 
@@ -44,17 +46,30 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const sidebarViews = await window.eo?.getSidebarViews?.();
     console.log('sidebarViews', sidebarViews);
     sidebarViews?.forEach((item) => {
-      this.modules.push({
-        title: item.title,
-        id: item.extName,
-        isShare: false,
-        isOffical: false,
-        icon: item.icon,
-        activeRoute: `home/extensionSidebarView/${item.extName}`,
-        route: `home/extensionSidebarView/${item.extName}`,
-      });
+      if (!this.modules.some((n) => n.id === item.extensionID)) {
+        this.modules.push({
+          title: item.title,
+          id: item.extensionID,
+          isShare: false,
+          isOffical: false,
+          icon: item.icon,
+          activeRoute: `home/extensionSidebarView/${item.extensionID}`,
+          route: `home/extensionSidebarView/${item.extensionID}`,
+        });
+      }
     });
     sidebarViews?.length && this.getIDFromRoute();
+  }
+
+  watchLocalExtensionsChange() {
+    this.messageService.get().subscribe((inArg: Message) => {
+      if (inArg.type === 'localExtensionsChange') {
+        const extensionIDs = Array.isArray(inArg.data) ? inArg.data.map((n) => n.name) : [...inArg.data.keys()];
+        console.log(' this.modules', this.modules);
+        this.modules = this.modules.filter((n) => n.id.startsWith('@eo-core') || extensionIDs.includes(n.id));
+        this.initSidebarViews();
+      }
+    });
   }
 
   watchWorkspaceChange() {

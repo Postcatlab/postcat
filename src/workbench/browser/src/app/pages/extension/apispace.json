@@ -1,9 +1,9 @@
 {
-  "name": "eoapi-api-space-debug",
-  "version": "0.1.3",
-  "title": "eoapi-api-sapce",
+  "name": "eoapi-apispace",
+  "version": "0.1.1",
+  "title": "eoapi-apispace",
   "description": "ApiSpace",
-  "author": "eoapi",
+  "author": "APISpace",
   "main": "index.js",
   "logo": "https://vite-vue3-admin.vercel.app/assets/logo.3503d5cd.png",
   "scripts": {},
