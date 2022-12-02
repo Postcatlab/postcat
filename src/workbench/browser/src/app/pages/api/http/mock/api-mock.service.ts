@@ -25,7 +25,7 @@ export class ApiMockService {
   getMockPrefix(apiData) {
     const mockUrl = this.store.isLocal
       ? this.dataSource.mockUrl
-      : `${this.dataSource.mockUrl}/mock-${this.effect.currentProjectID}`;
+      : `${this.dataSource.mockUrl}/mock-${this.store.getCurrentProjectID}`;
     const uri = transferUrlAndQuery(formatUri(apiData.uri, apiData.restParams), apiData.queryParams, {
       base: 'query',
       replaceType: 'replace',
