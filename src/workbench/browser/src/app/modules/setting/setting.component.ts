@@ -83,6 +83,10 @@ export class SettingComponent implements OnInit {
         },
       ],
     },
+    {
+      name: $localize`:@@Theme:Theme`,
+      moduleID: 'eoapi-theme',
+    },
     ...(this.webService.isWeb
       ? []
       : [

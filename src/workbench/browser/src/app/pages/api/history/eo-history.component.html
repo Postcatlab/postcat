@@ -28,7 +28,7 @@
   <section class="flex-1 px-2 overflow-auto">
     <div
       *ngFor="let item of historyList"
-      class="flex items-center h-8 p-2 text-xs cursor-pointer hover:bg-gray-100"
+      class="flex items-center h-8 p-2 text-xs cursor-pointer "
       (click)="gotoTestHistory(item)"
     >
       <span
@@ -36,7 +36,7 @@
         [ngClass]="'method_text_' + (item.request?.method || TEXT_BY_PROTOCOL[item?.request.protocol])"
         >{{ item.request?.method || TEXT_BY_PROTOCOL[item?.request.protocol] }}</span
       >
-      <span class="flex-1 overflow-hidden text-gray-600 truncate">{{ item.request?.uri }}</span>
+      <span class="flex-1 overflow-hidden truncate">{{ item.request?.uri }}</span>
     </div>
   </section>
 </div>

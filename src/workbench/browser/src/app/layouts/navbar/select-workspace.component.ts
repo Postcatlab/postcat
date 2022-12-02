@@ -23,7 +23,7 @@ import { MessageService } from '../../shared/services/message';
           <input
             eo-ng-input
             type="text"
-            class="flex-1 px-3 eo-search-input"
+            class="flex-1 px-3"
             i18n-placeholder
             placeholder="Search Workspace"
             [(ngModel)]="searchValue"
@@ -41,7 +41,6 @@ import { MessageService } from '../../shared/services/message';
           </button>
         </div>
         <li
-          style="color: #000"
           nz-menu-item
           (click)="changeWorkspace(item)"
           [nzSelected]="store.getCurrentWorkspaceInfo?.id === item.id"

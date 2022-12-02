@@ -5,7 +5,6 @@ import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { SidebarModuleInfo } from './sidebar.model';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 @Component({
@@ -19,7 +18,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     public sidebar: SidebarService,
-    private dataSourceService: DataSourceService,
     private messageService: MessageService,
     private store: StoreService
   ) {}

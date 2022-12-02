@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
 
 //Other module
 import { AppRoutingModule } from './app-routing.module';
@@ -63,6 +63,12 @@ registerLocaleData(zh);
       deps: ['$injector'],
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (themeService: ThemeService) => () => themeService.initTheme(),
+      deps: [ThemeService],
+      multi: true,
+    },
     {
       provide: NZ_I18N,
       useFactory: (localId: string) => {

@@ -6,7 +6,6 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 @Component({
   selector: 'eo-data-storage',
   template: `
-    <div class="font-bold text-lg mb-2" i18n="@@Cloud">Cloud Storage</div>
     <form nz-form nzLayout="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <div class="text-[12px] mt-[8px] text-gray-400">

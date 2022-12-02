@@ -30,18 +30,28 @@
   <nz-divider nzType="vertical" class="divider"></nz-divider>
   <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
     <ng-container *ngIf="store.isLogin">
+      <div class="font-bold text-lg mb-2" i18n>Account</div>
       <eo-account id="eoapi-account"></eo-account>
+      <nz-divider></nz-divider>
+    </ng-container>
+    <!-- Select theme -->
+    <ng-container>
+      <div class="font-bold text-lg mb-2" i18n="@@Cloud">Theme</div>
+      <eo-select-theme id="eoapi-theme"></eo-select-theme>
       <nz-divider></nz-divider>
     </ng-container>
     <!-- Cloud Storage -->
     <ng-container *ngIf="!webService.isWeb">
+      <div class="font-bold text-lg mb-2" i18n="@@Cloud">Cloud Storage</div>
       <eo-data-storage [(model)]="settings" id="eoapi-common"></eo-data-storage>
       <nz-divider></nz-divider>
     </ng-container>
     <!-- Cloud Storage -->
+    <div class="font-bold text-lg mb-2" i18n>Language</div>
     <eo-language-switcher [(model)]="settings" id="eoapi-language"> </eo-language-switcher>
     <nz-divider></nz-divider>
     <!-- About -->
+    <div class="font-bold text-lg mb-2" i18n>Abount</div>
     <eo-about id="eoapi-about"></eo-about>
   </div>
 </section>

@@ -71,16 +71,7 @@ object {
 .method_text_OPTIONS {
   color: var(--BLACK_TAG_BG);
 }
-.eo-search-input {
-  height: 32px;
-  border-color: transparent;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 0.9em;
-  }
-}
+
 
 ::-webkit-scrollbar {
   width: 16px;

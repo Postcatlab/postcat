@@ -4,7 +4,6 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 @Component({
   selector: 'eo-language-switcher',
   template: `
-    <div class="font-bold text-lg mb-2" i18n="@@Language">Language</div>
     <eo-ng-select
       i18n-nzPlaceHolder="@@Language"
       nzPlaceHolder="Language"

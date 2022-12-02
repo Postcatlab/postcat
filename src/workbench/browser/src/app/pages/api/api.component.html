@@ -157,7 +157,7 @@
         nz-resizable
         [nzWidth]="rightSiderWidth"
         [nzMaxWidth]="500"
-        [nzMinWidth]="RIGHT_BAR_WIDTH"
+        [nzMinWidth]="RIGHT_SIDER_SHRINK_WIDTH"
         (nzResize)="onRightPanelResize($event)"
       >
         <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left">

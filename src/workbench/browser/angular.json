@@ -31,15 +31,12 @@
               { "glob": "**/*", "input": "../../../node_modules/monaco-editor/min/vs", "output": "/assets/vs/" }
             ],
             "styles": [
-              { "input": "src/assets/theme/blue.css", "bundleName": "blue", "inject": false },
-              { "input": "src/assets/theme/dark.css", "bundleName": "dark", "inject": false },
-              { "input": "src/assets/theme/light.css", "bundleName": "light", "inject": false },
-              { "input": "src/assets/theme/orange.css", "bundleName": "orange", "inject": false },
-              { "input": "src/assets/theme/purple.css", "bundleName": "purple", "inject": false },
-              "src/antd.less",
-              "src/eoui.less",
+              "src/styles/antd.less",
+              "src/styles/eoui.less",
               "src/styles.scss",
-              "src/assets/font/iconfont.css"
+              "src/assets/font/iconfont.css",
+              { "input": "src/styles/theme/light.less", "bundleName": "light", "inject": false },
+              { "input": "src/styles/theme/dark.less", "bundleName": "dark", "inject": false }
             ],
             "scripts": ["src/assets/libs/protocolcheck.js"],
             "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true },

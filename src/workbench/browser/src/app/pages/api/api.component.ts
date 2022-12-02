@@ -14,7 +14,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
-const DEFAULT_DY_WIDTH = 250;
+const DEFAULT_RIGHT_SIDER_WIDTH = 250;
 
 const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KEY), 10);
 @Component({
@@ -26,7 +26,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   envUuid = '';
   isFirstTime = true;
   siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
-  RIGHT_BAR_WIDTH = 50;
+  RIGHT_SIDER_SHRINK_WIDTH = 50;
   isDragging = false;
   animateId = -1;
   animationId: number;
@@ -151,17 +151,17 @@ export class ApiComponent implements OnInit, OnDestroy {
   toggleRightBar(operate: 'open' | 'close') {
     if (operate === 'open') {
       let dyWitdth = this.getLocalRightSiderWidth();
-      if (dyWitdth === this.RIGHT_BAR_WIDTH) {
-        dyWitdth = DEFAULT_DY_WIDTH;
+      if (dyWitdth === this.RIGHT_SIDER_SHRINK_WIDTH) {
+        dyWitdth = DEFAULT_RIGHT_SIDER_WIDTH;
       }
       this.rightSiderWidth = dyWitdth;
     } else {
-      this.rightSiderWidth = this.RIGHT_BAR_WIDTH;
+      this.rightSiderWidth = this.RIGHT_SIDER_SHRINK_WIDTH;
     }
     localStorage.setItem(RIGHT_SIDER_WIDTH_KEY, this.rightSiderWidth.toString());
   }
   getLocalRightSiderWidth() {
-    return localStorage.getItem(RIGHT_SIDER_WIDTH_KEY) ? Number(localStorage.getItem(RIGHT_SIDER_WIDTH_KEY)) : DEFAULT_DY_WIDTH;
+    return localStorage.getItem(RIGHT_SIDER_WIDTH_KEY) ? Number(localStorage.getItem(RIGHT_SIDER_WIDTH_KEY)) : this.RIGHT_SIDER_SHRINK_WIDTH;
   }
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {

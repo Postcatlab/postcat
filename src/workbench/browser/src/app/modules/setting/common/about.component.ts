@@ -3,7 +3,6 @@ import { ElectronService } from '../../../core/services';
 @Component({
   selector: 'eo-about',
   template: `
-    <div class="font-bold text-lg mb-2" i18n>About</div>
     <div class="about">
       <nz-descriptions [nzColumn]="1">
         <nz-descriptions-item *ngFor="let item of list" [nzTitle]="item.label">{{ item.value }}</nz-descriptions-item>

@@ -11,17 +11,13 @@
 .sidebar-item {
   padding: 8px 0;
   margin-bottom: 10px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: var(--DEFAULT_BORDER_RADIUS);
   cursor: pointer;
-  &:hover {
-    background-color: var(--SEC_BG);
-  }
-  &.sidebar-item-active {
+  &:hover,&.sidebar-item-active {
     background-color: var(--NAVBAR_BTN_BG);
     color: var(--MAIN_TEXT);
   }

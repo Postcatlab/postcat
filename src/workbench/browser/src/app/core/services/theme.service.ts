@@ -1,42 +1,49 @@
 import { Inject, Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
-import { share } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
-import { THEMES } from '../../layouts/toolbar/select-theme/theme.model';
+import { MainColor, THEMES } from '../../modules/setting/common/select-theme/theme.model';
+import { Theme } from 'ng-zorro-antd/core/config';
 
 @Injectable()
 export class ThemeService {
-  currentTheme = 'blue';
-  DESIGN_TOKEN = {
+  appearance: 'light' | 'dark' = 'light';
+  mainColor: MainColor;
+  DESIGN_TOKEN: Theme = {
     primaryColor: getComputedStyle(this.document.documentElement)
       .getPropertyValue('--MAIN_THEME_COLOR')
       .replace(' ', ''),
   };
-  private themeChanges$ = new ReplaySubject(1);
   constructor(@Inject(DOCUMENT) private document: Document) {}
-  changeTheme(name?: string): void {
-    if (name) {
-      this.themeChanges$.next({ name, previous: this.currentTheme });
-      this.currentTheme = name;
-    }
-    this.loadCss(`${this.currentTheme}.css`);
-    this.loadCss(`light.css`, 'eoapi_theme_bg');
+  initTheme() {
+    this.changeAppearance('dark');
+    this.changeColor('purple');
   }
   getThemes() {
     return THEMES;
   }
-  onThemeChange = function() {
-    return this.themeChanges$.pipe(share());
-  };
+  changeAppearance(appearance) {
+    document.documentElement.classList.add(appearance);
+    this.loadCss(`${appearance}.css`, 'eoapi_theme_bg');
+    this.appearance = appearance;
+  }
+
+  changeColor(name: MainColor) {
+    this.loadCss(`/assets/theme/${name}.css`);
+    this.mainColor = name;
+  }
   private loadCss(href: string, id: string = 'eoapi_theme_main'): Promise<Event> {
     return new Promise((resolve, reject) => {
-      const style = document.createElement('link');
-      style.rel = 'stylesheet';
-      style.href = href;
-      style.id = id;
-      style.onload = resolve;
-      style.onerror = reject;
-      document.head.append(style);
+      let dom = this.document.getElementById(id) as HTMLLinkElement;
+      if (dom) {
+        dom.href = href;
+      } else {
+        dom = document.createElement('link');
+        dom.rel = 'stylesheet';
+        dom.href = href;
+        dom.id = id;
+        document.head.append(dom);
+      }
+      dom.onload = resolve;
+      dom.onerror = reject;
     });
   }
 }
