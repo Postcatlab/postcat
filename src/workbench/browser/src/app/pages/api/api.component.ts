@@ -12,7 +12,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-const DY_WIDTH_KEY = 'DY_WIDTH';
+const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
 const DEFAULT_DY_WIDTH = 250;
 
@@ -70,7 +70,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   ];
 
   isOpen = false;
-  dyWidth = this.getLocalDyWidth();
+  rightSiderWidth = this.getLocalRightSiderWidth();
 
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
@@ -133,8 +133,8 @@ export class ApiComponent implements OnInit, OnDestroy {
   onRightPanelResize({ width }: NzResizeEvent): void {
     cancelAnimationFrame(this.animationId);
     this.animationId = requestAnimationFrame(() => {
-      this.dyWidth = width;
-      localStorage.setItem(DY_WIDTH_KEY, String(width));
+      this.rightSiderWidth = width;
+      localStorage.setItem(RIGHT_SIDER_WIDTH_KEY, String(width));
     });
   }
 
@@ -150,18 +150,18 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   toggleRightBar(operate: 'open' | 'close') {
     if (operate === 'open') {
-      let dyWitdth = this.getLocalDyWidth();
+      let dyWitdth = this.getLocalRightSiderWidth();
       if (dyWitdth === this.RIGHT_BAR_WIDTH) {
         dyWitdth = DEFAULT_DY_WIDTH;
       }
-      this.dyWidth = dyWitdth;
+      this.rightSiderWidth = dyWitdth;
     } else {
-      this.dyWidth = this.RIGHT_BAR_WIDTH;
+      this.rightSiderWidth = this.RIGHT_BAR_WIDTH;
     }
-    localStorage.setItem(DY_WIDTH_KEY, this.dyWidth.toString());
+    localStorage.setItem(RIGHT_SIDER_WIDTH_KEY, this.rightSiderWidth.toString());
   }
-  getLocalDyWidth() {
-    return localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : DEFAULT_DY_WIDTH;
+  getLocalRightSiderWidth() {
+    return localStorage.getItem(RIGHT_SIDER_WIDTH_KEY) ? Number(localStorage.getItem(RIGHT_SIDER_WIDTH_KEY)) : DEFAULT_DY_WIDTH;
   }
   handleEnvSelectStatus(event: boolean) {}
   private async changeStoreEnv(uuid) {

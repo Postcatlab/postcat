@@ -2,8 +2,13 @@
   max-width: 90px;
   font-weight: 500;
 }
+.has-edit-tab-item-container {
+  .tab-text {
+    max-width: 83px;
+  }
+}
 :host ::ng-deep {
-  width: calc(100% - 200px);
+  width: 100%;
   .ant-tabs-card.ant-tabs-top {
     > .ant-tabs-nav {
       margin: 0;
@@ -69,10 +74,9 @@
     }
     .ant-tabs-tab-remove {
       padding: 0;
-      eo-iconpark-icon{
-        width: 18px;
-        height: 18px;
-        line-height: 18px;
+      eo-iconpark-icon {
+        padding: 3px;
+        vertical-align: middle;
         border-radius: 50%;
       }
       &:hover {

@@ -265,7 +265,6 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
 
   changeContentType(contentType) {
-    console.log('changeContentType', contentType);
     this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(
       contentType,
       this.model.request.requestHeaders
@@ -422,6 +421,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     }
   }
   private initContentType() {
+    console.log('initContentType');
     if (this.model.request.requestBodyType === ApiBodyType.Raw) {
       this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestHeaders) || 'text/plain';
     }

@@ -49,10 +49,17 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
     }
   }
   private initListConf() {
-    const config = this.apiTable.initTable({
-      in: 'rest',
-      isEdit: true,
-    });
+    const config = this.apiTable.initTable(
+      {
+        in: 'rest',
+        isEdit: true,
+      },
+      {
+        changeFn: () => {
+          this.modelChange.emit(this.model);
+        },
+      }
+    );
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
   }

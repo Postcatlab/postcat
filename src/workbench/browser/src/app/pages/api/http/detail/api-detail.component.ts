@@ -54,8 +54,7 @@ export class ApiDetailComponent implements OnInit {
   }
   async initExtensionExtra() {
     const apiPreviewTab = this.webExtensionService.getFeatures('apiPreviewTab');
-    console.log('apiPreviewTab', apiPreviewTab);
-    apiPreviewTab?.forEach(async (value, key) => {
+    await apiPreviewTab?.forEach(async (value, key) => {
       if (!this.webExtensionService?.isEnable(key)) {
         return;
       }
@@ -75,10 +74,12 @@ export class ApiDetailComponent implements OnInit {
       }, []);
       this.rightExtras.push(...rightExtra);
     });
-    console.log('this.rightExtras', this.rightExtras);
-  }
-  handleClick() {
-    console.log('click icon');
+    this.rightExtras.forEach((val) => {
+      //TODO remove after 2023.02
+      if (val.icon === 'file-text-one') {val.icon = 'file-text';}
+      console.log(val);
+    });
+    // console.log('this.rightExtras', this.rightExtras);
   }
   getApiByUuid(id: number) {
     return new Promise(async (resolve) => {

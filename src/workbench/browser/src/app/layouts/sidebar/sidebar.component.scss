@@ -3,31 +3,26 @@
   overflow: auto;
   width: 90px;
   height: 100%;
-  transition: width .3s cubic-bezier(.2,0,0,1) 0s;
+  transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
 }
 .eo-sidebar-shrink {
   width: 50px;
 }
 .sidebar-item {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
   padding: 8px 0;
-  color: var(--SIDEBAR_TEXT);
-  transform: scale(0.8);
-  border-radius: 3px;
-  color: rgba(0,0,0,0.5);
+  margin-bottom: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--DEFAULT_BORDER_RADIUS);
+  cursor: pointer;
   &:hover {
     background-color: var(--SEC_BG);
   }
   &.sidebar-item-active {
-    background-color: var(--SEC_BG);
-    color: var(--MAIN_THEME_COLOR);
-    .label {
-      color: rgba(0,0,0,0.8);
-    }
+    background-color: var(--NAVBAR_BTN_BG);
+    color: var(--MAIN_TEXT);
   }
 }
-

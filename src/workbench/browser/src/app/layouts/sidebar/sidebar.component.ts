@@ -120,14 +120,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/extension',
         route: 'home/extension/list',
       },
-      {
-        title: $localize`Vue3`,
-        id: '@eo-core-vue3',
-        isOffical: true,
-        icon: 'plugins',
-        activeRoute: 'home/app-vue3',
-        route: 'home/app-vue3',
-      },
+      // {
+      //   title: $localize`Vue3`,
+      //   id: '@eo-core-vue3',
+      //   isOffical: true,
+      //   icon: 'plugins',
+      //   activeRoute: 'home/app-vue3',
+      //   route: 'home/app-vue3',
+      // },
     ];
     const isShare = this.store.isShare;
     this.modules = defaultModule.filter((it: any) =>

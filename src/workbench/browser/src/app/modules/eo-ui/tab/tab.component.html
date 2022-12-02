@@ -11,7 +11,10 @@
     <ng-template #titleTemplate>
       <div
         class="flex items-center tab-item-container h-100"
-        [ngClass]="{ 'fixed-tab-item-container': tabStorage.tabsByID.get(uuid)?.isFixed }"
+        [ngClass]="{
+          'fixed-tab-item-container': tabStorage.tabsByID.get(uuid)?.isFixed,
+          'has-edit-tab-item-container': tabStorage.tabsByID.get(uuid)?.hasChanged
+        }"
       >
         <!-- loading -->
         <nz-spin nzSimple class="mr10" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid)?.isLoading"></nz-spin>

@@ -11,24 +11,22 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { ApiDetailComponent } from './api-detail.component';
-import { ApiDetailHeaderComponent } from './header/api-detail-header.component';
+import { ApiDetailFormComponent } from './form/api-detail-form.component';
 import { ApiDetailBodyComponent } from './body/api-detail-body.component';
-import { ApiDetailQueryComponent } from './query/api-detail-query.component';
-import { ApiDetailRestComponent } from './rest/api-detail-rest.component';
 
 import { ApiDetailUtilService } from './api-detail-util.service';
 import { RouterModule } from '@angular/router';
 import { ApiSharedModule } from '../../../../modules/api-shared/api-shared.module';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { EoApiMethodsTagComponent } from './eo-api-methods-tag/eo-api-methods-tag.component';
 
 const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule,NzCollapseModule];
 const COMPONENTS = [
   ApiDetailComponent,
-  ApiDetailHeaderComponent,
+  ApiDetailFormComponent,
   ApiDetailBodyComponent,
-  ApiDetailQueryComponent,
-  ApiDetailRestComponent
+  EoApiMethodsTagComponent
 ];
 @NgModule({
   declarations: [...COMPONENTS],

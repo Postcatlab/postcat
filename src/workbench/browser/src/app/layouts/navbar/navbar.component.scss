@@ -1,4 +1,4 @@
-.eo_navbar {
+.eo-navbar {
   -webkit-app-region: drag;
   position: sticky;
   width: 100%;
@@ -6,6 +6,7 @@
   left: 0;
   top: 0;
   padding: 0 8px;
+  background-color: var(--NAVBAR_BG);
   border-bottom: 1px solid var(--BORDER);
   height: var(--NAVBAR_HEIGHT);
   .logo {

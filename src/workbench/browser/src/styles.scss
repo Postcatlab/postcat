@@ -27,7 +27,8 @@ body {
 :root {
   --NAVBAR_HEIGHT: 50px;
   --FOOTER_HEIGHT: 30px;
-  --API_TABS_HEIGHT: 36px;
+  --PAGE_TABS_HEIGHT: 48px;
+  --PAGE_INSIDE_TABS_HEIGHT: 40px;
 }
 
 img,
@@ -92,11 +93,11 @@ object {
   border-color: #eee0;
   border-style: solid;
   border-radius: 50px;
-  border-width: 4px;
+  // border-width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background-color: var(--SCROLL_BAR_BG);
-  border-color: var(--BORDER);
+  // background-color: var(--SCROLL_BAR_BG);
+  border-color:transparent;
   border-style: solid;
   border-left-width: 1px;
   border-top-width: 0px;

@@ -1,15 +1,18 @@
-.detail_page {
-  padding: 0 20px 20px;
-  width: 100%;
-}
-
 .api_name {
   margin-top: 15px;
   font-weight: bold;
   font-size: 16px;
 }
-:host ::ng-deep{
-  // .ant-collapse-content{
-  //   padding: calc(var(--PADDING_Y) / 2);
-  // }
+.http,
+.https {
+  background-color: rgba(6, 125, 219, 1);
+  border: 1px solid rgba(6, 125, 219, 1);
+  color: #fff;
+}
+
+.ws,
+.wss {
+  background-color: rgba(71, 125, 168, 1);
+  border: 1px solid rgba(71, 125, 168, 1);
+  color: #fff;
 }

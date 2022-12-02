@@ -1,12 +1,11 @@
-<div class="flex items-center justify-start h-10 param_header">
+<div class="flex items-center justify-start h-10 param-box-header">
   <div class="flex items-center h-full">
     <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
       <label *ngFor="let item of CONST.API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
     </eo-ng-radio-group>
   </div>
-  <span class="flex-shrink mx-0.5 text-gray-200">｜</span>
-  <!-- <nz-divider nzType="vertical"></nz-divider> -->
-  <div *ngIf="['formData', 'json', 'xml'].includes(bodyType)" class="inline-flex items-center">
+  <div *ngIf="['formData', 'json', 'xml'].includes(bodyType)">
+    <nz-divider nzType="vertical"></nz-divider>
     <params-import
       [baseData]="model"
       [contentType]="bodyType"
@@ -46,10 +45,9 @@
 >
 </eo-monaco-editor>
 <!-- Binary -->
-<div class="p-[10px]">
+<div class="p-[10px]" *ngIf="bodyType === 'binary'">
   <textarea
     rows="4"
-    *ngIf="bodyType === 'binary'"
     i18n-placeholder
     (ngModelChange)="rawChange($event)"
     placeholder="Binary Description"

@@ -13,7 +13,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import _, { omit } from 'lodash-es';
+import _ from 'lodash-es';
 import { isUndefined, omitBy } from 'lodash-es';
 import { eoDeepCopy } from '../../../utils/index.utils';
 import { filterTableData } from '../../../utils/tree/tree.utils';
@@ -87,7 +87,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
 
   childKey = 'children';
 
-  randomClass=`full-screen-container_${Date.now()}`;
+  randomClass = `full-screen-container_${Date.now()}`;
 
   private isFullScreenStatus = false;
   private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
@@ -99,11 +99,11 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     }
     if (changes.nzData) {
       if (this.setting.isEdit && !this.setting.manualAdd) {
-        if (!this.nzDataItem) {
-          console.error(`EO_ERROR: Can't find nzDataItem`);
+        if (!this.nzData) {
           return;
         }
-        if (!this.nzData) {
+        if (!this.nzDataItem || !this.setting.primaryKey) {
+          console.error(`EO_ERROR: Please add nzDataItem and setting.primaryKey`);
           return;
         }
         if (!this.nzData.length || this.nzData[this.nzData.length - 1][this.setting.primaryKey]) {
@@ -353,7 +353,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     return item.level !== 0 || !apis.checkIsCurrentLevelLastItem(item);
   }
   private generateBtnTemplate() {
-    this.iconBtns=[];
+    this.iconBtns = [];
     this.columns.forEach((col, index) => {
       if (col.type !== 'btnList') {
         return;

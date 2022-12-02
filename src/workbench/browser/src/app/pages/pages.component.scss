@@ -32,7 +32,8 @@
     router-outlet + * {
       display: block;
       height: calc(
-        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - var(--API_TABS_HEIGHT)
+        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) -
+          var(--PAGE_TABS_HEIGHT)
       );
       overflow: auto;
     }
@@ -40,9 +41,12 @@
       overflow: unset;
     }
 
-    .has_tab_page + * {
+    .has_tab_page  {
       router-outlet + * {
-        height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 74px);
+        height: calc(
+          100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) -
+            var(--PAGE_TABS_HEIGHT) - var(--PAGE_INSIDE_TABS_HEIGHT)
+        );
       }
     }
   }

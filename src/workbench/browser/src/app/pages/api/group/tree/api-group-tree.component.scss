@@ -1,4 +1,7 @@
 :host ::ng-deep {
+  .ant-skeleton-content{
+    padding: 10px;
+  }
   .group-tree {
     overflow: hidden auto;
     height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - 80px);
