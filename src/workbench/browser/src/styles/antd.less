@@ -1,30 +1,7 @@
-// Custom Theming for NG-ZORRO
+// AntD Base Less
+
 // For more information: https://ng.ant.design/docs/customize-theme/en
 @import '~ng-zorro-antd/ng-zorro-antd.variable.min.css';
-@import '../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.less';
-@import '../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
-@import './theme/dark.less';
-
-// Override less variables to here
-// View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
-:root {
-  --ant-primary-color: #1890ff;
-}
-//Theme mainColor
-@theme-color: #00785a;
-@border-radius-base: 3px;
-@primary-color-hover: @theme-color;
-@success-color: @theme-color;
-@link-color:  @text-color;
-@processing-color: @theme-color;
-@tree-title-height: 30px;
-
-//Theme Apperance
-@layout-sider-background: @component-background;
-@layout-header-background: @component-background;
-@component-background:@body-background;
-@table-header-color: @component-background;
-@table-header-bg: @component-background;
 body {
   line-height: initial;
 }
@@ -89,13 +66,13 @@ p {
 .ant-empty-description {
   color: #999;
 }
-.ant-badge-primary {
-  .ant-badge-status-dot {
-    background-color: var(--ant-primary-color);
-  }
-}
+// .ant-badge-primary {
+//   .ant-badge-status-dot {
+//     background-color: var(--ant-primary-color);
+//   }
+// }
 
-.ant-tag-default{
-  color:#666;
+.ant-tag-default {
+  color: #666;
   background-color: #66666626;
 }
