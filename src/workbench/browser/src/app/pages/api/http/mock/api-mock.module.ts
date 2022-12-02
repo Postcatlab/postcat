@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ApiMockComponent } from './api-mock.component';
-import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { FormsModule } from '@angular/forms';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { RouterModule } from '@angular/router';
+import { EoTableProModule } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.module';
+import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/edit/api-mock-edit.component';
+import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
+import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared/api-shared.module';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 
 @NgModule({
-  declarations: [],
+  declarations: [ApiMockComponent, ApiMockEditComponent],
   imports: [
     RouterModule.forChild([
       {
@@ -17,13 +16,12 @@ import { RouterModule } from '@angular/router';
         component: ApiMockComponent,
       },
     ]),
-    CommonModule,
-    SharedModule,
-    NzFormModule,
-    NzInputModule,
-    FormsModule,
-    NzModalModule
+    ApiSharedModule,
+    EoMonacoEditorModule,
+    EoTableProModule,
+    SharedModule
   ],
+  providers:[],
   exports: [],
 })
 export class ApiMockModule {}

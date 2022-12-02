@@ -1,86 +1,13 @@
 <div>
-  <ng-container *ngIf="showToolBar">
-    <button eo-ng-button nzType="primary" (click)="addOrEditModal()" i18n>New Mock</button>
+  <ng-container *ngIf="canEdit">
+    <button eo-ng-button nzType="primary" (click)="addMock()" i18n>New Mock</button>
   </ng-container>
-
   <div class="mt-[20px]">
-    <!-- <eo-table [(model)]="mocklList" [columns]="mockListColumns" [hideEmptyLine]="true">
-      <ng-template cell="name" let-scope="scope" let-index="index">
-        <div class="w-[120px]">{{ scope.name }}</div>
-      </ng-template>
-      <ng-template cell="url" let-scope="scope" let-index="index">
-        <span
-          i18n-nzTooltipTitle
-          nzTooltipTitle="Click to Copy"
-          nzTooltipPlacement="top"
-          eoNgFeedbackTooltip
-          (click)="copyText(scope.url)"
-        >
-          <span nz-typography nzEllipsis [nzContent]="scope.url"> </span>
-        </span>
-      </ng-template>
-      <ng-template cell="createWay" let-scope="scope" let-index="index">
-        <span>{{ createWayMap[scope.createWay] }}</span>
-      </ng-template>
-      <ng-template cell="action" let-scope="scope" let-index="index">
-        <div class="flex">
-          <a
-            eo-ng-button
-            nzType="link"
-            *ngIf="scope.name || scope.url"
-            [ngSwitch]="scope.createWay"
-            (click)="addOrEditModal(index)"
-          >
-            <span *ngSwitchCase="'system'" i18n="@@mockPreview">Preview</span>
-            <span *ngSwitchDefault i18n>Edit</span>
-          </a>
-          <a
-            eo-ng-button
-            nzType="link"
-            *ngIf="(scope.name || scope.url) && scope.createWay !== 'system'"
-            nz-popconfirm
-            i18n-nzPopconfirmTitle
-            nzPopconfirmTitle="Are you sure you want to delete this Mock?"
-            nzPopconfirmPlacement="topRight"
-            (nzOnConfirm)="handleDeleteMockItem(index)"
-            i18n="@@Delete"
-            >Delete</a
-          >
-        </div>
-      </ng-template>
-    </eo-table> -->
+    <eo-api-mock-table
+      class="table-border-all"
+      #mockTable
+      [apiData]="apiData"
+      isEdit="true"
+    ></eo-api-mock-table>
   </div>
 </div>
-
-<nz-modal [(nzVisible)]="isVisible" nzWidth="70%" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()">
-  <section *nzModalContent class="flex">
-    <div class="w-full main-content">
-      <form nz-form nzLayout="vertical">
-        <nz-form-item>
-          <nz-form-label i18n nzFor="currentEditMock.name">Mock Name</nz-form-label>
-          <nz-form-control>
-            <input eo-ng-input name="name" type="text" [(ngModel)]="currentEditMock.name" [readonly]="isSystemMock" />
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label i18n nzFor="currentEditMock.response">Response</nz-form-label>
-          <nz-form-control>
-            <eo-monaco-editor
-              [(code)]="responseStr"
-              (codeChange)="rawDataChange()"
-              [maxLine]="15"
-              class="h-[200px]"
-              [config]="{ readOnly: isSystemMock }"
-              [eventList]="['type', 'format', 'copy', 'search', 'replace']"
-            >
-            </eo-monaco-editor>
-          </nz-form-control>
-        </nz-form-item>
-      </form>
-    </div>
-  </section>
-  <div *nzModalFooter class="footer">
-    <button *ngIf="!isSystemMock" eo-ng-button nzType="primary" i18n (click)="handleSave()">Save</button>
-    <button eo-ng-button nzType="default" i18n (click)="handleCancel()">Cancel</button>
-  </div>
-</nz-modal>

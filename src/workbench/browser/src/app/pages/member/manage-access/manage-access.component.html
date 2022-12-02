@@ -1,8 +1,8 @@
 <nz-list nzItemLayout="horizontal" nzBordered [nzLoading]="loading">
   <nz-list-header>
-    <nz-input-group [nzPrefix]="prefixIconSearch">
+    <eo-ng-input-group [nzPrefix]="prefixIconSearch">
       <input type="text" [(ngModel)]="searchValue" eo-ng-input i18n-placeholder placeholder="Search" />
-    </nz-input-group>
+    </eo-ng-input-group>
     <ng-template #prefixIconSearch>
       <eo-iconpark-icon name="search"></eo-iconpark-icon>
     </ng-template>

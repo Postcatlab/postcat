@@ -4,7 +4,7 @@
 <div class="!pt-0 p-[20px]">
   <form nz-form [formGroup]="validateForm" [nzLayout]="'vertical'">
     <nz-form-label class="mt-4" nzFor="uri" i18n>API Path</nz-form-label>
-    <nz-input-group nzCompact>
+    <eo-ng-input-group nzCompact>
       <eo-ng-select [(ngModel)]="model.protocol" formControlName="protocol">
         <eo-ng-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
       </eo-ng-select>
@@ -16,9 +16,9 @@
           <input type="text" [(ngModel)]="model.uri" name="uri" id="uri" eo-ng-input formControlName="uri" />
         </nz-form-control>
       </nz-form-item>
-    </nz-input-group>
+    </eo-ng-input-group>
     <nz-form-label nzFor="name" i18n>Group / API Name</nz-form-label>
-    <nz-input-group nzCompact>
+    <eo-ng-input-group nzCompact>
       <nz-form-item nz-col>
         <nz-form-control class="w_250" i18n-nzErrorTip nzErrorTip="Please select an API group">
           <eo-ng-tree-select
@@ -43,7 +43,7 @@
           <input type="text" [(ngModel)]="model.name" name="name" id="name" eo-ng-input formControlName="name" />
         </nz-form-control>
       </nz-form-item>
-    </nz-input-group>
+    </eo-ng-input-group>
   </form>
   <!-- 请求参数 -->
   <nz-collapse class="eo_collapse mt-[20px]">

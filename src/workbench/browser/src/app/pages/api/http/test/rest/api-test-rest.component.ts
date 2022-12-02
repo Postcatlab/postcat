@@ -33,9 +33,8 @@ export class ApiTestRestComponent implements OnInit {
     this.initListConf();
   }
   private initListConf() {
-    const config = this.apiTable.initTable({
-      in: 'rest',
-      isEdit: true,
+    const config = this.apiTable.initTestTable({
+      in: 'rest'
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

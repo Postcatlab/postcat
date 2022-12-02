@@ -52,7 +52,7 @@ const routes: Routes = [
       },
       {
         path: 'workspace',
-        loadChildren: () => import('./workspace/workspace.module').then((m) => m.EoWorkspaceModule),
+        loadChildren: () => import('./workspace/workspace.module').then((m) => m.WorkspaceModule),
       },
       {
         path: 'share',
@@ -62,7 +62,7 @@ const routes: Routes = [
       },
       {
         path: 'member',
-        loadChildren: () => import('./member.module').then((m) => m.MemberModule),
+        loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),
       },
       {
         path: 'extension',

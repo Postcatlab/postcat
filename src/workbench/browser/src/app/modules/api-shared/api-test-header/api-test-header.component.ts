@@ -50,9 +50,8 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   private initListConf() {
-    const config = this.apiTable.initTable({
-      in: 'header',
-      isEdit: true,
+    const config = this.apiTable.initTestTable({
+      in: 'header'
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

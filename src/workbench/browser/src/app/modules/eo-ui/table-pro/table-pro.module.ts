@@ -8,6 +8,7 @@ import { EoNgCheckboxModule } from 'eo-ng-checkbox';
 import { FormsModule } from '@angular/forms';
 import { EoNgButtonModule } from 'eo-ng-button';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   declarations: [EoTableProComponent],
@@ -18,6 +19,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     EoNgButtonModule,
     EoNgDropdownModule,
     EoNgCheckboxModule,
+    NzPopconfirmModule,
     EoNgFeedbackTooltipModule,
     NzInputNumberModule,
   ],

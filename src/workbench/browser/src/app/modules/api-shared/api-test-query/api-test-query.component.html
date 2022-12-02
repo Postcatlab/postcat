@@ -7,5 +7,6 @@
   [nzDataItem]="itemStructure"
   [setting]="listConf.setting"
   [(nzData)]="model"
+  (nzDataChange)="modelChange.emit($event)"
 ></eo-ng-table-pro>
 </fieldset>

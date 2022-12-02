@@ -153,12 +153,12 @@ export class ApiComponent implements OnInit, OnDestroy {
       let dyWitdth = this.getLocalDyWidth();
       if (dyWitdth === this.RIGHT_BAR_WIDTH) {
         dyWitdth = DEFAULT_DY_WIDTH;
-        localStorage.setItem(DY_WIDTH_KEY, dyWitdth.toString());
       }
       this.dyWidth = dyWitdth;
     } else {
       this.dyWidth = this.RIGHT_BAR_WIDTH;
     }
+    localStorage.setItem(DY_WIDTH_KEY, this.dyWidth.toString());
   }
   getLocalDyWidth() {
     return localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : DEFAULT_DY_WIDTH;

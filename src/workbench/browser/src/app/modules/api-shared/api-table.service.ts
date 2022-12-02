@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 import { omit } from 'lodash-es';
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
+import { ApiTestParamsTypeFormData } from '../../pages/api/service/api-test/api-test.model';
 import { ModalService } from '../../shared/services/modal.service';
-import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml } from '../../shared/services/storage/index.model';
+import {
+  ApiBodyType,
+  ApiParamsTypeFormData,
+  ApiParamsTypeJsonOrXml,
+  REQURIED_ENUMS,
+} from '../../shared/services/storage/index.model';
 import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 @Injectable()
@@ -27,7 +33,7 @@ export class ApiTableService {
   initTable(
     inArg: {
       in: 'body' | 'header' | 'query' | 'rest';
-      module?: 'test' | 'edit' | 'preview';
+      module?: 'edit' | 'preview';
       isEdit: boolean;
       where?: 'request' | 'response';
       format?: ApiBodyType;
@@ -39,9 +45,8 @@ export class ApiTableService {
         title: $localize`Param Name`,
         left: true,
         type: 'input',
-        columnShow: 'fixed',
+        columnVisible: 'fixed',
         key: 'name',
-        placeholder: $localize`Param Name`,
         width: 150,
       },
       type: {
@@ -55,31 +60,27 @@ export class ApiTableService {
         type: 'checkbox',
         key: 'required',
         width: 100,
+        enums: REQURIED_ENUMS,
       },
       description: {
         title: $localize`:@@Description:Description`,
         type: 'input',
         key: 'description',
-        placeholder: $localize`:@@Description:Description`,
         width: 300,
       },
       example: {
         title: $localize`Example`,
         type: 'input',
         key: 'example',
-        placeholder: $localize`Example`,
         width: 200,
       },
       editOperate: {
         type: 'btnList',
-        width: 120,
         right: true,
         btns: [
           {
-            action: 'insert',
-          },
-          {
             icon: 'more',
+            title: $localize`Advanced Settings`,
             click: (item) => {
               this.showMore(item.data).then((res) => {
                 Object.assign(item.data, res[0]);
@@ -98,7 +99,6 @@ export class ApiTableService {
       },
       previewOperate: {
         type: 'btnList',
-        width: 100,
         right: true,
         btns: [
           {
@@ -149,7 +149,12 @@ export class ApiTableService {
         }
         case 'editOperate': {
           if (result.setting.isLevel) {
-            column.btns.splice(1, 0, { action: 'addChild' });
+            column.btns.unshift(
+              { action: 'addChild' },
+              {
+                action: 'insert',
+              }
+            );
           }
           break;
         }
@@ -160,6 +165,103 @@ export class ApiTableService {
         case 'checkbox': {
           if (!inArg.isEdit) {
             column.type = 'text';
+          }
+          break;
+        }
+      }
+      return column;
+    });
+    return result;
+  }
+  initTestTable(
+    inArg: {
+      in: 'body' | 'header' | 'query' | 'rest';
+      format?: 'Form-data';
+    },
+    opts: any = {}
+  ) {
+    const columnMUI = {
+      name: {
+        title: $localize`Name`,
+        left: true,
+        type: 'input',
+        columnVisible: 'fixed',
+        key: 'name',
+        width: 150,
+      },
+      type: {
+        title: $localize`Type`,
+        type: 'select',
+        key: 'type',
+        width: 120,
+      },
+      required: {
+        type: 'checkbox',
+        key: 'required',
+        width: 25,
+        enums: REQURIED_ENUMS,
+      },
+      value: {
+        title: $localize`Value`,
+        type: 'input',
+        key: 'value',
+        width: 200,
+      },
+      editOperate: {
+        type: 'btnList',
+        right: true,
+        btns: [
+          {
+            action: 'delete',
+          },
+        ],
+      }
+    };
+    const result = {
+      columns: [],
+      setting: {
+        primaryKey: 'name',
+        manualAdd: opts.manualAdd,
+        rowSortable: true,
+        isLevel: false,
+        toolButton: {
+          fullScreen: true,
+        },
+      },
+    };
+    let columnsArr = [];
+    switch (inArg.in) {
+      case 'body': {
+        columnsArr = ['required', 'name','type', 'value','editOperate'];
+        break;
+      }
+      default: {
+        columnsArr = ['required', 'name', 'value','editOperate'];
+        break;
+      }
+    }
+    const types =ApiTestParamsTypeFormData ;
+    result.columns = columnsArr.map((keyName) => {
+      const column = columnMUI[keyName];
+      if (!column) {
+        throw new Error(`[EO_ERROR]columnMUI not found ${keyName}`);
+      }
+      switch (keyName) {
+        case 'type': {
+          column.enums = Object.keys(types).map((val) => ({
+            title: val,
+            value: types[val],
+          }));
+          break;
+        }
+        case 'editOperate': {
+          if (result.setting.isLevel) {
+            column.btns.unshift(
+              { action: 'addChild' },
+              {
+                action: 'insert',
+              }
+            );
           }
           break;
         }

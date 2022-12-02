@@ -1,148 +1,16 @@
 import { Injectable } from '@angular/core';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { ApiTestHeaders, ContentTypeByAbridge } from '../../pages/api/service/api-test/api-test.model';
+import { ApiTestHeaders, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../../pages/api/service/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../shared/services/storage/index.model';
 import { eoDeepCopy } from '../../utils/index.utils';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { omit } from 'lodash-es';
+import { filterTableData } from '../../utils/tree/tree.utils';
 
 @Injectable()
 export class ApiTestUtilService {
   constructor() {}
-  initListConf(opts) {
-    opts.title = opts.title || $localize`Param`;
-    opts.nameTitle = opts.nameTitle || $localize`${opts.title} Name`;
-    opts.valueTitle = opts.valueTitle || $localize`${opts.title} Value`;
-    return {
-      setting: {
-        // draggable: true,
-        // dragCacheVar: opts.dragCacheVar || 'DRAG_VAR_API_PARAM',
-      },
-      baseFun: {
-        watchCheckboxChange: opts.watchFormLastChange,
-      },
-      itemStructure: Object.assign({}, opts.itemStructure),
-      tdList: [
-        {
-          thKey: '',
-          type: 'checkbox',
-          modelKey: 'required',
-          mark: 'require',
-        },
-        {
-          thKey: opts.nameTitle,
-          type: 'input',
-          modelKey: 'name',
-          placeholder: opts.nameTitle,
-          // width: 300,
-          // mark: 'name',
-        },
-        {
-          thKey: opts.valueTitle,
-          type: 'input',
-          modelKey: 'value',
-          placeholder: opts.valueTitle,
-          // width: 200,
-          // hide: 1,
-          // mark: 'value',
-        },
-        {
-          type: 'btn',
-          class: 'w_250',
-          btnList: [
-            {
-              key: $localize`:@@Delete:Delete`,
-              operateName: 'delete',
-            },
-          ],
-        },
-      ],
-    };
-  }
-  initBodyListConf(opts) {
-    const reduceItemWhenIsOprDepth = (inputItem) => {
-      switch (inputItem.type) {
-        case 'json':
-        case 'array':
-        case 'object': {
-          break;
-        }
-        default: {
-          inputItem.type = 'object';
-        }
-      }
-      return true;
-    };
-    return {
-      setting: {
-        draggableWithSelect: true,
-        draggable: true,
-        dragCacheVar: 'DRAG_VAR_API_TEST_BODY',
-      },
-      baseFun: {
-        reduceItemWhenAddChildItem: reduceItemWhenIsOprDepth,
-        watchCheckboxChange: opts.watchFormLastChange,
-        importFile: opts.importFile,
-      },
-      itemStructure: Object.assign({}, opts.itemStructure),
-      tdList: [
-        {
-          thKey: '',
-          type: 'checkbox',
-          modelKey: 'required',
-          mark: 'require',
-        },
-        {
-          thKey: $localize`Param Name`,
-          type: 'depthInput',
-          modelKey: 'name',
-          placeholder: $localize`Param Name`,
-          width: 300,
-          mark: 'name',
-        },
-        {
-          thKey: $localize`Type`,
-          type: 'select',
-          key: 'key',
-          value: 'value',
-          class: 'drag_select_conatiner',
-          initialData: 'item.type',
-          selectQuery: [],
-          modelKey: 'type',
-          mark: 'type',
-          width: 100,
-        },
-
-        {
-          thKey: $localize`Value`,
-          type: 'autoCompleteAndFile',
-          modelKey: 'value',
-          switchVar: 'type',
-          swicthFile: 'file',
-          placeholder: $localize`Value`,
-          width: 300,
-          mark: 'value',
-        },
-        {
-          type: 'btn',
-          class: 'w_250',
-          btnList: [
-            {
-              key: $localize`Add Child`,
-              operateName: 'addChild',
-              itemExpression: `eo-attr-tip-placeholder="add_child_btn" ng-if="$ctrl.mainObject.setting.isLevel"`,
-            },
-            {
-              key: $localize`:@@Delete:Delete`,
-              operateName: 'delete',
-              itemExpression: 'ng-if="!($ctrl.mainObject.setting.munalHideOperateColumn&&$first)"',
-            },
-          ],
-        },
-      ],
-    };
-  }
   getHTTPStatus(statusCode) {
     const HTTP_CODE_STATUS = [
       {
@@ -209,12 +77,14 @@ export class ApiTestUtilService {
    * @returns apiData
    */
   formatEditingApiData(formData): ApiTestData {
-    const result = eoDeepCopy(formData);
+    const result = omit(eoDeepCopy(formData),['eoKey']) as ApiTestData;
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach((tableName) => {
       if (whatType(result[tableName]) !== 'array') {
         return;
       }
-      result[tableName] = (result[tableName] || []).filter((val) => val.name || val.value);
+      result[tableName] = filterTableData(result[tableName], {
+        filterFn: (val) => val.name || val.value,
+      });
     });
     return result;
   }
@@ -242,7 +112,7 @@ export class ApiTestUtilService {
    * @returns
    */
   formatSavingApiData(inData): ApiData {
-    console.log('formatSavingApiData',eoDeepCopy(inData));
+    console.log('formatSavingApiData', eoDeepCopy(inData));
     const result = {
       ...inData.testData,
       responseHeaders: this.filterCommonHeader(inData.history.response.headers) || [],
@@ -318,8 +188,7 @@ export class ApiTestUtilService {
     }
     if (['json', 'xml'].includes(inData.requestBodyType)) {
       //Add/Replace Content-type
-      const contentType: ContentTypeByAbridge =
-        inData.requestBodyType === 'xml' ? ContentTypeByAbridge.XML : ContentTypeByAbridge.JSON;
+      const contentType: ContentType = inData.requestBodyType === 'xml' ? 'application/xml' : 'application/json';
       inData.requestHeaders = this.addOrReplaceContentType(contentType, inData.requestHeaders);
       //Xml、Json change content-type to raw in test page
       inData.requestBodyType = 'raw';
@@ -337,7 +206,7 @@ export class ApiTestUtilService {
    * @param type content-type be added/replaced
    * @param headers
    */
-  addOrReplaceContentType(contentType: ContentTypeByAbridge, headers: ApiTestHeaders[] = []) {
+  addOrReplaceContentType(contentType: ContentType, headers: ApiTestHeaders[] = []) {
     const result = headers;
     const existHeader = headers.find((val) => val.name.toLowerCase() === 'content-type');
     if (existHeader) {

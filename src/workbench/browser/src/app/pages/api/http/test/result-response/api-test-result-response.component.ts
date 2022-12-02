@@ -3,7 +3,7 @@ import { getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { ApiTestHistoryResponse } from '../../../../../shared/services/storage/index.model';
 import { ApiTestUtilService } from '../../../../../modules/api-shared/api-test-util.service';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 @Component({
@@ -24,7 +24,6 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
   imgBlobUrl: SafeUrl;
   constructor(
     private apiTest: ApiTestUtilService,
-    private sanitizer: DomSanitizer,
     private nzContextMenuService: NzContextMenuService
   ) {}
 

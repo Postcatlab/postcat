@@ -68,13 +68,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebar.currentModule = module;
     const nextApp = this.modules.find((val) => val.id === module.id);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    if (module.id !== '@eo-core-member') {
-      this.router.navigate([route], { queryParamsHandling: 'merge' });
-      return;
-    }
-    this.dataSourceService.checkRemoteCanOperate(() => {
-      this.router.navigate([route], { queryParamsHandling: 'merge' });
-    }, this.store.isLocal);
+    this.router.navigate([route], { queryParamsHandling: 'merge' });
   }
   ngOnDestroy(): void {
     this.destroy = true;
