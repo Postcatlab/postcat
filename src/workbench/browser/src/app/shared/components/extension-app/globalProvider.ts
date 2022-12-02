@@ -10,6 +10,7 @@ import { SidebarView } from 'eo/platform/node/extension-manager/types';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
+  modalMaskEl: HTMLDivElement;
   constructor(
     private modalService: ModalService,
     private router: Router,
@@ -19,6 +20,10 @@ export class GlobalProvider {
     private projectService: ProjectService
   ) {
     window.__POWERED_BY_EOAPI__ = true;
+
+    // this.modalMaskEl = document.createElement('div');
+    // this.modalMaskEl.classList.add('cdk-overlay-backdrop ant-modal-mask cdk-overlay-backdrop-showing');
+    // document.body.appendChild(this.modalMaskEl);
   }
 
   injectGlobalData() {
@@ -36,6 +41,9 @@ export class GlobalProvider {
     window.eo.getGroup = this.getGroup;
     window.eo.importProject = this.importProject;
     // window.eo.getConfiguration = this.modalService;
+
+    window.eo.showModalMask = this.showModalMask;
+    window.eo.hideModalMask = this.hideModalMask;
   }
   getSidebarView = (extName) => {
     return this.getSidebarViews()[0];
@@ -46,6 +54,14 @@ export class GlobalProvider {
     const sidebarView = this.webExtensionService.getFeatures('sidebarView');
     sidebarView?.size && result.push(...sidebarView.values());
     return result;
+  };
+
+  showModalMask = () => {
+    this.modalMaskEl.style.display = 'block';
+  };
+
+  hideModalMask = () => {
+    this.modalMaskEl.style.display = 'node';
   };
 
   serializationData = (data) => {
