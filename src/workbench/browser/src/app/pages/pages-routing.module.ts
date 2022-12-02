@@ -24,8 +24,8 @@ class RedirectProjectID implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const urlTree = this.router.parseUrl(state.url);
-    if(!urlTree.queryParams.shareId&& this.store.shareId){
-      urlTree.queryParams.shareId = this.store.shareId;
+    if (!urlTree.queryParams.shareId && this.store.getShareId) {
+      urlTree.queryParams.shareId = this.store.getShareId;
       return urlTree;
     }
     return true;

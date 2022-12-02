@@ -208,7 +208,7 @@ export class MemberComponent implements OnInit {
   }
   btny703n5Status() {
     // * disabled status status
-    return !this.store.isLocal && this.store.authEnum.canEdit;
+    return !this.store.isLocal && this.store.canEdit;
   }
   async e97uoiuCallback($event) {
     // * eoOnRemove event callback

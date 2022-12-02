@@ -33,7 +33,7 @@ export class ApiMockComponent implements OnInit {
   get mockUrl() {
     const prefix = this.store.isLocal
       ? this.dataSource.mockUrl
-      : `${this.dataSource.mockUrl}/mock-${this.effect.currentProjectID}`;
+      : `${this.dataSource.mockUrl}/mock-${this.store.getCurrentProjectID}`;
     return `${prefix}`;
   }
   get modalTitle() {

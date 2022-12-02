@@ -16,37 +16,46 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 })
 export class StoreService {
   // * observable data
-  @observable url = '';
-  @observable shareId = StorageUtil.get('shareId') || '';
-  @observable userProfile = StorageUtil.get('userProfile') || null;
+  @observable private url = '';
+  @observable private envList = [];
+  @observable private envUuid = '';
+  @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
+  @observable private shareId = StorageUtil.get('shareId') || '';
+  @observable private userProfile = StorageUtil.get('userProfile') || null;
+  @observable private isOpenRightBar = false;
   // * Local workspace always keep in last
-  @observable currentWorkspaceID = -1;
-  @observable workspaceList: API.Workspace[] = [
+  @observable private currentWorkspaceID = -1;
+  @observable private workspaceList: API.Workspace[] = [
     {
       title: $localize`Local workspace`,
       id: -1,
     } as API.Workspace,
   ];
-  @observable.shallow env = {
+  @observable.shallow private currentEnv = {
     hostUri: '',
     parameters: [],
     frontURI: '',
+    uuid: null,
   };
 
-  @observable.shallow authEnum = {
+  @observable.shallow private authEnum = {
     canEdit: false,
     canDelete: false,
     canCreate: false,
   };
 
-  @observable.shallow loginInfo = {
+  @observable.shallow private loginInfo = {
     accessToken: StorageUtil.get('accessToken') || null,
     refreshToken: StorageUtil.get('refreshToken') || null,
   };
 
   // * computed data
-  @computed get getEnv() {
-    return this.env;
+  @computed get getCurrentEnv() {
+    return this.currentEnv;
+  }
+
+  @computed get getEnvList() {
+    return this.envList;
   }
 
   @computed get isLogin() {
@@ -74,6 +83,14 @@ export class StoreService {
     return this.workspaceList.at(-1);
   }
 
+  @computed get getCurrentProjectID() {
+    return this.currentProjectID;
+  }
+
+  @computed get getEnvUuid() {
+    return this.envUuid;
+  }
+
   @computed get getCurrentWorkspaceInfo() {
     const [workspace] = this.workspaceList.filter((it) => it.id === this.currentWorkspaceID);
     return workspace;
@@ -85,6 +102,14 @@ export class StoreService {
 
   @computed get getLoginInfo() {
     return this.loginInfo;
+  }
+
+  @computed get getShareId() {
+    return this.shareId;
+  }
+
+  @computed get canEdit() {
+    return this.authEnum.canEdit;
   }
 
   constructor(
@@ -100,7 +125,7 @@ export class StoreService {
 
   // * actions
   @action setEnv(data) {
-    this.env =
+    this.currentEnv =
       data == null
         ? {
             hostUri: '',
@@ -143,8 +168,21 @@ export class StoreService {
     }
   }
 
+  @action toggleRightBar() {
+    this.isOpenRightBar = false;
+  }
+
+  @action setEnvList(data = []) {
+    this.envList = data;
+  }
+
   @action setAuthEnum(data) {
     this.authEnum = Object.assign(this.authEnum, data);
+  }
+
+  @action setCurrentProjectID(projectID: number) {
+    this.currentProjectID = projectID;
+    StorageUtil.set('currentProjectID', projectID);
   }
 
   @action setDataSource() {

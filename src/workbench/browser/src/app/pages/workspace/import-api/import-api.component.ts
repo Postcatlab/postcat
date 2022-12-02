@@ -6,7 +6,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { Router } from '@angular/router';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 // const optionList = [
 //   {
@@ -60,7 +60,7 @@ export class ImportApiComponent implements OnInit {
     private eoMessage: EoNgFeedbackMessageService,
     public extensionService: ExtensionService,
     public webExtensionService: WebExtensionService,
-    private effect: EffectService
+    private store: StoreService
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
@@ -88,7 +88,7 @@ export class ImportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = await window.eo?.loadFeatureModule?.(this.currentExtension);
-    console.log(this.currentExtension)
+    console.log(this.currentExtension);
     const { name, content } = this.uploadData;
     const [data, err] = module[action](content);
     // console.log('import data', structuredClone?.(data));
@@ -118,12 +118,12 @@ export class ImportApiComponent implements OnInit {
       }
       return obj;
     };
-    const params = [this.effect.currentProjectID, decycle(data)];
+    const params = [this.store.getCurrentProjectID, decycle(data)];
     this.storage.run('projectImport', params, (result: StorageRes) => {
-      console.log(result)
+      console.log(result);
       if (result.status !== StorageResStatus.success) {
         callback(false);
-        console.error("EO_ERROR: Import Error",result.error);
+        console.error('EO_ERROR: Import Error', result.error);
         return;
       }
       callback(true);

@@ -10,15 +10,15 @@
           <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
         <div
-          *ngIf="getEnv.hostUri"
+          *ngIf="store.getCurrentEnv.hostUri"
           nz-typography
           nzEllipsis
           class="env_front_uri"
-          nzTooltipTitle="{{ getEnv.hostUri }}"
+          nzTooltipTitle="{{ store.getCurrentEnv.hostUri }}"
           nzTooltipPlacement="bottom"
           eoNgFeedbackTooltip
         >
-          {{ getEnv.hostUri }}
+          {{ store.getCurrentEnv.hostUri }}
         </div>
         <nz-form-item nz-col class="flex-1">
           <nz-form-control

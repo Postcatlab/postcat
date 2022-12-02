@@ -90,7 +90,7 @@ export class ApiDetailComponent implements OnInit {
       if (this.store.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetApiDetail({
           apiDataUUID: id,
-          uniqueID: this.store.shareId,
+          uniqueID: this.store.getShareId,
         });
         if (err) {
           return;

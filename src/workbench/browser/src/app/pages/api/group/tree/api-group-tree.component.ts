@@ -160,7 +160,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       if (this.store.isShare) {
         const [res, err]: any = await this.http.api_shareDocGetAllApi(
           {
-            uniqueID: this.store.shareId,
+            uniqueID: this.store.getShareId,
           },
           '/api'
         );
@@ -175,7 +175,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         resolve(true);
         return;
       }
-      this.storage.run('projectCollections', [this.effect.currentProjectID], (result: StorageRes) => {
+      this.storage.run('projectCollections', [this.store.getCurrentProjectID], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           const { groups, apis } = result.data;
           this.getGroups(groups);

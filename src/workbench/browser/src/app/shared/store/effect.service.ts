@@ -5,29 +5,24 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { reaction, observable } from 'mobx';
+import { reaction } from 'mobx';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EffectService {
-  @observable currentProjectID = StorageUtil.get('currentProjectID', 1);
-
   constructor(
     private apiService: ApiService,
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage,
-    private store: StoreService
+    private store: StoreService,
+    private http: RemoteService
   ) {
     reaction(
-      () => this.store.currentWorkspaceID,
+      () => this.store.getCurrentWorkspaceInfo.id,
       (workspaceID) => this.updateProjectID(workspaceID)
     );
-  }
-
-  setCurrentProjectID(projectID: number) {
-    this.currentProjectID = projectID;
-    StorageUtil.set('currentProjectID', projectID);
   }
 
   getGroups(projectID = 1): Promise<any[]> {
@@ -99,14 +94,39 @@ export class EffectService {
 
   async updateProjectID(workspaceID: number) {
     if (workspaceID === -1) {
-      this.setCurrentProjectID(1);
+      this.store.setCurrentProjectID(1);
       StorageUtil.remove('server_version');
       return;
     }
     const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
-    this.setCurrentProjectID(projects.at(0).uuid);
+    this.store.setCurrentProjectID(projects.at(0).uuid);
     this.store.setAuthEnum({
       canEdit: creatorID === this.store.getUserProfile.id,
+    });
+  }
+
+  getAllEnv() {
+    return new Promise((resolve) => {
+      if (this.store.isShare) {
+        this.http
+          .api_shareDocGetEnv({
+            uniqueID: this.store.getShareId,
+          })
+          .then(([data, err]) => {
+            if (err) {
+              return resolve([]);
+            }
+            return resolve(data || []);
+          });
+        return;
+      }
+      this.storage.run('environmentLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.store.setEnvList(result.data || []);
+          return resolve(result.data || []);
+        }
+        return resolve([]);
+      });
     });
   }
 }

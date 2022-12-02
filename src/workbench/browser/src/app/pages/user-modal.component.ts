@@ -423,7 +423,7 @@ export class UserModalComponent implements OnInit {
     this.store.setWorkspaceList(data);
     if (workspaceID !== -1) {
       const { projects } = await this.effect.getWorkspaceInfo(workspaceID);
-      this.effect.setCurrentProjectID(projects.at(0).uuid);
+      this.store.setCurrentProjectID(projects.at(0).uuid);
     }
 
     const url = this.dataSource.remoteServerUrl;

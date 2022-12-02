@@ -90,9 +90,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
-  @computed get getEnv() {
-    return this.store.getEnv;
-  }
+
   constructor(
     public store: StoreService,
     private cdRef: ChangeDetectorRef,
@@ -309,7 +307,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
       id: JSON.stringify(this.route.snapshot.queryParams),
       action: 'ajax',
       data: this.testServer.formatRequestData(this.model.request, {
-        env: this.getEnv,
+        env: this.store.getCurrentEnv,
         globals: getGlobals(),
         beforeScript: this.model.beforeScript,
         afterScript: this.model.afterScript,
@@ -428,7 +426,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
   }
   private watchEnvChange() {
     reaction(
-      () => this.getEnv,
+      () => this.store.getCurrentEnv,
       (env: any) => {
         if (env.uuid) {
           this.validateForm.controls.uri.setValidators([]);

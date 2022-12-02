@@ -15,7 +15,7 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
     </h2>
     <section class="py-2"><eo-api-overview></eo-api-overview></section>
     <nz-divider></nz-divider>
-    <section class="" *ngIf="!store.isLocal && store.authEnum.canEdit">
+    <section class="" *ngIf="!store.isLocal && store.canEdit">
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Edit Workspace</span>
       </h2>

@@ -16,7 +16,7 @@ import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service'
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 const protocolReg = new RegExp('^(http|https)://');
 
@@ -32,7 +32,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     return `/${this.workspaceID}/${this.projectID}/`;
   }
   get projectID() {
-    return this.effect.currentProjectID;
+    return this.store.getCurrentProjectID;
   }
   get workspaceID() {
     return this.store.getCurrentWorkspaceInfo.id;

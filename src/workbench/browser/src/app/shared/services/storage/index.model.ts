@@ -1,4 +1,9 @@
-import { ApiTestBody, ApiTestBodyType, ApiTestHeaders, ApiTestQuery } from '../../../pages/api/service/api-test/api-test.model';
+import {
+  ApiTestBody,
+  ApiTestBodyType,
+  ApiTestHeaders,
+  ApiTestQuery,
+} from '../../../pages/api/service/api-test/api-test.model';
 import { Observable } from 'rxjs';
 
 /**
@@ -38,6 +43,12 @@ interface StorageModel {
  * 环境对象接口
  */
 export interface Environment extends StorageModel {
+  /**
+   * 主键UUID，字符串UUID或数值型
+   *
+   * @type {number}
+   */
+  uuid?: number;
   /**
    * Env name
    *

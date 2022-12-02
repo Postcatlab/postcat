@@ -69,7 +69,6 @@ export class EnvComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getAllEnv();
     this.changeStoreEnv(localStorage.getItem('env:selected'));
   }
   ngOnDestroy() {
@@ -77,18 +76,6 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getAllEnv(uuid?: number) {
-    const projectID = 1;
-    return new Promise(async (resolve) => {
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          this.envList = result.data || [];
-          return resolve(result.data || []);
-        }
-        return resolve([]);
-      });
-    });
-  }
   closeEnv() {
     this.statusChange.emit();
   }
@@ -100,7 +87,6 @@ export class EnvComponent implements OnInit, OnDestroy {
     // * delete env in menu on left sidebar
     this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        await this.getAllEnv();
         if (this.envUuid === Number(uuid)) {
           this.envUuid = this.activeUuid;
         }
@@ -151,7 +137,6 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run('environmentUpdate', [{ ...other, name, parameters }, uuid], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.message.success($localize`Edited successfully`);
-          await this.getAllEnv(this.activeUuid);
           if (this.envUuid === Number(uuid)) {
             this.envUuid = Number(uuid);
           }
@@ -168,7 +153,6 @@ export class EnvComponent implements OnInit, OnDestroy {
           if (result.status === StorageResStatus.success) {
             this.message.success($localize`Added successfully`);
             this.activeUuid = Number(result.data.uuid);
-            await this.getAllEnv();
             this.handleCancel();
           } else {
             this.message.error($localize`Failed to add`);
@@ -193,7 +177,6 @@ export class EnvComponent implements OnInit, OnDestroy {
     if (event) {
       this.activeUuid = this.envUuid;
       this.handleEditEnv(this.activeUuid);
-      this.getAllEnv();
     }
   }
 

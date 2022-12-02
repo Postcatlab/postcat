@@ -23,6 +23,7 @@ const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KE
   styleUrls: ['./api.component.scss'],
 })
 export class ApiComponent implements OnInit, OnDestroy {
+  envUuid = '';
   isFirstTime = true;
   siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
   RIGHT_BAR_WIDTH = 50;
@@ -67,9 +68,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       onlyDestop: true,
     },
   ];
-  activeUuid: number | string | null = 0;
-  envInfo: any = {};
-  envList: NzSelectOptionInterface[] = [];
 
   isOpen = false;
   dyWidth = this.getLocalDyWidth();
@@ -87,18 +85,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     public store: StoreService,
     private http: RemoteService
   ) {}
-  get envUuid(): number | null {
-    return Number(localStorage.getItem('env:selected')) || 0;
-  }
-  set envUuid(value) {
-    this.activeUuid = value;
-    if (value !== null) {
-      localStorage.setItem('env:selected', value == null ? '' : value.toString());
-    } else {
-      localStorage.removeItem('env:selected');
-    }
-    this.changeStoreEnv(value);
-  }
+
   /**
    * Router-outlet child componnet change
    * Router-outlet bind childComponent output fun by (activate)
@@ -112,8 +99,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.watchRouterChange();
-    this.initEnv();
-    this.watchEnvChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
   }
   ngOnDestroy() {
@@ -186,7 +171,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     }
     if (this.store.isShare) {
       const [data, err]: any = await this.http.api_shareDocGetEnv({
-        uniqueID: this.store.shareId,
+        uniqueID: this.store.getShareId,
       });
       if (err) {
         return;
@@ -201,60 +186,38 @@ export class ApiComponent implements OnInit, OnDestroy {
       }
     });
   }
-  private initEnv() {
-    this.envUuid = Number(localStorage.getItem('env:selected'));
-    // * load All env
-    this.getAllEnv().then((result: any[]) => {
-      this.envList = result || [];
-    });
-  }
-  private watchEnvChange() {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(({ type, data }) => {
-        switch (type) {
-          case 'updateEnv': {
-            this.getAllEnv().then((result: any[]) => {
-              this.envList = result || [];
-            });
-            break;
-          }
-          case 'toggleEnv': {
-            this.toggleRightBar(data ? 'open' : 'close');
-            break;
-          }
-          case 'deleteEnv': {
-            const list = this.envList.filter((it) => it.value !== Number(data));
-            this.envList = list;
-            if (this.envUuid === Number(data)) {
-              this.envUuid = null;
-            }
-            break;
-          }
-        }
-      });
-  }
-  private getAllEnv(uuid?: number) {
-    const projectID = 1;
-    return new Promise(async (resolve) => {
-      if (this.store.isShare) {
-        const [data, err]: any = await this.http.api_shareDocGetEnv({
-          uniqueID: this.store.shareId,
-        });
-        if (err) {
-          return resolve([]);
-        }
-        const result = (data || []).map((item) => ({ label: item.name, value: item.uuid }));
-        return resolve(result);
-      }
-      this.storage.run('environmentLoadAllByProjectID', [projectID], async (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          const data = (result.data || []).map((item) => ({ label: item.name, value: item.uuid }));
-          return resolve(data);
-        }
-        return resolve([]);
-      });
-    });
-  }
+  // private initEnv() {
+  //   this.envUuid = Number(localStorage.getItem('env:selected'));
+  //   // * load All env
+  //   this.getAllEnv().then((result: any[]) => {
+  //     this.envList = result || [];
+  //   });
+  // }
+  // private watchEnvChange() {
+  //   this.messageService
+  //     .get()
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe(({ type, data }) => {
+  //       switch (type) {
+  //         case 'updateEnv': {
+  //           this.getAllEnv().then((result: any[]) => {
+  //             this.envList = result || [];
+  //           });
+  //           break;
+  //         }
+  //         case 'toggleEnv': {
+  //           this.toggleRightBar(data ? 'open' : 'close');
+  //           break;
+  //         }
+  //         case 'deleteEnv': {
+  //           const list = this.envList.filter((it) => it.value !== Number(data));
+  //           this.envList = list;
+  //           if (this.envUuid === Number(data)) {
+  //             this.envUuid = null;
+  //           }
+  //           break;
+  //         }
+  //       }
+  //     });
+  // }
 }
