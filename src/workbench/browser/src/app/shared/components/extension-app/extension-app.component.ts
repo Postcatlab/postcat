@@ -12,7 +12,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
 @Component({
   selector: 'extension-app',
   template: `
-    <div style="transform: translate(0)" class="w-[90vw] h-[90vh] overflow-auto">
+    <div style="transform: translate(0)" class="extension-app w-full h-full overflow-auto relative">
       <ngx-wujie
         *ngIf="type === 'micro-app' && url"
         width="100%"
@@ -89,12 +89,14 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
 
   receiveMessage = async (event) => {
     const { data, origin } = event;
-    if (data.msgID && window.eo[data.name]) {
-      const res = await window.eo[data.name](...data.data);
+    const target = data.namePath?.split('.')?.reduce((p, c) => p?.[c], window.eo);
+    if (data.msgID) {
+      console.log('data.data', data.data);
+      const res = typeof target === 'function' ? await target(...data.data) : target;
       this.iframeWin.postMessage(
         {
           msgID: data.msgID,
-          data: res,
+          data: target ? res : `调用路径[${data.namePath}]不存在`,
         },
         origin
       );

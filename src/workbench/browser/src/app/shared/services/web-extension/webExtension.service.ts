@@ -117,13 +117,13 @@ export class WebExtensionService {
     return window[extName];
   };
 
-  getFeatures(featureName: string): Map<string, FeatureInfo> {
+  getFeatures<T = FeatureInfo>(featureName: string): Map<string, T> {
     if (window.eo?.getFeature) {
       return window.eo.getFeature(featureName);
     }
-    const featureMap = new Map<string, FeatureInfo>([]);
+    const featureMap = new Map<string, T>([]);
     this.installedList.forEach((item) => {
-      const feature: FeatureInfo = item.pkgInfo?.features?.[featureName];
+      const feature: T = item.pkgInfo?.features?.[featureName];
       if (feature) {
         featureMap.set(item.name, {
           extensionID: item.name,

@@ -20,6 +20,7 @@ export class ModalService {
     });
   }
   create = (inOpts) => {
+    console.log('inOpts', inOpts);
     const modalOpts: ModalOptions = {
       nzTitle: 'modal title',
       nzContent: inOpts.nzContent,

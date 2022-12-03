@@ -52,7 +52,6 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
 import { LocalWorkspaceTipComponent } from './components/local-workspace-tip/local-workspace-tip.component';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
-import { ExtensionAppIframeComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app-iframe.component';
 
 const COMPONENTS = [
   ToolbarComponent,
@@ -69,7 +68,6 @@ const COMPONENTS = [
   DownloadClienteComponent,
   LocalWorkspaceTipComponent,
   ExtensionAppComponent,
-  ExtensionAppIframeComponent,
 ];
 
 const SHARED_MODULE = [

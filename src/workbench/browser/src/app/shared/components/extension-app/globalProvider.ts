@@ -20,10 +20,6 @@ export class GlobalProvider {
     private projectService: ProjectService
   ) {
     window.__POWERED_BY_EOAPI__ = true;
-
-    // this.modalMaskEl = document.createElement('div');
-    // this.modalMaskEl.classList.add('cdk-overlay-backdrop ant-modal-mask cdk-overlay-backdrop-showing');
-    // document.body.appendChild(this.modalMaskEl);
   }
 
   injectGlobalData() {
@@ -45,23 +41,40 @@ export class GlobalProvider {
     window.eo.showModalMask = this.showModalMask;
     window.eo.hideModalMask = this.hideModalMask;
   }
-  getSidebarView = (extName) => {
-    return this.getSidebarViews()[0];
+  getSidebarView = (extName): SidebarView | undefined => {
+    return this.getSidebarViews().find((n) => n.extensionID === extName);
   };
 
   getSidebarViews = (): SidebarView[] => {
-    const result = [];
-    const sidebarView = this.webExtensionService.getFeatures('sidebarView');
-    sidebarView?.size && result.push(...sidebarView.values());
-    return result;
+    const sidebarView = this.webExtensionService.getFeatures<SidebarView>('sidebarView');
+    return [...sidebarView.values()];
   };
 
-  showModalMask = () => {
-    this.modalMaskEl.style.display = 'block';
+  showModalMask = (style = {}) => {
+    this.modalMaskEl = document.createElement('div');
+    this.modalMaskEl.classList.add('ant-modal-mask', 'cdk-overlay-backdrop-showing');
+    document.body.appendChild(this.modalMaskEl);
+    this.modalMaskEl.classList.add('cdk-overlay-backdrop');
+    const iframeWrapper = document.querySelector<HTMLDivElement>('.extension-app');
+    if (iframeWrapper) {
+      iframeWrapper.style.zIndex = '10000';
+    }
+    // this.modalMaskEl.onclick = () => {
+    //   this.hideModalMask();
+    // };
+    Object.entries(style).forEach(([key, value]) => {
+      this.modalMaskEl.style[key] = value;
+    });
   };
 
   hideModalMask = () => {
-    this.modalMaskEl.style.display = 'node';
+    this.modalMaskEl.style.display = 'none';
+    this.modalMaskEl.classList.remove('cdk-overlay-backdrop');
+    this.modalMaskEl.remove();
+    const iframeWrapper = document.querySelector<HTMLDivElement>('.extension-app');
+    if (iframeWrapper) {
+      iframeWrapper.style.zIndex = 'unset';
+    }
   };
 
   serializationData = (data) => {
