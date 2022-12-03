@@ -37,25 +37,26 @@ export class ThemeService {
     this.changeAppearance(this.appearance, true);
     this.changeColor(this.mainColor, true);
   }
-  getEditorTheme() {
+  private getEditorTheme(appearance) {
     //Default Theme: https://microsoft.github.io/monaco-editor/index.html
     //'vs', 'vs-dark' or 'hc-black'
-    return this.appearance === 'dark' ? 'vs-dark' : 'vs';
+    return appearance === 'dark' ? 'vs-dark' : 'vs';
   }
-  changeEditorTheme() {
+  changeEditorTheme(theme?) {
+    theme=theme||this.getEditorTheme(this.appearance);
+    console.log('changeEditorTheme',theme,this.appearance);
     if (window.monaco?.editor) {
-      window.monaco?.editor.setTheme(this.getEditorTheme());
+      window.monaco?.editor.setTheme(theme);
     }
   }
   changeAppearance(name: AppearanceType, firstLoad = false) {
     this.changeModule('appearance', name, firstLoad);
-    this.changeEditorTheme();
   }
 
   changeColor(name: MainColorType, firstLoad = false) {
     this.changeModule('mainColor', name, firstLoad);
   }
-  changeModule(mid: 'appearance' | 'mainColor', name: string, firstLoad) {
+  changeModule(mid: 'appearance' | 'mainColor', name, firstLoad) {
     if (!firstLoad && (!name || name === this[mid])) {
       return;
     }
@@ -66,6 +67,9 @@ export class ThemeService {
         this.removeCss(this[mid]);
         //@ts-ignore
         this[mid] = name;
+      }
+      if(mid==='appearance'){
+        this.changeEditorTheme(this.getEditorTheme(name));
       }
       StorageUtil.set(module.storageKey, name);
     });

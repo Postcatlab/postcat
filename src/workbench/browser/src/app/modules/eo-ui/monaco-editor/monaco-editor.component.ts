@@ -94,7 +94,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   defaultConfig: JoinedEditorOptions = {
     language: this.editorType || 'json',
     // automaticLayout: true,
-    theme:this.theme.getEditorTheme(),
     scrollBeyondLastLine: false,
     wordWrap: 'on',
     wrappingStrategy: 'advanced',
@@ -122,8 +121,8 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
   constructor(
     private message: EoNgFeedbackMessageService,
-    private theme: ThemeService,
     private electron: ElectronService,
+    private theme: ThemeService,
     elementRef: ElementRef
   ) {
     this.el = elementRef.nativeElement;
@@ -373,5 +372,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   onEditorInitialized(codeEdtor) {
     this.codeEdtor = codeEdtor;
     this.initMonacoEditorEvent();
+    //Manual change theme,don't use options.theme,it will not be replace by setTheme function
+    this.theme.changeEditorTheme();
   }
 }
