@@ -1,48 +1,37 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { ThemeService } from '../../../../core/services/theme.service';
+import { APPEARANCE, THEMES } from './theme.model';
 
 @Component({
   selector: 'eo-select-theme',
-  template: `<p class="font-bold">Appearance</p>
-    <eo-ng-card-switch
-      class="cursor-pointer border-none mt-[10px] block"
-      ngDefaultControl
-      [(ngModel)]="theme.appearance"
-      (ngModelChange)="theme.changeAppearance($event)"
-    ></eo-ng-card-switch>
-
+  template: `<p class="mb-[5px] mt-[15px] font-bold">Appearance</p>
+    <button eo-ng-button nzType="text" *ngFor="let option of this.APPEARANCE"  (click)="theme.changeAppearance(option.value)">
+      <eo-iconpark-icon [name]="option.icon"></eo-iconpark-icon>
+    </button>
     <!-- theme -->
-    <p class="mb-[5px] mt-[10px]" nzTypography>Accept color</p>
+    <p class="mb-[5px] mt-[15px] font-bold" nzTypography>Accept color</p>
     <eo-ng-radio-group
       nzBorderless
       class="w-full flex"
-      [(ngModel)]="theme.mainColor"
+      [ngModel]="theme.mainColor"
       (ngModelChange)="theme.changeColor($event)"
     >
       <label
-        class="theme-box mx-[5px]"
-        *ngFor="let option of THEMES"
+        [style.border]="'0px solid' + option.color"
+        class="mx-[5px]"
+        *ngFor="let option of this.THEMES"
         eo-ng-radio
-        [style.background]="option.value"
-        [nzValue]="option.title"
+        [nzValue]="option.value"
       >
-        <svg *ngIf="theme.mainColor === option.label" class="theme-box-checked iconpark-icon !h-[24px] !w-[24px]">
-          <use href="#check"></use>
-        </svg>
       </label>
     </eo-ng-radio-group>`,
-  providers: [ThemeService],
+  styleUrls: ['./select-theme.component.scss'],
 })
 export class SelectThemeComponent implements OnInit, OnDestroy {
-  THEMES: any;
-
-  constructor(public theme: ThemeService) {
-    this.getThemes();
-  }
-  private getThemes() {
-    this.THEMES = this.theme.getThemes();
-  }
+  THEMES = THEMES;
+  APPEARANCE = APPEARANCE;
+  constructor(public theme: ThemeService) {}
   ngOnInit(): void {}
 
   ngOnDestroy() {}

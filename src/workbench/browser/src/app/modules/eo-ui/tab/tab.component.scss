@@ -36,16 +36,13 @@
         flex: none;
       }
       .ant-tabs-tab {
-        .ant-tabs-tab-remove {
-          color: rgba(0, 0, 0, 0);
-        }
         &:hover {
           .tab-has-edit-icon {
             display: none;
           }
           .ant-tabs-tab-remove {
             display: flex;
-            color: rgba(0, 0, 0, 0.45);
+            color: var(--MAIN_TEXT);
           }
         }
       }
@@ -81,7 +78,7 @@
       }
       &:hover {
         eo-iconpark-icon {
-          background: #eee;
+          background: var(--NAVBAR_BTN_BG);
         }
       }
     }

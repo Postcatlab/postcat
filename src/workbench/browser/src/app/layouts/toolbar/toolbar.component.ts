@@ -27,11 +27,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.sidebar.toggleCollapsed();
   }
   changeTheme() {
-    this.drawerService.create({
-      nzTitle: 'Theme',
-      nzSize: 'default',
-      nzContent: SelectThemeComponent,
-    });
+    // this.drawerService.create({
+    //   nzTitle: 'Theme',
+    //   nzSize: 'default',
+    //   nzContent: SelectThemeComponent,
+    // });
   }
   ngOnInit(): void {}
   ngOnDestroy(): void {

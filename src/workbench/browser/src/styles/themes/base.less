@@ -1,12 +1,15 @@
-@import '../antd.less';
-
 
 @import '../../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
+
+// For more information: https://ng.ant.design/docs/customize-theme/en
+@import '../../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.variable.min.css';
+
+@import './eoui.less';
 // Override less variables to here
-// View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
 :root {
   --ant-primary-color: #1890ff;
 }
+//* View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
 //Theme mainColor
 @theme-color: #00785a;
 @border-radius-base: 3px;
@@ -17,8 +20,85 @@
 @tree-title-height: 30px;
 
 //Theme Apperance
+@component-background: @body-background;
 @layout-sider-background: @component-background;
 @layout-header-background: @component-background;
-@component-background: @body-background;
 @table-header-color: @component-background;
 @table-header-bg: @component-background;
+
+// AntD Base Less
+body {
+  line-height: initial;
+}
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  padding: 8px 10px 5px 10px;
+}
+.ant-btn-link,
+.ant-btn-link:hover {
+  color: var(--BLUE_DEEPER);
+}
+.ant-divider-horizontal {
+  margin: 10px 0;
+}
+.ant-drawer {
+  .ant-drawer-content-wrapper {
+    height: calc(100vh - 25px);
+    top: 10px;
+  }
+  .ant-drawer-content {
+    border-radius: 3px;
+  }
+  .ant-drawer-title {
+    font-weight: bold;
+  }
+}
+
+.ant-tabs-top {
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
+  .ant-tabs-nav::before {
+    border-color: var(--BORDER);
+  }
+}
+.ant-divider-vertical {
+  border-color: var(--BORDER);
+}
+.ant-radio-group {
+  .ant-radio-wrapper:last-child {
+    margin-right: 0;
+  }
+}
+.ant-modal-footer {
+  padding: 16px 24px;
+}
+p {
+  margin-bottom: 0;
+}
+.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: var(--NAVBAR_BTN_BG);
+}
+.ant-tabs-tab {
+  font-weight: bold;
+  color: #999;
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  text-shadow: none;
+}
+.ant-tree-switcher {
+  width: 20px;
+}
+.ant-empty-description {
+  color: #999;
+}
+// .ant-badge-primary {
+//   .ant-badge-status-dot {
+//     background-color: var(--ant-primary-color);
+//   }
+// }
+
+.ant-tag-default {
+  color: #666;
+  background-color: #66666626;
+}
+

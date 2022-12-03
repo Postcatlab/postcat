@@ -1,19 +1,32 @@
 export const THEMES = [
   {
-    title: 'default',
-    value: '#00785a',
+    value: 'default',
+    color: '#00785a',
   },
   {
-    title: 'orange',
-    value: '#f47023',
+    value: 'orange',
+    color: '#f47023',
   },
   {
-    title: 'blue',
-    value: '#2878ff',
+    value: 'blue',
+    color: '#2878ff',
   },
   {
-    title: 'purple',
-    value: '#673ab7',
+    value: 'purple',
+    color: '#673ab7',
   },
 ] as const;
-export type MainColor = typeof THEMES[number]['title'];
+export type MainColorType = typeof THEMES[number]['value'];
+
+export const APPEARANCE = [
+  {
+    icon: 'link-cloud-sucess',
+    value: 'dark',
+  },
+  {
+    icon: 'loading',
+    value: 'light',
+  },
+] as const;
+export type AppearanceType = typeof APPEARANCE[number]['value'];
+
