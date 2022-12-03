@@ -211,7 +211,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set RowSortable
     if (this.setting.rowSortable) {
       theaderConf.push({
-        width: 25,
+        width: 40,
       });
       tbodyConf.push({
         type: 'sort',

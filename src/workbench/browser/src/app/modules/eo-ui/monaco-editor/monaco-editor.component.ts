@@ -16,6 +16,7 @@ import type { editor, IDisposable } from 'monaco-editor';
 import type MonacoEditor from 'monaco-editor';
 import { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 import { defaultCompletions } from './defaultCompletions';
+import { ThemeService } from '../../../core/services/theme.service';
 
 declare const monaco: typeof MonacoEditor;
 
@@ -93,6 +94,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   defaultConfig: JoinedEditorOptions = {
     language: this.editorType || 'json',
     // automaticLayout: true,
+    theme:this.theme.getEditorTheme(),
     scrollBeyondLastLine: false,
     wordWrap: 'on',
     wrappingStrategy: 'advanced',
@@ -118,7 +120,12 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     return Number.isNaN(Number(val));
   }
 
-  constructor(private message: EoNgFeedbackMessageService, private electron: ElectronService, elementRef: ElementRef) {
+  constructor(
+    private message: EoNgFeedbackMessageService,
+    private theme: ThemeService,
+    private electron: ElectronService,
+    elementRef: ElementRef
+  ) {
     this.el = elementRef.nativeElement;
   }
 
