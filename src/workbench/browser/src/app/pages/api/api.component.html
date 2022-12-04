@@ -13,6 +13,7 @@
         [ngClass]="{ 'share-group-tabset': store.isShare }"
         nzCentered
         [nzAnimated]="false"
+        eo-ng-tabset
         [(nzSelectedIndex)]="tabsIndex"
       >
         <eo-ng-tab [nzTitle]="apiTitle">
@@ -49,146 +50,134 @@
       <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
     </nz-content>
   </nz-sider>
-  <nz-layout class="right-layout">
-    <nz-content>
-      <div class="inner-content">
-        <div class="flex items-center tabs-bar">
-          <!-- API Tab -->
-          <eo-tab
-            class="flex-1"
-            [list]="apiTab.BASIC_TABS"
-            [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspaceInfo.id) + '_TabCache'"
-            [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
-            [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
-            (beforeClose)="apiTab.beforeTabClose($event)"
-            [addDropDown]="newTabTemplate"
-            [titleLabel]="titleLabel"
-            #apiTabComponent
-          ></eo-tab>
-          <eo-ng-dropdown-menu #newTabTemplate>
-            <ul nz-menu>
-              <li nz-menu-item (click)="apiTabComponent.newTab()">HTTP</li>
-              <li nz-menu-item (click)="apiTabComponent.newTab('ws')">Websocket</li>
-            </ul>
-          </eo-ng-dropdown-menu>
-          <ng-template #titleLabel let-item="item">
-            <span class="mr-[5px] method-text method_text_{{ item?.extends?.method || 'WS' }}">
-              {{ item?.extends?.method || 'WS' }}</span
-            >
-          </ng-template>
-          <!-- Env Select -->
-          <div class="flex items-center fix-mt">
-            <eo-ng-select
-              [(ngModel)]="envUuid"
-              [(nzOpen)]="isOpen"
-              (nzOpenChange)="handleEnvSelectStatus($event)"
-              [nzDropdownRender]="renderTemplate"
-              nzAllowClear
-              i18n-nzPlaceHolder="Environment Dropdown placeholder"
-              [nzOptions]="renderEnvList"
-              nzPlaceHolder="Environment"
-              #envSelect
-            >
-            </eo-ng-select>
-            <ng-template #renderTemplate>
-              <nz-divider *ngIf="!store.isShare"></nz-divider>
-              <a
-                *ngIf="!store.isShare"
-                class="text-sx manager-env"
-                eo-ng-button
-                nzType="link"
-                (click)="gotoEnvManager()"
-                i18n
-                >Manage Environment</a
-              >
-            </ng-template>
+  <nz-content class="inner-content">
+    <!--Tab Bar -->
+    <nz-header class="flex items-center tabs-bar">
+      <eo-tab
+        class="flex-1"
+        [list]="apiTab.BASIC_TABS"
+        [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspaceInfo.id) + '_TabCache'"
+        [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
+        [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
+        (beforeClose)="apiTab.beforeTabClose($event)"
+        [addDropDown]="newTabTemplate"
+        [titleLabel]="titleLabel"
+        #apiTabComponent
+      ></eo-tab>
+      <eo-ng-dropdown-menu #newTabTemplate>
+        <ul nz-menu>
+          <li nz-menu-item (click)="apiTabComponent.newTab()">HTTP</li>
+          <li nz-menu-item (click)="apiTabComponent.newTab('ws')">Websocket</li>
+        </ul>
+      </eo-ng-dropdown-menu>
+      <ng-template #titleLabel let-item="item">
+        <span class="mr-[5px] font-light method-text method_text_{{ item?.extends?.method || 'WS' }}">
+          {{ item?.extends?.method || 'WS' }}</span
+        >
+      </ng-template>
+      <!-- Env Select -->
+      <div class="flex items-center fix-mt">
+        <eo-ng-select
+          [(ngModel)]="envUuid"
+          [(nzOpen)]="isOpen"
+          (nzOpenChange)="handleEnvSelectStatus($event)"
+          [nzDropdownRender]="renderTemplate"
+          nzAllowClear
+          i18n-nzPlaceHolder="Environment Dropdown placeholder"
+          [nzOptions]="renderEnvList"
+          nzPlaceHolder="Environment"
+          #envSelect
+        >
+        </eo-ng-select>
+        <ng-template #renderTemplate>
+          <nz-divider *ngIf="!store.isShare"></nz-divider>
+          <a
+            *ngIf="!store.isShare"
+            class="text-sx manager-env"
+            eo-ng-button
+            nzType="link"
+            (click)="gotoEnvManager()"
+            i18n
+            >Manage Environment</a
+          >
+        </ng-template>
+        <button
+          eo-ng-button
+          nzType="text"
+          class="flex items-center justify-center mx-1 icon"
+          i18n-nzTooltipTitle
+          eoNgFeedbackTooltip
+          [nzTooltipMouseEnterDelay]="0.8"
+          [nzTooltipMouseLeaveDelay]="0"
+          nzTooltipTitle="Environment Quick Look"
+          nz-popover
+          [nzPopoverContent]="envParams"
+          nzTooltipPlacement="bottomRight"
+          nzPopoverPlacement="bottomRight"
+          nzPopoverTrigger="click"
+        >
+          <eo-iconpark-icon name="preview-open"></eo-iconpark-icon>
+        </button>
+        <ng-template #envParams>
+          <!-- <env-list></env-list> -->
+        </ng-template>
+      </div>
+    </nz-header>
+    <!-- Content -->
+    <nz-layout class="content_container {{ this.id ? 'has_tab_page' : '' }}">
+      <nz-layout>
+        <!-- Child Tab Bar -->
+        <eo-ng-tabset class="inside_page_tabset" *ngIf="this.id" nzLinkRouter>
+          <eo-ng-tab *ngFor="let tab of renderTabs">
+            <p *ngIf="web.isWeb && tab.onlyDestop">
+              <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
+            </p>
+            <div *ngIf="!web.isWeb || !tab.onlyDestop">
+              <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
+                {{ tab.title }}
+                <nz-badge
+                  *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
+                  class="ant-badge-theme-color"
+                  nzStatus="default"
+                ></nz-badge>
+              </a>
+            </div>
+          </eo-ng-tab>
+        </eo-ng-tabset>
+        <!-- Get router child component by activate -->
+        <router-outlet (activate)="onActivate($event)"></router-outlet>
+      </nz-layout>
+      <!-- Right Sider -->
+      <nz-sider
+        *ngIf="!store.isShare"
+        nz-resizable
+        [nzWidth]="rightSiderWidth"
+        [nzMaxWidth]="500"
+        [nzMinWidth]="RIGHT_SIDER_SHRINK_WIDTH"
+        (nzResize)="onRightPanelResize($event)"
+      >
+        <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left">
+        </nz-resize-handle>
+        <div class="flex h-full">
+          <div class="flex flex-col p-2">
             <button
+              type="button"
               eo-ng-button
               nzType="text"
-              class="flex items-center justify-center mx-1 icon"
-              i18n-nzTooltipTitle
+              class="flex items-center justify-center"
+              [ngClass]="rightSiderWidth > 100 ? 'active' : ''"
+              (click)="toggleRightBar('open')"
               eoNgFeedbackTooltip
-              [nzTooltipMouseEnterDelay]="0.8"
               [nzTooltipMouseLeaveDelay]="0"
-              nzTooltipTitle="Environment Quick Look"
-              nz-popover
-              [nzPopoverContent]="envParams"
-              nzTooltipPlacement="bottomRight"
-              nzPopoverPlacement="bottomRight"
-              nzPopoverTrigger="click"
+              i18n-nzTooltipTitle="@@Environment Setting"
+              nzTooltipTitle="Environment Setting"
             >
-              <eo-iconpark-icon name="preview-open"></eo-iconpark-icon>
+              <eo-iconpark-icon name="application"></eo-iconpark-icon>
             </button>
-            <ng-template #envParams>
-              <!-- <env-list></env-list> -->
-            </ng-template>
           </div>
+          <eo-env class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env>
         </div>
-        <div class="content_container {{ this.id ? 'has_tab_page' : '' }}">
-          <eo-ng-tabset
-            class="inside_page_tabset"
-            [nzTabBarStyle]="{ 'padding-left': '10px' }"
-            *ngIf="this.id"
-            nzLinkRouter
-          >
-            <eo-ng-tab *ngFor="let tab of renderTabs">
-              <p *ngIf="web.isWeb && tab.onlyDestop">
-                <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
-              </p>
-              <div *ngIf="!web.isWeb || !tab.onlyDestop">
-                <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
-                  {{ tab.title }}
-                  <nz-badge
-                    *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
-                    class="ant-badge-primary"
-                    nzStatus="default"
-                  ></nz-badge>
-                </a>
-              </div>
-            </eo-ng-tab>
-          </eo-ng-tabset>
-        </div>
-        <section class="relative">
-          <!-- Get router child component by activate -->
-          <div style="width: calc(100% - {{ dyWidth }}px)">
-            <router-outlet (activate)="onActivate($event)"></router-outlet>
-          </div>
-
-          <div
-            *ngIf="!store.isShare"
-            class="absolute top-0 bottom-0 right-0 flex right-bar"
-            nz-resizable
-            [style.width.px]="dyWidth"
-            [nzMaxWidth]="500"
-            [nzMinWidth]="RIGHT_BAR_WIDTH"
-            (nzResize)="onRightPanelResize($event)"
-          >
-            <nz-resize-handle
-              *ngIf="!store.isShare"
-              class="bottom-0 z-10 vertical container-draggable"
-              nzDirection="left"
-            >
-            </nz-resize-handle>
-            <div class="flex flex-col p-2">
-              <button
-                type="button"
-                eo-ng-button
-                nzType="text"
-                class="flex items-center justify-center"
-                [ngClass]="dyWidth > 100 ? 'active' : ''"
-                (click)="toggleRightBar('open')"
-                eoNgFeedbackTooltip
-                [nzTooltipMouseLeaveDelay]="0"
-                i18n-nzTooltipTitle="@@Environment Setting"
-                nzTooltipTitle="Environment Setting"
-              >
-                <eo-iconpark-icon name="application"></eo-iconpark-icon>
-              </button>
-            </div>
-            <eo-env class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env>
-          </div>
-        </section>
-      </div>
-    </nz-content>
-  </nz-layout>
+      </nz-sider>
+    </nz-layout>
+  </nz-content>
 </nz-layout>

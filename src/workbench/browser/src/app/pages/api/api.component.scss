@@ -1,5 +1,4 @@
 nz-content {
-  width: 100%;
   background-color: var(--MAIN_BG);
 }
 :lang(zh) {
@@ -7,16 +6,18 @@ nz-content {
     width: 132px;
   }
 }
-
+.ant-layout{
+  background-color: var(--MAIN_BG);
+}
 :lang(en) {
   .ant-select {
     width: 162px;
   }
 }
-
-nz-sider {
-  width: 250px;
-  background-color: #fff;
+.active {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+  color: var(--MAIN_TEXT);
 }
 
 .fix-mt {
@@ -26,45 +27,27 @@ nz-sider {
 nz-divider {
   margin: 0.1em 0;
 }
-
+.tabs-bar {
+  background-color: var(--SEC_BG);
+  box-sizing: border-box;
+  padding:0;
+  height: var(--PAGE_TABS_HEIGHT);
+  display: flex;
+  margin-bottom: -1px;
+  align-items: center;
+  justify-content: space-between;
+  eo-tab {
+    width: calc(100% - 200px);
+  }
+}
 :host ::ng-deep {
   .ant-layout-sider-children {
-    position: relative;
-    display: flex;
-    // border-right: 1px solid #f0f0f0;
-    // padding: 0 10px;
-    .group-btn-add,
-    .group-search {
-      margin-bottom: 12px;
-    }
-    .sider-resize-line {
-      @apply absolute w-[1px] bg-[#f8f8f9] flex items-center justify-center flex-col right-0 top-0 bottom-0;
-      cursor: col-resize;
-      &:hover,
-      &.is-drag {
-        width: 6px;
-        right: -3px;
-        background: #68be8d;
-        border-color: #68be8d;
-        z-index: 20;
-        i {
-          opacity: 1;
-        }
-      }
-      > i {
-        opacity: 0;
-        margin: 1px 0;
-        height: 2px;
-        width: 2px;
-        border-radius: 2px;
-        background: rgba(23, 35, 61, 0.25);
-      }
-    }
+    width: 100%;
   }
 
   .api-container-tabs {
     .ant-tabs-nav {
-      height: 40px;
+      height: var( --PAGE_TABS_HEIGHT);
     }
     .ant-tabs-nav-list {
       width: 100%;
@@ -77,14 +60,6 @@ nz-divider {
       }
     }
   }
-  .tabs-bar {
-    background-color: var(--SEC_BG);
-    padding: 5px 0px 0px 5px;
-    display: flex;
-    margin-bottom: -1px;
-    align-items: center;
-    justify-content: space-between;
-  }
   .share-group-tabset {
     .ant-tabs-nav {
       display: none;
@@ -93,82 +68,15 @@ nz-divider {
   .content_container {
     border-top: 1px solid var(--BORDER);
     .inside_page_tabset {
-      .ant-tabs-tab-active {
-        a {
-          color: var(--MAIN_THEME_COLOR);
-        }
-      }
-      a {
-        color: #999;
-      }
     }
   }
   .ant-tabs-nav,
   .ant-tabs-extra-content {
-    height: 42px;
+    height: 43px;
   }
 
-  .param_header {
+  .param-box-header {
     padding: 5px 15px;
     box-sizing: border-box;
-    // >div{
-    //   min-height: 32px;
-    // }
-    .ant-radio-wrapper {
-      // font-size: 12px;
-    }
-    .ant-radio-inner {
-      width: 14px;
-      height: 14px;
-    }
-    .ant-radio-inner::after {
-      width: 14px;
-      height: 14px;
-      margin-top: -7px;
-      margin-left: -7px;
-    }
-  }
-  .param_header + list-block-common-component .wrap_lbcc {
-    border-top: 1px solid var(--BORDER);
-  }
-  .ant-divider {
-    // margin: 10px 0;
-  }
-
-  .env {
-    border: 2px solid pink;
-  }
-  .right-bar {
-    // transition: 0.1s all ease;
-    &.left-line {
-      border-left: 1px solid rgba(0, 0, 0, 0.07);
-    }
-    button.active {
-      background: rgba(0, 0, 0, 0.1);
-      border-color: transparent;
-      color: var(--MAIN_TEXT);
-    }
-  }
-
-  .api-container-tabs {
-    .ant-tabs-tab {
-      padding: 0.2em 0;
-      padding: 0;
-      margin: 0;
-      .ant-tabs-tab-btn {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .tab-content {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-    }
   }
 }

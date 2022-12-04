@@ -1,7 +1,7 @@
 <div class="px-3">
   <div class="grid grid-cols-2 gap-6 py-5 list-block">
     <div
-      class="border-all w-full min-h-[140px] p-5 flex flex-col flex-wrap plugin-block hover:border-green-700 hover:shadow-lg transition-shadow duration-300"
+      class="border-all w-full min-h-[140px] p-5 flex flex-col flex-wrap plugin-block hover:shadow-lg transition-shadow duration-300"
       *ngFor="let it of renderList" (click)="clickExtension($event, it)">
       <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzAvatar]="true">
         <div class="flex justify-between w-full">
@@ -30,7 +30,7 @@
           </div>
           <div *ngIf="type !== 'installed'">
             <span *ngIf="extensionService.localExtensions.has(it.name)"
-              class="p-1 text-xs text-green-700 border-green-700 rounded-sm border-all whitespace-nowrap"
+              class="p-1 text-xs text-green-700 rounded-sm border-all whitespace-nowrap"
               i18n>Installed</span>
           </div>
         </div>

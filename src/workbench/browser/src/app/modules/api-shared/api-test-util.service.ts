@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { ApiTestHeaders, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../../pages/api/service/api-test/api-test.model';
+import { ApiTestHeaders, ContentType } from '../../pages/api/service/api-test/api-test.model';
 import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../shared/services/storage/index.model';
 import { eoDeepCopy } from '../../utils/index.utils';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
-import { omit } from 'lodash-es';
 import { filterTableData } from '../../utils/tree/tree.utils';
+import omitDeep from 'omit-deep-lodash';
 
 @Injectable()
 export class ApiTestUtilService {
@@ -77,7 +77,7 @@ export class ApiTestUtilService {
    * @returns apiData
    */
   formatEditingApiData(formData): ApiTestData {
-    const result = omit(eoDeepCopy(formData),['eoKey']) as ApiTestData;
+    const result = eoDeepCopy(formData) as ApiTestData;
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach((tableName) => {
       if (whatType(result[tableName]) !== 'array') {
         return;
@@ -96,7 +96,7 @@ export class ApiTestUtilService {
     const result = {};
     const bodyInfo = text2table(text);
     if (bodyInfo.textType !== 'raw') {
-      result[`${keyName}`] = bodyInfo.data.map((val) => omit(val, ['value', 'eoKey']));
+      result[`${keyName}`] = bodyInfo.data.map((val) => omitDeep(val, ['value']));
     } else {
       result[`${keyName}`] = bodyInfo.data;
     }
@@ -105,14 +105,15 @@ export class ApiTestUtilService {
     return result;
   }
   /**
-   * Transfer test data/test history to api data
+   * Transfer test/history data to  api ui data
+   * Test Page: Save as API
    *
    * @param inData.history
    * @param inData.testData - test request info
    * @returns
    */
   formatSavingApiData(inData): ApiData {
-    console.log('formatSavingApiData', eoDeepCopy(inData));
+    // console.log('formatSavingApiData', eoDeepCopy(inData));
     const result = {
       ...inData.testData,
       responseHeaders: this.filterCommonHeader(inData.history.response.headers) || [],

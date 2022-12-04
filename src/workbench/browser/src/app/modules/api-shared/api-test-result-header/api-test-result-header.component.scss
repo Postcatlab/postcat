@@ -1,6 +1,9 @@
-li{
-    line-height: 30px;
+:host {
+  display: block;
 }
-.c6{
-    color: #666;
+ul {
+  list-style-type: none;
+}
+.header-key {
+  color: var(--TIPS_TEXT_COLOR);
 }

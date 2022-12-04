@@ -2,32 +2,51 @@ import { Injectable } from '@angular/core';
 import { omit } from 'lodash-es';
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
 import { ApiTestParamsTypeFormData } from '../../pages/api/service/api-test/api-test.model';
-import { ModalService } from '../../shared/services/modal.service';
+import { ModalOptions, ModalService } from '../../shared/services/modal.service';
 import {
   ApiBodyType,
   ApiParamsTypeFormData,
   ApiParamsTypeJsonOrXml,
   REQURIED_ENUMS,
 } from '../../shared/services/storage/index.model';
+import { filterTableData } from '../../utils/tree/tree.utils';
 import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
-  showMore(item) {
+  showMore(item, opts: {in: string;isEdit: boolean }) {
     return new Promise((resolve) => {
-      const modal = this.modalService.create({
+      const modalConf: ModalOptions = {
         nzTitle: $localize`Advanced Settings`,
         nzContent: ApiParamsExtraSettingComponent,
         nzWidth: '60%',
         nzComponentParams: {
+          in: opts.in,
           model: [omit(item, ['children'])],
+          isEdit: opts.isEdit,
         },
-        nzOnOk() {
-          resolve(modal.componentInstance.model);
+      };
+      if (opts.isEdit) {
+        modalConf.nzOnOk = () => {
+          const model = modal.componentInstance.model[0];
+          model.enum = filterTableData(model.enum, {
+            primaryKey: 'value',
+          });
+          resolve(model);
           modal.destroy();
-        },
-      });
+        };
+      } else {
+        modalConf.nzFooter = [
+          {
+            label: $localize`Cancel`,
+            onClick: () => {
+              modal.destroy();
+            },
+          },
+        ];
+      }
+      const modal = this.modalService.create(modalConf);
     });
   }
   initTable(
@@ -42,7 +61,7 @@ export class ApiTableService {
   ): { columns: any[]; setting: TableProSetting } {
     const columnMUI = {
       name: {
-        title: $localize`Param Name`,
+        title: inArg.in === 'header' ? $localize`:@@HeaderName:Key` : $localize`:@@ParamName:Name`,
         left: true,
         type: 'input',
         columnVisible: 'fixed',
@@ -82,10 +101,13 @@ export class ApiTableService {
             icon: 'more',
             title: $localize`Advanced Settings`,
             click: (item) => {
-              this.showMore(item.data).then((res) => {
-                Object.assign(item.data, res[0]);
+              this.showMore(item.data, {
+                in: inArg.in,
+                isEdit: true,
+              }).then((res) => {
+                Object.assign(item.data, res);
                 if (!opts.changeFn) {
-                  console.error('changeFn is not defined');
+                  console.warn('Advance Sttings need changeFn is not defined');
                   return;
                 }
                 opts.changeFn();
@@ -103,7 +125,15 @@ export class ApiTableService {
         btns: [
           {
             icon: 'more',
-            click: () => {},
+            showFn: ({ data }) =>
+              data.enum?.length || data.minimum || data.maximum || data.maxLength || data.minLength || data.example,
+            title: $localize`Advanced Settings`,
+            click: (item) => {
+              this.showMore(item.data, {
+                in: inArg.in,
+                isEdit: false,
+              });
+            },
           },
         ],
       },
@@ -198,7 +228,7 @@ export class ApiTableService {
       required: {
         type: 'checkbox',
         key: 'required',
-        width: 25,
+        width: 30,
         enums: REQURIED_ENUMS,
       },
       value: {
@@ -215,7 +245,7 @@ export class ApiTableService {
             action: 'delete',
           },
         ],
-      }
+      },
     };
     const result = {
       columns: [],
@@ -232,15 +262,15 @@ export class ApiTableService {
     let columnsArr = [];
     switch (inArg.in) {
       case 'body': {
-        columnsArr = ['required', 'name','type', 'value','editOperate'];
+        columnsArr = ['required', 'name', 'type', 'value', 'editOperate'];
         break;
       }
       default: {
-        columnsArr = ['required', 'name', 'value','editOperate'];
+        columnsArr = ['required', 'name', 'value', 'editOperate'];
         break;
       }
     }
-    const types =ApiTestParamsTypeFormData ;
+    const types = ApiTestParamsTypeFormData;
     result.columns = columnsArr.map((keyName) => {
       const column = columnMUI[keyName];
       if (!column) {

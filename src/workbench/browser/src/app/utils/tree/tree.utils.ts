@@ -1,7 +1,5 @@
 import { GroupTreeItem } from '../../shared/models';
-import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { omit } from 'lodash-es';
-
+import omitDeep from 'omit-deep-lodash';
 export type TreeToObjOpts = {
   key?: string;
   valueKey?: string;
@@ -15,7 +13,7 @@ const filterTree = (
   }
 ) =>
   result.filter((item) => {
-    const hasKeep = filterFn(item);
+    const hasKeep = filterFn ? filterFn(item) : true;
     if (!hasKeep) {
       return false;
     }
@@ -25,17 +23,21 @@ const filterTree = (
     return true;
   });
 export const filterTableData = (
-  inData,
-  opts?: {
+  inData: any[],
+  opts: {
     childKey?: string;
     primaryKey?: string;
     filterFn?: (item: any) => boolean;
-  }
+  } = {}
 ) => {
-  opts.childKey=opts.childKey||'children';
-  const result = inData.map((val) => omit(val, ['eoKey']));
+  opts.childKey = opts.childKey || 'children';
+  const result = inData.map((val) => omitDeep(val, ['eoKey']));
   if (!opts.filterFn) {
-    opts.filterFn = (item) => item[opts.primaryKey];
+    if (!opts.primaryKey) {
+      console.error('[EO_ERROR]: filterTableData need primaryKey');
+    } else {
+      opts.filterFn = (item) => item[opts.primaryKey];
+    }
   }
   return filterTree(result, opts.filterFn, {
     childKey: opts.childKey,
@@ -78,7 +80,6 @@ export const flatData = (data) => {
   });
   return arr;
 };
-
 
 export const getExpandGroupByKey: (component, key) => string[] = (component, key) => {
   if (!component) {

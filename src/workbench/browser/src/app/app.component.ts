@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
-import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'eo-root',
@@ -9,12 +8,10 @@ import { ThemeService } from './core/services/theme.service';
 })
 export class AppComponent {
   constructor(
-    private theme: ThemeService,
     private webExtensionService: WebExtensionService,
     private globalProvider: GlobalProvider
   ) {
     this.webExtensionService.init();
-    this.theme.changeTheme();
     this.globalProvider.injectGlobalData();
   }
 }

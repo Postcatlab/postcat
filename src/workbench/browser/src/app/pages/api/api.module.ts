@@ -30,7 +30,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   imports: [
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule,
     CommonModule,
     ApiRoutingModule,
     EnvModule,

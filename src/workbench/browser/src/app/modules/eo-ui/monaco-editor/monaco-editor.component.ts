@@ -16,6 +16,7 @@ import type { editor, IDisposable } from 'monaco-editor';
 import type MonacoEditor from 'monaco-editor';
 import { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 import { defaultCompletions } from './defaultCompletions';
+import { ThemeService } from '../../../core/services/theme.service';
 
 declare const monaco: typeof MonacoEditor;
 
@@ -118,7 +119,12 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     return Number.isNaN(Number(val));
   }
 
-  constructor(private message: EoNgFeedbackMessageService, private electron: ElectronService, elementRef: ElementRef) {
+  constructor(
+    private message: EoNgFeedbackMessageService,
+    private electron: ElectronService,
+    private theme: ThemeService,
+    elementRef: ElementRef
+  ) {
     this.el = elementRef.nativeElement;
   }
 
@@ -366,5 +372,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   onEditorInitialized(codeEdtor) {
     this.codeEdtor = codeEdtor;
     this.initMonacoEditorEvent();
+    //Manual change theme,don't use options.theme,it will not be replace by setTheme function
+    this.theme.changeEditorTheme();
   }
 }

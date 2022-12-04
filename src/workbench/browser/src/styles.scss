@@ -1,6 +1,7 @@
 // @import "tailwindcss/base";
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import './styles/atom.scss';
 
 @import '../../../node_modules/eo-ng-checkbox/styles.scss';
 @import '../../../node_modules/eo-ng-select/styles.scss';
@@ -27,7 +28,8 @@ body {
 :root {
   --NAVBAR_HEIGHT: 50px;
   --FOOTER_HEIGHT: 30px;
-  --API_TABS_HEIGHT: 36px;
+  --PAGE_TABS_HEIGHT: 43px;
+  --PAGE_INSIDE_TABS_HEIGHT: 40px;
 }
 
 img,
@@ -70,16 +72,7 @@ object {
 .method_text_OPTIONS {
   color: var(--BLACK_TAG_BG);
 }
-.eo-search-input {
-  height: 32px;
-  border-color: transparent;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 0.9em;
-  }
-}
+
 
 ::-webkit-scrollbar {
   width: 16px;
@@ -92,11 +85,11 @@ object {
   border-color: #eee0;
   border-style: solid;
   border-radius: 50px;
-  border-width: 4px;
+  // border-width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background-color: var(--SCROLL_BAR_BG);
-  border-color: var(--BORDER);
+  // background-color: var(--SCROLL_BAR_BG);
+  border-color:transparent;
   border-style: solid;
   border-left-width: 1px;
   border-top-width: 0px;

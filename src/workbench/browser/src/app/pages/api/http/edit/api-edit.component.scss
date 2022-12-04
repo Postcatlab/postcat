@@ -4,9 +4,7 @@
 .ant-select {
   height: 32px;
 }
-.ant-form-item-label {
-  font-weight: bold;
-}
+
 eo-api-edit-header,
 eo-api-edit-body,
 eo-api-edit-query,
@@ -17,4 +15,14 @@ eo-api-edit-rest {
   @apply sticky top-0 z-10 py-2.5;
   background-color: var(--BTN_SEC_BG_HOVER);
   border-bottom: 1px solid var(--BORDER);
+}
+.content {
+  overflow: auto;
+  height: calc(100% - 55px);
+}
+
+:host ::ng-deep {
+  .group-select.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-radius: var(--DEFAULT_BORDER_RADIUS) 0 0 var(--DEFAULT_BORDER_RADIUS);
+  }
 }

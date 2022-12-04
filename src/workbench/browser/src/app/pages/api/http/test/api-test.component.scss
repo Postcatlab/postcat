@@ -4,12 +4,8 @@
 .ant-form-item {
   margin-bottom: 0;
 }
-.ant-select {
-  height: 32px;
-}
-.basic_info_container {
+.header-container {
   padding: 10px;
-  background-color: var(--MAIN_BG);
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 0px;
@@ -50,6 +46,23 @@ div.ant-typography {
   margin-bottom: 0;
 }
 :host ::ng-deep {
+  .header-container {
+    eo-ng-select,
+    .ant-input,
+    .ant-btn {
+      height: 40px;
+    }
+    eo-ng-select eo-ng-select-top-control,
+    .ant-input {
+      background-color: var(--BTN_SEC_BG_HOVER) !important;
+    }
+
+    eo-ng-select {
+      eo-ng-select-top-control {
+        height: 100% !important;
+      }
+    }
+  }
   .ant-tabs-content-holder {
     height: calc(100% - 35px);
     overflow: auto;
@@ -72,13 +85,6 @@ div.ant-typography {
       .ant-tabs-tabpane {
         height: 100%;
         overflow: hidden;
-      }
-      .ant-tabs-nav,
-      .param_header {
-        // position: sticky;
-        // top: 0;
-        // z-index: 10;
-        // background-color: white;
       }
       .ant-tabs-content {
         overflow: hidden;

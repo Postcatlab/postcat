@@ -21,7 +21,6 @@
     width: 100%;
   }
   .ant-tabs-tab {
-    color: #333;
     padding: 10px 0;
   }
   .preview_tab {
@@ -38,7 +37,7 @@
     }
     .ant-descriptions-item-content,
     .ant-descriptions-item-label {
-      color: #999;
+      color: var( --TIPS_TEXT_COLOR);
     }
   }
 }

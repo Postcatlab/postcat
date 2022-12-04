@@ -11,6 +11,7 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { AboutComponent, DataStorageComponent, LanguageSwticherComponent } from './common';
 import { AccountComponent } from '../../pages/account.component';
+import { SelectThemeComponent } from './common/select-theme/select-theme.component';
 
 const ANTDMODULES = [
   NzDividerModule,
@@ -20,7 +21,7 @@ const ANTDMODULES = [
   NzTreeViewModule
 ];
 @NgModule({
-  declarations: [SettingComponent, AccountComponent, DataStorageComponent, LanguageSwticherComponent, AboutComponent],
+  declarations: [SettingComponent,SelectThemeComponent, AccountComponent, DataStorageComponent, LanguageSwticherComponent, AboutComponent],
   imports: [FormsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
   exports: [SettingComponent],
 })

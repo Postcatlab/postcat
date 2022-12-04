@@ -8,29 +8,13 @@ import {
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
-  templateUrl: './api-params-extra-setting.component.html'
+  templateUrl: './api-params-extra-setting.component.html',
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
   @Input() model: { type: string | ApiParamsTypeJsonOrXml } & BasiApiEditParams;
-  listConfBasicInfo = [
-    {
-      title: $localize`Param Name`,
-      key: 'name',
-    },
-    {
-      title: $localize`Type`,
-      key: 'type',
-    },
-    {
-      title: $localize`Required`,
-      key: 'required',
-      enums:REQURIED_ENUMS,
-    },
-    {
-      title: $localize`:@@Description:Description`,
-      key: 'description',
-    },
-  ];
+  @Input() isEdit = true;
+  @Input() in: 'body' | 'header' | 'query' | 'rest';
+  listConfBasicInfo;
   listConfLenthInterval = [
     {
       title: $localize`Minimum length`,
@@ -55,6 +39,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       key: 'maximum',
     },
   ];
+
   itemStructureEnums: ParamsEnum = {
     value: '',
     description: '',
@@ -64,7 +49,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       title: $localize`Value Enum`,
       type: 'input',
       key: 'value',
-      placeholder: $localize`enum`
+      placeholder: $localize`enum`,
     },
     {
       title: $localize`Description`,
@@ -74,10 +59,10 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     },
     {
       type: 'btnList',
-      width:100,
+      width: 100,
       btns: [
         {
-          action: 'delete'
+          action: 'delete',
         },
       ],
     },
@@ -85,6 +70,43 @@ export class ApiParamsExtraSettingComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
+    this.listConfBasicInfo = [
+      {
+        title: $localize`Param Name`,
+        key: 'name',
+      },
+      ...(this.in === 'body'
+        ? [
+            {
+              title: $localize`Type`,
+              key: 'type',
+            },
+          ]
+        : []),
+      {
+        title: $localize`Required`,
+        key: 'required',
+        enums: REQURIED_ENUMS,
+      },
+      {
+        title: $localize`:@@Description:Description`,
+        key: 'description',
+      },
+    ];
+    if (!this.isEdit) {
+      ['listConfValueInterval', 'listConfEnums', 'listConfValueInterval'].forEach((configName) => {
+        this[configName].forEach((column, index) => {
+          //Change edit to preview
+          if (['inputNumber', 'input'].includes(column.type)) {
+            column.type = 'text';
+          }
+          const hiddenOperate = !this.isEdit && column.type === 'btnlist';
+          if (hiddenOperate) {
+            this[configName].splice(index, 1);
+          }
+        });
+      });
+    }
     if (this.model[0] && (!this.model[0].enum || !this.model[0].enum.length)) {
       this.model[0].enum = this.model[0].enum || [];
     }

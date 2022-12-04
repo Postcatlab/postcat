@@ -26,7 +26,9 @@ export const formatUri = (uri, rest = []) => {
     return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
   }, {});
   Object.keys(restByName).forEach((restName) => {
-    result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
+    try {
+      result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
+    } catch (e) {}
   });
   return result;
 };

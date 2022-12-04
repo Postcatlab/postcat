@@ -13,7 +13,7 @@ import { ApiEditQuery } from '../../../../../shared/services/storage/index.model
 
 @Component({
   selector: 'eo-api-edit-query',
-  template: `<div class="param_header flex items-center h-10">
+  template: `<div class="param-box-header flex items-center h-10">
       <params-import [(baseData)]="model" contentType="query" modalTitle="Query"></params-import>
     </div>
     <eo-ng-table-pro
@@ -51,6 +51,10 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
     const config = this.apiTable.initTable({
       in: 'header',
       isEdit: true,
+    },{
+      changeFn: () => {
+        this.modelChange.emit(this.model);
+      }
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

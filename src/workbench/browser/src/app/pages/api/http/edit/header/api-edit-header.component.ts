@@ -10,7 +10,7 @@ import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared
 import { ApiEditHeaders } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-edit-header',
-  template: `<div class="param_header flex items-center h-10">
+  template: `<div class="param-box-header flex items-center h-10">
       <params-import
         [(baseData)]="model"
         contentType="formData"
@@ -48,6 +48,10 @@ export class ApiEditHeaderComponent implements OnInit {
     const config = this.apiTable.initTable({
       in: 'header',
       isEdit: true,
+    },{
+      changeFn: () => {
+        this.modelChange.emit(this.model);
+      }
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

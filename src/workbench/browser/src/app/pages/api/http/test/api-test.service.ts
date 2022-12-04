@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import { CONTENT_TYPE_BY_ABRIDGE } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import {
   ApiTestData,
@@ -41,7 +40,7 @@ export class ApiTestService {
           {
             required: true,
             name: 'content-type',
-            value: CONTENT_TYPE_BY_ABRIDGE['application/json'],
+            value:'application/json',
           },
         ],
       }

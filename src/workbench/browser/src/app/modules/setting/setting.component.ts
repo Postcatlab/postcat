@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
@@ -29,6 +29,7 @@ interface FlatNode {
   styleUrls: ['./setting.component.scss'],
 })
 export class SettingComponent implements OnInit {
+  @Input() selectedModule:string;
   extensitonConfigurations: any[];
   objectKeys = Object.keys;
   isClick = false;
@@ -82,6 +83,10 @@ export class SettingComponent implements OnInit {
           moduleID: 'eoapi-account-password',
         },
       ],
+    },
+    {
+      name: $localize`:@@Theme:Theme`,
+      moduleID: 'eoapi-theme',
     },
     ...(this.webService.isWeb
       ? []
