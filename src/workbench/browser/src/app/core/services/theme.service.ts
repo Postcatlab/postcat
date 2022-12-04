@@ -43,8 +43,8 @@ export class ThemeService {
     return appearance === 'dark' ? 'vs-dark' : 'vs';
   }
   changeEditorTheme(theme?) {
-    theme=theme||this.getEditorTheme(this.appearance);
-    console.log('changeEditorTheme',theme,this.appearance);
+    theme = theme || this.getEditorTheme(this.appearance);
+    console.log('changeEditorTheme', theme, this.appearance);
     if (window.monaco?.editor) {
       window.monaco?.editor.setTheme(theme);
     }
@@ -62,17 +62,27 @@ export class ThemeService {
     }
     const module = this.module[mid];
     const href = `${module.path}${name}.css`;
-    this.loadCss(href, name, module.injectDirection).then(() => {
-      if (!firstLoad) {
-        this.removeCss(this[mid]);
-        //@ts-ignore
-        this[mid] = name;
-      }
-      if(mid==='appearance'){
-        this.changeEditorTheme(this.getEditorTheme(name));
-      }
+    if(mid==='mainColor'&&name==='default'){
+      this.removeCss(this[mid]);
+      //@ts-ignore
+      this[mid] = name;
       StorageUtil.set(module.storageKey, name);
-    });
+      return;
+    }
+    this.loadCss(href, name, module.injectDirection)
+      .then(() => {
+        if (!firstLoad) {
+          this.removeCss(this[mid]);
+          //@ts-ignore
+          this[mid] = name;
+        }
+        if (mid === 'appearance') {
+          this.changeEditorTheme(this.getEditorTheme(name));
+        }
+        StorageUtil.set(module.storageKey, name);
+      })
+      .catch((e) => {
+      });
   }
   private removeCss(theme): void {
     const removedThemeStyle = document.getElementById(theme);
