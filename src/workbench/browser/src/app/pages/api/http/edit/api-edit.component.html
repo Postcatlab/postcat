@@ -1,27 +1,38 @@
 <div class="top-save-bar px-[20px] py-[10px]">
   <button type="submit" eo-ng-button nzType="primary" (click)="saveApi()" i18n>Save</button>
 </div>
-<div class="content !pt-0 p-[20px]">
+<div class="content p-[20px]">
   <form nz-form [formGroup]="validateForm" [nzLayout]="'vertical'">
-    <nz-form-label class="mt-4" nzFor="uri" i18n>API Path</nz-form-label>
     <eo-ng-input-group nzCompact>
-      <eo-ng-select [(ngModel)]="model.protocol" formControlName="protocol">
+      <eo-ng-select
+        class="!w-[15%] !min-w-[100px] !max-w-[200px]"
+        [(ngModel)]="model.protocol"
+        formControlName="protocol"
+      >
         <eo-ng-option *ngFor="let item of REQUEST_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
       </eo-ng-select>
-      <eo-ng-select class="w-[106px]" [(ngModel)]="model.method" formControlName="method">
+      <eo-ng-select class="!w-[15%] !min-w-[100px] !max-w-[200px]" [(ngModel)]="model.method" formControlName="method">
         <eo-ng-option *ngFor="let item of REQUEST_METHOD" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
       </eo-ng-select>
       <nz-form-item nz-col class="flex-1">
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter API Path">
-          <input type="text" [(ngModel)]="model.uri" name="uri" id="uri" eo-ng-input formControlName="uri" />
+          <input
+            type="text"
+            class="rounded-r"
+            [(ngModel)]="model.uri"
+            name="uri"
+            id="uri"
+            eo-ng-input
+            formControlName="uri"
+          />
         </nz-form-control>
       </nz-form-item>
     </eo-ng-input-group>
-    <nz-form-label nzFor="name" i18n>Group / API Name</nz-form-label>
     <eo-ng-input-group nzCompact>
-      <nz-form-item nz-col>
-        <nz-form-control class="w_250" i18n-nzErrorTip nzErrorTip="Please select an API group">
+      <nz-form-item class="w-[30%] !mb-0" nz-col>
+        <nz-form-control i18n-nzErrorTip nzErrorTip="Please select an API group">
           <eo-ng-tree-select
+            class="group-select"
             nzAllowClear="false"
             [nzExpandedKeys]="expandKeys"
             [nzDropdownMatchSelectWidth]="false"
@@ -34,13 +45,21 @@
           </eo-ng-tree-select>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nz-col class="flex-1">
+      <nz-form-item nz-col class="flex-1 !mb-0">
         <nz-form-control
           i18n-nzErrorTip
           nzErrorTip="Please enter API name"
           [nzValidateStatus]="this.validateForm.controls.name"
         >
-          <input type="text" [(ngModel)]="model.name" name="name" id="name" eo-ng-input formControlName="name" />
+          <input
+            type="text"
+            class="rounded-r"
+            [(ngModel)]="model.name"
+            name="name"
+            id="name"
+            eo-ng-input
+            formControlName="name"
+          />
         </nz-form-control>
       </nz-form-item>
     </eo-ng-input-group>
@@ -55,7 +74,7 @@
             <span i18n>Request Headers</span>
             <nz-badge
               *ngIf="bindGetApiParamNum(model.requestHeaders)"
-              class="ml-1 ant-badge-primary"
+              class="ml-1 ant-badge-theme-color"
               nzStatus="success"
             ></nz-badge>
           </ng-template>
@@ -66,7 +85,7 @@
           <ng-template #bodyTitleTmp>
             <span i18n>Body</span>
             <nz-badge
-              class="ml-1 ant-badge-primary"
+              class="ml-1 ant-badge-theme-color"
               *ngIf="
                 ['formData', 'json', 'xml'].includes(model.requestBodyType)
                   ? bindGetApiParamNum(model.requestBody)
@@ -89,7 +108,7 @@
             <span i18n>Query</span>
             <nz-badge
               *ngIf="bindGetApiParamNum(model.queryParams)"
-              class="ml-1 ant-badge-primary"
+              class="ml-1 ant-badge-theme-color"
               nzStatus="success"
             ></nz-badge>
           </ng-template>
@@ -100,7 +119,7 @@
             <span i18n>REST</span>
             <nz-badge
               *ngIf="bindGetApiParamNum(model.restParams)"
-              class="ml-1 ant-badge-primary"
+              class="ml-1 ant-badge-theme-color"
               nzStatus="success"
             ></nz-badge>
           </ng-template>
@@ -118,7 +137,7 @@
             <span i18n>Response Headers</span>
             <nz-badge
               *ngIf="bindGetApiParamNum(model.responseHeaders)"
-              class="ml-1 ant-badge-primary"
+              class="ml-1 ant-badge-theme-color"
               nzStatus="success"
             ></nz-badge>
           </ng-template>
@@ -128,7 +147,7 @@
           <ng-template #responseTitleTmp>
             <span i18n>Response</span>
             <nz-badge
-              class="ml-1 ant-badge-primary"
+              class="ml-1 ant-badge-theme-color"
               *ngIf="
                 ['formData', 'json', 'xml'].includes(model.responseBodyType)
                   ? bindGetApiParamNum(model.responseBody)

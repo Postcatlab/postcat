@@ -5,7 +5,7 @@
 <!-- {{ setting | json }} -->
 <!-- {{columnVisibleStatus|json}} -->
 <eo-ng-table
-  class="{{randomClass}}"
+  class="{{ randomClass }}"
   [nzDataItem]="nzDataItem"
   [(nzData)]="nzData"
   [nzIsLevel]="setting.isLevel"
@@ -16,7 +16,8 @@
   [nzPrimaryKey]="setting.primaryKey"
   [nzChildKey]="childKey"
   [nzScroll]="nzScroll"
-  [nzCheckAddRow]="checkAdd"
+  [nzCheckAddRow]="nzCheckAddRow"
+  [nzDragCheck]="nzDragCheck"
   (nzDataChange)="handleDataChange($event)"
   [nzThead]="theadConf"
 ></eo-ng-table>

@@ -90,7 +90,7 @@ export class ApiTestUtilService {
   }
 
   /**
-   * Transfer test raw  text to api table data
+   * Transfer Test requstBody[type==='raw'] to API edit table data
    */
   private text2EditBody(keyName, text: string = '') {
     const result = {};
@@ -207,7 +207,7 @@ export class ApiTestUtilService {
    * @param type content-type be added/replaced
    * @param headers
    */
-  addOrReplaceContentType(contentType: ContentType, headers: ApiTestHeaders[] = []) {
+  addOrReplaceContentType(contentType: ContentType, headers: any[] = []) {
     const result = headers;
     const existHeader = headers.find((val) => val.name.toLowerCase() === 'content-type');
     if (existHeader) {
@@ -218,6 +218,7 @@ export class ApiTestUtilService {
       required: true,
       name: 'content-type',
       value: contentType,
+      // editable:false
     });
     return result;
   }

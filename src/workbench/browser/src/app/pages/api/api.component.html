@@ -12,7 +12,7 @@
       <eo-ng-tabset
         [ngClass]="{ 'share-group-tabset': store.isShare }"
         nzCentered
-        [nzAnimated]="false"
+        [nzAnimated]="false"eo-ng-tabset
         [(nzSelectedIndex)]="tabsIndex"
       >
         <eo-ng-tab [nzTitle]="apiTitle">
@@ -128,7 +128,6 @@
         <!-- Child Tab Bar -->
         <eo-ng-tabset
           class="inside_page_tabset"
-          [nzTabBarStyle]="{ 'padding-left': '10px' }"
           *ngIf="this.id"
           nzLinkRouter
         >
@@ -141,7 +140,7 @@
                 {{ tab.title }}
                 <nz-badge
                   *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
-                  class="ant-badge-primary"
+                  class="ant-badge-theme-color"
                   nzStatus="default"
                 ></nz-badge>
               </a>

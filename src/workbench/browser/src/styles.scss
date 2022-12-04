@@ -1,6 +1,7 @@
 // @import "tailwindcss/base";
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import './styles/atom.scss';
 
 @import '../../../node_modules/eo-ng-checkbox/styles.scss';
 @import '../../../node_modules/eo-ng-select/styles.scss';
@@ -27,7 +28,7 @@ body {
 :root {
   --NAVBAR_HEIGHT: 50px;
   --FOOTER_HEIGHT: 30px;
-  --PAGE_TABS_HEIGHT: 48px;
+  --PAGE_TABS_HEIGHT: 43px;
   --PAGE_INSIDE_TABS_HEIGHT: 40px;
 }
 

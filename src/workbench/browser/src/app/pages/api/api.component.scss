@@ -15,7 +15,7 @@ nz-content {
   }
 }
 .active {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--NAVBAR_BTN_BG);
   border-color: transparent;
   color: var(--MAIN_TEXT);
 }
@@ -30,7 +30,7 @@ nz-divider {
 .tabs-bar {
   background-color: var(--SEC_BG);
   box-sizing: border-box;
-  padding: 5px 0px 0px 5px;
+  padding:0;
   height: var(--PAGE_TABS_HEIGHT);
   display: flex;
   margin-bottom: -1px;
@@ -47,7 +47,7 @@ nz-divider {
 
   .api-container-tabs {
     .ant-tabs-nav {
-      height: var(--PAGE_INSIDE_TABS_HEIGHT);
+      height: var( --PAGE_TABS_HEIGHT);
     }
     .ant-tabs-nav-list {
       width: 100%;
@@ -68,19 +68,11 @@ nz-divider {
   .content_container {
     border-top: 1px solid var(--BORDER);
     .inside_page_tabset {
-      .ant-tabs-tab-active {
-        a {
-          // color: var(--MAIN_THEME_COLOR);
-        }
-      }
-      a {
-        color: #999;
-      }
     }
   }
   .ant-tabs-nav,
   .ant-tabs-extra-content {
-    height: 42px;
+    height: 43px;
   }
 
   .param-box-header {

@@ -1,10 +1,9 @@
-
 @import '../../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
 
 // For more information: https://ng.ant.design/docs/customize-theme/en
 @import '../../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.variable.min.css';
 
-@import './eoui.less';
+@import './../antd.less';
 // Override less variables to here
 :root {
   --ant-primary-color: #1890ff;
@@ -23,13 +22,10 @@
 @component-background: @body-background;
 @layout-sider-background: @component-background;
 @layout-header-background: @component-background;
-@table-header-color: @component-background;
-@table-header-bg: @component-background;
+// @table-header-color: @component-background;
+// @table-header-bg: @component-background;
 
 // AntD Base Less
-body {
-  line-height: initial;
-}
 .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
   padding: 8px 10px 5px 10px;
 }
@@ -78,10 +74,6 @@ p {
 .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
   background-color: var(--NAVBAR_BTN_BG);
 }
-.ant-tabs-tab {
-  font-weight: bold;
-  color: #999;
-}
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   text-shadow: none;
 }
@@ -89,16 +81,14 @@ p {
   width: 20px;
 }
 .ant-empty-description {
-  color: #999;
+  color: var(--TIPS_TEXT_COLOR);
 }
-// .ant-badge-primary {
-//   .ant-badge-status-dot {
-//     background-color: var(--ant-primary-color);
-//   }
-// }
 
 .ant-tag-default {
-  color: #666;
+  color: var(--MAIN_COLOR);
+  border: 0 none;
   background-color: #66666626;
+  svg {
+    font-size: 12px;
+  }
 }
-

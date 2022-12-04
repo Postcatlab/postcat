@@ -18,7 +18,7 @@ import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 
-import { computed, reaction } from 'mobx';
+import { reaction } from 'mobx';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestService } from './api-test.service';

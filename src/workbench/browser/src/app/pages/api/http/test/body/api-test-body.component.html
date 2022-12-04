@@ -8,7 +8,7 @@
   <div *ngIf="['raw'].includes(bodyType)">
     <span class="text-[12px]">Content-Type：</span>
     <eo-ng-select
-      class="fs12 content-type-select"
+      class="text-[12px] w-[300px] content-type-select"
       (ngModelChange)="changeContentType($event)"
       [(ngModel)]="contentType"
       nzBorderless
@@ -45,7 +45,7 @@
 >
 </eo-monaco-editor>
 <!-- Binary -->
-<div class="px-5" *ngIf="bodyType === 'binary'">
+<div class="px-5 min-h-[60%]" *ngIf="bodyType === 'binary'">
   <nz-upload
     nzType="drag"
     (nzChange)="emitModelChange()"

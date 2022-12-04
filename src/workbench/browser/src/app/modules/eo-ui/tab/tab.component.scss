@@ -1,6 +1,5 @@
 .tab-text {
   max-width: 90px;
-  font-weight: 500;
 }
 .has-edit-tab-item-container {
   .tab-text {
@@ -12,15 +11,16 @@
   .ant-tabs-card.ant-tabs-top {
     > .ant-tabs-nav {
       margin: 0;
-      padding: 0 4px;
       .ant-tabs-tab {
-        width: 150px;
-        border-radius: 6px 6px 0 0;
+        max-width: 185px;
+        min-width: 145px;
+        border-radius: 0;
         border-width: 1px;
-        border-bottom: 1px solid var(--BORDER);
+        margin-left: 0px;
+        border-top-color: transparent;
+        border-left: 0 none;
         &.ant-tabs-tab-active {
-          border-color: rgba($color: #000000, $alpha: 0.15);
-          border-bottom-color: var(--MAIN_BG);
+          border-top: 2px solid var(--MAIN_THEME_COLOR);
           .ant-tabs-tab-btn {
             color: var(--MAIN_TEXT);
           }
