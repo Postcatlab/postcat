@@ -85,9 +85,12 @@ export class EoTabComponent implements OnInit, OnDestroy {
       nzClosable: false,
       nzFooter: [
         {
-          label: $localize`Cancel`,
+          label: $localize`Save`,
+          type: 'primary',
           onClick: () => {
+            this.beforeClose.emit(true);
             modal.destroy();
+            this.tabOperate.closeTab(index);
           },
         },
         {
@@ -99,14 +102,11 @@ export class EoTabComponent implements OnInit, OnDestroy {
           },
         },
         {
-          label: $localize`Save`,
-          type: 'primary',
+          label: $localize`Cancel`,
           onClick: () => {
-            this.beforeClose.emit(true);
             modal.destroy();
-            this.tabOperate.closeTab(index);
           },
-        },
+        }
       ],
     });
   }

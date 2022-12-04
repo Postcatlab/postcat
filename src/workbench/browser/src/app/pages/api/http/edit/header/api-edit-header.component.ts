@@ -13,7 +13,7 @@ import { ApiEditHeaders } from '../../../../../shared/services/storage/index.mod
   template: `<div class="param-box-header flex items-center h-10">
       <params-import
         [(baseData)]="model"
-        contentType="formData"
+        contentType="header"
         i18n-modalTitle="@@Header"
         modalTitle="Header"
       ></params-import>

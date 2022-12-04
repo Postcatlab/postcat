@@ -1,4 +1,3 @@
-
 @import '../../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
 
 // For more information: https://ng.ant.design/docs/customize-theme/en
@@ -23,7 +22,7 @@
 @component-background: @body-background;
 @layout-sider-background: @component-background;
 @layout-header-background: @component-background;
-@table-header-color: @component-background;
+// @table-header-color: @component-background;
 // @table-header-bg: @component-background;
 
 // AntD Base Less
@@ -82,11 +81,14 @@ p {
   width: 20px;
 }
 .ant-empty-description {
-  color: var( --TIPS_TEXT_COLOR);
+  color: var(--TIPS_TEXT_COLOR);
 }
 
 .ant-tag-default {
-  color: #666;
+  color: var(--MAIN_COLOR);
+  border: 0 none;
   background-color: #66666626;
+  svg {
+    font-size: 12px;
+  }
 }
-

@@ -11,7 +11,7 @@ import { form2json, xml2json, isXML, json2Table } from '../../../utils/data-tran
 export class ParamsImportComponent {
   @Input() disabled: boolean;
   @Input() rootType: 'array' | string | 'object' = 'object';
-  @Input() contentType = 'json';
+  @Input() contentType: string | 'json' | 'formData' | 'xml' | 'header' | 'query' = 'json';
   @Input() baseData: object[] = [];
   @Input() modalTitle = '';
   @Output() baseDataChange = new EventEmitter<any>();
@@ -28,6 +28,8 @@ export class ParamsImportComponent {
         return 'JSON';
       case 'formData':
         return `Form-data`;
+      case 'header':
+        return $localize`Header`;
       default:
         return '';
     }
@@ -36,23 +38,26 @@ export class ParamsImportComponent {
   get eg() {
     switch (this.contentType) {
       case 'xml':
-        return `<name>Jack</name><age>12</age>`;
+        return `<name>Jack</name><age>18</age>`;
       // case 'json':
       //   return `{ "name": "Jack", "age": 12 }`;
       case 'formData':
-        return `name: Jack\nage: 12`;
+        return `name: Jack\nage: 18`;
       case 'query':
-        return `/api?name=Jack&age=12`;
+        return `/api?name=Jack&age=18`;
       case 'json':
-        return `{ "name": "Jack", "age": 12}`;
+        return `{ "name": "Jack", "age": 18}`;
+      case 'header':
+        return `headerName:headerValue\nheaderName2:headerValue2`;
       default:
-        return `/api?name=Jack&age=12`;
+        return `/api?name=Jack&age=18`;
     }
   }
 
   get contenTypeEditor() {
     switch (this.contentType) {
       case 'formData':
+      case 'header':
       case 'query':
         return 'text';
       default:
@@ -85,7 +90,7 @@ export class ParamsImportComponent {
       paramCode = qs.parse(this.paramCode.indexOf('?') > -1 ? this.paramCode.split('?')[1] : this.paramCode);
       // console.log('-->', paramCode);
     }
-    if (this.contentType === 'formData') {
+    if (['formData', 'header'].includes(this.contentType)) {
       const json = {};
       form2json(this.paramCode).forEach((it) => {
         const { key, value } = it;
@@ -146,7 +151,7 @@ export class ParamsImportComponent {
       default:
         break;
     }
-
+    console.log(resultData, tailData);
     this.baseDataChange.emit(resultData.concat(tailData));
     this.handleCancel();
   }

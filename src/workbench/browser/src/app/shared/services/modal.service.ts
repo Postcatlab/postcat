@@ -30,12 +30,6 @@ export class ModalService {
       },
       nzFooter: [
         {
-          label: $localize`Cancel`,
-          onClick: () => {
-            modal.destroy();
-          },
-        },
-        {
           label: $localize`Confirm`,
           type: 'primary',
           onClick: () => {
@@ -44,6 +38,12 @@ export class ModalService {
             }
           },
         },
+        {
+          label: $localize`Cancel`,
+          onClick: () => {
+            modal.destroy();
+          },
+        }
       ],
     };
     Object.assign(modalOpts, inOpts);

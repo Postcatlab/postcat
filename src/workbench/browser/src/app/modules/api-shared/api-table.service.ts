@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { omit } from 'lodash-es';
+import { has, omit } from 'lodash-es';
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
 import { ApiTestParamsTypeFormData } from '../../pages/api/service/api-test/api-test.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
@@ -9,16 +9,17 @@ import {
   ApiParamsTypeJsonOrXml,
   REQURIED_ENUMS,
 } from '../../shared/services/storage/index.model';
+import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
-  showMore(item, opts: {in: string;isEdit: boolean }) {
+  showMore(item, opts: { in: string; isEdit: boolean }) {
     return new Promise((resolve) => {
       const modalConf: ModalOptions = {
-        nzTitle: $localize`Advanced Settings`,
+        nzTitle: $localize`More Settings`,
         nzContent: ApiParamsExtraSettingComponent,
         nzWidth: '60%',
         nzComponentParams: {
@@ -29,7 +30,7 @@ export class ApiTableService {
       };
       if (opts.isEdit) {
         modalConf.nzOnOk = () => {
-          const model = modal.componentInstance.model[0];
+          const model = eoDeepCopy(modal.componentInstance.model[0]);
           model.enum = filterTableData(model.enum, {
             primaryKey: 'value',
           });
@@ -72,6 +73,7 @@ export class ApiTableService {
         title: $localize`Type`,
         type: 'select',
         key: 'type',
+        disabledFn:inArg.format===ApiBodyType.XML?(item,data)=>data.level===0:undefined,
         width: 120,
       },
       required: {
@@ -85,7 +87,7 @@ export class ApiTableService {
         title: $localize`:@@Description:Description`,
         type: 'input',
         key: 'description',
-        width: 300,
+        width: 250,
       },
       example: {
         title: $localize`Example`,
@@ -99,7 +101,7 @@ export class ApiTableService {
         btns: [
           {
             icon: 'more',
-            title: $localize`Advanced Settings`,
+            title: $localize`More Settings`,
             click: (item) => {
               this.showMore(item.data, {
                 in: inArg.in,
@@ -127,7 +129,7 @@ export class ApiTableService {
             icon: 'more',
             showFn: ({ data }) =>
               data.enum?.length || data.minimum || data.maximum || data.maxLength || data.minLength || data.example,
-            title: $localize`Advanced Settings`,
+            title: $localize`More Settings`,
             click: (item) => {
               this.showMore(item.data, {
                 in: inArg.in,
@@ -179,12 +181,13 @@ export class ApiTableService {
         }
         case 'editOperate': {
           if (result.setting.isLevel) {
-            column.btns.unshift(
-              { action: 'addChild' },
-              {
-                action: 'insert',
-              }
-            );
+            const insert: any = {
+              action: 'insert',
+            };
+            if (inArg.format === 'xml') {
+              insert.showFn = (item) =>item.level!==0;
+            }
+            column.btns.unshift({ action: 'addChild' }, insert);
           }
           break;
         }
@@ -216,6 +219,7 @@ export class ApiTableService {
         left: true,
         type: 'input',
         columnVisible: 'fixed',
+        disabledFn:inArg.in==='header'?(item) => has(item,'editable')&&!item.editable:undefined,
         key: 'name',
         width: 150,
       },

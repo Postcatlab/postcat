@@ -30,6 +30,7 @@ export const filterTableData = (
     filterFn?: (item: any) => boolean;
   } = {}
 ) => {
+  //TODO add pickBy method
   opts.childKey = opts.childKey || 'children';
   const result = inData.map((val) => omitDeep(val, ['eoKey']));
   if (!opts.filterFn) {
