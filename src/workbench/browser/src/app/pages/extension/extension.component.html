@@ -1,29 +1,17 @@
 <section class="flex-shrink-0 p-0 left">
-  <div class="mb-2">
+  <div class="m-[10px]">
     <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
-      <input
-        type="text"
-        eo-ng-input
-        class="flex-1 w-full px-3"
-        i18n-placeholder="@@Search"
-        placeholder="Search"
-        [(ngModel)]="keyword"
-        (ngModelChange)="onSearchChange($event)"
-      />
+      <input type="text" eo-ng-input class="flex-1 w-full px-3" i18n-placeholder="@@Search" placeholder="Search"
+        [(ngModel)]="keyword" (ngModelChange)="onSearchChange($event)" />
     </eo-ng-input-group>
-    <ng-template #prefixTemplateUser
-      ><svg class="iconpark-icon"><use href="#search"></use></svg
-    ></ng-template>
+    <ng-template #prefixTemplateUser><svg class="iconpark-icon">
+        <use href="#search"></use>
+      </svg></ng-template>
   </div>
   <!-- Fixed Group -->
   <div class="group_container">
-    <nz-tree
-      [nzData]="fixedTreeNode"
-      [nzSelectedKeys]="nzSelectedKeys"
-      nzBlockNode
-      (nzClick)="clickTreeItem($event)"
-      [nzTreeTemplate]="nzFixedTreeTemplate"
-    ></nz-tree>
+    <eo-ng-tree-default [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode
+      (nzClick)="clickTreeItem($event)" [nzTreeTemplate]="nzFixedTreeTemplate"></eo-ng-tree-default>
     <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
       <div class="pl-[18px] tree_node" *ngIf="node.origin?.isFixed">
         <div class="flex items-center">
@@ -34,19 +22,12 @@
     </ng-template>
   </div>
   <nz-divider class="!mt-[5px] !mb-[7px]"></nz-divider>
-  <nz-tree
-    [nzData]="treeNodes"
-    [nzSelectedKeys]="nzSelectedKeys"
-    #apiGroup
-    [nzHideUnMatched]="true"
-    (nzClick)="clickTreeItem($event)"
-    nzBlockNode
-    [nzTreeTemplate]="nzTreeTemplate"
-  ></nz-tree>
+  <eo-ng-tree-default [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzHideUnMatched]="true"
+    (nzClick)="clickTreeItem($event)" nzBlockNode [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
     <div class="pl-[18px]">
       <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
-        <div class="overflow-hidden flex items-center text-ellipsis">
+        <div class="flex items-center overflow-hidden text-ellipsis">
           <span class="text-omit node_title">{{ node.title }}</span>
         </div>
       </div>
@@ -55,6 +36,6 @@
       style="bottom: -3px; left: 4px; right: 0px;"></div> -->
   </ng-template>
 </section>
-<section class="px-4 right flex-1">
+<section class="flex-1 px-4 right">
   <router-outlet></router-outlet>
 </section>

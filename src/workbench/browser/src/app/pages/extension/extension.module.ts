@@ -13,6 +13,7 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { EoNgSwitchModule } from 'eo-ng-switch';
+import { EoNgTreeModule } from 'eo-ng-tree';
 @NgModule({
   imports: [
     SharedModule,
@@ -23,7 +24,8 @@ import { EoNgSwitchModule } from 'eo-ng-switch';
     NzCardModule,
     NzAvatarModule,
     ExtensionDetailModule,
-    EoNgSwitchModule
+    EoNgSwitchModule,
+    EoNgTreeModule,
   ],
   declarations: [ExtensionComponent, ExtensionListComponent],
 })

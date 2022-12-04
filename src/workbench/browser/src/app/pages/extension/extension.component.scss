@@ -1,3 +1,5 @@
+@import '../api/group/tree/api-group-tree.component.scss';
+
 :host ::ng-deep {
   height: 100%;
   width: 100%;
@@ -5,40 +7,10 @@
   .ant-btn-link {
     padding: 0;
   }
-  .tree_node {
-    font-size: 12px;
-  }
-  .ant-tree .ant-tree-treenode {
-    padding: 0;
-    margin: 2px 0;
-    border-radius: 3px;
-    transition: all 0.3s, border 0s, line-height 0s, box-shadow 0s;
-    &:hover {
-      background-color: #f5f5f5;
-    }
-  }
-  .ant-tree-treenode-selected {
-    background-color: var(--NAVBAR_BTN_BG);
-  }
-  .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
-    background-color: transparent;
-    transition: none;
-  }
-  .ant-tree .ant-tree-node-content-wrapper {
-    border-radius: 0;
-    &.ant-tree-node-selected {
-      opacity: 0.8;
-    }
-  }
-
-  .ant-tree-switcher {
-    width: 0;
-  }
 
   .left {
     border-right: 1px solid var(--BORDER);
     width: 250px;
-    padding: 10px;
 
     .plugin-link {
       &:hover,
