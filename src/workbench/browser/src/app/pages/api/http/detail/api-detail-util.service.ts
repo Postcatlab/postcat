@@ -106,7 +106,7 @@ export class ApiDetailUtilService {
         {
           thKey: $localize`<button type="button" class="eo-operate-btn" ng-click="$ctrl.data.isSpreedBtnClick=!$ctrl.data.isSpreedBtnClick;$ctrl.data.isSpreed=true;$ctrl.mainObject.baseFun.spreedAll($event);$ctrl.data.isSpreed=false;">{{$ctrl.data.isSpreedBtnClick?"Shrink All":"Expand All"}}</button>`,
           type: 'html',
-          html: $localize`<span class="eo-operate-btn fs12" ng-show="item.minimum ||
+          html: $localize`<span class="eo-operate-btn text-[12px]" ng-show="item.minimum ||
           item.maximum ||
           item.minLength ||
           item.maxLength ||
@@ -175,7 +175,7 @@ export class ApiDetailUtilService {
         {
           thKey: $localize`<button type="button" class="eo-operate-btn" ng-click="$ctrl.data.isSpreedBtnClick=!$ctrl.data.isSpreedBtnClick;$ctrl.data.isSpreed=true;$ctrl.mainObject.baseFun.spreedAll($event);$ctrl.data.isSpreed=false;">{{$ctrl.data.isSpreedBtnClick?"Shrink All":"Expand All"}}</button>`,
           type: 'html',
-          html: $localize`<span class="eo-operate-btn fs12" ng-show="item.minimum ||
+          html: $localize`<span class="eo-operate-btn text-[12px]" ng-show="item.minimum ||
           item.maximum ||
           item.minLength ||
           item.maxLength ||

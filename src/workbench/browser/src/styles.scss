@@ -1,6 +1,7 @@
 // @import "tailwindcss/base";
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import './styles/atom.scss';
 
 @import '../../../node_modules/eo-ng-checkbox/styles.scss';
 @import '../../../node_modules/eo-ng-select/styles.scss';

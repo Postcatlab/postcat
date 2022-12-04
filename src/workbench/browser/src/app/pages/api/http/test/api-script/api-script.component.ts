@@ -52,8 +52,10 @@ export class ApiScriptComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   nzClick($event) {
+    console.log('nzClick',$event);
     const { node } = $event;
     if (node.isLeaf) {
+      this.insertCode(node);
       // * insert code
       return;
     }

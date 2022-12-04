@@ -30,6 +30,7 @@ import {
   EoNgFeedbackMessageModule,
 } from 'eo-ng-feedback';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { ReactiveFormsModule } from '@angular/forms';
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -38,6 +39,7 @@ registerLocaleData(zh);
   imports: [
     BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     NzModalModule,
     EoNgFeedbackTooltipModule,
