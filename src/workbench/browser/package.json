@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -c dev -o --host 0.0.0.0",
-    "start:zh": "ng serve -c devCn -o",
+    "start": "ng serve  --hmr -c dev -o --host 0.0.0.0",
+    "start:zh": "ng serve --hmr -c devCn -o",
     "build": "node ./build/build.js",
     "build:web": "node ./build/build.js web",
     "build:docker:web": "node ./build/build.js web docker",
