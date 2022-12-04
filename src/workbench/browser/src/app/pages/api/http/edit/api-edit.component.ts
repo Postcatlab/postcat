@@ -166,6 +166,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     // );
     const originText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.initialModel));
     const afterText = JSON.stringify(this.apiEditUtil.formatEditingApiData(this.model));
+    // console.log(`\n\n${originText}\n\n${afterText}`);
     if (originText !== afterText) {
       // console.log('api edit formChange true!', originText.split(afterText));
       return true;
