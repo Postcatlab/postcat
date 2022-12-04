@@ -1,4 +1,4 @@
-import { languages } from 'monaco-editor/esm/vs/editor/editor.api';
+import type { languages } from 'monaco-editor';
 
 // https://docs.eoapi.io/docs/script-function.html
 // 自动根据页面中片段生成数组
@@ -147,5 +147,5 @@ export const completions: Omit<languages.CompletionItem, 'range' | 'kind'>[] = [
 
 export const defaultCompletions: Omit<languages.CompletionItem, 'range'>[] = completions.map((item) => ({
   ...item,
-  kind: languages.CompletionItemKind.Function,
+  kind: window.monaco.languages.CompletionItemKind.Function,
 }));
