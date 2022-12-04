@@ -90,7 +90,7 @@ export class ApiTestUtilService {
   }
 
   /**
-   * Transfer test raw  text to api table data
+   * Transfer Test requstBody[type==='raw'] to API edit table data
    */
   private text2EditBody(keyName, text: string = '') {
     const result = {};

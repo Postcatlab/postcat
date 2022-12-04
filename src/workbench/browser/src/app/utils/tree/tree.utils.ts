@@ -27,12 +27,17 @@ export const filterTableData = (
   opts: {
     childKey?: string;
     primaryKey?: string;
+    pickBy?: string[];
+    omitBy?: string[];
     filterFn?: (item: any) => boolean;
   } = {}
 ) => {
-  //TODO add pickBy method
+  //TODO add pickBy support
+  //Set default Options
   opts.childKey = opts.childKey || 'children';
-  const result = inData.map((val) => omitDeep(val, ['eoKey']));
+  opts.omitBy = opts.omitBy || ['eoKey'];
+  //Omit useless fieild
+  const result = inData.map((val) => omitDeep(val, opts.omitBy));
   if (!opts.filterFn) {
     if (!opts.primaryKey) {
       console.error('[EO_ERROR]: filterTableData need primaryKey');
