@@ -18,7 +18,7 @@ export class ThemeService {
     },
     mainColor: {
       id: 'mainColor',
-      path: '/assets/theme/',
+      path: './assets/theme/',
       injectDirection: 'append',
       storageKey: 'theme_mainColor',
       default: 'default' as MainColorType,
