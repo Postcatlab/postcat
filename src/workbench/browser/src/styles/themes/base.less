@@ -4,7 +4,7 @@
 // For more information: https://ng.ant.design/docs/customize-theme/en
 @import '../../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.variable.min.css';
 
-@import './eoui.less';
+@import './../antd.less';
 // Override less variables to here
 :root {
   --ant-primary-color: #1890ff;
@@ -24,7 +24,7 @@
 @layout-sider-background: @component-background;
 @layout-header-background: @component-background;
 @table-header-color: @component-background;
-@table-header-bg: @component-background;
+// @table-header-bg: @component-background;
 
 // AntD Base Less
 body {
@@ -78,10 +78,6 @@ p {
 .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
   background-color: var(--NAVBAR_BTN_BG);
 }
-.ant-tabs-tab {
-  font-weight: bold;
-  color: #999;
-}
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   text-shadow: none;
 }
@@ -91,11 +87,6 @@ p {
 .ant-empty-description {
   color: #999;
 }
-// .ant-badge-primary {
-//   .ant-badge-status-dot {
-//     background-color: var(--ant-primary-color);
-//   }
-// }
 
 .ant-tag-default {
   color: #666;
