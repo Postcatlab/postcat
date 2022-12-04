@@ -23,12 +23,6 @@ export class StoreService {
   // ? env
   @observable private envList = [];
   @observable private envUuid = StorageUtil.get('env:selected') || null;
-  @observable.shallow private currentEnv = {
-    hostUri: '',
-    parameters: [],
-    frontURI: '',
-    uuid: null,
-  };
 
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
@@ -65,7 +59,15 @@ export class StoreService {
 
   // ? env
   @computed get getCurrentEnv() {
-    return this.currentEnv;
+    const [data] = this.envList.filter((it) => it.uuid === this.envUuid);
+    return (
+      data || {
+        hostUri: '',
+        parameters: [],
+        frontURI: '',
+        uuid: null,
+      }
+    );
   }
   @computed get getEnvList() {
     return this.envList;
@@ -144,15 +146,10 @@ export class StoreService {
   };
 
   // ? env
-  @action setEnv(data) {
-    this.currentEnv =
-      data == null
-        ? {
-            hostUri: '',
-            parameters: [],
-            frontURI: '',
-          }
-        : data;
+
+  @action setEnvUuid(data) {
+    this.envUuid = data;
+    StorageUtil.set('env:selected', data);
   }
 
   @action setEnvList(data = []) {
@@ -160,6 +157,7 @@ export class StoreService {
     const isHere = data.find((it) => it.uuid === this.envUuid);
     if (!isHere) {
       this.envUuid = null;
+      //  for delete env
       StorageUtil.set('env:selected', null);
     }
   }

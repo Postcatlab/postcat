@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 // import { EoTableComponent } from '../../eo-ui/table/eo-table/eo-table.component';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
@@ -26,9 +25,8 @@ export class EnvComponent implements OnInit, OnDestroy {
   isVisible = false;
   /** 是否打开下拉菜单 */
   isOpen = false;
-  envInfo: any = {};
+  envCache: any = {};
   envList: any[] = [];
-  activeUuid = 0;
   envDataItem = { name: '', value: '', description: '' };
   envListColumns = [
     { title: $localize`Name`, type: 'input', key: 'name' },
@@ -49,24 +47,11 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
+    public store: StoreService,
     private storage: StorageService,
-    private messageService: MessageService,
     private message: EoNgFeedbackMessageService,
-    private store: StoreService,
     private effect: EffectService
   ) {}
-
-  get envUuid(): number {
-    return Number(localStorage.getItem('env:selected')) || 0;
-  }
-  set envUuid(value) {
-    this.activeUuid = value;
-    if (value) {
-      localStorage.setItem('env:selected', value == null ? '' : value.toString());
-    } else {
-      localStorage.removeItem('env:selected');
-    }
-  }
 
   ngOnInit(): void {}
   ngOnDestroy() {
@@ -90,11 +75,10 @@ export class EnvComponent implements OnInit, OnDestroy {
     return new Promise((resolve) => {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.envInfo = result.data ?? {};
-          const parameters = this.envInfo.parameters ?? [];
+          this.envCache = result.data ?? {};
+          const parameters = this.envCache.parameters ?? [];
           //! Compatible some error data
-          this.envInfo.parameters = typeof parameters === 'string' ? JSON.parse(parameters) : parameters;
-          this.activeUuid = result.data?.uuid ?? null;
+          this.envCache.parameters = typeof parameters === 'string' ? JSON.parse(parameters) : parameters;
           resolve(true);
         }
         resolve(false);
@@ -104,20 +88,19 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleAddEnv(pid = 1) {
     // * init form of env, create new env-id
-    this.envInfo = {
+    this.envCache = {
       projectID: pid,
       name: '',
       hostUri: '',
       parameters: [],
     };
     this.modalTitle = $localize`:@@New Environment:New Environment`;
-    this.activeUuid = null;
     this.handleShowModal();
   }
 
   handleSaveEnv(uuid: string | number | undefined = undefined) {
     // * update list after call save api
-    const { name, ...other } = this.envInfo;
+    const { name, ...other } = this.envCache;
     if (!name) {
       this.message.error($localize`Name is not allowed to be empty`);
       return;
@@ -127,9 +110,6 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.storage.run('environmentUpdate', [{ ...other, name, parameters }, uuid], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.message.success($localize`Edited successfully`);
-          if (this.envUuid === Number(uuid)) {
-            this.envUuid = Number(uuid);
-          }
           this.handleCancel();
         } else {
           this.message.error($localize`Failed to edit`);
@@ -138,11 +118,10 @@ export class EnvComponent implements OnInit, OnDestroy {
     } else {
       this.storage.run(
         'environmentCreate',
-        [Object.assign({}, this.envInfo, { parameters })],
+        [Object.assign({}, this.envCache, { parameters })],
         async (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
             this.message.success($localize`Added successfully`);
-            this.activeUuid = Number(result.data.uuid);
             this.handleCancel();
           } else {
             this.message.error($localize`Failed to add`);
@@ -154,19 +133,12 @@ export class EnvComponent implements OnInit, OnDestroy {
 
   handleCancel(): void {
     this.isVisible = false;
-    this.envInfo = {};
+    this.envCache = {};
     this.effect.updateEnvList();
   }
 
   handleShowModal() {
     this.isVisible = true;
     this.isOpen = false;
-  }
-
-  handleEnvSelectStatus(event: boolean) {
-    if (event) {
-      this.activeUuid = this.envUuid;
-      this.handleEditEnv(this.activeUuid);
-    }
   }
 }

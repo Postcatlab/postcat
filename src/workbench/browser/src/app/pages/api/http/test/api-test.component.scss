@@ -35,11 +35,12 @@ eo-api-test-rest {
 }
 .env_front_uri {
   max-width: 240px;
-  height: 32px;
-  line-height: 32px;
+  height: 40px;
+  display: flex;
+  align-items: center;
   padding: 0 10px;
   background-color: var(--TABLE_HEADER_BG);
-  border: 1px solid #d9d9d9;
+  border: 1px solid rgb(232, 232, 232);
   flex-shrink: 0;
 }
 div.ant-typography {

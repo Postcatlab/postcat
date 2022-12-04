@@ -1,18 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { Message, MessageService } from '../../shared/services/message';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
 import { ApiTabService } from './api-tab.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
-import { computed } from 'mobx';
+import { computed, makeObservable, observable, reaction } from 'mobx';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -25,7 +20,7 @@ const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KE
   styleUrls: ['./api.component.scss'],
 })
 export class ApiComponent implements OnInit, OnDestroy {
-  envUuid = '';
+  @observable envUuid = '';
   isFirstTime = true;
   siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
   RIGHT_SIDER_SHRINK_WIDTH = 50;
@@ -101,10 +96,18 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.apiTab.onChildComponentInit(componentRef);
   }
   ngOnInit(): void {
+    makeObservable(this);
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.effect.updateEnvList();
     this.watchRouterChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
+    this.envUuid = this.store.getEnvUuid;
+    reaction(
+      () => this.envUuid,
+      (data) => {
+        this.store.setEnvUuid(data);
+      }
+    );
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -168,7 +171,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     localStorage.setItem(RIGHT_SIDER_WIDTH_KEY, this.rightSiderWidth.toString());
   }
   getLocalRightSiderWidth() {
-    return localStorage.getItem(RIGHT_SIDER_WIDTH_KEY) ? Number(localStorage.getItem(RIGHT_SIDER_WIDTH_KEY)) : this.RIGHT_SIDER_SHRINK_WIDTH;
+    return localStorage.getItem(RIGHT_SIDER_WIDTH_KEY)
+      ? Number(localStorage.getItem(RIGHT_SIDER_WIDTH_KEY))
+      : this.RIGHT_SIDER_SHRINK_WIDTH;
   }
   handleEnvSelectStatus(event: boolean) {}
 }

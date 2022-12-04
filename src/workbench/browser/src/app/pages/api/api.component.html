@@ -76,7 +76,7 @@
         >
       </ng-template>
       <!-- Env Select -->
-      <div class="flex items-center fix-mt">
+      <div class="flex items-center">
         <eo-ng-select
           [(ngModel)]="envUuid"
           [(nzOpen)]="isOpen"
@@ -119,7 +119,7 @@
           <eo-iconpark-icon name="preview-open"></eo-iconpark-icon>
         </button>
         <ng-template #envParams>
-          <!-- <env-list></env-list> -->
+          <env-list></env-list>
         </ng-template>
       </div>
     </nz-header>
