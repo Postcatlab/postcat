@@ -32,6 +32,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() nzScroll = {};
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
+
+  @Input() nzCheckAddRow;
+  @Input() nzDragCheck;
+
   @Output() nzTrClick = new EventEmitter();
   @Output() nzDataChange = new EventEmitter();
   @Output() columnVisibleStatusChange = new EventEmitter();
@@ -121,9 +125,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       primaryKey: this.setting.primaryKey,
     });
   }
-  ngAfterViewInit() {
-    this.initConfig();
-  }
+  ngAfterViewInit() {}
   handleDataChange(data) {
     this.nzDataChange.emit(data);
   }
@@ -178,9 +180,6 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
     this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
   }
-  checkAdd(item) {
-    return true;
-  }
   //* Use pro custom template to generate icon btn
   private needCustomTempalte(btn) {
     if (btn.type === 'dropdown' || btn.icon || this.BTN_TYPE_NEED_CUSTOMER.includes(btn.action)) {
@@ -193,9 +192,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     this.setting.isEdit = this.autoSetIsEdit();
     this.generateBtnTemplate();
     //SetTimeout be sure the icon child template ready
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       this.initConfig();
-    }, 0);
+    });
   }
   private initConfig() {
     const theaderConf = [];
@@ -209,14 +208,16 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     //Set RowSortable
-    if (this.setting.rowSortable) {
+    if (this.setting.rowSortable && this.columns[0].type !== 'sort') {
       theaderConf.push({
-        width: this.setting.isLevel?40:25,
+        resizeable:false,
+        width: this.columns.length*5,
       });
       tbodyConf.push({
         type: 'sort',
       });
     }
+    console.log(theaderConf);
     //Set ColumnVisible
     this.setting.toolButton = this.setting.toolButton || {};
     if (!_.has(this.setting.toolButton, 'columnVisible')) {
@@ -230,7 +231,14 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         isUndefined
       );
       const body: any = omitBy(
-        { key: col.slot || col.key, left: col.left, type: col.type, right: col.right, errorTip: col.errorTip },
+        {
+          key: col.slot || col.key,
+          left: col.left,
+          type: col.type,
+          right: col.right,
+          errorTip: col.errorTip,
+          disabledFn: col.disabledFn,
+        },
         isUndefined
       );
       switch (col.type) {

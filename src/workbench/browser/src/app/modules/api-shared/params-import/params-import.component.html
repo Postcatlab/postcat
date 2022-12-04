@@ -10,17 +10,19 @@
   (nzOnCancel)="handleCancel()"
 >
   <div *nzModalContent>
-    <pre class="eg" i18n>Import like this:<br />{{ eg }}</pre>
+    <eo-ng-feedback-alert nzType="default" [nzMessage]="egMsg" i18n-nzMessage nzShowIcon></eo-ng-feedback-alert>
+    <ng-template #egMsg> Import like this:<br /><pre>{{eg}} </pre></ng-template>
     <eo-monaco-editor
+      class="mt-[15px] border-all"
       [(code)]="paramCode"
       [editorType]="contenTypeEditor"
       [eventList]="['type', 'format', 'copy', 'search', 'replace']"
     ></eo-monaco-editor>
   </div>
   <div *nzModalFooter>
-    <button eo-ng-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
+    <button eo-ng-button nzType="primary" (click)="handleImport('mixin')" i18n>Replace Changed</button>
     <button eo-ng-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
     <button eo-ng-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
-    <button eo-ng-button nzType="default" (click)="handleImport('mixin')" i18n>Replace Changed</button>
+    <button eo-ng-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
   </div>
 </nz-modal>

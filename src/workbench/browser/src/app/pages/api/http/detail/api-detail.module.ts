@@ -14,7 +14,6 @@ import { ApiDetailComponent } from './api-detail.component';
 import { ApiDetailFormComponent } from './form/api-detail-form.component';
 import { ApiDetailBodyComponent } from './body/api-detail-body.component';
 
-import { ApiDetailUtilService } from './api-detail-util.service';
 import { RouterModule } from '@angular/router';
 import { ApiSharedModule } from '../../../../modules/api-shared/api-shared.module';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
@@ -45,7 +44,6 @@ const COMPONENTS = [
     ...NZ_COMPONETS,
     SharedModule,
   ],
-  providers: [ApiDetailUtilService],
   exports: [...COMPONENTS],
 })
 export class ApiDetailModule {}

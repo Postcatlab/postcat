@@ -38,6 +38,7 @@ export class ApiTestService {
         restParams: [],
         requestHeaders: [
           {
+            // editable:false,
             required: true,
             name: 'content-type',
             value:'application/json',

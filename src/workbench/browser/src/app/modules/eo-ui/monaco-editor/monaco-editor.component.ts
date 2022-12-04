@@ -14,12 +14,11 @@ import { debounce, whatTextType } from '../../../utils/index.utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import type { editor, IDisposable } from 'monaco-editor';
 import type MonacoEditor from 'monaco-editor';
-import { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
+import type { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 import { defaultCompletions } from './defaultCompletions';
 import { ThemeService } from '../../../core/services/theme.service';
 
 declare const monaco: typeof MonacoEditor;
-
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 
 const eventHash = new Map()

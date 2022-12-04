@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { isNil } from 'ng-zorro-antd/core/util';
 import {
   ApiParamsTypeJsonOrXml,
   ParamsEnum,
-  BasiApiEditParams,
   REQURIED_ENUMS,
+  ApiEditBody,
 } from '../../../../../shared/services/storage/index.model';
 
 @Component({
@@ -11,9 +12,11 @@ import {
   templateUrl: './api-params-extra-setting.component.html',
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
-  @Input() model: { type: string | ApiParamsTypeJsonOrXml } & BasiApiEditParams;
+  @Input() model: { type: string | ApiParamsTypeJsonOrXml } & ApiEditBody;
   @Input() isEdit = true;
   @Input() in: 'body' | 'header' | 'query' | 'rest';
+  showValueTable = false;
+  showLengthTable = false;
   listConfBasicInfo;
   listConfLenthInterval = [
     {
@@ -69,7 +72,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
   ];
 
   constructor() {}
-  ngOnInit(): void {
+  initBasicListConf() {
     this.listConfBasicInfo = [
       {
         title: $localize`Param Name`,
@@ -93,22 +96,37 @@ export class ApiParamsExtraSettingComponent implements OnInit {
         key: 'description',
       },
     ];
-    if (!this.isEdit) {
-      ['listConfValueInterval', 'listConfEnums', 'listConfValueInterval'].forEach((configName) => {
-        this[configName].forEach((column, index) => {
-          //Change edit to preview
-          if (['inputNumber', 'input'].includes(column.type)) {
-            column.type = 'text';
-          }
-          const hiddenOperate = !this.isEdit && column.type === 'btnlist';
-          if (hiddenOperate) {
-            this[configName].splice(index, 1);
-          }
-        });
+  }
+  transferPreviewTable() {
+    ['listConfValueInterval', 'listConfEnums', 'listConfValueInterval'].forEach((configName) => {
+      this[configName].forEach((column, index) => {
+        //Change edit to preview
+        if (['inputNumber', 'input'].includes(column.type)) {
+          column.type = 'text';
+        }
+        const hiddenOperate = !this.isEdit && column.type === 'btnlist';
+        if (hiddenOperate) {
+          this[configName].splice(index, 1);
+        }
       });
+    });
+  }
+  ngOnInit(): void {
+    this.initBasicListConf();
+    if (!this.isEdit) {
+      this.transferPreviewTable();
     }
-    if (this.model[0] && (!this.model[0].enum || !this.model[0].enum.length)) {
+    //Init Enum List
+    if (this.isEdit && this.model[0] && !this.model[0]?.enum?.length) {
       this.model[0].enum = this.model[0].enum || [];
+    }
+    //Set Table preview
+    if (this.isEdit) {
+      this.showLengthTable = ['string'].includes(this.model[0].type);
+      this.showValueTable = ['int', 'float', 'double', 'short', 'long', 'number'].includes(this.model[0].type);
+    } else {
+      this.showLengthTable = !isNil(this.model[0].minLength || this.model[0].maxLength);
+      this.showValueTable = !isNil(this.model[0].minimum || this.model[0].maximum);
     }
   }
 }

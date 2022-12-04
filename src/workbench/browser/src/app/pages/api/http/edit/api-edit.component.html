@@ -1,9 +1,9 @@
 <div class="top-save-bar px-[20px] py-[10px]">
   <button type="submit" eo-ng-button nzType="primary" (click)="saveApi()" i18n>Save</button>
 </div>
-<div class="content !pt-0 p-[20px]">
+<div class="content p-[20px]">
   <form nz-form [formGroup]="validateForm" [nzLayout]="'vertical'">
-    <eo-ng-input-group class="mt-4" nzCompact>
+    <eo-ng-input-group nzCompact>
       <eo-ng-select
         class="!w-[15%] !min-w-[100px] !max-w-[200px]"
         [(ngModel)]="model.protocol"
@@ -29,7 +29,7 @@
       </nz-form-item>
     </eo-ng-input-group>
     <eo-ng-input-group nzCompact>
-      <nz-form-item class="w-[30%]" nz-col>
+      <nz-form-item class="w-[30%] !mb-0" nz-col>
         <nz-form-control i18n-nzErrorTip nzErrorTip="Please select an API group">
           <eo-ng-tree-select
             class="group-select"
@@ -45,7 +45,7 @@
           </eo-ng-tree-select>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item nz-col class="flex-1">
+      <nz-form-item nz-col class="flex-1 !mb-0">
         <nz-form-control
           i18n-nzErrorTip
           nzErrorTip="Please enter API name"
