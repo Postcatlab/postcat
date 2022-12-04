@@ -8,6 +8,7 @@ import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/in
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -57,7 +58,7 @@ export class RemoteService {
       .subscribe((inArg: Message) => {
         switch (inArg.type) {
           case 'onDataSourceChange': {
-            if (localStorage.getItem(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
+            if (StorageUtil.get(IS_SHOW_DATA_SOURCE_TIP) === 'true') {
               this.showMessage();
             }
             break;
@@ -164,15 +165,15 @@ export class RemoteService {
     if (isRemote) {
       const [isSuccess] = await this.pingRmoteServerUrl();
       if (isSuccess) {
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+        StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'true');
         this.switchToHttp();
         this.refreshComponent();
       } else {
         this.message.create('error', $localize`Remote data source not available`);
-        localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+        StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'false');
       }
     } else {
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+      StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'true');
       this.switchToLocal();
       this.refreshComponent();
     }
@@ -180,6 +181,6 @@ export class RemoteService {
 
   showMessage() {
     this.message.create('success', $localize`successfully switched to ${this.dataSourceText} data source`);
-    localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
+    StorageUtil.set('IS_SHOW_DATA_SOURCE_TIP', 'false');
   }
 }

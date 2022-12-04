@@ -16,21 +16,13 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 })
 export class StoreService {
   // * observable data
+
+  // ? router
   @observable private url = '';
+
+  // ? env
   @observable private envList = [];
-  @observable private envUuid = '';
-  @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
-  @observable private shareId = StorageUtil.get('shareId') || '';
-  @observable private userProfile = StorageUtil.get('userProfile') || null;
-  @observable private isOpenRightBar = false;
-  // * Local workspace always keep in last
-  @observable private currentWorkspaceID = -1;
-  @observable private workspaceList: API.Workspace[] = [
-    {
-      title: $localize`Local workspace`,
-      id: -1,
-    } as API.Workspace,
-  ];
+  @observable private envUuid = StorageUtil.get('env:selected') || null;
   @observable.shallow private currentEnv = {
     hostUri: '',
     parameters: [],
@@ -38,78 +30,100 @@ export class StoreService {
     uuid: null,
   };
 
+  // ? share
+  @observable private shareId = StorageUtil.get('shareId') || '';
+
+  // ? workspace
+  @observable private currentWorkspaceID = -1;
+  //  Local workspace always keep in last
+  @observable private workspaceList: API.Workspace[] = [
+    {
+      title: $localize`Local workspace`,
+      id: -1,
+    } as API.Workspace,
+  ];
+
+  // ? project
+  @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
+
+  // ? user && auth
+  @observable private userProfile = StorageUtil.get('userProfile') || null;
   @observable.shallow private authEnum = {
     canEdit: false,
     canDelete: false,
     canCreate: false,
   };
-
   @observable.shallow private loginInfo = {
     accessToken: StorageUtil.get('accessToken') || null,
     refreshToken: StorageUtil.get('refreshToken') || null,
   };
 
+  // ? UI
+  @observable private rightBarStatus = false;
+
   // * computed data
+
+  // ? env
   @computed get getCurrentEnv() {
     return this.currentEnv;
   }
-
   @computed get getEnvList() {
     return this.envList;
   }
-
-  @computed get isLogin() {
-    return !!this.userProfile?.username;
-  }
-
-  @computed get isShare() {
-    return this.url.includes('/home/share');
-  }
-
-  @computed get isRemote() {
-    return this.isShare || this.setting.settings['eoapi-common.dataStorage'] === 'http';
-  }
-
-  @computed get isLocal() {
-    return !this.isShare && this.currentWorkspaceID === -1;
-  }
-
-  @computed get getWorkspaceList() {
-    return this.workspaceList;
-  }
-
-  @computed get getLocalWorkspaceInfo() {
-    // * The last data must be local workspace
-    return this.workspaceList.at(-1);
-  }
-
-  @computed get getCurrentProjectID() {
-    return this.currentProjectID;
-  }
-
   @computed get getEnvUuid() {
     return this.envUuid;
   }
 
+  // ? share
+  @computed get isShare() {
+    return this.url.includes('/home/share');
+  }
+  @computed get isLocal() {
+    return !this.isShare && this.currentWorkspaceID === -1;
+  }
+  @computed get isRemote() {
+    return this.isShare || this.setting.settings['eoapi-common.dataStorage'] === 'http';
+  }
+  @computed get getShareId() {
+    return this.shareId;
+  }
+
+  // ? workspace
+  @computed get getWorkspaceList() {
+    return this.workspaceList;
+  }
+  @computed get getLocalWorkspaceInfo() {
+    // * The last data must be local workspace
+    return this.workspaceList.at(-1);
+  }
   @computed get getCurrentWorkspaceInfo() {
     const [workspace] = this.workspaceList.filter((it) => it.id === this.currentWorkspaceID);
     return workspace;
   }
 
+  // ? project
+  @computed get getCurrentProjectID() {
+    return this.currentProjectID;
+  }
+
+  // ? user && auth
+  @computed get isLogin() {
+    return !!this.userProfile?.username;
+  }
   @computed get getUserProfile() {
     return this.userProfile;
   }
-
   @computed get getLoginInfo() {
     return this.loginInfo;
   }
 
-  @computed get getShareId() {
-    return this.shareId;
-  }
-
   @computed get canEdit() {
     return this.authEnum.canEdit;
+  }
+
+  // ? UI
+  @computed get isOpenRightBar() {
+    return this.rightBarStatus;
   }
 
   constructor(
@@ -124,6 +138,12 @@ export class StoreService {
   }
 
   // * actions
+  // ? router
+  @action private routeListener = (event: NavigationEnd) => {
+    this.url = event.urlAfterRedirects;
+  };
+
+  // ? env
   @action setEnv(data) {
     this.currentEnv =
       data == null
@@ -135,11 +155,46 @@ export class StoreService {
         : data;
   }
 
+  @action setEnvList(data = []) {
+    this.envList = data;
+    const isHere = data.find((it) => it.uuid === this.envUuid);
+    if (!isHere) {
+      this.envUuid = null;
+      StorageUtil.set('env:selected', null);
+    }
+  }
+
+  // ? share
   @action setShareId(data = '') {
     this.shareId = data;
     StorageUtil.set('shareId', data);
   }
 
+  // ? workspace
+  @action setWorkspaceList(data: API.Workspace[] = []) {
+    const local = this.workspaceList.at(-1);
+    this.workspaceList = [...data.map((it) => ({ ...it, type: 'online' })), local];
+    if (this.workspaceList.length === -1) {
+      this.setCurrentWorkspace(local);
+    }
+  }
+  @action async setCurrentWorkspace(workspace: API.Workspace) {
+    this.currentWorkspaceID = workspace.id;
+    StorageUtil.set('currentWorkspace', workspace);
+    // refresh component
+    await this.router.navigate(['**']);
+    await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
+
+    this.message.send({ type: 'workspaceChange', data: true });
+  }
+
+  // ? project
+  @action setCurrentProjectID(projectID: number) {
+    this.currentProjectID = projectID;
+    StorageUtil.set('currentProjectID', projectID);
+  }
+
+  // ? user && auth
   @action setUserProfile(data: API.User = null) {
     this.userProfile = data;
     StorageUtil.set('userProfile', data);
@@ -156,52 +211,22 @@ export class StoreService {
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
 
-  @action private routeListener = (event: NavigationEnd) => {
-    this.url = event.urlAfterRedirects;
-  };
-
-  @action setWorkspaceList(data: API.Workspace[] = []) {
-    const local = this.workspaceList.at(-1);
-    this.workspaceList = [...data.map((it) => ({ ...it, type: 'online' })), local];
-    if (this.workspaceList.length === -1) {
-      this.setCurrentWorkspace(local);
-    }
-  }
-
-  @action toggleRightBar() {
-    this.isOpenRightBar = false;
-  }
-
-  @action setEnvList(data = []) {
-    this.envList = data;
-  }
-
   @action setAuthEnum(data) {
     this.authEnum = Object.assign(this.authEnum, data);
   }
 
-  @action setCurrentProjectID(projectID: number) {
-    this.currentProjectID = projectID;
-    StorageUtil.set('currentProjectID', projectID);
+  // ? UI
+  @action toggleRightBar(data = false) {
+    this.rightBarStatus = data;
   }
 
   @action setDataSource() {
     if (!this.isLocal) {
       this.storage.toggleDataSource({ dataSourceType: 'http' });
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'false');
+      StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'false');
     } else {
       this.storage.toggleDataSource({ dataSourceType: 'local' });
-      localStorage.setItem(IS_SHOW_DATA_SOURCE_TIP, 'true');
+      StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'true');
     }
-  }
-
-  @action async setCurrentWorkspace(workspace: API.Workspace) {
-    this.currentWorkspaceID = workspace.id;
-    StorageUtil.set('currentWorkspace', workspace);
-    // refresh component
-    await this.router.navigate(['**']);
-    await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
-
-    this.message.send({ type: 'workspaceChange', data: true });
   }
 }

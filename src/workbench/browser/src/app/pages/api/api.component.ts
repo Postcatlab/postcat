@@ -11,6 +11,8 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { NzSelectOptionInterface } from 'ng-zorro-antd/select';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { computed } from 'mobx';
 
 const DY_WIDTH_KEY = 'DY_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -75,15 +77,17 @@ export class ApiComponent implements OnInit, OnDestroy {
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
+  @computed get renderEnvList() {
+    return this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
+  }
+
   constructor(
     private route: ActivatedRoute,
     public apiTab: ApiTabService,
     private router: Router,
-    private messageService: MessageService,
-    private storage: StorageService,
     public web: WebService,
     public store: StoreService,
-    private http: RemoteService
+    private effect: EffectService
   ) {}
 
   /**
@@ -98,6 +102,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.queryParams.uuid);
+    this.effect.updateEnvList();
     this.watchRouterChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
   }
@@ -144,7 +149,9 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   gotoEnvManager() {
     // * switch to env
-    this.messageService.send({ type: 'toggleEnv', data: true });
+    // this.store.toggleRightBar(true);
+    this.toggleRightBar('open');
+
     // * close select
     this.isOpen = false;
   }
@@ -164,60 +171,4 @@ export class ApiComponent implements OnInit, OnDestroy {
     return localStorage.getItem(DY_WIDTH_KEY) ? Number(localStorage.getItem(DY_WIDTH_KEY)) : DEFAULT_DY_WIDTH;
   }
   handleEnvSelectStatus(event: boolean) {}
-  private async changeStoreEnv(uuid) {
-    if (uuid == null) {
-      this.store.setEnv(null);
-      return;
-    }
-    if (this.store.isShare) {
-      const [data, err]: any = await this.http.api_shareDocGetEnv({
-        uniqueID: this.store.getShareId,
-      });
-      if (err) {
-        return;
-      }
-      const result = data.find((val) => val.uuid === Number(uuid));
-      return this.store.setEnv(result);
-    }
-    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.setEnv(data);
-      }
-    });
-  }
-  // private initEnv() {
-  //   this.envUuid = Number(localStorage.getItem('env:selected'));
-  //   // * load All env
-  //   this.getAllEnv().then((result: any[]) => {
-  //     this.envList = result || [];
-  //   });
-  // }
-  // private watchEnvChange() {
-  //   this.messageService
-  //     .get()
-  //     .pipe(takeUntil(this.destroy$))
-  //     .subscribe(({ type, data }) => {
-  //       switch (type) {
-  //         case 'updateEnv': {
-  //           this.getAllEnv().then((result: any[]) => {
-  //             this.envList = result || [];
-  //           });
-  //           break;
-  //         }
-  //         case 'toggleEnv': {
-  //           this.toggleRightBar(data ? 'open' : 'close');
-  //           break;
-  //         }
-  //         case 'deleteEnv': {
-  //           const list = this.envList.filter((it) => it.value !== Number(data));
-  //           this.envList = list;
-  //           if (this.envUuid === Number(data)) {
-  //             this.envUuid = null;
-  //           }
-  //           break;
-  //         }
-  //       }
-  //     });
-  // }
 }

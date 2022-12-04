@@ -35,6 +35,15 @@ export class EffectService {
     });
   }
 
+  deleteEnv(uuid) {
+    this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
+        const envList = this.store.getEnvList.filter((it) => it.uuid !== uuid);
+        this.store.setEnvList(envList);
+      }
+    });
+  }
+
   async exportLocalProjectData(projectID = 1) {
     return new Promise((resolve) => {
       const apiGroupObservable = this.indexedDBStorage.groupLoadAllByProjectID(projectID);
@@ -105,7 +114,7 @@ export class EffectService {
     });
   }
 
-  getAllEnv() {
+  updateEnvList() {
     return new Promise((resolve) => {
       if (this.store.isShare) {
         this.http
@@ -116,6 +125,7 @@ export class EffectService {
             if (err) {
               return resolve([]);
             }
+            this.store.setEnvList(data);
             return resolve(data || []);
           });
         return;

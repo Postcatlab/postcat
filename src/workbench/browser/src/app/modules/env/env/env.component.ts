@@ -7,6 +7,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
 import { Subject } from 'rxjs';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 @Component({
   selector: 'eo-env',
@@ -51,7 +52,8 @@ export class EnvComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private messageService: MessageService,
     private message: EoNgFeedbackMessageService,
-    private store: StoreService
+    private store: StoreService,
+    private effect: EffectService
   ) {}
 
   get envUuid(): number {
@@ -64,12 +66,9 @@ export class EnvComponent implements OnInit, OnDestroy {
     } else {
       localStorage.removeItem('env:selected');
     }
-    this.changeStoreEnv(value);
   }
 
-  ngOnInit(): void {
-    this.changeStoreEnv(localStorage.getItem('env:selected'));
-  }
+  ngOnInit(): void {}
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -82,15 +81,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleDeleteEnv($event, uuid: string) {
     $event?.stopPropagation();
     // * delete localstrage
-    this.messageService.send({ type: 'deleteEnv', data: uuid });
-    // * delete env in menu on left sidebar
-    this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        if (this.envUuid === Number(uuid)) {
-          this.envUuid = this.activeUuid;
-        }
-      }
-    });
+    this.effect.deleteEnv(uuid);
   }
   handleEditEnv(uuid) {
     this.modalTitle = $localize`Edit Environment`;
@@ -164,7 +155,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   handleCancel(): void {
     this.isVisible = false;
     this.envInfo = {};
-    this.messageService.send({ type: 'updateEnv', data: {} });
+    this.effect.updateEnvList();
   }
 
   handleShowModal() {
@@ -177,18 +168,5 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.activeUuid = this.envUuid;
       this.handleEditEnv(this.activeUuid);
     }
-  }
-
-  private changeStoreEnv(uuid) {
-    if (uuid == null) {
-      this.store.setEnv(null);
-      return;
-    }
-    this.storage.run('environmentLoadAllByProjectID', [1], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        const data = result.data.find((val) => val.uuid === Number(uuid));
-        this.store.setEnv(data);
-      }
-    });
   }
 }

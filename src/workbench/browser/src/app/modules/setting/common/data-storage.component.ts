@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+
 @Component({
   selector: 'eo-data-storage',
   template: `
@@ -94,7 +96,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
     this.messageS.send({ type: 'workspaceChange', data: {} });
     if (isSuccess) {
       this.message.success($localize`Successfully connect to cloud`);
-      localStorage.setItem('IS_SHOW_DATA_SOURCE_TIP', 'false');
+      StorageUtil.set('IS_SHOW_DATA_SOURCE_TIP', 'false');
       //Relogin to update user info
       this.messageS.send({ type: 'login', data: {} });
       this.modelChange.emit(this.model);
