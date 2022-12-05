@@ -14,7 +14,7 @@ import { computed } from 'mobx';
       <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
     <p *ngIf="!gloablParams.length" class="text-gray-500" i18n>No Global variables</p>
-    <div class="pt-2.5" *ngIf="getEnv?.uuid">
+    <!-- <div class="pt-2.5" *ngIf="getEnv?.uuid">
       <div *ngIf="getEnv.hostUri">
         <span class="text-gray-400" i18n>Environment Host</span>
         <div>
@@ -26,7 +26,7 @@ import { computed } from 'mobx';
         <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
         <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
       </div>
-    </div>
+    </div> -->
   </div>`,
   styleUrls: [],
 })
