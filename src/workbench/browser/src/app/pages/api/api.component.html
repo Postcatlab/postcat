@@ -76,7 +76,26 @@
         >
       </ng-template>
       <!-- Env Select -->
-      <div class="flex items-center">
+      <div class="flex items-center h-full bg-white env-select">
+        <span
+          nzType="text"
+          class="flex items-center justify-center ml-4 cursor-pointer"
+          i18n-nzTooltipTitle
+          eoNgFeedbackTooltip
+          [nzTooltipMouseEnterDelay]="0.8"
+          [nzTooltipMouseLeaveDelay]="0"
+          nzTooltipTitle="Environment Quick Look"
+          nz-popover
+          [nzPopoverContent]="envParams"
+          nzTooltipPlacement="left"
+          nzPopoverPlacement="bottomRight"
+          nzPopoverTrigger="click"
+        >
+          <eo-iconpark-icon name="preview-open"></eo-iconpark-icon>
+        </span>
+        <ng-template #envParams>
+          <env-list></env-list>
+        </ng-template>
         <eo-ng-select
           [(ngModel)]="envUuid"
           [(nzOpen)]="isOpen"
@@ -100,26 +119,6 @@
             i18n
             >Manage Environment</a
           >
-        </ng-template>
-        <button
-          eo-ng-button
-          nzType="text"
-          class="flex items-center justify-center mx-1 icon"
-          i18n-nzTooltipTitle
-          eoNgFeedbackTooltip
-          [nzTooltipMouseEnterDelay]="0.8"
-          [nzTooltipMouseLeaveDelay]="0"
-          nzTooltipTitle="Environment Quick Look"
-          nz-popover
-          [nzPopoverContent]="envParams"
-          nzTooltipPlacement="bottomRight"
-          nzPopoverPlacement="bottomRight"
-          nzPopoverTrigger="click"
-        >
-          <eo-iconpark-icon name="preview-open"></eo-iconpark-icon>
-        </button>
-        <ng-template #envParams>
-          <env-list></env-list>
         </ng-template>
       </div>
     </nz-header>

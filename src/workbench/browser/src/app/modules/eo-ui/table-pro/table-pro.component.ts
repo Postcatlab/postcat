@@ -36,7 +36,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() nzCheckAddRow;
   @Input() nzDragCheck;
 
-  @Output() nzTrClick = new EventEmitter();
+  @Input() nzTrClick: (...rest: any[]) => void;
   @Output() nzDataChange = new EventEmitter();
   @Output() columnVisibleStatusChange = new EventEmitter();
 
@@ -210,8 +210,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set RowSortable
     if (this.setting.rowSortable && this.columns[0].type !== 'sort') {
       theaderConf.push({
-        resizeable:false,
-        width: this.columns.length*5,
+        resizeable: false,
+        width: this.columns.length * 5,
       });
       tbodyConf.push({
         type: 'sort',

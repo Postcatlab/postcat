@@ -1,5 +1,5 @@
 :host ::ng-deep {
-  .ant-skeleton-content{
+  .ant-skeleton-content {
     padding: 10px;
   }
   .group-tree {
@@ -33,6 +33,7 @@
     background-color: rgba(0, 0, 0, 0.1);
   }
   .dragging::after {
+    display: none;
     animation: initial;
   }
   .ant-tree-node-content-wrapper {

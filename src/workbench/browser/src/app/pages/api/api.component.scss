@@ -20,6 +20,15 @@ nz-content {
   color: var(--MAIN_TEXT);
 }
 
+.env-select {
+  border-bottom: 1px solid rgb(232, 232, 232);
+  ::ng-deep {
+    eo-ng-select eo-ng-select-top-control {
+        border: none !important;
+    }
+  }
+}
+
 nz-divider {
   margin: 0.1em 0;
 }

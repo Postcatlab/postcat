@@ -1,21 +1,9 @@
 import { whatType, whatTextType, eoDeepCopy } from '../index.utils';
 import { ApiBodyType, ApiEditBody, JsonRootType } from '../../shared/services/storage/index.model';
 import { flatData } from '../tree/tree.utils';
+import isXml from 'is-xml';
 
-export const isXML = (data) => {
-  const parser = new DOMParser();
-  let xml = null;
-  try {
-    const xmlContent = parser.parseFromString(data, 'text/xml');
-    xml = xmlContent.getElementsByTagName('parsererror');
-  } catch (error) {
-    return false;
-  }
-  if (xml.length > 0) {
-    return false;
-  }
-  return true;
-};
+export const isXML = (data) => isXml(data);
 /**
  * Parse item to eoTableComponent need
  */
@@ -175,7 +163,7 @@ export const xml2json = (text) => {
       }),
       {}
     );
-  const result = deep(data);
+  const result = deep(data.slice(0, 1));
   return result;
 };
 /**
@@ -186,7 +174,7 @@ export const xml2json = (text) => {
  * @returns
  */
 export const json2xml: (o: object, tab?) => string = (o, tab) => {
-  const toXml = function(v, name, ind) {
+  const toXml = function (v, name, ind) {
     let xml = '';
     if (v instanceof Array) {
       for (let i = 0, n = v.length; i < n; i++) {
@@ -244,7 +232,7 @@ export const text2table: (text: string) => uiData = (text) => {
   result.textType = ['xml', 'json'].includes(textType) ? (textType as ApiBodyType) : ApiBodyType.Raw;
   switch (result.textType) {
     case 'xml': {
-      result.data =  json2Table(xml2json(text));
+      result.data = json2Table(xml2json(text));
       break;
     }
     case 'json': {
@@ -266,7 +254,7 @@ export const text2table: (text: string) => uiData = (text) => {
  * @param inputOptions
  * @returns
  */
-export const table2json = function(eoapiArr: ApiEditBody[], inputOptions) {
+export const table2json = function (eoapiArr: ApiEditBody[], inputOptions) {
   inputOptions = inputOptions || {};
   let result = {};
   const loopFun = (inputArr, inputObject) => {

@@ -1,0 +1,13 @@
+::ng-deep {
+    .ant-popover-inner-content {
+      padding: 0;
+    }
+}
+
+.preview {
+  color: rgba(0,0,0,0.85);
+}
+
+.title {
+  background-color: var(--BTN_SEC_MORE_BG_HOVER);
+}

@@ -17,6 +17,8 @@ import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+
 interface testViewModel {
   requestTabIndex: number;
   protocol: string;
@@ -44,6 +46,9 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   @Output() eoOnInit = new EventEmitter<testViewModel>();
   wsStatus: 'connected' | 'connecting' | 'disconnect' = 'disconnect';
   isSocketConnect = true;
+  get isConnecting() {
+    return ['connecting', 'connected'].includes(this.wsStatus);
+  }
   Object = Object;
   socket = null;
   model: testViewModel;
@@ -64,6 +69,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     private testService: ApiTestService,
     private modal: ModalService,
     private message: MessageService,
+    private eoNgFeedbackMessageService: EoNgFeedbackMessageService,
     private store: StoreService
   ) {
     this.initBasicForm();
@@ -92,7 +98,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             ? APP_CONFIG.REMOTE_SOCKET_URL
             : `ws://localhost:${port || 13928}`
         }`,
-        { path: '/socket.io', transports: ['websocket'],reconnectionAttempts:2 }
+        { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 }
       );
       this.socket.on('connect_error', (error) => {
         // * conncet socketIO is failed
@@ -109,6 +115,12 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.isSocketConnect = false;
     }
   }
+
+  handleTestQueryTableClick = () => {
+    if (this.isConnecting) {
+      this.eoNgFeedbackMessageService.info('连接状态无法编辑');
+    }
+  };
 
   onResize({ height }: NzResizeEvent): void {
     this.height = height;
