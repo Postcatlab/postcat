@@ -118,8 +118,9 @@ export class GlobalProvider {
   };
 
   importProject = (params = {}) => {
+    const currentProjectID = this.getCurrentProjectID();
     const { projectID, groupID, ...rest } = {
-      projectID: this.getCurrentProjectID(), //没有传 projectID 默认获取当前项目
+      projectID: currentProjectID, //没有传 projectID 默认获取当前项目
       groupID: 0, //没传 groupID 默认加入根分组
       collections: [], //分组、API 数据
       environments: [], //环境数据
@@ -127,7 +128,8 @@ export class GlobalProvider {
     };
     console.log('projectID, rest, groupID', projectID, rest, groupID);
     return new Promise((resolve) => {
-      this.storage.run('projectImport', [projectID, rest, groupID], (result: StorageRes) => {
+      // 只能导入到当前 项目 所以 currentProjectID写死。。。
+      this.storage.run('projectImport', [currentProjectID, rest, groupID], (result: StorageRes) => {
         console.log('result', result);
         if (result.status === StorageResStatus.success) {
           resolve(
