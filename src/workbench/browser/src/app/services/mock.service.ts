@@ -11,22 +11,23 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
+import { ElectronService } from '../core/services';
 
 const mockReg = /\/mock-(\d+)/;
 
 @Injectable({ providedIn: 'root' })
 export class MockService {
-  private ipcRenderer: IpcRenderer = window.require?.('electron')?.ipcRenderer;
 
   constructor(
     private indexedDBStorage: IndexedDBStorage,
     private storageService: StorageService,
-    private settingService: SettingService
+    private settingService: SettingService,
+    private electron: ElectronService
   ) {}
 
   init() {
-    if (this.ipcRenderer) {
-      this.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
+    if (this.electron.isElectron) {
+      this.electron.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
         const sender = event.sender;
         const isRemoteMock = mockReg.test(req.url);
         const { mockID } = req.query;

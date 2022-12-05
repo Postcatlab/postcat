@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 
 const routes: Routes = [
@@ -20,7 +20,10 @@ const routes: Routes = [
 @NgModule({
   imports: [
     //electron user hash to keep router after page refresh
-    RouterModule.forRoot(routes, { useHash: !!(window && window.process && window.process.type) ? true : false }),
+    RouterModule.forRoot(routes, {
+      useHash: !!(window && window.process && window.process.type) ? true : false,
+      preloadingStrategy: PreloadAllModules,
+    }),
   ],
   exports: [RouterModule],
   // 👇 设置基础路由

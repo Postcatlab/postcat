@@ -33,8 +33,7 @@
             "styles": [
               { "input": "src/styles/light.less", "bundleName": "light", "inject": false },
               { "input": "src/styles/dark.less", "bundleName": "dark", "inject": false },
-              "src/styles.scss",
-              "src/assets/font/iconfont.css"
+              "src/styles.scss"
             ],
             "stylePreprocessorOptions": { "includePaths": ["src/styles/themes"] },
             "scripts": ["src/assets/libs/protocolcheck.js"],

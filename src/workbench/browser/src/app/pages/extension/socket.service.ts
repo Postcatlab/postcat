@@ -20,7 +20,7 @@ export class SocketService {
             ? APP_CONFIG.REMOTE_SOCKET_URL
             : `ws://localhost:${port || 13928}`
         }`,
-        { path: '/socket.io', transports: ['websocket'] }
+        { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 }
       );
     } catch (e) {
       console.log('Connect not allow', e);

@@ -21,8 +21,7 @@ export const sampleApiData: ApiData[] = [
         description: $localize`City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html`,
         enum: [
           { value: '110000', description: 'Beijing' },
-          { value: '440000', description: 'Guangdong' },
-          { value: '', description: '' },
+          { value: '440000', description: 'Guangdong' }
         ],
       },
     ],
@@ -99,7 +98,7 @@ export const sampleApiData: ApiData[] = [
         required: true,
         example:
           '{"lastUpdateTime":"2022-02-05 11:52:51","chinaTotal":{"confirm":139641,"heal":126827,"dead":5700,"nowConfirm":7114,"suspect":2,"nowSevere":6,"importedCase":12684,"noInfect":887,"showLocalConfirm":1,"showlocalinfeciton":1,"localConfirm":851,"noInfectH5":109,"localConfirmH5":850,"local_acc_confirm":106297},"chinaAdd":{"confirm":321,"heal":165,"dead":0,"nowConfirm":156,"suspect":-2,"nowSevere":0,"importedCase":18,"noInfect":60,"localConfirm":-67,"noInfectH5":0,"localConfirmH5":9},"isShowAdd":true,"showAddSwitch":{"all":true,"confirm":true,"suspect":true,"dead":true,"heal":true,"nowConfirm":true,"nowSevere":true,"importedCase":true,"noInfect":true,"localConfirm":true,"localinfeciton":true},"areaTree":[{"name":"中国","today":{"confirm":321,"isUpdated":true},"total":{"nowConfirm":7114,"confirm":139641,"dead":5700,"showRate":false,"heal":126827,"showHeal":true,"wzz":0,"provinceLocalConfirm":0}}]}',
-        enum: [{ value: '', description: '' }],
+        enum: [],
         children: [
           {
             name: 'areaTree',

@@ -36,7 +36,6 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     type: 'string',
     required: true,
     example: '',
-    enum: [],
     description: '',
   };
   private bodyType$: Subject<string> = new Subject<string>();

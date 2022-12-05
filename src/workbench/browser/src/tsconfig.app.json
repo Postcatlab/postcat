@@ -3,7 +3,13 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "",
-    "types": [],
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
     "paths": {
       "eo/*": [
         "../../../../src/*"
