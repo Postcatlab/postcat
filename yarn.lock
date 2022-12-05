@@ -8115,6 +8115,11 @@ is-wsl@^2.2.0:
   dependencies:
     is-docker "^2.0.0"
 
+is-xml@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/is-xml/-/is-xml-0.1.0.tgz#539cf2a87f69f02669d296a966fa2ab2b070b427"
+  integrity sha512-fYP19gmpEL5Ox3wAB9Ly425caWR6CveOAsDqBWqYueQbNeHkW5jvAyEaVMeP2yGIuwxydA3H3y5NM9QRc3C+Qg==
+
 is-yarn-global@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmmirror.com/is-yarn-global/-/is-yarn-global-0.3.0.tgz"

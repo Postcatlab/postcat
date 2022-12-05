@@ -46,6 +46,7 @@
     "eo-ng-table": "0.0.87",
     "eo-ng-tabs": "0.0.82",
     "eo-ng-tree": "0.0.73",
+    "is-xml": "0.1.0",
     "js-beautify": "1.14.4",
     "lodash-es": "4.17.21",
     "markdown-it": "13.0.1",

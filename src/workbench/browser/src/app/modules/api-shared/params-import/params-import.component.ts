@@ -152,7 +152,7 @@ export class ParamsImportComponent {
         break;
     }
     console.log(resultData, tailData);
-    this.baseDataChange.emit(resultData.concat(tailData));
+    this.baseDataChange.emit(isXML(this.paramCode) ? resultData : resultData.concat(tailData));
     this.handleCancel();
   }
 
