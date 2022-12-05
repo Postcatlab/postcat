@@ -7,7 +7,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
-import { computed, makeObservable, observable, reaction } from 'mobx';
+import { autorun, makeObservable, observable, reaction } from 'mobx';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -21,6 +21,7 @@ const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KE
 })
 export class ApiComponent implements OnInit, OnDestroy {
   @observable envUuid = '';
+  renderEnvList = [];
   isFirstTime = true;
   siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
   RIGHT_SIDER_SHRINK_WIDTH = 50;
@@ -36,6 +37,11 @@ export class ApiComponent implements OnInit, OnDestroy {
       this.apiTab.onAllComponentInit();
     }
   }
+
+  // @computed get renderEnvList() {
+  //   console.log('heloooo');
+  //   return this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
+  // }
 
   tabsetIndex: number;
   /**
@@ -72,10 +78,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   tabsIndex = 0;
   private destroy$: Subject<void> = new Subject<void>();
 
-  @computed get renderEnvList() {
-    return this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
-  }
-
   constructor(
     private route: ActivatedRoute,
     public apiTab: ApiTabService,
@@ -102,6 +104,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchRouterChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
     this.envUuid = this.store.getEnvUuid;
+    autorun(() => {
+      this.renderEnvList = this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
+    });
     reaction(
       () => this.envUuid,
       (data) => {

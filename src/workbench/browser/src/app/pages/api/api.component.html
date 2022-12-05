@@ -77,7 +77,7 @@
       </ng-template>
       <!-- Env Select -->
       <div class="flex items-center">
-        <!-- <eo-ng-select
+        <eo-ng-select
           [(ngModel)]="envUuid"
           [(nzOpen)]="isOpen"
           (nzOpenChange)="handleEnvSelectStatus($event)"
@@ -88,7 +88,7 @@
           nzPlaceHolder="Environment"
           #envSelect
         >
-        </eo-ng-select> -->
+        </eo-ng-select>
         <ng-template #renderTemplate>
           <nz-divider *ngIf="!store.isShare"></nz-divider>
           <a
