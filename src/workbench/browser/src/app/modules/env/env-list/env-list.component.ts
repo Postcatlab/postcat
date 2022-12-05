@@ -3,7 +3,8 @@ import { getGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-t
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { Environment } from '../../../shared/services/storage/index.model';
-import { computed, reaction } from 'mobx';
+import { computed, autorun, reaction } from 'mobx';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 
 @Component({
   selector: 'env-list',
@@ -38,20 +39,17 @@ export class EnvListComponent implements OnInit {
     hostUri: '',
     parameters: [],
   };
-  constructor(private store: StoreService, private http: RemoteService) {}
-  async ngOnInit() {
+  constructor(private store: StoreService, private http: RemoteService, private effect: EffectService) {}
+  ngOnInit() {
+    autorun(() => {
+      this.renderEnv = this.store.getEnvList
+        .map((it) => ({
+          ...it,
+          parameters: it.parameters.filter((item) => item.name || item.value),
+        }))
+        .find((it: any) => it.uuid === this.store.getCurrentEnv?.uuid);
+    });
     this.gloablParams = this.getGlobalParams();
-    reaction(
-      () => this.store.getEnvList,
-      (data) => {
-        this.renderEnv = data
-          .map((it) => ({
-            ...it,
-            parameters: it.parameters.filter((item) => item.name || item.value),
-          }))
-          .find((it: any) => it.uuid === this.store.getCurrentEnv?.uuid);
-      }
-    );
   }
   getGlobalParams() {
     return Object.entries(getGlobals() || {}).map((it) => {

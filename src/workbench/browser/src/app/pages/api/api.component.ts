@@ -7,7 +7,7 @@ import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
-import { computed, makeObservable, observable, reaction } from 'mobx';
+import { autorun, makeObservable, observable, reaction } from 'mobx';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
@@ -104,12 +104,9 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.watchRouterChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
     this.envUuid = this.store.getEnvUuid;
-    reaction(
-      () => this.store.getEnvList,
-      (data) => {
-        this.renderEnvList = data.map((it) => ({ label: it.name, value: it.uuid }));
-      }
-    );
+    autorun(() => {
+      this.renderEnvList = this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
+    });
     reaction(
       () => this.envUuid,
       (data) => {
