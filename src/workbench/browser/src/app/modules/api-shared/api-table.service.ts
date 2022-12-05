@@ -73,6 +73,7 @@ export class ApiTableService {
         title: $localize`Type`,
         type: 'select',
         key: 'type',
+        filterable:inArg.isEdit?false:true,
         disabledFn:inArg.format===ApiBodyType.XML?(item,data)=>data.level===0:undefined,
         width: 120,
       },
@@ -81,6 +82,7 @@ export class ApiTableService {
         type: 'checkbox',
         key: 'required',
         width: 100,
+        filterable:inArg.isEdit?false:true,
         enums: REQURIED_ENUMS,
       },
       description: {

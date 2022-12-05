@@ -312,12 +312,20 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       //Set filter
       if (col.filterable) {
         if (this.setting.isEdit) {
-          console.warn(`[EO_WARN]: editable table use filterable may perform poorly`);
+          console.warn(`[EO_WARN]: editable table use filterable may perform badly`);
         }
         header.filterMultiple = true;
         //Use custom filter
         if (!col.filterFn || col.filterFn === true) {
-          header.filterFn = (selected: string[], item: any) => selected.includes(item.data[col.key]);
+          if(this.setting.isLevel){
+          //TODO level filter
+            // header.filterFn = (selected: string[], item: any) =>(
+            //   this.
+            // );
+          }else{
+            header.filterFn = (selected: string[], item: any) => selected.includes(item.data[col.key]);
+
+          }
         } else {
           header.filterFn = col.filterFn;
         }
