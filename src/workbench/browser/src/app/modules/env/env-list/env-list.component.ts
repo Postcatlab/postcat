@@ -8,28 +8,38 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 
 @Component({
   selector: 'env-list',
-  template: ` <div style="width:300px">
-    <span class="text-gray-400" i18n>Global variable</span>
-    <div *ngFor="let it of gloablParams" class="flex items-center justify-between h-8">
-      <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
-      <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
+  template: ` <div style="width:400px" class="preview pb-4">
+    <span class="flex items-center px-6 h-12 title" i18n>Global variable</span>
+    <div *ngIf="gloablParams.length" class="flex items-center justify-between px-6 h-8">
+      <span class="px-1 w-1/3 text-gray-400">Name</span>
+      <span class="px-1 w-2/3 text-gray-400">Value</span>
     </div>
-    <p *ngIf="!gloablParams.length" class="text-gray-500" i18n>No Global variables</p>
-    <div class="pt-2.5" *ngIf="renderEnv?.uuid">
+    <div *ngFor="let it of gloablParams" class="flex items-center justify-between px-6 h-8">
+      <span class="px-1 w-1/3  text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
+      <span class="px-1 w-2/3  text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
+    </div>
+    <span *ngIf="!gloablParams.length" class="flex items-center px-6 h-12" i18n>No Global variables</span>
+    <div *ngIf="renderEnv?.uuid">
       <div *ngIf="renderEnv.hostUri">
-        <span class="text-gray-400" i18n>Environment Host</span>
+        <span class="flex items-center px-6 h-12 title" i18n>Environment Host</span>
         <div>
-          <p class="text-gray-500 text-ellipsis overflow-hidden" class="h-8">{{ renderEnv.hostUri }}</p>
+          <span class="text-ellipsis overflow-hidden flex items-center px-6 h-12">{{ renderEnv.hostUri }}</span>
         </div>
       </div>
-      <span class="text-gray-400" *ngIf="renderEnv.parameters?.length" i18n>Environment Global variable</span>
-      <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between h-8">
-        <span class="px-1 w-1/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
-        <span class="px-1 w-2/3 text-gray-500 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
+      <span class="flex items-center px-6 h-12 title" *ngIf="renderEnv.parameters?.length" i18n
+        >Environment Global variable</span
+      >
+      <div class="flex items-center justify-between px-6 h-8">
+        <span class="px-1 w-1/3 text-gray-400">Name</span>
+        <span class="px-1 w-2/3 text-gray-400">Value</span>
+      </div>
+      <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between px-6 h-8">
+        <span class="px-1 w-1/3 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
+        <span class="px-1 w-2/3 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
       </div>
     </div>
   </div>`,
-  styleUrls: [],
+  styleUrls: ['./env-list.component.scss'],
 })
 export class EnvListComponent implements OnInit {
   gloablParams: any = [];
