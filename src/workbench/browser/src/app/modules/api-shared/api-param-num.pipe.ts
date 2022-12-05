@@ -8,6 +8,6 @@ export class ApiParamsNumPipe implements PipeTransform {
     if (!params || typeof params !== 'object') {
       return 0;
     }
-    return params.filter((val) => val.name).length;
+    return params.filter((val) => val.name||val.example||val.description).length;
   }
 }

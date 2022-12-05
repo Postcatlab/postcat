@@ -11,9 +11,11 @@ export class FormFocusDirective implements AfterViewInit {
   ngAfterViewInit() {
     const input = this.element.nativeElement.querySelector(this.focusables.join(','));
     if (input) {
+      // input.focus();
+      console.log(input);
       // Promise.resolve().then(() => {
       //   input.focus();
-      //   console.log(input);
+      //   console.log(input,input.nativeElement);
       // });
     }
   }
