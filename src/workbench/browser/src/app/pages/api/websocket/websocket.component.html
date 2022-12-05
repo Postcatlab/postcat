@@ -68,7 +68,7 @@
       [(nzSelectedIndex)]="model.requestTabIndex"
     >
       <!-- Request Headers -->
-      <eo-ng-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="headerTitleTmp">
         <ng-template #headerTitleTmp>
           <span
             i18n="@@RequestHeaders"
@@ -90,7 +90,7 @@
         >
         </eo-api-test-header>
       </eo-ng-tab>
-      <eo-ng-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="queryTitleTmp">
         <ng-template #queryTitleTmp>
           <span
             i18n
@@ -218,7 +218,7 @@
         <ng-container *ngIf="item.isExpand && item.type === 'start'">
           <div *ngFor="let k of Object.keys(item.msg); let index = index" class="headers">
             <div class="font-bold bbd pb-[10px] pt-[8px]">{{ k }}</div>
-            <eo-api-test-result-header class="p-pbase" [model]="item.msg?.[k] || []"></eo-api-test-result-header>
+            <eo-api-test-result-header [model]="item.msg?.[k] || []"></eo-api-test-result-header>
           </div>
         </ng-container>
       </li>

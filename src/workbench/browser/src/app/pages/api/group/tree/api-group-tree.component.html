@@ -28,6 +28,7 @@
         <a i18n="@@AddAPI">New API</a>
       </li>
       <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
+      <li nz-menu-divider></li>
       <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'importAPI' })">
         <a i18n>Import API</a>
       </li>
@@ -86,7 +87,7 @@
           <div class="flex items-center" [style.width]="'calc(100% - 22px)'">
             <div class="width-box" *ngIf="node.level === 0"></div>
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
-              node.origin.method
+              node.origin.method.length > 5 ? node.origin.method.slice(0, 3) : node.origin.method
             }}</b>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>

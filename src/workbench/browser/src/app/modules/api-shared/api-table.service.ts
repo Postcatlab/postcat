@@ -231,8 +231,9 @@ export class ApiTableService {
       },
       required: {
         type: 'checkbox',
+        left:true,
         key: 'required',
-        width: 30,
+        width: 25,
         enums: REQURIED_ENUMS,
       },
       value: {

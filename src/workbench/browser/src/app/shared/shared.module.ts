@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClickStopPropagationDirective } from './directives';
+import { ClickStopPropagationDirective, FormFocusDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -27,6 +27,7 @@ import { ExtensionAppComponent } from './components/extension-app/extension-app.
 import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 
 const COMPONENTS = [DownloadClienteComponent, ExtensionAppComponent];
+const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective];
 const SHARED_UI_MODULE = [
   NzFormModule,
   EoNgButtonModule,
@@ -51,9 +52,9 @@ const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsMod
 
 @NgModule({
   imports: [...SHARED_MODULE, ...SHARED_UI_MODULE],
-  declarations: [...COMPONENTS, ClickStopPropagationDirective],
+  declarations: [...COMPONENTS, ...DIRECTIVES],
   providers: [],
-  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ClickStopPropagationDirective],
+  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ...DIRECTIVES],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SharedModule {}

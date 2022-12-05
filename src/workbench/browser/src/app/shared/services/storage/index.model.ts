@@ -369,7 +369,7 @@ interface BasicApiData extends StorageModel {
   requestHeaders?: ApiEditHeaders[];
 
   /**
-   * 请求的json参数根类型
+   * 请求的 JSON 参数根类型
    *
    */
   requestBodyJsonType?: JsonRootType;
@@ -475,7 +475,7 @@ export interface ApiTestData {
   requestHeaders?: ApiTestHeaders[];
 
   /**
-   * 请求的json参数根类型
+   * 请求的 JSON 参数根类型
    *
    * @type {JsonRootType|string}
    */

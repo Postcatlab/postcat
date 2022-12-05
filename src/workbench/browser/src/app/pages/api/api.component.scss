@@ -6,7 +6,7 @@ nz-content {
     width: 132px;
   }
 }
-.ant-layout{
+.ant-layout {
   background-color: var(--MAIN_BG);
 }
 :lang(en) {
@@ -26,7 +26,7 @@ nz-divider {
 .tabs-bar {
   background-color: var(--SEC_BG);
   box-sizing: border-box;
-  padding:0;
+  padding: 0;
   height: var(--PAGE_TABS_HEIGHT);
   display: flex;
   margin-bottom: -1px;
@@ -37,13 +37,34 @@ nz-divider {
   }
 }
 :host ::ng-deep {
+  height: 100%;
+
+  router-outlet + * {
+    display: block;
+    height: calc(
+      100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - var(--PAGE_TABS_HEIGHT)
+    );
+    overflow: auto;
+  }
+  router-outlet + eo-api-test {
+    overflow: unset;
+  }
+
+  .has_tab_page {
+    router-outlet + * {
+      height: calc(
+        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) -
+          var(--PAGE_TABS_HEIGHT) - var(--PAGE_INSIDE_TABS_HEIGHT)
+      );
+    }
+  }
   .ant-layout-sider-children {
     width: 100%;
   }
 
   .api-container-tabs {
     .ant-tabs-nav {
-      height: var( --PAGE_TABS_HEIGHT);
+      height: var(--PAGE_TABS_HEIGHT);
     }
     .ant-tabs-nav-list {
       width: 100%;

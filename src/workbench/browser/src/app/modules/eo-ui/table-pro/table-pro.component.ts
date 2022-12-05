@@ -217,7 +217,6 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         type: 'sort',
       });
     }
-    console.log(theaderConf);
     //Set ColumnVisible
     this.setting.toolButton = this.setting.toolButton || {};
     if (!_.has(this.setting.toolButton, 'columnVisible')) {
