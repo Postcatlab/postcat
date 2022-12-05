@@ -4,6 +4,11 @@
   height: 100%;
   width: 100%;
   display: flex;
+  router-outlet + * {
+    display: block;
+    height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height));
+    overflow: auto;
+  }
   .ant-btn-link {
     padding: 0;
   }

@@ -53,6 +53,9 @@ export class EoTabComponent implements OnInit, OnDestroy {
     }
     this.tabOperate.newDefaultTab(key);
   }
+  doubleClickTab($event,uuid){
+    this.tabStorage.tabsByID.get(uuid).isFixed =true;
+  }
   sortTab(_left: KeyValue<number, any>, _right: KeyValue<number, any>): number {
     const leftIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _left.key);
     const rightIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _right.key);

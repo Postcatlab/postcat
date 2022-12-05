@@ -72,7 +72,7 @@
       [(nzSelectedIndex)]="model.requestTabIndex"
     >
       <!-- Request Headers -->
-      <eo-ng-tab [nzTitle]="headerTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="headerTitleTmp">
         <ng-template #headerTitleTmp>
           <span i18n="@@RequestHeaders">Headers</span>
           <nz-badge
@@ -88,7 +88,7 @@
         ></eo-api-test-header>
       </eo-ng-tab>
       <!--Request Info -->
-      <eo-ng-tab [nzTitle]="bodyTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="bodyTitleTmp">
         <ng-template #bodyTitleTmp>
           <span i18n>Body</span>
           <nz-badge
@@ -113,7 +113,7 @@
         >
         </eo-api-test-body>
       </eo-ng-tab>
-      <eo-ng-tab [nzTitle]="queryTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="queryTitleTmp">
         <ng-template #queryTitleTmp>
           <span i18n>Query</span>
           <nz-badge
@@ -128,7 +128,7 @@
           (modelChange)="emitChangeFun('queryParams')"
         ></eo-api-test-query>
       </eo-ng-tab>
-      <eo-ng-tab [nzTitle]="restTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="restTitleTmp">
         <ng-template #restTitleTmp>
           <span i18n>REST</span>
           <nz-badge
@@ -143,7 +143,7 @@
           (modelChange)="emitChangeFun('restParams')"
         ></eo-api-test-rest>
       </eo-ng-tab>
-      <eo-ng-tab [nzTitle]="preScriptTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="preScriptTitleTmp">
         <ng-template #preScriptTitleTmp>
           <span i18n>Pre-request Script</span>
           <nz-badge class="ml-1 ant-badge-theme-color" *ngIf="model.beforeScript?.trim()" nzStatus="success"></nz-badge>
@@ -157,7 +157,7 @@
           class="eo_theme_iblock"
         ></eo-api-script>
       </eo-ng-tab>
-      <eo-ng-tab [nzTitle]="suffixScriptTitleTmp" [nzForceRender]="true">
+      <eo-ng-tab [nzTitle]="suffixScriptTitleTmp">
         <ng-template #suffixScriptTitleTmp>
           <span i18n>After-response Script</span>
           <nz-badge class="ml-1 ant-badge-theme-color" *ngIf="model.afterScript?.trim()" nzStatus="success"></nz-badge>
@@ -197,14 +197,14 @@
         </eo-api-test-result-response>
       </eo-ng-tab>
       <div>
-        <eo-ng-tab i18n-nzTitle nzTitle="Response Headers">
+        <eo-ng-tab *ngIf="model.testResult?.response?.headers" i18n-nzTitle nzTitle="Response Headers">
           <eo-api-test-result-header
             class="p-pbase"
             [model]="model.testResult?.response?.headers"
           ></eo-api-test-result-header>
         </eo-ng-tab>
       </div>
-      <eo-ng-tab i18n-nzTitle nzTitle="Body" [nzForceRender]="true">
+      <eo-ng-tab  *ngIf="model.testResult.request.requestBody" i18n-nzTitle nzTitle="Body">
         <!-- TODO use isRequestBodyLoaded -->
         <eo-api-test-result-request-body
           *ngIf="model.responseTabIndex === 2"
@@ -212,7 +212,7 @@
         >
         </eo-api-test-result-request-body>
       </eo-ng-tab>
-      <eo-ng-tab i18n-nzTitle nzTitle="Request Headers">
+      <eo-ng-tab *ngIf="model.testResult?.request?.requestHeaders" i18n-nzTitle nzTitle="Request Headers">
         <eo-api-test-result-header class="p-pbase" [model]="model.testResult?.request?.requestHeaders">
         </eo-api-test-result-header>
       </eo-ng-tab>

@@ -26,35 +26,4 @@
     overflow: auto;
     height: 100%;
   }
-  eo-api {
-    height: 100%;
-
-    router-outlet + * {
-      display: block;
-      height: calc(
-        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) -
-          var(--PAGE_TABS_HEIGHT)
-      );
-      overflow: auto;
-    }
-    router-outlet + eo-api-test {
-      overflow: unset;
-    }
-
-    .has_tab_page  {
-      router-outlet + * {
-        height: calc(
-          100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) -
-            var(--PAGE_TABS_HEIGHT) - var(--PAGE_INSIDE_TABS_HEIGHT)
-        );
-      }
-    }
-  }
-  eo-extension {
-    router-outlet + * {
-      display: block;
-      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height));
-      overflow: auto;
-    }
-  }
 }

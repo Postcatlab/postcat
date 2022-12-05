@@ -10,6 +10,7 @@
   <eo-ng-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
     <ng-template #titleTemplate>
       <div
+        (dblclick)="doubleClickTab($event,uuid)"
         class="flex items-center tab-item-container h-100"
         [ngClass]="{
           'fixed-tab-item-container': tabStorage.tabsByID.get(uuid)?.isFixed,
