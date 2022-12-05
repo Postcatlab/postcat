@@ -20,7 +20,7 @@
             formControlName="uri"
             (change)="changeUri()"
             [(ngModel)]="model.request.uri"
-            class="left-1"
+            class="left-1 rounded-r"
             name="uri"
             eo-ng-input
           />
@@ -162,7 +162,7 @@
             *ngIf="item.type === 'send'"
             class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer"
           >
-            <span class="flex justify-center w-4 h-4 rounded shrink-0 items-cente send_icon">
+            <span class="flex justify-center w-4 h-4 rounded shrink-0 items-center send_icon">
               <eo-iconpark-icon name="arrow-up" size="10"></eo-iconpark-icon>
             </span>
             <div class="px-2">{{ item.msg }}</div>
