@@ -15,13 +15,12 @@
     <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
       <div class="pl-[18px] tree_node" *ngIf="node.origin?.isFixed">
         <div class="flex items-center">
-          <eo-iconpark-icon name="home" class="mr10"></eo-iconpark-icon>
+          <eo-iconpark-icon name="home" class="mr10 h-[14px] mt-[-4px]"></eo-iconpark-icon>
           <span class="text-omit node_title">{{ node.title }}</span>
         </div>
       </div>
     </ng-template>
   </div>
-  <nz-divider class="!mt-[5px] !mb-[7px]"></nz-divider>
   <eo-ng-tree-default [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzHideUnMatched]="true"
     (nzClick)="clickTreeItem($event)" nzBlockNode [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
