@@ -15,6 +15,7 @@ import { ApiTestUtilService } from '../api-test-util.service';
 export class ApiTestQueryComponent implements OnInit, OnDestroy {
   @Input() model: ApiTestQuery[];
   @Input() disabled: boolean;
+  @Input() nzTrClick: (...rest: any[]) => any;
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
   listConf: any = {
