@@ -95,6 +95,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
 
   private isFullScreenStatus = false;
   private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
+  private showItems = [];
   constructor(private cdRef: ChangeDetectorRef) {}
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
@@ -317,14 +318,39 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         header.filterMultiple = true;
         //Use custom filter
         if (!col.filterFn || col.filterFn === true) {
-          if(this.setting.isLevel){
-          //TODO level filter
-            // header.filterFn = (selected: string[], item: any) =>(
-            //   this.
-            // );
-          }else{
+          if (this.setting.isLevel) {
+            header.filterFn = (selected: string[], inItem: any) => {
+              //First loop get all show item
+              if (inItem.data.eoKey === this.nzData[0].eoKey) {
+                this.showItems = [];
+                const findNode = (arr): boolean => {
+                  let hasFind = false;
+                  arr.forEach((item) => {
+                    if (selected.includes(item[col.key])) {
+                      this.showItems.push(item.eoKey);
+                      hasFind = true;
+                    }
+                    if (item[this.childKey]?.length) {
+                      const chidHasFind = findNode(item[this.childKey]);
+                      if (chidHasFind) {
+                        if (!hasFind) {
+                          this.showItems.push(item.eoKey);
+                        }
+                        hasFind = true;
+                      }
+                    }
+                  });
+                  return hasFind;
+                };
+                findNode(this.nzData);
+              }
+              if (this.showItems.includes(inItem.data.eoKey)) {
+                return true;
+              }
+              return false;
+            };
+          } else {
             header.filterFn = (selected: string[], item: any) => selected.includes(item.data[col.key]);
-
           }
         } else {
           header.filterFn = col.filterFn;
