@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
@@ -50,7 +50,8 @@ export class RemoteService {
     private message: EoNgFeedbackMessageService,
     private electronService: ElectronService,
     private settingService: SettingService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.messageService
       .get()
@@ -77,8 +78,7 @@ export class RemoteService {
   }
 
   async refreshComponent() {
-    const { pathname, searchParams } = new URL(this.router.url, 'https://github.com/');
-    // console.log('this.router', pathname, Object.fromEntries(searchParams.entries()));
+    const { pathname, searchParams } = new URL(window.location.href);
     await this.router.navigate(['**']);
     await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
   }
