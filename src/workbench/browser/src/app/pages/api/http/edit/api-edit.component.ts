@@ -183,6 +183,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.model.restParams = [...generateRestFromUrl(url, this.model.restParams)];
   }
   getApiGroup() {
+    // ! Sooner or later need to refactor
     this.groups = [];
     const treeItems: any = [
       {
