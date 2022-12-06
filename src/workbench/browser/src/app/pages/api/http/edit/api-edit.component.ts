@@ -134,7 +134,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
       //@ts-ignore
-      this.initialModel =this.apiEditUtil.formatEditingApiData(Object.assign({}, this.model, this.validateForm.value));
+      this.initialModel = this.apiEditUtil.formatEditingApiData(Object.assign({}, this.model, this.validateForm.value));
       if (busEvent === 'addApi') {
         this.router.navigate(['/home/api/http/detail'], {
           queryParams: {
@@ -182,12 +182,12 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     //Need On push reset params
     this.model.restParams = [...generateRestFromUrl(url, this.model.restParams)];
   }
-  private getApiGroup() {
+  getApiGroup() {
     this.groups = [];
     const treeItems: any = [
       {
         title: $localize`Root directory`,
-        //!actually is 0,but 0 will hidden in nz component,so use -1 replace 0
+        // ! actually is 0, but 0 will hidden in nz component, so use -1 replace 0
         key: '-1',
         weight: 0,
         parentID: '0',
