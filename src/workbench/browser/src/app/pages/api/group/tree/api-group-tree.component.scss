@@ -60,17 +60,24 @@
   min-width: 32px;
   font-size: 14px;
   font-weight: 700;
+  flex-shrink: 0;
+}
+.more-btn{
+  padding: 3px;
+  height: 20px;
 }
 
-.tree_node {
+
+.tree-node {
+  height: 100%;
   font-size: 12px;
   white-space: nowrap;
-  .tree_node_operate {
+  .tree-node_operate {
     font-size: 14px;
     font-weight: bold;
-    visibility: hidden;
+    display: none;
   }
-  &:hover .tree_node_operate {
-    visibility: visible;
+  &:hover .tree-node_operate {
+    display: initial;
   }
 }

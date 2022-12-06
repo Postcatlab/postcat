@@ -32,9 +32,9 @@
     (nzOnDrop)="treeItemDrop($event)" [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
   <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
-      <div [style.--tree-level]="node.level" apiGroupTree [node]="node">
+      <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
         <!-- Folder -->
-        <div class="flex items-center justify-between tree_node" *ngIf="!node.isLeaf">
+        <div class="flex items-center justify-between tree-node" *ngIf="!node.isLeaf">
           <div class="flex items-center" [style.width]="'calc(100% - 8px * var(--tree-level))'">
             <div class="width-box" *ngIf="!node.origin.children || !node.origin.children.length"></div>
             <svg class="iconpark-icon mr-[5px] flex-shrink-0">
@@ -42,12 +42,11 @@
             </svg>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
-          <span class="flex tree_node_operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
+          <span class="flex tree-node_operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
             <ng-container *ngIf="isEdit">
-              <div nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
-                <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
-              </div>
-
+              <button eo-ng-button nzType="text"  class="more-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
+                <eo-iconpark-icon  name="more" size="16px"></eo-iconpark-icon>
+              </button>
               <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
                 <ul nz-menu>
                   <li nz-menu-item *ngFor="let item of groupItemsMenu" (click)="item.click({ group: node })">
@@ -59,19 +58,19 @@
           </span>
         </div>
         <!-- Leaf -->
-        <div class="flex items-center justify-between tree_node" *ngIf="!node.origin?.isFixed && node.isLeaf">
-          <div class="flex items-center" [style.width]="'calc(100% - 22px)'">
+        <div class="flex items-center justify-between tree-node" *ngIf="!node.origin?.isFixed && node.isLeaf">
+          <div class="flex items-center" [style.width]="'calc(100% - 30px)'">
             <div class="width-box" style="width: 6px" *ngIf="node.level === 0"></div>
             <b class="method_text method_text_{{ node.origin.method }} mr-[5px]" *ngIf="node.origin.method">{{
               node.origin.method.length > 5 ? node.origin.method.slice(0, 3) : node.origin.method
             }}</b>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
-          <div class="flex tree_node_operate">
+          <div class="flex tree-node_operate">
             <ng-container *ngIf="isEdit">
-              <div eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="apiMenu" (click)="$event.stopPropagation()">
-                <eo-iconpark-icon class="mr-[5px]" name="more" size="16px"></eo-iconpark-icon>
-              </div>
+                <button class="more-btn" eo-ng-button nzType="text" eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="apiMenu" (click)="$event.stopPropagation()">
+                  <eo-iconpark-icon  name="more" size="16px"></eo-iconpark-icon>
+                </button>
               <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
                 <ul nz-menu>
                   <li nz-menu-item *ngFor="let item of apiItemsMenu"
