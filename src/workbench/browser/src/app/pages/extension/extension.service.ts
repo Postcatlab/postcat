@@ -44,6 +44,7 @@ export class ExtensionService {
     this.messageService.send({ type: 'localExtensionsChange', data: this.localExtensions });
   }
   getInstalledList() {
+    this.localExtensions = this.getExtensions();
     // Local extension exception for ignore list
     return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.name));
   }
@@ -53,9 +54,7 @@ export class ExtensionService {
   }
   public async requestList() {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
-    console.log('result', structuredClone(result));
     const installList = this.getInstalledList();
-    console.log('installList', installList);
     result.data = [
       ...result.data.filter((val) => installList.every((childVal) => childVal.name !== val.name)),
       //Local debug package

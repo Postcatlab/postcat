@@ -64,7 +64,6 @@ export class ExtensionListComponent implements OnInit {
       if (this.type === 'official') {
         return new ExtensionList(res.data.filter((it) => it.author === 'Eoapi')).search(keyword);
       }
-      console.log('res.data', res.data);
       return new ExtensionList(res.data).search(keyword);
     } catch (error) {
     } finally {

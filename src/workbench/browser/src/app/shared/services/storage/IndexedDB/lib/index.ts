@@ -757,7 +757,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             }
             this.environmentCreate(result.data).subscribe(({ status, data: environment }: ResultType<Environment>) => {
               if (status === 200 && data) {
-                successes.apiData.push({
+                successes.environment.push({
                   name: environment.name,
                   uuid: environment.uuid,
                 });
