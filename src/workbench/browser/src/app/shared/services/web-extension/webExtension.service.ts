@@ -131,9 +131,6 @@ export class WebExtensionService {
         });
       }
     });
-    if (featureMap.size === 0) {
-      return;
-    }
     return featureMap;
   }
 

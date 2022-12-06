@@ -57,9 +57,7 @@ export class ModuleManager implements ModuleManagerInterface {
   }
   async getRemoteExtension() {
     const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
-    return data.data
-      .map(({ name, version }) => ({ name, version }))
-      .concat({ name: 'eoapi-apispace', version: '0.1.3' });
+    return data.data.map(({ name, version }) => ({ name, version }));
   }
 
   async installExt({ name }) {

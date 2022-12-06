@@ -6,7 +6,6 @@ import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import apispacePkg from '../apispace.json';
 
 class ExtensionList {
   list = [];
@@ -14,11 +13,7 @@ class ExtensionList {
     this.list = list;
   }
   search(keyword: string) {
-    const list = this.list.filter((it) => it.name.includes(keyword) || it.keywords?.includes(keyword));
-    if (!list.some((n) => n.name === 'eoapi-apispace')) {
-      list.push(apispacePkg);
-    }
-    return list;
+    return this.list.filter((it) => it.name.includes(keyword) || it.keywords?.includes(keyword));
   }
 }
 @Component({
@@ -69,6 +64,7 @@ export class ExtensionListComponent implements OnInit {
       if (this.type === 'official') {
         return new ExtensionList(res.data.filter((it) => it.author === 'Eoapi')).search(keyword);
       }
+      console.log('res.data', res.data);
       return new ExtensionList(res.data).search(keyword);
     } catch (error) {
     } finally {

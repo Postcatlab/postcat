@@ -8,7 +8,6 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
-import apispacePkg from './apispace.json';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Injectable({
@@ -54,7 +53,9 @@ export class ExtensionService {
   }
   public async requestList() {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
+    console.log('result', structuredClone(result));
     const installList = this.getInstalledList();
+    console.log('installList', installList);
     result.data = [
       ...result.data.filter((val) => installList.every((childVal) => childVal.name !== val.name)),
       //Local debug package
@@ -136,10 +137,6 @@ export class ExtensionService {
   }
 
   private async requestDetail(id) {
-    // TODO delete when finish
-    if (id === 'eoapi-apispace') {
-      return { data: apispacePkg };
-    }
     return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}?locale=${this.language.systemLanguage}`)).catch(
       (err) => [0, err]
     );
