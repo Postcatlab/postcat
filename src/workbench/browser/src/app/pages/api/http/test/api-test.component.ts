@@ -1,4 +1,15 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -30,9 +41,7 @@ import {
   afterScriptCompletions,
 } from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import {
-  ContentType,
-} from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
+import { ContentType } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
@@ -60,7 +69,7 @@ interface testViewModel {
   templateUrl: './api-test.component.html',
   styleUrls: ['./api-test.component.scss'],
 })
-export class ApiTestComponent implements OnInit, OnDestroy {
+export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() model: testViewModel = this.resetModel();
   /**
    * Intial model from outside,check form is change
@@ -80,7 +89,7 @@ export class ApiTestComponent implements OnInit, OnDestroy {
 
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
-  height = Number.isNaN(localHeight) ? 300 : localHeight;
+  height: number;
 
   isRequestBodyLoaded = false;
   REQUEST_METHOD = objectToArray(RequestMethod);
@@ -104,7 +113,8 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     private apiTestUtil: ApiTestUtilService,
     private testServer: TestServerService,
     private messageService: MessageService,
-    private lang: LanguageService
+    private lang: LanguageService,
+    private elementRef: ElementRef
   ) {
     this.initBasicForm();
     this.testServer.init((message) => {
@@ -113,6 +123,10 @@ export class ApiTestComponent implements OnInit, OnDestroy {
     this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((status) => {
       this.changeStatus(status);
     });
+  }
+
+  ngAfterViewInit() {
+    this.height = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
   }
   /**
    * Restore data from history
