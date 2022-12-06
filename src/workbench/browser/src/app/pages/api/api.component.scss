@@ -28,8 +28,8 @@ nz-content {
 
 .env-select {
   border-bottom: 1px solid rgb(232, 232, 232);
+  background-color: var(--MAIN_BG);
   ::ng-deep {
-   
     eo-ng-select eo-ng-select-top-control {
         border: none !important;
     }
