@@ -18,7 +18,7 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
       <span class="px-1 w-1/3  text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
       <span class="px-1 w-2/3  text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
-    <span *ngIf="!gloablParams.length" class="flex items-center px-6 h-12" i18n>No Global variables</span>
+    <span *ngIf="!gloablParams.length" class="flex items-center px-6 h-12 text-gray-400" i18n>No Global variables</span>
     <div *ngIf="renderEnv?.uuid">
       <div *ngIf="renderEnv.hostUri">
         <span class="flex items-center px-6 h-12 title" i18n>Environment Host</span>
@@ -49,7 +49,7 @@ export class EnvListComponent implements OnInit {
     hostUri: '',
     parameters: [],
   };
-  constructor(private store: StoreService, private http: RemoteService, private effect: EffectService) {}
+  constructor(private store: StoreService) {}
   ngOnInit() {
     autorun(() => {
       this.renderEnv = this.store.getEnvList

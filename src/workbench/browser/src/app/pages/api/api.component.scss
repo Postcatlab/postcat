@@ -20,9 +20,16 @@ nz-content {
   color: var(--MAIN_TEXT);
 }
 
+::ng-deep .eo-env-preview {
+  .ant-popover-inner-content {
+      padding: 0;
+  }
+}
+
 .env-select {
   border-bottom: 1px solid rgb(232, 232, 232);
   ::ng-deep {
+   
     eo-ng-select eo-ng-select-top-control {
         border: none !important;
     }

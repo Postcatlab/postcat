@@ -71,27 +71,27 @@
         </ul>
       </eo-ng-dropdown-menu>
       <ng-template #titleLabel let-item="item">
-        <span class="mr-[5px] font-light method-text">
-          {{ item?.extends?.method}}</span
-        >
+        <span class="mr-[5px] font-light method-text"> {{ item?.extends?.method }}</span>
       </ng-template>
       <!-- Env Select -->
       <div class="flex items-center h-full bg-white env-select">
-        <span
+        <button
+          eo-ng-button
           nzType="text"
-          class="flex items-center justify-center ml-4 cursor-pointer"
+          class="flex items-center justify-center ml-2 cursor-pointer"
           i18n-nzTooltipTitle
           eoNgFeedbackTooltip
           [nzTooltipMouseLeaveDelay]="0"
           nzTooltipTitle="Environment Quick Look"
           nz-popover
+          nzPopoverOverlayClassName="eo-env-preview"
           [nzPopoverContent]="envParams"
           nzTooltipPlacement="left"
           nzPopoverPlacement="bottomRight"
           nzPopoverTrigger="click"
         >
           <eo-iconpark-icon name="preview-open"></eo-iconpark-icon>
-        </span>
+        </button>
         <ng-template #envParams>
           <env-list></env-list>
         </ng-template>
