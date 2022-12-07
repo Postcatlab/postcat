@@ -51,6 +51,7 @@ export class GlobalProvider {
   };
 
   showModalMask = (style = {}) => {
+    this.modalMaskEl?.remove();
     this.modalMaskEl = document.createElement('div');
     this.modalMaskEl.classList.add('ant-modal-mask', 'cdk-overlay-backdrop-showing');
     document.body.appendChild(this.modalMaskEl);
