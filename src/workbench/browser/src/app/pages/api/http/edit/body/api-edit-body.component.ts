@@ -11,9 +11,9 @@ import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/se
   styleUrls: ['./api-edit-body.component.scss'],
 })
 export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
-   /**
-    * Table ID
-    */
+  /**
+   * Table ID
+   */
   @Input() tid: string;
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
@@ -49,25 +49,10 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((model) => {
+      if(this.bodyType!==ApiBodyType.Raw) {return;}
       // ! Must set value by data, because this.model has delay
       this.modelChange.emit(model);
     });
-  }
-  private beforeChangeBodyByType(type) {
-    switch (type) {
-      case ApiBodyType.Binary:
-      case ApiBodyType.Raw: {
-        if (typeof this.model !== 'string') {
-          return;
-        }
-        this.cache[type] = this.model || '';
-        break;
-      }
-      default: {
-        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
-        break;
-      }
-    }
   }
   jsonRootTypeDataChange(jsonRootType) {
     this.jsonRootTypeChange.emit(jsonRootType);
@@ -79,11 +64,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
     this.bodyTypeChange.emit(this.bodyType);
-    this.initListConf();
     this.setModel();
-    if (type === 'init') {
-      return;
-    }
+    this.initListConf();
     this.modelChange.emit(this.model);
   }
   ngOnInit(): void {
@@ -101,7 +83,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
       ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)
     ) {
       this.beforeChangeBodyByType(this.bodyType);
-      this.changeBodyType('init');
+      this.setModel();
+      this.initListConf();
     }
   }
   beforeHandleImport(result) {
@@ -113,6 +96,22 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   handleParamsImport(data) {
     this.model = data;
     this.modelChange.emit(data);
+  }
+  private beforeChangeBodyByType(type) {
+    switch (type) {
+      case ApiBodyType.Binary:
+      case ApiBodyType.Raw: {
+        if (typeof this.model !== 'string') {
+          return;
+        }
+        this.cache[type] = this.model || '';
+        break;
+      }
+      default: {
+        this.cache[type] = [...(Array.isArray(this.model) ? this.model : [])];
+        break;
+      }
+    }
   }
   /**
    * Set model after change bodyType
@@ -152,7 +151,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     const config = this.apiTable.initTable(
       {
         in: 'body',
-        id:this.tid,
+        id: this.tid,
         format: this.bodyType as ApiBodyType,
         isEdit: true,
       },

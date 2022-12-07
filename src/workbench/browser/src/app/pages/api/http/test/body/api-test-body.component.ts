@@ -26,6 +26,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-test-body',
@@ -37,7 +38,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   @Input() supportType: string[];
   @Input() contentType: ContentType;
   @Input() bodyType: ApiTestBodyType | string;
-  @Output() bodyTypeChange: EventEmitter<any> = new EventEmitter();
+  @Output() bodyTypeChange: EventEmitter<ApiBodyType | string> = new EventEmitter();
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   @Output() contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
