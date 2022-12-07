@@ -37,7 +37,13 @@ export class DataSourceService {
   }
 
   getApiUrl(apiData: ApiData) {
-    const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    const url = new URL(
+      `${this.mockUrl}/${apiData.uri}`
+        .replace(/:\/{2,}/g, ':::')
+        .replace(/\/{2,}/g, '/')
+        .replace(/:{3}/g, '://'),
+      'https://github.com/'
+    );
     if (apiData) {
       url.searchParams.set('mockID', apiData.uuid + '');
     }

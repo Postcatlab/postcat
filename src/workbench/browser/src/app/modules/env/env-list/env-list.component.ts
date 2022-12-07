@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { getGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { Environment } from '../../../shared/services/storage/index.model';
-import { computed, autorun, reaction } from 'mobx';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { autorun } from 'mobx';
 
 @Component({
   selector: 'env-list',
   template: ` <div style="width:400px" class="preview pb-4">
     <span class="flex items-center px-6 h-12 title" i18n>Global variable</span>
-    <div *ngIf="gloablParams.length" class="flex items-center justify-between px-6 h-8">
+    <div *ngIf="gloablParams.length" class="flex items-center justify-between px-6 h-8 content">
       <span class="px-1 w-1/3 text-gray-400">Name</span>
       <span class="px-1 w-2/3 text-gray-400">Value</span>
     </div>
@@ -23,7 +21,7 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
       <div *ngIf="renderEnv.hostUri">
         <span class="flex items-center px-6 h-12 title" i18n>Environment Host</span>
         <div>
-          <span class="text-ellipsis overflow-hidden flex items-center px-6 h-12">{{ renderEnv.hostUri }}</span>
+          <span class="text-ellipsis overflow-hidden flex items-center px-6 h-12 content">{{ renderEnv.hostUri }}</span>
         </div>
       </div>
       <span class="flex items-center px-6 h-12 title" *ngIf="renderEnv.parameters?.length" i18n
@@ -33,7 +31,7 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
         <span class="px-1 w-1/3 text-gray-400">Name</span>
         <span class="px-1 w-2/3 text-gray-400">Value</span>
       </div>
-      <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between px-6 h-8">
+      <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between px-6 h-8 content">
         <span class="px-1 w-1/3 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
         <span class="px-1 w-2/3 text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
       </div>

@@ -78,7 +78,9 @@ export class GetShareLinkComponent implements OnInit {
       return '';
     }
     const host = (this.dataSourceService?.remoteServerUrl || window.location.host)
-      .replace(/(?<!:)\/{2,}/g, '/')
+      .replace(/:\/{2,}/g, ':::')
+      .replace(/\/{2,}/g, '/')
+      .replace(/:{3}/g, '://')
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
     return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;

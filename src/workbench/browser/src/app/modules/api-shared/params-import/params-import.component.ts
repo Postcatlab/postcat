@@ -38,7 +38,7 @@ export class ParamsImportComponent {
   get eg() {
     switch (this.contentType) {
       case 'xml':
-        return `<name>Jack</name><age>18</age>`;
+        return `<name>Jack</name>`;
       // case 'json':
       //   return `{ "name": "Jack", "age": 12 }`;
       case 'formData':
@@ -117,6 +117,8 @@ export class ParamsImportComponent {
 
     const tailData = this.baseData.slice(-1);
     let resultData = eoDeepCopy(this.baseData.reverse().slice(1).reverse());
+    console.log('resultData', resultData);
+
     if (rootType !== whatType(paramCode)) {
       // TODO Perhaps should be handled about format compatibility later.
       console.warn('The code that you input is no-equal to the root type.');
@@ -146,6 +148,7 @@ export class ParamsImportComponent {
       }
       case 'append': {
         resultData = resultData.concat(cacheData);
+        console.log(resultData);
         break;
       }
       default:

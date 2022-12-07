@@ -492,8 +492,7 @@ export class UserModalComponent implements OnInit {
         return;
       }
       const { workspace } = data;
-      const list = this.store.getWorkspaceList.filter((it) => it.id !== -1);
-      this.store.setWorkspaceList([...list, workspace]);
+      this.store.setWorkspaceList([workspace, ...this.store.getWorkspaceList]);
       this.store.setCurrentWorkspace(workspace);
 
       // * 关闭弹窗

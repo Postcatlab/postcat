@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
@@ -69,7 +69,13 @@ export class RemoteService {
   }
 
   getApiUrl(apiData: ApiData) {
-    const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    const url = new URL(
+      `${this.mockUrl}/${apiData.uri}`
+        .replace(/:\/{2,}/g, ':::')
+        .replace(/\/{2,}/g, '/')
+        .replace(/:{3}/g, '://'),
+      'https://github.com/'
+    );
     if (apiData) {
       url.searchParams.set('mockID', apiData.uuid + '');
     }
@@ -93,7 +99,10 @@ export class RemoteService {
       return [false, remoteUrl];
     }
 
-    const url = `${remoteUrl}/system/status`.replace(/(?<!:)\/{2,}/g, '/');
+    const url = `${remoteUrl}/system/status`
+      .replace(/:\/{2,}/g, ':::')
+      .replace(/\/{2,}/g, '/')
+      .replace(/:{3}/g, '://');
 
     let result;
     try {

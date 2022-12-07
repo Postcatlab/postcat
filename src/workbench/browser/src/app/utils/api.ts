@@ -10,7 +10,11 @@ import { ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storag
 export const getRest = (url = ''): string[] =>
   [...url.replace(/{{(.*?)}}/g, '').matchAll(/{(.*?)}/g)].map((val) => val[1]);
 
-export const uniqueSlash = (path: string) => path.replace(/(?<!:)\/{2,}/g, '/');
+export const uniqueSlash = (path: string) =>
+  path
+    .replace(/:\/{2,}/g, ':::')
+    .replace(/\/{2,}/g, '/')
+    .replace(/:{3}/g, '://');
 
 /**
  * URL and Query transfer each other
