@@ -20,7 +20,6 @@ export class LanguageService {
     return this.langHashMap.get(this.systemLanguage);
   }
   init() {
-    console.log(1);
     this.changeLanguage(this.setting.getSettings()?.['eoapi-language']);
   }
   changeLanguage(localeID) {

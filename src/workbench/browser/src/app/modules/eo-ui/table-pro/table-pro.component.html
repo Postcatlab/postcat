@@ -40,8 +40,8 @@
     </button>
     <eo-ng-dropdown-menu #dropdownMenTmp>
       <ul nz-menu>
-        <li nz-menu-item *ngFor="let item of columnVisibleMenus" (click)="toggleColumnVisible($event, item)">
-          <label eo-ng-checkbox [(ngModel)]="item.checked">{{ item.title }}</label>
+        <li nz-menu-item *ngFor="let item of columnVisibleMenus" (ngModelChange)="toggleColumnVisible(item,$event)">
+          <label (click)="$event.stopPropagation()" eo-ng-checkbox [(ngModel)]="item.checked" (ngModelChange)="toggleColumnVisible( item)">{{ item.title }}</label>
         </li>
       </ul>
     </eo-ng-dropdown-menu>

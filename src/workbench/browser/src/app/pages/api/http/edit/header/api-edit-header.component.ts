@@ -28,6 +28,10 @@ import { ApiEditHeaders } from '../../../../../shared/services/storage/index.mod
 })
 export class ApiEditHeaderComponent implements OnInit {
   @Input() model: ApiEditHeaders[];
+   /**
+   * Table ID
+   */
+  @Input() tid: string;
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: any = {
     column: [],
@@ -48,6 +52,7 @@ export class ApiEditHeaderComponent implements OnInit {
     const config = this.apiTable.initTable({
       in: 'header',
       isEdit: true,
+      id:this.tid
     },{
       changeFn: () => {
         this.modelChange.emit(this.model);

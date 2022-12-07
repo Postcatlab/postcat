@@ -7,6 +7,10 @@ import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/se
   templateUrl: './api-detail-body.component.html',
 })
 export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
+   /**
+   * Table ID
+   */
+  @Input() tid: string;
   @Input() model: string | ApiEditBody[] | any;
   @Input() bodyType: ApiBodyType | string;
   @Input() jsonRootType: JsonRootType | string;
@@ -17,8 +21,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(private apiTable: ApiTableService) {
-  }
+  constructor(private apiTable: ApiTableService) {}
   beforeChangeBodyByType(type) {
     switch (type) {
       case ApiBodyType.Binary:
@@ -48,9 +51,10 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   private initListConf() {
     const config = this.apiTable.initTable({
       in: 'body',
-      module:'preview',
-      format:this.bodyType as ApiBodyType,
-      isEdit:false
+      module: 'preview',
+      format: this.bodyType as ApiBodyType,
+      isEdit: false,
+      id: this.tid,
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

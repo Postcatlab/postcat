@@ -8,7 +8,6 @@ export class FormFocusDirective implements AfterViewInit {
 
   constructor(private element: ElementRef, private cdk: ChangeDetectorRef) {}
   ngAfterViewInit() {
-    console.log(1);
     const input = this.element.nativeElement.querySelector(this.focusables.join(','));
     if (input) {
       setTimeout(() => {

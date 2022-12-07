@@ -25,6 +25,7 @@ import { ApiEditQuery } from '../../../../../shared/services/storage/index.model
     ></eo-ng-table-pro>`
 })
 export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecked {
+  @Input() tid:  string;
   @Input() model: ApiEditQuery[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: any = {
@@ -51,6 +52,7 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
     const config = this.apiTable.initTable({
       in: 'header',
       isEdit: true,
+      id:this.tid
     },{
       changeFn: () => {
         this.modelChange.emit(this.model);

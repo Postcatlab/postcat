@@ -21,6 +21,10 @@ import { ApiEditRest } from '../../../../../shared/services/storage/index.model'
   ></eo-ng-table-pro>`,
 })
 export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked {
+  /**
+   * Table ID
+   */
+  @Input() tid: string;
   @Input() model: ApiEditRest[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: any = {
@@ -53,6 +57,7 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
       {
         in: 'rest',
         isEdit: true,
+        id: this.tid,
       },
       {
         changeFn: () => {

@@ -21,7 +21,6 @@
             class="rounded-r"
             [(ngModel)]="model.uri"
             name="uri"
-            id="uri"
             eo-ng-input
             formControlName="uri"
           />
@@ -57,7 +56,6 @@
             class="rounded-r"
             [(ngModel)]="model.name"
             name="name"
-            id="name"
             eo-ng-input
             formControlName="name"
           />
@@ -78,7 +76,8 @@
                 nzStatus="success"
               ></nz-badge>
             </ng-template>
-            <eo-api-edit-header (modelChange)="emitChangeFun()" [model]="model.requestHeaders"> </eo-api-edit-header>
+            <eo-api-edit-header tid="requestHeaders" (modelChange)="emitChangeFun()" [model]="model.requestHeaders">
+            </eo-api-edit-header>
           </eo-ng-tab>
           <!-- Request Body -->
           <eo-ng-tab [nzTitle]="bodyTitleTmp">
@@ -95,6 +94,7 @@
               ></nz-badge>
             </ng-template>
             <eo-api-edit-body
+              tid="requestBody"
               [(bodyType)]="model.requestBodyType"
               [(model)]="model.requestBody"
               (modelChange)="emitChangeFun()"
@@ -112,7 +112,8 @@
                 nzStatus="success"
               ></nz-badge>
             </ng-template>
-            <eo-api-edit-query (modelChange)="emitChangeFun()" [model]="model.queryParams"> </eo-api-edit-query>
+            <eo-api-edit-query tid="queryParams" (modelChange)="emitChangeFun()" [model]="model.queryParams">
+            </eo-api-edit-query>
           </eo-ng-tab>
           <eo-ng-tab [nzTitle]="restTitleTmp">
             <ng-template #restTitleTmp>
@@ -123,7 +124,8 @@
                 nzStatus="success"
               ></nz-badge>
             </ng-template>
-            <eo-api-edit-rest [model]="model.restParams" (modelChange)="emitChangeFun()"> </eo-api-edit-rest>
+            <eo-api-edit-rest tid="restParams" [model]="model.restParams" (modelChange)="emitChangeFun()">
+            </eo-api-edit-rest>
           </eo-ng-tab>
         </eo-ng-tabset>
       </nz-collapse-panel>
@@ -141,7 +143,8 @@
                 nzStatus="success"
               ></nz-badge>
             </ng-template>
-            <eo-api-edit-header [model]="model.responseHeaders" (modelChange)="emitChangeFun()"> </eo-api-edit-header>
+            <eo-api-edit-header tid="responseHeaders" [model]="model.responseHeaders" (modelChange)="emitChangeFun()">
+            </eo-api-edit-header>
           </eo-ng-tab>
           <eo-ng-tab [nzTitle]="responseTitleTmp">
             <ng-template #responseTitleTmp>
@@ -157,6 +160,7 @@
               ></nz-badge>
             </ng-template>
             <eo-api-edit-body
+              tid="responseBody"
               [(bodyType)]="model.responseBodyType"
               [(model)]="model.responseBody"
               (modelChange)="emitChangeFun()"

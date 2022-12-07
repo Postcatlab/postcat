@@ -52,6 +52,7 @@ export class ApiTableService {
   }
   initTable(
     inArg: {
+      id: string;
       in: 'body' | 'header' | 'query' | 'rest';
       module?: 'edit' | 'preview';
       isEdit: boolean;
@@ -145,6 +146,7 @@ export class ApiTableService {
     const result = {
       columns: [],
       setting: {
+        id:inArg.id,
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
         rowSortable: inArg.isEdit ? true : false,

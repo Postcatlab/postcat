@@ -11,6 +11,10 @@ import { ApiEditHeaders } from '../../../../../shared/services/storage/index.mod
   ></eo-ng-table-pro>`,
 })
 export class ApiDetailFormComponent implements OnInit {
+   /**
+   * Table ID
+   */
+  @Input() tid: string;
   @Input() model: ApiEditHeaders[];
   @Input() module: 'rest' | 'header' | 'query';
   listConf: any = {};
@@ -24,6 +28,7 @@ export class ApiDetailFormComponent implements OnInit {
       in: this.module,
       module: 'preview',
       isEdit: false,
+      id:this.tid
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
