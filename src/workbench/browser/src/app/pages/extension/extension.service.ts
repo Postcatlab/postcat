@@ -8,6 +8,7 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 @Injectable({
   providedIn: 'root',
@@ -22,13 +23,16 @@ export class ExtensionService {
     private http: HttpClient,
     private electron: ElectronService,
     private language: LanguageService,
-    private webExtensionService: WebExtensionService
-  ) {
+    private webExtensionService: WebExtensionService,
+    private messageService: MessageService
+  ) {}
+  init() {
     this.localExtensions = this.getExtensions();
     this.extensionIDs = this.updateExtensionIDs();
     this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
+    this.emitLocalExtensionsChangeEvent();
   }
-  private getExtensions() {
+  getExtensions() {
     if (this.electron.isElectron) {
       return window.eo?.getModules?.() || new Map();
     } else {
@@ -36,7 +40,11 @@ export class ExtensionService {
       return new Map(webeExts as any);
     }
   }
+  private emitLocalExtensionsChangeEvent() {
+    this.messageService.send({ type: 'localExtensionsChange', data: this.localExtensions });
+  }
   getInstalledList() {
+    this.localExtensions = this.getExtensions();
     // Local extension exception for ignore list
     return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.name));
   }
@@ -82,6 +90,7 @@ export class ExtensionService {
     if (code === 0) {
       this.localExtensions = modules;
       this.extensionIDs = this.updateExtensionIDs();
+      this.emitLocalExtensionsChangeEvent();
       return true;
     }
     console.error(data);
@@ -93,6 +102,7 @@ export class ExtensionService {
     if (code === 0) {
       this.localExtensions = modules;
       this.extensionIDs = this.updateExtensionIDs();
+      this.emitLocalExtensionsChangeEvent();
       return true;
     }
     console.error(data);

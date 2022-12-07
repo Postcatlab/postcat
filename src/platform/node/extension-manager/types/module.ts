@@ -103,7 +103,7 @@ export type SidebarView = {
   title: string;
   url: string;
   debugUrl: string;
-  extName: string;
+  extensionID: string;
   server?: HttpServer;
 };
 

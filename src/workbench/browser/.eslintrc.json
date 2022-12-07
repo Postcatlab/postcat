@@ -25,6 +25,8 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "no-underscore-dangle": 0,
+        "arrow-body-style": 0,
         "prefer-arrow/prefer-arrow-functions": 0,
         "@typescript-eslint/member-ordering": 0,
         "@typescript-eslint/no-unused-expressions": 0,
