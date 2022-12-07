@@ -33,6 +33,7 @@
               placeholder="Enter URL"
               name="uri"
               eo-ng-input
+              (input)="updateParamsbyUri(model.request.uri)"
               formControlName="uri"
               [(ngModel)]="model.request.uri"
             />

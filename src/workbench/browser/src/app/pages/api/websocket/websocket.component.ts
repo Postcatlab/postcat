@@ -143,14 +143,12 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   changeQuery() {
     this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'query',
-      replaceType: 'replace',
+      base: 'query'
     }).url;
   }
   changeUri() {
     this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
       base: 'url',
-      replaceType: 'replace',
     }).query;
   }
   emitChangeFun(where) {

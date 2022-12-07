@@ -24,7 +24,7 @@ export class TabOperateService {
   //* Allow development mode debug not exist router
   private allowNotExistRouter = !APP_CONFIG.production;
   //* Cache page data in tab
-  private disabledCache = false;
+  private disabledCache = true;
   constructor(
     private tabStorage: TabStorageService,
     private messageService: MessageService,

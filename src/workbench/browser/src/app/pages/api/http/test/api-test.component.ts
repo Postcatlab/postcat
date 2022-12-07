@@ -221,8 +221,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   changeQuery() {
     this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'query',
-      replaceType: 'replace',
+      base: 'query'
     }).url;
   }
   watchBasicForm() {
@@ -232,17 +231,12 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         this.modelChange.emit(this.model);
       }, 0);
     });
-    //watch uri
-    this.validateForm
-      .get('uri')
-      ?.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$))
-      .subscribe((url) => {
-        this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-          base: 'url',
-          replaceType: 'replace',
-        }).query;
-        this.model.request.restParams = [...generateRestFromUrl(this.model.request.uri, this.model.request.restParams)];
-      });
+  }
+  updateParamsbyUri(url){
+    this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
+      base: 'url'
+    }).query;
+    this.model.request.restParams = [...generateRestFromUrl(this.model.request.uri, this.model.request.restParams)];
   }
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);

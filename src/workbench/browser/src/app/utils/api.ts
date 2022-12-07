@@ -1,5 +1,5 @@
 import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
-import { ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiEditQuery, ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 /**
  * get rest param from url,format like {restName}
@@ -15,6 +15,18 @@ export const uniqueSlash = (path: string) =>
     .replace(/:\/{2,}/g, ':::')
     .replace(/\/{2,}/g, '/')
     .replace(/:{3}/g, '://');
+const jointQuery = (url = '', query: ApiTestQuery[] | ApiEditQuery[]) => {
+  //Joint query
+  let search = '';
+  query.forEach((val) => {
+    if (!(val.name && val.required)) {
+      return;
+    }
+    search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
+  });
+  search = search ? `?${search.slice(0, -1)}` : '';
+  return `${url.split('?')[0]}${search}`;
+};
 
 /**
  * URL and Query transfer each other
@@ -29,7 +41,7 @@ export const uniqueSlash = (path: string) =>
 export const transferUrlAndQuery = (
   url = '',
   query = [],
-  opts: { base: string; replaceType: string } = {
+  opts: { base: string; replaceType?: string } = {
     base: 'url',
     replaceType: 'replace',
   }
@@ -45,30 +57,18 @@ export const transferUrlAndQuery = (
     };
     urlQuery.push(item);
   });
-  //Get replace result
-  const origin = opts.base === 'url' ? uiQuery : urlQuery;
-  const replace = opts.base === 'url' ? urlQuery : uiQuery;
-  if (opts.replaceType === 'replace') {
-    origin.forEach((val) => (val.name ? (val.required = false) : ''));
-  }
-  const result = [...replace, ...origin];
-  for (let i = 0; i < result.length; ++i) {
-    for (let j = i + 1; j < result.length; ++j) {
-      if (result[i].name === result[j].name) {
-        result.splice(j--, 1);
-      }
+  let result = [];
+  if (opts.replaceType === 'merge') {
+    result = [...urlQuery, ...uiQuery];
+    url = jointQuery(url, result);
+  } else {
+    if (opts.base === 'url') {
+      result = [...urlQuery, ...uiQuery.filter((val) => !val.required)];
+    } else {
+      result = uiQuery;
+      url = jointQuery(url, result);
     }
   }
-  //Joint query
-  let search = '';
-  result.forEach((val) => {
-    if (!val.name || !val.required) {
-      return;
-    }
-    search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
-  });
-  search = search ? `?${search.slice(0, -1)}` : '';
-  url = `${url.split('?')[0]}${search}`;
   return {
     url,
     query: result,
