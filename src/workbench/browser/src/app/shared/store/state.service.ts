@@ -171,7 +171,7 @@ export class StoreService {
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
     const local = this.workspaceList.at(-1);
-    this.workspaceList = [...data.map((it) => ({ ...it, type: 'online' })), local];
+    this.workspaceList = [...data.filter((it) => it.id !== -1).map((it) => ({ ...it, type: 'online' })), local];
     if (this.workspaceList.length === -1) {
       this.setCurrentWorkspace(local);
     }
