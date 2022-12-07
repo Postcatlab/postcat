@@ -44,10 +44,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   async initSidebarViews() {
     const sidebarViews = await window.eo?.getSidebarViews?.();
-    console.log('sidebarViews', sidebarViews);
     sidebarViews?.forEach((item) => {
       if (!this.modules.some((n) => n.id === item.extensionID)) {
-        this.modules.push({
+        this.modules.splice(-1, 0, {
           title: item.title,
           id: item.extensionID,
           isShare: false,
@@ -65,7 +64,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.messageService.get().subscribe((inArg: Message) => {
       if (inArg.type === 'localExtensionsChange') {
         const extensionIDs = Array.isArray(inArg.data) ? inArg.data.map((n) => n.name) : [...inArg.data.keys()];
-        console.log(' this.modules', this.modules);
         this.modules = this.modules.filter((n) => n.id.startsWith('@eo-core') || extensionIDs.includes(n.id));
         this.initSidebarViews();
       }
