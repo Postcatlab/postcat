@@ -4,6 +4,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { MessageService } from '../../../shared/services/message';
 import { Subject, takeUntil } from 'rxjs';
+import { NzTreeNodeKey } from 'ng-zorro-antd/core/tree';
 
 @Component({
   selector: 'eo-history',
@@ -15,13 +16,15 @@ export class HistoryComponent implements OnInit {
     ws: 'WS',
   };
   historyList = [];
+  nzSelectedKeys: NzTreeNodeKey[];
   colorHash = new Map().set('get', 'green').set('post', 'blue').set('delete', 'red').set('put', 'pink');
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private storage: StorageService, private router: Router, private message: MessageService) {}
   async ngOnInit() {
     const result = await this.loadAllTest();
-    this.historyList = (result || []).reverse();
+    this.historyList = (result || []).reverse().map((n) => ({ ...n, title: n.request?.uri, key: n.uuid }));
+    console.log('historyList', this.historyList);
     this.message
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -52,7 +55,8 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(data) {
-    const protocol = data.request.protocol === 'ws' ? 'ws' : 'http';
+    console.log('data', data);
+    const protocol = data.request?.protocol === 'ws' ? 'ws' : 'http';
     this.router.navigate([`home/api/${protocol}/test`], {
       queryParams: {
         uuid: `history_${data.uuid}`,
