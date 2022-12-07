@@ -8,7 +8,7 @@ import { ApiEditQuery, ApiEditRest } from 'eo/workbench/browser/src/app/shared/s
  * @returns
  */
 export const getRest = (url = ''): string[] =>
-  [...url.replace(/{{(.*?)}}/g, '').matchAll(/{(.*?)}/g)].map((val) => val[1]);
+  [...url.replace(/{{(.+?)}}/g, '').matchAll(/{(.+?)}/g)].map((val) => val[1]);
 
 export const uniqueSlash = (path: string) =>
   path
@@ -79,19 +79,9 @@ export const transferUrlAndQuery = (
  * Generate Rest Param From Url
  */
 export const generateRestFromUrl = (url, rest): ApiEditRest[] => {
-  const result = rest;
   const rests = getRest(url);
-  rests.forEach((newRest) => {
-    if (result.find((val: ApiEditRest) => val.name === newRest)) {
-      return;
-    }
-    const restItem: ApiEditRest = {
-      name: newRest,
-      required: true,
-      example: '',
-      description: '',
-    };
-    result.splice(result.length - 1, 0, restItem);
-  });
-  return result;
+  return [
+    ...rests.map((restName) => ({ name: restName, required: true, example: '', description: '' })),
+    ...rest.filter((val) => !(rests.includes(val.name)||val.required)),
+  ];
 };
