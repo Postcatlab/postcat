@@ -6,6 +6,17 @@ export interface TableProConfig {
   fullScreenTitle: string;
   columnVisibleTitle: string;
   columnVisibleIcon: string;
+  btnAddRowIcon: string;
+  btnAddRowTitle: string;
+  btnAddChildRowIcon: string;
+  btnAddChildRowTitle: string;
+  btnInsertRowIcon: string;
+  btnInsertRowTitle: string;
+  btnEditRowIcon: string;
+  btnEditRowTitle: string;
+  btnDeleteRowIcon: string;
+  btnDeleteRowTitle: string;
+  btnDeleteRowConfirmTitle: string;
 }
 export const TABLE_PRO_DEFUALT_CONFIG: TableProConfig = {
   childKey: 'children',
@@ -13,6 +24,17 @@ export const TABLE_PRO_DEFUALT_CONFIG: TableProConfig = {
   fullScreenTitle: $localize`Full Screen`,
   columnVisibleTitle: $localize`Column Visible`,
   columnVisibleIcon: 'view-list-781pg17c',
+  btnAddRowIcon:'plus',
+  btnAddRowTitle: $localize`Add Row`,
+  btnAddChildRowIcon:'plus',
+  btnAddChildRowTitle: $localize`Add Child Row`,
+  btnInsertRowIcon:'arrow-down',
+  btnInsertRowTitle: $localize`Add Row Down`,
+  btnEditRowIcon:'edit',
+  btnEditRowTitle: $localize`Edit`,
+  btnDeleteRowIcon:'delete',
+  btnDeleteRowTitle: $localize`Delete`,
+  btnDeleteRowConfirmTitle: $localize`Are you sure you want to delete?`,
 };
 export const TABLE_PRO_CONFIG = new InjectionToken<TableProConfig>('table-pro-config', {
   providedIn: 'root',

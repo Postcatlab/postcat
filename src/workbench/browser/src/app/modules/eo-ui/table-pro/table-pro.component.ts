@@ -48,34 +48,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
 
   private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit'];
   //Default buttom template match action
-  private TABLE_DEFAULT_BTN: { [key: string]: Partial<IconBtn> } = {
-    add: {
-      icon: 'plus',
-      title: $localize`Add Row`,
-      //eo-ng-table fun action
-      fnName: 'add',
-    },
-    addChild: {
-      icon: 'plus',
-      title: $localize`Add Child Row`,
-      fnName: 'addChild',
-    },
-    insert: {
-      icon: 'arrow-down',
-      title: $localize`Add Row Down`,
-      fnName: 'insertRow',
-    },
-    edit: {
-      icon: 'edit',
-      title: $localize`Edit`,
-    },
-    delete: {
-      icon: 'delete',
-      title: $localize`Delete`,
-      fnName: 'deleteRow',
-      confirmTitle: $localize`Are you sure you want to delete?`,
-    },
-  };
+  private TABLE_DEFAULT_BTN: { [key: string]: Partial<IconBtn> };
   iconBtns: IconBtn[] = [];
 
   //Generate By iconBtns
@@ -106,6 +79,34 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     @Inject(TABLE_PRO_CONFIG) public tableConfig: TableProConfig
   ) {
     this.tableConfig = Object.assign(eoDeepCopy(TABLE_PRO_DEFUALT_CONFIG), this.tableConfig);
+    this.TABLE_DEFAULT_BTN = {
+      add: {
+        icon: this.tableConfig.btnAddChildRowIcon,
+        title: this.tableConfig.btnAddRowTitle,
+        //eo-ng-table fun action
+        fnName: 'add',
+      },
+      addChild: {
+        icon: this.tableConfig.btnAddChildRowIcon,
+        title: this.tableConfig.btnAddChildRowTitle,
+        fnName: 'addChild',
+      },
+      insert: {
+        icon: this.tableConfig.btnInsertRowIcon,
+        title: this.tableConfig.btnInsertRowTitle,
+        fnName: 'insertRow',
+      },
+      edit: {
+        icon: this.tableConfig.btnEditRowIcon,
+        title: this.tableConfig.btnEditRowTitle,
+      },
+      delete: {
+        icon: this.tableConfig.btnDeleteRowIcon,
+        title: this.tableConfig.btnDeleteRowTitle,
+        fnName: 'deleteRow',
+        confirmTitle: this.tableConfig.btnDeleteRowConfirmTitle,
+      },
+    };
   }
   ngOnInit(): void {
     this.DEFAULT_ID = `${window.location.pathname}_${
