@@ -8,6 +8,7 @@ import { distinct, interval } from 'rxjs';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { WebService } from '../../core/services';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { autorun } from 'mobx';
 @Component({
   selector: 'eo-get-share-link',
   template: `<button
@@ -40,7 +41,7 @@ export class GetShareLinkComponent implements OnInit {
   shareLink = '';
   isCopy = false;
   constructor(
-    private store: StoreService,
+    public store: StoreService,
     public dataSourceService: DataSourceService,
     private web: WebService,
     private message: MessageService,
@@ -63,38 +64,36 @@ export class GetShareLinkComponent implements OnInit {
       });
     }
   }
-  async getShareLink() {
-    if (this.store.isLocal) {
-      return '';
-    }
-    if (!this.store.isLogin) {
-      return '';
-    }
-    if (this.store.isShare) {
-      return '';
-    }
-    const [res, err]: any = await this.http.api_shareCreateShare({});
-    if (err) {
-      return '';
-    }
-    const host = (this.dataSourceService?.remoteServerUrl || window.location.host)
-      .replace(/:\/{2,}/g, ':::')
-      .replace(/\/{2,}/g, '/')
-      .replace(/:{3}/g, '://')
-      .replace(/(\/$)/, '');
-    const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
-  }
   async ngOnInit() {
-    this.shareLink = await this.getShareLink();
-    this.message
-      .get()
-      .pipe(distinct(({ type }) => type, interval(400)))
-      .subscribe(async ({ type }) => {
-        if (type === 'update-share-link') {
-          // * request share link
-          this.shareLink = await this.getShareLink();
-        }
-      });
+    autorun(async () => {
+      console.log('yoo');
+      if (this.store.isLocal) {
+        this.shareLink = '';
+        return;
+      }
+      if (!this.store.isLogin) {
+        this.shareLink = '';
+        return;
+      }
+      if (this.store.isShare) {
+        this.shareLink = '';
+        return;
+      }
+      console.log('yoo1');
+      const [res, err]: any = await this.http.api_shareCreateShare({});
+      if (err) {
+        console.log('yoo2');
+        this.shareLink = '';
+        return;
+      }
+      const host = (this.dataSourceService?.remoteServerUrl || window.location.host)
+        .replace(/:\/{2,}/g, ':::')
+        .replace(/\/{2,}/g, '/')
+        .replace(/:{3}/g, '://')
+        .replace(/(\/$)/, '');
+      const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
+      this.shareLink = `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
+      console.log('yoo3', this.shareLink);
+    });
   }
 }

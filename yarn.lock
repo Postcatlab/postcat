@@ -4668,6 +4668,11 @@ core-js-compat@^3.21.0, core-js-compat@^3.22.1:
   dependencies:
     browserslist "^4.21.4"
 
+core-js@3.26.1:
+  version "3.26.1"
+  resolved "https://registry.npmmirror.com/core-js/-/core-js-3.26.1.tgz#7a9816dabd9ee846c1c0fe0e8fcad68f3709134e"
+  integrity sha512-21491RRQVzUn0GGM9Z1Jrpr6PNPxPi+Za8OM9q4tksTSnlbXXGKK1nXNg/QvwFYettXvSX6zWKCtHHfjN4puyA==
+
 core-util-is@1.0.2:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/core-util-is/-/core-util-is-1.0.2.tgz"
@@ -5785,10 +5790,10 @@ eo-ng-tabs@0.0.82:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-tree@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-tree/-/eo-ng-tree-0.0.73.tgz"
-  integrity sha512-KDXUW+DpPBc0F6OKBXz2UL/iMWpduEwZLEJNPoGxsKmy1rQZ0Csdgekg78vB3lMJLymAk7Lt9tYlcdhi1TA0FA==
+eo-ng-tree@0.0.83:
+  version "0.0.83"
+  resolved "https://registry.npmmirror.com/eo-ng-tree/-/eo-ng-tree-0.0.83.tgz#2894942dcb9a4e7eb60fbfd28bc9f88131c528f4"
+  integrity sha512-morxcllU37MRlIGhSs0KMKub27CVckXRP2ud0E4YtiZTR2DD8nhOeYvRb/8T/q6vWQBp6lKaR7ds+jP9wFQ8Jw==
   dependencies:
     tslib "^2.3.0"
 

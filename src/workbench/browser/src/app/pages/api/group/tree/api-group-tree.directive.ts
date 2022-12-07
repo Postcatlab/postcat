@@ -14,16 +14,16 @@ export class ApiGroupTreeDirective implements OnChanges {
     if (this.treeNodeTitle) {
       this.treeNodeTitle.style.display = 'block';
       this.treeNodeTitle.style.width = `calc(100% - 24px * ${this.node.level + 1})`;
-      const treenode = this.treeNodeTitle.closest('.ant-tree-treenode');
-      treenode.removeEventListener('click', this.clickTitle);
-      treenode.addEventListener('click', this.clickTitle);
+      // const treenode = this.treeNodeTitle.closest('.ant-tree-treenode');
+      // treenode.removeEventListener('click', this.clickTitle);
+      // treenode.addEventListener('click', this.clickTitle);
     }
   }
 
-  clickTitle = (e) => {
-    const isIndent = e.target.closest('.ant-tree-indent');
-    if (isIndent) {
-      this.treeNodeTitle.click();
-    }
-  };
+  // clickTitle = (e) => {
+  //   const isIndent = e.target.closest('.ant-tree-indent');
+  //   if (isIndent) {
+  //     this.treeNodeTitle.click();
+  //   }
+  // };
 }
