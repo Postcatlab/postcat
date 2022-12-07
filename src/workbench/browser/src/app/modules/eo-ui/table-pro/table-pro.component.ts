@@ -103,9 +103,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(
     private cdRef: ChangeDetectorRef,
     private elRef: ElementRef,
-    @Inject(TABLE_PRO_CONFIG) public CONFIG: TableProConfig
+    @Inject(TABLE_PRO_CONFIG) public tableConfig: TableProConfig
   ) {
-    this.CONFIG = Object.assign(eoDeepCopy(TABLE_PRO_DEFUALT_CONFIG), this.CONFIG);
+    this.tableConfig = Object.assign(eoDeepCopy(TABLE_PRO_DEFUALT_CONFIG), this.tableConfig);
   }
   ngOnInit(): void {
     this.DEFAULT_ID = `${window.location.pathname}_${
@@ -136,7 +136,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       return;
     }
     return filterTableData(this.nzData, {
-      childKey: this.CONFIG.childKey,
+      childKey: this.tableConfig.childKey,
       primaryKey: this.setting.primaryKey,
     });
   }
@@ -355,8 +355,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
                       this.showItems.push(item.eoKey);
                       hasFind = true;
                     }
-                    if (item[this.CONFIG.childKey]?.length) {
-                      const chidHasFind = findNode(item[this.CONFIG.childKey]);
+                    if (item[this.tableConfig.childKey]?.length) {
+                      const chidHasFind = findNode(item[this.tableConfig.childKey]);
                       if (chidHasFind) {
                         if (!hasFind) {
                           this.showItems.push(item.eoKey);

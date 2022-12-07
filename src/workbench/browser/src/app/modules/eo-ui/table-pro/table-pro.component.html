@@ -14,7 +14,7 @@
   [nzExpand]="nzExpand"
   [nzExpand]="true"
   [nzPrimaryKey]="setting.primaryKey"
-  [nzChildKey]="CONFIG.childKey"
+  [nzChildKey]="tableConfig.childKey"
   [nzScroll]="nzScroll"
   [nzCheckAddRow]="nzCheckAddRow"
   [nzDragCheck]="nzDragCheck"
@@ -62,12 +62,12 @@
       nzType="text"
       i18n-nzTooltipTitle
       eoNgFeedbackTooltip
-      nzTooltipTitle="CONFIG.columnVisibleTitle"
+      [nzTooltipTitle]="tableConfig.columnVisibleTitle"
       *ngIf="setting?.toolButton?.columnVisible"
       [nzDropdownMenu]="dropdownMenTmp"
     >
       <svg class="iconpark-icon">
-        <use [attr.href]="'#'+CONFIG.columnVisibleIcon"></use>
+        <use [attr.href]="'#'+tableConfig.columnVisibleIcon"></use>
       </svg>
     </button>
     <eo-ng-dropdown-menu #dropdownMenTmp>
@@ -87,14 +87,14 @@
     <button
       eoNgFeedbackTooltip
       i18n-nzTooltipTitle
-      [nzTooltipTitle]="CONFIG.fullScreenTitle"
+      [nzTooltipTitle]="tableConfig.fullScreenTitle"
       *ngIf="setting?.toolButton?.fullScreen"
       eo-ng-button
       nzType="text"
       (click)="screenAll()"
     >
       <svg class="iconpark-icon">
-        <use [attr.href]="'#'+CONFIG.fullScreenIcon"></use>
+        <use [attr.href]="'#'+tableConfig.fullScreenIcon"></use>
       </svg>
     </button>
   </div>
