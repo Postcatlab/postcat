@@ -14,11 +14,6 @@ nz-content {
     width: 162px;
   }
 }
-.active {
-  background: var(--NAVBAR_BTN_BG);
-  border-color: transparent;
-  color: var(--MAIN_TEXT);
-}
 
 ::ng-deep .eo-env-preview {
   .ant-popover-inner-content {

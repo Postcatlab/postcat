@@ -3,6 +3,7 @@ export interface TableProSetting {
   isLevel?: boolean;
   primaryKey?: string;
   rowSortable?: boolean;
+  id?: string;
   /**
    * Manually add row
    */

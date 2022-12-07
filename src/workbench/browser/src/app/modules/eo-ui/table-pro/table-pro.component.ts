@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -13,12 +14,11 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import _ from 'lodash-es';
+import _, { attempt, has } from 'lodash-es';
 import { isUndefined, omitBy } from 'lodash-es';
 import { eoDeepCopy } from '../../../utils/index.utils';
 import { filterTableData } from '../../../utils/tree/tree.utils';
 import { TableProSetting } from './table-pro.model';
-
 @Component({
   selector: 'eo-ng-table-pro',
   templateUrl: './table-pro.component.html',
@@ -95,9 +95,16 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
 
   private isFullScreenStatus = false;
   private IS_EDIT_COLUMN_TYPE = ['select', 'checkbox', 'autoComplete', 'input', 'inputNumber'];
+  private COLUMN_VISIBLE_KEY: string;
+  //Default Table unique ID
+  private DEFAULT_ID: string;
   private showItems = [];
-  constructor(private cdRef: ChangeDetectorRef) {}
-  ngOnInit(): void {}
+  constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}
+  ngOnInit(): void {
+    this.DEFAULT_ID = `${window.location.pathname}_${
+      this.elRef.nativeElement?.parentElement?.localName || this.columns?.length
+    }`;
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes?.columns?.currentValue?.length) {
       this.onColumnChanges();
@@ -176,10 +183,11 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       domElem.className = domElem.className.replace(' eo-ng-table-full-screen', '');
     }
   }
-  toggleColumnVisible($event: any, item?: any) {
-    $event.stopPropagation();
+  toggleColumnVisible(item: any, $event?: any) {
+    $event?.stopPropagation();
     this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
     this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
+    window.localStorage.setItem(this.COLUMN_VISIBLE_KEY, JSON.stringify(this.columnVisibleStatus));
   }
   //* Use pro custom template to generate icon btn
   private needCustomTempalte(btn) {
@@ -223,6 +231,15 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     if (!_.has(this.setting.toolButton, 'columnVisible')) {
       this.setting.toolButton.columnVisible = this.columns.length >= 6 ? true : false;
     }
+    if (this.setting.toolButton.columnVisible) {
+      if (!this.setting.id) {
+        console.warn(`EO_WARN[eo-table-pro]: Lack of setting.id, the storage key for table columnVisible may repeat!`);
+      }
+      this.COLUMN_VISIBLE_KEY = this.setting.id || `TABLE_COLUMN_VISIBLE_${this.DEFAULT_ID}`;
+      this.columnVisibleStatus = attempt(() => JSON.parse(window.localStorage.getItem(this.COLUMN_VISIBLE_KEY))) || {};
+    }
+
+    //Set columns
     this.columns.forEach((col) => {
       const colID = col.id || col.key;
       //Set component
@@ -275,7 +292,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
             const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
             //Use custom btn template
             if (this.needCustomTempalte(btn)) {
-              newBtn.title = this.iconBtnTmp.get(tmpIndex++);
+              newBtn.title = this.iconBtnTmp?.get(tmpIndex++);
             } else {
               //User eo-ng-table defualt icon template
               newBtn.icon = btn.icon || defaultBtn?.icon;
@@ -371,7 +388,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         body.showFn = header.showFn = col.showFn;
       }
       if (col.columnVisible !== 'fixed' && col.type !== 'btnList') {
-        this.columnVisibleStatus[colID] = col.columnVisible === false ? 0 : 1;
+        //If not storage,use default to set column visible status
+        if (!has(this.columnVisibleStatus, colID)) {
+          this.columnVisibleStatus[colID] = col.columnVisible === false ? false : true;
+        }
         this.columnVisibleMenus.push({
           title: col.title,
           key: colID,

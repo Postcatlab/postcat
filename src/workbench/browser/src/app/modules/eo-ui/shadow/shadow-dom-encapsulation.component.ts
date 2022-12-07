@@ -3,13 +3,7 @@ import MarkdownIt from 'markdown-it/dist/markdown-it';
 
 @Component({
   selector: 'eo-shadow-dom',
-  template: `
-    <link
-      rel="stylesheet"
-      href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/github-markdown-css/5.1.0/github-markdown-light.min.css"
-    />
-    <article class="markdown-body" [innerHTML]="content"></article>
-  `,
+  template: ` <article class="markdown-body" [innerHTML]="content"></article> `,
   styleUrls: ['./eo-shadow-dom.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom,
 })

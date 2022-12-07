@@ -34,6 +34,7 @@
     "@babel/runtime": "7.18.3",
     "@micro-zoe/micro-app": "1.0.0-alpha.10",
     "ajv": "8.11.0",
+    "core-js": "3.26.1",
     "eo-ng-auto-complete": "0.0.82",
     "eo-ng-button": "0.0.85",
     "eo-ng-checkbox": "0.0.82",

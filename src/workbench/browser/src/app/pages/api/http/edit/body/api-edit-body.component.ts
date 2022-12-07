@@ -11,6 +11,10 @@ import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/se
   styleUrls: ['./api-edit-body.component.scss'],
 })
 export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
+   /**
+    * Table ID
+    */
+  @Input() tid: string;
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
   @Input() bodyType: ApiBodyType | string;
@@ -148,6 +152,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     const config = this.apiTable.initTable(
       {
         in: 'body',
+        id:this.tid,
         format: this.bodyType as ApiBodyType,
         isEdit: true,
       },

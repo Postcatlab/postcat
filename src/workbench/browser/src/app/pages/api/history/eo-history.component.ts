@@ -54,12 +54,12 @@ export class HistoryComponent implements OnInit {
     return this.colorHash.get(type.toLowerCase());
   }
 
-  gotoTestHistory(data) {
-    console.log('data', data);
-    const protocol = data.request?.protocol === 'ws' ? 'ws' : 'http';
+  gotoTestHistory(e) {
+    const origin = e.node.origin;
+    const protocol = origin.request?.protocol === 'ws' ? 'ws' : 'http';
     this.router.navigate([`home/api/${protocol}/test`], {
       queryParams: {
-        uuid: `history_${data.uuid}`,
+        uuid: `history_${origin.uuid}`,
       },
     });
   }
