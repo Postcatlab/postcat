@@ -21,7 +21,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     EoNgCheckboxModule,
     NzPopconfirmModule,
     EoNgFeedbackTooltipModule,
-    NzInputNumberModule,
+    NzInputNumberModule
   ],
   exports: [EoTableProComponent],
 })

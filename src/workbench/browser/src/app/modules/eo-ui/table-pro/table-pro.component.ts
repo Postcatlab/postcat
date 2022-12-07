@@ -4,9 +4,11 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Inject,
   Input,
   OnChanges,
   OnInit,
+  Optional,
   Output,
   QueryList,
   SimpleChanges,
@@ -18,14 +20,15 @@ import _, { attempt, has } from 'lodash-es';
 import { isUndefined, omitBy } from 'lodash-es';
 import { eoDeepCopy } from '../../../utils/index.utils';
 import { filterTableData } from '../../../utils/tree/tree.utils';
-import { TableProSetting } from './table-pro.model';
+import { ColumnItem, IconBtn, TableProSetting } from './table-pro.model';
+import { TableProConfig, TABLE_PRO_CONFIG, TABLE_PRO_DEFUALT_CONFIG } from './table-pro.token';
 @Component({
   selector: 'eo-ng-table-pro',
   templateUrl: './table-pro.component.html',
   styleUrls: ['./table-pro.component.scss'],
 })
 export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
-  @Input() columns;
+  @Input() columns: ColumnItem[];
   @Input() nzData;
   @Input() setting: TableProSetting = {};
   @Input() nzDataItem?;
@@ -41,11 +44,11 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() columnVisibleStatusChange = new EventEmitter();
 
   @ViewChild('enums', { read: TemplateRef })
-  enums: TemplateRef<any>;
+  enums: TemplateRef<HTMLDivElement>;
 
   private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit'];
   //Default buttom template match action
-  private TABLE_DEFAULT_BTN = {
+  private TABLE_DEFAULT_BTN: { [key: string]: Partial<IconBtn> } = {
     add: {
       icon: 'plus',
       title: $localize`Add Row`,
@@ -73,23 +76,21 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       confirmTitle: $localize`Are you sure you want to delete?`,
     },
   };
-  iconBtns = [];
+  iconBtns: IconBtn[] = [];
 
   //Generate By iconBtns
   @ViewChildren('iconBtnTmp', { read: TemplateRef })
-  iconBtnTmp: QueryList<TemplateRef<any>>;
+  iconBtnTmp: QueryList<TemplateRef<HTMLButtonElement>>;
 
   columnVisibleMenus = [];
   @ViewChild('toolBtnTmp', { read: TemplateRef })
-  toolBtnTmp: TemplateRef<any>;
+  toolBtnTmp: TemplateRef<HTMLDivElement>;
 
   @ViewChild('numberInput', { read: TemplateRef })
-  numberInput: TemplateRef<any>;
+  numberInput: TemplateRef<HTMLInputElement>;
 
   tbodyConf = [];
   theadConf = [];
-
-  childKey = 'children';
 
   randomClass = `full-screen-container_${Date.now()}`;
 
@@ -99,7 +100,13 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   //Default Table unique ID
   private DEFAULT_ID: string;
   private showItems = [];
-  constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private elRef: ElementRef,
+    @Inject(TABLE_PRO_CONFIG) public CONFIG: TableProConfig
+  ) {
+    this.CONFIG = Object.assign(eoDeepCopy(TABLE_PRO_DEFUALT_CONFIG), this.CONFIG);
+  }
   ngOnInit(): void {
     this.DEFAULT_ID = `${window.location.pathname}_${
       this.elRef.nativeElement?.parentElement?.localName || this.columns?.length
@@ -129,7 +136,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       return;
     }
     return filterTableData(this.nzData, {
-      childKey: this.childKey,
+      childKey: this.CONFIG.childKey,
       primaryKey: this.setting.primaryKey,
     });
   }
@@ -183,7 +190,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       domElem.className = domElem.className.replace(' eo-ng-table-full-screen', '');
     }
   }
-  toggleColumnVisible(item: any, $event?: any) {
+  toggleColumnVisible(item: { key: string }, $event?: Event) {
     $event?.stopPropagation();
     this.columnVisibleStatus[item.key] = !this.columnVisibleStatus[item.key];
     this.columnVisibleStatusChange.emit(this.columnVisibleStatus);
@@ -240,8 +247,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     //Set columns
-    this.columns.forEach((col) => {
-      const colID = col.id || col.key;
+    this.columns.forEach((col: ColumnItem) => {
+      const colID = col.key;
       //Set component
       const header = omitBy(
         { title: col.title, left: col.left, right: col.right, resizeable: col.resizeable },
@@ -249,7 +256,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       );
       const body: any = omitBy(
         {
-          key: col.slot || col.key,
+          key: col.key,
+          title: col.slot,
           left: col.left,
           type: col.type,
           right: col.right,
@@ -289,7 +297,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           body.type = 'btn';
           body.btns = col.btns.map((btn) => {
             const defaultBtn = this.TABLE_DEFAULT_BTN[btn.action];
-            const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined);
+            const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined) as IconBtn;
             //Use custom btn template
             if (this.needCustomTempalte(btn)) {
               newBtn.title = this.iconBtnTmp?.get(tmpIndex++);
@@ -347,8 +355,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
                       this.showItems.push(item.eoKey);
                       hasFind = true;
                     }
-                    if (item[this.childKey]?.length) {
-                      const chidHasFind = findNode(item[this.childKey]);
+                    if (item[this.CONFIG.childKey]?.length) {
+                      const chidHasFind = findNode(item[this.CONFIG.childKey]);
                       if (chidHasFind) {
                         if (!hasFind) {
                           this.showItems.push(item.eoKey);
@@ -425,17 +433,17 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           return;
         }
         //Use eo-ng-table default template
-        const iconBtn: any = omitBy(
+        const iconBtn: IconBtn = omitBy(
           {
             action: btn.action,
             showFn: btn.showFn,
             confirm: btn.confirm,
             click: btn.click,
             confirmFn: btn.confirmFn,
-            confirmTitle: btn.confirmTitles,
+            confirmTitle: btn.confirmTitle,
           },
           isUndefined
-        );
+        ) as IconBtn;
         if (btn.icon) {
           iconBtn.icon = btn.icon;
         }

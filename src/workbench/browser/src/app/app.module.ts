@@ -1,4 +1,3 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
 
@@ -31,6 +30,7 @@ import {
 } from 'eo-ng-feedback';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -58,6 +58,12 @@ registerLocaleData(zh);
         theme: theme.DESIGN_TOKEN,
       }),
       deps: [ThemeService],
+    },
+    {
+      provide:TABLE_PRO_CONFIG,
+      useValue: {
+        childKey: 'children',
+      }
     },
     {
       provide: '$scope',

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ColumnItem } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
 import { isNil } from 'ng-zorro-antd/core/util';
 import {
   ApiParamsTypeJsonOrXml,
@@ -18,7 +19,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
   showValueTable = false;
   showLengthTable = false;
   listConfBasicInfo;
-  listConfLenthInterval = [
+  listConfLenthInterval: ColumnItem[] = [
     {
       title: $localize`Minimum length`,
       type: 'inputNumber',
@@ -30,7 +31,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
       key: 'maxLength',
     },
   ];
-  listConfValueInterval = [
+  listConfValueInterval: ColumnItem[] = [
     {
       title: $localize`Minimum`,
       type: 'inputNumber',
@@ -47,7 +48,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     value: '',
     description: '',
   };
-  listConfEnums = [
+  listConfEnums: ColumnItem[] = [
     {
       title: $localize`Value Enum`,
       type: 'input',

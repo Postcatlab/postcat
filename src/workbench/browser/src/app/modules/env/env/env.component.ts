@@ -7,6 +7,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 
 import { Subject } from 'rxjs';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { ColumnItem } from '../../eo-ui/table-pro/table-pro.model';
 
 @Component({
   selector: 'eo-env',
@@ -28,7 +29,7 @@ export class EnvComponent implements OnInit, OnDestroy {
   envCache: any = {};
   envList: any[] = [];
   envDataItem = { name: '', value: '', description: '' };
-  envListColumns = [
+  envListColumns: ColumnItem[] = [
     { title: $localize`Name`, type: 'input', key: 'name' },
     { title: $localize`Value`, type: 'input', key: 'value' },
     { title: $localize`:@@Description:Description`, type: 'input', key: 'description' },

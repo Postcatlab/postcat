@@ -4,10 +4,24 @@
 <div class="mx-2">{{ nzDataItem | json }}</div> -->
 <!-- {{ setting | json }} -->
 <!-- {{columnVisibleStatus|json}} -->
-<eo-ng-table class="{{ randomClass }}" [nzDataItem]="nzDataItem" [(nzData)]="nzData" [nzIsLevel]="setting.isLevel"
-  [nzDraggable]="setting.rowSortable" [nzTbody]="tbodyConf" [nzExpand]="nzExpand" [nzExpand]="true"
-  [nzPrimaryKey]="setting.primaryKey" [nzChildKey]="childKey" [nzScroll]="nzScroll" [nzCheckAddRow]="nzCheckAddRow"
-  [nzDragCheck]="nzDragCheck" [nzTrClick]="nzTrClick" (nzDataChange)="handleDataChange($event)" [nzThead]="theadConf">
+<eo-ng-table
+  class="{{ randomClass }}"
+  [nzDataItem]="nzDataItem"
+  [(nzData)]="nzData"
+  [nzIsLevel]="setting.isLevel"
+  [nzDraggable]="setting.rowSortable"
+  [nzTbody]="tbodyConf"
+  [nzExpand]="nzExpand"
+  [nzExpand]="true"
+  [nzPrimaryKey]="setting.primaryKey"
+  [nzChildKey]="CONFIG.childKey"
+  [nzScroll]="nzScroll"
+  [nzCheckAddRow]="nzCheckAddRow"
+  [nzDragCheck]="nzDragCheck"
+  [nzTrClick]="nzTrClick"
+  (nzDataChange)="handleDataChange($event)"
+  [nzThead]="theadConf"
+>
 </eo-ng-table>
 <!-- Enum template -->
 <ng-template #enums let-item="item" let-rowItem="rowItem">
@@ -18,10 +32,20 @@
 <!-- Row Operation Button -->
 <div *ngFor="let btnItem of iconBtns">
   <ng-template #iconBtnTmp let-item="item" let-apis="apis" let-index="index">
-    <button *ngIf="btnItem.showFn ? btnItem.showFn(item, index, apis) : true" eo-ng-button nzType="text" nz-popconfirm
-      i18n-nzPopconfirmTitle [nzPopconfirmTitle]="btnItem.confirmTitle" [nzCondition]="!btnItem.confirm"
-      (nzOnConfirm)="btnClick(btnItem, index, item, apis)" eoNgFeedbackTooltip i18n-nzTooltipTitle
-      nzTooltipTitle="{{ btnItem.title }}" class="mr-btnbase eo-list-btn">
+    <button
+      *ngIf="btnItem.showFn ? btnItem.showFn(item, index, apis) : true"
+      eo-ng-button
+      nzType="text"
+      nz-popconfirm
+      i18n-nzPopconfirmTitle
+      [nzPopconfirmTitle]="btnItem.confirmTitle"
+      [nzCondition]="!btnItem.confirm"
+      (nzOnConfirm)="btnClick(btnItem, index, item, apis)"
+      eoNgFeedbackTooltip
+      i18n-nzTooltipTitle
+      nzTooltipTitle="{{ btnItem.title }}"
+      class="mr-btnbase eo-list-btn"
+    >
       <svg class="iconpark-icon">
         <use [attr.href]="'#' + btnItem.icon"></use>
       </svg>
@@ -32,24 +56,45 @@
 <ng-template #toolBtnTmp dir="rtl">
   <div class="eo-table-tool-bar">
     <!-- Show Column -->
-    <button eo-ng-dropdown eo-ng-button nzType="text" i18n-nzTooltipTitle eoNgFeedbackTooltip
-      nzTooltipTitle="Column Visible" *ngIf="setting?.toolButton?.columnVisible" [nzDropdownMenu]="dropdownMenTmp">
+    <button
+      eo-ng-dropdown
+      eo-ng-button
+      nzType="text"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      nzTooltipTitle="CONFIG.columnVisibleTitle"
+      *ngIf="setting?.toolButton?.columnVisible"
+      [nzDropdownMenu]="dropdownMenTmp"
+    >
       <svg class="iconpark-icon">
-        <use href="#view-list-781pg17c"></use>
+        <use [attr.href]="'#'+CONFIG.columnVisibleIcon"></use>
       </svg>
     </button>
     <eo-ng-dropdown-menu #dropdownMenTmp>
       <ul nz-menu>
-        <li nz-menu-item *ngFor="let item of columnVisibleMenus" (ngModelChange)="toggleColumnVisible(item,$event)">
-          <label (click)="$event.stopPropagation()" eo-ng-checkbox [(ngModel)]="item.checked" (ngModelChange)="toggleColumnVisible( item)">{{ item.title }}</label>
+        <li nz-menu-item *ngFor="let item of columnVisibleMenus" (ngModelChange)="toggleColumnVisible(item, $event)">
+          <label
+            (click)="$event.stopPropagation()"
+            eo-ng-checkbox
+            [(ngModel)]="item.checked"
+            (ngModelChange)="toggleColumnVisible(item)"
+            >{{ item.title }}</label
+          >
         </li>
       </ul>
     </eo-ng-dropdown-menu>
     <!-- Full screen -->
-    <button eoNgFeedbackTooltip i18n-nzTooltipTitle nzTooltipTitle="Full Screen" *ngIf="setting?.toolButton?.fullScreen"
-      eo-ng-button nzType="text" (click)="screenAll()">
+    <button
+      eoNgFeedbackTooltip
+      i18n-nzTooltipTitle
+      [nzTooltipTitle]="CONFIG.fullScreenTitle"
+      *ngIf="setting?.toolButton?.fullScreen"
+      eo-ng-button
+      nzType="text"
+      (click)="screenAll()"
+    >
       <svg class="iconpark-icon">
-        <use href="#full-screen"></use>
+        <use [attr.href]="'#'+CONFIG.fullScreenIcon"></use>
       </svg>
     </button>
   </div>

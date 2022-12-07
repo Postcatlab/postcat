@@ -34,7 +34,6 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.initTable();
-    this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
   }
   async handleDeleteMockItem(item, index) {
     await this.apiMock.deleteMock(item.uuid);
@@ -115,6 +114,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   async ngOnChanges(changes) {
     if (changes?.apiData?.currentValue) {
       this.mockList = await this.apiMock.getMocks(this.apiData.uuid);
+      this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
       this.setMocksUrl();
     }
   }
