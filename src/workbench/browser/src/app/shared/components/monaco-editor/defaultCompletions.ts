@@ -17,31 +17,31 @@ export const completions: Omit<languages.CompletionItem, 'range' | 'kind'>[] = [
     insertText: 'eo.info(data);',
     detail: '输出信息',
   },
-  {
-    label: 'eo.stop(data)',
-    insertText: 'eo.stop(data);',
-    detail: '中止测试并输出信息',
-  },
-  {
-    label: 'eo.error(data)',
-    insertText: 'eo.error(data);',
-    detail: '断言失败并输出信息',
-  },
-  {
-    label: 'eo.jsonpath("jsonpath语句",data)',
-    insertText: 'eo.jsonpath("jsonpath语句",data);',
-    detail: '使用JsonPath语句提取内容',
-  },
-  {
-    label: 'eo.xpath("xpath语句",data)',
-    insertText: 'eo.xpath("xpath语句",data);',
-    detail: '使用XPath语句提取内容',
-  },
-  {
-    label: 'eo.file(file Type)',
-    insertText: 'eo.file(file Type);',
-    detail: '插入一个内置的文件',
-  },
+  // {
+  //   label: 'eo.stop(data)',
+  //   insertText: 'eo.stop(data);',
+  //   detail: '中止测试并输出信息',
+  // },
+  // {
+  //   label: 'eo.error(data)',
+  //   insertText: 'eo.error(data);',
+  //   detail: '断言失败并输出信息',
+  // },
+  // {
+  //   label: 'eo.jsonpath("jsonpath语句",data)',
+  //   insertText: 'eo.jsonpath("jsonpath语句",data);',
+  //   detail: '使用JsonPath语句提取内容',
+  // },
+  // {
+  //   label: 'eo.xpath("xpath语句",data)',
+  //   insertText: 'eo.xpath("xpath语句",data);',
+  //   detail: '使用XPath语句提取内容',
+  // },
+  // {
+  //   label: 'eo.file(file Type)',
+  //   insertText: 'eo.file(file Type);',
+  //   detail: '插入一个内置的文件',
+  // },
   {
     label: 'eo.img(file Type)',
     insertText: 'eo.img(file Type);',

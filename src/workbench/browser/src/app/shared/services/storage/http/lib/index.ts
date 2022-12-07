@@ -23,7 +23,7 @@ export class HttpStorage implements StorageInterface {
   projectImport(uuid: number, item: Project, groupID = 0) {
     return this.http.put(`/project/${uuid}/import`, {
       groupID,
-      data: item,
+      ...item,
     }) as Observable<object>;
   }
   // Project collections
