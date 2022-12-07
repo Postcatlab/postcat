@@ -5790,10 +5790,10 @@ eo-ng-tabs@0.0.82:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-tree@0.0.73:
-  version "0.0.73"
-  resolved "https://registry.npmmirror.com/eo-ng-tree/-/eo-ng-tree-0.0.73.tgz"
-  integrity sha512-KDXUW+DpPBc0F6OKBXz2UL/iMWpduEwZLEJNPoGxsKmy1rQZ0Csdgekg78vB3lMJLymAk7Lt9tYlcdhi1TA0FA==
+eo-ng-tree@0.0.83:
+  version "0.0.83"
+  resolved "https://registry.npmmirror.com/eo-ng-tree/-/eo-ng-tree-0.0.83.tgz#2894942dcb9a4e7eb60fbfd28bc9f88131c528f4"
+  integrity sha512-morxcllU37MRlIGhSs0KMKub27CVckXRP2ud0E4YtiZTR2DD8nhOeYvRb/8T/q6vWQBp6lKaR7ds+jP9wFQ8Jw==
   dependencies:
     tslib "^2.3.0"
 
