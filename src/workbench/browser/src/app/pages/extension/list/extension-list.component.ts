@@ -54,7 +54,7 @@ export class ExtensionListComponent implements OnInit {
     const timeStart = Date.now();
     try {
       if (this.type === 'installed') {
-    const installedList = new ExtensionList(this.extensionService.getInstalledList());
+        const installedList = new ExtensionList(this.extensionService.getInstalledList());
         return installedList.search(keyword).map((n) => {
           n.isEnable = this.extensionService.isEnable(n.name);
           return n;

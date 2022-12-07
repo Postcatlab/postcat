@@ -18,7 +18,13 @@ microApp.start({
         .then((res) => res.text());
     }
 
-    return window.fetch(url, options).then((res) => res.text());
+    return window.fetch(url, options).then((res) => {
+      if (res.status > 400) {
+        console.error(res);
+        return '';
+      }
+      return res.text();
+    });
   },
 });
 

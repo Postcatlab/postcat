@@ -4,6 +4,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { StorageUtil } from '../../../utils/storage/Storage';
 import { FeatureInfo } from 'eo/platform/node/extension-manager/types';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 
 type ExtensionItem = {
   name: string;
@@ -23,9 +24,14 @@ export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
   disabledExtensionNames = [];
 
-  constructor(private message: NzMessageService, private webService: WebService) {}
+  constructor(
+    private message: NzMessageService,
+    private webService: WebService,
+    private messageService: MessageService
+  ) {}
 
   init() {
+    this.unInstallExtension('eoapi-api-space-debug');
     if (this.webService.isWeb) {
       defaultExtensions.forEach((n) => {
         const isInstall = this.getExtensionByName(n);
@@ -53,6 +59,7 @@ export class WebExtensionService {
         pkgInfo: pkgObj,
       });
       StorageUtil.set(extKey, this.installedList);
+      this.emitLocalExtensionsChangeEvent();
       return true;
     } else {
       this.message.info(data);
@@ -62,6 +69,7 @@ export class WebExtensionService {
 
   unInstallExtension(extName: string) {
     this.installedList = this.installedList.filter((n) => n.name !== extName);
+    this.emitLocalExtensionsChangeEvent();
     StorageUtil.set(extKey, this.installedList);
   }
 
@@ -109,20 +117,24 @@ export class WebExtensionService {
     return window[extName];
   };
 
-  getFeatures(featureName: string): Map<string, FeatureInfo> {
+  getFeatures<T = FeatureInfo>(featureName: string): Map<string, T> {
     if (window.eo?.getFeature) {
       return window.eo.getFeature(featureName);
     }
-    const featureMap = new Map<string, FeatureInfo>([]);
+    const featureMap = new Map<string, T>([]);
     this.installedList.forEach((item) => {
-      const feature: FeatureInfo = item.pkgInfo?.features?.[featureName];
+      const feature: T = item.pkgInfo?.features?.[featureName];
       if (feature) {
-        featureMap.set(item.name, feature);
+        featureMap.set(item.name, {
+          extensionID: item.name,
+          ...feature,
+        });
       }
     });
-    if (featureMap.size === 0) {
-      return;
-    }
     return featureMap;
+  }
+
+  private emitLocalExtensionsChangeEvent() {
+    this.messageService.send({ type: 'localExtensionsChange', data: this.installedList });
   }
 }

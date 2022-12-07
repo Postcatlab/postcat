@@ -1555,7 +1555,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.8.4":
+"@babel/runtime@^7.18.6", "@babel/runtime@^7.8.4":
   version "7.20.1"
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.20.1.tgz"
   integrity sha512-mrzLkl6U9YLF8qpqI7TB82PESyEGjm/0Ly91jG575eVxMMlb8fYfOXFZIJ8XfLrJZQbm7dlKry2bJmXBUEkdFg==
@@ -2881,6 +2881,13 @@
   dependencies:
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
+
+"@xmagic/ngx-wujie@1.0.0-rc.20":
+  version "1.0.0-rc.20"
+  resolved "https://registry.npmmirror.com/@xmagic/ngx-wujie/-/ngx-wujie-1.0.0-rc.20.tgz#eb25566377897d52d696cecece552d09a4cc9615"
+  integrity sha512-mHPeaPnkstwD6HLmi18XrNxhNrEGFYVt1UABz4cfvfOzTWGIcxyfpmLJd8M67ofBfmsakTncTcLft99SPrG2EA==
+  dependencies:
+    tslib "^2.3.0"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -12627,13 +12634,6 @@ rxjs-for-await@0.0.2:
   resolved "https://registry.npmmirror.com/rxjs-for-await/-/rxjs-for-await-0.0.2.tgz"
   integrity sha512-IJ8R/ZCFMHOcDIqoABs82jal00VrZx8Xkgfe7TOKoaRPAW5nH/VFlG23bXpeGdrmtqI9UobFPgUKgCuFc7Lncw==
 
-rxjs@*, rxjs@^7.5.4, rxjs@^7.5.5:
-  version "7.5.7"
-  resolved "https://registry.npmmirror.com/rxjs/-/rxjs-7.5.7.tgz#2ec0d57fdc89ece220d2e702730ae8f1e49def39"
-  integrity sha512-z9MzKh/UcOqB3i20H6rtrlaE/CgjLOvheWK/9ILrbhROGTweAi1BaFsTT9FbwZi5Trr1qNRs+MXkhmR06awzQA==
-  dependencies:
-    tslib "^2.1.0"
-
 rxjs@6.6.7, rxjs@^6.5.4:
   version "6.6.7"
   resolved "https://registry.npmmirror.com/rxjs/-/rxjs-6.6.7.tgz"
@@ -12645,6 +12645,13 @@ rxjs@7.5.5:
   version "7.5.5"
   resolved "https://registry.npmmirror.com/rxjs/-/rxjs-7.5.5.tgz"
   integrity sha512-sy+H0pQofO95VDmFLzyaw9xNJU4KTRSwQIGM6+iG3SypAtCiLDzpeG8sJrNCWn2Up9km+KhkvTdbkrdy+yzZdw==
+  dependencies:
+    tslib "^2.1.0"
+
+rxjs@^7.5.2, rxjs@^7.5.4, rxjs@^7.5.5:
+  version "7.5.7"
+  resolved "https://registry.npmmirror.com/rxjs/-/rxjs-7.5.7.tgz#2ec0d57fdc89ece220d2e702730ae8f1e49def39"
+  integrity sha512-z9MzKh/UcOqB3i20H6rtrlaE/CgjLOvheWK/9ILrbhROGTweAi1BaFsTT9FbwZi5Trr1qNRs+MXkhmR06awzQA==
   dependencies:
     tslib "^2.1.0"
 
@@ -14980,6 +14987,13 @@ ws@~8.2.3:
   version "8.2.3"
   resolved "https://registry.npmmirror.com/ws/-/ws-8.2.3.tgz"
   integrity sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==
+
+wujie@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/wujie/-/wujie-1.0.1.tgz#f554bcd73016872fdf20644af10d5145cca4fa45"
+  integrity sha512-pzul3z3L48IBUb6yijcAn/ecwdF00uT4ER5aOSZR5hZ46BP1UK2q+ZAa2aq9sJD9tbmQArM/YRCfCB0fkXi/iQ==
+  dependencies:
+    "@babel/runtime" "^7.18.6"
 
 xdg-basedir@^3.0.0:
   version "3.0.0"

@@ -4,6 +4,8 @@ import { PageNotFoundComponent, ToolbarComponent, SidebarComponent } from './com
 import { ClickStopPropagationDirective } from './directives';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { WujieModule } from '@xmagic/ngx-wujie';
+
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -109,7 +111,7 @@ const SHARED_MODULE = [
 ] as const;
 
 @NgModule({
-  imports: [...SHARED_MODULE],
+  imports: [...SHARED_MODULE, WujieModule],
   declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
   providers: [],
   exports: [...SHARED_MODULE, ...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe],

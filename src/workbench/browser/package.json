@@ -35,6 +35,7 @@
     "@babel/runtime": "7.18.3",
     "@micro-zoe/micro-app": "1.0.0-alpha.10",
     "@ngxs/store": "3.7.4",
+    "@xmagic/ngx-wujie": "1.0.0-rc.20",
     "ajv": "8.11.0",
     "js-beautify": "1.14.4",
     "lodash-es": "4.17.21",
@@ -45,6 +46,7 @@
     "rxjs": "7.5.5",
     "socket.io-client": "4.5.1",
     "tslib": "^2.4.0",
+    "wujie": "1.0.1",
     "zone.js": "~0.11.6"
   },
   "devDependencies": {
