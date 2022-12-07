@@ -16,7 +16,7 @@
   <eo-ng-tree-default [nzData]="historyList" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode
     (nzClick)="gotoTestHistory($event)" [nzTreeTemplate]="nzFixedTreeTemplate"></eo-ng-tree-default>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-    <div class="flex items-center h-8 p-2 text-xs cursor-pointer " (click)="gotoTestHistory(origin)">
+    <div class="flex items-center  cursor-pointer ">
       <span class="block w-12 font-light method_type"
         [ngClass]="'method_text_' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])">{{
         origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol] }}</span>
