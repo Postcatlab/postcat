@@ -8,6 +8,7 @@ import { distinct } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { LanguageService } from '../../core/services/language/language.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { ThemeService } from '../../core/services/theme.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -15,7 +16,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 })
 export class NavbarComponent implements OnInit {
   resourceInfo = this.web.resourceInfo;
-
   helpMenus = [
     {
       title: 'Document',
@@ -32,6 +32,7 @@ export class NavbarComponent implements OnInit {
     public electron: ElectronService,
     private web: WebService,
     private modal: NzModalService,
+    public theme: ThemeService,
     private message: MessageService,
     public lang: LanguageService,
     public store: StoreService,

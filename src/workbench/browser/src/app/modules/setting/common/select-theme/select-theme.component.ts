@@ -6,7 +6,15 @@ import { APPEARANCE, THEMES } from './theme.model';
 @Component({
   selector: 'eo-select-theme',
   template: `<p class="mb-[5px] mt-[15px] font-bold">Appearance</p>
-    <button eo-ng-button nzType="text" *ngFor="let option of this.APPEARANCE"  (click)="theme.changeAppearance(option.value)">
+    <button
+      eo-ng-button
+      nzType="text"
+      eoNgFeedbackTooltip
+      [nzTooltipTitle]="option.title"
+      *ngFor="let option of this.APPEARANCE"
+      (click)="theme.changeAppearance(option.value)"
+      [ngClass]="{ 'ant-btn-active': theme.appearance === option.value }"
+    >
       <eo-iconpark-icon [name]="option.icon"></eo-iconpark-icon>
     </button>
     <!-- theme -->

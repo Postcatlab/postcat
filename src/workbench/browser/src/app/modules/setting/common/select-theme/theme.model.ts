@@ -20,13 +20,15 @@ export type MainColorType = typeof THEMES[number]['value'];
 
 export const APPEARANCE = [
   {
+    title:$localize`Light`,
     icon: 'link-cloud-sucess',
-    value: 'dark',
-  },
-  {
-    icon: 'loading',
     value: 'light',
   },
+  {
+    title: $localize`Dark`,
+    icon: 'round',
+    value: 'dark',
+  }
 ] as const;
 export type AppearanceType = typeof APPEARANCE[number]['value'];
 
