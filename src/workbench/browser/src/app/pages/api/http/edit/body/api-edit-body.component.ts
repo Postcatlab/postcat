@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
-
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
@@ -46,7 +45,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((model) => {
-      //! Must set value by data,because this.model has delay
+      // ! Must set value by data, because this.model has delay
       this.modelChange.emit(model);
     });
   }
