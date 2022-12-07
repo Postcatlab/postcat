@@ -6,7 +6,6 @@ import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
-import { ApiEditUtilService } from '../api-edit-util.service';
 @Component({
   selector: 'eo-api-edit-body',
   templateUrl: './api-edit-body.component.html',

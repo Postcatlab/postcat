@@ -149,7 +149,13 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   private getMockUrl(mock) {
     //Generate Mock URL
     //TODO Mock URL = API Path
-    const url = new URL(this.mockPrefix.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
+    const url = new URL(
+      this.mockPrefix
+        .replace(/:\/{2,}/g, ':::')
+        .replace(/\/{2,}/g, '/')
+        .replace(/:{3}/g, '://'),
+      'https://github.com/'
+    );
     if (mock?.createWay === 'custom' && mock.uuid) {
       url.searchParams.set('mockID', mock.uuid + '');
     }

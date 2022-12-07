@@ -27,7 +27,7 @@ nz-content {
 }
 
 .env-select {
-  border-bottom: 1px solid rgb(232, 232, 232);
+  border-bottom: 1px solid var(--BORDER);
   background-color: var(--MAIN_BG);
   ::ng-deep {
     eo-ng-select eo-ng-select-top-control {
