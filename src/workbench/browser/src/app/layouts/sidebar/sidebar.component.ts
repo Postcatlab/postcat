@@ -139,7 +139,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);
-      console.warn(`route error: currentModule is [${currentModule}]`, currentModule);
+      console.warn(`EO_WARN[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule);
       return;
     }
     this.sidebar.currentModule = currentModule;

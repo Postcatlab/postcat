@@ -1,10 +1,9 @@
 import isXml from 'is-xml';
+import { ApiBodyType, ApiEditBody, JsonRootType } from '../../modules/api-shared/api.model';
 
-import { ApiBodyType, ApiEditBody, JsonRootType } from '../../shared/services/storage/index.model';
-import { whatType, whatTextType, eoDeepCopy } from '../index.utils';
-import { flatData } from '../tree/tree.utils';
+import { whatType, whatTextType } from '../index.utils';
 
-export const isXML = (data) => isXml(data);
+export const isXML = data => isXml(data);
 /**
  * Parse item to eoTableComponent need
  */
@@ -16,7 +15,7 @@ const parseTree = (key, value) => {
       example: '',
       type: 'object',
       description: '',
-      children: Object.keys(value).map((it) => parseTree(it, value[it])),
+      children: Object.keys(value).map(it => parseTree(it, value[it]))
     };
   }
   if (whatType(value) === 'array') {
@@ -32,7 +31,7 @@ const parseTree = (key, value) => {
         //TODO only edit page has example
         example: JSON.stringify(value),
         type: 'array',
-        description: '',
+        description: ''
       };
     }
     return {
@@ -41,7 +40,7 @@ const parseTree = (key, value) => {
       example: '',
       type: 'array',
       description: '',
-      children: data ? Object.keys(data).map((it) => parseTree(it, data[it])) : [],
+      children: data ? Object.keys(data).map(it => parseTree(it, data[it])) : []
     };
   }
   // * value is string & number & null
@@ -51,18 +50,18 @@ const parseTree = (key, value) => {
     description: '',
     type: whatType(value),
     required: true,
-    example: value == null ? '' : value.toString(),
+    example: value == null ? '' : value.toString()
   };
 };
 /**
  * Parse item to table need row data
  */
-export const form2json = (tmpl) =>
+export const form2json = tmpl =>
   tmpl
     .split('\n')
-    .filter((it) => it.trim())
-    .map((it) => it.split(':'))
-    .map((it) => {
+    .filter(it => it.trim())
+    .map(it => it.split(':'))
+    .map(it => {
       const [key, value] = it;
       return { key: key?.trim(), value: value?.trim() };
     });
@@ -110,7 +109,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
           tagName: label.trim(),
           attr: attr.trim(),
           content: '',
-          children: [],
+          children: []
         });
         stack.push(parent);
         xml = xml.trim().substring(str.length);
@@ -120,7 +119,7 @@ const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: s
         tagName: label.trim(),
         attr: attr.trim(),
         content: '',
-        children: [],
+        children: []
       });
       index = xml.indexOf(str) === -1 ? 0 : xml.indexOf(str);
       xml = xml.substring(index + str.length);
@@ -153,13 +152,13 @@ type uiData = {
   data: ApiEditBody | any;
 };
 
-export const xml2json = (text) => {
+export const xml2json = text => {
   const data: any[] = xml2jsonArr(text);
   const deep = (list = []) =>
     list.reduce(
       (total, { tagName, content, attr, children }) => ({
         ...total,
-        [tagName]: children?.length > 0 ? deep(children || []) : content,
+        [tagName]: children?.length > 0 ? deep(children || []) : content
         // attribute: attr,  // * not support the key for now cause ui has not show it
       }),
       {}
@@ -223,11 +222,11 @@ export const json2xml: (o: object, tab?) => string = (o, tab) => {
  *
  * @returns body info
  */
-export const text2table: (text: string) => uiData = (text) => {
+export const text2table: (text: string) => uiData = text => {
   const result: uiData = {
     textType: ApiBodyType.Raw,
     rootType: JsonRootType.Object,
-    data: text,
+    data: text
   };
   const textType = whatTextType(text);
   result.textType = ['xml', 'json'].includes(textType) ? (textType as ApiBodyType) : ApiBodyType.Raw;
@@ -275,10 +274,7 @@ export const table2json = function (eoapiArr: ApiEditBody[], inputOptions) {
           throw new Error('errorXmlAttr');
         }
         if (inputObject['@eo_attr'].hasOwnProperty(tmpKey)) {
-          inputObject['@eo_attr'][tmpKey] = [
-            inputObject['@eo_attr'][tmpKey],
-            (val.attribute || '').replace(/\s+/, ' '),
-          ];
+          inputObject['@eo_attr'][tmpKey] = [inputObject['@eo_attr'][tmpKey], (val.attribute || '').replace(/\s+/, ' ')];
         } else {
           inputObject['@eo_attr'][tmpKey] = (val.attribute || '').replace(/\s+/, ' ');
         }
@@ -306,7 +302,7 @@ export const table2json = function (eoapiArr: ApiEditBody[], inputOptions) {
           array: '[]',
           object: '{}',
           number: '0',
-          int: '0',
+          int: '0'
         };
         switch (val.type) {
           case 'string': {
@@ -335,4 +331,4 @@ export const table2json = function (eoapiArr: ApiEditBody[], inputOptions) {
   }
   return result;
 };
-export const json2Table = (json) => Object.entries(json).map(([key, value]) => parseTree(key, value));
+export const json2Table = json => Object.entries(json).map(([key, value]) => parseTree(key, value));

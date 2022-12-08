@@ -1,5 +1,5 @@
-import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
-import { ApiEditQuery, ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.model';
+import { ApiEditQuery, ApiEditRest } from '../modules/api-shared/api.model';
 
 /**
  * get rest param from url,format like {restName}

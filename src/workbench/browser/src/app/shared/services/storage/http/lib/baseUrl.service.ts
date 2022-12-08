@@ -1,12 +1,4 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpHeaders,
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
@@ -29,22 +21,18 @@ const noPrefix = ['https://', 'http://'];
 // implements StorageInterface
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
-  get apiPrefix() {
-    return `/${this.workspaceID}/${this.projectID}/`;
-  }
   get projectID() {
+    console.log('==>', this.store.getCurrentProjectID);
     return this.store.getCurrentProjectID;
   }
   get workspaceID() {
     return this.store.getCurrentWorkspaceInfo.id;
   }
+  get apiPrefix() {
+    return `/${this.workspaceID}/${this.projectID}/`;
+  }
   prefix;
-  constructor(
-    private store: StoreService,
-    private effect: EffectService,
-    private messageService: MessageService,
-    private web: WebService
-  ) {
+  constructor(private store: StoreService, private effect: EffectService, private messageService: MessageService, private web: WebService) {
     super();
     //* Web deploy from v1.9.1
     this.prefix = this.web.isWeb ? '/api/' : '/';
@@ -55,30 +43,28 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     const token = StorageUtil.get('accessToken') || '';
 
     let targetUrl;
-    if ((targetUrl = sharePaths.find((n) => req.url.startsWith(n)))) {
+    if ((targetUrl = sharePaths.find(n => req.url.startsWith(n)))) {
       req = req.clone({
-        url: req.url.replace(targetUrl, `/api${targetUrl}`),
+        url: req.url.replace(targetUrl, `/api${targetUrl}`)
       });
-    } else if ((targetUrl = interceptorPaths.find((n) => req.url.startsWith(n)))) {
+    } else if ((targetUrl = interceptorPaths.find(n => req.url.startsWith(n)))) {
       req = req.clone({
-        url: req.url.replace(targetUrl, `${this.apiPrefix}${targetUrl}`),
+        url: req.url.replace(targetUrl, `${this.apiPrefix}${targetUrl}`)
       });
-    } else if ((targetUrl = needWorkspaceIDPrefixPaths.find((n) => req.url.startsWith(n)))) {
+    } else if ((targetUrl = needWorkspaceIDPrefixPaths.find(n => req.url.startsWith(n)))) {
       req = req.clone({
-        url: req.url.replace(targetUrl, `/${this.workspaceID}/${targetUrl}`),
+        url: req.url.replace(targetUrl, `/${this.workspaceID}/${targetUrl}`)
       });
     }
     req = req.clone({
-      url: noPrefix.find((n) => req.url.startsWith(n))
-        ? req.url
-        : uniqueSlash(url + this.prefix + req.url).replace(/(\/api){1,}/g, '/api'),
+      url: noPrefix.find(n => req.url.startsWith(n)) ? req.url : uniqueSlash(url + this.prefix + req.url).replace(/(\/api){1,}/g, '/api'),
       headers: new HttpHeaders({
-        Authorization: token,
-      }),
+        Authorization: token
+      })
     });
 
     return next.handle(req).pipe(
-      filter((event) => event instanceof HttpResponse && [200, 201].includes(event.status)),
+      filter(event => event instanceof HttpResponse && [200, 201].includes(event.status)),
       map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data } })),
       tap((event: any) => {
         // ! TODO delete

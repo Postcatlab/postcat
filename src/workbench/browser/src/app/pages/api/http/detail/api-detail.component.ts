@@ -6,19 +6,14 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { cloneDeep } from 'lodash-es';
+import { JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
-import {
-  ApiData,
-  ApiBodyType,
-  JsonRootType,
-  StorageRes,
-  StorageResStatus,
-} from '../../../../shared/services/storage/index.model';
+import { ApiData, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { reverseObj } from '../../../../utils/index.utils';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
-  styleUrls: ['./api-detail.component.scss'],
+  styleUrls: ['./api-detail.component.scss']
 })
 export class ApiDetailComponent implements OnInit {
   @Input() model: ApiData | any;
@@ -26,7 +21,7 @@ export class ApiDetailComponent implements OnInit {
   originModel: ApiData | any;
   CONST = {
     BODY_TYPE: reverseObj(ApiBodyType),
-    JSON_ROOT_TYPE: reverseObj(JsonRootType),
+    JSON_ROOT_TYPE: reverseObj(JsonRootType)
   };
   rightExtras = [];
   constructor(
@@ -69,13 +64,13 @@ export class ApiDetailComponent implements OnInit {
         }, {});
         prev.push({
           ...curr,
-          ...eventObj,
+          ...eventObj
         });
         return prev;
       }, []);
       this.rightExtras.push(...rightExtra);
     });
-    this.rightExtras.forEach((val) => {
+    this.rightExtras.forEach(val => {
       //TODO remove after 2023.02
       if (val.icon === 'file-text-one') {
         val.icon = 'file-text';
@@ -85,11 +80,11 @@ export class ApiDetailComponent implements OnInit {
     // console.log('this.rightExtras', this.rightExtras);
   }
   getApiByUuid(id: number) {
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       if (this.store.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetApiDetail({
           apiDataUUID: id,
-          uniqueID: this.store.getShareId,
+          uniqueID: this.store.getShareID
         });
         if (err) {
           return;

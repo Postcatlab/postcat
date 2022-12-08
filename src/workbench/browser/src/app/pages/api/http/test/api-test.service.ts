@@ -2,16 +2,14 @@ import { Injectable } from '@angular/core';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/modules/api-shared/api-test-util.service';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import {
-  ApiTestData,
-  ApiTestHistoryFrame,
-  RequestMethod,
-  RequestProtocol,
   StorageRes,
   StorageResStatus,
 } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 
 import { ApiTestHistory } from '../../../../shared/services/storage/index.model';
+import { ApiTestData, ApiTestHistoryFrame } from './api-test.model';
 @Injectable()
 export class ApiTestService {
   constructor(

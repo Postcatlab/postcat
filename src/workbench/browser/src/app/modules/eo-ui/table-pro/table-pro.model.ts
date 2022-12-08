@@ -23,7 +23,7 @@ export interface TableProSetting {
    * Manually add row
    */
   manualAdd?: boolean;
-  showBtnWhenHoverRow?:boolean;
+  showBtnWhenHoverRow?: boolean;
   toolButton?: {
     columnVisible?: boolean;
     fullScreen?: boolean;
@@ -44,6 +44,9 @@ export interface ColumnItem {
    * Column init visible,default true
    */
   columnVisible?: 'fixed' | boolean;
+  /** 
+   * Custom column body html
+   */
   slot?: TemplateRef<HTMLElement>;
   errorTip?: string;
   right?: boolean;
@@ -60,7 +63,7 @@ export interface ColumnItem {
   showFn?: (item, index, apis) => boolean;
   filterFn?: boolean | ((item, index, apis) => boolean);
   disabledFn?: (item, index, apis) => boolean;
-  enums?: any[];
+  enums?: { title: string; value: any; class: string }[];
 }
 interface ColumnBtn {
   title?: string;

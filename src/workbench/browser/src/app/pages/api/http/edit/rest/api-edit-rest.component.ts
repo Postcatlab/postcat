@@ -9,8 +9,8 @@ import {
   Output,
 } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiEditRest, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
-import { ApiEditRest } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-edit-rest',
   template: `<eo-ng-table-pro
@@ -28,8 +28,8 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
   @Input() tid: string;
   @Input() model: ApiEditRest[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  listConf: any = {
-    column: [],
+    listConf: ApiTableConf = {
+    columns: [],
     setting: {},
   };
   itemStructure: ApiEditRest = {

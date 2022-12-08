@@ -2,15 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import {
-  Project,
-  Environment,
-  Group,
-  ApiData,
-  ApiTestHistory,
-  StorageInterface,
-  ApiMockEntity,
-} from '../../index.model';
+import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, ApiMockEntity } from '../../index.model';
 
 @Injectable()
 export class HttpStorage implements StorageInterface {

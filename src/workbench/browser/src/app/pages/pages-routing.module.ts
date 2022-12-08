@@ -1,13 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterModule,
-  RouterStateSnapshot,
-  Routes,
-  UrlTree,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterModule, RouterStateSnapshot, Routes, UrlTree } from '@angular/router';
 import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
 import { Observable } from 'rxjs';
 
@@ -24,8 +16,8 @@ class RedirectProjectID implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const urlTree = this.router.parseUrl(state.url);
-    if (!urlTree.queryParams.shareId && this.store.getShareId) {
-      urlTree.queryParams.shareId = this.store.getShareId;
+    if (!urlTree.queryParams.shareId && this.store.getShareID) {
+      urlTree.queryParams.shareId = this.store.getShareID;
       return urlTree;
     }
     return true;
@@ -40,38 +32,38 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'api',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'blank',
-        component: PageBlankComponent,
+        component: PageBlankComponent
       },
       {
         path: 'api',
-        loadChildren: () => import('./api/api.module').then((m) => m.ApiModule),
+        loadChildren: () => import('./api/api.module').then(m => m.ApiModule)
       },
       {
         path: 'workspace',
-        loadChildren: () => import('./workspace/workspace.module').then((m) => m.WorkspaceModule),
+        loadChildren: () => import('./workspace/workspace.module').then(m => m.WorkspaceModule)
       },
       {
         path: 'share',
         canActivate: [RedirectProjectID],
         runGuardsAndResolvers: 'always',
-        loadChildren: () => import('./share-project/share-project.module').then((m) => m.ShareProjectModule),
+        loadChildren: () => import('./share-project/share-project.module').then(m => m.ShareProjectModule)
       },
       {
         path: 'member',
-        loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),
+        loadChildren: () => import('./member/member.module').then(m => m.MemberModule)
       },
       {
         path: 'extension',
-        loadChildren: () => import('./extension/extension.module').then((m) => m.ExtensionModule),
+        loadChildren: () => import('./extension/extension.module').then(m => m.ExtensionModule)
       },
       {
         path: 'extensionSidebarView/:extName',
-        component: ExtensionAppComponent,
-      },
+        component: ExtensionAppComponent
+      }
       // {
       //   path: 'app-vue3',
       //   children: [
@@ -81,13 +73,13 @@ const routes: Routes = [
       //     },
       //   ],
       // },
-    ],
-  },
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   providers: [RedirectProjectID],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class PagesRoutingModule {}

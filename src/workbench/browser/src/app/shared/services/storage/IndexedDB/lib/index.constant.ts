@@ -1,4 +1,5 @@
-import { ApiData, JsonRootType, RequestProtocol, RequestMethod, ApiBodyType } from '../../index.model';
+import { ApiBodyType, JsonRootType, RequestProtocol, RequestMethod } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { ApiData } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [
   {
@@ -20,9 +21,9 @@ export const sampleApiData: ApiData[] = [
         description: $localize`City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html`,
         enum: [
           { value: '110000', description: 'Beijing' },
-          { value: '440000', description: 'Guangdong' },
-        ],
-      },
+          { value: '440000', description: 'Guangdong' }
+        ]
+      }
     ],
     updatedAt: new Date(),
     requestHeaders: [],
@@ -44,23 +45,23 @@ export const sampleApiData: ApiData[] = [
             description: $localize`minimum temperature`,
             type: 'string',
             required: true,
-            example: '18℃',
+            example: '18℃'
           },
           {
             name: 'temp2',
             description: $localize`maximun temperature`,
             type: 'string',
             required: true,
-            example: '31℃',
+            example: '31℃'
           },
           { name: 'weather', description: '', type: 'string', required: true, example: '多云转阴' },
           { name: 'img1', description: '', type: 'string', required: true, example: 'n1.gif' },
           { name: 'img2', description: '', type: 'string', required: true, example: 'd2.gif' },
-          { name: 'ptime', description: '', type: 'string', required: true, example: '18:00' },
-        ],
-      },
+          { name: 'ptime', description: '', type: 'string', required: true, example: '18:00' }
+        ]
+      }
     ],
-    weight: 0,
+    weight: 0
   },
   {
     name: $localize`COVID-19 national epidemic`,
@@ -84,7 +85,7 @@ export const sampleApiData: ApiData[] = [
       { name: 'server', required: true, description: '', example: 'openresty' },
       { name: 'tracecode', required: true, description: '', example: '8QMewH9c6JodvyHb5wE=' },
       { name: 'x-client-ip', required: true, description: '', example: '120.26.198.150' },
-      { name: 'x-server-ip', required: true, description: '', example: '58.250.137.40' },
+      { name: 'x-server-ip', required: true, description: '', example: '58.250.137.40' }
     ],
     responseBodyType: ApiBodyType.JSON,
     responseBodyJsonType: JsonRootType.Object,
@@ -115,8 +116,8 @@ export const sampleApiData: ApiData[] = [
                 description: '',
                 children: [
                   { name: 'confirm', description: '', type: 'number', required: true, example: '321' },
-                  { name: 'isUpdated', description: '', type: 'boolean', required: true, example: 'true' },
-                ],
+                  { name: 'isUpdated', description: '', type: 'boolean', required: true, example: 'true' }
+                ]
               },
               {
                 name: 'total',
@@ -137,44 +138,44 @@ export const sampleApiData: ApiData[] = [
                     description: '',
                     type: 'number',
                     required: true,
-                    example: '',
-                  },
-                ],
+                    example: ''
+                  }
+                ]
               },
-              { name: 'children', type: 'array', required: true, example: '', enum: [], description: '' },
-            ],
+              { name: 'children', type: 'array', required: true, example: '', enum: [], description: '' }
+            ]
           },
           {
             name: 'chinaTotal',
             required: true,
             example: '',
             type: 'object',
-            description: '',
+            description: ''
           },
           {
             name: 'chinaAdd',
             required: true,
             example: '',
             type: 'object',
-            description: '',
+            description: ''
           },
           {
             name: 'showAddSwitch',
             required: true,
             example: '',
             type: 'object',
-            description: '',
+            description: ''
           },
           {
             name: 'lastUpdateTime',
             description: '',
             type: 'object',
             required: true,
-            example: '2022-02-05 11:52:51',
-          },
-        ],
-      },
+            example: '2022-02-05 11:52:51'
+          }
+        ]
+      }
     ],
-    weight: 0,
-  },
+    weight: 0
+  }
 ];

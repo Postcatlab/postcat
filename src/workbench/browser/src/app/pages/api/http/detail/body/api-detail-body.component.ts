@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiBodyType, ApiEditBody, ApiTableConf, JsonRootType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { Subject } from 'rxjs';
 
-import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-detail-body',
-  templateUrl: './api-detail-body.component.html',
+  templateUrl: './api-detail-body.component.html'
 })
 export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   /**
@@ -15,10 +15,10 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | ApiEditBody[] | any;
   @Input() bodyType: ApiBodyType | string;
   @Input() jsonRootType: JsonRootType | string;
-  listConf: any = {};
+  listConf: ApiTableConf = {};
   cache: object = {};
   CONST: any = {
-    JSON_ROOT_TYPE: Object.keys(JsonRootType).map((val) => ({ key: val, value: JsonRootType[val] })),
+    JSON_ROOT_TYPE: Object.keys(JsonRootType).map(val => ({ key: val, value: JsonRootType[val] }))
   };
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -37,7 +37,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   ngOnInit(): void {
-    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType).map((val) => ({ key: val, value: ApiBodyType[val] }));
+    this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType).map(val => ({ key: val, value: ApiBodyType[val] }));
     this.initListConf();
   }
   ngOnDestroy() {
@@ -55,7 +55,7 @@ export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
       module: 'preview',
       format: this.bodyType as ApiBodyType,
       isEdit: false,
-      id: this.tid,
+      id: this.tid
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

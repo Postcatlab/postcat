@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestRest } from '../../../service/api-test/api-test.model';
+import { ApiTestRest } from '../api-test.model';
 
 @Component({
   selector: 'eo-api-test-rest',
@@ -13,8 +14,8 @@ import { ApiTestRest } from '../../../service/api-test/api-test.model';
 export class ApiTestRestComponent implements OnInit {
   @Input() model: object[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  listConf: any = {
-    column: [],
+    listConf: ApiTableConf = {
+    columns: [],
     setting: {},
   };
   private modelChange$: Subject<void> = new Subject();

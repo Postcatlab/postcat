@@ -12,8 +12,8 @@ import {
 } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -25,7 +25,7 @@ import {
   ApiTestBodyType,
   ContentType,
   CONTENT_TYPE_BY_ABRIDGE,
-} from '../../../service/api-test/api-test.model';
+} from '../api-test.model';
 
 @Component({
   selector: 'eo-api-test-body',
@@ -42,8 +42,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   @Output() contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   isReload = true;
-  listConf: any = {
-    column: [],
+    listConf: ApiTableConf = {
+    columns: [],
     setting: {},
   };
   binaryFiles: NzUploadFile[] = [];

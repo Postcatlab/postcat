@@ -56,7 +56,7 @@
       <eo-tab
         class="flex-1"
         [list]="apiTab.BASIC_TABS"
-        [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspaceInfo.id) + '_TabCache'"
+        [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspaceInfo?.id) + '_TabCache'"
         [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
         [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
         (beforeClose)="apiTab.beforeTabClose($event)"
@@ -109,13 +109,7 @@
         </eo-ng-select>
         <ng-template #renderTemplate>
           <nz-divider *ngIf="!store.isShare"></nz-divider>
-          <a
-            *ngIf="!store.isShare"
-            class="text-sx manager-env"
-            eo-ng-button
-            nzType="link"
-            (click)="gotoEnvManager()"
-            i18n
+          <a *ngIf="!store.isShare" class="text-sx manager-env" eo-ng-button nzType="link" (click)="gotoEnvManager()" i18n
             >Manage Environment</a
           >
         </ng-template>
@@ -154,8 +148,7 @@
         [nzMinWidth]="RIGHT_SIDER_SHRINK_WIDTH"
         (nzResize)="onRightPanelResize($event)"
       >
-        <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left">
-        </nz-resize-handle>
+        <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left"> </nz-resize-handle>
         <div class="flex h-full">
           <div class="flex flex-col p-2">
             <button

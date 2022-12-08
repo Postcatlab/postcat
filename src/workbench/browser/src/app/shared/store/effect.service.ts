@@ -6,10 +6,14 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { reaction } from 'mobx';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class EffectService {
   constructor(
@@ -17,12 +21,32 @@ export class EffectService {
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage,
     private store: StoreService,
-    private http: RemoteService
+    private http: RemoteService,
+    private message: MessageService,
+    private lang: LanguageService,
+    private web: WebService
   ) {
     reaction(
-      () => this.store.getCurrentWorkspaceInfo.id,
-      (workspaceID) => this.updateProjectID(workspaceID)
+      () => this.store.getCurrentWorkspaceInfo,
+      ({ id }) => {
+        id ?? this.updateProjectID(id);
+      }
     );
+  }
+
+  async updateWorkspaceList() {
+    const [list, wErr]: any = await this.http.api_workspaceList({});
+    if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} });
+        if (this.store.isLogin) {
+          return;
+        }
+        this.message.send({ type: 'http-401', data: {} });
+      }
+      return;
+    }
+    this.store.setWorkspaceList(list);
   }
 
   getGroups(projectID = 1): Promise<any[]> {
@@ -38,14 +62,14 @@ export class EffectService {
   deleteEnv(uuid) {
     this.storage.run('environmentRemove', [uuid], async (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
-        const envList = this.store.getEnvList.filter((it) => it.uuid !== uuid);
+        const envList = this.store.getEnvList.filter(it => it.uuid !== uuid);
         this.store.setEnvList(envList);
       }
     });
   }
 
   async exportLocalProjectData(projectID = 1) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const apiGroupObservable = this.indexedDBStorage.groupLoadAllByProjectID(projectID);
       apiGroupObservable.subscribe(({ data: apiGroup }: any) => {
         const apiDataObservable = this.indexedDBStorage.apiDataLoadAllByProjectID(projectID);
@@ -54,7 +78,7 @@ export class EffectService {
           envObservable.subscribe(({ data: environments }: any) => {
             resolve({
               collections: this.exportCollects(apiGroup, apiData),
-              environments,
+              environments
             });
           });
         });
@@ -69,22 +93,22 @@ export class EffectService {
     if ([success, empty].includes(result.status)) {
       return {
         collections: this.exportCollects(apiGroup, result.data),
-        environments: [],
+        environments: []
       };
     }
     return {
       collections: [],
-      environments: [],
+      environments: []
     };
   }
 
   exportCollects(apiGroup: any[], apiData: any[], parentID = 0) {
-    const apiGroupFilters = apiGroup.filter((child) => child.parentID === parentID);
-    const apiDataFilters = apiData.filter((child) => child.groupID === parentID);
+    const apiGroupFilters = apiGroup.filter(child => child.parentID === parentID);
+    const apiDataFilters = apiData.filter(child => child.groupID === parentID);
     return apiGroupFilters
-      .map((item) => ({
+      .map(item => ({
         name: item.name,
-        children: this.exportCollects(apiGroup, apiData, item.uuid),
+        children: this.exportCollects(apiGroup, apiData, item.uuid)
       }))
       .concat(apiDataFilters);
   }
@@ -102,24 +126,43 @@ export class EffectService {
   }
 
   async updateProjectID(workspaceID: number) {
+    console.log('===>>', workspaceID);
     if (workspaceID === -1) {
       this.store.setCurrentProjectID(1);
       StorageUtil.remove('server_version');
       return;
     }
     const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
+    console.log('===>>', projects);
     this.store.setCurrentProjectID(projects.at(0).uuid);
     this.store.setAuthEnum({
-      canEdit: creatorID === this.store.getUserProfile.id,
+      canEdit: creatorID === this.store.getUserProfile.id
     });
+    if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
+      this.store.setShareLink('');
+      return;
+    }
+    const [res, err]: any = await this.http.api_shareCreateShare({});
+    if (err) {
+      this.store.setShareLink('');
+      return;
+    }
+    const host = (this.store.remoteUrl || window.location.host)
+      .replace(/:\/{2,}/g, ':::')
+      .replace(/\/{2,}/g, '/')
+      .replace(/:{3}/g, '://')
+      .replace(/(\/$)/, '');
+    const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
+    const link = `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
+    this.store.setShareLink(link);
   }
 
   updateEnvList() {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (this.store.isShare) {
         this.http
           .api_shareDocGetEnv({
-            uniqueID: this.store.getShareId,
+            uniqueID: this.store.getShareID
           })
           .then(([data, err]) => {
             if (err) {
