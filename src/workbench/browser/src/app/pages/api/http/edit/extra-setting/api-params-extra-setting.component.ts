@@ -2,16 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ColumnItem } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
 import { isNil } from 'ng-zorro-antd/core/util';
 
-import {
-  ApiParamsTypeJsonOrXml,
-  ParamsEnum,
-  REQURIED_ENUMS,
-  ApiEditBody,
-} from '../../../../../shared/services/storage/index.model';
+import { ApiParamsTypeJsonOrXml, ParamsEnum, REQURIED_ENUMS, ApiEditBody } from '../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
-  templateUrl: './api-params-extra-setting.component.html',
+  templateUrl: './api-params-extra-setting.component.html'
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
   @Input() model: { type: string | ApiParamsTypeJsonOrXml } & ApiEditBody;
@@ -24,53 +19,53 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     {
       title: $localize`Minimum length`,
       type: 'inputNumber',
-      key: 'minLength',
+      key: 'minLength'
     },
     {
       title: $localize`Maximum Length`,
       type: 'inputNumber',
-      key: 'maxLength',
-    },
+      key: 'maxLength'
+    }
   ];
   listConfValueInterval: ColumnItem[] = [
     {
       title: $localize`Minimum`,
       type: 'inputNumber',
-      key: 'minimum',
+      key: 'minimum'
     },
     {
       title: $localize`Maximum`,
       type: 'inputNumber',
-      key: 'maximum',
-    },
+      key: 'maximum'
+    }
   ];
 
   itemStructureEnums: ParamsEnum = {
     value: '',
-    description: '',
+    description: ''
   };
   listConfEnums: ColumnItem[] = [
     {
       title: $localize`Value Enum`,
       type: 'input',
       key: 'value',
-      placeholder: $localize`enum`,
+      placeholder: $localize`enum`
     },
     {
       title: $localize`Description`,
       type: 'input',
       key: 'description',
-      placeholder: $localize`Description`,
+      placeholder: $localize`Description`
     },
     {
       type: 'btnList',
       width: 100,
       btns: [
         {
-          action: 'delete',
-        },
-      ],
-    },
+          action: 'delete'
+        }
+      ]
+    }
   ];
 
   constructor() {}
@@ -78,37 +73,37 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     this.listConfBasicInfo = [
       {
         title: $localize`Param Name`,
-        key: 'name',
+        key: 'name'
       },
       ...(this.in === 'body'
         ? [
             {
               title: $localize`Type`,
-              key: 'type',
-            },
+              key: 'type'
+            }
           ]
         : []),
       {
         title: $localize`Required`,
         key: 'required',
-        enums: REQURIED_ENUMS,
+        enums: REQURIED_ENUMS
       },
       {
         title: $localize`:@@Description:Description`,
-        key: 'description',
-      },
+        key: 'description'
+      }
     ];
   }
   transferPreviewTable() {
-    ['listConfValueInterval', 'listConfEnums', 'listConfValueInterval'].forEach((configName) => {
+    ['listConfValueInterval', 'listConfEnums', 'listConfValueInterval'].forEach(configName => {
       this[configName].forEach((column, index) => {
         //Change edit to preview
+        if (column.type === 'btnList') {
+          this[configName].splice(index, 1);
+          return;
+        }
         if (['inputNumber', 'input'].includes(column.type)) {
           column.type = 'text';
-        }
-        const hiddenOperate = !this.isEdit && column.type === 'btnlist';
-        if (hiddenOperate) {
-          this[configName].splice(index, 1);
         }
       });
     });
@@ -117,6 +112,7 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     this.initBasicListConf();
     if (!this.isEdit) {
       this.transferPreviewTable();
+      console.log(this.listConfEnums);
     }
     //Init Enum List
     if (this.isEdit && this.model[0] && !this.model[0]?.enum?.length) {

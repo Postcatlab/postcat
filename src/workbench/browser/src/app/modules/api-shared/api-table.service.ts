@@ -150,6 +150,7 @@ export class ApiTableService {
         id: inArg.id,
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
+        showBtnWhenHoverRow:inArg.isEdit ? false : true,
         rowSortable: inArg.isEdit ? true : false,
         isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
         toolButton: {

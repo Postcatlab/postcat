@@ -23,6 +23,7 @@ export interface TableProSetting {
    * Manually add row
    */
   manualAdd?: boolean;
+  showBtnWhenHoverRow?:boolean;
   toolButton?: {
     columnVisible?: boolean;
     fullScreen?: boolean;

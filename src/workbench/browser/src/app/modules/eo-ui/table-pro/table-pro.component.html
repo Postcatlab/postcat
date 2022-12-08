@@ -5,6 +5,7 @@
 <!-- {{ setting | json }} -->
 <!-- {{columnVisibleStatus|json}} -->
 <eo-ng-table
+  [ngClass]="{'show-btn-when-hover-row':setting.showBtnWhenHoverRow}"
   class="{{ randomClass }}"
   [nzDataItem]="nzDataItem"
   [(nzData)]="nzData"
@@ -73,13 +74,9 @@
     <eo-ng-dropdown-menu #dropdownMenTmp>
       <ul nz-menu>
         <li nz-menu-item *ngFor="let item of columnVisibleMenus" (ngModelChange)="toggleColumnVisible(item, $event)">
-          <label
-            (click)="$event.stopPropagation()"
-            eo-ng-checkbox
-            [(ngModel)]="item.checked"
-            (ngModelChange)="toggleColumnVisible(item)"
-            >{{ item.title }}</label
-          >
+          <label (click)="$event.stopPropagation()" eo-ng-checkbox [(ngModel)]="item.checked" (ngModelChange)="toggleColumnVisible(item)">{{
+            item.title
+          }}</label>
         </li>
       </ul>
     </eo-ng-dropdown-menu>
@@ -102,6 +99,5 @@
 
 <!-- Input Number -->
 <ng-template #numberInput let-item="item" let-rowItem="rowItem">
-  <nz-input-number class="w-full" (change)="handleDataChange($event)" min="0" [(ngModel)]="item[rowItem.keyName]">
-  </nz-input-number>
+  <nz-input-number class="w-full" (change)="handleDataChange($event)" min="0" [(ngModel)]="item[rowItem.keyName]"> </nz-input-number>
 </ng-template>

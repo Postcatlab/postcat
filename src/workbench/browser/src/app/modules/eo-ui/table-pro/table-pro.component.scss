@@ -11,3 +11,13 @@
 :host {
   display: block;
 }
+:host ::ng-deep {
+  .show-btn-when-hover-row {
+    .eo-ng-table-btns {
+      visibility: hidden;
+    }
+    .ant-table-row:hover .eo-ng-table-btns {
+      visibility: visible;
+    }
+  }
+}
