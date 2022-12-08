@@ -131,6 +131,7 @@ export class RemoteService {
             resolve([null, { status, ...data }]);
           },
           error: error => {
+            console.log('::', error);
             console.log('%c workspace:list - api_workspaceList 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }

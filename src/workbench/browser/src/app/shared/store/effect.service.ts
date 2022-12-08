@@ -7,7 +7,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { autorun, reaction } from 'mobx';
+import { autorun } from 'mobx';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
