@@ -6,19 +6,13 @@ import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { MessageService } from '../../../../shared/services/message';
-import {
-  Group,
-  ApiEditViewData,
-  RequestProtocol,
-  RequestMethod,
-  StorageRes,
-  StorageResStatus,
-} from '../../../../shared/services/storage/index.model';
+import { Group, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
+import { ApiEditViewData, RequestProtocol, RequestMethod } from '../../../../modules/api-shared/api.model';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { listToTree, getExpandGroupByKey } from '../../../../utils/tree/tree.utils';
 import { ApiEditUtilService } from './api-edit-util.service';
@@ -26,7 +20,7 @@ import { ApiEditUtilService } from './api-edit-util.service';
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
-  styleUrls: ['./api-edit.component.scss'],
+  styleUrls: ['./api-edit.component.scss']
 })
 export class ApiEditComponent implements OnInit, OnDestroy {
   @Input() model: ApiEditViewData;
@@ -75,7 +69,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       const initTimes = this.initTimes;
       const result = await this.apiEdit.getApi({
         id,
-        groupID,
+        groupID
       });
       //!Prevent await async ,replace current  api data
       if (initTimes >= this.initTimes) {
@@ -106,7 +100,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.getApiGroup();
-    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe((id) => {
+    this.changeGroupID$.pipe(debounceTime(300), take(1)).subscribe(id => {
       /**
        * Expand Select Group
        */
@@ -137,8 +131,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         this.router.navigate(['/home/api/http/detail'], {
           queryParams: {
             pageID: Number(this.route.snapshot.queryParams.pageID),
-            uuid: result.data.uuid,
-          },
+            uuid: result.data.uuid
+          }
         });
       }
       this.messageService.send({ type: `${busEvent}Success`, data: result.data });
@@ -190,8 +184,8 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         key: '-1',
         weight: 0,
         parentID: '0',
-        isLeaf: false,
-      },
+        isLeaf: false
+      }
     ];
     this.storage.run('groupLoadAllByProjectID', [1], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
@@ -202,7 +196,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
             key: item.uuid.toString(),
             weight: item.weight || 0,
             parentID: (item.parentID || 0).toString(),
-            isLeaf: false,
+            isLeaf: false
           });
         });
         treeItems.sort((a, b) => a.weight - b.weight);
@@ -235,14 +229,14 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       this.model = {} as ApiEditViewData;
     }
     const controls = {};
-    ['protocol', 'method', 'uri', 'groupID', 'name'].forEach((name) => {
+    ['protocol', 'method', 'uri', 'groupID', 'name'].forEach(name => {
       controls[name] = [this.model[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }
 
   private watchBasicForm() {
-    this.validateForm.valueChanges.subscribe((x) => {
+    this.validateForm.valueChanges.subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       setTimeout(() => {
         this.modelChange.emit(this.model);
@@ -252,7 +246,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     this.validateForm
       .get('uri')
       ?.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$))
-      .subscribe((url) => {
+      .subscribe(url => {
         this.resetRestFromUrl(url);
       });
   }

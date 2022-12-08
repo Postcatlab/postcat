@@ -2,23 +2,19 @@ import { Injectable } from '@angular/core';
 import { has, omit } from 'lodash-es';
 
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
-import { ApiTestParamsTypeFormData } from '../../pages/api/service/api-test/api-test.model';
+import { ApiTestParamsTypeFormData } from '../../pages/api/http/test/api-test.model';
+import { REQURIED_ENUMS } from '../../shared/models/shared.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
-import {
-  ApiBodyType,
-  ApiParamsTypeFormData,
-  ApiParamsTypeJsonOrXml,
-  REQURIED_ENUMS,
-} from '../../shared/services/storage/index.model';
+
 import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
-import { TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-
+import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
+import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml } from './api.model';
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
   showMore(item, opts: { in: string; isEdit: boolean }) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const modalConf: ModalOptions = {
         nzTitle: $localize`More Settings`,
         nzContent: ApiParamsExtraSettingComponent,
@@ -26,14 +22,14 @@ export class ApiTableService {
         nzComponentParams: {
           in: opts.in,
           model: [omit(item, ['children'])],
-          isEdit: opts.isEdit,
-        },
+          isEdit: opts.isEdit
+        }
       };
       if (opts.isEdit) {
         modalConf.nzOnOk = () => {
           const model = eoDeepCopy(modal.componentInstance.model[0]);
           model.enum = filterTableData(model.enum, {
-            primaryKey: 'value',
+            primaryKey: 'value'
           });
           resolve(model);
           modal.destroy();
@@ -44,8 +40,8 @@ export class ApiTableService {
             label: $localize`Cancel`,
             onClick: () => {
               modal.destroy();
-            },
-          },
+            }
+          }
         ];
       }
       const modal = this.modalService.create(modalConf);
@@ -61,7 +57,7 @@ export class ApiTableService {
       format?: ApiBodyType;
     },
     opts: any = {}
-  ): { columns: any[]; setting: TableProSetting } {
+  ): { columns: ColumnItem[]; setting: TableProSetting } {
     const columnMUI = {
       name: {
         title: inArg.in === 'header' ? $localize`:@@HeaderName:Key` : $localize`:@@ParamName:Name`,
@@ -69,7 +65,7 @@ export class ApiTableService {
         type: 'input',
         columnVisible: 'fixed',
         key: 'name',
-        width: 150,
+        width: 150
       },
       type: {
         title: $localize`Type`,
@@ -77,7 +73,7 @@ export class ApiTableService {
         key: 'type',
         filterable: inArg.isEdit ? false : true,
         disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined,
-        width: 120,
+        width: 120
       },
       required: {
         title: $localize`Required`,
@@ -85,19 +81,19 @@ export class ApiTableService {
         key: 'required',
         width: 100,
         filterable: inArg.isEdit ? false : true,
-        enums: REQURIED_ENUMS,
+        enums: REQURIED_ENUMS
       },
       description: {
         title: $localize`:@@Description:Description`,
         type: 'input',
         key: 'description',
-        width: 250,
+        width: 250
       },
       example: {
         title: $localize`Example`,
         type: 'input',
         key: 'example',
-        width: 200,
+        width: 200
       },
       editOperate: {
         type: 'btnList',
@@ -106,24 +102,24 @@ export class ApiTableService {
           {
             icon: 'more',
             title: $localize`More Settings`,
-            click: (item) => {
+            click: item => {
               this.showMore(item.data, {
                 in: inArg.in,
-                isEdit: true,
-              }).then((res) => {
+                isEdit: true
+              }).then(res => {
                 Object.assign(item.data, res);
                 if (!opts.changeFn) {
-                  console.warn('Advance Sttings need changeFn is not defined');
+                  console.warn('EO_WARN: Advance Sttings need changeFn is not defined');
                   return;
                 }
                 opts.changeFn();
               });
-            },
+            }
           },
           {
-            action: 'delete',
-          },
-        ],
+            action: 'delete'
+          }
+        ]
       },
       previewOperate: {
         type: 'btnList',
@@ -131,18 +127,17 @@ export class ApiTableService {
         btns: [
           {
             icon: 'more',
-            showFn: ({ data }) =>
-              data.enum?.length || data.minimum || data.maximum || data.maxLength || data.minLength || data.example,
+            showFn: ({ data }) => data.enum?.length || data.minimum || data.maximum || data.maxLength || data.minLength || data.example,
             title: $localize`More Settings`,
-            click: (item) => {
+            click: item => {
               this.showMore(item.data, {
                 in: inArg.in,
-                isEdit: false,
+                isEdit: false
               });
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     };
     const result = {
       columns: [],
@@ -150,13 +145,14 @@ export class ApiTableService {
         id: inArg.id,
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
+        showBtnWhenHoverRow: inArg.isEdit ? false : true,
         rowSortable: inArg.isEdit ? true : false,
         isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
         toolButton: {
           columnVisible: true,
-          fullScreen: true,
-        },
-      },
+          fullScreen: true
+        }
+      }
     };
     let columnsArr = [];
     switch (inArg.in) {
@@ -171,26 +167,32 @@ export class ApiTableService {
     }
     columnsArr.push(inArg.module === 'preview' ? 'previewOperate' : 'editOperate');
     const types = inArg.format === ApiBodyType['Form-data'] ? ApiParamsTypeFormData : ApiParamsTypeJsonOrXml;
-    result.columns = columnsArr.map((keyName) => {
+    result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
-        throw new Error(`[EO_ERROR]columnMUI not found ${keyName}`);
+        throw new Error(`EO_ERROR: columnMUI not found ${keyName}`);
       }
       switch (keyName) {
+        case 'name': {
+          if (inArg.in === 'header' && inArg.isEdit) {
+            // column.type='autoComplete';
+          }
+          break;
+        }
         case 'type': {
-          column.enums = Object.keys(types).map((val) => ({
+          column.enums = Object.keys(types).map(val => ({
             title: val,
-            value: types[val],
+            value: types[val]
           }));
           break;
         }
         case 'editOperate': {
           if (result.setting.isLevel) {
             const insert: any = {
-              action: 'insert',
+              action: 'insert'
             };
             if (inArg.format === 'xml') {
-              insert.showFn = (item) => item.level !== 0;
+              insert.showFn = item => item.level !== 0;
             }
             column.btns.unshift({ action: 'addChild' }, insert);
           }
@@ -217,45 +219,45 @@ export class ApiTableService {
       format?: 'Form-data';
     },
     opts: any = {}
-  ) {
+  ): { columns: ColumnItem[]; setting: TableProSetting } {
     const columnMUI = {
       name: {
         title: $localize`Name`,
         left: true,
         type: 'input',
         columnVisible: 'fixed',
-        disabledFn: inArg.in === 'header' ? (item) => has(item, 'editable') && !item.editable : undefined,
+        disabledFn: inArg.in === 'header' ? item => has(item, 'editable') && !item.editable : undefined,
         key: 'name',
-        width: 150,
+        width: 150
       },
       type: {
         title: $localize`Type`,
         type: 'select',
         key: 'type',
-        width: 120,
+        width: 120
       },
       required: {
         type: 'checkbox',
         left: true,
         key: 'required',
         width: 25,
-        enums: REQURIED_ENUMS,
+        enums: REQURIED_ENUMS
       },
       value: {
         title: $localize`Value`,
         type: 'input',
         key: 'value',
-        width: 200,
+        width: 200
       },
       editOperate: {
         type: 'btnList',
         right: true,
         btns: [
           {
-            action: 'delete',
-          },
-        ],
-      },
+            action: 'delete'
+          }
+        ]
+      }
     };
     const result = {
       columns: [],
@@ -265,9 +267,9 @@ export class ApiTableService {
         rowSortable: true,
         isLevel: false,
         toolButton: {
-          fullScreen: true,
-        },
-      },
+          fullScreen: true
+        }
+      }
     };
     let columnsArr = [];
     switch (inArg.in) {
@@ -281,16 +283,16 @@ export class ApiTableService {
       }
     }
     const types = ApiTestParamsTypeFormData;
-    result.columns = columnsArr.map((keyName) => {
+    result.columns = columnsArr.map(keyName => {
       const column = columnMUI[keyName];
       if (!column) {
-        throw new Error(`[EO_ERROR]columnMUI not found ${keyName}`);
+        throw new Error(`EO_ERROR: columnMUI not found ${keyName}`);
       }
       switch (keyName) {
         case 'type': {
-          column.enums = Object.keys(types).map((val) => ({
+          column.enums = Object.keys(types).map(val => ({
             title: val,
-            value: types[val],
+            value: types[val]
           }));
           break;
         }
@@ -299,7 +301,7 @@ export class ApiTableService {
             column.btns.unshift(
               { action: 'addChild' },
               {
-                action: 'insert',
+                action: 'insert'
               }
             );
           }

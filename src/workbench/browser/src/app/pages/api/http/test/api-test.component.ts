@@ -20,7 +20,7 @@ import {
   afterScriptCompletions
 } from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
-import { ContentType } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
+import { ApiTestData, ApiTestHistoryFrame, ContentType } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.model';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -34,16 +34,10 @@ import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
 import { MessageService } from '../../../../shared/services/message';
-import {
-  ApiBodyType,
-  ApiTestData,
-  ApiTestHistoryFrame,
-  RequestMethod,
-  RequestProtocol
-} from '../../../../shared/services/storage/index.model';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
+import { ApiBodyType, RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));

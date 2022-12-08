@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiEditHeaders, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
-import { ApiEditHeaders } from '../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-detail-form',
@@ -18,7 +18,7 @@ export class ApiDetailFormComponent implements OnInit {
   @Input() tid: string;
   @Input() model: ApiEditHeaders[];
   @Input() module: 'rest' | 'header' | 'query';
-  listConf: any = {};
+  listConf: ApiTableConf = {};
   constructor(private apiTable: ApiTableService) {}
 
   ngOnInit(): void {

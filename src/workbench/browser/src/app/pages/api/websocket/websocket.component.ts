@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
+import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';

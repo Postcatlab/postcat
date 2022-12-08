@@ -1,7 +1,8 @@
 import { formatDate } from '@angular/common';
 import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
+import { ApiBodyType } from '../../../../modules/api-shared/api.model';
 
-import { ApiBodyType, ApiData } from '../../../../shared/services/storage/index.model';
+import {  ApiData } from '../../../../shared/services/storage/index.model';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
 const PROTOCOL = ['http', 'https'];

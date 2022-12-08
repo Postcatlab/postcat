@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiEditHeaders, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
-import { ApiEditHeaders } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-edit-header',
   template: `<div class="param-box-header flex items-center h-10">
@@ -27,8 +27,8 @@ export class ApiEditHeaderComponent implements OnInit {
    */
   @Input() tid: string;
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  listConf: any = {
-    column: [],
+    listConf: ApiTableConf = {
+    columns: [],
     setting: {},
   };
   itemStructure: ApiEditHeaders = {

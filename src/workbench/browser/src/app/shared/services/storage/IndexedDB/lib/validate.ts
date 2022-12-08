@@ -1,7 +1,8 @@
-import Ajv, { JSONSchemaType } from 'ajv';
+import Ajv from 'ajv';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
-import { ApiData, Environment, Group, ApiBodyType } from '../../index.model';
+import { ApiData, Environment, Group } from '../../index.model';
 import apiDataSchema from '../schema/apiData.json';
 import envSchema from '../schema/env.json';
 export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiData; error?: any } => {

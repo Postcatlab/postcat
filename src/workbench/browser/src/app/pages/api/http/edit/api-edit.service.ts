@@ -1,23 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import {
-  ApiBodyType,
-  ApiData,
-  ApiEditViewData,
-  JsonRootType,
-  StorageRes,
-} from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { ApiBodyType, ApiEditViewData, JsonRootType, RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 
-import { RequestMethod, RequestProtocol } from '../../../../shared/services/storage/index.model';
 import { ApiEditUtilService } from './api-edit-util.service';
 @Injectable()
 export class ApiEditService {
-  constructor(
-    private storage: StorageService,
-    private apiEditUtil: ApiEditUtilService,
-    private apiService: ApiService
-  ) {}
+  constructor(private storage: StorageService, private apiEditUtil: ApiEditUtilService, private apiService: ApiService) {}
   getPureApi({ groupID }) {
     return {
       name: '',
@@ -35,7 +25,7 @@ export class ApiEditService {
       responseHeaders: [],
       responseBodyType: ApiBodyType.JSON,
       responseBodyJsonType: JsonRootType.Object,
-      responseBody: [],
+      responseBody: []
     };
   }
   async getApi({ id, groupID }): Promise<ApiEditViewData> {
@@ -48,7 +38,7 @@ export class ApiEditService {
         //Add From Test
         window.sessionStorage.removeItem('apiDataWillbeSave');
         tmpApiData = JSON.parse(tmpApiData);
-        Object.keys(pureApi).forEach((keyName) => {
+        Object.keys(pureApi).forEach(keyName => {
           //Filter useless keyName
           result[keyName] = tmpApiData[keyName];
         });
@@ -65,7 +55,7 @@ export class ApiEditService {
   editApi(apiData): Promise<StorageRes> {
     const busEvent = apiData.uuid ? 'editApi' : 'addApi';
     if (busEvent === 'editApi') {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         this.storage.run('apiDataUpdate', [apiData, apiData.uuid], resolve);
       });
     } else {

@@ -5,15 +5,15 @@ import { getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 import { ApiTestUtilService } from '../../../../../modules/api-shared/api-test-util.service';
-import { ApiTestHistoryResponse } from '../../../../../shared/services/storage/index.model';
+import { ApiTestHistoryResponse } from '../api-test.model';
 
 @Component({
   selector: 'eo-api-test-result-response',
   templateUrl: './api-test-result-response.component.html',
-  styleUrls: ['./api-test-result-response.component.scss'],
+  styleUrls: ['./api-test-result-response.component.scss']
 })
 export class ApiTestResultResponseComponent implements OnInit, OnChanges {
-  @Input() model: any | ApiTestHistoryResponse;
+  @Input() model: ApiTestHistoryResponse;
   @Input() uri: string;
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoEditor?: EoMonacoEditorComponent;
   codeStatus: { status: string; cap: number; class: string };

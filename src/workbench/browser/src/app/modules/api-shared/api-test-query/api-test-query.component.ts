@@ -2,29 +2,28 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } 
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestQuery } from '../../../pages/api/service/api-test/api-test.model';
+import { ApiTestQuery } from '../../../pages/api/http/test/api-test.model';
 import { ApiTableService } from '../api-table.service';
-import { ApiTestUtilService } from '../api-test-util.service';
+import { ApiTableConf } from '../api.model';
 
 @Component({
   selector: 'eo-api-test-query',
   templateUrl: './api-test-query.component.html',
-  styleUrls: ['./api-test-query.component.scss'],
+  styleUrls: ['./api-test-query.component.scss']
 })
 export class ApiTestQueryComponent implements OnInit, OnDestroy {
   @Input() model: ApiTestQuery[];
   @Input() disabled: boolean;
   @Input() nzTrClick: (...rest: any[]) => any;
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-
-  listConf: any = {
-    column: [],
-    setting: {},
+  listConf: ApiTableConf = {
+    columns: [],
+    setting: {}
   };
   itemStructure: ApiTestQuery = {
     required: true,
     name: '',
-    value: '',
+    value: ''
   };
 
   private modelChange$: Subject<void> = new Subject();
@@ -45,7 +44,7 @@ export class ApiTestQueryComponent implements OnInit, OnDestroy {
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: 'header',
+      in: 'header'
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
