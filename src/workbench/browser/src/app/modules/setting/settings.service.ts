@@ -11,7 +11,7 @@ export const getSettings = () => {
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SettingService {
   get settings() {
@@ -29,7 +29,7 @@ export class SettingService {
 
   deleteSettings(keys: string[]) {
     const settings = { ...this.settings };
-    keys.forEach((key) => Reflect.deleteProperty(settings, key));
+    keys.forEach(key => Reflect.deleteProperty(settings, key));
     this.saveSetting(settings);
   }
 
@@ -55,7 +55,7 @@ export class SettingService {
     }
 
     const keys = Object.keys(localSettings);
-    const filterKeys = keys.filter((n) => n.startsWith(keyPath));
+    const filterKeys = keys.filter(n => n.startsWith(keyPath));
     if (filterKeys.length) {
       return filterKeys.reduce((pb, ck) => {
         const keyArr = ck.replace(`${keyPath}.`, '').split('.');

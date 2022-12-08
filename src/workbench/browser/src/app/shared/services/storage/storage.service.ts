@@ -4,6 +4,8 @@ import { getSettings, SettingService } from 'eo/workbench/browser/src/app/module
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
 import { StorageResStatus } from './index.model';
+import { autorun } from 'mobx';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 export type DataSourceType = 'local' | 'http';
 /** is show local data source tips */
@@ -19,13 +21,11 @@ export class StorageService {
   get dataSourceType(): DataSourceType {
     return getSettings()['eoapi-common.dataStorage'] || 'local';
   }
-  constructor(
-    private injector: Injector,
-    private settingService: SettingService,
-    private indexedDBStorage: IndexedDBStorage
-  ) {
+  constructor(private injector: Injector, private store: StoreService, private indexedDBStorage: IndexedDBStorage) {
     console.log('StorageService init');
-    this.setStorage(this.dataSourceType);
+    autorun(() => {
+      this.instance = this.store.isLocal ? this.indexedDBStorage : this.injector.get(HttpStorage);
+    });
   }
   /**
    * Handle data from IndexedDB
@@ -37,7 +37,7 @@ export class StorageService {
       status: StorageResStatus.invalid,
       data: undefined,
       error: null,
-      callback,
+      callback
     };
     // console.log('this.instance', this.instance, action);
     if (!this.instance[action]) {
@@ -57,28 +57,5 @@ export class StorageService {
         callback(handleResult);
       }
     );
-  }
-  setStorage = (type: DataSourceType = 'local', options = {}) => {
-    switch (type) {
-      case 'local': {
-        this.instance = this.indexedDBStorage;
-        break;
-      }
-      case 'http': {
-        this.instance = this.injector.get(HttpStorage);
-        break;
-      }
-    }
-
-    this.setDataStorage(type);
-  };
-  toggleDataSource = (options: any = {}) => {
-    const { dataSourceType } = options;
-    this.setStorage(dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http'), options);
-  };
-  setDataStorage(value) {
-    this.settingService.putSettings({
-      'eoapi-common.dataStorage': value,
-    });
   }
 }

@@ -1,15 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { autorun } from 'mobx';
-import { distinct, interval } from 'rxjs';
+import { interval } from 'rxjs';
 
-import { WebService } from '../../core/services';
 import { DataSourceService } from '../../shared/services/data-source/data-source.service';
-import { MessageService } from '../../shared/services/message';
-import { RemoteService } from '../../shared/services/storage/remote.service';
 @Component({
   selector: 'eo-get-share-link',
   template: `<button
@@ -36,19 +30,12 @@ import { RemoteService } from '../../shared/services/storage/remote.service';
           <button eo-ng-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
         </div>
       </div>
-    </ng-template> `,
+    </ng-template> `
 })
 export class GetShareLinkComponent implements OnInit {
   shareLink = '';
   isCopy = false;
-  constructor(
-    public store: StoreService,
-    public dataSourceService: DataSourceService,
-    private web: WebService,
-    private message: MessageService,
-    private lang: LanguageService,
-    private http: RemoteService
-  ) {}
+  constructor(public store: StoreService, public dataSourceService: DataSourceService) {}
   handleCopy() {
     if (this.isCopy) {
       return;
@@ -65,36 +52,5 @@ export class GetShareLinkComponent implements OnInit {
       });
     }
   }
-  async ngOnInit() {
-    autorun(async () => {
-      console.log('yoo');
-      if (this.store.isLocal) {
-        this.shareLink = '';
-        return;
-      }
-      if (!this.store.isLogin) {
-        this.shareLink = '';
-        return;
-      }
-      if (this.store.isShare) {
-        this.shareLink = '';
-        return;
-      }
-      console.log('yoo1');
-      const [res, err]: any = await this.http.api_shareCreateShare({});
-      if (err) {
-        console.log('yoo2');
-        this.shareLink = '';
-        return;
-      }
-      const host = (this.dataSourceService?.remoteServerUrl || window.location.host)
-        .replace(/:\/{2,}/g, ':::')
-        .replace(/\/{2,}/g, '/')
-        .replace(/:{3}/g, '://')
-        .replace(/(\/$)/, '');
-      const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-      this.shareLink = `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
-      console.log('yoo3', this.shareLink);
-    });
-  }
+  async ngOnInit() {}
 }

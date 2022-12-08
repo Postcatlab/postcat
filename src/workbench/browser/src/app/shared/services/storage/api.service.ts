@@ -8,16 +8,12 @@ import RemoteService from './remote.service';
 export type DataSourceType = 'local' | 'http';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ApiService {
   dataSourceType: DataSourceType = getSettings()['eoapi-common.dataStorage'] || 'local';
 
   constructor(private messageService: MessageService, private local: LocalService, private remote: RemoteService) {}
-  toggleDataSource = (options: any = {}) => {
-    const { dataSourceType } = options;
-    this.dataSourceType = dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http');
-  };
 
   api_projectCreate(params) {
     if (this.dataSourceType === 'local') {

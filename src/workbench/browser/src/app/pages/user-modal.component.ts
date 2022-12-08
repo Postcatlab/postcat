@@ -1,5 +1,5 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
@@ -22,9 +22,7 @@ import { distinct } from 'rxjs/operators';
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <span i18n>
-          After confirmation, the system will create a cloud space to upload the local data to the cloud.
-        </span>
+        <span i18n> After confirmation, the system will create a cloud space to upload the local data to the cloud. </span>
         <eo-ng-feedback-alert
           nzType="warning"
           nzMessage="Subsequent local space and cloud space are no longer synchronized"
@@ -33,26 +31,10 @@ import { distinct } from 'rxjs/operators';
         ></eo-ng-feedback-alert>
       </ng-container>
       <ng-template #modalSyncFooter>
-        <button
-          eo-ng-button
-          [nzLoading]="isSyncCancelBtnLoading"
-          class=""
-          nzType="default"
-          (click)="btnsgs0ckCallback()"
-          i18n
-        >
+        <button eo-ng-button [nzLoading]="isSyncCancelBtnLoading" class="" nzType="default" (click)="btnsgs0ckCallback()" i18n>
           Cancel
         </button>
-        <button
-          eo-ng-button
-          [nzLoading]="isSyncSyncBtnLoading"
-          class=""
-          nzType="primary"
-          (click)="btnsf8zsrCallback()"
-          i18n
-        >
-          Sync
-        </button>
+        <button eo-ng-button [nzLoading]="isSyncSyncBtnLoading" class="" nzType="primary" (click)="btnsf8zsrCallback()" i18n> Sync </button>
       </ng-template>
     </nz-modal>
     <nz-modal
@@ -65,29 +47,13 @@ import { distinct } from 'rxjs/operators';
     >
       <ng-container *nzModalContent>
         <span i18n> Can't connect right now, click to retry or </span>
-        <span style="color: #1890ff" class="cursor-pointer" (click)="textiqd22iCallback()" i18n>
-          config in the configuration
-        </span>
+        <span style="color: #1890ff" class="cursor-pointer" (click)="textiqd22iCallback()" i18n> config in the configuration </span>
       </ng-container>
       <ng-template #modalCheckConnectFooter>
-        <button
-          eo-ng-button
-          [nzLoading]="isCheckConnectCancelBtnLoading"
-          class=""
-          nzType="default"
-          (click)="btnzls4ymCallback()"
-          i18n
-        >
+        <button eo-ng-button [nzLoading]="isCheckConnectCancelBtnLoading" class="" nzType="default" (click)="btnzls4ymCallback()" i18n>
           Cancel
         </button>
-        <button
-          eo-ng-button
-          [nzLoading]="isCheckConnectRetryBtnLoading"
-          class=""
-          nzType="primary"
-          (click)="btn0mu0b2Callback()"
-          i18n
-        >
+        <button eo-ng-button [nzLoading]="isCheckConnectRetryBtnLoading" class="" nzType="primary" (click)="btn0mu0b2Callback()" i18n>
           Retry
         </button>
       </ng-template>
@@ -119,13 +85,7 @@ import { distinct } from 'rxjs/operators';
 
             <nz-form-item>
               <nz-form-control [nzErrorTip]="passwordErrorTpl">
-                <input
-                  type="password"
-                  eo-ng-input
-                  formControlName="password"
-                  placeholder="Enter password"
-                  i18n-placeholder
-                />
+                <input type="password" eo-ng-input formControlName="password" placeholder="Enter password" i18n-placeholder />
                 <ng-template #passwordErrorTpl let-control>
                   <ng-container *ngIf="control.hasError('required')" i18n> Please input your password; </ng-container>
 
@@ -162,9 +122,7 @@ import { distinct } from 'rxjs/operators';
     >
       <ng-container *nzModalContent>
         <span i18n> If you want to collaborate, please </span>
-        <span style="color: #1890ff" class="cursor-pointer" (click)="textqdb64pCallback()" i18n>
-          open the settings
-        </span>
+        <span style="color: #1890ff" class="cursor-pointer" (click)="textqdb64pCallback()" i18n> open the settings </span>
         <span i18n> and fill in the configuration </span>
       </ng-container>
     </nz-modal>
@@ -203,21 +161,13 @@ import { distinct } from 'rxjs/operators';
             >
               Cancel
             </button>
-            <button
-              eo-ng-button
-              [nzLoading]="isSaveBtnLoading"
-              type="submit"
-              class=""
-              nzType="primary"
-              (click)="btnd4wbcjCallback()"
-              i18n
-            >
+            <button eo-ng-button [nzLoading]="isSaveBtnLoading" type="submit" class="" nzType="primary" (click)="btnd4wbcjCallback()" i18n>
               Save
             </button>
           </section>
         </form>
       </ng-container>
-    </nz-modal>`,
+    </nz-modal>`
 })
 export class UserModalComponent implements OnInit {
   isSyncModalVisible;
@@ -291,7 +241,7 @@ export class UserModalComponent implements OnInit {
             id: -1,
             password: '',
             username: '',
-            workspaces: [],
+            workspaces: []
           });
           return;
         }
@@ -322,7 +272,7 @@ export class UserModalComponent implements OnInit {
             id: -1,
             password: '',
             username: '',
-            workspaces: [],
+            workspaces: []
           });
           this.store.setWorkspaceList([]);
           this.eMessage.success($localize`Successfully logged out !`);
@@ -330,7 +280,7 @@ export class UserModalComponent implements OnInit {
           this.store.clearAuth();
           {
             const [data, err]: any = await this.api.api_authLogout({
-              refreshToken,
+              refreshToken
             });
             if (err) {
               if (err.status === 401) {
@@ -397,30 +347,19 @@ export class UserModalComponent implements OnInit {
     // * Init Login form
     this.validateLoginForm = this.fb.group({
       username: [null, [Validators.required]],
-      password: [null, [Validators.required, Validators.minLength(6)]],
+      password: [null, [Validators.required, Validators.minLength(6)]]
     });
 
     // * Init WorkspaceName form
     this.validateWorkspaceNameForm = this.fb.group({
-      newWorkName: [null, [Validators.required]],
+      newWorkName: [null, [Validators.required]]
     });
 
     const { id: workspaceID } = this.store.getCurrentWorkspaceInfo;
     if (this.store.isShare) {
       return;
     }
-    const [data, err]: any = await this.api.api_workspaceList({});
-    if (err) {
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.isLogin) {
-          return;
-        }
-        this.message.send({ type: 'http-401', data: {} });
-      }
-      return;
-    }
-    this.store.setWorkspaceList(data);
+    this.effect.updateWorkspaceList();
     if (workspaceID !== -1) {
       const { projects } = await this.effect.getWorkspaceInfo(workspaceID);
       this.store.setCurrentProjectID(projects.at(0).uuid);
@@ -565,9 +504,7 @@ export class UserModalComponent implements OnInit {
       const formData = this.validateLoginForm.value;
       const [data, err]: any = await this.api.api_authLogin(formData);
       if (err) {
-        this.eMessage.error(
-          $localize`Please check the account/password, the account must be a mobile phone number or email !`
-        );
+        this.eMessage.error($localize`Please check the account/password, the account must be a mobile phone number or email !`);
         if ([401, 403].includes(err.status)) {
           this.isLoginBtnBtnLoading = false;
           this.message.send({ type: 'clear-user', data: {} });
@@ -598,20 +535,7 @@ export class UserModalComponent implements OnInit {
         }
         this.store.setUserProfile(data);
       }
-      {
-        const [data, err]: any = await this.api.api_workspaceList({});
-        if (err) {
-          if (err.status === 401) {
-            this.message.send({ type: 'clear-user', data: {} });
-            if (this.store.isLogin) {
-              return;
-            }
-            this.message.send({ type: 'http-401', data: {} });
-          }
-          return;
-        }
-        this.store.setWorkspaceList(data);
-      }
+      this.effect.updateWorkspaceList();
 
       if (!data.isFirstLogin) {
         return;
@@ -685,18 +609,7 @@ export class UserModalComponent implements OnInit {
       this.isAddWorkspaceModalVisible = false;
       this.message.send({ type: 'update-share-link', data: {} });
       {
-        const [lData, err]: any = await this.api.api_workspaceList({});
-        if (err) {
-          if (err.status === 401) {
-            this.message.send({ type: 'clear-user', data: {} });
-            if (this.store.isLogin) {
-              return;
-            }
-            this.message.send({ type: 'http-401', data: {} });
-          }
-          return;
-        }
-        this.store.setWorkspaceList(lData);
+        this.effect.updateWorkspaceList();
         this.store.setCurrentWorkspace(data);
       }
     };

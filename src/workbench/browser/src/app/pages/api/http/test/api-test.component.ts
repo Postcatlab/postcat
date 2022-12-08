@@ -34,7 +34,6 @@ import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
 import { MessageService } from '../../../../shared/services/message';
-
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
@@ -118,7 +117,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.height = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
+    Promise.resolve(() => {
+      this.height = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
+    });
   }
   /**
    * Restore data from history

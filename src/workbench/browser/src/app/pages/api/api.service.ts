@@ -9,7 +9,7 @@ import { MessageService } from '../../shared/services/message';
 import { ApiData, StorageRes, StorageResStatus } from '../../shared/services/storage/index.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ApiService {
   constructor(
@@ -21,11 +21,11 @@ export class ApiService {
     private store: StoreService
   ) {}
   get(uuid): Promise<ApiData> {
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       if (this.store.isShare) {
         const [data, err]: any = await this.http.api_shareDocGetApiDetail({
-          uniqueID: this.store.getShareId,
-          apiDataUUID: uuid,
+          uniqueID: this.store.getShareID,
+          apiDataUUID: uuid
         });
         if (err) {
           return;
@@ -42,12 +42,12 @@ export class ApiService {
     });
   }
   getAll(projectID): Promise<StorageRes> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.storage.run('apiDataLoadAllByProjectID', [projectID], resolve);
     });
   }
   add(apiData: ApiData): Promise<StorageRes> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.storage.run('apiDataCreate', [apiData], resolve);
     });
   }
@@ -55,7 +55,7 @@ export class ApiService {
     apiData.name += ' Copy';
     const result = await this.add(apiData);
     this.router.navigate(['/home/api/http/edit'], {
-      queryParams: { pageID: Date.now(), uuid: result.data.uuid },
+      queryParams: { pageID: Date.now(), uuid: result.data.uuid }
     });
     this.messageService.send({ type: 'copyApiSuccess', data: { uuids: [uuid] } });
   }

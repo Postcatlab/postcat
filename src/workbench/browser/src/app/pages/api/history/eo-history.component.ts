@@ -10,11 +10,11 @@ import { MessageService } from '../../../shared/services/message';
 @Component({
   selector: 'eo-history',
   templateUrl: './eo-history.component.html',
-  styleUrls: ['./eo-history.component.scss'],
+  styleUrls: ['./eo-history.component.scss']
 })
 export class HistoryComponent implements OnInit {
   TEXT_BY_PROTOCOL = {
-    ws: 'WS',
+    ws: 'WS'
   };
   historyList = [];
   nzSelectedKeys: NzTreeNodeKey[];
@@ -24,7 +24,7 @@ export class HistoryComponent implements OnInit {
   constructor(private storage: StorageService, private router: Router, private message: MessageService) {}
   async ngOnInit() {
     const result = await this.loadAllTest();
-    this.historyList = (result || []).reverse().map((n) => ({ ...n, title: n.request?.uri, key: n.uuid }));
+    this.historyList = (result || []).reverse().map(n => ({ ...n, title: n.request?.uri, key: n.uuid }));
     this.message
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -38,7 +38,7 @@ export class HistoryComponent implements OnInit {
 
   loadAllTest() {
     // return this.storageInstance.apiTestHistoryLoadAllByProjectID(1);
-    return new Promise<any[]>((resolve) => {
+    return new Promise<any[]>(resolve => {
       this.storage.run('apiTestHistoryLoadAllByProjectID', [1], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
@@ -59,13 +59,13 @@ export class HistoryComponent implements OnInit {
     const protocol = origin.request?.protocol === 'ws' ? 'ws' : 'http';
     this.router.navigate([`home/api/${protocol}/test`], {
       queryParams: {
-        uuid: `history_${origin.uuid}`,
-      },
+        uuid: `history_${origin.uuid}`
+      }
     });
   }
 
   clearAllHistory() {
-    const uuids = this.historyList.map((it) => it.uuid);
+    const uuids = this.historyList.map(it => it.uuid);
     this.historyList = [];
     // this.storageInstance.apiTestHistoryBulkRemove(uuids);
     this.storage.run('apiTestHistoryBulkRemove', [uuids], (result: StorageRes) => {
