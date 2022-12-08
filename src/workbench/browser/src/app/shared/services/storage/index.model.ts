@@ -438,6 +438,7 @@ export interface ApiTestData {
    * For adding test history
    */
   uuid: number;
+  projectID: number;
   groupID: number;
   /**
    * For adding test history
