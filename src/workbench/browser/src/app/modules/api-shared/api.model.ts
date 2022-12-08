@@ -1,5 +1,5 @@
-import { StorageModel } from "../../shared/services/storage/index.model";
-import { ColumnItem, TableProSetting } from "../eo-ui/table-pro/table-pro.model";
+import { StorageModel } from '../../shared/services/storage/index.model';
+import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
 
 /**
  * API body FormData param type
@@ -240,7 +240,50 @@ export interface ApiEditViewData extends BasicApiData {
   groupID: string;
 }
 
-export interface ApiTableConf{
+export interface ApiTableConf {
   columns?: ColumnItem[];
-  setting?:TableProSetting;
+  setting?: TableProSetting;
 }
+export const DEFAULT_HEADER = [
+  { title: 'Authorization', restricted: false },
+  { title: 'Accept', restricted: false },
+  { title: 'Accept-Language', restricted: false },
+  { title: 'Access-Control-Request-Headers', restricted: true },
+  { title: 'Access-Control-Request-Method', restricted: true },
+  { title: 'Accept-Charset', restricted: true },
+  { title: 'Accept-Encoding', restricted: true },
+  { title: 'Cache-Control', restricted: false },
+  { title: 'Content-MD5', restricted: false },
+  { title: 'Content-Type', restricted: false },
+  { title: 'Cookie', restricted: false },
+  { title: 'Content-Length', restricted: true },
+  { title: 'Content-Transfer-Encoding', restricted: true },
+  { title: 'Date', restricted: true },
+  { title: 'Expect', restricted: true },
+  { title: 'From', restricted: false },
+  { title: 'Host', restricted: true },
+  { title: 'If-Match', restricted: false },
+  { title: 'If-Modified-Since', restricted: false },
+  { title: 'If-None-Match', restricted: false },
+  { title: 'If-Range', restricted: false },
+  { title: 'If-Unmodified-Since', restricted: false },
+  { title: 'Keep-Alive', restricted: true },
+  { title: 'Max-Forwards', restricted: false },
+  { title: 'Origin', restricted: true },
+  { title: 'Pragma', restricted: false },
+  { title: 'Proxy-Authorization', restricted: false },
+  { title: 'Range', restricted: false },
+  { title: 'Referer', restricted: true },
+  { title: 'TE', restricted: true },
+  { title: 'Trailer', restricted: true },
+  { title: 'Transfer-Encoding', restricted: true },
+  { title: 'Upgrade', restricted: true },
+  { title: 'User-Agent', restricted: true },
+  { title: 'Via', restricted: true },
+  { title: 'Warning', restricted: false },
+  { title: 'X-Requested-With', restricted: false },
+  { title: 'X-Do-Not-Track', restricted: false },
+  { title: 'DNT', restricted: false },
+  { title: 'x-api-key', restricted: false },
+  { title: 'Connection', restricted: true }
+];

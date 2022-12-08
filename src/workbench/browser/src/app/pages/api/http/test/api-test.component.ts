@@ -419,7 +419,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   private initContentType() {
-    // console.log('initContentType');
     if (this.model.request.requestBodyType === ApiBodyType.Raw) {
       this.model.contentType = this.apiTestUtil.getContentType(this.model.request.requestHeaders) || 'text/plain';
     }
