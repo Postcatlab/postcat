@@ -7,6 +7,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import StorageUtil from '../../../utils/storage/Storage';
 
 // const optionList = [
 //   {
@@ -46,14 +47,13 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
     [(extension)]="currentExtension"
     [extensionList]="supportList"
     (uploadChange)="uploadChange($event)"
-  ></extension-select>`,
+  ></extension-select>`
 })
 export class ImportApiComponent implements OnInit {
   supportList: any[] = [];
-  currentExtension = '';
+  currentExtension = StorageUtil.get('import_api_modal');
   uploadData = null;
-  featureMap =
-    this.webExtensionService.getFeatures('importAPI') || this.webExtensionService.getFeatures('apimanage.import');
+  featureMap = this.webExtensionService.getFeatures('importAPI') || this.webExtensionService.getFeatures('apimanage.import');
   constructor(
     private router: Router,
     private storage: StorageService,
@@ -67,19 +67,22 @@ export class ImportApiComponent implements OnInit {
       if (this.webExtensionService.isEnable(key)) {
         this.supportList.push({
           key,
-          ...data,
+          ...data
         });
       }
     });
     {
       const { key } = this.supportList.at(0);
-      this.currentExtension = key || '';
+      if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
+        this.currentExtension = key || '';
+      }
     }
   }
   uploadChange(data) {
     this.uploadData = data;
   }
   async submit(callback) {
+    StorageUtil.set('import_api_modal', this.currentExtension);
     if (!this.uploadData) {
       this.eoMessage.error($localize`Please import the file first`);
       return;
@@ -88,7 +91,6 @@ export class ImportApiComponent implements OnInit {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = await window.eo?.loadFeatureModule?.(this.currentExtension);
-    console.log(this.currentExtension);
     const { name, content } = this.uploadData;
     const [data, err] = module[action](content);
     // console.log('import data', structuredClone?.(data));
@@ -102,14 +104,14 @@ export class ImportApiComponent implements OnInit {
       const parentArr = parent || [obj];
       for (const i in obj) {
         if (typeof obj[i] === 'object') {
-          parentArr.forEach((pObj) => {
+          parentArr.forEach(pObj => {
             if (pObj === obj[i]) {
               obj[i] = {
                 description: $localize`Same as the parent's field ${obj[i].name}`,
                 example: '',
                 name: obj[i].name,
                 required: true,
-                type: obj[i].type,
+                type: obj[i].type
               };
             }
           });
@@ -120,7 +122,6 @@ export class ImportApiComponent implements OnInit {
     };
     const params = [this.store.getCurrentProjectID, decycle(data)];
     this.storage.run('projectImport', params, (result: StorageRes) => {
-      console.log(result);
       if (result.status !== StorageResStatus.success) {
         callback(false);
         console.error('EO_ERROR: Import Error', result.error);

@@ -9,7 +9,7 @@ import { ModalOptions, ModalService } from '../../shared/services/modal.service'
 import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
-import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml } from './api.model';
+import { ApiBodyType, ApiParamsTypeFormData, ApiParamsTypeJsonOrXml, DEFAULT_HEADER } from './api.model';
 @Injectable()
 export class ApiTableService {
   constructor(private modalService: ModalService) {}
@@ -175,7 +175,8 @@ export class ApiTableService {
       switch (keyName) {
         case 'name': {
           if (inArg.in === 'header' && inArg.isEdit) {
-            // column.type='autoComplete';
+            column.type = 'autoComplete';
+            column.enums = DEFAULT_HEADER.map(val => ({ title: val.title, value: val.title }));
           }
           break;
         }
@@ -289,6 +290,13 @@ export class ApiTableService {
         throw new Error(`EO_ERROR: columnMUI not found ${keyName}`);
       }
       switch (keyName) {
+        case 'name': {
+          if (inArg.in === 'header') {
+            column.type = 'autoComplete';
+            column.enums = DEFAULT_HEADER.map(val => ({ title: val.title, value: val.title }));
+          }
+          break;
+        }
         case 'type': {
           column.enums = Object.keys(types).map(val => ({
             title: val,
