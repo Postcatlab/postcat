@@ -101,7 +101,7 @@
     "karma-coverage-istanbul-reporter": "3.0.3",
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.0.0",
-    "lint-staged": "13.1.0",
+    "lint-staged": "~12.5.0",
     "node-polyfill-webpack-plugin": "2.0.0",
     "postcss-html": "1.5.0",
     "postcss-scss": "4.0.6",
