@@ -15,13 +15,13 @@ microApp.start({
       // 删除 http://localhost:3001/error.js 的内容
       return window
         .fetch(new URL(url.replace('https://unpkg.com/', ''), `https://unpkg.com/${appName}/page/`).href, options)
-        .then((res) => res.text());
+        .then(res => res.text());
     }
 
-    return window.fetch(url, options).then((res) => res.text());
-  },
+    return window.fetch(url, options).then(res => res.text());
+  }
 });
 
 platformBrowserDynamic()
   .bootstrapModule(AppModule)
-  .catch((err) => console.error(err));
+  .catch(err => console.error(err));

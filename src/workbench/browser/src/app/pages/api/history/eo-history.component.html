@@ -32,9 +32,10 @@
     nzBlockNode
     (nzClick)="gotoTestHistory($event)"
     [nzTreeTemplate]="nzFixedTreeTemplate"
+    class="overflow-auto"
   ></eo-ng-tree-default>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-    <div class="flex items-center cursor-pointer">
+    <div class="flex items-center cursor-pointer w-full">
       <span
         class="block w-12 font-light method_type"
         [ngClass]="'method_text_' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])"
