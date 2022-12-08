@@ -1,6 +1,6 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { APP_BASE_HREF } from '@angular/common';
 
 const routes: Routes = [
   {

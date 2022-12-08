@@ -3,12 +3,14 @@ const DEFAULT_CACHE_TIME = 60 * 60 * 24 * 7;
 
 /**
  * 创建本地缓存对象
+ *
  * @param {string=} prefixKey -
  * @param {Object} [storage=localStorage] - sessionStorage | localStorage
  */
 export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) => {
   /**
    * 本地缓存类
+   *
    * @class Storage
    */
   const StorageUtil = class {
@@ -35,6 +37,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
 
     /**
      * 读取缓存
+     *
      * @param {string} key 缓存键
      * @param {*=} def 默认值
      */
@@ -58,6 +61,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
 
     /**
      * 从缓存删除某项
+     *
      * @param {string} key
      */
     remove(key: string) {
@@ -66,6 +70,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
 
     /**
      * 清空所有缓存
+     *
      * @memberOf Cache
      */
     clear() {
@@ -74,6 +79,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
 
     /**
      * 设置cookie
+     *
      * @param {string} name cookie 名称
      * @param {*} value cookie 值
      * @param {number=} expire 过期时间
@@ -86,6 +92,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
 
     /**
      * 根据名字获取cookie值
+     *
      * @param name
      */
     getCookie(name: string): string {
@@ -101,6 +108,7 @@ export const createStorage = ({ prefixKey = '', storage = localStorage } = {}) =
 
     /**
      * 根据名字删除指定的cookie
+     *
      * @param {string} key
      */
     removeCookie(key: string) {

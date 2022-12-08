@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { eoDeepCopy, whatType } from '../../../utils/index.utils';
 import qs from 'qs';
+
 import { form2json, xml2json, isXML, json2Table } from '../../../utils/data-transfer/data-transfer.utils';
+import { eoDeepCopy, whatType } from '../../../utils/index.utils';
 @Component({
   selector: 'params-import',
   templateUrl: './params-import.component.html',

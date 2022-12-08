@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { TabStorageService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-storage.service';
 import { storageTab, TabItem, TabOperate } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 /**
@@ -20,7 +20,7 @@ export class TabOperateService {
   /**
    * Tab basic info
    */
-  BASIC_TABS: Partial<TabItem>[];
+  BASIC_TABS: Array<Partial<TabItem>>;
   //* Allow development mode debug not exist router
   private allowNotExistRouter = !APP_CONFIG.production;
   //* Cache page data in tab
@@ -33,7 +33,7 @@ export class TabOperateService {
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
-  init(inArg: { basicTabs: Partial<TabItem>[] }) {
+  init(inArg: { basicTabs: Array<Partial<TabItem>> }) {
     this.BASIC_TABS = inArg.basicTabs;
     const tabStorage = this.disabledCache ? null : this.tabStorage.getPersistenceStorage();
 
@@ -95,10 +95,9 @@ export class TabOperateService {
    * @returns tabItem
    */
   newDefaultTab(routerStr?) {
-    const tabItem = Object.assign(
-      {},
-      eoDeepCopy(this.BASIC_TABS.find((val) => val.pathname.includes(routerStr)) || this.BASIC_TABS[0])
-    );
+    const tabItem = {
+      ...eoDeepCopy(this.BASIC_TABS.find((val) => val.pathname.includes(routerStr)) || this.BASIC_TABS[0]),
+    };
     tabItem.params = {};
     tabItem.uuid = tabItem.params.pageID = Date.now();
     Object.assign(tabItem, { isLoading: false });

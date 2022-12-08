@@ -1,8 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
-import { StorageResStatus } from './index.model';
+import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
-import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { StorageResStatus } from './index.model';
 
 export type DataSourceType = 'local' | 'http';
 /** is show local data source tips */
@@ -24,18 +25,18 @@ export class StorageService {
     private indexedDBStorage: IndexedDBStorage
   ) {
     console.log('StorageService init');
-    this.setStorage( this.dataSourceType);
+    this.setStorage(this.dataSourceType);
   }
   /**
    * Handle data from IndexedDB
    *
    * @param args
    */
-  run(action: string, params: Array<any>, callback): void {
+  run(action: string, params: any[], callback): void {
     const handleResult = {
       status: StorageResStatus.invalid,
       data: undefined,
-      error:null,
+      error: null,
       callback,
     };
     // console.log('this.instance', this.instance, action);

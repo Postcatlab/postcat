@@ -13,7 +13,11 @@
       [(ngModel)]="contentType"
       nzBorderless
     >
-      <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.title"></eo-ng-option>
+      <eo-ng-option
+        *ngFor="let item of CONST.CONTENT_TYPE"
+        [nzValue]="item.value"
+        [nzLabel]="item.title"
+      ></eo-ng-option>
     </eo-ng-select>
   </div>
 

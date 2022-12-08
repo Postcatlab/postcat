@@ -1,5 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { cloneDeep } from 'lodash-es';
+
 import {
   ApiData,
   ApiBodyType,
@@ -8,12 +15,6 @@ import {
   StorageResStatus,
 } from '../../../../shared/services/storage/index.model';
 import { reverseObj } from '../../../../utils/index.utils';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
-import { cloneDeep } from 'lodash-es';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 @Component({
   selector: 'api-detail',
   templateUrl: './api-detail.component.html',
@@ -76,7 +77,9 @@ export class ApiDetailComponent implements OnInit {
     });
     this.rightExtras.forEach((val) => {
       //TODO remove after 2023.02
-      if (val.icon === 'file-text-one') {val.icon = 'file-text';}
+      if (val.icon === 'file-text-one') {
+        val.icon = 'file-text';
+      }
       console.log(val);
     });
     // console.log('this.rightExtras', this.rightExtras);

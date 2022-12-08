@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { SocketService } from 'eo/workbench/browser/src/app/pages/extension/socket.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 
 @Component({
   selector: 'eo-extensions',

@@ -8,9 +8,8 @@ describe('ApiScriptComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiScriptComponent ]
-    })
-    .compileComponents();
+      declarations: [ApiScriptComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ApiScriptComponent);
     component = fixture.componentInstance;

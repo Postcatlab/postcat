@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 /**
  * @description
@@ -45,7 +45,7 @@ export class DataSourceService {
       'https://github.com/'
     );
     if (apiData) {
-      url.searchParams.set('mockID', apiData.uuid + '');
+      url.searchParams.set('mockID', `${apiData.uuid}`);
     }
     // console.log('getApiUrl', decodeURIComponent(url.toString()));
     return decodeURIComponent(url.toString());
@@ -86,12 +86,8 @@ export class DataSourceService {
       this.modal.info({
         nzTitle: $localize`Need to deploy cloud services`,
         nzContent:
-          `<span>` +
-          $localize`Store data on the cloud for team collaboration and product use across devices.` +
-          `</span>` +
-          `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">` +
-          $localize`Learn more..` +
-          `</a>`,
+          `<span>${$localize`Store data on the cloud for team collaboration and product use across devices.`}</span>` +
+          `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">${$localize`Learn more..`}</a>`,
         nzOnOk: () => console.log('Info OK'),
         nzMaskClosable: true,
       });

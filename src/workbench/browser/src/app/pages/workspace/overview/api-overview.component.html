@@ -1,6 +1,6 @@
 <div class="overview_container">
   <section class="grid grid-cols-2 gap-8 xl:grid-cols-3">
-    <div class="card_item" *ngFor="let item of overviewList"  (click)="handleClickCard($event, item)">
+    <div class="card_item" *ngFor="let item of overviewList" (click)="handleClickCard($event, item)">
       <nz-card class="h-full" [nzActions]="[card]" [nzHoverable]="true">
         <nz-card-meta [nzTitle]="item.title" [nzDescription]="item.desc"></nz-card-meta>
       </nz-card>

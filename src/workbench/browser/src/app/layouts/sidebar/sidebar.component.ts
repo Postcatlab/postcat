@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { filter } from 'rxjs/operators';
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { SidebarService } from './sidebar.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { SidebarModuleInfo } from './sidebar.model';
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { filter } from 'rxjs/operators';
+
+import { SidebarModuleInfo } from './sidebar.model';
+import { SidebarService } from './sidebar.service';
 
 @Component({
   selector: 'eo-sidebar',

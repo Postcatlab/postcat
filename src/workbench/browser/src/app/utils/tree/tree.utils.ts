@@ -1,5 +1,6 @@
-import { GroupTreeItem } from '../../shared/models';
 import omitDeep from 'omit-deep-lodash';
+
+import { GroupTreeItem } from '../../shared/models';
 export type TreeToObjOpts = {
   key?: string;
   valueKey?: string;
@@ -57,7 +58,7 @@ export const filterTableData = (
  * @param tree Array<GroupTreeItem>
  * @param parentID number|string
  */
-export const listToTree = (list: Array<GroupTreeItem>, tree: Array<GroupTreeItem>, parentID: number | string): void => {
+export const listToTree = (list: GroupTreeItem[], tree: GroupTreeItem[], parentID: number | string): void => {
   list.forEach((data) => {
     if (data.parentID === parentID) {
       const child = {

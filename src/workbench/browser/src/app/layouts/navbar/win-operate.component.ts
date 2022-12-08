@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { ElectronService } from '../../core/services';
 
 @Component({
@@ -51,7 +52,7 @@ import { ElectronService } from '../../core/services';
 export class WinOperateComponent {
   isMaximized = false;
   showOperate = navigator.platform.toLowerCase().includes('mac') && this.electron.isElectron;
-  constructor(private electron: ElectronService,private router: Router,private route: ActivatedRoute) {}
+  constructor(private electron: ElectronService, private router: Router, private route: ActivatedRoute) {}
   minimize() {
     this.electron.ipcRenderer.send('message', {
       action: 'minimize',

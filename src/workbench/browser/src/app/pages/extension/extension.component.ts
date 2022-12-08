@@ -5,6 +5,7 @@ import { GroupTreeItem } from 'eo/workbench/browser/src/app/shared/models';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { filter, Subject } from 'rxjs';
+
 import { ExtensionGroupType } from './extension.model';
 import { ExtensionService } from './extension.service';
 
@@ -15,7 +16,7 @@ import { ExtensionService } from './extension.service';
 })
 export class ExtensionComponent implements OnInit {
   keyword = '';
-  nzSelectedKeys: (number | string)[] = [];
+  nzSelectedKeys: Array<number | string> = [];
   treeNodes: NzTreeNodeOptions[] = [
     {
       key: 'official',

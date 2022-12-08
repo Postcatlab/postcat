@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
-import { parserJsonFile } from '../../../utils/index.utils';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { Observable, Observer } from 'rxjs';
+
+import { parserJsonFile } from '../../../utils/index.utils';
 
 type optionType = {
   label: string;

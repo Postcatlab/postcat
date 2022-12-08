@@ -6,7 +6,7 @@ export enum ApiMethod {
   'DELETE',
   'HEAD',
   'OPTIONS',
-  'PATCH'
+  'PATCH',
 }
 
 export enum ApiTypeEnum {
@@ -16,7 +16,7 @@ export enum ApiTypeEnum {
   udp = 'udp',
   hsf = 'hsf',
   dubbo = 'dubbo',
-  grpc = 'grpc'
+  grpc = 'grpc',
 }
 
 export type APIMethodsType = keyof typeof ApiMethod | 'ALL' | undefined;
@@ -25,8 +25,10 @@ const DEFAULT_TYPE = 'GET';
 @Component({
   selector: 'eo-api-methods-tag',
   exportAs: 'eoApiMethodsTag',
-  template: `<nz-tag *ngIf="type" [class]="[text | lowercase, _background && 'ignore']">{{ text | uppercase }}</nz-tag> `,
-  styleUrls: ['./eo-api-methods-tag.component.scss']
+  template: `<nz-tag *ngIf="type" [class]="[text | lowercase, _background && 'ignore']">{{
+    text | uppercase
+  }}</nz-tag> `,
+  styleUrls: ['./eo-api-methods-tag.component.scss'],
 })
 export class EoApiMethodsTagComponent implements OnChanges {
   _background = false;
@@ -41,7 +43,7 @@ export class EoApiMethodsTagComponent implements OnChanges {
 
   update() {
     if (this.apiType && this.apiType !== 'http') {
-      this.text = this.apiType === 'websocket' ?  'ws' : this.apiType;
+      this.text = this.apiType === 'websocket' ? 'ws' : this.apiType;
     } else if (this.apiRequestType || this.apiRequestType === 0) {
       this.text = ApiMethod[this.apiRequestType];
     } else if (this.type) {
@@ -53,7 +55,7 @@ export class EoApiMethodsTagComponent implements OnChanges {
         HEAD: 'HEAD',
         OPTIONS: 'OPTS',
         PATCH: 'PATCH',
-        ALL: 'ALL'
+        ALL: 'ALL',
       };
       this.text = simpleMap[this.type];
     }

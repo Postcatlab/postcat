@@ -1,7 +1,7 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 
-import { requestDataOpts, TestServer } from '../test-server.model';
 import { DEFAULT_UNIT_TEST_RESULT, eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
+import { requestDataOpts, TestServer } from '../test-server.model';
 @Injectable()
 /**
  * Vercel serverless api
@@ -23,7 +23,9 @@ export class TestServerServerlessService implements TestServer {
         this.xhrByTabID[message.id]?.abort();
       }
     }
-    if (message.action !== 'ajax') {return;}
+    if (message.action !== 'ajax') {
+      return;
+    }
   }
   ajax(message) {
     const xhr = new XMLHttpRequest();
@@ -35,7 +37,7 @@ export class TestServerServerlessService implements TestServer {
         if (xhr.status === 200) {
           this.receiveMessage(this.formatResponseData(JSON.parse(xhr.responseText).data));
         } else {
-          this.receiveMessage(Object.assign({id:message.id},DEFAULT_UNIT_TEST_RESULT));
+          this.receiveMessage({ id: message.id, ...DEFAULT_UNIT_TEST_RESULT });
         }
       }
     };

@@ -18,21 +18,20 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation
-} from '@angular/core'
-import { fromEvent } from 'rxjs'
-import { filter, takeUntil } from 'rxjs/operators'
+  ViewEncapsulation,
+} from '@angular/core';
+import { collapseMotion } from 'ng-zorro-antd/core/animation';
+import { NzConfigKey, NzConfigService, WithConfig } from 'ng-zorro-antd/core/config';
+import { NzNoAnimationDirective } from 'ng-zorro-antd/core/no-animation';
+import { NzDestroyService } from 'ng-zorro-antd/core/services';
+import { BooleanInput } from 'ng-zorro-antd/core/types';
+import { InputBoolean } from 'ng-zorro-antd/core/util';
+import { fromEvent } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
-import { collapseMotion } from 'ng-zorro-antd/core/animation'
-import { NzConfigKey, NzConfigService, WithConfig } from 'ng-zorro-antd/core/config'
-import { NzNoAnimationDirective } from 'ng-zorro-antd/core/no-animation'
-import { NzDestroyService } from 'ng-zorro-antd/core/services'
-import { BooleanInput } from 'ng-zorro-antd/core/types'
-import { InputBoolean } from 'ng-zorro-antd/core/util'
+import { EoNgCollapseComponent } from './collapse.component';
 
-import { EoNgCollapseComponent } from './collapse.component'
-
-const NZ_CONFIG_MODULE_NAME: NzConfigKey = 'collapsePanel'
+const NZ_CONFIG_MODULE_NAME: NzConfigKey = 'collapsePanel';
 
 @Component({
   selector: 'nz-collapse-panel',
@@ -69,28 +68,28 @@ const NZ_CONFIG_MODULE_NAME: NzConfigKey = 'collapsePanel'
     class: 'ant-collapse-item',
     '[class.ant-collapse-no-arrow]': '!nzShowArrow',
     '[class.ant-collapse-item-active]': 'nzActive',
-    '[class.ant-collapse-item-disabled]': 'nzDisabled'
+    '[class.ant-collapse-item-disabled]': 'nzDisabled',
   },
-  providers: [NzDestroyService]
+  providers: [NzDestroyService],
 })
 export class EoNgCollapsePanelComponent implements OnInit, OnDestroy {
-  readonly _nzModuleName: NzConfigKey = NZ_CONFIG_MODULE_NAME
-  static ngAcceptInputType_nzActive: BooleanInput
-  static ngAcceptInputType_nzDisabled: BooleanInput
-  static ngAcceptInputType_nzShowArrow: BooleanInput
+  readonly _nzModuleName: NzConfigKey = NZ_CONFIG_MODULE_NAME;
+  static ngAcceptInputType_nzActive: BooleanInput;
+  static ngAcceptInputType_nzDisabled: BooleanInput;
+  static ngAcceptInputType_nzShowArrow: BooleanInput;
 
-  @Input() @InputBoolean() nzActive = false
-  @Input() @InputBoolean() nzDisabled = false
-  @Input() @WithConfig() @InputBoolean() nzShowArrow: boolean = true
-  @Input() nzExtra?: string | TemplateRef<void>
-  @Input() nzHeader?: string | TemplateRef<void>
-  @Input() nzExpandedIcon?: string | TemplateRef<void>
-  @Output() readonly nzActiveChange = new EventEmitter<boolean>()
+  @Input() @InputBoolean() nzActive = false;
+  @Input() @InputBoolean() nzDisabled = false;
+  @Input() @WithConfig() @InputBoolean() nzShowArrow: boolean = true;
+  @Input() nzExtra?: string | TemplateRef<void>;
+  @Input() nzHeader?: string | TemplateRef<void>;
+  @Input() nzExpandedIcon?: string | TemplateRef<void>;
+  @Output() readonly nzActiveChange = new EventEmitter<boolean>();
 
-  @ViewChild('collapseHeader', { static: true }) collapseHeader!: ElementRef<HTMLElement>
+  @ViewChild('collapseHeader', { static: true }) collapseHeader!: ElementRef<HTMLElement>;
 
   markForCheck(): void {
-    this.cdr.markForCheck()
+    this.cdr.markForCheck();
   }
 
   constructor(
@@ -105,13 +104,13 @@ export class EoNgCollapsePanelComponent implements OnInit, OnDestroy {
       .getConfigChangeEventForComponent(NZ_CONFIG_MODULE_NAME)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.cdr.markForCheck()
-      })
+        this.cdr.markForCheck();
+      });
   }
 
   ngOnInit(): void {
     //@ts-ignore
-    this.nzCollapseComponent.addPanel(this)
+    this.nzCollapseComponent.addPanel(this);
 
     this.ngZone.runOutsideAngular(() =>
       fromEvent(this.collapseHeader.nativeElement, 'click')
@@ -122,15 +121,15 @@ export class EoNgCollapsePanelComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           this.ngZone.run(() => {
             //@ts-ignore
-            this.nzCollapseComponent.click(this)
-            this.cdr.markForCheck()
-          })
+            this.nzCollapseComponent.click(this);
+            this.cdr.markForCheck();
+          });
         })
-    )
+    );
   }
 
   ngOnDestroy(): void {
     //@ts-ignore
-    this.nzCollapseComponent.removePanel(this)
+    this.nzCollapseComponent.removePanel(this);
   }
 }

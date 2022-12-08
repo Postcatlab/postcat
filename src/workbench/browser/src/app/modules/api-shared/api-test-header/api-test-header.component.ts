@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
-
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -35,8 +34,7 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.initListConf();
   }
-  ngOnChanges(changes) {
-  }
+  ngOnChanges(changes) {}
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -51,7 +49,7 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: 'header'
+      in: 'header',
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

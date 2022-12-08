@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-
 import { Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
-import { MessageService } from '../../../../shared/services/message';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
+import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
+import { MessageService } from '../../../../shared/services/message';
 import {
   Group,
   ApiEditViewData,
@@ -17,14 +19,10 @@ import {
   StorageRes,
   StorageResStatus,
 } from '../../../../shared/services/storage/index.model';
-
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { listToTree, getExpandGroupByKey } from '../../../../utils/tree/tree.utils';
-import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
-import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit/api-edit.service';
 import { ApiEditUtilService } from './api-edit-util.service';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
+
 @Component({
   selector: 'eo-api-edit-edit',
   templateUrl: './api-edit.component.html',
@@ -126,7 +124,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (this.validateForm.status === 'INVALID') {
       return;
     }
-    let formData: any = Object.assign({}, this.model, this.validateForm.value);
+    let formData: any = { ...this.model, ...this.validateForm.value };
     const busEvent = formData.uuid ? 'editApi' : 'addApi';
     const title = busEvent === 'editApi' ? $localize`Edited successfully` : $localize`Added successfully`;
     formData = this.apiEditUtil.formatSavingApiData(formData);
@@ -134,7 +132,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     if (result.status === StorageResStatus.success) {
       this.message.success(title);
       //@ts-ignore
-      this.initialModel = this.apiEditUtil.formatEditingApiData(Object.assign({}, this.model, this.validateForm.value));
+      this.initialModel = this.apiEditUtil.formatEditingApiData({ ...this.model, ...this.validateForm.value });
       if (busEvent === 'addApi') {
         this.router.navigate(['/home/api/http/detail'], {
           queryParams: {

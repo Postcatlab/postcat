@@ -1,8 +1,7 @@
-
 export type Note = {
   code?: string;
   desc?: string;
-  input?: { key: string; value: string }[];
+  input?: Array<{ key: string; value: string }>;
   output?: string;
 };
 

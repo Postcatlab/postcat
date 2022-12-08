@@ -9,6 +9,7 @@ import {
   Output,
 } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+
 import { ApiEditRest } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-edit-rest',
@@ -48,7 +49,7 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
   ngOnChanges(changes) {
     if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
       if (!this.model.length || this.model[this.model.length - 1].name) {
-        this.model.push(Object.assign({}, this.itemStructure));
+        this.model.push({ ...this.itemStructure });
       }
     }
   }

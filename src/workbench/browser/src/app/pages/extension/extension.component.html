@@ -1,17 +1,30 @@
 <section class="flex-shrink-0 p-0 left">
   <div class="m-[10px]">
     <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
-      <input type="text" eo-ng-input class="flex-1 w-full px-3" i18n-placeholder="@@Search" placeholder="Search"
-        [(ngModel)]="keyword" (ngModelChange)="onSearchChange($event)" />
+      <input
+        type="text"
+        eo-ng-input
+        class="flex-1 w-full px-3"
+        i18n-placeholder="@@Search"
+        placeholder="Search"
+        [(ngModel)]="keyword"
+        (ngModelChange)="onSearchChange($event)"
+      />
     </eo-ng-input-group>
-    <ng-template #prefixTemplateUser><svg class="iconpark-icon">
-        <use href="#search"></use>
-      </svg></ng-template>
+    <ng-template #prefixTemplateUser
+      ><svg class="iconpark-icon">
+        <use href="#search"></use></svg
+    ></ng-template>
   </div>
   <!-- Fixed Group -->
   <div class="group_container">
-    <eo-ng-tree-default [nzData]="fixedTreeNode" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode
-      (nzClick)="clickTreeItem($event)" [nzTreeTemplate]="nzFixedTreeTemplate"></eo-ng-tree-default>
+    <eo-ng-tree-default
+      [nzData]="fixedTreeNode"
+      [nzSelectedKeys]="nzSelectedKeys"
+      nzBlockNode
+      (nzClick)="clickTreeItem($event)"
+      [nzTreeTemplate]="nzFixedTreeTemplate"
+    ></eo-ng-tree-default>
     <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
       <div class="pl-[18px] tree-node" *ngIf="node.origin?.isFixed">
         <div class="flex items-center">
@@ -21,8 +34,15 @@
       </div>
     </ng-template>
   </div>
-  <eo-ng-tree-default [nzData]="treeNodes" [nzSelectedKeys]="nzSelectedKeys" #apiGroup [nzHideUnMatched]="true"
-    (nzClick)="clickTreeItem($event)" nzBlockNode [nzTreeTemplate]="nzTreeTemplate"></eo-ng-tree-default>
+  <eo-ng-tree-default
+    [nzData]="treeNodes"
+    [nzSelectedKeys]="nzSelectedKeys"
+    #apiGroup
+    [nzHideUnMatched]="true"
+    (nzClick)="clickTreeItem($event)"
+    nzBlockNode
+    [nzTreeTemplate]="nzTreeTemplate"
+  ></eo-ng-tree-default>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
     <div class="pl-[18px]">
       <div class="tree-node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">

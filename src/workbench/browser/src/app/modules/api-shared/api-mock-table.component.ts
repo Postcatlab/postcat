@@ -1,10 +1,11 @@
 import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.model';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { copyText, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.service';
-import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/edit/api-mock-edit.component';
+import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+import { copyText, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+
+import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-mock-table',
@@ -157,7 +158,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
       'https://github.com/'
     );
     if (mock?.createWay === 'custom' && mock.uuid) {
-      url.searchParams.set('mockID', mock.uuid + '');
+      url.searchParams.set('mockID', `${mock.uuid}`);
     }
     return decodeURIComponent(url.toString());
   }

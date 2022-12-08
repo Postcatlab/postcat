@@ -1,14 +1,15 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EoTableProComponent } from './table-pro.component';
-import { EoNgTableModule } from 'eo-ng-table';
-import { EoNgDropdownModule } from 'eo-ng-dropdown';
-import { EoNgFeedbackTooltipModule } from 'eo-ng-feedback';
-import { EoNgCheckboxModule } from 'eo-ng-checkbox';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EoNgButtonModule } from 'eo-ng-button';
+import { EoNgCheckboxModule } from 'eo-ng-checkbox';
+import { EoNgDropdownModule } from 'eo-ng-dropdown';
+import { EoNgFeedbackTooltipModule } from 'eo-ng-feedback';
+import { EoNgTableModule } from 'eo-ng-table';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+
+import { EoTableProComponent } from './table-pro.component';
 
 @NgModule({
   declarations: [EoTableProComponent],
@@ -21,7 +22,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     EoNgCheckboxModule,
     NzPopconfirmModule,
     EoNgFeedbackTooltipModule,
-    NzInputNumberModule
+    NzInputNumberModule,
   ],
   exports: [EoTableProComponent],
 })

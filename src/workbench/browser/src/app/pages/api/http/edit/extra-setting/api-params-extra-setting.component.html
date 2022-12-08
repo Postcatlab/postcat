@@ -19,7 +19,7 @@
 </eo-ng-table-pro>
 
 <eo-ng-table-pro
-  *ngIf="!['null','boolean'].includes(model[0].type)&&(isEdit || model[0].enum?.length)"
+  *ngIf="!['null', 'boolean'].includes(model[0].type) && (isEdit || model[0].enum?.length)"
   class="table-border-all mt-[15px]"
   [nzData]="model[0].enum"
   [nzDataItem]="itemStructureEnums"

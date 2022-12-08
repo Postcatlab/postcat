@@ -1,23 +1,24 @@
 import { Component, OnInit, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-
-import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-
-import { io } from 'socket.io-client';
-import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { MessageService } from '../../../shared/services/message';
-import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
+import { ActivatedRoute } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { Subject, takeUntil } from 'rxjs';
-import { ModalService } from '../../../shared/services/modal.service';
-import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe';
-
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { Subject, takeUntil } from 'rxjs';
+import { io } from 'socket.io-client';
+
+import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe';
+import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
+import { MessageService } from '../../../shared/services/message';
+
+
+import { ModalService } from '../../../shared/services/modal.service';
+
 
 interface testViewModel {
   requestTabIndex: number;
@@ -143,7 +144,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   changeQuery() {
     this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'query'
+      base: 'query',
     }).url;
   }
   changeUri() {
@@ -185,7 +186,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       // * save to test history
       this.model.response.responseBody.unshift({
         type: 'end',
-        msg: 'Disconnect from ' + this.getLink(),
+        msg: `Disconnect from ${this.getLink()}`,
         isExpand: false,
       });
       const { requestTabIndex, msg, ...data } = this.model;
@@ -256,14 +257,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
                 value,
               })),
             },
-            title: 'Connected to ' + this.getLink(),
+            title: `Connected to ${this.getLink()}`,
             isExpand: false,
           });
         } else {
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: content,
-            title: 'Connect to ' + this.getLink() + ` is failed`,
+            title: `Connect to ${this.getLink()} is failed`,
             isExpand: false,
           });
           this.wsStatus = 'disconnect';
@@ -335,7 +336,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     const { uri, protocol } = this.model.request;
     const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(uri.trim())
       ? uri.trim()
-      : protocol + '://' + uri.trim().replace('//', '');
+      : `${protocol}://${uri.trim().replace('//', '')}`;
     // console.log('link', link);
     return link;
   }

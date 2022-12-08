@@ -1,35 +1,33 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
-
 //Other module
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 
-import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
-import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { MockService } from './services/mock.service';
 
 //I18n
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { registerLocaleData } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
-
-import { ThemeService } from './core/services/theme.service';
-
+import { NgModule, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
 import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   EoNgFeedbackTooltipModule,
   EoNgFeedbackMessageModule,
 } from 'eo-ng-feedback';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { ReactiveFormsModule } from '@angular/forms';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
+import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
+import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ThemeService } from './core/services/theme.service';
 import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
 registerLocaleData(en);
 registerLocaleData(zh);
@@ -60,10 +58,10 @@ registerLocaleData(zh);
       deps: [ThemeService],
     },
     {
-      provide:TABLE_PRO_CONFIG,
+      provide: TABLE_PRO_CONFIG,
       useValue: {
         childKey: 'children',
-      }
+      },
     },
     {
       provide: '$scope',

@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./api-test-result-header.component.scss'],
 })
 export class ApiTestResultHeaderComponent implements OnInit {
-  @Input() model: { name: string; value: string }[];
+  @Input() model: Array<{ name: string; value: string }>;
   constructor() {}
 
   ngOnInit(): void {}

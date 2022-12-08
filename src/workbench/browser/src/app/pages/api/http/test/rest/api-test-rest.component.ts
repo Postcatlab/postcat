@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
-
+import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { ApiTestRest } from '../../../service/api-test/api-test.model';
-import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+
 @Component({
   selector: 'eo-api-test-rest',
   templateUrl: './api-test-rest.component.html',
@@ -16,7 +16,8 @@ export class ApiTestRestComponent implements OnInit {
   listConf: any = {
     column: [],
     setting: {},
-  };  private modelChange$: Subject<void> = new Subject();
+  };
+  private modelChange$: Subject<void> = new Subject();
   private destroy$: Subject<void> = new Subject();
   itemStructure: ApiTestRest = {
     required: true,
@@ -34,7 +35,7 @@ export class ApiTestRestComponent implements OnInit {
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: 'rest'
+      in: 'rest',
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

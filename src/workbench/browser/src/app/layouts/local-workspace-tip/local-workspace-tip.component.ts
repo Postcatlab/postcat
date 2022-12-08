@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { StorageUtil } from '../../utils/storage/Storage';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+
+import { StorageUtil } from '../../utils/storage/Storage';
 
 @Component({
   selector: 'eo-local-workspace-tip',

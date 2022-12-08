@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { Router } from '@angular/router';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
@@ -49,7 +49,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
   ></extension-select>`,
 })
 export class ImportApiComponent implements OnInit {
-  supportList: Array<any> = [];
+  supportList: any[] = [];
   currentExtension = '';
   uploadData = null;
   featureMap =

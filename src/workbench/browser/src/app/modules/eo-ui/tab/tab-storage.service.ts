@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { storageTab, TabItem } from './tab.model';
 
 @Injectable()
@@ -7,7 +8,7 @@ import { storageTab, TabItem } from './tab.model';
  * All data chagne in this service
  */
 export class TabStorageService {
-  tabOrder: Array<number> = [];
+  tabOrder: number[] = [];
   tabStorageKey: string;
   tabsByID = new Map<number, TabItem>();
   constructor() {}

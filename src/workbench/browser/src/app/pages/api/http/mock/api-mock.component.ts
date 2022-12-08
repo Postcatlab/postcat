@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { ApiData } from '../../../../shared/services/storage/index.model';
 import { ActivatedRoute } from '@angular/router';
-import { ApiMockService } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.service';
-import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/edit/api-mock-edit.component';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ApiMockTableComponent } from 'eo/workbench/browser/src/app/modules/api-shared/api-mock-table.component';
+import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
+import { ApiMockService } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.service';
+import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/edit/api-mock-edit.component';
+import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
+
+import { ApiData } from '../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-mock',

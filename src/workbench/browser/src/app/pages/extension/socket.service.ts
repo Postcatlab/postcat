@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { io } from 'socket.io-client';
-import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { io } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root',

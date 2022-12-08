@@ -1,15 +1,18 @@
 .ant-input-group.ant-input-group-compact {
   display: flex;
 }
+
 .ant-form-item {
   margin-bottom: 0;
 }
+
 .header-container {
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
+
 .ant-tabs-nav {
   margin-left: 10px;
 }
@@ -22,8 +25,10 @@ eo-api-test-rest {
   height: 100%;
   overflow-y: auto;
 }
+
 .test_wrap {
   height: 100%;
+
   .scroll_container {
     // height: calc(100% - 52px);
     overflow-y: auto;
@@ -33,6 +38,7 @@ eo-api-test-rest {
     height: 100%;
   }
 }
+
 .env_front_uri {
   max-width: 240px;
   height: 40px;
@@ -44,9 +50,11 @@ eo-api-test-rest {
   box-sizing: border-box;
   flex-shrink: 0;
 }
+
 div.ant-typography {
   margin-bottom: 0;
 }
+
 :host ::ng-deep {
   .header-container {
     eo-ng-select,
@@ -54,6 +62,7 @@ div.ant-typography {
     .ant-btn {
       height: 40px;
     }
+
     eo-ng-select eo-ng-select-top-control,
     .ant-input {
       background-color: var(--BTN_SEC_BG_HOVER) !important;
@@ -65,16 +74,20 @@ div.ant-typography {
       }
     }
   }
+
   .ant-tabs-content-holder {
     height: calc(100% - 35px);
     overflow: auto;
   }
+
   .response_container {
     @apply h-full overflow-hidden;
+
     .ant-tabs-tabpane {
       min-height: 208px;
     }
   }
+
   .top_container {
     height: 100%;
 
@@ -82,17 +95,18 @@ div.ant-typography {
       position: sticky;
       top: 0;
     }
+
     .ant-tabs {
       height: calc(100% - 60px);
+
       .ant-tabs-tabpane {
         height: 100%;
         overflow: hidden;
       }
+
       .ant-tabs-content {
         overflow: hidden;
         height: 100%;
-      }
-      eo-api-test-body[ng-reflect-body-type='formData'] {
       }
     }
   }

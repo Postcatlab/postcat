@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+
 import { ApiEditHeaders } from '../../../../../shared/services/storage/index.model';
 
 @Component({
@@ -11,7 +12,7 @@ import { ApiEditHeaders } from '../../../../../shared/services/storage/index.mod
   ></eo-ng-table-pro>`,
 })
 export class ApiDetailFormComponent implements OnInit {
-   /**
+  /**
    * Table ID
    */
   @Input() tid: string;
@@ -28,7 +29,7 @@ export class ApiDetailFormComponent implements OnInit {
       in: this.module,
       module: 'preview',
       isEdit: false,
-      id:this.tid
+      id: this.tid,
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

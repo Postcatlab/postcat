@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { StorageUtil } from '../../../utils/storage/Storage';
-import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
+import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+
+import { StorageUtil } from '../../../utils/storage/Storage';
 
 type ExtensionItem = {
   name: string;

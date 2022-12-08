@@ -8,9 +8,8 @@ describe('ManageAccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ManageAccessComponent ]
-    })
-    .compileComponents();
+      declarations: [ManageAccessComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ManageAccessComponent);
     component = fixture.componentInstance;

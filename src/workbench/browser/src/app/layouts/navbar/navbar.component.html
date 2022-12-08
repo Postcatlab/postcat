@@ -1,6 +1,10 @@
 <div class="flex items-center justify-between eo-navbar">
   <div class="flex">
-    <img loading="lazy" class="logo" src="assets/images/{{theme.appearance==='dark'?'logo-white.svg':'logo.svg'}}" />
+    <img
+      loading="lazy"
+      class="logo"
+      src="assets/images/{{ theme.appearance === 'dark' ? 'logo-white.svg' : 'logo.svg' }}"
+    />
     <!-- star -->
     <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center electron-can-be-click">
       <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
@@ -30,14 +34,29 @@
     </ng-template>
     <nz-divider nzType="vertical"></nz-divider>
     <!-- setting -->
-    <button eo-ng-button nzType="text" *ngIf="!store.isShare" class="flex items-center justify-center icon"
-      i18n-nzTooltipTitle eoNgFeedbackTooltip [nzTooltipMouseEnterDelay]="0.4" nzTooltipPlacement="bottom"
-      nzTooltipTitle="Open Settings" (click)="openSettingModal()">
+    <button
+      eo-ng-button
+      nzType="text"
+      *ngIf="!store.isShare"
+      class="flex items-center justify-center icon"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      [nzTooltipMouseEnterDelay]="0.4"
+      nzTooltipPlacement="bottom"
+      nzTooltipTitle="Open Settings"
+      (click)="openSettingModal()"
+    >
       <eo-iconpark-icon name="setting"></eo-iconpark-icon>
     </button>
     <!-- User -->
-    <button eo-ng-button nzType="text" eo-ng-dropdown *ngIf="!store.isShare"
-      class="flex items-center justify-center icon" [nzDropdownMenu]="userMenu">
+    <button
+      eo-ng-button
+      nzType="text"
+      eo-ng-dropdown
+      *ngIf="!store.isShare"
+      class="flex items-center justify-center icon"
+      [nzDropdownMenu]="userMenu"
+    >
       <eo-iconpark-icon name="people"> </eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #userMenu>

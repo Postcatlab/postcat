@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, OnChanges, ViewChild } from '@angular/core';
-import { getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { ApiTestHistoryResponse } from '../../../../../shared/services/storage/index.model';
-import { ApiTestUtilService } from '../../../../../modules/api-shared/api-test-util.service';
-import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
 import { SafeUrl } from '@angular/platform-browser';
+import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
+import { getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+
+import { ApiTestUtilService } from '../../../../../modules/api-shared/api-test-util.service';
+import { ApiTestHistoryResponse } from '../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-test-result-response',
@@ -22,10 +23,7 @@ export class ApiTestResultResponseComponent implements OnInit, OnChanges {
     return this.model.contentType?.startsWith('image');
   }
   imgBlobUrl: SafeUrl;
-  constructor(
-    private apiTest: ApiTestUtilService,
-    private nzContextMenuService: NzContextMenuService
-  ) {}
+  constructor(private apiTest: ApiTestUtilService, private nzContextMenuService: NzContextMenuService) {}
 
   ngOnChanges(changes) {
     if (changes.model && this.model) {

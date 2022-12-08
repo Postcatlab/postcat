@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Group, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { MessageService } from '../../../../shared/services/message';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+
 import { GroupApiDataModel, GroupTreeItem } from '../../../../shared/models';
+import { MessageService } from '../../../../shared/services/message';
+import { Group, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-group-edit',
@@ -90,7 +91,7 @@ export class ApiGroupEditComponent implements OnInit {
    * @param tree
    * @param parentID
    */
-  getChildrenFromTree(list: Array<GroupTreeItem>, tree: GroupApiDataModel, parentID: string): void {
+  getChildrenFromTree(list: GroupTreeItem[], tree: GroupApiDataModel, parentID: string): void {
     list.forEach((item) => {
       if (item.parentID === parentID) {
         if (!item.isLeaf) {

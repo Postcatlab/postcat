@@ -1,21 +1,23 @@
-@import '../api/group/tree/api-group-tree.component.scss';
+@import '../api/group/tree/api-group-tree.component';
 
 :host ::ng-deep {
-  height: 100%;
-  width: 100%;
   display: flex;
+  width: 100%;
+  height: 100%;
+
   router-outlet + * {
     display: block;
     height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height));
     overflow: auto;
   }
+
   .ant-btn-link {
     padding: 0;
   }
 
   .left {
-    border-right: 1px solid var(--BORDER);
     width: 250px;
+    border-right: 1px solid var(--BORDER);
 
     .plugin-link {
       &:hover,
@@ -25,7 +27,7 @@
       }
 
       &:hover {
-        background: rgba(0, 0, 0, 0.1);
+        background: rgb(0 0 0 / 10%);
       }
     }
   }

@@ -10,7 +10,13 @@ import {
   AfterViewInit,
   ElementRef,
 } from '@angular/core';
-
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
+import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { EditorOptions } from 'ng-zorro-antd/code-editor';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer, Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
@@ -20,13 +26,6 @@ import {
   ContentType,
   CONTENT_TYPE_BY_ABRIDGE,
 } from '../../../service/api-test/api-test.model';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
-import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { EditorOptions } from 'ng-zorro-antd/code-editor';
-import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { ApiBodyType } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-test-body',

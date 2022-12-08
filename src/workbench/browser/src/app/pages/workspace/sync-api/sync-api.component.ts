@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import packageJson from '../../../../../../../../package.json';
-import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+
+import packageJson from '../../../../../../../../package.json';
+import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-sync-api',

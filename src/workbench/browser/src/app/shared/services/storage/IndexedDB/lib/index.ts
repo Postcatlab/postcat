@@ -4,6 +4,7 @@ import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/sto
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { firstValueFrom, Observable } from 'rxjs';
+
 import {
   Project,
   Environment,
@@ -15,9 +16,8 @@ import {
   StorageItem,
   StorageResStatus,
 } from '../../index.model';
-
-import { parseAndCheckApiData, parseAndCheckEnv, parseAndCheckGroup } from './validate';
 import { sampleApiData } from './index.constant';
+import { parseAndCheckApiData, parseAndCheckEnv, parseAndCheckGroup } from './validate';
 
 export type ResultType<T = any> = {
   status: StorageResStatus.success;
@@ -32,7 +32,7 @@ const getApiUrl = (apiData: ApiData) => {
 
   /** get mock url */
   const mockUrl = isRemote
-    ? window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
+    ? `${window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url')}/mock/eo-1/`
     : window.eo?.getMockUrl?.();
 
   const url = new URL(uniqueSlash(`${mockUrl}/${apiData.uri}`), 'https://github.com/');
@@ -129,7 +129,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param items
    */
-  private bulkCreate(table: Table, items: Array<StorageItem>): Observable<object> {
+  private bulkCreate(table: Table, items: StorageItem[]): Observable<object> {
     items = items.map((item: StorageItem) => {
       delete item.uuid;
       if (!item.createdAt) {
@@ -186,7 +186,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param table
    * @param items
    */
-  private bulkUpdate(table: Table, items: Array<StorageItem>): Observable<object> {
+  private bulkUpdate(table: Table, items: StorageItem[]): Observable<object> {
     items = items.map((item: StorageItem) => {
       if (!item.updatedAt) {
         item.updatedAt = new Date();
@@ -209,7 +209,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         .bulkGet(uuids.map(Number))
         .then((existItems) => {
           if (existItems) {
-            const newItems: Array<StorageItem> = [];
+            const newItems: StorageItem[] = [];
             existItems
               .filter((x) => x)
               .forEach((item: StorageItem) => {
@@ -347,7 +347,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         });
     });
   }
-  apiDataBulkCreate(items: Array<ApiData>): Observable<object> {
+  apiDataBulkCreate(items: ApiData[]): Observable<object> {
     return this.bulkCreate(this.apiData, items);
   }
   apiDataBulkLoad(uuids: Array<number | string>): Observable<object> {
@@ -359,7 +359,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   apiDataBulkRemoveByGroupIDs(groupIDs: number[]) {
     return this.apiData.where('groupID').anyOf(groupIDs).delete();
   }
-  apiDataBulkUpdate(items: Array<ApiData>): Observable<object> {
+  apiDataBulkUpdate(items: ApiData[]): Observable<object> {
     return this.bulkUpdate(this.apiData, items);
   }
   apiDataCreate(item: ApiData): Observable<object> {
@@ -426,7 +426,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param items
    */
-  apiTestHistoryBulkCreate(items: Array<ApiTestHistory>): Observable<object> {
+  apiTestHistoryBulkCreate(items: ApiTestHistory[]): Observable<object> {
     return this.bulkCreate(this.apiTestHistory, items);
   }
 
@@ -453,7 +453,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param items
    */
-  apiTestHistoryBulkUpdate(items: Array<ApiTestHistory>): Observable<object> {
+  apiTestHistoryBulkUpdate(items: ApiTestHistory[]): Observable<object> {
     return this.bulkUpdate(this.apiTestHistory, items);
   }
 
@@ -524,7 +524,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param items
    */
-  environmentBulkCreate(items: Array<Environment>): Observable<object> {
+  environmentBulkCreate(items: Environment[]): Observable<object> {
     return this.bulkCreate(this.environment, items);
   }
 
@@ -551,7 +551,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param items
    */
-  environmentBulkUpdate(items: Array<Environment>): Observable<object> {
+  environmentBulkUpdate(items: Environment[]): Observable<object> {
     return this.bulkUpdate(this.environment, items);
   }
 
@@ -606,7 +606,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param items
    */
-  groupBulkCreate(items: Array<Group>): Observable<object> {
+  groupBulkCreate(items: Group[]): Observable<object> {
     return this.bulkCreate(this.group, items);
   }
 
@@ -624,7 +624,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuids
    */
-  groupBulkRemove(uuids: Array<number>): Observable<object> {
+  groupBulkRemove(uuids: number[]): Observable<object> {
     this.apiDataBulkRemoveByGroupIDs(uuids);
     return this.bulkRemove(this.group, uuids);
   }
@@ -634,7 +634,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param items
    */
-  groupBulkUpdate(items: Array<Group>): Observable<object> {
+  groupBulkUpdate(items: Group[]): Observable<object> {
     return this.bulkUpdate(this.group, items);
   }
 
@@ -748,7 +748,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             this.environmentCreate(result.data);
           });
         }
-        obs.next(this.resProxy(null,error,StorageResStatus.success));
+        obs.next(this.resProxy(null, error, StorageResStatus.success));
         obs.complete();
       });
     });
@@ -759,7 +759,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param items
    */
 
-  projectBulkCreate(items: Array<Project>): Observable<object> {
+  projectBulkCreate(items: Project[]): Observable<object> {
     return this.bulkCreate(this.project, items);
   }
   projectExport(): Observable<object> {
@@ -803,7 +803,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param items
    */
-  projectBulkUpdate(items: Array<Project>): Observable<object> {
+  projectBulkUpdate(items: Project[]): Observable<object> {
     return this.bulkUpdate(this.project, items);
   }
 

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { autorun } from 'mobx';
+import { distinct, interval } from 'rxjs';
+
+import { WebService } from '../../core/services';
+import { DataSourceService } from '../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../shared/services/message';
 import { RemoteService } from '../../shared/services/storage/remote.service';
-import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { DataSourceService } from '../../shared/services/data-source/data-source.service';
-import { distinct, interval } from 'rxjs';
-import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { WebService } from '../../core/services';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun } from 'mobx';
 @Component({
   selector: 'eo-get-share-link',
   template: `<button

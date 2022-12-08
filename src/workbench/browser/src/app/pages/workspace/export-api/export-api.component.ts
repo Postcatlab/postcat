@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
-import packageJson from '../../../../../../../../package.json';
-import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+
+import packageJson from '../../../../../../../../package.json';
+import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-export-api',
@@ -13,7 +14,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
-  supportList: Array<any> = [];
+  supportList: any[] = [];
   featureMap =
     this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
   constructor(

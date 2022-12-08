@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, Subject, takeUntil } from 'rxjs';
-import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
-import { ApiTabService } from './api-tab.service';
-import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, makeObservable, observable, reaction } from 'mobx';
+import { NzResizeEvent } from 'ng-zorro-antd/resizable';
+import { filter, Subject, takeUntil } from 'rxjs';
+
+import { ApiTabService } from './api-tab.service';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';

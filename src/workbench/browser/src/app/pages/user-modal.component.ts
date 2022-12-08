@@ -1,15 +1,15 @@
+import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { distinct } from 'rxjs/operators';
-import { interval } from 'rxjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { interval } from 'rxjs';
+import { distinct } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-user-modal',

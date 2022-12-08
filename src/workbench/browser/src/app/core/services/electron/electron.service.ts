@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
 import { ipcRenderer, webFrame } from 'electron';
+import { getSettings } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+
+import pkg from '../../../../../../../../package.json';
+
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
-import pkg from '../../../../../../../../package.json';
-import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
-import { getSettings } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 type DescriptionsItem = {
   readonly id: string;

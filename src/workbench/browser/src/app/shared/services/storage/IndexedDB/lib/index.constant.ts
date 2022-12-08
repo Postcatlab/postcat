@@ -1,5 +1,4 @@
-import { ApiData } from '../../index.model';
-import { JsonRootType, RequestProtocol, RequestMethod, ApiBodyType } from '../../index.model';
+import { ApiData, JsonRootType, RequestProtocol, RequestMethod, ApiBodyType } from '../../index.model';
 
 export const sampleApiData: ApiData[] = [
   {
@@ -21,7 +20,7 @@ export const sampleApiData: ApiData[] = [
         description: $localize`City Code : http://www.mca.gov.cn/article/sj/xzqh/2020/20201201.html`,
         enum: [
           { value: '110000', description: 'Beijing' },
-          { value: '440000', description: 'Guangdong' }
+          { value: '440000', description: 'Guangdong' },
         ],
       },
     ],

@@ -1,22 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ApiGroupTreeComponent } from './api-group-tree.component';
-
-import { StorageService } from '../../../../modules/storage/storage.service';
-import { storageSettingData } from '../../../../shared/models/storageSetting.model';
-import { StorageModule } from '../../../../modules/storage/storage.module';
-
-import { ApiDataService } from '../../../../shared/services/api-data/api-data.service';
-import { MessageService } from '../../../../shared/services/message';
-import { GroupService } from '../../../../shared/services/group/group.service';
-
-import { NzTreeModule } from 'ng-zorro-antd/tree';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { ModalService } from '../../../../shared/services/modal.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
+
+import { StorageModule } from '../../../../modules/storage/storage.module';
+import { StorageService } from '../../../../modules/storage/storage.service';
+import { storageSettingData } from '../../../../shared/models/storageSetting.model';
+import { ApiDataService } from '../../../../shared/services/api-data/api-data.service';
+import { GroupService } from '../../../../shared/services/group/group.service';
+import { MessageService } from '../../../../shared/services/message';
+import { ModalService } from '../../../../shared/services/modal.service';
+import { ApiGroupTreeComponent } from './api-group-tree.component';
 
 describe('ApiGroupTreeComponent', () => {
   let component: ApiGroupTreeComponent;
@@ -41,7 +39,7 @@ describe('ApiGroupTreeComponent', () => {
               new NavigationEnd(
                 0,
                 'http://localhost:4200/home/api/http/test',
-                'http://localhost:4200/home/api/http/test?uuid=1',
+                'http://localhost:4200/home/api/http/test?uuid=1'
               )
             ),
             navigate: jasmine.createSpy('navigate'),

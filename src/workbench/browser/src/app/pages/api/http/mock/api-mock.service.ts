@@ -27,7 +27,7 @@ export class ApiMockService {
       ? this.dataSource.mockUrl
       : `${this.dataSource.mockUrl}/mock-${this.store.getCurrentProjectID}`;
     const uri = transferUrlAndQuery(formatUri(apiData.uri, apiData.restParams), apiData.queryParams, {
-      base: 'query'
+      base: 'query',
     }).url;
     return `${mockUrl}/${uri}`;
   }

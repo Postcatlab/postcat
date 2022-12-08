@@ -1,7 +1,8 @@
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+
 import { ElectronService } from '../../../../../core/services';
-import { requestDataOpts, TestServer } from '../test-server.model';
 import { eoFormatRequestData, eoFormatResponseData } from '../api-test.utils';
+import { requestDataOpts, TestServer } from '../test-server.model';
 @Injectable()
 export class TestServerLocalNodeService implements TestServer {
   constructor(private electron: ElectronService, @Inject(LOCALE_ID) private locale: string) {}

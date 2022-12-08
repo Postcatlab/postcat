@@ -2,7 +2,7 @@
  * 消息对象接口
  */
 
-export type Message={
+export type Message = {
   /**
    * 消息类型
    *

@@ -1,6 +1,7 @@
-import { tree2obj } from '../utils/tree/tree.utils';
 import { Injectable } from '@angular/core';
 import type { IpcRenderer } from 'electron';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import {
   ApiData,
   ApiMockEntity,
@@ -8,16 +9,15 @@ import {
   StorageResStatus,
 } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
+
 import { ElectronService } from '../core/services';
+import { tree2obj } from '../utils/tree/tree.utils';
 
 const mockReg = /\/mock-(\d+)/;
 
 @Injectable({ providedIn: 'root' })
 export class MockService {
-
   constructor(
     private indexedDBStorage: IndexedDBStorage,
     private storageService: StorageService,

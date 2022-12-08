@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ModalService } from '../../../../shared/services/modal.service';
-import { ApiData } from '../../../../shared/services/storage/index.model';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { omit } from 'lodash-es';
+
+import { ModalService } from '../../../../shared/services/modal.service';
+import { ApiData } from '../../../../shared/services/storage/index.model';
 import { filterTableData } from '../../../../utils/tree/tree.utils';
 @Injectable()
 export class ApiEditUtilService {

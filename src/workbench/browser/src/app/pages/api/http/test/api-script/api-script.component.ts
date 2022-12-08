@@ -11,10 +11,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
+import { NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
-import {  NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-
-import type {  FlatNode } from './constant';
+import type { FlatNode } from './constant';
 
 @Component({
   selector: 'eo-api-script',
@@ -52,7 +51,7 @@ export class ApiScriptComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   nzClick($event) {
-    console.log('nzClick',$event);
+    console.log('nzClick', $event);
     const { node } = $event;
     if (node.isLeaf) {
       this.insertCode(node);

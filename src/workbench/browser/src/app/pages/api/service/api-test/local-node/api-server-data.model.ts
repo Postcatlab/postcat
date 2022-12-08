@@ -34,18 +34,19 @@ export interface TestLocalNodeData {
    * @type {string}
    */
   apiRequestParamJsonType: string;
-  headers: {
+  headers: Array<{
     checkbox: boolean;
     headerName: string;
     headerValue: string;
-  }[];
+  }>;
   /**
    * request body
    *
    * @type {string|array}
    */
-  params: | string
-    | {
+  params:
+    | string
+    | Array<{
         checkbox: boolean;
         paramKey: string;
         paramType: string;
@@ -54,7 +55,7 @@ export interface TestLocalNodeData {
          */
         paramInfo: string;
         childList: object[];
-      }[];
+      }>;
   /**
    * request auth,baisc auth/jwt
    *

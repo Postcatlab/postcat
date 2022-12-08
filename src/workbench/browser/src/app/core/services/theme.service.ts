@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { AppearanceType, MainColorType } from '../../modules/setting/common/select-theme/theme.model';
+import { Inject, Injectable } from '@angular/core';
 import { Theme } from 'ng-zorro-antd/core/config';
+
+import { AppearanceType, MainColorType } from '../../modules/setting/common/select-theme/theme.model';
 import StorageUtil from '../../utils/storage/Storage';
 
 @Injectable({

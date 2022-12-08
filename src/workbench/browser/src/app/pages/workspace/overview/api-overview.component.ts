@@ -1,11 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
-
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { ExportApiComponent } from '../export-api/export-api.component';
-import { SyncApiComponent } from '../sync-api/sync-api.component';
-import { ImportApiComponent } from '../import-api/import-api.component';
+
 import { ModalService } from '../../../shared/services/modal.service';
+import { ExportApiComponent } from '../export-api/export-api.component';
+import { ImportApiComponent } from '../import-api/import-api.component';
+import { SyncApiComponent } from '../sync-api/sync-api.component';
 
 const actionComponent = {
   push: SyncApiComponent,

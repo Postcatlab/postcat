@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SidebarService } from '../sidebar/sidebar.service';
-import { SelectThemeComponent } from '../../modules/setting/common/select-theme/select-theme.component';
 import { EoNgFeedbackDrawerService } from 'eo-ng-feedback';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { SelectThemeComponent } from '../../modules/setting/common/select-theme/select-theme.component';
+import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'eo-toolbar',

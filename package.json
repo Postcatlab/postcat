@@ -8,11 +8,10 @@
   "author": "eoapi",
   "private": true,
   "workspaces": [
-    "src/workbench/browser",
-    "src/workbench/node"
+    "src/workbench/*"
   ],
   "scripts": {
-    "prepare": "electron-builder install-app-deps && npx patch-package",
+    "prepare": "husky install && electron-builder install-app-deps && npx patch-package",
     "start": "npm-run-all -p start:workbench electron:serve",
     "serve:web": "cd src/workbench/browser && npm run ng:serve",
     "start:testServer": "cd src/workbench/node && yarn dev",
@@ -33,7 +32,8 @@
     "electron:tsc": "tsc -p tsconfig.json",
     "electron:serve-tsc": "yarn electron:dev",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
-    "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out"
+    "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out",
+    "lint:lint-staged": "lint-staged"
   },
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",
@@ -82,5 +82,26 @@
   "__npminstall_done": false,
   "node-module-alias": {
     "eo": "./out"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ],
+    "*.html": [
+      "eslint --fix",
+      "prettier --write",
+      "stylelint --fix"
+    ],
+    "*.{scss,less,styl,html}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   }
 }

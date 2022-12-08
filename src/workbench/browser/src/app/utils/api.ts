@@ -82,6 +82,6 @@ export const generateRestFromUrl = (url, rest): ApiEditRest[] => {
   const rests = getRest(url);
   return [
     ...rests.map((restName) => ({ name: restName, required: true, example: '', description: '' })),
-    ...rest.filter((val) => !(rests.includes(val.name)||val.required)),
+    ...rest.filter((val) => !(rests.includes(val.name) || val.required)),
   ];
 };

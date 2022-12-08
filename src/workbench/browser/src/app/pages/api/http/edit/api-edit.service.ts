@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import {
   ApiBodyType,
   ApiData,
@@ -8,6 +7,8 @@ import {
   JsonRootType,
   StorageRes,
 } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+
 import { RequestMethod, RequestProtocol } from '../../../../shared/services/storage/index.model';
 import { ApiEditUtilService } from './api-edit-util.service';
 @Injectable()
@@ -18,28 +19,24 @@ export class ApiEditService {
     private apiService: ApiService
   ) {}
   getPureApi({ groupID }) {
-    return Object.assign(
-      {
-        name: '',
-        projectID: 1,
-        uri: '/',
-        groupID,
-        protocol: RequestProtocol.HTTP,
-        method: RequestMethod.POST,
-      },
-      {
-        requestBodyType: ApiBodyType.JSON,
-        requestBodyJsonType: JsonRootType.Object,
-        requestBody: [],
-        queryParams: [],
-        restParams: [],
-        requestHeaders: [],
-        responseHeaders: [],
-        responseBodyType: ApiBodyType.JSON,
-        responseBodyJsonType: JsonRootType.Object,
-        responseBody: [],
-      }
-    );
+    return {
+      name: '',
+      projectID: 1,
+      uri: '/',
+      groupID,
+      protocol: RequestProtocol.HTTP,
+      method: RequestMethod.POST,
+      requestBodyType: ApiBodyType.JSON,
+      requestBodyJsonType: JsonRootType.Object,
+      requestBody: [],
+      queryParams: [],
+      restParams: [],
+      requestHeaders: [],
+      responseHeaders: [],
+      responseBodyType: ApiBodyType.JSON,
+      responseBodyJsonType: JsonRootType.Object,
+      responseBody: [],
+    };
   }
   async getApi({ id, groupID }): Promise<ApiEditViewData> {
     let result = {} as ApiData;

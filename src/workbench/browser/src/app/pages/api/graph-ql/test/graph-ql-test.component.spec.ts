@@ -8,9 +8,8 @@ describe('GraphQlTestComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GraphQlTestComponent ]
-    })
-    .compileComponents();
+      declarations: [GraphQlTestComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GraphQlTestComponent);
     component = fixture.componentInstance;

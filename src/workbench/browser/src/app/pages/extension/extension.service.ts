@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { lastValueFrom } from 'rxjs';
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { TranslateService } from 'eo/platform/common/i18n';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/service
 export class ExtensionService {
   ignoreList = ['default'];
   disabledExtensionNames: string[] = this.getExtensionNames();
-  extensionIDs: Array<string> = [];
+  extensionIDs: string[] = [];
   HOST = '';
   localExtensions: Map<string, ModuleInfo>;
   constructor(

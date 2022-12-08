@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ApiTestUtilService } from '../../../../../modules/api-shared/api-test-util.service';
 
+import { ApiTestUtilService } from '../../../../../modules/api-shared/api-test-util.service';
 import { ApiTestRestComponent } from './api-test-rest.component';
 
 describe('ApiTestRestComponent', () => {

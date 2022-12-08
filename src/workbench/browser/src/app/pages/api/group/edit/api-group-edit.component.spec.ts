@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ApiGroupEditComponent } from './api-group-edit.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from '../../../../shared/services/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
-import { GroupService } from '../../../../shared/services/group/group.service';
-import { StorageService } from '../../../../modules/storage/storage.service';
 import { StorageModule } from '../../../../modules/storage/storage.module';
+import { StorageService } from '../../../../modules/storage/storage.service';
 import { storageSettingData } from '../../../../shared/models/storageSetting.model';
+import { GroupService } from '../../../../shared/services/group/group.service';
+import { MessageService } from '../../../../shared/services/message';
+import { ApiGroupEditComponent } from './api-group-edit.component';
 
 describe('ApiGroupTreeComponent', () => {
   let component: ApiGroupEditComponent;

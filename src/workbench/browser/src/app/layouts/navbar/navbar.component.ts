@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectronService, WebService } from '../../core/services';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { SettingComponent } from '../../modules/setting/setting.component';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { distinct } from 'rxjs/operators';
-import { interval } from 'rxjs';
-import { LanguageService } from '../../core/services/language/language.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { interval } from 'rxjs';
+import { distinct } from 'rxjs/operators';
+
+import { ElectronService, WebService } from '../../core/services';
+import { LanguageService } from '../../core/services/language/language.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { SettingComponent } from '../../modules/setting/setting.component';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',

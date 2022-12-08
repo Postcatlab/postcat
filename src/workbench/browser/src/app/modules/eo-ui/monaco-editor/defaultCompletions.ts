@@ -11,7 +11,7 @@ import type { languages } from 'monaco-editor';
 //   }
 // }).filter(n => n.label)
 
-export const completions: Omit<languages.CompletionItem, 'range' | 'kind'>[] = [
+export const completions: Array<Omit<languages.CompletionItem, 'range' | 'kind'>> = [
   {
     label: 'eo.info(data)',
     insertText: 'eo.info(data);',
@@ -145,7 +145,7 @@ export const completions: Omit<languages.CompletionItem, 'range' | 'kind'>[] = [
   },
 ];
 
-export const defaultCompletions: Omit<languages.CompletionItem, 'range'>[] = completions.map((item) => ({
+export const defaultCompletions: Array<Omit<languages.CompletionItem, 'range'>> = completions.map((item) => ({
   ...item,
   kind: 1,
 }));

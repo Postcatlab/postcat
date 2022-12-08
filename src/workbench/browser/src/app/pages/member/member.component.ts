@@ -1,12 +1,12 @@
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { Component, OnInit } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { distinct } from 'rxjs/operators';
-import { interval } from 'rxjs';
-import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import { Component, OnInit } from '@angular/core';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { interval } from 'rxjs';
+import { distinct } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-member',

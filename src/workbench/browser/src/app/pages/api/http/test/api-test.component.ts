@@ -10,9 +10,30 @@ import {
   ElementRef,
   AfterViewInit,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import {
+  BEFORE_DATA,
+  AFTER_DATA,
+  beforeScriptCompletions,
+  afterScriptCompletions,
+} from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
+import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
+import { ContentType } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
+import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
+import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
+import { isEmpty } from 'lodash-es';
+import { reaction } from 'mobx';
+import { NzResizeEvent } from 'ng-zorro-antd/resizable';
+import { interval, Subscription, Subject } from 'rxjs';
+import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
+import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
+import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
+import { MessageService } from '../../../../shared/services/message';
 import {
   ApiBodyType,
   ApiTestData,
@@ -20,33 +41,9 @@ import {
   RequestMethod,
   RequestProtocol,
 } from '../../../../shared/services/storage/index.model';
-import { MessageService } from '../../../../shared/services/message';
-
-import { interval, Subscription, Subject } from 'rxjs';
-import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
-
-import { TestServerService } from '../../service/api-test/test-server.service';
-import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
-
-import { reaction } from 'mobx';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
+import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
-import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
-import {
-  BEFORE_DATA,
-  AFTER_DATA,
-  beforeScriptCompletions,
-  afterScriptCompletions,
-} from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ContentType } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
-import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
-import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
-import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
-import { isEmpty } from 'lodash-es';
-import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
@@ -210,7 +207,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     const apiData = this.apiTestUtil.formatSavingApiData({
       history: this.model.testResult,
-      testData: Object.assign({}, this.model.request),
+      testData: { ...this.model.request },
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
     this.router.navigate(['/home/api/http/edit'], {
@@ -221,7 +218,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   changeQuery() {
     this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'query'
+      base: 'query',
     }).url;
   }
   watchBasicForm() {
@@ -232,9 +229,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       }, 0);
     });
   }
-  updateParamsbyUri(url){
+  updateParamsbyUri(url) {
     this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url'
+      base: 'url',
     }).query;
     this.model.request.restParams = [...generateRestFromUrl(this.model.request.uri, this.model.request.restParams)];
   }

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { reaction } from 'mobx';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { reaction } from 'mobx';
 
 @Injectable({
   providedIn: 'root',

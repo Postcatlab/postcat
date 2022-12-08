@@ -8,9 +8,8 @@ describe('Vue3Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ Vue3Component ]
-    })
-    .compileComponents();
+      declarations: [Vue3Component],
+    }).compileComponents();
   });
 
   beforeEach(() => {

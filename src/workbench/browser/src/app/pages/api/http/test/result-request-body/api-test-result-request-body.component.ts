@@ -6,7 +6,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
   styleUrls: ['./api-test-result-request-body.component.scss'],
 })
 export class ApiTestResultRequestBodyComponent implements OnInit, OnChanges {
-  @Input() model: { name: string; type: string; value: string }[] | string | any;
+  @Input() model: Array<{ name: string; type: string; value: string }> | string | any;
   modelType: string;
   constructor() {}
 

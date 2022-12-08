@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
-import { debounceTime, Subject } from 'rxjs';
-import { EoTabComponent } from '../../modules/eo-ui/tab/tab.component';
-import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
-import { isEmptyObj } from '../../utils/index.utils';
-import { MessageService } from '../../shared/services/message';
 import { Router } from '@angular/router';
+import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { debounceTime, Subject } from 'rxjs';
+
+import { EoTabComponent } from '../../modules/eo-ui/tab/tab.component';
+import { MessageService } from '../../shared/services/message';
+import { isEmptyObj } from '../../utils/index.utils';
+
 @Injectable()
 export class ApiTabService {
   componentRef;
@@ -16,7 +18,7 @@ export class ApiTabService {
     return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
-  BASIC_TABS: Partial<TabItem>[] = this.store.isShare
+  BASIC_TABS: Array<Partial<TabItem>> = this.store.isShare
     ? [
         {
           pathname: '/home/share/http/test',
@@ -271,7 +273,7 @@ export class ApiTabService {
       //Update other tab test result
       inData.url = `${inData.model.url}?pageID=${inData.model.id}`;
       currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
-      inData.model = Object.assign({}, currentTab.content.test, inData.model.model);
+      inData.model = { ...currentTab.content.test, ...inData.model.model };
     }
     this.updateTab(currentTab, inData);
   }

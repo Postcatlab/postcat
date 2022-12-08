@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
-import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 
 interface TreeNode {
   name: string;
@@ -29,7 +29,7 @@ interface FlatNode {
   styleUrls: ['./setting.component.scss'],
 })
 export class SettingComponent implements OnInit {
-  @Input() selectedModule:string;
+  @Input() selectedModule: string;
   extensitonConfigurations: any[];
   objectKeys = Object.keys;
   isClick = false;

@@ -1,25 +1,45 @@
 <div class="flex flex-col history-body">
   <div class="flex items-center justify-between h-10 py-2 mx-2 history-title">
     <span class="font-bold" i18n>History</span>
-    <button class="flex items-center justify-center cursor-pointer shrink-0 h-7" eo-ng-button nzType="text"
-      [disabled]="!historyList.length" i18-nzTooltipTitle nzTooltipTitle="Clear All" eoNgFeedbackTooltip nz-popconfirm
-      i18n-nzPopconfirmTitle [nzTooltipMouseEnterDelay]="0.4"
-      [nzPopconfirmTrigger]="historyList.length ? 'click' : null" nzPopconfirmTitle="Are you sure delete all history?"
-      (nzOnConfirm)="clearAllHistory()" (nzOnCancel)="cancel()" nzPopconfirmPlacement="leftTop" nzOkText="Yes"
-      nzCancelText="No">
+    <button
+      class="flex items-center justify-center cursor-pointer shrink-0 h-7"
+      eo-ng-button
+      nzType="text"
+      [disabled]="!historyList.length"
+      i18-nzTooltipTitle
+      nzTooltipTitle="Clear All"
+      eoNgFeedbackTooltip
+      nz-popconfirm
+      i18n-nzPopconfirmTitle
+      [nzTooltipMouseEnterDelay]="0.4"
+      [nzPopconfirmTrigger]="historyList.length ? 'click' : null"
+      nzPopconfirmTitle="Are you sure delete all history?"
+      (nzOnConfirm)="clearAllHistory()"
+      (nzOnCancel)="cancel()"
+      nzPopconfirmPlacement="leftTop"
+      nzOkText="Yes"
+      nzCancelText="No"
+    >
       <span class="flex items-center justify-center icon">
         <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
       </span>
     </button>
   </div>
 
-  <eo-ng-tree-default [nzData]="historyList" [nzSelectedKeys]="nzSelectedKeys" nzBlockNode
-    (nzClick)="gotoTestHistory($event)" [nzTreeTemplate]="nzFixedTreeTemplate"></eo-ng-tree-default>
+  <eo-ng-tree-default
+    [nzData]="historyList"
+    [nzSelectedKeys]="nzSelectedKeys"
+    nzBlockNode
+    (nzClick)="gotoTestHistory($event)"
+    [nzTreeTemplate]="nzFixedTreeTemplate"
+  ></eo-ng-tree-default>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-    <div class="flex items-center  cursor-pointer ">
-      <span class="block w-12 font-light method_type"
-        [ngClass]="'method_text_' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])">{{
-        origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol] }}</span>
+    <div class="flex items-center cursor-pointer">
+      <span
+        class="block w-12 font-light method_type"
+        [ngClass]="'method_text_' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])"
+        >{{ origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol] }}</span
+      >
       <span class="flex-1 overflow-hidden truncate">{{ origin.request?.uri }}</span>
     </div>
   </ng-template>

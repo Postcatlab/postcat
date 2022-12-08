@@ -1,37 +1,33 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { SharedModule } from '../../../../shared/shared.module';
-
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { NzTypographyModule } from 'ng-zorro-antd/typography';
-
-import { ByteToStringPipe } from './result-response/get-size.pipe';
-
-import { TestServerService } from '../../service/api-test/test-server.service';
-import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
-import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/local-node/test-connect.service';
-import { TestServerServerlessService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/serverless-node/test-connect.service';
-
-import { ApiTestComponent } from './api-test.component';
-import { ApiTestBodyComponent } from './body/api-test-body.component';
-import { ApiTestRestComponent } from './rest/api-test-rest.component';
-import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
-import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
-import { TestServerRemoteService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/remote-node/test-connect.service';
-import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { RouterModule } from '@angular/router';
+import { EoNgTreeModule } from 'eo-ng-tree';
+import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiSharedModule } from 'eo/workbench/browser/src/app/modules/api-shared/api-shared.module';
-import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
-import { ApiTestService } from './api-test.service';
 import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
 import { ApiScriptComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/api-script.component';
-import { EoNgTreeModule } from 'eo-ng-tree';
+import { TestServerLocalNodeService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/local-node/test-connect.service';
+import { TestServerRemoteService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/remote-node/test-connect.service';
+import { TestServerServerlessService } from 'eo/workbench/browser/src/app/pages/api/service/api-test/serverless-node/test-connect.service';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+
+import { SharedModule } from '../../../../shared/shared.module';
+import { TestServerService } from '../../service/api-test/test-server.service';
+import { ApiTestComponent } from './api-test.component';
+import { ApiTestService } from './api-test.service';
+import { ApiTestBodyComponent } from './body/api-test-body.component';
+import { ApiTestRestComponent } from './rest/api-test-rest.component';
+import { ApiTestResultRequestBodyComponent } from './result-request-body/api-test-result-request-body.component';
+import { ApiTestResultResponseComponent } from './result-response/api-test-result-response.component';
+import { ByteToStringPipe } from './result-response/get-size.pipe';
 
 const UI_COMPONETS = [
   NzTabsModule,
@@ -41,7 +37,7 @@ const UI_COMPONETS = [
   NzTypographyModule,
   NzUploadModule,
   NzBadgeModule,
-  EoMonacoEditorModule
+  EoMonacoEditorModule,
 ];
 const COMPONENTS = [
   ApiTestComponent,
@@ -49,7 +45,7 @@ const COMPONENTS = [
   ApiTestRestComponent,
   ApiTestResultResponseComponent,
   ApiTestResultRequestBodyComponent,
-  ApiScriptComponent
+  ApiScriptComponent,
 ];
 @NgModule({
   declarations: [...COMPONENTS, ByteToStringPipe],

@@ -10,13 +10,14 @@ import {
   ElementRef,
 } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { debounce, whatTextType } from '../../../utils/index.utils';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import type { editor, IDisposable } from 'monaco-editor';
 import type MonacoEditor from 'monaco-editor';
 import type { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
-import { defaultCompletions } from './defaultCompletions';
+
 import { ThemeService } from '../../../core/services/theme.service';
+import { debounce, whatTextType } from '../../../utils/index.utils';
+import { defaultCompletions } from './defaultCompletions';
 
 declare const monaco: typeof MonacoEditor;
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';

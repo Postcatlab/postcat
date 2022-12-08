@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 // import { EoTableComponent } from '../../eo-ui/table/eo-table/eo-table.component';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-
-import { Subject } from 'rxjs';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { Subject } from 'rxjs';
+
+import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 import { ColumnItem } from '../../eo-ui/table-pro/table-pro.model';
 
 @Component({
@@ -117,18 +117,14 @@ export class EnvComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.storage.run(
-        'environmentCreate',
-        [Object.assign({}, this.envCache, { parameters })],
-        async (result: StorageRes) => {
-          if (result.status === StorageResStatus.success) {
-            this.message.success($localize`Added successfully`);
-            this.handleCancel();
-          } else {
-            this.message.error($localize`Failed to add`);
-          }
+      this.storage.run('environmentCreate', [{ ...this.envCache, parameters }], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.message.success($localize`Added successfully`);
+          this.handleCancel();
+        } else {
+          this.message.error($localize`Failed to add`);
         }
-      );
+      });
     }
   }
 

@@ -1,10 +1,11 @@
+import { Observable } from 'rxjs';
+
 import {
   ApiTestBody,
   ApiTestBodyType,
   ApiTestHeaders,
   ApiTestQuery,
 } from '../../../pages/api/service/api-test/api-test.model';
-import { Observable } from 'rxjs';
 
 /**
  * 数据对象基础模型
@@ -73,7 +74,7 @@ export interface Environment extends StorageModel {
   /**
    * Env parameters
    */
-  parameters?: { name: string; value: string; description: string }[];
+  parameters?: Array<{ name: string; value: string; description: string }>;
 }
 
 /**
@@ -133,7 +134,7 @@ export interface ApiTestHistoryResponse {
   /**
    * Inject Code println
    */
-  reportList: { type: 'throw' | 'interrupt'; content: string }[];
+  reportList: Array<{ type: 'throw' | 'interrupt'; content: string }>;
 }
 
 /**
@@ -146,7 +147,7 @@ export interface ApiTestResGeneral {
   downloadSize: number;
   redirectTimes: number;
   time: string;
-  timingSummary: {
+  timingSummary: Array<{
     dnsTiming: string;
     tcpTiming: string;
     /**
@@ -169,7 +170,7 @@ export interface ApiTestResGeneral {
      * Total Time
      */
     responseTiming: string;
-  }[];
+  }>;
 }
 
 export interface ApiTestHistoryFrame {
@@ -183,7 +184,7 @@ export interface ApiTestHistoryFrame {
     downloadSize: number;
     redirectTimes: number;
     time: string;
-    timingSummary: {
+    timingSummary: Array<{
       dnsTiming: string;
       tcpTiming: string;
       /**
@@ -206,7 +207,7 @@ export interface ApiTestHistoryFrame {
        * Total Time
        */
       responseTiming: string;
-    }[];
+    }>;
   };
   beforeScript: string;
   afterScript: string;
@@ -499,7 +500,7 @@ export interface ApiTestData {
    *
    * @type {object[]}
    */
-  restParams?: Record<string, any>[];
+  restParams?: Array<Record<string, any>>;
   /**
    * Javascript code before test
    */
@@ -648,7 +649,7 @@ export interface StorageInterface {
   projectImport: (uuid: number, item: any) => Observable<object>;
   projectCreate: (item: Project) => Observable<object>;
   projectUpdate: (item: Project, uuid: number | string) => Observable<object>;
-  projectBulkUpdate: (items: Array<Project>) => Observable<object>;
+  projectBulkUpdate: (items: Project[]) => Observable<object>;
   projectRemove: (uuid: number | string) => Observable<object>;
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
@@ -657,8 +658,8 @@ export interface StorageInterface {
   // Environment
   environmentCreate: (item: Environment) => Observable<object>;
   environmentUpdate: (item: Environment, uuid: number | string) => Observable<object>;
-  environmentBulkCreate: (items: Array<Environment>) => Observable<object>;
-  environmentBulkUpdate: (items: Array<Environment>) => Observable<object>;
+  environmentBulkCreate: (items: Environment[]) => Observable<object>;
+  environmentBulkUpdate: (items: Environment[]) => Observable<object>;
   environmentRemove: (uuid: number | string) => Observable<object>;
   environmentBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   environmentLoad: (uuid: number | string) => Observable<object>;
@@ -667,8 +668,8 @@ export interface StorageInterface {
   // Group
   groupCreate: (item: Group) => Observable<object>;
   groupUpdate: (item: Group, uuid: number | string) => Observable<object>;
-  groupBulkCreate: (items: Array<Group>) => Observable<object>;
-  groupBulkUpdate: (items: Array<Group>) => Observable<object>;
+  groupBulkCreate: (items: Group[]) => Observable<object>;
+  groupBulkUpdate: (items: Group[]) => Observable<object>;
   groupRemove: (uuid: number | string) => Observable<object>;
   groupBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   groupLoad: (uuid: number | string) => Observable<object>;
@@ -693,14 +694,14 @@ export interface StorageInterface {
    *
    * @param items
    */
-  apiDataBulkCreate: (items: Array<ApiData>) => Observable<object>;
+  apiDataBulkCreate: (items: ApiData[]) => Observable<object>;
 
   /**
    * Bulk update apiData items.
    *
    * @param items
    */
-  apiDataBulkUpdate: (items: Array<ApiData>) => Observable<object>;
+  apiDataBulkUpdate: (items: ApiData[]) => Observable<object>;
   apiDataRemove: (uuid: number | string) => Observable<object>;
   /**
    * Bulk delete apiData items.
@@ -739,8 +740,8 @@ export interface StorageInterface {
   // Api Test History
   apiTestHistoryCreate: (item: ApiTestHistory) => Observable<object>;
   apiTestHistoryUpdate: (item: ApiTestHistory, uuid: number | string) => Observable<object>;
-  apiTestHistoryBulkCreate: (items: Array<ApiTestHistory>) => Observable<object>;
-  apiTestHistoryBulkUpdate: (items: Array<ApiTestHistory>) => Observable<object>;
+  apiTestHistoryBulkCreate: (items: ApiTestHistory[]) => Observable<object>;
+  apiTestHistoryBulkUpdate: (items: ApiTestHistory[]) => Observable<object>;
   apiTestHistoryRemove: (uuid: number | string) => Observable<object>;
   apiTestHistoryBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   apiTestHistoryLoad: (uuid: number | string) => Observable<object>;
@@ -755,7 +756,7 @@ export interface StorageHandleArgs {
   type?: StorageProcessType;
   callback?: any;
   action: string;
-  params: Array<any>;
+  params: any[];
 }
 
 export interface StorageRes {

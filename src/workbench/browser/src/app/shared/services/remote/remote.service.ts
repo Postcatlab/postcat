@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { Message } from 'eo/workbench/browser/src/app/shared/services/message/message.model';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { DataSourceType, StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { Subject, takeUntil } from 'rxjs';
 
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
@@ -40,7 +40,7 @@ export class RemoteService {
   /** get mock url */
   get mockUrl() {
     return this.isRemote
-      ? window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url') + '/mock/eo-1/'
+      ? `${window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url')}/mock/eo-1/`
       : window.eo?.getMockUrl?.();
   }
 
@@ -77,7 +77,7 @@ export class RemoteService {
       'https://github.com/'
     );
     if (apiData) {
-      url.searchParams.set('mockID', apiData.uuid + '');
+      url.searchParams.set('mockID', `${apiData.uuid}`);
     }
     console.log('getApiUrl', decodeURIComponent(url.toString()));
     return decodeURIComponent(url.toString());

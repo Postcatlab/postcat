@@ -104,39 +104,37 @@ export function getBrowserType(lang: 'zh-Hans' | 'en-US' = 'en-US') {
   ]).get(true) || ['none', 'unknow'];
 
   return {
-    'zh-Hans': Object.assign(
-      {
-        内核: engine, // 内核: webkit gecko presto trident
-        内核版本: engineVs, // 内核版本
-        // 平台: platform, // 平台: desktop mobile
-        载体: supporter, // 载体: chrome safari firefox opera iexplore edge
-        载体版本: supporterVs, // 载体版本
-        系统: system, // 系统: windows macos linux android ios
-        系统版本: systemVs, // 系统版本
-      },
-      shell === 'none'
+    'zh-Hans': {
+      内核: engine, // 内核: webkit gecko presto trident
+      内核版本: engineVs, // 内核版本
+      // 平台: platform, // 平台: desktop mobile
+      载体: supporter, // 载体: chrome safari firefox opera iexplore edge
+      载体版本: supporterVs, // 载体版本
+      系统: system, // 系统: windows macos linux android ios
+      系统版本: systemVs, // 系统版本
+
+      ...(shell === 'none'
         ? {}
         : {
             外壳: shell, // 外壳: wechat qq uc 360 2345 sougou liebao maxthon
             外壳版本: shellVs, // 外壳版本
-          }
-    ),
-    'en-US': Object.assign(
-      {
-        engine, // 内核: webkit gecko presto trident
-        engineVs, // 内核版本
-        // platform, // 平台: desktop mobile
-        supporter, // 载体: chrome safari firefox opera iexplore edge
-        supporterVs, // 载体版本
-        system, // 系统: windows macos linux android ios
-        systemVs, // 系统版本
-      },
-      shell === 'none'
+          }),
+    },
+    'en-US': {
+      engine, // 内核: webkit gecko presto trident
+      engineVs, // 内核版本
+      // platform, // 平台: desktop mobile
+      supporter, // 载体: chrome safari firefox opera iexplore edge
+      supporterVs, // 载体版本
+      system, // 系统: windows macos linux android ios
+      systemVs, // 系统版本
+
+      ...(shell === 'none'
         ? {}
         : {
             shell, // 外壳: wechat qq uc 360 2345 sougou liebao maxthon
             shellVs, // 外壳版本
-          }
-    ),
+          }),
+    },
   }[lang];
 }

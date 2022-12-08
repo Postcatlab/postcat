@@ -8,9 +8,8 @@ describe('ApiOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiOverviewComponent ]
-    })
-    .compileComponents();
+      declarations: [ApiOverviewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

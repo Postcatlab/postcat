@@ -4,6 +4,7 @@ import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
+
 import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-edit-body',
@@ -49,7 +50,9 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.initListConf();
     this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((model) => {
-      if(this.bodyType!==ApiBodyType.Raw) {return;}
+      if (this.bodyType !== ApiBodyType.Raw) {
+        return;
+      }
       // ! Must set value by data, because this.model has delay
       this.modelChange.emit(model);
     });

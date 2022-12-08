@@ -8,9 +8,8 @@ describe('ApiTestResultRequestBodyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiTestResultRequestBodyComponent ]
-    })
-    .compileComponents();
+      declarations: [ApiTestResultRequestBodyComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

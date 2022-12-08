@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { ModalButtonOptions } from 'ng-zorro-antd/modal';
+import { NzModalService, ModalButtonOptions } from 'ng-zorro-antd/modal';
 import { filter } from 'rxjs';
 
 export type ModalOptions = {
@@ -43,7 +42,7 @@ export class ModalService {
           onClick: () => {
             modal.destroy();
           },
-        }
+        },
       ],
     };
     Object.assign(modalOpts, inOpts);

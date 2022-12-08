@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { ElectronService } from '../../../core/services';
 @Component({
   selector: 'eo-about',
@@ -9,7 +10,7 @@ import { ElectronService } from '../../../core/services';
       </nz-descriptions>
     </div>
   `,
-  styleUrls:['./about.component.scss'] ,
+  styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
   list = this.electron.getSystemInfo();

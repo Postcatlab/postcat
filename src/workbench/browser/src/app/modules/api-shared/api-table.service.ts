@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { has, omit } from 'lodash-es';
+
 import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
 import { ApiTestParamsTypeFormData } from '../../pages/api/service/api-test/api-test.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
@@ -74,8 +75,8 @@ export class ApiTableService {
         title: $localize`Type`,
         type: 'select',
         key: 'type',
-        filterable:inArg.isEdit?false:true,
-        disabledFn:inArg.format===ApiBodyType.XML?(item,data)=>data.level===0:undefined,
+        filterable: inArg.isEdit ? false : true,
+        disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined,
         width: 120,
       },
       required: {
@@ -83,7 +84,7 @@ export class ApiTableService {
         type: 'checkbox',
         key: 'required',
         width: 100,
-        filterable:inArg.isEdit?false:true,
+        filterable: inArg.isEdit ? false : true,
         enums: REQURIED_ENUMS,
       },
       description: {
@@ -146,7 +147,7 @@ export class ApiTableService {
     const result = {
       columns: [],
       setting: {
-        id:inArg.id,
+        id: inArg.id,
         primaryKey: 'name',
         manualAdd: opts.manualAdd,
         rowSortable: inArg.isEdit ? true : false,
@@ -189,7 +190,7 @@ export class ApiTableService {
               action: 'insert',
             };
             if (inArg.format === 'xml') {
-              insert.showFn = (item) =>item.level!==0;
+              insert.showFn = (item) => item.level !== 0;
             }
             column.btns.unshift({ action: 'addChild' }, insert);
           }
@@ -223,7 +224,7 @@ export class ApiTableService {
         left: true,
         type: 'input',
         columnVisible: 'fixed',
-        disabledFn:inArg.in==='header'?(item) => has(item,'editable')&&!item.editable:undefined,
+        disabledFn: inArg.in === 'header' ? (item) => has(item, 'editable') && !item.editable : undefined,
         key: 'name',
         width: 150,
       },
@@ -235,7 +236,7 @@ export class ApiTableService {
       },
       required: {
         type: 'checkbox',
-        left:true,
+        left: true,
         key: 'required',
         width: 25,
         enums: REQURIED_ENUMS,

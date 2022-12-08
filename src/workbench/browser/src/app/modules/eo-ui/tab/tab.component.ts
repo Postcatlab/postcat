@@ -1,28 +1,29 @@
+import { KeyValue } from '@angular/common';
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
-import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { TabStorageService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-storage.service';
 import { TabItem, TabOperate } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
-import { ModalService } from '../../../shared/services/modal.service';
-import { KeyValue } from '@angular/common';
-import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
+import { filter, Subscription } from 'rxjs';
+
+import { ModalService } from '../../../shared/services/modal.service';
 @Component({
   selector: 'eo-tab',
   templateUrl: './tab.component.html',
   styleUrls: ['./tab.component.scss'],
 })
 export class EoTabComponent implements OnInit, OnDestroy {
-  @Input() list: Partial<TabItem>[];
-  @Input() tabStorageKey='DEFAULT_TAB_STORAGE_KEY';
+  @Input() list: Array<Partial<TabItem>>;
+  @Input() tabStorageKey = 'DEFAULT_TAB_STORAGE_KEY';
 
-  @Input () addDropDown?: NzDropdownMenuComponent;
-  @Input () titleLabel?: TemplateRef<void>;
+  @Input() addDropDown?: NzDropdownMenuComponent;
+  @Input() titleLabel?: TemplateRef<void>;
 
   @Input() checkTabCanLeave?: () => boolean;
-  @Input() handleDataBeforeCache?: <T>({tabsByID:T}) => T;
+  @Input() handleDataBeforeCache?: <T>({ tabsByID: T }) => T;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
@@ -38,10 +39,10 @@ export class EoTabComponent implements OnInit, OnDestroy {
     this.watchPageLeave();
 
     this.tabStorage.init({
-      tabStorageKey:this.tabStorageKey
+      tabStorageKey: this.tabStorageKey,
     });
     this.tabOperate.init({
-      basicTabs:this.list
+      basicTabs: this.list,
     });
   }
   async newTab(key = undefined) {
@@ -53,8 +54,8 @@ export class EoTabComponent implements OnInit, OnDestroy {
     }
     this.tabOperate.newDefaultTab(key);
   }
-  doubleClickTab($event,uuid){
-    this.tabStorage.tabsByID.get(uuid).isFixed =true;
+  doubleClickTab($event, uuid) {
+    this.tabStorage.tabsByID.get(uuid).isFixed = true;
   }
   sortTab(_left: KeyValue<number, any>, _right: KeyValue<number, any>): number {
     const leftIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _left.key);
@@ -109,7 +110,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
           onClick: () => {
             modal.destroy();
           },
-        }
+        },
       ],
     });
   }
@@ -171,12 +172,11 @@ export class EoTabComponent implements OnInit, OnDestroy {
       return;
     }
     const index = this.tabStorage.tabOrder.findIndex((uuid) => uuid === existTab.uuid);
-    this.tabStorage.updateTab(
-      index,
-      Object.assign({}, existTab, tabItem, {
-        extends: Object.assign({}, existTab.extends, tabItem.extends),
-      })
-    );
+    this.tabStorage.updateTab(index, {
+      ...existTab,
+      ...tabItem,
+      extends: { ...existTab.extends, ...tabItem.extends },
+    });
   }
   /**
    * Cache tab header/tabs content for restore when page close or component destroy
@@ -207,7 +207,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
   }
   private watchPageLeave() {
     const that = this;
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
       that.cacheData();
     });
   }

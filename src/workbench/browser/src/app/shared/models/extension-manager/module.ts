@@ -61,10 +61,10 @@ export interface ModuleInfo {
   baseDir: string;
 
   //*Only exist in HTTP request(from extension server) moduleInfo
-  i18n: {
+  i18n: Array<{
     locale: string;
     package: any | object;
-  }[];
+  }>;
   //!Will Deprecated
   // 模块ID，用于关联
   moduleID: string;
@@ -86,7 +86,7 @@ interface ModuleConfiguration {
  * 模块配置项目字段接口
  */
 interface ModuleConfigurationField {
-  type: string | Array<string>;
+  type: string | string[];
   default: string | number | null;
   label: string;
   description?: string;

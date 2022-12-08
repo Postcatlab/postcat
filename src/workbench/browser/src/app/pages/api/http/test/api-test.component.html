@@ -205,7 +205,7 @@
           ></eo-api-test-result-header>
         </eo-ng-tab>
       </div>
-      <eo-ng-tab  *ngIf="model.testResult.request.requestBody" i18n-nzTitle nzTitle="Body">
+      <eo-ng-tab *ngIf="model.testResult.request.requestBody" i18n-nzTitle nzTitle="Body">
         <!-- TODO use isRequestBodyLoaded -->
         <eo-api-test-result-request-body
           *ngIf="model.responseTabIndex === 2"

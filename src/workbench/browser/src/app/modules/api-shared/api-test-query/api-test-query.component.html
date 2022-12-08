@@ -3,6 +3,12 @@
     <params-import [disabled]="disabled" [(baseData)]="model" contentType="query" i18n-modalTitle modalTitle="Query">
     </params-import>
   </div>
-  <eo-ng-table-pro [columns]="listConf.columns" [nzDataItem]="itemStructure" [setting]="listConf.setting"
-    [nzTrClick]="nzTrClick" [(nzData)]="model" (nzDataChange)="modelChange.emit($event)"></eo-ng-table-pro>
+  <eo-ng-table-pro
+    [columns]="listConf.columns"
+    [nzDataItem]="itemStructure"
+    [setting]="listConf.setting"
+    [nzTrClick]="nzTrClick"
+    [(nzData)]="model"
+    (nzDataChange)="modelChange.emit($event)"
+  ></eo-ng-table-pro>
 </fieldset>

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { EoExtensionInfo } from '../extension.model';
-import { ExtensionService } from '../extension.service';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { WebService } from '../../../core/services/web/web.service';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+
+import { WebService } from '../../../core/services/web/web.service';
+import { EoExtensionInfo } from '../extension.model';
+import { ExtensionService } from '../extension.service';
 
 @Component({
   selector: 'eo-extension-detail',
@@ -80,7 +81,7 @@ export class ExtensionDetailComponent implements OnInit {
     try {
       const response = await fetch(
         `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/CHANGELOG.${
-          locale ? locale + '.' : ''
+          locale ? `${locale}.` : ''
         }md`
       );
       if (response.status === 200) {
@@ -124,7 +125,7 @@ ${log}
       this.introLoading = true;
       const response = await fetch(
         `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/README.${
-          locale ? locale + '.' : ''
+          locale ? `${locale}.` : ''
         }md`
       );
       if (response.status === 200) {

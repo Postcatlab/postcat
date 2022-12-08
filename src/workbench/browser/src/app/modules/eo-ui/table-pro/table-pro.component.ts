@@ -16,8 +16,8 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import _, { attempt, has } from 'lodash-es';
-import { isUndefined, omitBy } from 'lodash-es';
+import _, { attempt, has, isUndefined, omitBy } from 'lodash-es';
+
 import { eoDeepCopy } from '../../../utils/index.utils';
 import { filterTableData } from '../../../utils/tree/tree.utils';
 import { ColumnItem, IconBtn, TableProSetting } from './table-pro.model';
@@ -205,7 +205,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     return false;
   }
   private onColumnChanges() {
-    this.nzScroll = Object.assign({ x: this.columns.length * 100 }, this.nzScroll);
+    this.nzScroll = { x: this.columns.length * 100, ...this.nzScroll };
     this.setting.isEdit = this.autoSetIsEdit();
     this.generateBtnTemplate();
     //SetTimeout be sure the icon child template ready

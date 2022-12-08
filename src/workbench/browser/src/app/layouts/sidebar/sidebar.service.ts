@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { Subject } from 'rxjs';
+
 import { SidebarModuleInfo } from './sidebar.model';
 
 @Injectable({
@@ -18,7 +19,7 @@ export class SidebarService {
     this.collapsed = !this.collapsed;
     this.collapsedChanged$.next(this.collapsed);
   }
-  onCollapsedChanged = function() {
+  onCollapsedChanged = function () {
     return this.collapsedChanged$.pipe();
   };
 }

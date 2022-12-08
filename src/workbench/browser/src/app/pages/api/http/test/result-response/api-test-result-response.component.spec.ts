@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { ApiTestUtilService } from '../../../../../modules/api-shared/api-test-util.service';
 import { ApiTestResultResponseComponent } from './api-test-result-response.component';
 import { ByteToStringPipe } from './get-size.pipe';
 
-describe ('ApiTestResultResponseComponent', () => {
+describe('ApiTestResultResponseComponent', () => {
   let component: ApiTestResultResponseComponent;
   let fixture: ComponentFixture<ApiTestResultResponseComponent>;
 
@@ -17,7 +18,7 @@ describe ('ApiTestResultResponseComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ApiTestResultResponseComponent);
     component = fixture.componentInstance;
-    component.model = { responseType: 'text', responseLength: 1024, statusCode: 200,testDeny:200 };
+    component.model = { responseType: 'text', responseLength: 1024, statusCode: 200, testDeny: 200 };
     component.ngOnChanges({
       model: {},
     });

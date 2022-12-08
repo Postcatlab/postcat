@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
+
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
 
 class ExtensionList {
   list = [];
@@ -54,7 +55,7 @@ export class ExtensionListComponent implements OnInit {
     const timeStart = Date.now();
     try {
       if (this.type === 'installed') {
-    const installedList = new ExtensionList(this.extensionService.getInstalledList());
+        const installedList = new ExtensionList(this.extensionService.getInstalledList());
         return installedList.search(keyword).map((n) => {
           n.isEnable = this.extensionService.isEnable(n.name);
           return n;

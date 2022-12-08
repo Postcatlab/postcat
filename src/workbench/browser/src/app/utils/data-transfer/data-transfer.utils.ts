@@ -1,7 +1,8 @@
-import { whatType, whatTextType, eoDeepCopy } from '../index.utils';
-import { ApiBodyType, ApiEditBody, JsonRootType } from '../../shared/services/storage/index.model';
-import { flatData } from '../tree/tree.utils';
 import isXml from 'is-xml';
+
+import { ApiBodyType, ApiEditBody, JsonRootType } from '../../shared/services/storage/index.model';
+import { whatType, whatTextType, eoDeepCopy } from '../index.utils';
+import { flatData } from '../tree/tree.utils';
 
 export const isXML = (data) => isXml(data);
 /**
@@ -66,7 +67,7 @@ export const form2json = (tmpl) =>
       return { key: key?.trim(), value: value?.trim() };
     });
 
-const xml2jsonArr = (tmpl): { tagName: string; children: any[]; content: string; attr: string }[] => {
+const xml2jsonArr = (tmpl): Array<{ tagName: string; children: any[]; content: string; attr: string }> => {
   // * delete <?xml ... ?>
   let xml = tmpl.replace(/<\?xml.+\?>/g, '').trim();
   if (xml === '') {
@@ -178,14 +179,14 @@ export const json2xml: (o: object, tab?) => string = (o, tab) => {
     let xml = '';
     if (v instanceof Array) {
       for (let i = 0, n = v.length; i < n; i++) {
-        xml += ind + toXml(v[i], name, ind + '\t') + '\n';
+        xml += `${ind + toXml(v[i], name, `${ind}\t`)}\n`;
       }
     } else if (typeof v == 'object') {
       let hasChild = false;
-      xml += ind + '<' + name;
+      xml += `${ind}<${name}`;
       for (var m in v) {
         if (m.charAt(0) == '@') {
-          xml += ' ' + m.substr(1) + '="' + v[m].toString() + '"';
+          xml += ` ${m.substr(1)}="${v[m].toString()}"`;
         } else {
           hasChild = true;
         }
@@ -196,15 +197,15 @@ export const json2xml: (o: object, tab?) => string = (o, tab) => {
           if (m == '#text') {
             xml += v[m];
           } else if (m == '#cdata') {
-            xml += '<![CDATA[' + v[m] + ']]>';
+            xml += `<![CDATA[${v[m]}]]>`;
           } else if (m.charAt(0) != '@') {
-            xml += toXml(v[m], m, ind + '\t');
+            xml += toXml(v[m], m, `${ind}\t`);
           }
         }
-        xml += (xml.charAt(xml.length - 1) == '\n' ? ind : '') + '</' + name + '>';
+        xml += `${xml.charAt(xml.length - 1) == '\n' ? ind : ''}</${name}>`;
       }
     } else {
-      xml += ind + '<' + name + '>' + v.toString() + '</' + name + '>';
+      xml += `${ind}<${name}>${v.toString()}</${name}>`;
     }
     return xml;
   };

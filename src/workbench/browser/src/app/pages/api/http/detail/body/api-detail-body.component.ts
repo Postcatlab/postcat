@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { Subject } from 'rxjs';
+
 import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-detail-body',
   templateUrl: './api-detail-body.component.html',
 })
 export class ApiDetailBodyComponent implements OnInit, OnChanges, OnDestroy {
-   /**
+  /**
    * Table ID
    */
   @Input() tid: string;

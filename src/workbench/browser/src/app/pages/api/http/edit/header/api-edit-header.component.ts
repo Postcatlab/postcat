@@ -1,12 +1,6 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ChangeDetectorRef,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+
 import { ApiEditHeaders } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-edit-header',
@@ -28,7 +22,7 @@ import { ApiEditHeaders } from '../../../../../shared/services/storage/index.mod
 })
 export class ApiEditHeaderComponent implements OnInit {
   @Input() model: ApiEditHeaders[];
-   /**
+  /**
    * Table ID
    */
   @Input() tid: string;
@@ -49,15 +43,18 @@ export class ApiEditHeaderComponent implements OnInit {
     this.initListConf();
   }
   private initListConf() {
-    const config = this.apiTable.initTable({
-      in: 'header',
-      isEdit: true,
-      id:this.tid
-    },{
-      changeFn: () => {
-        this.modelChange.emit(this.model);
+    const config = this.apiTable.initTable(
+      {
+        in: 'header',
+        isEdit: true,
+        id: this.tid,
+      },
+      {
+        changeFn: () => {
+          this.modelChange.emit(this.model);
+        },
       }
-    });
+    );
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
   }

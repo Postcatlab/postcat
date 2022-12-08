@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ColumnItem } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
 import { isNil } from 'ng-zorro-antd/core/util';
+
 import {
   ApiParamsTypeJsonOrXml,
   ParamsEnum,

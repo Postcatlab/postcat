@@ -9,6 +9,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+
 import { ApiEditQuery } from '../../../../../shared/services/storage/index.model';
 
 @Component({
@@ -22,10 +23,10 @@ import { ApiEditQuery } from '../../../../../shared/services/storage/index.model
       [setting]="listConf.setting"
       [(nzData)]="model"
       (nzDataChange)="modelChange.emit($event)"
-    ></eo-ng-table-pro>`
+    ></eo-ng-table-pro>`,
 })
 export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecked {
-  @Input() tid:  string;
+  @Input() tid: string;
   @Input() model: ApiEditQuery[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   listConf: any = {
@@ -49,15 +50,18 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
   }
   ngOnChanges(changes) {}
   private initListConf() {
-    const config = this.apiTable.initTable({
-      in: 'header',
-      isEdit: true,
-      id:this.tid
-    },{
-      changeFn: () => {
-        this.modelChange.emit(this.model);
+    const config = this.apiTable.initTable(
+      {
+        in: 'header',
+        isEdit: true,
+        id: this.tid,
+      },
+      {
+        changeFn: () => {
+          this.modelChange.emit(this.model);
+        },
       }
-    });
+    );
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
   }
