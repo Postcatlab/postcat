@@ -11,7 +11,7 @@ import { SidebarService } from './sidebar.service';
 @Component({
   selector: 'eo-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
+  styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   destroy = false;
@@ -36,7 +36,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   async initSidebarViews() {
     const sidebarViews = await window.eo?.getSidebarViews?.();
-    sidebarViews?.forEach((item) => {
+    sidebarViews?.forEach(item => {
       this.modules.push({
         title: item.title,
         id: item.extName,
@@ -44,7 +44,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         isOffical: false,
         icon: item.icon,
         activeRoute: `home/extensionSidebarView/${item.extName}`,
-        route: `home/extensionSidebarView/${item.extName}`,
+        route: `home/extensionSidebarView/${item.extName}`
       });
     });
     sidebarViews?.length && this.getIDFromRoute();
@@ -59,13 +59,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   watchRouterChange() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.getIDFromRoute();
     });
   }
   async clickModule(module) {
     this.sidebar.currentModule = module;
-    const nextApp = this.modules.find((val) => val.id === module.id);
+    const nextApp = this.modules.find(val => val.id === module.id);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
     this.router.navigate([route], { queryParamsHandling: 'merge' });
   }
@@ -81,7 +81,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         isOffical: true,
         icon: 'api',
         activeRoute: 'home/share',
-        route: 'home/share/http/test',
+        route: 'home/share/http/test'
       },
       {
         title: 'API',
@@ -89,7 +89,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         isOffical: true,
         icon: 'api',
         activeRoute: 'home/api',
-        route: 'home/api/http/test',
+        route: 'home/api/http/test'
       },
       ...(!this.store.isLocal
         ? [
@@ -99,8 +99,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
               isOffical: true,
               icon: 'peoples',
               activeRoute: 'home/member',
-              route: 'home/member',
-            },
+              route: 'home/member'
+            }
           ]
         : []),
       {
@@ -109,7 +109,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         isOffical: true,
         icon: 'home',
         activeRoute: 'home/workspace',
-        route: 'home/workspace',
+        route: 'home/workspace'
       },
       {
         title: $localize`Extensions`,
@@ -117,8 +117,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         isOffical: true,
         icon: 'plugins',
         activeRoute: 'home/extension',
-        route: 'home/extension/list',
-      },
+        route: 'home/extension/list'
+      }
       // {
       //   title: $localize`Vue3`,
       //   id: '@eo-core-vue3',
@@ -129,13 +129,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       // },
     ];
     const isShare = this.store.isShare;
-    this.modules = defaultModule.filter((it: any) =>
-      isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true
-    );
+    this.modules = defaultModule.filter((it: any) => (isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true));
   }
   private getIDFromRoute() {
     const urlArr = new URL(this.router.url, 'http://localhost').pathname.split('/');
-    const currentModule = this.modules.find((val) => val.activeRoute.split('/').every((n) => urlArr.includes(n)));
+    const currentModule = this.modules.find(val => val.activeRoute.split('/').every(n => urlArr.includes(n)));
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);

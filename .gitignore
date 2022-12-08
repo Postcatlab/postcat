@@ -58,3 +58,6 @@ Thumbs.db
 nginx-test.conf
 docker-compose.dev.yml
 Dockerfile.dev
+
+#cache
+buildFile

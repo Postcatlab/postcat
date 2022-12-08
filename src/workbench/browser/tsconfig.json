@@ -13,27 +13,14 @@
     "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
     "target": "es2020",
-    "lib": [
-      "es2021",
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2021", "es2020", "dom"],
     "paths": {
-      "eo/*": [
-        "./src/*"
-      ]
+      "eo/*": ["./src/*"]
     },
     "allowJs": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"]
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".angular",
-    "src/app/assets"
-  ],
+  "exclude": ["node_modules", "dist", ".angular", "src/app/assets"],
   "useDefineForClassFields": true,
   "angularCompilerOptions": {
     "enableIvy": true,
@@ -45,6 +32,6 @@
     "skipMetadataEmit": false,
     "disableTypeScriptVersionCheck": true,
     "enableI18nLegacyMessageIdFormat": false,
-    "strictInputAccessModifiers": true,
+    "strictInputAccessModifiers": true
   }
 }
