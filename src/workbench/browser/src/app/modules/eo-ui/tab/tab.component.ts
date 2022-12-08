@@ -13,7 +13,7 @@ import { ModalService } from '../../../shared/services/modal.service';
 @Component({
   selector: 'eo-tab',
   templateUrl: './tab.component.html',
-  styleUrls: ['./tab.component.scss'],
+  styleUrls: ['./tab.component.scss']
 })
 export class EoTabComponent implements OnInit, OnDestroy {
   @Input() list: Array<Partial<TabItem>>;
@@ -22,7 +22,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
   @Input() addDropDown?: NzDropdownMenuComponent;
   @Input() titleLabel?: TemplateRef<void>;
 
-  @Input() checkTabCanLeave?: () => boolean;
+  @Input() checkTabCanLeave?: (closeTarget?: TabItem) => boolean;
   @Input() handleDataBeforeCache?: <T>({ tabsByID: T }) => T;
   @Output() beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
@@ -39,10 +39,10 @@ export class EoTabComponent implements OnInit, OnDestroy {
     this.watchPageLeave();
 
     this.tabStorage.init({
-      tabStorageKey: this.tabStorageKey,
+      tabStorageKey: this.tabStorageKey
     });
     this.tabOperate.init({
-      basicTabs: this.list,
+      basicTabs: this.list
     });
   }
   async newTab(key = undefined) {
@@ -58,8 +58,8 @@ export class EoTabComponent implements OnInit, OnDestroy {
     this.tabStorage.tabsByID.get(uuid).isFixed = true;
   }
   sortTab(_left: KeyValue<number, any>, _right: KeyValue<number, any>): number {
-    const leftIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _left.key);
-    const rightIndex = this.tabStorage.tabOrder.findIndex((uuid) => uuid === _right.key);
+    const leftIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === _left.key);
+    const rightIndex = this.tabStorage.tabOrder.findIndex(uuid => uuid === _right.key);
     return leftIndex - rightIndex;
   }
   canDeactivate: NzTabsCanDeactivateFn = async (fromIndex: number, toIndex: number) => {
@@ -75,7 +75,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
     this.tabOperate.navigateTabRoute(this.getCurrentTab());
   }
   async closeTab({ $event, index, tab }: { $event: Event; index: number; tab: any }) {
-    if (this.checkTabCanLeave && !(await this.checkTabCanLeave())) {
+    if (this.checkTabCanLeave && !(await this.checkTabCanLeave(tab))) {
       return;
     }
     $event.stopPropagation();
@@ -95,7 +95,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
             this.beforeClose.emit(true);
             modal.destroy();
             this.tabOperate.closeTab(index);
-          },
+          }
         },
         {
           label: $localize`Don't Save`,
@@ -103,22 +103,22 @@ export class EoTabComponent implements OnInit, OnDestroy {
             this.beforeClose.emit(false);
             modal.destroy();
             this.tabOperate.closeTab(index);
-          },
+          }
         },
         {
           label: $localize`Cancel`,
           onClick: () => {
             modal.destroy();
-          },
-        },
-      ],
+          }
+        }
+      ]
     });
   }
   //Quick see tabs change in templete,for debug,can be deleted
   // ! just for debug
   getConsoleTabs() {
     const tabs = [];
-    this.tabStorage.tabOrder.forEach((uuid) => {
+    this.tabStorage.tabOrder.forEach(uuid => {
       const tab = this.tabStorage.tabsByID.get(uuid);
       if (!tab) {
         return;
@@ -129,14 +129,14 @@ export class EoTabComponent implements OnInit, OnDestroy {
         type: tab.type,
         title: tab.title,
         pathname: tab.pathname,
-        params: tab.params,
+        params: tab.params
       });
     });
     return tabs;
   }
   getTabs() {
     const tabs = [];
-    this.tabStorage.tabOrder.forEach((uuid) => tabs.push(this.tabStorage.tabsByID.get(uuid)));
+    this.tabStorage.tabOrder.forEach(uuid => tabs.push(this.tabStorage.tabsByID.get(uuid)));
     return tabs;
   }
   /**
@@ -171,11 +171,11 @@ export class EoTabComponent implements OnInit, OnDestroy {
       console.error(`EO_ERROR:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
       return;
     }
-    const index = this.tabStorage.tabOrder.findIndex((uuid) => uuid === existTab.uuid);
+    const index = this.tabStorage.tabOrder.findIndex(uuid => uuid === existTab.uuid);
     this.tabStorage.updateTab(index, {
       ...existTab,
       ...tabItem,
-      extends: { ...existTab.extends, ...tabItem.extends },
+      extends: { ...existTab.extends, ...tabItem.extends }
     });
   }
   /**
@@ -183,7 +183,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
    */
   cacheData() {
     this.tabStorage.setPersistenceStorage(this.tabOperate.selectedIndex, {
-      handleDataBeforeCache: this.handleDataBeforeCache,
+      handleDataBeforeCache: this.handleDataBeforeCache
     });
   }
   /**
@@ -195,11 +195,9 @@ export class EoTabComponent implements OnInit, OnDestroy {
     this.tabOperate.closeTabByOperate(action);
   }
   private watchRouterChange() {
-    this.routerSubscribe = this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((res: NavigationEnd) => {
-        this.tabOperate.operateTabAfterRouteChange(res);
-      });
+    this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
+      this.tabOperate.operateTabAfterRouteChange(res);
+    });
   }
   ngOnDestroy(): void {
     this.routerSubscribe?.unsubscribe();

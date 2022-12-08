@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { TabOperateService } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab-operate.service';
 import { ApiTestHeaders, ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
@@ -16,9 +18,7 @@ import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe
 import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 import { MessageService } from '../../../shared/services/message';
 
-
 import { ModalService } from '../../../shared/services/modal.service';
-
 
 interface testViewModel {
   requestTabIndex: number;
@@ -39,7 +39,7 @@ interface testViewModel {
 @Component({
   selector: 'websocket-content',
   templateUrl: './websocket.component.html',
-  styleUrls: ['./websocket.component.scss'],
+  styleUrls: ['./websocket.component.scss']
 })
 export class WebsocketComponent implements OnInit, OnDestroy {
   @Input() bodyType = 'json';
@@ -53,13 +53,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   Object = Object;
   socket = null;
   model: testViewModel;
+  leaveModal: NzModalRef<any, any>;
   height = 300;
   WS_PROTOCOL = [
     { value: 'ws', key: 'WS' },
-    { value: 'wss', key: 'WSS' },
+    { value: 'wss', key: 'WSS' }
   ];
   editorConfig = {
-    language: 'json',
+    language: 'json'
   };
   validateForm!: FormGroup;
   private destroy$: Subject<void> = new Subject<void>();
@@ -71,7 +72,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     private modal: ModalService,
     private message: MessageService,
     private eoNgFeedbackMessageService: EoNgFeedbackMessageService,
-    private store: StoreService
+    private store: StoreService,
+    public tabOperate: TabOperateService
   ) {
     this.initBasicForm();
   }
@@ -94,19 +96,15 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     try {
       const port = await window.eo?.getWebsocketPort?.();
       this.socket = io(
-        `${
-          APP_CONFIG.production && !this.electron.isElectron
-            ? APP_CONFIG.REMOTE_SOCKET_URL
-            : `ws://localhost:${port || 13928}`
-        }`,
+        `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : `ws://localhost:${port || 13928}`}`,
         { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 }
       );
-      this.socket.on('connect_error', (error) => {
+      this.socket.on('connect_error', error => {
         // * conncet socketIO is failed
         console.log('connect_error', error);
         this.isSocketConnect = false;
       });
-      this.socket.on('error', (error) => {
+      this.socket.on('error', error => {
         // * conncet socketIO is failed
         console.log('error', error);
         this.isSocketConnect = false;
@@ -133,10 +131,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.model.response.responseBody[index].isExpand = status == null ? true : !status;
   }
   renderStatus(status) {
-    const hash = new Map()
-      .set('connected', 'Connected')
-      .set('disconnect', 'Disconnect')
-      .set('connecting', 'Connecting');
+    const hash = new Map().set('connected', 'Connected').set('disconnect', 'Disconnect').set('connecting', 'Connecting');
     return hash.get(status);
   }
   rawDataChange(e) {
@@ -144,12 +139,12 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   }
   changeQuery() {
     this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'query',
+      base: 'query'
     }).url;
   }
   changeUri() {
     this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url',
+      base: 'url'
     }).query;
   }
   emitChangeFun(where) {
@@ -173,8 +168,8 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         {
           type: 'end',
           msg: 'The test service connection failed, please submit an Issue to contact the community',
-          isExpand: false,
-        },
+          isExpand: false
+        }
       ];
       return;
     }
@@ -187,7 +182,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.model.response.responseBody.unshift({
         type: 'end',
         msg: `Disconnect from ${this.getLink()}`,
-        isExpand: false,
+        isExpand: false
       });
       const { requestTabIndex, msg, ...data } = this.model;
       if (this.store.isShare) {
@@ -250,22 +245,22 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             msg: {
               'Request Headers': Object.entries<string>(reqHeader).map(([key, value]) => ({
                 name: key,
-                value,
+                value
               })),
               'Response Headers': Object.entries<string>(resHeader).map(([key, value]) => ({
                 name: key,
-                value,
-              })),
+                value
+              }))
             },
             title: `Connected to ${this.getLink()}`,
-            isExpand: false,
+            isExpand: false
           });
         } else {
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: content,
             title: `Connect to ${this.getLink()} is failed`,
-            isExpand: false,
+            isExpand: false
           });
           this.wsStatus = 'disconnect';
           this.switchEditStatus();
@@ -283,7 +278,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
           this.model.response.responseBody.unshift({
             type: 'end',
             msg: `Error by ${this.getLink()}`,
-            isExpand: false,
+            isExpand: false
           });
           this.wsStatus = 'disconnect';
           this.switchEditStatus();
@@ -301,12 +296,16 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.socket.close();
     this.unListen();
   }
-  checkTabCanLeave = () => {
-    if (this.wsStatus === 'disconnect') {
+  checkTabCanLeave = closeTarget => {
+    if (this.leaveModal) {
+      return false;
+    }
+    const isCloseOther = closeTarget?.uuid && closeTarget.uuid !== this.tabOperate.getCurrentTab().uuid;
+    if (this.wsStatus === 'disconnect' || isCloseOther) {
       return true;
     }
-    return new Promise((resolve) => {
-      const modal = this.modal.create({
+    return new Promise(resolve => {
+      this.leaveModal = this.modal.create({
         nzTitle: $localize`Do you want to leave the page?`,
         nzContent: $localize`After leaving, the current long connection is no longer maintained, whether to confirm to leave?`,
         nzClosable: false,
@@ -315,28 +314,28 @@ export class WebsocketComponent implements OnInit, OnDestroy {
             label: $localize`Leave`,
             type: 'primary',
             onClick: () => {
-              modal.destroy();
+              this.leaveModal.destroy();
+              this.leaveModal = null;
               // * disconnect ws connect
               this.handleConnect('disconnect');
               resolve(true);
-            },
+            }
           },
           {
             label: $localize`Cancel`,
             onClick: () => {
-              modal.destroy();
+              this.leaveModal.destroy();
+              this.leaveModal = null;
               resolve(false);
-            },
-          },
-        ],
+            }
+          }
+        ]
       });
     });
   };
   private getLink() {
     const { uri, protocol } = this.model.request;
-    const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(uri.trim())
-      ? uri.trim()
-      : `${protocol}://${uri.trim().replace('//', '')}`;
+    const link = /^(wss:\/{2})|(ws:\/{2})\S+$/m.test(uri.trim()) ? uri.trim() : `${protocol}://${uri.trim().replace('//', '')}`;
     // console.log('link', link);
     return link;
   }
@@ -349,13 +348,13 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         requestHeaders: [],
         uri: '',
         protocol: 'ws',
-        queryParams: [],
+        queryParams: []
       },
       response: {
         requestHeaders: [],
         responseHeaders: [],
-        responseBody: [],
-      },
+        responseBody: []
+      }
     };
   }
   private checkForm(): boolean {
@@ -371,7 +370,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     return true;
   }
   private watchBasicForm() {
-    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((x) => {
+    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       setTimeout(() => {
         this.modelChange.emit(this.model);
@@ -384,14 +383,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.model = this.resetModel();
     }
     const controls = {};
-    ['uri', 'protocol'].forEach((name) => {
+    ['uri', 'protocol'].forEach(name => {
       controls[name] = [this.model.request[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }
   private switchEditStatus() {
     const bool = this.wsStatus !== 'disconnect';
-    ['uri', 'protocol'].forEach((name) => {
+    ['uri', 'protocol'].forEach(name => {
       if (bool) {
         // wsStatus !== 'disconnect'
         this.validateForm.controls[name].disable();

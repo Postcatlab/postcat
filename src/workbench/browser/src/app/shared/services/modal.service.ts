@@ -10,11 +10,11 @@ export type ModalOptions = {
   [propName: string]: any;
 };
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ModalService {
   constructor(private modal: NzModalService, private router: Router) {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.modal.closeAll();
     });
   }
@@ -25,7 +25,7 @@ export class ModalService {
       nzClosable: 'nzClosable' in inOpts ? inOpts.nzClosable : true,
       nzComponentParams: {
         title: 'title in component',
-        subtitle: 'component sub title，will be changed after 2 sec',
+        subtitle: 'component sub title，will be changed after 2 sec'
       },
       nzFooter: [
         {
@@ -35,18 +35,17 @@ export class ModalService {
             if (inOpts.nzOnOk) {
               return inOpts.nzOnOk();
             }
-          },
+          }
         },
         {
           label: $localize`Cancel`,
           onClick: () => {
             modal.destroy();
-          },
-        },
-      ],
+          }
+        }
+      ]
     };
     Object.assign(modalOpts, inOpts);
-    console.log(modalOpts);
     const modal = this.modal.create(modalOpts);
     return modal;
   }
