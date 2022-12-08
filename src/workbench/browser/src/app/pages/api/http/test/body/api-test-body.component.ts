@@ -182,7 +182,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
-    let columnItem = this.listConf.columns.find(val => val.key === 'value');
-    columnItem.slot = this.formValue;
+    // let columnItem = this.listConf.columns.find(val => val.key === 'value');
+    // columnItem.slot = this.formValue;
   }
 }
