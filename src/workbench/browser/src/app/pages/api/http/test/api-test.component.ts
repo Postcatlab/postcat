@@ -117,7 +117,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    Promise.resolve(() => {
+    Promise.resolve().then(() => {
       this.height = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
     });
   }

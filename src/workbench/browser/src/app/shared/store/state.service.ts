@@ -28,10 +28,12 @@ export class StoreService {
   @observable private shareLink = '';
 
   // ? workspace
-  @observable private currentWorkspace = {
-    title: $localize`Local workspace`,
-    id: -1
-  } as API.Workspace;
+  @observable private currentWorkspace =
+    StorageUtil.get('currentWorkspace') ||
+    ({
+      title: $localize`Local workspace`,
+      id: -1
+    } as API.Workspace);
   //  Local workspace always keep in last
   @observable private workspaceList: API.Workspace[] = [
     {
@@ -196,7 +198,11 @@ export class StoreService {
   @action async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspace = workspace;
     StorageUtil.set('currentWorkspace', workspace);
-    // refresh component
+    if (this.workspaceList.length === 1) {
+      // * new user
+      return;
+    }
+    // * refresh view
     await this.router.navigate(['**']);
     await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
     this.message.send({ type: 'workspaceChange', data: true });

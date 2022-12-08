@@ -28,10 +28,8 @@ export class EffectService {
   ) {
     autorun(async () => {
       if (this.store.getLoginInfo) {
-        console.log('nnn');
         await this.updateWorkspaceList();
       }
-
       if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
         this.store.setShareLink('');
         return;
