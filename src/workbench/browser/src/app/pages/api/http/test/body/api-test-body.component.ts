@@ -9,6 +9,7 @@ import {
   ViewChild,
   AfterViewInit,
   ElementRef,
+  TemplateRef
 } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
@@ -20,17 +21,12 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer, Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
-import {
-  ApiTestBody,
-  ApiTestBodyType,
-  ContentType,
-  CONTENT_TYPE_BY_ABRIDGE,
-} from '../api-test.model';
+import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
 @Component({
   selector: 'eo-api-test-body',
   templateUrl: './api-test-body.component.html',
-  styleUrls: ['./api-test-body.component.scss'],
+  styleUrls: ['./api-test-body.component.scss']
 })
 export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() model: string | object[] | any;
@@ -41,24 +37,26 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   @Output() contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
+  @ViewChild('formValue', { static: false }) formValue?: TemplateRef<HTMLDivElement>;
+
   isReload = true;
-    listConf: ApiTableConf = {
+  listConf: ApiTableConf = {
     columns: [],
-    setting: {},
+    setting: {}
   };
   binaryFiles: NzUploadFile[] = [];
   CONST: any = {
-    CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE,
+    CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE
   };
   cache: any = {};
   editorConfig: EditorOptions = {
-    language: 'json',
+    language: 'json'
   };
   itemStructure: ApiTestBody = {
     required: true,
     name: '',
     type: 'string',
-    value: '',
+    value: ''
   };
   private resizeObserver: ResizeObserver;
   private readonly el: HTMLElement;
@@ -70,11 +68,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   }
   constructor(private apiTable: ApiTableService, elementRef: ElementRef, private message: EoNgFeedbackMessageService) {
     this.el = elementRef.nativeElement;
-    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
+    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((code) => {
+    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe(code => {
       //! Must set value by data,because this.model has delay
       this.modelChange.emit(code);
     });
@@ -110,8 +108,8 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
 
   ngOnInit(): void {
     this.CONST.API_BODY_TYPE = Object.keys(ApiTestBodyType)
-      .filter((val) => this.supportType.includes(ApiTestBodyType[val]))
-      .map((val) => ({ key: val, value: ApiTestBodyType[val] }));
+      .filter(val => this.supportType.includes(ApiTestBodyType[val]))
+      .map(val => ({ key: val, value: ApiTestBodyType[val] }));
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -119,15 +117,12 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     this.resizeObserver?.disconnect();
   }
   ngOnChanges(changes) {
-    if (
-      changes.model &&
-      ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)
-    ) {
+    if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {
       this.beforeChangeBodyByType(this.bodyType);
       this.changeBodyType('init');
     }
   }
-  uploadBinary = (file) =>
+  uploadBinary = file =>
     new Observable((observer: Observer<boolean>) => {
       this.model = {};
       this.binaryFiles = [];
@@ -139,14 +134,14 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
       transferFileToDataUrl(file).then((result: { name: string; content: string }) => {
         this.model = {
           name: file.name,
-          dataUrl: result.content,
+          dataUrl: result.content
         };
         this.binaryFiles = [
           {
             uid: '1',
             name: file.name,
-            status: 'done',
-          },
+            status: 'done'
+          }
         ];
         this.modelChange.emit(this.model);
       });
@@ -183,9 +178,11 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: 'body',
+      in: 'body'
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
+    let columnItem = this.listConf.columns.find(val => val.key === 'value');
+    columnItem.slot = this.formValue;
   }
 }

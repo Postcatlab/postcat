@@ -42,8 +42,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() nzDataChange = new EventEmitter();
   @Output() columnVisibleStatusChange = new EventEmitter();
 
-  @ViewChild('enumsTmp', { read: TemplateRef })
-  enumsTmp: TemplateRef<HTMLDivElement>;
+  @ViewChild('enumsTmp', { read: TemplateRef }) enumsTmp: TemplateRef<HTMLDivElement>;
 
   private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit'];
   //Default buttom template match action
@@ -51,15 +50,12 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   iconBtns: IconBtn[] = [];
 
   //Generate By iconBtns
-  @ViewChildren('iconBtnTmp', { read: TemplateRef })
-  iconBtnTmp: QueryList<TemplateRef<HTMLButtonElement>>;
+  @ViewChildren('iconBtnTmp', { read: TemplateRef }) iconBtnTmp: QueryList<TemplateRef<HTMLButtonElement>>;
 
   columnVisibleMenus = [];
-  @ViewChild('toolBtnTmp', { read: TemplateRef })
-  toolBtnTmp: TemplateRef<HTMLDivElement>;
+  @ViewChild('toolBtnTmp', { read: TemplateRef }) toolBtnTmp: TemplateRef<HTMLDivElement>;
 
-  @ViewChild('numberInput', { read: TemplateRef })
-  numberInput: TemplateRef<HTMLInputElement>;
+  @ViewChild('numberInput', { read: TemplateRef }) numberInput: TemplateRef<HTMLInputElement>;
 
   tbodyConf = [];
   theadConf = [];
@@ -250,7 +246,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           key: col.key,
           title: col.slot,
           left: col.left,
-          type: col.type,
+          //Slot priority higher than type
+          type: col.slot?null:col.type,
           right: col.right,
           errorTip: col.errorTip,
           disabledFn: col.disabledFn
@@ -262,7 +259,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           body.opts = col.enums.map(item => ({ label: item.title, value: item.value }));
           break;
         }
-        case 'autoComplete':{
+        case 'autoComplete': {
           body.opts = col.enums;
           break;
         }
@@ -412,7 +409,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    // console.log(this.theadConf, this.tbodyConf);
+    console.log(this.theadConf, this.tbodyConf);
   }
   private deleteButtonShowFn(item, index, apis) {
     //The last row can't be deleted

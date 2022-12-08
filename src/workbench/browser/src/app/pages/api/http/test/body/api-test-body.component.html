@@ -13,18 +13,13 @@
       [(ngModel)]="contentType"
       nzBorderless
     >
-      <eo-ng-option
-        *ngFor="let item of CONST.CONTENT_TYPE"
-        [nzValue]="item.value"
-        [nzLabel]="item.title"
-      ></eo-ng-option>
+      <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.title"></eo-ng-option>
     </eo-ng-select>
   </div>
 
   <!-- Import -->
   <div *ngIf="['formData'].includes(bodyType)" class="inline-flex items-center">
-    <params-import [baseData]="model" [contentType]="bodyType" (baseDataChange)="handleParamsImport($event)">
-    </params-import>
+    <params-import [baseData]="model" [contentType]="bodyType" (baseDataChange)="handleParamsImport($event)"> </params-import>
   </div>
 </div>
 <!-- FormData -->
@@ -60,3 +55,8 @@
     <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
   </nz-upload>
 </div>
+
+<ng-template #formValue let-item="item">
+  {{ item | json }}
+  select-file
+</ng-template>
