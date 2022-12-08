@@ -16,6 +16,7 @@ out/
 !/api/*.js
 !/scripts/*.js
 !*.config.js
+!.*.js
 !upload.js
 
 # dependencies
