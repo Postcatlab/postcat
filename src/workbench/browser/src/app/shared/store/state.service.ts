@@ -28,7 +28,12 @@ export class StoreService {
   @observable private shareLink = '';
 
   // ? workspace
-  @observable private currentWorkspaceID = -1;
+  @observable private currentWorkspace =
+    StorageUtil.get('currentWorkspace') ||
+    ({
+      title: $localize`Local workspace`,
+      id: -1
+    } as API.Workspace);
   //  Local workspace always keep in last
   @observable private workspaceList: API.Workspace[] = [
     {
@@ -81,7 +86,7 @@ export class StoreService {
     return this.url.includes('/home/share');
   }
   @computed get isLocal() {
-    return !this.isShare && this.currentWorkspaceID === -1;
+    return !this.isShare && this.getCurrentWorkspace.id === -1;
   }
   @computed get isRemote() {
     return this.isShare || this.setting.settings['eoapi-common.dataStorage'] === 'http';
@@ -97,13 +102,12 @@ export class StoreService {
   @computed get getWorkspaceList() {
     return this.workspaceList;
   }
-  @computed get getLocalWorkspaceInfo() {
+  @computed get getLocalWorkspace() {
     // * The last data must be local workspace
     return this.workspaceList.at(-1);
   }
-  @computed get getCurrentWorkspaceInfo() {
-    const [workspace] = this.workspaceList.filter(it => it.id === this.currentWorkspaceID);
-    return workspace;
+  @computed get getCurrentWorkspace() {
+    return this.currentWorkspace;
   }
 
   // ? project
@@ -140,12 +144,11 @@ export class StoreService {
     makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
     reaction(
-      () => this.getCurrentWorkspaceInfo,
-      ({ projects, creatorID }: any) => {
+      () => this.getCurrentWorkspace,
+      ({ creatorID }: any) => {
         if (this.isLocal) {
           return;
         }
-        this.setCurrentProjectID(projects.at(0).uuid);
         this.authEnum.canEdit = creatorID === this.getUserProfile.id;
       }
     );
@@ -193,10 +196,13 @@ export class StoreService {
     }
   }
   @action async setCurrentWorkspace(workspace: API.Workspace) {
-    console.log('setCurrentWorkspace');
-    this.currentWorkspaceID = workspace.id;
+    this.currentWorkspace = workspace;
     StorageUtil.set('currentWorkspace', workspace);
-    // refresh component
+    if (this.workspaceList.length === 1) {
+      // * new user, only has local workspace
+      return;
+    }
+    // * refresh view
     await this.router.navigate(['**']);
     await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
     this.message.send({ type: 'workspaceChange', data: true });

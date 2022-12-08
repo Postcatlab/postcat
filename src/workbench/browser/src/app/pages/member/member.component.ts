@@ -53,7 +53,7 @@ import { distinct } from 'rxjs/operators';
       <section class="py-5">
         <eo-manage-access [data]="memberList" (eoOnRemove)="e97uoiuCallback($event)"></eo-manage-access>
       </section>
-    </section>`,
+    </section>`
 })
 export class MemberComponent implements OnInit {
   isInvateModalVisible;
@@ -87,9 +87,9 @@ export class MemberComponent implements OnInit {
       this.message.send({ type: 'need-config-remote', data: {} });
       return;
     }
-    const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
+    const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
     const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID: currentWorkspaceID,
+      workspaceID: currentWorkspaceID
     });
     if (wErr) {
       if (wErr.status === 401) {
@@ -103,8 +103,8 @@ export class MemberComponent implements OnInit {
     }
 
     // * 对成员列表进行排序
-    const Owner = wData.filter((it) => it.roleName === 'Owner');
-    const Member = wData.filter((it) => it.roleName !== 'Owner');
+    const Owner = wData.filter(it => it.roleName === 'Owner');
+    const Member = wData.filter(it => it.roleName !== 'Owner');
     this.memberList = Owner.concat(Member);
   }
   handleInvateModalCancel(): void {
@@ -143,10 +143,10 @@ export class MemberComponent implements OnInit {
       const [user] = uData;
       const { id } = user;
 
-      const { id: workspaceID } = this.store.getCurrentWorkspaceInfo;
+      const { id: workspaceID } = this.store.getCurrentWorkspace;
       const [aData, aErr]: any = await this.api.api_workspaceAddMember({
         workspaceID,
-        userIDs: [id],
+        userIDs: [id]
       });
       if (aErr) {
         if (aErr.status === 401) {
@@ -163,9 +163,9 @@ export class MemberComponent implements OnInit {
       // * 关闭弹窗
       this.isInvateModalVisible = false;
 
-      const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
+      const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
       const [wData, wErr]: any = await this.api.api_workspaceMember({
-        workspaceID: currentWorkspaceID,
+        workspaceID: currentWorkspaceID
       });
       if (wErr) {
         if (wErr.status === 401) {
@@ -179,8 +179,8 @@ export class MemberComponent implements OnInit {
       }
 
       // * 对成员列表进行排序
-      const Owner = wData.filter((it) => it.roleName === 'Owner');
-      const Member = wData.filter((it) => it.roleName !== 'Owner');
+      const Owner = wData.filter(it => it.roleName === 'Owner');
+      const Member = wData.filter(it => it.roleName !== 'Owner');
       this.memberList = Owner.concat(Member);
     };
     await btnSelectRunning();
@@ -214,14 +214,14 @@ export class MemberComponent implements OnInit {
     // * eoOnRemove event callback
 
     const confirm = () =>
-      new Promise((resolve) => {
+      new Promise(resolve => {
         this.modal.confirm({
           nzTitle: $localize`Warning`,
           nzContent: $localize`Are you sure you want to remove the member ?`,
           nzOkDanger: true,
           nzOkText: $localize`Delete`,
           nzOnOk: () => resolve(true),
-          nzOnCancel: () => resolve(false),
+          nzOnCancel: () => resolve(false)
         });
       });
     const isOk = await confirm();
@@ -229,13 +229,13 @@ export class MemberComponent implements OnInit {
       return;
     }
 
-    const { id: workspaceID } = this.store.getCurrentWorkspaceInfo;
+    const { id: workspaceID } = this.store.getCurrentWorkspace;
 
     const { id } = $event;
 
     const [data, err]: any = await this.api.api_workspaceRemoveMember({
       workspaceID,
-      userIDs: [id],
+      userIDs: [id]
     });
     if (err) {
       if (err.status === 401) {
@@ -247,9 +247,9 @@ export class MemberComponent implements OnInit {
       }
       return;
     }
-    const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
+    const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
     const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID: currentWorkspaceID,
+      workspaceID: currentWorkspaceID
     });
     if (wErr) {
       if (wErr.status === 401) {
@@ -263,8 +263,8 @@ export class MemberComponent implements OnInit {
     }
 
     // * 对成员列表进行排序
-    const Owner = wData.filter((it) => it.roleName === 'Owner');
-    const Member = wData.filter((it) => it.roleName !== 'Owner');
+    const Owner = wData.filter(it => it.roleName === 'Owner');
+    const Member = wData.filter(it => it.roleName !== 'Owner');
     this.memberList = Owner.concat(Member);
   }
 }

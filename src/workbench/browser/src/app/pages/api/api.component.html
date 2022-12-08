@@ -56,7 +56,7 @@
       <eo-tab
         class="flex-1"
         [list]="apiTab.BASIC_TABS"
-        [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspaceInfo?.id) + '_TabCache'"
+        [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspace?.id) + '_TabCache'"
         [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
         [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
         (beforeClose)="apiTab.beforeTabClose($event)"

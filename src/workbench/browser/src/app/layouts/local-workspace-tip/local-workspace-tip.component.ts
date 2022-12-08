@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IS_SHOW_REMOTE_SERVER_NOTIFICATION } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import { StorageUtil } from '../../utils/storage/Storage';
@@ -14,13 +15,9 @@ import { StorageUtil } from '../../utils/storage/Storage';
     <button class="ml-[5px]" eo-ng-button nzType="default" nzSize="small" (click)="switchToTheCloud()" i18n>
       switch to the cloud workspace
     </button>
-    <eo-iconpark-icon
-      name="close"
-      class="absolute right-[20px] cursor-pointer"
-      (click)="closeNotification()"
-    ></eo-iconpark-icon>
+    <eo-iconpark-icon name="close" class="absolute right-[20px] cursor-pointer" (click)="closeNotification()"></eo-iconpark-icon>
   </div>`,
-  styleUrls: ['./local-workspace-tip.component.scss'],
+  styleUrls: ['./local-workspace-tip.component.scss']
 })
 export class LocalWorkspaceTipComponent implements OnInit {
   @Input() isShow: boolean;
@@ -29,11 +26,11 @@ export class LocalWorkspaceTipComponent implements OnInit {
   constructor(
     private eoMessage: EoNgFeedbackMessageService,
     private message: MessageService,
-    private store: StoreService
+    private store: StoreService,
+    private effect: EffectService
   ) {}
   get isShowNotification() {
-    const isShow =
-      this.store.isLocal && this.store.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
+    const isShow = this.store.isLocal && this.store.isLogin && StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
     this.isShow !== isShow && this.setIsShow(isShow);
     return isShow;
   }
@@ -46,12 +43,12 @@ export class LocalWorkspaceTipComponent implements OnInit {
   ngOnInit(): void {}
 
   switchToTheCloud = () => {
-    if (this.store.getWorkspaceList[0].id === this.store.getLocalWorkspaceInfo.id) {
+    if (this.store.getWorkspaceList.at(0).id === this.store.getLocalWorkspace.id) {
       this.eoMessage.warning($localize`You don't have cloud space yet, please create one`);
       this.message.send({ type: 'addWorkspace', data: {} });
       return;
     }
-    this.store.setCurrentWorkspace(this.store.getWorkspaceList[0]);
+    this.effect.updateWorkspace(this.store.getWorkspaceList.at(0));
   };
 
   closeNotification() {

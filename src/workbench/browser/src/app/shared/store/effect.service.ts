@@ -7,7 +7,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { reaction } from 'mobx';
+import { autorun } from 'mobx';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -26,12 +26,16 @@ export class EffectService {
     private lang: LanguageService,
     private web: WebService
   ) {
-    reaction(
-      () => this.store.getCurrentWorkspaceInfo,
-      ({ id }) => {
-        id ?? this.updateProjectID(id);
+    autorun(async () => {
+      if (this.store.getLoginInfo) {
+        await this.updateWorkspaceList();
       }
-    );
+      if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
+        this.store.setShareLink('');
+        return;
+      }
+      this.updateShareLink();
+    });
   }
 
   async updateWorkspaceList() {
@@ -125,23 +129,25 @@ export class EffectService {
     });
   }
 
-  async updateProjectID(workspaceID: number) {
-    console.log('===>>', workspaceID);
-    if (workspaceID === -1) {
+  async updateWorkspace(workspace) {
+    if (workspace.id === -1) {
+      this.store.setCurrentWorkspace(workspace);
       this.store.setCurrentProjectID(1);
       StorageUtil.remove('server_version');
       return;
     }
-    const { projects, creatorID } = await this.getWorkspaceInfo(workspaceID);
-    console.log('===>>', projects);
-    this.store.setCurrentProjectID(projects.at(0).uuid);
-    this.store.setAuthEnum({
-      canEdit: creatorID === this.store.getUserProfile.id
-    });
-    if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
-      this.store.setShareLink('');
-      return;
-    }
+    // * for translate isLogin state to false
+    this.store.setCurrentWorkspace(workspace);
+    const data = await this.getWorkspaceInfo(workspace.id);
+    // * update project id
+    this.store.setCurrentProjectID(data.projects.at(0).uuid);
+    // * real set workspace
+    this.store.setCurrentWorkspace(data);
+    this.updateShareLink();
+  }
+
+  async updateShareLink() {
+    // * update share link
     const [res, err]: any = await this.http.api_shareCreateShare({});
     if (err) {
       this.store.setShareLink('');

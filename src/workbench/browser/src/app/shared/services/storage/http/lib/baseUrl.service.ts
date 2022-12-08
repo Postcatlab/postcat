@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
@@ -22,17 +21,16 @@ const noPrefix = ['https://', 'http://'];
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
   get projectID() {
-    console.log('==>', this.store.getCurrentProjectID);
     return this.store.getCurrentProjectID;
   }
   get workspaceID() {
-    return this.store.getCurrentWorkspaceInfo.id;
+    return this.store.getCurrentWorkspace.id;
   }
   get apiPrefix() {
     return `/${this.workspaceID}/${this.projectID}/`;
   }
   prefix;
-  constructor(private store: StoreService, private effect: EffectService, private messageService: MessageService, private web: WebService) {
+  constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
     super();
     //* Web deploy from v1.9.1
     this.prefix = this.web.isWeb ? '/api/' : '/';

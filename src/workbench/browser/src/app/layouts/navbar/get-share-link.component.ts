@@ -25,7 +25,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
           This link will be updated with the API content. Everyone can access it without logging in
         </p>
         <div class="flex items-center justify-between">
-          <input readonly type="text" eo-ng-input [value]="shareLink" class="mr-3" />
+          <input readonly type="text" eo-ng-input [value]="store.getShareLink" class="mr-3" />
           <button eo-ng-button nzType="primary" *ngIf="!isCopy" (click)="handleCopy()">Copy</button>
           <button eo-ng-button nzType="default" *ngIf="isCopy" class="text-[#158565]">Copied</button>
         </div>
@@ -33,18 +33,17 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
     </ng-template> `
 })
 export class GetShareLinkComponent implements OnInit {
-  shareLink = '';
   isCopy = false;
   constructor(public store: StoreService, public dataSourceService: DataSourceService) {}
   handleCopy() {
     if (this.isCopy) {
       return;
     }
-    if (!this.shareLink) {
+    if (!this.store.getShareLink) {
       this.isCopy = false;
       return;
     }
-    const isOk = copy(this.shareLink);
+    const isOk = copy(this.store.getShareLink);
     if (isOk) {
       this.isCopy = true;
       interval(700).subscribe(() => {
