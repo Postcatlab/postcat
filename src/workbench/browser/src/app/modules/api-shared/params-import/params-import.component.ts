@@ -122,7 +122,7 @@ export class ParamsImportComponent {
 
     if (rootType !== whatType(paramCode)) {
       // TODO Perhaps should be handled about format compatibility later.
-      console.warn('The code that you input is no-equal to the root type.');
+      console.warn('EO_WARN[params-import]: The code that you input is no-equal to the root type.');
     }
     // if (whatType(paramCode) === 'object') {
     // * transform to array of table format.

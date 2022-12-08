@@ -3,11 +3,12 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import omitDeep from 'omit-deep-lodash';
 
-import { ApiTestHeaders, ContentType } from '../../pages/api/service/api-test/api-test.model';
-import { ApiBodyType, ApiData, ApiTestData, ApiTestHistory } from '../../shared/services/storage/index.model';
+import { ApiTestData, ContentType } from '../../pages/api/http/test/api-test.model';
+import { ApiData, ApiTestHistory } from '../../shared/services/storage/index.model';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
+import { ApiBodyType } from './api.model';
 
 @Injectable()
 export class ApiTestUtilService {
@@ -18,40 +19,40 @@ export class ApiTestUtilService {
         status: 'info',
         cap: 199,
         class: 'code_blue',
-        fontClass: 'cb',
+        fontClass: 'cb'
       },
       {
         status: 'success',
         cap: 299,
         class: 'code_green',
-        fontClass: 'cg',
+        fontClass: 'cg'
       },
       {
         status: 'redirect',
         cap: 399,
         class: 'code_yellow',
-        fontClass: 'cy',
+        fontClass: 'cy'
       },
       {
         status: 'clientError',
         cap: 499,
         class: 'code_red',
-        fontClass: 'cr',
+        fontClass: 'cr'
       },
       {
         status: 'serverError',
         cap: 599,
         class: 'code_red',
-        fontClass: 'cr',
-      },
+        fontClass: 'cr'
+      }
     ];
-    return HTTP_CODE_STATUS.find((val) => statusCode <= val.cap);
+    return HTTP_CODE_STATUS.find(val => statusCode <= val.cap);
   }
   getTestDataFromHistory(inData: ApiTestHistory) {
     //handle query and url
     const tmpResult = transferUrlAndQuery(inData.request.uri, [], {
       base: 'url',
-      replaceType: 'merge',
+      replaceType: 'merge'
     });
     const result = {
       testData: {
@@ -61,13 +62,13 @@ export class ApiTestUtilService {
         queryParams: tmpResult.query,
         requestBody: [ApiBodyType.Raw, ApiBodyType.Binary].includes(inData.request.requestBodyType as ApiBodyType)
           ? inData.request.requestBody
-          : inData.request?.requestBody?.map((val) => (val.required = true)),
+          : inData.request?.requestBody?.map(val => (val.required = true)),
         requestHeaders: inData.response?.headers,
-        ...inData.request,
+        ...inData.request
       },
-      response: eoDeepCopy(inData),
+      response: eoDeepCopy(inData)
     };
-    (result.testData.requestHeaders || []).map((val) => (val.required = true));
+    (result.testData.requestHeaders || []).map(val => (val.required = true));
     return result;
   }
   /**
@@ -79,12 +80,12 @@ export class ApiTestUtilService {
    */
   formatEditingApiData(formData): ApiTestData {
     const result = eoDeepCopy(formData) as ApiTestData;
-    ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach((tableName) => {
+    ['requestBody', 'queryParams', 'restParams', 'requestHeaders'].forEach(tableName => {
       if (whatType(result[tableName]) !== 'array') {
         return;
       }
       result[tableName] = filterTableData(result[tableName], {
-        filterFn: (val) => val.name || val.value,
+        filterFn: val => val.name || val.value
       });
     });
     return result;
@@ -97,7 +98,7 @@ export class ApiTestUtilService {
     const result = {};
     const bodyInfo = text2table(text);
     if (bodyInfo.textType !== 'raw') {
-      result[`${keyName}`] = bodyInfo.data.map((val) => omitDeep(val, ['value']));
+      result[`${keyName}`] = bodyInfo.data.map(val => omitDeep(val, ['value']));
     } else {
       result[`${keyName}`] = bodyInfo.data;
     }
@@ -120,13 +121,13 @@ export class ApiTestUtilService {
       responseHeaders: this.filterCommonHeader(inData.history.response.headers) || [],
       responseBodyType: 'json',
       responseBodyJsonType: 'object',
-      responseBody: [],
+      responseBody: []
     };
     delete result.uuid;
     if (result.requestBodyType === ApiBodyType.Raw) {
       Object.assign(result, this.text2EditBody('requestBody', result.requestBody));
     }
-    ['requestHeaders', 'requestBody', 'responseHeaders', 'restParams', 'queryParams'].forEach((keyName) => {
+    ['requestHeaders', 'requestBody', 'responseHeaders', 'restParams', 'queryParams'].forEach(keyName => {
       if (!result[keyName] || typeof result[keyName] !== 'object') {
         return;
       }
@@ -140,20 +141,20 @@ export class ApiTestUtilService {
 
   getTestDataFromApi(inData): ApiTestData {
     inData ||= {};
-    const editToTestParams = (arr) => {
+    const editToTestParams = arr => {
       arr = arr || [];
-      arr.forEach((val) => {
+      arr.forEach(val => {
         val.value = val.example;
         delete val.example;
       });
     };
-    ['queryParams', 'restParams', 'requestHeaders'].forEach((keyName) => {
+    ['queryParams', 'restParams', 'requestHeaders'].forEach(keyName => {
       editToTestParams(inData?.[keyName]);
     });
     //handle query and url
     const tmpResult = transferUrlAndQuery(inData.uri, inData.queryParams, {
       base: 'url',
-      replaceType: 'merge',
+      replaceType: 'merge'
     });
     inData.uri = tmpResult.url;
     inData.queryParams = tmpResult.query;
@@ -162,7 +163,7 @@ export class ApiTestUtilService {
       case ApiBodyType.JSON: {
         inData.requestBody = JSON.stringify(
           table2json(inData.requestBody, {
-            rootType: inData.requestBodyJsonType,
+            rootType: inData.requestBodyJsonType
           })
         );
         break;
@@ -170,13 +171,13 @@ export class ApiTestUtilService {
       case ApiBodyType.XML: {
         inData.requestBody = json2xml(
           table2json(inData.requestBody, {
-            rootType: inData.requestBodyJsonType,
+            rootType: inData.requestBodyJsonType
           })
         );
         break;
       }
       case ApiBodyType['Form-data']: {
-        inData.requestBody.forEach((val) => {
+        inData.requestBody.forEach(val => {
           val.value = val.example;
           val.type = val.type === 'file' ? 'file' : 'string';
           delete val.example;
@@ -198,7 +199,7 @@ export class ApiTestUtilService {
     return inData;
   }
   getContentType(headers) {
-    const existHeader = headers.find((val) => val.name.toLowerCase() === 'content-type');
+    const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (!existHeader) {
       return;
     }
@@ -210,7 +211,7 @@ export class ApiTestUtilService {
    */
   addOrReplaceContentType(contentType: ContentType, headers: any[] = []) {
     const result = headers;
-    const existHeader = headers.find((val) => val.name.toLowerCase() === 'content-type');
+    const existHeader = headers.find(val => val.name.toLowerCase() === 'content-type');
     if (existHeader) {
       existHeader.value = contentType;
       return result;
@@ -218,7 +219,7 @@ export class ApiTestUtilService {
     headers.unshift({
       required: true,
       name: 'content-type',
-      value: contentType,
+      value: contentType
       // editable:false
     });
     return result;
@@ -245,14 +246,14 @@ export class ApiTestUtilService {
       'if-none-match',
       'user-agent',
       'vary',
-      'referrer-policy',
+      'referrer-policy'
     ];
-    const result = headers.filter((val) => !commonHeader.includes(val.name));
+    const result = headers.filter(val => !commonHeader.includes(val.name));
     return result;
   }
   private testTable2body(arr): ApiData[] {
     const result = [];
-    arr.forEach((val) => {
+    arr.forEach(val => {
       if (!val.name) {
         return;
       }

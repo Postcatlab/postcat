@@ -9,8 +9,8 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { ApiEditQuery, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
-import { ApiEditQuery } from '../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-edit-query',
@@ -29,8 +29,8 @@ export class ApiEditQueryComponent implements OnInit, OnChanges, AfterViewChecke
   @Input() tid: string;
   @Input() model: ApiEditQuery[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  listConf: any = {
-    column: [],
+    listConf: ApiTableConf = {
+    columns: [],
     setting: {},
   };
   itemStructure: ApiEditQuery = {

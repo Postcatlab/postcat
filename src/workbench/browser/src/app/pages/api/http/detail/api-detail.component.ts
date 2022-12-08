@@ -6,11 +6,10 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { cloneDeep } from 'lodash-es';
+import { JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
 import {
   ApiData,
-  ApiBodyType,
-  JsonRootType,
   StorageRes,
   StorageResStatus,
 } from '../../../../shared/services/storage/index.model';

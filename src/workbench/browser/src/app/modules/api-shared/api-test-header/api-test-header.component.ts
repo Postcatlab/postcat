@@ -2,28 +2,29 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestHeaders } from '../../../pages/api/service/api-test/api-test.model';
+import { ApiTestHeaders } from '../../../pages/api/http/test/api-test.model';
 import { ApiTableService } from '../api-table.service';
+import { ApiTableConf } from '../api.model';
 @Component({
   selector: 'eo-api-test-header',
   templateUrl: './api-test-header.component.html',
-  styleUrls: ['./api-test-header.component.scss'],
+  styleUrls: ['./api-test-header.component.scss']
 })
 export class ApiTestHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() disabled: boolean;
   @Input() model: ApiTestHeaders[];
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
 
-  listConf: any = {
-    column: [],
-    setting: {},
+  listConf: ApiTableConf = {
+    columns: [],
+    setting: {}
   };
   private modelChange$: Subject<void> = new Subject();
   private destroy$: Subject<void> = new Subject();
   itemStructure: ApiTestHeaders = {
     required: true,
     name: '',
-    value: '',
+    value: ''
   };
   constructor(private apiTable: ApiTableService) {
     this.modelChange$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
@@ -49,7 +50,7 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
-      in: 'header',
+      in: 'header'
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;

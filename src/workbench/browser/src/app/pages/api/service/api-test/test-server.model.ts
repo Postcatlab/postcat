@@ -1,9 +1,7 @@
 import {
-  Environment,
-  ApiTestHistoryResponse,
-  ApiTestResGeneral,
-  ApiTestHistoryFrame,
+  Environment
 } from '../../../../shared/services/storage/index.model';
+import { ApiTestHistoryFrame, ApiTestHistoryResponse, ApiTestResGeneral } from '../../http/test/api-test.model';
 /**
  * Test response from  test server to ui
  */

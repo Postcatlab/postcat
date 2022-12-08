@@ -8,7 +8,7 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
-  AfterViewInit,
+  AfterViewInit
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,10 +17,10 @@ import {
   BEFORE_DATA,
   AFTER_DATA,
   beforeScriptCompletions,
-  afterScriptCompletions,
+  afterScriptCompletions
 } from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
 import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
-import { ContentType } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.model';
+import { ApiTestData, ApiTestHistoryFrame, ContentType } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.model';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -34,16 +34,11 @@ import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
 import { MessageService } from '../../../../shared/services/message';
-import {
-  ApiBodyType,
-  ApiTestData,
-  ApiTestHistoryFrame,
-  RequestMethod,
-  RequestProtocol,
-} from '../../../../shared/services/storage/index.model';
+
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
+import { ApiBodyType, RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
@@ -64,7 +59,7 @@ interface testViewModel {
 @Component({
   selector: 'eo-api-test',
   templateUrl: './api-test.component.html',
-  styleUrls: ['./api-test.component.scss'],
+  styleUrls: ['./api-test.component.scss']
 })
 export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() model: testViewModel = this.resetModel();
@@ -114,10 +109,10 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     private elementRef: ElementRef
   ) {
     this.initBasicForm();
-    this.testServer.init((message) => {
+    this.testServer.init(message => {
       this.receiveMessage(message);
     });
-    this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((status) => {
+    this.status$.pipe(distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(status => {
       this.changeStatus(status);
     });
   }
@@ -152,11 +147,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         id = Number(id);
         requestInfo = await this.apiTest.getApi({
-          id,
+          id
         });
         this.model.testResult = {
           response: {},
-          request: {},
+          request: {}
         };
       }
       //!Prevent await async ,replace current  api data
@@ -207,22 +202,22 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     const apiData = this.apiTestUtil.formatSavingApiData({
       history: this.model.testResult,
-      testData: { ...this.model.request },
+      testData: { ...this.model.request }
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
     this.router.navigate(['/home/api/http/edit'], {
       queryParams: {
-        pageID: Number(this.route.snapshot.queryParams.pageID),
-      },
+        pageID: Number(this.route.snapshot.queryParams.pageID)
+      }
     });
   }
   changeQuery() {
     this.model.request.uri = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'query',
+      base: 'query'
     }).url;
   }
   watchBasicForm() {
-    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((x) => {
+    this.validateForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
       // Settimeout for next loop, when triggle valueChanges, apiData actually isn't the newest data
       setTimeout(() => {
         this.modelChange.emit(this.model);
@@ -231,7 +226,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   updateParamsbyUri(url) {
     this.model.request.queryParams = transferUrlAndQuery(this.model.request.uri, this.model.request.queryParams, {
-      base: 'url',
+      base: 'url'
     }).query;
     this.model.request.restParams = [...generateRestFromUrl(this.model.request.uri, this.model.request.restParams)];
   }
@@ -270,10 +265,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   changeContentType(contentType) {
-    this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(
-      contentType,
-      this.model.request.requestHeaders
-    );
+    this.model.request.requestHeaders = this.apiTestUtil.addOrReplaceContentType(contentType, this.model.request.requestHeaders);
   }
   changeBodyType($event) {
     this.initContentType();
@@ -318,8 +310,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         globals: getGlobals(),
         beforeScript: this.model.beforeScript,
         afterScript: this.model.afterScript,
-        lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en',
-      }),
+        lang: this.lang.systemLanguage === 'zh-Hans' ? 'cn' : 'en'
+      })
     });
     this.model.testStartTime = Date.now();
     this.status$.next('testing');
@@ -327,7 +319,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   private abort() {
     this.testServer.send('unitTest', {
       id: this.route.snapshot.queryParams.pageID,
-      action: 'abort',
+      action: 'abort'
     });
     this.status$.next('tested');
   }
@@ -343,7 +335,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     const tmpHistory = {
       general: message.general,
       request: message.history.request || {},
-      response: message.response || {},
+      response: message.response || {}
     };
     let queryParams: { pageID: string; uuid?: string };
     try {
@@ -356,8 +348,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         url: '/home/api/http/test',
         model: {
           testStartTime: 0,
-          testResult: tmpHistory,
-        },
+          testResult: tmpHistory
+        }
       });
     } else {
       this.model.testResult = tmpHistory;
@@ -391,7 +383,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       complete() {
         that.changeStatus('tested');
-      },
+      }
     });
   }
   downloadFile() {
@@ -454,8 +446,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       afterScript: '',
       testResult: {
         response: {},
-        request: {},
-      },
+        request: {}
+      }
     } as testViewModel;
   }
   /**
@@ -467,7 +459,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       this.model = this.resetModel();
     }
     const controls = {};
-    ['protocol', 'method', 'uri'].forEach((name) => {
+    ['protocol', 'method', 'uri'].forEach(name => {
       controls[name] = [this.model.request[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);

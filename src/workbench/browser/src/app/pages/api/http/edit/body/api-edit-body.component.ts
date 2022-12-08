@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
+import { JsonRootType,ApiEditBody, ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
-import { ApiEditBody, ApiBodyType, JsonRootType } from '../../../../../shared/services/storage/index.model';
 @Component({
   selector: 'eo-api-edit-body',
   templateUrl: './api-edit-body.component.html',
@@ -25,8 +25,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   checkAddRow: (item) => boolean;
   nzDragCheck: (current, next) => boolean;
-  listConf: any = {
-    column: [],
+    listConf: ApiTableConf = {
+    columns: [],
     setting: {},
   };
   cache: any = {};

@@ -8,13 +8,12 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Optional,
   Output,
   QueryList,
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
 import _, { attempt, has, isUndefined, omitBy } from 'lodash-es';
 
@@ -25,7 +24,7 @@ import { TableProConfig, TABLE_PRO_CONFIG, TABLE_PRO_DEFUALT_CONFIG } from './ta
 @Component({
   selector: 'eo-ng-table-pro',
   templateUrl: './table-pro.component.html',
-  styleUrls: ['./table-pro.component.scss'],
+  styleUrls: ['./table-pro.component.scss']
 })
 export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() columns: ColumnItem[];
@@ -73,45 +72,39 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   //Default Table unique ID
   private DEFAULT_ID: string;
   private showItems = [];
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private elRef: ElementRef,
-    @Inject(TABLE_PRO_CONFIG) public tableConfig: TableProConfig
-  ) {
+  constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef, @Inject(TABLE_PRO_CONFIG) public tableConfig: TableProConfig) {
     this.tableConfig = Object.assign(eoDeepCopy(TABLE_PRO_DEFUALT_CONFIG), this.tableConfig);
     this.TABLE_DEFAULT_BTN = {
       add: {
         icon: this.tableConfig.btnAddChildRowIcon,
         title: this.tableConfig.btnAddRowTitle,
         //eo-ng-table fun action
-        fnName: 'add',
+        fnName: 'add'
       },
       addChild: {
         icon: this.tableConfig.btnAddChildRowIcon,
         title: this.tableConfig.btnAddChildRowTitle,
-        fnName: 'addChild',
+        fnName: 'addChild'
       },
       insert: {
         icon: this.tableConfig.btnInsertRowIcon,
         title: this.tableConfig.btnInsertRowTitle,
-        fnName: 'insertRow',
+        fnName: 'insertRow'
       },
       edit: {
         icon: this.tableConfig.btnEditRowIcon,
-        title: this.tableConfig.btnEditRowTitle,
+        title: this.tableConfig.btnEditRowTitle
       },
       delete: {
         icon: this.tableConfig.btnDeleteRowIcon,
         title: this.tableConfig.btnDeleteRowTitle,
         fnName: 'deleteRow',
-        confirmTitle: this.tableConfig.btnDeleteRowConfirmTitle,
-      },
+        confirmTitle: this.tableConfig.btnDeleteRowConfirmTitle
+      }
     };
   }
   ngOnInit(): void {
-    this.DEFAULT_ID = `${window.location.pathname}_${
-      this.elRef.nativeElement?.parentElement?.localName || this.columns?.length
-    }`;
+    this.DEFAULT_ID = `${window.location.pathname}_${this.elRef.nativeElement?.parentElement?.localName || this.columns?.length}`;
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes?.columns?.currentValue?.length) {
@@ -123,7 +116,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           return;
         }
         if (!this.nzDataItem || !this.setting.primaryKey) {
-          console.error(`EO_ERROR: Please add nzDataItem and setting.primaryKey`);
+          console.error('EO_ERROR: Please add nzDataItem and setting.primaryKey');
           return;
         }
         if (!this.nzData.length || this.nzData[this.nzData.length - 1][this.setting.primaryKey]) {
@@ -138,7 +131,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     }
     return filterTableData(this.nzData, {
       childKey: this.tableConfig.childKey,
-      primaryKey: this.setting.primaryKey,
+      primaryKey: this.setting.primaryKey
     });
   }
   ngAfterViewInit() {}
@@ -149,7 +142,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     if (_.has(this.setting, 'isEdit')) {
       return this.setting.isEdit;
     }
-    return this.columns.some((col) => this.IS_EDIT_COLUMN_TYPE.includes(col.type));
+    return this.columns.some(col => this.IS_EDIT_COLUMN_TYPE.includes(col.type));
   }
 
   btnClick(btnItem, index, item, apis) {
@@ -228,10 +221,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.setting.rowSortable && this.columns[0].type !== 'sort') {
       theaderConf.push({
         resizeable: false,
-        width: this.columns.length * 5,
+        width: this.columns.length * 5
       });
       tbodyConf.push({
-        type: 'sort',
+        type: 'sort'
       });
     }
     //Set ColumnVisible
@@ -241,7 +234,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     }
     if (this.setting.toolButton.columnVisible) {
       if (!this.setting.id) {
-        console.warn(`EO_WARN[eo-table-pro]: Lack of setting.id, the storage key for table columnVisible may repeat!`);
+        console.warn('EO_WARN[eo-table-pro]: Lack of setting.id, the storage key for table columnVisible may repeat!');
       }
       this.COLUMN_VISIBLE_KEY = this.setting.id || `TABLE_COLUMN_VISIBLE_${this.DEFAULT_ID}`;
       this.columnVisibleStatus = attempt(() => JSON.parse(window.localStorage.getItem(this.COLUMN_VISIBLE_KEY))) || {};
@@ -251,10 +244,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     this.columns.forEach((col: ColumnItem) => {
       const colID = col.key;
       //Set component
-      const header = omitBy(
-        { title: col.title, left: col.left, right: col.right, resizeable: col.resizeable },
-        isUndefined
-      );
+      const header = omitBy({ title: col.title, left: col.left, right: col.right, resizeable: col.resizeable }, isUndefined);
       const body: any = omitBy(
         {
           key: col.key,
@@ -263,13 +253,13 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           type: col.type,
           right: col.right,
           errorTip: col.errorTip,
-          disabledFn: col.disabledFn,
+          disabledFn: col.disabledFn
         },
         isUndefined
       );
       switch (col.type) {
         case 'select': {
-          body.opts = col.enums.map((item) => ({ label: item.title, value: item.value }));
+          body.opts = col.enums.map(item => ({ label: item.title, value: item.value }));
           break;
         }
         case 'checkbox': {
@@ -296,7 +286,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           //Disable resizeable prevent x-scroll bar
           header.resizeable = false;
           body.type = 'btn';
-          body.btns = col.btns.map((btn) => {
+          body.btns = col.btns.map(btn => {
             const defaultBtn = this.TABLE_DEFAULT_BTN[btn.action];
             const newBtn: any = omitBy({ icon: btn.icon, click: btn.click, type: btn.type }, isUndefined) as IconBtn;
             //Use custom btn template
@@ -339,7 +329,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       //Set filter
       if (col.filterable) {
         if (this.setting.isEdit) {
-          console.warn(`[EO_WARN]: editable table use filterable may perform badly`);
+          console.warn('EO_WARN[eo-table-pro]: editable table use filterable may perform badly');
         }
         header.filterMultiple = true;
         //Use custom filter
@@ -351,7 +341,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
                 this.showItems = [];
                 const findNode = (arr): boolean => {
                   let hasFind = false;
-                  arr.forEach((item) => {
+                  arr.forEach(item => {
                     if (selected.includes(item[col.key])) {
                       this.showItems.push(item.eoKey);
                       hasFind = true;
@@ -381,12 +371,12 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         } else {
           header.filterFn = col.filterFn;
         }
-        header.filterOpts = col.enums.map((item) => ({ text: item.title, value: item.value }));
+        header.filterOpts = col.enums.map(item => ({ text: item.title, value: item.value }));
       }
       //Set Sort
       if (col.sortable) {
         if (this.setting.isEdit) {
-          console.warn(`[EO_WARN]: editable table use sortable may perform poorly`);
+          console.warn('EO_WARN[eo-table-pro]: editable table use sortable may perform poorly');
         }
         header.showSort = true;
         header.sortDirections = ['ascend', 'descend', null];
@@ -404,10 +394,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         this.columnVisibleMenus.push({
           title: col.title,
           key: colID,
-          checked: this.columnVisibleStatus[colID],
+          checked: this.columnVisibleStatus[colID]
         });
         if (!col.showFn) {
-          body.showFn = header.showFn = (item) => this.columnVisibleStatus[colID];
+          body.showFn = header.showFn = item => this.columnVisibleStatus[colID];
         }
       }
 
@@ -429,7 +419,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         return;
       }
       //Operate btnList
-      col.btns.forEach((btn) => {
+      col.btns.forEach(btn => {
         if (!this.needCustomTempalte(btn)) {
           return;
         }
@@ -441,7 +431,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
             confirm: btn.confirm,
             click: btn.click,
             confirmFn: btn.confirmFn,
-            confirmTitle: btn.confirmTitle,
+            confirmTitle: btn.confirmTitle
           },
           isUndefined
         ) as IconBtn;

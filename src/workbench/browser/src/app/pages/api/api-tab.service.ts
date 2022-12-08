@@ -261,12 +261,12 @@ export class ApiTabService {
    */
   afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
     if (!this.apiTabComponent) {
-      console.warn(`EO_WARNING:apiTabComponent hasn't init yet!`);
+      console.warn(`EO_WARNING[api-tab]: apiTabComponent hasn't init yet!`);
       return;
     }
     let currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
     if (!currentTab) {
-      console.warn(`has't find the tab fit child component ,url:${inData.url}`);
+      console.warn(`EO_WARNING[api-tab]: has't find the tab fit child component ,url:${inData.url}`);
       return;
     }
     if (inData?.when === 'afterTested') {

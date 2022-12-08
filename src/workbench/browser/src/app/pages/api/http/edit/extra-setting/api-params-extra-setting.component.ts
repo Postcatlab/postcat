@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ApiParamsTypeJsonOrXml, ParamsEnum, ApiEditBody } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { ColumnItem } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.model';
+import { REQURIED_ENUMS } from 'eo/workbench/browser/src/app/shared/models/shared.model';
 import { isNil } from 'ng-zorro-antd/core/util';
-
-import { ApiParamsTypeJsonOrXml, ParamsEnum, REQURIED_ENUMS, ApiEditBody } from '../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
