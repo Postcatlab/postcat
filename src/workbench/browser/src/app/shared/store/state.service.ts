@@ -3,7 +3,6 @@ import { NavigationEnd, ActivatedRoute, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
@@ -12,7 +11,7 @@ import { filter } from 'rxjs/operators';
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class StoreService {
   // * observable data
@@ -26,6 +25,7 @@ export class StoreService {
 
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
+  @observable private shareLink = '';
 
   // ? workspace
   @observable private currentWorkspaceID = -1;
@@ -33,8 +33,8 @@ export class StoreService {
   @observable private workspaceList: API.Workspace[] = [
     {
       title: $localize`Local workspace`,
-      id: -1,
-    } as API.Workspace,
+      id: -1
+    } as API.Workspace
   ];
 
   // ? project
@@ -45,11 +45,11 @@ export class StoreService {
   @observable.shallow private authEnum = {
     canEdit: false,
     canDelete: false,
-    canCreate: false,
+    canCreate: false
   };
   @observable.shallow private loginInfo = {
     accessToken: StorageUtil.get('accessToken') || null,
-    refreshToken: StorageUtil.get('refreshToken') || null,
+    refreshToken: StorageUtil.get('refreshToken') || null
   };
 
   // ? UI
@@ -59,13 +59,13 @@ export class StoreService {
 
   // ? env
   @computed get getCurrentEnv() {
-    const [data] = this.envList.filter((it) => it.uuid === this.envUuid);
+    const [data] = this.envList.filter(it => it.uuid === this.envUuid);
     return (
       data || {
         hostUri: '',
         parameters: [],
         frontURI: '',
-        uuid: null,
+        uuid: null
       }
     );
   }
@@ -86,8 +86,11 @@ export class StoreService {
   @computed get isRemote() {
     return this.isShare || this.setting.settings['eoapi-common.dataStorage'] === 'http';
   }
-  @computed get getShareId() {
+  @computed get getShareID() {
     return this.shareId;
+  }
+  @computed get getShareLink() {
+    return this.shareLink;
   }
 
   // ? workspace
@@ -99,7 +102,7 @@ export class StoreService {
     return this.workspaceList.at(-1);
   }
   @computed get getCurrentWorkspaceInfo() {
-    const [workspace] = this.workspaceList.filter((it) => it.id === this.currentWorkspaceID);
+    const [workspace] = this.workspaceList.filter(it => it.id === this.currentWorkspaceID);
     return workspace;
   }
 
@@ -123,20 +126,29 @@ export class StoreService {
     return this.authEnum.canEdit;
   }
 
+  // ? setting
+  @computed get remoteUrl() {
+    return this.setting.getConfiguration('eoapi-common.remoteServer.url');
+  }
+
   // ? UI
   @computed get isOpenRightBar() {
     return this.rightBarStatus;
   }
 
-  constructor(
-    private setting: SettingService,
-    private storage: StorageService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private message: MessageService
-  ) {
+  constructor(private setting: SettingService, private router: Router, private route: ActivatedRoute, private message: MessageService) {
     makeObservable(this); // don't forget to add this if the class has observable fields
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(this.routeListener);
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
+    reaction(
+      () => this.getCurrentWorkspaceInfo,
+      ({ projects, creatorID }: any) => {
+        if (this.isLocal) {
+          return;
+        }
+        this.setCurrentProjectID(projects.at(0).uuid);
+        this.authEnum.canEdit = creatorID === this.getUserProfile.id;
+      }
+    );
   }
 
   // * actions
@@ -154,7 +166,7 @@ export class StoreService {
 
   @action setEnvList(data = []) {
     this.envList = data;
-    const isHere = data.find((it) => it.uuid === this.envUuid);
+    const isHere = data.find(it => it.uuid === this.envUuid);
     if (!isHere) {
       this.envUuid = null;
       //  for delete env
@@ -168,21 +180,25 @@ export class StoreService {
     StorageUtil.set('shareId', data);
   }
 
+  @action setShareLink(link = '') {
+    this.shareLink = link;
+  }
+
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
     const local = this.workspaceList.at(-1);
-    this.workspaceList = [...data.filter((it) => it.id !== -1).map((it) => ({ ...it, type: 'online' })), local];
-    if (this.workspaceList.length === -1) {
+    this.workspaceList = [...data.filter(it => it.id !== -1).map(it => ({ ...it, type: 'online' })), local];
+    if (this.workspaceList.length === 1) {
       this.setCurrentWorkspace(local);
     }
   }
   @action async setCurrentWorkspace(workspace: API.Workspace) {
+    console.log('setCurrentWorkspace');
     this.currentWorkspaceID = workspace.id;
     StorageUtil.set('currentWorkspace', workspace);
     // refresh component
     await this.router.navigate(['**']);
     await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
-
     this.message.send({ type: 'workspaceChange', data: true });
   }
 
@@ -190,6 +206,7 @@ export class StoreService {
   @action setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
     StorageUtil.set('currentProjectID', projectID);
+    // * update shareID
   }
 
   // ? user && auth
@@ -220,10 +237,8 @@ export class StoreService {
 
   @action setDataSource() {
     if (!this.isLocal) {
-      this.storage.toggleDataSource({ dataSourceType: 'http' });
       StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'false');
     } else {
-      this.storage.toggleDataSource({ dataSourceType: 'local' });
       StorageUtil.set(IS_SHOW_DATA_SOURCE_TIP, 'true');
     }
   }

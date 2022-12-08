@@ -113,18 +113,7 @@ export class WorkspaceComponent implements OnInit {
         return;
       }
       this.eMessage.success($localize`Edit workspace successfully !`);
-      const [list, wErr]: any = await this.api.api_workspaceList({});
-      if (wErr) {
-        if (wErr.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
-      this.store.setWorkspaceList(list);
+      this.effect.updateWorkspaceList();
     };
     await btnSaveBtnRunning();
     this.isSaveBtnBtnLoading = false;
@@ -168,18 +157,7 @@ You cannot restore it once deleted!`,
       }
       this.eMessage.success($localize`Delete success !`);
       await this.store.setCurrentWorkspace(this.store.getLocalWorkspaceInfo);
-      const [list, wErr]: any = await this.api.api_workspaceList({});
-      if (wErr) {
-        if (wErr.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
-      this.store.setWorkspaceList(list);
+      this.effect.updateWorkspaceList();
     };
     await btnDelWspRunning();
     this.isDelWspBtnLoading = false;

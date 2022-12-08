@@ -26,7 +26,7 @@ import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
 @Component({
   selector: 'eo-api-group-tree',
   templateUrl: './api-group-tree.component.html',
-  styleUrls: ['./api-group-tree.component.scss'],
+  styleUrls: ['./api-group-tree.component.scss']
 })
 export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   @ViewChild('apiGroup') apiGroup: NzTreeComponent;
@@ -65,8 +65,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       weight: 0,
       parentID: '0',
       isLeaf: true,
-      isFixed: true,
-    },
+      isFixed: true
+    }
   ];
   nzSelectedKeys: number[] = [];
   isEdit: boolean;
@@ -74,34 +74,34 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   apiItemsMenu = [
     {
       title: $localize`Edit`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'editApi', node: inArg.group }),
+      click: inArg => this.operateApiEvent({ eventName: 'editApi', node: inArg.group })
     },
     {
       title: $localize`:@Copy:Copy`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'copyApi', node: inArg.api }),
+      click: inArg => this.operateApiEvent({ eventName: 'copyApi', node: inArg.api })
     },
     {
       title: $localize`:@Delete:Delete`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'deleteApi', node: inArg.api }),
-    },
+      click: inArg => this.operateApiEvent({ eventName: 'deleteApi', node: inArg.api })
+    }
   ];
   groupItemsMenu = [
     {
       title: $localize`Add API`,
-      click: (inArg) => this.operateApiEvent({ eventName: 'addAPI', node: inArg.group }),
+      click: inArg => this.operateApiEvent({ eventName: 'addAPI', node: inArg.group })
     },
     {
       title: $localize`Add Subgroup`,
-      click: (inArg) => this.addSubGroup(inArg.group),
+      click: inArg => this.addSubGroup(inArg.group)
     },
     {
       title: $localize`Edit`,
-      click: (inArg) => this.editGroup(inArg.group),
+      click: inArg => this.editGroup(inArg.group)
     },
     {
       title: $localize`:@@Delete:Delete`,
-      click: (inArg) => this.deleteGroup(inArg.group),
-    },
+      click: inArg => this.deleteGroup(inArg.group)
+    }
   ];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
@@ -131,7 +131,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   setParentStyle(node) {
     console.log('node', node);
   }
-  onSearchFunc: NzTreeComponent['nzSearchFunc'] = (node) => {
+  onSearchFunc: NzTreeComponent['nzSearchFunc'] = node => {
     const origin = this.apiGroup.getTreeNodeByKey(node.key).origin;
     return node.title.includes(this.searchValue) || origin.uri?.includes(this.searchValue);
   };
@@ -149,7 +149,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   /**
    * Load all group and apiData items.
    */
-  buildGroupTreeData = debounce(async (callback) => {
+  buildGroupTreeData = debounce(async callback => {
     this.groupByID = {};
     this.treeItems = [];
     await this.getProjectCollections();
@@ -158,11 +158,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
 
   async getProjectCollections() {
     this.apiDataLoading = true;
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       if (this.store.isShare) {
         const [res, err]: any = await this.http.api_shareDocGetAllApi(
           {
-            uniqueID: this.store.getShareId,
+            uniqueID: this.store.getShareID
           },
           '/api'
         );
@@ -190,7 +190,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
 
   getGroups(apiGroups = []) {
-    apiGroups.forEach((item) => {
+    apiGroups.forEach(item => {
       delete item.updatedAt;
       this.groupByID[item.uuid] = item;
       this.treeItems.push({
@@ -198,7 +198,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         key: `group-${item.uuid}`,
         weight: item.weight || 0,
         parentID: item.parentID ? `group-${item.parentID}` : '0',
-        isLeaf: false,
+        isLeaf: false
       });
     });
   }
@@ -214,7 +214,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         weight: item.weight || 0,
         parentID: item.groupID ? `group-${item.groupID}` : '0',
         method: item.method,
-        isLeaf: true,
+        isLeaf: true
       });
     });
     this.apiDataItems = apiItems;
@@ -229,7 +229,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.expandKeys = key;
   }
   toggleExpand() {
-    this.expandKeys = this.apiGroup.getExpandedNodeList().map((tree) => tree.key);
+    this.expandKeys = this.apiGroup.getExpandedNodeList().map(tree => tree.key);
   }
   /**
    * Expand Select Group
@@ -238,10 +238,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     if (!this.route.snapshot.queryParams.uuid) {
       return;
     }
-    this.expandKeys = [
-      ...this.expandKeys,
-      ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || []),
-    ];
+    this.expandKeys = [...this.expandKeys, ...(getExpandGroupByKey(this.apiGroup, this.route.snapshot.queryParams.uuid) || [])];
   }
   /**
    * Watch  apiData change event.
@@ -258,11 +255,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           case 'deleteApiSuccess':
           case 'updateGroupSuccess': {
             const group = inArg.data?.group;
-            if (
-              inArg.type === 'updateGroupSuccess' &&
-              group?.parentID &&
-              !this.expandKeys.includes(`group-${group?.parentID}`)
-            ) {
+            if (inArg.type === 'updateGroupSuccess' && group?.parentID && !this.expandKeys.includes(`group-${group?.parentID}`)) {
               this.expandKeys.push(`group-${group?.parentID}`);
             }
             this.buildGroupTreeData();
@@ -284,19 +277,19 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       case 'editApi':
       case 'detailApi': {
         this.router.navigate([`${prefix}/http/${inArg.eventName.replace('Api', '')}`], {
-          queryParams: { uuid: inArg.node.key },
+          queryParams: { uuid: inArg.node.key }
         });
         break;
       }
       case 'jumpOverview': {
         this.router.navigate([`${prefix}/overview`], {
-          queryParams: { uuid: 'overview' },
+          queryParams: { uuid: 'overview' }
         });
         break;
       }
       case 'addAPI': {
         this.router.navigate([`${prefix}/http/edit`], {
-          queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') },
+          queryParams: { groupID: inArg.node?.origin.key.replace('group-', '') }
         });
         break;
       }
@@ -308,8 +301,8 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           nzMaskClosable: false,
           nzComponentParams: {},
           nzOnOk: () =>
-            new Promise((resolve) => {
-              modal.componentInstance.submit((status) => {
+            new Promise(resolve => {
+              modal.componentInstance.submit(status => {
                 if (status) {
                   this.message.success($localize`${title} successfully`);
                   this.buildGroupTreeData(resolve);
@@ -318,7 +311,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
                   this.message.error($localize`Failed to ${title}`);
                 }
               });
-            }),
+            })
         });
         break;
       }
@@ -331,7 +324,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
           }</strong> ? You cannot restore it once deleted!`,
           nzOnOk: () => {
             this.apiService.delete(apiInfo.uuid);
-          },
+          }
         });
         break;
       }
@@ -376,7 +369,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       projectID: 1,
       parentID: parentID ? Number(parentID.replace('group-', '')) : 0,
       weight: 0,
-      name: '',
+      name: ''
     };
     return groupModel;
   }
@@ -414,7 +407,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.groupModal($localize`Delete Group`, {
       group: this.nodeToGroup(node),
       treeItems: this.treeItems,
-      action: 'delete',
+      action: 'delete'
     });
   }
 
@@ -431,7 +424,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       nzComponentParams: params,
       nzOnOk() {
         modal.componentInstance.submit();
-      },
+      }
     });
   }
 
@@ -453,7 +446,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      const nodes = this.apiGroup.getTreeNodes().filter((n) => n.level === 0);
+      const nodes = this.apiGroup.getTreeNodes().filter(n => n.level === 0);
       nodes.forEach((item, index) => {
         if (item.isLeaf) {
           groupApiData.api.push({ uuid: item.key, weight: index, groupID: '0' });
@@ -480,11 +473,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       this.storage.run(
         'groupBulkUpdate',
         [
-          data.group.map((val) => ({
+          data.group.map(val => ({
             ...val,
             uuid: this.replaceGroupKey(val.uuid),
-            parentID: this.replaceGroupKey(val.parentID),
-          })),
+            parentID: this.replaceGroupKey(val.parentID)
+          }))
         ],
         (result: StorageRes) => {
           if (--count === 0) {
@@ -498,11 +491,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       this.storage.run(
         'apiDataBulkUpdate',
         [
-          data.api.map((n) => ({
+          data.api.map(n => ({
             ...n,
             uuid: this.replaceGroupKey(n.uuid),
-            groupID: this.replaceGroupKey(n.groupID),
-          })),
+            groupID: this.replaceGroupKey(n.groupID)
+          }))
         ],
         (result: StorageRes) => {
           if (--count === 0) {
@@ -516,7 +509,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Expand Group fit current select api  when router change
    */
   private watchRouterChange() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.setSelectedKeys();
       this.expandGroup();
     });
@@ -527,7 +520,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
       uuid: Number(node.origin.key.replace('group-', '')),
       name: node.origin.title,
       parentID: Number(node.origin.parentID.replace('group-', '')),
-      weight: node.origin.weight,
+      weight: node.origin.weight
     };
   }
 
