@@ -42,8 +42,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() nzDataChange = new EventEmitter();
   @Output() columnVisibleStatusChange = new EventEmitter();
 
-  @ViewChild('enums', { read: TemplateRef })
-  enums: TemplateRef<HTMLDivElement>;
+  @ViewChild('enumsTmp', { read: TemplateRef })
+  enumsTmp: TemplateRef<HTMLDivElement>;
 
   private BTN_TYPE_NEED_CUSTOMER = ['delete', 'insert', 'edit'];
   //Default buttom template match action
@@ -262,6 +262,10 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           body.opts = col.enums.map(item => ({ label: item.title, value: item.value }));
           break;
         }
+        case 'autoComplete':{
+          body.opts = col.enums;
+          break;
+        }
         case 'checkbox': {
           header.type = 'checkbox';
           body.type = 'checkbox';
@@ -271,12 +275,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           body.keyName = col.key;
           body.key = this.numberInput;
           body.type = '';
-          body.placeholder = col.placeholder || col.title || '';
           break;
         }
-        case 'input':
-        case 'autoComplete': {
-          body.placeholder = col.placeholder || (typeof col.title === 'string' ? col.title : '');
+        case 'input': {
           break;
         }
         case 'btnList': {
@@ -312,13 +313,18 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
         }
         case 'text':
         default: {
+          //Change value to enums text
           if (col.enums) {
             body.keyName = col.key;
-            body.key = this.enums;
+            body.key = this.enumsTmp;
             body.enums = col.enums.reduce((a, v) => ({ ...a, [v.value]: { title: v.title, class: v.class } }), {});
           }
           break;
         }
+      }
+      //Set placeholder
+      if (['autoComplete', 'inputNumber', 'input', 'autoComplete'].includes(col.type)) {
+        body.placeholder = col.placeholder || (typeof col.title === 'string' ? col.title : '');
       }
       //Set resizeable
       if (col.type === 'btnList') {

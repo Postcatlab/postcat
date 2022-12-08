@@ -25,7 +25,6 @@ export class HistoryComponent implements OnInit {
   async ngOnInit() {
     const result = await this.loadAllTest();
     this.historyList = (result || []).reverse().map((n) => ({ ...n, title: n.request?.uri, key: n.uuid }));
-    console.log('historyList', this.historyList);
     this.message
       .get()
       .pipe(takeUntil(this.destroy$))

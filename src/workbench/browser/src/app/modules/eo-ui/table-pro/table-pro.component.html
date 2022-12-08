@@ -25,7 +25,7 @@
 >
 </eo-ng-table>
 <!-- Enum template -->
-<ng-template #enums let-item="item" let-rowItem="rowItem">
+<ng-template #enumsTmp let-item="item" let-rowItem="rowItem">
   <div class="{{ rowItem.enums[item[rowItem.keyName]]?.class }}">
     {{ rowItem.enums[item[rowItem.keyName]]?.title }}
   </div>
