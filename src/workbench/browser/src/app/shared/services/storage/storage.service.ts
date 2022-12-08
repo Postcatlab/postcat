@@ -42,6 +42,7 @@ export class StorageService {
     if (!this.instance[action]) {
       throw Error(`Lack request API: ${action}`);
     }
+    // console.log(new Error());
     this.instance[action](...params).subscribe(
       (res: any) => {
         handleResult.status = res.status;

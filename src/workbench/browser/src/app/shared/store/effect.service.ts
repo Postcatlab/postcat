@@ -131,6 +131,7 @@ export class EffectService {
 
   async updateWorkspace(workspace) {
     if (workspace.id === -1) {
+      this.store.setCurrentWorkspace(workspace);
       this.store.setCurrentProjectID(1);
       StorageUtil.remove('server_version');
       return;
