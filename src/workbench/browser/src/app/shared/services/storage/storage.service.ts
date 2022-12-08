@@ -22,7 +22,6 @@ export class StorageService {
     return getSettings()['eoapi-common.dataStorage'] || 'local';
   }
   constructor(private injector: Injector, private store: StoreService, private indexedDBStorage: IndexedDBStorage) {
-    console.log('StorageService init');
     autorun(() => {
       this.instance = this.store.isLocal ? this.indexedDBStorage : this.injector.get(HttpStorage);
     });

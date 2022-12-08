@@ -355,11 +355,11 @@ export class UserModalComponent implements OnInit {
       newWorkName: [null, [Validators.required]]
     });
 
-    const { id: workspaceID } = this.store.getCurrentWorkspaceInfo;
+    const { id: workspaceID } = this.store.getCurrentWorkspace;
     if (this.store.isShare) {
       return;
     }
-    this.effect.updateWorkspaceList();
+
     if (workspaceID !== -1) {
       const { projects } = await this.effect.getWorkspaceInfo(workspaceID);
       this.store.setCurrentProjectID(projects.at(0).uuid);
@@ -376,7 +376,7 @@ export class UserModalComponent implements OnInit {
       return;
     }
 
-    const { id: currentWorkspaceID } = this.store.getCurrentWorkspaceInfo;
+    const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
     if (currentWorkspaceID === -1) {
       return;
     }
@@ -432,7 +432,7 @@ export class UserModalComponent implements OnInit {
       }
       const { workspace } = data;
       this.store.setWorkspaceList([workspace, ...this.store.getWorkspaceList]);
-      this.store.setCurrentWorkspace(workspace);
+      this.effect.updateWorkspace(workspace);
 
       // * 关闭弹窗
       this.isSyncModalVisible = false;
@@ -610,7 +610,7 @@ export class UserModalComponent implements OnInit {
       this.message.send({ type: 'update-share-link', data: {} });
       {
         this.effect.updateWorkspaceList();
-        this.store.setCurrentWorkspace(data);
+        this.effect.updateWorkspace(data);
       }
     };
     await btnSaveRunning();

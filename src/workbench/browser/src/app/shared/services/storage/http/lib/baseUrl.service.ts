@@ -22,11 +22,10 @@ const noPrefix = ['https://', 'http://'];
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
   get projectID() {
-    console.log('==>', this.store.getCurrentProjectID);
     return this.store.getCurrentProjectID;
   }
   get workspaceID() {
-    return this.store.getCurrentWorkspaceInfo.id;
+    return this.store.getCurrentWorkspace.id;
   }
   get apiPrefix() {
     return `/${this.workspaceID}/${this.projectID}/`;

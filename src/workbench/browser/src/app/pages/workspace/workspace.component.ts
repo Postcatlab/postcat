@@ -28,14 +28,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
         </nz-form-item>
 
         <section class="">
-          <button
-            eo-ng-button
-            [nzLoading]="isSaveBtnBtnLoading"
-            class=""
-            nzType="primary"
-            (click)="btnogunjqCallback()"
-            i18n
-          >
+          <button eo-ng-button [nzLoading]="isSaveBtnBtnLoading" class="" nzType="primary" (click)="btnogunjqCallback()" i18n>
             Save
           </button>
         </section>
@@ -47,19 +40,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
       <section class="pb-4">
         <span i18n> After deleting a workspace, all data in the workspace will be permanently deleted. </span>
       </section>
-      <button
-        eo-ng-button
-        [nzLoading]="isDelWspBtnLoading"
-        class=""
-        nzType="primary"
-        nzDanger
-        (click)="btn5y8eslCallback()"
-        i18n
-      >
+      <button eo-ng-button [nzLoading]="isDelWspBtnLoading" class="" nzType="primary" nzDanger (click)="btn5y8eslCallback()" i18n>
         Delete
       </button>
     </section>
-  </section>`,
+  </section>`
 })
 export class WorkspaceComponent implements OnInit {
   validateWspNameForm;
@@ -81,25 +66,24 @@ export class WorkspaceComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     // * Init WspName form
     this.validateWspNameForm = this.fb.group({
-      workspace: [null, [Validators.required]],
+      workspace: [null, [Validators.required]]
     });
 
-    const { title: currentWsp, id } = this.store.getCurrentWorkspaceInfo;
-    this.effect.updateProjectID(id);
+    const { title: currentWsp } = this.store.getCurrentWorkspace;
     // * get WspName form values
     this.validateWspNameForm.patchValue({
-      workspace: currentWsp,
+      workspace: currentWsp
     });
   }
   async btnogunjqCallback() {
     // * click event callback
     this.isSaveBtnBtnLoading = true;
     const btnSaveBtnRunning = async () => {
-      const { id: currentWsp } = this.store.getCurrentWorkspaceInfo;
+      const { id: currentWsp } = this.store.getCurrentWorkspace;
       const { workspace: title } = this.validateWspNameForm.value;
       const [data, err]: any = await this.api.api_workspaceEdit({
         workspaceID: currentWsp,
-        title,
+        title
       });
       if (err) {
         this.eMessage.error($localize`Edit workspace failed`);
@@ -125,7 +109,7 @@ export class WorkspaceComponent implements OnInit {
       this.isDelWspBtnLoading = false;
 
       const confirm = () =>
-        new Promise((resolve) => {
+        new Promise(resolve => {
           this.modal.confirm({
             nzTitle: $localize`Deletion Confirmation?`,
             nzContent: $localize`Are you sure you want to delete the workspace ? 
@@ -133,7 +117,7 @@ You cannot restore it once deleted!`,
             nzOkDanger: true,
             nzOkText: $localize`Delete`,
             nzOnOk: () => resolve(true),
-            nzOnCancel: () => resolve(false),
+            nzOnCancel: () => resolve(false)
           });
         });
       const isOk = await confirm();
@@ -141,9 +125,9 @@ You cannot restore it once deleted!`,
         return;
       }
 
-      const { id: currentWsp } = this.store.getCurrentWorkspaceInfo;
+      const { id: currentWsp } = this.store.getCurrentWorkspace;
       const [data, err]: any = await this.api.api_workspaceDelete({
-        workspaceID: currentWsp,
+        workspaceID: currentWsp
       });
       if (err) {
         if (err.status === 401) {
@@ -156,7 +140,7 @@ You cannot restore it once deleted!`,
         return;
       }
       this.eMessage.success($localize`Delete success !`);
-      await this.store.setCurrentWorkspace(this.store.getLocalWorkspaceInfo);
+      await this.effect.updateWorkspace(this.store.getLocalWorkspace);
       this.effect.updateWorkspaceList();
     };
     await btnDelWspRunning();

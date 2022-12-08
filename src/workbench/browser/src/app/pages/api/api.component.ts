@@ -18,7 +18,7 @@ const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KE
 @Component({
   selector: 'eo-api',
   templateUrl: './api.component.html',
-  styleUrls: ['./api.component.scss'],
+  styleUrls: ['./api.component.scss']
 })
 export class ApiComponent implements OnInit, OnDestroy {
   @observable envUuid = '';
@@ -40,7 +40,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   }
 
   // @computed get renderEnvList() {
-  //   console.log('heloooo');
   //   return this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
   // }
 
@@ -55,22 +54,22 @@ export class ApiComponent implements OnInit, OnDestroy {
     {
       routerLink: 'detail',
       isShare: true,
-      title: $localize`:@@API Detail:Preview`,
+      title: $localize`:@@API Detail:Preview`
     },
     {
       routerLink: 'edit',
-      title: $localize`Edit`,
+      title: $localize`Edit`
     },
     {
       routerLink: 'test',
       isShare: true,
-      title: $localize`Test`,
+      title: $localize`Test`
     },
     {
       routerLink: 'mock',
       title: 'Mock',
-      onlyDestop: true,
-    },
+      onlyDestop: true
+    }
   ];
 
   isOpen = false;
@@ -103,14 +102,14 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.id = Number(this.route.snapshot.queryParams.uuid);
     this.effect.updateEnvList();
     this.watchRouterChange();
-    this.renderTabs = this.store.isShare ? this.TABS.filter((it) => it.isShare) : this.TABS;
+    this.renderTabs = this.store.isShare ? this.TABS.filter(it => it.isShare) : this.TABS;
     this.envUuid = this.store.getEnvUuid;
     autorun(() => {
-      this.renderEnvList = this.store.getEnvList.map((it) => ({ label: it.name, value: it.uuid }));
+      this.renderEnvList = this.store.getEnvList.map(it => ({ label: it.name, value: it.uuid }));
     });
     reaction(
       () => this.envUuid,
-      (data) => {
+      data => {
         this.store.setEnvUuid(data);
       }
     );
@@ -129,7 +128,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   watchRouterChange() {
     this.router.events
       .pipe(takeUntil(this.destroy$))
-      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         this.id = Number(this.route.snapshot.queryParams.uuid);
       });
