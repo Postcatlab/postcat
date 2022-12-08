@@ -199,7 +199,7 @@ export class StoreService {
     this.currentWorkspace = workspace;
     StorageUtil.set('currentWorkspace', workspace);
     if (this.workspaceList.length === 1) {
-      // * new user
+      // * new user, only has local workspace
       return;
     }
     // * refresh view
