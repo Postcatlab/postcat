@@ -3,23 +3,24 @@ import { EoNgFeedbackDrawerService } from 'eo-ng-feedback';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { SelectThemeComponent } from '../../modules/setting/common/select-theme/select-theme.component';
+import { SettingComponent } from '../../modules/setting/setting.component';
+import { ModalService } from '../../shared/services/modal.service';
 import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'eo-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss'],
+  styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
   sideBarCollapsed: boolean;
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(public sidebar: SidebarService, private drawerService: EoNgFeedbackDrawerService) {
+  constructor(public sidebar: SidebarService, private modal: ModalService) {
     this.sideBarCollapsed = this.sidebar.getCollapsed();
     this.sidebar
       .onCollapsedChanged()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((isCollapsed) => {
+      .subscribe(isCollapsed => {
         this.sideBarCollapsed = isCollapsed;
       });
   }
@@ -27,11 +28,14 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.sidebar.toggleCollapsed();
   }
   changeTheme() {
-    // this.drawerService.create({
-    //   nzTitle: 'Theme',
-    //   nzSize: 'default',
-    //   nzContent: SelectThemeComponent,
-    // });
+    const ref = this.modal.create({
+      nzClassName: 'eo-setting-modal',
+      nzContent: SettingComponent,
+      nzComponentParams: {
+        selectedModule: 'eoapi-theme'
+      },
+      nzFooter: null
+    });
   }
   ngOnInit(): void {}
   ngOnDestroy(): void {

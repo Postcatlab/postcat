@@ -20,7 +20,7 @@ export class ModalService {
   }
   create(inOpts) {
     const modalOpts: ModalOptions = {
-      nzTitle: 'modal title',
+      nzTitle: null,
       nzContent: inOpts.nzContent,
       nzClosable: 'nzClosable' in inOpts ? inOpts.nzClosable : true,
       nzComponentParams: {

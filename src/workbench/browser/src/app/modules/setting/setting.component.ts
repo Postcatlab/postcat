@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
@@ -26,7 +26,7 @@ interface FlatNode {
 @Component({
   selector: 'eo-setting',
   templateUrl: './setting.component.html',
-  styleUrls: ['./setting.component.scss'],
+  styleUrls: ['./setting.component.scss']
 })
 export class SettingComponent implements OnInit {
   @Input() selectedModule: string;
@@ -38,19 +38,19 @@ export class SettingComponent implements OnInit {
     expandable: !!node.children && node.children.length > 0,
     name: node.name,
     level,
-    disabled: !!node.disabled,
+    disabled: !!node.disabled
   });
   selectListSelection = new SelectionModel<FlatNode & TreeNode>();
   treeControl: any = new FlatTreeControl<FlatNode & TreeNode>(
-    (node) => node.level,
-    (node) => node.expandable
+    node => node.level,
+    node => node.expandable
   );
 
   treeFlattener = new NzTreeFlattener(
     this.transformer,
-    (node) => node.level,
-    (node) => node.expandable,
-    (node) => node.children
+    node => node.level,
+    node => node.expandable,
+    node => node.children
   );
 
   dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -76,34 +76,34 @@ export class SettingComponent implements OnInit {
       children: [
         {
           name: $localize`:@@Account:Username`,
-          moduleID: 'eoapi-account-username',
+          moduleID: 'eoapi-account-username'
         },
         {
           name: $localize`Password`,
-          moduleID: 'eoapi-account-password',
-        },
-      ],
+          moduleID: 'eoapi-account-password'
+        }
+      ]
     },
     {
       name: $localize`:@@Theme:Theme`,
-      moduleID: 'eoapi-theme',
+      moduleID: 'eoapi-theme'
     },
     ...(this.webService.isWeb
       ? []
       : [
           {
             name: $localize`:@@Cloud:Cloud Storage`,
-            moduleID: 'eoapi-common',
-          },
+            moduleID: 'eoapi-common'
+          }
         ]),
     {
       name: $localize`:@@Language:Language`,
-      moduleID: 'eoapi-language',
+      moduleID: 'eoapi-language'
     },
     {
       name: $localize`About`,
-      moduleID: 'eoapi-about',
-    },
+      moduleID: 'eoapi-about'
+    }
   ] as const;
   /** local configure */
   localSettings = {};
@@ -114,14 +114,17 @@ export class SettingComponent implements OnInit {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  constructor(private settingService: SettingService, public store: StoreService, public webService: WebService) {}
+  constructor(
+    private settingService: SettingService,
+    public store: StoreService,
+    public webService: WebService,
+    private cdk: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.init();
     this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
-    // this.parseSettings();
   }
-
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
   /**
@@ -141,7 +144,7 @@ export class SettingComponent implements OnInit {
     }
     const target = e.target as HTMLDivElement;
     const treeNodes = this.dataSource._flattenedData.value;
-    treeNodes.some((node) => {
+    treeNodes.some(node => {
       const el = target.querySelector(`#${node.moduleID}`) as HTMLDivElement;
       if (el.offsetTop > target.scrollTop) {
         this.selectListSelection.select(node);
@@ -149,7 +152,6 @@ export class SettingComponent implements OnInit {
       }
     });
   }, 50);
-
   selectModule(node) {
     this.isClick = true;
     this.currentConfiguration = node.configuration || [];
@@ -171,13 +173,13 @@ export class SettingComponent implements OnInit {
         const treeItem: TreeNode = {
           name: curr.title,
           moduleID: curr.moduleID,
-          configuration: [].concat(curr),
+          configuration: [].concat(curr)
         };
         return prev.concat(treeItem);
       }, []);
     // All settings
     const treeData = eoDeepCopy(
-      this.treeNodes.filter((val) => {
+      this.treeNodes.filter(val => {
         switch (val.moduleID) {
           case 'eoapi-account': {
             if (!this.store.isLogin) {
@@ -192,7 +194,14 @@ export class SettingComponent implements OnInit {
     this.treeControl.expandAll();
 
     // The first item is selected by default
-    this.selectModule(this.treeControl.dataNodes.at(0));
+    const nodeIndex = this.treeControl.dataNodes.findIndex(node => node.moduleID === this.selectedModule);
+    if (this.selectedModule && nodeIndex === -1) {
+      console.error(`EO_ERROR[eo-setting]: The selected module [${this.selectModule}] does not exist`);
+    }
+    //!After view init for scrollIntoView
+    setTimeout(() => {
+      this.selectModule(this.treeControl.dataNodes.at(nodeIndex === -1 ? 0 : nodeIndex));
+    }, 0);
   }
   /**
    * Parse the configuration information of all modules
@@ -201,11 +210,11 @@ export class SettingComponent implements OnInit {
     this.settings = this.localSettings = this.settingService.getSettings();
     const modules = window.eo?.getModules?.() || new Map([]);
     this.extensitonConfigurations = [...modules.values()]
-      .filter((n) => n.features?.configuration)
-      .map((n) => {
+      .filter(n => n.features?.configuration)
+      .map(n => {
         const configuration = n.features.configuration;
         if (Array.isArray(configuration)) {
-          configuration.forEach((m) => (m.moduleID ??= n.moduleID));
+          configuration.forEach(m => (m.moduleID ??= n.moduleID));
         } else {
           configuration.moduleID ??= n.moduleID;
         }

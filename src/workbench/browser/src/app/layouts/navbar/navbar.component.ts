@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
@@ -10,10 +9,11 @@ import { ElectronService, WebService } from '../../core/services';
 import { LanguageService } from '../../core/services/language/language.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { SettingComponent } from '../../modules/setting/setting.component';
+import { ModalService } from '../../shared/services/modal.service';
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss'],
+  styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
   resourceInfo = this.web.resourceInfo;
@@ -21,18 +21,18 @@ export class NavbarComponent implements OnInit {
     {
       title: 'Document',
       href: 'https://docs.eoapi.io',
-      click: ($event) => {},
+      click: $event => {}
     },
     {
       title: 'Report Issue',
       href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
-      click: ($event) => {},
-    },
+      click: $event => {}
+    }
   ];
   constructor(
     public electron: ElectronService,
     private web: WebService,
-    private modal: NzModalService,
+    private modal: ModalService,
     public theme: ThemeService,
     private message: MessageService,
     public lang: LanguageService,
@@ -70,7 +70,7 @@ export class NavbarComponent implements OnInit {
     const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
       nzContent: SettingComponent,
-      nzFooter: null,
+      nzFooter: null
     });
     this.message
       .get()
@@ -84,7 +84,7 @@ export class NavbarComponent implements OnInit {
   private getEnvironment(): string {
     let result = '';
     const systemInfo = this.electron.getSystemInfo();
-    systemInfo.forEach((val) => {
+    systemInfo.forEach(val => {
       if (['homeDir'].includes(val.id)) {
         return;
       }
