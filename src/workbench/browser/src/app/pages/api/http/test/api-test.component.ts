@@ -19,8 +19,8 @@ import {
   beforeScriptCompletions,
   afterScriptCompletions
 } from 'eo/workbench/browser/src/app/pages/api/http/test/api-script/constant';
-import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
 import { ApiTestData, ApiTestHistoryFrame, ContentType } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.model';
+import { ApiTestResultResponseComponent } from 'eo/workbench/browser/src/app/pages/api/http/test/result-response/api-test-result-response.component';
 import { getGlobals, setGlobals } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { ApiTestRes } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -29,15 +29,15 @@ import { isEmpty } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { interval, Subscription, Subject } from 'rxjs';
-import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestUtilService } from '../../../../modules/api-shared/api-test-util.service';
+import { ApiBodyType, RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 import { MessageService } from '../../../../shared/services/message';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { TestServerService } from '../../service/api-test/test-server.service';
 import { ApiTestService } from './api-test.service';
-import { ApiBodyType, RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 
 const API_TEST_DRAG_TOP_HEIGHT_KEY = 'API_TEST_DRAG_TOP_HEIGHT';
 const localHeight = Number.parseInt(localStorage.getItem(API_TEST_DRAG_TOP_HEIGHT_KEY));
@@ -67,9 +67,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
    * * Usually restored from tab
    */
   @Input() initialModel: testViewModel;
-  @Output() modelChange = new EventEmitter<testViewModel>();
-  @Output() afterTested = new EventEmitter<any>();
-  @Output() eoOnInit = new EventEmitter<testViewModel>();
+  @Output() readonly modelChange = new EventEmitter<testViewModel>();
+  @Output() readonly afterTested = new EventEmitter<any>();
+  @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
   @ViewChild(ApiTestResultResponseComponent) apiTestResultResponseComponent: ApiTestResultResponseComponent; // 通过组件类型获取
   validateForm!: FormGroup;
   BEFORE_DATA = BEFORE_DATA;
@@ -80,7 +80,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   status: 'start' | 'testing' | 'tested' = 'start';
   waitSeconds = 0;
-  height: number;
+  responseContainerHeight: number;
 
   isRequestBodyLoaded = false;
   REQUEST_METHOD = objectToArray(RequestMethod);
@@ -118,7 +118,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     queueMicrotask(() => {
-      this.height = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
+      this.responseContainerHeight = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
     });
   }
   /**
@@ -374,25 +374,19 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.timer$) {
       this.timer$.unsubscribe();
     }
-    const that = this;
-    this.timer$ = interval(1000).subscribe({
-      next(val) {
-        that.waitSeconds++;
-        if (that.waitSeconds >= that.MAX_TEST_SECONDS) {
-          this.complete();
-        }
-      },
-      complete() {
-        that.changeStatus('tested');
-      }
-    });
+    this.timer$ = interval(1000)
+      .pipe(
+        takeWhile(() => this.waitSeconds < this.MAX_TEST_SECONDS),
+        finalize(() => this.changeStatus('tested'))
+      )
+      .subscribe(() => this.waitSeconds++);
   }
   downloadFile() {
     this.apiTestResultResponseComponent.downloadResponseText();
   }
 
   onResize({ height }: NzResizeEvent): void {
-    this.height = height;
+    this.responseContainerHeight = height;
     localStorage.setItem(API_TEST_DRAG_TOP_HEIGHT_KEY, String(height));
   }
   /**
@@ -414,6 +408,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         this.waitSeconds = 0;
         this.model.responseTabIndex = 0;
         this.ref.detectChanges();
+        // 测试完自动帮用户将返回高度调到 40%
+        const height = this.elementRef.nativeElement.offsetHeight * 0.4;
+        if (this.responseContainerHeight < height) {
+          this.responseContainerHeight = height;
+        }
         break;
       }
     }
