@@ -1,14 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  AfterViewInit,
-  OnDestroy,
-  OnInit,
-  ElementRef,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, OnDestroy, OnInit, ElementRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import type { editor, IDisposable } from 'monaco-editor';
@@ -25,25 +15,25 @@ type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' 
 const eventHash = new Map()
   .set('format', {
     label: $localize`Format`,
-    icon: 'code',
+    icon: 'code'
   })
   .set('copy', {
     label: $localize`:@@Copy:Copy`,
-    icon: 'copy',
+    icon: 'copy'
   })
   .set('search', {
     label: $localize`:@@Search:Search`,
-    icon: 'search',
+    icon: 'search'
   })
   .set('replace', {
     label: $localize`Replace`,
-    icon: 'file-text',
+    icon: 'file-text'
   });
 
 @Component({
   selector: 'eo-monaco-editor',
   templateUrl: './monaco-editor.component.html',
-  styleUrls: ['./monaco-editor.component.scss'],
+  styleUrls: ['./monaco-editor.component.scss']
 })
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
@@ -66,7 +56,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() autoFormat = false;
   @Input() disabled = false;
   @Input() completions = [];
-  @Output() codeChange = new EventEmitter<string>();
+  @Output() readonly codeChange = new EventEmitter<string>();
   $$code = '';
   $$isBase64 = false;
   isFirstFormat = true;
@@ -76,20 +66,20 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   typeList = [
     {
       value: 'json',
-      label: 'JSON',
+      label: 'JSON'
     },
     {
       value: 'xml',
-      label: 'XML',
+      label: 'XML'
     },
     {
       value: 'html',
-      label: 'HTML',
+      label: 'HTML'
     },
     {
       value: 'text',
-      label: 'Text',
-    },
+      label: 'Text'
+    }
   ];
   defaultConfig: JoinedEditorOptions = {
     language: this.editorType || 'json',
@@ -98,16 +88,16 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     wordWrap: 'on',
     wrappingStrategy: 'advanced',
     minimap: {
-      enabled: false,
+      enabled: false
     },
     formatOnPaste: true,
     formatOnType: true,
     scrollbar: {
       scrollByPage: true,
-      alwaysConsumeMouseWheel: false,
+      alwaysConsumeMouseWheel: false
     },
     overviewRulerLanes: 0,
-    quickSuggestions: { other: true, strings: true },
+    quickSuggestions: { other: true, strings: true }
   };
   private resizeObserver: ResizeObserver;
   private readonly el: HTMLElement; /** monaco config */
@@ -164,16 +154,16 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     // To get the Ace instance:
     this.buttonList = this.electron.isElectron
       ? this.eventList
-          .filter((it) => !['newTab', 'type'].includes(it))
-          .map((it) => ({
+          .filter(it => !['newTab', 'type'].includes(it))
+          .map(it => ({
             event: it,
-            ...eventHash.get(it),
+            ...eventHash.get(it)
           }))
       : this.eventList
-          .filter((it) => it !== 'type')
-          .map((it) => ({
+          .filter(it => it !== 'type')
+          .map(it => ({
             event: it,
-            ...eventHash.get(it),
+            ...eventHash.get(it)
           }));
   }
 
@@ -222,7 +212,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
             startLineNumber: 1,
             startColumn: 1,
             endLineNumber: position.lineNumber,
-            endColumn: position.column,
+            endColumn: position.column
           });
 
           const word = model.getWordUntilPosition(position);
@@ -230,12 +220,12 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
             startLineNumber: position.lineNumber,
             endLineNumber: position.lineNumber,
             startColumn: word.startColumn,
-            endColumn: word.endColumn,
+            endColumn: word.endColumn
           };
           return {
-            suggestions: [...this.completions, ...defaultCompletions].map((n) => ({ ...n, range })),
+            suggestions: [...this.completions, ...defaultCompletions].map(n => ({ ...n, range }))
           } as any;
-        },
+        }
       });
     }
 
@@ -244,11 +234,11 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       requestAnimationFrame(updateEditorHeight); // folding
     });
 
-    this.codeEdtor.onDidChangeModelContent((e) => {
+    this.codeEdtor.onDidChangeModelContent(e => {
       this.handleChange();
     });
 
-    this.codeEdtor.onDidBlurEditorText((e) => {
+    this.codeEdtor.onDidBlurEditorText(e => {
       this.handleBlur();
     });
 
@@ -291,7 +281,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.codeEdtor?.layout?.();
   };
   formatCode() {
-    return new Promise<string>((resolve) => {
+    return new Promise<string>(resolve => {
       requestAnimationFrame(async () => {
         this.codeEdtor?.updateOptions({ readOnly: false });
         await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
@@ -362,8 +352,8 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.codeEdtor.executeEdits('', [
       {
         range: new monaco.Range(p.lineNumber, p.column, p.lineNumber, p.column),
-        text: code,
-      },
+        text: code
+      }
     ]);
     this.codeEdtor.focus();
     // this.codeEdtor.trigger('keyboard', 'type', { text: code });

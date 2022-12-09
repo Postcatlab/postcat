@@ -7,7 +7,7 @@ import { eoDeepCopy, whatType } from '../../../utils/index.utils';
 @Component({
   selector: 'params-import',
   templateUrl: './params-import.component.html',
-  styleUrls: ['./params-import.component.scss'],
+  styleUrls: ['./params-import.component.scss']
 })
 export class ParamsImportComponent {
   @Input() disabled: boolean;
@@ -15,8 +15,8 @@ export class ParamsImportComponent {
   @Input() contentType: string | 'json' | 'formData' | 'xml' | 'header' | 'query' = 'json';
   @Input() baseData: object[] = [];
   @Input() modalTitle = '';
-  @Output() baseDataChange = new EventEmitter<any>();
-  @Output() beforeHandleImport = new EventEmitter<any>();
+  @Output() readonly baseDataChange = new EventEmitter<any>();
+  @Output() readonly beforeHandleImport = new EventEmitter<any>();
   isVisible = false;
   paramCode = '';
   constructor(private message: EoNgFeedbackMessageService) {}
@@ -93,7 +93,7 @@ export class ParamsImportComponent {
     }
     if (['formData', 'header'].includes(this.contentType)) {
       const json = {};
-      form2json(this.paramCode).forEach((it) => {
+      form2json(this.paramCode).forEach(it => {
         const { key, value } = it;
         if (key == null || value == null) {
           this.message.error($localize`Form format invalid`);
@@ -118,7 +118,7 @@ export class ParamsImportComponent {
 
     const tailData = this.baseData.slice(-1);
     let resultData = eoDeepCopy(this.baseData.reverse().slice(1).reverse());
-    console.log('resultData', resultData);
+    // console.log('resultData', resultData);
 
     if (rootType !== whatType(paramCode)) {
       // TODO Perhaps should be handled about format compatibility later.
@@ -138,8 +138,8 @@ export class ParamsImportComponent {
     // TODO delete useless attribute in cacheData
     switch (type) {
       case 'mixin': {
-        const nameList = resultData.map((it) => it.name);
-        const data = cacheData.filter((it) => !nameList.includes(it.name));
+        const nameList = resultData.map(it => it.name);
+        const data = cacheData.filter(it => !nameList.includes(it.name));
         resultData = resultData.concat(data);
         break;
       }

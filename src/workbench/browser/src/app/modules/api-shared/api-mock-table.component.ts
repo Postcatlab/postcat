@@ -3,7 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { copyText, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { copyText, eoDeepCopy, copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.model';
 
@@ -11,9 +11,12 @@ import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.mode
   selector: 'eo-api-mock-table',
   template: ` <eo-ng-table-pro [columns]="mockListColumns" [nzData]="mockList"></eo-ng-table-pro>
     <ng-template #urlCell let-item="item" let-index="index">
-      <span i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip (click)="copyText(item.url)">
-        <span class="truncate">{{ item.url }}</span>
-      </span>
+      <div class="flex items-center">
+        <span class="truncate flex-1" (click)="copyText(item.url)" i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip>
+          {{ item.url }}
+        </span>
+        <button eo-ng-button nzType="text" (click)="copyText(item.url)"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
+      </div>
     </ng-template>`
 })
 export class ApiMockTableComponent implements OnInit, OnChanges {
