@@ -29,8 +29,18 @@
   [nzDataItem]="itemStructure"
   [setting]="listConf.setting"
   [(nzData)]="model"
-  (nzDataChange)="modelChange.emit($event)"
+  (nzDataChange)="emitModelChange()"
 ></eo-ng-table-pro>
+<ng-template #formValue let-item="item" let-index="index">
+  <div [ngSwitch]="item.type">
+    <input *ngSwitchDefault eo-ng-input [(ngModel)]="item.value" (ngModelChange)="emitModelChange()" />
+    <div *ngSwitchCase="'file'">
+      <label class="ant-btn ant-btn-sm" for="file_{{ index }}" i18n>Choose Files</label>
+      <span class="ml-[10px]" i18n>{{ item.files?.length ? item.files?.length + ' files selected' : 'No file chosen' }}</span>
+      <input id="file_{{ index }}" multiple type="file" class="invisible" (change)="formdataSelectFiles($event.target, item)" />
+    </div>
+  </div>
+</ng-template>
 <!-- JSON -->
 <!-- XML -->
 <!-- Raw -->
@@ -47,7 +57,6 @@
 <div class="px-5 min-h-[60%]" *ngIf="bodyType === 'binary'">
   <nz-upload
     nzType="drag"
-    (nzChange)="emitModelChange()"
     [nzBeforeUpload]="uploadBinary"
     [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }"
     [(nzFileList)]="binaryFiles"
@@ -55,8 +64,3 @@
     <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
   </nz-upload>
 </div>
-
-<ng-template #formValue let-item="item">
-  {{ item | json }}
-  select-file
-</ng-template>
