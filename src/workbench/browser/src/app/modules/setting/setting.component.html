@@ -29,29 +29,17 @@
   </div>
   <nz-divider nzType="vertical" class="divider"></nz-divider>
   <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
-    <ng-container *ngIf="store.isLogin">
-      <div class="mb-2 text-lg font-bold" i18n>Account</div>
-      <eo-account id="eoapi-account"></eo-account>
-      <nz-divider></nz-divider>
+    <ng-container *ngFor="let item of treeNodes; last as isLast">
+      <div class="mb-2 text-lg font-bold" i18n>{{ item.name }}</div>
+      <ng-container *ngIf="!item.ifShow || item.ifShow?.()">
+        <ng-template #options></ng-template>
+        <!-- <eo-account *ngIf="item.moduleID === 'eoapi-account'" id="eoapi-account"></eo-account>
+        <eo-select-theme *ngIf="item.moduleID === 'eoapi-theme'" id="eoapi-theme"></eo-select-theme>
+        <eo-data-storage [(model)]="settings" id="eoapi-common"></eo-data-storage>
+        <eo-language-switcher [(model)]="settings" id="eoapi-language"> </eo-language-switcher>
+      <eo-about id="eoapi-about"></eo-about> -->
+        <nz-divider *ngIf="!isLast"></nz-divider>
+      </ng-container>
     </ng-container>
-    <!-- Select theme -->
-    <ng-container>
-      <div class="mb-2 text-lg font-bold" i18n="@@Theme">Theme</div>
-      <eo-select-theme id="eoapi-theme"></eo-select-theme>
-      <nz-divider></nz-divider>
-    </ng-container>
-    <!-- Cloud Storage -->
-    <ng-container *ngIf="!webService.isWeb">
-      <div class="mb-2 text-lg font-bold" i18n="@@Cloud">Cloud Storage</div>
-      <eo-data-storage [(model)]="settings" id="eoapi-common"></eo-data-storage>
-      <nz-divider></nz-divider>
-    </ng-container>
-    <!-- Cloud Storage -->
-    <div class="mb-2 text-lg font-bold" i18n>Language</div>
-    <eo-language-switcher [(model)]="settings" id="eoapi-language"> </eo-language-switcher>
-    <nz-divider></nz-divider>
-    <!-- About -->
-    <div class="mb-2 text-lg font-bold" i18n>About</div>
-    <eo-about id="eoapi-about"></eo-about>
   </div>
 </section>

@@ -1,16 +1,31 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Input,
+  OnInit,
+  QueryList,
+  ViewChildren,
+  ViewContainerRef
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { AccountComponent } from 'eo/workbench/browser/src/app/pages/account.component';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 
+import { AboutComponent, DataStorageComponent, LanguageSwticherComponent, SelectThemeComponent } from './common';
+
 interface TreeNode {
   name: string;
   moduleID?: string;
+  ifShow?: () => boolean;
   disabled?: boolean;
   children?: TreeNode[];
   configuration?: any[];
@@ -28,8 +43,9 @@ interface FlatNode {
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.scss']
 })
-export class SettingComponent implements OnInit {
+export class SettingComponent implements OnInit, AfterViewInit {
   @Input() selectedModule: string;
+  @ViewChildren('options', { read: ViewContainerRef }) options: QueryList<ViewContainerRef>;
   extensitonConfigurations: any[];
   objectKeys = Object.keys;
   isClick = false;
@@ -71,8 +87,9 @@ export class SettingComponent implements OnInit {
   treeNodes = [
     {
       name: $localize`:@@Account:Account`,
-      hidden: 'user.isLogin',
       moduleID: 'eoapi-account',
+      ifShow: () => this.store.isLogin,
+      comp: AccountComponent,
       children: [
         {
           name: $localize`:@@Account:Username`,
@@ -86,25 +103,26 @@ export class SettingComponent implements OnInit {
     },
     {
       name: $localize`:@@Theme:Theme`,
-      moduleID: 'eoapi-theme'
+      moduleID: 'eoapi-theme',
+      comp: SelectThemeComponent
     },
-    ...(this.webService.isWeb
-      ? []
-      : [
-          {
-            name: $localize`:@@Cloud:Cloud Storage`,
-            moduleID: 'eoapi-common'
-          }
-        ]),
+    {
+      name: $localize`:@@Cloud:Cloud Storage`,
+      moduleID: 'eoapi-common',
+      comp: DataStorageComponent,
+      ifShow: () => !this.webService.isWeb
+    },
     {
       name: $localize`:@@Language:Language`,
-      moduleID: 'eoapi-language'
+      moduleID: 'eoapi-language',
+      comp: LanguageSwticherComponent
     },
     {
       name: $localize`About`,
-      moduleID: 'eoapi-about'
+      moduleID: 'eoapi-about',
+      comp: AboutComponent
     }
-  ] as const;
+  ];
   /** local configure */
   localSettings = {};
   validateForm!: FormGroup;
@@ -114,12 +132,18 @@ export class SettingComponent implements OnInit {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
-  constructor(
-    private settingService: SettingService,
-    public store: StoreService,
-    public webService: WebService,
-    private cdk: ChangeDetectorRef
-  ) {}
+  constructor(private settingService: SettingService, public store: StoreService, public webService: WebService) {}
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const options = this.options.toArray();
+      this.treeNodes
+        .filter(item => !item.ifShow || item.ifShow?.())
+        .forEach((item, index) => {
+          console.log('this.options', options[index]);
+          options[index]?.createComponent(item.comp as any);
+        });
+    });
+  }
 
   ngOnInit(): void {
     this.init();
@@ -179,16 +203,18 @@ export class SettingComponent implements OnInit {
       }, []);
     // All settings
     const treeData = eoDeepCopy(
-      this.treeNodes.filter(val => {
-        switch (val.moduleID) {
-          case 'eoapi-account': {
-            if (!this.store.isLogin) {
-              return false;
+      this.treeNodes
+        .map(({ comp, ifShow, ...rest }) => rest)
+        .filter(val => {
+          switch (val.moduleID) {
+            case 'eoapi-account': {
+              if (!this.store.isLogin) {
+                return false;
+              }
             }
           }
-        }
-        return true;
-      })
+          return true;
+        })
     );
     this.dataSource.setData(treeData);
     this.treeControl.expandAll();

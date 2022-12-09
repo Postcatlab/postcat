@@ -28,7 +28,7 @@ import { generateRestFromUrl, transferUrlAndQuery } from 'eo/workbench/browser/s
 import { isEmpty } from 'lodash-es';
 import { reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
-import { interval, Subscription, Subject } from 'rxjs';
+import { interval, Subscription, Subject, fromEvent } from 'rxjs';
 import { takeUntil, distinctUntilChanged, takeWhile, finalize } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
@@ -117,10 +117,30 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    this.initShortcutKey();
     queueMicrotask(() => {
       this.responseContainerHeight = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
     });
   }
+
+  initShortcutKey() {
+    fromEvent(document, 'keydown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: KeyboardEvent) => {
+        const { ctrlKey, code, target } = event;
+        // 判断 Ctrl+S
+        if (ctrlKey == true && code === 'KeyS') {
+          console.log('EO_LOG[eo-api-test]: Ctrl + s');
+          // 或者 return false;
+          event.preventDefault();
+          this.saveApi();
+        } else if (code === 'Enter') {
+          // console.log('target',target)
+          this.clickTest();
+        }
+      });
+  }
+
   /**
    * Restore data from history
    */

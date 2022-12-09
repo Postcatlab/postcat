@@ -6,13 +6,13 @@ import { ApiEditService } from 'eo/workbench/browser/src/app/pages/api/http/edit
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-import { from, Subject } from 'rxjs';
+import { from, fromEvent, Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../modules/api-shared/api-param-num.pipe';
+import { ApiEditViewData, RequestProtocol, RequestMethod } from '../../../../modules/api-shared/api.model';
 import { MessageService } from '../../../../shared/services/message';
 import { Group, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
-import { ApiEditViewData, RequestProtocol, RequestMethod } from '../../../../modules/api-shared/api.model';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../utils/index.utils';
 import { listToTree, getExpandGroupByKey } from '../../../../utils/tree/tree.utils';
 import { ApiEditUtilService } from './api-edit-util.service';
@@ -29,9 +29,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
    * * Usually restored from tab
    */
   @Input() initialModel: ApiEditViewData;
-  @Output() modelChange = new EventEmitter<ApiEditViewData>();
-  @Output() eoOnInit = new EventEmitter<ApiEditViewData>();
-  @Output() afterSaved = new EventEmitter<ApiEditViewData>();
+  @Output() readonly modelChange = new EventEmitter<ApiEditViewData>();
+  @Output() readonly eoOnInit = new EventEmitter<ApiEditViewData>();
+  @Output() readonly afterSaved = new EventEmitter<ApiEditViewData>();
   @ViewChild('apiGroup') apiGroup: NzTreeSelectComponent;
   validateForm: FormGroup;
   groups: any[];
@@ -91,10 +91,26 @@ export class ApiEditComponent implements OnInit, OnDestroy {
 
     this.initBasicForm();
     this.watchBasicForm();
+    this.initShortcutKey();
     this.changeGroupID$.next(this.model.groupID);
     this.validateForm.patchValue(this.model);
     this.eoOnInit.emit(this.model);
   }
+
+  initShortcutKey() {
+    fromEvent(document, 'keydown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: KeyboardEvent) => {
+        // 判断 Ctrl+S
+        if (event.ctrlKey == true && event.code === 'KeyS') {
+          console.log('Ctrl + s');
+          // 或者 return false;
+          event.preventDefault();
+          this.saveApi();
+        }
+      });
+  }
+
   bindGetApiParamNum(params) {
     return new ApiParamsNumPipe().transform(params);
   }

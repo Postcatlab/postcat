@@ -11,13 +11,12 @@ import { isEmptyObj } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
-import { Subject, takeUntil } from 'rxjs';
+import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { io } from 'socket.io-client';
 
 import { ApiParamsNumPipe } from '../../../modules/api-shared/api-param-num.pipe';
 import { ApiTestService } from '../../../pages/api/http/test/api-test.service';
 import { MessageService } from '../../../shared/services/message';
-
 import { ModalService } from '../../../shared/services/modal.service';
 
 interface testViewModel {
@@ -43,8 +42,8 @@ interface testViewModel {
 })
 export class WebsocketComponent implements OnInit, OnDestroy {
   @Input() bodyType = 'json';
-  @Output() modelChange = new EventEmitter<testViewModel>();
-  @Output() eoOnInit = new EventEmitter<testViewModel>();
+  @Output() readonly modelChange = new EventEmitter<testViewModel>();
+  @Output() readonly eoOnInit = new EventEmitter<testViewModel>();
   wsStatus: 'connected' | 'connecting' | 'disconnect' = 'disconnect';
   isSocketConnect = true;
   get isConnecting() {
@@ -90,6 +89,20 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
     this.initBasicForm();
+    this.initShortcutKey();
+  }
+
+  initShortcutKey() {
+    fromEvent(document, 'keydown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: KeyboardEvent) => {
+        const { ctrlKey, code, target } = event;
+        // 判断 Ctrl+S
+        if (ctrlKey == true && code === 'Enter') {
+          console.log('EO_LOG[eo-websocket-test]: Ctrl + enter');
+          this.handleSendMsg();
+        }
+      });
   }
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
@@ -216,7 +229,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   handleSendMsg() {
     // * 通过 SocketIO 通知后端
     // send a message to the server
-    if (!this.model.msg) {
+    if (!this.model.msg || this.wsStatus !== 'connected') {
       return;
     }
     this.socket.emit('ws-server', { type: 'ws-message', content: { message: this.model.msg } });
