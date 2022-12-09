@@ -1,43 +1,57 @@
 :host {
   overflow: initial;
 }
+
 .ant-divider-vertical {
   margin: 0 16px;
 }
+
 :host ::ng-deep {
   .ant-skeleton {
     display: block;
+
+    &.ant-skeleton-active {
+      display: table;
+    }
   }
+
   .settings .ant-tabs-content-holder {
     padding-top: 0;
   }
+
   .ant-tabs-content-holder {
     padding-top: 15px;
     padding-bottom: 8px;
     margin-bottom: 24px;
     overflow: auto;
   }
+
   .ant-skeleton-element .ant-skeleton-button {
     width: 100%;
   }
+
   .ant-tabs-tab {
     padding: 10px 0;
   }
+
   .preview_tab {
     @apply w-4/5 m-auto;
   }
+
   .md-preview {
     img {
       max-width: 800px;
     }
   }
+
   .extension-detail {
     .ant-descriptions-row > td {
       padding-bottom: 8px;
     }
+
     .ant-descriptions-item-content,
     .ant-descriptions-item-label {
-      color: var( --TIPS_TEXT_COLOR);
+      color: var(--TIPS_TEXT_COLOR);
     }
   }
 }
