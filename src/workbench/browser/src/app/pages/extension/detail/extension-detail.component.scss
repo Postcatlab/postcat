@@ -10,7 +10,7 @@
   .ant-skeleton {
     display: block;
 
-    &.ant-skeleton-active {
+    &[ng-reflect-nz-loading='true'] {
       display: table;
     }
   }
