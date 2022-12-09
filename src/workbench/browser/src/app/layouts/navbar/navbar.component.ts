@@ -19,12 +19,12 @@ export class NavbarComponent implements OnInit {
   resourceInfo = this.web.resourceInfo;
   helpMenus = [
     {
-      title: 'Document',
+      title: $localize`Document`,
       href: 'https://docs.eoapi.io',
       click: $event => {}
     },
     {
-      title: 'Report Issue',
+      title: $localize`Report Issue`,
       href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
       click: $event => {}
     }

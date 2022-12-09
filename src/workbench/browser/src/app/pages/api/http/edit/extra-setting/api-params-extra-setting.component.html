@@ -1,6 +1,5 @@
 <!-- {{ model | json }} -->
-<eo-ng-table-pro class="table-border-all" [nzData]="model" [columns]="listConfBasicInfo" [nzScroll]="{ x: '800px' }">
-</eo-ng-table-pro>
+<eo-ng-table-pro class="table-border-all" [nzData]="model" [columns]="listConfBasicInfo" [nzScroll]="{ x: '800px' }"> </eo-ng-table-pro>
 <eo-ng-table-pro
   class="table-border-all mt-[15px]"
   *ngIf="showLengthTable"
@@ -37,16 +36,13 @@
     </thead>
     <tbody>
       <tr>
-        <td class="p-[10px]" [ngSwitch]="isEdit">
-          <textarea
-            *ngSwitchDefault
-            rows="4"
-            i18n-placeholder
-            placeholder="Param Example"
-            eo-ng-input
-            [(ngModel)]="model[0].example"
-          ></textarea>
-          <p *ngSwitchCase="false">{{ model[0].example }}</p>
+        <td class="p-[10px]">
+          <eo-monaco-editor
+            class="border-all"
+            [(code)]="model[0].example"
+            [config]="{ readOnly: isEdit }"
+            [eventList]="['format', 'copy', 'search', 'replace']"
+          ></eo-monaco-editor>
         </td>
       </tr>
     </tbody>
