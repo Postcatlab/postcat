@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { autorun } from 'mobx';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { autorun } from 'mobx';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +74,7 @@ export class EffectService {
 
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
+      console.log('yew');
       const apiGroupObservable = this.indexedDBStorage.groupLoadAllByProjectID(projectID);
       apiGroupObservable.subscribe(({ data: apiGroup }: any) => {
         const apiDataObservable = this.indexedDBStorage.apiDataLoadAllByProjectID(projectID);
@@ -117,28 +118,18 @@ export class EffectService {
       .concat(apiDataFilters);
   }
 
-  getWorkspaceInfo(workspaceID: number): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.storage.run('getWorkspaceInfo', [workspaceID], (result: StorageRes) => {
-        if (result.status === StorageResStatus.success) {
-          resolve(result.data);
-        } else {
-          reject();
-        }
-      });
-    });
-  }
-
   async updateWorkspace(workspace) {
     if (workspace.id === -1) {
-      this.store.setCurrentWorkspace(workspace);
       this.store.setCurrentProjectID(1);
+      this.store.setCurrentWorkspace(workspace);
       StorageUtil.remove('server_version');
       return;
     }
-    // * for translate isLogin state to false
-    this.store.setCurrentWorkspace(workspace);
-    const data = await this.getWorkspaceInfo(workspace.id);
+    // * for switch isLogin state to false
+    const [data, err]: any = await this.http.api_workspaceGetInfo({ workspaceID: workspace.id });
+    if (err) {
+      return;
+    }
     // * update project id
     this.store.setCurrentProjectID(data.projects.at(0).uuid);
     // * real set workspace

@@ -1,11 +1,11 @@
 import { Injectable, Injector } from '@angular/core';
 import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { autorun } from 'mobx';
 
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
 import { StorageResStatus } from './index.model';
-import { autorun } from 'mobx';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 export type DataSourceType = 'local' | 'http';
 /** is show local data source tips */
