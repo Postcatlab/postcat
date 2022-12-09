@@ -30,14 +30,9 @@
   <nz-divider nzType="vertical" class="divider"></nz-divider>
   <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
     <ng-container *ngFor="let item of treeNodes; last as isLast">
-      <div class="mb-2 text-lg font-bold" i18n>{{ item.name }}</div>
       <ng-container *ngIf="!item.ifShow || item.ifShow?.()">
+        <div class="mb-2 text-lg font-bold" i18n>{{ item.name }}</div>
         <ng-template #options></ng-template>
-        <!-- <eo-account *ngIf="item.moduleID === 'eoapi-account'" id="eoapi-account"></eo-account>
-        <eo-select-theme *ngIf="item.moduleID === 'eoapi-theme'" id="eoapi-theme"></eo-select-theme>
-        <eo-data-storage [(model)]="settings" id="eoapi-common"></eo-data-storage>
-        <eo-language-switcher [(model)]="settings" id="eoapi-language"> </eo-language-switcher>
-      <eo-about id="eoapi-about"></eo-about> -->
         <nz-divider *ngIf="!isLast"></nz-divider>
       </ng-container>
     </ng-container>

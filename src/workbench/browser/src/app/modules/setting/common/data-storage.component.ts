@@ -12,9 +12,7 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
       <nz-form-item>
         <div class="text-[12px] mt-[8px] text-gray-400">
           <p>
-            <span i18n>
-              Cloud Storage: Store data on the cloud for team collaboration and product use across devices.</span
-            >
+            <span i18n> Cloud Storage: Store data on the cloud for team collaboration and product use across devices.</span>
             <a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
           </p>
         </div>
@@ -23,12 +21,7 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
         <nz-form-item>
           <nz-form-label i18n>Host</nz-form-label>
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Host">
-            <input
-              eo-ng-input
-              formControlName="eoapi-common.remoteServer.url"
-              i18n-placeholder
-              placeholder="your host"
-            />
+            <input eo-ng-input formControlName="eoapi-common.remoteServer.url" i18n-placeholder placeholder="your host" />
           </nz-form-control>
         </nz-form-item>
       </ng-container>
@@ -44,12 +37,12 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
       [nz-form]:not(.ant-form-inline):not(.ant-form-vertical) {
         max-width: 600px;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class DataStorageComponent implements OnInit, OnChanges {
   @Input() model: Record<string, any> = {};
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
 
   validateForm!: FormGroup;
   loading = false;
@@ -63,7 +56,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      'eoapi-common.remoteServer.url': [this.model['eoapi-common.remoteServer.url'] || '', [Validators.required]],
+      'eoapi-common.remoteServer.url': [this.model['eoapi-common.remoteServer.url'] || '', [Validators.required]]
     });
   }
 
@@ -77,7 +70,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
   async submitForm() {
     const isValid = this.validateForm.valid;
     if (!isValid) {
-      Object.values(this.validateForm.controls).forEach((control) => {
+      Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -87,11 +80,9 @@ export class DataStorageComponent implements OnInit, OnChanges {
     }
     this.model = {
       ...this.model,
-      ...this.validateForm.value,
+      ...this.validateForm.value
     };
-    const isSuccess = await this.dataSource.pingCloudServerUrl(
-      this.validateForm.value['eoapi-common.remoteServer.url']
-    );
+    const isSuccess = await this.dataSource.pingCloudServerUrl(this.validateForm.value['eoapi-common.remoteServer.url']);
     this.messageS.send({ type: 'workspaceChange', data: {} });
     if (isSuccess) {
       this.message.success($localize`Successfully connect to cloud`);
@@ -108,7 +99,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
   async updateDataSource() {}
 
   setFormValue(model = {}) {
-    Object.keys(model).forEach((key) => {
+    Object.keys(model).forEach(key => {
       this.validateForm.get(key)?.setValue(model[key]);
     });
   }
