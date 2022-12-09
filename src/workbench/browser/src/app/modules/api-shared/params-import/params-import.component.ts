@@ -89,7 +89,6 @@ export class ParamsImportComponent {
     }
     if (this.contentType === 'query') {
       paramCode = qs.parse(this.paramCode.indexOf('?') > -1 ? this.paramCode.split('?')[1] : this.paramCode);
-      // console.log('-->', paramCode);
     }
     if (['formData', 'header'].includes(this.contentType)) {
       const json = {};
@@ -110,7 +109,6 @@ export class ParamsImportComponent {
         return;
       }
       paramCode = xml2json(this.paramCode);
-      // console.log('-->', paramCode);
     }
     if (this.contentType === 'raw') {
       paramCode = this.paramCode;
@@ -149,13 +147,12 @@ export class ParamsImportComponent {
       }
       case 'append': {
         resultData = resultData.concat(cacheData);
-        console.log(resultData);
         break;
       }
       default:
         break;
     }
-    console.log(resultData, tailData);
+    console.log('tailData', resultData, tailData);
     this.baseDataChange.emit(isXML(this.paramCode) ? resultData : resultData.concat(tailData));
     this.handleCancel();
   }
