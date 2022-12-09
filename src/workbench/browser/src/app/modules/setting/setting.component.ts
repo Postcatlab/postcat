@@ -126,8 +126,6 @@ export class SettingComponent implements OnInit, AfterViewInit {
   /** local configure */
   localSettings = {};
   validateForm!: FormGroup;
-  /** cloud server url */
-  remoteServerUrl = '';
   get selected() {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
@@ -139,15 +137,20 @@ export class SettingComponent implements OnInit, AfterViewInit {
       this.treeNodes
         .filter(item => !item.ifShow || item.ifShow?.())
         .forEach((item, index) => {
-          console.log('this.options', options[index]);
-          options[index]?.createComponent(item.comp as any);
+          const componentRef = options[index]?.createComponent<any>(item.comp as any);
+          componentRef.location.nativeElement.id = item.moduleID;
+          componentRef.instance.model = this.settings;
+          componentRef.instance.modelChange?.subscribe(data => {
+            Object.assign(this.settings, data);
+            this.handleSave();
+          });
+          // console.log('componentRef', componentRef);
         });
     });
   }
 
   ngOnInit(): void {
     this.init();
-    this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
   }
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
@@ -170,7 +173,7 @@ export class SettingComponent implements OnInit, AfterViewInit {
     const treeNodes = this.dataSource._flattenedData.value;
     treeNodes.some(node => {
       const el = target.querySelector(`#${node.moduleID}`) as HTMLDivElement;
-      if (el.offsetTop > target.scrollTop) {
+      if (el && el.offsetTop > target.scrollTop) {
         this.selectListSelection.select(node);
         return true;
       }

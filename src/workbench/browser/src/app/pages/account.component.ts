@@ -7,9 +7,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 @Component({
   selector: 'eo-account',
-  template: `<h2 class="text-lg flex justify-between items-center">
-      <span class="font-bold text-lg mb-2" i18n>Account</span>
-    </h2>
+  template: `
     <h2 class="text-lg flex justify-between items-center" id="eoapi-account-username">
       <span class="font-bold text-base mb-2" i18n>Username</span>
     </h2>
@@ -61,9 +59,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
           <nz-form-control [nzErrorTip]="confirmPasswordErrorTpl">
             <input type="password" eo-ng-input formControlName="confirmPassword" placeholder="" i18n-placeholder />
             <ng-template #confirmPasswordErrorTpl let-control>
-              <ng-container *ngIf="control.hasError('required')" i18n>
-                Please input your confirm new password;
-              </ng-container>
+              <ng-container *ngIf="control.hasError('required')" i18n> Please input your confirm new password; </ng-container>
 
               <ng-container *ngIf="control.hasError('isEqual')" i18n> Please confirm your password; </ng-container>
 
@@ -89,7 +85,8 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
         </section>
       </form>
     </section>
-    <section class="h-4"></section> `,
+    <section class="h-4"></section>
+  `
 })
 export class AccountComponent implements OnInit {
   validateUsernameForm;
@@ -111,22 +108,19 @@ export class AccountComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     // * Init Username form
     this.validateUsernameForm = this.fb.group({
-      username: [null, [Validators.required]],
+      username: [null, [Validators.required]]
     });
 
     // * Init Password form
     this.validatePasswordForm = this.fb.group({
       oldPassword: [null, [Validators.required]],
       newPassword: [null, [Validators.required]],
-      confirmPassword: [
-        null,
-        [Validators.required, Validators.minLength(6), Validators.maxLength(11), this.dynamicPasswordValidator],
-      ],
+      confirmPassword: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(11), this.dynamicPasswordValidator]]
     });
 
     // * get Username form values
     this.validateUsernameForm.patchValue({
-      username: this.store.getUserProfile?.username,
+      username: this.store.getUserProfile?.username
     });
   }
   async btnw9ec5mCallback() {
@@ -135,7 +129,7 @@ export class AccountComponent implements OnInit {
     const btnSaveUsernameRunning = async () => {
       const { username: user } = this.validateUsernameForm.value;
       const [data, err]: any = await this.api.api_userUpdateUserProfile({
-        username: user,
+        username: user
       });
       if (err) {
         this.eMessage.error($localize`Sorry, username is already in use`);
@@ -180,7 +174,7 @@ export class AccountComponent implements OnInit {
       const { newPassword: newPassword } = this.validatePasswordForm.value;
       const [data, err]: any = await this.api.api_userUpdatePsd({
         oldPassword,
-        newPassword,
+        newPassword
       });
       if (err) {
         this.eMessage.error($localize`Validation failed`);
