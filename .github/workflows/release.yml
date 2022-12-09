@@ -2,7 +2,6 @@ name: Release
 
 on:
   push:
-    branches: [feat/ui-component]
     tags:
       - 'v*.*.*'
 jobs:

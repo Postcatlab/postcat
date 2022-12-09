@@ -4,20 +4,18 @@ const fs = require('fs');
 
 const genProto = (name, code) => fs.writeFileSync(`./${name}.proto`, code);
 
-const deleteProto = (name) => fs.unlinkSync(`./${name}.proto`);
+const deleteProto = name => fs.unlinkSync(`./${name}.proto`);
 
 const grpcFunc = ({ PROTO_PATH, packages, service, method, url, params }) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
       keepCase: true,
       longs: String,
       enums: String,
       defaults: true,
-      oneofs: true,
+      oneofs: true
     });
-    const targetClient = packages
-      .split('.')
-      .reduce((prev, curr) => prev[curr], grpc.loadPackageDefinition(packageDefinition));
+    const targetClient = packages.split('.').reduce((prev, curr) => prev[curr], grpc.loadPackageDefinition(packageDefinition));
 
     const client = new targetClient[service](url, grpc.credentials.createInsecure());
     client[method](params, (err, response) => {
@@ -39,7 +37,7 @@ const grpcClient = async ({ url, packages, service, proto, method, params }) => 
     packages,
     params,
     method,
-    service,
+    service
   });
   if (err) {
     deleteProto(random);
