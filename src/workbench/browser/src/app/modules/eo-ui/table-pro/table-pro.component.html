@@ -4,8 +4,9 @@
 <div class="mx-2">{{ nzDataItem | json }}</div> -->
 <!-- {{ setting | json }} -->
 <!-- {{columnVisibleStatus|json}} -->
+<!-- {{ nzScroll | json }} -->
 <eo-ng-table
-  [ngClass]="{'show-btn-when-hover-row':setting.showBtnWhenHoverRow}"
+  [ngClass]="{ 'show-btn-when-hover-row': setting.showBtnWhenHoverRow }"
   class="{{ randomClass }}"
   [nzDataItem]="nzDataItem"
   [(nzData)]="nzData"

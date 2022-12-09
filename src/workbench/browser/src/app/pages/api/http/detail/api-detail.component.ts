@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { cloneDeep } from 'lodash-es';
-import { JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
 import { ApiData, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { reverseObj } from '../../../../utils/index.utils';
@@ -29,7 +29,7 @@ export class ApiDetailComponent implements OnInit {
     private storage: StorageService,
     public electron: ElectronService,
     private http: RemoteService,
-    private store: StoreService,
+    public store: StoreService,
     private webExtensionService: WebExtensionService
   ) {}
   ngOnInit(): void {

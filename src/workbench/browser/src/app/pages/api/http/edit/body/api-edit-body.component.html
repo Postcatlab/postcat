@@ -16,11 +16,7 @@
   </div>
 </div>
 <div *ngIf="bodyType === 'json'" class="px-4 py-2">
-  <eo-ng-select
-    class="w-[100px] mb10"
-    [(ngModel)]="jsonRootType"
-    (ngModelChange)="jsonRootTypeDataChange(jsonRootType)"
-  >
+  <eo-ng-select class="w-[100px] mb10" [(ngModel)]="jsonRootType" (ngModelChange)="jsonRootTypeDataChange(jsonRootType)">
     <eo-ng-option *ngFor="let item of CONST.JSON_ROOT_TYPE" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
   </eo-ng-select>
 </div>
@@ -37,6 +33,7 @@
   [(nzData)]="model"
   (nzDataChange)="tableChange($event)"
 ></eo-ng-table-pro>
+<!-- [nzScroll]="{ y: '300px' }" -->
 <!-- Raw -->
 <eo-monaco-editor
   *ngIf="bodyType === 'raw'"

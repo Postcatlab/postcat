@@ -1,4 +1,5 @@
-<nz-skeleton [nzLoading]="!model.uri" [nzActive]="true" class="block w-full px-[20px] pb-[20px]">
+<div class="w-full px-[20px] pb-[20px]">
+  <nz-skeleton *ngIf="!store.isLocal" [nzLoading]="!model.uri" [nzActive]="true"> </nz-skeleton>
   <div class="flex mt-4 justify-between items-center">
     <div class="flex flex-wrap items-center min-w-0">
       <nz-tag [class]="model.protocol"> {{ model.protocol | uppercase }}</nz-tag>
@@ -95,4 +96,4 @@
       <eo-api-mock-table [apiData]="model" class="!p-0" [canEdit]="false"> </eo-api-mock-table>
     </nz-collapse-panel>
   </nz-collapse>
-</nz-skeleton>
+</div>

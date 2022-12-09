@@ -31,7 +31,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() nzData;
   @Input() setting: TableProSetting = {};
   @Input() nzDataItem?;
-  @Input() nzScroll = {};
+  @Input() nzScroll: { x?: string; y?: string } = {};
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
 
@@ -170,6 +170,8 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   screenAll() {
+    // this.nzScroll = { x: this.nzScroll.x, y: `${document.body.clientHeight + 400}px` };
+    // console.log(this.nzScroll);
     this.isFullScreenStatus = !this.isFullScreenStatus;
     const domElem = document.getElementsByClassName(this.randomClass)[0];
     if (this.isFullScreenStatus) {
@@ -194,7 +196,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     return false;
   }
   private onColumnChanges() {
-    this.nzScroll = { x: this.columns.length * 100, ...this.nzScroll };
+    this.nzScroll = { x: `${this.columns.length * 100}px`, ...this.nzScroll };
     this.setting.isEdit = this.autoSetIsEdit();
     this.generateBtnTemplate();
     //SetTimeout be sure the icon child template ready
@@ -247,7 +249,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           title: col.slot,
           left: col.left,
           //Slot priority higher than type
-          type: col.slot?null:col.type,
+          type: col.slot ? null : col.type,
           right: col.right,
           errorTip: col.errorTip,
           disabledFn: col.disabledFn
