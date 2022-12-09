@@ -298,11 +298,8 @@ export class UserModalComponent implements OnInit {
 
         if (type === 'ping-fail') {
           this.eMessage.error($localize`Connect failed`);
-
           // * 唤起弹窗
           this.isCheckConnectModalVisible = true;
-          {
-          }
 
           return;
         }
@@ -337,8 +334,6 @@ export class UserModalComponent implements OnInit {
         if (type === 'retry') {
           // * 唤起弹窗
           this.isCheckConnectModalVisible = true;
-          {
-          }
 
           return;
         }
@@ -370,9 +365,10 @@ export class UserModalComponent implements OnInit {
 
     const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
     if (currentWorkspaceID === -1) {
+      // * local workspace, then return
       return;
     }
-    const status = this.dataSource.isConnectRemote;
+    const status = await this.dataSource.pingCloudServerUrl();
 
     if (!status) {
       // * 唤起弹窗

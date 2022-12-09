@@ -11,12 +11,7 @@
         </div>
         <span class="font-bold text-[14px]">{{ extensionDetail.title || extensionDetail.moduleName }}</span>
         <ng-container *ngIf="extensionDetail?.installed">
-          <eo-ng-switch
-            [(ngModel)]="isEnable"
-            nzSize="small"
-            class="ml-2.5"
-            (ngModelChange)="handleEnableExtension($event)"
-          >
+          <eo-ng-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5" (ngModelChange)="handleEnableExtension($event)">
           </eo-ng-switch>
         </ng-container>
       </div>
@@ -45,11 +40,7 @@
       (nzSelectChange)="handleTabChange($event)"
     >
       <!-- Setting -->
-      <eo-ng-tab
-        *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed"
-        i18n-nzTitle
-        nzTitle="Settings"
-      >
+      <eo-ng-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle nzTitle="Settings">
         <eo-extension-setting
           [configuration]="extensionDetail?.features?.configuration"
           [extName]="extensionDetail.name"
@@ -59,8 +50,7 @@
       <eo-ng-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
         <div class="h-full overflow-auto preview_tab">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
-            <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
-            </eo-shadow-dom>
+            <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }"> </eo-shadow-dom>
           </nz-skeleton>
         </div>
       </eo-ng-tab>

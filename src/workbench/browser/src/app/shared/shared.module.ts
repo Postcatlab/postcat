@@ -12,10 +12,10 @@ import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 
@@ -43,7 +43,7 @@ const SHARED_UI_MODULE = [
   NzDividerModule,
   NzModalModule,
   NzListModule,
-  NzPopconfirmModule,
+  NzPopconfirmModule
 ] as const;
 const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;
 
@@ -52,6 +52,6 @@ const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsMod
   declarations: [...COMPONENTS, ...DIRECTIVES],
   providers: [],
   exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ...DIRECTIVES],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule {}
