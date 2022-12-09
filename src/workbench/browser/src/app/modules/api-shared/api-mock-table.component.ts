@@ -12,9 +12,9 @@ import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.mode
   template: ` <eo-ng-table-pro [columns]="mockListColumns" [nzData]="mockList"></eo-ng-table-pro>
     <ng-template #urlCell let-item="item" let-index="index">
       <span i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip (click)="copyText(item.url)">
-        <span class="text-omit">{{ item.url }}</span>
+        <span class="truncate">{{ item.url }}</span>
       </span>
-    </ng-template>`,
+    </ng-template>`
 })
 export class ApiMockTableComponent implements OnInit, OnChanges {
   @Input() canEdit = true;
@@ -27,11 +27,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   mockPrefix: string;
   mockList: ApiMockEntity[] = [];
 
-  constructor(
-    private message: EoNgFeedbackMessageService,
-    private modal: ModalService,
-    private apiMock: ApiMockService
-  ) {}
+  constructor(private message: EoNgFeedbackMessageService, private modal: ModalService, private apiMock: ApiMockService) {}
 
   ngOnInit() {
     this.initTable();
@@ -52,8 +48,8 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         width: 150,
         enums: [
           { title: $localize`System creation`, value: 'system' },
-          { title: $localize`Manual creation`, value: 'custom' },
-        ],
+          { title: $localize`Manual creation`, value: 'custom' }
+        ]
       },
       { title: 'URL', slot: this.urlCell },
       {
@@ -62,54 +58,54 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
           {
             title: $localize`Preview`,
             icon: 'preview-open',
-            click: (item) => {
+            click: item => {
               const modal = this.modal.create({
                 nzTitle: $localize`Preview Mock`,
                 nzWidth: '70%',
                 nzContent: ApiMockEditComponent,
                 nzComponentParams: {
                   model: item.data,
-                  isEdit: false,
+                  isEdit: false
                 },
                 nzFooter: [
                   {
                     label: $localize`Cancel`,
                     onClick: () => {
                       modal.destroy();
-                    },
-                  },
-                ],
+                    }
+                  }
+                ]
               });
-            },
+            }
           },
           {
             action: 'edit',
-            showFn: (item) => item.data.createWay !== 'system',
+            showFn: item => item.data.createWay !== 'system',
             click: (item, index) => {
               const modal = this.modal.create({
                 nzTitle: $localize`Edit Mock`,
                 nzWidth: '70%',
                 nzContent: ApiMockEditComponent,
                 nzComponentParams: {
-                  model: eoDeepCopy(item.data),
+                  model: eoDeepCopy(item.data)
                 },
                 nzOnOk: async () => {
                   await this.addOrEditModal(item.data, index);
                   modal.destroy();
-                },
+                }
               });
-            },
+            }
           },
           {
             action: 'delete',
-            showFn: (item) => item.data.createWay !== 'system',
+            showFn: item => item.data.createWay !== 'system',
             confirm: true,
             confirmFn: (item, index) => {
               this.handleDeleteMockItem(item.data, index);
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     ];
   }
   async ngOnChanges(changes) {
@@ -120,7 +116,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     }
   }
   private setMocksUrl() {
-    this.mockList.forEach((mock) => {
+    this.mockList.forEach(mock => {
       mock.url = this.getMockUrl(mock);
     });
   }
@@ -137,7 +133,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     } else {
       const result = await this.apiMock.createMock(item);
       Object.assign(item, result.data, {
-        createWay: 'custom',
+        createWay: 'custom'
       });
       this.message.success($localize`Added successfully`);
       this.mockList.push(item);

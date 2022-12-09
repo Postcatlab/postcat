@@ -29,7 +29,7 @@
       <div class="pl-[18px] tree-node" *ngIf="node.origin?.isFixed">
         <div class="flex items-center">
           <eo-iconpark-icon name="home" class="mr10 h-[14px] mt-[-4px]"></eo-iconpark-icon>
-          <span class="text-omit node_title">{{ node.title }}</span>
+          <span class="truncate node_title">{{ node.title }}</span>
         </div>
       </div>
     </ng-template>
@@ -47,7 +47,7 @@
     <div class="pl-[18px]">
       <div class="tree-node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
         <div class="flex items-center overflow-hidden text-ellipsis">
-          <span class="text-omit node_title">{{ node.title }}</span>
+          <span class="truncate node_title">{{ node.title }}</span>
         </div>
       </div>
     </div>

@@ -35,9 +35,7 @@
           "
         >
         </ng-container>
-        <span class="text-omit tab-text" [title]="tabStorage.tabsByID.get(uuid)?.title">
-          {{ tabStorage.tabsByID.get(uuid)?.title }}</span
-        >
+        <span class="truncate tab-text" [title]="tabStorage.tabsByID.get(uuid)?.title"> {{ tabStorage.tabsByID.get(uuid)?.title }}</span>
         <!-- Close/HasEdit -->
         <div class="flex items-center tab-item-button-group">
           <nz-badge

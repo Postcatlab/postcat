@@ -1,24 +1,19 @@
-<nz-skeleton [nzLoading]="!model.uri" [nzActive]="true" class="w-full px-[20px] pb-[20px]">
+<nz-skeleton [nzLoading]="!model.uri" [nzActive]="true" class="block w-full px-[20px] pb-[20px]">
   <div class="flex mt-4 justify-between items-center">
-    <div class="flex flex-wrap items-center">
+    <div class="flex flex-wrap items-center min-w-0">
       <nz-tag [class]="model.protocol"> {{ model.protocol | uppercase }}</nz-tag>
       <eo-api-methods-tag [type]="model.method"></eo-api-methods-tag>
-      <span class="text-omit flex-1">{{ model.uri }}</span>
+      <span class="truncate flex-1">{{ model.uri }}</span>
     </div>
-    <div class="flex">
+    <div class="flex ml-[20px]" *ngIf="rightExtras?.length">
       <ng-container *ngFor="let item of rightExtras">
-        <button
-          eo-ng-button
-          nzType="text"
-          eoNgFeedbackTooltip
-          [nzTooltipTitle]="item.tooltip"
-          (click)="item.click(originModel)"
-        >
+        <button eo-ng-button nzType="text" eoNgFeedbackTooltip [nzTooltipTitle]="item.tooltip" (click)="item.click(originModel)">
           <eo-iconpark-icon [name]="item.icon" size="20px"> </eo-iconpark-icon>
         </button>
       </ng-container>
     </div>
   </div>
+  <p class="truncate mt-[15px]">{{ model.name }}</p>
   <!-- Request headers -->
   <nz-collapse *ngIf="model.requestHeaders && model.requestHeaders.length" class="w-full mt-[20px]">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request Headers">
@@ -33,23 +28,13 @@
   <!-- Query params -->
   <nz-collapse *ngIf="model.queryParams && model.queryParams.length" class="w-full mt-[20px]">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Query">
-      <eo-api-detail-form
-        tid="queryParams"
-        class="api-detail-form-table"
-        [model]="model.queryParams"
-        module="query"
-      ></eo-api-detail-form>
+      <eo-api-detail-form tid="queryParams" class="api-detail-form-table" [model]="model.queryParams" module="query"></eo-api-detail-form>
     </nz-collapse-panel>
   </nz-collapse>
   <!-- Rest params -->
   <nz-collapse *ngIf="model.restParams && model.restParams.length" class="w-full mt-[20px]">
     <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="REST">
-      <eo-api-detail-form
-        tid="restParams"
-        class="api-detail-form-table"
-        [model]="model.restParams"
-        module="rest"
-      ></eo-api-detail-form>
+      <eo-api-detail-form tid="restParams" class="api-detail-form-table" [model]="model.restParams" module="rest"></eo-api-detail-form>
     </nz-collapse-panel>
   </nz-collapse>
   <!-- Body -->
