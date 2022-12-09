@@ -6,24 +6,24 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'home',
-    pathMatch: 'full',
+    pathMatch: 'full'
   },
   {
     path: 'home',
-    loadChildren: () => import('./pages/pages.module').then((m) => m.PagesModule),
+    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule)
   },
   {
     path: '**',
-    loadChildren: () => import('./layouts/page-not-found/page-not-find.module').then((m) => m.PageNotFindModule),
-  },
+    loadChildren: () => import('./layouts/page-not-found/page-not-find.module').then(m => m.PageNotFindModule)
+  }
 ];
 @NgModule({
   imports: [
-    //electron user hash to keep router after page refresh
     RouterModule.forRoot(routes, {
+      //Electron user hash to keep router after page refresh
       useHash: !!(window && window.process && window.process.type) ? true : false,
-      preloadingStrategy: PreloadAllModules,
-    }),
+      preloadingStrategy: PreloadAllModules
+    })
   ],
   exports: [RouterModule],
   // 👇 设置基础路由
@@ -34,6 +34,6 @@ const routes: Routes = [
   //     useValue: window.__MICRO_APP_BASE_ROUTE__ || '/',
   //   },
   // ],
-  schemas: [],
+  schemas: []
 })
 export class AppRoutingModule {}
