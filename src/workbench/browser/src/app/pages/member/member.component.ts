@@ -4,6 +4,7 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval } from 'rxjs';
 import { distinct } from 'rxjs/operators';
@@ -19,7 +20,19 @@ import { distinct } from 'rxjs/operators';
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <input eo-ng-input [(ngModel)]="inputPersonValue" i18n-placeholder placeholder="Search by username" />
+        <eo-ng-select
+          class="w-full"
+          nzAllowClear
+          nzShowSearch
+          i18n-placeholder
+          placeholder="Search by username"
+          [(ngModel)]="userValue"
+          (nzOnSearch)="handleChange($event)"
+        >
+          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
+            {{ option.username }} {{ option.email }}
+          </eo-ng-option>
+        </eo-ng-select>
         <section class="h-4"></section>
         <button
           eo-ng-button
@@ -44,7 +57,7 @@ import { distinct } from 'rxjs/operators';
           class=""
           nzType="primary"
           (click)="btnf5umnoCallback()"
-          [disabled]="btny703n5Status()"
+          [disabled]="!store.isLocal && store.canEdit"
           i18n
         >
           Add people
@@ -57,24 +70,27 @@ import { distinct } from 'rxjs/operators';
 })
 export class MemberComponent implements OnInit {
   isInvateModalVisible;
-  inputPersonValue;
   isSelectBtnLoading;
   isAddPeopleBtnLoading;
   memberList;
+  userValue;
+  userList = [];
   constructor(
     public modal: NzModalService,
     public store: StoreService,
     public message: MessageService,
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService,
-    public dataSource: DataSourceService
+    public dataSource: DataSourceService,
+    private http: RemoteService
   ) {
     this.isInvateModalVisible = false;
-    this.inputPersonValue = '';
+    this.userValue = '';
     this.isSelectBtnLoading = false;
     this.isAddPeopleBtnLoading = false;
     this.memberList = [];
   }
+
   async ngOnInit(): Promise<void> {
     this.message
       .get()
@@ -107,6 +123,19 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter(it => it.roleName !== 'Owner');
     this.memberList = Owner.concat(Member);
   }
+  handleChange(value) {
+    if (value.trim() === '') {
+      this.userList = [];
+      return;
+    }
+    this.http.api_userSearch({ username: value.trim() }).then(([data, err]: any) => {
+      if (err) {
+        this.userList = [];
+        return;
+      }
+      this.userList = data;
+    });
+  }
   handleInvateModalCancel(): void {
     // * 关闭弹窗
     this.isInvateModalVisible = false;
@@ -115,15 +144,15 @@ export class MemberComponent implements OnInit {
     // * nzAfterClose event callback
     {
       // * auto clear form
-      this.inputPersonValue = '';
+      this.userValue = '';
     }
-    this.inputPersonValue = '';
+    this.userValue = '';
   }
   async btn0r9zcbCallback() {
     // * click event callback
     this.isSelectBtnLoading = true;
     const btnSelectRunning = async () => {
-      const username = this.inputPersonValue;
+      const username = this.userValue;
       const [uData, uErr]: any = await this.api.api_userSearch({ username });
       if (uErr) {
         if (uErr.status === 401) {
@@ -188,28 +217,21 @@ export class MemberComponent implements OnInit {
   }
   btnguixdgStatus() {
     // * disabled status status
-    return this.inputPersonValue === '';
+    return this.userValue === '';
   }
   async btnf5umnoCallback() {
     // * click event callback
+    // * 点击 Add People 按钮后的函数
     this.isAddPeopleBtnLoading = true;
     const btnAddPeopleRunning = async () => {
       // * 唤起弹窗
       this.isInvateModalVisible = true;
-      {
-        {
-        }
-        {
-        }
-      }
+      this.userValue = '';
     };
     await btnAddPeopleRunning();
     this.isAddPeopleBtnLoading = false;
   }
-  btny703n5Status() {
-    // * disabled status status
-    return !this.store.isLocal && this.store.canEdit;
-  }
+
   async e97uoiuCallback($event) {
     // * eoOnRemove event callback
 
