@@ -1,8 +1,8 @@
 import { formatDate } from '@angular/common';
 import { ApiTestRes, requestDataOpts } from 'eo/workbench/browser/src/app/pages/api/service/api-test/test-server.model';
-import { ApiBodyType } from '../../../../modules/api-shared/api.model';
 
-import {  ApiData } from '../../../../shared/services/storage/index.model';
+import { ApiBodyType } from '../../../../modules/api-shared/api.model';
+import { ApiData } from '../../../../shared/services/storage/index.model';
 import { TestLocalNodeData } from './local-node/api-server-data.model';
 const METHOD = ['POST', 'GET', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'];
 const PROTOCOL = ['http', 'https'];
@@ -27,7 +27,7 @@ export const formatUri = (uri, rest = []) => {
     }
     return { ...acc, [val.name]: val.value === undefined ? val.example : val.value };
   }, {});
-  Object.keys(restByName).forEach((restName) => {
+  Object.keys(restByName).forEach(restName => {
     try {
       result = result.replace(new RegExp(`{${restName}}`, 'g'), restByName[restName]);
     } catch (e) {}
@@ -40,19 +40,19 @@ export const eoFormatRequestData = (
   opts: requestDataOpts = { env: {}, beforeScript: '', afterScript: '', lang: 'en', globals: {} },
   locale
 ) => {
-  const formatList = (inArr) => {
+  const formatList = inArr => {
     if (!Array.isArray(inArr)) {
       return [];
     }
     return inArr
-      .filter((val) => val.name)
-      .map((val) => ({
+      .filter(val => val.name)
+      .map(val => ({
         checkbox: val.required,
         headerName: val.name,
-        headerValue: val.value,
+        headerValue: val.value
       }));
   };
-  const formatBody = (inData) => {
+  const formatBody = inData => {
     switch (inData.requestBodyType) {
       case ApiBodyType.Binary:
       case ApiBodyType.Raw: {
@@ -66,19 +66,18 @@ export const eoFormatRequestData = (
           array: '12',
           object: '13',
           number: '14',
-          null: '15',
+          null: '15'
         };
         return inData.requestBody
-          .filter((val) => val.name)
-          .map((val) => ({
+          .filter(val => val.name)
+          .map(val => ({
             checkbox: val.required,
             listDepth: 0,
             paramKey: val.name,
-            files: val.files?.map((file) => file.dataUrl),
+            files: val.files?.map(file => file.content),
             paramType: typeMUI[val.type],
-            paramInfo: val.value === undefined ? val.example : val.value,
+            paramInfo: val.value === undefined ? val.example : val.value
           }));
-        break;
       }
     }
   };
@@ -96,12 +95,12 @@ export const eoFormatRequestData = (
     auth: { status: '0' },
     advancedSetting: { requestRedirect: 1, checkSSL: 0, sendEoToken: 1, sendNocacheToken: 0 },
     env: {
-      paramList: (opts.env.parameters || []).map((val) => ({ paramKey: val.name, paramValue: val.value })),
-      frontURI: opts.env.hostUri,
+      paramList: (opts.env.parameters || []).map(val => ({ paramKey: val.name, paramValue: val.value })),
+      frontURI: opts.env.hostUri
     },
     beforeInject: opts.beforeScript,
     afterInject: opts.afterScript,
-    testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', locale),
+    testTime: formatDate(new Date(), 'YYYY-MM-dd HH:mm:ss', locale)
   };
   return result;
 };
@@ -112,14 +111,14 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
   if (report.errorReason) {
     reportList.unshift({
       type: 'interrupt',
-      content: report.errorReason,
+      content: report.errorReason
     });
   }
   //afterScript code tips
   if (report.response?.errorReason) {
     reportList.push({
       type: 'interrupt',
-      content: report.response?.errorReason,
+      content: report.response?.errorReason
     });
   }
   if (['error'].includes(report.status)) {
@@ -128,8 +127,8 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
       globals,
       id,
       response: {
-        reportList,
-      },
+        reportList
+      }
     };
     return result;
   }
@@ -139,7 +138,7 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
     ...response,
     reportList,
     body: response.body || '',
-    headers: response.headers.map((val) => ({ name: val.key, value: val.value })),
+    headers: response.headers.map(val => ({ name: val.key, value: val.value }))
   };
   (response = { blobFileName: report.blobFileName, ...response }),
     (result = {
@@ -160,15 +159,15 @@ export const eoFormatResponseData = ({ globals, report, history, id }): ApiTestR
           protocol: PROTOCOL[history.requestInfo.apiProtocol],
           requestHeaders: history.requestInfo.headers,
           requestBodyType: REQUEST_BODY_TYPE[history.requestInfo.requestType],
-          requestBody: history.requestInfo.params,
-        },
-      },
+          requestBody: history.requestInfo.params
+        }
+      }
     });
   if (result.history.request.requestBodyType === 'formData') {
-    result.history.request.requestBody = result.history.request.requestBody.map((val) => ({
+    result.history.request.requestBody = result.history.request.requestBody.map(val => ({
       name: val.key,
       type: 'string',
-      value: val.value,
+      value: val.value
     }));
   }
   return result;
@@ -182,14 +181,14 @@ export const DEFAULT_UNIT_TEST_RESULT = {
     responseLength: 0,
     responseType: 'text',
     reportList: [],
-    body: $localize`The test service connection failed, please submit an Issue to contact the community`,
+    body: $localize`The test service connection failed, please submit an Issue to contact the community`
   },
   report: {
     request: {
       requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
       requestBodyType: 'raw',
-      requestBody: '{}',
-    },
+      requestBody: '{}'
+    }
   },
   history: {
     request: {
@@ -199,9 +198,9 @@ export const DEFAULT_UNIT_TEST_RESULT = {
       requestHeaders: [{ name: 'Content-Type', value: 'application/json' }],
       requestBodyJsonType: 'object',
       requestBodyType: 'raw',
-      requestBody: '{}',
-    },
-  },
+      requestBody: '{}'
+    }
+  }
 };
 
 export const getGlobals = (): object => {
@@ -212,7 +211,7 @@ export const getGlobals = (): object => {
   } catch (e) {}
   return result || {};
 };
-export const setGlobals = (globals) => {
+export const setGlobals = globals => {
   if (!globals) {
     return;
   }

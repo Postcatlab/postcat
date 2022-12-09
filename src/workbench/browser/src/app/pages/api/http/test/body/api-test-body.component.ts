@@ -1,16 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  OnDestroy,
-  ViewChild,
-  AfterViewInit,
-  ElementRef,
-  TemplateRef
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
@@ -28,7 +16,7 @@ import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } fr
   templateUrl: './api-test-body.component.html',
   styleUrls: ['./api-test-body.component.scss']
 })
-export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
   @Input() contentType: ContentType;
@@ -37,7 +25,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
   @Output() modelChange: EventEmitter<any> = new EventEmitter();
   @Output() contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
-  @ViewChild('formValue', { static: false }) formValue?: TemplateRef<HTMLDivElement>;
+  @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
 
   isReload = true;
   listConf: ApiTableConf = {
@@ -78,7 +66,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     });
   }
 
-  ngAfterViewInit(): void {}
   beforeChangeBodyByType(type) {
     switch (type) {
       case ApiTestBodyType.Binary:
@@ -143,7 +130,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
             status: 'done'
           }
         ];
-        this.modelChange.emit(this.model);
+        this.emitModelChange();
       });
       observer.complete();
     });
@@ -175,6 +162,31 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
         break;
       }
     }
+    this.model.forEach(row => {
+      if (row.type === 'file') {
+        row.files = [];
+      }
+    });
+  }
+  formdataSelectFiles(target, item) {
+    const files = Array.from(target.files);
+    const execeedSize = files.some((file: File) => {
+      if (file.size >= 2 * 1024 * 1024) {
+        this.message.error($localize`The file is too large and needs to be less than 2 MB`);
+        return true;
+      }
+    });
+    if (execeedSize) return;
+    item.files = [];
+    files.forEach(file => {
+      transferFileToDataUrl(file).then((result: { name: string; content: string }) => {
+        item.files.push({
+          name: result.name,
+          content: result.content
+        });
+      });
+    });
+    this.emitModelChange();
   }
   private initListConf() {
     const config = this.apiTable.initTestTable({
@@ -182,7 +194,24 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, AfterViewInit, O
     });
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
-    // let columnItem = this.listConf.columns.find(val => val.key === 'value');
-    // columnItem.slot = this.formValue;
+    this.listConf.columns.forEach(col => {
+      switch (col.key) {
+        case 'value': {
+          col.slot = this.formValue;
+          break;
+        }
+        case 'type': {
+          col.change = item => {
+            if (item.type === 'file') {
+              item.files = [];
+              item.value = '';
+            } else {
+              delete item.files;
+            }
+          };
+          break;
+        }
+      }
+    });
   }
 }

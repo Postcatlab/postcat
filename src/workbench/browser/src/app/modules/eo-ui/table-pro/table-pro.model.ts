@@ -44,7 +44,7 @@ export interface ColumnItem {
    * Column init visible,default true
    */
   columnVisible?: 'fixed' | boolean;
-  /** 
+  /**
    * Custom column body html
    */
   slot?: TemplateRef<HTMLElement>;
@@ -60,10 +60,12 @@ export interface ColumnItem {
    * [type='btnList']
    */
   btns?: ColumnBtn[];
+
+  change?: (item) => void;
   showFn?: (item, index, apis) => boolean;
   filterFn?: boolean | ((item, index, apis) => boolean);
   disabledFn?: (item, index, apis) => boolean;
-  enums?: { title: string; value: any; class: string }[];
+  enums?: Array<{ title: string; value: any; class: string }>;
 }
 interface ColumnBtn {
   title?: string;

@@ -32,6 +32,9 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() setting: TableProSetting = {};
   @Input() nzDataItem?;
   @Input() nzScroll: { x?: string; y?: string } = {};
+  /**
+   * Expand tree data when init dom
+   */
   @Input() nzExpand = false;
   @Input() columnVisibleStatus = {};
 
@@ -211,7 +214,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
     //Set level
     if (this.setting.isLevel) {
       if (!this.setting.primaryKey) {
-        throw new Error('EO_ERROR[eo-table-pro]: Lack of primaryKey');
+        throw new Error('EO_ERROR[eo-table-pro]: Lack of primaryKey, please add it in setting!');
       }
     }
 
@@ -248,6 +251,7 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
           key: col.key,
           title: col.slot,
           left: col.left,
+          change: col.change,
           //Slot priority higher than type
           type: col.slot ? null : col.type,
           right: col.right,

@@ -3,11 +3,11 @@
     <span i18n>No Request Body</span>
   </ng-template>
 </nz-empty>
-<div *ngIf="model && model.length" class="p20">
+<div *ngIf="model && model.length">
   <!-- Formdata -->
-  <ul *ngIf="modelType !== 'string'">
+  <ul class="p-pbase" *ngIf="modelType !== 'string'">
     <li *ngFor="let item of model">
-      <span class="c6 fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
+      <span class="header-key fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
     </li>
   </ul>
   <!-- JSON / XML / Raw -->
