@@ -37,7 +37,6 @@ import { distinct } from 'rxjs/operators';
         <button
           eo-ng-button
           [nzLoading]="isSelectBtnLoading"
-          class=""
           nzType="primary"
           nzBlock
           (click)="btn0r9zcbCallback()"

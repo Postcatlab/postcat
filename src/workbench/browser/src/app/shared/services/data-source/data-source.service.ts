@@ -12,7 +12,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
  * A message queue global send and get message
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DataSourceService {
   isConnectRemote = false;
@@ -89,7 +89,7 @@ export class DataSourceService {
           `<span>${$localize`Store data on the cloud for team collaboration and product use across devices.`}</span>` +
           `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">${$localize`Learn more..`}</a>`,
         nzOnOk: () => console.log('Info OK'),
-        nzMaskClosable: true,
+        nzMaskClosable: true
       });
       return;
     }
@@ -141,7 +141,7 @@ export class DataSourceService {
     }
 
     const keys = Object.keys(localSettings);
-    const filterKeys = keys.filter((n) => n.startsWith(keyPath));
+    const filterKeys = keys.filter(n => n.startsWith(keyPath));
     if (filterKeys.length) {
       return filterKeys.reduce((pb, ck) => {
         const keyArr = ck.replace(`${keyPath}.`, '').split('.');
