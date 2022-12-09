@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
@@ -40,7 +40,7 @@ import { MessageService } from '../../shared/services/message';
       </ul>
     </eo-ng-dropdown-menu>`
 })
-export class SelectWorkspaceComponent implements OnInit {
+export class SelectWorkspaceComponent {
   searchValue: string;
 
   constructor(
@@ -48,13 +48,8 @@ export class SelectWorkspaceComponent implements OnInit {
     private effect: EffectService,
     private dataSourceService: DataSourceService,
     private message: MessageService
-  ) {
-    if (!this.store.isLocal) {
-      this.effect.getWorkspaceInfo(this.store.getCurrentWorkspace.id);
-    }
-  }
+  ) {}
 
-  ngOnInit(): void {}
   changeWorkspace(item) {
     this.effect.updateWorkspace(item);
   }

@@ -1,24 +1,22 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { ModalService } from '../../../../shared/services/modal.service';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { ElectronService } from '../../../../core/services';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/pages/workspace/import-api/import-api.component';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { debounce } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
+import { NzTreeComponent, NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { filter, Subject, takeUntil } from 'rxjs';
 
+import { ElectronService } from '../../../../core/services';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../shared/models';
 import { MessageService } from '../../../../shared/services/message';
 import { Message } from '../../../../shared/services/message/message.model';
+import { ModalService } from '../../../../shared/services/modal.service';
 import { Group, ApiData, StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 import { getExpandGroupByKey, listToTree } from '../../../../utils/tree/tree.utils';
 import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
@@ -129,7 +127,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   setParentStyle(node) {
-    console.log('node', node);
+    // console.log('node', node);
   }
   onSearchFunc: NzTreeComponent['nzSearchFunc'] = node => {
     const origin = this.apiGroup.getTreeNodeByKey(node.key).origin;

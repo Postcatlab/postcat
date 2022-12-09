@@ -355,14 +355,8 @@ export class UserModalComponent implements OnInit {
       newWorkName: [null, [Validators.required]]
     });
 
-    const { id: workspaceID } = this.store.getCurrentWorkspace;
     if (this.store.isShare) {
       return;
-    }
-
-    if (workspaceID !== -1) {
-      const { projects } = await this.effect.getWorkspaceInfo(workspaceID);
-      this.store.setCurrentProjectID(projects.at(0).uuid);
     }
 
     const url = this.dataSource.remoteServerUrl;
@@ -370,8 +364,6 @@ export class UserModalComponent implements OnInit {
     if (url === '') {
       // * 唤起弹窗
       // this.isOpenSettingModalVisible = true;
-      {
-      }
 
       return;
     }
@@ -388,8 +380,6 @@ export class UserModalComponent implements OnInit {
         return;
       }
       this.isCheckConnectModalVisible = true;
-      {
-      }
 
       return;
     }
@@ -400,8 +390,6 @@ export class UserModalComponent implements OnInit {
   }
   async e7odmm4Callback() {
     // * nzAfterClose event callback
-    {
-    }
   }
   async btnsgs0ckCallback() {
     // * click event callback
@@ -446,8 +434,6 @@ export class UserModalComponent implements OnInit {
   }
   async e4pgjfkCallback() {
     // * nzAfterClose event callback
-    {
-    }
   }
   async btnzls4ymCallback() {
     // * click event callback
@@ -543,8 +529,6 @@ export class UserModalComponent implements OnInit {
 
       // * 唤起弹窗
       this.isSyncModalVisible = true;
-      {
-      }
     };
     await btnLoginBtnRunning();
     this.isLoginBtnBtnLoading = false;
@@ -555,8 +539,6 @@ export class UserModalComponent implements OnInit {
   }
   async e95oi5lCallback() {
     // * nzAfterClose event callback
-    {
-    }
   }
   async textqdb64pCallback() {
     // * click event callback
