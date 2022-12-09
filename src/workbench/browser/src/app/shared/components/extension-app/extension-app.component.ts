@@ -12,7 +12,12 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
 @Component({
   selector: 'extension-app',
   template: `
-    <div style="transform: translate(0)" class="extension-app w-full h-full overflow-auto relative">
+    <nz-spin
+      [nzSpinning]="isSpinning"
+      [nzSize]="'large'"
+      style="transform: translate(0)"
+      class="extension-app w-full h-full overflow-hidden relative"
+    >
       <ngx-wujie
         *ngIf="type === 'micro-app' && url"
         width="100%"
@@ -34,9 +39,17 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
         class="border-none"
         [name]="name"
         [src]="safeUrl"
+        (load)="onAppload()"
       ></iframe>
-    </div>
+    </nz-spin>
   `,
+  styles: [
+    `
+      :host ::ng-deep .ant-spin-container {
+        height: 100%;
+      }
+    `,
+  ],
 })
 export class ExtensionAppComponent implements OnInit, OnDestroy {
   @ViewChild('extensionApp') extensionApp: ElementRef;
@@ -48,6 +61,7 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
   iframeWin: Window;
   safeUrl: SafeResourceUrl;
   retryCount = 0;
+  isSpinning = true;
 
   microAppData = { msg: '来自基座的数据' };
 
@@ -67,6 +81,10 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     window.removeEventListener('message', this.receiveMessage, false);
+  }
+
+  onAppload() {
+    this.isSpinning = false;
   }
 
   initSidebarViewByRoute() {
