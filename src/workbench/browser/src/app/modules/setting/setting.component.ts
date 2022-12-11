@@ -1,17 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Input,
-  OnInit,
-  QueryList,
-  ViewChildren,
-  ViewContainerRef
-} from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, Input, OnDestroy, OnInit, QueryList, ViewChildren, ViewContainerRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
@@ -43,9 +32,10 @@ interface FlatNode {
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.scss']
 })
-export class SettingComponent implements OnInit, AfterViewInit {
+export class SettingComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() selectedModule: string;
   @ViewChildren('options', { read: ViewContainerRef }) options: QueryList<ViewContainerRef>;
+  componentRefs: Array<ComponentRef<any>>;
   extensitonConfigurations: any[];
   objectKeys = Object.keys;
   isClick = false;
@@ -131,12 +121,17 @@ export class SettingComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private settingService: SettingService, public store: StoreService, public webService: WebService) {}
+
+  ngOnInit(): void {
+    this.init();
+  }
+
   ngAfterViewInit(): void {
     setTimeout(() => {
       const options = this.options.toArray();
-      this.treeNodes
+      this.componentRefs = this.treeNodes
         .filter(item => !item.ifShow || item.ifShow?.())
-        .forEach((item, index) => {
+        .map((item, index) => {
           const componentRef = options[index]?.createComponent<any>(item.comp as any);
           componentRef.location.nativeElement.id = item.moduleID;
           componentRef.instance.model = this.settings;
@@ -145,13 +140,15 @@ export class SettingComponent implements OnInit, AfterViewInit {
             this.handleSave();
           });
           // console.log('componentRef', componentRef);
+          return componentRef;
         });
     });
   }
 
-  ngOnInit(): void {
-    this.init();
+  ngOnDestroy(): void {
+    this.componentRefs.forEach(item => item.destroy());
   }
+
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
   /**
