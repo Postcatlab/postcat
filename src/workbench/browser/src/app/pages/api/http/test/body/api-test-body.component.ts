@@ -3,14 +3,20 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { transferFileToDataUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { transferFileToDataUrl, whatTextType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { EditorOptions } from 'ng-zorro-antd/code-editor';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer, Subject } from 'rxjs';
-import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
+import { pairwise, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
+const whatTextTypeMap = {
+  xml: 'text/xml',
+  json: 'application/json',
+  html: 'text/html',
+  text: 'text/plain'
+} as const;
 @Component({
   selector: 'eo-api-test-body',
   templateUrl: './api-test-body.component.html',
@@ -19,11 +25,13 @@ import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } fr
 export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() model: string | object[] | any;
   @Input() supportType: string[];
+  @Input() autoSetContentType = true;
   @Input() contentType: ContentType;
   @Input() bodyType: ApiTestBodyType | string;
-  @Output() bodyTypeChange: EventEmitter<ApiBodyType | string> = new EventEmitter();
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  @Output() contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
+  @Output() readonly bodyTypeChange: EventEmitter<ApiBodyType | string> = new EventEmitter();
+  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
+  @Output() readonly autoSetContentTypeChange: EventEmitter<boolean> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
 
@@ -33,8 +41,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     setting: {}
   };
   binaryFiles: NzUploadFile[] = [];
-  CONST: any = {
-    CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE
+  CONST = {
+    CONTENT_TYPE: CONTENT_TYPE_BY_ABRIDGE,
+    API_BODY_TYPE: []
   };
   cache: any = {};
   editorConfig: EditorOptions = {
@@ -46,23 +55,25 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
     type: 'string',
     value: ''
   };
-  private resizeObserver: ResizeObserver;
-  private readonly el: HTMLElement;
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   get editorType() {
     return this.contentType.replace(/.*\//, '');
   }
-  constructor(private apiTable: ApiTableService, elementRef: ElementRef, private message: EoNgFeedbackMessageService) {
-    this.el = elementRef.nativeElement;
+  constructor(private apiTable: ApiTableService, private message: EoNgFeedbackMessageService) {
     this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe(code => {
+    this.rawChange$.pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(code => {
       //! Must set value by data,because this.model has delay
       this.modelChange.emit(code);
+      const contentType = whatTextTypeMap[whatTextType(code)];
+      if (contentType && this.autoSetContentType !== false) {
+        this.contentType = contentType;
+        this.contentTypeChange.emit(contentType);
+      }
     });
   }
 
@@ -81,6 +92,7 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   changeContentType(contentType) {
     this.contentTypeChange.emit(contentType);
+    this.autoSetContentTypeChange.emit(false);
   }
   changeBodyType(type?) {
     this.bodyType$.next(this.bodyType);
@@ -101,7 +113,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.resizeObserver?.disconnect();
   }
   ngOnChanges(changes) {
     if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {

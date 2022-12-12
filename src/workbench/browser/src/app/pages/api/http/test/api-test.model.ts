@@ -1,14 +1,10 @@
-import { JsonRootType, RequestMethod, RequestProtocol } from "../../../../modules/api-shared/api.model";
+import { JsonRootType, RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 
 export enum ApiTestParamsTypeFormData {
   text = 'string',
   file = 'file'
 }
 export const CONTENT_TYPE_BY_ABRIDGE = [
-  {
-    title: 'Auto',
-    value: ''
-  },
   {
     title: 'application/x-www-form-urlencoded',
     value: 'application/x-www-form-urlencoded'
@@ -212,7 +208,7 @@ export interface ApiTestHistoryFrame {
  * API Test Data
  * Only has request info
  */
- export interface ApiTestData {
+export interface ApiTestData {
   /**
    * For adding test history
    */
