@@ -1,9 +1,7 @@
 import { Observable } from 'rxjs';
-import { BasicApiData } from '../../../modules/api-shared/api.model';
 
-import {
-  ApiTestHistoryFrame,
-} from '../../../pages/api/http/test/api-test.model';
+import { BasicApiData } from '../../../modules/api-shared/api.model';
+import { ApiTestHistoryFrame } from '../../../pages/api/http/test/api-test.model';
 
 /**
  * Date base model
@@ -123,7 +121,7 @@ export interface Project extends StorageModel {
 /**
  * API测试历史对象接口
  */
- export interface ApiTestHistory extends ApiTestHistoryFrame, StorageModel {
+export interface ApiTestHistory extends ApiTestHistoryFrame, StorageModel {
   /**
    * Project primary key ID
    *
@@ -183,7 +181,7 @@ export interface StorageInterface {
    */
   systemCheck?: () => Observable<object>;
   // Project
-  projectImport: (uuid: number, item: any) => Observable<object>;
+  projectImport: (uuid: number, item: any, groupID?: number) => Observable<object>;
   projectCreate: (item: Project) => Observable<object>;
   projectUpdate: (item: Project, uuid: number | string) => Observable<object>;
   projectBulkUpdate: (items: Project[]) => Observable<object>;
@@ -316,11 +314,11 @@ export enum StorageResStatus {
   unAuthorize = 401,
   notFind = 404,
   error = 500,
-  invalid = 'not connect',
+  invalid = 'not connect'
 }
 
 export enum StorageProcessType {
   default = 'default',
   remote = 'remote',
-  sync = 'sync',
+  sync = 'sync'
 }

@@ -3,8 +3,8 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-
-import { StorageUtil } from '../../../utils/storage/Storage';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 type ExtensionItem = {
   name: string;
@@ -18,21 +18,22 @@ const extKey = 'ext_installed_list';
 const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
   disabledExtensionNames = [];
 
-  constructor(private message: EoNgFeedbackMessageService, private webService: WebService) {}
+  constructor(private message: EoNgFeedbackMessageService, private webService: WebService, private messageService: MessageService) {}
 
   init() {
+    this.unInstallExtension('eoapi-api-space-debug');
     if (this.webService.isWeb) {
-      defaultExtensions.forEach((n) => {
+      defaultExtensions.forEach(n => {
         const isInstall = this.getExtensionByName(n);
         isInstall || this.installedList.push({ name: n } as any);
       });
-      this.installedList.forEach((n) => {
+      this.installedList.forEach(n => {
         this.installExtension(n.name);
       });
     }
@@ -45,15 +46,16 @@ export class WebExtensionService {
       this.insertScript(data);
       const pkgJson = await this.getPkgInfo(extName);
       const pkgObj = typeof pkgJson === 'object' ? pkgJson : JSON.parse(pkgJson);
-      const oldIndex = this.installedList.findIndex((n) => n.name === extName);
+      const oldIndex = this.installedList.findIndex(n => n.name === extName);
       this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
         name: extName,
         disable: false,
         version: pkgObj.version,
         url: res.url,
-        pkgInfo: pkgObj,
+        pkgInfo: pkgObj
       });
       StorageUtil.set(extKey, this.installedList);
+      this.emitLocalExtensionsChangeEvent();
       return true;
     } else {
       this.message.info(data);
@@ -62,12 +64,13 @@ export class WebExtensionService {
   }
 
   unInstallExtension(extName: string) {
-    this.installedList = this.installedList.filter((n) => n.name !== extName);
+    this.installedList = this.installedList.filter(n => n.name !== extName);
+    this.emitLocalExtensionsChangeEvent();
     StorageUtil.set(extKey, this.installedList);
   }
 
   getExtensionByName(extName: string) {
-    return this.installedList.find((n) => n.name === extName);
+    return this.installedList.find(n => n.name === extName);
   }
 
   isEnable(name: string) {
@@ -110,20 +113,24 @@ export class WebExtensionService {
     return window[extName];
   };
 
-  getFeatures(featureName: string): Map<string, FeatureInfo> {
+  getFeatures<T = FeatureInfo>(featureName: string): Map<string, T> {
     if (window.eo?.getFeature) {
       return window.eo.getFeature(featureName);
     }
-    const featureMap = new Map<string, FeatureInfo>([]);
-    this.installedList.forEach((item) => {
-      const feature: FeatureInfo = item.pkgInfo?.features?.[featureName];
+    const featureMap = new Map<string, T>([]);
+    this.installedList.forEach(item => {
+      const feature: T = item.pkgInfo?.features?.[featureName];
       if (feature) {
-        featureMap.set(item.name, feature);
+        featureMap.set(item.name, {
+          extensionID: item.name,
+          ...feature
+        });
       }
     });
-    if (featureMap.size === 0) {
-      return;
-    }
     return featureMap;
+  }
+
+  private emitLocalExtensionsChangeEvent() {
+    this.messageService.send({ type: 'localExtensionsChange', data: this.installedList });
   }
 }

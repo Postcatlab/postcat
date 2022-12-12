@@ -32,7 +32,7 @@
         },
         "example": {
           "description": "param example",
-          "type":"string"
+          "type": "string"
         },
         "maxLength": {
           "description": "最大长度",
@@ -133,7 +133,7 @@
     },
     "method": {
       "$ref": "#/definitions/RequestMethod",
-      "default":"POST",
+      "default": "POST",
       "description": "Request method [POST, GET, PUT, ...]"
     },
     "name": {
@@ -163,11 +163,11 @@
             "$ref": "#/definitions/ApiEditBody"
           },
           "type": "array",
-          "default":[]
+          "default": []
         },
         {
           "type": "string",
-          "default":""
+          "default": ""
         }
       ],
       "default": "",
@@ -239,10 +239,6 @@
     "uri": {
       "description": "Request url,Usually value is path",
       "type": "string"
-    },
-    "uuid": {
-      "description": "主键UUID，字符串UUID或数值型",
-      "type": "number"
     },
     "weight": {
       "description": "api show order",

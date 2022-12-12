@@ -38,7 +38,7 @@ server {
 
   # api测试服务
   location /api/unit {
-    proxy_pass  http://eoapi-test-server:4201; # 转发规则
+    proxy_pass  http://eoapi-test-server:$NODE_SERVER_PORT; # 转发规则
     proxy_set_header Host $proxy_host; # 修改转发请求头，让3000端口的应用可以受到真实的请求
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -46,7 +46,7 @@ server {
 
   # websocket测试服务
   location ~/socket.io/(.*) {
-    proxy_pass http://eoapi-test-server:4202; # 转发规则
+    proxy_pass http://eoapi-test-server:$EOAPI_WEBSOCKET_POST; # 转发规则
 
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
@@ -58,7 +58,7 @@ server {
 
   # 后端服务
   location ^~ /api {
-    proxy_pass  http://eoapi-remote-server:3000; # 转发规则
+    proxy_pass  http://eoapi-remote-server:$EOAPI_SERVER_PORT; # 转发规则
     proxy_set_header Host $proxy_host; # 修改转发请求头，让3000端口的应用可以受到真实的请求
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -66,7 +66,7 @@ server {
 
     # 后端服务兼容旧客户端
   location ~ ^/(system|workspace|user|auth|mock|[0-9]+/[0-9]+/api_data|[0-9]+/[0-9]+/group|[0-9]+/[0-9]+/group|[0-9]+/[0-9]+/environment|[0-9]+/[0-9]+/api_test_history|[0-9]+/[0-9]+/mock|[0-9]+/[0-9]+/shared|[0-9]+/project) {
-    proxy_pass  http://eoapi-remote-server:3000; # 转发规则
+    proxy_pass  http://eoapi-remote-server:$EOAPI_SERVER_PORT; # 转发规则
     proxy_set_header Host $proxy_host; # 修改转发请求头，让3000端口的应用可以受到真实的请求
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

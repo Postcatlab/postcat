@@ -1,0 +1,21 @@
+<div class="eo_sidebar" [ngClass]="{ eo_sidebar_shrink: isCollapsed }">
+  <ng-container *ngFor="let item of this.modules">
+    <nz-divider *ngIf="item.id === '@eo-core-extension'" style="transform: scale(0.8); margin: 5px 0"></nz-divider>
+    <a
+      (click)="clickModule(item)"
+      class="sidebar_item"
+      nz-tooltip
+      nzTooltipPlacement="right"
+      [nzTooltipTitle]="item.title"
+      [ngClass]="{ sidebar_item_active: item.id === this.sidebar.currentModule?.id }"
+    >
+      <i class="icon">
+        <img *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" width="24" height="24" />
+        <ng-template #icon>
+          <eo-iconpark-icon [name]="item.icon" size="24px"> </eo-iconpark-icon>
+        </ng-template>
+      </i>
+      <span class="mt-1 label" *ngIf="!sidebar.collapsed">{{ item.title }}</span>
+    </a>
+  </ng-container>
+</div>

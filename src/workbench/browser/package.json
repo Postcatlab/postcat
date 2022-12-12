@@ -34,6 +34,7 @@
     "@angular/upgrade": "^14.2.0",
     "@babel/runtime": "7.18.3",
     "@micro-zoe/micro-app": "1.0.0-alpha.10",
+    "@xmagic/ngx-wujie": "1.0.0-rc.20",
     "ajv": "8.11.0",
     "core-js": "3.26.1",
     "eo-ng-auto-complete": "0.0.82",
@@ -60,8 +61,8 @@
     "rxjs": "7.5.5",
     "socket.io-client": "4.5.1",
     "tslib": "^2.4.0",
-    "yarn": "1.22.19",
-    "zone.js": "~0.12.0"
+    "wujie": "1.0.1",
+    "zone.js": "~0.11.6"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "14.1.0",
