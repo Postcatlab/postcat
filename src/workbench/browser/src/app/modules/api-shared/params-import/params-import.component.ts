@@ -89,11 +89,6 @@ export class ParamsImportComponent implements OnInit {
     }
     return [{ data: xml2json(code), rootType: 'object' }, null];
   }
-
-  parseRaw(code) {
-    return [{ data: code, rootType: null }, null];
-  }
-
   parseForm(code) {
     const data = form2json(code).reduce((total, it) => ({ ...total, [it.key]: it.value }), {});
     // data like => { headerName: 'headerValue', headerName2: 'headerValue2' }
@@ -106,8 +101,6 @@ export class ParamsImportComponent implements OnInit {
       return;
     }
     const codeType = whatType(this.paramCode);
-    const tailData = this.baseData.slice(-1);
-    const resultData = cloneDeep(this.baseData.reverse().slice(1).reverse());
     if (this.rootType !== codeType) {
       // TODO Perhaps should be handled about format compatibility later.
       console.warn('EO_WARN[params-import]: The code that you input is no-equal to the root type.');
@@ -116,7 +109,6 @@ export class ParamsImportComponent implements OnInit {
       json: this.parseJSON,
       query: this.parseQuery,
       xml: this.parseXML,
-      raw: this.parseRaw,
       header: this.parseForm,
       formData: this.parseForm
     };
@@ -130,18 +122,19 @@ export class ParamsImportComponent implements OnInit {
     if (codeType === 'array') {
       console.log('===>', data.at(0));
     }
-    const cacheData = json2Table(data);
     const combineFunc = {
-      overwrite: data => data,
-      append: data => data.concat(cacheData),
-      mixin: data => {
+      overwrite: (data, base) => data,
+      append: (data, base) => base.concat(data),
+      mixin: (data, base) => {
         const nameList = data.map(it => it.name);
-        return data.concat(cacheData.filter(it => !nameList.includes(it.name)));
+        return data.concat(base.filter(it => !nameList.includes(it.name)));
       }
     };
-    console.log('type', type);
-    const result = combineFunc[type](cacheData);
-    console.log('result', this.paramCode, data, cacheData, result);
-    this.baseDataChange.emit(isXML(this.paramCode) ? result : result.concat(tailData));
+    // * this.baseData.reverse().slice(1).reverse() for filter the last empty row
+    const emptyRow = this.baseData.slice(-1);
+    const resultData = cloneDeep(this.baseData.reverse().slice(1).reverse());
+    const result = combineFunc[type](json2Table(data), resultData);
+    this.baseDataChange.emit([...result, emptyRow]);
+    this.handleCancel();
   }
 }
