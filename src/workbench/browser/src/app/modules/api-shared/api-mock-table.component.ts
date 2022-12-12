@@ -112,7 +112,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
     ];
   }
   async ngOnChanges(changes) {
-    if (changes?.apiData?.currentValue) {
+    if (changes?.apiData?.currentValue?.uuid) {
       this.mockList = await this.apiMock.getMocks(this.apiData.uuid);
       this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
       this.setMocksUrl();

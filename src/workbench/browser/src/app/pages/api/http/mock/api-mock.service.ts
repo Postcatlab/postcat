@@ -1,33 +1,21 @@
 import { Injectable } from '@angular/core';
 import { formatUri } from 'eo/workbench/browser/src/app/pages/api/service/api-test/api-test.utils';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
-import {
-  ApiMockEntity,
-  StorageRes,
-  StorageResStatus,
-} from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 
 @Injectable()
 export class ApiMockService {
-  constructor(
-    private storageService: StorageService,
-    private dataSource: DataSourceService,
-    private effect: EffectService,
-    private store: StoreService
-  ) {
+  constructor(private storageService: StorageService, private dataSource: DataSourceService, private store: StoreService) {
     console.log('init api mock service');
   }
   getMockPrefix(apiData) {
-    const mockUrl = this.store.isLocal
-      ? this.dataSource.mockUrl
-      : `${this.dataSource.mockUrl}/mock-${this.store.getCurrentProjectID}`;
+    const mockUrl = this.store.isLocal ? this.dataSource.mockUrl : `${this.dataSource.mockUrl}/mock-${this.store.getCurrentProjectID}`;
     const uri = transferUrlAndQuery(formatUri(apiData.uri, apiData.restParams), apiData.queryParams, {
-      base: 'query',
+      base: 'query'
     }).url;
     return `${mockUrl}/${uri}`;
   }
