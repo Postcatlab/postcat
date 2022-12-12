@@ -44,4 +44,6 @@
       <span class="flex-1 overflow-hidden truncate">{{ origin.request?.uri }}</span>
     </div>
   </ng-template>
+
+  <nz-empty *ngIf="!historyList.length" nzNotFoundImage="simple"> </nz-empty>
 </div>

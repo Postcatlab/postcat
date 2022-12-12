@@ -48,6 +48,7 @@ interface testViewModel {
   afterScript: string;
   testStartTime?: number;
   contentType: ContentType;
+  autoSetContentType: boolean;
   requestTabIndex: number;
   responseTabIndex: number;
   testResult: {
