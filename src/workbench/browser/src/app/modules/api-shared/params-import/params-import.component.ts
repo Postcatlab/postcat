@@ -37,11 +37,11 @@ export class ParamsImportComponent implements OnInit {
   paramCode = '';
 
   @computed get contentTypeTitle() {
-    return titleHash.get(this.contentTypeTitle) || '';
+    return titleHash.get(this.contentType) || '';
   }
 
   @computed get eg() {
-    return egHash.get(this.contentTypeTitle);
+    return egHash.get(this.contentType);
   }
 
   @computed get contentTypeEditor() {
@@ -95,7 +95,8 @@ export class ParamsImportComponent implements OnInit {
   }
 
   parseForm(code) {
-    const data = form2json(code).reduce((total, it) => ({ ...total, ...it }), {});
+    const data = form2json(code).reduce((total, it) => ({ ...total, [it.key]: it.value }), {});
+    // data like => { headerName: 'headerValue', headerName2: 'headerValue2' }
     return [{ data: data, rootType: 'object' }, null];
   }
 
@@ -120,17 +121,16 @@ export class ParamsImportComponent implements OnInit {
       formData: this.parseForm
     };
 
-    const [res, err] = func[this.contentType](this.paramCode);
+    const [{ data, rootType }, err] = func[this.contentType](this.paramCode);
     if (err) {
       this.message.error(err.msg);
       return;
     }
     // * same data struct
     if (codeType === 'array') {
-      console.log('===>', res.at(0));
+      console.log('===>', data.at(0));
     }
-    const cacheData = json2Table(res);
-
+    const cacheData = json2Table(data);
     const combineFunc = {
       overwrite: data => data,
       append: data => data.concat(cacheData),
@@ -139,7 +139,9 @@ export class ParamsImportComponent implements OnInit {
         return data.concat(cacheData.filter(it => !nameList.includes(it.name)));
       }
     };
-    const result = combineFunc[type](resultData);
+    console.log('type', type);
+    const result = combineFunc[type](cacheData);
+    console.log('result', this.paramCode, data, cacheData, result);
     this.baseDataChange.emit(isXML(this.paramCode) ? result : result.concat(tailData));
   }
 }

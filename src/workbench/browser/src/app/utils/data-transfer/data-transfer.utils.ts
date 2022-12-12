@@ -1,6 +1,6 @@
 import isXml from 'is-xml';
-import { ApiBodyType, ApiEditBody, JsonRootType } from '../../modules/api-shared/api.model';
 
+import { ApiBodyType, ApiEditBody, JsonRootType } from '../../modules/api-shared/api.model';
 import { whatType, whatTextType } from '../index.utils';
 
 export const isXML = data => isXml(data);
@@ -331,4 +331,5 @@ export const table2json = function (eoapiArr: ApiEditBody[], inputOptions) {
   }
   return result;
 };
+
 export const json2Table = json => Object.entries(json).map(([key, value]) => parseTree(key, value));
