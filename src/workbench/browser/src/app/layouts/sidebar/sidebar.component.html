@@ -1,16 +1,20 @@
-<div class="eo-sidebar p-[8px]" [ngClass]="{ 'eo-sidebar-shrink': sidebar.collapsed }">
+<div class="eo_sidebar" [ngClass]="{ eo_sidebar_shrink: sidebar.collapsed }">
   <ng-container *ngFor="let item of this.modules">
     <nz-divider *ngIf="item.id === '@eo-core-extension'" style="transform: scale(0.8); margin: 5px 0"></nz-divider>
     <a
       (click)="clickModule(item)"
-      class="sidebar-item"
-      eoNgFeedbackTooltip
+      class="sidebar_item"
+      nz-tooltip
       nzTooltipPlacement="right"
-      [nzTooltipTitle]="item.title"
-      [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentModule?.id }"
+      [ngClass]="{ sidebar_item_active: item.id === this.sidebar.currentModule?.id }"
     >
-      <eo-iconpark-icon [name]="item.icon"> </eo-iconpark-icon>
-      <span class="mt-[2px] text-[12px]" *ngIf="!sidebar.collapsed">{{ item.title }}</span>
+      <i class="icon">
+        <img *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" width="24" height="24" />
+        <ng-template #icon>
+          <eo-iconpark-icon [name]="item.icon" size="24px"> </eo-iconpark-icon>
+        </ng-template>
+      </i>
+      <span class="mt-1 label" *ngIf="!sidebar.collapsed">{{ item.title }}</span>
     </a>
   </ng-container>
 </div>
