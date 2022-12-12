@@ -37,9 +37,7 @@
     // for macOS - 用于在主机注册指定协议
     {
       "name": "eoapi",
-      "schemes": [
-        "eoapi"
-      ]
+      "schemes": ["eoapi"]
     }
   ],
   "win": {
@@ -57,13 +55,11 @@
   "mac": {
     "icon": "src/app/common/images/512x512.png",
     "hardenedRuntime": true,
+    "category": "public.app-category.productivity",
     "gatekeeperAssess": false,
     "entitlements": "scripts/entitlements.mac.plist",
     "entitlementsInherit": "scripts/entitlements.mac.plist",
-    "target": [
-      "dmg",
-      "zip"
-    ]
+    "target": ["dmg", "zip"]
   },
   "dmg": {
     "sign": false
@@ -71,8 +67,6 @@
   "afterSign": "scripts/notarize.js",
   "linux": {
     "icon": "src/app/common/images/",
-    "target": [
-      "AppImage"
-    ]
+    "target": ["AppImage"]
   }
 }

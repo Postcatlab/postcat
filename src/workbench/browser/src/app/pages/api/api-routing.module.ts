@@ -11,7 +11,7 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'http',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'http',
@@ -19,45 +19,45 @@ const routes: Routes = [
           {
             path: '',
             redirectTo: 'test',
-            pathMatch: 'full',
+            pathMatch: 'full'
           },
           {
             path: 'detail',
-            loadChildren: () => import('./http/detail/api-detail.module').then((m) => m.ApiDetailModule),
+            loadChildren: () => import('./http/detail/api-detail.module').then(m => m.ApiDetailModule)
           },
           {
             path: 'edit',
-            loadChildren: () => import('./http/edit/api-edit.module').then((m) => m.ApiEditModule),
+            loadChildren: () => import('./http/edit/api-edit.module').then(m => m.ApiEditModule)
           },
           {
             path: 'test',
-            loadChildren: () => import('./http/test/api-test.module').then((m) => m.ApiTestModule),
+            loadChildren: () => import('./http/test/api-test.module').then(m => m.ApiTestModule)
           },
           {
             path: 'mock',
-            loadChildren: () => import('./http/mock/api-mock.module').then((m) => m.ApiMockModule),
-          },
-        ],
+            loadChildren: () => import('./http/mock/api-mock.module').then(m => m.ApiMockModule)
+          }
+        ]
       },
       {
         path: 'ws',
         children: [
           {
             path: 'test',
-            loadChildren: () => import('./websocket/websocket.module').then((m) => m.WebsocketModule),
-          },
-        ],
-      },
+            loadChildren: () => import('./websocket/websocket.module').then(m => m.WebsocketModule)
+          }
+        ]
+      }
       // {
       //   path: 'grpc',
       //   loadChildren: () => import('./grpc/grpc.module').then((m) => m.GrpcModule),
       // },
-    ],
-  },
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class ApiRoutingModule {}

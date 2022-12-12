@@ -1,17 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Input,
-  OnInit,
-  QueryList,
-  ViewChildren,
-  ViewContainerRef
-} from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, Input, OnDestroy, OnInit, QueryList, ViewChildren, ViewContainerRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
@@ -43,9 +32,10 @@ interface FlatNode {
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.scss']
 })
-export class SettingComponent implements OnInit, AfterViewInit {
+export class SettingComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() selectedModule: string;
   @ViewChildren('options', { read: ViewContainerRef }) options: QueryList<ViewContainerRef>;
+  componentRefs: Array<ComponentRef<any>>;
   extensitonConfigurations: any[];
   objectKeys = Object.keys;
   isClick = false;
@@ -126,29 +116,39 @@ export class SettingComponent implements OnInit, AfterViewInit {
   /** local configure */
   localSettings = {};
   validateForm!: FormGroup;
-  /** cloud server url */
-  remoteServerUrl = '';
   get selected() {
     return this.selectListSelection.selected.at(0)?.moduleID;
   }
 
   constructor(private settingService: SettingService, public store: StoreService, public webService: WebService) {}
+
+  ngOnInit(): void {
+    this.init();
+  }
+
   ngAfterViewInit(): void {
     setTimeout(() => {
       const options = this.options.toArray();
-      this.treeNodes
+      this.componentRefs = this.treeNodes
         .filter(item => !item.ifShow || item.ifShow?.())
-        .forEach((item, index) => {
-          console.log('this.options', options[index]);
-          options[index]?.createComponent(item.comp as any);
+        .map((item, index) => {
+          const componentRef = options[index]?.createComponent<any>(item.comp as any);
+          componentRef.location.nativeElement.id = item.moduleID;
+          componentRef.instance.model = this.settings;
+          componentRef.instance.modelChange?.subscribe(data => {
+            Object.assign(this.settings, data);
+            this.handleSave();
+          });
+          // console.log('componentRef', componentRef);
+          return componentRef;
         });
     });
   }
 
-  ngOnInit(): void {
-    this.init();
-    this.remoteServerUrl = this.settings['eoapi-common.remoteServer.url'];
+  ngOnDestroy(): void {
+    this.componentRefs.forEach(item => item.destroy());
   }
+
   hasChild = (_: number, node: FlatNode): boolean => node.expandable;
 
   /**
@@ -170,7 +170,7 @@ export class SettingComponent implements OnInit, AfterViewInit {
     const treeNodes = this.dataSource._flattenedData.value;
     treeNodes.some(node => {
       const el = target.querySelector(`#${node.moduleID}`) as HTMLDivElement;
-      if (el.offsetTop > target.scrollTop) {
+      if (el && el.offsetTop > target.scrollTop) {
         this.selectListSelection.select(node);
         return true;
       }
