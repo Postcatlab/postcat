@@ -91,7 +91,7 @@ export class ParamsImportComponent implements OnInit {
   }
   parseForm(code) {
     const data = form2json(code).reduce((total, it) => ({ ...total, [it.key]: it.value }), {});
-    // data like => { headerName: 'headerValue', headerName2: 'headerValue2' }
+    // * data like => { headerName: 'headerValue', headerName2: 'headerValue2' }
     return [{ data: data, rootType: 'object' }, null];
   }
 
@@ -113,23 +113,21 @@ export class ParamsImportComponent implements OnInit {
       formData: this.parseForm
     };
 
-    const [{ data, rootType }, err] = func[this.contentType](this.paramCode);
+    const [{ data }, err] = func[this.contentType](this.paramCode);
     if (err) {
       this.message.error(err.msg);
       return;
     }
-    // * same data struct
-    if (codeType === 'array') {
-      console.log('===>', data.at(0));
-    }
+
     const combineFunc = {
-      overwrite: (data, base) => data,
+      overwrite: data => data,
       append: (data, base) => base.concat(data),
       mixin: (data, base) => {
         const nameList = data.map(it => it.name);
         return data.concat(base.filter(it => !nameList.includes(it.name)));
       }
     };
+
     // * this.baseData.reverse().slice(1).reverse() for filter the last empty row
     const emptyRow = this.baseData.slice(-1);
     const resultData = cloneDeep(this.baseData.reverse().slice(1).reverse());
