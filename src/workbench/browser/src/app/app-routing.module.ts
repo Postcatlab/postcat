@@ -1,6 +1,8 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { PageNotFindModule } from 'eo/workbench/browser/src/app/layouts/page-not-found/page-not-find.module';
+import { PageNotFoundComponent } from 'eo/workbench/browser/src/app/layouts/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
@@ -14,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    loadChildren: () => import('./layouts/page-not-found/page-not-find.module').then(m => m.PageNotFindModule)
+    component: PageNotFoundComponent
   }
 ];
 @NgModule({
@@ -23,7 +25,8 @@ const routes: Routes = [
       //Electron user hash to keep router after page refresh
       useHash: !!(window && window.process && window.process.type) ? true : false,
       preloadingStrategy: PreloadAllModules
-    })
+    }),
+    PageNotFindModule
   ],
   exports: [RouterModule],
   // 👇 设置基础路由

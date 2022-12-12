@@ -11,6 +11,8 @@ import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 
 import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
+import { type } from 'os';
+
 @Component({
   selector: 'eo-api-test-body',
   templateUrl: './api-test-body.component.html',
@@ -21,9 +23,9 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() supportType: string[];
   @Input() contentType: ContentType;
   @Input() bodyType: ApiTestBodyType | string;
-  @Output() bodyTypeChange: EventEmitter<ApiBodyType | string> = new EventEmitter();
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
-  @Output() contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
+  @Output() readonly bodyTypeChange: EventEmitter<ApiBodyType | string> = new EventEmitter();
+  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly contentTypeChange: EventEmitter<ContentType> = new EventEmitter();
   @ViewChild(EoMonacoEditorComponent, { static: false }) eoMonacoEditor?: EoMonacoEditorComponent;
   @ViewChild('formValue', { static: true }) formValue?: TemplateRef<HTMLDivElement>;
 
@@ -162,11 +164,13 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
         break;
       }
     }
-    this.model.forEach(row => {
-      if (row.type === 'file') {
-        row.files = [];
-      }
-    });
+    if (typeof this.model === 'object') {
+      this.model.forEach(row => {
+        if (row.type === 'file') {
+          row.files = [];
+        }
+      });
+    }
   }
   formdataSelectFiles(target, item) {
     const files = Array.from(target.files);
