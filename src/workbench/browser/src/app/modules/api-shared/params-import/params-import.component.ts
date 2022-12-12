@@ -68,13 +68,12 @@ export class ParamsImportComponent implements OnInit {
 
   parseJSON(code) {
     // * parse json
-    let data;
     try {
-      data = JSON.parse(code);
+      const data = JSON.parse(code);
+      return [{ data, rootType: Array.isArray(data) ? 'array' : 'object' }, null];
     } catch (error) {
       return [null, { msg: $localize`JSON format invalid` }];
     }
-    return [{ data, rootType: Array.isArray(data) ? 'array' : 'object' }, null];
   }
 
   parseQuery(code) {
@@ -87,7 +86,12 @@ export class ParamsImportComponent implements OnInit {
     if (!status) {
       return [null, { msg: $localize`XML format invalid` }];
     }
-    return [{ data: xml2json(code), rootType: 'object' }, null];
+    try {
+      const result = xml2json(code);
+      return [{ data: result, rootType: 'object' }, null];
+    } catch (error) {
+      return [null, { msg: $localize`XML format invalid` }];
+    }
   }
   parseForm(code) {
     const data = form2json(code).reduce((total, it) => ({ ...total, [it.key]: it.value }), {});
@@ -113,7 +117,7 @@ export class ParamsImportComponent implements OnInit {
       formData: this.parseForm
     };
 
-    const [{ data }, err] = func[this.contentType](this.paramCode);
+    const [res, err] = func[this.contentType](this.paramCode);
     if (err) {
       this.message.error(err.msg);
       return;
@@ -128,6 +132,7 @@ export class ParamsImportComponent implements OnInit {
       }
     };
 
+    const { data } = res;
     // * this.baseData.reverse().slice(1).reverse() for filter the last empty row
     const emptyRow = this.baseData.slice(-1);
     const resultData = cloneDeep(this.baseData.reverse().slice(1).reverse());
