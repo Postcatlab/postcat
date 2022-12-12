@@ -91,7 +91,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       enabled: false
     },
     formatOnPaste: true,
-    formatOnType: true,
+    formatOnType: false,
     scrollbar: {
       scrollByPage: true,
       alwaysConsumeMouseWheel: false
@@ -183,22 +183,22 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       return;
     }
 
-    let code = '';
+    let code = val;
     try {
       if (this.$$isBase64) {
         code = window.atob(val);
       } else {
-        code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val, null, 4);
+        // code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val);
       }
     } catch {
       code = String(val);
     }
 
     if (code && (this.config?.readOnly || (this.isFirstFormat && this.autoFormat))) {
-      (async () => {
+      queueMicrotask(async () => {
         this.isFirstFormat = false;
         this.$$code = await this.formatCode();
-      })();
+      });
     }
     this.$$code = code;
   }
@@ -283,6 +283,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   formatCode() {
     return new Promise<string>(resolve => {
       requestAnimationFrame(async () => {
+        console.warn('formatCode');
         this.codeEdtor?.updateOptions({ readOnly: false });
         await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
         this.codeEdtor?.updateOptions({ readOnly: this.config.readOnly });
