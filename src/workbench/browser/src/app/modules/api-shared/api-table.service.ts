@@ -5,7 +5,6 @@ import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-
 import { ApiTestParamsTypeFormData } from '../../pages/api/http/test/api-test.model';
 import { REQURIED_ENUMS } from '../../shared/models/shared.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
-
 import { eoDeepCopy } from '../../utils/index.utils';
 import { filterTableData } from '../../utils/tree/tree.utils';
 import { ColumnItem, TableProSetting } from '../eo-ui/table-pro/table-pro.model';
@@ -65,7 +64,7 @@ export class ApiTableService {
         type: 'input',
         columnVisible: 'fixed',
         key: 'name',
-        width: 150
+        width: 200
       },
       type: {
         title: $localize`Type`,
@@ -93,7 +92,7 @@ export class ApiTableService {
         title: $localize`Example`,
         type: 'input',
         key: 'example',
-        width: 200
+        width: 150
       },
       editOperate: {
         type: 'btnList',
@@ -229,7 +228,7 @@ export class ApiTableService {
         columnVisible: 'fixed',
         disabledFn: inArg.in === 'header' ? item => has(item, 'editable') && !item.editable : undefined,
         key: 'name',
-        width: 150
+        width: 200
       },
       type: {
         title: $localize`Type`,
@@ -248,7 +247,7 @@ export class ApiTableService {
         title: $localize`Value`,
         type: 'input',
         key: 'value',
-        width: 200
+        width: 150
       },
       editOperate: {
         type: 'btnList',

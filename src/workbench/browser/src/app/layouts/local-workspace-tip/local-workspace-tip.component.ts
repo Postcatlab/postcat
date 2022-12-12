@@ -10,7 +10,7 @@ import { StorageUtil } from '../../utils/storage/Storage';
 
 @Component({
   selector: 'eo-local-workspace-tip',
-  template: ` <div *ngIf="isShow" class="remote-notification">
+  template: ` <div *ngIf="isShow" class="remote-notification ant-alert-warning">
     <eo-iconpark-icon name="link-cloud-faild" class="text-[13px] mr-[5px]"></eo-iconpark-icon>
     <span i18n>The current data is stored locally,If you want to collaborate,Please</span>
     <button class="ml-[5px]" eo-ng-button nzType="default" nzSize="small" (click)="switchToTheCloud()" i18n>

@@ -3,6 +3,11 @@
   justify-content: center;
   align-items: center;
   height: var(--remote-notification-height, 0);
-  background-color: rgb(255 219 7);
   overflow: hidden;
+}
+
+::ng-deep {
+  .eo-theme-dark eo-local-workspace-tip button {
+    border: 1px solid rgb(255 255 255 / 30%);
+  }
 }
