@@ -221,7 +221,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     if (this.setting.rowSortable && this.columns[0].type !== 'sort') {
       theaderConf.push({
         resizeable: false,
-        width: this.columns.length * 5
+        width: this.columns.length * 7
       });
       tbodyConf.push({
         type: 'sort'

@@ -4,7 +4,7 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { version2Number } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { compareVersion } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { filter, map, tap, Observable, catchError } from 'rxjs';
 
@@ -67,7 +67,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         // ! TODO delete
         if (req.url.includes('/system/status')) {
           const { data } = event.body;
-          this.prefix = version2Number(data) >= version2Number('v1.9.0') ? '/api' : '/';
+          this.prefix = compareVersion(data, 'v1.9.0') < 0 ? '/' : '/api';
           console.log(this.prefix);
           StorageUtil.set('server_version', data);
         }
