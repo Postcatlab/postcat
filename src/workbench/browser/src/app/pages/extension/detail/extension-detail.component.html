@@ -7,7 +7,7 @@
         </a>
         <nz-divider nzType="vertical"></nz-divider>
         <div class="mr-2">
-          <nz-avatar nzSize="small" class="!w-[20px] !h-[20px]" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
+          <nz-avatar nzSize="small" class="!w-[20px] !h-[20px]" [nzShape]="'square'" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
         </div>
         <span class="font-bold text-[14px]">{{ extensionDetail.title || extensionDetail.moduleName }}</span>
         <ng-container *ngIf="extensionDetail?.installed">
