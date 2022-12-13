@@ -5,12 +5,13 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ExtensionService {
   ignoreList = ['default'];
@@ -22,23 +23,30 @@ export class ExtensionService {
     private http: HttpClient,
     private electron: ElectronService,
     private language: LanguageService,
-    private webExtensionService: WebExtensionService
-  ) {
+    private webExtensionService: WebExtensionService,
+    private messageService: MessageService
+  ) {}
+  init() {
     this.localExtensions = this.getExtensions();
     this.extensionIDs = this.updateExtensionIDs();
     this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
+    this.emitLocalExtensionsChangeEvent();
   }
-  private getExtensions() {
+  getExtensions() {
     if (this.electron.isElectron) {
       return window.eo?.getModules?.() || new Map();
     } else {
-      const webeExts = this.webExtensionService.installedList.map((n) => [n.name, n.pkgInfo]);
+      const webeExts = this.webExtensionService.installedList.map(n => [n.name, n.pkgInfo]);
       return new Map(webeExts as any);
     }
   }
+  private emitLocalExtensionsChangeEvent() {
+    this.messageService.send({ type: 'localExtensionsChange', data: this.localExtensions });
+  }
   getInstalledList() {
+    this.localExtensions = this.getExtensions();
     // Local extension exception for ignore list
-    return Array.from(this.localExtensions.values()).filter((it) => this.extensionIDs.includes(it.name));
+    return Array.from(this.localExtensions.values()).filter(it => this.extensionIDs.includes(it.name));
   }
   isInstalled(name) {
     const installList = this.getInstalledList();
@@ -48,16 +56,16 @@ export class ExtensionService {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
     const installList = this.getInstalledList();
     result.data = [
-      ...result.data.filter((val) => installList.every((childVal) => childVal.name !== val.name)),
+      ...result.data.filter(val => installList.every(childVal => childVal.name !== val.name)),
       //Local debug package
-      ...installList.map((module) => {
-        if (installList.find((it) => it.name === module.name)) {
-          module.i18n = result.data.find((it) => it.name === module.name)?.i18n;
+      ...installList.map(module => {
+        if (installList.find(it => it.name === module.name)) {
+          module.i18n = result.data.find(it => it.name === module.name)?.i18n;
         }
         return module;
-      }),
+      })
     ];
-    result.data = result.data.map((module) => this.translateModule(module));
+    result.data = result.data.map(module => this.translateModule(module));
     return result;
   }
   async getDetail(id, name): Promise<any> {
@@ -82,6 +90,7 @@ export class ExtensionService {
     if (code === 0) {
       this.localExtensions = modules;
       this.extensionIDs = this.updateExtensionIDs();
+      this.emitLocalExtensionsChangeEvent();
       return true;
     }
     console.error(data);
@@ -93,6 +102,7 @@ export class ExtensionService {
     if (code === 0) {
       this.localExtensions = modules;
       this.extensionIDs = this.updateExtensionIDs();
+      this.emitLocalExtensionsChangeEvent();
       return true;
     }
     console.error(data);
@@ -105,7 +115,7 @@ export class ExtensionService {
 
   enableExtension(names: string | string[]) {
     const enableNames = Array().concat(names) as string[];
-    this.setExtension(this.disabledExtensionNames.filter((n) => !enableNames.includes(n)));
+    this.setExtension(this.disabledExtensionNames.filter(n => !enableNames.includes(n)));
   }
 
   disableExtension(names: string | string[]) {
@@ -126,21 +136,19 @@ export class ExtensionService {
   }
 
   private async requestDetail(id) {
-    return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}?locale=${this.language.systemLanguage}`)).catch(
-      (err) => [0, err]
-    );
+    return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}?locale=${this.language.systemLanguage}`)).catch(err => [0, err]);
   }
   private updateExtensionIDs() {
     return Array.from(this.localExtensions.keys())
-      .filter((it) => it)
-      .filter((it) => !this.ignoreList.includes(it));
+      .filter(it => it)
+      .filter(it => !this.ignoreList.includes(it));
   }
   private translateModule(module: ModuleInfo) {
     const lang = this.language.systemLanguage;
 
     //If extension from web,transalte package content from http moduleInfo
     //Locale extension will translate from local i18n file
-    const locale = module.i18n?.find((val) => val.locale === lang)?.package;
+    const locale = module.i18n?.find(val => val.locale === lang)?.package;
     if (!locale) {
       return module;
     }

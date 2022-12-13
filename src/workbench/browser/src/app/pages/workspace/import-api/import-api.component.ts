@@ -7,6 +7,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+
 import StorageUtil from '../../../utils/storage/Storage';
 
 // const optionList = [
@@ -122,7 +123,11 @@ export class ImportApiComponent implements OnInit {
     };
     const params = [this.store.getCurrentProjectID, decycle(data)];
     this.storage.run('projectImport', params, (result: StorageRes) => {
-      if (result.status !== StorageResStatus.success) {
+      console.log('result', JSON.parse(JSON.stringify(result)));
+      if (result.status === StorageResStatus.success) {
+        callback(true);
+        this.router.navigate(['home/api']);
+      } else {
         callback(false);
         console.error('EO_ERROR: Import Error', result.error);
         return;

@@ -224,10 +224,14 @@ export class SettingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.selectedModule && nodeIndex === -1) {
       console.error(`EO_ERROR[eo-setting]: The selected module [${this.selectModule}] does not exist`);
     }
-    //!After view init for scrollIntoView
-    setTimeout(() => {
-      this.selectModule(this.treeControl.dataNodes.at(nodeIndex === -1 ? 0 : nodeIndex));
-    }, 0);
+    if (nodeIndex === -1) {
+      this.selectModule(this.treeControl.dataNodes.at(0));
+    } else {
+      //!After view init for scrollIntoView
+      setTimeout(() => {
+        this.selectModule(this.treeControl.dataNodes.at(nodeIndex));
+      }, 300);
+    }
   }
   /**
    * Parse the configuration information of all modules

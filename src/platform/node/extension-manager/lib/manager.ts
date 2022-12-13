@@ -1,32 +1,34 @@
+import http from 'axios';
+import { isNotEmpty } from 'eo/shared/common/common';
 import { MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
-import { ModuleHandler } from './handler';
 import {
   ModuleHandlerResult,
   ModuleInfo,
   ModuleManagerInfo,
   ModuleManagerInterface,
   SidebarView,
-  FeatureInfo,
+  FeatureInfo
 } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { isNotEmpty } from 'eo/shared/common/common';
-import http from 'axios';
-import { DATA_DIR } from '../../../../shared/electron-main/constant';
-import { promises, readFileSync } from 'fs';
-import { ELETRON_APP_CONFIG } from '../../../../environment';
 import { createServer } from 'http-server/lib/http-server';
-import path from 'node:path';
 import portfinder from 'portfinder';
+
+import { ELETRON_APP_CONFIG } from '../../../../environment';
+import { DATA_DIR } from '../../../../shared/electron-main/constant';
+import { ModuleHandler } from './handler';
+
+import { promises, readFileSync } from 'fs';
 import { lstat } from 'fs/promises';
+import path from 'node:path';
 
 const extServerMap = new Map<string, SidebarView>();
 
 // * npm pkg name
 const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
-const isExists = async (filePath) =>
+const isExists = async filePath =>
   await promises
     .access(filePath)
     .then(() => true)
-    .catch((_) => false);
+    .catch(_ => false);
 export class ModuleManager implements ModuleManagerInterface {
   /**
    * 模块管理器
@@ -62,15 +64,16 @@ export class ModuleManager implements ModuleManagerInterface {
 
   async installExt({ name }) {
     const remoteExtension = await this.getRemoteExtension();
-    return await this.install(remoteExtension.find((it) => it.name === name));
+    return await this.install(remoteExtension.find(it => it.name === name));
   }
 
   /**
    * 安装模块，调用npm install | link
+   *
    * @param module
    */
   async install(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
-    const result = await this.moduleHandler.install([module], module.isLocal || false);
+    const result = await this.moduleHandler.install([module], module?.isLocal || false);
     if (result.code === 0) {
       const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
       this.set(moduleInfo);
@@ -80,6 +83,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 删除模块，调用npm uninstall | unlink
+   *
    * @param module
    */
   async uninstall(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
@@ -87,8 +91,8 @@ export class ModuleManager implements ModuleManagerInterface {
     const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
-      extServerMap.forEach((item) => {
-        if (item.extName === module.name) {
+      extServerMap.forEach(item => {
+        if (item.extensionID === module.name) {
           extServerMap.delete(item.key);
         }
       });
@@ -99,7 +103,7 @@ export class ModuleManager implements ModuleManagerInterface {
   async updateAll() {
     // * ModuleManager will be new only one while app run start, so it should be here upgrade & install extension
     // * Upgrade
-    const list = Array.from(this.getModules().values()).map((val) => ({ name: val.name, version: val.version }));
+    const list = Array.from(this.getModules().values()).map(val => ({ name: val.name, version: val.version }));
     // * get version in remote
     const remoteExtension = await this.getRemoteExtension();
     const isOK = await isExists(`${DATA_DIR}/debugger.json`);
@@ -109,18 +113,19 @@ export class ModuleManager implements ModuleManagerInterface {
       const { extensions } = JSON.parse(debuggerExtension);
       debugExtension = extensions;
     }
-    const localExtensionName = [...new Set(list.map((it) => it.name).concat(defaultExtension.map((it) => it.name)))];
+    const localExtensionName = [...new Set(list.map(it => it.name).concat(defaultExtension.map(it => it.name)))];
     this.installExtension = remoteExtension
-      .filter((it) => localExtensionName.includes(it.name))
-      .filter((it) => !debugExtension.includes(it.name));
+      .filter(it => localExtensionName.includes(it.name))
+      .filter(it => !debugExtension.includes(it.name));
     this.moduleHandler.update(this.installExtension);
-    this.installExtension.forEach((it) => {
+    this.installExtension.forEach(it => {
       this.install(it);
     });
   }
 
   /**
    * 读取本地package.json更新模块信息
+   *
    * @param module
    */
   refresh(module: ModuleManagerInfo): void {
@@ -129,11 +134,12 @@ export class ModuleManager implements ModuleManagerInterface {
   }
   /**
    * 读取本地package.json更新模块信息
+   *
    * @param module
    */
   refreshAll(): void {
     const list = Array.from(this.getModules().values());
-    list.forEach((module) => {
+    list.forEach(module => {
       this.refresh(module);
     });
   }
@@ -141,6 +147,7 @@ export class ModuleManager implements ModuleManagerInterface {
   /**
    * 获取所有模块列表
    * belongs为true，返回关联子模块集合
+   *
    * @param belongs
    */
   getModules(): Map<string, ModuleInfo> {
@@ -149,6 +156,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 获取所有功能点列表
+   *
    * @returns
    */
   getFeatures(): Map<string, Map<string, object>> {
@@ -158,6 +166,7 @@ export class ModuleManager implements ModuleManagerInterface {
   /**
    * 获取某个模块信息
    * belongs为true，返回关联子模块集合
+   *
    * @param belongs
    */
   getModule(id: string): ModuleInfo {
@@ -166,6 +175,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 获取某个功能点的集合
+   *
    * @param featureKey
    * @returns
    */
@@ -175,6 +185,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 设置模块信息到模块列表
+   *
    * @param moduleInfo
    */
   private set(moduleInfo: ModuleInfo) {
@@ -185,6 +196,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 解析模块的功能点加入功能点集合
+   *
    * @param moduleInfo
    */
   private setFeatures(moduleInfo: ModuleInfo) {
@@ -200,6 +212,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 清除在模块列表中的信息
+   *
    * @param moduleInfo
    */
   private delete(moduleInfo: ModuleInfo) {
@@ -210,6 +223,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 清除功能点集合中的模块功能点
+   *
    * @param moduleInfo
    */
   private deleteFeatures(moduleInfo: ModuleInfo) {
@@ -224,6 +238,7 @@ export class ModuleManager implements ModuleManagerInterface {
 
   /**
    * 加入模块管理
+   *
    * @param moduleInfo
    */
   private setup(moduleInfo: ModuleInfo) {
@@ -260,12 +275,19 @@ export class ModuleManager implements ModuleManagerInterface {
           return {
             ...feature,
             url: feature.debugUrl,
-            extName,
+            extensionID: extName
           };
         }
       }
       // 生产环境需要提供 html 入口文件地址(features.sidebarView.main)
       if (feature?.url) {
+        if (/http(s)?:\/\//.test(feature?.url)) {
+          return {
+            ...feature,
+            key,
+            extensionID: extName
+          };
+        }
         if (extServerMap.has(key)) {
           return extServerMap.get(key);
         }
@@ -279,7 +301,7 @@ export class ModuleManager implements ModuleManagerInterface {
           ...feature,
           url,
           key,
-          extName,
+          extensionID: extName
         });
         return extServerMap.get(key);
       }
@@ -292,7 +314,7 @@ export class ModuleManager implements ModuleManagerInterface {
   async getExtTabs(extName: string): Promise<SidebarView[]> {
     try {
       const features = this.getExtFeatures(extName);
-      const list = features.extensionTabView.map((item) => {
+      const list = features.extensionTabView.map(item => {
         return this.getExtPageInfo(extName, item, `${extName}-extensionTabView-${item.name}`);
       });
       const result = await Promise.all(list);

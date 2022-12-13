@@ -9,7 +9,12 @@
       [nzTooltipTitle]="item.title"
       [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentModule?.id }"
     >
-      <eo-iconpark-icon [name]="item.icon"> </eo-iconpark-icon>
+      <i class="icon">
+        <img class="app-logo" *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" />
+        <ng-template #icon>
+          <eo-iconpark-icon [name]="item.icon"></eo-iconpark-icon>
+        </ng-template>
+      </i>
       <span class="mt-[2px] text-[12px]" *ngIf="!sidebar.collapsed">{{ item.title }}</span>
     </a>
   </ng-container>

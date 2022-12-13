@@ -18,7 +18,8 @@ export class ModalService {
       this.modal.closeAll();
     });
   }
-  create(inOpts) {
+  create = inOpts => {
+    console.log('inOpts', inOpts);
     const modalOpts: ModalOptions = {
       nzTitle: null,
       nzContent: inOpts.nzContent,
@@ -48,5 +49,5 @@ export class ModalService {
     Object.assign(modalOpts, inOpts);
     const modal = this.modal.create(modalOpts);
     return modal;
-  }
+  };
 }

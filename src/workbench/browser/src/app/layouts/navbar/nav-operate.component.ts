@@ -5,55 +5,52 @@ import { ElectronService } from '../../core/services';
 
 @Component({
   selector: 'eo-nav-operate',
-  template: ` <div class="flex items-center">
+  template: ` <div class="flex items-center" *ngIf="isElectron">
     <nz-divider nzType="vertical"></nz-divider>
-    <button eo-ng-button nzType="default">
-      <eo-iconpark-icon
+    <button eo-ng-button (click)="refresh()" nzType="default">
+      <eo-iconpark-icon eoNgFeedbackTooltip i18n-nzTooltipTitle nzTooltipTitle="Refresh" nzType="" name="refresh"></eo-iconpark-icon>
+    </button>
+    <div *ngIf="!isMac">
+      <button
+        eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle
-        nzTooltipTitle="Refresh"
-        nzType=""
-        (click)="refresh()"
-        name="refresh"
-      ></eo-iconpark-icon>
-    </button>
-    <div *ngIf="showOperate">
-      <button eo-ng-button nzType="text">
-        <eo-iconpark-icon
-          eoNgFeedbackTooltip
-          i18n-nzTooltipTitle
-          nzTooltipTitle="Minimize"
-          (click)="minimize()"
-          [nzTooltipMouseEnterDelay]="0.4"
-          name="minus"
-        ></eo-iconpark-icon>
+        nzTooltipTitle="Minimize"
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzType="text"
+        (click)="minimize()"
+      >
+        <eo-iconpark-icon name="minus"></eo-iconpark-icon>
       </button>
-      <button eo-ng-button nzType="text">
-        <eo-iconpark-icon
-          eoNgFeedbackTooltip
-          i18n-nzTooltipTitle
-          nzTooltipTitle="Minimize"
-          [nzTooltipMouseEnterDelay]="0.4"
-          (click)="toggleMaximize()"
-          [name]="isMaximized ? 'off-screen' : 'full-screen'"
-        ></eo-iconpark-icon>
+      <button
+        eo-ng-button
+        eoNgFeedbackTooltip
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Minimize"
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzType="text"
+        (click)="toggleMaximize()"
+      >
+        <eo-iconpark-icon [name]="isMaximized ? 'off-screen' : 'full-screen'"></eo-iconpark-icon>
       </button>
-      <button eo-ng-button nzType="text">
-        <eo-iconpark-icon
-          eoNgFeedbackTooltip
-          i18n-nzTooltipTitle
-          [nzTooltipMouseEnterDelay]="0.4"
-          nzTooltipTitle="Close"
-          name="close"
-          (click)="close()"
-        ></eo-iconpark-icon>
+      <button
+        eo-ng-button
+        eoNgFeedbackTooltip
+        i18n-nzTooltipTitle
+        (click)="close()"
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzTooltipTitle="Quit"
+        nzType="text"
+      >
+        <eo-iconpark-icon name="close"></eo-iconpark-icon>
       </button>
     </div>
   </div>`
 })
 export class NavOperateComponent {
   isMaximized = false;
-  showOperate = navigator.platform.toLowerCase().includes('mac') && this.electron.isElectron;
+  isElectron = this.electron.isElectron;
+  isMac = navigator.platform.toLowerCase().includes('mac');
   constructor(private electron: ElectronService, private router: Router) {}
   minimize() {
     this.electron.ipcRenderer.send('message', {
@@ -61,10 +58,9 @@ export class NavOperateComponent {
     });
   }
   async refresh() {
-    const { pathname, hash, searchParams } = new URL(window.location.href);
-    console.log(this.router.url.split('?')[0]);
-    // await this.router.navigate(['**']);
-    // await this.router.navigate([], { queryParams: Object.fromEntries(searchParams.entries()) });
+    const { pathname, hash, searchParams } = new URL(window.location.protocol + window.location.host + this.router.url);
+    await this.router.navigate(['**']);
+    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
   }
   toggleMaximize() {
     this.electron.ipcRenderer.send('message', {

@@ -14,7 +14,7 @@ import {
   ApiMockEntity,
   StorageInterface,
   StorageItem,
-  StorageResStatus,
+  StorageResStatus
 } from '../../index.model';
 import { sampleApiData } from './index.constant';
 import { parseAndCheckApiData, parseAndCheckEnv, parseAndCheckGroup } from './validate';
@@ -31,9 +31,7 @@ const getApiUrl = (apiData: ApiData) => {
   const isRemote = dataSourceType === 'http';
 
   /** get mock url */
-  const mockUrl = isRemote
-    ? `${window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url')}/mock/eo-1/`
-    : window.eo?.getMockUrl?.();
+  const mockUrl = isRemote ? `${window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url')}/mock/eo-1/` : window.eo?.getMockUrl?.();
 
   const url = new URL(uniqueSlash(`${mockUrl}/${apiData.uri}`), 'https://github.com/');
   // if (apiData) {
@@ -51,7 +49,7 @@ export const createMockObj = (apiData: ApiData, options: Record<string, any> = {
     projectID: 1,
     createWay,
     response: JSON.stringify(tree2obj([].concat(apiData.responseBody))),
-    ...rest,
+    ...rest
   };
 };
 
@@ -75,7 +73,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       group: '++uuid, name, projectID, parentID',
       apiData: '++uuid, name, projectID, groupID',
       apiTestHistory: '++uuid, projectID, apiDataID',
-      mock: '++uuid, name, apiDataID, projectID, createWay',
+      mock: '++uuid, name, apiDataID, projectID, createWay'
     });
     this.open();
     this.on('populate', () => this.populate());
@@ -94,7 +92,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     const result = {
       status: status || (error ? StorageResStatus.error : StorageResStatus.success),
       error,
-      data,
+      data
     };
     return result as ResultType;
   }
@@ -111,13 +109,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     delete item.uuid;
     item.updatedAt = item.createdAt;
     const result = table.add(item);
-    return new Observable((obs) => {
+    return new Observable(obs => {
       result
-        .then((uuid) => {
+        .then(uuid => {
           obs.next(this.resProxy(Object.assign(item, { uuid })));
           obs.complete();
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -139,9 +137,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       return item;
     });
     const result = table.bulkAdd(items);
-    return new Observable((obs) => {
+    return new Observable(obs => {
       result
-        .then((res) => {
+        .then(res => {
           obs.next(this.resProxy({ number: res }));
           obs.complete();
         })
@@ -162,10 +160,10 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     if (!item.updatedAt) {
       item.updatedAt = new Date();
     }
-    return new Observable((obs) => {
+    return new Observable(obs => {
       table
         .update(uuid, item)
-        .then(async (updated) => {
+        .then(async updated => {
           if (updated) {
             const result = await table.get(uuid);
             obs.next(this.resProxy(result));
@@ -174,7 +172,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             // obs.error(`Nothing was updated [${table.name}] - there were no data with primary key: ${uuid}`);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -193,7 +191,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       }
       return item;
     });
-    return new Observable((obs) => {
+    return new Observable(obs => {
       const uuids: Array<number | string> = [];
       const updateData = {};
       items
@@ -207,11 +205,11 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         });
       table
         .bulkGet(uuids.map(Number))
-        .then((existItems) => {
+        .then(existItems => {
           if (existItems) {
             const newItems: StorageItem[] = [];
             existItems
-              .filter((x) => x)
+              .filter(x => x)
               .forEach((item: StorageItem) => {
                 // @ts-ignore
                 newItems.push(Object.assign(item, updateData[item.uuid] || {}));
@@ -219,7 +217,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             // @ts-ignore
             table
               .bulkPut(newItems)
-              .then((result) => {
+              .then(result => {
                 obs.next(this.resProxy({ number: result, items: newItems }));
                 obs.complete();
               })
@@ -230,7 +228,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             // obs.error(`Nothing found from table [${table.name}].`);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -244,13 +242,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    */
   private remove(table: Table, uuid: number | string): Observable<object> {
     const result = table.delete(uuid);
-    return new Observable((obs) => {
+    return new Observable(obs => {
       result
         .then(() => {
           obs.next(this.resProxy(true));
           obs.complete();
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -264,13 +262,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    */
   private bulkRemove(table: Table, uuids: Array<number | string>): Observable<object> {
     const result = table.bulkDelete(uuids);
-    return new Observable((obs) => {
+    return new Observable(obs => {
       result
         .then(() => {
           obs.next(this.resProxy(true));
           obs.complete();
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -284,9 +282,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    */
   private load(table: Table, uuid: number | string): Observable<object> {
     const result = table.get(uuid);
-    return new Observable((obs) => {
+    return new Observable(obs => {
       result
-        .then((res) => {
+        .then(res => {
           if (res) {
             obs.next(this.resProxy(res));
             obs.complete();
@@ -294,7 +292,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             obs.error(`Nothing found from table [${table.name}] with id [${uuid}].`);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -307,10 +305,10 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param uuids
    */
   private bulkLoad(table: Table, uuids: Array<number | string>): Observable<object> {
-    return new Observable((obs) => {
+    return new Observable(obs => {
       table
         .bulkGet(uuids)
-        .then((result) => {
+        .then(result => {
           if (result) {
             obs.next(this.resProxy(result));
             obs.complete();
@@ -318,7 +316,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             // obs.error(`Nothing found from table [${table.name}] with uuids [${JSON.stringify(uuids)}].`);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -332,9 +330,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    */
   private loadAllByConditions(table: Table, where: { [key: string]: string | number | null }): Observable<object> {
     const result = table.where(where).toArray();
-    return new Observable((obs) => {
+    return new Observable(obs => {
       result
-        .then(async (res) => {
+        .then(async res => {
           if (res) {
             obs.next(this.resProxy(res));
             obs.complete();
@@ -342,7 +340,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             obs.error(`Nothing found from table [${table.name}].`);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           obs.error(error);
         });
     });
@@ -362,7 +360,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   apiDataBulkUpdate(items: ApiData[]): Observable<object> {
     return this.bulkUpdate(this.apiData, items);
   }
-  apiDataCreate(item: ApiData): Observable<object> {
+  apiDataCreate(item: ApiData): Observable<ResultType<ApiData>> {
     const result = this.create(this.apiData, item);
     result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
       if (status === 200 && data) {
@@ -404,7 +402,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
       if (status === 200 && data) {
         const mockList = await this.mock.where('apiDataID').equals(uuid).toArray();
-        this.mock.bulkDelete(mockList.map((n) => n.uuid));
+        this.mock.bulkDelete(mockList.map(n => n.uuid));
       }
     });
 
@@ -666,11 +664,11 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @returns
    */
   projectCollections(projectID: number | string): Observable<object> {
-    return new Observable((obs) => {
+    return new Observable(obs => {
       const fun = async () => {
         const result = {
           groups: await this.group.where({ projectID }).toArray(),
-          apis: await this.apiData.where({ projectID }).toArray(),
+          apis: await this.apiData.where({ projectID }).toArray()
         };
         obs.next(this.resProxy(result));
         obs.complete();
@@ -697,20 +695,23 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   groupUpdate(item: Group, uuid: number | string): Observable<object> {
     return this.update(this.group, item, uuid);
   }
-  projectImport(uuid: number, data): Observable<object> {
-    return new Observable((obs) => {
-      const error = {
-        apiData: [],
+  projectImport(uuid: number, data, groupID = 0): Observable<object> {
+    return new Observable(obs => {
+      const errors = {
+        apiData: []
       };
-      if (!data || !data.collections) {
-        obs.next(this.resProxy(null, [`can't find collections`], StorageResStatus.empty));
-        obs.complete();
-        return;
-      }
+      const successes = {
+        group: [],
+        apiData: [],
+        environment: []
+      };
       //Add api and group
       const deepFn = (collections, parentID) =>
-        new Promise((resolve) => {
-          collections.forEach(async (item) => {
+        new Promise(async resolve => {
+          if (collections.length === 0) {
+            resolve('');
+          }
+          const promiseTask = collections.map(async item => {
             item.projectID = uuid;
             //Judge item is api or group
             if (item.uri || item.method || item.protocol) {
@@ -718,37 +719,57 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
               item.groupID = parentID;
               const result = parseAndCheckApiData(item);
               if (!result.validate) {
-                error.apiData.push(item.name || item.uri);
+                errors.apiData.push(item.name || item.uri);
                 return;
               }
-              this.apiDataCreate(result.data);
+              const apiData = (await firstValueFrom(this.apiDataCreate(result.data))).data;
+              successes.apiData.push({
+                uri: apiData.uri,
+                name: apiData.name,
+                uuid: apiData.uuid
+              });
             } else {
               item.parentID = parentID;
               const result = parseAndCheckGroup(item);
               if (!result.validate) {
                 return;
               }
-              item.uuid = (await firstValueFrom(this.groupCreate(result.data))).data.uuid;
+              const group = (await firstValueFrom(this.groupCreate(result.data))).data;
+              item.uuid = group.uuid;
+              successes.group.push({ name: group.name, uuid: group.uuid });
             }
             if (item.children?.length) {
               await deepFn(item.children, item.uuid);
             }
-            resolve('');
           });
+          await Promise.allSettled(promiseTask);
+          resolve('');
         });
-      deepFn(data.collections, 0).then(() => {
+      deepFn(data.collections, groupID).then(() => {
         //Add env
         if (data.environments && data.environments.length) {
-          data.environments.forEach((item) => {
+          data.environments.forEach(item => {
             item.projectID = uuid;
             const result = parseAndCheckEnv(item);
             if (!result.validate) {
               return;
             }
-            this.environmentCreate(result.data);
+            this.environmentCreate(result.data).subscribe(({ status, data: environment }: ResultType<Environment>) => {
+              if (status === 200 && data) {
+                successes.environment.push({
+                  name: environment.name,
+                  uuid: environment.uuid
+                });
+              }
+            });
           });
         }
-        obs.next(this.resProxy(null, error, StorageResStatus.success));
+        obs.next(
+          this.resProxy({
+            errors,
+            successes
+          })
+        );
         obs.complete();
       });
     });
@@ -763,7 +784,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return this.bulkCreate(this.project, items);
   }
   projectExport(): Observable<object> {
-    return new Observable((obs) => {
+    return new Observable(obs => {
       const fun = async () => {
         const result = { version: '1.0.0' };
         const tables = ['environment', 'group', 'project', 'apiData', 'mock'];

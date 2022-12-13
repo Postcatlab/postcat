@@ -26,7 +26,7 @@ import { TableProConfig, TABLE_PRO_CONFIG, TABLE_PRO_DEFUALT_CONFIG } from './ta
   templateUrl: './table-pro.component.html',
   styleUrls: ['./table-pro.component.scss']
 })
-export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
+export class EoTableProComponent implements OnInit, OnChanges {
   @Input() columns: ColumnItem[];
   @Input() nzData;
   @Input() setting: TableProSetting = {};
@@ -35,15 +35,15 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * Expand tree data when init dom
    */
-  @Input() nzExpand = false;
+  @Input() nzExpand = true;
   @Input() columnVisibleStatus = {};
 
   @Input() nzCheckAddRow;
   @Input() nzDragCheck;
 
   @Input() nzTrClick: (...rest: any[]) => void;
-  @Output() nzDataChange = new EventEmitter();
-  @Output() columnVisibleStatusChange = new EventEmitter();
+  @Output() readonly nzDataChange = new EventEmitter();
+  @Output() readonly columnVisibleStatusChange = new EventEmitter();
 
   @ViewChild('enumsTmp', { read: TemplateRef }) enumsTmp: TemplateRef<HTMLDivElement>;
 
@@ -133,7 +133,6 @@ export class EoTableProComponent implements OnInit, AfterViewInit, OnChanges {
       primaryKey: this.setting.primaryKey
     });
   }
-  ngAfterViewInit() {}
   handleDataChange(data) {
     this.nzDataChange.emit(data);
   }

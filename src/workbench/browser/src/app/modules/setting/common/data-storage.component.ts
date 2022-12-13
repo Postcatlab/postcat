@@ -21,7 +21,7 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
         <nz-form-item>
           <nz-form-label i18n>Host</nz-form-label>
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Host">
-            <input eo-ng-input formControlName="eoapi-common.remoteServer.url" i18n-placeholder placeholder="your host" />
+            <input eo-ng-input formControlName="eoapi-common.remoteServer.url" i18n-placeholder placeholder="Your host" />
           </nz-form-control>
         </nz-form-item>
       </ng-container>

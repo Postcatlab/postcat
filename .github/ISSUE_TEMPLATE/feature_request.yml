@@ -1,5 +1,5 @@
-name: 'Bug Report'
-description: Create a report to help project improve
+name: 'Feature Request'
+description: Suggest an idea for this project
 body:
   - type: markdown
     attributes:
@@ -10,10 +10,10 @@ body:
   - type: textarea
     id: bug-description
     attributes:
-      label: Describe the bug
-      description: A clear and concise description of what the bug is..
+      label: Describe the feature
+      description: A clear and concise description of what the feature is..
       placeholder: |
-        What is the issue with the current behavior?
+        A clear and concise description of any alternative solutions or features you've considered.
     validations:
       required: true
   - type: textarea

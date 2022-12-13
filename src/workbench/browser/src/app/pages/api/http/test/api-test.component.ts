@@ -120,7 +120,8 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.initShortcutKey();
     queueMicrotask(() => {
-      this.responseContainerHeight = Number.isNaN(localHeight) ? this.elementRef.nativeElement.offsetHeight / 2 : localHeight;
+      const height = this.elementRef.nativeElement.parentElement.offsetHeight;
+      this.responseContainerHeight = Number.isNaN(localHeight) ? height / 2 : localHeight;
     });
   }
 
@@ -430,7 +431,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
         this.model.responseTabIndex = 0;
         this.ref.detectChanges();
         // 测试完自动帮用户将返回高度调到 40%
-        const height = this.elementRef.nativeElement.offsetHeight * 0.4;
+        const height = this.elementRef.nativeElement.parentElement.offsetHeight * 0.5;
         if (this.responseContainerHeight < height) {
           this.responseContainerHeight = height;
         }
