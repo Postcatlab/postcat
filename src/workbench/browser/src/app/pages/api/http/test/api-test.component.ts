@@ -89,6 +89,11 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
 
+  get isEmptyTestPage(): boolean {
+    const { uuid } = this.route.snapshot.queryParams;
+    return !this.store.isShare && (!uuid || uuid.includes('history_'));
+  }
+
   private initTimes = 0;
   private status$: Subject<string> = new Subject<string>();
   private timer$: Subscription;
@@ -129,9 +134,9 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
     fromEvent(document, 'keydown')
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, code, target } = event;
+        const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
-        if (ctrlKey == true && code === 'KeyS') {
+        if (this.isEmptyTestPage && [ctrlKey, metaKey].includes(true) && code === 'KeyS') {
           console.log('EO_LOG[eo-api-test]: Ctrl + s');
           // 或者 return false;
           event.preventDefault();

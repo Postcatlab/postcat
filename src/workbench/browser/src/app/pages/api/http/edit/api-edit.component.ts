@@ -101,8 +101,9 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     fromEvent(document, 'keydown')
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: KeyboardEvent) => {
+        const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
-        if (event.ctrlKey == true && event.code === 'KeyS') {
+        if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
           console.log('Ctrl + s');
           // 或者 return false;
           event.preventDefault();

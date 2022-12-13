@@ -40,15 +40,7 @@
         <span *ngIf="status === 'testing'" i18n>Abort</span>
         <span *ngIf="status === 'testing' && waitSeconds" class="ml-1">{{ waitSeconds }}</span>
       </button>
-      <button
-        type="button"
-        *ngIf="!store.isShare && (!route.snapshot.queryParams.uuid || route.snapshot.queryParams.uuid.includes('history_'))"
-        eo-ng-button
-        nzType="default"
-        (click)="saveApi()"
-        class="ml-[10px]"
-        i18n
-      >
+      <button type="button" *ngIf="isEmptyTestPage" eo-ng-button nzType="default" (click)="saveApi()" class="ml-[10px]" i18n>
         Save as API
       </button>
     </form>

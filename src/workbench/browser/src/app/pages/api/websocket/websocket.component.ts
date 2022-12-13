@@ -96,9 +96,9 @@ export class WebsocketComponent implements OnInit, OnDestroy {
     fromEvent(document, 'keydown')
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: KeyboardEvent) => {
-        const { ctrlKey, code, target } = event;
+        const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
-        if (ctrlKey == true && code === 'Enter') {
+        if ([ctrlKey, metaKey].includes(true) && code === 'Enter') {
           console.log('EO_LOG[eo-websocket-test]: Ctrl + enter');
           this.handleSendMsg();
         }
