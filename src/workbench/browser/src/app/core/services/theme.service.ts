@@ -6,7 +6,7 @@ import { AppearanceType, MainColorType } from '../../modules/setting/common/sele
 import StorageUtil from '../../utils/storage/Storage';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ThemeService {
   module = {
@@ -15,22 +15,20 @@ export class ThemeService {
       path: '',
       injectDirection: 'prepend',
       storageKey: 'theme_appearance',
-      default: 'light' as AppearanceType,
+      default: 'light' as AppearanceType
     },
     mainColor: {
       id: 'mainColor',
       path: './assets/theme/',
       injectDirection: 'append',
       storageKey: 'theme_mainColor',
-      default: 'default' as MainColorType,
-    },
+      default: 'default' as MainColorType
+    }
   };
   appearance: AppearanceType = StorageUtil.get(this.module.appearance.storageKey) || this.module.appearance.default;
   mainColor: MainColorType = StorageUtil.get(this.module.mainColor.storageKey) || this.module.mainColor.default;
   DESIGN_TOKEN: Theme = {
-    primaryColor: getComputedStyle(this.document.documentElement)
-      .getPropertyValue('--MAIN_THEME_COLOR')
-      .replace(' ', ''),
+    primaryColor: getComputedStyle(this.document.documentElement).getPropertyValue('--MAIN_THEME_COLOR').replace(' ', '')
   };
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
@@ -62,10 +60,12 @@ export class ThemeService {
     }
     const module = this.module[mid];
     const href = `${module.path}${name}.css`;
+    const className = `eo-theme-${name}`;
     if (mid === 'mainColor' && name === 'default') {
       this.removeCss(this[mid]);
       //@ts-ignore
       this[mid] = name;
+      document.documentElement.classList.add(className);
       StorageUtil.set(module.storageKey, name);
       return;
     }
@@ -79,16 +79,18 @@ export class ThemeService {
         if (mid === 'appearance') {
           this.changeEditorTheme(this.getEditorTheme(name));
         }
+        document.documentElement.classList.add(className);
         StorageUtil.set(module.storageKey, name);
       })
-      .catch((e) => {});
+      .catch(e => {});
   }
   private removeCss(theme): void {
     const removedThemeStyle = document.querySelectorAll(`[id=${theme}]`);
+    document.documentElement.classList.remove(`eo-theme-${theme}`);
     if (!removedThemeStyle?.length) {
       return;
     }
-    removedThemeStyle.forEach((dom) => {
+    removedThemeStyle.forEach(dom => {
       document.head.removeChild(dom);
     });
   }
@@ -100,7 +102,7 @@ export class ThemeService {
       dom.id = id;
       document.head[injectDirection](dom);
       dom.onload = resolve;
-      dom.onerror = (e) => {
+      dom.onerror = e => {
         console.log('theme change error:', e);
         reject();
       };

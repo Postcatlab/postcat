@@ -68,6 +68,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         if (req.url.includes('/system/status')) {
           const { data } = event.body;
           this.prefix = version2Number(data) >= version2Number('v1.9.0') ? '/api' : '/';
+          console.log(this.prefix);
           StorageUtil.set('server_version', data);
         }
       }),

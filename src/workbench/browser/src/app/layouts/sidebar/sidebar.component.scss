@@ -1,4 +1,4 @@
-.eo_sidebar {
+.eo-sidebar {
   border-right: 1px solid var(--BORDER);
   overflow: auto;
   width: 90px;
@@ -6,35 +6,38 @@
   transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
 }
 
-.eo_sidebar_shrink {
+.eo-sidebar-shrink {
   width: 50px;
 }
 
-.sidebar_item {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+.app-logo {
+  height: var(--ICONPARK_SIZE);
+  width: var(--ICONPARK_SIZE);
+}
+
+.sidebar-item {
   padding: 8px 0;
-  transform: scale(0.8);
-  border-radius: 3px;
-  color: rgb(0 0 0 / 50%);
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--DEFAULT_BORDER_RADIUS);
+  cursor: pointer;
 
-  &:hover {
-    background-color: var(--SEC_BG);
-  }
-
-  &.sidebar_item_active {
-    background-color: var(--SEC_BG);
-    color: #00785a;
+  &:hover,
+  &.sidebar-item-active {
+    background-color: var(--NAVBAR_BTN_BG);
+    color: var(--MAIN_TEXT);
 
     i.icon {
-      color: #00785a;
+      color: var(--MAIN_TEXT);
     }
+  }
+}
 
-    .label {
-      color: rgb(0 0 0 / 80%);
-    }
+::ng-deep {
+  .eo-theme-dark .eo-sidebar .app-logo {
+    filter: invert(100%) sepia(1%) saturate(89%) hue-rotate(300deg) brightness(113%) contrast(100%);
   }
 }
