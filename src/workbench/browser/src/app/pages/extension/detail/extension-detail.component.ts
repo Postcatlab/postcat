@@ -12,7 +12,7 @@ import { ExtensionService } from '../extension.service';
 @Component({
   selector: 'eo-extension-detail',
   templateUrl: './extension-detail.component.html',
-  styleUrls: ['./extension-detail.component.scss'],
+  styleUrls: ['./extension-detail.component.scss']
 })
 export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
@@ -80,9 +80,7 @@ export class ExtensionDetailComponent implements OnInit {
     const timer = setTimeout(() => (this.changelogLoading = true), 200);
     try {
       const response = await fetch(
-        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/CHANGELOG.${
-          locale ? `${locale}.` : ''
-        }md`
+        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/CHANGELOG.${locale ? `${locale}.` : ''}md`
       );
       if (response.status === 200) {
         this.changeLog = await response.text();
@@ -93,7 +91,7 @@ export class ExtensionDetailComponent implements OnInit {
             headers: {
               // if fullmeta
               // accept: ' application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*',
-            },
+            }
           });
           const data = await result.json();
           this.changeLog = Object.entries<any>(data.versions).reduceRight(
@@ -124,9 +122,7 @@ ${log}
     try {
       this.introLoading = true;
       const response = await fetch(
-        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/README.${
-          locale ? `${locale}.` : ''
-        }md`
+        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/README.${locale ? `${locale}.` : ''}md`
       );
       if (response.status === 200) {
         this.extensionDetail.introduction = await response.text();
@@ -140,7 +136,7 @@ ${log}
     }
   }
 
-  handleTabChange = (e) => {
+  handleTabChange = e => {
     if (e.tab?.nzTitle === 'ChangeLog') {
       this.fetchChangelog();
     }
@@ -156,7 +152,8 @@ ${log}
             this.handleEnableExtension(true);
             this.getDetail();
           } else {
-            this.extensionDetail.installed = await this.webExtensionService.installExtension(this.extensionDetail.name);
+            const { name, version, main } = this.extensionDetail;
+            this.extensionDetail.installed = await this.webExtensionService.installExtension(name, version, main);
           }
           break;
         }
@@ -179,8 +176,8 @@ ${log}
   backToList() {
     this.router.navigate(['/home/extension/list'], {
       queryParams: {
-        type: this.route.snapshot.queryParams.type,
-      },
+        type: this.route.snapshot.queryParams.type
+      }
     });
   }
 
