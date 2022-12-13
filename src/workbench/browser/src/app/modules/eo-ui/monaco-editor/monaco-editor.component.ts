@@ -7,7 +7,7 @@ import type { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 
 import { ThemeService } from '../../../core/services/theme.service';
 import { debounce, whatTextType } from '../../../utils/index.utils';
-import { defaultCompletions } from './defaultCompletions';
+import { getDefaultCompletions } from './defaultCompletions';
 
 declare const monaco: typeof MonacoEditor;
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
@@ -91,7 +91,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       enabled: false
     },
     formatOnPaste: true,
-    formatOnType: false,
+    formatOnType: true,
     scrollbar: {
       scrollByPage: true,
       alwaysConsumeMouseWheel: false
@@ -194,9 +194,9 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
       code = String(val);
     }
 
-    if (code && (this.config?.readOnly || (this.isFirstFormat && this.autoFormat))) {
-      queueMicrotask(async () => {
-        this.isFirstFormat = false;
+    if (code && this.autoFormat) {
+      requestIdleCallback(async () => {
+        console.log('auto format');
         this.$$code = await this.formatCode();
       });
     }
@@ -223,7 +223,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
             endColumn: word.endColumn
           };
           return {
-            suggestions: [...this.completions, ...defaultCompletions].map(n => ({ ...n, range }))
+            suggestions: [...this.completions, ...getDefaultCompletions()].map(n => ({ ...n, range }))
           } as any;
         }
       });
@@ -283,7 +283,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   formatCode() {
     return new Promise<string>(resolve => {
       requestAnimationFrame(async () => {
-        console.warn('formatCode');
         this.codeEdtor?.updateOptions({ readOnly: false });
         await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
         this.codeEdtor?.updateOptions({ readOnly: this.config.readOnly });
