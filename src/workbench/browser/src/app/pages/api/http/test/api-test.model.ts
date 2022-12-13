@@ -6,36 +6,24 @@ export enum ApiTestParamsTypeFormData {
 }
 export const CONTENT_TYPE_BY_ABRIDGE = [
   {
-    title: 'application/x-www-form-urlencoded',
-    value: 'application/x-www-form-urlencoded'
-  },
-  {
-    title: 'multipart/form-data',
-    value: 'multipart/form-data'
-  },
-  {
-    title: 'Text(text/plain)',
+    title: 'Text',
     value: 'text/plain'
   },
   {
-    title: 'JSON(application/json)',
+    title: 'JSON',
     value: 'application/json'
   },
   {
-    title: 'Javascript(application/javascript)',
-    value: 'application/javascript'
-  },
-  {
-    title: 'XML(application/xml)',
+    title: 'XML',
     value: 'application/xml'
   },
   {
-    title: 'XML(text/xml)',
-    value: 'text/xml'
+    title: 'HTML',
+    value: 'text/html'
   },
   {
-    title: 'HTML(text/html)',
-    value: 'text/html'
+    title: 'Javascript',
+    value: 'application/javascript'
   }
 ] as const;
 export type ContentType = typeof CONTENT_TYPE_BY_ABRIDGE[number]['value'];

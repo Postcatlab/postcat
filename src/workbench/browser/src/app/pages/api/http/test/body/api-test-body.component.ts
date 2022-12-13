@@ -12,7 +12,7 @@ import { pairwise, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/op
 import { ApiTestBody, ApiTestBodyType, ContentType, CONTENT_TYPE_BY_ABRIDGE } from '../api-test.model';
 
 const whatTextTypeMap = {
-  xml: 'text/xml',
+  xml: 'application/xml',
   json: 'application/json',
   html: 'text/html',
   text: 'text/plain'

@@ -8,17 +8,13 @@
   <div *ngIf="['raw'].includes(bodyType)">
     <span class="text-[12px]">Content-Type：</span>
     <eo-ng-select
-      class="text-[12px] w-[300px] content-type-select"
+      class="text-[12px]"
+      [nzDropdownMatchSelectWidth]="false"
       (ngModelChange)="changeContentType($event)"
       [(ngModel)]="contentType"
       nzBorderless
     >
-      <eo-ng-option
-        *ngFor="let item of CONST.CONTENT_TYPE"
-        [nzValue]="item.value"
-        [nzDisabled]="item.value === 'multipart/form-data'"
-        [nzLabel]="item.title"
-      ></eo-ng-option>
+      <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.title"></eo-ng-option>
     </eo-ng-select>
   </div>
 
