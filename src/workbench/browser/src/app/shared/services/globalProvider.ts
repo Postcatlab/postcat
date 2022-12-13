@@ -8,6 +8,8 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
+import { ElectronService } from '../../core/services';
+
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
   modalMaskEl: HTMLDivElement;
@@ -17,7 +19,8 @@ export class GlobalProvider {
     private settingService: SettingService,
     private webExtensionService: WebExtensionService,
     private storage: StorageService,
-    private state: StoreService
+    private state: StoreService,
+    private electron: ElectronService
   ) {
     window.__POWERED_BY_EOAPI__ = true;
   }
@@ -34,12 +37,13 @@ export class GlobalProvider {
     window.eo.navigate = (commands: any[], extras?: NavigationExtras) => {
       this.router.navigate(commands, extras);
     };
-    window.eo.getGroup = this.getGroup;
+    window.eo.getGroups = window.eo.getGroup = this.getGroup;
     window.eo.importProject = this.importProject;
     // window.eo.getConfiguration = this.modalService;
 
     window.eo.showModalMask = this.showModalMask;
     window.eo.hideModalMask = this.hideModalMask;
+    window.eo.getSystemInfo = this.getSystemInfo;
   }
   getSidebarView = (extName): SidebarView | undefined => {
     return this.getSidebarViews().find(n => n.extensionID === extName);
@@ -115,7 +119,7 @@ export class GlobalProvider {
       });
     });
   };
-
+  getSystemInfo() {}
   importProject = (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
     const { projectID, groupID, ...rest } = {

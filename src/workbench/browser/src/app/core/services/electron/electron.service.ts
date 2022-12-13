@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
 import { ipcRenderer, webFrame } from 'electron';
@@ -18,7 +17,7 @@ type DescriptionsItem = {
   value: string;
 };
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
@@ -47,15 +46,15 @@ export class ElectronService {
   }
 
   get isElectron(): boolean {
-    return !!(window && window.process && window.process.type);
+    return !!window?.process?.type;
   }
   getSystemInfo(): DescriptionsItem[] {
     const descriptions: DescriptionsItem[] = [
       {
         id: 'version',
         label: $localize`Version`,
-        value: pkg.version,
-      },
+        value: pkg.version
+      }
       // {
       //   id: 'publishTime',
       //   label: $localize`Publish Time`,
@@ -67,33 +66,33 @@ export class ElectronService {
       {
         id: 'homeDir',
         label: 'Install Location',
-        value: '',
+        value: ''
       },
       {
         id: 'electron',
         label: 'Electron',
-        value: '',
+        value: ''
       },
       {
         id: 'chrome',
         label: 'Chromium',
-        value: '',
+        value: ''
       },
       {
         id: 'node',
         label: 'Node.js',
-        value: '',
+        value: ''
       },
       {
         id: 'v8',
         label: 'V8',
-        value: '',
+        value: ''
       },
       {
         id: 'os',
         label: 'OS',
-        value: '',
-      },
+        value: ''
+      }
     ];
 
     if (this.isElectron) {
@@ -103,14 +102,13 @@ export class ElectronService {
       descriptions.push(
         ...Object.entries<string>(browserType).map(([key, value]) => ({
           id: key,
-          label: key.replace(/^\S/, (s) => s.toUpperCase()),
-          value,
+          label: key.replace(/^\S/, s => s.toUpperCase()),
+          value
         }))
       );
     }
-    const systemInfo =
-      this.ipcRenderer?.sendSync('get-system-info') || getBrowserType(getSettings()?.['eoapi.language']);
-    descriptions.forEach((item) => {
+    const systemInfo = this.ipcRenderer?.sendSync('get-system-info') || getBrowserType(getSettings()?.['eoapi.language']);
+    descriptions.forEach(item => {
       if (item.id in systemInfo) {
         item.value = systemInfo[item.id];
       }
@@ -122,7 +120,7 @@ export class ElectronService {
       descriptions.push({
         id: 'server',
         label: 'Server',
-        value: serverVersion,
+        value: serverVersion
       });
     }
 

@@ -154,8 +154,9 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     callback?.();
   });
 
-  async getProjectCollections() {
+  getProjectCollections() {
     this.apiDataLoading = true;
+    // rome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
     return new Promise(async resolve => {
       if (this.store.isShare) {
         const [res, err]: any = await this.http.api_shareDocGetAllApi(
@@ -306,7 +307,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
                   this.buildGroupTreeData(resolve);
                   modal.destroy();
                 } else {
-                  this.message.error($localize`Failed to ${title}`);
+                  this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
                 }
               });
             })

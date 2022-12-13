@@ -10,13 +10,12 @@ import { StorageRes, StorageResStatus } from '../../../shared/services/storage/i
 
 @Component({
   selector: 'eo-export-api',
-  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `,
+  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `
 })
 export class ExportApiComponent implements OnInit {
   currentExtension = 'eoapi';
   supportList: any[] = [];
-  featureMap =
-    this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
+  featureMap = this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
   constructor(
     private storage: StorageService,
     private store: StoreService,
@@ -28,7 +27,7 @@ export class ExportApiComponent implements OnInit {
       if (this.webExtensionService.isEnable(key)) {
         this.supportList.push({
           key,
-          ...data,
+          ...data
         });
       }
     });
@@ -55,7 +54,7 @@ export class ExportApiComponent implements OnInit {
   }
   /**
    * Module export
-   * callback应该支持返回具体的错误信息显示
+   * TODO callback show support specific error tips
    *
    * @param callback
    */
@@ -68,13 +67,18 @@ export class ExportApiComponent implements OnInit {
       const params = [this.store.getCurrentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          console.log('result.data', result.data);
+          console.log('projectExport result', result.data);
           result.data.version = packageJson.version;
-          const output = module[action](result || {});
-          if (filename) {
-            this.transferTextToFile(filename, output);
+          try {
+            const output = module[action](result || {});
+            if (filename) {
+              this.transferTextToFile(filename, output);
+            }
+            callback(true);
+          } catch (e) {
+            console.error(e);
+            callback(false);
           }
-          callback(true);
         } else {
           callback(false);
         }

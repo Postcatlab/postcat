@@ -93,47 +93,52 @@ export class ImportApiComponent implements OnInit {
     const action = feature.action || null;
     const module = await window.eo?.loadFeatureModule?.(this.currentExtension);
     const { name, content } = this.uploadData;
-    const [data, err] = module[action](content);
-    // console.log('import data', structuredClone?.(data));
-    if (err) {
-      console.error(err.msg);
-      callback(false);
-      return;
-    }
-    // The datastructure may has circular reference,decycle by reset object;
-    const decycle = (obj, parent?) => {
-      const parentArr = parent || [obj];
-      for (const i in obj) {
-        if (typeof obj[i] === 'object') {
-          parentArr.forEach(pObj => {
-            if (pObj === obj[i]) {
-              obj[i] = {
-                description: $localize`Same as the parent's field ${obj[i].name}`,
-                example: '',
-                name: obj[i].name,
-                required: true,
-                type: obj[i].type
-              };
-            }
-          });
-          decycle(obj[i], [...parentArr, obj[i]]);
-        }
-      }
-      return obj;
-    };
-    const params = [this.store.getCurrentProjectID, decycle(data)];
-    this.storage.run('projectImport', params, (result: StorageRes) => {
-      console.log('result', JSON.parse(JSON.stringify(result)));
-      if (result.status === StorageResStatus.success) {
-        callback(true);
-        this.router.navigate(['home/api']);
-      } else {
+    try {
+      const [data, err] = module[action](content);
+      // console.log('import data', structuredClone?.(data));
+      if (err) {
+        console.error(err.msg);
         callback(false);
-        console.error('EO_ERROR: Import Error', result.error);
         return;
       }
-      callback(true);
-      this.router.navigate(['home/api']);
-    });
+      // The datastructure may has circular reference,decycle by reset object;
+      const decycle = (obj, parent?) => {
+        const parentArr = parent || [obj];
+        for (const i in obj) {
+          if (typeof obj[i] === 'object') {
+            parentArr.forEach(pObj => {
+              if (pObj === obj[i]) {
+                obj[i] = {
+                  description: $localize`Same as the parent's field ${obj[i].name}`,
+                  example: '',
+                  name: obj[i].name,
+                  required: true,
+                  type: obj[i].type
+                };
+              }
+            });
+            decycle(obj[i], [...parentArr, obj[i]]);
+          }
+        }
+        return obj;
+      };
+      const params = [this.store.getCurrentProjectID, decycle(data)];
+      this.storage.run('projectImport', params, (result: StorageRes) => {
+        console.log('projectImport result', JSON.parse(JSON.stringify(result)));
+        if (result.status === StorageResStatus.success) {
+          callback(true);
+          this.router.navigate(['home/api']);
+        } else {
+          callback(false);
+          console.error('EO_ERROR: Import Error', result.error);
+          return;
+        }
+        callback(true);
+        this.router.navigate(['home/api']);
+      });
+    } catch (e) {
+      console.error(e);
+      callback(false);
+    }
   }
 }

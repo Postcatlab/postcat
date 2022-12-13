@@ -5,6 +5,7 @@ import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { firstValueFrom, Observable } from 'rxjs';
 
+import { GroupTreeItem } from '../../../../models';
 import {
   Project,
   Environment,
@@ -707,7 +708,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       };
       //Add api and group
       const deepFn = (collections, parentID) =>
-        new Promise(async resolve => {
+        new Promise(resolve => {
           if (collections.length === 0) {
             resolve('');
           }
@@ -742,8 +743,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
               await deepFn(item.children, item.uuid);
             }
           });
-          await Promise.allSettled(promiseTask);
-          resolve('');
+          Promise.allSettled(promiseTask).then(() => {
+            resolve('');
+          });
         });
       deepFn(data.collections, groupID).then(() => {
         //Add env
@@ -765,10 +767,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
           });
         }
         obs.next(
-          this.resProxy({
+          this.resProxy(
+            {
+              successes: successes
+            },
             errors,
-            successes
-          })
+            StorageResStatus.success
+          )
         );
         obs.complete();
       });
@@ -785,16 +790,50 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
   projectExport(): Observable<object> {
     return new Observable(obs => {
+      const exportCollects = (data: { groups: Group[]; apis: ApiData[]; mock: ApiMockEntity[] }, parentID = 0) => {
+        const apiGroupFilters: Group[] = data.groups.filter(child => child.parentID === parentID);
+        const apiDataFilters: ApiData[] = data.apis
+          .filter(child => child.groupID === parentID)
+          .map(val => ({
+            ...val,
+            mock: data.mock.filter(mock => mock.apiDataID === val.uuid && mock.createWay !== 'system')
+          }));
+        return apiGroupFilters
+          .map(item => ({
+            name: item.name,
+            children: exportCollects(data, item.uuid)
+          }))
+          .concat(apiDataFilters as any);
+      };
       const fun = async () => {
-        const result = { version: '1.0.0' };
+        //Update Log
+        //1.1.0 change level to tree
+        const result: any = { version: '1.1.0' };
+        const database: any = {};
         const tables = ['environment', 'group', 'project', 'apiData', 'mock'];
         for (const tableName of tables) {
-          if (tableName === 'project') {
-            result[tableName] = (await this[tableName].toArray())[0];
-          } else {
-            result[tableName] = await this[tableName].toArray();
+          switch (tableName) {
+            case 'mock':
+            case 'group':
+            case 'apiData': {
+              database[tableName] = await this[tableName].toArray();
+              break;
+            }
+            case 'project': {
+              database[tableName] = (await this[tableName].toArray())[0];
+              break;
+            }
+            default: {
+              result[tableName] = await this[tableName].toArray();
+              break;
+            }
           }
         }
+        result.collections = exportCollects({
+          groups: database.group,
+          apis: database.apiData,
+          mock: database.mock
+        });
         obs.next(this.resProxy(result));
         obs.complete();
       };
