@@ -4,8 +4,8 @@ import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/mod
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { has } from 'lodash-es';
 
-import packageJson from '../../../../../../../../package.json';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 
 @Component({
@@ -68,9 +68,12 @@ export class ExportApiComponent implements OnInit {
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           console.log('projectExport result', result.data);
-          result.data.version = packageJson.version;
           try {
-            const output = module[action](result || {});
+            let output = module[action](result || {});
+            //Change format
+            if (has(output, 'status') && output.status === 0) {
+              output = output.data;
+            }
             if (filename) {
               this.transferTextToFile(filename, output);
             }

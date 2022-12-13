@@ -9,13 +9,7 @@
     (nzResizeEnd)="onResizeEnd()"
   >
     <nz-content class="api-container-tabs">
-      <eo-ng-tabset
-        [ngClass]="{ 'share-group-tabset': store.isShare }"
-        nzCentered
-        [nzAnimated]="false"
-        eo-ng-tabset
-        [(nzSelectedIndex)]="tabsIndex"
-      >
+      <eo-ng-tabset [ngClass]="{ 'share-group-tabset': store.isShare }" nzCentered eo-ng-tabset [(nzSelectedIndex)]="tabsIndex">
         <eo-ng-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
             <span
@@ -45,6 +39,21 @@
             </span>
           </ng-template>
           <eo-history></eo-history>
+        </eo-ng-tab>
+        <eo-ng-tab [nzTitle]="envTitle" *ngIf="!store.isShare">
+          <ng-template #envTitle>
+            <span
+              [nzTooltipMouseLeaveDelay]="0"
+              i18n-nzTooltipTitle="@@Environment Setting"
+              eoNgFeedbackTooltip
+              nzTooltipTitle="Environment Setting"
+              [nzTooltipMouseEnterDelay]="0.4"
+              class="text-lg tab-content"
+            >
+              <eo-iconpark-icon name="application"></eo-iconpark-icon>
+            </span>
+          </ng-template>
+          <eo-env class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env>
         </eo-ng-tab>
       </eo-ng-tabset>
       <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
@@ -151,22 +160,18 @@
         <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left"> </nz-resize-handle>
         <div class="flex h-full">
           <div class="flex flex-col p-2">
-            <button
-              type="button"
-              eo-ng-button
-              nzType="text"
-              class="flex items-center justify-center"
-              [ngClass]="rightSiderWidth > 100 ? 'ant-btn-active' : ''"
-              (click)="toggleRightBar('open')"
-              eoNgFeedbackTooltip
-              [nzTooltipMouseLeaveDelay]="0"
-              i18n-nzTooltipTitle="@@Environment Setting"
-              nzTooltipTitle="Environment Setting"
-            >
-              <eo-iconpark-icon name="application"></eo-iconpark-icon>
-            </button>
+            <ng-container *ngFor="let item of rightExtras">
+              <button
+                eo-ng-button
+                nzType="text"
+                eoNgFeedbackTooltip
+                [nzTooltipTitle]="item.tooltip"
+                (click)="item.click(apiTab.componentRef.model)"
+              >
+                <eo-iconpark-icon [name]="item.icon" size="20px"> </eo-iconpark-icon>
+              </button>
+            </ng-container>
           </div>
-          <eo-env class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env>
         </div>
       </nz-sider>
     </nz-layout>

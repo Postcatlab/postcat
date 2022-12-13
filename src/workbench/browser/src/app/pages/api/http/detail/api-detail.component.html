@@ -14,13 +14,6 @@
           ></button>
         </div>
       </div>
-      <div class="flex ml-[20px]" *ngIf="rightExtras?.length">
-        <ng-container *ngFor="let item of rightExtras">
-          <button eo-ng-button nzType="text" eoNgFeedbackTooltip [nzTooltipTitle]="item.tooltip" (click)="item.click(originModel)">
-            <eo-iconpark-icon [name]="item.icon" size="20px"> </eo-iconpark-icon>
-          </button>
-        </ng-container>
-      </div>
     </div>
     <p class="truncate mt-[15px]">{{ model.name }}</p>
     <!-- Request headers -->

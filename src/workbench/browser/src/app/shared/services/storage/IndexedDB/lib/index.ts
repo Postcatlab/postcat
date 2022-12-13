@@ -1,3 +1,4 @@
+import { VariableBinding } from '@angular/compiler';
 import Dexie, { Table } from 'dexie';
 import { getSettings } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
@@ -5,7 +6,7 @@ import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { firstValueFrom, Observable } from 'rxjs';
 
-import { GroupTreeItem } from '../../../../models';
+import packageJson from '../../../../../../../../../../package.json';
 import {
   Project,
   Environment,
@@ -749,7 +750,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
         });
       deepFn(data.collections, groupID).then(() => {
         //Add env
-        if (data.environments && data.environments.length) {
+        if (data.environments?.length) {
           data.environments.forEach(item => {
             item.projectID = uuid;
             const result = parseAndCheckEnv(item);
@@ -807,8 +808,10 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
       };
       const fun = async () => {
         //Update Log
-        //1.1.0 change level to tree
-        const result: any = { version: '1.1.0' };
+        //1.12.0 change level to tree
+        const result: any = {
+          version: packageJson.version
+        };
         const database: any = {};
         const tables = ['environment', 'group', 'project', 'apiData', 'mock'];
         for (const tableName of tables) {
@@ -820,7 +823,11 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
               break;
             }
             case 'project': {
-              database[tableName] = (await this[tableName].toArray())[0];
+              result[tableName] = (await this[tableName].toArray())[0];
+              break;
+            }
+            case 'environment': {
+              result.environments = await this[tableName].toArray();
               break;
             }
             default: {
