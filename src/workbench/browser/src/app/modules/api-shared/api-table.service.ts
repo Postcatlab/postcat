@@ -148,8 +148,7 @@ export class ApiTableService {
         rowSortable: inArg.isEdit ? true : false,
         isLevel: inArg.in !== 'body' || inArg.format === ApiBodyType['Form-data'] ? false : true,
         toolButton: {
-          columnVisible: true,
-          fullScreen: true
+          columnVisible: true
         }
       }
     };
@@ -266,9 +265,7 @@ export class ApiTableService {
         manualAdd: opts.manualAdd,
         rowSortable: true,
         isLevel: false,
-        toolButton: {
-          fullScreen: true
-        }
+        toolButton: {}
       }
     };
     let columnsArr = [];
