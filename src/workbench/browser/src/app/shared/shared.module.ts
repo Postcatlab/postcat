@@ -18,6 +18,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
@@ -43,7 +44,8 @@ const SHARED_UI_MODULE = [
   NzDividerModule,
   NzModalModule,
   NzListModule,
-  NzPopconfirmModule
+  NzPopconfirmModule,
+  NzSpinModule
 ] as const;
 const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;
 
