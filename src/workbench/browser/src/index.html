@@ -28,8 +28,8 @@
       const callback = function (mutationsList, observer) {
         // Use traditional 'for loops' for IE 11
         for (let mutation of mutationsList) {
-          if (mutation.type === 'childList' && rootEl.querySelector('eo-pages')) {
-            loadingEl.style.display = 'none';
+          if (mutation.type === 'childList' && rootEl.childElementCount > 1) {
+            loadingEl.remove();
             // 之后，可停止观察
             observer.disconnect();
           }
@@ -74,6 +74,12 @@
       top: 40%;
       left: 50%;
       transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .loading_container .ant-spin-dot-item {
+      background-color: #00785a;
     }
 
     .loading_container img {
