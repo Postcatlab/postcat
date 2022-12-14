@@ -30,22 +30,30 @@ export class ModalService {
       },
       nzFooter: [
         {
-          label: $localize`Confirm`,
-          type: 'primary',
-          onClick: () => {
-            if (inOpts.nzOnOk) {
-              return inOpts.nzOnOk();
-            }
-          }
-        },
-        {
           label: $localize`Cancel`,
           onClick: () => {
             modal.destroy();
           }
-        }
+        },
+        //@ts-ignore
+        ...(inOpts.onlyCancel
+          ? []
+          : [
+              {
+                label: $localize`Confirm`,
+                type: 'primary',
+                onClick: () => {
+                  if (inOpts.nzOnOk) {
+                    return inOpts.nzOnOk();
+                  }
+                }
+              }
+            ])
       ]
     };
+    if (inOpts.withoutFooter) {
+      modalOpts.nzFooter = null;
+    }
     Object.assign(modalOpts, inOpts);
     const modal = this.modal.create(modalOpts);
     return modal;

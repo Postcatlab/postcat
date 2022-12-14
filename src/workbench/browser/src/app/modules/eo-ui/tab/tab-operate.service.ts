@@ -184,7 +184,7 @@ export class TabOperateService {
     const basicTab = this.BASIC_TABS.find(val => urlArr[0].includes(val.pathname));
     if (!basicTab) {
       console.log(this.BASIC_TABS);
-      console.error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route: ${urlArr[0]}`);
+      eoConsole.error(`: Please check this router has added in BASIC_TABS,current route: ${urlArr[0]}`);
       return;
     }
     // Parse query params
@@ -211,12 +211,12 @@ export class TabOperateService {
   generateTabFromUrl(url): TabItem {
     const result = this.getBasicInfoFromUrl(url);
     if (!result) {
-      console.error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+      eoConsole.error(`: Please check this router has added in BASIC_TABS,current route:${url}`);
       return;
     }
     const basicTab = eoDeepCopy(this.BASIC_TABS.find(val => result.pathname === val.pathname));
     if (!basicTab) {
-      console.error(`EO_ERROR: Please check this router has added in BASIC_TABS,current route:${url}`);
+      eoConsole.error(`: Please check this router has added in BASIC_TABS,current route:${url}`);
       return;
     }
     result.params.pageID = result.params.pageID || Date.now();

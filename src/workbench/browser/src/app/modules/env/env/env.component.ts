@@ -12,11 +12,11 @@ import { ColumnItem } from '../../eo-ui/table-pro/table-pro.model';
 @Component({
   selector: 'eo-env',
   templateUrl: './env.component.html',
-  styleUrls: ['./env.component.scss'],
+  styleUrls: ['./env.component.scss']
 })
-export class EnvComponent implements OnInit, OnDestroy {
+export class EnvComponent implements OnDestroy {
   // @ViewChild('table') table: EoTableComponent; // * child component ref
-  @Output() private statusChange: EventEmitter<any> = new EventEmitter();
+  @Output() private readonly statusChange: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('envParams')
   envParamsComponent: any;
@@ -40,10 +40,10 @@ export class EnvComponent implements OnInit, OnDestroy {
       right: true,
       btns: [
         {
-          action: 'delete',
-        },
-      ],
-    },
+          action: 'delete'
+        }
+      ]
+    }
   ];
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -54,7 +54,6 @@ export class EnvComponent implements OnInit, OnDestroy {
     private effect: EffectService
   ) {}
 
-  ngOnInit(): void {}
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -73,7 +72,7 @@ export class EnvComponent implements OnInit, OnDestroy {
     this.modalTitle = $localize`Edit Environment`;
     this.handleShowModal();
     // * switch env in menu on left sidebar
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.storage.run('environmentLoad', [uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.envCache = result.data ?? {};
@@ -93,7 +92,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       projectID: pid,
       name: '',
       hostUri: '',
-      parameters: [],
+      parameters: []
     };
     this.modalTitle = $localize`:@@New Environment:New Environment`;
     this.handleShowModal();
@@ -106,7 +105,7 @@ export class EnvComponent implements OnInit, OnDestroy {
       this.message.error($localize`Name is not allowed to be empty`);
       return;
     }
-    const parameters = this.envParamsComponent.getPureNzData()?.filter((it) => it.name || it.value);
+    const parameters = this.envParamsComponent.getPureNzData()?.filter(it => it.name || it.value);
     if (uuid != null) {
       this.storage.run('environmentUpdate', [{ ...other, name, parameters }, uuid], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {

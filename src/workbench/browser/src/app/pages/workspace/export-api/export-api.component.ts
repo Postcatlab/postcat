@@ -4,8 +4,9 @@ import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/mod
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { has } from 'lodash-es';
 
-import packageJson from '../../../../../../../../package.json';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
 
 @Component({
@@ -13,7 +14,7 @@ import { StorageRes, StorageResStatus } from '../../../shared/services/storage/i
   template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select> `
 })
 export class ExportApiComponent implements OnInit {
-  currentExtension = 'eoapi';
+  currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
   featureMap = this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
   constructor(
@@ -32,8 +33,10 @@ export class ExportApiComponent implements OnInit {
       }
     });
     {
-      const { key } = this.supportList?.at(0);
-      this.currentExtension = key || '';
+      const { key } = this.supportList.at(0);
+      if (!(this.currentExtension && this.supportList.find(val => val.key === this.currentExtension))) {
+        this.currentExtension = key || '';
+      }
     }
   }
   submit(callback: () => boolean) {
@@ -59,6 +62,7 @@ export class ExportApiComponent implements OnInit {
    * @param callback
    */
   private async export(callback) {
+    StorageUtil.set('export_api_modal', this.currentExtension);
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const filename = feature.filename || null;
@@ -68,9 +72,12 @@ export class ExportApiComponent implements OnInit {
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           console.log('projectExport result', result.data);
-          result.data.version = packageJson.version;
           try {
-            const output = module[action](result || {});
+            let output = module[action](result || {});
+            //Change format
+            if (has(output, 'status') && output.status === 0) {
+              output = output.data;
+            }
             if (filename) {
               this.transferTextToFile(filename, output);
             }

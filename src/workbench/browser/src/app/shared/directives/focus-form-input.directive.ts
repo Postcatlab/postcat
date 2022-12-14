@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 
 @Directive({
-  selector: '[auto-focus-form]',
+  selector: '[auto-focus-form]'
 })
 export class FormFocusDirective implements AfterViewInit {
   focusables = ['.ant-input', 'select', 'textarea'];
@@ -13,14 +13,14 @@ export class FormFocusDirective implements AfterViewInit {
       setTimeout(() => {
         input.focus();
         this.cdk.detectChanges();
-      }, 500);
+      }, 300);
     }
   }
 
   @HostListener('submit')
   submit() {
     console.log('submit');
-    const input = this.element.nativeElement.querySelector(this.focusables.map((x) => `${x}.ng-invalid`).join(','));
+    const input = this.element.nativeElement.querySelector(this.focusables.map(x => `${x}.ng-invalid`).join(','));
     if (input) {
       input.focus();
     }

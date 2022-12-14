@@ -125,6 +125,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/workspace'
       },
       {
+        title: $localize`Project`,
+        id: '@eo-core-project',
+        isOffical: true,
+        icon: 'puzzle',
+        activeRoute: 'home/project',
+        route: 'home/project'
+      },
+      {
         title: $localize`Extensions`,
         id: '@eo-core-extension',
         isOffical: true,
@@ -132,14 +140,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/extension',
         route: 'home/extension/list'
       }
-      // {
-      //   title: $localize`apiSpace`,
-      //   id: '@eo-core-vue3',
-      //   isOffical: true,
-      //   icon: 'puzzle',
-      //   activeRoute: 'home/extensionSidebarView/apispace',
-      //   route: 'home/extensionSidebarView/apispace',
-      // },
     ];
     const isShare = this.store.isShare;
     this.modules = defaultModule.filter((it: any) => (isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true));
@@ -150,7 +150,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);
-      console.warn(`EO_WARN[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule);
+      eoConsole.warn(`[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule);
       return;
     }
     this.sidebar.currentModule = currentModule;

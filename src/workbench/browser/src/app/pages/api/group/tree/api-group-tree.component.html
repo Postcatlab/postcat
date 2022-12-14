@@ -1,13 +1,6 @@
 <header class="flex pt-2 px-[10px]">
   <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
-    <input
-      eo-ng-input
-      type="text"
-      class="flex-1 px-3"
-      i18n-placeholder="@@Search"
-      placeholder="Search"
-      [(ngModel)]="searchValue"
-    />
+    <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="searchValue" />
   </eo-ng-input-group>
   <ng-template #prefixTemplateUser>
     <eo-iconpark-icon name="search"></eo-iconpark-icon>
@@ -70,14 +63,7 @@
           </div>
           <span class="flex tree-node_operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
             <ng-container *ngIf="isEdit">
-              <button
-                eo-ng-button
-                nzType="text"
-                class="more-btn"
-                nzTrigger="click"
-                eo-ng-dropdown
-                [nzDropdownMenu]="groupMenu"
-              >
+              <button eo-ng-button nzType="text" class="more-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
                 <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
               </button>
               <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
@@ -114,11 +100,7 @@
               </button>
               <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li
-                    nz-menu-item
-                    *ngFor="let item of apiItemsMenu"
-                    (click)="item.click({ group: node, api: apiDataItems[node.key] })"
-                  >
+                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click({ group: node, api: apiDataItems[node.key] })">
                     {{ item.title }}
                   </li>
                 </ul>

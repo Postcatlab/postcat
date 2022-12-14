@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
-import { JsonRootType,ApiEditBody, ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
+import { JsonRootType, ApiEditBody, ApiBodyType, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { Subject } from 'rxjs';
 import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { pairwise, takeUntil, debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'eo-api-edit-body',
   templateUrl: './api-edit-body.component.html',
-  styleUrls: ['./api-edit-body.component.scss'],
+  styleUrls: ['./api-edit-body.component.scss']
 })
 export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   /**
@@ -20,36 +20,36 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   @Input() supportType: string[];
   @Input() bodyType: ApiBodyType | string;
   @Input() jsonRootType: JsonRootType | string;
-  @Output() jsonRootTypeChange: EventEmitter<any> = new EventEmitter();
-  @Output() bodyTypeChange: EventEmitter<any> = new EventEmitter();
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly jsonRootTypeChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly bodyTypeChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   checkAddRow: (item) => boolean;
   nzDragCheck: (current, next) => boolean;
-    listConf: ApiTableConf = {
+  listConf: ApiTableConf = {
     columns: [],
-    setting: {},
+    setting: {}
   };
   cache: any = {};
 
   CONST: any = {
-    JSON_ROOT_TYPE: Object.keys(JsonRootType).map((val) => ({ key: val, value: JsonRootType[val] })),
+    JSON_ROOT_TYPE: Object.keys(JsonRootType).map(val => ({ key: val, value: JsonRootType[val] }))
   };
   itemStructure: ApiEditBody = {
     name: '',
     type: 'string',
     required: true,
     example: '',
-    description: '',
+    description: ''
   };
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
   private rawChange$: Subject<string> = new Subject<string>();
   constructor(private message: EoNgFeedbackMessageService, private apiTable: ApiTableService) {
-    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe((val) => {
+    this.bodyType$.pipe(pairwise(), takeUntil(this.destroy$)).subscribe(val => {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe((model) => {
+    this.rawChange$.pipe(debounceTime(400), takeUntil(this.destroy$)).subscribe(model => {
       if (this.bodyType !== ApiBodyType.Raw) {
         return;
       }
@@ -73,18 +73,15 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnInit(): void {
     this.CONST.API_BODY_TYPE = Object.keys(ApiBodyType)
-      .filter((val) => this.supportType.includes(ApiBodyType[val]))
-      .map((val) => ({ key: val, value: ApiBodyType[val] }));
+      .filter(val => this.supportType.includes(ApiBodyType[val]))
+      .map(val => ({ key: val, value: ApiBodyType[val] }));
   }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
   ngOnChanges(changes) {
-    if (
-      changes.model &&
-      ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)
-    ) {
+    if (changes.model && ((!changes.model.previousValue && changes.model.currentValue) || changes.model.currentValue?.length === 0)) {
       this.beforeChangeBodyByType(this.bodyType);
       this.setModel();
       this.initListConf();
@@ -143,7 +140,7 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         this.model.push(
           Object.assign(eoDeepCopy(this.itemStructure), {
             type: 'object',
-            name: 'root',
+            name: 'root'
           })
         );
       }
@@ -156,19 +153,19 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         in: 'body',
         id: this.tid,
         format: this.bodyType as ApiBodyType,
-        isEdit: true,
+        isEdit: true
       },
       {
         manualAdd: true,
         changeFn: () => {
           this.tableChange(this.model);
-        },
+        }
       }
     );
     this.listConf.columns = config.columns;
     this.listConf.setting = config.setting;
     if (this.bodyType === ApiBodyType.XML) {
-      this.checkAddRow = (item) => item.eoKey !== this.model[0].eoKey;
+      this.checkAddRow = item => item.eoKey !== this.model[0].eoKey;
       this.nzDragCheck = (current, next) => {
         if (next.level === 0) {
           this.message.warning($localize`XML can have only one root node`);
@@ -176,6 +173,8 @@ export class ApiEditBodyComponent implements OnInit, OnChanges, OnDestroy {
         }
         return true;
       };
+    } else {
+      this.checkAddRow = null;
     }
   }
 }

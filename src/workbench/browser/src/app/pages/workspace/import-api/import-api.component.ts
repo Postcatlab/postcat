@@ -130,7 +130,7 @@ export class ImportApiComponent implements OnInit {
           this.router.navigate(['home/api']);
         } else {
           callback(false);
-          console.error('EO_ERROR: Import Error', result.error);
+          eoConsole.error('Import Error', result.error);
           return;
         }
         callback(true);

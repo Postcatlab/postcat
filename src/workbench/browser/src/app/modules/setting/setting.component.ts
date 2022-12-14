@@ -222,7 +222,7 @@ export class SettingComponent implements OnInit, AfterViewInit, OnDestroy {
     // The first item is selected by default
     const nodeIndex = this.treeControl.dataNodes.findIndex(node => node.moduleID === this.selectedModule);
     if (this.selectedModule && nodeIndex === -1) {
-      console.error(`EO_ERROR[eo-setting]: The selected module [${this.selectModule}] does not exist`);
+      eoConsole.error(`[eo-setting]: The selected module [${this.selectModule}] does not exist`);
     }
     if (nodeIndex === -1) {
       this.selectModule(this.treeControl.dataNodes.at(0));

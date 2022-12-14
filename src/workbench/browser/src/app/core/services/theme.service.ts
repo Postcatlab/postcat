@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { Theme } from 'ng-zorro-antd/core/config';
+import { NzConfigService, Theme } from 'ng-zorro-antd/core/config';
 
 import { AppearanceType, MainColorType } from '../../modules/setting/common/select-theme/theme.model';
 import StorageUtil from '../../utils/storage/Storage';
@@ -27,10 +27,6 @@ export class ThemeService {
   };
   appearance: AppearanceType = StorageUtil.get(this.module.appearance.storageKey) || this.module.appearance.default;
   mainColor: MainColorType = StorageUtil.get(this.module.mainColor.storageKey) || this.module.mainColor.default;
-  DESIGN_TOKEN: Theme = {
-    primaryColor: getComputedStyle(this.document.documentElement).getPropertyValue('--MAIN_THEME_COLOR').replace(' ', '')
-  };
-
   constructor(@Inject(DOCUMENT) private document: Document) {}
   initTheme() {
     this.changeAppearance(this.appearance, true);
@@ -65,7 +61,7 @@ export class ThemeService {
       this.removeCss(this[mid]);
       //@ts-ignore
       this[mid] = name;
-      document.documentElement.classList.add(className);
+      this.document.documentElement.classList.add(className);
       StorageUtil.set(module.storageKey, name);
       return;
     }
@@ -79,28 +75,28 @@ export class ThemeService {
         if (mid === 'appearance') {
           this.changeEditorTheme(this.getEditorTheme(name));
         }
-        document.documentElement.classList.add(className);
+        this.document.documentElement.classList.add(className);
         StorageUtil.set(module.storageKey, name);
       })
       .catch(e => {});
   }
   private removeCss(theme): void {
-    const removedThemeStyle = document.querySelectorAll(`[id=${theme}]`);
-    document.documentElement.classList.remove(`eo-theme-${theme}`);
+    const removedThemeStyle = this.document.querySelectorAll(`[id=${theme}]`);
+    this.document.documentElement.classList.remove(`eo-theme-${theme}`);
     if (!removedThemeStyle?.length) {
       return;
     }
     removedThemeStyle.forEach(dom => {
-      document.head.removeChild(dom);
+      this.document.head.removeChild(dom);
     });
   }
   private loadCss(href, id: string, injectDirection): Promise<Event> {
     return new Promise((resolve, reject) => {
-      const dom = document.createElement('link');
+      const dom = this.document.createElement('link');
       dom.rel = 'stylesheet';
       dom.href = href;
       dom.id = id;
-      document.head[injectDirection](dom);
+      this.document.head[injectDirection](dom);
       dom.onload = resolve;
       dom.onerror = e => {
         console.log('theme change error:', e);

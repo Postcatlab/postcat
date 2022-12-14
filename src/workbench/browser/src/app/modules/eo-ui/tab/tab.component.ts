@@ -24,7 +24,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
 
   @Input() checkTabCanLeave?: (closeTarget?: TabItem) => boolean;
   @Input() handleDataBeforeCache?: <T>({ tabsByID: T }) => T;
-  @Output() beforeClose = new EventEmitter<boolean>();
+  @Output() readonly beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
   constructor(
@@ -89,14 +89,12 @@ export class EoTabComponent implements OnInit, OnDestroy {
       nzClosable: false,
       nzFooter: [
         {
-          label: $localize`Save`,
-          type: 'primary',
+          label: $localize`Cancel`,
           onClick: () => {
-            this.beforeClose.emit(true);
             modal.destroy();
-            this.tabOperate.closeTab(index);
           }
         },
+
         {
           label: $localize`Don't Save`,
           onClick: () => {
@@ -106,9 +104,12 @@ export class EoTabComponent implements OnInit, OnDestroy {
           }
         },
         {
-          label: $localize`Cancel`,
+          label: $localize`Save`,
+          type: 'primary',
           onClick: () => {
+            this.beforeClose.emit(true);
             modal.destroy();
+            this.tabOperate.closeTab(index);
           }
         }
       ]
@@ -168,7 +169,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
   updatePartialTab(url: string, tabItem: Partial<TabItem>) {
     const existTab = this.getExistTabByUrl(url);
     if (!existTab) {
-      console.error(`EO_ERROR:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
+      eoConsole.error(`:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
       return;
     }
     const index = this.tabStorage.tabOrder.findIndex(uuid => uuid === existTab.uuid);
@@ -203,10 +204,9 @@ export class EoTabComponent implements OnInit, OnDestroy {
     this.routerSubscribe?.unsubscribe();
     this.cacheData();
   }
-  private watchPageLeave() {
-    const that = this;
-    window.addEventListener('beforeunload', function (e) {
-      that.cacheData();
+  private watchPageLeave = () => {
+    window.addEventListener('beforeunload', e => {
+      this.cacheData();
     });
-  }
+  };
 }

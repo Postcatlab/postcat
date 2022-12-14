@@ -70,14 +70,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
                   model: item.data,
                   isEdit: false
                 },
-                nzFooter: [
-                  {
-                    label: $localize`Cancel`,
-                    onClick: () => {
-                      modal.destroy();
-                    }
-                  }
-                ]
+                onlyCancel: true
               });
             }
           },

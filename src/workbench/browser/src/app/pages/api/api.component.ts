@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
+import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, makeObservable, observable, reaction } from 'mobx';
@@ -29,6 +31,8 @@ export class ApiComponent implements OnInit, OnDestroy {
   isDragging = false;
   animateId = -1;
   animationId: number;
+  rightExtras = [];
+
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: EoTabComponent) {
     // For lifecycle error, use timeout
@@ -71,7 +75,7 @@ export class ApiComponent implements OnInit, OnDestroy {
       onlyDestop: true
     }
   ];
-
+  originModel: ApiData | any;
   isOpen = false;
   rightSiderWidth = this.getLocalRightSiderWidth();
 
@@ -83,10 +87,43 @@ export class ApiComponent implements OnInit, OnDestroy {
     public apiTab: ApiTabService,
     private router: Router,
     public web: WebService,
+    private webExtensionService: WebExtensionService,
     public store: StoreService,
     private effect: EffectService
-  ) {}
-
+  ) {
+    this.initExtensionExtra();
+  }
+  async initExtensionExtra() {
+    const apiPreviewTab = this.webExtensionService.getFeatures('apiPreviewTab');
+    await apiPreviewTab?.forEach(async (value, key) => {
+      if (!this.webExtensionService?.isEnable(key)) {
+        return;
+      }
+      const module = await window.eo?.loadFeatureModule?.(key);
+      const rightExtra = value.rightExtra?.reduce((prev, curr) => {
+        const eventObj = curr.events?.reduce((event, currEvent) => {
+          event[currEvent.name] = (...rest) => {
+            module?.[currEvent.handler]?.(...rest);
+          };
+          return event;
+        }, {});
+        prev.push({
+          ...curr,
+          ...eventObj
+        });
+        return prev;
+      }, []);
+      this.rightExtras.push(...rightExtra);
+    });
+    this.rightExtras.forEach(val => {
+      //TODO remove after 2023.02
+      if (val.icon === 'file-text-one') {
+        val.icon = 'file-text';
+      }
+      console.log(val);
+    });
+    // console.log('this.rightExtras', this.rightExtras);
+  }
   /**
    * Router-outlet child componnet change
    * Router-outlet bind childComponent output fun by (activate)
@@ -157,9 +194,7 @@ export class ApiComponent implements OnInit, OnDestroy {
 
   gotoEnvManager() {
     // * switch to env
-    // this.store.toggleRightBar(true);
-    this.toggleRightBar('open');
-
+    this.tabsIndex = 2;
     // * close select
     this.isOpen = false;
   }

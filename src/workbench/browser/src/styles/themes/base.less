@@ -1,13 +1,7 @@
 @import '../../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
 
-// For more information: https://ng.ant.design/docs/customize-theme/en
-@import '../../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.variable.min.css';
-
 @import './../antd.less';
 // Override less variables to here
-:root {
-  --ant-primary-color: #1890ff;
-}
 //* View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
 //Theme mainColor
 @theme-color: #00785a;
@@ -17,7 +11,7 @@
 @link-color: @text-color;
 @processing-color: @theme-color;
 @input-number-hover-border-color: @theme-color;
-@primary-color-outline:@theme-color;
+@primary-color-outline: @theme-color;
 @tree-title-height: 30px;
 
 //Theme Apperance
@@ -94,6 +88,7 @@ p {
     font-size: 12px;
   }
 }
-.ant-input-number:focus, .ant-input-number-focused{
-  box-shadow:  none;
+.ant-input-number:focus,
+.ant-input-number-focused {
+  box-shadow: none;
 }

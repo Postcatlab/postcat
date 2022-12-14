@@ -4,7 +4,7 @@ import { LANGUAGES } from 'eo/workbench/browser/src/app/core/services/language/l
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class LanguageService {
   languages = LANGUAGES;
@@ -12,7 +12,7 @@ export class LanguageService {
   // Web from nginx setting and App from computer system setting
   systemLanguage =
     this.setting.getSettings()?.['eoapi-language'] ||
-    this.languages.find((val) => window.location.href.includes(`/${val.path}`))?.value ||
+    this.languages.find(val => window.location.href.includes(`/${val.path}`))?.value ||
     (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
   langHashMap = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
   constructor(private electron: ElectronService, private setting: SettingService) {}
@@ -24,7 +24,7 @@ export class LanguageService {
   }
   changeLanguage(localeID) {
     if (!localeID || localeID === this.systemLanguage) {
-      console.warn(`EO_WARN[languageService]: current language has already ${localeID}`);
+      eoConsole.warn(`[languageService]: current language has already ${localeID}`);
       return;
     }
     this.systemLanguage = localeID;
@@ -32,7 +32,7 @@ export class LanguageService {
     if (this.electron.isElectron) {
       this.electron.ipcRenderer.send('message', {
         action: 'changeLanguage',
-        data: this.systemLanguage,
+        data: this.systemLanguage
       });
     } else {
       const url = window.location.href;

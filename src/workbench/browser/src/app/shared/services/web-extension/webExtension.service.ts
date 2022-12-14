@@ -1,10 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+import { lastValueFrom } from 'rxjs';
 
 type ExtensionItem = {
   name: string;
@@ -24,27 +28,38 @@ export class WebExtensionService {
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
   disabledExtensionNames = [];
 
-  constructor(private message: EoNgFeedbackMessageService, private webService: WebService, private messageService: MessageService) {}
+  constructor(
+    private message: EoNgFeedbackMessageService,
+    private webService: WebService,
+    private messageService: MessageService,
+    private http: HttpClient,
+    private language: LanguageService
+  ) {}
 
-  init() {
-    this.unInstallExtension('eoapi-api-space-debug');
+  async init() {
+    const { data } = await lastValueFrom<any>(this.http.get(`${APP_CONFIG.MOCK_URL}/list?locale=${this.language.systemLanguage}`));
     if (this.webService.isWeb) {
       defaultExtensions.forEach(n => {
         const isInstall = this.getExtensionByName(n);
         isInstall || this.installedList.push({ name: n } as any);
       });
       this.installedList.forEach(n => {
-        this.installExtension(n.name);
+        const target = data.find(m => m.name === n.name);
+        if (target) {
+          this.installExtension(target.name, target.version, target.main);
+        }
       });
     }
   }
 
-  async installExtension(extName: string) {
-    const res = await fetch(`https://unpkg.com/${extName}`);
+  async installExtension(extName: string, version = 'latest', entry = '') {
+    const url = `${extName}@${version}${entry ? `/${entry}` : entry}`;
+    const fullPath = new URL(url, 'https://unpkg.com');
+    const res = await fetch(fullPath);
     const data = await res.text();
     if (res.status === 200) {
       this.insertScript(data);
-      const pkgJson = await this.getPkgInfo(extName);
+      const pkgJson = await this.getPkgInfo(extName, version);
       const pkgObj = typeof pkgJson === 'object' ? pkgJson : JSON.parse(pkgJson);
       const oldIndex = this.installedList.findIndex(n => n.name === extName);
       this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
@@ -101,8 +116,8 @@ export class WebExtensionService {
     document.head.appendChild(script);
   }
 
-  async getPkgInfo(extName: string) {
-    const res = await fetch(`https://unpkg.com/${extName}/package.json`);
+  async getPkgInfo(extName: string, version = 'latest') {
+    const res = await fetch(`https://unpkg.com/${extName}@${version}/package.json`);
     return res.json();
   }
 

@@ -78,7 +78,9 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
   }
 
   onAppload() {
-    this.isSpinning = false;
+    requestIdleCallback(() => {
+      this.isSpinning = false;
+    });
   }
 
   initSidebarViewByRoute() {
@@ -94,7 +96,6 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
           console.log('sidebar 动态配置的地址', dynamickUrl);
           this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dynamickUrl || this.url);
         }
-        console.log('this', this);
       }
     });
   }

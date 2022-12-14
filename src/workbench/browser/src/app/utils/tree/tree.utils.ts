@@ -10,10 +10,10 @@ const filterTree = (
   result,
   filterFn,
   opts = {
-    childKey: 'children',
+    childKey: 'children'
   }
 ) =>
-  result.filter((item) => {
+  result.filter(item => {
     const hasKeep = filterFn ? filterFn(item) : true;
     if (!hasKeep) {
       return false;
@@ -38,16 +38,16 @@ export const filterTableData = (
   opts.childKey = opts.childKey || 'children';
   opts.omitBy = opts.omitBy || ['eoKey'];
   //Omit useless fieild
-  const result = inData.map((val) => omitDeep(val, opts.omitBy));
+  const result = inData.map(val => omitDeep(val, opts.omitBy));
   if (!opts.filterFn) {
     if (!opts.primaryKey) {
-      console.error('EO_ERROR: filterTableData need primaryKey');
+      eoConsole.error('filterTableData need primaryKey');
     } else {
-      opts.filterFn = (item) => item[opts.primaryKey];
+      opts.filterFn = item => item[opts.primaryKey];
     }
   }
   return filterTree(result, opts.filterFn, {
-    childKey: opts.childKey,
+    childKey: opts.childKey
   });
 };
 
@@ -59,11 +59,11 @@ export const filterTableData = (
  * @param parentID number|string
  */
 export const listToTree = (list: GroupTreeItem[], tree: GroupTreeItem[], parentID: number | string): void => {
-  list.forEach((data) => {
+  list.forEach(data => {
     if (data.parentID === parentID) {
       const child = {
         ...data,
-        children: [],
+        children: []
       };
       if (!data.isLeaf) {
         listToTree(list, child.children, data.key);
@@ -75,13 +75,13 @@ export const listToTree = (list: GroupTreeItem[], tree: GroupTreeItem[], parentI
     }
   });
 };
-export const flatData = (data) => {
+export const flatData = data => {
   // * DFS
   const arr = [];
-  data.forEach((item) => {
+  data.forEach(item => {
     const loop = ({ children = [], ...it }) => {
       arr.push(it);
-      children.forEach((x) => loop(x));
+      children.forEach(x => loop(x));
     };
     loop(item);
   });
@@ -135,5 +135,5 @@ export const fieldTypeMap = new Map<string, any>([
   ['object', {}],
   ['number', 0],
   ['null', null],
-  ['string', 'default_value'],
+  ['string', 'default_value']
 ]);

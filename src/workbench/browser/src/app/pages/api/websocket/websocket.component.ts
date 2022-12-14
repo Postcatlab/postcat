@@ -324,6 +324,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         nzClosable: false,
         nzFooter: [
           {
+            label: $localize`Cancel`,
+            onClick: () => {
+              this.leaveModal.destroy();
+              this.leaveModal = null;
+              resolve(false);
+            }
+          },
+          {
             label: $localize`Leave`,
             type: 'primary',
             onClick: () => {
@@ -332,14 +340,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
               // * disconnect ws connect
               this.handleConnect('disconnect');
               resolve(true);
-            }
-          },
-          {
-            label: $localize`Cancel`,
-            onClick: () => {
-              this.leaveModal.destroy();
-              this.leaveModal = null;
-              resolve(false);
             }
           }
         ]
