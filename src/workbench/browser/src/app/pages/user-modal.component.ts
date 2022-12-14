@@ -1,4 +1,4 @@
-import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
+import { ViewChild, ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
@@ -8,8 +8,8 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { interval } from 'rxjs';
-import { distinct } from 'rxjs/operators';
+import { interval, Subject } from 'rxjs';
+import { distinct, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-user-modal',
@@ -169,7 +169,7 @@ import { distinct } from 'rxjs/operators';
       </ng-container>
     </nz-modal>`
 })
-export class UserModalComponent implements OnInit {
+export class UserModalComponent implements OnInit, OnDestroy {
   isSyncModalVisible;
   isSyncCancelBtnLoading;
   isSyncSyncBtnLoading;
@@ -187,6 +187,7 @@ export class UserModalComponent implements OnInit {
   newWorkNameWorkspaceNameRef: ElementRef<HTMLInputElement>;
   isCancelBtnLoading;
   isSaveBtnLoading;
+  private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public store: StoreService,
     public message: MessageService,
@@ -217,6 +218,7 @@ export class UserModalComponent implements OnInit {
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(async ({ type, data }) => {
         if (type === 'login') {
           // * 唤起弹窗
@@ -379,6 +381,10 @@ export class UserModalComponent implements OnInit {
 
       return;
     }
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   handleSyncModalCancel(): void {
     // * 关闭弹窗

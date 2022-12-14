@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { GroupTreeItem } from 'eo/workbench/browser/src/app/shared/models';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { observable, makeObservable, computed, action } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-import { filter, Subject } from 'rxjs';
 
 import { ExtensionGroupType } from './extension.model';
 import { ExtensionService } from './extension.service';
@@ -12,22 +11,23 @@ import { ExtensionService } from './extension.service';
 @Component({
   selector: 'eo-extension',
   templateUrl: './extension.component.html',
-  styleUrls: ['./extension.component.scss'],
+  styleUrls: ['./extension.component.scss']
 })
 export class ExtensionComponent implements OnInit {
+  @observable extensionName = '';
   keyword = '';
   nzSelectedKeys: Array<number | string> = [];
   treeNodes: NzTreeNodeOptions[] = [
     {
       key: 'official',
       title: $localize`Official`,
-      isLeaf: true,
+      isLeaf: true
     },
     {
       key: 'installed',
       title: $localize`Installed`,
-      isLeaf: true,
-    },
+      isLeaf: true
+    }
   ];
   fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
     {
@@ -36,39 +36,36 @@ export class ExtensionComponent implements OnInit {
       weight: 0,
       parentID: '0',
       isLeaf: true,
-      isFixed: true,
-    },
+      isFixed: true
+    }
   ];
   selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
 
-  constructor(
-    public extensionService: ExtensionService,
-    private router: Router,
-    public electron: ElectronService,
-    private route: ActivatedRoute,
-    private messageService: MessageService
-  ) {}
+  @computed get hasExtension() {
+    return !!this.extensionName;
+  }
+
+  @computed get getExtension() {
+    return this.extensionName;
+  }
+
+  constructor(public extensionService: ExtensionService, public electron: ElectronService, private messageService: MessageService) {}
+
   clickGroup(id) {
     this.selectGroup = id;
-    this.router
-      .navigate(['home/extension/list'], {
-        queryParams: { type: id },
-      })
-      .finally();
+    this.selectExtension('');
   }
   ngOnInit(): void {
-    this.watchRouterChange();
-    this.setSelectedKeys();
+    makeObservable(this);
+    this.nzSelectedKeys = [this.fixedTreeNode[0].key];
+  }
+
+  selectExtension(name = '') {
+    this.setExtension(name);
   }
 
   onSearchChange(keyword) {
     this.messageService.send({ type: 'searchPluginByKeyword', data: keyword });
-  }
-
-  private watchRouterChange() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.setSelectedKeys();
-    });
   }
 
   /**
@@ -91,11 +88,7 @@ export class ExtensionComponent implements OnInit {
     }
   }
 
-  private setSelectedKeys() {
-    if (this.route.snapshot.queryParams.type) {
-      this.nzSelectedKeys = [this.route.snapshot.queryParams.type];
-    } else {
-      this.nzSelectedKeys = [this.fixedTreeNode[0].key];
-    }
+  @action setExtension(data = '') {
+    this.extensionName = data;
   }
 }

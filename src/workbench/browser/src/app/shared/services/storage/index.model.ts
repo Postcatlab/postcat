@@ -182,13 +182,13 @@ export interface StorageInterface {
   systemCheck?: () => Observable<object>;
   // Project
   projectImport: (uuid: number, item: any, groupID?: number) => Observable<object>;
-  projectCreate: (item: Project) => Observable<object>;
+  projectCreate: (workspaceID: number, item: Project) => Observable<object>;
   projectUpdate: (item: Project, uuid: number | string) => Observable<object>;
   projectBulkUpdate: (items: Project[]) => Observable<object>;
   projectRemove: (uuid: number | string) => Observable<object>;
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
-  projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
+  projectBulkLoad: (workspaceID: number) => Observable<object>;
   projectExport: (projectID?) => Observable<object>;
   // Environment
   environmentCreate: (item: Environment) => Observable<object>;

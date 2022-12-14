@@ -125,25 +125,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/workspace'
       },
       {
-        title: $localize`Extensions`,
-        id: '@eo-core-extension',
+        title: $localize`Project`,
+        id: '@eo-core-project',
         isOffical: true,
-        icon: 'plugins',
-        activeRoute: 'home/extension',
-        route: 'home/extension/list'
+        icon: 'puzzle',
+        activeRoute: 'home/project',
+        route: 'home/project'
       }
-      // {
-      //   title: $localize`apiSpace`,
-      //   id: '@eo-core-vue3',
-      //   isOffical: true,
-      //   icon: 'puzzle',
-      //   activeRoute: 'home/extensionSidebarView/apispace',
-      //   route: 'home/extensionSidebarView/apispace',
-      // },
     ];
     const isShare = this.store.isShare;
     this.modules = defaultModule.filter((it: any) => (isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true));
   }
+
   private getIDFromRoute() {
     const urlArr = new URL(this.router.url, 'http://localhost').pathname.split('/');
     const currentModule = this.modules.find(val => val.activeRoute.split('/').every(n => urlArr.includes(n)));

@@ -852,8 +852,8 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuids
    */
-  projectBulkLoad(uuids: Array<number | string>): Observable<object> {
-    return this.bulkLoad(this.project, uuids);
+  projectBulkLoad(workspaceID: number): Observable<object> {
+    return this.bulkLoad(this.project, [workspaceID]);
   }
 
   /**
@@ -879,7 +879,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param item
    */
-  projectCreate(item: Project): Observable<object> {
+  projectCreate(workspaceID: number, item: Project): Observable<object> {
     return this.create(this.project, item);
   }
 

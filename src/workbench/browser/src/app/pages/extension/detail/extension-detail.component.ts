@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
@@ -15,6 +15,8 @@ import { ExtensionService } from '../extension.service';
   styleUrls: ['./extension-detail.component.scss']
 })
 export class ExtensionDetailComponent implements OnInit {
+  @Input() extensionData = '';
+  @Output() readonly goBack: EventEmitter<any> = new EventEmitter();
   isOperating = false;
   introLoading = false;
   changelogLoading = false;
@@ -22,7 +24,6 @@ export class ExtensionDetailComponent implements OnInit {
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   nzSelectedIndex = 0;
-  extName = '';
 
   changeLog = '';
   changeLogNotFound = false;
@@ -45,9 +46,7 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   async getDetail() {
-    this.extName = this.route.snapshot.queryParams.name;
-
-    this.isOperating = window.eo?.getExtIsInTask?.(this.extName, ({ type, status }) => {
+    this.isOperating = window.eo?.getExtIsInTask?.(this.extensionData, ({ type, status }) => {
       if (type === 'install' && status === 'success') {
         this.extensionDetail.installed = true;
       }
@@ -56,7 +55,7 @@ export class ExtensionDetailComponent implements OnInit {
       }
       this.isOperating = false;
     });
-    this.extensionDetail = await this.extensionService.getDetail(this.route.snapshot.queryParams.id, this.extName);
+    this.extensionDetail = await this.extensionService.getDetail(this.extensionData, this.extensionData);
 
     this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
 
@@ -174,11 +173,7 @@ ${log}
   }
 
   backToList() {
-    this.router.navigate(['/home/extension/list'], {
-      queryParams: {
-        type: this.route.snapshot.queryParams.type
-      }
-    });
+    this.goBack.emit();
   }
 
   handleEnableExtension(isEnable) {

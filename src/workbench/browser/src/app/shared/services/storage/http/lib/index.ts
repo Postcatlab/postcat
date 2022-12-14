@@ -23,8 +23,8 @@ export class HttpStorage implements StorageInterface {
   projectCollections(uuid: number) {
     return this.http.get(`/project/${uuid}/collections`) as Observable<object>;
   }
-  projectCreate(item: Project) {
-    return this.http.post(`/project`, item) as Observable<object>;
+  projectCreate(workspaceID: number, item: Project) {
+    return this.http.post(`/${workspaceID}/project`, item) as Observable<object>;
   }
   projectUpdate(item: Project, uuid: number | string) {
     return this.http.put(`/project/${uuid}`, item) as Observable<object>;
@@ -35,7 +35,9 @@ export class HttpStorage implements StorageInterface {
   }
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
-  projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
+  projectBulkLoad = (workspaceID: number): Observable<object> => {
+    return this.http.get(`/${workspaceID}/project`);
+  };
   projectExport(projectID) {
     return this.http.get(`/project/${projectID}/export`) as Observable<object>;
   }

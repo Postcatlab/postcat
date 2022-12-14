@@ -51,10 +51,9 @@
         </div>
       </div>
     </div>
-    <!-- <div *ngIf="node.component?.showIndicator" class="ant-tree-drop-indicator ng-star-inserted"
-      style="bottom: -3px; left: 4px; right: 0px;"></div> -->
   </ng-template>
 </section>
 <section class="flex-1 px-4 right">
-  <router-outlet></router-outlet>
+  <eo-extension-list *ngIf="!hasExtension" (selectChange)="selectExtension($event)"></eo-extension-list>
+  <eo-extension-detail *ngIf="hasExtension" [extensionData]="getExtension" (goBack)="selectExtension()"></eo-extension-detail>
 </section>

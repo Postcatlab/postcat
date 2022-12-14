@@ -43,6 +43,10 @@ const routes: Routes = [
         loadChildren: () => import('./api/api.module').then(m => m.ApiModule)
       },
       {
+        path: 'project',
+        loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
+      },
+      {
         path: 'workspace',
         loadChildren: () => import('./workspace/workspace.module').then(m => m.WorkspaceModule)
       },
@@ -64,15 +68,6 @@ const routes: Routes = [
         path: 'extensionSidebarView/:extName',
         component: ExtensionAppComponent
       }
-      // {
-      //   path: 'app-vue3',
-      //   children: [
-      //     {
-      //       path: '**',
-      //       component: Vue3Component,
-      //     },
-      //   ],
-      // },
     ]
   }
 ];

@@ -6,6 +6,10 @@
   -webkit-line-clamp: 1;
 }
 
+.extension-list {
+  height: 70vh;
+}
+
 .plugin-block {
   user-select: none;
   cursor: pointer;
@@ -14,6 +18,7 @@
 .list-block {
   height: calc(100% - 65px);
   overflow: auto;
+
   > div {
     border-radius: 3px;
   }

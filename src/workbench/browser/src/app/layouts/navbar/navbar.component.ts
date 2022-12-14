@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ExtensionComponent } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
@@ -10,6 +12,7 @@ import { LanguageService } from '../../core/services/language/language.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { SettingComponent } from '../../modules/setting/setting.component';
 import { ModalService } from '../../shared/services/modal.service';
+
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -33,6 +36,7 @@ export class NavbarComponent implements OnInit {
     public electron: ElectronService,
     private web: WebService,
     private modal: ModalService,
+    private modalService: NzModalService,
     public theme: ThemeService,
     private message: MessageService,
     public lang: LanguageService,
@@ -51,6 +55,14 @@ export class NavbarComponent implements OnInit {
           return;
         }
       });
+  }
+  openExtension() {
+    this.modalService.create({
+      nzWidth: '80%',
+      nzTitle: $localize`Extensions`,
+      nzContent: ExtensionComponent,
+      nzFooter: null
+    });
   }
 
   loginOrSign() {
