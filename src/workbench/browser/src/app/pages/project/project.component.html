@@ -21,7 +21,7 @@
   <ng-container *ngIf="listType === 'card'">
     <div class="flex flex-wrap">
       <ng-container *ngFor="let item of projectList">
-        <div>
+        <div class="mr-[20px]">
           <nz-card style="width: 300px">
             <div class="flex justify-between">
               <nz-avatar [nzText]="item.name.charAt(0)" nzShape="square"></nz-avatar>

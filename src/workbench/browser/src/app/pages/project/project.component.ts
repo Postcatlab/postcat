@@ -18,6 +18,10 @@ export class ProjectComponent implements OnInit {
   initLoading = true; // bug
   projectList: any[] = [];
 
+  get WorkspaceID() {
+    return this.storeSerive.getCurrentWorkspace.id;
+  }
+
   constructor(
     private msg: EoNgFeedbackMessageService,
     private storage: StorageService,
@@ -30,7 +34,8 @@ export class ProjectComponent implements OnInit {
   }
 
   getProjectList() {
-    this.storage.run('projectBulkLoad', [this.storeSerive.getCurrentWorkspace.id], (result: StorageRes) => {
+    this.storage.run('projectBulkLoad', [this.WorkspaceID], (result: StorageRes) => {
+      console.log('result', result);
       if (result.status === StorageResStatus.success) {
         this.projectList = result.data;
         this.initLoading = false;
@@ -39,12 +44,39 @@ export class ProjectComponent implements OnInit {
   }
 
   editProject(item: any): void {
-    console.log('item', item);
-    this.msg.success(item.email);
+    const model = {
+      name: item.name
+    };
+    const modal = this.modalService.create({
+      nzTitle: $localize`Edit Project`,
+      nzContent: OperateProjectFormComponent,
+      nzComponentParams: {
+        model
+      },
+      nzOnOk: async () => {
+        this.storage.run('projectUpdate', [this.WorkspaceID, model, item.uuid], (result: StorageRes) => {
+          if (result.status === StorageResStatus.success) {
+            this.getProjectList();
+            modal.destroy();
+          }
+        });
+      }
+    });
   }
 
   delProject(item: any): void {
-    this.msg.success(item.email);
+    const modal = this.modalService.create({
+      nzTitle: 'Delete Project',
+      nzContent: 'Are you sure to delete this project?',
+      nzOnOk: () => {
+        this.storage.run('projectRemove', [this.WorkspaceID, item.uuid], (result: StorageRes) => {
+          if (result.status === StorageResStatus.success) {
+            this.getProjectList();
+            modal.destroy();
+          }
+        });
+      }
+    });
   }
 
   setListType(type: ListType) {

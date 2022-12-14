@@ -26,12 +26,12 @@ export class HttpStorage implements StorageInterface {
   projectCreate(workspaceID: number, item: Project) {
     return this.http.post(`/${workspaceID}/project`, item) as Observable<object>;
   }
-  projectUpdate(item: Project, uuid: number | string) {
-    return this.http.put(`/project/${uuid}`, item) as Observable<object>;
+  projectUpdate(workspaceID: number, item: Project, uuid: number | string) {
+    return this.http.put(`/${workspaceID}/project/${uuid}`, item) as Observable<object>;
   }
   projectBulkUpdate: (items: Project[]) => Observable<object>;
-  projectRemove(uuid: number | string) {
-    return this.http.delete(`/project/${uuid}`) as Observable<object>;
+  projectRemove(workspaceID: number, uuid: number | string) {
+    return this.http.delete(`/${workspaceID}/project/${uuid}`) as Observable<object>;
   }
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
