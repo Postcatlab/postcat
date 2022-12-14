@@ -63,36 +63,31 @@ export class ApiTableService {
         left: true,
         type: 'input',
         columnVisible: 'fixed',
-        key: 'name',
-        width: 200
+        key: 'name'
       },
       type: {
         title: $localize`Type`,
         type: 'select',
         key: 'type',
         filterable: inArg.isEdit ? false : true,
-        disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined,
-        width: 120
+        disabledFn: inArg.format === ApiBodyType.XML ? (item, data) => data.level === 0 : undefined
       },
       required: {
         title: $localize`Required`,
         type: 'checkbox',
         key: 'required',
-        width: 100,
         filterable: inArg.isEdit ? false : true,
         enums: REQURIED_ENUMS
       },
       description: {
         title: $localize`:@@Description:Description`,
         type: 'input',
-        key: 'description',
-        width: 250
+        key: 'description'
       },
       example: {
         title: $localize`Example`,
         type: 'input',
-        key: 'example',
-        width: 150
+        key: 'example'
       },
       editOperate: {
         type: 'btnList',
@@ -108,7 +103,7 @@ export class ApiTableService {
               }).then(res => {
                 Object.assign(item.data, res);
                 if (!opts.changeFn) {
-                  console.warn('EO_WARN: Advance Sttings need changeFn is not defined');
+                  eoConsole.warn('Advance Sttings need changeFn is not defined');
                   return;
                 }
                 opts.changeFn();

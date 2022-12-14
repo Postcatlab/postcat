@@ -23,9 +23,9 @@
     ></eo-monaco-editor>
   </div>
   <div *nzModalFooter>
-    <button eo-ng-button nzType="primary" (click)="handleImport('mixin')" i18n>Replace Changed</button>
-    <button eo-ng-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
-    <button eo-ng-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
     <button eo-ng-button nzType="default" (click)="handleCancel()" i18n>Cancel</button>
+    <button eo-ng-button nzType="default" (click)="handleImport('overwrite')" i18n>Replace All</button>
+    <button eo-ng-button nzType="default" (click)="handleImport('append')" i18n>Insert at the end</button>
+    <button eo-ng-button nzType="primary" (click)="handleImport('mixin')" i18n>Replace Changed</button>
   </div>
 </nz-modal>

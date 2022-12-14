@@ -44,8 +44,7 @@ const SHARED_UI_MODULE = [
   NzDividerModule,
   NzModalModule,
   NzListModule,
-  NzPopconfirmModule,
-  NzSpinModule
+  NzPopconfirmModule
 ] as const;
 const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;
 

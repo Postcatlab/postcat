@@ -1,22 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/modules/api-shared/api-test-util.service';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import {
-  StorageRes,
-  StorageResStatus,
-} from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 
+import { RequestMethod, RequestProtocol } from '../../../../modules/api-shared/api.model';
 import { ApiTestHistory } from '../../../../shared/services/storage/index.model';
 import { ApiTestData, ApiTestHistoryFrame } from './api-test.model';
 @Injectable()
 export class ApiTestService {
-  constructor(
-    private apiService: ApiService,
-    private apiTestUtils: ApiTestUtilService,
-    private storage: StorageService
-  ) {}
+  constructor(private apiService: ApiService, private apiTestUtils: ApiTestUtilService, private storage: StorageService) {}
   async getApi({ id }): Promise<ApiTestData> {
     let result: ApiTestData = {
       projectID: 1,
@@ -34,12 +27,11 @@ export class ApiTestService {
       restParams: [],
       requestHeaders: [
         {
-          // editable:false,
           required: true,
           name: 'content-type',
-          value: 'application/json',
-        },
-      ],
+          value: 'text/plain'
+        }
+      ]
     };
     if (id) {
       const apiData = await this.apiService.get(id);
@@ -50,7 +42,7 @@ export class ApiTestService {
     return result;
   }
   getHistory(id): Promise<ApiTestHistory> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.storage.run('apiTestHistoryLoad', [id], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
@@ -61,15 +53,15 @@ export class ApiTestService {
     });
   }
   addHistory(history: ApiTestHistoryFrame | any, apiID): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.storage.run(
         'apiTestHistoryCreate',
         [
           {
             projectID: 1,
             apiDataID: apiID,
-            ...history,
-          },
+            ...history
+          }
         ],
         (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {

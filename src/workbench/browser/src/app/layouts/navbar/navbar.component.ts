@@ -70,7 +70,7 @@ export class NavbarComponent implements OnInit {
     const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
       nzContent: SettingComponent,
-      nzFooter: null
+      withoutFooter: true
     });
     this.message
       .get()

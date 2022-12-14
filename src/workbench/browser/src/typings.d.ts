@@ -12,6 +12,11 @@ declare global {
     require: any;
     angular: any;
     eo: any;
+    eoConsole: {
+      warn: (...args) => void;
+      error: (...args) => void;
+      log: (...args) => void;
+    };
     BlobBuilder: any;
     WebKitBlobBuilder: any;
     MozBlobBuilder: any;
@@ -19,5 +24,6 @@ declare global {
     monaco: typeof monaco;
     __POWERED_BY_EOAPI__: boolean;
   }
+  declare const eoConsole: typeof eoConsole;
 }
 declare const monaco: typeof MonacoEditor;

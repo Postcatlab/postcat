@@ -1,3 +1,14 @@
+window.eoConsole = {
+  log(...args) {
+    console.log('EO_LOG: ', ...args);
+  },
+  warn(...args) {
+    console.warn('%c EO_WARN:', 'background-color:yellow', ...args);
+  },
+  error(...args) {
+    console.warn('%c EO_ERROR: ', 'background-color:red', ...args);
+  }
+};
 export const uuid = (): string => Math.random().toString(36).slice(-8);
 
 // const DOMAIN_REGEX =

@@ -15,7 +15,7 @@ export class ApiTabService {
   apiTabComponent: EoTabComponent;
   // Set current tab type:'preview'|'edit' for  later judgment
   get currentComponentTab(): Partial<TabItem> {
-    return this.BASIC_TABS.find((val) => this.router.url.includes(val.pathname));
+    return this.BASIC_TABS.find(val => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
   BASIC_TABS: Array<Partial<TabItem>> = this.store.isShare
@@ -25,7 +25,7 @@ export class ApiTabService {
           module: 'test',
           type: 'edit',
           title: $localize`New Request`,
-          extends: { method: 'POST' },
+          extends: { method: 'POST' }
         },
         { pathname: '/home/share/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
         {
@@ -34,8 +34,8 @@ export class ApiTabService {
           isFixed: true,
           type: 'preview',
           extends: { method: 'WS' },
-          title: $localize`New Websocket`,
-        },
+          title: $localize`New Websocket`
+        }
       ]
     : [
         {
@@ -43,7 +43,7 @@ export class ApiTabService {
           module: 'test',
           type: 'edit',
           title: $localize`New Request`,
-          extends: { method: 'POST' },
+          extends: { method: 'POST' }
         },
         { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
         { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
@@ -53,13 +53,13 @@ export class ApiTabService {
           isFixed: true,
           type: 'edit',
           extends: { method: 'WS' },
-          title: $localize`New Websocket`,
+          title: $localize`New Websocket`
         },
-        { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' },
+        { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' }
       ];
 
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
-    this.changeContent$.pipe(debounceTime(150)).subscribe((inData) => {
+    this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterContentChanged(inData);
     });
     this.messageService.get().subscribe((inArg: Message) => {
@@ -72,8 +72,8 @@ export class ApiTabService {
         //Close those tab who has been deleted
         const closeTabIDs = this.apiTabComponent
           .getTabs()
-          .filter((val) => inArg.data.uuids.includes(Number(val.params.uuid)))
-          .map((val) => val.uuid);
+          .filter(val => inArg.data.uuids.includes(Number(val.params.uuid)))
+          .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
       }
@@ -99,27 +99,27 @@ export class ApiTabService {
     }
     const url = this.router.url;
     this.componentRef.eoOnInit = {
-      emit: (model) => {
+      emit: model => {
         this.afterContentChanged({ when: 'init', url, model });
-      },
+      }
     };
     if (this.currentComponentTab.type === 'edit') {
       this.componentRef.afterSaved = {
-        emit: (model) => {
+        emit: model => {
           this.afterContentChanged({ when: 'saved', url, model });
-        },
+        }
       };
       this.componentRef.modelChange = {
-        emit: (model) => {
+        emit: model => {
           this.changeContent$.next({ when: 'editing', url, model });
-        },
+        }
       };
     }
     if (this.currentComponentTab.module === 'test') {
       this.componentRef.afterTested = {
-        emit: (model) => {
+        emit: model => {
           this.afterContentChanged({ when: 'afterTested', url, model });
-        },
+        }
       };
     }
   }
@@ -149,7 +149,7 @@ export class ApiTabService {
 
     if (!this.componentRef?.init) {
       this.changeContent$.next({ when: 'init', url });
-      console.error('EO_ERROR:Child componentRef need has init function for reflesh data when router change');
+      eoConsole.error('Child componentRef need has init function for reflesh data when router change');
       return;
     }
     //?Why should use getCurrentTab()?
@@ -174,8 +174,8 @@ export class ApiTabService {
       hasChanged: currentTab.hasChanged,
       isLoading: false,
       extends: {
-        module: contentID,
-      },
+        module: contentID
+      }
     };
     if (model && !isEmptyObj(model)) {
       //Set title/method
@@ -188,15 +188,14 @@ export class ApiTabService {
           replaceTab.extends.method = model.request.method;
         }
         //Only Untitle request need set url to tab title
-        const originTitle = this.BASIC_TABS.find((val) => val.pathname === currentTab.pathname)?.title;
+        const originTitle = this.BASIC_TABS.find(val => val.pathname === currentTab.pathname)?.title;
         if (!model.request.uuid || (currentTab.params.uuid && currentTab.params.uuid.includes('history_'))) {
           replaceTab.title = model.request.uri || originTitle;
         } else {
           replaceTab.title = model.request.name || originTitle;
         }
       } else if (!model.uuid) {
-        replaceTab.title =
-          replaceTab.title || this.BASIC_TABS.find((val) => val.pathname === currentTab.pathname).title;
+        replaceTab.title = replaceTab.title || this.BASIC_TABS.find(val => val.pathname === currentTab.pathname).title;
       }
       //Only hasChanged edit page storage data
       if (currentTab.type === 'edit') {
@@ -226,8 +225,8 @@ export class ApiTabService {
         replaceTab.extends.hasChanged[contentID] = currentHasChanged;
         // Editiable tab  share hasChanged data
         if (!currentHasChanged && currentTab.extends?.hasChanged) {
-          const otherEditableTabs = this.BASIC_TABS.filter((val) => val.type === 'edit' && val.module !== contentID);
-          currentHasChanged = otherEditableTabs.some((tabItem) => currentTab.extends?.hasChanged[tabItem.module]);
+          const otherEditableTabs = this.BASIC_TABS.filter(val => val.type === 'edit' && val.module !== contentID);
+          currentHasChanged = otherEditableTabs.some(tabItem => currentTab.extends?.hasChanged[tabItem.module]);
         }
         replaceTab.hasChanged = currentHasChanged;
         // Set storage
@@ -261,12 +260,12 @@ export class ApiTabService {
    */
   afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
     if (!this.apiTabComponent) {
-      console.warn(`EO_WARNING[api-tab]: apiTabComponent hasn't init yet!`);
+      eoConsole.warn(`ING[api-tab]: apiTabComponent hasn't init yet!`);
       return;
     }
     let currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
     if (!currentTab) {
-      console.warn(`EO_WARNING[api-tab]: has't find the tab fit child component ,url:${inData.url}`);
+      eoConsole.warn(`ING[api-tab]: has't find the tab fit child component ,url:${inData.url}`);
       return;
     }
     if (inData?.when === 'afterTested') {
@@ -281,7 +280,7 @@ export class ApiTabService {
     Object.values(tabsByID).forEach((val: TabItem) => {
       //Delete gio key
       if (val.params) {
-        ['utm_campaign', 'utm_content', 'utm_source'].forEach((keyName) => {
+        ['utm_campaign', 'utm_content', 'utm_source'].forEach(keyName => {
           delete val.params[keyName];
         });
       }
@@ -289,7 +288,7 @@ export class ApiTabService {
       if (val.module === 'test' && val.content?.test?.testResult) {
         val.content.test.testResult = {
           request: {},
-          response: {},
+          response: {}
         };
       }
     });

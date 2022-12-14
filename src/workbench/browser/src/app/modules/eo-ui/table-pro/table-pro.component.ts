@@ -114,8 +114,8 @@ export class EoTableProComponent implements OnInit, OnChanges {
         if (!this.nzData) {
           return;
         }
-        if (!this.nzDataItem || !this.setting.primaryKey) {
-          console.error('EO_ERROR: Please add nzDataItem and setting.primaryKey');
+        if (!(this.nzDataItem && this.setting.primaryKey)) {
+          eoConsole.error('Please add nzDataItem and setting.primaryKey');
           return;
         }
         if (!this.nzData.length || this.nzData[this.nzData.length - 1][this.setting.primaryKey]) {
@@ -155,7 +155,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     }
     if (btnItem.fnName) {
       if (!apis[btnItem.fnName]) {
-        console.error(`EO_ERROR: Can't find ${btnItem.fnName} function`);
+        eoConsole.error(`: Can't find ${btnItem.fnName} function`);
         return;
       }
       switch (btnItem.fnName) {
@@ -221,7 +221,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     if (this.setting.rowSortable && this.columns[0].type !== 'sort') {
       theaderConf.push({
         resizeable: false,
-        width: this.columns.length * 7
+        width: 40
       });
       tbodyConf.push({
         type: 'sort'
@@ -234,7 +234,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     }
     if (this.setting.toolButton.columnVisible) {
       if (!this.setting.id) {
-        console.warn('EO_WARN[eo-table-pro]: Lack of setting.id, the storage key for table columnVisible may repeat!');
+        eoConsole.warn('[eo-table-pro]: Lack of setting.id, the storage key for table columnVisible may repeat!');
       }
       this.COLUMN_VISIBLE_KEY = this.setting.id || `TABLE_COLUMN_VISIBLE_${this.DEFAULT_ID}`;
       this.columnVisibleStatus = attempt(() => JSON.parse(window.localStorage.getItem(this.COLUMN_VISIBLE_KEY))) || {};
@@ -330,14 +330,14 @@ export class EoTableProComponent implements OnInit, OnChanges {
       }
       //Set resizeable
       if (col.type === 'btnList') {
-        header.width = col.width || body.btns.length * 20 + 50;
+        // header.width = col.width || body.btns.length * 20 + 50;
       } else if (col.width) {
         header.width = col.width;
       }
       //Set filter
       if (col.filterable) {
         if (this.setting.isEdit) {
-          console.warn('EO_WARN[eo-table-pro]: editable table use filterable may perform badly');
+          eoConsole.warn('[eo-table-pro]: editable table use filterable may perform badly');
         }
         header.filterMultiple = true;
         //Use custom filter
@@ -384,7 +384,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       //Set Sort
       if (col.sortable) {
         if (this.setting.isEdit) {
-          console.warn('EO_WARN[eo-table-pro]: editable table use sortable may perform poorly');
+          eoConsole.warn('[eo-table-pro]: editable table use sortable may perform poorly');
         }
         header.showSort = true;
         header.sortDirections = ['ascend', 'descend', null];
@@ -408,13 +408,15 @@ export class EoTableProComponent implements OnInit, OnChanges {
           body.showFn = header.showFn = item => this.columnVisibleStatus[colID];
         }
       }
-
+      // if (!header.width) {
+      //   eoConsole.warn(`Width not find: ${colID}`);
+      // }
       theaderConf.push(header);
       tbodyConf.push(body);
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    // console.log(this.theadConf, this.tbodyConf);
+    console.log(this.theadConf, this.tbodyConf);
   }
   private deleteButtonShowFn(item, index, apis) {
     //The last row can't be deleted

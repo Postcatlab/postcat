@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EoNgFeedbackDrawerService } from 'eo-ng-feedback';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -12,7 +11,7 @@ import { SidebarService } from '../sidebar/sidebar.service';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit, OnDestroy {
+export class ToolbarComponent implements OnDestroy {
   sideBarCollapsed: boolean;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(public sidebar: SidebarService, private modal: ModalService) {
@@ -34,10 +33,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       nzComponentParams: {
         selectedModule: 'eoapi-theme'
       },
-      nzFooter: null
+      withoutFooter: true
     });
   }
-  ngOnInit(): void {}
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
