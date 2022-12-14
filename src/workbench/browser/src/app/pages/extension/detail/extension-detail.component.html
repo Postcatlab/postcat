@@ -1,38 +1,34 @@
 <div class="h-full py-3 extension-detail" *ngIf="extensionDetail">
-  <div class="sticky top-0 z-50 px-2">
-    <div class="pb-3 flex justify-between h-[36px]">
-      <div class="flex items-center">
-        <a eo-ng-button nzType="link" (click)="backToList()">
-          <eo-iconpark-icon name="left" size="16px"></eo-iconpark-icon><span i18n>Back</span>
-        </a>
-        <nz-divider nzType="vertical"></nz-divider>
+  <div class="top-0 z-50 px-2">
+    <div class="pb-3 h-[36px]">
+      <a eo-ng-button nzType="link" (click)="backToList()" class="flex">
+        <eo-iconpark-icon name="left" size="16px"></eo-iconpark-icon><span i18n>Back</span>
+      </a>
+      <div class="flex items-center justify-between">
         <div class="mr-2">
           <nz-avatar nzSize="small" class="!w-[20px] !h-[20px]" [nzShape]="'square'" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
+          <span class="font-bold text-[14px]">{{ extensionDetail.title || extensionDetail.moduleName }}</span>
         </div>
-        <span class="font-bold text-[14px]">{{ extensionDetail.title || extensionDetail.moduleName }}</span>
         <ng-container *ngIf="extensionDetail?.installed">
           <eo-ng-switch [(ngModel)]="isEnable" nzSize="small" class="ml-2.5" (ngModelChange)="handleEnableExtension($event)">
           </eo-ng-switch>
         </ng-container>
+        <button
+          eo-ng-button
+          [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
+          [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
+          class="mt-[8px]"
+          [nzLoading]="isOperating"
+          (click)="handleInstall()"
+        >
+          <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
+          <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
+        </button>
       </div>
     </div>
   </div>
   <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
-    <div>
-      <button
-        eo-ng-button
-        [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
-        [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
-        class="mt-[8px]"
-        [nzLoading]="isOperating"
-        (click)="handleInstall()"
-      >
-        <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
-        <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
-      </button>
-    </div>
-
     <eo-ng-tabset
       [(nzSelectedIndex)]="nzSelectedIndex"
       [nzAnimated]="false"

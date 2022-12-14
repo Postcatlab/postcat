@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { GroupTreeItem } from 'eo/workbench/browser/src/app/shared/models';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { observable, makeObservable, computed, action } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-import { filter, Subject } from 'rxjs';
 
 import { ExtensionGroupType } from './extension.model';
 import { ExtensionService } from './extension.service';
@@ -51,26 +49,15 @@ export class ExtensionComponent implements OnInit {
     return this.extensionName;
   }
 
-  constructor(
-    public extensionService: ExtensionService,
-    private router: Router,
-    public electron: ElectronService,
-    private route: ActivatedRoute,
-    private messageService: MessageService
-  ) {}
+  constructor(public extensionService: ExtensionService, public electron: ElectronService, private messageService: MessageService) {}
 
   clickGroup(id) {
     this.selectGroup = id;
-    this.router
-      .navigate(['home/extension/list'], {
-        queryParams: { type: id }
-      })
-      .finally();
+    this.selectExtension('');
   }
   ngOnInit(): void {
     makeObservable(this);
-    this.watchRouterChange();
-    this.setSelectedKeys();
+    this.nzSelectedKeys = [this.fixedTreeNode[0].key];
   }
 
   selectExtension(name = '') {
@@ -79,12 +66,6 @@ export class ExtensionComponent implements OnInit {
 
   onSearchChange(keyword) {
     this.messageService.send({ type: 'searchPluginByKeyword', data: keyword });
-  }
-
-  private watchRouterChange() {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.setSelectedKeys();
-    });
   }
 
   /**
@@ -104,14 +85,6 @@ export class ExtensionComponent implements OnInit {
         this.clickGroup(event.node.key);
         break;
       }
-    }
-  }
-
-  private setSelectedKeys() {
-    if (this.route.snapshot.queryParams.type) {
-      this.nzSelectedKeys = [this.route.snapshot.queryParams.type];
-    } else {
-      this.nzSelectedKeys = [this.fixedTreeNode[0].key];
     }
   }
 

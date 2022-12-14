@@ -1,8 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
 
 import { ExtensionGroupType } from '../extension.model';
@@ -35,9 +34,7 @@ export class ExtensionListComponent implements OnInit {
     public extensionService: ExtensionService,
     public electron: ElectronService,
     private route: ActivatedRoute,
-    private router: Router,
-    private messageService: MessageService,
-    private modal: NzModalService
+    private messageService: MessageService
   ) {
     this.type = this.route.snapshot.queryParams.type;
     this.seachChanged$.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async keyword => {
