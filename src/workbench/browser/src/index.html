@@ -45,16 +45,11 @@
   <body eo-drop-root>
     <eo-root></eo-root>
     <div id="mask"></div>
-    <div id="first-screen-loading-container" class="loading_container f_column">
+    <div id="first-screen-loading-container" class="loading-container">
       <img src="assets/images/logo.svg" />
-      <div class="mt-2.5 ant-spin ant-spin-spinning ant-spin-lg">
-        <span class="ant-spin-dot ant-spin-dot-spin ng-star-inserted">
-          <i class="ant-spin-dot-item"></i>
-          <i class="ant-spin-dot-item"></i>
-          <i class="ant-spin-dot-item"></i>
-          <i class="ant-spin-dot-item"></i>
-        </span>
-      </div>
+      <svg class="iconpark-icon loading-icon">
+        <use href="#loading"></use>
+      </svg>
     </div>
   </body>
 
@@ -69,21 +64,26 @@
       display: none;
     }
 
-    .loading_container {
+    .loading-container {
       position: absolute;
       top: 40%;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
+      align-items: center;
     }
 
-    .loading_container .ant-spin-dot-item {
-      background-color: #00785a;
+    .loading-container img {
+      width: 100px;
     }
 
-    .loading_container img {
-      width: 200px;
+    .loading-container .iconpark-icon.loading-icon {
+      margin-top: 15px;
+      height: 25px;
+      width: 25px;
+      vertical-align: middle;
+      animation: loadingCircle 1s infinite linear;
     }
   </style>
 </html>

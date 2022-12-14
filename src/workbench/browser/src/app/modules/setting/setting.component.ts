@@ -1,30 +1,19 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { AfterViewInit, Component, ComponentRef, Input, OnDestroy, OnInit, QueryList, ViewChildren, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { AccountComponent } from 'eo/workbench/browser/src/app/modules/setting/common/account.component';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
-import { AccountComponent } from 'eo/workbench/browser/src/app/pages/account.component';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { debounce, eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
-import { NzTreeFlatDataSource, NzTreeFlattener } from 'ng-zorro-antd/tree-view';
 
 import { AboutComponent, DataStorageComponent, LanguageSwticherComponent, SelectThemeComponent } from './common';
 
 interface TreeNode {
-  name: string;
-  moduleID?: string;
+  title: string;
+  id?: string;
   ifShow?: () => boolean;
+  comp?: any;
   disabled?: boolean;
-  children?: TreeNode[];
   configuration?: any[];
-}
-
-interface FlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-  disabled: boolean;
 }
 
 @Component({
@@ -32,34 +21,14 @@ interface FlatNode {
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.scss']
 })
-export class SettingComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SettingComponent implements OnInit, OnDestroy {
   @Input() selectedModule: string;
-  @ViewChildren('options', { read: ViewContainerRef }) options: QueryList<ViewContainerRef>;
-  componentRefs: Array<ComponentRef<any>>;
+  @ViewChild('options', { read: ViewContainerRef, static: true }) options: ViewContainerRef;
+  private componentRefs: Array<ComponentRef<any>> = [];
   extensitonConfigurations: any[];
   objectKeys = Object.keys;
+  selectedTabIndex;
   isClick = false;
-  private transformer = (node: TreeNode, level: number): FlatNode & TreeNode => ({
-    ...node,
-    expandable: !!node.children && node.children.length > 0,
-    name: node.name,
-    level,
-    disabled: !!node.disabled
-  });
-  selectListSelection = new SelectionModel<FlatNode & TreeNode>();
-  treeControl: any = new FlatTreeControl<FlatNode & TreeNode>(
-    node => node.level,
-    node => node.expandable
-  );
-
-  treeFlattener = new NzTreeFlattener(
-    this.transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node.children
-  );
-
-  dataSource = new NzTreeFlatDataSource(this.treeControl, this.treeFlattener);
   /** current configuration */
   currentConfiguration = [];
   /** current active configure */
@@ -74,164 +43,70 @@ export class SettingComponent implements OnInit, AfterViewInit, OnDestroy {
   get settings() {
     return this.$settings;
   }
-  treeNodes = [
+  treeNodes: TreeNode[] = [
     {
-      name: $localize`:@@Account:Account`,
-      moduleID: 'eoapi-account',
-      ifShow: () => this.store.isLogin,
-      comp: AccountComponent,
-      children: [
-        {
-          name: $localize`:@@Account:Username`,
-          moduleID: 'eoapi-account-username'
-        },
-        {
-          name: $localize`Password`,
-          moduleID: 'eoapi-account-password'
-        }
-      ]
+      title: $localize`:@@Account:Account`,
+      id: 'eoapi-account',
+      ifShow: () => {
+        return this.store.isLogin;
+      },
+      comp: AccountComponent
     },
     {
-      name: $localize`:@@Theme:Theme`,
-      moduleID: 'eoapi-theme',
+      title: $localize`:@@Theme:Theme`,
+      id: 'eoapi-theme',
       comp: SelectThemeComponent
     },
     {
-      name: $localize`:@@Cloud:Cloud Storage`,
-      moduleID: 'eoapi-common',
+      title: $localize`:@@Cloud:Cloud Storage`,
+      id: 'eoapi-common',
       comp: DataStorageComponent,
       ifShow: () => !this.webService.isWeb
     },
     {
-      name: $localize`:@@Language:Language`,
-      moduleID: 'eoapi-language',
+      title: $localize`:@@Language:Language`,
+      id: 'eoapi-language',
       comp: LanguageSwticherComponent
     },
     {
-      name: $localize`About`,
-      moduleID: 'eoapi-about',
+      title: $localize`About`,
+      id: 'eoapi-about',
       comp: AboutComponent
     }
   ];
   /** local configure */
   localSettings = {};
   validateForm!: FormGroup;
-  get selected() {
-    return this.selectListSelection.selected.at(0)?.moduleID;
-  }
 
   constructor(private settingService: SettingService, public store: StoreService, public webService: WebService) {}
 
   ngOnInit(): void {
     this.init();
   }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const options = this.options.toArray();
-      this.componentRefs = this.treeNodes
-        .filter(item => !item.ifShow || item.ifShow?.())
-        .map((item, index) => {
-          const componentRef = options[index]?.createComponent<any>(item.comp as any);
-          componentRef.location.nativeElement.id = item.moduleID;
-          componentRef.instance.model = this.settings;
-          componentRef.instance.modelChange?.subscribe(data => {
-            Object.assign(this.settings, data);
-            this.handleSave();
-          });
-          // console.log('componentRef', componentRef);
-          return componentRef;
-        });
-    });
-  }
-
-  ngOnDestroy(): void {
+  updateView() {
+    let selectModule = this.treeNodes.find(val => val.id === this.selectedModule);
     this.componentRefs.forEach(item => item.destroy());
-  }
-
-  hasChild = (_: number, node: FlatNode): boolean => node.expandable;
-
-  /**
-   * Get the title of the module
-   *
-   * @param module
-   * @returns
-   */
-  getModuleTitle(module: any): string {
-    const title = module?.moduleName ?? module?.title;
-    return title;
-  }
-
-  handleScroll = debounce((e: Event) => {
-    if (this.isClick) {
-      return;
-    }
-    const target = e.target as HTMLDivElement;
-    const treeNodes = this.dataSource._flattenedData.value;
-    treeNodes.some(node => {
-      const el = target.querySelector(`#${node.moduleID}`) as HTMLDivElement;
-      if (el && el.offsetTop > target.scrollTop) {
-        this.selectListSelection.select(node);
-        return true;
-      }
+    const componentRef = this.options.createComponent<any>(selectModule.comp as any);
+    componentRef.location.nativeElement.id = selectModule.id;
+    componentRef.instance.model = this.settings;
+    componentRef.instance.modelChange?.subscribe(data => {
+      Object.assign(this.settings, data);
+      this.handleSave();
     });
-  }, 50);
-  selectModule(node) {
-    this.isClick = true;
-    this.currentConfiguration = node.configuration || [];
-    // console.log('this.currentConfiguration', this.currentConfiguration);
-    this.selectListSelection.select(node);
-    const target = document.querySelector(`#${node.moduleID}`);
-    target?.scrollIntoView();
-    setTimeout(() => {
-      this.isClick = false;
-    }, 800);
+    this.componentRefs.push(componentRef);
+    console.log(this.componentRefs, this.selectedModule, this.options);
   }
-  private initTree() {
-    // Recursively generate the setup tree
-    const generateTreeData = (configurations = []) =>
-      [].concat(configurations).reduce<TreeNode[]>((prev, curr) => {
-        if (Array.isArray(curr)) {
-          return prev.concat(generateTreeData(curr));
-        }
-        const treeItem: TreeNode = {
-          name: curr.title,
-          moduleID: curr.moduleID,
-          configuration: [].concat(curr)
-        };
-        return prev.concat(treeItem);
-      }, []);
-    // All settings
-    const treeData = eoDeepCopy(
-      this.treeNodes
-        .map(({ comp, ifShow, ...rest }) => rest)
-        .filter(val => {
-          switch (val.moduleID) {
-            case 'eoapi-account': {
-              if (!this.store.isLogin) {
-                return false;
-              }
-            }
-          }
-          return true;
-        })
-    );
-    this.dataSource.setData(treeData);
-    this.treeControl.expandAll();
-
-    // The first item is selected by default
-    const nodeIndex = this.treeControl.dataNodes.findIndex(node => node.moduleID === this.selectedModule);
-    if (this.selectedModule && nodeIndex === -1) {
-      eoConsole.error(`[eo-setting]: The selected module [${this.selectModule}] does not exist`);
-    }
-    if (nodeIndex === -1) {
-      this.selectModule(this.treeControl.dataNodes.at(0));
-    } else {
-      //!After view init for scrollIntoView
-      setTimeout(() => {
-        this.selectModule(this.treeControl.dataNodes.at(nodeIndex));
-      }, 300);
-    }
+  selectModule(id) {
+    this.selectedModule = id;
+    this.selectedTabIndex = this.treeNodes.filter(node => this.checkItemShow(node)).findIndex(node => node.id === id);
+    this.updateView();
+  }
+  private handleSave = () => {
+    this.settingService.saveSetting(this.settings);
+    window.eo?.saveSettings?.({ ...this.settings });
+  };
+  checkItemShow(node) {
+    return !node.ifShow || node.ifShow();
   }
   /**
    * Parse the configuration information of all modules
@@ -244,18 +119,23 @@ export class SettingComponent implements OnInit, AfterViewInit, OnDestroy {
       .map(n => {
         const configuration = n.features.configuration;
         if (Array.isArray(configuration)) {
-          configuration.forEach(m => (m.moduleID ??= n.moduleID));
+          configuration.forEach(m => (m.id ??= n.id));
         } else {
-          configuration.moduleID ??= n.moduleID;
+          configuration.id ??= n.id;
         }
         return configuration;
       });
 
-    this.initTree();
+    // The first item is selected by default
+    let node = this.treeNodes.find(node => node.id === this.selectedModule && this.checkItemShow(node));
+    if (this.selectedModule && !node) {
+      eoConsole.error(`[eo-setting]: The selected module [${this.selectModule}] does not exist`);
+    }
+    node = node || this.treeNodes.find(node => this.checkItemShow(node));
+    this.selectModule(node.id);
   }
 
-  handleSave = () => {
-    this.settingService.saveSetting(this.settings);
-    window.eo?.saveSettings?.({ ...this.settings });
-  };
+  ngOnDestroy(): void {
+    this.componentRefs.forEach(item => item.destroy());
+  }
 }

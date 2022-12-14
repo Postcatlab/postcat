@@ -1,11 +1,13 @@
-@import '../group/tree/api-group-tree.component.scss';
+@import '../group/tree/api-group-tree.component';
 
 .history-title {
   border-bottom: 1px solid #eee;
 }
+
 .history-body {
-  height: calc(100vh - var(--NAVBAR_HEIGHT) - 40px - 30px);
+  height: calc(var(--body-height) - 40px - 42px);
 }
+
 :host {
   ::ng-deep nz-tree-node-title {
     width: 0 !important;

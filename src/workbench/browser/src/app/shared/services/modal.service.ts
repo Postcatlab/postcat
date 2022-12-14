@@ -18,7 +18,7 @@ export class ModalService {
       this.modal.closeAll();
     });
   }
-  create = inOpts => {
+  create = (inOpts: ModalOptions) => {
     console.log('inOpts', inOpts);
     const modalOpts: ModalOptions = {
       nzTitle: null,

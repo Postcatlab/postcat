@@ -59,9 +59,7 @@ nz-divider {
 
   router-outlet + * {
     display: block;
-    height: calc(
-      100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - var(--PAGE_TABS_HEIGHT)
-    );
+    height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT));
     overflow: auto;
   }
 
@@ -71,10 +69,7 @@ nz-divider {
 
   .has_tab_page {
     router-outlet + * {
-      height: calc(
-        100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) -
-          var(--PAGE_TABS_HEIGHT) - var(--PAGE_INSIDE_TABS_HEIGHT)
-      );
+      height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT) - var(--PAGE_INSIDE_TABS_HEIGHT));
     }
   }
 
@@ -98,6 +93,10 @@ nz-divider {
         margin: 0;
       }
     }
+  }
+
+  .group-tabset {
+    height: calc(var(--body-height));
   }
 
   .share-group-tabset {

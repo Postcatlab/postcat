@@ -1,23 +1,25 @@
 require('@bqy/node-module-alias/register');
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
-import { EoUpdater } from './updater';
-import * as path from 'path';
-import * as os from 'os';
-import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
+import { LanguageService } from 'eo/app/electron-main/language.service';
+import { MockServer } from 'eo/platform/node/mock-server';
 import { ModuleManagerInterface } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import portfinder from 'portfinder';
+import { ConfigurationInterface } from 'src/platform/node/configuration';
+
+import Configuration from '../../platform/node/configuration/lib';
 import { processEnv } from '../../platform/node/constant';
+import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
 import { proxyOpenExternal } from '../../shared/common/browserView';
 import { UnitWorkerModule } from '../../workbench/node/electron/main';
-import Configuration from '../../platform/node/configuration/lib';
-import { ConfigurationInterface } from 'src/platform/node/configuration';
-import { MockServer } from 'eo/platform/node/mock-server';
 import socket from '../../workbench/node/server/socketio';
-import { LanguageService } from 'eo/app/electron-main/language.service';
-import portfinder from 'portfinder';
+import { EoUpdater } from './updater';
+
+import * as os from 'os';
+import * as path from 'path';
 
 export const subView = {
   appView: null,
-  mainView: null,
+  mainView: null
 };
 
 // 获取单实例锁
@@ -47,7 +49,7 @@ let websocketPort = 13928;
 const moduleManager: ModuleManagerInterface = new ModuleManager();
 const configuration: ConfigurationInterface = Configuration();
 global.shareObject = {
-  storageResult: null,
+  storageResult: null
 };
 let eoBrowserWindow: EoBrowserWindow = null;
 class EoBrowserWindow {
@@ -62,14 +64,14 @@ class EoBrowserWindow {
   // Start unit test function
   private startUnitTest() {
     UnitWorkerModule.setup({
-      view: this.win,
+      view: this.win
     });
   }
   //Watch win event
   private watch() {
     // Reload page when load page url error
     this.win.webContents.on('did-fail-load', (event, errorCode) => {
-      console.error('did-fail-load', event,errorCode);
+      console.error('did-fail-load', event, errorCode);
       // this.loadURL();
     });
     this.win.on('closed', () => {
@@ -84,14 +86,11 @@ class EoBrowserWindow {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(
-            __dirname,
-            `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`
-          )}`;
+        : `file://${path.join(__dirname, `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`)}`;
     this.win.loadURL(file);
     if (['development'].includes(processEnv)) {
       this.win.webContents.openDevTools({
-        mode: 'undocked',
+        mode: 'undocked'
       });
     }
   }
@@ -103,8 +102,6 @@ class EoBrowserWindow {
     this.win = new BrowserWindow({
       width,
       height,
-      minWidth: Math.floor(size.width * 0.5),
-      minHeight: Math.floor(size.height * 0.5),
       useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
       frame: os.type() === 'Darwin' ? true : false, //mac use default frame
       webPreferences: {
@@ -112,8 +109,8 @@ class EoBrowserWindow {
         preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
         nodeIntegration: true,
         allowRunningInsecureContent: processEnv === 'development' ? true : false,
-        contextIsolation: false, // false if you want to run e2e test with Spectron
-      },
+        contextIsolation: false // false if you want to run e2e test with Spectron
+      }
     });
 
     proxyOpenExternal(this.win);
@@ -186,7 +183,7 @@ try {
     }
   });
   // 这里可以封装成类+方法匹配调用，不用多个if else
-  ['on', 'handle'].forEach((eventName) =>
+  ['on', 'handle'].forEach(eventName =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
       let returnValue: any;
       if (arg.action === 'getModules') {
@@ -232,11 +229,11 @@ try {
       return returnValue;
     })
   );
-  ipcMain.on('get-system-info', (event) => {
+  ipcMain.on('get-system-info', event => {
     const systemInfo = {
       homeDir: path.dirname(app.getPath('exe')),
       ...process.versions,
-      os: `${os.type()} ${os.arch()} ${os.release()}`,
+      os: `${os.type()} ${os.arch()} ${os.release()}`
     };
     event.returnValue = systemInfo;
   });

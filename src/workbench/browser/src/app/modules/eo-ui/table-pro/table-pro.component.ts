@@ -330,7 +330,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       }
       //Set resizeable
       if (col.type === 'btnList') {
-        // header.width = col.width || body.btns.length * 20 + 50;
+        header.width = col.width || body.btns.length * 20 + 50;
       } else if (col.width) {
         header.width = col.width;
       }
@@ -416,7 +416,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     });
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
-    console.log(this.theadConf, this.tbodyConf);
+    // console.log(this.theadConf, this.tbodyConf);
   }
   private deleteButtonShowFn(item, index, apis) {
     //The last row can't be deleted

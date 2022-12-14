@@ -41,6 +41,7 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    // this.openSettingModal();
     this.message
       .get()
       .pipe(distinct(({ type }) => type, interval(400)))
@@ -69,7 +70,11 @@ export class NavbarComponent implements OnInit {
   openSettingModal() {
     const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
+      nzTitle: $localize`Setting`,
       nzContent: SettingComponent,
+      // nzComponentParams: {
+      //   selectedModule: 'eoapi-about'
+      // },
       withoutFooter: true
     });
     this.message

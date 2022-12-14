@@ -9,7 +9,13 @@
     (nzResizeEnd)="onResizeEnd()"
   >
     <nz-content class="api-container-tabs">
-      <eo-ng-tabset [ngClass]="{ 'share-group-tabset': store.isShare }" nzCentered eo-ng-tabset [(nzSelectedIndex)]="tabsIndex">
+      <eo-ng-tabset
+        class="group-tabset"
+        [ngClass]="{ 'share-group-tabset': store.isShare }"
+        nzCentered
+        eo-ng-tabset
+        [(nzSelectedIndex)]="tabsIndex"
+      >
         <eo-ng-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
             <span

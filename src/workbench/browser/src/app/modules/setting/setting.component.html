@@ -1,40 +1,10 @@
-<section class="container">
-  <div class="tree-view">
-    <img src="assets/images/logo-text.svg" class="h-[40px]" />
-    <nz-tree-view [nzTreeControl]="treeControl" [nzDataSource]="dataSource" [nzBlockNode]="true">
-      <nz-tree-node *nzTreeNodeDef="let node" nzTreeNodePadding>
-        <nz-tree-node-toggle nzTreeNodeNoopToggle></nz-tree-node-toggle>
-        <nz-tree-node-option
-          [nzDisabled]="node.disabled"
-          [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)"
-        >
-          {{ node.name }}
-        </nz-tree-node-option>
-      </nz-tree-node>
-
-      <nz-tree-node *nzTreeNodeDef="let node; when: hasChild" nzTreeNodePadding>
-        <nz-tree-node-toggle>
-          <i nz-icon nzType="caret-down" nzTreeNodeToggleRotateIcon></i>
-        </nz-tree-node-toggle>
-        <nz-tree-node-option
-          [nzDisabled]="node.disabled"
-          [nzSelected]="selectListSelection.isSelected(node)"
-          (nzClick)="selectModule(node)"
-        >
-          {{ node.name }}
-        </nz-tree-node-option>
-      </nz-tree-node>
-    </nz-tree-view>
-  </div>
-  <nz-divider nzType="vertical" class="divider"></nz-divider>
-  <div (scroll)="handleScroll($event)" class="overflow-auto setting-container scroll-smooth mt-[37px] pr-[8px]">
-    <ng-container *ngFor="let item of treeNodes; last as isLast">
-      <ng-container *ngIf="!item.ifShow || item.ifShow?.()">
-        <div class="mb-2 text-lg font-bold" i18n>{{ item.name }}</div>
-        <ng-template #options></ng-template>
-        <nz-divider *ngIf="!isLast"></nz-divider>
-      </ng-container>
-    </ng-container>
+<section class="flex flex-col">
+  <eo-ng-tabset class="mx-[5px]" [nzSelectedIndex]="selectedTabIndex">
+    <div *ngFor="let tab of treeNodes">
+      <eo-ng-tab [nzTitle]="tab.title" *ngIf="checkItemShow(tab)" (nzClick)="this.selectModule(tab.id)"> </eo-ng-tab>
+    </div>
+  </eo-ng-tabset>
+  <div class="px-[15px] mt-[15px]">
+    <ng-template #options></ng-template>
   </div>
 </section>

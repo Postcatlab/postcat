@@ -1,46 +1,36 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ThemeService } from '../../../../core/services/theme.service';
 import { APPEARANCE, THEMES } from './theme.model';
 
 @Component({
   selector: 'eo-select-theme',
-  template: `<p class="mb-[5px] mt-[15px] font-bold">Appearance</p>
-    <button
-      eo-ng-button
-      nzType="text"
-      eoNgFeedbackTooltip
-      [nzTooltipTitle]="option.title"
-      *ngFor="let option of this.APPEARANCE"
-      (click)="theme.changeAppearance(option.value)"
-      [ngClass]="{ 'ant-btn-active': theme.appearance === option.value }"
+  template: `<div class="grid grid-cols-4 gap-2.5	rounded">
+    <div
+      class="cursor-pointer theme-container"
+      [ngClass]="{ 'theme-container-active': theme.mainColor === option.value }"
+      (click)="theme.changeColor(option.value)"
+      *ngFor="let option of THEMES"
     >
-      <eo-iconpark-icon [name]="option.icon"></eo-iconpark-icon>
-    </button>
-    <!-- theme -->
-    <p class="mb-[5px] mt-[15px] font-bold" nzTypography>Accept color</p>
-    <eo-ng-radio-group
-      nzBorderless
-      class="w-full flex"
-      [ngModel]="theme.mainColor"
-      (ngModelChange)="theme.changeColor($event)"
-    >
-      <label
-        [style.border]="'0px solid' + option.color"
-        class="mx-[5px]"
-        *ngFor="let option of this.THEMES"
-        eo-ng-radio
-        [nzValue]="option.value"
-      >
-      </label>
-    </eo-ng-radio-group>`,
-  styleUrls: ['./select-theme.component.scss'],
+      <div class="border-all theme-block">
+        <header class="navbar h-[15px]" [style.background]="option.navBackgroud"></header>
+        <section class="flex h-[35px]">
+          <div class="sidebar w-[35px]" [style.background]="option.sidebarBackground"></div>
+          <div class="content flex-1 flex items-center justify-center" [style.background]="option.contentBackground">
+            <div class="main-color w-[30px]  h-[15px]" [style.background]="option.primaryColor"></div>
+          </div>
+        </section>
+      </div>
+      <div class="flex items-center justify-center mt-[10px]">
+        <!-- <eo-iconpark-icon class="mr-[5px]" *ngIf="theme.mainColor === option.value" name="check" size="10"></eo-iconpark-icon> -->
+        <p class="">{{ option.title }}</p>
+      </div>
+    </div>
+  </div>`,
+  styleUrls: ['./select-theme.component.scss']
 })
-export class SelectThemeComponent implements OnInit, OnDestroy {
+export class SelectThemeComponent {
   THEMES = THEMES;
   APPEARANCE = APPEARANCE;
   constructor(public theme: ThemeService) {}
-  ngOnInit(): void {}
-
-  ngOnDestroy() {}
 }

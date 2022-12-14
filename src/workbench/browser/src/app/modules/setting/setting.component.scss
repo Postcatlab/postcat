@@ -1,38 +1,11 @@
-.container {
-  display: grid;
-  grid-template-columns: minmax(200px, min-content) 25px auto;
-  height: 60vh;
-  .divider {
-    height: 100%;
-  }
-}
-
-.ant-tree .ant-tree-treenode {
-  padding: 0;
-  margin: 2px 0;
-  border-radius: 3px;
-  transition: all 0.3s, border 0s, line-height 0s, box-shadow 0s;
-}
-.ant-tree-treenode-selected {
-  background-color: var(--NAVBAR_BTN_BG);
-}
-.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
-  background-color: transparent;
-  transition: none;
-}
-.ant-tree .ant-tree-node-content-wrapper {
-  border-radius: 0;
-  &.ant-tree-node-selected {
-    opacity: 0.8;
-  }
-}
-
- ::ng-deep {
+::ng-deep {
   .eo-setting-modal {
-    width: 70% !important;
-    .ant-modal-body{
-      padding: 24px 6px;
-    }
+    width: 600px !important;
 
+    .ant-modal-body {
+      padding: 0 0 15px;
+      min-height: 300px;
+      border-radius: var(--DEFAULT_BORDER_RADIUS);
+    }
   }
 }

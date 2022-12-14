@@ -26,7 +26,7 @@ const COMPONENTS = [
   ApiEditBodyComponent,
   ApiEditQueryComponent,
   ApiEditRestComponent,
-  ApiParamsExtraSettingComponent,
+  ApiParamsExtraSettingComponent
 ];
 @NgModule({
   declarations: [...COMPONENTS],
@@ -34,8 +34,8 @@ const COMPONENTS = [
     RouterModule.forChild([
       {
         path: '',
-        component: ApiEditComponent,
-      },
+        component: ApiEditComponent
+      }
     ]),
     EoMonacoEditorModule,
     FormsModule,
@@ -43,8 +43,8 @@ const COMPONENTS = [
     CommonModule,
     ...NZ_COMPONETS,
     ApiSharedModule,
-    SharedModule,
+    SharedModule
   ],
-  providers: [ApiEditUtilService, ApiEditService],
+  providers: [ApiEditUtilService, ApiEditService]
 })
 export class ApiEditModule {}

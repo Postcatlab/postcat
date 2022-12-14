@@ -1,11 +1,7 @@
 <div class="flex items-center justify-between eo-navbar">
   <div class="flex">
-    <img loading="lazy" class="logo" src="assets/images/{{ theme.appearance === 'dark' ? 'logo-white.svg' : 'logo.svg' }}" />
-    <!-- star -->
-    <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center electron-can-be-click">
-      <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
-    </a>
-    <eo-select-workspace class="flex electron-can-be-click" *ngIf="!store.isShare"></eo-select-workspace>
+    <img loading="lazy" class="logo" src="assets/images/{{ theme.appearance === 'dark' ? 'logo.svg' : 'logo.svg' }}" />
+    <eo-select-workspace class="flex ml-[15px] electron-can-be-click" *ngIf="!store.isShare"></eo-select-workspace>
   </div>
 
   <div class="flex items-center electron-can-be-click">

@@ -20,15 +20,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
         </nz-form-item>
 
         <section class="">
-          <button
-            eo-ng-button
-            [nzLoading]="isSaveUsernameBtnLoading"
-            type="submit"
-            class="w-[84px]"
-            nzType="primary"
-            (click)="btnw9ec5mCallback()"
-            i18n
-          >
+          <button eo-ng-button [nzLoading]="isSaveUsernameBtnLoading" type="submit" nzType="primary" (click)="btnw9ec5mCallback()" i18n>
             Save
           </button>
         </section>
@@ -71,15 +63,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
         </nz-form-item>
 
         <section class="">
-          <button
-            eo-ng-button
-            [nzLoading]="isResetBtnBtnLoading"
-            type="submit"
-            class="w-[84px]"
-            nzType="primary"
-            (click)="btnn016ppCallback()"
-            i18n
-          >
+          <button eo-ng-button [nzLoading]="isResetBtnBtnLoading" type="submit" nzType="primary" (click)="btnn016ppCallback()" i18n>
             Reset
           </button>
         </section>
@@ -128,6 +112,9 @@ export class AccountComponent implements OnInit {
     this.isSaveUsernameBtnLoading = true;
     const btnSaveUsernameRunning = async () => {
       const { username: user } = this.validateUsernameForm.value;
+      console.log({
+        username: user
+      });
       const [data, err]: any = await this.api.api_userUpdateUserProfile({
         username: user
       });

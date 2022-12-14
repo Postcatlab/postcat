@@ -57,6 +57,7 @@ export class ApiOverviewComponent {
             this.modal.destroy();
           } else {
             this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+            return Promise.resolve();
           }
         });
       }

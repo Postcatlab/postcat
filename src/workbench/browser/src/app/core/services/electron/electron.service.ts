@@ -64,11 +64,6 @@ export class ElectronService {
 
     const electronDetails: DescriptionsItem[] = [
       {
-        id: 'homeDir',
-        label: 'Install Location',
-        value: ''
-      },
-      {
         id: 'electron',
         label: 'Electron',
         value: ''
@@ -91,6 +86,11 @@ export class ElectronService {
       {
         id: 'os',
         label: 'OS',
+        value: ''
+      },
+      {
+        id: 'homeDir',
+        label: 'Install Location',
         value: ''
       }
     ];

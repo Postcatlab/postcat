@@ -1,6 +1,10 @@
-:host ::ng-deep {
-  .ant-radio,
-  .ant-radio-inner {
-    border-color: inherit !important;
+.sidebar {
+  border-right: 1px solid var(--BORDER);
+}
+
+.theme-container-active {
+  .theme-block {
+    border-color: var(--MAIN_THEME_COLOR);
+    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
   }
 }

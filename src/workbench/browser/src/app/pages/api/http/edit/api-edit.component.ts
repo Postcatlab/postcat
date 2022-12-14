@@ -154,7 +154,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       }
       this.messageService.send({ type: `${busEvent}Success`, data: result.data });
     } else {
-      this.message.success($localize`Failed Operation`);
+      this.message.error($localize`Failed Operation`);
     }
     this.afterSaved.emit(this.initialModel);
   }

@@ -11,10 +11,7 @@
           [nzTooltipMouseEnterDelay]="0.4"
         >
           <span *ngIf="!item.icon">{{ item.title || item.label }}</span>
-          <i
-            class="logobg absolute left-1.5 right-1.5 top-0 bottom-0"
-            [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"
-          ></i>
+          <i class="logobg absolute left-1.5 right-1.5 top-0 bottom-0" [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"></i>
           <eo-iconpark-icon name="check" class="check absolute right-0 bottom-0" size="18px"></eo-iconpark-icon>
         </div>
       </div>
@@ -23,9 +20,7 @@
 </div>
 <ng-template #empty>
   <div class="text mb-4" i18n>
-    This feature requires plugin support, please move to<a class="eo_link" routerLink="/home/extension/list">
-      Extensions
-    </a>
+    This feature requires plugin support, please move to<a class="eo_link" routerLink="/home/extension/list"> Extensions </a>
     download or open exist extensions.
   </div>
 </ng-template>
