@@ -1,19 +1,8 @@
-.demo-loadmore-list {
-  min-height: 350px;
-}
-
-.loadmore {
-  text-align: center;
-  margin-top: 12px;
-  height: 32px;
-  line-height: 32px;
-}
-
 @mixin hover-item {
-  transition: border 0.3s;
+  transition: border 0.2s;
 
   &:hover {
-    border: 1px solid var(--BTN_PRIMARY_BG);
+    border-color: var(--BTN_PRIMARY_BG);
   }
 }
 
@@ -28,10 +17,12 @@
 
   ::ng-deep {
     .ant-list-items {
-      @apply px-[10px] rounded-[3px];
-      @include hover-item;
+      .ant-list-item {
+        @apply px-[10px] rounded-[3px];
+        @include hover-item;
 
-      border: 1px solid transparent;
+        border: 1px solid transparent;
+      }
     }
 
     .ant-card {

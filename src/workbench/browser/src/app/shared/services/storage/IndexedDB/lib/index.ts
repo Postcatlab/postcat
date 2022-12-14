@@ -853,7 +853,13 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param uuids
    */
   projectBulkLoad(workspaceID: number): Observable<object> {
-    return this.bulkLoad(this.project, [workspaceID]);
+    return new Observable(obs => {
+      const fun = async () => {
+        obs.next(this.resProxy(await this.project.toArray()));
+        obs.complete();
+      };
+      fun();
+    });
   }
 
   /**
@@ -897,7 +903,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuid
    */
-  projectRemove(uuid: number | string): Observable<object> {
+  projectRemove(workspaceID: number, uuid: number | string): Observable<object> {
     return this.remove(this.project, uuid);
   }
 
@@ -907,7 +913,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    * @param item
    * @param uuid
    */
-  projectUpdate(item: Project, uuid: number | string): Observable<object> {
+  projectUpdate(workspaceID: number, item: Project, uuid: number | string): Observable<object> {
     return this.update(this.project, item, uuid);
   }
 

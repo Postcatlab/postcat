@@ -23,7 +23,7 @@
     <div class="flex flex-wrap">
       {{ projectList | json }}
       <ng-container *ngFor="let item of projectList">
-        <div *ngIf="item">
+        <div class="mr-[20px]">
           <nz-card style="width: 300px">
             <div class="flex justify-between">
               <nz-avatar [nzText]="item.name.charAt(0)" nzShape="square"></nz-avatar>
