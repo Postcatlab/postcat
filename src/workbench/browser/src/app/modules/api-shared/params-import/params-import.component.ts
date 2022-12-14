@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep, merge } from 'lodash-es';
 import { computed, observable, makeObservable, reaction } from 'mobx';
 import qs from 'qs';
 
@@ -127,8 +127,8 @@ export class ParamsImportComponent implements OnInit {
       overwrite: data => data,
       append: (data, base) => base.concat(data),
       mixin: (data, base) => {
-        const nameList = data.map(it => it.name);
-        return data.concat(base.filter(it => !nameList.includes(it.name)));
+        console.log('base', base);
+        return merge(base, data);
       }
     };
 
