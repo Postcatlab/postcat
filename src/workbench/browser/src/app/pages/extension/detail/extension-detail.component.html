@@ -1,5 +1,5 @@
 <div class="h-full py-3 extension-detail" *ngIf="extensionDetail">
-  <div class="top-0 z-50 px-2">
+  <div class="top-0 z-50 h-2 px-2">
     <div class="pb-3 h-[36px]">
       <a eo-ng-button nzType="link" (click)="backToList()" class="flex">
         <eo-iconpark-icon name="left" size="16px"></eo-iconpark-icon><span i18n>Back</span>
@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
+  <section class="h-full px-4 overflow-auto max-w-[80vw] mx-auto flex flex-col">
     <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
     <eo-ng-tabset
       [(nzSelectedIndex)]="nzSelectedIndex"
