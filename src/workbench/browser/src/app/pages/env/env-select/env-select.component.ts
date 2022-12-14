@@ -25,9 +25,7 @@ import { Environment } from '../../../shared/services/storage/index.model';
           <span class="text-ellipsis overflow-hidden flex items-center px-6 h-12 content">{{ renderEnv.hostUri }}</span>
         </div>
       </div>
-      <span class="flex items-center px-6 h-12 title" *ngIf="renderEnv.parameters?.length" i18n
-        >Environment Global variable</span
-      >
+      <span class="flex items-center px-6 h-12 title" *ngIf="renderEnv.parameters?.length" i18n>Environment Global variable</span>
       <div class="flex items-center justify-between px-6 h-8">
         <span class="px-1 w-1/3 text-gray-400">Name</span>
         <span class="px-1 w-2/3 text-gray-400">Value</span>
@@ -38,30 +36,30 @@ import { Environment } from '../../../shared/services/storage/index.model';
       </div>
     </div>
   </div>`,
-  styleUrls: ['./env-list.component.scss'],
+  styleUrls: ['./env-select.component.scss']
 })
-export class EnvListComponent implements OnInit {
+export class EnvSelectComponent implements OnInit {
   gloablParams: any = [];
   renderEnv: Environment = {
     name: '',
     projectID: -1,
     hostUri: '',
-    parameters: [],
+    parameters: []
   };
   constructor(private store: StoreService) {}
   ngOnInit() {
     autorun(() => {
       this.renderEnv = this.store.getEnvList
-        .map((it) => ({
+        .map(it => ({
           ...it,
-          parameters: it.parameters.filter((item) => item.name || item.value),
+          parameters: it.parameters.filter(item => item.name || item.value)
         }))
         .find((it: any) => it.uuid === this.store.getCurrentEnv?.uuid);
     });
     this.gloablParams = this.getGlobalParams();
   }
   getGlobalParams() {
-    return Object.entries(getGlobals() || {}).map((it) => {
+    return Object.entries(getGlobals() || {}).map(it => {
       const [key, value] = it;
       return { name: key, value };
     });

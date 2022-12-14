@@ -45,6 +45,13 @@ export class ApiTabService {
           title: $localize`New Request`,
           extends: { method: 'POST' }
         },
+        {
+          pathname: '/home/api/env',
+          module: 'env',
+          type: 'edit',
+          title: $localize`New Environment`
+          // extends: { method: 'ENV' }
+        },
         { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
         { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
         {
@@ -149,7 +156,9 @@ export class ApiTabService {
 
     if (!this.componentRef?.init) {
       this.changeContent$.next({ when: 'init', url });
-      eoConsole.error('Child componentRef need has init function for reflesh data when router change');
+      eoConsole.error(
+        'Child componentRef need has init function for reflesh data when router change,Please add init function in child component'
+      );
       return;
     }
     //?Why should use getCurrentTab()?
@@ -199,17 +208,17 @@ export class ApiTabService {
       }
       //Only hasChanged edit page storage data
       if (currentTab.type === 'edit') {
-        //Set hasChange
-        if (!this.componentRef?.isFormChange) {
-          throw new Error(
-            `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
-          );
-        }
         let currentHasChanged = currentTab.extends?.hasChanged?.[contentID] || false;
         switch (inData.when) {
           case 'editing': {
             // Saved APIs do not need to verify changes
             if (currentTab.module !== 'test' || !currentTab.params.uuid || currentTab.params.uuid.includes('history')) {
+              //Set hasChange
+              if (!this.componentRef?.isFormChange) {
+                throw new Error(
+                  `EO_ERROR:Child componentRef[${this.componentRef.constructor.name}] need has isFormChange function check model change`
+                );
+              }
               currentHasChanged = this.componentRef.isFormChange();
             } else {
               currentHasChanged = false;

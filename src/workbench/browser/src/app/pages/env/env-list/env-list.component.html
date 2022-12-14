@@ -1,0 +1,31 @@
+<div class="flex flex-col flex-1 env-main">
+  <div class="flex items-center justify-between px-2 h-11 header">
+    <span class="font-bold" i18n>Environment</span>
+  </div>
+  <div class="px-2 pt-2">
+    <button eo-ng-button nzType="primary" (click)="addEnv()">
+      <eo-iconpark-icon name="plus"></eo-iconpark-icon>
+    </button>
+  </div>
+  <nz-divider></nz-divider>
+  <div *ngFor="let item of store.getEnvList" class="flex items-center justify-between px-2 py-1 env-item" (click)="editEnv(item)">
+    <span class="flex-1 name">{{ item.name }}</span>
+    <div class="env-operate">
+      <button
+        class="delete-btn"
+        eo-ng-button
+        nzType="text"
+        i18n-nzTooltipTitle
+        nzTooltipTitle="Delete"
+        (click)="$event.stopPropagation()"
+        eoNgFeedbackTooltip
+        nz-popconfirm
+        i18n-nzPopconfirmTitle
+        nzPopconfirmTitle="Are you sure you want to delete?"
+        (nzOnConfirm)="handleDeleteEnv($event, item.uuid)"
+      >
+        <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
+      </button>
+    </div>
+  </div>
+</div>

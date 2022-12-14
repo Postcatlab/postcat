@@ -11,7 +11,12 @@
 
 .env-item {
   cursor: pointer;
+  height: 40px;
   transition: all 0.3s ease;
+
+  .env-operate {
+    display: none;
+  }
 
   a {
     transition: all 0.3s ease;
@@ -20,6 +25,10 @@
 
   &:hover {
     background-color: rgb(0 0 0 / 10%);
+
+    .env-operate {
+      display: inherit;
+    }
 
     a {
       opacity: 1;
@@ -55,14 +64,12 @@
   padding: 4px 11px;
 }
 
-:host ::ng-deep {
-  eo-env {
-    .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-      border-radius: 6px;
-    }
+// :host ::ng-deep {
+//   .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+//     border-radius: 6px;
+//   }
 
-    nz-select {
-      width: 160px;
-    }
-  }
-}
+//   nz-select {
+//     width: 160px;
+//   }
+// }

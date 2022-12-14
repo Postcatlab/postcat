@@ -25,8 +25,8 @@ const COMPONENTS = [ApiDetailComponent, ApiDetailFormComponent, ApiDetailBodyCom
     RouterModule.forChild([
       {
         path: '',
-        component: ApiDetailComponent,
-      },
+        component: ApiDetailComponent
+      }
     ]),
     FormsModule,
     ApiSharedModule,
@@ -34,8 +34,8 @@ const COMPONENTS = [ApiDetailComponent, ApiDetailFormComponent, ApiDetailBodyCom
     EoMonacoEditorModule,
     CommonModule,
     ...NZ_COMPONETS,
-    SharedModule,
+    SharedModule
   ],
-  exports: [...COMPONENTS],
+  exports: [...COMPONENTS]
 })
 export class ApiDetailModule {}

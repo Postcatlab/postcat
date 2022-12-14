@@ -15,6 +15,7 @@
         nzCentered
         eo-ng-tabset
         [(nzSelectedIndex)]="tabsIndex"
+        (nzSelectChange)="onGroupTabSelectChange($event)"
       >
         <eo-ng-tab [nzTitle]="apiTitle">
           <ng-template #apiTitle>
@@ -59,7 +60,7 @@
               <eo-iconpark-icon name="application"></eo-iconpark-icon>
             </span>
           </ng-template>
-          <eo-env class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env>
+          <eo-env-list class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env-list>
         </eo-ng-tab>
       </eo-ng-tabset>
       <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
@@ -131,10 +132,10 @@
       </div>
     </nz-header>
     <!-- Content -->
-    <nz-layout class="content_container {{ this.id ? 'has_tab_page' : '' }}">
+    <nz-layout class="content_container {{ this.showChildBar ? 'has_tab_page' : '' }}">
       <nz-layout>
         <!-- Child Tab Bar -->
-        <eo-ng-tabset class="inside_page_tabset" *ngIf="this.id" nzLinkRouter>
+        <eo-ng-tabset class="inside_page_tabset" *ngIf="this.showChildBar" nzLinkRouter>
           <eo-ng-tab *ngFor="let tab of renderTabs">
             <p *ngIf="web.isWeb && tab.onlyDestop">
               <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>

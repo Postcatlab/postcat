@@ -53,7 +53,7 @@
     </div>
   </ng-template>
 </section>
-<section class="flex-1 px-4 right">
+<section class="flex-1 right">
   <eo-extension-list *ngIf="!hasExtension" (selectChange)="selectExtension($event)"></eo-extension-list>
   <eo-extension-detail *ngIf="hasExtension" [extensionData]="getExtension" (goBack)="selectExtension()"></eo-extension-detail>
 </section>

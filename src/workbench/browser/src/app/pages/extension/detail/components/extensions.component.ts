@@ -6,10 +6,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/set
 @Component({
   selector: 'eo-extension-setting',
   template: `
-    <div
-      class="sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]"
-      style="border-color: var(--BORDER)"
-    >
+    <div class="sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]" style="border-color: var(--BORDER)">
       <button eo-ng-button nzType="primary" (click)="handleSave()">Save</button>
     </div>
 
@@ -21,10 +18,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/set
           </nz-form-label>
         </ng-container>
         <!-- 二级说明 -->
-        <div
-          *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description"
-          class="text-[12px] mb-[8px] text-gray-400"
-        >
+        <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-gray-400">
           {{ properties[field]?.description }}
         </div>
         <nz-form-control
@@ -41,8 +35,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/set
             [disabled]="properties[field]?.disabled"
             i18n-placeholder
             placeholder="{{
-              (properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.title || '')) ||
-                properties[field]?.label
+              (properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.title || '')) || properties[field]?.label
             }}"
             formControlName="{{ field }}"
             [(ngModel)]="localSettings[field]"
@@ -75,7 +68,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/set
         </nz-form-control>
       </nz-form-item>
     </form>
-  `,
+  `
 })
 export class ExtensionSettingComponent implements OnInit {
   @Input() configuration = {} as any;
@@ -85,11 +78,7 @@ export class ExtensionSettingComponent implements OnInit {
   objectKeys = Object.keys;
   properties = {};
 
-  constructor(
-    private fb: FormBuilder,
-    private settingService: SettingService,
-    private message: EoNgFeedbackMessageService
-  ) {}
+  constructor(private fb: FormBuilder, private settingService: SettingService, private message: EoNgFeedbackMessageService) {}
 
   ngOnInit(): void {
     this.init();
@@ -121,7 +110,7 @@ export class ExtensionSettingComponent implements OnInit {
    */
   private setSettingsModel(properties, controls) {
     //  Flat configuration object
-    Object.keys(properties).forEach((fieldKey) => {
+    Object.keys(properties).forEach(fieldKey => {
       const props = properties[fieldKey];
       this.localSettings[fieldKey] ??= props.default;
       // Extensible to add more default checks

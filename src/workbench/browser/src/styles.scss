@@ -150,3 +150,15 @@ nz-resize-handle.container-draggable {
 .border-all {
   border: 1px solid var(--BORDER);
 }
+
+.top-save-bar {
+  @apply sticky top-0 z-10 py-2.5;
+
+  background-color: var(--BTN_SEC_BG_HOVER);
+  border-bottom: 1px solid var(--BORDER);
+}
+
+.save-container {
+  overflow: auto;
+  height: calc(100% - 56px);
+}

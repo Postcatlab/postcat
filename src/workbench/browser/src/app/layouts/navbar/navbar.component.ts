@@ -58,6 +58,7 @@ export class NavbarComponent implements OnInit {
   }
   openExtension() {
     this.modalService.create({
+      nzClassName: 'eo-extension-modal',
       nzWidth: '80%',
       nzTitle: $localize`Extensions`,
       nzContent: ExtensionComponent,

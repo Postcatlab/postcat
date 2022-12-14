@@ -6,7 +6,7 @@ window.eoConsole = {
     console.warn('%c EO_WARN:', 'background-color:yellow', ...args);
   },
   error(...args) {
-    console.warn('%c EO_ERROR: ', 'background-color:red', ...args);
+    console.error('%c EO_ERROR: ', 'background-color:red', ...args);
   }
 };
 export const uuid = (): string => Math.random().toString(36).slice(-8);

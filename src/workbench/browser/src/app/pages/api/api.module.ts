@@ -14,8 +14,8 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 
 import { ElectronService } from '../../core/services';
-import { EnvModule } from '../../modules/env/env.module';
 import { EoTabModule } from '../../modules/eo-ui/tab/tab.module';
+import { EnvModule } from '../env/env.module';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
 import { ApiGroupEditComponent } from './group/edit/api-group-edit.component';

@@ -9,17 +9,19 @@
   height: var(--body-height);
 }
 
-.home_container {
+.home-container {
   height: 100%;
-  // height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--remote-notification-height, 0px) - 1px);
 }
+
 .home {
   background-color: var(--MAIN_BG);
   color: var(--MAIN_TEXT);
   overflow: hidden;
 }
+
 :host ::ng-deep {
   --body-height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0px));
+
   eo-workspace,
   eo-member {
     display: block;

@@ -10,6 +10,7 @@ import { autorun, makeObservable, observable, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { filter, Subject, takeUntil } from 'rxjs';
 
+import StorageUtil from '../../utils/storage/Storage';
 import { ApiTabService } from './api-tab.service';
 
 const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
@@ -26,13 +27,14 @@ export class ApiComponent implements OnInit, OnDestroy {
   @observable envUuid = '';
   renderEnvList = [];
   isFirstTime = true;
+
   siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
   RIGHT_SIDER_SHRINK_WIDTH = 50;
   isDragging = false;
   animateId = -1;
   animationId: number;
   rightExtras = [];
-
+  showChildBar = false;
   @ViewChild('apiTabComponent')
   set apiTabComponent(value: EoTabComponent) {
     // For lifecycle error, use timeout
@@ -79,7 +81,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   isOpen = false;
   rightSiderWidth = this.getLocalRightSiderWidth();
 
-  tabsIndex = 0;
+  tabsIndex = StorageUtil.get('eo_group_tab_select') || 0;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
@@ -120,7 +122,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       if (val.icon === 'file-text-one') {
         val.icon = 'file-text';
       }
-      console.log(val);
     });
     // console.log('this.rightExtras', this.rightExtras);
   }
@@ -134,9 +135,15 @@ export class ApiComponent implements OnInit, OnDestroy {
   onActivate(componentRef) {
     this.apiTab.onChildComponentInit(componentRef);
   }
+  initChildBarShowStatus() {
+    this.showChildBar = Number(this.route.snapshot.queryParams.uuid) && !this.router.url.includes('home/api/env');
+  }
+  onGroupTabSelectChange($event) {
+    StorageUtil.set('eo_group_tab_select', this.tabsIndex);
+  }
   ngOnInit(): void {
     makeObservable(this);
-    this.id = Number(this.route.snapshot.queryParams.uuid);
+    this.initChildBarShowStatus();
     this.effect.updateEnvList();
     this.watchRouterChange();
     this.renderTabs = this.store.isShare ? this.TABS.filter(it => it.isShare) : this.TABS;
@@ -167,7 +174,7 @@ export class ApiComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.id = Number(this.route.snapshot.queryParams.uuid);
+        this.initChildBarShowStatus();
       });
   }
 

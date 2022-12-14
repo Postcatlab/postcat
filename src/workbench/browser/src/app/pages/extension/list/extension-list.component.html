@@ -1,21 +1,21 @@
 <div class="px-3 extension-list">
   <div class="grid grid-cols-2 gap-6 py-5 list-block">
     <div
-      class="border-all w-full min-h-[140px] p-5 flex flex-col flex-wrap plugin-block hover:shadow-lg transition-shadow duration-300"
+      class="border-all w-full min-h-[140px]flex flex-col flex-wrap plugin-block hover:shadow-lg transition-shadow duration-300"
       *ngFor="let it of renderList"
       (click)="clickExtension($event, it)"
     >
       <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzAvatar]="true">
-        <div class="flex justify-between w-full">
+        <div class="flex justify-between w-full p-5">
           <div class="flex">
             <div
               class="shrink-0 block w-[40px] h-[40px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
               [ngClass]="{ 'bg-gray-100': it.logo }"
               [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
             ></div>
-            <div class="flex flex-col">
+            <div class="flex flex-col" [style.width]="'calc(100% - 100px)'">
               <div class="flex flex-col flex-auto">
-                <span class="text-lg font-bold">{{ it.title || it.moduleName }}</span>
+                <span class="text-lg font-bold truncate">{{ it.title || it.moduleName }}</span>
                 <span class="my-2 text-gray-400">{{ it.author?.name || it.author }}</span>
                 <span class="my-1 desc">{{ it.description }}</span>
               </div>
