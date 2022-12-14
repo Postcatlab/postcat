@@ -188,7 +188,7 @@ export interface StorageInterface {
   projectRemove: (uuid: number | string) => Observable<object>;
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
-  projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
+  projectBulkLoad: (workspaceID: number) => Observable<object>;
   projectExport: (projectID?) => Observable<object>;
   // Environment
   environmentCreate: (item: Environment) => Observable<object>;

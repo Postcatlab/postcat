@@ -35,7 +35,9 @@ export class HttpStorage implements StorageInterface {
   }
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
-  projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
+  projectBulkLoad = (workspaceID: number): Observable<object> => {
+    return this.http.get(`/${workspaceID}/project`);
+  };
   projectExport(projectID) {
     return this.http.get(`/project/${projectID}/export`) as Observable<object>;
   }

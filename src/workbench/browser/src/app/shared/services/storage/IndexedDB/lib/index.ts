@@ -852,8 +852,8 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param uuids
    */
-  projectBulkLoad(uuids: Array<number | string>): Observable<object> {
-    return this.bulkLoad(this.project, uuids);
+  projectBulkLoad(workspaceID: number): Observable<object> {
+    return this.bulkLoad(this.project, [workspaceID]);
   }
 
   /**
