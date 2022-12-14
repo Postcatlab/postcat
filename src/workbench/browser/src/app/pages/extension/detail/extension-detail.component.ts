@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
@@ -15,6 +15,8 @@ import { ExtensionService } from '../extension.service';
   styleUrls: ['./extension-detail.component.scss']
 })
 export class ExtensionDetailComponent implements OnInit {
+  @Input() extensionData = {};
+  @Output() readonly goBack: EventEmitter<any> = new EventEmitter();
   isOperating = false;
   introLoading = false;
   changelogLoading = false;
@@ -174,11 +176,7 @@ ${log}
   }
 
   backToList() {
-    this.router.navigate(['/home/extension/list'], {
-      queryParams: {
-        type: this.route.snapshot.queryParams.type
-      }
-    });
+    this.goBack.emit();
   }
 
   handleEnableExtension(isEnable) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
@@ -14,15 +14,16 @@ class ExtensionList {
     this.list = list;
   }
   search(keyword: string) {
-    return this.list.filter((it) => it.name.includes(keyword) || it.keywords?.includes(keyword));
+    return this.list.filter(it => it.name.includes(keyword) || it.keywords?.includes(keyword));
   }
 }
 @Component({
   selector: 'eo-extension-list',
   templateUrl: './extension-list.component.html',
-  styleUrls: ['./extension-list.component.scss'],
+  styleUrls: ['./extension-list.component.scss']
 })
 export class ExtensionListComponent implements OnInit {
+  @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
   type: ExtensionGroupType = ExtensionGroupType.all;
   keyword = '';
   renderList = [];
@@ -39,13 +40,16 @@ export class ExtensionListComponent implements OnInit {
     private modal: NzModalService
   ) {
     this.type = this.route.snapshot.queryParams.type;
-    this.seachChanged$.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async (keyword) => {
+    this.seachChanged$.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async keyword => {
       this.getPluginList(keyword);
     });
   }
   async ngOnInit() {
     this.watchSearchConditionChange();
     this.watchSearchKeywordChange();
+  }
+  clickExtension(event, item) {
+    this.selectChange.emit(item.name);
   }
   async getPluginList(keyword: string) {
     this.renderList = await this.searchPlugin(keyword);
@@ -56,14 +60,14 @@ export class ExtensionListComponent implements OnInit {
     try {
       if (this.type === 'installed') {
         const installedList = new ExtensionList(this.extensionService.getInstalledList());
-        return installedList.search(keyword).map((n) => {
+        return installedList.search(keyword).map(n => {
           n.isEnable = this.extensionService.isEnable(n.name);
           return n;
         });
       }
       const res: any = await this.extensionService.requestList();
       if (this.type === 'official') {
-        return new ExtensionList(res.data.filter((it) => it.author === 'Eoapi')).search(keyword);
+        return new ExtensionList(res.data.filter(it => it.author === 'Eoapi')).search(keyword);
       }
       return new ExtensionList(res.data).search(keyword);
     } catch (error) {
@@ -76,18 +80,6 @@ export class ExtensionListComponent implements OnInit {
   onSeachChange(keyword) {
     this.seachChanged$.next(keyword);
   }
-  clickExtension(event, item) {
-    this.router
-      .navigate(['home/extension/detail'], {
-        queryParams: {
-          type: this.route.snapshot.queryParams.type,
-          id: item.name,
-          name: item.name,
-          tab: event?.target?.dataset?.id === 'details' ? 1 : 0,
-        },
-      })
-      .finally();
-  }
 
   handleEnableExtension(isEnable, item) {
     if (isEnable) {
@@ -98,7 +90,7 @@ export class ExtensionListComponent implements OnInit {
   }
 
   private watchSearchConditionChange() {
-    this.route.queryParamMap.subscribe(async (params) => {
+    this.route.queryParamMap.subscribe(async params => {
       this.type = this.route.snapshot.queryParams.type;
       this.renderList = await this.searchPlugin();
     });

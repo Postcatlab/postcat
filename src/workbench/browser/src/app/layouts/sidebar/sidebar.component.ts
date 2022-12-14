@@ -131,19 +131,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
         icon: 'puzzle',
         activeRoute: 'home/project',
         route: 'home/project'
-      },
-      {
-        title: $localize`Extensions`,
-        id: '@eo-core-extension',
-        isOffical: true,
-        icon: 'plugins',
-        activeRoute: 'home/extension',
-        route: 'home/extension/list'
       }
     ];
     const isShare = this.store.isShare;
     this.modules = defaultModule.filter((it: any) => (isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true));
   }
+
   private getIDFromRoute() {
     const urlArr = new URL(this.router.url, 'http://localhost').pathname.split('/');
     const currentModule = this.modules.find(val => val.activeRoute.split('/').every(n => urlArr.includes(n)));
