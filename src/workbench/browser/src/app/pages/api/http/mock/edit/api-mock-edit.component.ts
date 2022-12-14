@@ -1,9 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ApiMockService } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.service';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'eo-api-mock-edit',
-  providers: [ApiMockService],
   template: ` <div class="w-full main-content">
     <form nz-form nzLayout="vertical">
       <nz-form-item>
@@ -26,11 +24,9 @@ import { ApiMockService } from 'eo/workbench/browser/src/app/pages/api/http/mock
         </nz-form-control>
       </nz-form-item>
     </form>
-  </div>`,
+  </div>`
 })
-export class ApiMockEditComponent implements OnInit {
+export class ApiMockEditComponent {
   @Input() model;
   @Input() isEdit = true;
-  constructor(private apiMock: ApiMockService) {}
-  ngOnInit(): void {}
 }

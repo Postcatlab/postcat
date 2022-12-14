@@ -879,7 +879,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
    *
    * @param item
    */
-  projectCreate(item: Project): Observable<object> {
+  projectCreate(workspaceID: number, item: Project): Observable<object> {
     return this.create(this.project, item);
   }
 
