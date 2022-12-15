@@ -19,6 +19,10 @@
     padding-top: 0;
   }
 
+  .ant-tabs {
+    overflow: hidden;
+  }
+
   .ant-tabs-content-holder {
     padding-top: 15px;
     padding-bottom: 8px;
@@ -46,6 +50,7 @@
 
   .extension-detail {
     height: 70vh;
+    overflow: hidden;
 
     .ant-descriptions-row > td {
       padding-bottom: 8px;
