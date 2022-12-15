@@ -11,6 +11,7 @@
 
   .left {
     width: 250px;
+    height: 70vh; // * necessary
     border-right: 1px solid var(--BORDER);
 
     .plugin-link {

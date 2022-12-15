@@ -1,15 +1,7 @@
 <section class="flex-shrink-0 p-0 left">
   <div class="m-[10px]">
     <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
-      <input
-        type="text"
-        eo-ng-input
-        class="flex-1 w-full px-3"
-        i18n-placeholder="@@Search"
-        placeholder="Search"
-        [(ngModel)]="keyword"
-        (ngModelChange)="onSearchChange($event)"
-      />
+      <input type="text" eo-ng-input class="flex-1 w-full px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="keyword" />
     </eo-ng-input-group>
     <ng-template #prefixTemplateUser
       ><svg class="iconpark-icon">
@@ -17,23 +9,6 @@
     ></ng-template>
   </div>
   <!-- Fixed Group -->
-  <div class="group_container">
-    <eo-ng-tree-default
-      [nzData]="fixedTreeNode"
-      [nzSelectedKeys]="nzSelectedKeys"
-      nzBlockNode
-      (nzClick)="clickTreeItem($event)"
-      [nzTreeTemplate]="nzFixedTreeTemplate"
-    ></eo-ng-tree-default>
-    <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-      <div class="pl-[18px] tree-node" *ngIf="node.origin?.isFixed">
-        <div class="flex items-center">
-          <eo-iconpark-icon name="home" class="mr10 h-[14px] mt-[-4px]"></eo-iconpark-icon>
-          <span class="truncate node_title">{{ node.title }}</span>
-        </div>
-      </div>
-    </ng-template>
-  </div>
   <eo-ng-tree-default
     [nzData]="treeNodes"
     [nzSelectedKeys]="nzSelectedKeys"
@@ -54,6 +29,11 @@
   </ng-template>
 </section>
 <section class="flex-1 right">
-  <eo-extension-list *ngIf="!hasExtension" (selectChange)="selectExtension($event)"></eo-extension-list>
+  <eo-extension-list
+    *ngIf="!hasExtension"
+    [keyword]="keyword"
+    [type]="selectGroup"
+    (selectChange)="selectExtension($event)"
+  ></eo-extension-list>
   <eo-extension-detail *ngIf="hasExtension" [extensionData]="getExtension" (goBack)="selectExtension()"></eo-extension-detail>
 </section>
