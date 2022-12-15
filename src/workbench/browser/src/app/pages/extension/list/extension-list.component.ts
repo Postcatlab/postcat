@@ -1,81 +1,62 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { debounceTime, distinctUntilChanged, takeUntil, Subject } from 'rxjs';
+import { autorun, observable, makeObservable } from 'mobx';
 
 import { ExtensionGroupType } from '../extension.model';
 import { ExtensionService } from '../extension.service';
 
-class ExtensionList {
-  list = [];
-  constructor(list) {
-    this.list = list;
-  }
-  search(keyword: string) {
-    return this.list.filter(it => it.name.includes(keyword) || it.keywords?.includes(keyword));
-  }
-}
+const extensionSearch = list => keyword => list.filter(it => it.name.includes(keyword) || it.keywords?.includes(keyword));
+
 @Component({
   selector: 'eo-extension-list',
   templateUrl: './extension-list.component.html',
   styleUrls: ['./extension-list.component.scss']
 })
 export class ExtensionListComponent implements OnInit {
+  @Input() @observable type: string = ExtensionGroupType.all;
+  @Input() @observable keyword = '';
   @Output() readonly selectChange: EventEmitter<any> = new EventEmitter<any>();
-  type: ExtensionGroupType = ExtensionGroupType.all;
-  keyword = '';
   renderList = [];
   loading = false;
-  seachChanged$: Subject<string> = new Subject<string>();
-  private destroy$: Subject<void> = new Subject<void>();
-
-  constructor(
-    public extensionService: ExtensionService,
-    public electron: ElectronService,
-    private route: ActivatedRoute,
-    private messageService: MessageService
-  ) {
-    this.type = this.route.snapshot.queryParams.type;
-    this.seachChanged$.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async keyword => {
-      this.getPluginList(keyword);
-    });
-  }
+  constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
   async ngOnInit() {
-    this.watchSearchConditionChange();
-    this.watchSearchKeywordChange();
+    makeObservable(this);
+    autorun(async () => {
+      this.renderList = await this.searchPlugin(this.type, this.keyword);
+    });
   }
   clickExtension(event, item) {
     this.selectChange.emit(item.name);
   }
-  async getPluginList(keyword: string) {
-    this.renderList = await this.searchPlugin(keyword);
-  }
-  async searchPlugin(keyword = '') {
+  async searchPlugin(groupType, keyword = '') {
     const timer = setTimeout(() => (this.loading = true), 80);
     const timeStart = Date.now();
+    const func = {
+      installed: () => {
+        const list = this.extensionService.getInstalledList();
+        return extensionSearch(list)(keyword).map(({ isEnable, name, ...it }) => ({
+          ...it,
+          name,
+          isEnable: this.extensionService.isEnable(name)
+        }));
+      },
+      official: async () => {
+        const { data }: any = await this.extensionService.requestList();
+        return extensionSearch(data.filter(it => it.author === 'Eoapi'))(keyword);
+      },
+      all: async () => {
+        const { data }: any = await this.extensionService.requestList();
+        return extensionSearch(data)(keyword);
+      }
+    };
     try {
-      if (this.type === 'installed') {
-        const installedList = new ExtensionList(this.extensionService.getInstalledList());
-        return installedList.search(keyword).map(n => {
-          n.isEnable = this.extensionService.isEnable(n.name);
-          return n;
-        });
-      }
-      const res: any = await this.extensionService.requestList();
-      if (this.type === 'official') {
-        return new ExtensionList(res.data.filter(it => it.author === 'Eoapi')).search(keyword);
-      }
-      return new ExtensionList(res.data).search(keyword);
+      return func[groupType]();
     } catch (error) {
     } finally {
       clearTimeout(timer);
       const timeout = Date.now() - timeStart > 300 ? 0 : 300;
       setTimeout(() => (this.loading = false), timeout);
     }
-  }
-  onSeachChange(keyword) {
-    this.seachChanged$.next(keyword);
   }
 
   handleEnableExtension(isEnable, item) {
@@ -84,26 +65,5 @@ export class ExtensionListComponent implements OnInit {
     } else {
       this.extensionService.disableExtension(item.name);
     }
-  }
-
-  private watchSearchConditionChange() {
-    this.route.queryParamMap.subscribe(async params => {
-      this.type = this.route.snapshot.queryParams.type;
-      this.renderList = await this.searchPlugin();
-    });
-  }
-
-  private watchSearchKeywordChange() {
-    this.messageService
-      .get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((inArg: Message) => {
-        switch (inArg.type) {
-          case 'searchPluginByKeyword': {
-            this.onSeachChange(inArg.data);
-            break;
-          }
-        }
-      });
   }
 }

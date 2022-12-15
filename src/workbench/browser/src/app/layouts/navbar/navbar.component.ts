@@ -59,7 +59,7 @@ export class NavbarComponent implements OnInit {
     this.modalService.create({
       nzClassName: 'eo-extension-modal',
       nzWidth: '80%',
-      nzTitle: $localize`Extensions`,
+      nzTitle: $localize`Plugins Hub`,
       nzContent: ExtensionComponent,
       nzFooter: null
     });
