@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
@@ -40,12 +41,14 @@ export class EnvEditComponent {
       ]
     }
   ];
+  validateForm: FormGroup;
   @ViewChild('envParams')
   envParamsComponent: any;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     private storage: StorageService,
     private effect: EffectService,
+    private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private route: ActivatedRoute,
     private router: Router,
@@ -74,6 +77,9 @@ export class EnvEditComponent {
     return { ...result, parameters };
   }
   saveEnv(uuid: string | number | undefined = undefined) {
+    if (this.validateForm.status === 'INVALID') {
+      return;
+    }
     const formdata = this.formatEnvData(this.model);
     formdata.projectID = this.store.getCurrentProjectID;
     this.initialModel = eoDeepCopy(formdata);
@@ -120,8 +126,15 @@ export class EnvEditComponent {
       const [res, err]: any = await this.getEnv(id);
       this.model = res;
     }
+    this.initForm();
     this.initialModel = eoDeepCopy(this.model);
     this.eoOnInit.emit(this.model);
+  }
+  private initForm() {
+    this.validateForm = this.fb.group({
+      name: [this.model.name, [Validators.required]],
+      hostUri: [this.model.hostUri]
+    });
   }
   emitChange($event) {
     this.modelChange.emit(this.model);
