@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 type UserMeta = {
@@ -11,12 +11,12 @@ type UserMeta = {
 @Component({
   selector: 'eo-manage-access',
   templateUrl: './manage-access.component.html',
-  styleUrls: ['./manage-access.component.scss'],
+  styleUrls: ['./manage-access.component.scss']
 })
-export class ManageAccessComponent implements OnInit {
+export class ManageAccessComponent {
   @Input() data: UserMeta[] = [];
   @Input() loading = false;
-  @Output() eoOnRemove = new EventEmitter<UserMeta>();
+  @Output() readonly eoOnRemove = new EventEmitter<UserMeta>();
   searchValue: string;
   constructor(public store: StoreService) {}
   get seachMember() {
@@ -24,9 +24,8 @@ export class ManageAccessComponent implements OnInit {
       return this.data;
     }
     const searchText = this.searchValue.toLocaleLowerCase();
-    return this.data.filter((val) => val.username.toLocaleLowerCase().includes(searchText));
+    return this.data.filter(val => val.username.toLocaleLowerCase().includes(searchText));
   }
-  ngOnInit(): void {}
 
   handleRemove(item: UserMeta) {
     this.eoOnRemove.emit(item);

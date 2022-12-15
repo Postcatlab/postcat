@@ -1,0 +1,37 @@
+@mixin hover-item {
+  transition: border 0.2s;
+
+  &:hover {
+    border-color: var(--BTN_PRIMARY_BG);
+  }
+}
+
+:host {
+  @apply block;
+
+  .list-type-switcher {
+    .active {
+      color: var(--BTN_PRIMARY_BG);
+    }
+  }
+
+  .operate-btn-list button {
+    background: #f0f0f0;
+    border: 0 none;
+  }
+
+  .ant-card {
+    @include hover-item;
+  }
+
+  ::ng-deep {
+    .ant-list-items {
+      .ant-list-item {
+        @apply rounded-[3px];
+        @include hover-item;
+
+        border: 1px solid transparent;
+      }
+    }
+  }
+}

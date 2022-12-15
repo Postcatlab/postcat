@@ -46,7 +46,7 @@
   </ng-container>
 
   <ng-container *ngIf="listType === 'list'">
-    <nz-list class="demo-loadmore-list" [nzLoading]="initLoading">
+    <nz-list [nzLoading]="initLoading">
       <a>
         <nz-list-item *ngFor="let item of projectList">
           <div>

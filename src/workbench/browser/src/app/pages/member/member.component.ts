@@ -16,7 +16,7 @@ import { distinct } from 'rxjs/operators';
       [(nzVisible)]="isInvateModalVisible"
       (nzOnCancel)="handleInvateModalCancel()"
       (nzAfterClose)="ehe4islCallback()"
-      nzTitle="Add people to the workspace"
+      nzTitle="Add Member To Project"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
