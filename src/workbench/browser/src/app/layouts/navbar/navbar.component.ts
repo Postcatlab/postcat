@@ -53,6 +53,10 @@ export class NavbarComponent implements OnInit {
           this.openSettingModal();
           return;
         }
+        if (type === 'open-extension') {
+          this.openExtension();
+          return;
+        }
       });
   }
   openExtension() {
