@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "prepare": "husky install && electron-builder install-app-deps && npx patch-package",
-    "start": "npm-run-all -p start:workbench electron:serve",
+    "start": "npm-run-all -p start:web electron:serve-tsc",
     "start:web": "yarn workspace eoapi-workbench run serve",
     "serve:web": "yarn workspace eoapi-workbench run serve",
     "start:electron": "wait-on tcp:4200 && npm run electron:dev",

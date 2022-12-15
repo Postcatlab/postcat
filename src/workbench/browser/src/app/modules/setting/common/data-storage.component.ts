@@ -13,7 +13,7 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
         <div class="text-[12px] mt-[8px] text-gray-400">
           <p>
             <span i18n> Cloud Storage: Store data on the cloud for team collaboration and product use across devices.</span>
-            <a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link"> Learn more..</a>
+            <a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo-link"> Learn more..</a>
           </p>
         </div>
       </nz-form-item>
