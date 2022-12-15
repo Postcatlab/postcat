@@ -80,7 +80,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebar.currentModule = module;
     const nextApp = this.modules.find(val => val.id === module.id);
     const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    this.router.navigate([route], { queryParamsHandling: 'merge' });
+    this.router.navigate([route]);
   }
   ngOnDestroy(): void {
     this.destroy = true;

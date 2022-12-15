@@ -138,13 +138,15 @@ import { distinct, takeUntil } from 'rxjs/operators';
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <form nz-form [formGroup]="validateWorkspaceNameForm" nzLayout="horizontal">
+        <form nz-form [formGroup]="validateWorkspaceNameForm" nzLayout="vertical">
           <nz-form-item>
+            <nz-form-label i18n nzFor="newWorkName">Workspace Name</nz-form-label>
             <nz-form-control nzErrorTip="Please input your new work name;">
               <input
                 type="text"
                 #newWorkNameWorkspaceNameRef
                 eo-ng-input
+                id="newWorkName"
                 formControlName="newWorkName"
                 placeholder="Workspace Name"
                 i18n-placeholder

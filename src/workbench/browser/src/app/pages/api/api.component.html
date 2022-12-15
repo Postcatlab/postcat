@@ -157,7 +157,7 @@
       </nz-layout>
       <!-- Right Sider -->
       <nz-sider
-        *ngIf="!store.isShare"
+        *ngIf="!store.isShare && rightExtras.length"
         nz-resizable
         [nzWidth]="rightSiderWidth"
         [nzMaxWidth]="500"

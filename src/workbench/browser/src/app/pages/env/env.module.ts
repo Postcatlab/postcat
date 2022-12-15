@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 import { EoTableProModule } from '../../modules/eo-ui/table-pro/table-pro.module';
 import { EnvEditComponent } from './env-edit/env-edit.component';
@@ -20,6 +21,7 @@ const COMPONENTA = [EnvListComponent, EnvSelectComponent];
         component: EnvEditComponent
       }
     ]),
+    NzEmptyModule,
     FormsModule,
     CommonModule,
     SharedModule,
