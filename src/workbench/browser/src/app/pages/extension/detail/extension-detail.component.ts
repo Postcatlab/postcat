@@ -30,7 +30,6 @@ export class ExtensionDetailComponent implements OnInit {
   constructor(
     private extensionService: ExtensionService,
     private route: ActivatedRoute,
-    private router: Router,
     private webService: WebService,
     public electron: ElectronService,
     private language: LanguageService,
@@ -40,7 +39,9 @@ export class ExtensionDetailComponent implements OnInit {
   ngOnInit(): void {
     this.getDetail();
   }
-
+  jumpToClient() {
+    this.webService.jumpToClient($localize`Eoapi Client is required to use this extension.`);
+  }
   async handleInstall() {
     this.manageExtension(this.extensionDetail?.installed ? 'uninstall' : 'install', this.extensionDetail?.name);
   }
