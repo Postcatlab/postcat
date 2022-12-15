@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { getSettings } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
 
@@ -42,7 +42,6 @@ export class StorageService {
     if (!this.instance[action]) {
       throw Error(`Lack request API: ${action}`);
     }
-    // console.log(new Error());
     this.instance[action](...params).subscribe(
       (res: any) => {
         handleResult.status = res.status;

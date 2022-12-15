@@ -2,17 +2,24 @@
   <button type="submit" eo-ng-button nzType="primary" (click)="saveEnv()" i18n>Save</button>
 </div>
 <section class="save-container p-[15px]" *ngIf="model">
-  <form auto-focus-form nz-form nzLayout="vertical">
+  <form auto-focus-form [formGroup]="validateForm" nz-form nzLayout="vertical">
     <nz-form-item>
       <nz-form-label nzFor="name" i18n>Name</nz-form-label>
-      <nz-form-control>
-        <input eo-ng-input name="name" id="name" (ngModelChange)="emitChange($event)" type="text" [(ngModel)]="model.name" />
+      <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter name">
+        <input eo-ng-input formControlName="name" id="name" (ngModelChange)="emitChange($event)" type="text" [(ngModel)]="model.name" />
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzFor="hostUri">Host</nz-form-label>
       <nz-form-control>
-        <input eo-ng-input id="hostUri" name="hostUri" (ngModelChange)="emitChange($event)" type="text" [(ngModel)]="model.hostUri" />
+        <input
+          eo-ng-input
+          id="hostUri"
+          formControlName="hostUri"
+          (ngModelChange)="emitChange($event)"
+          type="text"
+          [(ngModel)]="model.hostUri"
+        />
       </nz-form-control>
     </nz-form-item>
     <p class="mb-[8px]" i18n> Global variable: API Documentation/Test can use {{ varName }} to refer to the global variable </p>

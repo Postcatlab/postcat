@@ -99,7 +99,7 @@ export class GlobalProvider {
   };
 
   getGroup = (projectID = this.getCurrentProjectID()) => {
-    return new Promise(async resolve => {
+    return new Promise(resolve => {
       this.storage.run('groupLoadAllByProjectID', [projectID], (result: StorageRes) => {
         console.log('result', result);
         if (result.status === StorageResStatus.success) {

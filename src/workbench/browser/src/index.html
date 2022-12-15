@@ -18,30 +18,6 @@
     };
   </script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const rootEl = document.querySelector('eo-root');
-      const loadingEl = document.querySelector('#first-screen-loading-container');
-      // 观察器的配置（需要观察什么变动）
-      const config = { childList: true, subtree: true };
-      // 当观察到变动时执行的回调函数
-      const callback = function (mutationsList, observer) {
-        // Use traditional 'for loops' for IE 11
-        for (let mutation of mutationsList) {
-          if (mutation.type === 'childList' && rootEl.childElementCount > 1) {
-            loadingEl.remove();
-            // 之后，可停止观察
-            observer.disconnect();
-          }
-        }
-      };
-      // 创建一个观察器实例并传入回调函数
-      const observer = new MutationObserver(callback);
-      // 以上述配置开始观察目标节点
-      observer.observe(rootEl, config);
-    });
-  </script>
-
   <body eo-drop-root>
     <eo-root></eo-root>
     <div id="mask"></div>
@@ -53,6 +29,27 @@
     </div>
   </body>
 
+  <script>
+    const rootEl = document.querySelector('eo-root');
+    const loadingEl = document.querySelector('#first-screen-loading-container');
+    // 观察器的配置（需要观察什么变动）
+    const config = { childList: true, subtree: true };
+    // 当观察到变动时执行的回调函数
+    const callback = function (mutationsList, observer) {
+      // Use traditional 'for loops' for IE 11
+      for (let mutation of mutationsList) {
+        if (mutation.type === 'childList' && rootEl.childElementCount > 1) {
+          loadingEl.remove();
+          // 之后，可停止观察
+          observer.disconnect();
+        }
+      }
+    };
+    // 创建一个观察器实例并传入回调函数
+    const observer = new MutationObserver(callback);
+    // 以上述配置开始观察目标节点
+    observer.observe(rootEl, config);
+  </script>
   <style>
     #mask {
       position: absolute;
