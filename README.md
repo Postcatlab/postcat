@@ -91,8 +91,8 @@ yarn add @angular/cli --global
 | 命令                  | 描述                                 |
 | --------------------- | ------------------------------------ |
 | `yarn start`          | 开发模式下，同时运行在浏览器和桌面端 |
-| `yarn serve:web`      | 仅运行在浏览器                       |
-| `yarn electron:serve` | 仅运行在桌面端                       |
+| `yarn start:web`      | 仅运行在浏览器                       |
+| `yarn start:electron` | 仅运行在桌面端                       |
 
 ### 打包构建
 

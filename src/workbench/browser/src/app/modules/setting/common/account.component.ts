@@ -14,6 +14,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
     <section class="w-1/2">
       <form nz-form [formGroup]="validateUsernameForm" nzLayout="vertical">
         <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired i18n>Username</nz-form-label>
           <nz-form-control nzErrorTip="Please input your username;">
             <input type="text" eo-ng-input formControlName="username" placeholder="" i18n-placeholder />
           </nz-form-control>
