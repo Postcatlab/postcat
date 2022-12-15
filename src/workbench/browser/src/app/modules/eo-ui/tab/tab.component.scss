@@ -19,10 +19,10 @@
         max-width: 185px;
         min-width: 145px;
         border-radius: 0;
-        border-width: 1px;
         margin-left: 0;
-        border-top-color: transparent;
         border-left: 0 none;
+        border-top-width: 2px;
+        border-top-color: transparent;
 
         &:hover {
           .tab-has-edit-icon {

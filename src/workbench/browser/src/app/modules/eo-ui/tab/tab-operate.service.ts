@@ -197,6 +197,7 @@ export class TabOperateService {
     const result = {
       uuid: params.pageID,
       pathname: basicTab.pathname,
+      icon: basicTab.icon,
       params
     };
     return result;

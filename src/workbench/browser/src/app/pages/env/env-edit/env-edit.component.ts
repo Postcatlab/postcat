@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
@@ -55,6 +55,7 @@ export class EnvEditComponent {
     private store: StoreService
   ) {
     this.initShortcutKey();
+    this.initForm();
   }
   initShortcutKey() {
     fromEvent(document, 'keydown')
@@ -63,7 +64,6 @@ export class EnvEditComponent {
         const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
-          console.log('Ctrl + s');
           // 或者 return false;
           event.preventDefault();
           const id = Number(this.route.snapshot.queryParams.uuid);
@@ -76,8 +76,14 @@ export class EnvEditComponent {
     const parameters = this.envParamsComponent.getPureNzData()?.filter(it => it.name || it.value);
     return { ...result, parameters };
   }
-  saveEnv(uuid: string | number | undefined = undefined) {
+  private checkForm(): boolean {
     if (this.validateForm.status === 'INVALID') {
+      return false;
+    }
+    return true;
+  }
+  saveEnv(uuid: string | number | undefined = undefined) {
+    if (!this.checkForm()) {
       return;
     }
     const formdata = this.formatEnvData(this.model);
@@ -132,8 +138,8 @@ export class EnvEditComponent {
   }
   private initForm() {
     this.validateForm = this.fb.group({
-      name: [this.model.name, [Validators.required]],
-      hostUri: [this.model.hostUri]
+      name: [this.model?.name || '', [Validators.required]],
+      hostUri: [this.model?.hostUri || '']
     });
   }
   emitChange($event) {

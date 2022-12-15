@@ -2,10 +2,10 @@
   <button type="submit" eo-ng-button nzType="primary" (click)="saveEnv()" i18n>Save</button>
 </div>
 <section class="save-container p-[15px]" *ngIf="model">
-  <form auto-focus-form [formGroup]="validateForm" nz-form nzLayout="vertical">
+  <form auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
     <nz-form-item>
-      <nz-form-label nzFor="name" i18n>Name</nz-form-label>
-      <nz-form-control i18n-nzErrorTip nzErrorTip="Please enter name">
+      <nz-form-label nzFor="name" i18n nzRequired>Name</nz-form-label>
+      <nz-form-control [nzValidateStatus]="this.validateForm.controls.name" i18n-nzErrorTip nzErrorTip="Please enter name">
         <input eo-ng-input formControlName="name" id="name" (ngModelChange)="emitChange($event)" type="text" [(ngModel)]="model.name" />
       </nz-form-control>
     </nz-form-item>

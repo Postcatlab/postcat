@@ -50,8 +50,8 @@ export class ApiTabService {
       module: 'env',
       type: 'edit',
       isFixed: true,
+      icon: 'application',
       title: $localize`New Environment`
-      // extends: { method: 'ENV' }
     },
     { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
     { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
