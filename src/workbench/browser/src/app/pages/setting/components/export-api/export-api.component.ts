@@ -7,7 +7,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { has } from 'lodash-es';
 
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+import { StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-export-api',

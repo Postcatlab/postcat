@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
-import { ImportApiComponent } from 'eo/workbench/browser/src/app/pages/workspace/import-api/import-api.component';
+import { ImportApiComponent } from 'eo/workbench/browser/src/app/pages/setting/components/import-api/import-api.component';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
@@ -297,7 +297,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
         const modal = this.modalService.create({
           nzTitle: title,
           nzContent: ImportApiComponent,
-          nzMaskClosable: false,
           nzComponentParams: {},
           nzOnOk: () =>
             new Promise(resolve => {

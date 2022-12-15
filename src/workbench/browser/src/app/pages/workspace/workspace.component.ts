@@ -13,7 +13,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
     <h2 class="text-lg flex justify-between items-center">
       <span i18n>Manage Workspace</span>
     </h2>
-    <section class="py-2"><eo-api-overview></eo-api-overview></section>
     <section class="" *ngIf="!store.isLocal && store.canEdit">
       <nz-divider></nz-divider>
       <h2 class="text-lg flex justify-between items-center">

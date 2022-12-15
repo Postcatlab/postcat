@@ -2,16 +2,15 @@ import { Component } from '@angular/core';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import { DataSourceService } from '../../shared/services/data-source/data-source.service';
-import { MessageService } from '../../shared/services/message';
+import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
+import { MessageService } from '../../../shared/services/message';
 
 @Component({
   selector: 'eo-select-workspace',
-  template: ` <button eo-ng-button nzType="text" class="flex items-center" eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
-      <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ store.isLocal ? 'sucess' : 'faild' }}"> </eo-iconpark-icon>
+  template: ` <a eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
       {{ store.getCurrentWorkspace.title }}
-      <eo-iconpark-icon class="ml-[3px]" name="down"></eo-iconpark-icon>
-    </button>
+      <eo-iconpark-icon name="down"></eo-iconpark-icon>
+    </a>
     <eo-ng-dropdown-menu #workspaceMenu>
       <ul class="ml-[-11px]" nz-menu>
         <div class="flex py-[5px] px-[12px]">

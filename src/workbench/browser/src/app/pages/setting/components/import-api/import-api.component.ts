@@ -8,7 +8,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import StorageUtil from '../../../utils/storage/Storage';
+import StorageUtil from '../../../../utils/storage/Storage';
 
 // const optionList = [
 //   {

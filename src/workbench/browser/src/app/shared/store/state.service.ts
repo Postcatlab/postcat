@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, ActivatedRoute, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { Project, StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
@@ -26,7 +26,8 @@ export class StoreService {
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
   @observable private shareLink = '';
-
+  // ? project
+  @observable private currentProject: Project;
   // ? workspace
   @observable private currentWorkspace =
     StorageUtil.get('currentWorkspace') ||
@@ -113,6 +114,9 @@ export class StoreService {
   // ? project
   @computed get getCurrentProjectID() {
     return this.currentProjectID;
+  }
+  @computed get getCurrentProject() {
+    return this.currentProject;
   }
 
   // ? user && auth
@@ -207,12 +211,14 @@ export class StoreService {
     await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
     this.message.send({ type: 'workspaceChange', data: true });
   }
-
+  @action setCurrentProject(project: Project) {
+    this.currentProject = project;
+    this.setCurrentProjectID(project.uuid);
+  }
   // ? project
   @action setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
     StorageUtil.set('currentProjectID', projectID);
-    // * update shareID
   }
 
   // ? user && auth

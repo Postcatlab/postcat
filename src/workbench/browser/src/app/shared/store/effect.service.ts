@@ -27,8 +27,10 @@ export class EffectService {
     private web: WebService
   ) {
     autorun(async () => {
-      if (this.store.getLoginInfo) {
+      if (this.store.isLogin) {
         await this.updateWorkspaceList();
+      } else {
+        this.updateWorkspace(this.store.getLocalWorkspace);
       }
       if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
         this.store.setShareLink('');
@@ -51,6 +53,7 @@ export class EffectService {
       return;
     }
     this.store.setWorkspaceList(list);
+    this.updateWorkspace(this.store.getCurrentWorkspace);
   }
 
   getGroups(projectID = 1): Promise<any[]> {
@@ -119,22 +122,25 @@ export class EffectService {
   }
 
   async updateWorkspace(workspace) {
-    if (workspace.id === -1) {
-      this.store.setCurrentProjectID(1);
-      this.store.setCurrentWorkspace(workspace);
-      StorageUtil.remove('server_version');
-      return;
+    if (workspace.id !== -1) {
+      const [data, err]: any = await this.http.api_workspaceGetInfo({ workspaceID: workspace.id });
+      if (err) {
+        return;
+      }
+      workspace = data;
+      //?Why
+      // StorageUtil.remove('server_version');
     }
-    // * for switch isLogin state to false
-    const [data, err]: any = await this.http.api_workspaceGetInfo({ workspaceID: workspace.id });
-    if (err) {
-      return;
-    }
-    // * update project id
-    this.store.setCurrentProjectID(data.projects.at(0).uuid);
-    // * real set workspace
-    this.store.setCurrentWorkspace(data);
-    this.updateShareLink();
+    this.storage.run('projectBulkLoad', [workspace.id], (result: StorageRes) => {
+      if (result.status === StorageResStatus.success) {
+        // * update project id
+        const projects = result.data;
+        this.store.setCurrentProject(projects.at(0));
+        // * real set workspace
+        this.store.setCurrentWorkspace(workspace);
+        this.updateShareLink();
+      }
+    });
   }
 
   async updateShareLink() {

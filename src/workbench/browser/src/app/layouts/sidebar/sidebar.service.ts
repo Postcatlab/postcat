@@ -5,10 +5,11 @@ import { Subject } from 'rxjs';
 import { SidebarModuleInfo } from './sidebar.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SidebarService {
   collapsed = false;
+  sidebarShow = true;
   currentModule: ModuleInfo | SidebarModuleInfo | any;
   private collapsedChanged$: Subject<boolean> = new Subject();
   constructor() {}

@@ -61,6 +61,10 @@ const routes: Routes = [
         loadChildren: () => import('./member/member.module').then(m => m.MemberModule)
       },
       {
+        path: 'setting',
+        loadChildren: () => import('./setting/project-setting.module').then(m => m.ProjectSettingModule)
+      },
+      {
         path: 'extension',
         loadChildren: () => import('./extension/extension.module').then(m => m.ExtensionModule)
       },

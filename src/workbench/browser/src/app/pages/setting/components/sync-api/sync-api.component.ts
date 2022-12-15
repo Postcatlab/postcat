@@ -5,18 +5,17 @@ import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extensio
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
-import packageJson from '../../../../../../../../package.json';
-import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+import packageJson from '../../../../../../../../../package.json';
+import { StorageRes, StorageResStatus } from '../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'eo-sync-api',
-  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select>`,
+  template: `<extension-select [(extension)]="currentExtension" [extensionList]="supportList"></extension-select>`
 })
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
-  featureMap =
-    this.webExtensionService.getFeatures('syncAPI') || this.webExtensionService.getFeatures('apimanage.sync');
+  featureMap = this.webExtensionService.getFeatures('syncAPI') || this.webExtensionService.getFeatures('apimanage.sync');
   constructor(
     private storage: StorageService,
     public extensionService: ExtensionService,
@@ -29,7 +28,7 @@ export class SyncApiComponent implements OnInit {
       if (this.webExtensionService.isEnable(key)) {
         this.supportList.push({
           key,
-          ...data,
+          ...data
         });
       }
     });
@@ -50,7 +49,7 @@ export class SyncApiComponent implements OnInit {
           try {
             const output = await module[action](result.data, {
               projectId,
-              secretKey,
+              secretKey
             });
             callback(true);
           } catch (e) {

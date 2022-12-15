@@ -1,0 +1,8 @@
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <eo-select-workspace></eo-select-workspace>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item class="underline">
+    <a [routerLink]="['/home/project']">{{ store.getCurrentProject?.name }}</a>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>

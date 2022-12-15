@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
-import { ModalService } from '../../../shared/services/modal.service';
-import { ExportApiComponent } from '../export-api/export-api.component';
-import { ImportApiComponent } from '../import-api/import-api.component';
-import { SyncApiComponent } from '../sync-api/sync-api.component';
+import { ModalService } from '../../shared/services/modal.service';
+import { ExportApiComponent } from './components/export-api/export-api.component';
+import { ImportApiComponent } from './components/import-api/import-api.component';
+import { SyncApiComponent } from './components/sync-api/sync-api.component';
 
 const actionComponent = {
   push: SyncApiComponent,
@@ -13,11 +13,11 @@ const actionComponent = {
   export: ExportApiComponent
 };
 @Component({
-  selector: 'eo-api-overview',
-  templateUrl: './api-overview.component.html',
-  styleUrls: ['./api-overview.component.scss']
+  selector: 'eo-project-setting',
+  templateUrl: './project-setting.component.html',
+  styleUrls: ['./project-setting.component.scss']
 })
-export class ApiOverviewComponent {
+export class ProjectSettingComponent {
   modal: NzModalRef;
   constructor(private modalService: ModalService, private message: EoNgFeedbackMessageService) {}
   overviewList = [
