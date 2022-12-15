@@ -4,21 +4,24 @@
 
 .extension {
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.5);
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+  color: rgb(0 0 0 / 50%);
+  border-color: rgb(0 0 0 / 10%);
+  box-shadow: 0 0 3px rgb(0 0 0 / 5%);
   transition: all 0.3s ease;
+
   .logobg {
     background-repeat: no-repeat;
     background-size: 45px;
     background-position: center center;
   }
+
   &:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
     background-color: #fff;
   }
+
   &.active {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
     background-color: #fff;
 
     eo-iconpark-icon {
@@ -26,6 +29,7 @@
       display: flex;
     }
   }
+
   eo-iconpark-icon {
     display: none;
   }
