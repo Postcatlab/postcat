@@ -1,8 +1,8 @@
 import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { Subject } from 'rxjs';
+import { filter, Subject } from 'rxjs';
 @Component({
   selector: 'eo-env-list',
   templateUrl: './env-list.component.html',
@@ -12,10 +12,19 @@ export class EnvListComponent implements OnDestroy {
   // @ViewChild('table') table: EoTableComponent; // * child component ref
   @Output() private readonly statusChange: EventEmitter<any> = new EventEmitter();
   modalTitle = $localize`:@@New Environment:New Environment`;
-
+  id;
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(public store: StoreService, private router: Router, private effect: EffectService) {}
-
+  constructor(public store: StoreService, private router: Router, private route: ActivatedRoute, private effect: EffectService) {
+    this.getIDFromRoute();
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
+      this.getIDFromRoute();
+    });
+  }
+  getIDFromRoute() {
+    const uuid = this.route.snapshot.queryParams.uuid;
+    this.id = this.router.url.includes('home/api/env') && uuid ? Number(this.route.snapshot.queryParams.uuid) : null;
+    console.log(this.id);
+  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

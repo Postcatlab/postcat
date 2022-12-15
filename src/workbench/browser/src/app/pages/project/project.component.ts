@@ -6,6 +6,8 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
+import StorageUtil from '../../utils/storage/Storage';
+
 type ListType = 'list' | 'card';
 
 @Component({
@@ -14,7 +16,7 @@ type ListType = 'list' | 'card';
   styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit {
-  listType: ListType = 'list';
+  listType: ListType = StorageUtil.get('project_list_tyle') || 'list';
   initLoading = true; // bug
   projectList: any[] = [];
 
@@ -81,6 +83,7 @@ export class ProjectComponent implements OnInit {
 
   setListType(type: ListType) {
     this.listType = type;
+    StorageUtil.set('project_list_tyle', type);
   }
 
   createProject() {

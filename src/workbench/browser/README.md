@@ -4,6 +4,6 @@ Eoapi browser code
 
 | Command                  | Desc                                 |
 | --------------------- | ------------------------------------ |
-| `yarn start`          | Only frontend |
+| `yarn start`          | Only run frontend,local workspace |
 | `yarn serve`      | Use proxy                       |
 | `yarn build` | Pack static frontend resource                       |

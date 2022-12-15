@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { reaction } from 'mobx';
 import { debounceTime, Subject } from 'rxjs';
 
 import { EoTabComponent } from '../../modules/eo-ui/tab/tab.component';
@@ -18,60 +19,67 @@ export class ApiTabService {
     return this.BASIC_TABS.find(val => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
-  BASIC_TABS: Array<Partial<TabItem>> = this.store.isShare
-    ? [
-        {
-          pathname: '/home/share/http/test',
-          module: 'test',
-          type: 'edit',
-          title: $localize`New Request`,
-          extends: { method: 'POST' }
-        },
-        { pathname: '/home/share/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
-        {
-          pathname: '/home/share/ws/test',
-          module: 'test',
-          isFixed: true,
-          type: 'preview',
-          extends: { method: 'WS' },
-          title: $localize`New Websocket`
-        }
-      ]
-    : [
-        {
-          pathname: '/home/api/http/test',
-          module: 'test',
-          type: 'edit',
-          title: $localize`New Request`,
-          extends: { method: 'POST' }
-        },
-        {
-          pathname: '/home/api/env',
-          module: 'env',
-          type: 'edit',
-          title: $localize`New Environment`
-          // extends: { method: 'ENV' }
-        },
-        { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
-        { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
-        {
-          pathname: '/home/api/ws/test',
-          module: 'test',
-          isFixed: true,
-          type: 'edit',
-          extends: { method: 'WS' },
-          title: $localize`New Websocket`
-        },
-        { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' }
-      ];
+  SHARE_TABS = [
+    {
+      pathname: '/home/share/http/test',
+      module: 'test',
+      type: 'edit',
+      title: $localize`New Request`,
+      extends: { method: 'POST' }
+    },
+    { pathname: '/home/share/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    {
+      pathname: '/home/share/ws/test',
+      module: 'test',
+      isFixed: true,
+      type: 'preview',
+      extends: { method: 'WS' },
+      title: $localize`New Websocket`
+    }
+  ];
+  API_TABS = [
+    {
+      pathname: '/home/api/http/test',
+      module: 'test',
+      type: 'edit',
+      title: $localize`New Request`,
+      extends: { method: 'POST' }
+    },
+    {
+      pathname: '/home/api/env',
+      module: 'env',
+      type: 'edit',
+      title: $localize`New Environment`
+      // extends: { method: 'ENV' }
+    },
+    { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
+    { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    {
+      pathname: '/home/api/ws/test',
+      module: 'test',
+      isFixed: true,
+      type: 'edit',
+      extends: { method: 'WS' },
+      title: $localize`New Websocket`
+    },
+    { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' }
+  ];
+  BASIC_TABS: Array<Partial<TabItem>> = this.API_TABS;
 
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
     this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterContentChanged(inData);
     });
+    console.log('StoreServiceStoreServiceStoreService', this.store.isShare);
     this.messageService.get().subscribe((inArg: Message) => {
       this.watchApiChange(inArg);
     });
+    reaction(
+      () => this.store.isShare,
+      isShare => {
+        this.BASIC_TABS = isShare ? this.SHARE_TABS : this.API_TABS;
+      }
+    );
   }
   watchApiChange(inArg: Message) {
     switch (inArg.type) {

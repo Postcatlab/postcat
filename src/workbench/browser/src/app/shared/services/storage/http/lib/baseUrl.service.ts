@@ -33,6 +33,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
     super();
     //* Web deploy from v1.9.1
+    //TODO 2023.02.01 delete apiPrefix
     this.prefix = this.web.isWeb ? '/api/' : '/';
   }
 
@@ -68,7 +69,6 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         if (req.url.includes('/system/status')) {
           const { data } = event.body;
           this.prefix = compareVersion(data, 'v1.9.0') < 0 ? '/' : '/api';
-          console.log(this.prefix);
           StorageUtil.set('server_version', data);
         }
       }),

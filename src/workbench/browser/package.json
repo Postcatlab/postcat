@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve --hmr -c dev -o --host 0.0.0.0",
     "start:zh": "ng serve --hmr -c devCn -o",
-    "serve": "ng serve -c dev -o --proxy-config=proxy.conf.json",
+    "serve": "ng serve --hmr -c dev -o --proxy-config=proxy.conf.json",
     "build": "node ./build/build.js",
     "build:web": "node ./build/build.js web",
     "build:docker:web": "node ./build/build.js web docker",

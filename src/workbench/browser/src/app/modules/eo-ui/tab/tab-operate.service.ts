@@ -36,7 +36,6 @@ export class TabOperateService {
   init(inArg: { basicTabs: Array<Partial<TabItem>> }) {
     this.BASIC_TABS = inArg.basicTabs;
     const tabStorage = this.disabledCache ? null : this.tabStorage.getPersistenceStorage();
-
     const tabCache = this.parseChangeRouter(tabStorage);
     const validTabItem = this.generateTabFromUrl(this.router.url);
     const executeWhenNoTab = () => {
