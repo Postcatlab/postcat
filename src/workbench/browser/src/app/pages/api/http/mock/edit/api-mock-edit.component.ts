@@ -5,16 +5,17 @@ import { Component, Input } from '@angular/core';
   template: ` <div class="w-full main-content">
     <form nz-form nzLayout="vertical">
       <nz-form-item>
-        <nz-form-label i18n nzFor="model.name">Mock Name</nz-form-label>
+        <nz-form-label i18n nzFor="name">Mock Name</nz-form-label>
         <nz-form-control>
-          <input eo-ng-input required name="name" type="text" [(ngModel)]="model.name" [readonly]="!isEdit" />
+          <input eo-ng-input required id="name" name="name" type="text" [(ngModel)]="model.name" [readonly]="!isEdit" />
         </nz-form-control>
       </nz-form-item>
       <nz-form-item class="mb-0">
-        <nz-form-label i18n nzFor="model.response">Response</nz-form-label>
+        <nz-form-label i18n nzFor="response">Response</nz-form-label>
         <nz-form-control>
           <eo-monaco-editor
             [(code)]="model.response"
+            id="response"
             [maxLine]="15"
             class="h-[200px] border-all"
             [config]="{ readOnly: !isEdit }"

@@ -6,7 +6,7 @@ import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module'
 
 import { EoTableProModule } from '../../modules/eo-ui/table-pro/table-pro.module';
 import { EnvEditComponent } from './env-edit/env-edit.component';
-import { EnvListComponent } from './env-list/env.component';
+import { EnvListComponent } from './env-list/env-list.component';
 import { EnvSelectComponent } from './env-select/env-select.component';
 
 const ANTDMODULES = [EoTableProModule];
