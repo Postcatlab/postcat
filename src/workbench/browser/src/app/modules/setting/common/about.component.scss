@@ -20,6 +20,14 @@
   }
 }
 
+.favor-image {
+  transition: all 0.3s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
 .favor-image-link {
   background-color: #eee;
   border-radius: 50%;

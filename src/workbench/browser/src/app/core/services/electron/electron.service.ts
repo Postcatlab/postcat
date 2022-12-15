@@ -123,6 +123,11 @@ export class ElectronService {
         value: serverVersion
       });
     }
+    descriptions.push({
+      id: 'platForm',
+      label: $localize`Platform`,
+      value: this.isElectron ? 'Electron' : 'Web'
+    });
 
     return descriptions;
   }

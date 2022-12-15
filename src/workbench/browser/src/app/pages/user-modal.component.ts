@@ -69,13 +69,15 @@ import { distinct, takeUntil } from 'rxjs/operators';
     >
       <ng-container *nzModalContent>
         <section class="my-3">
-          <form nz-form [formGroup]="validateLoginForm" nzLayout="horizontal">
+          <form nz-form [formGroup]="validateLoginForm" nzLayout="vertical">
             <nz-form-item>
+              <nz-form-label i18n nzFor="username">Email/Phone/Username</nz-form-label>
               <nz-form-control nzErrorTip="Please input your email or phone;">
                 <input
                   type="text"
                   #usernameLoginRef
                   eo-ng-input
+                  id="username"
                   formControlName="username"
                   placeholder="Enter Email/Phone/Username"
                   i18n-placeholder
@@ -84,8 +86,9 @@ import { distinct, takeUntil } from 'rxjs/operators';
             </nz-form-item>
 
             <nz-form-item>
+              <nz-form-label i18n nzFor="password">Password</nz-form-label>
               <nz-form-control [nzErrorTip]="passwordErrorTpl">
-                <input type="password" eo-ng-input formControlName="password" placeholder="Enter password" i18n-placeholder />
+                <input type="password" eo-ng-input formControlName="password" id="password" placeholder="Enter password" i18n-placeholder />
                 <ng-template #passwordErrorTpl let-control>
                   <ng-container *ngIf="control.hasError('required')" i18n> Please input your password; </ng-container>
 
