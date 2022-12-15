@@ -26,7 +26,7 @@
       {
         "label": "Build.Renderer",
         "type": "shell",
-        "command": "npm run ng:serve",
+        "command": "npm run serve",
         "isBackground": true,
         "group": {
           "kind": "build",

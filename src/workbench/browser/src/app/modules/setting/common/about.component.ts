@@ -17,11 +17,14 @@ import { ElectronService } from '../../../core/services';
       <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center mt-[15px]">
         <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
       </a>
-      <p class="text-center mt-[15px]">
+      <p i18n class="text-center mt-[15px]">
         Hi!~ If you like <b>Postcat</b>, please give the Postcat a Star!<br />Your support is our greatest motivation~
       </p>
+      <a class="favor-image-link mt-[15px]" target="_blank" href="https://github.com/eolinker/eoapi">
+        <img class="w-[40px] favor-image align-middle" src="assets/images/heart.png" />
+      </a>
       <nz-divider></nz-divider>
-      <nz-descriptions class="mt-[15px] w-[285px]" [nzColumn]="1">
+      <nz-descriptions [nzColumn]="1">
         <nz-descriptions-item *ngFor="let item of list" [nzTitle]="item.label">{{ item.value }}</nz-descriptions-item>
       </nz-descriptions>
     </div>
@@ -29,14 +32,16 @@ import { ElectronService } from '../../../core/services';
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit {
-  list = this.electron.getSystemInfo();
+  list;
   versionInfo;
 
   constructor(private electron: ElectronService, public theme: ThemeService) {}
 
   ngOnInit(): void {
+    const result = this.electron.getSystemInfo();
     this.versionInfo = {
-      version: this.list[0].value
+      version: result.shift().value
     };
+    this.list = result;
   }
 }

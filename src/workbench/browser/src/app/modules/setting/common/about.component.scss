@@ -1,14 +1,35 @@
-::ng-deep {
-  .about {
-    .ant-descriptions-item-label {
-      width: 112px;
-      position: relative;
-      padding-right: 16px;
-      justify-content: flex-end;
-    }
-    .ant-descriptions-item-label::after {
-      position: absolute;
-      right: 0;
-    }
+:host ::ng-deep {
+  .ant-descriptions-item-label {
+    width: 5rem;
+    position: relative;
+    padding-right: 16px;
+    justify-content: flex-end;
   }
+
+  .ant-descriptions-item-label::after {
+    position: absolute;
+    right: 0;
+  }
+
+  .ant-descriptions-item-content {
+    word-break: keep-all;
+  }
+
+  .ant-descriptions-view table {
+    width: initial;
+  }
+}
+
+.favor-image {
+  transition: all 0.3s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.favor-image-link {
+  background-color: #eee;
+  border-radius: 50%;
+  padding: 13px;
 }

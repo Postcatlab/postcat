@@ -15,6 +15,15 @@
     }
   }
 
+  .operate-btn-list button {
+    background: #f0f0f0;
+    border: 0 none;
+
+    .ant-card {
+      @include hover-item;
+    }
+  }
+
   ::ng-deep {
     .ant-list-items {
       .ant-list-item {
@@ -23,10 +32,6 @@
 
         border: 1px solid transparent;
       }
-    }
-
-    .ant-card {
-      @include hover-item;
     }
   }
 }
