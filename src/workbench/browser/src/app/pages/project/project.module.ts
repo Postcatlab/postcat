@@ -8,6 +8,7 @@ import { EoNgInputModule } from 'eo-ng-input';
 import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { OperateProjectFormComponent } from 'eo/workbench/browser/src/app/pages/project/components/operate-project-form.compoent';
 import { ProjectRoutingModule } from 'eo/workbench/browser/src/app/pages/project/project-routing.module';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -33,7 +34,8 @@ import { ProjectComponent } from './project.component';
     FormsModule,
     ReactiveFormsModule,
     EoNgInputModule,
-    NzFormModule
+    NzFormModule,
+    SharedModule
   ],
   declarations: [ProjectComponent, OperateProjectFormComponent]
 })
