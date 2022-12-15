@@ -10,8 +10,6 @@ import { filter, map, tap, Observable, catchError } from 'rxjs';
 
 import { uniqueSlash } from '../../../../../utils/api';
 
-const protocolReg = new RegExp('^(http|https)://');
-
 const interceptorPaths = ['/api_data', '/group', '/api_test_history', '/mock', '/environment', '/shared'];
 const needWorkspaceIDPrefixPaths = ['/project'];
 const sharePaths = ['/shared-docs'];
@@ -33,7 +31,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
     super();
     //* Web deploy from v1.9.1
-    //TODO 2023.02.01 delete apiPrefix
+    //TODO 2023.02.01 change prefix to '/api/'
     this.prefix = this.web.isWeb ? '/api/' : '/';
   }
 

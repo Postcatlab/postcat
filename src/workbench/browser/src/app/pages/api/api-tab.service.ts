@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { reaction } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { debounceTime, Subject } from 'rxjs';
 
 import { EoTabComponent } from '../../modules/eo-ui/tab/tab.component';
@@ -49,6 +49,7 @@ export class ApiTabService {
       pathname: '/home/api/env',
       module: 'env',
       type: 'edit',
+      isFixed: true,
       title: $localize`New Environment`
       // extends: { method: 'ENV' }
     },
@@ -64,22 +65,18 @@ export class ApiTabService {
     },
     { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' }
   ];
-  BASIC_TABS: Array<Partial<TabItem>> = this.API_TABS;
+  BASIC_TABS: Array<Partial<TabItem>>;
 
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
     this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterContentChanged(inData);
     });
-    console.log('StoreServiceStoreServiceStoreService', this.store.isShare);
     this.messageService.get().subscribe((inArg: Message) => {
       this.watchApiChange(inArg);
     });
-    reaction(
-      () => this.store.isShare,
-      isShare => {
-        this.BASIC_TABS = isShare ? this.SHARE_TABS : this.API_TABS;
-      }
-    );
+    autorun(() => {
+      this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
+    });
   }
   watchApiChange(inArg: Message) {
     switch (inArg.type) {
@@ -87,7 +84,15 @@ export class ApiTabService {
         //Close those tab who has been deleted
         const closeTabIDs = this.apiTabComponent
           .getTabs()
-          .filter(val => inArg.data.uuids.includes(Number(val.params.uuid)))
+          .filter((val: TabItem) => val.pathname.includes('home/api/http') && inArg.data.uuids.includes(Number(val.params.uuid)))
+          .map(val => val.uuid);
+        this.apiTabComponent.batchCloseTab(closeTabIDs);
+        break;
+      }
+      case 'deleteEnvSuccess': {
+        const closeTabIDs = this.apiTabComponent
+          .getTabs()
+          .filter((val: TabItem) => val.pathname.includes('home/api/env') && inArg.data.uuids.includes(Number(val.params.uuid)))
           .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;

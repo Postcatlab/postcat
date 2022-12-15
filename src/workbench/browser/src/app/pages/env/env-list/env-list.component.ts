@@ -3,6 +3,8 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { filter, Subject } from 'rxjs';
+
+import { MessageService } from '../../../shared/services/message';
 @Component({
   selector: 'eo-env-list',
   templateUrl: './env-list.component.html',
@@ -14,7 +16,13 @@ export class EnvListComponent implements OnDestroy {
   modalTitle = $localize`:@@New Environment:New Environment`;
   id;
   private destroy$: Subject<void> = new Subject<void>();
-  constructor(public store: StoreService, private router: Router, private route: ActivatedRoute, private effect: EffectService) {
+  constructor(
+    public store: StoreService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private effect: EffectService,
+    private message: MessageService
+  ) {
     this.getIDFromRoute();
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.getIDFromRoute();
@@ -23,7 +31,6 @@ export class EnvListComponent implements OnDestroy {
   getIDFromRoute() {
     const uuid = this.route.snapshot.queryParams.uuid;
     this.id = this.router.url.includes('home/api/env') && uuid ? Number(this.route.snapshot.queryParams.uuid) : null;
-    console.log(this.id);
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -38,6 +45,12 @@ export class EnvListComponent implements OnDestroy {
     $event?.stopPropagation();
     // * delete localstrage
     this.effect.deleteEnv(uuid);
+    this.message.send({
+      type: 'deleteEnvSuccess',
+      data: {
+        uuids: [uuid]
+      }
+    });
   }
   editEnv(item) {
     this.router.navigate(['/home/api/env'], {

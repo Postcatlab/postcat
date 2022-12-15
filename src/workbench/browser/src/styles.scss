@@ -45,6 +45,10 @@ object {
   color: var(--BLUE_TAG_BG);
 }
 
+.eo-link {
+  color: var(--BLUE_DEEPER);
+}
+
 .method_text_POST {
   // color: var(--GREEN_TAG_BG);
   @apply text-green-700;
