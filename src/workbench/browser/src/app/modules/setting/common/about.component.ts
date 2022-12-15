@@ -20,8 +20,11 @@ import { ElectronService } from '../../../core/services';
       <p class="text-center mt-[15px]">
         Hi!~ If you like <b>Postcat</b>, please give the Postcat a Star!<br />Your support is our greatest motivation~
       </p>
+      <a class="favor-image-link mt-[15px]" href="https://github.com/eolinker/eoapi">
+        <img class="w-[40px] align-middle" src="assets/images/heart.png" />
+      </a>
       <nz-divider></nz-divider>
-      <nz-descriptions class="mt-[15px] w-[285px]" [nzColumn]="1">
+      <nz-descriptions [nzColumn]="1">
         <nz-descriptions-item *ngFor="let item of list" [nzTitle]="item.label">{{ item.value }}</nz-descriptions-item>
       </nz-descriptions>
     </div>

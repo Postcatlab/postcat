@@ -32,6 +32,10 @@ export class ThemeService {
     this.changeAppearance(this.appearance, true);
     this.changeColor(this.mainColor, true);
   }
+  changeTheme(name) {
+    this.changeAppearance(name.includes('dark') ? 'dark' : 'light');
+    this.changeColor(name.replace('dark-', ''));
+  }
   private getEditorTheme(appearance) {
     //Default Theme: https://microsoft.github.io/monaco-editor/index.html
     //'vs', 'vs-dark' or 'hc-black'

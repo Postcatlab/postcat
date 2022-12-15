@@ -5,6 +5,7 @@ export const THEMES = [
     navBackgroud: '#f8f8fa',
     sidebarBackground: '#ffffff',
     contentBackground: '#ffffff',
+    borderColor: '#e8e8e8',
     primaryColor: '#00785a'
   },
   {
@@ -13,6 +14,7 @@ export const THEMES = [
     navBackgroud: '#f8f8fa',
     sidebarBackground: '#ffffff',
     contentBackground: '#ffffff',
+    borderColor: '#e8e8e8',
     primaryColor: '#f47023'
   },
   {
@@ -20,6 +22,7 @@ export const THEMES = [
     navBackgroud: '#f8f8fa',
     sidebarBackground: '#ffffff',
     contentBackground: '#ffffff',
+    borderColor: '#e8e8e8',
     value: 'blue',
     primaryColor: '#2878ff'
   },
@@ -28,7 +31,17 @@ export const THEMES = [
     navBackgroud: '#f8f8fa',
     sidebarBackground: '#ffffff',
     contentBackground: '#ffffff',
+    borderColor: '#e8e8e8',
     value: 'purple',
+    primaryColor: '#673ab7'
+  },
+  {
+    title: $localize`Dark-Purple`,
+    navBackgroud: '#222222',
+    sidebarBackground: '#333333',
+    contentBackground: '#333333',
+    borderColor: '#464646',
+    value: 'dark-purple',
     primaryColor: '#673ab7'
   }
 ] as const;
