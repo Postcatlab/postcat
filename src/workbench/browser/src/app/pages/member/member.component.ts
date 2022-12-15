@@ -49,7 +49,7 @@ import { distinct } from 'rxjs/operators';
     </nz-modal>
     <section class="py-5 px-10 w-6/12 m-auto">
       <h2 class="text-lg flex justify-between items-center">
-        <span i18n>Manage access</span
+        <span class="font-bold" i18n>Project Members</span
         ><button
           eo-ng-button
           [nzLoading]="isAddPeopleBtnLoading"
@@ -58,7 +58,7 @@ import { distinct } from 'rxjs/operators';
           [disabled]="!store.isLocal && store.canEdit"
           i18n
         >
-          + Invite
+          + Add
         </button>
       </h2>
       <section class="py-5">
