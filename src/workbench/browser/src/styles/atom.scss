@@ -7,6 +7,15 @@
   padding-right: var(--PADDING_X);
 }
 
+.border {
+  border: 1px solid var(--BORDER);
+}
+
+.debug-border {
+  // * use it only for debug, not prod
+  border: 1px solid red;
+}
+
 .rounded-r {
   border-radius: 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS) 0 !important;
 }
