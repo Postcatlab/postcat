@@ -1,12 +1,12 @@
 window.eoConsole = {
   log(...args) {
-    console.log('EO_LOG: ', ...args);
+    console.log('EO_LOG: ', 'background-color:blue', ...args);
   },
   warn(...args) {
     console.warn('%c EO_WARN:', 'background-color:yellow', ...args);
   },
   error(...args) {
-    console.error('%c EO_ERROR: ', 'background-color:red', ...args);
+    console.error('%c EO_ERROR: ', 'background-color:red,color:white', ...args);
   }
 };
 export const uuid = (): string => Math.random().toString(36).slice(-8);

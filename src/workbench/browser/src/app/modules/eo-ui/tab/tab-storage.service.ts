@@ -52,10 +52,11 @@ export class TabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
+    return;
     let tabsByID = Object.fromEntries(this.tabsByID);
-    Object.values(tabsByID).forEach((val) => {
+    Object.values(tabsByID).forEach(val => {
       if (val.type === 'preview') {
-        ['baseContent', 'content'].forEach((keyName) => {
+        ['baseContent', 'content'].forEach(keyName => {
           val[keyName] = null;
         });
       }
@@ -68,7 +69,7 @@ export class TabStorageService {
       JSON.stringify({
         selectedIndex,
         tabOrder: this.tabOrder,
-        tabsByID,
+        tabsByID
       })
     );
   }

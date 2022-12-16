@@ -84,7 +84,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.router.navigate([route]);
   }
   ngOnDestroy(): void {
-    this.routerSubscribe.unsubscribe();
+    this.routerSubscribe?.unsubscribe();
   }
   private getModules() {
     const defaultModule = [

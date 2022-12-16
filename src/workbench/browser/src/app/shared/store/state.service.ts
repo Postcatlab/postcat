@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, ActivatedRoute, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { Project, StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
 import { filter } from 'rxjs/operators';

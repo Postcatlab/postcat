@@ -129,7 +129,6 @@ export class EoTabComponent implements OnInit, OnDestroy {
         type: tab.type,
         title: tab.title,
         pathname: tab.pathname,
-        icon: tab.icon,
         params: tab.params
       });
     });

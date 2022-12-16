@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, KeyValueDiffers } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
@@ -11,7 +11,7 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { autorun } from 'mobx';
+import { autorun, reaction } from 'mobx';
 
 @Injectable({
   providedIn: 'root'
@@ -28,18 +28,22 @@ export class EffectService {
     private lang: LanguageService,
     private web: WebService
   ) {
-    autorun(async () => {
-      if (this.store.isLogin) {
-        await this.updateWorkspaceList();
-      } else {
-        this.updateWorkspace(this.store.getLocalWorkspace);
+    this.updateWorkspaceList();
+    this.updateProjects(this.store.getCurrentWorkspace.id);
+    reaction(
+      () => this.store.isLogin,
+      async () => {
+        if (this.store.isLogin) {
+          await this.updateWorkspaceList();
+        }
+        this.updateWorkspace(this.store.getCurrentWorkspace);
+        if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
+          this.store.setShareLink('');
+          return;
+        }
+        this.updateShareLink();
       }
-      if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
-        this.store.setShareLink('');
-        return;
-      }
-      this.updateShareLink();
-    });
+    );
   }
 
   async updateWorkspaceList() {
@@ -55,7 +59,6 @@ export class EffectService {
       return;
     }
     this.store.setWorkspaceList(list);
-    this.updateWorkspace(this.store.getCurrentWorkspace);
   }
 
   getGroups(projectID = 1): Promise<any[]> {
@@ -122,7 +125,6 @@ export class EffectService {
       }))
       .concat(apiDataFilters);
   }
-
   async updateWorkspace(workspace) {
     if (workspace.id !== -1) {
       const [data, err]: any = await this.http.api_workspaceGetInfo({ workspaceID: workspace.id });
@@ -135,16 +137,29 @@ export class EffectService {
     }
     // * real set workspace
     this.store.setCurrentWorkspace(workspace);
-    this.storage.run('projectBulkLoad', [workspace.id], async (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        // * update project id
-        const projects = result.data;
-        this.store.setCurrentProject(projects.at(0));
-        this.updateShareLink();
-        // * refresh view
-        await this.router.navigate(['**']);
-        await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
-      }
+    // * real set workspace
+    const [projects]: any = await this.getProjects(workspace.id);
+    this.store.setCurrentProject(projects[0]);
+    this.updateShareLink();
+    // * refresh view
+    await this.router.navigate(['**']);
+    await this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspace.id } });
+  }
+  async updateProjects(workspaceID) {
+    // * real set workspace
+    const [projects]: any = await this.getProjects(workspaceID);
+    this.store.setCurrentProject(projects[0]);
+    this.updateShareLink();
+  }
+  private async getProjects(workspaceID) {
+    return new Promise(resolve => {
+      this.storage.run('projectBulkLoad', [workspaceID], async (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve([result.data, null]);
+          return;
+        }
+        resolve([null, result.data]);
+      });
     });
   }
 
