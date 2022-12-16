@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { interval } from 'rxjs';
 
@@ -15,6 +15,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="bottomRight"
       nzPopoverTrigger="click"
+      (click)="handleGetShareLink()"
       i18n
     >
       Share
@@ -27,7 +28,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
         </p>
         <div class="flex items-center">
           <span class="truncate flex-1" (click)="handleCopy()" i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip>
-            {{ store.getShareLink }}
+            {{ link }}
           </span>
           <button eo-ng-button nzType="text" (click)="handleCopy()"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
         </div>
@@ -35,17 +36,20 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
     </ng-template> `
 })
 export class GetShareLinkComponent {
+  link;
   isCopy = false;
-  constructor(public store: StoreService, public dataSourceService: DataSourceService, private message: EoNgFeedbackMessageService) {}
+  constructor(private effect: EffectService, public dataSourceService: DataSourceService, private message: EoNgFeedbackMessageService) {
+    this.link = 'Please wait ...';
+  }
   handleCopy() {
     if (this.isCopy) {
       return;
     }
-    if (!this.store.getShareLink) {
+    if (!this.link) {
       this.isCopy = false;
       return;
     }
-    const isOk = copy(this.store.getShareLink);
+    const isOk = copy(this.link);
     if (isOk) {
       this.message.success($localize`Copied`);
       this.isCopy = true;
@@ -53,5 +57,8 @@ export class GetShareLinkComponent {
         this.isCopy = false;
       });
     }
+  }
+  async handleGetShareLink() {
+    this.link = await this.effect.updateShareLink();
   }
 }

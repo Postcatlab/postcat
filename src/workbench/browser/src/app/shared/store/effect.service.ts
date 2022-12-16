@@ -34,11 +34,6 @@ export class EffectService {
       } else {
         this.updateWorkspace(this.store.getLocalWorkspace);
       }
-      if (this.store.isLocal || !this.store.isLogin || this.store.isShare) {
-        this.store.setShareLink('');
-        return;
-      }
-      this.updateShareLink();
     });
   }
 
@@ -140,7 +135,6 @@ export class EffectService {
         // * update project id
         const projects = result.data;
         this.store.setCurrentProject(projects.at(0));
-        this.updateShareLink();
         // * refresh view
         await this.router.navigate(['**']);
         await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
@@ -161,12 +155,11 @@ export class EffectService {
     });
   }
 
-  async updateShareLink() {
+  async updateShareLink(): Promise<string> {
     // * update share link
     const [res, err]: any = await this.http.api_shareCreateShare({});
     if (err) {
-      this.store.setShareLink('');
-      return;
+      return 'Error ... ';
     }
     const host = (this.store.remoteUrl || window.location.host)
       .replace(/:\/{2,}/g, ':::')
@@ -174,8 +167,7 @@ export class EffectService {
       .replace(/:{3}/g, '://')
       .replace(/(\/$)/, '');
     const lang = !APP_CONFIG.production && this.web.isWeb ? '' : this.lang.langHash;
-    const link = `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
-    this.store.setShareLink(link);
+    return `${host}/${lang ? `${lang}/` : ''}home/share/http/test?shareId=${res.uniqueID}`;
   }
 
   updateEnvList() {
