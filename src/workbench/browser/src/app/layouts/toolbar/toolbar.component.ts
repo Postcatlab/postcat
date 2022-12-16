@@ -28,11 +28,11 @@ export class ToolbarComponent implements OnDestroy {
   }
   changeTheme() {
     const ref = this.modal.create({
-      nzClassName: 'eo-setting-modal',
+      nzClassName: 'eo-system-setting-modal',
       nzTitle: $localize`Settings`,
       nzContent: SystemSettingComponent,
       nzComponentParams: {
-        selectedModule: 'eoapi-theme'
+        selectedModule: 'theme'
       },
       withoutFooter: true
     });

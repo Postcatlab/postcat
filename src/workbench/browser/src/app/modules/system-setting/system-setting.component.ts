@@ -8,14 +8,15 @@ import { AboutComponent, DataStorageComponent, LanguageSwticherComponent, Select
 
 @Component({
   selector: 'eo-system-setting',
-  template: ` <eo-setting [selectedModule]="selectedModule" [nzData]="treeNodes"></eo-setting>`
+  template: ` <eo-setting [selectedModule]="selectedModule" [nzData]="treeNodes"></eo-setting>`,
+  styleUrls: [`./system-setting.component.scss`]
 })
 export class SystemSettingComponent {
   @Input() selectedModule: string;
   treeNodes: SettingItem[] = [
     {
       title: $localize`:@@Account:Account`,
-      id: 'eoapi-account',
+      id: 'account',
       ifShow: () => {
         return this.store.isLogin;
       },
@@ -23,23 +24,23 @@ export class SystemSettingComponent {
     },
     {
       title: $localize`:@@Theme:Theme`,
-      id: 'eoapi-theme',
+      id: 'theme',
       comp: SelectThemeComponent
     },
     {
       title: $localize`:@@Cloud:Cloud Storage`,
-      id: 'eoapi-common',
+      id: 'common',
       comp: DataStorageComponent,
       ifShow: () => !this.webService.isWeb
     },
     {
       title: $localize`:@@Language:Language`,
-      id: 'eoapi-language',
+      id: 'language',
       comp: LanguageSwticherComponent
     },
     {
       title: $localize`About`,
-      id: 'eoapi-about',
+      id: 'about',
       comp: AboutComponent
     }
   ];

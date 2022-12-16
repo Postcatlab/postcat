@@ -1,15 +1,18 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 
+import { EoSettingModule } from '../../modules/eo-ui/setting/setting.module';
 import { SharedModule } from '../../shared/shared.module';
-import { WorkspaceSettingComponent } from './components/workspace-setting/workspace-setting.component';
+import { WorkspaceDeleteComponent } from './components/delete/workspace-delete.component';
+import { WorkspaceEditComponent } from './components/edit/workspace-edit.component';
+import { WorkspaceMemberComponent } from './components/member/workspace-member.component';
+import { WorkspaceSettingComponent } from './components/setting/workspace-setting.component';
 
 @NgModule({
-  declarations: [WorkspaceSettingComponent],
+  declarations: [WorkspaceSettingComponent, WorkspaceEditComponent, WorkspaceMemberComponent, WorkspaceDeleteComponent],
   imports: [
     RouterModule.forChild([
       {
@@ -24,6 +27,7 @@ import { WorkspaceSettingComponent } from './components/workspace-setting/worksp
     ]),
     NzCardModule,
     NzFormModule,
+    EoSettingModule,
     SharedModule,
     NzUploadModule
   ]

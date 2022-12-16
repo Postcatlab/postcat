@@ -90,7 +90,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
    */
   openSettingModal() {
     const ref = this.modal.create({
-      nzClassName: 'eo-setting-modal',
+      nzClassName: 'eo-system-setting-modal',
       nzTitle: $localize`Settings`,
       nzContent: SystemSettingComponent,
       withoutFooter: true

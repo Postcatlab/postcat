@@ -21,21 +21,7 @@ export interface SettingItem {
       <ng-template #options></ng-template>
     </div>
   </section> `,
-  styles: [
-    `
-      ::ng-deep {
-        .eo-setting-modal {
-          width: 600px !important;
-
-          .ant-modal-body {
-            padding: 0 0 15px;
-            min-height: 300px;
-            border-radius: var(--DEFAULT_BORDER_RADIUS);
-          }
-        }
-      }
-    `
-  ]
+  styleUrls: ['./setting.component.scss']
 })
 export class EoSettingComponent implements OnInit, OnDestroy {
   @Input() selectedModule: string;
