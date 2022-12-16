@@ -15,14 +15,13 @@ import { SharedModule } from '../../shared/shared.module';
         path: '',
         redirectTo: 'project',
         pathMatch: 'full'
+      },
+      {
+        path: 'project',
+        loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
       }
-      // {
-      //   path: 'project',
-      //   loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
-      // }
     ]),
     NzCardModule,
-    CommonModule,
     NzFormModule,
     SharedModule,
     NzUploadModule

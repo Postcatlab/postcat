@@ -14,10 +14,6 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'env',
-        loadChildren: () => import('./components/env/env.module').then(m => m.EnvModule)
-      },
-      {
         path: 'http',
         children: [
           {
