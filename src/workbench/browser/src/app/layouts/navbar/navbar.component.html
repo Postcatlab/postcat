@@ -25,6 +25,7 @@
     >
       Extensions
     </button>
+    <nz-divider nzType="vertical"></nz-divider>
     <!-- Change Language -->
     <ng-container *ngIf="store.isShare">
       <eo-ng-select [(ngModel)]="lang.systemLanguage" nzBorderless (ngModelChange)="handleSwitchLang($event)">
@@ -34,7 +35,7 @@
       <nz-divider nzType="vertical"></nz-divider>
     </ng-container>
     <!-- Help -->
-    <eo-ng-dropdown class="ml-[5px]" btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus">
+    <eo-ng-dropdown btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus">
       <ng-template #helpTitle>
         <eo-iconpark-icon name="help"></eo-iconpark-icon>
       </ng-template>

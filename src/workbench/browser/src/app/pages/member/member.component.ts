@@ -6,8 +6,6 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { interval } from 'rxjs';
-import { distinct } from 'rxjs/operators';
 
 @Component({
   selector: 'eo-member',
@@ -25,12 +23,22 @@ import { distinct } from 'rxjs/operators';
           nzAllowClear
           nzShowSearch
           i18n-placeholder
+          [nzOptionHeightPx]="54"
           placeholder="Search by username"
-          [(ngModel)]="userValue"
+          [(ngModel)]="userCache"
+          nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
           <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
-            {{ option.username }} {{ option.email }}
+            <div class="h-full flex justify-between hover-control">
+              <div class="flex flex-col">
+                <span class="font-bold">{{ option.username }}</span>
+                <span>906630451@qq.com</span>
+              </div>
+              <div class="btn flex items-center">
+                <button eo-ng-button nzType="primary" nzBlock (click)="handleAddProject(option)" i18n> Add to project </button>
+              </div>
+            </div>
           </eo-ng-option>
         </eo-ng-select>
         <section class="h-4"></section>
@@ -43,35 +51,28 @@ import { distinct } from 'rxjs/operators';
           [disabled]="btnguixdgStatus()"
           i18n
         >
-          Select a member above
+          Add to project
         </button>
       </ng-container>
     </nz-modal>
     <section class="py-5 px-10 w-6/12 m-auto">
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Project Members</span
-        ><button
-          eo-ng-button
-          [nzLoading]="isAddPeopleBtnLoading"
-          nzType="primary"
-          (click)="btnf5umnoCallback()"
-          [disabled]="!store.isLocal && store.canEdit"
-          i18n
-        >
-          + Add
-        </button>
+        ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()" i18n> + Add </button>
       </h2>
       <section class="py-5">
         <eo-manage-access [data]="memberList" (eoOnRemove)="e97uoiuCallback($event)"></eo-manage-access>
       </section>
-    </section>`
+    </section>`,
+  styleUrls: ['./member.component.scss']
 })
 export class MemberComponent implements OnInit {
+  @observable searchValue = '';
+  userCache;
   isInvateModalVisible;
   isSelectBtnLoading;
   isAddPeopleBtnLoading;
   memberList;
-  userValue;
   userList = [];
   constructor(
     public modal: NzModalService,
@@ -83,17 +84,33 @@ export class MemberComponent implements OnInit {
     private http: RemoteService
   ) {
     this.isInvateModalVisible = false;
-    this.userValue = '';
     this.isSelectBtnLoading = false;
     this.isAddPeopleBtnLoading = false;
+    this.userCache = [];
     this.memberList = [];
   }
 
   async ngOnInit(): Promise<void> {
-    this.message
-      .get()
-      .pipe(distinct(({ type }) => type, interval(400)))
-      .subscribe(async ({ type, data }) => {});
+    makeObservable(this);
+    reaction(
+      () => this.searchValue,
+      value => {
+        if (value.trim() === '') {
+          return;
+        }
+        this.http.api_userSearch({ username: value.trim() }).then(([data, err]: any) => {
+          if (err) {
+            this.userList = [];
+            return;
+          }
+          const memberList = this.memberList.map(it => it.username);
+          this.userList = data.filter(it => {
+            return !memberList.includes(it.username);
+          });
+        });
+      },
+      { delay: 300 }
+    );
 
     const url = this.dataSource.remoteServerUrl;
 
@@ -121,18 +138,13 @@ export class MemberComponent implements OnInit {
     const Member = wData.filter(it => it.roleName !== 'Owner');
     this.memberList = Owner.concat(Member);
   }
-  handleChange(value) {
-    if (value.trim() === '') {
-      this.userList = [];
-      return;
-    }
-    this.http.api_userSearch({ username: value.trim() }).then(([data, err]: any) => {
-      if (err) {
-        this.userList = [];
-        return;
-      }
-      this.userList = data;
-    });
+
+  handleChange(event) {
+    this.searchValue = event;
+  }
+
+  handleAddProject(data) {
+    console.log('option', data);
   }
   handleInvateModalCancel(): void {
     // * 关闭弹窗
@@ -140,17 +152,13 @@ export class MemberComponent implements OnInit {
   }
   async ehe4islCallback() {
     // * nzAfterClose event callback
-    {
-      // * auto clear form
-      this.userValue = '';
-    }
-    this.userValue = '';
+    this.userCache = [];
   }
   async btn0r9zcbCallback() {
     // * click event callback
     this.isSelectBtnLoading = true;
     const btnSelectRunning = async () => {
-      const username = this.userValue;
+      const username = this.userCache;
       const [uData, uErr]: any = await this.api.api_userSearch({ username });
       if (uErr) {
         if (uErr.status === 401) {
@@ -215,7 +223,7 @@ export class MemberComponent implements OnInit {
   }
   btnguixdgStatus() {
     // * disabled status status
-    return this.userValue === '';
+    return this.userCache.length === 0;
   }
   async btnf5umnoCallback() {
     // * click event callback
@@ -224,7 +232,7 @@ export class MemberComponent implements OnInit {
     const btnAddPeopleRunning = async () => {
       // * 唤起弹窗
       this.isInvateModalVisible = true;
-      this.userValue = '';
+      this.userCache = [];
     };
     await btnAddPeopleRunning();
     this.isAddPeopleBtnLoading = false;
