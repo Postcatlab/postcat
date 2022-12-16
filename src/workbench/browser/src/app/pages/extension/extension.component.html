@@ -22,6 +22,7 @@
     <div class="pl-[18px]">
       <div class="tree-node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
         <div class="flex items-center overflow-hidden text-ellipsis">
+          <eo-iconpark-icon *ngIf="node.icon" [name]="node.icon" class="mr-2 h-[14px] mt-[-4px]"></eo-iconpark-icon>
           <span class="truncate node_title">{{ node.title }}</span>
         </div>
       </div>

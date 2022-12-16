@@ -10,21 +10,21 @@
   <nz-list-item *ngFor="let item of seachMember">
     <a class="flex items-center justify-between w-full">
       <nz-list-item-meta>
-        <nz-list-item-meta-avatar>
+        <!-- <nz-list-item-meta-avatar>
           <nz-avatar [nzSize]="44" [nzText]="item.username.at(0)"></nz-avatar>
-        </nz-list-item-meta-avatar>
+        </nz-list-item-meta-avatar> -->
         <nz-list-item-meta-title>
           <div class="flex flex-col">
-            <span class="link">{{ item.username }}</span>
+            <span class="font-bold link">{{ item.username }}</span>
             <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
           </div>
         </nz-list-item-meta-title>
       </nz-list-item-meta>
       <ul nz-list-item-actions>
         <nz-list-item-action>
-          <div class="flex w-[90px] items-center justify-between" *ngIf="store.canEdit && item.roleName !== 'Owner'">
+          <div class="flex w-[90px] items-center justify-between">
             <span>{{ item.roleName }}</span>
-            <div class="operate-btn-list">
+            <div class="operate-btn-list" *ngIf="store.canEdit && item.roleName !== 'Owner'">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>

@@ -30,7 +30,7 @@ export class StoreService {
 
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
-  @observable private shareLink = '';
+
   // ? project
   @observable private currentProject: Project;
   // ? workspace
@@ -89,9 +89,6 @@ export class StoreService {
   }
   @computed get getShareID() {
     return this.shareId;
-  }
-  @computed get getShareLink() {
-    return this.shareLink;
   }
 
   // ? workspace
@@ -180,11 +177,6 @@ export class StoreService {
     this.shareId = data;
     StorageUtil.set('shareId', data);
   }
-
-  @action setShareLink(link = '') {
-    this.shareLink = link;
-  }
-
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
     const local = eoDeepCopy(LOCAL_WORKSPACE);

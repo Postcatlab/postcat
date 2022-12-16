@@ -15,11 +15,12 @@ export class ExtensionComponent implements OnInit {
   @observable extensionName = '';
   @observable selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
   keyword = '';
-  nzSelectedKeys: Array<number | string> = [];
+  nzSelectedKeys: Array<number | string> = ['all'];
   treeNodes: NzTreeNodeOptions[] = [
     {
       key: 'all',
       title: $localize`All`,
+      icon: 'home ',
       isLeaf: true
     },
     {
