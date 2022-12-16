@@ -23,21 +23,15 @@ import { NzModalService } from 'ng-zorro-antd/modal';
           nzAllowClear
           nzShowSearch
           i18n-placeholder
-          [nzOptionHeightPx]="54"
           placeholder="Search by username"
           [(ngModel)]="userCache"
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
           <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
-            <div class="h-full flex justify-between hover-control">
-              <div class="flex flex-col">
-                <span class="font-bold">{{ option.username }}</span>
-                <span>906630451@qq.com</span>
-              </div>
-              <div class="btn flex items-center">
-                <button eo-ng-button nzType="primary" nzBlock (click)="handleAddProject(option)" i18n> Add to project </button>
-              </div>
+            <div class="flex w-full justify-between">
+              <span class="font-bold">{{ option.username }}</span>
+              <span class="text-tips">{{ option.email }}</span>
             </div>
           </eo-ng-option>
         </eo-ng-select>
@@ -63,8 +57,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
       <section class="py-5">
         <eo-manage-access [data]="memberList" (eoOnRemove)="e97uoiuCallback($event)"></eo-manage-access>
       </section>
-    </section>`,
-  styleUrls: ['./member.component.scss']
+    </section>`
 })
 export class MemberComponent implements OnInit {
   @observable searchValue = '';
