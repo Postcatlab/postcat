@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { observable, makeObservable, reaction, autorun } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { ExportApiComponent } from '../../../../modules/extension-select/export-api/export-api.component';
@@ -17,9 +22,19 @@ const actionComponent = {
   templateUrl: './project-setting.component.html',
   styleUrls: ['./project-setting.component.scss']
 })
-export class ProjectSettingComponent {
+export class ProjectSettingComponent implements OnInit {
   modal: NzModalRef;
-  constructor(private modalService: ModalService, private message: EoNgFeedbackMessageService) {}
+  isLoading: boolean;
+  @observable projectName: string;
+  constructor(
+    private modalService: ModalService,
+    private storage: StorageService,
+    private message: EoNgFeedbackMessageService,
+    private store: StoreService,
+    private effect: EffectService
+  ) {
+    this.isLoading = false;
+  }
   overviewList = [
     {
       title: $localize`Import`,
@@ -41,11 +56,21 @@ export class ProjectSettingComponent {
     }
   ];
 
-  handleClickCard = (event, item) => {
-    this.clickCard(item);
-  };
+  ngOnInit(): void {
+    makeObservable(this);
+    const { name } = this.store.getCurrentProject;
+    this.projectName = name;
+  }
 
-  clickCard({ title, desc, type }) {
+  async handleChangeProjectName(name) {
+    this.isLoading = true;
+    const project = this.store.getCurrentProject;
+    const isOk: any = await this.effect.updateProject({ ...project, name });
+    isOk ? this.message.success($localize`Edited successfully`) : this.message.error($localize`Failed Operation`);
+    this.isLoading = false;
+  }
+
+  handleClickCard(event, { title, desc, type }) {
     this.modal = this.modalService.create({
       nzTitle: desc,
       nzContent: actionComponent[type],

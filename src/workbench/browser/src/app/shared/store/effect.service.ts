@@ -148,6 +148,19 @@ export class EffectService {
     });
   }
 
+  updateProject(data) {
+    const workspace = this.store.getCurrentWorkspace;
+    return new Promise(resolve => {
+      this.storage.run('projectUpdate', [workspace.id, data, data.uuid], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          this.store.setCurrentProject(result.data);
+          return resolve(true);
+        }
+        return resolve(false);
+      });
+    });
+  }
+
   async updateShareLink() {
     // * update share link
     const [res, err]: any = await this.http.api_shareCreateShare({});
