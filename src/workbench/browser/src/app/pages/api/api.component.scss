@@ -93,10 +93,10 @@ nz-divider {
         margin: 0;
       }
     }
-  }
 
-  .group-tabset {
-    height: calc(var(--body-height));
+    .ant-tabs-content {
+      height: calc(var(--body-height) - 42px);
+    }
   }
 
   .share-group-tabset {

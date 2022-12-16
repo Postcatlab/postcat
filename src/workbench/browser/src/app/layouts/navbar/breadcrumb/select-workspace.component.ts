@@ -7,7 +7,7 @@ import { MessageService } from '../../../shared/services/message';
 
 @Component({
   selector: 'eo-select-workspace',
-  template: ` <a eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
+  template: ` <a eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
       {{ store.getCurrentWorkspace.title }}
       <eo-iconpark-icon name="down"></eo-iconpark-icon>
     </a>

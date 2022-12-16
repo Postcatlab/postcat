@@ -7,6 +7,11 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
 
+import { eoDeepCopy } from '../../utils/index.utils';
+const LOCAL_WORKSPACE = {
+  title: $localize`Persional Workspace`,
+  id: -1
+} as API.Workspace;
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
@@ -29,19 +34,9 @@ export class StoreService {
   // ? project
   @observable private currentProject: Project;
   // ? workspace
-  @observable private currentWorkspace =
-    StorageUtil.get('currentWorkspace') ||
-    ({
-      title: $localize`Local workspace`,
-      id: -1
-    } as API.Workspace);
+  @observable private currentWorkspace = StorageUtil.get('currentWorkspace') || eoDeepCopy(LOCAL_WORKSPACE);
   //  Local workspace always keep in last
-  @observable private workspaceList: API.Workspace[] = [
-    {
-      title: $localize`Local workspace`,
-      id: -1
-    } as API.Workspace
-  ];
+  @observable private workspaceList: API.Workspace[] = [eoDeepCopy(LOCAL_WORKSPACE)];
 
   // ? project
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);

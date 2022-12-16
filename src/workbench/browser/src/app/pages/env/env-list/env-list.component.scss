@@ -1,12 +1,10 @@
-@mixin item-active {
-  color: var(--MAIN_THEME_COLOR);
-  background-color: #f4f4f4;
-  border-color: transparent;
-  border-radius: 5px;
-}
-
 .env-main {
   height: 100%;
+}
+
+.env-list {
+  height: calc(100% - 40px);
+  overflow: auto;
 }
 
 .env-item:hover,
@@ -17,15 +15,9 @@
 .env-item {
   cursor: pointer;
   height: 40px;
-  transition: all 0.3s ease;
 
   .env-operate {
     display: none;
-  }
-
-  a {
-    transition: all 0.3s ease;
-    opacity: 0;
   }
 
   &:hover {
@@ -37,42 +29,4 @@
       opacity: 1;
     }
   }
-
-  &.active {
-    .name {
-      color: var(--BTN_PRIMARY_BG);
-    }
-  }
 }
-
-.main-content {
-  flex: 1;
-  padding: 0 15px;
-  overflow-y: auto;
-
-  i {
-    cursor: pointer;
-  }
-}
-
-.editable-cell {
-  position: relative;
-  padding: 5px 12px;
-  cursor: pointer;
-}
-
-.editable-row:hover .editable-cell {
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  padding: 4px 11px;
-}
-
-// :host ::ng-deep {
-//   .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-//     border-radius: 6px;
-//   }
-
-//   nz-select {
-//     width: 160px;
-//   }
-// }
