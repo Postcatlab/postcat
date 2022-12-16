@@ -19,7 +19,6 @@ export class ModalService {
     });
   }
   create = (inOpts: ModalOptions) => {
-    console.log('inOpts', inOpts);
     const modalOpts: ModalOptions = {
       nzTitle: null,
       nzContent: inOpts.nzContent,

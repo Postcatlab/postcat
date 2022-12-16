@@ -21,10 +21,14 @@ export class TabOperateService {
    * Tab basic info
    */
   BASIC_TABS: Array<Partial<TabItem>>;
-  //* Allow development mode debug not exist router
-  private allowNotExistRouter = !APP_CONFIG.production;
-  //* Cache page data in tab
-  private disabledCache = false;
+  setting = {
+    //* Cache pagedata in tab
+    disabledCache: false,
+    //* Allow development mode debug not exist router at init
+    allowNotExistRouter: !APP_CONFIG.production,
+    //* Allow open new tab by url at init
+    allowOpenNewTabByUrl: false
+  };
   constructor(
     private tabStorage: TabStorageService,
     private messageService: MessageService,
@@ -35,7 +39,7 @@ export class TabOperateService {
   //Maybe from tab cache info or router url
   init(inArg: { basicTabs: Array<Partial<TabItem>> }) {
     this.BASIC_TABS = inArg.basicTabs;
-    const tabStorage = this.disabledCache ? null : this.tabStorage.getPersistenceStorage();
+    const tabStorage = this.setting.disabledCache ? null : this.tabStorage.getPersistenceStorage();
     const tabCache = this.parseChangeRouter(tabStorage);
     const validTabItem = this.generateTabFromUrl(this.router.url);
     const executeWhenNoTab = () => {
@@ -69,22 +73,20 @@ export class TabOperateService {
       tabsByID.set(tabItem.uuid, tabItem);
     });
     this.tabStorage.tabsByID = tabsByID;
-    //Still no valid tab item
+    //After filter unvalid tab,Still no tab item can be selected
     if (!this.tabStorage.tabOrder?.length) {
       executeWhenNoTab();
       return;
     }
 
-    //Tab from url
-    if (validTabItem) {
-      //If current url did't match exist tab,throw error
-      this.getSameContentTab(validTabItem);
-      //If current url is valid tab url,select it
+    //If current url is valid tab url,select it
+    if (validTabItem && this.setting.allowOpenNewTabByUrl) {
       this.operateTabAfterRouteChange({
         url: this.router.url
       });
       return;
-    } else if (this.allowNotExistRouter) {
+    }
+    if (!validTabItem && this.setting.allowNotExistRouter) {
       return;
     }
     //Tab from last choose

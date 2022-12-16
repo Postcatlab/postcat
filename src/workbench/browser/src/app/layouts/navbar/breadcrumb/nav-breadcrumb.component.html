@@ -3,6 +3,8 @@
     <eo-select-workspace></eo-select-workspace>
   </nz-breadcrumb-item>
   <nz-breadcrumb-item class="underline">
-    <a [routerLink]="['/home/project']">{{ store.getCurrentProject?.name }}</a>
+    <a [routerLink]="['/home/project']" [queryParams]="{ pid: store.getCurrentProjectID, wid: store.getCurrentWorkspace.uuid }">{{
+      store.getCurrentProject?.name
+    }}</a>
   </nz-breadcrumb-item>
 </nz-breadcrumb>
