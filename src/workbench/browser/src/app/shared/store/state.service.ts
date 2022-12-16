@@ -7,6 +7,11 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
 import { action, computed, makeObservable, reaction, observable } from 'mobx';
 import { filter } from 'rxjs/operators';
 
+import { eoDeepCopy } from '../../utils/index.utils';
+const LOCAL_WORKSPACE = {
+  title: $localize`Persional Workspace`,
+  id: -1
+} as API.Workspace;
 /** is show switch success tips */
 export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 
@@ -29,19 +34,9 @@ export class StoreService {
   // ? project
   @observable private currentProject: Project;
   // ? workspace
-  @observable private currentWorkspace =
-    StorageUtil.get('currentWorkspace') ||
-    ({
-      title: $localize`Local workspace`,
-      id: -1
-    } as API.Workspace);
+  @observable private currentWorkspace = StorageUtil.get('currentWorkspace') || eoDeepCopy(LOCAL_WORKSPACE);
   //  Local workspace always keep in last
-  @observable private workspaceList: API.Workspace[] = [
-    {
-      title: $localize`Local workspace`,
-      id: -1
-    } as API.Workspace
-  ];
+  @observable private workspaceList: API.Workspace[] = [eoDeepCopy(LOCAL_WORKSPACE)];
 
   // ? project
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
@@ -104,8 +99,7 @@ export class StoreService {
     return this.workspaceList;
   }
   @computed get getLocalWorkspace() {
-    // * The last data must be local workspace
-    return this.workspaceList.at(-1);
+    return eoDeepCopy(LOCAL_WORKSPACE);
   }
   @computed get getCurrentWorkspace() {
     return this.currentWorkspace;
@@ -193,22 +187,12 @@ export class StoreService {
 
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
-    const local = this.workspaceList.at(-1);
-    this.workspaceList = [...data.filter(it => it.id !== -1).map(it => ({ ...it, type: 'online' })), local];
-    if (this.workspaceList.length === 1) {
-      this.setCurrentWorkspace(local);
-    }
+    const local = eoDeepCopy(LOCAL_WORKSPACE);
+    this.workspaceList = [local, ...data.filter(it => it.id !== -1).map(it => ({ ...it, type: 'online' }))];
   }
   @action async setCurrentWorkspace(workspace: API.Workspace) {
     this.currentWorkspace = workspace;
     StorageUtil.set('currentWorkspace', workspace);
-    if (this.workspaceList.length === 1) {
-      // * new user, only has local workspace
-      return;
-    }
-    // * refresh view
-    await this.router.navigate(['**']);
-    await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
     this.message.send({ type: 'workspaceChange', data: true });
   }
   @action setCurrentProject(project: Project) {

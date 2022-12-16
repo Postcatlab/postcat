@@ -5,9 +5,9 @@
 </nz-empty>
 <div *ngIf="model && model.length">
   <!-- Formdata -->
-  <ul class="p-pbase" *ngIf="modelType !== 'string'">
+  <ul class="p-base" *ngIf="modelType !== 'string'">
     <li *ngFor="let item of model">
-      <span class="header-key fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
+      <span class="text-tips fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
     </li>
   </ul>
   <!-- JSON / XML / Raw -->

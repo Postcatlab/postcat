@@ -3,7 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { filter } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
 import { SidebarModuleInfo } from './sidebar.model';
 import { SidebarService } from './sidebar.service';
@@ -14,8 +15,8 @@ import { SidebarService } from './sidebar.service';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  destroy = false;
   modules: Array<ModuleInfo | SidebarModuleInfo | any>;
+  routerSubscribe: Subscription;
   constructor(
     private router: Router,
     public sidebar: SidebarService,
@@ -72,7 +73,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   watchRouterChange() {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
+    this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.getIDFromRoute();
     });
   }
@@ -83,7 +84,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.router.navigate([route]);
   }
   ngOnDestroy(): void {
-    this.destroy = true;
+    this.routerSubscribe.unsubscribe();
   }
   private getModules() {
     const defaultModule = [
@@ -135,7 +136,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);
-      eoConsole.warn(`[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule);
+      eoConsole.warn(`[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule, urlArr);
       return;
     }
     this.sidebar.currentModule = currentModule;

@@ -23,6 +23,7 @@ declare global {
     MSBlobBuilder: any;
     monaco: typeof monaco;
     __POWERED_BY_EOAPI__: boolean;
+    __POWERED_BY_POSTCAT__: boolean;
   }
   declare const eoConsole: typeof eoConsole;
 }

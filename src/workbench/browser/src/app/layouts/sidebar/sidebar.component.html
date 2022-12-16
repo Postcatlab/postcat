@@ -10,7 +10,7 @@
       [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentModule?.id }"
     >
       <i class="icon">
-        <img class="app-logo" *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" />
+        <img class="app-logo" loading="lazy" *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" />
         <ng-template #icon>
           <eo-iconpark-icon [name]="item.icon"></eo-iconpark-icon>
         </ng-template>

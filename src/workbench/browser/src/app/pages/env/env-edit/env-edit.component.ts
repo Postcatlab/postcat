@@ -66,8 +66,7 @@ export class EnvEditComponent {
         if ([ctrlKey, metaKey].includes(true) && code === 'KeyS') {
           // 或者 return false;
           event.preventDefault();
-          const id = Number(this.route.snapshot.queryParams.uuid);
-          this.saveEnv(id);
+          this.saveEnv();
         }
       });
   }
@@ -82,7 +81,8 @@ export class EnvEditComponent {
     }
     return true;
   }
-  saveEnv(uuid: string | number | undefined = undefined) {
+  saveEnv() {
+    const uuid = Number(this.route.snapshot.queryParams.uuid);
     if (!this.checkForm()) {
       return;
     }
@@ -109,6 +109,7 @@ export class EnvEditComponent {
       if (result.status === StorageResStatus.success) {
         this.message.success(operate.success);
         this.effect.updateEnvList();
+        console.log(operateName);
         if (operateName === 'add') {
           this.router.navigate(['home/api/env'], {
             queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: result.data.uuid }

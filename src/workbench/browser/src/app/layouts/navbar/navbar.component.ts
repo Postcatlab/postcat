@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExtensionComponent } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { interval } from 'rxjs';
+import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
 import { ElectronService, WebService } from '../../core/services';
@@ -18,7 +18,7 @@ import { ModalService } from '../../shared/services/modal.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   resourceInfo = this.web.resourceInfo;
   helpMenus = [
     {
@@ -32,6 +32,7 @@ export class NavbarComponent implements OnInit {
       click: $event => {}
     }
   ];
+  private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
     private web: WebService,
@@ -47,6 +48,7 @@ export class NavbarComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.message
       .get()
+      .pipe(takeUntil(this.destroy$))
       .pipe(distinct(({ type }) => type, interval(400)))
       .subscribe(async ({ type }) => {
         if (type === 'open-setting') {
@@ -68,7 +70,10 @@ export class NavbarComponent implements OnInit {
       nzFooter: null
     });
   }
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   loginOrSign() {
     this.dataSourceService.checkRemoteCanOperate();
   }

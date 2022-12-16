@@ -26,7 +26,6 @@ export class PagesComponent implements OnInit {
     this.initPlugSideabr();
     this.initSidebarVisible(this.router.url);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
-      console.log(this);
       this.initSidebarVisible(res.url);
     });
   }

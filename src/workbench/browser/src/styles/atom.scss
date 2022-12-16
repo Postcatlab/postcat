@@ -1,5 +1,10 @@
-.p-pbase {
+.p-base {
   padding: var(--PADDING_Y) var(--PADDING_X);
+}
+
+.px-base {
+  padding-left: var(--PADDING_X);
+  padding-right: var(--PADDING_X);
 }
 
 .rounded-r {
@@ -8,4 +13,12 @@
 
 .rounded-l {
   border-radius: var(--DEFAULT_BORDER_RADIUS) 0 0 var(--DEFAULT_BORDER_RADIUS) !important;
+}
+
+.text-tips {
+  color: var(--TIPS_TEXT_COLOR);
+}
+
+.text-main-color {
+  color: var(--MAIN_THEME_COLOR);
 }

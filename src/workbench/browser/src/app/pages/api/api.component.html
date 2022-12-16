@@ -29,9 +29,7 @@
               <eo-iconpark-icon name="folder-open"></eo-iconpark-icon>
             </span>
           </ng-template>
-          <div class="inner-content">
-            <eo-api-group-tree></eo-api-group-tree>
-          </div>
+          <eo-api-group-tree></eo-api-group-tree>
         </eo-ng-tab>
         <eo-ng-tab [nzTitle]="historyTitle" *ngIf="!store.isShare">
           <ng-template #historyTitle>

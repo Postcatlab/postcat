@@ -6,9 +6,7 @@ import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface,
 
 @Injectable()
 export class HttpStorage implements StorageInterface {
-  constructor(private http: HttpClient) {
-    console.log('eoapi http storage start');
-  }
+  constructor(private http: HttpClient) {}
   systemCheck() {
     return this.http.get('/system/status') as Observable<object>;
   }

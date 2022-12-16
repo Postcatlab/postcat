@@ -7,6 +7,7 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { windowWhen } from 'rxjs';
 
 import { ElectronService } from '../../core/services';
 
@@ -23,6 +24,7 @@ export class GlobalProvider {
     private electron: ElectronService
   ) {
     window.__POWERED_BY_EOAPI__ = true;
+    window.__POWERED_BY_POSTCAT__ = true;
   }
 
   injectGlobalData() {
