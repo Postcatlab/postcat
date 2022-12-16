@@ -26,6 +26,7 @@
     </button>
   </div>
   <eo-ng-tree-default
+    *ngIf="historyList.length"
     [nzData]="historyList"
     [nzSelectedKeys]="nzSelectedKeys"
     nzBlockNode

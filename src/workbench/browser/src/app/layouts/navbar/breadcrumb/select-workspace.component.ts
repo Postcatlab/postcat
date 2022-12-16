@@ -12,9 +12,9 @@ import { MessageService } from '../../../shared/services/message';
       <eo-iconpark-icon name="down"></eo-iconpark-icon>
     </a>
     <eo-ng-dropdown-menu #workspaceMenu>
-      <ul class="ml-[-11px]" nz-menu>
+      <ul nz-menu>
         <div class="flex py-[5px] px-[12px]">
-          <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder placeholder="Search Workspace" [(ngModel)]="searchValue" />
+          <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder placeholder="Search" [(ngModel)]="searchValue" />
           <button
             eoNgFeedbackTooltip
             i18n-nzTooltipTitle
@@ -27,17 +27,36 @@ import { MessageService } from '../../../shared/services/message';
             <eo-iconpark-icon name="plus"></eo-iconpark-icon>
           </button>
         </div>
-        <li
-          nz-menu-item
-          (click)="changeWorkspace(item)"
-          [nzSelected]="store.getCurrentWorkspace?.id === item.id"
-          *ngFor="let item of searchWorkspace"
-        >
-          <eo-iconpark-icon class="mr-[5px]" name="link-cloud-{{ item.id !== -1 ? 'sucess' : 'faild' }}"> </eo-iconpark-icon>
-          {{ item.title }}
-        </li>
+        <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace)">
+          <p class="text-tips px-base mb-[10px]" i18n>Local</p>
+          <li class="px-[25px]" [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }" nz-menu-item>
+            <eo-iconpark-icon class="mr-[5px]" size="15px" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
+          >
+        </div>
+        <nz-divider class="m-0"></nz-divider>
+        <div class="my-[10px]">
+          <p class="text-tips px-base mb-[10px]" i18n>Cloud</p>
+          <p i18n *ngIf="!cloudWorkspaces.length" class="text-tips px-base mx-[5px] text-[12px]">No cloud worspace</p>
+          <li
+            class="px-[25px]"
+            nz-menu-item
+            (click)="changeWorkspace(item)"
+            [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === item.id }"
+            *ngFor="let item of cloudWorkspaces"
+          >
+            <eo-iconpark-icon class="mr-[5px]" size="15px" name="link-cloud-sucess"> </eo-iconpark-icon>
+            <span class="truncate mw-[250px]"> {{ item.title }}</span>
+          </li>
+        </div>
       </ul>
-    </eo-ng-dropdown-menu>`
+    </eo-ng-dropdown-menu>`,
+  styles: [
+    `
+      .active-item {
+        color: var(--MAIN_THEME_COLOR);
+      }
+    `
+  ]
 })
 export class SelectWorkspaceComponent {
   searchValue: string;
@@ -48,7 +67,23 @@ export class SelectWorkspaceComponent {
     private dataSourceService: DataSourceService,
     private message: MessageService
   ) {}
-
+  get localWorkspace() {
+    const result = this.searchWorkspace(this.searchValue, [this.store.getLocalWorkspace]);
+    return result[0];
+  }
+  get cloudWorkspaces() {
+    return this.searchWorkspace(
+      this.searchValue,
+      this.store.getWorkspaceList.filter(val => val.id !== -1)
+    );
+  }
+  searchWorkspace(text, list) {
+    if (!text) {
+      return list;
+    }
+    const searchText = text.toLocaleLowerCase();
+    return list.filter(val => val.title.toLocaleLowerCase().includes(searchText));
+  }
   changeWorkspace(item) {
     this.effect.updateWorkspace(item);
   }
@@ -56,13 +91,5 @@ export class SelectWorkspaceComponent {
     this.dataSourceService.checkRemoteCanOperate(() => {
       this.message.send({ type: 'addWorkspace', data: {} });
     });
-  }
-
-  get searchWorkspace() {
-    if (!this.searchValue) {
-      return this.store.getWorkspaceList;
-    }
-    const searchText = this.searchValue.toLocaleLowerCase();
-    return this.store.getWorkspaceList.filter(val => val.title.toLocaleLowerCase().includes(searchText));
   }
 }

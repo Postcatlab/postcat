@@ -507,10 +507,13 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * Expand Group fit current select api  when router change
    */
   private watchRouterChange() {
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.setSelectedKeys();
-      this.expandGroup();
-    });
+    this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((res: any) => {
+        this.setSelectedKeys();
+        this.expandGroup();
+      });
   }
   private nodeToGroup(node: NzTreeNode): Group {
     return {

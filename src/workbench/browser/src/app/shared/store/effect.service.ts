@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
@@ -23,6 +24,7 @@ export class EffectService {
     private store: StoreService,
     private http: RemoteService,
     private message: MessageService,
+    private router: Router,
     private lang: LanguageService,
     private web: WebService
   ) {
@@ -129,16 +131,19 @@ export class EffectService {
       }
       workspace = data;
       //?Why
-      // StorageUtil.remove('server_version');
+      StorageUtil.remove('server_version');
     }
-    this.storage.run('projectBulkLoad', [workspace.id], (result: StorageRes) => {
+    // * real set workspace
+    this.store.setCurrentWorkspace(workspace);
+    this.storage.run('projectBulkLoad', [workspace.id], async (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         // * update project id
         const projects = result.data;
         this.store.setCurrentProject(projects.at(0));
-        // * real set workspace
-        this.store.setCurrentWorkspace(workspace);
         this.updateShareLink();
+        // * refresh view
+        await this.router.navigate(['**']);
+        await this.router.navigate(['/home'], { queryParams: { spaceID: workspace.id } });
       }
     });
   }

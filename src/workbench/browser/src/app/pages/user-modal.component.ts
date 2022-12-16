@@ -282,6 +282,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
             workspaces: []
           });
           this.store.setWorkspaceList([]);
+          this.effect.updateWorkspace(this.store.getLocalWorkspace);
           this.eMessage.success($localize`Successfully logged out !`);
           const refreshToken = this.store.getLoginInfo.refreshToken;
           this.store.clearAuth();
