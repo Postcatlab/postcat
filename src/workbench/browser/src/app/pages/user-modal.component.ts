@@ -228,17 +228,16 @@ export class UserModalComponent implements OnInit, OnDestroy {
         if (type === 'login') {
           // * 唤起弹窗
           this.isLoginModalVisible = true;
-          {
-            {
-              {
-                // * auto focus
-                setTimeout(() => {
-                  this.usernameLoginRef?.nativeElement.focus();
-                }, 300);
-              }
-            }
-          }
+          // * auto focus
+          setTimeout(() => {
+            this.usernameLoginRef?.nativeElement.focus();
+          }, 300);
 
+          return;
+        }
+
+        if (type === 'server-fail') {
+          this.eMessage.error($localize`Oops, server fail`);
           return;
         }
 

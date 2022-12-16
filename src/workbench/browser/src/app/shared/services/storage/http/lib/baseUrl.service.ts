@@ -31,7 +31,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
     super();
     //* Web deploy from v1.9.1
-    //TODO 2023.02.01 change prefix to '/api/'
+    // TODO 2023.02.01 change prefix to '/api/'
     this.prefix = this.web.isWeb ? '/api/' : '/';
   }
 
@@ -74,6 +74,9 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401 && this.workspaceID !== -1) {
             this.messageService.send({ type: 'login', data: {} });
+          }
+          if ([500, 502, 503, 504].includes(err.status)) {
+            this.messageService.send({ type: 'server-fail', data: {} });
           }
         }
         return err;
