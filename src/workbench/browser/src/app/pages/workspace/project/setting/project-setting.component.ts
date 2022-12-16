@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { observable, makeObservable, reaction, autorun } from 'mobx';
+import { observable, makeObservable, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { ExportApiComponent } from '../../../../modules/extension-select/export-api/export-api.component';
@@ -28,7 +26,6 @@ export class ProjectSettingComponent implements OnInit {
   @observable projectName: string;
   constructor(
     private modalService: ModalService,
-    private storage: StorageService,
     private message: EoNgFeedbackMessageService,
     private store: StoreService,
     private effect: EffectService
@@ -58,8 +55,15 @@ export class ProjectSettingComponent implements OnInit {
 
   ngOnInit(): void {
     makeObservable(this);
-    const { name } = this.store.getCurrentProject;
-    this.projectName = name;
+    reaction(
+      () => this.store.getCurrentProject.name,
+      name => {
+        if (this.projectName === name) {
+          return;
+        }
+        this.projectName = name;
+      }
+    );
   }
 
   async handleChangeProjectName(name) {

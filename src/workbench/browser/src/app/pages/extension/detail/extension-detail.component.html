@@ -1,4 +1,4 @@
-<div class="h-full extension-detail flex flex-col" *ngIf="extensionDetail">
+<div class="flex flex-col h-full extension-detail" *ngIf="extensionDetail">
   <div class="top-0 z-50">
     <div class="pb-[16px]">
       <a eo-ng-button nzType="link" (click)="backToList()" class="flex !pl-[12px] leading-[40px] h-[40px] !text-black">
@@ -19,7 +19,7 @@
           <button
             eo-ng-button
             nzType="primary"
-            class="h-[30px]"
+            class="h-[30px] w-20"
             [nzLoading]="isOperating"
             [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
             (click)="handleInstall()"
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <section class="h-full flex flex-col overflow-hidden">
+  <section class="flex flex-col h-full overflow-hidden">
     <eo-ng-tabset
       [(nzSelectedIndex)]="nzSelectedIndex"
       [nzTabBarExtraContent]="extraTemplate"
@@ -54,8 +54,9 @@
           </nz-skeleton>
         </div>
       </eo-ng-tab>
+      <!-- Support -->
       <eo-ng-tab i18n-nzTitle nzTitle="Support">
-        <nz-descriptions [nzColumn]="1" nzTitle="">
+        <nz-descriptions [nzColumn]="1" nzTitle="" class="preview_tab">
           <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
           <nz-descriptions-item *ngIf="extensionDetail.repository?.url" i18n-nzTitle nzTitle="Repository">
@@ -71,6 +72,7 @@
           </nz-descriptions-item>
         </nz-descriptions>
       </eo-ng-tab>
+      <!-- ChangeLog -->
       <eo-ng-tab *ngIf="changeLog" i18n-nzTitle nzTitle="ChangeLog">
         <nz-skeleton class="preview_tab" [nzLoading]="changelogLoading" [nzActive]="true">
           <eo-shadow-dom *ngIf="!changeLogNotFound" class="md-preview" [text]="changeLog"> </eo-shadow-dom>

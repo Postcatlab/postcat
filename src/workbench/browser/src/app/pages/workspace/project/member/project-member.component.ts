@@ -45,7 +45,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
           [disabled]="btnguixdgStatus()"
           i18n
         >
-          Add to project
+          Invite
         </button>
       </ng-container>
     </nz-modal>
