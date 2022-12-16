@@ -15,13 +15,13 @@ import { ElectronService } from '../../../core/services';
       <p class="">V{{ versionInfo?.version }}</p>
       <!-- star -->
       <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center mt-[15px]">
-        <img class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
+        <img loading="lazy" class="mx-4" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
       </a>
       <p i18n class="text-center mt-[15px]">
         Hi!~ If you like <b>Postcat</b>, please give the Postcat a Star!<br />Your support is our greatest motivation~
       </p>
       <a class="favor-image-link mt-[15px]" target="_blank" href="https://github.com/eolinker/eoapi">
-        <img class="w-[40px] favor-image align-middle" src="assets/images/heart.png" />
+        <img loading="lazy" class="w-[40px] favor-image align-middle" src="assets/images/heart.png" />
       </a>
       <nz-divider></nz-divider>
       <nz-descriptions [nzColumn]="1">

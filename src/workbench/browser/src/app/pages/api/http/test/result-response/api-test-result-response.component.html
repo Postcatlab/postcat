@@ -7,10 +7,7 @@
 </div>
 <div class="p-[20px]" *ngIf="model && (model | json) !== '{}'">
   <!-- Status Bar -->
-  <div
-    *ngIf="model?.statusCode"
-    class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}"
-  >
+  <div *ngIf="model?.statusCode" class="mb15 basic_info_bar cw f_row f_js {{ model.statusCode ? codeStatus.class : 'code_red' }}">
     <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
     <div class="flex items-center text-[12px]">
       <span class="mr-[15px]" id="size">Size: {{ model.responseLength | byteToString }}</span>
@@ -29,18 +26,13 @@
   <!-- Response -->
   <div *ngIf="model.responseType">
     <ng-container *ngIf="responseIsImg; else stream">
-      <img class="max-w-full" [src]="imgBlobUrl" />
+      <img loading="lazy" class="max-w-full" [src]="imgBlobUrl" />
     </ng-container>
     <ng-template #stream>
       <ng-container *ngIf="model.responseType === 'stream' && model.responseLength > 500000; else longText">
         <div class="text-center">
           <span i18n>Unable to preview non-text type data, you can</span>
-          <button
-            class="eo_theme_btn_default mlr5"
-            type="button"
-            (click)="downloadResponseText()"
-            i18n="@@downloadResponse"
-          >
+          <button class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()" i18n="@@downloadResponse">
             download response
           </button>
           <span i18n>and open it with other programs.</span>
@@ -51,12 +43,7 @@
       <ng-container *ngIf="model.responseType === 'longText' && model.responseLength > 500000; else other">
         <div class="text-center">
           <span i18n>The response result exceeds the previewable size, you can</span>
-          <button
-            i18n="@@downloadResponse"
-            class="eo_theme_btn_default mlr5"
-            type="button"
-            (click)="downloadResponseText()"
-          >
+          <button i18n="@@downloadResponse" class="eo_theme_btn_default mlr5" type="button" (click)="downloadResponseText()">
             download response
           </button>
           <!-- or
