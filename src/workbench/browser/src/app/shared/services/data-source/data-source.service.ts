@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';

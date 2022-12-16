@@ -9,15 +9,23 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzTreeViewModule } from 'ng-zorro-antd/tree-view';
 
+import { EoSettingModule } from '../eo-ui/setting/setting.module';
 import { AboutComponent, DataStorageComponent, LanguageSwticherComponent } from './common';
 import { AccountComponent } from './common/account.component';
 import { SelectThemeComponent } from './common/select-theme/select-theme.component';
-import { SettingComponent } from './setting.component';
+import { SystemSettingComponent } from './system-setting.component';
 
 const ANTDMODULES = [NzDividerModule, NzInputNumberModule, NzEmptyModule, NzDescriptionsModule, NzTreeViewModule];
 @NgModule({
-  declarations: [SettingComponent, SelectThemeComponent, AccountComponent, DataStorageComponent, LanguageSwticherComponent, AboutComponent],
-  imports: [FormsModule, EoNgTabsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
-  exports: [SettingComponent]
+  declarations: [
+    SystemSettingComponent,
+    SelectThemeComponent,
+    AccountComponent,
+    DataStorageComponent,
+    LanguageSwticherComponent,
+    AboutComponent
+  ],
+  imports: [EoSettingModule, FormsModule, EoNgTabsModule, ReactiveFormsModule, SharedModule, CommonModule, ...ANTDMODULES],
+  exports: [SystemSettingComponent]
 })
-export class SettingModule {}
+export class SystemSettingModule {}

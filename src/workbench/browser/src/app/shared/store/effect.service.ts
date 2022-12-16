@@ -132,8 +132,6 @@ export class EffectService {
         return;
       }
       workspace = data;
-      //?Why
-      StorageUtil.remove('server_version');
     }
     // * real set workspace
     this.store.setCurrentWorkspace(workspace);

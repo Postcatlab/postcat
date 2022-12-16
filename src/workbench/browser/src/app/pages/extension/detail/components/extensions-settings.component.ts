@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 
 @Component({
   selector: 'eo-extension-setting',
@@ -86,7 +86,7 @@ export class ExtensionSettingComponent implements OnInit {
 
   private init() {
     this.formatProperties();
-    this.localSettings = this.settingService.getSettings();
+    this.localSettings = this.settingService.settings;
     const controls = {};
 
     this.setSettingsModel(this.properties, controls);
@@ -124,7 +124,6 @@ export class ExtensionSettingComponent implements OnInit {
 
   handleSave = () => {
     this.settingService.saveSetting(this.localSettings);
-    window.eo?.saveSettings?.({ ...this.localSettings });
     this.message.success($localize`Save Success`);
   };
 }

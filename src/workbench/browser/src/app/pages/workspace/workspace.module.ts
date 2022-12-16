@@ -6,9 +6,10 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 
 import { SharedModule } from '../../shared/shared.module';
+import { WorkspaceSettingComponent } from './components/workspace-setting/workspace-setting.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [WorkspaceSettingComponent],
   imports: [
     RouterModule.forChild([
       {

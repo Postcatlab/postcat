@@ -10,7 +10,7 @@ import { distinct } from 'rxjs/operators';
 import { ElectronService, WebService } from '../../core/services';
 import { LanguageService } from '../../core/services/language/language.service';
 import { ThemeService } from '../../core/services/theme.service';
-import { SettingComponent } from '../../modules/setting/setting.component';
+import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
 
 @Component({
@@ -91,8 +91,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   openSettingModal() {
     const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
-      nzTitle: $localize`Setting`,
-      nzContent: SettingComponent,
+      nzTitle: $localize`Settings`,
+      nzContent: SystemSettingComponent,
       withoutFooter: true
     });
     this.message

@@ -1,11 +1,10 @@
-import { getLocaleData } from '../node/i18n';
 import { LANGUAGES } from '../../workbench/browser/src/app/core/services/language/language.model';
+import { getLocaleData } from '../node/i18n';
 export class I18N {
-  constructor() {
-  }
+  constructor() {}
   getSystemLanguage() {
     let deafultLanguage =
-      LANGUAGES.find((val) => window.location.href.includes(`/${val.path}`))?.value ||
+      LANGUAGES.find(val => window.location.href.includes(`/${val.path}`))?.value ||
       (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
     return window.eo.getSettings()['eoapi-language'] || deafultLanguage;
   }

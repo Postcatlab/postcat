@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { SettingComponent } from '../../modules/setting/setting.component';
+import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
 import { SidebarService } from '../sidebar/sidebar.service';
 
@@ -29,8 +29,8 @@ export class ToolbarComponent implements OnDestroy {
   changeTheme() {
     const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
-      nzTitle: $localize`Setting`,
-      nzContent: SettingComponent,
+      nzTitle: $localize`Settings`,
+      nzContent: SystemSettingComponent,
       nzComponentParams: {
         selectedModule: 'eoapi-theme'
       },

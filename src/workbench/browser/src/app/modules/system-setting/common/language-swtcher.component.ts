@@ -11,12 +11,7 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
       (ngModelChange)="handleChange($event)"
       [nzCustomTemplate]="defaultTemplate"
     >
-      <eo-ng-option
-        *ngFor="let item of languageService.languages"
-        nzCustomContent
-        [nzValue]="item.value"
-        [nzLabel]="item.name"
-      >
+      <eo-ng-option *ngFor="let item of languageService.languages" nzCustomContent [nzValue]="item.value" [nzLabel]="item.name">
         {{ item.name }}
       </eo-ng-option>
     </eo-ng-select>
@@ -30,12 +25,12 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
       [nz-form]:not(.ant-form-inline):not(.ant-form-vertical) {
         max-width: 600px;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class LanguageSwticherComponent implements OnInit {
   @Input() model: object = {};
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   constructor(public languageService: LanguageService) {}
 
   ngOnInit(): void {

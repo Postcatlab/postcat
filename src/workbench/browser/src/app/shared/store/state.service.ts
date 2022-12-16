@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, ActivatedRoute, Router } from '@angular/router';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';

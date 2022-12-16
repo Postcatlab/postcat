@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
 import { ipcRenderer, webFrame } from 'electron';
-import { getSettings } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { getSettings } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 import pkg from '../../../../../../../../package.json';
+import { StoreService } from '../../../shared/store/state.service';
 
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
@@ -24,7 +25,7 @@ export class ElectronService {
   webFrame: typeof webFrame;
   childProcess: typeof childProcess;
   fs: typeof fs;
-  constructor() {
+  constructor(private store: StoreService) {
     // Conditional imports
     if (this.isElectron) {
       // Notes :
@@ -116,7 +117,7 @@ export class ElectronService {
 
     // remote server version
     const serverVersion = StorageUtil.get('server_version');
-    if (serverVersion) {
+    if (serverVersion && !this.store.isLocal) {
       descriptions.push({
         id: 'server',
         label: 'Server',

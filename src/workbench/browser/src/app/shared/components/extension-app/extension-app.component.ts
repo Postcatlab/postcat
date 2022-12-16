@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
 @Component({
   selector: 'extension-app',

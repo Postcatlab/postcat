@@ -5,6 +5,8 @@ import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
+import { SettingService } from '../settings.service';
+
 @Component({
   selector: 'eo-data-storage',
   template: `
@@ -41,9 +43,7 @@ import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage'
   ]
 })
 export class DataStorageComponent implements OnInit, OnChanges {
-  @Input() model: Record<string, any> = {};
-  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
-
+  model;
   validateForm!: FormGroup;
   loading = false;
 
@@ -51,8 +51,11 @@ export class DataStorageComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private messageS: MessageService,
-    private dataSource: DataSourceService
-  ) {}
+    private dataSource: DataSourceService,
+    private settingService: SettingService
+  ) {
+    this.model = this.settingService.settings;
+  }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -89,7 +92,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       StorageUtil.set('IS_SHOW_DATA_SOURCE_TIP', 'false');
       //Relogin to update user info
       this.messageS.send({ type: 'login', data: {} });
-      this.modelChange.emit(this.model);
+      this.saveConf();
     } else {
       this.message.error($localize`Failed to connect`);
     }
@@ -102,5 +105,8 @@ export class DataStorageComponent implements OnInit, OnChanges {
     Object.keys(model).forEach(key => {
       this.validateForm.get(key)?.setValue(model[key]);
     });
+  }
+  saveConf() {
+    this.settingService.saveSetting(this.model);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
@@ -31,6 +31,7 @@ export class GlobalProvider {
     window.eo ??= {};
     window.eo.modalService = this.modalService;
     window.eo.getExtensionSettings = this.settingService.getConfiguration;
+    window.eo.getSettings = this.settingService.settings;
     /** prload 里面同时有的方法 start */
     window.eo.getSidebarViews ??= this.getSidebarViews;
     window.eo.getSidebarView ??= this.getSidebarView;
@@ -50,7 +51,6 @@ export class GlobalProvider {
   getSidebarView = (extName): SidebarView | undefined => {
     return this.getSidebarViews().find(n => n.extensionID === extName);
   };
-
   getSidebarViews = (): SidebarView[] => {
     const sidebarView = this.webExtensionService.getFeatures<SidebarView>('sidebarView');
     return [...sidebarView.values()];

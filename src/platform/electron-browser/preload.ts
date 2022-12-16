@@ -1,4 +1,5 @@
 import { I18N } from './i18n';
+
 const { ipcRenderer } = require('electron');
 // 正在安装中的插件任务列表
 const installTask = new Map();
@@ -48,10 +49,10 @@ window.eo = {
       }
     }
     return featureModules.get(id);
-  },
+  }
 };
 // 卸载feature模块
-window.eo.unloadFeatureModule = (id) => {
+window.eo.unloadFeatureModule = id => {
   featureModules.delete(id);
 };
 
@@ -61,21 +62,21 @@ window.eo.installModule = (name, isLocal = false) => {
   result
     .then(() => {
       const callbackTask = installTask.get(name);
-      callbackTask.forEach((callback) =>
+      callbackTask.forEach(callback =>
         callback({
           extName: name,
           type: 'install',
-          status: 'success',
+          status: 'success'
         })
       );
     })
     .catch(() => {
       const callbackTask = installTask.get(name);
-      callbackTask.forEach((callback) =>
+      callbackTask.forEach(callback =>
         callback({
           extName: name,
           type: 'install',
-          status: 'error',
+          status: 'error'
         })
       );
     })
@@ -91,21 +92,21 @@ window.eo.uninstallModule = (name, isLocal = false) => {
   result
     .then(() => {
       const callbackTask = uninstallTask.get(name);
-      callbackTask.forEach((callback) =>
+      callbackTask.forEach(callback =>
         callback({
           extName: name,
           type: 'uninstall',
-          status: 'success',
+          status: 'success'
         })
       );
     })
     .catch(() => {
       const callbackTask = uninstallTask.get(name);
-      callbackTask.forEach((callback) =>
+      callbackTask.forEach(callback =>
         callback({
           extName: name,
           type: 'uninstall',
-          status: 'error',
+          status: 'error'
         })
       );
     })
@@ -143,34 +144,6 @@ window.eo.getSidebarViews = (extName: string) => {
   return ipcRenderer.invoke('eo-sync', { action: 'getSidebarViews', data: { extName } });
 };
 
-window.eo.saveSettings = (settings) => {
-  // console.log('window.eo.saveSettings', settings);
-  return ipcRenderer.sendSync('eo-sync', { action: 'saveSettings', data: { settings } });
-};
-
-window.eo.saveModuleSettings = (moduleID, settings) => {
-  return ipcRenderer.sendSync('eo-sync', {
-    action: 'saveModuleSettings',
-    data: { moduleID: moduleID, settings: settings },
-  });
-};
-
-window.eo.deleteModuleSettings = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'deleteModuleSettings', data: { moduleID: moduleID } });
-};
-
-window.eo.getSettings = () => {
-  try {
-    return JSON.parse(localStorage.getItem('localSettings') || '{}');
-  } catch (error) {
-    return {};
-  }
-};
-window.eo.i18n = new I18N();
-
-window.eo.getExtensionSettings = (moduleID) => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getExtensionSettings', data: { moduleID: moduleID } });
-};
 // 注册单个mock路由
 window.eo.registerMockRoute = ({ method, path, data }) => {
   return ipcRenderer.send('eo-sync', { action: 'registerMockRoute', data: { method, path, data } });

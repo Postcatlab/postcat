@@ -15,11 +15,6 @@ export const getSettings = () => {
 })
 export class SettingService {
   get settings() {
-    return this.getSettings();
-  }
-
-  /** get local settings */
-  getSettings() {
     return getSettings();
   }
 
@@ -48,7 +43,7 @@ export class SettingService {
    * @returns
    */
   getConfiguration = (keyPath: string) => {
-    const localSettings = this.getSettings();
+    const localSettings = this.settings;
 
     if (Reflect.has(localSettings, keyPath)) {
       return Reflect.get(localSettings, keyPath);

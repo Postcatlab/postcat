@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import { SettingComponent } from '../../../modules/setting/setting.component';
+import { SystemSettingComponent } from '../../../modules/system-setting/system-setting.component';
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../../shared/services/message';
 import { ModalService } from '../../../shared/services/modal.service';
@@ -92,7 +92,7 @@ export class SelectWorkspaceComponent {
     const ref = this.modal.create({
       nzClassName: 'eo-setting-modal',
       nzTitle: $localize`Workspace Settings`,
-      nzContent: SettingComponent,
+      nzContent: SystemSettingComponent,
       withoutFooter: true
     });
   }

@@ -40,6 +40,7 @@ export class ExportApiComponent implements OnInit {
     }
   }
   submit(callback: () => boolean) {
+    console.log(this.store.getCurrentProjectID);
     this.export(callback);
   }
   private transferTextToFile(fileName: string, exportData: any) {

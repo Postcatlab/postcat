@@ -4,9 +4,7 @@ import { LanguageService } from 'eo/app/electron-main/language.service';
 import { MockServer } from 'eo/platform/node/mock-server';
 import { ModuleManagerInterface } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import portfinder from 'portfinder';
-import { ConfigurationInterface } from 'src/platform/node/configuration';
 
-import Configuration from '../../platform/node/configuration/lib';
 import { processEnv } from '../../platform/node/constant';
 import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
 import { proxyOpenExternal } from '../../shared/common/browserView';
@@ -47,7 +45,6 @@ let websocketPort = 13928;
   socket(websocketPort);
 })();
 const moduleManager: ModuleManagerInterface = new ModuleManager();
-const configuration: ConfigurationInterface = Configuration();
 global.shareObject = {
   storageResult: null
 };
@@ -200,16 +197,6 @@ try {
         returnValue = moduleManager.getFeatures();
       } else if (arg.action === 'getFeature') {
         returnValue = moduleManager.getFeature(arg.data.featureKey);
-      } else if (arg.action === 'saveSettings') {
-        returnValue = configuration.saveSettings(arg.data);
-      } else if (arg.action === 'saveModuleSettings') {
-        returnValue = configuration.saveModuleSettings(arg.data.moduleID, arg.data.settings);
-      } else if (arg.action === 'deleteModuleSettings') {
-        returnValue = configuration.deleteModuleSettings(arg.data.moduleID);
-      } else if (arg.action === 'getSettings') {
-        returnValue = configuration.getSettings();
-      } else if (arg.action === 'getExtensionSettings') {
-        returnValue = configuration.getExtensionSettings(arg.data.moduleID);
       } else if (arg.action === 'getMockUrl') {
         // 获取mock服务地址
         returnValue = mockServer.getMockUrl();

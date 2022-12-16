@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { getSettings } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { getSettings } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
 

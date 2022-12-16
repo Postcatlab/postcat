@@ -52,7 +52,6 @@ export class TabStorageService {
    * @param data
    */
   setPersistenceStorage(selectedIndex, opts) {
-    return;
     let tabsByID = Object.fromEntries(this.tabsByID);
     Object.values(tabsByID).forEach(val => {
       if (val.type === 'preview') {

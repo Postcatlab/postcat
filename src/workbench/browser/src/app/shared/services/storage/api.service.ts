@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { getSettings, SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 
 import { MessageService } from '../../../shared/services/message';
 import LocalService from './local.service';

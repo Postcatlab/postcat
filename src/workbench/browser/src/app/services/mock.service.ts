@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
 import type { IpcRenderer } from 'electron';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
-import {
-  ApiData,
-  ApiMockEntity,
-  StorageRes,
-  StorageResStatus,
-} from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 
@@ -38,7 +33,7 @@ export class MockService {
           const response = await fetch(uniqueSlash(`${url}/mock/match`), {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
               // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({
@@ -46,9 +41,9 @@ export class MockService {
               mockID,
               req: {
                 ...req,
-                url: req.url.replace(/^\/mock-\d+/, ''),
-              },
-            }),
+                url: req.url.replace(/^\/mock-\d+/, '')
+              }
+            })
           });
 
           const { data } = await response.json();
@@ -62,8 +57,8 @@ export class MockService {
               return {
                 statusCode: 404,
                 response: {
-                  message: `mockID为${mockID}的mock不存在`,
-                },
+                  message: `mockID为${mockID}的mock不存在`
+                }
               };
             }
             const apiData = await this.getApiData(Number(mock.apiDataID));
@@ -84,8 +79,8 @@ export class MockService {
           } catch (error) {
             sender.send('getMockApiList', {
               response: {
-                message: error,
-              },
+                message: error
+              }
             });
           }
           // Whether the matching request mode is enabled
@@ -124,7 +119,7 @@ export class MockService {
     }
     if (Array.isArray(queryParams) && queryParams.length > 0) {
       const query = req.query;
-      isQueryMatch = queryParams.every((n) => n.example === query[n.name]);
+      isQueryMatch = queryParams.every(n => n.example === query[n.name]);
     }
     const uriReg = new RegExp(`^/?${uri}/?$`);
     const isMatch = method === req.method && uriReg.test(pathname) && isQueryMatch;

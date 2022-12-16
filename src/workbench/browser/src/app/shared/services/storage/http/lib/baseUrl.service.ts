@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/setting/settings.service';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { compareVersion } from 'eo/workbench/browser/src/app/utils/index.utils';
