@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/api/api.service';
+import { ApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';

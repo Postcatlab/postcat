@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } 
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestQuery } from '../../../pages/api/http/test/api-test.model';
+import { ApiTestQuery } from '../../../pages/workspace/project/api/http/test/api-test.model';
 import { ApiTableService } from '../api-table.service';
 import { ApiTableConf } from '../api.model';
 
@@ -15,7 +15,7 @@ export class ApiTestQueryComponent implements OnInit, OnDestroy {
   @Input() model: ApiTestQuery[];
   @Input() disabled: boolean;
   @Input() nzTrClick: (...rest: any[]) => any;
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
   listConf: ApiTableConf = {
     columns: [],
     setting: {}

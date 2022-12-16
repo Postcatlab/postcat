@@ -3,7 +3,7 @@ import { transferUrlAndQuery } from 'eo/workbench/browser/src/app/utils/api';
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import omitDeep from 'omit-deep-lodash';
 
-import { ApiTestData, ContentType } from '../../pages/api/http/test/api-test.model';
+import { ApiTestData, ContentType } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { ApiData, ApiTestHistory } from '../../shared/services/storage/index.model';
 import { table2json, text2table, json2xml } from '../../utils/data-transfer/data-transfer.utils';
 import { eoDeepCopy } from '../../utils/index.utils';

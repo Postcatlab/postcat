@@ -11,36 +11,36 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'http',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'http',
         children: [
           {
             path: 'detail',
-            loadChildren: () => import('../api/http/detail/api-detail.module').then((m) => m.ApiDetailModule),
+            loadChildren: () => import('../workspace/project/api/http/detail/api-detail.module').then(m => m.ApiDetailModule)
           },
           {
             path: 'test',
-            loadChildren: () => import('../api/http/test/api-test.module').then((m) => m.ApiTestModule),
-          },
-        ],
+            loadChildren: () => import('../workspace/project/api/http/test/api-test.module').then(m => m.ApiTestModule)
+          }
+        ]
       },
       {
         path: 'ws',
         children: [
           {
             path: 'test',
-            loadChildren: () => import('../api/websocket/websocket.module').then((m) => m.WebsocketModule),
-          },
-        ],
-      },
-    ],
-  },
+            loadChildren: () => import('../workspace/project/api/websocket/websocket.module').then(m => m.WebsocketModule)
+          }
+        ]
+      }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class ShareRoutingModule {}

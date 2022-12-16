@@ -1,0 +1,44 @@
+.basic_info_bar {
+  @apply flex justify-between;
+
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.code_blue {
+  background-color: var(--BLUE_NORMAL);
+  border-color: var(--BLUE_NORMAL);
+}
+
+.code_green {
+  background-color: var(--GREEN_NORMAL);
+  border-color: var(--GREEN_DEEP);
+}
+
+.code_yellow {
+  background-color: var(--RED_NORMAL);
+  border-color: var(--RED_LIGHT);
+}
+
+.code_red {
+  background-color: var(--RED_NORMAL);
+  border-color: var(--RED_NORMAL);
+}
+
+:host ::ng-deep {
+  .eo_alert_bar {
+    margin-bottom: 5px;
+
+    .ant-alert-info {
+      background-color: #fff;
+      border: 1px solid #4c9e81;
+    }
+  }
+
+  .ant-code-editor {
+    height: calc(var(--bottom-height) - 156px);
+  }
+}

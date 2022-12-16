@@ -1,0 +1,109 @@
+:host {
+  display: inline-block;
+
+  span {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: var(--DEFAULT_BORDER_RADIUS);
+    font-size: 12px;
+  }
+
+  .all {
+    color: rgb(119 40 245 / 100%);
+
+    & .bg {
+      background-color: rgb(119 40 245 / 15%);
+    }
+  }
+
+  .all.ignore {
+    background-color: transparent;
+  }
+
+  .get {
+    color: rgb(6 125 219 / 100%);
+    border: 1px solid rgb(6 125 219 / 15%);
+    background-color: rgb(6 125 219 / 15%);
+  }
+
+  .get.ignore {
+    border: 1px solid transparent;
+    background-color: transparent;
+  }
+
+  .post,
+  .ws,
+  .tcp,
+  .udp,
+  .hsf,
+  .dubbo,
+  .grpc {
+    color: rgb(6 125 219 / 100%);
+    background-color: rgb(6 125 219 / 15%);
+    border: 1px solid rgb(6 125 219 / 15%);
+  }
+
+  .post.ignore,
+  .ws.ignore,
+  .tcp.ignore,
+  .udp.ignore,
+  .hsf.ignore,
+  .dubbo.ignore,
+  .grpc.ignore {
+    background-color: transparent;
+    border: 1px solid transparent;
+  }
+
+  .put {
+    color: rgb(216 131 12 / 100%);
+    background-color: rgb(216 131 12 / 15%);
+    border: 1px solid rgb(216 131 12 / 15%);
+  }
+
+  .put.ignore {
+    background-color: transparent;
+  }
+
+  .delete {
+    color: rgb(194 22 27 / 100%);
+    background-color: rgb(194 22 27 / 15%);
+    border: 1px solid rgb(194 22 27 / 15%);
+  }
+
+  .delete.ignore {
+    background-color: transparent;
+  }
+
+  .head {
+    color: rgb(238 196 12 / 100%);
+    background-color: rgb(238 196 12 / 15%);
+    border: 1px solid rgb(238 196 12 / 15%);
+  }
+
+  .head.ignore {
+    border: 1px solid transparent;
+    background-color: transparent;
+  }
+
+  .options {
+    color: rgb(14 90 179 / 100%);
+    border: 1px solid rgb(14 90 179 / 15%);
+    background-color: rgb(14 90 179 / 15%);
+  }
+
+  .options.ignore {
+    border: 1px solid transparent;
+    background-color: transparent;
+  }
+
+  .patch {
+    color: rgb(237 134 58 / 100%);
+    border: 1px solid rgb(238 196 12 / 15%);
+    background-color: rgb(237 134 58 / 15%);
+  }
+
+  .patch.ignore {
+    border: 1px solid transparent;
+    background-color: transparent;
+  }
+}

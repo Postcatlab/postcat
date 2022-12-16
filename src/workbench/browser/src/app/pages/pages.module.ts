@@ -7,7 +7,7 @@ import { SidebarComponent } from '../layouts/sidebar/sidebar.component';
 import { ToolbarModule } from '../layouts/toolbar/toolbar.module';
 import { SettingModule } from '../modules/setting/setting.module';
 import { SharedModule } from '../shared/shared.module';
-import { ExtensionsComponent } from './extensions.component';
+import { ExtensionsComponent } from './extension/iinit-extensions.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { PagesComponent } from './pages.component';
 import { UserModalComponent } from './user-modal.component';
@@ -17,6 +17,6 @@ import { UserModalComponent } from './user-modal.component';
   declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ExtensionsComponent],
   exports: [],
   providers: [],
-  schemas: [],
+  schemas: []
 })
 export class PagesModule {}

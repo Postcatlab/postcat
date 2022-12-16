@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } 
 import { Subject, takeUntil } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { ApiTestHeaders } from '../../../pages/api/http/test/api-test.model';
+import { ApiTestHeaders } from '../../../pages/workspace/project/api/http/test/api-test.model';
 import { ApiTableService } from '../api-table.service';
 import { ApiTableConf } from '../api.model';
 @Component({
@@ -10,10 +10,10 @@ import { ApiTableConf } from '../api.model';
   templateUrl: './api-test-header.component.html',
   styleUrls: ['./api-test-header.component.scss']
 })
-export class ApiTestHeaderComponent implements OnInit, OnChanges, OnDestroy {
+export class ApiTestHeaderComponent implements OnInit, OnDestroy {
   @Input() disabled: boolean;
   @Input() model: ApiTestHeaders[];
-  @Output() modelChange: EventEmitter<any> = new EventEmitter();
+  @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
 
   listConf: ApiTableConf = {
     columns: [],
@@ -35,7 +35,6 @@ export class ApiTestHeaderComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.initListConf();
   }
-  ngOnChanges(changes) {}
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

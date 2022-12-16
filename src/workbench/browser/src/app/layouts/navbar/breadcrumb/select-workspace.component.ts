@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
+import { SettingComponent } from '../../../modules/setting/setting.component';
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../../shared/services/message';
+import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'eo-select-workspace',
-  template: ` <a eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
+  template: ` <a eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
       {{ store.getCurrentWorkspace.title }}
       <eo-iconpark-icon name="down"></eo-iconpark-icon>
     </a>
@@ -38,14 +40,21 @@ import { MessageService } from '../../../shared/services/message';
           <p class="text-tips px-base mb-[10px]" i18n>Cloud</p>
           <p i18n *ngIf="!cloudWorkspaces.length" class="text-tips px-base mx-[5px] text-[12px]">No cloud worspace</p>
           <li
-            class="px-[25px]"
+            class="px-[25px] flex justify-between"
             nz-menu-item
             (click)="changeWorkspace(item)"
             [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === item.id }"
             *ngFor="let item of cloudWorkspaces"
           >
-            <eo-iconpark-icon class="mr-[5px]" size="15px" name="link-cloud-sucess"> </eo-iconpark-icon>
-            <span class="truncate mw-[250px]"> {{ item.title }}</span>
+            <div class="flex items-center">
+              <eo-iconpark-icon class="mr-[5px]" size="15px" name="link-cloud-sucess"> </eo-iconpark-icon>
+              <span class="truncate mw-[250px]"> {{ item.title }}</span>
+            </div>
+            <div>
+              <button eo-ng-button nzType="text" (click)="openSetting($event, item)"
+                ><eo-iconpark-icon size="15px" name="setting"> </eo-iconpark-icon>
+              </button>
+            </div>
           </li>
         </div>
       </ul>
@@ -65,7 +74,8 @@ export class SelectWorkspaceComponent {
     public store: StoreService,
     private effect: EffectService,
     private dataSourceService: DataSourceService,
-    private message: MessageService
+    private message: MessageService,
+    private modal: ModalService
   ) {}
   get localWorkspace() {
     const result = this.searchWorkspace(this.searchValue, [this.store.getLocalWorkspace]);
@@ -77,19 +87,29 @@ export class SelectWorkspaceComponent {
       this.store.getWorkspaceList.filter(val => val.id !== -1)
     );
   }
-  searchWorkspace(text, list) {
+  openSetting($event, workspace) {
+    $event.stopPropagation();
+    const ref = this.modal.create({
+      nzClassName: 'eo-setting-modal',
+      nzTitle: $localize`Workspace Settings`,
+      nzContent: SettingComponent,
+      withoutFooter: true
+    });
+  }
+  changeWorkspace(item) {
+    this.effect.updateWorkspace(item);
+  }
+  addWorkspace() {
+    this.dataSourceService.checkRemoteCanOperate(() => {
+      this.message.send({ type: 'addWorkspace', data: {} });
+    });
+  }
+
+  private searchWorkspace(text, list) {
     if (!text) {
       return list;
     }
     const searchText = text.toLocaleLowerCase();
     return list.filter(val => val.title.toLocaleLowerCase().includes(searchText));
-  }
-  changeWorkspace(item) {
-    this.effect.updateWorkspace(item);
-  }
-  async addWorkspace() {
-    this.dataSourceService.checkRemoteCanOperate(() => {
-      this.message.send({ type: 'addWorkspace', data: {} });
-    });
   }
 }

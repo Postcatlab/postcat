@@ -22,8 +22,7 @@
 :host ::ng-deep {
   --body-height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0px));
 
-  eo-workspace,
-  eo-member {
+  eo-project-member {
     display: block;
     overflow: auto;
     height: 100%;

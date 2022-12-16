@@ -4,10 +4,10 @@ import { EoNgTreeModule } from 'eo-ng-tree';
 import { ApiMockTableComponent } from 'eo/workbench/browser/src/app/modules/api-shared/api-mock-table.component';
 import { ParamsImportComponent } from 'eo/workbench/browser/src/app/modules/api-shared/params-import/params-import.component';
 import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco.module';
-import { ApiMockService } from 'eo/workbench/browser/src/app/pages/api/http/mock/api-mock.service';
+import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
-import { ApiTestService } from '../../pages/api/http/test/api-test.service';
+import { ApiTestService } from '../../pages/workspace/project/api/http/test/api-test.service';
 import { SharedModule } from '../../shared/shared.module';
 import { EoTableProModule } from '../eo-ui/table-pro/table-pro.module';
 import { ApiParamsNumPipe } from './api-param-num.pipe';

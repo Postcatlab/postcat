@@ -31,20 +31,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'api',
+        redirectTo: 'workspace',
         pathMatch: 'full'
       },
       {
         path: 'blank',
         component: PageBlankComponent
-      },
-      {
-        path: 'api',
-        loadChildren: () => import('./api/api.module').then(m => m.ApiModule)
-      },
-      {
-        path: 'project',
-        loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
       },
       {
         path: 'workspace',
@@ -55,14 +47,6 @@ const routes: Routes = [
         canActivate: [RedirectProjectID],
         runGuardsAndResolvers: 'always',
         loadChildren: () => import('./share-project/share-project.module').then(m => m.ShareProjectModule)
-      },
-      {
-        path: 'member',
-        loadChildren: () => import('./member/member.module').then(m => m.MemberModule)
-      },
-      {
-        path: 'setting',
-        loadChildren: () => import('./setting/project-setting.module').then(m => m.ProjectSettingModule)
       },
       {
         path: 'extension',

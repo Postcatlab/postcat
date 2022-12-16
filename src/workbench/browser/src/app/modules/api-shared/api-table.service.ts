@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { has, omit } from 'lodash-es';
 
-import { ApiParamsExtraSettingComponent } from '../../pages/api/http/edit/extra-setting/api-params-extra-setting.component';
-import { ApiTestParamsTypeFormData } from '../../pages/api/http/test/api-test.model';
+import { ApiParamsExtraSettingComponent } from '../../pages/workspace/project/api/http/edit/extra-setting/api-params-extra-setting.component';
+import { ApiTestParamsTypeFormData } from '../../pages/workspace/project/api/http/test/api-test.model';
 import { REQURIED_ENUMS } from '../../shared/models/shared.model';
 import { ModalOptions, ModalService } from '../../shared/services/modal.service';
 import { eoDeepCopy } from '../../utils/index.utils';

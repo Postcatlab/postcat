@@ -15,7 +15,7 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 
 // import { ExtensionRoutingModule } from './extension-routing.module';
 import { ShadowDomEncapsulationModule } from '../../modules/eo-ui/shadow/shadow-dom-encapsulation.module';
-import { ExtensionSettingComponent } from './detail/components/extensions.component';
+import { ExtensionSettingComponent } from './detail/components/extensions-settings.component';
 import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
 

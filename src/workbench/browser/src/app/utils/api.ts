@@ -1,4 +1,5 @@
-import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/api/http/test/api-test.model';
+import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+
 import { ApiEditQuery, ApiEditRest } from '../modules/api-shared/api.model';
 
 /**
@@ -7,8 +8,7 @@ import { ApiEditQuery, ApiEditRest } from '../modules/api-shared/api.model';
  * @param url
  * @returns
  */
-export const getRest = (url = ''): string[] =>
-  [...url.replace(/{{(.+?)}}/g, '').matchAll(/{(.+?)}/g)].map((val) => val[1]);
+export const getRest = (url = ''): string[] => [...url.replace(/{{(.+?)}}/g, '').matchAll(/{(.+?)}/g)].map(val => val[1]);
 
 export const uniqueSlash = (path: string) =>
   path
@@ -18,7 +18,7 @@ export const uniqueSlash = (path: string) =>
 const jointQuery = (url = '', query: ApiTestQuery[] | ApiEditQuery[]) => {
   //Joint query
   let search = '';
-  query.forEach((val) => {
+  query.forEach(val => {
     if (!(val.name && val.required)) {
       return;
     }
@@ -43,7 +43,7 @@ export const transferUrlAndQuery = (
   query = [],
   opts: { base: string; replaceType?: string } = {
     base: 'url',
-    replaceType: 'replace',
+    replaceType: 'replace'
   }
 ) => {
   const urlQuery = [];
@@ -53,7 +53,7 @@ export const transferUrlAndQuery = (
     const item: ApiTestQuery = {
       required: true,
       name,
-      value: val,
+      value: val
     };
     urlQuery.push(item);
   });
@@ -63,7 +63,7 @@ export const transferUrlAndQuery = (
     url = jointQuery(url, result);
   } else {
     if (opts.base === 'url') {
-      result = [...urlQuery, ...uiQuery.filter((val) => !val.required)];
+      result = [...urlQuery, ...uiQuery.filter(val => !val.required)];
     } else {
       result = uiQuery;
       url = jointQuery(url, result);
@@ -71,7 +71,7 @@ export const transferUrlAndQuery = (
   }
   return {
     url,
-    query: result,
+    query: result
   };
 };
 
@@ -81,7 +81,7 @@ export const transferUrlAndQuery = (
 export const generateRestFromUrl = (url, rest): ApiEditRest[] => {
   const rests = getRest(url);
   return [
-    ...rests.map((restName) => ({ name: restName, required: true, example: '', description: '' })),
-    ...rest.filter((val) => !(rests.includes(val.name) || val.required)),
+    ...rests.map(restName => ({ name: restName, required: true, example: '', description: '' })),
+    ...rest.filter(val => !(rests.includes(val.name) || val.required))
   ];
 };

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 
 import { BasicApiData } from '../../../modules/api-shared/api.model';
-import { ApiTestHistoryFrame } from '../../../pages/api/http/test/api-test.model';
+import { ApiTestHistoryFrame } from '../../../pages/workspace/project/api/http/test/api-test.model';
 
 /**
  * Date base model
