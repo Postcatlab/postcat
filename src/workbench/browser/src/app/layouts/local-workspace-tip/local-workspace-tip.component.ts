@@ -40,14 +40,14 @@ export class LocalWorkspaceTipComponent implements OnInit {
   }
 
   switchToTheCloud = () => {
-    const workspace = this.store.getWorkspaceList.at(0);
-    if (workspace.id === -1) {
+    const workspaces = this.store.getWorkspaceList;
+    if (workspaces.length === 1) {
       // * only local workspace
       this.eoMessage.warning($localize`You don't have cloud space yet, please create one`);
       this.message.send({ type: 'addWorkspace', data: {} });
       return;
     }
-    this.effect.updateWorkspace(workspace);
+    this.effect.updateWorkspace(workspaces.find(val => val.id !== -1));
   };
 
   closeNotification() {
