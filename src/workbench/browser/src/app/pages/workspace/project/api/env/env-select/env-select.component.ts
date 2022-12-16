@@ -3,7 +3,7 @@ import { getGlobals } from 'eo/workbench/browser/src/app/pages/workspace/project
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun } from 'mobx';
 
-import { Environment } from '../../../../../../../shared/services/storage/index.model';
+import { Environment } from '../../../../../../shared/services/storage/index.model';
 
 @Component({
   selector: 'env-list',

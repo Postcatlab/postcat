@@ -270,7 +270,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    * @param inArg NzFormatEmitEvent
    */
   operateApiEvent(inArg: NzFormatEmitEvent | any): void {
-    const prefix = this.store.isShare ? 'home/share' : '/home/api';
+    const prefix = this.store.isShare ? 'home/share' : '/home/workspace/project/api';
     inArg.event?.stopPropagation();
     switch (inArg.eventName) {
       case 'editApi':

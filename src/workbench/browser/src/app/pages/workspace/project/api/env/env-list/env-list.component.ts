@@ -4,7 +4,7 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { filter, Subject } from 'rxjs';
 
-import { MessageService } from '../../../../../../../shared/services/message';
+import { MessageService } from '../../../../../../shared/services/message';
 @Component({
   selector: 'eo-env-list',
   templateUrl: './env-list.component.html',
@@ -30,7 +30,7 @@ export class EnvListComponent implements OnDestroy {
   }
   getIDFromRoute() {
     const uuid = this.route.snapshot.queryParams.uuid;
-    this.id = this.router.url.includes('home/api/env') && uuid ? Number(this.route.snapshot.queryParams.uuid) : null;
+    this.id = this.router.url.includes('home/workspace/project/api/env/edit') && uuid ? Number(this.route.snapshot.queryParams.uuid) : null;
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -53,11 +53,11 @@ export class EnvListComponent implements OnDestroy {
     });
   }
   editEnv(item) {
-    this.router.navigate(['/home/api/env'], {
+    this.router.navigate(['/home/workspace/project/api/env/edit'], {
       queryParams: { uuid: item.uuid }
     });
   }
   addEnv(pid = 1) {
-    this.router.navigate(['/home/api/env']);
+    this.router.navigate(['/home/workspace/project/api/env/edit']);
   }
 }

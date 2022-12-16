@@ -237,7 +237,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       testData: { ...this.model.request }
     });
     window.sessionStorage.setItem('apiDataWillbeSave', JSON.stringify(apiData));
-    this.router.navigate(['/home/api/http/edit'], {
+    this.router.navigate(['/home/workspace/project/api/http/edit'], {
       queryParams: {
         pageID: Number(this.route.snapshot.queryParams.pageID)
       }
@@ -377,7 +377,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       //* Other tab test finish,support multiple tab test same time
       this.afterTested.emit({
         id: queryParams.pageID,
-        url: '/home/api/http/test',
+        url: '/home/workspace/project/api/http/test',
         model: {
           testStartTime: 0,
           testResult: tmpHistory

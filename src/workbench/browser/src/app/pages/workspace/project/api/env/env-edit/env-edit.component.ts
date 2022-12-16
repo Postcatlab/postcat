@@ -4,12 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 
-import { ColumnItem } from '../../../../../../../modules/eo-ui/table-pro/table-pro.model';
-import { Environment, StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
-import { StorageService } from '../../../../../../../shared/services/storage/storage.service';
-import { EffectService } from '../../../../../../../shared/store/effect.service';
-import { StoreService } from '../../../../../../../shared/store/state.service';
-import { eoDeepCopy } from '../../../../../../../utils/index.utils';
+import { ColumnItem } from '../../../../../../modules/eo-ui/table-pro/table-pro.model';
+import { Environment, StorageRes, StorageResStatus } from '../../../../../../shared/services/storage/index.model';
+import { StorageService } from '../../../../../../shared/services/storage/storage.service';
+import { EffectService } from '../../../../../../shared/store/effect.service';
+import { StoreService } from '../../../../../../shared/store/state.service';
+import { eoDeepCopy } from '../../../../../../utils/index.utils';
 
 export type EnvironmentView = Partial<Environment>;
 @Component({
@@ -111,7 +111,7 @@ export class EnvEditComponent implements OnDestroy {
         this.effect.updateEnvList();
         console.log(operateName);
         if (operateName === 'add') {
-          this.router.navigate(['home/api/env'], {
+          this.router.navigate(['home/workspace/project/api/env/edit'], {
             queryParams: { pageID: this.route.snapshot.queryParams.pageID, uuid: result.data.uuid }
           });
         }

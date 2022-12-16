@@ -58,7 +58,7 @@ export class HistoryComponent implements OnInit {
   gotoTestHistory(e) {
     const origin = e.node.origin;
     const protocol = origin.request?.protocol === 'ws' ? 'ws' : 'http';
-    this.router.navigate([`home/api/${protocol}/test`], {
+    this.router.navigate([`home/workspace/project/api/${protocol}/test`], {
       queryParams: {
         uuid: `history_${origin.uuid}`
       }

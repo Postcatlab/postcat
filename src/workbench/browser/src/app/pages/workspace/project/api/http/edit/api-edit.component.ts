@@ -145,7 +145,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       //@ts-ignore
       this.initialModel = this.apiEditUtil.formatEditingApiData({ ...this.model, ...this.validateForm.value });
       if (busEvent === 'addApi') {
-        this.router.navigate(['/home/api/http/detail'], {
+        this.router.navigate(['/home/workspace/project/api/http/detail'], {
           queryParams: {
             pageID: Number(this.route.snapshot.queryParams.pageID),
             uuid: result.data.uuid

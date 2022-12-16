@@ -18,10 +18,10 @@ import { EoTabModule } from '../../../../modules/eo-ui/tab/tab.module';
 import { ExtensionSelectModule } from '../../../../modules/extension-select/extension-select.module';
 import { ApiRoutingModule } from './api-routing.module';
 import { ApiComponent } from './api.component';
-import { EnvModule } from './components/env/env.module';
 import { ApiGroupEditComponent } from './components/group/edit/api-group-edit.component';
 import { ApiGroupTreeComponent } from './components/group/tree/api-group-tree.component';
 import { HistoryComponent } from './components/history/eo-history.component';
+import { EnvModule } from './env/env.module';
 
 const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, HistoryComponent];
 @NgModule({
@@ -29,9 +29,9 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
     ExtensionSelectModule,
     HttpClientModule,
     FormsModule,
+    EnvModule,
     CommonModule,
     ApiRoutingModule,
-    EnvModule,
     SharedModule,
     EoTabModule,
     NzResizableModule,

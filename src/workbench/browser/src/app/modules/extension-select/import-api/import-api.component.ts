@@ -127,14 +127,14 @@ export class ImportApiComponent implements OnInit {
         console.log('projectImport result', JSON.parse(JSON.stringify(result)));
         if (result.status === StorageResStatus.success) {
           callback(true);
-          this.router.navigate(['home/api']);
+          this.router.navigate(['home/workspace/project/api']);
         } else {
           callback(false);
           eoConsole.error('Import Error', result.error);
           return;
         }
         callback(true);
-        this.router.navigate(['home/api']);
+        this.router.navigate(['home/workspace/project/api']);
       });
     } catch (e) {
       console.error(e);

@@ -39,31 +39,31 @@ export class ApiTabService {
   ];
   API_TABS = [
     {
-      pathname: '/home/api/http/test',
+      pathname: '/home/workspace/project/api/http/test',
       module: 'test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' }
     },
     {
-      pathname: '/home/api/env',
+      pathname: '/home/workspace/project/api/env/edit',
       module: 'env',
       type: 'edit',
       isFixed: true,
       icon: 'application',
       title: $localize`New Environment`
     },
-    { pathname: '/home/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
-    { pathname: '/home/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/home/workspace/project/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
+    { pathname: '/home/workspace/project/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
     {
-      pathname: '/home/api/ws/test',
+      pathname: '/home/workspace/project/api/ws/test',
       module: 'test',
       isFixed: true,
       type: 'edit',
       extends: { method: 'WS' },
       title: $localize`New Websocket`
     },
-    { pathname: '/home/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' }
+    { pathname: '/home/workspace/project/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' }
   ];
   BASIC_TABS: Array<Partial<TabItem>>;
 
@@ -84,7 +84,9 @@ export class ApiTabService {
         //Close those tab who has been deleted
         const closeTabIDs = this.apiTabComponent
           .getTabs()
-          .filter((val: TabItem) => val.pathname.includes('home/api/http') && inArg.data.uuids.includes(Number(val.params.uuid)))
+          .filter(
+            (val: TabItem) => val.pathname.includes('home/workspace/project/api/http') && inArg.data.uuids.includes(Number(val.params.uuid))
+          )
           .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
@@ -92,7 +94,10 @@ export class ApiTabService {
       case 'deleteEnvSuccess': {
         const closeTabIDs = this.apiTabComponent
           .getTabs()
-          .filter((val: TabItem) => val.pathname.includes('home/api/env') && inArg.data.uuids.includes(Number(val.params.uuid)))
+          .filter(
+            (val: TabItem) =>
+              val.pathname.includes('home/workspace/project/api/env/edit') && inArg.data.uuids.includes(Number(val.params.uuid))
+          )
           .map(val => val.uuid);
         this.apiTabComponent.batchCloseTab(closeTabIDs);
         break;
@@ -204,7 +209,7 @@ export class ApiTabService {
       replaceTab.title = model.name;
       replaceTab.extends.method = model.method;
       if (currentTab.module === 'test') {
-        if (currentTab.pathname === '/home/api/ws/test') {
+        if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
           replaceTab.extends.method = model.request.protocol?.toUpperCase();
         } else {
           replaceTab.extends.method = model.request.method;

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
-import { EoTableProModule } from '../../../../../../modules/eo-ui/table-pro/table-pro.module';
+import { EoTableProModule } from '../../../../../modules/eo-ui/table-pro/table-pro.module';
 import { EnvEditComponent } from './env-edit/env-edit.component';
 import { EnvListComponent } from './env-list/env-list.component';
 import { EnvSelectComponent } from './env-select/env-select.component';
@@ -17,7 +17,7 @@ const COMPONENTA = [EnvListComponent, EnvSelectComponent];
   imports: [
     RouterModule.forChild([
       {
-        path: '',
+        path: 'edit',
         component: EnvEditComponent
       }
     ]),

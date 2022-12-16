@@ -102,8 +102,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         id: '@eo-core-apimanger',
         isOffical: true,
         icon: 'api',
-        activeRoute: 'home/api',
-        route: 'home/api/http/test'
+        activeRoute: 'home/workspace/project/api',
+        route: 'home/workspace/project/api/http/test'
       },
       ...(!this.store.isLocal
         ? [
@@ -112,8 +112,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
               id: '@eo-core-member',
               isOffical: true,
               icon: 'peoples',
-              activeRoute: 'home/member',
-              route: 'home/member'
+              activeRoute: 'home/workspace/project/member',
+              route: 'home/workspace/project/member'
             }
           ]
         : []),
@@ -122,8 +122,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         id: '@eo-core-setting',
         isOffical: true,
         icon: 'setting',
-        activeRoute: 'home/setting',
-        route: 'home/setting'
+        activeRoute: 'home/workspace/project/setting',
+        route: 'home/workspace/project/setting'
       }
     ];
     const isShare = this.store.isShare;

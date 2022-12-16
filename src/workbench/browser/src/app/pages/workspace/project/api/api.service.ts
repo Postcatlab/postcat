@@ -54,7 +54,7 @@ export class ApiService {
   async copy({ uuid, createdAt, ...apiData }: ApiData) {
     apiData.name += ' Copy';
     const result = await this.add(apiData);
-    this.router.navigate(['/home/api/http/edit'], {
+    this.router.navigate(['/home/workspace/project/api/http/edit'], {
       queryParams: { pageID: Date.now(), uuid: result.data.uuid }
     });
     this.messageService.send({ type: 'copyApiSuccess', data: { uuids: [uuid] } });
