@@ -1,4 +1,4 @@
-# eo-test-server
+# eoapi-test-server
 Only deploy in web server.
 Recieve eoapi test config and response http result
 

@@ -26,7 +26,7 @@ app.use(async (ctx, next) => {
       let reqJSON = ctx.request.body.data;
       reqJSON.env = _LibsCommon.parseEnv(reqJSON.env);
       await new _LibsFlowCommon.core().main(reqJSON).then(({ globals, report, history }) => {
-        ['general', 'requestInfo', 'resultInfo'].forEach((keyName) => {
+        ['general', 'requestInfo', 'resultInfo'].forEach(keyName => {
           if (typeof history[keyName] === 'string') history[keyName] = JSON.parse(history[keyName]);
         });
         ctx.body = JSON.stringify({
@@ -35,8 +35,8 @@ app.use(async (ctx, next) => {
             id: ctx.request.body.id,
             report: report,
             history: history,
-            globals: globals,
-          },
+            globals: globals
+          }
         });
       });
       break;
@@ -47,3 +47,4 @@ app.use(async (ctx, next) => {
 
 socketio();
 app.listen(port);
+console.log(`Server is running at port ${port} ...`);

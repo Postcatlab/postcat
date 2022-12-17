@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import type { IpcRenderer } from 'electron';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { ApiData, ApiMockEntity, StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
@@ -22,7 +21,7 @@ export class MockService {
 
   init() {
     if (this.electron.isElectron) {
-      this.electron.ipcRenderer.on('getMockApiList', async (event, req = {}) => {
+      this.electron.ipcRenderer.on('getMockApiList', async (event, req: any = {}) => {
         const sender = event.sender;
         const isRemoteMock = mockReg.test(req.url);
         const { mockID } = req.query;

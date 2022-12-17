@@ -99,7 +99,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
         if ([ctrlKey, metaKey].includes(true) && code === 'Enter') {
-          console.log('EO_LOG[eo-websocket-test]: Ctrl + enter');
+          console.log('EO_LOG[eoapi-websocket-test]: Ctrl + enter');
           this.handleSendMsg();
         }
       });

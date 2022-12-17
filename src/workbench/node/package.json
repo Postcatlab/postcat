@@ -1,5 +1,5 @@
 {
-  "name": "eo-test-server",
+  "name": "eoapi-test-server",
   "version": "1.0.0",
   "description": "Recieve eoapi tes config and response http result",
   "main": "./server/main.js",

@@ -73,8 +73,15 @@
 
 我们在开发和构建时使用 [yarn](https://yarnpkg.com/) 作为包管理工具，强烈建议你也这么做，但如果您希望使用 npm 也完全没问题，只是在安装依赖时可能需要多花一些时间。
 
+如果你想要跑桌面端版本：
 ```
 yarn install
+yarn start
+```
+
+如果你只是想运行浏览器的代码，你可以：
+```
+cd src/workbench&&npm install
 yarn start
 ```
 

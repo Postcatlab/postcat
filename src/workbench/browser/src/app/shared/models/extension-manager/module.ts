@@ -1,3 +1,4 @@
+//@ts-ignore
 import { createServer } from 'http-server/lib/http-server';
 
 export type FeatureInfo = {
