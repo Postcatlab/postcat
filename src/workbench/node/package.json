@@ -23,8 +23,12 @@
     "jsdom": "20.0.1",
     "koa": "2.13.4",
     "koa-body": "5.0.0",
+    "ws": "8.8.1",
     "pm2": "5.2.0",
     "socket.io": "4.5.3",
-    "xml2js": "0.4.23"
+    "xml2js": "0.4.23",
+    "iconv-lite": "^0.6.3",
+    "form-data": "^4.0.0",
+    "content-disposition": "^0.5.4"
   }
 }

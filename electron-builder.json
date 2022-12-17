@@ -10,11 +10,9 @@
     "out/platform/**/*.js*",
     "out/environment.js",
     "out/shared/**/*.js*",
-    "**/*/browser/dist/**/*",
-    "**/*/node/dist/**/*",
+    "src/workbench/browser/dist/**/*",
     "out/workbench/browser/src/**/*.js*",
     "out/workbench/node/**/*.js*",
-    "out/core/**/package.json",
     "out/app/common/**/*",
     "!**/*.ts"
   ],
@@ -61,6 +59,8 @@
     "entitlementsInherit": "scripts/entitlements.mac.plist",
     "target": ["dmg", "zip"]
   },
+  "includeSubNodeModules": true,
+  "buildDependenciesFromSource": true,
   "dmg": {
     "sign": false
   },
