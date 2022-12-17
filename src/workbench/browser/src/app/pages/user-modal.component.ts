@@ -369,8 +369,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
-    if (currentWorkspaceID === -1) {
+    if (this.store.getCurrentWorkspaceID === -1) {
       // * local workspace, then return
       return;
     }
@@ -426,7 +425,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       }
       const { workspace } = data;
       this.store.setWorkspaceList([workspace, ...this.store.getWorkspaceList]);
-      this.effect.updateWorkspace(workspace);
+      this.effect.changeWorkspace(workspace);
 
       // * 关闭弹窗
       this.isSyncModalVisible = false;
@@ -527,7 +526,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         }
         this.store.setUserProfile(data);
       }
-      this.effect.updateWorkspaceList();
+      this.effect.updateWorkspaces();
 
       if (!data.isFirstLogin) {
         return;
@@ -597,8 +596,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.isAddWorkspaceModalVisible = false;
       this.message.send({ type: 'update-share-link', data: {} });
       {
-        this.effect.updateWorkspaceList();
-        this.effect.updateWorkspace(data);
+        this.effect.updateWorkspaces();
+        this.effect.changeWorkspace(data);
       }
     };
     await btnSaveRunning();

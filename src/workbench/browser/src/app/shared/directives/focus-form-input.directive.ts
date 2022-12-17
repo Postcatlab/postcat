@@ -19,7 +19,6 @@ export class FormFocusDirective implements AfterViewInit {
 
   @HostListener('submit')
   submit() {
-    console.log('submit');
     const input = this.element.nativeElement.querySelector(this.focusables.map(x => `${x}.ng-invalid`).join(','));
     if (input) {
       input.focus();

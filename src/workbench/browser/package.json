@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "npm-run-all -p start:testServer star:en",
-    "star:en":"ng serve --hmr -c dev -o",
+    "start": "npm-run-all -p start:testServer start:en",
+    "start:en":"ng serve --hmr -c dev -o",
     "start:zh": "ng serve --hmr -c devCn -o",
     "serve": "ng serve --hmr -c dev -o --host 0.0.0.0",
     "start:testServer": "yarn workspace eoapi-test-server run dev",

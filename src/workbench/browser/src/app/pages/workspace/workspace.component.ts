@@ -96,7 +96,7 @@
 //         return;
 //       }
 //       this.eMessage.success($localize`Edit workspace successfully !`);
-//       this.effect.updateWorkspaceList();
+//       this.effect.changeWorkspaceList();
 //     };
 //     await btnSaveBtnRunning();
 //     this.isSaveBtnBtnLoading = false;
@@ -139,8 +139,8 @@
 //         return;
 //       }
 //       this.eMessage.success($localize`Delete success !`);
-//       await this.effect.updateWorkspace(this.store.getLocalWorkspace);
-//       this.effect.updateWorkspaceList();
+//       await this.effect.changeWorkspace(this.store.getLocalWorkspace);
+//       this.effect.changeWorkspaceList();
 //     };
 //     await btnDelWspRunning();
 //     this.isDelWspBtnLoading = false;

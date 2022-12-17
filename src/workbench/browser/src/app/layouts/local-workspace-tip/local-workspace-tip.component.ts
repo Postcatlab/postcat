@@ -47,7 +47,7 @@ export class LocalWorkspaceTipComponent implements OnInit {
       this.message.send({ type: 'addWorkspace', data: {} });
       return;
     }
-    this.effect.updateWorkspace(workspaces.find(val => val.id !== -1));
+    this.effect.changeWorkspace(workspaces.find(val => val.id !== -1));
   };
 
   closeNotification() {

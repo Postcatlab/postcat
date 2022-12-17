@@ -26,6 +26,7 @@ export class HistoryComponent implements OnInit {
   async ngOnInit() {
     const result = await this.loadAllTest();
     this.historyList = (result || []).reverse().map(n => ({ ...n, title: n.request?.uri, key: n.uuid }));
+    console.log(this.historyList);
     this.message
       .get()
       .pipe(takeUntil(this.destroy$))
@@ -67,14 +68,10 @@ export class HistoryComponent implements OnInit {
 
   clearAllHistory() {
     const uuids = this.historyList.map(it => it.uuid);
-    this.historyList = [];
-    // this.storageInstance.apiTestHistoryBulkRemove(uuids);
     this.storage.run('apiTestHistoryBulkRemove', [uuids], (result: StorageRes) => {
-      // if (result.status === StorageResStatus.success) {
-      //   resolve(result.data);
-      // } else {
-      //   console.error(result.data);
-      // }
+      if (result.status === StorageResStatus.success) {
+        this.historyList = [];
+      }
     });
   }
   cancel() {}

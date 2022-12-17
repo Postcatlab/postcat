@@ -22,7 +22,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     return this.store.getCurrentProjectID;
   }
   get workspaceID() {
-    return this.store.getCurrentWorkspace.id;
+    return this.store.getCurrentWorkspaceID;
   }
   get apiPrefix() {
     return `/${this.workspaceID}/${this.projectID}/`;

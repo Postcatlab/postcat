@@ -5,7 +5,7 @@
   <nz-breadcrumb-item class="underline">
     <a
       [routerLink]="['/home/workspace/project/list']"
-      [queryParams]="{ pid: store.getCurrentProjectID, wid: store.getCurrentWorkspace.uuid }"
+      [queryParams]="{ pid: store.getCurrentProjectID, wid: store.getCurrentWorkspaceID }"
       >{{ store.getCurrentProject?.name }}</a
     >
   </nz-breadcrumb-item>

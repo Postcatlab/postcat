@@ -30,7 +30,6 @@
     "electron:tsc": "tsc -p tsconfig.json",
     "electron:serve-tsc": "yarn electron:dev",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
-    "copyfile:out": "copyfiles -u 1 src/**/*.json src/app/common/images/** out",
     "lint:lint-staged": "lint-staged"
   },
   "dependencies": {

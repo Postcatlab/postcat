@@ -111,9 +111,8 @@ export class ProjectMemberComponent implements OnInit {
       this.message.send({ type: 'need-config-remote', data: {} });
       return;
     }
-    const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
     const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID: currentWorkspaceID
+      workspaceID: this.store.getCurrentWorkspaceID
     });
     if (wErr) {
       if (wErr.status === 401) {
@@ -191,9 +190,8 @@ export class ProjectMemberComponent implements OnInit {
       // * 关闭弹窗
       this.isInvateModalVisible = false;
 
-      const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
       const [wData, wErr]: any = await this.api.api_workspaceMember({
-        workspaceID: currentWorkspaceID
+        workspaceID: this.store.getCurrentWorkspaceID
       });
       if (wErr) {
         if (wErr.status === 401) {
@@ -268,9 +266,8 @@ export class ProjectMemberComponent implements OnInit {
       }
       return;
     }
-    const { id: currentWorkspaceID } = this.store.getCurrentWorkspace;
     const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID: currentWorkspaceID
+      workspaceID: this.store.getCurrentWorkspaceID
     });
     if (wErr) {
       if (wErr.status === 401) {

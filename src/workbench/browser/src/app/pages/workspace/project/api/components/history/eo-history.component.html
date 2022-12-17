@@ -17,16 +17,16 @@
       (nzOnConfirm)="clearAllHistory()"
       (nzOnCancel)="cancel()"
       nzPopconfirmPlacement="leftTop"
-      nzOkText="Yes"
-      nzCancelText="No"
+      [nzOkDanger]="true"
+      nzOkText="Delete"
     >
       <span class="flex items-center justify-center icon">
         <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
       </span>
     </button>
   </div>
+  <nz-empty *ngIf="!historyList.length" nzNotFoundImage="simple"> </nz-empty>
   <eo-ng-tree-default
-    *ngIf="historyList.length"
     [nzData]="historyList"
     [nzSelectedKeys]="nzSelectedKeys"
     nzBlockNode
@@ -44,6 +44,4 @@
       <span class="flex-1 overflow-hidden text-[12px] truncate">{{ origin.request?.uri }}</span>
     </div>
   </ng-template>
-
-  <nz-empty *ngIf="!historyList.length" nzNotFoundImage="simple"> </nz-empty>
 </div>

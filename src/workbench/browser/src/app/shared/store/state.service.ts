@@ -31,15 +31,16 @@ export class StoreService {
   // ? share
   @observable private shareId = StorageUtil.get('shareId') || '';
 
-  // ? project
-  @observable private currentProject: Project;
   // ? workspace
-  @observable private currentWorkspace = StorageUtil.get('currentWorkspace') || eoDeepCopy(LOCAL_WORKSPACE);
+  @observable private currentWorkspaceID = StorageUtil.get('currentWorkspaceID') || -1;
+  @observable private currentWorkspace: API.Workspace = eoDeepCopy(LOCAL_WORKSPACE);
   //  Local workspace always keep in last
   @observable private workspaceList: API.Workspace[] = [eoDeepCopy(LOCAL_WORKSPACE)];
 
   // ? project
+  @observable private projectList: Project[];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
+  @observable private currentProject: Project;
 
   // ? user && auth
   @observable private userProfile = StorageUtil.get('userProfile') || null;
@@ -82,7 +83,7 @@ export class StoreService {
     return this.url.includes('/home/share');
   }
   @computed get isLocal() {
-    return !this.isShare && this.getCurrentWorkspace.id === -1;
+    return !this.isShare && this.currentWorkspaceID === -1;
   }
   @computed get isRemote() {
     return this.isShare || this.setting.settings['eoapi-common.dataStorage'] === 'http';
@@ -95,11 +96,15 @@ export class StoreService {
   @computed get getWorkspaceList() {
     return this.workspaceList;
   }
-  @computed get getLocalWorkspace() {
-    return eoDeepCopy(LOCAL_WORKSPACE);
+  @computed get getCurrentWorkspaceID() {
+    return this.currentWorkspaceID;
   }
   @computed get getCurrentWorkspace() {
     return this.currentWorkspace;
+  }
+
+  @computed get getLocalWorkspace() {
+    return eoDeepCopy(LOCAL_WORKSPACE);
   }
 
   // ? project
@@ -181,22 +186,32 @@ export class StoreService {
   @action setWorkspaceList(data: API.Workspace[] = []) {
     const local = eoDeepCopy(LOCAL_WORKSPACE);
     this.workspaceList = [local, ...data.filter(it => it.id !== -1).map(it => ({ ...it, type: 'online' }))];
-  }
-  @action async setCurrentWorkspace(workspace: API.Workspace) {
+    const workspace = this.workspaceList.find(val => val.id === this.currentWorkspaceID) || this.getLocalWorkspace;
     this.currentWorkspace = workspace;
-    StorageUtil.set('currentWorkspace', workspace);
-    this.message.send({ type: 'workspaceChange', data: true });
+    this.currentWorkspaceID = workspace.id;
   }
-  @action setCurrentProject(project: Project) {
-    this.currentProject = project;
-    this.setCurrentProjectID(project.uuid);
+  @action updateWorkspace(workspace) {
+    const index = this.workspaceList.findIndex(val => val.id === workspace.id);
+    this.workspaceList[index] = workspace;
+    if (this.currentWorkspaceID === workspace.id) {
+      this.currentWorkspace = workspace;
+    }
+  }
+  @action setCurrentWorkspaceID(id: number) {
+    this.currentWorkspaceID = id;
+    this.currentWorkspace = this.workspaceList?.find(val => val.id === id);
+    StorageUtil.set('currentWorkspaceID', this.currentWorkspaceID);
+    this.message.send({ type: 'workspaceChange', data: true });
   }
   // ? project
   @action setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
+    this.currentProject = this.projectList?.find(val => val.uuid === projectID);
     StorageUtil.set('currentProjectID', projectID);
   }
-
+  @action setProjectList(projects: Project[]) {
+    this.projectList = projects;
+  }
   // ? user && auth
   @action setUserProfile(data: API.User = null) {
     this.userProfile = data;

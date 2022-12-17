@@ -1,4 +1,4 @@
-import { Component, ComponentRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { COMPILER_OPTIONS, Component, ComponentRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 
 export interface SettingItem {
   title: string;
@@ -26,6 +26,8 @@ export interface SettingItem {
 export class EoSettingComponent implements OnInit, OnDestroy {
   @Input() selectedModule: string;
   @Input() nzData: SettingItem[];
+  //Input params
+  @Input() model: any;
   @ViewChild('options', { read: ViewContainerRef, static: true }) options: ViewContainerRef;
   private componentRefs: Array<ComponentRef<any>> = [];
   selectedTabIndex;
@@ -41,9 +43,10 @@ export class EoSettingComponent implements OnInit, OnDestroy {
     let selectModule = this.nzData.find(val => val.id === this.selectedModule);
     this.componentRefs.forEach(item => item.destroy());
     const componentRef = this.options.createComponent<any>(selectModule.comp as any);
+    componentRef.instance.model = this.model;
+    componentRef.instance.ngOnChanges?.();
     componentRef.location.nativeElement.id = selectModule.id;
     this.componentRefs.push(componentRef);
-    console.log(this.componentRefs, this.selectedModule, this.options);
   }
   selectModule(id) {
     this.selectedModule = id;

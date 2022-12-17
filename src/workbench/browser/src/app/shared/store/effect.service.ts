@@ -27,20 +27,20 @@ export class EffectService {
     private lang: LanguageService,
     private web: WebService
   ) {
-    this.updateWorkspaceList();
-    this.updateProjects(this.store.getCurrentWorkspace.id);
+    this.updateWorkspaces();
+    this.updateProjects(this.store.getCurrentWorkspaceID);
     reaction(
       () => this.store.isLogin,
       async () => {
         if (this.store.isLogin) {
-          await this.updateWorkspaceList();
+          await this.updateWorkspaces();
         }
-        this.updateWorkspace(this.store.getCurrentWorkspace);
+        this.changeWorkspace(this.store.getCurrentWorkspace);
       }
     );
   }
 
-  async updateWorkspaceList() {
+  async updateWorkspaces() {
     const [list, wErr]: any = await this.http.api_workspaceList({});
     if (wErr) {
       if (wErr.status === 401) {
@@ -50,6 +50,8 @@ export class EffectService {
         }
         this.message.send({ type: 'http-401', data: {} });
       }
+      this.store.setWorkspaceList([]);
+      this.updateProjects(this.store.getCurrentWorkspaceID);
       return;
     }
     this.store.setWorkspaceList(list);
@@ -119,7 +121,7 @@ export class EffectService {
       }))
       .concat(apiDataFilters);
   }
-  async updateWorkspace(workspace) {
+  async changeWorkspace(workspace) {
     if (workspace.id !== -1) {
       const [data, err]: any = await this.http.api_workspaceGetInfo({ workspaceID: workspace.id });
       if (err) {
@@ -128,18 +130,20 @@ export class EffectService {
       workspace = data;
     }
     // * real set workspace
-    this.store.setCurrentWorkspace(workspace);
+    this.store.setCurrentWorkspaceID(workspace.id);
     // * real set workspace
     const [projects]: any = await this.getProjects(workspace.id);
-    this.store.setCurrentProject(projects[0]);
+    this.store.setProjectList(projects);
+    this.store.setCurrentProjectID(projects[0].uuid);
     // * refresh view
     await this.router.navigate(['**']);
-    await this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspace.id } });
+    await this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspaceID } });
   }
   async updateProjects(workspaceID) {
     // * real set workspace
     const [projects]: any = await this.getProjects(workspaceID);
-    this.store.setCurrentProject(projects[0]);
+    this.store.setProjectList(projects);
+    this.store.setCurrentProjectID(projects[0].uuid);
   }
   private async getProjects(workspaceID) {
     return new Promise(resolve => {
@@ -158,7 +162,7 @@ export class EffectService {
     return new Promise(resolve => {
       this.storage.run('projectUpdate', [workspace.id, data, data.uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.store.setCurrentProject(result.data);
+          this.store.setCurrentProjectID(result.data.uuid);
           return resolve(true);
         }
         return resolve(false);
