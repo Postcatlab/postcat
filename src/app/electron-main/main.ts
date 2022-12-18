@@ -1,5 +1,6 @@
 require('@bqy/node-module-alias/register');
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import Store from 'electron-store';
 import { LanguageService } from 'eo/app/electron-main/language.service';
 import { MockServer } from 'eo/platform/node/mock-server';
 import { ModuleManagerInterface } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
@@ -19,6 +20,11 @@ export const subView = {
   appView: null,
   mainView: null
 };
+const windowConfig = {
+  width: 1280,
+  height: 680
+};
+const store = new Store();
 
 // 获取单实例锁
 const gotTheLock = app.requestSingleInstanceLock();
@@ -71,7 +77,17 @@ class EoBrowserWindow {
       console.error('did-fail-load', event, errorCode);
       // this.loadURL();
     });
-    this.win.on('closed', () => {
+    this.win.on('resize', () => {
+      Object.assign(
+        windowConfig,
+        {
+          isMaximized: this.win.isMaximized()
+        },
+        this.win.getNormalBounds()
+      );
+      store.set('winConf', windowConfig);
+    });
+    this.win.on('closed', $event => {
       // Dereference the window object, usually you would store window
       // in an array if your app supports multi windows, this is the time
       // when you should delete the corresponding element.
@@ -91,14 +107,12 @@ class EoBrowserWindow {
       });
     }
   }
+
   public create(): BrowserWindow {
-    const size = screen.getPrimaryDisplay().workAreaSize;
-    const width = Math.floor(size.width * 0.85);
-    const height = Math.floor(size.height * 0.85);
     // Create the browser window.
-    this.win = new BrowserWindow({
-      width,
-      height,
+    const opts = {
+      width: 1280,
+      height: 680,
       useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
       frame: os.type() === 'Darwin' ? true : false, //mac use default frame
       webPreferences: {
@@ -108,7 +122,9 @@ class EoBrowserWindow {
         allowRunningInsecureContent: processEnv === 'development' ? true : false,
         contextIsolation: false // false if you want to run e2e test with Spectron
       }
-    });
+    };
+    Object.assign(opts, windowConfig, store.get('winConf'));
+    this.win = new BrowserWindow(opts);
 
     proxyOpenExternal(this.win);
     this.loadURL();
