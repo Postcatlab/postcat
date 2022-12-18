@@ -7,7 +7,6 @@ import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/share
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { windowWhen } from 'rxjs';
 
 import { ElectronService } from '../../core/services';
 
@@ -38,6 +37,13 @@ export class GlobalProvider {
     window.eo.loadFeatureModule ??= this.webExtensionService.importModule;
     /** prload 里面同时有的方法 end */
     window.eo.navigate = (commands: any[], extras?: NavigationExtras) => {
+      const eoChangeRoute = {
+        'home/api': 'home/workspace/project/api'
+      };
+      Object.keys(eoChangeRoute).forEach(pre => {
+        const after = eoChangeRoute[pre];
+        commands[0] = commands[0].replace(pre, after);
+      });
       this.router.navigate(commands, extras);
     };
     window.eo.getGroups = window.eo.getGroup = this.getGroup;

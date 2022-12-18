@@ -77,7 +77,8 @@ export class ApiTableService {
         type: 'checkbox',
         key: 'required',
         filterable: inArg.isEdit ? false : true,
-        enums: REQURIED_ENUMS
+        enums: REQURIED_ENUMS,
+        width: 120
       },
       description: {
         title: $localize`:@@Description:Description`,
@@ -221,27 +222,24 @@ export class ApiTableService {
         type: 'input',
         columnVisible: 'fixed',
         disabledFn: inArg.in === 'header' ? item => has(item, 'editable') && !item.editable : undefined,
-        key: 'name',
-        width: 200
+        key: 'name'
       },
       type: {
         title: $localize`Type`,
         type: 'select',
         key: 'type',
-        width: 120
+        width: 150
       },
       required: {
         type: 'checkbox',
         left: true,
         key: 'required',
-        width: 25,
         enums: REQURIED_ENUMS
       },
       value: {
         title: $localize`Value`,
         type: 'input',
-        key: 'value',
-        width: 150
+        key: 'value'
       },
       editOperate: {
         type: 'btnList',

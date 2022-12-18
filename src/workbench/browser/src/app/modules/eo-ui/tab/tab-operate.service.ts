@@ -40,7 +40,8 @@ export class TabOperateService {
   init(inArg: { basicTabs: Array<Partial<TabItem>> }) {
     this.BASIC_TABS = inArg.basicTabs;
     const tabStorage = this.setting.disabledCache ? null : this.tabStorage.getPersistenceStorage();
-    const tabCache = this.parseChangeRouter(tabStorage);
+    //parse result for router change
+    const tabCache = this.filterValidTab(tabStorage);
     const validTabItem = this.generateTabFromUrl(this.router.url);
     const executeWhenNoTab = () => {
       if (!validTabItem) {
@@ -420,7 +421,13 @@ export class TabOperateService {
   private updateChildView() {
     this.messageService.send({ type: 'tabContentInit', data: {} });
   }
-  private parseChangeRouter(cache: storageTab) {
+  /**
+   * Get valid tab item
+   *
+   * @param cache
+   * @returns
+   */
+  private filterValidTab(cache: storageTab) {
     if (!cache) {
       return;
     }
@@ -430,11 +437,13 @@ export class TabOperateService {
       if (!tabItem) {
         return false;
       }
-      const hasExist = this.BASIC_TABS.find(val => val.pathname === tabItem.pathname);
-      if (!hasExist) {
+      const validTab = this.BASIC_TABS.find(val => val.id === tabItem.id);
+      if (!validTab) {
         delete cache.tabsByID[id];
+      } else {
+        tabItem.pathname = validTab.pathname;
       }
-      return hasExist;
+      return validTab;
     });
     return cache;
   }

@@ -2,7 +2,7 @@ export enum TabOperate {
   closeOther = 'closeOther',
   closeAll = 'closeAll',
   closeLeft = 'closeLeft',
-  closeRight = 'closeRight',
+  closeRight = 'closeRight'
 }
 export type storageTab = {
   selectedIndex: number;
@@ -18,9 +18,9 @@ export type TabItem = {
    */
   uuid: number;
   /**
-   * Content module
+   * Unique id,used for identify content
    */
-  module: string;
+  id: string;
   isFixed?: boolean;
   /**
    * Preview page or edit page

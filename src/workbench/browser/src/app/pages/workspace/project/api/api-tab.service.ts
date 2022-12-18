@@ -19,51 +19,51 @@ export class ApiTabService {
     return this.BASIC_TABS.find(val => this.router.url.includes(val.pathname));
   }
   private changeContent$: Subject<any> = new Subject();
-  SHARE_TABS = [
+  SHARE_TABS: Array<Partial<TabItem>> = [
     {
       pathname: '/home/share/http/test',
-      module: 'test',
+      id: 'share-api-test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' }
     },
-    { pathname: '/home/share/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/home/share/http/detail', id: 'share-api-detail', type: 'preview', title: $localize`Preview` },
     {
       pathname: '/home/share/ws/test',
-      module: 'test',
+      id: 'share-api-test',
       isFixed: true,
       type: 'preview',
       extends: { method: 'WS' },
       title: $localize`New Websocket`
     }
   ];
-  API_TABS = [
+  API_TABS: Array<Partial<TabItem>> = [
     {
       pathname: '/home/workspace/project/api/http/test',
-      module: 'test',
+      id: 'api-http-test',
       type: 'edit',
       title: $localize`New Request`,
       extends: { method: 'POST' }
     },
     {
       pathname: '/home/workspace/project/api/env/edit',
-      module: 'env',
+      id: 'project-env',
       type: 'edit',
       isFixed: true,
       icon: 'application',
       title: $localize`New Environment`
     },
-    { pathname: '/home/workspace/project/api/http/edit', module: 'edit', isFixed: true, type: 'edit', title: $localize`New API` },
-    { pathname: '/home/workspace/project/api/http/detail', module: 'detail', type: 'preview', title: $localize`Preview` },
+    { pathname: '/home/workspace/project/api/http/edit', id: 'api-http-edit', isFixed: true, type: 'edit', title: $localize`New API` },
+    { pathname: '/home/workspace/project/api/http/detail', id: 'api-http-detail', type: 'preview', title: $localize`Preview` },
     {
       pathname: '/home/workspace/project/api/ws/test',
-      module: 'test',
+      id: 'api-ws-test',
       isFixed: true,
       type: 'edit',
       extends: { method: 'WS' },
       title: $localize`New Websocket`
     },
-    { pathname: '/home/workspace/project/api/http/mock', module: 'mock', type: 'preview', title: 'Mock' }
+    { pathname: '/home/workspace/project/api/http/mock', id: 'api-http-mock', type: 'preview', title: 'Mock' }
   ];
   BASIC_TABS: Array<Partial<TabItem>>;
 
@@ -140,7 +140,7 @@ export class ApiTabService {
         }
       };
     }
-    if (this.currentComponentTab.module === 'test') {
+    if (this.currentComponentTab.pathname.includes('test')) {
       this.componentRef.afterTested = {
         emit: model => {
           this.afterContentChanged({ when: 'afterTested', url, model });
@@ -185,7 +185,7 @@ export class ApiTabService {
     if (!currentTab) {
       return;
     }
-    const contentID = currentTab.module;
+    const contentID = currentTab.id;
     //Get tab cache
     this.componentRef.model = currentTab?.content?.[contentID] || null;
     this.componentRef.initialModel = currentTab?.baseContent?.[contentID] || null;
@@ -194,21 +194,19 @@ export class ApiTabService {
 
   updateTab(currentTab, inData) {
     const model = inData.model;
-    const contentID = currentTab.module;
+    const contentID = currentTab.id;
 
     //Set tabItem
     const replaceTab: Partial<TabItem> = {
       hasChanged: currentTab.hasChanged,
       isLoading: false,
-      extends: {
-        module: contentID
-      }
+      extends: {}
     };
     if (model && !isEmptyObj(model)) {
       //Set title/method
       replaceTab.title = model.name;
       replaceTab.extends.method = model.method;
-      if (currentTab.module === 'test') {
+      if (currentTab.pathname.includes('test')) {
         if (currentTab.pathname === '/home/workspace/project/api/ws/test') {
           replaceTab.extends.method = model.request.protocol?.toUpperCase();
         } else {
@@ -252,8 +250,8 @@ export class ApiTabService {
         replaceTab.extends.hasChanged[contentID] = currentHasChanged;
         // Editiable tab  share hasChanged data
         if (!currentHasChanged && currentTab.extends?.hasChanged) {
-          const otherEditableTabs = this.BASIC_TABS.filter(val => val.type === 'edit' && val.module !== contentID);
-          currentHasChanged = otherEditableTabs.some(tabItem => currentTab.extends?.hasChanged[tabItem.module]);
+          const otherEditableTabs = this.BASIC_TABS.filter(val => val.type === 'edit' && val.id !== contentID);
+          currentHasChanged = otherEditableTabs.some(tabItem => currentTab.extends?.hasChanged[tabItem.id]);
         }
         replaceTab.hasChanged = currentHasChanged;
         // Set storage
@@ -273,7 +271,7 @@ export class ApiTabService {
         replaceTab.isFixed = true;
       }
       //Has tested/exsix api set fixed
-      if (currentTab.module === 'test' && (model.testStartTime !== undefined || currentTab.params.uuid)) {
+      if (currentTab.pathname.includes('test') && (model.testStartTime !== undefined || currentTab.params.uuid)) {
         replaceTab.isFixed = true;
       }
     }
@@ -312,7 +310,7 @@ export class ApiTabService {
         });
       }
       //Cancel cache testResult
-      if (val.module === 'test' && val.content?.test?.testResult) {
+      if (val.pathname.includes('test') && val.content?.test?.testResult) {
         val.content.test.testResult = {
           request: {},
           response: {}

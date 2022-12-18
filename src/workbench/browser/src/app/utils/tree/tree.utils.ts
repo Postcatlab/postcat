@@ -1,11 +1,24 @@
 import omitDeep from 'omit-deep-lodash';
 
 import { GroupTreeItem } from '../../shared/models';
+import { whatType } from '../index.utils';
 export type TreeToObjOpts = {
   key?: string;
   valueKey?: string;
   childKey?: string;
 };
+export const getTreeTotalCount = (trees): number => {
+  if (whatType(trees) !== 'array') return 0;
+  let result = 0;
+  result += trees.length;
+  trees.forEach(val => {
+    if (val.children?.length) {
+      result += getTreeTotalCount(val.children);
+    }
+  });
+  return result;
+};
+
 const filterTree = (
   result,
   filterFn,

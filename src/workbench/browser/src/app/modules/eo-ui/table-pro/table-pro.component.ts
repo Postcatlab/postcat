@@ -18,7 +18,7 @@ import {
 import _, { attempt, has, isUndefined, omitBy } from 'lodash-es';
 
 import { eoDeepCopy } from '../../../utils/index.utils';
-import { filterTableData } from '../../../utils/tree/tree.utils';
+import { filterTableData, getTreeTotalCount } from '../../../utils/tree/tree.utils';
 import { ColumnItem, IconBtn, TableProSetting } from './table-pro.model';
 import { TableProConfig, TABLE_PRO_CONFIG, TABLE_PRO_DEFUALT_CONFIG } from './table-pro.token';
 @Component({
@@ -110,6 +110,9 @@ export class EoTableProComponent implements OnInit, OnChanges {
       this.onColumnChanges();
     }
     if (changes.nzData) {
+      if (getTreeTotalCount(this.nzData) > 100) {
+        this.nzExpand = false;
+      }
       if (this.setting.isEdit && !this.setting.manualAdd) {
         if (!this.nzData) {
           return;
@@ -155,7 +158,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     }
     if (btnItem.fnName) {
       if (!apis[btnItem.fnName]) {
-        eoConsole.error(`: Can't find ${btnItem.fnName} function`);
+        eoConsole.error(`[eo-table-pro]: Can't find ${btnItem.fnName} function`);
         return;
       }
       switch (btnItem.fnName) {
@@ -408,12 +411,12 @@ export class EoTableProComponent implements OnInit, OnChanges {
           body.showFn = header.showFn = item => this.columnVisibleStatus[colID];
         }
       }
-      // if (!header.width) {
-      //   eoConsole.warn(`Width not find: ${colID}`);
-      // }
       theaderConf.push(header);
       tbodyConf.push(body);
     });
+    if (theaderConf.every(val => val.width)) {
+      eoConsole.warn('[eo-table-pro]: all clumn item has set width,it will cause table width invalid,please rest');
+    }
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;
     // console.log(this.theadConf, this.tbodyConf);
