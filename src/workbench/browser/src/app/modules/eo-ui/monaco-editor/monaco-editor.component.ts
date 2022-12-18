@@ -11,7 +11,6 @@ import { getDefaultCompletions } from './defaultCompletions';
 
 declare const monaco: typeof MonacoEditor;
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
-
 const eventHash = new Map()
   .set('format', {
     label: $localize`Format`,

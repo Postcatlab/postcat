@@ -12,6 +12,8 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { reaction } from 'mobx';
 
+import { debug } from 'console';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -131,6 +133,7 @@ export class EffectService {
     }
     // * real set workspace
     this.store.setCurrentWorkspaceID(workspace.id);
+    this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
     const [projects]: any = await this.getProjects(workspace.id);
     this.store.setProjectList(projects);
@@ -143,7 +146,6 @@ export class EffectService {
     // * real set workspace
     const [projects]: any = await this.getProjects(workspaceID);
     this.store.setProjectList(projects);
-    this.store.setCurrentProjectID(projects[0].uuid);
   }
   private async getProjects(workspaceID) {
     return new Promise(resolve => {

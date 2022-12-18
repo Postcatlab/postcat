@@ -187,8 +187,7 @@ export class StoreService {
     const local = eoDeepCopy(LOCAL_WORKSPACE);
     this.workspaceList = [local, ...data.filter(it => it.id !== -1).map(it => ({ ...it, type: 'online' }))];
     const workspace = this.workspaceList.find(val => val.id === this.currentWorkspaceID) || this.getLocalWorkspace;
-    this.currentWorkspace = workspace;
-    this.currentWorkspaceID = workspace.id;
+    this.setCurrentWorkspaceID(workspace.id);
   }
   @action updateWorkspace(workspace) {
     const index = this.workspaceList.findIndex(val => val.id === workspace.id);
@@ -201,16 +200,18 @@ export class StoreService {
     this.currentWorkspaceID = id;
     this.currentWorkspace = this.workspaceList?.find(val => val.id === id);
     StorageUtil.set('currentWorkspaceID', this.currentWorkspaceID);
-    this.message.send({ type: 'workspaceChange', data: true });
   }
   // ? project
+  @action setProjectList(projects: Project[]) {
+    this.projectList = projects;
+    const project = this.projectList.find(val => val.uuid === this.currentProjectID) || projects[0];
+    this.setCurrentProjectID(project.uuid);
+    console.log(this.currentProject, this.currentProjectID, this.projectList);
+  }
   @action setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;
     this.currentProject = this.projectList?.find(val => val.uuid === projectID);
     StorageUtil.set('currentProjectID', projectID);
-  }
-  @action setProjectList(projects: Project[]) {
-    this.projectList = projects;
   }
   // ? user && auth
   @action setUserProfile(data: API.User = null) {
