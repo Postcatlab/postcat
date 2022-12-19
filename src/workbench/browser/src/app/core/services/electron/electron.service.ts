@@ -100,7 +100,7 @@ export class ElectronService {
     if (this.isElectron) {
       descriptions.push(...electronDetails);
     } else {
-      const browserType = getBrowserType(getSettings()?.['eoapi-language']);
+      const browserType = getBrowserType(getSettings()?.['system.language']);
       descriptions.push(
         ...Object.entries<string>(browserType).map(([key, value]) => ({
           id: key,
@@ -109,7 +109,7 @@ export class ElectronService {
         }))
       );
     }
-    const systemInfo = this.ipcRenderer?.sendSync('get-system-info') || getBrowserType(getSettings()?.['eoapi.language']);
+    const systemInfo = this.ipcRenderer?.sendSync('get-system-info') || getBrowserType(getSettings()?.['common.language']);
     descriptions.forEach(item => {
       if (item.id in systemInfo) {
         item.value = systemInfo[item.id];

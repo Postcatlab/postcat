@@ -20,11 +20,13 @@
 }
 
 :host ::ng-deep {
-  --body-height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0px));
+  .home-container {
+    --body-height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0));
 
-  eo-project-member {
-    display: block;
-    overflow: auto;
-    height: 100%;
+    router-outlet + * {
+      display: block;
+      height: var(--body-height);
+      overflow: auto;
+    }
   }
 }

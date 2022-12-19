@@ -7,14 +7,13 @@ import { SidebarComponent } from '../layouts/sidebar/sidebar.component';
 import { ToolbarModule } from '../layouts/toolbar/toolbar.module';
 import { SystemSettingModule } from '../modules/system-setting/system-setting.module';
 import { SharedModule } from '../shared/shared.module';
-import { ExtensionsComponent } from './extension/iinit-extensions.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { PagesComponent } from './pages.component';
 import { UserModalComponent } from './user-modal.component';
 
 @NgModule({
   imports: [PagesRoutingModule, SystemSettingModule, CommonModule, NavbarModule, ToolbarModule, SharedModule],
-  declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent, ExtensionsComponent],
+  declarations: [PagesComponent, SidebarComponent, LocalWorkspaceTipComponent, UserModalComponent],
   exports: [],
   providers: [],
   schemas: []

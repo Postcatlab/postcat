@@ -2,7 +2,7 @@ const IO = require('socket.io');
 const WebSocket = require('ws');
 const grpcClient = require('./grpc_client.js');
 
-process.on('uncaughtException', (err) => {
+process.on('uncaughtException', err => {
   console.error('uncaughtException', err);
 });
 
@@ -10,20 +10,21 @@ const _post = process.env.EOAPI_WEBSOCKET_POST || 13928;
 
 const socket = (port = _post) => {
   const io = new IO.Server(port, {
-    transports: ['websocket'],
+    transports: ['websocket']
   });
-  io.on('connection', (socket) => {
+  io.on('connection', socket => {
     // send a message to the client
     socket.emit('ws-client', 'link success');
     let ws = null;
 
     const unlisten = () => {
+      if (!ws) return;
       ws.on('close', null);
       ws.on('upgrade', null);
       ws.on('message', null);
       ws = null;
     };
-    socket.on('grpc-server', async (data) => {
+    socket.on('grpc-server', async data => {
       // * 创建 grpc 客户端发起请求
       // 端口管理、编译文件、运行插件代码、销毁服务
       const [res, err] = await grpcClient(data);
@@ -47,16 +48,16 @@ const socket = (port = _post) => {
             : request.protocol + '://' + request.uri.trim().replace('//', '');
           ws = new WebSocket(link, {
             headers: request?.requestHeaders
-              ?.filter((it) => it.name && it.value)
+              ?.filter(it => it.name && it.value)
               .reduce(
                 (total, { name, value }) => ({
                   ...total,
-                  [name]: value,
+                  [name]: value
                 }),
                 {}
-              ),
+              )
           });
-          ws.on('error', (err) => {
+          ws.on('error', err => {
             socket.emit('ws-client', { type: 'ws-connect-back', status: -1, content: err });
             unlisten();
           });
@@ -72,16 +73,16 @@ const socket = (port = _post) => {
         ws.on('open', () => {
           // console.log(`[CLIENT] open()`);
         });
-        ws.on('upgrade', (res) => {
+        ws.on('upgrade', res => {
           const { headers: resHeader } = res;
           socket.emit('ws-client', { type: 'ws-connect-back', status: 0, content: { reqHeader, resHeader } });
         });
 
-        ws.on('message', (message) => {
+        ws.on('message', message => {
           socket.emit('ws-client', {
             type: 'ws-message-back',
             status: 0,
-            content: message?.toString() || message,
+            content: message?.toString() || message
           });
         });
 
@@ -89,7 +90,7 @@ const socket = (port = _post) => {
           socket.emit('ws-client', {
             type: 'ws-connect-back',
             status: -1,
-            content: 'Server disconnected',
+            content: 'Server disconnected'
           });
           unlisten();
         });

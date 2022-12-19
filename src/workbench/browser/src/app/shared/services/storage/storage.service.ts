@@ -7,7 +7,6 @@ import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
 import { StorageResStatus } from './index.model';
 
-export type DataSourceType = 'local' | 'http';
 /** is show local data source tips */
 export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 
@@ -18,9 +17,6 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
 @Injectable({ providedIn: 'root' })
 export class StorageService {
   private instance;
-  get dataSourceType(): DataSourceType {
-    return getSettings()['eoapi-common.dataStorage'] || 'local';
-  }
   constructor(private injector: Injector, private store: StoreService, private indexedDBStorage: IndexedDBStorage) {
     autorun(() => {
       this.instance = this.store.isLocal ? this.indexedDBStorage : this.injector.get(HttpStorage);

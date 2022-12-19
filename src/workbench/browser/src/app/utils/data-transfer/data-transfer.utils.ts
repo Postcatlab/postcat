@@ -247,14 +247,14 @@ export const text2table: (text: string) => uiData = text => {
 };
 
 /**
- * Format eoapi body to json
+ * Format postcat body to json
  * !TODO Current just from sass apikit,need refactor
  *
- * @param eoapiArr
+ * @param arr
  * @param inputOptions
  * @returns
  */
-export const table2json = function (eoapiArr: ApiEditBody[], inputOptions) {
+export const table2json = function (arr: ApiEditBody[], inputOptions) {
   inputOptions = inputOptions || {};
   let result = {};
   const loopFun = (inputArr, inputObject) => {
@@ -325,7 +325,7 @@ export const table2json = function (eoapiArr: ApiEditBody[], inputOptions) {
       }
     }
   };
-  loopFun(eoapiArr, result);
+  loopFun(arr, result);
   if (inputOptions.rootType === JsonRootType.Array) {
     result = [result];
   }

@@ -56,6 +56,7 @@ export class HistoryComponent implements OnInit {
   }
 
   gotoTestHistory(e) {
+    this.nzSelectedKeys = [];
     const origin = e.node.origin;
     const protocol = origin.request?.protocol === 'ws' ? 'ws' : 'http';
     this.router.navigate([`home/workspace/project/api/${protocol}/test`], {

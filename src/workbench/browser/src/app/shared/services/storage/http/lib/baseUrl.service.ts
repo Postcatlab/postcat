@@ -36,7 +36,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const { url = '' } = this.getConfiguration('eoapi-common.remoteServer') || {};
+    const { url = '' } = this.getConfiguration('features.backend') || {};
     const token = StorageUtil.get('accessToken') || '';
     let targetUrl;
     if ((targetUrl = sharePaths.find(n => req.url.startsWith(n)))) {

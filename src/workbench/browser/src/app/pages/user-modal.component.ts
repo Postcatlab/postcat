@@ -167,7 +167,7 @@ import { distinct, takeUntil } from 'rxjs/operators';
               Cancel
             </button>
             <button eo-ng-button [nzLoading]="isSaveBtnLoading" type="submit" class="" nzType="primary" (click)="btnd4wbcjCallback()" i18n>
-              Save
+              Confirm
             </button>
           </section>
         </form>

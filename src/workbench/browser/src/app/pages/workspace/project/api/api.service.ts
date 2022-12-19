@@ -11,7 +11,7 @@ import { ApiData, StorageRes, StorageResStatus } from '../../../../shared/servic
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
+export class ProjectApiService {
   constructor(
     private messageService: MessageService,
     private message: EoNgFeedbackMessageService,

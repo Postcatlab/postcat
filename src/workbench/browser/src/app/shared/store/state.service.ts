@@ -77,16 +77,16 @@ export class StoreService {
   @computed get getEnvUuid() {
     return this.envUuid;
   }
-
-  // ? share
-  @computed get isShare() {
-    return this.url.includes('/home/share');
-  }
+  // ? data source
   @computed get isLocal() {
     return !this.isShare && this.currentWorkspaceID === -1;
   }
   @computed get isRemote() {
-    return this.isShare || this.setting.settings['eoapi-common.dataStorage'] === 'http';
+    return !this.isLocal;
+  }
+  // ? share
+  @computed get isShare() {
+    return this.url.includes('/home/share');
   }
   @computed get getShareID() {
     return this.shareId;
@@ -108,6 +108,9 @@ export class StoreService {
   }
 
   // ? project
+  @computed get getProjectList() {
+    return this.projectList;
+  }
   @computed get getCurrentProjectID() {
     return this.currentProjectID;
   }
@@ -132,7 +135,7 @@ export class StoreService {
 
   // ? setting
   @computed get remoteUrl() {
-    return this.setting.getConfiguration('eoapi-common.remoteServer.url');
+    return this.setting.getConfiguration('backend.url');
   }
 
   // ? UI
@@ -206,7 +209,6 @@ export class StoreService {
     this.projectList = projects;
     const project = this.projectList.find(val => val.uuid === this.currentProjectID) || projects[0];
     this.setCurrentProjectID(project.uuid);
-    console.log(this.currentProject, this.currentProjectID, this.projectList);
   }
   @action setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;

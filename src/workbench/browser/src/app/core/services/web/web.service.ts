@@ -37,7 +37,7 @@ export class WebService {
   ];
   constructor(private modalService: ModalService, private settingService: SettingService, private electronService: ElectronService) {
     if (this.isWeb) {
-      this.settingService.putSettings({ 'eoapi-common.remoteServer.url': window.location.origin });
+      this.settingService.putSettings({ 'backend.url': window.location.origin });
     }
     this.getClientResource();
   }
@@ -76,7 +76,6 @@ export class WebService {
       (window as any).protocolCheck(
         PROTOCOL,
         () => {
-          // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
           resolve(false);
         },
         () => {
@@ -101,7 +100,6 @@ export class WebService {
     return new Promise(async (resolve, reject) => {
       const isInstalled = await this.protocolCheck();
       if (!isInstalled) {
-        // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
         this.showDownloadClientModal(modalTitle);
         resolve(false);
       } else {

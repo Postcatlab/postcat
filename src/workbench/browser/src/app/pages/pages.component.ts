@@ -5,6 +5,7 @@ import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/ser
 import { filter } from 'rxjs';
 
 import { SidebarService } from '../layouts/sidebar/sidebar.service';
+import { SocketService } from './extension/socket.service';
 
 @Component({
   selector: 'eo-pages',
@@ -15,6 +16,7 @@ export class PagesComponent implements OnInit {
   isShowNotification;
   sidebarViews: any[] = [];
   constructor(
+    private socket: SocketService,
     public electron: ElectronService,
     private messageService: MessageService,
     private router: Router,
@@ -23,6 +25,8 @@ export class PagesComponent implements OnInit {
     this.isShowNotification = false;
   }
   ngOnInit(): void {
+    // * 通过 socketIO 告知 Node 端，建立 grpc 连接
+    this.socket.socket2Node();
     this.initPlugSideabr();
     this.initSidebarVisible(this.router.url);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
@@ -31,22 +35,12 @@ export class PagesComponent implements OnInit {
   }
   initSidebarVisible(url: string) {
     if (['home/workspace/project/list'].find(val => url.includes(val))) {
-      this.sidebar.sidebarShow = false;
+      this.sidebar.visible = false;
     } else {
-      this.sidebar.sidebarShow = true;
+      this.sidebar.visible = true;
     }
   }
-  async initPlugSideabr() {
-    // this.sidebarViews = await window.eo?.getSidebarViews?.();
-    // console.log('this.sidebarViews', this.sidebarViews);
-    // this.sidebarViews = this.sidebarViews?.filter(item => {
-    //   if (item.useIframe) {
-    //     const dynamickUrl = this.settingService.getConfiguration('eoapi-apispace.dynamicUrl');
-    //     item.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dynamickUrl || item.url);
-    //   }
-    //   return item.useIframe;
-    // });
-  }
+  async initPlugSideabr() {}
 
   watchLocalExtensionsChange() {
     this.messageService.get().subscribe((inArg: Message) => {

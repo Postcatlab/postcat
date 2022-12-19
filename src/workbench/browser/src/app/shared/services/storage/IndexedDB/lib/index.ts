@@ -1,8 +1,7 @@
 import { VariableBinding } from '@angular/compiler';
 import Dexie, { Table } from 'dexie';
-import { getSettings } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
+import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -25,15 +24,12 @@ export type ResultType<T = any> = {
   status: StorageResStatus.success;
   data: T;
 };
-
 const getApiUrl = (apiData: ApiData) => {
-  const dataSourceType: DataSourceType = getSettings()?.['eoapi-common.dataStorage'] ?? 'local';
-
   /** Is it a remote data source */
-  const isRemote = dataSourceType === 'http';
+  const isRemote = StorageUtil.get('currentWorkspaceID') === -1 ? true : false;
 
   /** get mock url */
-  const mockUrl = isRemote ? `${window.eo?.getExtensionSettings?.('eoapi-common.remoteServer.url')}/mock/eo-1/` : window.eo?.getMockUrl?.();
+  const mockUrl = isRemote ? `${window.eo?.getExtensionSettings?.('backend.url')}/mock/eo-1/` : window.eo?.getMockUrl?.();
 
   const url = new URL(uniqueSlash(`${mockUrl}/${apiData.uri}`), 'https://github.com/');
   // if (apiData) {

@@ -30,7 +30,7 @@ export interface ModuleInfo {
   // extension description
   description: string;
 
-  //* Eoapi extend
+  //* Postcat extend
   //Entry js file,node environment
   node: string;
   title: string;

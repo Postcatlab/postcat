@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ImportApiComponent } from 'eo/workbench/browser/src/app/modules/extension-select/import-api/import-api.component';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
@@ -111,7 +111,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private storage: StorageService,
-    private apiService: ApiService,
+    private apiService: ProjectApiService,
     private nzModalService: NzModalService,
     private http: RemoteService,
     private effect: EffectService

@@ -53,7 +53,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   /** Automatically identify the type */
   @Input() autoType = false;
   @Input() autoFormat = false;
-  @Input() disabled = false;
   @Input() completions = [];
   @Output() readonly codeChange = new EventEmitter<string>();
   $$code = '';

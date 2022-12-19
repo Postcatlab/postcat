@@ -1,15 +1,19 @@
-let fixPath = require('fix-path');
-import * as path from 'path';
-import { ModuleHandlerOptions, ModuleHandlerResult } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { fileExists, writeJson } from 'eo/shared/node/file';
+import { ModuleHandlerOptions, ModuleHandlerResult } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+
 import { CoreHandler } from './core';
-import * as fs from 'fs';
+
 import { spawn } from 'child_process';
+import * as fs from 'fs';
+import * as path from 'path';
+
+let fixPath = require('fix-path');
 type Action = 'uninstall' | 'install' | 'update';
 // import npmCli from 'npm';
 const npmCli = require('npm');
 /**
  * 本地模块管理器
+ *
  * @class ModuleHandler
  */
 fixPath();
@@ -37,9 +41,9 @@ export class ModuleHandler extends CoreHandler {
     const packageJsonFile: string = path.join(this.baseDir, 'package.json');
     if (!fileExists(packageJsonFile)) {
       const data = {
-        name: 'eoapi-modules',
-        description: 'EOAPI modules package',
-        dependencies: {},
+        name: 'postcat-extensions',
+        description: 'Postcat extensions package',
+        dependencies: {}
       };
       writeJson(packageJsonFile, data);
     }
@@ -47,6 +51,7 @@ export class ModuleHandler extends CoreHandler {
 
   /**
    * 获取模块目录
+   *
    * @param name
    * @returns
    */
@@ -56,6 +61,7 @@ export class ModuleHandler extends CoreHandler {
 
   /**
    * 安装模块
+   *
    * @param modules 模块名称数组
    * @param isLocal 本地安装用link
    */
@@ -64,6 +70,7 @@ export class ModuleHandler extends CoreHandler {
   }
   /**
    * 更新模块
+   *
    * @param [{ name:string, version:string }]
    */
   async update(modules: any[]): Promise<ModuleHandlerResult> {
@@ -72,6 +79,7 @@ export class ModuleHandler extends CoreHandler {
 
   /**
    * 卸载模块
+   *
    * @param {string[]} modules 模块名称数组
    * @param isLocal 本地卸载用unlink
    */
@@ -81,12 +89,13 @@ export class ModuleHandler extends CoreHandler {
 
   /**
    * 手动操作package.json
+   *
    * @param result npm install安装成功回调的结果
    * @param moduleList 所有的模块列表
    */
   private operatePackage(result: any[], moduleList: string[], action: Action) {
     if (Array.isArray(result)) {
-      const names = moduleList.map((n) => n.split('@')[0]);
+      const names = moduleList.map(n => n.split('@')[0]);
       const packagePath = path.join(this.baseDir, 'package.json');
       result.forEach(([name]) => {
         const [pkgName, pkgVersion] = name.split('@');
@@ -108,7 +117,7 @@ export class ModuleHandler extends CoreHandler {
   }
   private executeByAppNpm(command: string, modules: any[], resolve, reject) {
     // https://www.npmjs.com/package/bin-links
-    npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, (loaderr) => {
+    npmCli.load({ 'bin-links': false, verbose: true, prefix: this.baseDir }, loaderr => {
       const moduleList = modules.map(({ name, version }) => (version ? `${name}@${version}` : name));
       let executeCommand = ['update', 'install', 'uninstall'];
       if (!executeCommand.includes(command)) {
@@ -157,6 +166,7 @@ export class ModuleHandler extends CoreHandler {
   }
   /**
    * 运行模块管理器
+   *
    * @param command
    * @param modules
    */

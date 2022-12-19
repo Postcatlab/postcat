@@ -5,7 +5,7 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { io } from 'socket.io-client';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SocketService {
   socket;
@@ -15,11 +15,7 @@ export class SocketService {
     try {
       const port = await window.eo?.getWebsocketPort?.();
       this.socket = io(
-        `${
-          APP_CONFIG.production && !this.electron.isElectron
-            ? APP_CONFIG.REMOTE_SOCKET_URL
-            : `ws://localhost:${port || 13928}`
-        }`,
+        `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : `ws://localhost:${port || 13928}`}`,
         { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 }
       );
     } catch (e) {
@@ -33,7 +29,7 @@ export class SocketService {
     }
     this.message.get().subscribe(({ type, data }) => {
       if (type === 'msg-grpc') {
-        this.socket.on('grpc-client', (response) => {
+        this.socket.on('grpc-client', response => {
           this.message.send({ type: 'msg-grpc-back', data: response });
         });
         this.socket.emit('grpc-server', data);

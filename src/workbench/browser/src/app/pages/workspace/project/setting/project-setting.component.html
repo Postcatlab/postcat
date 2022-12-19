@@ -15,7 +15,9 @@
           <div class="flex items-center justify-between w-full px-base">
             <span class="w-1/12">{{ item.title }}</span>
             <span class="w-6/12 text-tips">{{ item.desc }}</span>
-            <button class="w-24" eo-ng-button nzType="default" (click)="handleClickCard($event, item)">{{ item.title }}</button>
+            <button class="w-24" eo-ng-button nzType="default" [nzDanger]="item.type === 'delete'" (click)="clickItem($event, item)">{{
+              item.title
+            }}</button>
           </div>
         </nz-list-item>
         <nz-list-empty *ngIf="overviewList.length === 0"></nz-list-empty>

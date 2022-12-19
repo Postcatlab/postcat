@@ -7,7 +7,7 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
     <eo-ng-select
       i18n-nzPlaceHolder="@@Language"
       nzPlaceHolder="Language"
-      [ngModel]="model['eoapi-language']"
+      [ngModel]="model['system.language']"
       (ngModelChange)="handleChange($event)"
       [nzCustomTemplate]="defaultTemplate"
     >
@@ -34,11 +34,11 @@ export class LanguageSwticherComponent implements OnInit {
   constructor(public languageService: LanguageService) {}
 
   ngOnInit(): void {
-    this.model['eoapi-language'] = this.languageService.systemLanguage;
+    this.model['system.language'] = this.languageService.systemLanguage;
   }
 
   handleChange(localeID) {
-    this.model['eoapi-language'] = localeID;
+    this.model['system.language'] = localeID;
     this.modelChange.emit(this.model);
     this.languageService.changeLanguage(localeID);
   }

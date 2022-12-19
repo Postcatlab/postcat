@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiData, StorageRes } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
@@ -7,7 +7,7 @@ import { ApiBodyType, ApiEditViewData, JsonRootType, RequestMethod, RequestProto
 import { ApiEditUtilService } from './api-edit-util.service';
 @Injectable()
 export class ApiEditService {
-  constructor(private storage: StorageService, private apiEditUtil: ApiEditUtilService, private apiService: ApiService) {}
+  constructor(private storage: StorageService, private apiEditUtil: ApiEditUtilService, private apiService: ProjectApiService) {}
   getPureApi({ groupID }) {
     return {
       name: '',

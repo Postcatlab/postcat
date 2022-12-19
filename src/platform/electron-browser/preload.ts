@@ -22,7 +22,7 @@ ipcRenderer.on('storageCallback', (event, result) => {
 const featureModules = new Map();
 // 其他子应用可访问的api队列都集中到.eo上
 window.eo = {
-  name: 'Eoapi public api',
+  name: 'Postcat public api',
   version: '1.0.0',
   // 获取模块列表
   getModules() {

@@ -22,13 +22,15 @@
   <ng-container *ngIf="listType === 'card'">
     <div class="flex flex-wrap">
       <ng-container *ngFor="let item of projectList">
-        <a class="mr-[20px]" [routerLink]="['/home/workspace/project/api']">
+        <a class="mr-[20px]" [routerLink]="['/home/workspace/project/api']" (click)="changeProject(item)">
           <nz-card style="width: 300px">
             <div class="flex justify-between">
               <nz-avatar [nzText]="item.name.charAt(0)" nzShape="square"></nz-avatar>
 
               <div class="operate-btn-list">
-                <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu2"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
+                <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu2" (click)="$event.preventDefault(); $event.stopPropagation()">
+                  <eo-iconpark-icon name="more"></eo-iconpark-icon>
+                </button>
 
                 <eo-ng-dropdown-menu #menu2="nzDropdownMenu">
                   <ul nz-menu>
@@ -47,15 +49,17 @@
 
   <ng-container *ngIf="listType === 'list'">
     <nz-list [nzLoading]="initLoading">
-      <a>
-        <nz-list-item *ngFor="let item of projectList" [routerLink]="['/home/workspace/project/api']">
+      <a *ngFor="let item of projectList" [routerLink]="['/home/workspace/project/api']" (click)="changeProject(item)">
+        <nz-list-item>
           <div>
             <nz-avatar [nzText]="item.name.charAt(0)" nzShape="square"></nz-avatar>
             <b class="ml-[6px]">{{ item.name }}</b>
           </div>
 
           <div class="operate-btn-list">
-            <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu2"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
+            <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu2" (click)="$event.preventDefault(); $event.stopPropagation()">
+              <eo-iconpark-icon name="more"></eo-iconpark-icon>
+            </button>
             <eo-ng-dropdown-menu #menu2="nzDropdownMenu">
               <ul nz-menu>
                 <li nz-menu-item i18n (click)="editProject(item)">Edit</li>

@@ -8,7 +8,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 @Component({
   selector: 'eo-account',
   template: `
-    <h2 class="text-lg flex justify-between items-center" id="eoapi-account-username">
+    <h2 class="text-lg flex justify-between items-center" id="postcat-account-username">
       <span class="font-bold text-base mb-2" i18n>Username</span>
     </h2>
     <section class="w-1/2">
@@ -28,7 +28,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
       </form>
       <section class="h-4"></section>
     </section>
-    <h2 class="text-lg flex justify-between items-center" id="eoapi-account-password">
+    <h2 class="text-lg flex justify-between items-center" id="postcat-account-password">
       <span class="font-bold text-base mb-2" i18n>Password</span>
     </h2>
     <section class="w-1/2">

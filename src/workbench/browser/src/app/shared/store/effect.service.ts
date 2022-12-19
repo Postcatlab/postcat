@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
@@ -13,13 +13,14 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { reaction } from 'mobx';
 
 import { debug } from 'console';
+import { resolve } from 'path';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EffectService {
   constructor(
-    private apiService: ApiService,
+    private apiService: ProjectApiService,
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage,
     private store: StoreService,
@@ -135,22 +136,18 @@ export class EffectService {
     this.store.setCurrentWorkspaceID(workspace.id);
     this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
-    const [projects]: any = await this.getProjects(workspace.id);
-    this.store.setProjectList(projects);
-    this.store.setCurrentProjectID(projects[0].uuid);
+    await this.updateProjects(workspace.id);
+    this.store.setCurrentProjectID(this.store.getProjectList[0].uuid);
     // * refresh view
     await this.router.navigate(['**']);
     await this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspaceID } });
   }
   async updateProjects(workspaceID) {
-    // * real set workspace
-    const [projects]: any = await this.getProjects(workspaceID);
-    this.store.setProjectList(projects);
-  }
-  private async getProjects(workspaceID) {
     return new Promise(resolve => {
+      // * real set workspace
       this.storage.run('projectBulkLoad', [workspaceID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
+          this.store.setProjectList(result.data);
           resolve([result.data, null]);
           return;
         }
@@ -158,9 +155,9 @@ export class EffectService {
       });
     });
   }
-
   updateProject(data) {
     const workspace = this.store.getCurrentWorkspace;
+    console.log(workspace.id, data, data.uuid);
     return new Promise(resolve => {
       this.storage.run('projectUpdate', [workspace.id, data, data.uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {

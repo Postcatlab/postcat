@@ -6,7 +6,7 @@ body:
       value: |
         Before opening an issue, we recommend:
         * Use English to communicate.
-        * Search for duplicates of [Issues](https://github.com/eolinker/eoapi/issues) and [Discussions](https://github.com/eolinker/eoapi/discussions) unresolved.
+        * Search for duplicates of [Issues](https://github.com/eolinker/postcat/issues) and [Discussions](https://github.com/eolinker/postcat/discussions) unresolved.
   - type: textarea
     id: bug-description
     attributes:
@@ -22,7 +22,7 @@ body:
       label: Environment
       description: Share your environment details. Reports without proper environment details will likely be closed.
       placeholder: |
-        - Eoapi Version [e.g. 1.7.0]
+        - Postcat Version [e.g. 1.7.0]
         - OS: [e.g. Darwin arm64 21.5.0]
     validations:
       required: true

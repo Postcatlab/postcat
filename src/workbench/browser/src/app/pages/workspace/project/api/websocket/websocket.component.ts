@@ -84,7 +84,6 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         const historyData: unknown = await this.testService.getHistory(Number(id.replace('history_', '')));
         this.model = historyData as testViewModel;
       }
-      // console.log(this.model);
     }
     this.watchBasicForm();
     this.eoOnInit.emit(this.model);
@@ -99,7 +98,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
         const { ctrlKey, metaKey, code } = event;
         // 判断 Ctrl+S
         if ([ctrlKey, metaKey].includes(true) && code === 'Enter') {
-          console.log('EO_LOG[eoapi-websocket-test]: Ctrl + enter');
+          console.log('EO_LOG[postcat-websocket-test]: Ctrl + enter');
           this.handleSendMsg();
         }
       });

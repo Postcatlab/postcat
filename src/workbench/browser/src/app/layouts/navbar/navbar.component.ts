@@ -65,7 +65,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.modalService.create({
       nzClassName: 'eo-extension-modal',
       nzWidth: '80%',
-      nzTitle: $localize`Plugins Hub`,
+      nzTitle: $localize`Extensions Hub`,
       nzContent: ExtensionComponent,
       nzFooter: null
     });

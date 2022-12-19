@@ -1,10 +1,23 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 export const LOCAL_SETTINGS_KEY = 'LOCAL_SETTINGS_KEY';
 
 export const getSettings = () => {
   try {
-    return JSON.parse(localStorage.getItem(LOCAL_SETTINGS_KEY) || '{}');
+    let reuslt = JSON.parse(localStorage.getItem(LOCAL_SETTINGS_KEY) || '{}');
+    reuslt = JSON.parse(reuslt);
+    //TODO Compatible code,Delete at 2023.01.01
+    const MUI = {
+      'eoapi-common.remoteServer.url': 'backend.url',
+      'eoapi-language': 'system.language'
+    };
+    Object.keys(MUI).forEach(pre => {
+      if (Reflect.has(reuslt, pre)) {
+        reuslt[MUI[pre]] = reuslt[pre];
+        Reflect.deleteProperty(reuslt, pre);
+      }
+    });
+    return reuslt;
   } catch (error) {
     return {};
   }
@@ -17,7 +30,12 @@ export class SettingService {
   get settings() {
     return getSettings();
   }
-
+  set(key: string, value) {
+    this.saveSetting({ ...this.settings, ...{ [key]: value } });
+  }
+  get(keyPath: string) {
+    return this.getConfiguration(keyPath);
+  }
   putSettings(settings: Record<string, any> = {}) {
     this.saveSetting({ ...this.settings, ...settings });
   }
@@ -42,7 +60,7 @@ export class SettingService {
    * @param key
    * @returns
    */
-  getConfiguration = (keyPath: string) => {
+  getConfiguration(keyPath: string) {
     const localSettings = this.settings;
 
     if (Reflect.has(localSettings, keyPath)) {
@@ -64,5 +82,5 @@ export class SettingService {
       }, {});
     }
     return undefined;
-  };
+  }
 }

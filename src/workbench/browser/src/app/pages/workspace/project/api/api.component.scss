@@ -57,14 +57,18 @@ nz-divider {
 :host ::ng-deep {
   height: 100%;
 
-  router-outlet + * {
-    display: block;
-    height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT));
-    overflow: auto;
-  }
+  .content_container {
+    border-top: 1px solid var(--BORDER);
 
-  router-outlet + eo-api-test {
-    overflow: unset;
+    router-outlet + * {
+      display: block;
+      height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT));
+      overflow: auto;
+    }
+
+    router-outlet + eo-api-test {
+      overflow: unset;
+    }
   }
 
   .has_tab_page {
@@ -95,7 +99,7 @@ nz-divider {
     }
 
     .ant-tabs-content {
-      height: calc(var(--body-height) - 42px);
+      height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT));
     }
   }
 
@@ -103,10 +107,6 @@ nz-divider {
     .ant-tabs-nav {
       display: none;
     }
-  }
-
-  .content_container {
-    border-top: 1px solid var(--BORDER);
   }
 
   .ant-tabs-nav,

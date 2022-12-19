@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { JsonRootType, ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { cloneDeep } from 'lodash-es';
@@ -25,7 +25,7 @@ export class ApiDetailComponent implements OnInit {
   };
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService,
+    private apiService: ProjectApiService,
     public electron: ElectronService,
     public store: StoreService,
     private message: EoNgFeedbackMessageService

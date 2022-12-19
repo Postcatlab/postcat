@@ -9,7 +9,7 @@ import { SidebarModuleInfo } from './sidebar.model';
 })
 export class SidebarService {
   collapsed = false;
-  sidebarShow = true;
+  visible = true;
   currentModule: ModuleInfo | SidebarModuleInfo | any;
   private collapsedChanged$: Subject<boolean> = new Subject();
   constructor() {}

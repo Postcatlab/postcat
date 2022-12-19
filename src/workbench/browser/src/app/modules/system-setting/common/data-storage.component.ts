@@ -23,7 +23,7 @@ import { SettingService } from '../settings.service';
         <nz-form-item>
           <nz-form-label i18n>Host</nz-form-label>
           <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your Host">
-            <input eo-ng-input formControlName="eoapi-common.remoteServer.url" i18n-placeholder placeholder="Your host" />
+            <input eo-ng-input formControlName="backend.url" i18n-placeholder placeholder="Your host" />
           </nz-form-control>
         </nz-form-item>
       </ng-container>
@@ -59,7 +59,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      'eoapi-common.remoteServer.url': [this.model['eoapi-common.remoteServer.url'] || '', [Validators.required]]
+      'backend.url': [this.model['backend.url'] || '', [Validators.required]]
     });
   }
 
@@ -85,7 +85,7 @@ export class DataStorageComponent implements OnInit, OnChanges {
       ...this.model,
       ...this.validateForm.value
     };
-    const isSuccess = await this.dataSource.pingCloudServerUrl(this.validateForm.value['eoapi-common.remoteServer.url']);
+    const isSuccess = await this.dataSource.pingCloudServerUrl(this.validateForm.value['backend.url']);
     this.messageS.send({ type: 'workspaceChange', data: {} });
     if (isSuccess) {
       this.message.success($localize`Successfully connect to cloud`);

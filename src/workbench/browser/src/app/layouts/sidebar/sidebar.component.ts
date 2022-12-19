@@ -131,6 +131,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private getIDFromRoute() {
+    if (!this.sidebar.visible) return;
     const urlArr = new URL(this.router.url, 'http://localhost').pathname.split('/');
     const currentModule = this.modules.find(val => val.activeRoute.split('/').every(n => urlArr.includes(n)));
     if (!currentModule) {

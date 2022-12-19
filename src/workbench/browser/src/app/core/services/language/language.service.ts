@@ -11,7 +11,7 @@ export class LanguageService {
   //If the user does not set it, the system default language is used
   // Web from nginx setting and App from computer system setting
   systemLanguage =
-    this.setting.settings?.['eoapi-language'] ||
+    this.setting.settings?.['system.language'] ||
     this.languages.find(val => window.location.href.includes(`/${val.path}`))?.value ||
     (navigator.language.includes('zh') ? 'zh-Hans' : 'en-US');
   langHashMap = new Map().set('zh-Hans', 'zh').set('en-US', 'en');
@@ -20,7 +20,7 @@ export class LanguageService {
     return this.langHashMap.get(this.systemLanguage);
   }
   init() {
-    this.changeLanguage(this.setting.settings?.['eoapi-language']);
+    this.changeLanguage(this.setting.settings?.['system.language']);
   }
   changeLanguage(localeID) {
     if (!localeID || localeID === this.systemLanguage) {

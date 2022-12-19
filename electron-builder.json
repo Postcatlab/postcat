@@ -1,6 +1,6 @@
 {
-  "appId": ".eoapi.io",
-  "productName": "Eoapi",
+  "appId": ".postcat.io",
+  "productName": "Postcat",
   "asar": true,
   "directories": {
     "output": "release/"
@@ -48,7 +48,7 @@
     ]
   },
   "portable": {
-    "splashImage": "src/app/common/images/eoapi.bmp"
+    "splashImage": "src/app/common/images/postcat.bmp"
   },
   "mac": {
     "icon": "src/app/common/images/512x512.png",

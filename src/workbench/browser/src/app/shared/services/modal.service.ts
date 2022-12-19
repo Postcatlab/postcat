@@ -57,4 +57,15 @@ export class ModalService {
     const modal = this.modal.create(modalOpts);
     return modal;
   };
+  confirm = inOpts => {
+    const modalOpts: ModalOptions = {
+      nzTitle: null,
+      nzContent: inOpts.nzContent,
+      nzCancelText: $localize`Cancel`,
+      nzOnCancel: () => modal.destroy()
+    };
+    Object.assign(modalOpts, inOpts);
+    const modal = this.modal.confirm(inOpts);
+    return modal;
+  };
 }

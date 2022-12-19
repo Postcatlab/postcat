@@ -2,12 +2,7 @@
   <header class="p-[10px]">
     <form nz-form [formGroup]="validateForm" class="flex">
       <div>
-        <eo-ng-select
-          class="!w-[106px] no-radius-select"
-          [disabled]="isConnecting"
-          [(ngModel)]="model.request.protocol"
-          formControlName="protocol"
-        >
+        <eo-ng-select class="!w-[106px] no-radius-select" [(ngModel)]="model.request.protocol" formControlName="protocol">
           <eo-ng-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
         </eo-ng-select>
       </div>
@@ -20,7 +15,7 @@
             formControlName="uri"
             (change)="changeUri()"
             [(ngModel)]="model.request.uri"
-            class="left-1 rounded-r"
+            class="rounded-r left-1"
             name="uri"
             eo-ng-input
           />
@@ -122,10 +117,10 @@
             </eo-ng-select>
             <button
               eo-ng-button
+              [disabled]="wsStatus !== 'connected' || !model.msg"
               class="mx-1"
               nzType="primary"
               i18n
-              [disabled]="wsStatus !== 'connected' || !model.msg"
               (click)="handleSendMsg()"
             >
               Send
@@ -151,7 +146,7 @@
       <li *ngFor="let item of model.response?.responseBody; let index = index" class="block w-full">
         <div (click)="expandMessage(index)" class="flex flex-col w-full text-gray-500 top-line">
           <div *ngIf="item.type === 'send'" class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer">
-            <span class="flex justify-center w-4 h-4 rounded shrink-0 items-center send_icon">
+            <span class="flex items-center justify-center w-4 h-4 rounded shrink-0 send_icon">
               <eo-iconpark-icon name="arrow-up" size="10"></eo-iconpark-icon>
             </span>
             <div class="px-2">{{ item.msg }}</div>
@@ -181,12 +176,11 @@
             <div class="px-2">{{ item.title || item.msg }}</div>
           </div>
         </div>
-
+        <!-- 
         <eo-monaco-editor
           *ngIf="item.isExpand && item.type !== 'start'"
           [code]="item.msg"
           class="border-all"
-          [disabled]="true"
           [config]="{
             language: 'json',
             readOnly: true
@@ -194,7 +188,7 @@
           [eventList]="['type', 'format', 'copy', 'search']"
           (codeChange)="rawDataChange($event)"
         >
-        </eo-monaco-editor>
+        </eo-monaco-editor> -->
         <ng-container *ngIf="item.isExpand && item.type === 'start'">
           <div *ngFor="let k of Object.keys(item.msg); let index = index" class="headers">
             <div class="font-bold bbd pb-[10px] pt-[8px]">{{ k }}</div>

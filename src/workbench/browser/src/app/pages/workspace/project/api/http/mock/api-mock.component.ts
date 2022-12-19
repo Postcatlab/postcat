@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiMockTableComponent } from 'eo/workbench/browser/src/app/modules/api-shared/api-mock-table.component';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
@@ -32,7 +32,12 @@ export class ApiMockComponent implements OnInit {
   apiDataID = Number(this.route.snapshot.queryParams.uuid);
   apiData: ApiData;
 
-  constructor(private route: ActivatedRoute, private apiMock: ApiMockService, private modal: ModalService, private api: ApiService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private apiMock: ApiMockService,
+    private modal: ModalService,
+    private api: ProjectApiService
+  ) {}
 
   async ngOnInit() {
     this.apiData = await this.api.get(this.apiDataID);

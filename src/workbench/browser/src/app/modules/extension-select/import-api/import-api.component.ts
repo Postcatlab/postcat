@@ -10,6 +10,8 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 import StorageUtil from '../../../utils/storage/Storage';
 
+import { resolve } from 'path';
+
 // const optionList = [
 //   {
 //     value: 'import',
@@ -86,9 +88,10 @@ export class ImportApiComponent implements OnInit {
     StorageUtil.set('import_api_modal', this.currentExtension);
     if (!this.uploadData) {
       this.eoMessage.error($localize`Please import the file first`);
+      callback('stayModal');
       return;
     }
-    // * this.currentExtension is extension's key, like 'eoapi-import-openapi'
+    // * this.currentExtension is extension's key, like 'postcat-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
     const module = await window.eo?.loadFeatureModule?.(this.currentExtension);

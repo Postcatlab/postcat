@@ -21,7 +21,6 @@ const actionComponent = {
   styleUrls: ['./project-setting.component.scss']
 })
 export class ProjectSettingComponent implements OnInit {
-  modal: NzModalRef;
   isLoading: boolean;
   @observable projectName: string;
   constructor(
@@ -36,20 +35,27 @@ export class ProjectSettingComponent implements OnInit {
     {
       title: $localize`Import`,
       icon: 'afferent',
-      desc: $localize`:@@ImportAPI:Import API`,
+      desc: $localize`Import data from other products`,
       type: 'import'
     },
     {
       title: $localize`Export`,
       icon: 'efferent',
-      desc: $localize`Export API`,
+      desc: $localize`Export Postcat project data`,
       type: 'export'
     },
     {
       title: $localize`Push`,
       icon: 'play-cycle',
-      desc: $localize`Push/Sync API to other platforms`,
+      desc: $localize`Push/Sync API to other products`,
       type: 'push'
+    },
+    {
+      title: $localize`Delete`,
+      icon: 'play-cycle',
+      desc: $localize`Delete project will clean all the project 
+      data，this action can not be recovered！ `,
+      type: 'delete'
     }
   ];
 
@@ -66,6 +72,26 @@ export class ProjectSettingComponent implements OnInit {
     );
   }
 
+  clickItem(event, inParams) {
+    switch (inParams.type) {
+      case 'delete': {
+        this.delete();
+        break;
+      }
+      default: {
+        this.handleClickCard(inParams);
+        break;
+      }
+    }
+  }
+  private delete() {
+    this.modalService.confirm({
+      nzTitle: 'Are you sure delete this project?',
+      nzOkText: $localize`Delete`,
+      nzOkDanger: true,
+      nzOnOk: () => {}
+    });
+  }
   async handleChangeProjectName(name) {
     this.isLoading = true;
     const project = this.store.getCurrentProject;
@@ -74,20 +100,27 @@ export class ProjectSettingComponent implements OnInit {
     this.isLoading = false;
   }
 
-  handleClickCard(event, { title, desc, type }) {
-    this.modal = this.modalService.create({
+  private handleClickCard({ title, desc, type }) {
+    const modal: NzModalRef = this.modalService.create({
       nzTitle: desc,
       nzContent: actionComponent[type],
       nzComponentParams: {},
       nzOnOk: () => {
-        this.modal.componentInstance.submit(status => {
-          if (status) {
-            this.message.success($localize`${title} successfully`);
-            this.modal.destroy();
-          } else {
-            this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
-            return Promise.resolve();
-          }
+        return new Promise(resolve => {
+          modal.componentInstance.submit(status => {
+            if (status) {
+              if (status === 'stayModal') {
+                resolve(true);
+                return;
+              }
+              this.message.success($localize`${title} successfully`);
+              modal.destroy();
+              resolve(true);
+            } else {
+              this.message.error($localize`Failed to ${title},Please upgrade extension or try again later`);
+              resolve(true);
+            }
+          });
         });
       }
     });

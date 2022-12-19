@@ -8,7 +8,8 @@ import { StorageService } from 'eo/workbench/browser/src/app/shared/services/sto
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import { ElectronService } from '../../core/services';
+import { SocketService } from '../../pages/extension/socket.service';
+import { MessageService } from './message';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalProvider {
@@ -20,7 +21,7 @@ export class GlobalProvider {
     private webExtensionService: WebExtensionService,
     private storage: StorageService,
     private state: StoreService,
-    private electron: ElectronService
+    private message: MessageService
   ) {
     window.__POWERED_BY_EOAPI__ = true;
     window.__POWERED_BY_POSTCAT__ = true;
@@ -53,6 +54,20 @@ export class GlobalProvider {
     window.eo.showModalMask = this.showModalMask;
     window.eo.hideModalMask = this.hideModalMask;
     window.eo.getSystemInfo = this.getSystemInfo;
+    window.eo.gRPC = {
+      send: params =>
+        new Promise(resolve => {
+          const subscription = this.message.get().subscribe(({ type, data }) => {
+            if (type === 'msg-grpc-back') {
+              // data: [res, err]
+              subscription.unsubscribe();
+              resolve(data);
+              return;
+            }
+          });
+          this.message.send({ type: 'msg-grpc', data: params });
+        })
+    };
   }
   getSidebarView = (extName): SidebarView | undefined => {
     return this.getSidebarViews().find(n => n.extensionID === extName);

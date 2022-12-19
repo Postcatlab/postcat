@@ -22,7 +22,7 @@ export class DataSourceService {
     return window.eo?.getMockUrl?.();
   }
   get remoteServerUrl() {
-    return this.settingService.getConfiguration('eoapi-common.remoteServer.url');
+    return this.settingService.getConfiguration('backend.url');
   }
 
   constructor(

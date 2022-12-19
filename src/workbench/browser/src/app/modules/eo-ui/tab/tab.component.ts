@@ -87,6 +87,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
       nzTitle: $localize`Do you want to save the changes?`,
       nzContent: $localize`Your changes will be lost if you don't save them.`,
       nzClosable: false,
+      nzAutofocus: false,
       nzFooter: [
         {
           label: $localize`Cancel`,

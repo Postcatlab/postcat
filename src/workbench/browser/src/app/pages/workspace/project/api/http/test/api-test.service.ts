@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiTestUtilService } from 'eo/workbench/browser/src/app/modules/api-shared/api-test-util.service';
-import { ApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
+import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 
@@ -9,7 +9,7 @@ import { ApiTestHistory } from '../../../../../../shared/services/storage/index.
 import { ApiTestData, ApiTestHistoryFrame } from './api-test.model';
 @Injectable()
 export class ApiTestService {
-  constructor(private apiService: ApiService, private apiTestUtils: ApiTestUtilService, private storage: StorageService) {}
+  constructor(private apiService: ProjectApiService, private apiTestUtils: ApiTestUtilService, private storage: StorageService) {}
   async getApi({ id }): Promise<ApiTestData> {
     let result: ApiTestData = {
       projectID: 1,
