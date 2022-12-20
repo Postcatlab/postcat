@@ -20,13 +20,13 @@
                   <div *ngIf="type === 'installed'">
                     <eo-ng-switch
                       click-stop-propagation
-                      [(ngModel)]="it.isEnable"
-                      (ngModelChange)="handleEnableExtension($event, it)"
+                      [(ngModel)]="it.enable"
+                      (ngModelChange)="extensionService.toggleEnableExtension(it.name, $event)"
                     ></eo-ng-switch>
                   </div>
                   <div *ngIf="type !== 'installed'">
                     <span
-                      *ngIf="extensionService.localExtensions.has(it.name)"
+                      *ngIf="extensionService.installedMap.has(it.name)"
                       class="p-1 text-xs text-green-700 rounded-sm border-all whitespace-nowrap"
                       i18n
                       >Installed</span

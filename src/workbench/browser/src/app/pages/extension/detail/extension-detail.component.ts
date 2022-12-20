@@ -2,8 +2,6 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 import { WebService } from '../../../core/services/web/web.service';
 import { EoExtensionInfo } from '../extension.model';
@@ -20,7 +18,6 @@ export class ExtensionDetailComponent implements OnInit {
   isOperating = false;
   introLoading = false;
   changelogLoading = false;
-  isEnable = false;
   isNotLoaded = true;
   extensionDetail: EoExtensionInfo;
   nzSelectedIndex = 0;
@@ -28,12 +25,11 @@ export class ExtensionDetailComponent implements OnInit {
   changeLog = '';
   changeLogNotFound = false;
   constructor(
-    private extensionService: ExtensionService,
+    public extensionService: ExtensionService,
     private route: ActivatedRoute,
     private webService: WebService,
-    public electron: ElectronService,
-    private language: LanguageService,
-    private webExtensionService: WebExtensionService
+    private electron: ElectronService,
+    private language: LanguageService
   ) {}
 
   ngOnInit(): void {
@@ -47,18 +43,18 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   async getDetail() {
-    this.isOperating = window.eo?.getExtIsInTask?.(this.extensionData, ({ type, status }) => {
-      if (type === 'install' && status === 'success') {
-        this.extensionDetail.installed = true;
-      }
-      if (type === 'uninstall' && status === 'success') {
-        this.extensionDetail.installed = false;
-      }
-      this.isOperating = false;
-    });
+    if (this.electron.isElectron) {
+      this.isOperating = window.electron.getInstallingExtension(this.extensionData, ({ type, status }) => {
+        if (type === 'install' && status === 'success') {
+          this.extensionDetail.installed = true;
+        }
+        if (type === 'uninstall' && status === 'success') {
+          this.extensionDetail.installed = false;
+        }
+        this.isOperating = false;
+      });
+    }
     this.extensionDetail = await this.extensionService.getDetail(this.extensionData, this.extensionData);
-
-    this.isEnable = this.extensionService.isEnable(this.extensionDetail.name);
 
     if (!this.extensionDetail?.installed || this.webService.isWeb) {
       await this.fetchReadme(this.language.systemLanguage);
@@ -79,9 +75,7 @@ export class ExtensionDetailComponent implements OnInit {
     }
     const timer = setTimeout(() => (this.changelogLoading = true), 200);
     try {
-      const response = await fetch(
-        `https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/CHANGELOG.${locale ? `${locale}.` : ''}md`
-      );
+      const response = await fetch(`https://unpkg.com/${this.extensionDetail.name}@${this.extensionDetail.version}/CHANGELOG.md`);
       if (response.status === 200) {
         this.changeLog = await response.text();
       } else if (!locale && response.status === 404) {
@@ -142,46 +136,29 @@ ${log}
     }
   };
 
-  private manageExtension(operate: string, id) {
+  private async manageExtension(operate: string, id) {
     this.isOperating = true;
-    setTimeout(async () => {
-      switch (operate) {
-        case 'install': {
-          if (this.electron.isElectron) {
-            this.extensionDetail.installed = await this.extensionService.install(id);
-            this.handleEnableExtension(true);
-            this.getDetail();
-          } else {
-            const { name, version, main } = this.extensionDetail;
-            this.extensionDetail.installed = await this.webExtensionService.installExtension(name, version, main);
-          }
-          break;
-        }
-        case 'uninstall': {
-          if (this.electron.isElectron) {
-            this.extensionDetail.installed = !(await this.extensionService.uninstall(id));
-            this.handleEnableExtension(false);
-            this.fetchReadme(this.language.systemLanguage);
-          } else {
-            this.webExtensionService.unInstallExtension(this.extensionDetail.name);
-            this.extensionDetail.installed = false;
-          }
-          break;
-        }
+    switch (operate) {
+      case 'install': {
+        const { name, version, main } = this.extensionDetail;
+        this.extensionDetail.installed = await this.extensionService.installExtension({
+          name,
+          version,
+          main
+        });
+        this.extensionDetail['enabled'] = true;
+        break;
       }
-      this.isOperating = false;
-    }, 100);
+      case 'uninstall': {
+        this.extensionDetail.installed = !(await this.extensionService.uninstallExtension(id));
+        break;
+      }
+    }
+    this.getDetail();
+    this.isOperating = false;
   }
 
   backToList() {
     this.goBack.emit();
-  }
-
-  handleEnableExtension(isEnable) {
-    if (isEnable) {
-      this.extensionService.enableExtension(this.extensionDetail.name);
-    } else {
-      this.extensionService.disableExtension(this.extensionDetail.name);
-    }
   }
 }

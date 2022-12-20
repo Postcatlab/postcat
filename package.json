@@ -12,11 +12,9 @@
   ],
   "scripts": {
     "prepare": "husky install && electron-builder install-app-deps && npx patch-package",
-    "start": "npm-run-all -p start:web electron:serve-tsc",
+    "start": "npm-run-all -p start:web electron:dev",
     "start:web": "yarn workspace eoapi-web run start",
-    "serve:web": "yarn workspace eoapi-web run start",
-    "start:electron": "wait-on tcp:4200 && npm run electron:dev",
-    "electron:dev": "npm run electron:tsc && electron . --development",
+    "start:electron": "npm-run-all -p web:start:direct electron:dev",
     "build": "npx patch-package && npm-run-all -s build:web clear:electron:tsc electron:tsc && electron-builder build",
     "build:static": "npm run clear:electron:tsc&&npm run electron:tsc && electron-builder build",
     "build:web": "yarn workspace eoapi-web run build",
@@ -28,7 +26,8 @@
     "e2e": "yarn build:prod && npx playwright test -c e2e/playwright.config.ts e2e/",
     "clear:electron:tsc": "tsc --build --clean",
     "electron:tsc": "tsc -p tsconfig.json",
-    "electron:serve-tsc": "yarn electron:dev",
+    "electron:dev": "npm run electron:tsc && electron . --development",
+    "web:start:direct":"yarn workspace eoapi-web run start:direct",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "lint:lint-staged": "lint-staged"
   },

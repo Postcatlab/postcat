@@ -6,7 +6,7 @@
 </p>
 
 <div align="center">
-一个可拓展的 API 工具，简单（Easy） & 开源（OpenSource）的 API 生态系统
+一个可拓展的 API 工具，核心轻量且开源的 API 生态系统
 </div>
 <hr>
 <p align="center">
@@ -19,7 +19,6 @@
 [English](wiki/README.en.md)｜简体中文
 
 ![](https://docs.eoapi.io/images/eoapi-demo.png)
-> Eoapi（发音：一欧 API）
 # 在线试试！
 
 [https://eoapi.io](https://eoapi.io/)

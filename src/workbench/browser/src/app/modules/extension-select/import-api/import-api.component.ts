@@ -5,7 +5,6 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
 import StorageUtil from '../../../utils/storage/Storage';
@@ -56,23 +55,21 @@ export class ImportApiComponent implements OnInit {
   supportList: any[] = [];
   currentExtension = StorageUtil.get('import_api_modal');
   uploadData = null;
-  featureMap = this.webExtensionService.getFeatures('importAPI') || this.webExtensionService.getFeatures('apimanage.import');
+  featureMap =
+    this.extensionService.getValidExtensionsByFature('importAPI') || this.extensionService.getValidExtensionsByFature('apimanage.import');
   constructor(
     private router: Router,
     private storage: StorageService,
     private eoMessage: EoNgFeedbackMessageService,
-    public extensionService: ExtensionService,
-    public webExtensionService: WebExtensionService,
+    private extensionService: ExtensionService,
     private store: StoreService
   ) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.webExtensionService.isEnable(key)) {
-        this.supportList.push({
-          key,
-          ...data
-        });
-      }
+      this.supportList.push({
+        key,
+        ...data
+      });
     });
     {
       const { key } = this.supportList.at(0);
@@ -94,7 +91,7 @@ export class ImportApiComponent implements OnInit {
     // * this.currentExtension is extension's key, like 'postcat-import-openapi'
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = await window.eo?.loadFeatureModule?.(this.currentExtension);
+    const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     const { name, content } = this.uploadData;
     try {
       const [data, err] = module[action](content);
@@ -133,7 +130,7 @@ export class ImportApiComponent implements OnInit {
           this.router.navigate(['home/workspace/project/api']);
         } else {
           callback(false);
-          eoConsole.error('Import Error', result.error);
+          pcConsole.error('Import Error', result.error);
           return;
         }
         callback(true);

@@ -4,25 +4,23 @@ export const LOCAL_SETTINGS_KEY = 'LOCAL_SETTINGS_KEY';
 
 export const getSettings = () => {
   try {
-    let reuslt = JSON.parse(localStorage.getItem(LOCAL_SETTINGS_KEY) || '{}');
-    reuslt = JSON.parse(reuslt);
+    let result = JSON.parse(localStorage.getItem(LOCAL_SETTINGS_KEY) || '{}');
     //TODO Compatible code,Delete at 2023.01.01
     const MUI = {
       'eoapi-common.remoteServer.url': 'backend.url',
       'eoapi-language': 'system.language'
     };
     Object.keys(MUI).forEach(pre => {
-      if (Reflect.has(reuslt, pre)) {
-        reuslt[MUI[pre]] = reuslt[pre];
-        Reflect.deleteProperty(reuslt, pre);
+      if (Reflect.has(result, pre)) {
+        result[MUI[pre]] = result[pre];
+        Reflect.deleteProperty(result, pre);
       }
     });
-    return reuslt;
+    return result;
   } catch (error) {
     return {};
   }
 };
-
 @Injectable({
   providedIn: 'root'
 })
@@ -56,13 +54,13 @@ export class SettingService {
 
   /**
    * Get the value of the corresponding configuration according to the key path
+   * ! Dont't change arrow function to class function
    *
    * @param key
    * @returns
    */
-  getConfiguration(keyPath: string) {
+  getConfiguration = (keyPath: string) => {
     const localSettings = this.settings;
-
     if (Reflect.has(localSettings, keyPath)) {
       return Reflect.get(localSettings, keyPath);
     }
@@ -82,5 +80,5 @@ export class SettingService {
       }, {});
     }
     return undefined;
-  }
+  };
 }

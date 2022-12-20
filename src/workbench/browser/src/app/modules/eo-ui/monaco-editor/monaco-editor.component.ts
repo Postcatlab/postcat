@@ -194,7 +194,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
     if (code && this.autoFormat) {
       requestIdleCallback(async () => {
-        console.log('auto format');
         this.$$code = await this.formatCode();
       });
     }

@@ -118,7 +118,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
           return;
         }
         if (!(this.nzDataItem && this.setting.primaryKey)) {
-          eoConsole.error('Please add nzDataItem and setting.primaryKey');
+          pcConsole.error('Please add nzDataItem and setting.primaryKey');
           return;
         }
         if (!this.nzData.length || this.nzData[this.nzData.length - 1][this.setting.primaryKey]) {
@@ -158,7 +158,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     }
     if (btnItem.fnName) {
       if (!apis[btnItem.fnName]) {
-        eoConsole.error(`[eo-table-pro]: Can't find ${btnItem.fnName} function`);
+        pcConsole.error(`[eo-table-pro]: Can't find ${btnItem.fnName} function`);
         return;
       }
       switch (btnItem.fnName) {
@@ -237,7 +237,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
     }
     if (this.setting.toolButton.columnVisible) {
       if (!this.setting.id) {
-        eoConsole.warn('[eo-table-pro]: Lack of setting.id, the storage key for table columnVisible may repeat!');
+        pcConsole.warn('[eo-table-pro]: Lack of setting.id, the storage key for table columnVisible may repeat!');
       }
       this.COLUMN_VISIBLE_KEY = this.setting.id || `TABLE_COLUMN_VISIBLE_${this.DEFAULT_ID}`;
       this.columnVisibleStatus = attempt(() => JSON.parse(window.localStorage.getItem(this.COLUMN_VISIBLE_KEY))) || {};
@@ -340,7 +340,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       //Set filter
       if (col.filterable) {
         if (this.setting.isEdit) {
-          eoConsole.warn('[eo-table-pro]: editable table use filterable may perform badly');
+          pcConsole.warn('[eo-table-pro]: editable table use filterable may perform badly');
         }
         header.filterMultiple = true;
         //Use custom filter
@@ -387,7 +387,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       //Set Sort
       if (col.sortable) {
         if (this.setting.isEdit) {
-          eoConsole.warn('[eo-table-pro]: editable table use sortable may perform poorly');
+          pcConsole.warn('[eo-table-pro]: editable table use sortable may perform poorly');
         }
         header.showSort = true;
         header.sortDirections = ['ascend', 'descend', null];
@@ -415,7 +415,7 @@ export class EoTableProComponent implements OnInit, OnChanges {
       tbodyConf.push(body);
     });
     if (theaderConf.every(val => val.width)) {
-      eoConsole.warn('[eo-table-pro]: all clumn item has set width,it will cause table width invalid,please rest');
+      pcConsole.warn('[eo-table-pro]: all clumn item has set width,it will cause table width invalid,please rest');
     }
     this.theadConf = theaderConf;
     this.tbodyConf = tbodyConf;

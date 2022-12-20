@@ -174,7 +174,7 @@ export class ApiTabService {
 
     if (!this.componentRef?.init) {
       this.changeContent$.next({ when: 'init', url });
-      eoConsole.error(
+      pcConsole.error(
         'Child componentRef need has init function for reflesh data when router change,Please add init function in child component'
       );
       return;
@@ -285,12 +285,12 @@ export class ApiTabService {
    */
   afterContentChanged(inData: { when: 'init' | 'editing' | 'saved' | 'afterTested'; url: string; model: any }) {
     if (!this.apiTabComponent) {
-      eoConsole.warn(`ING[api-tab]: apiTabComponent hasn't init yet!`);
+      pcConsole.warn(`ING[api-tab]: apiTabComponent hasn't init yet!`);
       return;
     }
     let currentTab = this.apiTabComponent.getExistTabByUrl(inData.url);
     if (!currentTab) {
-      eoConsole.warn(`ING[api-tab]: has't find the tab fit child component ,url:${inData.url}`);
+      pcConsole.warn(`ING[api-tab]: has't find the tab fit child component ,url:${inData.url}`);
       return;
     }
     if (inData?.when === 'afterTested') {

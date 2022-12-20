@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import { SocketService } from '../../pages/extension/socket.service';
 import { MessageService } from './message';
 
 @Injectable({ providedIn: 'root' })
@@ -17,10 +14,9 @@ export class GlobalProvider {
   constructor(
     private modalService: ModalService,
     private router: Router,
-    private settingService: SettingService,
-    private webExtensionService: WebExtensionService,
     private storage: StorageService,
     private state: StoreService,
+    private setting: SettingService,
     private message: MessageService
   ) {
     window.__POWERED_BY_EOAPI__ = true;
@@ -28,16 +24,11 @@ export class GlobalProvider {
   }
 
   injectGlobalData() {
-    window.eo ??= {};
-    window.eo.modalService = this.modalService;
-    window.eo.getExtensionSettings = this.settingService.getConfiguration;
-    window.eo.getSettings = this.settingService.settings;
-    /** prload 里面同时有的方法 start */
-    window.eo.getSidebarViews ??= this.getSidebarViews;
-    window.eo.getSidebarView ??= this.getSidebarView;
-    window.eo.loadFeatureModule ??= this.webExtensionService.importModule;
+    window.pc = {};
+    window.pc.modalService = this.modalService;
+    window.pc.getExtensionSettings = this.setting.getConfiguration;
     /** prload 里面同时有的方法 end */
-    window.eo.navigate = (commands: any[], extras?: NavigationExtras) => {
+    window.pc.navigate = (commands: any[], extras?: NavigationExtras) => {
       const eoChangeRoute = {
         'home/api': 'home/workspace/project/api'
       };
@@ -47,14 +38,12 @@ export class GlobalProvider {
       });
       this.router.navigate(commands, extras);
     };
-    window.eo.getGroups = window.eo.getGroup = this.getGroup;
-    window.eo.importProject = this.importProject;
-    // window.eo.getConfiguration = this.modalService;
+    window.pc.getGroups = window.pc.getGroup = this.getGroup;
+    window.pc.importProject = this.importProject;
 
-    window.eo.showModalMask = this.showModalMask;
-    window.eo.hideModalMask = this.hideModalMask;
-    window.eo.getSystemInfo = this.getSystemInfo;
-    window.eo.gRPC = {
+    window.pc.showModalMask = this.showModalMask;
+    window.pc.hideModalMask = this.hideModalMask;
+    window.pc.gRPC = {
       send: params =>
         new Promise(resolve => {
           const subscription = this.message.get().subscribe(({ type, data }) => {
@@ -68,15 +57,8 @@ export class GlobalProvider {
           this.message.send({ type: 'msg-grpc', data: params });
         })
     };
+    window.eo = window.pc;
   }
-  getSidebarView = (extName): SidebarView | undefined => {
-    return this.getSidebarViews().find(n => n.extensionID === extName);
-  };
-  getSidebarViews = (): SidebarView[] => {
-    const sidebarView = this.webExtensionService.getFeatures<SidebarView>('sidebarView');
-    return [...sidebarView.values()];
-  };
-
   showModalMask = (style = {}) => {
     this.modalMaskEl?.remove();
     this.modalMaskEl = document.createElement('div');
@@ -142,7 +124,6 @@ export class GlobalProvider {
       });
     });
   };
-  getSystemInfo() {}
   importProject = (params = {}) => {
     const currentProjectID = this.getCurrentProjectID();
     const { projectID, groupID, ...rest } = {

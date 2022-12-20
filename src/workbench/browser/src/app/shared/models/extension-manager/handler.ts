@@ -29,24 +29,3 @@ export interface ModuleManagerInfo {
   name: string;
   isLocal?: boolean;
 }
-/**
- * 模块管理
- * install 安装模块
- * uninstall 卸载模块
- * refresh 重新从本地读取并更新模块信息
- * getModules 获取所有模块列表，或返回有模块关联子模块的信息
- */
-export interface ModuleManagerInterface {
-  getSidebarView(extName: any): any;
-  getSidebarViews(extName: any): any;
-  getExtTabs(extName: any): any;
-  installExt: any;
-  install: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
-  uninstall: (module: ModuleManagerInfo) => Promise<ModuleHandlerResult>;
-  refresh: (module: ModuleManagerInfo) => void;
-  refreshAll: () => void;
-  getModule: (id: string) => ModuleInfo;
-  getModules: () => Map<string, ModuleInfo>;
-  getFeature: (featureKey: string) => Map<string, object>;
-  getFeatures: () => Map<string, Map<string, object>>;
-}

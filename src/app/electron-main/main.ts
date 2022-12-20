@@ -3,7 +3,6 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import Store from 'electron-store';
 import { LanguageService } from 'eo/app/electron-main/language.service';
 import { MockServer } from 'eo/platform/node/mock-server';
-import { ModuleManagerInterface } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import portfinder from 'portfinder';
 
 import { processEnv } from '../../platform/node/constant';
@@ -50,7 +49,7 @@ let websocketPort = 13928;
   // * start SocketIO
   socket(websocketPort);
 })();
-const moduleManager: ModuleManagerInterface = new ModuleManager();
+const moduleManager = new ModuleManager();
 global.shareObject = {
   storageResult: null
 };
@@ -119,8 +118,8 @@ class EoBrowserWindow {
         webSecurity: false,
         preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
         nodeIntegration: true,
-        allowRunningInsecureContent: processEnv === 'development' ? true : false,
-        contextIsolation: false // false if you want to run e2e test with Spectron
+        contextIsolation: false,
+        allowRunningInsecureContent: processEnv === 'development' ? true : false
       }
     };
     Object.assign(opts, windowConfig, store.get('winConf'));
@@ -209,8 +208,8 @@ try {
       } else if (arg.action === 'uninstallModule') {
         const data = await moduleManager.uninstall(arg.data);
         returnValue = Object.assign(data, { modules: moduleManager.getModules() });
-      } else if (arg.action === 'getFeatures') {
-        returnValue = moduleManager.getFeatures();
+      } else if (arg.action === 'getExtensionPackage') {
+        returnValue = await moduleManager.getExtensionPackage(arg.data.feature, arg.data.params);
       } else if (arg.action === 'getFeature') {
         returnValue = moduleManager.getFeature(arg.data.featureKey);
       } else if (arg.action === 'getMockUrl') {
@@ -224,7 +223,7 @@ try {
       } else if (arg.action === 'getSidebarView') {
         returnValue = moduleManager.getSidebarView(arg.data.extName);
       } else if (arg.action === 'getSidebarViews') {
-        returnValue = moduleManager.getSidebarViews(arg.data.extName);
+        returnValue = moduleManager.getSidebarViews();
       } else {
         returnValue = 'Invalid data';
       }

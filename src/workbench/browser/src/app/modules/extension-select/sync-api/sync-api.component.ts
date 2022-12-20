@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 
 import packageJson from '../../../../../../../../package.json';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
@@ -15,22 +15,21 @@ import { StorageRes, StorageResStatus } from '../../../shared/services/storage/i
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
-  featureMap = this.webExtensionService.getFeatures('syncAPI') || this.webExtensionService.getFeatures('apimanage.sync');
+  featureMap =
+    this.extensionService.getValidExtensionsByFature('syncAPI') || this.extensionService.getValidExtensionsByFature('apimanage.sync');
   constructor(
     private storage: StorageService,
-    public extensionService: ExtensionService,
-    public webExtensionService: WebExtensionService,
-    private settingService: SettingService
+    private extensionService: ExtensionService,
+    private settingService: SettingService,
+    private eoMessage: EoNgFeedbackMessageService
   ) {}
 
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.webExtensionService.isEnable(key)) {
-        this.supportList.push({
-          key,
-          ...data
-        });
-      }
+      this.supportList.push({
+        key,
+        ...data
+      });
     });
     {
       const { key } = this.supportList?.at(0);
@@ -40,16 +39,21 @@ export class SyncApiComponent implements OnInit {
   async submit(callback) {
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const module = window.eo.loadFeatureModule(this.currentExtension);
-    const { token: secretKey, projectId } = this.settingService.getConfiguration(this.currentExtension);
-    if (module && module[action] && typeof module[action] === 'function') {
+    const module = await this.extensionService.getExtensionPackage(this.currentExtension);
+    const config = this.settingService.getConfiguration(this.currentExtension);
+    if (!config) {
+      this.eoMessage.error($localize`Please Set the configure first`);
+      callback('stayModal');
+      return;
+    }
+    if (module?.[action] && typeof module[action] === 'function') {
       this.storage.run('projectExport', [], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {
             const output = await module[action](result.data, {
-              projectId,
-              secretKey
+              projectId: config.projectId,
+              secretKey: config.secretKey
             });
             callback(true);
           } catch (e) {

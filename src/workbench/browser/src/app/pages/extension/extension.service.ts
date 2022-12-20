@@ -4,21 +4,22 @@ import { TranslateService } from 'eo/platform/common/i18n';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { FeatureInfo, ModuleInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExtensionService {
   ignoreList = ['default'];
-  disabledExtensionNames: string[] = this.getExtensionNames();
+  disabledExtensionNames: string[] = this.getDisableExtensionNames();
   extensionIDs: string[] = [];
-  HOST = '';
-  localExtensions: Map<string, ModuleInfo>;
+  HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
+  installedList: ModuleInfo[] = [];
+  installedMap: Map<string, ModuleInfo>;
   constructor(
     private http: HttpClient,
     private electron: ElectronService,
@@ -26,40 +27,44 @@ export class ExtensionService {
     private webExtensionService: WebExtensionService,
     private messageService: MessageService
   ) {}
-  init() {
-    this.localExtensions = this.getExtensions();
-    this.extensionIDs = this.updateExtensionIDs();
-    this.HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
-    this.emitLocalExtensionsChangeEvent();
+  async init() {
+    if (!this.electron.isElectron) {
+      await this.webExtensionService.init();
+    }
+    this.updateInstalledInfo(this.getExtensions());
   }
   getExtensions() {
+    let result: any = new Map();
     if (this.electron.isElectron) {
-      return window.eo?.getModules?.() || new Map();
+      result = window.electron.getInstalledExtensions() || new Map();
     } else {
-      const webeExts = this.webExtensionService.installedList.map(n => [n.name, n.pkgInfo]);
-      return new Map(webeExts as any);
+      result = this.webExtensionService.getExtensions();
+      result = new Map(result);
     }
-  }
-  private emitLocalExtensionsChangeEvent() {
-    this.messageService.send({ type: 'localExtensionsChange', data: this.localExtensions });
+    return result;
   }
   getInstalledList() {
-    this.localExtensions = this.getExtensions();
-    // Local extension exception for ignore list
-    return Array.from(this.localExtensions.values()).filter(it => this.extensionIDs.includes(it.name));
+    return this.installedList;
+  }
+  updateInstalledInfo(data) {
+    this.installedMap = data;
+    this.installedMap.forEach((val, key) => {
+      val['enable'] = this.isEnable(val.name);
+    });
+    this.extensionIDs = this.updateExtensionIDs();
+    this.installedList = Array.from(this.installedMap.values()).filter(it => this.extensionIDs.includes(it.name));
+    this.emitInstalledExtensionsChangeEvent();
   }
   isInstalled(name) {
-    const installList = this.getInstalledList();
-    return installList.includes(name);
+    return this.installedList.includes(name);
   }
   public async requestList() {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
-    const installList = this.getInstalledList();
     result.data = [
-      ...result.data.filter(val => installList.every(childVal => childVal.name !== val.name)),
+      ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
       //Local debug package
-      ...installList.map(module => {
-        if (installList.find(it => it.name === module.name)) {
+      ...this.installedList.map(module => {
+        if (this.installedList.find(it => it.name === module.name)) {
           module.i18n = result.data.find(it => it.name === module.name)?.i18n;
         }
         return module;
@@ -72,8 +77,8 @@ export class ExtensionService {
     let result = {} as ModuleInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
-    if (this.localExtensions.has(id)) {
-      Object.assign(result, this.localExtensions.get(id), { installed: true });
+    if (this.installedMap.has(id)) {
+      Object.assign(result, this.installedMap.get(id), { installed: true, enable: this.isEnable(result.name) });
     }
     result = this.translateModule(result);
     return result;
@@ -84,62 +89,135 @@ export class ExtensionService {
    * @param id
    * @returns if install success
    */
-  async install(id): Promise<boolean> {
-    console.log('Install module:', id);
-    const { code, data, modules } = await window.eo.installModule(id);
-    if (code === 0) {
-      this.localExtensions = modules;
-      this.extensionIDs = this.updateExtensionIDs();
-      this.emitLocalExtensionsChangeEvent();
-      return true;
+  async installExtension({ name, version = 'latest', main = '' }): Promise<boolean> {
+    const successCallback = () => {
+      this.updateInstalledInfo(this.getExtensions());
+      if (!this.isEnable(name)) {
+        this.toggleEnableExtension(name, true);
+      }
+    };
+    if (this.electron.isElectron) {
+      const { code, data, modules } = await window.electron.installExtension(name);
+      if (code === 0) {
+        successCallback();
+        return true;
+      } else {
+        console.error(data);
+        return false;
+      }
+    } else {
+      const isSuccess = await this.webExtensionService.installExtension(name, version, main);
+      if (isSuccess) {
+        successCallback();
+      }
+      return isSuccess;
     }
-    console.error(data);
-    return false;
   }
-  async uninstall(id): Promise<boolean> {
-    console.log('Uninstall module:', id);
-    const { code, data, modules } = await window.eo.uninstallModule(id);
-    if (code === 0) {
-      this.localExtensions = modules;
-      this.extensionIDs = this.updateExtensionIDs();
-      this.emitLocalExtensionsChangeEvent();
-      return true;
+  async uninstallExtension(name): Promise<boolean> {
+    if (this.electron.isElectron) {
+      const { code, data, modules } = await window.electron.uninstallExtension(name);
+      if (code === 0) {
+        this.updateInstalledInfo(this.getExtensions());
+        return true;
+      }
+      console.error(data);
+      return false;
+    } else {
+      const isSuccess = await this.webExtensionService.unInstallExtension(name);
+      if (isSuccess) {
+        this.updateInstalledInfo(this.getExtensions());
+      }
+      return isSuccess;
     }
-    console.error(data);
-    return false;
   }
 
   isEnable(name: string) {
     return !this.disabledExtensionNames.includes(name);
   }
-
-  enableExtension(names: string | string[]) {
+  toggleEnableExtension(id: string, isEnable: boolean) {
+    if (isEnable) {
+      this.enableExtension(id);
+    } else {
+      this.disableExtension(id);
+    }
+    this.updateInstalledInfo(this.installedMap);
+  }
+  private enableExtension(names: string | string[]) {
     const enableNames = Array().concat(names) as string[];
-    this.setExtension(this.disabledExtensionNames.filter(n => !enableNames.includes(n)));
+    this.setDisabledExtension(this.disabledExtensionNames.filter(n => !enableNames.includes(n)));
   }
 
-  disableExtension(names: string | string[]) {
-    this.setExtension([...new Set(this.disabledExtensionNames.concat(names))]);
+  private disableExtension(names: string | string[]) {
+    this.setDisabledExtension([...new Set(this.disabledExtensionNames.concat(names))]);
   }
 
-  setExtension(arr: string[]) {
+  private setDisabledExtension(arr: string[]) {
     localStorage.setItem(DISABLE_EXTENSION_NAMES, JSON.stringify(arr));
     this.disabledExtensionNames = arr;
   }
-
-  getExtensionNames() {
+  async getExtensionPackage(name: string): Promise<any> {
+    if (this.electron.isElectron) {
+      return window.electron.getExtensionPackage(name);
+    } else {
+      if (!window[name]) {
+        await this.installExtension({ name });
+      }
+      return window[name];
+    }
+  }
+  getExtensionsByFeature<T = FeatureInfo>(featureKey: string): Map<string, T> {
+    let extensions = new Map();
+    if (this.electron.isElectron) {
+      extensions = window.electron.getExtensionsByFeature(featureKey);
+    } else {
+      this.installedList.forEach(item => {
+        const feature: T = item.features?.[featureKey];
+        if (feature) {
+          extensions.set(item.name, {
+            extensionID: item.name,
+            ...feature
+          });
+        }
+      });
+    }
+    return extensions;
+  }
+  getValidExtensionsByFature<T = FeatureInfo>(featureKey: string): Map<string, T> {
+    const extensions = this.getExtensionsByFeature<T>(featureKey);
+    const validExtensions = new Map([...extensions].filter(([k, v]) => this.isEnable(k)));
+    return validExtensions;
+  }
+  getSidebarView(extName) {
+    if (this.electron.isElectron) {
+      return window.electron.getSidebarView(extName);
+    }
+    return this.getSidebarViews().find(n => n.extensionID === extName);
+  }
+  getSidebarViews(): SidebarView[] {
+    let result: any = new Map();
+    if (this.electron.isElectron) {
+      result = window.electron.getSidebarViews();
+    } else {
+      result = this.getExtensionsByFeature<SidebarView>('sidebarView');
+      result = [...result.values()];
+    }
+    return result;
+  }
+  private getDisableExtensionNames() {
     try {
-      return (this.disabledExtensionNames = JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]'));
+      return JSON.parse(localStorage.getItem(DISABLE_EXTENSION_NAMES) || '[]');
     } catch (error) {
       return [];
     }
   }
-
+  private emitInstalledExtensionsChangeEvent() {
+    this.messageService.send({ type: 'installedExtensionsChange', data: this.installedMap });
+  }
   private async requestDetail(id) {
     return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}?locale=${this.language.systemLanguage}`)).catch(err => [0, err]);
   }
   private updateExtensionIDs() {
-    return Array.from(this.localExtensions.keys())
+    return Array.from(this.installedMap.keys())
       .filter(it => it)
       .filter(it => !this.ignoreList.includes(it));
   }

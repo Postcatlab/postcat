@@ -18,7 +18,6 @@ export class MockService {
     private settingService: SettingService,
     private electron: ElectronService
   ) {}
-
   init() {
     if (this.electron.isElectron) {
       this.electron.ipcRenderer.on('getMockApiList', async (event, req: any = {}) => {

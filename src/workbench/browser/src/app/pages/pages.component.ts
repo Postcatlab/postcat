@@ -15,19 +15,12 @@ import { SocketService } from './extension/socket.service';
 export class PagesComponent implements OnInit {
   isShowNotification;
   sidebarViews: any[] = [];
-  constructor(
-    private socket: SocketService,
-    public electron: ElectronService,
-    private messageService: MessageService,
-    private router: Router,
-    private sidebar: SidebarService
-  ) {
+  constructor(private socket: SocketService, public electron: ElectronService, private router: Router, private sidebar: SidebarService) {
     this.isShowNotification = false;
   }
   ngOnInit(): void {
     // * 通过 socketIO 告知 Node 端，建立 grpc 连接
     this.socket.socket2Node();
-    this.initPlugSideabr();
     this.initSidebarVisible(this.router.url);
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
       this.initSidebarVisible(res.url);
@@ -39,14 +32,5 @@ export class PagesComponent implements OnInit {
     } else {
       this.sidebar.visible = true;
     }
-  }
-  async initPlugSideabr() {}
-
-  watchLocalExtensionsChange() {
-    this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'localExtensionsChange') {
-        this.initPlugSideabr();
-      }
-    });
   }
 }

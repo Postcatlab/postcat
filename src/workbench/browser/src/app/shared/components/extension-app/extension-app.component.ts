@@ -1,8 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 @Component({
   selector: 'extension-app',
   template: `
@@ -59,15 +58,9 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
 
   microAppData = { msg: '来自基座的数据' };
 
-  constructor(
-    private sanitizer: DomSanitizer,
-    public route: ActivatedRoute,
-    private globalProvider: GlobalProvider,
-    private settingService: SettingService
-  ) {}
+  constructor(private sanitizer: DomSanitizer, public route: ActivatedRoute, private extension: ExtensionService) {}
 
   ngOnInit(): void {
-    this.globalProvider.injectGlobalData();
     this.initSidebarViewByRoute();
 
     window.addEventListener('message', this.receiveMessage, false);
@@ -85,10 +78,9 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
 
   initSidebarViewByRoute() {
     this.route.params.subscribe(async data => {
-      if (data.extName && window.eo?.getSidebarView) {
+      if (data.extName) {
         this.name = data.extName;
-        const sidebar = await window.eo?.getSidebarView?.(data.extName);
-        console.log('sidebar', sidebar);
+        const sidebar = await this.extension.getSidebarView(data.extName);
         this.url = sidebar.url;
         this.type = sidebar.useIframe ? 'iframe' : 'micro-app';
         if (sidebar.useIframe) {

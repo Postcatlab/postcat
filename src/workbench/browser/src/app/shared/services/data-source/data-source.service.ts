@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -17,10 +16,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 export class DataSourceService {
   isConnectRemote = false;
 
-  /** get mock url */
-  get mockUrl() {
-    return window.eo?.getMockUrl?.();
-  }
   get remoteServerUrl() {
     return this.settingService.getConfiguration('backend.url');
   }
@@ -34,21 +29,6 @@ export class DataSourceService {
     private web: WebService
   ) {
     this.pingCloudServerUrl();
-  }
-
-  getApiUrl(apiData: ApiData) {
-    const url = new URL(
-      `${this.mockUrl}/${apiData.uri}`
-        .replace(/:\/{2,}/g, ':::')
-        .replace(/\/{2,}/g, '/')
-        .replace(/:{3}/g, '://'),
-      'https://github.com/'
-    );
-    if (apiData) {
-      url.searchParams.set('mockID', `${apiData.uuid}`);
-    }
-    // console.log('getApiUrl', decodeURIComponent(url.toString()));
-    return decodeURIComponent(url.toString());
   }
 
   /**

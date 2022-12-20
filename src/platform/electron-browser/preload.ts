@@ -1,169 +1,121 @@
-import { I18N } from './i18n';
-
-const { ipcRenderer } = require('electron');
+// Preload (Isolated World)
+const { contextBridge, ipcRenderer } = require('electron');
 // 正在安装中的插件任务列表
 const installTask = new Map();
 // 正在卸载中的插件任务列表
 const uninstallTask = new Map();
 
-// 异步防止返回处理覆盖
-const storageCallback = new Map();
-ipcRenderer.on('storageCallback', (event, result) => {
-  if (storageCallback.has(result.callback) && typeof storageCallback.get(result.callback) === 'function') {
-    try {
-      storageCallback.get(result.callback)(result);
-      storageCallback.delete(result.callback);
-    } catch (e) {
-      storageCallback.delete(result.callback);
-    }
-  }
-});
-// 已加载feature模块列表
-const featureModules = new Map();
-// 其他子应用可访问的api队列都集中到.eo上
-window.eo = {
-  name: 'Postcat public api',
-  version: '1.0.0',
-  // 获取模块列表
-  getModules() {
+//TODO use contextBridge
+//Because we need to access window.pc/window.eo API directly, the contextIsolation need to be set false
+// contextBridge.exposeInMainWorld('electron',
+window.electron = {
+  ipcRenderer: {
+    send: (msgID: string, msgObject) => ipcRenderer.send(msgID, msgObject),
+    on: (msgID: string, callback) => ipcRenderer.on(msgID, callback),
+    removeAllListeners: msgID => ipcRenderer.removeAllListeners(msgID)
+  },
+  getSystemInfo() {
+    return ipcRenderer.sendSync('get-system-info');
+  },
+  getInstalledExtensions() {
     return ipcRenderer.sendSync('eo-sync', { action: 'getModules' });
   },
-  getModule(id) {
-    return ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { id: id } });
+  getMockUrl() {
+    return ipcRenderer.sendSync('eo-sync', { action: 'getMockUrl' });
   },
-  getFeatures() {
-    return ipcRenderer.sendSync('eo-sync', { action: 'getFeatures' });
-  },
-  getFeature(featureKey) {
+  getExtensionsByFeature(featureKey) {
     return ipcRenderer.sendSync('eo-sync', { action: 'getFeature', data: { featureKey: featureKey } });
   },
-  loadFeatureModule(id) {
-    if (!featureModules.has(id)) {
-      try {
-        const module = window.eo.getModule(id);
-        window.eo._currentExtensionID = id;
-        const _module = require(module.baseDir);
-        featureModules.set(id, _module);
-      } catch (e) {
-        console.log(e);
-      }
+  getWebsocketPort: () => {
+    return ipcRenderer.invoke('eo-sync', { action: 'getWebsocketPort' });
+  },
+  getExtensionPackage(id) {
+    //TODO nodeIntegration set false
+    try {
+      const module = ipcRenderer.sendSync('eo-sync', { action: 'getModule', data: { id } });
+      return require(module.baseDir);
+    } catch (e) {
+      console.log(e);
     }
-    return featureModules.get(id);
-  }
-};
-// 卸载feature模块
-window.eo.unloadFeatureModule = id => {
-  featureModules.delete(id);
-};
-
-window.eo.installModule = (name, isLocal = false) => {
-  installTask.set(name, []);
-  const result = ipcRenderer.invoke('eo-sync', { action: 'installModule', data: { name, isLocal } });
-  result
-    .then(() => {
+  },
+  getInstallingExtension: (name, callback) => {
+    if (installTask.has(name)) {
       const callbackTask = installTask.get(name);
-      callbackTask.forEach(callback =>
-        callback({
-          extName: name,
-          type: 'install',
-          status: 'success'
-        })
-      );
-    })
-    .catch(() => {
-      const callbackTask = installTask.get(name);
-      callbackTask.forEach(callback =>
-        callback({
-          extName: name,
-          type: 'install',
-          status: 'error'
-        })
-      );
-    })
-    .finally(() => {
-      installTask.delete(name);
-    });
-  return result;
-};
-window.eo.uninstallModule = (name, isLocal = false) => {
-  uninstallTask.set(name, []);
-  const result = ipcRenderer.invoke('eo-sync', { action: 'uninstallModule', data: { name, isLocal } });
-
-  result
-    .then(() => {
+      callback && callbackTask.push(callback);
+      installTask.set(name, callbackTask);
+      return true;
+    }
+    if (uninstallTask.has(name)) {
       const callbackTask = uninstallTask.get(name);
-      callbackTask.forEach(callback =>
-        callback({
-          extName: name,
-          type: 'uninstall',
-          status: 'success'
-        })
-      );
-    })
-    .catch(() => {
-      const callbackTask = uninstallTask.get(name);
-      callbackTask.forEach(callback =>
-        callback({
-          extName: name,
-          type: 'uninstall',
-          status: 'error'
-        })
-      );
-    })
-    .finally(() => {
-      uninstallTask.delete(name);
-    });
-  return result;
-};
-window.eo.getInstallTask = () => installTask;
-window.eo.getUninstallTask = () => uninstallTask;
-window.eo.getExtIsInTask = (name, callback) => {
-  if (installTask.has(name)) {
-    const callbackTask = installTask.get(name);
-    callback && callbackTask.push(callback);
-    installTask.set(name, callbackTask);
-    return true;
+      callback && callbackTask.push(callback);
+      uninstallTask.set(name, callbackTask);
+      return true;
+    }
+    return false;
+  },
+  installExtension: (name, isLocal = false) => {
+    installTask.set(name, []);
+    const result = ipcRenderer.invoke('eo-sync', { action: 'installModule', data: { name, isLocal } });
+    result
+      .then(() => {
+        const callbackTask = installTask.get(name);
+        callbackTask.forEach(callback =>
+          callback({
+            extName: name,
+            type: 'install',
+            status: 'success'
+          })
+        );
+      })
+      .catch(() => {
+        const callbackTask = installTask.get(name);
+        callbackTask.forEach(callback =>
+          callback({
+            extName: name,
+            type: 'install',
+            status: 'error'
+          })
+        );
+      })
+      .finally(() => {
+        installTask.delete(name);
+      });
+    return result;
+  },
+  uninstallExtension: (name, isLocal = false) => {
+    uninstallTask.set(name, []);
+    const result = ipcRenderer.invoke('eo-sync', { action: 'uninstallModule', data: { name, isLocal } });
+
+    result
+      .then(() => {
+        const callbackTask = uninstallTask.get(name);
+        callbackTask.forEach(callback =>
+          callback({
+            extName: name,
+            type: 'uninstall',
+            status: 'success'
+          })
+        );
+      })
+      .catch(() => {
+        const callbackTask = uninstallTask.get(name);
+        callbackTask.forEach(callback =>
+          callback({
+            extName: name,
+            type: 'uninstall',
+            status: 'error'
+          })
+        );
+      })
+      .finally(() => {
+        uninstallTask.delete(name);
+      });
+    return result;
+  },
+  getSidebarView: (extName: string) => {
+    return ipcRenderer.invoke('eo-sync', { action: 'getSidebarView', data: { extName } });
+  },
+  getSidebarViews: () => {
+    return ipcRenderer.invoke('eo-sync', { action: 'getSidebarViews' });
   }
-  if (uninstallTask.has(name)) {
-    const callbackTask = uninstallTask.get(name);
-    callback && callbackTask.push(callback);
-    uninstallTask.set(name, callbackTask);
-    return true;
-  }
-  return false;
-};
-
-window.eo.getExtTabs = (extName: string) => {
-  return ipcRenderer.invoke('eo-sync', { action: 'getExtTabs', data: { extName } });
-};
-
-window.eo.getSidebarView = (extName: string) => {
-  return ipcRenderer.invoke('eo-sync', { action: 'getSidebarView', data: { extName } });
-};
-window.eo.getSidebarViews = (extName: string) => {
-  return ipcRenderer.invoke('eo-sync', { action: 'getSidebarViews', data: { extName } });
-};
-
-// 注册单个mock路由
-window.eo.registerMockRoute = ({ method, path, data }) => {
-  return ipcRenderer.send('eo-sync', { action: 'registerMockRoute', data: { method, path, data } });
-};
-
-// 注销mock路由
-window.eo.unRegisterMockRoute = ({ method, path }) => {
-  return ipcRenderer.send('eo-sync', { action: 'unRegisterMockRoute', data: { method, path } });
-};
-// 获取mock服务地址
-window.eo.getMockUrl = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'getMockUrl' });
-};
-
-// 获取websocket服务端口
-window.eo.getWebsocketPort = () => {
-  return ipcRenderer.invoke('eo-sync', { action: 'getWebsocketPort' });
-};
-
-// 重置并初始化路由
-window.eo.resetAndInitRoutes = () => {
-  return ipcRenderer.sendSync('eo-sync', { action: 'resetAndInitRoutes' });
 };

@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, makeObservable, observable, reaction } from 'mobx';
@@ -89,19 +89,16 @@ export class ApiComponent implements OnInit, OnDestroy {
     public apiTab: ApiTabService,
     private router: Router,
     public web: WebService,
-    private webExtensionService: WebExtensionService,
+    private extensionService: ExtensionService,
     public store: StoreService,
     private effect: EffectService
   ) {
     this.initExtensionExtra();
   }
   async initExtensionExtra() {
-    const apiPreviewTab = this.webExtensionService.getFeatures('apiPreviewTab');
+    const apiPreviewTab = this.extensionService.getValidExtensionsByFature('apiPreviewTab');
     await apiPreviewTab?.forEach(async (value, key) => {
-      if (!this.webExtensionService?.isEnable(key)) {
-        return;
-      }
-      const module = await window.eo?.loadFeatureModule?.(key);
+      const module = await this.extensionService.getExtensionPackage(key);
       const rightExtra = value.rightExtra?.reduce((prev, curr) => {
         const eventObj = curr.events?.reduce((event, currEvent) => {
           event[currEvent.name] = (...rest) => {

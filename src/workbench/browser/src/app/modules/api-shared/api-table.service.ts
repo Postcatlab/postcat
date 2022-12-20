@@ -104,7 +104,7 @@ export class ApiTableService {
               }).then(res => {
                 Object.assign(item.data, res);
                 if (!opts.changeFn) {
-                  eoConsole.warn('Advance Sttings need changeFn is not defined');
+                  pcConsole.warn('Advance Sttings need changeFn is not defined');
                   return;
                 }
                 opts.changeFn();

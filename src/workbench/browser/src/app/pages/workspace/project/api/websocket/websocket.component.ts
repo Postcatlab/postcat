@@ -106,11 +106,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     // * 通过 SocketIO 通知后端
     try {
-      const port = await window.eo?.getWebsocketPort?.();
-      this.socket = io(
-        `${APP_CONFIG.production && !this.electron.isElectron ? APP_CONFIG.REMOTE_SOCKET_URL : `ws://localhost:${port || 13928}`}`,
-        { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 }
-      );
+      let url = '';
+      if (!APP_CONFIG.production || this.electron.isElectron) {
+        const port = this.electron.isElectron ? await window.electron?.getWebsocketPort?.() : 13928;
+        url = `ws://localhost:${port}`;
+      } else {
+        url = APP_CONFIG.REMOTE_SOCKET_URL;
+      }
+      this.socket = io(url, { path: '/socket.io', transports: ['websocket'], reconnectionAttempts: 2 });
       this.socket.on('connect_error', error => {
         // * conncet socketIO is failed
         console.log('connect_error', error);

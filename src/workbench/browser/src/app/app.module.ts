@@ -11,12 +11,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
 import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib/baseUrl.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { NzConfig, NZ_CONFIG } from 'ng-zorro-antd/core/config';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
@@ -81,8 +81,15 @@ registerLocaleData(zh);
   schemas: []
 })
 export class AppModule {
-  constructor(private lang: LanguageService, private mockService: MockService) {
+  constructor(
+    private lang: LanguageService,
+    private mockService: MockService,
+    private global: GlobalProvider,
+    private extensionService: ExtensionService
+  ) {
+    this.extensionService.init();
     this.mockService.init();
+    this.global.injectGlobalData();
     if (APP_CONFIG.production) {
       this.lang.init();
     }

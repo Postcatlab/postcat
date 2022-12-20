@@ -170,7 +170,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
   updatePartialTab(url: string, tabItem: Partial<TabItem>) {
     const existTab = this.getExistTabByUrl(url);
     if (!existTab) {
-      eoConsole.error(`:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
+      pcConsole.error(`:updatePartialTab fail,can't find exist tab to fixed url:${url}`);
       return;
     }
     const index = this.tabStorage.tabOrder.findIndex(uuid => uuid === existTab.uuid);

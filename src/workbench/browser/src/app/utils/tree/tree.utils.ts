@@ -54,7 +54,7 @@ export const filterTableData = (
   const result = inData.map(val => omitDeep(val, opts.omitBy));
   if (!opts.filterFn) {
     if (!opts.primaryKey) {
-      eoConsole.error('filterTableData need primaryKey');
+      pcConsole.error('filterTableData need primaryKey');
     } else {
       opts.filterFn = item => item[opts.primaryKey];
     }

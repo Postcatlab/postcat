@@ -6,14 +6,12 @@ import { EoNgTabsModule } from 'eo-ng-tabs';
 import { EoNgTreeModule } from 'eo-ng-tree';
 import { ApiTabService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api-tab.service';
 import { ApiGroupTreeDirective } from 'eo/workbench/browser/src/app/pages/workspace/project/api/components/group/tree/api-group-tree.directive';
-import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzResizableModule, NzResizableService } from 'ng-zorro-antd/resizable';
 
-import { ElectronService } from '../../../../core/services';
 import { EoTabModule } from '../../../../modules/eo-ui/tab/tab.module';
 import { ExtensionSelectModule } from '../../../../modules/extension-select/extension-select.module';
 import { ApiRoutingModule } from './api-routing.module';
@@ -43,6 +41,6 @@ const COMPONENTS = [ApiComponent, ApiGroupEditComponent, ApiGroupTreeComponent, 
   ],
   declarations: [...COMPONENTS, ApiGroupTreeDirective],
   exports: [ApiComponent],
-  providers: [ElectronService, NzResizableService, ApiTabService, IndexedDBStorage]
+  providers: [NzResizableService, ApiTabService]
 })
 export class ApiModule {}

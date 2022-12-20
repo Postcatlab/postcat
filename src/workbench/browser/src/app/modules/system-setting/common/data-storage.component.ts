@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
@@ -42,7 +42,7 @@ import { SettingService } from '../settings.service';
     `
   ]
 })
-export class DataStorageComponent implements OnInit, OnChanges {
+export class DataStorageComponent implements OnInit {
   model;
   validateForm!: FormGroup;
   loading = false;
@@ -63,13 +63,6 @@ export class DataStorageComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const { model } = changes;
-
-    if (model && this.validateForm?.value) {
-      this.setFormValue(model.currentValue);
-    }
-  }
   async submitForm() {
     const isValid = this.validateForm.valid;
     if (!isValid) {

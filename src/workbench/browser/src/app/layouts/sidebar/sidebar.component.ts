@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -21,6 +22,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private router: Router,
     public sidebar: SidebarService,
     private messageService: MessageService,
+    private extension: ExtensionService,
     private store: StoreService
   ) {}
   toggleCollapsed(): void {
@@ -32,14 +34,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.getIDFromRoute();
     this.watchRouterChange();
     this.watchWorkspaceChange();
-    this.watchLocalExtensionsChange();
+    this.watchInstalledExtensionsChange();
     this.initSidebarViews();
   }
 
   async initSidebarViews() {
-    const sidebarViews = await window.eo?.getSidebarViews?.();
+    const sidebarViews = await this.extension.getSidebarViews();
     sidebarViews?.forEach(item => {
-      if (!this.modules.some(n => n.id === item.extensionID)) {
+      const moduleIndex = this.modules.findIndex(n => n.id === item.extensionID);
+      const validExtension = this.extension.isEnable(item.extensionID);
+      if (moduleIndex !== -1 && !validExtension) {
+        this.modules.splice(moduleIndex, 1);
+        return;
+      }
+      if (moduleIndex === -1 && validExtension) {
         this.modules.splice(-1, 0, {
           title: item.title,
           id: item.extensionID,
@@ -54,12 +62,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     sidebarViews?.length && this.getIDFromRoute();
   }
 
-  watchLocalExtensionsChange() {
+  watchInstalledExtensionsChange() {
     this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'localExtensionsChange') {
+      if (inArg.type === 'installedExtensionsChange') {
         const extensionIDs = Array.isArray(inArg.data) ? inArg.data.map(n => n.name) : [...inArg.data.keys()];
         this.modules = this.modules.filter(n => n.id.startsWith('@eo-core') || extensionIDs.includes(n.id));
         this.initSidebarViews();
+        if (!this.modules.some(val => this.router.url.includes(val.activeRoute))) {
+          this.router.navigate(['/home/workspace/project/api']);
+        }
       }
     });
   }
@@ -137,7 +148,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!currentModule) {
       //route error
       // this.clickModule(this.modules[0]);
-      eoConsole.warn(`[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule, urlArr);
+      pcConsole.warn(`[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule, urlArr);
       return;
     }
     this.sidebar.currentModule = currentModule;

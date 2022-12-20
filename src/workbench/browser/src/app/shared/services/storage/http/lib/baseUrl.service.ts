@@ -36,7 +36,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const { url = '' } = this.getConfiguration('features.backend') || {};
+    const url = this.getConfiguration('backend.url') || '';
     const token = StorageUtil.get('accessToken') || '';
     let targetUrl;
     if ((targetUrl = sharePaths.find(n => req.url.startsWith(n)))) {

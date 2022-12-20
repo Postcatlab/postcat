@@ -1,4 +1,5 @@
 import { COMPILER_OPTIONS, Component, ComponentRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { isUndefined } from 'lodash-es';
 
 export interface SettingItem {
   title: string;
@@ -43,8 +44,16 @@ export class EoSettingComponent implements OnInit, OnDestroy {
     let selectModule = this.nzData.find(val => val.id === this.selectedModule);
     this.componentRefs.forEach(item => item.destroy());
     const componentRef = this.options.createComponent<any>(selectModule.comp as any);
-    componentRef.instance.model = this.model;
-    componentRef.instance.ngOnChanges?.();
+    if (!isUndefined(this.model)) {
+      componentRef.instance.model = this.model;
+    }
+    try {
+      componentRef.instance.ngOnChanges?.({
+        changes: {
+          model: this.model
+        }
+      });
+    } catch (e) {}
     componentRef.location.nativeElement.id = selectModule.id;
     this.componentRefs.push(componentRef);
   }
@@ -63,7 +72,7 @@ export class EoSettingComponent implements OnInit, OnDestroy {
     // The first item is selected by default
     let node = this.nzData.find(node => node.id === this.selectedModule && this.checkItemShow(node));
     if (this.selectedModule && !node) {
-      eoConsole.error(`[eo-setting]: The selected module [${this.selectModule}] does not exist`);
+      pcConsole.error(`[eo-setting]: The selected module [${this.selectModule}] does not exist`);
     }
     node = node || this.nzData.find(node => this.checkItemShow(node));
     this.selectModule(node.id);

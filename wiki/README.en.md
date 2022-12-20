@@ -4,7 +4,7 @@
   </a>
 </p>
 <div align="center">
-A extensible API tool,Easy & Open Source API Ecosystem
+A extensible API tool,Lightweight Core  & Open Source API Ecosystem
 </div>
 <hr>
 <p align="center">
@@ -17,8 +17,6 @@ A extensible API tool,Easy & Open Source API Ecosystem
 English | [简体中文](README.md)
 
 ![](https://docs.eoapi.io/images/eoapi-demo-en.png)
-
-> Eoapi (pronounced: E-O-API)
 
 # Try it!
 

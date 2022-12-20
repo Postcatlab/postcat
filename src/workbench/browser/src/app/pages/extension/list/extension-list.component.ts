@@ -34,15 +34,11 @@ export class ExtensionListComponent implements OnInit {
     const func = {
       installed: () => {
         const list = this.extensionService.getInstalledList();
-        return extensionSearch(list)(keyword).map(({ isEnable, name, ...it }) => ({
-          ...it,
-          name,
-          isEnable: this.extensionService.isEnable(name)
-        }));
+        return extensionSearch(list)(keyword);
       },
       official: async () => {
         const { data }: any = await this.extensionService.requestList();
-        return extensionSearch(data.filter(it => it.author === 'Eoapi'))(keyword);
+        return extensionSearch(data.filter(it => it.author === 'Postcat'))(keyword);
       },
       all: async () => {
         const { data }: any = await this.extensionService.requestList();
@@ -56,14 +52,6 @@ export class ExtensionListComponent implements OnInit {
       clearTimeout(timer);
       const timeout = Date.now() - timeStart > 300 ? 0 : 300;
       setTimeout(() => (this.loading = false), timeout);
-    }
-  }
-
-  handleEnableExtension(isEnable, item) {
-    if (isEnable) {
-      this.extensionService.enableExtension(item.name);
-    } else {
-      this.extensionService.disableExtension(item.name);
     }
   }
 }

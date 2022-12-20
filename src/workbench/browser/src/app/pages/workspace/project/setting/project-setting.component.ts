@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { observable, makeObservable, reaction } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { ExportApiComponent } from '../../../../modules/extension-select/export-api/export-api.component';
@@ -22,7 +22,7 @@ const actionComponent = {
 })
 export class ProjectSettingComponent implements OnInit {
   isLoading: boolean;
-  @observable projectName: string;
+  projectName: string;
   constructor(
     private modalService: ModalService,
     private message: EoNgFeedbackMessageService,
@@ -60,16 +60,9 @@ export class ProjectSettingComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    makeObservable(this);
-    reaction(
-      () => this.store.getCurrentProject.name,
-      name => {
-        if (this.projectName === name) {
-          return;
-        }
-        this.projectName = name;
-      }
-    );
+    autorun(() => {
+      this.projectName = this.store.getCurrentProject.name;
+    });
   }
 
   clickItem(event, inParams) {

@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
 // If you import a module but never use any of the imported values other than as TypeScript types,
 // the resulting javascript file will look as if you never imported the module at all.
-//@ts-ignore
-import type { ipcRenderer, webFrame } from 'electron';
 import { getSettings } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { getBrowserType } from 'eo/workbench/browser/src/app/utils/browser-type';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 
 import pkg from '../../../../../../../../package.json';
 import { StoreService } from '../../../shared/store/state.service';
-
-import * as childProcess from 'child_process';
-import * as fs from 'fs';
 
 type DescriptionsItem = {
   readonly id: string;
@@ -22,10 +17,7 @@ type DescriptionsItem = {
   providedIn: 'root'
 })
 export class ElectronService {
-  ipcRenderer: typeof ipcRenderer;
-  webFrame: typeof webFrame;
-  childProcess: typeof childProcess;
-  fs: typeof fs;
+  ipcRenderer;
   constructor(private store: StoreService) {
     // Conditional imports
     if (this.isElectron) {
@@ -36,19 +28,15 @@ export class ElectronService {
       // * A NodeJS's dependency imported with TS module import (ex: import { Dropbox } from 'dropbox') CAN only be present
       // in `dependencies` of `package.json (root folder)` because it is loaded during build phase and does not need to be
       // in the final bundle. Reminder : only if not used in Electron's Main process (app folder)
-
       // If you want to use a NodeJS 3rd party deps in Renderer process,
       // ipcRenderer.invoke can serve many common use cases.
       // https://www.electronjs.org/docs/latest/api/ipc-renderer#ipcrendererinvokechannel-args
-      this.ipcRenderer = window.require('electron').ipcRenderer;
-      this.webFrame = window.require('electron').webFrame;
-      this.childProcess = window.require('child_process');
-      this.fs = window.require('fs');
+      this.ipcRenderer = window.electron.ipcRenderer;
     }
   }
 
   get isElectron(): boolean {
-    return !!window?.process?.type;
+    return !!window?.electron;
   }
   getSystemInfo(): DescriptionsItem[] {
     const descriptions: DescriptionsItem[] = [
@@ -96,20 +84,20 @@ export class ElectronService {
         value: ''
       }
     ];
-
+    let systemInfo = {};
     if (this.isElectron) {
+      systemInfo = window.electron.getSystemInfo();
       descriptions.push(...electronDetails);
     } else {
-      const browserType = getBrowserType(getSettings()?.['system.language']);
+      systemInfo = getBrowserType(getSettings()?.['system.language']);
       descriptions.push(
-        ...Object.entries<string>(browserType).map(([key, value]) => ({
+        ...Object.entries<string>(systemInfo).map(([key, value]) => ({
           id: key,
           label: key.replace(/^\S/, s => s.toUpperCase()),
           value
         }))
       );
     }
-    const systemInfo = this.ipcRenderer?.sendSync('get-system-info') || getBrowserType(getSettings()?.['common.language']);
     descriptions.forEach(item => {
       if (item.id in systemInfo) {
         item.value = systemInfo[item.id];

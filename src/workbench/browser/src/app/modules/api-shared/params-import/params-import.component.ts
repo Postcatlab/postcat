@@ -107,7 +107,7 @@ export class ParamsImportComponent implements OnInit {
     const codeType = whatType(this.paramCode);
     if (this.rootType !== codeType) {
       // TODO Perhaps should be handled about format compatibility later.
-      eoConsole.warn('[params-import]: The code that you input is no-equal to the root type.');
+      pcConsole.warn('[params-import]: The code that you input is no-equal to the root type.');
     }
     const func = {
       json: this.parseJSON,

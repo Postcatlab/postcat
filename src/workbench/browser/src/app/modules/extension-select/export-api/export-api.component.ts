@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { has } from 'lodash-es';
@@ -16,21 +15,15 @@ import { StorageRes, StorageResStatus } from '../../../shared/services/storage/i
 export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
-  featureMap = this.webExtensionService.getFeatures('exportAPI') || this.webExtensionService.getFeatures('apimanage.export');
-  constructor(
-    private storage: StorageService,
-    private store: StoreService,
-    public extensionService: ExtensionService,
-    public webExtensionService: WebExtensionService
-  ) {}
+  featureMap =
+    this.extensionService.getValidExtensionsByFature('exportAPI') || this.extensionService.getValidExtensionsByFature('apimanage.export');
+  constructor(private storage: StorageService, private store: StoreService, private extensionService: ExtensionService) {}
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
-      if (this.webExtensionService.isEnable(key)) {
-        this.supportList.push({
-          key,
-          ...data
-        });
-      }
+      this.supportList.push({
+        key,
+        ...data
+      });
     });
     {
       const { key } = this.supportList.at(0);
@@ -40,7 +33,6 @@ export class ExportApiComponent implements OnInit {
     }
   }
   submit(callback: () => boolean) {
-    console.log(this.store.getCurrentProjectID);
     this.export(callback);
   }
   private transferTextToFile(fileName: string, exportData: any) {
@@ -66,9 +58,9 @@ export class ExportApiComponent implements OnInit {
     StorageUtil.set('export_api_modal', this.currentExtension);
     const feature = this.featureMap.get(this.currentExtension);
     const action = feature.action || null;
-    const filename = feature.filename || null;
-    const module: ModuleInfo = await window.eo?.loadFeatureModule?.(this.currentExtension);
-    if (action && filename && module && module[action] && typeof module[action] === 'function') {
+    const filename = feature.filename || 'export.json';
+    const module = await this.extensionService.getExtensionPackage(this.currentExtension);
+    if (action && module?.[action] && typeof module[action] === 'function') {
       const params = [this.store.getCurrentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {

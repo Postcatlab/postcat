@@ -1,12 +1,16 @@
-window.eoConsole = {
+window.pcConsole = {
   log(...args) {
-    console.log('EO_LOG: ', 'background-color:blue', ...args);
+    console.log('%c EO_LOG: ', 'background-color:#2a4073; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
   },
   warn(...args) {
-    console.warn('%c EO_WARN:', 'background-color:yellow', ...args);
+    console.warn('%c EO_WARN:', 'background-color:#ffd900;color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
   },
   error(...args) {
-    console.error('%c EO_ERROR: ', 'background-color:red,color:white', ...args);
+    console.error(
+      '%c EO_ERROR: ',
+      'background-color: #a73836; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;',
+      ...args
+    );
   }
 };
 export const uuid = (): string => Math.random().toString(36).slice(-8);

@@ -1,6 +1,4 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { EoNgSwitchModule } from 'eo-ng-switch';
 import { EoNgTabsModule } from 'eo-ng-tabs';
 import { EoNgTreeModule } from 'eo-ng-tree';
@@ -11,7 +9,6 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzResultModule } from 'ng-zorro-antd/result';
-import { NzTreeModule } from 'ng-zorro-antd/tree';
 
 // import { ExtensionRoutingModule } from './extension-routing.module';
 import { ShadowDomEncapsulationModule } from '../../modules/eo-ui/shadow/shadow-dom-encapsulation.module';
@@ -23,13 +20,10 @@ import { ExtensionListComponent } from './list/extension-list.component';
   imports: [
     SharedModule,
     NzDescriptionsModule,
-    // ExtensionRoutingModule,
-    CommonModule,
-    NzTreeModule,
+    NzInputNumberModule,
     NzCardModule,
     NzAvatarModule,
     EoNgTabsModule,
-    NzInputNumberModule,
     EoNgSwitchModule,
     EoNgTreeModule,
     NzResultModule,

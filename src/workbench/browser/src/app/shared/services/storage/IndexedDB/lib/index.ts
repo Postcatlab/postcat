@@ -1,7 +1,9 @@
-import { VariableBinding } from '@angular/compiler';
+import { Injectable } from '@angular/core';
 import Dexie, { Table } from 'dexie';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
+import { MockService } from 'eo/workbench/browser/src/app/services/mock.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
-import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -24,37 +26,14 @@ export type ResultType<T = any> = {
   status: StorageResStatus.success;
   data: T;
 };
-const getApiUrl = (apiData: ApiData) => {
-  /** Is it a remote data source */
-  const isRemote = StorageUtil.get('currentWorkspaceID') === -1 ? true : false;
-
-  /** get mock url */
-  const mockUrl = isRemote ? `${window.eo?.getExtensionSettings?.('backend.url')}/mock/eo-1/` : window.eo?.getMockUrl?.();
-
-  const url = new URL(uniqueSlash(`${mockUrl}/${apiData.uri}`), 'https://github.com/');
-  // if (apiData) {
-  //   url.searchParams.set('mockID', apiData.uuid + '');
-  // }
-  return decodeURIComponent(url.toString());
-};
-
-export const createMockObj = (apiData: ApiData, options: Record<string, any> = {}) => {
-  const { name = '', createWay = 'custom', ...rest } = options;
-  return {
-    name,
-    url: getApiUrl(apiData),
-    apiDataID: apiData.uuid,
-    projectID: 1,
-    createWay,
-    response: JSON.stringify(tree2obj([].concat(apiData.responseBody))),
-    ...rest
-  };
-};
 
 /**
  * @description
  * A storage service with IndexedDB.
  */
+@Injectable({
+  providedIn: 'root'
+})
 export class IndexedDBStorage extends Dexie implements StorageInterface {
   project!: Table<Project, number | string>;
   group!: Table<Group, number | string>;
@@ -63,7 +42,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   apiTestHistory!: Table<ApiTestHistory, number | string>;
   mock!: Table<ApiMockEntity, number | string>;
 
-  constructor() {
+  constructor(private store: StoreService) {
     super('eoapi_core');
     this.version(2).stores({
       project: '++uuid, name',
@@ -76,12 +55,30 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     this.open();
     this.on('populate', () => this.populate());
   }
+  private getApiUrl(apiData: ApiData) {
+    /** get mock url */
+    const mockUrl = this.store.mockUrl;
+    const url = new URL(uniqueSlash(`${mockUrl}/${apiData.uri}`), 'https://github.com/');
+    return decodeURIComponent(url.toString());
+  }
 
+  private createMockObj(apiData: ApiData, options: Record<string, any> = {}) {
+    const { name = '', createWay = 'custom', ...rest } = options;
+    return {
+      name,
+      url: this.getApiUrl(apiData),
+      apiDataID: apiData.uuid,
+      projectID: 1,
+      createWay,
+      response: JSON.stringify(tree2obj([].concat(apiData.responseBody))),
+      ...rest
+    };
+  }
   async populate() {
     await this.project.add({ uuid: 1, name: 'Default' });
     const apiDataKeys = await this.apiData.bulkAdd(sampleApiData, { allKeys: true });
     const apiData = sampleApiData.map((n, i) =>
-      createMockObj(n, { name: $localize`Default Mock`, createWay: 'system', apiDataID: apiDataKeys.at(i) })
+      this.createMockObj(n, { name: $localize`Default Mock`, createWay: 'system', apiDataID: apiDataKeys.at(i) })
     );
     this.mock.bulkAdd(apiData);
   }
@@ -362,7 +359,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     const result = this.create(this.apiData, item);
     result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
       if (status === 200 && data) {
-        await this.mock.add(createMockObj(data, { name: '默认 Mock', createWay: 'system' }));
+        await this.mock.add(this.createMockObj(data, { name: '默认 Mock', createWay: 'system' }));
       }
     });
     return result;

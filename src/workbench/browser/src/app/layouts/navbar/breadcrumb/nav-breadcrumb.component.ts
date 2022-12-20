@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { autorun } from 'mobx';
 
 import { StoreService } from '../../../shared/store/state.service';
 
@@ -8,5 +9,14 @@ import { StoreService } from '../../../shared/store/state.service';
   styleUrls: ['./nav-breadcrumb.component.scss']
 })
 export class NavBreadcrumbComponent {
-  constructor(public store: StoreService) {}
+  projectName: string;
+  projectID;
+  workspaceID;
+  constructor(private store: StoreService) {
+    autorun(() => {
+      this.projectName = this.store.getCurrentProject.name;
+      this.projectID = this.store.getCurrentProject.uuid;
+      this.workspaceID = this.store.getCurrentWorkspaceID;
+    });
+  }
 }

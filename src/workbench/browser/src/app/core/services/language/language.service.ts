@@ -24,7 +24,7 @@ export class LanguageService {
   }
   changeLanguage(localeID) {
     if (!localeID || localeID === this.systemLanguage) {
-      eoConsole.warn(`[languageService]: current language has already ${localeID}`);
+      pcConsole.warn(`[languageService]: current language has already ${localeID}`);
       return;
     }
     this.systemLanguage = localeID;

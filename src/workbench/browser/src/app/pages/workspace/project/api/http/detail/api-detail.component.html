@@ -1,6 +1,6 @@
 <div class="w-full px-[20px] pb-[20px]">
-  <nz-skeleton *ngIf="!store.isLocal" [nzLoading]="!model.uri" [nzActive]="true"> </nz-skeleton>
-  <div *ngIf="model.uri">
+  <nz-skeleton *ngIf="!store.isLocal" [nzLoading]="!model?.uri" [nzActive]="true"> </nz-skeleton>
+  <div *ngIf="model?.uri">
     <div class="flex items-center justify-between mt-4">
       <div class="flex flex-wrap items-center min-w-0">
         <nz-tag [class]="model.protocol"> {{ model.protocol | uppercase }}</nz-tag>

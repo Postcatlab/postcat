@@ -40,7 +40,7 @@ export class StoreService {
   // ? project
   @observable private projectList: Project[];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
-  @observable private currentProject: Project;
+  @observable private currentProject: Project = { name: '' };
 
   // ? user && auth
   @observable private userProfile = StorageUtil.get('userProfile') || null;
@@ -80,6 +80,10 @@ export class StoreService {
   // ? data source
   @computed get isLocal() {
     return !this.isShare && this.currentWorkspaceID === -1;
+  }
+  @computed get mockUrl() {
+    const mockUrl = window.electron?.getMockUrl?.();
+    return this.isLocal ? mockUrl : `${mockUrl}/mock-${this.getCurrentProjectID}`;
   }
   @computed get isRemote() {
     return !this.isLocal;

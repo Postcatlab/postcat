@@ -1,6 +1,6 @@
 :host ::ng-deep {
   .ant-descriptions-item-label {
-    width: 5rem;
+    width: 112px;
     position: relative;
     padding-right: 16px;
     justify-content: flex-end;
@@ -12,7 +12,10 @@
   }
 
   .ant-descriptions-item-content {
-    word-break: keep-all;
+    @apply truncate;
+
+    max-width: 250px;
+    display: block;
   }
 
   .ant-descriptions-view table {

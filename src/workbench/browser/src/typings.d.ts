@@ -12,7 +12,9 @@ declare global {
     require: any;
     angular: any;
     eo: any;
-    eoConsole: {
+    pc: any;
+    electron: any;
+    pcConsole: {
       warn: (...args) => void;
       error: (...args) => void;
       log: (...args) => void;
@@ -25,6 +27,6 @@ declare global {
     __POWERED_BY_EOAPI__: boolean;
     __POWERED_BY_POSTCAT__: boolean;
   }
-  declare const eoConsole: typeof eoConsole;
+  declare const pcConsole: typeof pcConsole;
 }
 declare const monaco: typeof MonacoEditor;

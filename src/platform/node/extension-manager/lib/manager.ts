@@ -5,7 +5,6 @@ import {
   ModuleHandlerResult,
   ModuleInfo,
   ModuleManagerInfo,
-  ModuleManagerInterface,
   SidebarView,
   FeatureInfo
 } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
@@ -29,7 +28,7 @@ const isExists = async filePath =>
     .access(filePath)
     .then(() => true)
     .catch(_ => false);
-export class ModuleManager implements ModuleManagerInterface {
+export class ModuleManager {
   /**
    * 模块管理器
    */
@@ -153,16 +152,24 @@ export class ModuleManager implements ModuleManagerInterface {
   getModules(): Map<string, ModuleInfo> {
     return this.modules;
   }
-
   /**
-   * 获取所有功能点列表
+   * Call extension method
    *
+   * @param featureInfo
+   * @param args
    * @returns
    */
-  getFeatures(): Map<string, Map<string, object>> {
-    return this.features;
+  getExtensionPackage(featureInfo, args): Promise<any> {
+    return new Promise(resolve => {
+      const extension = this.modules.get(featureInfo.name);
+      try {
+        args = JSON.parse(args);
+      } catch (e) {}
+      const extensionPackage: any = require(extension.baseDir);
+      resolve(JSON.stringify(extensionPackage[featureInfo.action](args)));
+      return;
+    });
   }
-
   /**
    * 获取某个模块信息
    * belongs为true，返回关联子模块集合
