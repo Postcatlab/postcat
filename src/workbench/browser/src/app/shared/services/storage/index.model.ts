@@ -298,11 +298,11 @@ export interface StorageRes {
   status: StorageResStatus;
   data: any;
   /**
-   * Error tips
+   * Error description
    */
   message?: string;
   /**
-   * Error reason
+   * Error code|detail
    */
   error?: string;
   callback: any;

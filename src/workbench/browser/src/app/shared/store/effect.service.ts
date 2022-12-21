@@ -12,9 +12,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { reaction } from 'mobx';
 
-import { debug } from 'console';
-import { resolve } from 'path';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -53,6 +50,7 @@ export class EffectService {
         }
         this.message.send({ type: 'http-401', data: {} });
       }
+      //* Switch store to local workspace
       this.store.setWorkspaceList([]);
       this.updateProjects(this.store.getCurrentWorkspaceID);
       return;
@@ -81,7 +79,6 @@ export class EffectService {
 
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
-      console.log('yew');
       const apiGroupObservable = this.indexedDBStorage.groupLoadAllByProjectID(projectID);
       apiGroupObservable.subscribe(({ data: apiGroup }: any) => {
         const apiDataObservable = this.indexedDBStorage.apiDataLoadAllByProjectID(projectID);
@@ -137,10 +134,13 @@ export class EffectService {
     this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
     await this.updateProjects(workspace.id);
-    this.store.setCurrentProjectID(this.store.getProjectList[0].uuid);
-    // * refresh view
     await this.router.navigate(['**']);
-    await this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspaceID } });
+    if (this.store.getProjectList.length === 0) {
+      await this.router.navigate(['/home/workspace/project/list']);
+    } else {
+      // * refresh view
+      await this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspaceID } });
+    }
   }
   async updateProjects(workspaceID) {
     return new Promise(resolve => {
@@ -157,7 +157,6 @@ export class EffectService {
   }
   updateProject(data) {
     const workspace = this.store.getCurrentWorkspace;
-    console.log(workspace.id, data, data.uuid);
     return new Promise(resolve => {
       this.storage.run('projectUpdate', [workspace.id, data, data.uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {

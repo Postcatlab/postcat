@@ -10,9 +10,10 @@ import { WorkspaceDeleteComponent } from './components/delete/workspace-delete.c
 import { WorkspaceEditComponent } from './components/edit/workspace-edit.component';
 import { WorkspaceMemberComponent } from './components/member/workspace-member.component';
 import { WorkspaceSettingComponent } from './components/setting/workspace-setting.component';
+import { WorkspaceComponent } from './workspace.component';
 
 @NgModule({
-  declarations: [WorkspaceSettingComponent, WorkspaceEditComponent, WorkspaceMemberComponent, WorkspaceDeleteComponent],
+  declarations: [WorkspaceSettingComponent, WorkspaceEditComponent, WorkspaceMemberComponent, WorkspaceDeleteComponent, WorkspaceComponent],
   imports: [
     RouterModule.forChild([
       {
@@ -21,8 +22,14 @@ import { WorkspaceSettingComponent } from './components/setting/workspace-settin
         pathMatch: 'full'
       },
       {
-        path: 'project',
-        loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
+        path: '',
+        component: WorkspaceComponent,
+        children: [
+          {
+            path: 'project',
+            loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
+          }
+        ]
       }
     ]),
     NzCardModule,
@@ -32,4 +39,6 @@ import { WorkspaceSettingComponent } from './components/setting/workspace-settin
     NzUploadModule
   ]
 })
-export class WorkspaceModule {}
+export class WorkspaceModule {
+  constructor() {}
+}

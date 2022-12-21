@@ -12,20 +12,16 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 
     <form nz-form [nzLayout]="'vertical'" [formGroup]="validateForm" class="form mt-2">
       <nz-form-item nz-col class="flex-1" *ngFor="let field of objectKeys(properties)">
-        <ng-container *ngIf="properties[field]?.title || properties[field]?.label">
+        <ng-container *ngIf="properties[field]?.label">
           <nz-form-label nzFor="{{ field }}" [nzRequired]="properties[field]?.required" class="label font-bold">
-            {{ properties[field]?.title || properties[field]?.label }}
+            {{ properties[field]?.label }}
           </nz-form-label>
         </ng-container>
         <!-- 二级说明 -->
         <div *ngIf="properties[field]?.type !== 'boolean' && properties[field]?.description" class="text-[12px] mb-[8px] text-gray-400">
           {{ properties[field]?.description }}
         </div>
-        <nz-form-control
-          i18n-nzErrorTip
-          nzErrorTip="Please Enter {{ properties[field]?.title || properties[field]?.label }}"
-          class="form-control"
-        >
+        <nz-form-control i18n-nzErrorTip nzErrorTip="Please Enter {{ properties[field]?.label }}" class="form-control">
           <!-- 字符串类型 -->
           <!-- <ng-container *ngIf="properties[field]?.type === 'string'"> -->
           <input
@@ -34,9 +30,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
             id="{{ field }}"
             [disabled]="properties[field]?.disabled"
             i18n-placeholder
-            placeholder="{{
-              (properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.title || '')) || properties[field]?.label
-            }}"
+            placeholder="{{ properties[field]?.placeholder ?? 'Please Enter ' + (properties[field]?.label || '') }}"
             formControlName="{{ field }}"
             [(ngModel)]="localSettings[field]"
           />
@@ -95,10 +89,8 @@ export class ExtensionSettingComponent implements OnInit {
   }
 
   formatProperties() {
-    const prefix = `${this.extName}.`;
     this.properties = Object.entries(this.configuration?.properties).reduce((prev, [key, value]) => {
-      const newKey = key.startsWith(prefix) ? key : `${prefix}${key}`;
-      prev[newKey] = value;
+      prev[key] = value;
       return prev;
     }, {});
   }

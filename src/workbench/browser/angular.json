@@ -120,7 +120,7 @@
   },
   "defaultProject": "eoapi",
   "schematics": {
-    "@schematics/angular:component": { "prefix": "eo", "style": "scss" },
+    "@schematics/angular:component": { "prefix": "eo", "style": "scss", "inlineStyle": true, "inlineTemplate": true },
     "@schematics/angular:directive": { "prefix": "eo" }
   }
 }

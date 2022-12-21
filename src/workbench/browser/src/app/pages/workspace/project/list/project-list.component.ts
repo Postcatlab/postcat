@@ -7,8 +7,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 import { SettingService } from '../../../../modules/system-setting/settings.service';
 import { EffectService } from '../../../../shared/store/effect.service';
-import StorageUtil from '../../../../utils/storage/Storage';
-
 type ListType = 'list' | 'card';
 
 @Component({
@@ -22,7 +20,7 @@ export class ProjectListComponent implements OnInit {
   projectList: any[] = [];
 
   get WorkspaceID() {
-    return this.storeSerive.getCurrentWorkspace.id;
+    return this.storeSerive.getCurrentWorkspaceID;
   }
 
   constructor(

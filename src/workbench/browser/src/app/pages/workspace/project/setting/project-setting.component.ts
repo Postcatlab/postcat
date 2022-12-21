@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { autorun, reaction } from 'mobx';
@@ -27,6 +30,8 @@ export class ProjectSettingComponent implements OnInit {
     private modalService: ModalService,
     private message: EoNgFeedbackMessageService,
     private store: StoreService,
+    private storage: StorageService,
+    private router: Router,
     private effect: EffectService
   ) {
     this.isLoading = false;
@@ -78,11 +83,19 @@ export class ProjectSettingComponent implements OnInit {
     }
   }
   private delete() {
-    this.modalService.confirm({
+    const modal = this.modalService.confirm({
       nzTitle: 'Are you sure delete this project?',
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
-      nzOnOk: () => {}
+      nzOnOk: () => {
+        this.storage.run('projectRemove', [this.store.getCurrentWorkspaceID, this.store.getCurrentProjectID], (result: StorageRes) => {
+          if (result.status === StorageResStatus.success) {
+            this.router.navigate(['/home/workspace/project/list']);
+            this.effect.updateProjects(this.store.getCurrentWorkspaceID);
+            modal.destroy();
+          }
+        });
+      }
     });
   }
   async handleChangeProjectName(name) {

@@ -18,7 +18,7 @@
       </button>
     </div>
   </div>
-
+  <nz-empty *ngIf="!initLoading && projectList.length === 0"> </nz-empty>
   <ng-container *ngIf="listType === 'card'">
     <div class="flex flex-wrap">
       <ng-container *ngFor="let item of projectList">

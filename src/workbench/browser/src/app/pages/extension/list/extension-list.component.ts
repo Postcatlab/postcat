@@ -37,8 +37,9 @@ export class ExtensionListComponent implements OnInit {
         return extensionSearch(list)(keyword);
       },
       official: async () => {
+        const authorName = ['Postcat', 'Eoapi'];
         const { data }: any = await this.extensionService.requestList();
-        return extensionSearch(data.filter(it => it.author === 'Postcat'))(keyword);
+        return extensionSearch(data.filter(it => authorName.includes(it.author)))(keyword);
       },
       all: async () => {
         const { data }: any = await this.extensionService.requestList();

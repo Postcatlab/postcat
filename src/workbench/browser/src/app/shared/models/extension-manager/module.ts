@@ -48,11 +48,6 @@ export interface ModuleInfo {
 
     //Random feature
     [index: string]: any;
-
-    //!Will Deprecated
-    'apimanage.export': FeatureInfo;
-    'apimanage.import': FeatureInfo;
-    'apimanage.sync': FeatureInfo;
   };
 
   //*Field for browser generate by code,not actually in package.json
@@ -66,11 +61,6 @@ export interface ModuleInfo {
     locale: string;
     package: any | object;
   }>;
-  //!Will Deprecated
-  // 模块ID，用于关联
-  moduleID: string;
-  // 模块名称，用于显示
-  moduleName: string;
 }
 
 /**

@@ -38,7 +38,7 @@ export class StoreService {
   @observable private workspaceList: API.Workspace[] = [eoDeepCopy(LOCAL_WORKSPACE)];
 
   // ? project
-  @observable private projectList: Project[];
+  @observable private projectList: Project[] = [];
   @observable private currentProjectID = StorageUtil.get('currentProjectID', 1);
   @observable private currentProject: Project = { name: '' };
 
@@ -209,10 +209,11 @@ export class StoreService {
     StorageUtil.set('currentWorkspaceID', this.currentWorkspaceID);
   }
   // ? project
-  @action setProjectList(projects: Project[]) {
+  @action setProjectList(projects: Project[] = []) {
     this.projectList = projects;
-    const project = this.projectList.find(val => val.uuid === this.currentProjectID) || projects[0];
-    this.setCurrentProjectID(project.uuid);
+    console.log('setProjects', this.projectList);
+    const uuid = projects.length ? this.projectList.find(val => val.uuid === this.currentProjectID)?.uuid || projects[0].uuid : -1;
+    this.setCurrentProjectID(uuid);
   }
   @action setCurrentProjectID(projectID: number) {
     this.currentProjectID = projectID;

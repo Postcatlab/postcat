@@ -55,8 +55,7 @@ export class ImportApiComponent implements OnInit {
   supportList: any[] = [];
   currentExtension = StorageUtil.get('import_api_modal');
   uploadData = null;
-  featureMap =
-    this.extensionService.getValidExtensionsByFature('importAPI') || this.extensionService.getValidExtensionsByFature('apimanage.import');
+  featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
   constructor(
     private router: Router,
     private storage: StorageService,
