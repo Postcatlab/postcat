@@ -57,7 +57,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   };
   private bodyType$: Subject<string> = new Subject<string>();
   private destroy$: Subject<void> = new Subject<void>();
-  private rawChange$: Subject<string> = new Subject<string>();
   get editorType() {
     return this.contentType.replace(/.*\//, '');
   }
@@ -66,15 +65,6 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
       this.beforeChangeBodyByType(val[0]);
     });
     this.initListConf();
-    this.rawChange$.pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe(code => {
-      //! Must set value by data,because this.model has delay
-      this.modelChange.emit(code);
-      const contentType = whatTextTypeMap[whatTextType(code)];
-      if (contentType && this.autoSetContentType !== false) {
-        this.contentType = contentType;
-        this.contentTypeChange.emit(contentType);
-      }
-    });
   }
 
   beforeChangeBodyByType(type) {
@@ -154,7 +144,12 @@ export class ApiTestBodyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   rawDataChange(code: string) {
-    this.rawChange$.next(code);
+    this.modelChange.emit(code);
+    const contentType = whatTextTypeMap[whatTextType(code)];
+    if (contentType && this.autoSetContentType !== false) {
+      this.contentType = contentType;
+      this.contentTypeChange.emit(contentType);
+    }
   }
   /**
    * Set model after change bodyType

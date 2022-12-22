@@ -38,7 +38,7 @@ import { ModalService } from '../../../shared/services/modal.service';
         <nz-divider class="mt-[10px]"></nz-divider>
         <div class="my-[10px]">
           <p class="workspace-title text-tips" i18n>CLOUD</p>
-          <p i18n *ngIf="!cloudWorkspaces.length" class="text-tips px-base mt-[10px] mx-[5px] text-[12px]">No cloud worspace</p>
+          <p i18n *ngIf="!cloudWorkspaces.length" class="text-tips px-base mt-[10px] mx-[5px] text-[12px]">No cloud workspace</p>
           <li
             class="workspace-item flex justify-between"
             nz-menu-item

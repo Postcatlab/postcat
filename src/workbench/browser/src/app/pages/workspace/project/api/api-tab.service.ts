@@ -309,13 +309,12 @@ export class ApiTabService {
     }
     this.updateTab(currentTab, inData);
   }
-  handleDataBeforeGetCache(tabsInfo) {
-    console.log(tabsInfo);
+  handleDataBeforeGetCache = tabsInfo => {
+    // console.log(this.store.getCurrentWorkspaceID, this.store.getCurrentProjectID);
     return tabsInfo;
-  }
-  handleDataBeforeCache = tabsByID => {
-    console.log(this, this.tabStorageKey, tabsByID);
-    Object.values(tabsByID).forEach((val: TabItem) => {
+  };
+  handleDataBeforeCache = tabStorage => {
+    Object.values(tabStorage.tabsByID).forEach((val: TabItem) => {
       //Delete gio key
       if (val.params) {
         ['utm_campaign', 'utm_content', 'utm_source'].forEach(keyName => {
@@ -330,6 +329,6 @@ export class ApiTabService {
         };
       }
     });
-    return tabsByID;
+    return tabStorage;
   };
 }

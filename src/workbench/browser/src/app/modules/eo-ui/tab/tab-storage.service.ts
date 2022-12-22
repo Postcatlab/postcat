@@ -61,23 +61,21 @@ export class TabStorageService {
         });
       }
     });
+    let result = {
+      selectedIndex,
+      tabOrder: this.tabOrder,
+      tabsByID
+    };
     if (opts.handleDataBeforeCache) {
-      tabsByID = opts.handleDataBeforeCache(tabsByID);
+      result = opts.handleDataBeforeCache(result);
     }
-    StorageUtil.set(
-      this.tabStorageKey,
-      JSON.stringify({
-        selectedIndex,
-        tabOrder: this.tabOrder,
-        tabsByID
-      })
-    );
+    StorageUtil.set(this.tabStorageKey, result);
   }
 
   getPersistenceStorage(opts): storageTab {
     let result: any = null;
     try {
-      result = JSON.parse(window.localStorage.get(this.tabStorageKey) as string);
+      result = StorageUtil.get(this.tabStorageKey);
     } catch (e) {}
     if (opts.handleDataBeforeGetCache) {
       result = opts.handleDataBeforeGetCache(result);

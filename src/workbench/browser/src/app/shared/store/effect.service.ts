@@ -146,7 +146,6 @@ export class EffectService {
   async updateProjects(workspaceID) {
     return new Promise(resolve => {
       // * real set workspace
-      console.log('projectBulkLoad', this.store.isLocal, workspaceID);
       this.storage.run('projectBulkLoad', [workspaceID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.store.setProjectList(result.data);
