@@ -1,7 +1,7 @@
 {
-  "name": "eoapi-test-server",
+  "name": "postcat-test-server",
   "version": "1.0.0",
-  "description": "Recieve eoapi tes config and response http result",
+  "description": "Recieve postcat test config and response http result",
   "main": "./server/main.js",
   "scripts": {
     "dev": "node ./server/main.js",
@@ -12,7 +12,7 @@
     "stop": "pm2 stop all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "eoapi",
+  "author": "Postcat",
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "3.3.0",

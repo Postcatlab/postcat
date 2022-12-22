@@ -1,14 +1,17 @@
 {
-  "name": "eoapi-web",
+  "name": "postcat-web",
   "version": "0.0.1",
+  "author": {
+    "name": "Postcat"
+  },
   "private": true,
   "scripts": {
     "start": "npm-run-all -p start:testServer start:en",
-    "start:en":"ng serve --hmr -c dev -o",
+    "start:en": "ng serve --hmr -c dev -o",
     "start:zh": "ng serve --hmr -c devCn -o",
-    "start:direct":"ng serve --hmr -c dev",
+    "start:direct": "ng serve --hmr -c dev",
     "serve": "ng serve --hmr -c dev -o --host 0.0.0.0",
-    "start:testServer": "yarn workspace eoapi-test-server run dev",
+    "start:testServer": "yarn workspace postcat-test-server run dev",
     "build": "node ./build/build.js",
     "build:web": "node ./build/build.js web",
     "build:docker:web": "node ./build/build.js web docker",

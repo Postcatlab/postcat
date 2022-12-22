@@ -58,8 +58,7 @@ export class ProjectSettingComponent implements OnInit {
     {
       title: $localize`Delete`,
       icon: 'play-cycle',
-      desc: $localize`Delete project will clean all the project 
-      data，this action can not be recovered！ `,
+      desc: $localize`Delete project will clean all the project data，this action can not be recovered！ `,
       type: 'delete'
     }
   ];

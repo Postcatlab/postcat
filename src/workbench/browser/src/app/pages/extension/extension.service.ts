@@ -9,7 +9,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom, map } from 'rxjs';
-
+const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
 @Injectable({
   providedIn: 'root'
 })
@@ -29,9 +29,28 @@ export class ExtensionService {
   ) {}
   async init() {
     if (!this.electron.isElectron) {
-      await this.webExtensionService.init();
+      //Install  extensions
+      const { data } = await lastValueFrom<any>(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
+      for (let i = 0; i < this.webExtensionService.installedList.length; i++) {
+        const target = data.find(m => m.name === this.webExtensionService.installedList[i].name);
+        if (target) {
+          this.installExtension({
+            name: target.name
+          });
+        }
+      }
+      //Install default extensions
+      defaultExtensions.forEach(name => {
+        const target = data.find(m => m.name === name);
+        if (target && !this.installedList.some(m => m.name === target.name)) {
+          this.installExtension({
+            name: target.name
+          });
+        }
+      });
+    } else {
+      this.updateInstalledInfo(this.getExtensions());
     }
-    this.updateInstalledInfo(this.getExtensions());
   }
   getExtensions() {
     let result: any = new Map();

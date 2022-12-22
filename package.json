@@ -1,11 +1,11 @@
 {
-  "name": "eoapi",
+  "name": "postcat",
   "souceLocale": "zh-Hans",
   "version": "1.12.0",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
-  "homepage": "https://github.com/eolinker/eoapi.git",
-  "author": "eoapi",
+  "homepage": "https://github.com/eolinker/postcat.git",
+  "author": "Postcat",
   "private": true,
   "workspaces": [
     "src/workbench/*"
@@ -13,12 +13,12 @@
   "scripts": {
     "prepare": "husky install && electron-builder install-app-deps && npx patch-package",
     "start": "npm-run-all -p start:web electron:dev",
-    "start:web": "yarn workspace eoapi-web run start",
+    "start:web": "yarn workspace postcat-web run start",
     "start:electron": "npm-run-all -p web:start:direct electron:dev",
     "build": "npx patch-package && npm-run-all -s build:web clear:electron:tsc electron:tsc && electron-builder build",
     "build:static": "npm run clear:electron:tsc&&npm run electron:tsc && electron-builder build",
-    "build:web": "yarn workspace eoapi-web run build",
-    "docker:build:web": "yarn workspace eoapi-web run build:docker:web",
+    "build:web": "yarn workspace postcat-web run build",
+    "docker:build:web": "yarn workspace postcat-web run build:docker:web",
     "electron:static": "npm run electron:tsc && electron .",
     "release": "npm-run-all -s build:web electron:tsc && electron-builder --publish=always",
     "release:m1": "npm-run-all -s build:web electron:tsc && electron-builder -m=dmg --arm64 -p onTagOrDraft",

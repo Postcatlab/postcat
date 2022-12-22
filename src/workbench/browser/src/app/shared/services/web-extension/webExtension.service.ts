@@ -1,12 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
-import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { lastValueFrom } from 'rxjs';
 
 type ExtensionItem = {
   name: string;
@@ -17,7 +11,6 @@ type ExtensionItem = {
 };
 
 const extKey = 'ext_installed_list';
-const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
 
 //* Web Extension manage service
 //! Can't import by other component,please use ExtensionService
@@ -25,30 +18,10 @@ const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
   providedIn: 'root'
 })
 export class WebExtensionService {
-  private installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
+  installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
   disabledExtensionNames = [];
 
-  constructor(
-    private message: EoNgFeedbackMessageService,
-    private messageService: MessageService,
-    private http: HttpClient,
-    private language: LanguageService
-  ) {}
-
-  async init() {
-    const { data } = await lastValueFrom<any>(this.http.get(`${APP_CONFIG.MOCK_URL}/list?locale=${this.language.systemLanguage}`));
-    defaultExtensions.forEach(n => {
-      const isInstall = this.getExtensionByName(n);
-      isInstall || this.installedList.push({ name: n } as any);
-    });
-    this.installedList.forEach(n => {
-      const target = data.find(m => m.name === n.name);
-      if (target) {
-        this.installExtension(target.name, target.version, target.main);
-      }
-    });
-  }
-
+  constructor() {}
   async installExtension(extName: string, version = 'latest', entry = '') {
     const url = `${extName}@${version}${entry ? `/${entry}` : entry}`;
     const fullPath = new URL(url, 'https://unpkg.com');
@@ -69,7 +42,8 @@ export class WebExtensionService {
       StorageUtil.set(extKey, this.installedList);
       return true;
     } else {
-      this.message.info(data);
+      pcConsole.error(`[Install package] ${data}`);
+      // this.message.info(data);
       return false;
     }
   }
@@ -80,10 +54,6 @@ export class WebExtensionService {
     this.installedList = this.installedList.filter(n => n.name !== extName);
     StorageUtil.set(extKey, this.installedList);
     return true;
-  }
-
-  getExtensionByName(extName: string) {
-    return this.installedList.find(n => n.name === extName);
   }
 
   isEnable(name: string) {
