@@ -4,7 +4,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
-import { action, computed, makeObservable, reaction, observable } from 'mobx';
+import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
 
 import { eoDeepCopy } from '../../utils/index.utils';
@@ -210,7 +210,6 @@ export class StoreService {
   }
   // ? project
   @action setProjectList(projects: Project[] = []) {
-    console.log(projects);
     this.projectList = projects;
     const uuid = projects.length ? this.projectList.find(val => val.uuid === this.currentProjectID)?.uuid || projects[0].uuid : -1;
     this.setCurrentProjectID(uuid);

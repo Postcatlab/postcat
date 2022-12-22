@@ -40,7 +40,7 @@
           <eo-monaco-editor
             class="border-all"
             [(code)]="model[0].example"
-            [config]="{ readOnly: isEdit }"
+            [config]="{ readOnly: !isEdit }"
             [eventList]="['format', 'copy', 'search', 'replace']"
           ></eo-monaco-editor>
         </td>

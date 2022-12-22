@@ -5,7 +5,7 @@
       <div class="flex flex-wrap items-center min-w-0">
         <nz-tag [class]="model.protocol"> {{ model.protocol | uppercase }}</nz-tag>
         <eo-api-methods-tag [type]="model.method"></eo-api-methods-tag>
-        <div class="flex items-center w-full">
+        <div class="flex items-center w-full mt-[10px]">
           <span class="truncate" (click)="handleCopy(model.uri)" i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip>
             {{ model.uri }}
           </span>
@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <p class="truncate mt-[15px]">{{ model.name }}</p>
+    <p class="truncate mt-[10px]">{{ model.name }}</p>
     <!-- Request headers -->
     <nz-collapse *ngIf="model.requestHeaders && model.requestHeaders.length" class="w-full mt-[20px]">
       <nz-collapse-panel [nzActive]="true" i18n-nzHeader nzHeader="Request Headers">

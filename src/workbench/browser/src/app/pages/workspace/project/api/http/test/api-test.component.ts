@@ -145,9 +145,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
           // 或者 return false;
           event.preventDefault();
           this.saveApi();
-        } else if (code === 'Enter') {
-          // console.log('target',target)
-          this.clickTest();
         }
       });
   }

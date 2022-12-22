@@ -19,7 +19,7 @@ export class NavBreadcrumbComponent implements OnDestroy {
   constructor(private store: StoreService, private router: Router) {
     this.watchRouterChange();
     autorun(() => {
-      if (this.store.getCurrentProject) {
+      if (this.store.getCurrentProject.name) {
         this.projectName = this.store.getCurrentProject.name;
         this.projectID = this.store.getCurrentProject.uuid;
       }

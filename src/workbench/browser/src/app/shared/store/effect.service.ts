@@ -10,7 +10,7 @@ import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/stor
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { reaction } from 'mobx';
+import { reaction, toJS } from 'mobx';
 
 @Injectable({
   providedIn: 'root'
@@ -162,7 +162,16 @@ export class EffectService {
     return new Promise(resolve => {
       this.storage.run('projectUpdate', [workspace.id, data, data.uuid], (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
-          this.store.setCurrentProjectID(result.data.uuid);
+          const project = result.data;
+          const projects = this.store.getProjectList;
+          projects.some(val => {
+            if (val.uuid === project.uuid) {
+              Object.assign(val, project);
+              return true;
+            }
+          });
+          this.store.setProjectList(projects);
+          this.store.setCurrentProjectID(project.uuid);
           return resolve(true);
         }
         return resolve(false);

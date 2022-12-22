@@ -35,7 +35,7 @@
     class="overflow-auto pt-[10px]"
   ></eo-ng-tree-default>
   <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-    <div class="flex items-center w-full cursor-pointer pl-[6px]">
+    <div class="flex items-center w-full cursor-pointer px-[6px]">
       <b
         class="block w-12 method_type"
         [ngClass]="'method_text_' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])"

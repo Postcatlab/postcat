@@ -99,6 +99,7 @@ export class ProjectSettingComponent implements OnInit {
     });
   }
   async handleChangeProjectName(name) {
+    if (!name) return;
     this.isLoading = true;
     const project = this.store.getCurrentProject;
     const isOk: any = await this.effect.updateProject({ ...project, name });
