@@ -22,6 +22,7 @@ export class ExtensionListComponent implements OnInit {
   async ngOnInit() {
     makeObservable(this);
     autorun(async () => {
+      this.renderList = [];
       this.renderList = await this.searchPlugin(this.type, this.keyword);
     });
   }
@@ -29,8 +30,7 @@ export class ExtensionListComponent implements OnInit {
     this.selectChange.emit(item.name);
   }
   async searchPlugin(groupType, keyword = '') {
-    const timer = setTimeout(() => (this.loading = true), 80);
-    const timeStart = Date.now();
+    this.loading = true;
     const func = {
       installed: () => {
         const list = this.extensionService.getInstalledList();
@@ -47,12 +47,10 @@ export class ExtensionListComponent implements OnInit {
       }
     };
     try {
-      return func[groupType]();
+      return await func[groupType]();
     } catch (error) {
     } finally {
-      clearTimeout(timer);
-      const timeout = Date.now() - timeStart > 300 ? 0 : 300;
-      setTimeout(() => (this.loading = false), timeout);
+      this.loading = false;
     }
   }
 }

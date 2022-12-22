@@ -1,52 +1,52 @@
 <div class="px-6 overflow-auto extension-list">
+  <nz-spin class="w-fit mx-auto my-[30px]" nzSimple *ngIf="loading"></nz-spin>
+  <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading && !renderList.length"></nz-empty>
   <div class="grid gap-6 py-5 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-1 list-block">
     <div
       class="border-all w-full min-h-[140px]flex flex-col flex-wrap plugin-block hover:shadow-lg transition-shadow duration-300"
       *ngFor="let it of renderList"
       (click)="clickExtension($event, it)"
     >
-      <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzAvatar]="true">
-        <div class="flex w-full p-5">
-          <div class="flex w-full">
-            <div
-              class="shrink-0 block w-[40px] h-[40px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
-              [ngClass]="{ 'bg-gray-100': it.logo }"
-              [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
-            ></div>
+      <div class="flex w-full p-5">
+        <div class="flex w-full">
+          <div
+            class="shrink-0 block w-[40px] h-[40px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
+            [ngClass]="{ 'bg-gray-100': it.logo }"
+            [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
+          ></div>
+          <div class="flex flex-col w-full">
             <div class="flex flex-col w-full">
-              <div class="flex flex-col w-full">
-                <div class="flex justify-between text-lg">
-                  <span class="font-bold">{{ it.title }}</span>
-                  <div *ngIf="type === 'installed'">
-                    <eo-ng-switch
-                      click-stop-propagation
-                      [(ngModel)]="it.enable"
-                      (ngModelChange)="extensionService.toggleEnableExtension(it.name, $event)"
-                    ></eo-ng-switch>
-                  </div>
-                  <div *ngIf="type !== 'installed'">
-                    <span
-                      *ngIf="extensionService.installedMap.has(it.name)"
-                      class="p-1 text-xs text-green-700 rounded-sm border-all whitespace-nowrap"
-                      i18n
-                      >Installed</span
-                    >
-                  </div>
+              <div class="flex justify-between text-lg">
+                <span class="font-bold">{{ it.title }}</span>
+                <div *ngIf="type === 'installed'">
+                  <eo-ng-switch
+                    click-stop-propagation
+                    [(ngModel)]="it.enable"
+                    (ngModelChange)="extensionService.toggleEnableExtension(it.name, $event)"
+                  ></eo-ng-switch>
                 </div>
-                <span class="text-gray-400">{{ it.author?.name || it.author }}</span>
-                <div class="flex my-1 desc">{{ it.description }}</div>
+                <div *ngIf="type !== 'installed'">
+                  <span
+                    *ngIf="extensionService.installedMap.has(it.name)"
+                    class="p-1 text-xs text-green-700 rounded-sm border-all whitespace-nowrap"
+                    i18n
+                    >Installed</span
+                  >
+                </div>
               </div>
-              <div class="btn-group" *ngIf="type === 'installed'">
-                <ng-container *ngIf="it.features?.configuration">
-                  <a eo-ng-button nzType="link" i18n>Setting</a>
-                  <nz-divider nzType="vertical"></nz-divider>
-                </ng-container>
-                <a eo-ng-button nzType="link"><span data-id="details" i18n="@@ExtensionDetail">Details</span></a>
-              </div>
+              <span class="text-gray-400">{{ it.author?.name || it.author }}</span>
+              <div class="flex my-1 desc">{{ it.description }}</div>
+            </div>
+            <div class="btn-group" *ngIf="type === 'installed'">
+              <ng-container *ngIf="it.features?.configuration">
+                <a eo-ng-button nzType="link" i18n>Setting</a>
+                <nz-divider nzType="vertical"></nz-divider>
+              </ng-container>
+              <a eo-ng-button nzType="link"><span data-id="details" i18n="@@ExtensionDetail">Details</span></a>
             </div>
           </div>
         </div>
-      </nz-skeleton>
+      </div>
     </div>
   </div>
 </div>

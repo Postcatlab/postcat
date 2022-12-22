@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import StorageUtil from '../../../utils/storage/Storage';
 import { storageTab, TabItem } from './tab.model';
 
 @Injectable()
@@ -63,7 +64,7 @@ export class TabStorageService {
     if (opts.handleDataBeforeCache) {
       tabsByID = opts.handleDataBeforeCache(tabsByID);
     }
-    window.localStorage.setItem(
+    StorageUtil.set(
       this.tabStorageKey,
       JSON.stringify({
         selectedIndex,
@@ -73,11 +74,14 @@ export class TabStorageService {
     );
   }
 
-  getPersistenceStorage(): storageTab {
+  getPersistenceStorage(opts): storageTab {
     let result: any = null;
     try {
-      result = JSON.parse(window.localStorage.getItem(this.tabStorageKey) as string);
+      result = JSON.parse(window.localStorage.get(this.tabStorageKey) as string);
     } catch (e) {}
+    if (opts.handleDataBeforeGetCache) {
+      result = opts.handleDataBeforeGetCache(result);
+    }
     return result;
   }
 }

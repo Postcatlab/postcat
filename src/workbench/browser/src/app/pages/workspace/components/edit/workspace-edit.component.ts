@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { RemoteService } from '../../../../shared/services/storage/remote.service';
 import { EffectService } from '../../../../shared/store/effect.service';
@@ -27,7 +28,8 @@ export class WorkspaceEditComponent implements OnChanges {
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private api: RemoteService,
-    private store: StoreService
+    private store: StoreService,
+    private modalRef: NzModalRef
   ) {
     this.initForm();
   }
@@ -57,5 +59,6 @@ export class WorkspaceEditComponent implements OnChanges {
     this.message.success($localize`Edit workspace successfully !`);
     this.store.updateWorkspace(eoDeepCopy(data));
     this.isSaveBtnLoading = false;
+    this.modalRef.destroy();
   }
 }

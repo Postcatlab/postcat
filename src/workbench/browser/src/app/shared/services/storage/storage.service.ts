@@ -1,7 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { getSettings } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun } from 'mobx';
 
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
@@ -16,11 +14,11 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
  */
 @Injectable({ providedIn: 'root' })
 export class StorageService {
-  private instance;
+  private localInstance;
+  private httpInstance;
   constructor(private injector: Injector, private store: StoreService, private indexedDBStorage: IndexedDBStorage) {
-    autorun(() => {
-      this.instance = this.store.isLocal ? this.indexedDBStorage : this.injector.get(HttpStorage);
-    });
+    this.localInstance = this.indexedDBStorage;
+    this.httpInstance = this.injector.get(HttpStorage);
   }
   /**
    * Handle data from IndexedDB
@@ -34,11 +32,12 @@ export class StorageService {
       error: null,
       callback
     };
-    // console.log('this.instance', this.instance, action);
-    if (!this.instance[action]) {
+    const instance = this.store.isLocal ? this.localInstance : this.httpInstance;
+    // console.log('this.instance', instance, action);
+    if (!instance[action]) {
       throw Error(`Lack request API: ${action}`);
     }
-    this.instance[action](...params).subscribe(
+    instance[action](...params).subscribe(
       (res: any) => {
         handleResult.status = res.status;
         handleResult.data = res.data;

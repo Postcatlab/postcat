@@ -29,6 +29,9 @@ export class GlobalProvider {
     window.pc.getExtensionSettings = this.setting.getConfiguration;
     /** prload 里面同时有的方法 end */
     window.pc.navigate = (commands: any[], extras?: NavigationExtras) => {
+      if (commands[0] === 'home/extension/detail') {
+        return;
+      }
       const eoChangeRoute = {
         'home/api': 'home/workspace/project/api'
       };
@@ -36,6 +39,7 @@ export class GlobalProvider {
         const after = eoChangeRoute[pre];
         commands[0] = commands[0].replace(pre, after);
       });
+      console.log(commands[0]);
       this.router.navigate(commands, extras);
     };
     window.pc.getGroups = window.pc.getGroup = this.getGroup;

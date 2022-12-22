@@ -35,16 +35,14 @@ export class ModalService {
           }
         },
         //@ts-ignore
-        ...(inOpts.onlyCancel
+        ...(!inOpts.nzOnOk
           ? []
           : [
               {
                 label: $localize`Confirm`,
                 type: 'primary',
                 onClick: () => {
-                  if (inOpts.nzOnOk) {
-                    return inOpts.nzOnOk();
-                  }
+                  return inOpts.nzOnOk();
                 }
               }
             ])

@@ -24,9 +24,9 @@ import { ElectronService } from '../../../core/services';
         <img loading="lazy" class="w-[40px] favor-image align-middle" src="assets/images/heart.png" />
       </a>
       <nz-divider></nz-divider>
-      <nz-descriptions [nzColumn]="1">
-        <nz-descriptions-item *ngFor="let item of list" [nzTitle]="item.label">{{ item.value }}</nz-descriptions-item>
-      </nz-descriptions>
+      <div class="w-[300px] text-[12px] text-center m-auto">
+        <p *ngFor="let item of list" class="mt-[10px]">{{ item.label }}: {{ item.value }}</p>
+      </div>
     </div>
   `,
   styleUrls: ['./about.component.scss']

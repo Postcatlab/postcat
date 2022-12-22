@@ -12,12 +12,14 @@ import { EoNgRadioModule } from 'eo-ng-radio';
 import { EoNgSelectModule } from 'eo-ng-select';
 import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
@@ -43,6 +45,8 @@ const SHARED_UI_MODULE = [
   NzTypographyModule,
   NzPopoverModule,
   NzDividerModule,
+  NzSpinModule,
+  NzEmptyModule,
   NzModalModule,
   NzListModule,
   NzPopconfirmModule

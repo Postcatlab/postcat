@@ -37,9 +37,13 @@ export class TabOperateService {
   ) {}
   //Init tab info
   //Maybe from tab cache info or router url
-  init(inArg: { basicTabs: Array<Partial<TabItem>> }) {
+  init(inArg: { basicTabs: Array<Partial<TabItem>>; handleDataBeforeGetCache }) {
     this.BASIC_TABS = inArg.basicTabs;
-    const tabStorage = this.setting.disabledCache ? null : this.tabStorage.getPersistenceStorage();
+    const tabStorage = this.setting.disabledCache
+      ? null
+      : this.tabStorage.getPersistenceStorage({
+          handleDataBeforeGetCache: inArg.handleDataBeforeGetCache
+        });
     //parse result for router change
     const tabCache = this.filterValidTab(tabStorage);
     const validTabItem = this.generateTabFromUrl(this.router.url);

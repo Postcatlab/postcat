@@ -70,8 +70,9 @@
       <eo-tab
         class="flex-1"
         [list]="apiTab.BASIC_TABS"
-        [tabStorageKey]="(store.isLocal ? 'local' : store.getCurrentWorkspace?.id) + '_TabCache'"
+        tabStorageKey="API_TAB_STORAGE_KEY"
         [handleDataBeforeCache]="apiTab.handleDataBeforeCache"
+        [handleDataBeforeGetCache]="apiTab.handleDataBeforeGetCache"
         [checkTabCanLeave]="apiTab.componentRef?.checkTabCanLeave"
         (beforeClose)="apiTab.beforeTabClose($event)"
         [addDropDown]="newTabTemplate"
@@ -163,20 +164,18 @@
         (nzResize)="onRightPanelResize($event)"
       >
         <nz-resize-handle *ngIf="!store.isShare" class="bottom-0 z-10 vertical container-draggable" nzDirection="left"> </nz-resize-handle>
-        <div class="flex h-full">
-          <div class="flex flex-col p-2">
-            <ng-container *ngFor="let item of rightExtras">
-              <button
-                eo-ng-button
-                nzType="text"
-                eoNgFeedbackTooltip
-                [nzTooltipTitle]="item.tooltip"
-                (click)="item.click(apiTab.componentRef.model)"
-              >
-                <eo-iconpark-icon [name]="item.icon" size="20px"> </eo-iconpark-icon>
-              </button>
-            </ng-container>
-          </div>
+        <div class="flex flex-col p-2">
+          <ng-container *ngFor="let item of rightExtras">
+            <button
+              eo-ng-button
+              nzType="text"
+              eoNgFeedbackTooltip
+              [nzTooltipTitle]="item.tooltip"
+              (click)="item.click(apiTab.componentRef.model)"
+            >
+              <eo-iconpark-icon [name]="item.icon" size="20px"> </eo-iconpark-icon>
+            </button>
+          </ng-container>
         </div>
       </nz-sider>
     </nz-layout>

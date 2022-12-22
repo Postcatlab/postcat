@@ -24,6 +24,7 @@ export class EoTabComponent implements OnInit, OnDestroy {
 
   @Input() checkTabCanLeave?: (closeTarget?: TabItem) => boolean;
   @Input() handleDataBeforeCache?: <T>({ tabsByID: T }) => T;
+  @Input() handleDataBeforeGetCache?;
   @Output() readonly beforeClose = new EventEmitter<boolean>();
   MAX_TAB_LIMIT = 15;
   routerSubscribe: Subscription;
@@ -42,7 +43,8 @@ export class EoTabComponent implements OnInit, OnDestroy {
       tabStorageKey: this.tabStorageKey
     });
     this.tabOperate.init({
-      basicTabs: this.list
+      basicTabs: this.list,
+      handleDataBeforeGetCache: this.handleDataBeforeGetCache
     });
   }
   async newTab(key = undefined) {

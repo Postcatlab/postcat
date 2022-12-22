@@ -38,7 +38,7 @@ export class ProjectListComponent implements OnInit {
 
   async getProjectList() {
     const [data]: any = await this.effect.updateProjects(this.WorkspaceID);
-    this.projectList = data;
+    this.projectList = data || [];
     this.initLoading = false;
   }
 

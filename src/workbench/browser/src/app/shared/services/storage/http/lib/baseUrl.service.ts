@@ -30,9 +30,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   prefix;
   constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
     super();
-    //* Web deploy from v1.9.1
-    // TODO 2023.02.01 change prefix to '/api/'
-    this.prefix = this.web.isWeb ? '/api/' : '/';
+    this.prefix = '/api/';
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

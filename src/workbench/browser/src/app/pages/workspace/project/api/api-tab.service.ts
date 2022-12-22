@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TabItem } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.model';
 import { Message } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { autorun, reaction } from 'mobx';
+import { autorun } from 'mobx';
 import { debounceTime, Subject } from 'rxjs';
 
 import { EoTabComponent } from '../../../../modules/eo-ui/tab/tab.component';
@@ -66,8 +66,15 @@ export class ApiTabService {
     { pathname: '/home/workspace/project/api/http/mock', id: 'api-http-mock', type: 'preview', title: 'Mock' }
   ];
   BASIC_TABS: Array<Partial<TabItem>>;
-
+  tabStorageKey: string;
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
+    //TODO compatible with old version,DELETE at
+    for (var i = 0; i < localStorage.length; i++) {
+      const keyName = localStorage.key(i);
+      if (keyName.includes('_TabCache')) {
+        localStorage.removeItem(keyName);
+      }
+    }
     this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterContentChanged(inData);
     });
@@ -76,6 +83,7 @@ export class ApiTabService {
     });
     autorun(() => {
       this.BASIC_TABS = this.store.isShare ? this.SHARE_TABS : this.API_TABS;
+      this.tabStorageKey = `${this.store.isLocal ? 'local' : this.store.getCurrentWorkspace?.id}_TabCache`;
     });
   }
   watchApiChange(inArg: Message) {
@@ -301,7 +309,12 @@ export class ApiTabService {
     }
     this.updateTab(currentTab, inData);
   }
-  handleDataBeforeCache(tabsByID) {
+  handleDataBeforeGetCache(tabsInfo) {
+    console.log(tabsInfo);
+    return tabsInfo;
+  }
+  handleDataBeforeCache = tabsByID => {
+    console.log(this, this.tabStorageKey, tabsByID);
     Object.values(tabsByID).forEach((val: TabItem) => {
       //Delete gio key
       if (val.params) {
@@ -318,5 +331,5 @@ export class ApiTabService {
       }
     });
     return tabsByID;
-  }
+  };
 }

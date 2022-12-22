@@ -237,6 +237,9 @@ export class UserModalComponent implements OnInit, OnDestroy {
         }
 
         if (type === 'server-fail') {
+          if (this.store.isLocal) {
+            return;
+          }
           this.eMessage.error($localize`Oops, server fail`);
           return;
         }
@@ -270,35 +273,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
             }
           }
 
-          return;
-        }
-
-        if (type === 'logOut') {
-          this.store.setUserProfile({
-            id: -1,
-            password: '',
-            username: '',
-            workspaces: []
-          });
-          this.store.setWorkspaceList([]);
-          this.eMessage.success($localize`Successfully logged out !`);
-          const refreshToken = this.store.getLoginInfo.refreshToken;
-          this.store.clearAuth();
-          {
-            const [data, err]: any = await this.api.api_authLogout({
-              refreshToken
-            });
-            if (err) {
-              if (err.status === 401) {
-                this.message.send({ type: 'clear-user', data: {} });
-                if (this.store.isLogin) {
-                  return;
-                }
-                this.message.send({ type: 'http-401', data: {} });
-              }
-              return;
-            }
-          }
           return;
         }
 
@@ -425,7 +399,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       }
       const { workspace } = data;
       this.store.setWorkspaceList([workspace, ...this.store.getWorkspaceList]);
-      this.effect.changeWorkspace(workspace);
+      this.effect.changeWorkspace(workspace.id);
 
       // * 关闭弹窗
       this.isSyncModalVisible = false;
@@ -464,7 +438,12 @@ export class UserModalComponent implements OnInit, OnDestroy {
   }
   async textiqd22iCallback() {
     // * click event callback
-    this.message.send({ type: 'open-setting', data: {} });
+    this.message.send({
+      type: 'open-setting',
+      data: {
+        module: 'data-storage'
+      }
+    });
 
     // * 关闭弹窗
     this.isCheckConnectModalVisible = false;
@@ -526,7 +505,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
         }
         this.store.setUserProfile(data);
       }
-      this.effect.updateWorkspaces();
 
       if (!data.isFirstLogin) {
         return;
@@ -547,7 +525,12 @@ export class UserModalComponent implements OnInit, OnDestroy {
   }
   async textqdb64pCallback() {
     // * click event callback
-    this.message.send({ type: 'open-setting', data: {} });
+    this.message.send({
+      type: 'open-setting',
+      data: {
+        module: 'data-storage'
+      }
+    });
 
     // * 关闭弹窗
     this.isOpenSettingModalVisible = false;
@@ -597,7 +580,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.message.send({ type: 'update-share-link', data: {} });
       {
         this.effect.updateWorkspaces();
-        this.effect.changeWorkspace(data);
+        this.effect.changeWorkspace(data.id);
       }
     };
     await btnSaveRunning();

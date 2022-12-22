@@ -107,7 +107,7 @@ export class StoreService {
     return this.currentWorkspace;
   }
 
-  @computed get getLocalWorkspace() {
+  get getLocalWorkspace() {
     return eoDeepCopy(LOCAL_WORKSPACE);
   }
 
@@ -192,7 +192,7 @@ export class StoreService {
   // ? workspace
   @action setWorkspaceList(data: API.Workspace[] = []) {
     const local = eoDeepCopy(LOCAL_WORKSPACE);
-    this.workspaceList = [local, ...data.filter(it => it.id !== -1).map(it => ({ ...it, type: 'online' }))];
+    this.workspaceList = [local, ...data.filter(it => it.id !== -1)];
     const workspace = this.workspaceList.find(val => val.id === this.currentWorkspaceID) || this.getLocalWorkspace;
     this.setCurrentWorkspaceID(workspace.id);
   }
@@ -210,8 +210,8 @@ export class StoreService {
   }
   // ? project
   @action setProjectList(projects: Project[] = []) {
+    console.log(projects);
     this.projectList = projects;
-    console.log('setProjects', this.projectList);
     const uuid = projects.length ? this.projectList.find(val => val.uuid === this.currentProjectID)?.uuid || projects[0].uuid : -1;
     this.setCurrentProjectID(uuid);
   }

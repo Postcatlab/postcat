@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ExtensionComponent } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject, takeUntil } from 'rxjs';
@@ -12,7 +15,6 @@ import { LanguageService } from '../../core/services/language/language.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
-
 @Component({
   selector: 'eo-navbar',
   templateUrl: './navbar.component.html',
@@ -38,11 +40,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private web: WebService,
     private modal: ModalService,
     private modalService: NzModalService,
+    private eMessage: EoNgFeedbackMessageService,
     public theme: ThemeService,
     private message: MessageService,
+    private api: RemoteService,
     public lang: LanguageService,
     public store: StoreService,
-    public dataSourceService: DataSourceService
+    public dataSourceService: DataSourceService,
+    private effect: EffectService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -50,9 +55,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .get()
       .pipe(takeUntil(this.destroy$))
       .pipe(distinct(({ type }) => type, interval(400)))
-      .subscribe(async ({ type }) => {
+      .subscribe(async ({ type, data }) => {
         if (type === 'open-setting') {
-          this.openSettingModal();
+          this.openSettingModal(data);
           return;
         }
         if (type === 'open-extension') {
@@ -77,8 +82,31 @@ export class NavbarComponent implements OnInit, OnDestroy {
   loginOrSign() {
     this.dataSourceService.checkRemoteCanOperate();
   }
-  loginOut() {
-    this.message.send({ type: 'logOut', data: {} });
+  async loginOut() {
+    this.store.setUserProfile({
+      id: -1,
+      password: '',
+      username: '',
+      workspaces: []
+    });
+    this.eMessage.success($localize`Successfully logged out !`);
+    const refreshToken = this.store.getLoginInfo.refreshToken;
+    this.store.clearAuth();
+    {
+      const [data, err]: any = await this.api.api_authLogout({
+        refreshToken
+      });
+      if (err) {
+        if (err.status === 401) {
+          this.message.send({ type: 'clear-user', data: {} });
+          if (this.store.isLogin) {
+            return;
+          }
+          this.message.send({ type: 'http-401', data: {} });
+        }
+        return;
+      }
+    }
   }
 
   handleSwitchLang(event) {
@@ -88,11 +116,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   /**
    * 打开系统设置
    */
-  openSettingModal() {
+  openSettingModal(inArg?) {
     const ref = this.modal.create({
       nzClassName: 'eo-system-setting-modal',
       nzTitle: $localize`Settings`,
       nzContent: SystemSettingComponent,
+      nzComponentParams: {
+        selectedModule: inArg?.module
+      },
       withoutFooter: true
     });
     this.message

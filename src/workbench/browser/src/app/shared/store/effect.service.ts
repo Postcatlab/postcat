@@ -28,34 +28,25 @@ export class EffectService {
     private web: WebService
   ) {
     this.updateWorkspaces();
-    this.updateProjects(this.store.getCurrentWorkspaceID);
+    this.updateProjects(this.store.getCurrentWorkspaceID).then(() => {
+      if (this.store.getProjectList.length === 0) {
+        this.router.navigate(['/home/workspace/project/list']);
+      }
+    });
     reaction(
       () => this.store.isLogin,
       async () => {
         if (this.store.isLogin) {
           await this.updateWorkspaces();
+        } else {
+          if (this.store.isLocal) {
+            this.store.setWorkspaceList([]);
+          } else {
+            this.changeWorkspace(this.store.getLocalWorkspace.id);
+          }
         }
-        this.changeWorkspace(this.store.getCurrentWorkspace);
       }
     );
-  }
-
-  async updateWorkspaces() {
-    const [list, wErr]: any = await this.http.api_workspaceList({});
-    if (wErr) {
-      if (wErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.isLogin) {
-          return;
-        }
-        this.message.send({ type: 'http-401', data: {} });
-      }
-      //* Switch store to local workspace
-      this.store.setWorkspaceList([]);
-      this.updateProjects(this.store.getCurrentWorkspaceID);
-      return;
-    }
-    this.store.setWorkspaceList(list);
   }
 
   getGroups(projectID = 1): Promise<any[]> {
@@ -121,30 +112,41 @@ export class EffectService {
       }))
       .concat(apiDataFilters);
   }
-  async changeWorkspace(workspace) {
-    if (workspace.id !== -1) {
-      const [data, err]: any = await this.http.api_workspaceGetInfo({ workspaceID: workspace.id });
-      if (err) {
-        return;
-      }
-      workspace = data;
-    }
+  async changeWorkspace(workspaceID: number = -1) {
     // * real set workspace
-    this.store.setCurrentWorkspaceID(workspace.id);
+    this.store.setCurrentWorkspaceID(workspaceID);
     this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
-    await this.updateProjects(workspace.id);
+    await this.updateProjects(workspaceID);
     await this.router.navigate(['**']);
     if (this.store.getProjectList.length === 0) {
-      await this.router.navigate(['/home/workspace/project/list']);
+      this.router.navigate(['/home/workspace/project/list']);
     } else {
       // * refresh view
-      await this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspaceID } });
+      this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspaceID } });
     }
+  }
+  async updateWorkspaces() {
+    const [list, wErr]: any = await this.http.api_workspaceList({});
+    if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} });
+        if (this.store.isLogin) {
+          return;
+        }
+        this.message.send({ type: 'http-401', data: {} });
+      }
+      //* Switch store to local workspace
+      this.store.setWorkspaceList([]);
+      this.updateProjects(this.store.getCurrentWorkspaceID);
+      return;
+    }
+    this.store.setWorkspaceList(list);
   }
   async updateProjects(workspaceID) {
     return new Promise(resolve => {
       // * real set workspace
+      console.log('projectBulkLoad', this.store.isLocal, workspaceID);
       this.storage.run('projectBulkLoad', [workspaceID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           this.store.setProjectList(result.data);

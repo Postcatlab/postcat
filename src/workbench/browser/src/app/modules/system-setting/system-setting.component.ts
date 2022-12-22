@@ -29,7 +29,7 @@ export class SystemSettingComponent {
     },
     {
       title: $localize`:@@Cloud:Cloud Storage`,
-      id: 'common',
+      id: 'data-storage',
       comp: DataStorageComponent,
       ifShow: () => !this.webService.isWeb
     },

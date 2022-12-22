@@ -9,7 +9,7 @@ import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'eo-select-workspace',
-  template: ` <a eo-ng-dropdown nzTrigger="click" [nzDropdownMenu]="workspaceMenu">
+  template: ` <a eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
       {{ store.getCurrentWorkspace?.title }}
       <eo-iconpark-icon name="down"></eo-iconpark-icon>
     </a>
@@ -29,20 +29,20 @@ import { ModalService } from '../../../shared/services/modal.service';
             <eo-iconpark-icon name="plus"></eo-iconpark-icon>
           </button>
         </div>
-        <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace)">
-          <p class="text-tips px-[20px]" i18n>LOCAL</p>
-          <li class="px-[20px]" [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }" nz-menu-item>
+        <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.id)">
+          <p class="workspace-title text-tips" i18n>LOCAL</p>
+          <li class="workspace-item" [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }" nz-menu-item>
             <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
           >
         </div>
-        <nz-divider class="m-0"></nz-divider>
+        <nz-divider class="mt-[10px]"></nz-divider>
         <div class="my-[10px]">
-          <p class="text-tips px-[20px]" i18n>CLOUD</p>
+          <p class="workspace-title text-tips" i18n>CLOUD</p>
           <p i18n *ngIf="!cloudWorkspaces.length" class="text-tips px-base mt-[10px] mx-[5px] text-[12px]">No cloud worspace</p>
           <li
-            class="px-[20px] flex justify-between"
+            class="workspace-item flex justify-between"
             nz-menu-item
-            (click)="changeWorkspace(item)"
+            (click)="changeWorkspace(item.id)"
             [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === item.id }"
             *ngFor="let item of cloudWorkspaces"
           >
@@ -51,7 +51,7 @@ import { ModalService } from '../../../shared/services/modal.service';
               <span class="truncate mw-[250px]"> {{ item.title }}</span>
             </div>
             <div>
-              <button eo-ng-button nzType="text" (click)="openSetting($event, item)"
+              <button nzSize="small" eo-ng-button nzType="text" (click)="openSetting($event, item)"
                 ><eo-iconpark-icon name="setting"> </eo-iconpark-icon>
               </button>
             </div>
@@ -61,6 +61,16 @@ import { ModalService } from '../../../shared/services/modal.service';
     </eo-ng-dropdown-menu>`,
   styles: [
     `
+      .workspace-title {
+        padding: 0 10px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .workspace-item {
+        padding: 0 20px;
+        height: 30px;
+      }
       .active-item {
         color: var(--MAIN_THEME_COLOR);
       }
@@ -99,8 +109,8 @@ export class SelectWorkspaceComponent {
       withoutFooter: true
     });
   }
-  changeWorkspace(item) {
-    this.effect.changeWorkspace(item);
+  changeWorkspace(workspaceID) {
+    this.effect.changeWorkspace(workspaceID);
   }
   addWorkspace() {
     this.dataSourceService.checkRemoteCanOperate(() => {

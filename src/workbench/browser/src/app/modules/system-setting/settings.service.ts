@@ -5,7 +5,7 @@ export const LOCAL_SETTINGS_KEY = 'LOCAL_SETTINGS_KEY';
 export const getSettings = () => {
   try {
     let result = JSON.parse(localStorage.getItem(LOCAL_SETTINGS_KEY) || '{}');
-    //TODO Compatible code,Delete at 2023.01.01
+    //TODO Compatible with old version,,Delete at 2023.01.01
     const MUI = {
       'eoapi-common.remoteServer.url': 'backend.url',
       'eoapi-language': 'system.language'

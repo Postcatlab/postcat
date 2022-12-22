@@ -39,7 +39,7 @@ export class WorkspaceDeleteComponent {
         }
         this.message.success($localize`Delete success !`);
         if (this.store.getCurrentWorkspaceID === this.model.id) {
-          await this.effect.changeWorkspace(this.store.getLocalWorkspace);
+          await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
         } else {
           this.modalRef.close();
         }

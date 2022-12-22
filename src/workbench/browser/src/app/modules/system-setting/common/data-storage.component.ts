@@ -79,17 +79,16 @@ export class DataStorageComponent implements OnInit {
       ...this.validateForm.value
     };
     const isSuccess = await this.dataSource.pingCloudServerUrl(this.validateForm.value['backend.url']);
-    this.messageS.send({ type: 'workspaceChange', data: {} });
     if (isSuccess) {
       this.message.success($localize`Successfully connect to cloud`);
       StorageUtil.set('IS_SHOW_DATA_SOURCE_TIP', 'false');
       //Relogin to update user info
       this.messageS.send({ type: 'login', data: {} });
       this.saveConf();
+      this.messageS.send({ type: 'close-setting', data: {} });
     } else {
       this.message.error($localize`Failed to connect`);
     }
-    this.messageS.send({ type: 'close-setting', data: {} });
   }
 
   async updateDataSource() {}

@@ -3,7 +3,7 @@ window.pcConsole = {
     console.log('%c EO_LOG: ', 'background-color:#2a4073; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
   },
   warn(...args) {
-    console.warn('%c EO_WARN:', 'background-color:#ffd900;color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
+    console.warn('%c EO_WARN:', 'background-color:#ffd900;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
   },
   error(...args) {
     console.error(

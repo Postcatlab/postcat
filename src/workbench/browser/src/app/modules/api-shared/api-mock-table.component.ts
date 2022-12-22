@@ -69,8 +69,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
                 nzComponentParams: {
                   model: item.data,
                   isEdit: false
-                },
-                onlyCancel: true
+                }
               });
             }
           },
