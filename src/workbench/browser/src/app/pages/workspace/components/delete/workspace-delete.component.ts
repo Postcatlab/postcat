@@ -9,10 +9,10 @@ import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-delete',
-  template: `<p
+  template: `<p i18n
       >Delete Workspace <b>{{ model?.title }}</b> will clean all the data，this action can not be recovered！</p
     >
-    <button nz-popconfirm class="mt-[15px]" eo-ng-button nzDanger (click)="delete()" type="submit">Delete Workspace</button>`
+    <button nz-popconfirm class="mt-[15px]" eo-ng-button nzDanger (click)="delete()" type="submit" i18n>Delete Workspace</button>`
 })
 export class WorkspaceDeleteComponent {
   @Input() model: API.Workspace;
@@ -26,7 +26,7 @@ export class WorkspaceDeleteComponent {
   ) {}
   delete() {
     this.modal.confirm({
-      nzTitle: 'Are you sure delete this workspace?',
+      nzTitle: $localize`Are you sure delete this workspace?`,
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: async () => {

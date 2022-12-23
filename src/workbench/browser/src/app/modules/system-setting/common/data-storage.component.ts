@@ -79,6 +79,7 @@ export class DataStorageComponent implements OnInit {
       ...this.validateForm.value
     };
     const isSuccess = await this.dataSource.pingCloudServerUrl(this.validateForm.value['backend.url']);
+    console.log(isSuccess);
     if (isSuccess) {
       this.message.success($localize`Successfully connect to cloud`);
       StorageUtil.set('IS_SHOW_DATA_SOURCE_TIP', 'false');

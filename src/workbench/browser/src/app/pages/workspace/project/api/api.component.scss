@@ -18,12 +18,6 @@ nz-content {
   }
 }
 
-::ng-deep .eo-env-preview {
-  .ant-popover-inner-content {
-    padding: 0;
-  }
-}
-
 .env-select {
   border-bottom: 1px solid var(--BORDER);
   background-color: var(--MAIN_BG);
@@ -117,5 +111,17 @@ nz-divider {
   .param-box-header {
     padding: 5px 15px;
     box-sizing: border-box;
+  }
+}
+
+::ng-deep {
+  .eo-env-preview {
+    .ant-popover-inner-content {
+      padding: 0;
+    }
+  }
+
+  .env-selector-dropdown {
+    width: 224px;
   }
 }

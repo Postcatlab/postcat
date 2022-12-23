@@ -38,6 +38,9 @@ export class SyncApiComponent implements OnInit {
   }
   async submit(callback) {
     const feature = this.featureMap.get(this.currentExtension);
+    if (!feature) {
+      callback(false);
+    }
     const action = feature.action || null;
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     if (module?.[action] && typeof module[action] === 'function') {
