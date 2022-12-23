@@ -50,7 +50,7 @@
               <span i18n>Request Headers</span>
               <nz-badge *ngIf="bindGetApiParamNum(model.requestHeaders)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
             </ng-template>
-            <eo-api-edit-header tid="requestHeaders" (modelChange)="emitChangeFun()" [model]="model.requestHeaders"> </eo-api-edit-header>
+            <eo-api-edit-header tid="requestHeaders" (modelChange)="emitChangeFun()" [(model)]="model.requestHeaders"> </eo-api-edit-header>
           </eo-ng-tab>
           <!-- Request Body -->
           <eo-ng-tab [nzTitle]="bodyTitleTmp">
@@ -81,14 +81,14 @@
               <span i18n>Query</span>
               <nz-badge *ngIf="bindGetApiParamNum(model.queryParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
             </ng-template>
-            <eo-api-edit-query tid="queryParams" (modelChange)="emitChangeFun()" [model]="model.queryParams"> </eo-api-edit-query>
+            <eo-api-edit-query tid="queryParams" (modelChange)="emitChangeFun()" [(model)]="model.queryParams"> </eo-api-edit-query>
           </eo-ng-tab>
           <eo-ng-tab [nzTitle]="restTitleTmp">
             <ng-template #restTitleTmp>
               <span i18n>REST</span>
               <nz-badge *ngIf="bindGetApiParamNum(model.restParams)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
             </ng-template>
-            <eo-api-edit-rest tid="restParams" [model]="model.restParams" (modelChange)="emitChangeFun()"> </eo-api-edit-rest>
+            <eo-api-edit-rest tid="restParams" [(model)]="model.restParams" (modelChange)="emitChangeFun()"> </eo-api-edit-rest>
           </eo-ng-tab>
         </eo-ng-tabset>
       </nz-collapse-panel>
@@ -102,7 +102,8 @@
               <span i18n>Response Headers</span>
               <nz-badge *ngIf="bindGetApiParamNum(model.responseHeaders)" class="ml-1 ant-badge-theme-color" nzStatus="success"></nz-badge>
             </ng-template>
-            <eo-api-edit-header tid="responseHeaders" [model]="model.responseHeaders" (modelChange)="emitChangeFun()"> </eo-api-edit-header>
+            <eo-api-edit-header tid="responseHeaders" [(model)]="model.responseHeaders" (modelChange)="emitChangeFun()">
+            </eo-api-edit-header>
           </eo-ng-tab>
           <eo-ng-tab [nzTitle]="responseTitleTmp">
             <ng-template #responseTitleTmp>

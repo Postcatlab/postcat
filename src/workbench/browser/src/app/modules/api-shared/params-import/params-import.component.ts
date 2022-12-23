@@ -137,7 +137,7 @@ export class ParamsImportComponent implements OnInit {
     const emptyRow = this.baseData.slice(-1);
     const resultData = cloneDeep(this.baseData.reverse().slice(1).reverse());
     const result = combineFunc[type](json2Table(data), resultData);
-    this.baseDataChange.emit([...result, emptyRow]);
+    this.baseDataChange.emit([...result, ...emptyRow]);
     this.handleCancel();
   }
 }

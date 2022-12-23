@@ -1,11 +1,17 @@
-import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiEditHeaders, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
 @Component({
   selector: 'eo-api-edit-header',
   template: `<div class="param-box-header flex items-center h-10">
-      <params-import [(baseData)]="model" contentType="header" i18n-modalTitle="@@Header" modalTitle="Header"></params-import>
+      <params-import
+        [(baseData)]="model"
+        (baseDataChange)="changeFn($event)"
+        contentType="header"
+        i18n-modalTitle="@@Header"
+        modalTitle="Header"
+      ></params-import>
     </div>
     <eo-ng-table-pro
       [columns]="listConf.columns"
@@ -32,10 +38,13 @@ export class ApiEditHeaderComponent implements OnInit {
     example: '',
     description: ''
   };
-  constructor(private apiTable: ApiTableService, private cdRef: ChangeDetectorRef) {}
+  constructor(private apiTable: ApiTableService) {}
 
   ngOnInit(): void {
     this.initListConf();
+  }
+  changeFn($event) {
+    this.modelChange.emit(this.model);
   }
   private initListConf() {
     const config = this.apiTable.initTable(
