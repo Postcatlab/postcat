@@ -44,11 +44,7 @@ export class StoreService {
 
   // ? user && auth
   @observable private userProfile = StorageUtil.get('userProfile') || null;
-  @observable.shallow private authEnum = {
-    canEdit: false,
-    canDelete: false,
-    canCreate: false
-  };
+
   @observable.shallow private loginInfo = {
     accessToken: StorageUtil.get('accessToken') || null,
     refreshToken: StorageUtil.get('refreshToken') || null
@@ -133,9 +129,7 @@ export class StoreService {
     return this.loginInfo;
   }
 
-  @computed get canEdit() {
-    return this.authEnum.canEdit;
-  }
+
 
   // ? setting
   @computed get remoteUrl() {
@@ -150,15 +144,6 @@ export class StoreService {
   constructor(private setting: SettingService, private router: Router, private route: ActivatedRoute, private message: MessageService) {
     makeObservable(this); // don't forget to add this if the class has observable fields
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(this.routeListener);
-    reaction(
-      () => this.getCurrentWorkspace,
-      ({ creatorID }: any) => {
-        if (this.isLocal) {
-          return;
-        }
-        this.authEnum.canEdit = creatorID === this.getUserProfile.id;
-      }
-    );
   }
 
   // * actions
@@ -235,11 +220,6 @@ export class StoreService {
     this.setUserProfile(null);
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
-
-  @action setAuthEnum(data) {
-    this.authEnum = Object.assign(this.authEnum, data);
-  }
-
   // ? UI
   @action toggleRightBar(data = false) {
     this.rightBarStatus = data;

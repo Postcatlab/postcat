@@ -52,7 +52,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
     <section class="py-5 px-10 w-6/12 m-auto">
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Project Members</span
-        ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()" i18n> + Add </button>
+        ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()" i18n>
+          <eo-iconpark-icon name="plus"></eo-iconpark-icon> Add
+        </button>
       </h2>
       <section class="py-5">
         <eo-manage-access [data]="memberList" (eoOnRemove)="e97uoiuCallback($event)"></eo-manage-access>

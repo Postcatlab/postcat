@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { autorun } from 'mobx';
 
 type UserMeta = {
   username: string;
   roleName: string;
   email: string;
   mobilePhone: string;
+  permissions: string[];
 };
 
 @Component({
@@ -17,15 +19,25 @@ export class ManageAccessComponent {
   @Input() data: UserMeta[] = [];
   @Input() loading = false;
   @Output() readonly eoOnRemove = new EventEmitter<UserMeta>();
-  searchValue: string;
-  constructor(public store: StoreService) {}
-  get seachMember() {
-    if (!this.searchValue) {
-      return this.data;
-    }
-    const searchText = this.searchValue.toLocaleLowerCase();
-    return this.data.filter(val => val.username.toLocaleLowerCase().includes(searchText));
+  // memberList = []
+
+  // autorun(() => {
+  //   this.memberList = this.data?.map(({ permissions = [], ...it }) => ({
+  //     ...it,
+  //     permissions,
+  //     isDelete: permissions.includes('delete:project')
+  //   }));
+  // })
+
+  get memberList() {
+    return this.data?.map(({ permissions = [], ...it }) => ({
+      ...it,
+      permissions,
+      isDelete: permissions.includes('delete:project')
+    }));
   }
+
+  constructor(public store: StoreService) {}
 
   handleRemove(item: UserMeta) {
     this.eoOnRemove.emit(item);
