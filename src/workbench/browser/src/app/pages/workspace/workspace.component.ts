@@ -18,7 +18,7 @@ export class WorkspaceComponent implements OnInit {
     if (this.store.getCurrentWorkspaceID !== wid) {
       this.effect.changeWorkspace(wid);
       this.store.setCurrentProjectID(pid);
-    } else if (this.store.getCurrentProjectID !== pid) {
+    } else if (this.store.getCurrentProjectID !== pid && pid) {
       this.effect.changeProject(pid);
     }
   }

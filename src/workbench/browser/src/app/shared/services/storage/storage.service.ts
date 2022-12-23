@@ -45,7 +45,7 @@ export class StorageService {
         callback(handleResult);
       },
       (error: any) => {
-        console.log('EOERROR:', action, error);
+        console.log('EOERROR:', action);
         handleResult.status = StorageResStatus.error;
         handleResult.error = error;
         callback(handleResult);

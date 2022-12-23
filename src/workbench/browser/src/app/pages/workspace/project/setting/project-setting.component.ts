@@ -83,7 +83,7 @@ export class ProjectSettingComponent implements OnInit {
   }
   private delete() {
     const modal = this.modalService.confirm({
-      nzTitle: 'Are you sure delete this project?',
+      nzTitle: $localize`Are you sure delete this project?`,
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: () => {

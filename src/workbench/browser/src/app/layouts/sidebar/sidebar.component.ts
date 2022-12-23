@@ -69,10 +69,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
   watchInstalledExtensionsChange() {
     this.messageService.get().subscribe((inArg: Message) => {
       if (inArg.type === 'installedExtensionsChange') {
+        if (!this.sidebar.visible) return;
         const extensionIDs = Array.isArray(inArg.data) ? inArg.data.map(n => n.name) : [...inArg.data.keys()];
         this.modules = this.modules.filter(n => n.id.startsWith('@eo-core') || extensionIDs.includes(n.id));
         this.initSidebarViews();
         if (!this.modules.some(val => this.router.url.includes(val.activeRoute))) {
+          pcConsole.warn('sidebar activeRoute not found, redirect to home');
           this.router.navigate(['/home/workspace/project/api']);
         }
       }
