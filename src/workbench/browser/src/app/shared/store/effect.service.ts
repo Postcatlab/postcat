@@ -126,14 +126,14 @@ export class EffectService {
       this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
     }
     // * update workspace role
-    {
-      const [data, err]: any = await this.http.api_workspaceRoleList({ workspaceID: this.store.getCurrentWorkspaceID });
-      if (err) {
-        return;
-      }
-      console.log('workspace role list', data);
-      this.store.setRole(data, 'workspace');
-    }
+    // {
+    //   const [data, err]: any = await this.http.api_workspaceRoleList({ workspaceID: this.store.getCurrentWorkspaceID });
+    //   if (err) {
+    //     return;
+    //   }
+    //   console.log('workspace role list', data);
+    //   this.store.setRole(data, 'workspace');
+    // }
     {
       // * update workspace auth
       const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
@@ -141,7 +141,8 @@ export class EffectService {
         return;
       }
       console.log('workspace permission list', data);
-      this.store.setAuthMap(data, 'workspace');
+      this.store.setAuthMap(data.permissions, 'workspace');
+      this.store.setRole(data.role.name, 'workspace');
     }
   }
   async changeProject(pid) {

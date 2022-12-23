@@ -16,13 +16,15 @@ import { StoreService } from '../../../../shared/store/state.service';
         i18n-placeholder
         placeholder="Search by username"
         [(ngModel)]="userCache"
-        nzMode="multiple"
         (nzOnSearch)="handleChange($event)"
       >
         <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
-          <div class="flex w-full justify-between">
-            <span class="font-bold">{{ option.username }}</span>
-            <span class="text-tips">{{ option.email }}</span>
+          <div class="flex w-full justify-between option">
+            <div class="flex flex-col justify-between">
+              <span class="font-bold">{{ option.username }}</span>
+              <span class="text-tips">{{ option.email }}</span>
+            </div>
+            <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add Workspace</button>
           </div>
         </eo-ng-option>
       </eo-ng-select>
@@ -123,7 +125,7 @@ export class WorkspaceMemberComponent implements OnInit {
   async addMember(items) {
     await this.remote.api_workspaceAddMember({
       workspaceID: this.store.getCurrentWorkspaceID,
-      userIDs: items
+      userIDs: [items.id]
     });
     this.queryList();
   }
