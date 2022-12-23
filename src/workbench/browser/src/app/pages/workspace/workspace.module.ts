@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
@@ -36,7 +37,8 @@ import { WorkspaceComponent } from './workspace.component';
     NzFormModule,
     EoSettingModule,
     SharedModule,
-    NzUploadModule
+    NzUploadModule,
+    NzAvatarModule
   ]
 })
 export class WorkspaceModule {

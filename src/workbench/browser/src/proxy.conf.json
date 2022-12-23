@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://localhost:3000",
+    "target": "http://2913z573b8.zicp.fun:20643",
     "secure": false,
     "logLevel": "debug"
   }
