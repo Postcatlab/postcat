@@ -130,7 +130,7 @@ export class AccountComponent implements OnInit {
         }
         return;
       }
-      const [pData, pErr]: any = await this.api.api_userReadProfile(null);
+      const [pData, pErr]: any = await this.api.api_userReadProfile({});
       if (pErr) {
         if (pErr.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
