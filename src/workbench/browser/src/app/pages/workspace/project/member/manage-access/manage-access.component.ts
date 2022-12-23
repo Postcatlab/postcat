@@ -19,6 +19,7 @@ export class ManageAccessComponent {
   @Input() data: UserMeta[] = [];
   @Input() loading = false;
   @Output() readonly eoOnRemove = new EventEmitter<UserMeta>();
+
   // memberList = []
 
   // autorun(() => {
@@ -28,14 +29,14 @@ export class ManageAccessComponent {
   //     isDelete: permissions.includes('delete:project')
   //   }));
   // })
-
-  get memberList() {
-    return this.data?.map(({ permissions = [], ...it }) => ({
-      ...it,
-      permissions,
-      isDelete: permissions.includes('delete:project')
-    }));
-  }
+  memberList = [];
+  // get memberList() {
+  //   return this.data?.map(({ permissions = [], ...it }) => ({
+  //     ...it,
+  //     permissions,
+  //     isDelete: permissions.includes('delete:project')
+  //   }));
+  // }
 
   constructor(public store: StoreService) {}
 

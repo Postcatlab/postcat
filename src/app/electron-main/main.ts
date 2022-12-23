@@ -21,7 +21,7 @@ export const subView = {
 };
 const windowConfig = {
   width: 1280,
-  height: 680
+  height: 700
 };
 const store = new Store();
 
@@ -110,8 +110,6 @@ class EoBrowserWindow {
   public create(): BrowserWindow {
     // Create the browser window.
     const opts = {
-      width: 1280,
-      height: 680,
       useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
       frame: os.type() === 'Darwin' ? true : false, //mac use default frame
       webPreferences: {

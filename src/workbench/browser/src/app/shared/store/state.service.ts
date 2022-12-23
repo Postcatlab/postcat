@@ -52,6 +52,10 @@ export class StoreService {
 
   // ? UI
   @observable private rightBarStatus = false;
+  @observable role = {
+    workspace: 'editor',
+    project: 'admin'
+  };
 
   // * computed data
 
@@ -128,8 +132,6 @@ export class StoreService {
   @computed get getLoginInfo() {
     return this.loginInfo;
   }
-
-
 
   // ? setting
   @computed get remoteUrl() {
