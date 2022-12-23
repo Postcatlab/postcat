@@ -54,7 +54,7 @@
       </eo-ng-tab>
       <!-- Details -->
       <eo-ng-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
-        <div class="h-full overflow-auto tab-content-container">
+        <div class="h-full overflow-auto tab-content-container pt-[10px]">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
             <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }"> </eo-shadow-dom>
           </nz-skeleton>
