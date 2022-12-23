@@ -1,0 +1,9 @@
+::ng-deep {
+  .ant-list-items {
+    .ant-list-item {
+      @apply px-[10px] rounded-[3px];
+
+      border: 1px solid transparent;
+    }
+  }
+}
