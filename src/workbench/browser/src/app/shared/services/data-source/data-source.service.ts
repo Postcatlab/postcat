@@ -12,7 +12,7 @@ import StorageUtil from '../../../utils/storage/Storage';
 /**
  * Client need min fontend version
  */
-const minFontendVersion = '2.0.0';
+const minFontendVersion = '1.10.0';
 /**
  * @description
  * A message queue global send and get message
@@ -55,7 +55,9 @@ export class DataSourceService {
         this.lowLevelTipsHasShow = true;
         this.modal.warning({
           nzTitle: $localize`The version of the cloud service is too low`,
-          nzContent: $localize`Requires cloud service at least version ${minFontendVersion}.<br>Please update the local version to the latest version,<a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
+          nzContent:
+            $localize`Requires cloud service at least version ${minFontendVersion}.<br>` +
+            $localize`Please update the local version to the latest version <a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
         });
         return true;
       }
