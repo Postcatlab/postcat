@@ -96,12 +96,12 @@ const generateEoExcuteSnippet = bodyType => {
       "timelimit": 1000 //${localizes.timelimit}
   };
   //${localizes.execute}
-  var ${variables.id}_api_demo_1_result = eo.execute(${variables.id}_api_demo_1);
+  var ${variables.id}_api_demo_1_result = pc.execute(${variables.id}_api_demo_1);
   //${localizes.assert}
   if (${variables.id}_api_demo_1_result.response !== "") {
-      eo.info("info_1"); //${localizes.info}
+      pc.info("info_1"); //${localizes.info}
   } else {
-      eo.stop("info_2"); //${localizes.infoError}
+      pc.stop("info_2"); //${localizes.infoError}
   }`;
   return result;
 };
@@ -118,20 +118,20 @@ const COMMON_DATA: TreeNode[] = [
     children: [
       {
         name: $localize`Set an global variable`,
-        caption: 'eo.globals.set',
-        value: 'eo.globals.set("param_key","param_value");',
+        caption: 'pc.globals.set',
+        value: 'pc.globals.set("param_key","param_value");',
         note: {
-          code: 'eo.http.response.get()',
+          code: 'pc.http.response.get()',
           desc: $localize`Set an global variable`,
           input: [...commonInputs]
         }
       },
       {
         name: $localize`Get an global variable`,
-        caption: 'eo.globals.get',
-        value: 'eo.globals.get("param_key");',
+        caption: 'pc.globals.get',
+        value: 'pc.globals.get("param_key");',
         note: {
-          code: 'eo.globals.get("param_key")',
+          code: 'pc.globals.get("param_key")',
           desc: $localize`Get an global variable`,
           input: [commonInputs[0]],
           output: $localize`Global Varibale Value`
@@ -139,20 +139,20 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Clear an global variable`,
-        caption: 'eo.globals.unset',
-        value: 'eo.globals.unset("param_key");',
+        caption: 'pc.globals.unset',
+        value: 'pc.globals.unset("param_key");',
         note: {
-          code: 'eo.globals.unset("param_key")',
+          code: 'pc.globals.unset("param_key")',
           desc: $localize`Clear an global variable`,
           input: [commonInputs[0]]
         }
       },
       {
         name: $localize`Clear all global variable`,
-        caption: 'eo.globals.clear',
-        value: 'eo.globals.clear()',
+        caption: 'pc.globals.clear',
+        value: 'pc.globals.clear()',
         note: {
-          code: 'eo.globals.clear()',
+          code: 'pc.globals.clear()',
           desc: $localize`Clear all global variable`
         }
       }
@@ -163,10 +163,10 @@ const COMMON_DATA: TreeNode[] = [
     children: [
       {
         name: $localize`JSON Encode`,
-        caption: 'eo.json.encode',
-        value: 'eo.json.encode(json_object)',
+        caption: 'pc.json.encode',
+        value: 'pc.json.encode(json_object)',
         note: {
-          code: 'eo.json.encode(json_object)',
+          code: 'pc.json.encode(json_object)',
           desc: $localize`JSON Encode`,
           input: [{ key: 'json_object', value: $localize`JSON object` }],
           output: $localize`JSON string`
@@ -174,10 +174,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`JSON Decode`,
-        caption: 'eo.json.decode',
-        value: 'eo.json.decode(json)',
+        caption: 'pc.json.decode',
+        value: 'pc.json.decode(json)',
         note: {
-          code: 'eo.json.decode(json)',
+          code: 'pc.json.decode(json)',
           desc: $localize`JSON Decode`,
           input: [{ key: 'json', value: $localize`JSON string` }],
           output: $localize`JSON object`
@@ -185,10 +185,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`XML Encode`,
-        caption: 'eo.xml.encode',
-        value: 'eo.xml.encode(xml_object)',
+        caption: 'pc.xml.encode',
+        value: 'pc.xml.encode(xml_object)',
         note: {
-          code: 'eo.xml.encode(xml_object)',
+          code: 'pc.xml.encode(xml_object)',
           desc: $localize`XML Encode`,
           input: [{ key: 'xml_object', value: $localize`XML object` }],
           output: $localize`XML string`
@@ -196,10 +196,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`XML Decode`,
-        caption: 'eo.xml.decode',
-        value: 'eo.xml.decode(xml)',
+        caption: 'pc.xml.decode',
+        value: 'pc.xml.decode(xml)',
         note: {
-          code: 'eo.xml.decode(xml)',
+          code: 'pc.xml.decode(xml)',
           desc: $localize`XML Decode`,
           input: [{ key: 'xml', value: $localize`XML string` }],
           output: $localize`XML code`
@@ -207,10 +207,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Base64 Encode`,
-        caption: 'eo.base64.encode',
-        value: 'eo.base64.encode(data)',
+        caption: 'pc.base64.encode',
+        value: 'pc.base64.encode(data)',
         note: {
-          code: 'eo.base64.encode(data)',
+          code: 'pc.base64.encode(data)',
           desc: $localize`Base64 Encode`,
           input: [{ key: 'data', value: $localize`string of wait for encode` }],
           output: $localize`string after encode`
@@ -218,10 +218,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Base64 Decode`,
-        caption: 'eo.base64.decode',
-        value: 'eo.base64.decode(data)',
+        caption: 'pc.base64.decode',
+        value: 'pc.base64.decode(data)',
         note: {
-          code: 'eo.base64.decode(data)',
+          code: 'pc.base64.decode(data)',
           desc: $localize`Base64 Decode`,
           input: [{ key: 'data', value: $localize`string of wait for decode` }],
           output: $localize`string after decode`
@@ -229,10 +229,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`UrlEncode Encode`,
-        caption: 'eo.urlEncode',
-        value: 'eo.urlEncode(data)',
+        caption: 'pc.urlEncode',
+        value: 'pc.urlEncode(data)',
         note: {
-          code: 'eo.urlEncode(data)',
+          code: 'pc.urlEncode(data)',
           desc: $localize`UrlEncode Encode`,
           input: [{ key: 'data', value: $localize`string of wait for encode` }],
           output: $localize`string after encode`
@@ -240,10 +240,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`UrlEncode Decode`,
-        caption: 'eo.urlDecode',
-        value: 'eo.urlDecode(data)',
+        caption: 'pc.urlDecode',
+        value: 'pc.urlDecode(data)',
         note: {
-          code: 'eo.urlDecode(data)',
+          code: 'pc.urlDecode(data)',
           desc: $localize`UrlEncode Decode`,
           input: [{ key: 'data', value: $localize`string of wait for decode` }],
           output: $localize`string after decode`
@@ -251,10 +251,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Gzip zip`,
-        caption: 'eo.gzip.zip',
-        value: 'eo.gzip.zip(data)',
+        caption: 'pc.gzip.zip',
+        value: 'pc.gzip.zip(data)',
         note: {
-          code: 'eo.gzip.zip(data)',
+          code: 'pc.gzip.zip(data)',
           desc: $localize`Gzip zip`,
           input: [{ key: 'data', value: $localize`string of wait for zip` }],
           output: $localize`string after zip`
@@ -262,10 +262,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Gzip unzip`,
-        caption: 'eo.gzip.unzip',
-        value: 'eo.gzip.unzip(data)',
+        caption: 'pc.gzip.unzip',
+        value: 'pc.gzip.unzip(data)',
         note: {
-          code: 'eo.gzip.unzip(data)',
+          code: 'pc.gzip.unzip(data)',
           desc: $localize`Gzip unzip`,
           input: [{ key: 'data', value: $localize`string of wait for unzip` }],
           output: $localize`string after unzip`
@@ -273,10 +273,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Deflate zip`,
-        caption: 'eo.deflate.zip',
-        value: 'eo.deflate.zip(data)',
+        caption: 'pc.deflate.zip',
+        value: 'pc.deflate.zip(data)',
         note: {
-          code: 'eo.deflate.zip(data)',
+          code: 'pc.deflate.zip(data)',
           desc: $localize`Deflate zip`,
           input: [{ key: 'data', value: $localize`string of wait for zip` }],
           output: $localize`string after zip`
@@ -284,10 +284,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`Deflate unzip`,
-        caption: 'eo.deflate.unzip',
-        value: 'eo.deflate.unzip(data)',
+        caption: 'pc.deflate.unzip',
+        value: 'pc.deflate.unzip(data)',
         note: {
-          code: 'eo.deflate.unzip(data)',
+          code: 'pc.deflate.unzip(data)',
           desc: $localize`Deflate unzip`,
           input: [{ key: 'data', value: $localize`string of wait for unzip` }],
           output: $localize`string after unzip`
@@ -300,10 +300,10 @@ const COMMON_DATA: TreeNode[] = [
     children: [
       {
         name: `MD5`,
-        caption: 'eo.crypt.md5',
-        value: 'eo.crypt.md5(data)',
+        caption: 'pc.crypt.md5',
+        value: 'pc.crypt.md5(data)',
         note: {
-          code: 'eo.crypt.md5(data)',
+          code: 'pc.crypt.md5(data)',
           desc: $localize`MD5 Encryption`,
           input: [
             {
@@ -316,10 +316,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`SHA1 Encryption`,
-        caption: 'eo.crypt.sha1',
-        value: 'eo.crypt.sha1(data)',
+        caption: 'pc.crypt.sha1',
+        value: 'pc.crypt.sha1(data)',
         note: {
-          code: 'eo.crypt.sha1(data)',
+          code: 'pc.crypt.sha1(data)',
           desc: $localize`SHA1 Encryption`,
           input: [
             {
@@ -332,10 +332,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`SHA256 Encryption`, // SHA256 加密
-        caption: 'eo.crypt.sha256',
-        value: 'eo.crypt.sha256(data)',
+        caption: 'pc.crypt.sha256',
+        value: 'pc.crypt.sha256(data)',
         note: {
-          code: 'eo.crypt.sha256(data)',
+          code: 'pc.crypt.sha256(data)',
           desc: $localize`SHA256 Encryption`,
           input: [
             {
@@ -348,10 +348,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`RSA-SHA1 Signature`,
-        caption: 'eo.crypt.rsaSHA1',
-        value: 'eo.crypt.rsaSHA1(data,privateKey,"base64")',
+        caption: 'pc.crypt.rsaSHA1',
+        value: 'pc.crypt.rsaSHA1(data,privateKey,"base64")',
         note: {
-          code: 'eo.crypt.rsaSHA1(data,privateKey,"base64")',
+          code: 'pc.crypt.rsaSHA1(data,privateKey,"base64")',
           desc: $localize`RSA-SHA1 Signature`,
           input: [
             {
@@ -372,10 +372,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`RSA-SHA256 Signature`, // RSA-SHA256 签名
-        caption: 'eo.crypt.rsaSHA256',
-        value: 'eo.crypt.rsaSHA256(data,privateKey,"base64")',
+        caption: 'pc.crypt.rsaSHA256',
+        value: 'pc.crypt.rsaSHA256(data,privateKey,"base64")',
         note: {
-          code: 'eo.crypt.rsaSHA256(data,privateKey,"base64")',
+          code: 'pc.crypt.rsaSHA256(data,privateKey,"base64")',
           desc: $localize`RSA-SHA256 Signature`,
           input: [
             {
@@ -396,10 +396,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`RSA Public Key Encryption`, // RSA 公钥加密
-        caption: 'eo.crypt.rsaPublicEncrypt',
-        value: 'eo.crypt.rsaPublicEncrypt(data,publicKey,"base64")',
+        caption: 'pc.crypt.rsaPublicEncrypt',
+        value: 'pc.crypt.rsaPublicEncrypt(data,publicKey,"base64")',
         note: {
-          code: 'eo.crypt.rsaPublicEncrypt(data,publicKey,"base64")',
+          code: 'pc.crypt.rsaPublicEncrypt(data,publicKey,"base64")',
           desc: $localize`RSA Public Key Encryption`,
           input: [
             {
@@ -420,10 +420,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`RSA Public Key Dencryption`, // RSA 公钥解密
-        caption: 'eo.crypt.rsaPublicDecrypt',
-        value: 'eo.crypt.rsaPublicDecrypt(data,publicKey,"base64")',
+        caption: 'pc.crypt.rsaPublicDecrypt',
+        value: 'pc.crypt.rsaPublicDecrypt(data,publicKey,"base64")',
         note: {
-          code: 'eo.crypt.rsaPublicDecrypt(data,publicKey,"base64")',
+          code: 'pc.crypt.rsaPublicDecrypt(data,publicKey,"base64")',
           desc: $localize`RSA Public Key Dencryption`,
           input: [
             {
@@ -444,10 +444,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`RSA Private Key Encryption`, // RSA 私钥加密
-        caption: 'eo.crypt.rsaPrivateEncrypt',
-        value: 'eo.crypt.rsaPrivateEncrypt(data,privateKey,"base64")',
+        caption: 'pc.crypt.rsaPrivateEncrypt',
+        value: 'pc.crypt.rsaPrivateEncrypt(data,privateKey,"base64")',
         note: {
-          code: 'eo.crypt.rsaPrivateEncrypt(data,privateKey,"base64")',
+          code: 'pc.crypt.rsaPrivateEncrypt(data,privateKey,"base64")',
           desc: $localize`RSA Private Key Encryption`,
           input: [
             {
@@ -468,10 +468,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`RSA Private Key Encryption`, // RSA 私钥解密
-        caption: 'eo.crypt.rsaPrivateDecrypt',
-        value: 'eo.crypt.rsaPrivateDecrypt(data,privateKey,"base64")',
+        caption: 'pc.crypt.rsaPrivateDecrypt',
+        value: 'pc.crypt.rsaPrivateDecrypt(data,privateKey,"base64")',
         note: {
-          code: 'eo.crypt.rsaPrivateDecrypt(data,privateKey,"base64")',
+          code: 'pc.crypt.rsaPrivateDecrypt(data,privateKey,"base64")',
           desc: $localize`RSA Private Key Encryption`,
           input: [
             {
@@ -492,10 +492,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`AES Encryption`, // AES 加密
-        caption: 'eo.crypt.aesEncrypt',
-        value: 'eo.crypt.aesEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        caption: 'pc.crypt.aesEncrypt',
+        value: 'pc.crypt.aesEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
         note: {
-          code: 'eo.crypt.aesEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          code: 'pc.crypt.aesEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
           desc: $localize`AES Encryption`,
           input: [
             {
@@ -524,10 +524,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`AES Dencryption`, // AES 解密
-        caption: 'eo.crypt.aesDecrypt',
-        value: 'eo.crypt.aesDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        caption: 'pc.crypt.aesDecrypt',
+        value: 'pc.crypt.aesDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
         note: {
-          code: 'eo.crypt.aesDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          code: 'pc.crypt.aesDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
           desc: $localize`AES Dencryption`,
           input: [
             {
@@ -556,10 +556,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`DES Encryption`, // DES 加密
-        caption: 'eo.crypt.desEncrypt',
-        value: 'eo.crypt.desEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        caption: 'pc.crypt.desEncrypt',
+        value: 'pc.crypt.desEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
         note: {
-          code: 'eo.crypt.desEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          code: 'pc.crypt.desEncrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
           desc: $localize`DES Encryption`,
           input: [
             {
@@ -588,10 +588,10 @@ const COMMON_DATA: TreeNode[] = [
       },
       {
         name: $localize`DES Dencryption`, // DES 解密
-        caption: 'eo.crypt.desDecrypt',
-        value: 'eo.crypt.desDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+        caption: 'pc.crypt.desDecrypt',
+        value: 'pc.crypt.desDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
         note: {
-          code: 'eo.crypt.desDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
+          code: 'pc.crypt.desDecrypt(data,password,{"padding":"Pkcs7","mode":"CBC","iv":""})',
           desc: $localize`DES Dencryption`,
           input: [
             {
@@ -628,20 +628,20 @@ export const BEFORE_DATA: TreeNode[] = [
     children: [
       {
         name: $localize`Set Request URL`,
-        caption: 'eo.http.url.set',
-        value: 'eo.http.url.set("new_url")',
+        caption: 'pc.http.url.set',
+        value: 'pc.http.url.set("new_url")',
         note: {
-          code: 'eo.http.url.set("new_url")',
+          code: 'pc.http.url.set("new_url")',
           desc: $localize`Set HTTP API request path`,
           input: [{ key: 'new_url', value: $localize`new url` }]
         }
       },
       {
         name: $localize`Set Header`,
-        caption: 'eo.http.header.set',
-        value: 'eo.http.header.set("param_key","param_value")',
+        caption: 'pc.http.header.set',
+        value: 'pc.http.header.set("param_key","param_value")',
         note: {
-          code: 'eo.http.header.set("param_key","param_value")',
+          code: 'pc.http.header.set("param_key","param_value")',
           desc: $localize`Set HTTP API request header params`,
           input: [
             { key: 'param_key', value: $localize`params name` },
@@ -652,21 +652,21 @@ export const BEFORE_DATA: TreeNode[] = [
 
       {
         name: $localize`Request body[Form-data]`,
-        caption: 'eo.http.bodyParseParam',
-        value: 'eo.http.bodyParseParam'
+        caption: 'pc.http.bodyParseParam',
+        value: 'pc.http.bodyParseParam'
       },
 
       {
         name: $localize`Request body[Raw]`,
-        caption: 'eo.http.bodyParam',
-        value: 'eo.http.bodyParam'
+        caption: 'pc.http.bodyParam',
+        value: 'pc.http.bodyParam'
       },
       {
         name: $localize`Set REST params`,
-        caption: 'eo.http.rest.set',
-        value: 'eo.http.rest.set("param_key","param_value")',
+        caption: 'pc.http.rest.set',
+        value: 'pc.http.rest.set("param_key","param_value")',
         note: {
-          code: 'eo.http.rest.set("param_key","param_value")',
+          code: 'pc.http.rest.set("param_key","param_value")',
           desc: $localize`Set HTTP API REST params`,
           input: [
             { key: 'param_key', value: $localize`params name` },
@@ -676,10 +676,10 @@ export const BEFORE_DATA: TreeNode[] = [
       },
       {
         name: $localize`Set Query params`,
-        caption: 'eo.http.query.set',
-        value: 'eo.http.query.set("param_key","param_value")',
+        caption: 'pc.http.query.set',
+        value: 'pc.http.query.set("param_key","param_value")',
         note: {
-          code: 'eo.http.query.set("param_key","param_value")',
+          code: 'pc.http.query.set("param_key","param_value")',
           desc: $localize`Set HTTP API Query params`,
           input: [
             { key: 'param_key', value: $localize`params name` },
@@ -718,19 +718,19 @@ export const AFTER_DATA: TreeNode[] = [
     children: [
       {
         name: $localize`Get Response Results`,
-        caption: 'eo.http.response.get',
-        value: 'eo.http.response.get();',
+        caption: 'pc.http.response.get',
+        value: 'pc.http.response.get();',
         note: {
-          code: 'eo.http.response.get()',
+          code: 'pc.http.response.get()',
           desc: $localize`Get the response result of the HTTP API`
         }
       },
       {
         name: $localize`Set Response Result`,
-        caption: 'eo.http.response.set',
-        value: 'eo.http.response.set("response_value");',
+        caption: 'pc.http.response.set',
+        value: 'pc.http.response.set("response_value");',
         note: {
-          code: 'eo.http.response.set("response_value")',
+          code: 'pc.http.response.set("response_value")',
           desc: $localize`Set the response result of the HTTP API`,
           input: [{ key: 'response_value', value: $localize`response result` }]
         }

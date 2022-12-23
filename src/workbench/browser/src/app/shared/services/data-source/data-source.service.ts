@@ -4,8 +4,12 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { compareVersion } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
+import StorageUtil from '../../../utils/storage/Storage';
+
+const minFontendVersion = '2.0.0';
 /**
  * @description
  * A message queue global send and get message
@@ -15,7 +19,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 })
 export class DataSourceService {
   isConnectRemote = false;
-
+  lowLevelTipsHasShow = false;
   get remoteServerUrl() {
     return this.settingService.getConfiguration('backend.url');
   }
@@ -39,12 +43,19 @@ export class DataSourceService {
     if (!remoteUrl) {
       return false;
     }
-    const [, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
+    const [data, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
     if (err) {
-      // ! TODO delete the retry
-      const [, nErr]: any = await this.http.api_systemStatus({}, remoteUrl);
-      if (nErr) {
-        this.isConnectRemote = false;
+      this.isConnectRemote = false;
+      return false;
+    } else {
+      StorageUtil.set('server_version', data);
+      if (!this.lowLevelTipsHasShow && compareVersion(data, minFontendVersion) < 0) {
+        if (this.store.isLocal) return;
+        this.lowLevelTipsHasShow = true;
+        this.modal.warning({
+          nzTitle: $localize`The version of the cloud service is too low`,
+          nzContent: $localize`Please update the local version to the latest version,<a i18n href="https://docs.eoapi.io/docs/storage.html#%E6%9C%8D%E5%8A%A1%E5%8D%87%E7%BA%A7" target="_blank" class="eo-link">${$localize`Learn more..`}</a>`
+        });
         return false;
       }
     }

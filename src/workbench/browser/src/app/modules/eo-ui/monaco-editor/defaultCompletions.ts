@@ -13,123 +13,123 @@ import type { languages } from 'monaco-editor';
 
 export const completions: Array<Omit<languages.CompletionItem, 'range' | 'kind'>> = [
   {
-    label: 'eo.info(data)',
-    insertText: 'eo.info(data);',
+    label: 'pc.info(data)',
+    insertText: 'pc.info(data);',
     detail: '输出信息'
   },
   // {
-  //   label: 'eo.stop(data)',
-  //   insertText: 'eo.stop(data);',
+  //   label: 'pc.stop(data)',
+  //   insertText: 'pc.stop(data);',
   //   detail: '中止测试并输出信息',
   // },
   // {
-  //   label: 'eo.error(data)',
-  //   insertText: 'eo.error(data);',
+  //   label: 'pc.error(data)',
+  //   insertText: 'pc.error(data);',
   //   detail: '断言失败并输出信息',
   // },
   // {
-  //   label: 'eo.jsonpath("jsonpath语句",data)',
-  //   insertText: 'eo.jsonpath("jsonpath语句",data);',
+  //   label: 'pc.jsonpath("jsonpath语句",data)',
+  //   insertText: 'pc.jsonpath("jsonpath语句",data);',
   //   detail: '使用JsonPath语句提取内容',
   // },
   // {
-  //   label: 'eo.xpath("xpath语句",data)',
-  //   insertText: 'eo.xpath("xpath语句",data);',
+  //   label: 'pc.xpath("xpath语句",data)',
+  //   insertText: 'pc.xpath("xpath语句",data);',
   //   detail: '使用XPath语句提取内容',
   // },
   // {
-  //   label: 'eo.file(file Type)',
-  //   insertText: 'eo.file(file Type);',
+  //   label: 'pc.file(file Type)',
+  //   insertText: 'pc.file(file Type);',
   //   detail: '插入一个内置的文件',
   // },
   {
-    label: 'eo.img(file Type)',
-    insertText: 'eo.img(file Type);',
+    label: 'pc.img(file Type)',
+    insertText: 'pc.img(file Type);',
     detail: '插入一个内置的图片文件'
   },
   {
-    label: 'eo.http.url.get()',
-    insertText: 'eo.http.url.get();',
+    label: 'pc.http.url.get()',
+    insertText: 'pc.http.url.get();',
     detail: '获取原始的http协议url，不包含环境的base url，比如/user/login/{user_type}?user_name={{name}}'
   },
   {
-    label: 'eo.http.url.parse()',
-    insertText: 'eo.http.url.parse();',
+    label: 'pc.http.url.parse()',
+    insertText: 'pc.http.url.parse();',
     detail: '获取经过解析处理后的http协议url，包含环境的base url，比如www.eolinker.com/user/login/admin?user_name=jackliu'
   },
   {
-    label: 'eo.http.url.set("new_url")',
-    insertText: 'eo.http.url.set("new_url");',
+    label: 'pc.http.url.set("new_url")',
+    insertText: 'pc.http.url.set("new_url");',
     detail: '设置http协议url，比如/user/login/admin?user_name={{name}}'
   },
   {
-    label: 'eo.http.header.get("param_key")',
-    insertText: 'eo.http.header.get("param_key");',
+    label: 'pc.http.header.get("param_key")',
+    insertText: 'pc.http.header.get("param_key");',
     detail: '获取http协议请求头部参数值'
   },
   {
-    label: 'eo.http.header.set("param_key","param_value")',
-    insertText: 'eo.http.header.set("param_key","param_value");',
+    label: 'pc.http.header.set("param_key","param_value")',
+    insertText: 'pc.http.header.set("param_key","param_value");',
     detail: '设置http协议请求头部参数值'
   },
   {
-    label: 'eo.http.header.unset("param_key")',
-    insertText: 'eo.http.header.unset("param_key");',
+    label: 'pc.http.header.unset("param_key")',
+    insertText: 'pc.http.header.unset("param_key");',
     detail: '删除http协议header参数'
   },
   {
-    label: 'eo.http.header.clear',
-    insertText: 'eo.http.header.clear;',
+    label: 'pc.http.header.clear',
+    insertText: 'pc.http.header.clear;',
     detail: '清空http协议header参数'
   },
   {
-    label: 'eo.http.query.get("param_key")',
-    insertText: 'eo.http.query.get("param_key");',
+    label: 'pc.http.query.get("param_key")',
+    insertText: 'pc.http.query.get("param_key");',
     detail: '获取http协议query参数'
   },
   {
-    label: 'eo.http.query.set("param_key","param_value")',
-    insertText: 'eo.http.query.set("param_key","param_value");',
+    label: 'pc.http.query.set("param_key","param_value")',
+    insertText: 'pc.http.query.set("param_key","param_value");',
     detail: '设置http协议query参数'
   },
   {
-    label: 'eo.http.query.unset("param_key")',
-    insertText: 'eo.http.query.unset("param_key");',
+    label: 'pc.http.query.unset("param_key")',
+    insertText: 'pc.http.query.unset("param_key");',
     detail: '删除http协议query参数（删除后不会出现在地址栏中）'
   },
   {
-    label: 'eo.http.query.clear',
-    insertText: 'eo.http.query.clear;',
+    label: 'pc.http.query.clear',
+    insertText: 'pc.http.query.clear;',
     detail: '清空http协议query参数'
   },
   {
-    label: 'eo.http.rest.get("param_key")',
-    insertText: 'eo.http.rest.get("param_key");',
+    label: 'pc.http.rest.get("param_key")',
+    insertText: 'pc.http.rest.get("param_key");',
     detail: '获取http协议rest参数'
   },
   {
-    label: 'eo.http.rest.set("param_key","param_value")',
-    insertText: 'eo.http.rest.set("param_key","param_value");',
+    label: 'pc.http.rest.set("param_key","param_value")',
+    insertText: 'pc.http.rest.set("param_key","param_value");',
     detail: '设置http协议rest参数'
   },
   {
-    label: 'eo.http.rest.unset("param_key")',
-    insertText: 'eo.http.rest.unset("param_key");',
+    label: 'pc.http.rest.unset("param_key")',
+    insertText: 'pc.http.rest.unset("param_key");',
     detail: '删除http协议rest参数'
   },
   {
-    label: 'eo.http.rest.clear',
-    insertText: 'eo.http.rest.clear;',
+    label: 'pc.http.rest.clear',
+    insertText: 'pc.http.rest.clear;',
     detail: '清空http协议rest参数'
   },
   {
-    label: 'eo.http.response.get()',
-    insertText: 'eo.http.response.get();',
+    label: 'pc.http.response.get()',
+    insertText: 'pc.http.response.get();',
     detail: '获取http协议返回结果'
   },
   {
-    label: 'eo.http.response.set("response_value")',
-    insertText: 'eo.http.response.set("response_value");',
+    label: 'pc.http.response.set("response_value")',
+    insertText: 'pc.http.response.set("response_value");',
     detail: '设置http协议返回结果'
   },
   {

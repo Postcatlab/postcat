@@ -4,7 +4,6 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { compareVersion } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
 import { filter, map, tap, Observable, catchError } from 'rxjs';
 
@@ -27,10 +26,8 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
   get apiPrefix() {
     return `/${this.workspaceID}/${this.projectID}/`;
   }
-  prefix;
   constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
     super();
-    this.prefix = '/api/';
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -38,6 +35,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     const token = StorageUtil.get('accessToken') || '';
     let targetUrl;
     if ((targetUrl = sharePaths.find(n => req.url.startsWith(n)))) {
+      //Share page
       req = req.clone({
         url: req.url.replace(targetUrl, `/api${targetUrl}`)
       });
@@ -51,7 +49,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
       });
     }
     req = req.clone({
-      url: noPrefix.find(n => req.url.startsWith(n)) ? req.url : uniqueSlash(url + this.prefix + req.url).replace(/(\/api){1,}/g, '/api'),
+      url: noPrefix.find(n => req.url.startsWith(n)) ? req.url : uniqueSlash(`${url}/api/${req.url}`).replace(/(\/api){1,}/g, '/api'),
       headers: new HttpHeaders({
         Authorization: token
       })
@@ -60,14 +58,7 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
     return next.handle(req).pipe(
       filter(event => event instanceof HttpResponse && [200, 201].includes(event.status)),
       map((event: HttpResponse<any>) => event.clone({ body: { status: 200, data: event.body.data } })),
-      tap((event: any) => {
-        // ! TODO delete
-        if (req.url.includes('/system/status')) {
-          const { data } = event.body;
-          this.prefix = compareVersion(data, 'v1.9.0') < 0 ? '/' : '/api';
-          StorageUtil.set('server_version', data);
-        }
-      }),
+      tap((event: any) => {}),
       catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401 && this.workspaceID !== -1) {
