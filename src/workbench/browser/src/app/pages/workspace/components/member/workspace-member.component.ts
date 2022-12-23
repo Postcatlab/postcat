@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'eo-workspace-member',
-  template: ``
+  template: `workspace`
 })
 export class WorkspaceMemberComponent implements OnInit {
   constructor() {}

@@ -27,7 +27,7 @@ export class MockService {
 
         if (isRemoteMock) {
           const [_, projectID] = req.url.match(mockReg);
-          const { url = '' } = this.settingService.getConfiguration('features.backend') || {};
+          const url = this.settingService.getConfiguration('backend.url') || '';
           const response = await fetch(uniqueSlash(`${url}/mock/match`), {
             method: 'POST',
             headers: {

@@ -9,6 +9,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 
 import StorageUtil from '../../../utils/storage/Storage';
 
+/**
+ * Client need min fontend version
+ */
 const minFontendVersion = '2.0.0';
 /**
  * @description
@@ -18,7 +21,6 @@ const minFontendVersion = '2.0.0';
   providedIn: 'root'
 })
 export class DataSourceService {
-  isConnectRemote = false;
   lowLevelTipsHasShow = false;
   get remoteServerUrl() {
     return this.settingService.getConfiguration('backend.url');
@@ -45,22 +47,20 @@ export class DataSourceService {
     }
     const [data, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
     if (err) {
-      this.isConnectRemote = false;
       return false;
     } else {
       StorageUtil.set('server_version', data);
       if (!this.lowLevelTipsHasShow && compareVersion(data, minFontendVersion) < 0) {
-        if (this.store.isLocal) return;
+        if (this.store.isLocal) return true;
         this.lowLevelTipsHasShow = true;
         this.modal.warning({
           nzTitle: $localize`The version of the cloud service is too low`,
-          nzContent: $localize`Please update the local version to the latest version,<a i18n href="https://docs.eoapi.io/docs/storage.html#%E6%9C%8D%E5%8A%A1%E5%8D%87%E7%BA%A7" target="_blank" class="eo-link">${$localize`Learn more..`}</a>`
+          nzContent: $localize`Requires cloud service at least version ${minFontendVersion}.<br>Please update the local version to the latest version,<a i18n href="https://docs.eoapi.io/docs/storage.html#%E6%9C%8D%E5%8A%A1%E5%8D%87%E7%BA%A7" target="_blank" class="eo-link">${$localize`Learn more..`}</a>`
         });
-        return false;
+        return true;
       }
     }
-    this.isConnectRemote = true;
-    return this.isConnectRemote;
+    return true;
   }
 
   async checkRemoteAndTipModal() {

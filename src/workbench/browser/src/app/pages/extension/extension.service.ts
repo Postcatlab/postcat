@@ -199,7 +199,7 @@ export class ExtensionService {
         }
       });
     }
-    return extensions;
+    return extensions || new Map();
   }
   getValidExtensionsByFature<T = FeatureInfo>(featureKey: string): Map<string, T> {
     const extensions = this.getExtensionsByFeature<T>(featureKey);
