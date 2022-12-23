@@ -264,7 +264,12 @@ export class StoreService {
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
 
+  @action setRole(role, type) {
+    this.role[type] = role;
+  }
+
   @action setAuthMap(permissionsList, type) {
+    // TODO rename to setPermission
     // * set all false
     Object.keys(this.permissions[type]).forEach(it => {
       this.permissions[type][it] = false;

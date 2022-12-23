@@ -141,12 +141,30 @@ export class EffectService {
         }
         this.message.send({ type: 'http-401', data: {} });
       }
-      //* Switch store to local workspace
+      // * Switch store to local workspace
       this.store.setWorkspaceList([]);
       this.updateProjects(this.store.getCurrentWorkspaceID);
       return;
     }
     this.store.setWorkspaceList(list);
+    // * update workspace role
+    {
+      const [data, err]: any = await this.http.api_workspaceRoleList({ workspaceID: this.store.getCurrentWorkspaceID });
+      if (err) {
+        return;
+      }
+      console.log('workspace role list', data);
+      this.store.setRole(data, 'workspace');
+    }
+    {
+      // * update workspace auth
+      const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
+      if (err) {
+        return;
+      }
+      console.log('workspace permission list', data);
+      this.store.setAuthMap(data, 'workspace');
+    }
   }
   async updateProjects(workspaceID) {
     return new Promise(resolve => {
@@ -164,7 +182,7 @@ export class EffectService {
   updateProject(data) {
     const workspace = this.store.getCurrentWorkspace;
     return new Promise(resolve => {
-      this.storage.run('projectUpdate', [workspace.id, data, data.uuid], (result: StorageRes) => {
+      this.storage.run('projectUpdate', [workspace.id, data, data.uuid], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           const project = result.data;
           const projects = this.store.getProjectList;
@@ -176,9 +194,25 @@ export class EffectService {
           });
           this.store.setProjectList(projects);
           this.store.setCurrentProjectID(project.uuid);
-          return resolve(true);
         }
-        return resolve(false);
+        // * update project role
+        {
+          const [data, err]: any = await this.http.api_projectRoleList({ projectID: this.store.getCurrentProjectID });
+          if (err) {
+            return;
+          }
+          console.log('project role list', data);
+          this.store.setRole(data, 'project');
+        }
+        {
+          // * update project auth
+          const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
+          if (err) {
+            return;
+          }
+          console.log('project permission list', data);
+          this.store.setAuthMap(data, 'project');
+        }
       });
     });
   }
