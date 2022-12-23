@@ -4,6 +4,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { Project } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageUtil } from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import _ from 'lodash-es';
 import { action, computed, makeObservable, reaction, observable, toJS } from 'mobx';
 import { filter } from 'rxjs/operators';
 
@@ -48,6 +49,35 @@ export class StoreService {
   @observable.shallow private loginInfo = {
     accessToken: StorageUtil.get('accessToken') || null,
     refreshToken: StorageUtil.get('refreshToken') || null
+  };
+
+  @observable.shallow private role = {
+    workspace: [],
+    project: []
+  };
+
+  @observable.shallow private permissions = {
+    workspace: {
+      /** workspace */
+      UPDATE_WORKSPACE: false,
+      DELETE_WORKSPACE: false,
+      VIEW_WORKSPACE: false,
+      ADD_WORKSPACE_MEMBER: false,
+      UPDATE_WORKSPACE_MEMBER: false,
+      DELETE_WORKSPACE__MEMBER: false
+    },
+    project: {
+      /** project */
+      VIEW_PROJECT_LIST: false,
+      VIEW_PROJECT: false,
+      UPDATE_PROJECT: false,
+      DELETE_PROJECT: false,
+      IMPORT_PROJECT: false,
+      EXPORT_PROJECT: false,
+      ADD_PROJECT_MEMBER: false,
+      UPDATE_PROJECT_MEMBER: false,
+      DELETE_PROJECT__MEMBER: false
+    }
   };
 
   // ? UI
@@ -129,7 +159,21 @@ export class StoreService {
     return this.loginInfo;
   }
 
+  @computed get getWorkspacePermissions() {
+    return this.permissions.workspace;
+  }
 
+  @computed get getProjectPermissions() {
+    return this.permissions.project;
+  }
+
+  @computed get getWorkspaceRole() {
+    return this.role.workspace;
+  }
+
+  @computed get getProjectRole() {
+    return this.role.project;
+  }
 
   // ? setting
   @computed get remoteUrl() {
@@ -220,6 +264,19 @@ export class StoreService {
     this.setUserProfile(null);
     this.setLoginInfo({ accessToken: '', refreshToken: '' });
   }
+
+  @action setAuthMap(permissionsList, type) {
+    // * set all false
+    Object.keys(this.permissions[type]).forEach(it => {
+      this.permissions[type][it] = false;
+    });
+    // * set some true
+    this.permissions[type] = permissionsList.forEach(it => {
+      const name = _.upperCase(it).split(' ').join('_');
+      this.permissions[type][name] = true;
+    });
+  }
+
   // ? UI
   @action toggleRightBar(data = false) {
     this.rightBarStatus = data;
