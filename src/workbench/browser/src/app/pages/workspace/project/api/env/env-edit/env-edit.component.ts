@@ -130,11 +130,13 @@ export class EnvEditComponent implements OnDestroy {
         parameters: []
       };
     } else {
-      const [res, err]: any = await this.getEnv(id);
-      this.model = res;
+      if (!this.model) {
+        const [res, err]: any = await this.getEnv(id);
+        this.model = res;
+        this.initialModel = eoDeepCopy(this.model);
+      }
     }
     this.initForm();
-    this.initialModel = eoDeepCopy(this.model);
     this.eoOnInit.emit(this.model);
   }
   private initForm() {
@@ -147,7 +149,8 @@ export class EnvEditComponent implements OnDestroy {
     this.modelChange.emit(this.model);
   }
   isFormChange() {
-    return JSON.stringify(this.formatEnvData(this.model)) !== JSON.stringify(this.initialModel);
+    const hasChanged = JSON.stringify(this.formatEnvData(this.model)) !== JSON.stringify(this.formatEnvData(this.initialModel));
+    return hasChanged;
   }
   getEnv(uuid) {
     return new Promise(resolve => {

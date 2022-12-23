@@ -49,7 +49,6 @@ export class ApiTabService {
       pathname: '/home/workspace/project/api/env/edit',
       id: 'project-env',
       type: 'edit',
-      isFixed: true,
       icon: 'application',
       title: $localize`New Environment`
     },
