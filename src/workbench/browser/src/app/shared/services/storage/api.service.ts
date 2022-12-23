@@ -153,6 +153,13 @@ export class ApiService {
     return this.remote.api_workspaceMember(params)
   }
 
+  api_workspaceSearchMember(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_workspaceSearchMember(params)
+    }
+    return this.remote.api_workspaceSearchMember(params)
+  }
+
   api_workspaceAddMember(params) {
     if (this.dataSourceType === 'local') {
       return this.local.api_workspaceAddMember(params)

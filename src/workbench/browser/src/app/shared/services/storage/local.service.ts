@@ -550,6 +550,48 @@ export default class LocalService extends localStorage {
     })
   }
 
+  api_workspaceSearchMember({ workspaceID, username }) {
+    if (!workspaceID) {
+      console.log(
+        '%c Error: workspace - searchMember 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!username) {
+      console.log(
+        '%c Error: workspace - searchMember 接口 缺失参数 username %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.load(this.undefined, { workspaceID, username })
+        .then(({ status, ...data }: any) => {
+          console.log(
+            '%c workspace - searchMember 接口调用成功 %c',
+            SuccessStyle,
+            ''
+          )
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log(
+            '%c workspace - searchMember 接口调用失败 %c',
+            ErrorStyle,
+            ''
+          )
+          resolve([null, error])
+        })
+    })
+  }
+
   api_workspaceAddMember({ workspaceID, userIDs }) {
     if (!workspaceID) {
       console.log(

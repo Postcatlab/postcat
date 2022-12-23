@@ -26,6 +26,7 @@ const http = {
         { 'delete @delete': '/workspace/{workspaceID}' },
         { 'getInfo @get': '/workspace/{workspaceID}' },
         { 'member @get': '/workspace/{workspaceID}/member/list' },
+        { 'searchMember @get': '/workspace/{workspaceID}/member/list/{username}' },
         { 'addMember @post': '/workspace/{workspaceID}/member/add', json: 'userIDs' },
         { 'removeMember @delete': '/workspace/{workspaceID}/member/remove', body: 'userIDs' },
         { 'memberQuit @post': '/workspace/{workspaceID}/member/leave' },

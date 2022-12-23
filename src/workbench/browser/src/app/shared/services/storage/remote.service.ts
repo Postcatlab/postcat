@@ -570,6 +570,51 @@ export class RemoteService {
     })
   }
 
+  api_workspaceSearchMember({ workspaceID, username }, prefix = '') {
+    if (!workspaceID) {
+      console.log(
+        '%c Error: workspace - searchMember 接口 缺失参数 workspaceID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+    if (!username) {
+      console.log(
+        '%c Error: workspace - searchMember 接口 缺失参数 username %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.http
+        .get(`${prefix}/workspace/${workspaceID}/member/list/${username}`, {})
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log(
+              '%c workspace - searchMember 接口请求成功 %c',
+              SuccessStyle,
+              ''
+            )
+            if (status === 200) {
+              return resolve([data, null])
+            }
+            resolve([null, { status, ...data }])
+          },
+          error: (error) => {
+            console.log(
+              '%c workspace - searchMember 接口请求失败 %c',
+              ErrorStyle,
+              ''
+            )
+            resolve([null, error])
+          },
+        })
+    })
+  }
+
   api_workspaceAddMember({ workspaceID, userIDs }, prefix = '') {
     if (!workspaceID) {
       console.log(

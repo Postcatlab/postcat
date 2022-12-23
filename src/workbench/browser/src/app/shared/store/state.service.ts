@@ -274,11 +274,14 @@ export class StoreService {
     Object.keys(this.permissions[type]).forEach(it => {
       this.permissions[type][it] = false;
     });
+    console.log('jj', this.permissions, type);
     // * set some true
     this.permissions[type] = permissionsList.forEach(it => {
       const name = _.upperCase(it).split(' ').join('_');
+      console.log('name', name);
       this.permissions[type][name] = true;
     });
+    console.log(this.permissions[type]);
   }
 
   // ? UI
