@@ -10,7 +10,7 @@ import { StoreService } from '../../../../shared/store/state.service';
 @Component({
   selector: 'eo-workspace-member',
   template: `<nz-list nzItemLayout="horizontal" [nzLoading]="loading">
-    <nz-list-header *ngIf="store.getWorkspaceRole === 'admin'">
+    <nz-list-header *ngIf="store.getWorkspaceRole === 'Owner'">
       <eo-ng-select
         class="w-full"
         nzAllowClear
@@ -44,14 +44,14 @@ import { StoreService } from '../../../../shared/store/state.service';
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
             <span>{{ item.roleTitle }}</span>
-            <div class="operate-btn-list" *ngIf="item.myself || store.getWorkspaceRole === 'admin'">
+            <div class="operate-btn-list" *ngIf="item.myself || store.getWorkspaceRole === 'Owner'">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'admin'" nz-menu-item i18n (click)="changeRole(item)"
+                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)"
                     >Set {{ item.role.name === 'Owner' ? 'Editor' : 'Owner' }}
                   </li>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'admin'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
+                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
                   <li *ngIf="item.myself" nz-menu-item i18n (click)="quitWorkspace(item)">Quit</li>
                 </ul>
               </eo-ng-dropdown-menu>

@@ -56,7 +56,7 @@ export class ManageAccessComponent {
     item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
   }
   async removeMember(item) {
-    const [data, err]: any = await this.remote.api_projectAddMember({
+    const [data, err]: any = await this.remote.api_projectDelMember({
       projectID: this.store.getCurrentProjectID,
       userIDs: [item.id]
     });
