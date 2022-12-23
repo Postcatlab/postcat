@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://2913z573b8.zicp.fun:20643",
+    "target": "http://8.219.85.124:3000",
     "secure": false,
     "logLevel": "debug"
   }

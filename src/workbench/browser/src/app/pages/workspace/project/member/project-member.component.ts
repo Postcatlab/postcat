@@ -28,7 +28,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
         >
-          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
+          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.id">
             <div class="flex w-full justify-between">
               <span class="font-bold">{{ option.username }}</span>
               <span class="text-tips">{{ option.email }}</span>
@@ -57,7 +57,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
         </button>
       </h2>
       <section class="py-5">
-        <eo-manage-access [data]="memberList" (eoOnRemove)="e97uoiuCallback($event)"></eo-manage-access>
+        <eo-manage-access [list]="memberList" (eoOnChange)="e97uoiuCallback($event)"></eo-manage-access>
       </section>
     </section>`
 })
@@ -84,8 +84,20 @@ export class ProjectMemberComponent implements OnInit {
     this.userCache = [];
     this.memberList = [];
   }
-
+  async queryList() {
+    const [wData, wErr]: any = await this.api.api_projectMember({
+      projectID: this.store.getCurrentProjectID
+    });
+    if (wErr) {
+      return;
+    }
+    // * 对成员列表进行排序
+    const Owner = wData.filter(it => it.roleName === 'Owner');
+    const Member = wData.filter(it => it.roleName !== 'Owner');
+    this.memberList = Owner.concat(Member);
+  }
   async ngOnInit(): Promise<void> {
+    this.queryList();
     makeObservable(this);
     reaction(
       () => this.searchValue,
@@ -106,33 +118,7 @@ export class ProjectMemberComponent implements OnInit {
       },
       { delay: 300 }
     );
-
-    const url = this.dataSource.remoteServerUrl;
-
-    if (url === '') {
-      this.message.send({ type: 'need-config-remote', data: {} });
-      return;
-    }
-    const [wData, wErr]: any = await this.api.api_projectMember({
-      projectID: this.store.getCurrentProjectID
-    });
-    if (wErr) {
-      if (wErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.isLogin) {
-          return;
-        }
-        this.message.send({ type: 'http-401', data: {} });
-      }
-      return;
-    }
-    console.log('wData', wData);
-    // * 对成员列表进行排序
-    const Owner = wData.filter(it => it.roleName === 'Owner');
-    const Member = wData.filter(it => it.roleName !== 'Owner');
-    this.memberList = Owner.concat(Member);
   }
-
   handleChange(event) {
     this.searchValue = event;
   }
@@ -152,39 +138,17 @@ export class ProjectMemberComponent implements OnInit {
     // * click event callback
     this.isSelectBtnLoading = true;
     const btnSelectRunning = async () => {
-      const username = this.userCache;
-      const [uData, uErr]: any = await this.api.api_userSearch({ username });
-      if (uErr) {
-        if (uErr.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
+      const userIds = this.userCache;
+      if (userIds.length === 0) {
+        this.eMessage.error($localize`Please select a member`);
         return;
       }
 
-      if (uData.length === 0) {
-        this.eMessage.error($localize`Could not find a user matching ${username}`);
-        return;
-      }
-      const [user] = uData;
-      const { id } = user;
-
-      const { id: workspaceID } = this.store.getCurrentWorkspace;
-      const [aData, aErr]: any = await this.api.api_workspaceAddMember({
-        workspaceID,
-        userIDs: [id]
+      const [aData, aErr]: any = await this.api.api_projectAddMember({
+        projectID: this.store.getCurrentProjectID,
+        userIDs: userIds
       });
       if (aErr) {
-        if (aErr.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
         return;
       }
       this.eMessage.success($localize`Add new member success`);
@@ -192,24 +156,7 @@ export class ProjectMemberComponent implements OnInit {
       // * 关闭弹窗
       this.isInvateModalVisible = false;
 
-      const [wData, wErr]: any = await this.api.api_workspaceMember({
-        workspaceID: this.store.getCurrentWorkspaceID
-      });
-      if (wErr) {
-        if (wErr.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
-
-      // * 对成员列表进行排序
-      const Owner = wData.filter(it => it.roleName === 'Owner');
-      const Member = wData.filter(it => it.roleName !== 'Owner');
-      this.memberList = Owner.concat(Member);
+      this.queryList();
     };
     await btnSelectRunning();
     this.isSelectBtnLoading = false;
@@ -232,59 +179,6 @@ export class ProjectMemberComponent implements OnInit {
   }
 
   async e97uoiuCallback($event) {
-    // * eoOnRemove event callback
-
-    const confirm = () =>
-      new Promise(resolve => {
-        this.modal.confirm({
-          nzTitle: $localize`Warning`,
-          nzContent: $localize`Are you sure you want to remove the member ?`,
-          nzOkDanger: true,
-          nzOkText: $localize`Delete`,
-          nzOnOk: () => resolve(true),
-          nzOnCancel: () => resolve(false)
-        });
-      });
-    const isOk = await confirm();
-    if (!isOk) {
-      return;
-    }
-
-    const { id: workspaceID } = this.store.getCurrentWorkspace;
-
-    const { id } = $event;
-
-    const [data, err]: any = await this.api.api_workspaceRemoveMember({
-      workspaceID,
-      userIDs: [id]
-    });
-    if (err) {
-      if (err.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.isLogin) {
-          return;
-        }
-        this.message.send({ type: 'http-401', data: {} });
-      }
-      return;
-    }
-    const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID: this.store.getCurrentWorkspaceID
-    });
-    if (wErr) {
-      if (wErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.isLogin) {
-          return;
-        }
-        this.message.send({ type: 'http-401', data: {} });
-      }
-      return;
-    }
-
-    // * 对成员列表进行排序
-    const Owner = wData.filter(it => it.roleName === 'Owner');
-    const Member = wData.filter(it => it.roleName !== 'Owner');
-    this.memberList = Owner.concat(Member);
+    this.queryList();
   }
 }
