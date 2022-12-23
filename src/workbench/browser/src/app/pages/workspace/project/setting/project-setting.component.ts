@@ -101,8 +101,12 @@ export class ProjectSettingComponent implements OnInit {
     if (!name) return;
     this.isLoading = true;
     const project = this.store.getCurrentProject;
-    const isOk: any = await this.effect.updateProject({ ...project, name });
-    isOk ? this.message.success($localize`Edited successfully`) : this.message.error($localize`Failed Operation`);
+    try {
+      await this.effect.updateProject({ ...project, name });
+      this.message.success($localize`Edited successfully`);
+    } catch (error) {
+      this.message.error($localize`Failed Operation`);
+    }
     this.isLoading = false;
   }
 
