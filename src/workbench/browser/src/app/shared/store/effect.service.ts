@@ -33,6 +33,8 @@ export class EffectService {
         this.router.navigate(['/home/workspace/project/list']);
       }
     });
+    this.changeProject(this.store.getCurrentProjectID);
+    this.changeWorkspace(this.store.getCurrentWorkspaceID);
     reaction(
       () => this.store.isLogin,
       async () => {
