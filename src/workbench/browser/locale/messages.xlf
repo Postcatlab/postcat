@@ -329,18 +329,18 @@
         <source>Member</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">100</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/setting/workspace-setting.component.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6785659997897155974" datatype="html">
         <source>Setting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">113</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/list/extension-list.component.html</context>
@@ -892,7 +892,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/setting/workspace-setting.component.ts</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">36</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/api/components/group/tree/api-group-tree.component.ts</context>
@@ -915,12 +915,8 @@
           <context context-type="linenumber">71</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.html</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">243</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -1684,7 +1680,7 @@
         <source>General</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/setting/workspace-setting.component.ts</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3312816458112607142" datatype="html">
@@ -3574,39 +3570,39 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="467321397227119929" datatype="html">
-        <source> + Add </source>
+      <trans-unit id="3730841496464053940" datatype="html">
+        <source><x id="START_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="-icon name=&quot;plus&quot;&gt;"/><x id="CLOSE_TAG_EO_ICONPARK_ICON" ctype="x-eo_iconpark_icon" equiv-text="Add"/> Add </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8370746762893790920" datatype="html">
         <source>Could not find a user matching <x id="PH" equiv-text="username"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4514148561788509919" datatype="html">
         <source>Add new member success</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2832180029870893530" datatype="html">
         <source>Are you sure you want to remove the member ?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3193976279273491157" datatype="html">
@@ -3686,22 +3682,11 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6449716934243638729" datatype="html">
-        <source>Requires cloud service at least version <x id="PH" equiv-text="minFontendVersion"/>.&lt;br&gt;Please update the local version to the latest version,&lt;a i18n href=&quot;https://docs.eoapi.io/docs/storage.html#%E6%9C%8D%E5%8A%A1%E5%8D%87%E7%BA%A7&quot; target=&quot;_blank&quot; class=&quot;eo-link&quot;&gt;<x id="PH_1" equiv-text="$localize`Learn more..`"/>&lt;/a&gt;</source>
+      <trans-unit id="1226750987829960949" datatype="html">
+        <source>Requires cloud service at least version <x id="PH" equiv-text="minFontendVersion"/>.&lt;br&gt;Please update the local version to the latest version,&lt;a href=&quot;https://docs.eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo-link&quot;&gt;Learn more..&lt;/a&gt;</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
           <context context-type="linenumber">58</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1999067197786235511" datatype="html">
-        <source>Learn more..</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
-          <context context-type="linenumber">58</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
-          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2684546755759864807" datatype="html">
@@ -3716,6 +3701,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
           <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1999067197786235511" datatype="html">
+        <source>Learn more..</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9178182467454450952" datatype="html">
@@ -3778,7 +3770,7 @@
         <source>Persional Workspace</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/store/state.service.ts</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
     </body>

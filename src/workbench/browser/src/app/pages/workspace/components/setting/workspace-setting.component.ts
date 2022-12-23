@@ -16,7 +16,7 @@ export class WorkspaceSettingComponent {
   @Input() selectedModule: string;
   @Input() model: any;
   treeNodes: SettingItem[] = [
-    ...(this.store.role.workspace === 'admin'
+    ...(this.store.getWorkspaceRole === 'admin'
       ? [
           {
             title: $localize`General`,
@@ -30,7 +30,7 @@ export class WorkspaceSettingComponent {
       id: 'member',
       comp: WorkspaceMemberComponent
     },
-    ...(this.store.role.workspace === 'admin'
+    ...(this.store.getWorkspaceRole === 'admin'
       ? [
           {
             title: $localize`Delete`,

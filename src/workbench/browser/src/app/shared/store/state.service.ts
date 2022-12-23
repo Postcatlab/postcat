@@ -77,7 +77,7 @@ export class StoreService {
 
   // ? UI
   @observable private rightBarStatus = false;
-  @observable role = {
+  @observable private role = {
     workspace: 'editor',
     project: 'admin'
   };

@@ -55,7 +55,7 @@ export class DataSourceService {
         this.lowLevelTipsHasShow = true;
         this.modal.warning({
           nzTitle: $localize`The version of the cloud service is too low`,
-          nzContent: $localize`Requires cloud service at least version ${minFontendVersion}.<br>Please update the local version to the latest version,<a i18n href="https://docs.eoapi.io/docs/storage.html#%E6%9C%8D%E5%8A%A1%E5%8D%87%E7%BA%A7" target="_blank" class="eo-link">${$localize`Learn more..`}</a>`
+          nzContent: $localize`Requires cloud service at least version ${minFontendVersion}.<br>Please update the local version to the latest version,<a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
         });
         return true;
       }
