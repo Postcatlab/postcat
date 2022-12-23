@@ -126,6 +126,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
       this.message.success($localize`Edited successfully`);
       this.mockList[index] = item;
     } else {
+      item.apiDataID = this.apiData.uuid;
       const result = await this.apiMock.createMock(item);
       Object.assign(item, result.data, {
         createWay: 'custom'

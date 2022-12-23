@@ -142,7 +142,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Add member failed`);
       return;
     }
-    this.message.success($localize`Add member succssfully`);
+    this.message.success($localize`Add member successfully`);
     this.userList = [];
     this.userCache = '';
     this.queryList();
@@ -158,7 +158,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Change role Failed`);
       return;
     }
-    this.message.success($localize`Change role succssfully`);
+    this.message.success($localize`Change role successfully`);
     item.role.id = roleID;
     item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
   }
@@ -171,7 +171,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Change role error`);
       return;
     }
-    this.message.success($localize`Remove Member succssfully`);
+    this.message.success($localize`Remove Member successfully`);
     this.queryList();
   }
   async quitWorkspace(item) {
@@ -189,7 +189,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Quit Failed`);
       return;
     }
-    this.message.success($localize`Quit succssfully`);
+    this.message.success($localize`Quit successfully`);
     if (this.store.getCurrentWorkspaceID === this.workspaceID) {
       await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
     } else {

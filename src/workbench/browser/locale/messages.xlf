@@ -1728,7 +1728,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="4327927887356810079" datatype="html">
-        <source>Add member succssfully</source>
+        <source>Add member successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -1746,7 +1746,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="753210079123404983" datatype="html">
-        <source>Change role succssfully</source>
+        <source>Change role successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
           <context context-type="linenumber">161</context>
@@ -1768,7 +1768,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8626165599185021957" datatype="html">
-        <source>Remove Member succssfully</source>
+        <source>Remove Member successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
           <context context-type="linenumber">174</context>
@@ -1797,7 +1797,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="9122178932593325974" datatype="html">
-        <source>Quit succssfully</source>
+        <source>Quit successfully</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
           <context context-type="linenumber">192</context>
