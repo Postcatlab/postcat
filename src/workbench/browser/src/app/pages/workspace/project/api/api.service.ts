@@ -36,7 +36,7 @@ export class ProjectApiService {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
         } else {
-          this.message.error($localize`Can't find this API`);
+          this.message.error($localize`Can't find this Api`);
         }
       });
     });

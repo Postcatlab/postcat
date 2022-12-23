@@ -4,8 +4,9 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/e
 import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { autorun } from 'mobx';
 import { Subscription } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { SidebarModuleInfo } from './sidebar.model';
 import { SidebarService } from './sidebar.service';
@@ -31,9 +32,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getModules();
+    autorun(() => {
+      this.store.isLocal;
+      this.getModules();
+    });
     this.getIDFromRoute();
     this.watchRouterChange();
-    this.watchWorkspaceChange();
     this.watchInstalledExtensionsChange();
     this.initSidebarViews();
   }
@@ -75,14 +79,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-  watchWorkspaceChange() {
-    this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'workspaceChange') {
-        this.getModules();
-      }
-    });
-  }
-
   watchRouterChange() {
     this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.getIDFromRoute();
@@ -98,6 +94,32 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.routerSubscribe?.unsubscribe();
   }
   private getModules() {
+    const memberItem = !this.store.isLocal
+      ? [
+          {
+            title: $localize`Member`,
+            id: '@eo-core-member',
+            isOffical: true,
+            icon: 'peoples',
+            activeRoute: 'home/workspace/project/member',
+            route: 'home/workspace/project/member'
+          }
+        ]
+      : [];
+    const settingItem =
+      this.store.role.project === 'admin'
+        ? [
+            {
+              title: $localize`Setting`,
+              id: '@eo-core-setting',
+              isOffical: true,
+              icon: 'setting',
+              activeRoute: 'home/workspace/project/setting',
+              route: 'home/workspace/project/setting'
+            }
+          ]
+        : [];
+
     const defaultModule = [
       {
         title: 'API',
@@ -116,26 +138,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/workspace/project/api',
         route: 'home/workspace/project/api/http/test'
       },
-      ...(!this.store.isLocal
-        ? [
-            {
-              title: $localize`Member`,
-              id: '@eo-core-member',
-              isOffical: true,
-              icon: 'peoples',
-              activeRoute: 'home/workspace/project/member',
-              route: 'home/workspace/project/member'
-            }
-          ]
-        : []),
-      {
-        title: $localize`Setting`,
-        id: '@eo-core-setting',
-        isOffical: true,
-        icon: 'setting',
-        activeRoute: 'home/workspace/project/setting',
-        route: 'home/workspace/project/setting'
-      }
+      ...memberItem,
+      ...settingItem
     ];
     const isShare = this.store.isShare;
     this.modules = defaultModule.filter((it: any) => (isShare ? it?.isShare : it?.isShare ? it?.isShare === isShare : true));

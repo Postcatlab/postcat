@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { SettingItem } from '../../../../modules/eo-ui/setting/setting.component';
+import { StoreService } from '../../../../shared/store/state.service';
 import { WorkspaceDeleteComponent } from '../delete/workspace-delete.component';
 import { WorkspaceEditComponent } from '../edit/workspace-edit.component';
 import { WorkspaceMemberComponent } from '../member/workspace-member.component';
@@ -11,24 +12,32 @@ import { WorkspaceMemberComponent } from '../member/workspace-member.component';
   styleUrls: ['./workspace-setting.component.scss']
 })
 export class WorkspaceSettingComponent {
-  constructor() {}
+  constructor(private store: StoreService) {}
   @Input() selectedModule: string;
   @Input() model: any;
   treeNodes: SettingItem[] = [
-    {
-      title: $localize`General`,
-      id: 'general',
-      comp: WorkspaceEditComponent
-    },
+    ...(this.store.role.workspace === 'admin'
+      ? [
+          {
+            title: $localize`General`,
+            id: 'general',
+            comp: WorkspaceEditComponent
+          }
+        ]
+      : []),
     {
       title: $localize`Member`,
       id: 'member',
       comp: WorkspaceMemberComponent
     },
-    {
-      title: $localize`Delete`,
-      id: 'delete',
-      comp: WorkspaceDeleteComponent
-    }
+    ...(this.store.role.workspace === 'admin'
+      ? [
+          {
+            title: $localize`Delete`,
+            id: 'delete',
+            comp: WorkspaceDeleteComponent
+          }
+        ]
+      : [])
   ];
 }

@@ -51,11 +51,6 @@ export class StoreService {
     refreshToken: StorageUtil.get('refreshToken') || null
   };
 
-  @observable.shallow private role = {
-    workspace: [],
-    project: []
-  };
-
   @observable.shallow private permissions = {
     workspace: {
       /** workspace */
@@ -82,6 +77,10 @@ export class StoreService {
 
   // ? UI
   @observable private rightBarStatus = false;
+  @observable role = {
+    workspace: 'editor',
+    project: 'admin'
+  };
 
   // * computed data
 
