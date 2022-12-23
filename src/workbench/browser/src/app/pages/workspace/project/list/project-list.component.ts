@@ -67,7 +67,7 @@ export class ProjectListComponent implements OnInit {
   }
   delProject(item: any): void {
     const modal = this.modalService.confirm({
-      nzTitle: 'Are you sure delete this project?',
+      nzTitle: $localize`Are you sure delete this project?`,
       nzOkText: $localize`Delete`,
       nzOkDanger: true,
       nzOnOk: async () => {
