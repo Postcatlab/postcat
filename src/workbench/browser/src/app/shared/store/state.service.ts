@@ -266,23 +266,34 @@ export class StoreService {
   }
 
   @action setRole(role, type) {
+    if (this.isLocal) {
+      this.role[type] = 'admin';
+      return;
+    }
     this.role[type] = role;
   }
 
   @action setAuthMap(permissionsList, type) {
     // TODO rename to setPermission
+    if (this.isLocal) {
+      // * set all false
+      Object.keys(this.permissions[type]).forEach(it => {
+        this.permissions[type][it] = true;
+      });
+      return;
+    }
     // * set all false
     Object.keys(this.permissions[type]).forEach(it => {
       this.permissions[type][it] = false;
     });
-    console.log('check permission', { ...this.permissions[type] }, permissionsList);
+    // console.log('check permission', { ...this.permissions[type] }, permissionsList);
     // * set some true
     permissionsList.forEach(it => {
       const name = _.upperCase(it).split(' ').join('_');
-      console.log('name', name);
+      // console.log('name', name);
       this.permissions[type][name] = true;
     });
-    console.log(this.permissions[type]);
+    // console.log(this.permissions[type]);
   }
 
   // ? UI
