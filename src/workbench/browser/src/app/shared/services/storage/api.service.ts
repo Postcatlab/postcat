@@ -69,6 +69,13 @@ export class ApiService {
     return this.remote.api_projectDelMember(params)
   }
 
+  api_projectMember(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectMember(params)
+    }
+    return this.remote.api_projectMember(params)
+  }
+
   api_projectMemberQuit(params) {
     if (this.dataSourceType === 'local') {
       return this.local.api_projectMemberQuit(params)

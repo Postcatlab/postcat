@@ -220,6 +220,32 @@ export default class LocalService extends localStorage {
     })
   }
 
+  api_projectMember({ projectID }) {
+    if (!projectID) {
+      console.log(
+        '%c Error: project - member 接口 缺失参数 projectID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.load(this.project, { projectID })
+        .then(({ status, ...data }: any) => {
+          console.log('%c project - member 接口调用成功 %c', SuccessStyle, '')
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, data])
+        })
+        .catch((error) => {
+          console.log('%c project - member 接口调用失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        })
+    })
+  }
+
   api_projectMemberQuit({ projectID }) {
     if (!projectID) {
       console.log(
@@ -250,7 +276,7 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_projectSetRole({ projectID, roleID }) {
+  api_projectSetRole({ projectID, roleID, memberID }) {
     if (!projectID) {
       console.log(
         '%c Error: project - setRole 接口 缺失参数 projectID %c',
@@ -267,9 +293,17 @@ export default class LocalService extends localStorage {
       )
       return
     }
+    if (!memberID) {
+      console.log(
+        '%c Error: project - setRole 接口 缺失参数 memberID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
 
     return new Promise((resolve) => {
-      this.create(this.project, { projectID, roleID })
+      this.create(this.project, { projectID, roleID, memberID })
         .then(({ status, ...data }: any) => {
           console.log('%c project - setRole 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {
@@ -634,7 +668,7 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_workspaceSetRole({ workspaceID, roleID }) {
+  api_workspaceSetRole({ workspaceID, roleID, memberID }) {
     if (!workspaceID) {
       console.log(
         '%c Error: workspace - setRole 接口 缺失参数 workspaceID %c',
@@ -651,9 +685,17 @@ export default class LocalService extends localStorage {
       )
       return
     }
+    if (!memberID) {
+      console.log(
+        '%c Error: workspace - setRole 接口 缺失参数 memberID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
 
     return new Promise((resolve) => {
-      this.create(this.undefined, { workspaceID, roleID })
+      this.create(this.undefined, { workspaceID, roleID, memberID })
         .then(({ status, ...data }: any) => {
           console.log(
             '%c workspace - setRole 接口调用成功 %c',

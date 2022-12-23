@@ -9,10 +9,11 @@ const http = {
         { 'export @get': '/project/export' },
         { 'addMember @post': '/project/{projectID}/member/add', json: 'userIDs' },
         { 'delMember @delete': '/project/{projectID}/member/remove', body: 'userIDs' },
+        { 'member @get': '/project/{projectID}/member/list' },
         { 'memberQuit @post': '/project/{projectID}/member/leave' },
-        { 'setRole @post': '/project/{projectID}/member/setRole', json: 'roleID' },
+        { 'setRole @post': '/project/{projectID}/member/setRole', json: 'roleID, memberID' },
         { 'roleList @get': '/project/{projectID}/roles' },
-        { 'permission @get': '/project/{projectID}/permissions' }
+        { 'permission @get': '/project/{projectID}/rolePermission' }
       ]
     },
     {
@@ -28,9 +29,9 @@ const http = {
         { 'addMember @post': '/workspace/{workspaceID}/member/add', json: 'userIDs' },
         { 'removeMember @delete': '/workspace/{workspaceID}/member/remove', body: 'userIDs' },
         { 'memberQuit @post': '/workspace/{workspaceID}/member/leave' },
-        { 'setRole @post': '/workspace/{workspaceID}/member/setRole', json: 'roleID' },
+        { 'setRole @post': '/workspace/{workspaceID}/member/setRole', json: 'roleID, memberID' },
         { 'roleList @get': '/workspace/{workspaceID}/roles' },
-        { 'permission @get': '/workspace/{workspaceID}/permissions' }
+        { 'permission @get': '/workspace/{workspaceID}/rolePermission' }
       ]
     },
     {

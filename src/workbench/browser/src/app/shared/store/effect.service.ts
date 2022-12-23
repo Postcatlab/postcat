@@ -125,28 +125,6 @@ export class EffectService {
       // * refresh view
       this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
     }
-  }
-  changeProject(pid) {
-    this.store.setCurrentProjectID(pid);
-    this.router.navigate(['**']);
-    this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
-  }
-  async updateWorkspaces() {
-    const [list, wErr]: any = await this.http.api_workspaceList({});
-    if (wErr) {
-      if (wErr.status === 401) {
-        this.message.send({ type: 'clear-user', data: {} });
-        if (this.store.isLogin) {
-          return;
-        }
-        this.message.send({ type: 'http-401', data: {} });
-      }
-      // * Switch store to local workspace
-      this.store.setWorkspaceList([]);
-      this.updateProjects(this.store.getCurrentWorkspaceID);
-      return;
-    }
-    this.store.setWorkspaceList(list);
     // * update workspace role
     {
       const [data, err]: any = await this.http.api_workspaceRoleList({ workspaceID: this.store.getCurrentWorkspaceID });
@@ -165,6 +143,47 @@ export class EffectService {
       console.log('workspace permission list', data);
       this.store.setAuthMap(data, 'workspace');
     }
+  }
+  async changeProject(pid) {
+    this.store.setCurrentProjectID(pid);
+    this.router.navigate(['**']);
+    this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
+    // * update project role
+    // {
+    //   const [data, err]: any = await this.http.api_projectRoleList({ projectID: this.store.getCurrentProjectID });
+    //   if (err) {
+    //     return;
+    //   }
+    //   console.log('project role list', data);
+    //   this.store.setRole(data, 'project');
+    // }
+    {
+      // * update project auth
+      const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
+      if (err) {
+        return;
+      }
+      console.log('project permission list', data);
+      this.store.setAuthMap(data.permissions, 'project');
+      this.store.setRole(data.role.name, 'project');
+    }
+  }
+  async updateWorkspaces() {
+    const [list, wErr]: any = await this.http.api_workspaceList({});
+    if (wErr) {
+      if (wErr.status === 401) {
+        this.message.send({ type: 'clear-user', data: {} });
+        if (this.store.isLogin) {
+          return;
+        }
+        this.message.send({ type: 'http-401', data: {} });
+      }
+      // * Switch store to local workspace
+      this.store.setWorkspaceList([]);
+      this.updateProjects(this.store.getCurrentWorkspaceID);
+      return;
+    }
+    this.store.setWorkspaceList(list);
   }
   async updateProjects(workspaceID) {
     return new Promise(resolve => {
@@ -194,24 +213,6 @@ export class EffectService {
           });
           this.store.setProjectList(projects);
           this.store.setCurrentProjectID(project.uuid);
-        }
-        // * update project role
-        {
-          const [data, err]: any = await this.http.api_projectRoleList({ projectID: this.store.getCurrentProjectID });
-          if (err) {
-            return;
-          }
-          console.log('project role list', data);
-          this.store.setRole(data, 'project');
-        }
-        {
-          // * update project auth
-          const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
-          if (err) {
-            return;
-          }
-          console.log('project permission list', data);
-          this.store.setAuthMap(data, 'project');
         }
       });
     });

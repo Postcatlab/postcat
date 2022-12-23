@@ -113,8 +113,8 @@ export class ProjectMemberComponent implements OnInit {
       this.message.send({ type: 'need-config-remote', data: {} });
       return;
     }
-    const [wData, wErr]: any = await this.api.api_workspaceMember({
-      workspaceID: this.store.getCurrentWorkspaceID
+    const [wData, wErr]: any = await this.api.api_projectMember({
+      projectID: this.store.getCurrentProjectID
     });
     if (wErr) {
       if (wErr.status === 401) {
@@ -126,7 +126,7 @@ export class ProjectMemberComponent implements OnInit {
       }
       return;
     }
-
+    console.log('wData', wData);
     // * 对成员列表进行排序
     const Owner = wData.filter(it => it.roleName === 'Owner');
     const Member = wData.filter(it => it.roleName !== 'Owner');

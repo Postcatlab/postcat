@@ -195,6 +195,35 @@ export class RemoteService {
     })
   }
 
+  api_projectMember({ projectID }, prefix = '') {
+    if (!projectID) {
+      console.log(
+        '%c Error: project - member 接口 缺失参数 projectID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
+
+    return new Promise((resolve) => {
+      this.http
+        .get(`${prefix}/project/${projectID}/member/list`, {})
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c project - member 接口请求成功 %c', SuccessStyle, '')
+            if (status === 200) {
+              return resolve([data, null])
+            }
+            resolve([null, { status, ...data }])
+          },
+          error: (error) => {
+            console.log('%c project - member 接口请求失败 %c', ErrorStyle, '')
+            resolve([null, error])
+          },
+        })
+    })
+  }
+
   api_projectMemberQuit({ projectID }, prefix = '') {
     if (!projectID) {
       console.log(
@@ -232,7 +261,7 @@ export class RemoteService {
     })
   }
 
-  api_projectSetRole({ projectID, roleID }, prefix = '') {
+  api_projectSetRole({ projectID, roleID, memberID }, prefix = '') {
     if (!projectID) {
       console.log(
         '%c Error: project - setRole 接口 缺失参数 projectID %c',
@@ -249,10 +278,21 @@ export class RemoteService {
       )
       return
     }
+    if (!memberID) {
+      console.log(
+        '%c Error: project - setRole 接口 缺失参数 memberID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
 
     return new Promise((resolve) => {
       this.http
-        .post(`${prefix}/project/${projectID}/member/setRole`, { roleID })
+        .post(`${prefix}/project/${projectID}/member/setRole`, {
+          roleID,
+          memberID,
+        })
         .subscribe({
           next: ({ status, data }: any) => {
             console.log(
@@ -312,7 +352,7 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http
-        .get(`${prefix}/project/${projectID}/permissions`, {})
+        .get(`${prefix}/project/${projectID}/rolePermission`, {})
         .subscribe({
           next: ({ status, data }: any) => {
             console.log(
@@ -659,7 +699,7 @@ export class RemoteService {
     })
   }
 
-  api_workspaceSetRole({ workspaceID, roleID }, prefix = '') {
+  api_workspaceSetRole({ workspaceID, roleID, memberID }, prefix = '') {
     if (!workspaceID) {
       console.log(
         '%c Error: workspace - setRole 接口 缺失参数 workspaceID %c',
@@ -676,10 +716,21 @@ export class RemoteService {
       )
       return
     }
+    if (!memberID) {
+      console.log(
+        '%c Error: workspace - setRole 接口 缺失参数 memberID %c',
+        ErrorStyle,
+        ''
+      )
+      return
+    }
 
     return new Promise((resolve) => {
       this.http
-        .post(`${prefix}/workspace/${workspaceID}/member/setRole`, { roleID })
+        .post(`${prefix}/workspace/${workspaceID}/member/setRole`, {
+          roleID,
+          memberID,
+        })
         .subscribe({
           next: ({ status, data }: any) => {
             console.log(
@@ -747,7 +798,7 @@ export class RemoteService {
 
     return new Promise((resolve) => {
       this.http
-        .get(`${prefix}/workspace/${workspaceID}/permissions`, {})
+        .get(`${prefix}/workspace/${workspaceID}/rolePermission`, {})
         .subscribe({
           next: ({ status, data }: any) => {
             console.log(
