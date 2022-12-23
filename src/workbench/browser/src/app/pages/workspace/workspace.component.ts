@@ -7,7 +7,7 @@ import { EffectService } from '../../shared/store/effect.service';
 
 @Component({
   selector: 'eo-workspace',
-  template: `<eo-workspace-member></eo-workspace-member><router-outlet></router-outlet>`,
+  template: `<router-outlet></router-outlet>`,
   styles: []
 })
 export class WorkspaceComponent implements OnInit {

@@ -69,6 +69,18 @@ export class ProjectMemberComponent implements OnInit {
   isAddPeopleBtnLoading;
   memberList;
   userList = [];
+  roleMUI = [
+    {
+      title: 'Project Owner',
+      name: 'owner',
+      id: 3
+    },
+    {
+      title: 'Editor',
+      name: 'editor',
+      id: 4
+    }
+  ];
   constructor(
     public modal: NzModalService,
     public store: StoreService,
@@ -92,9 +104,15 @@ export class ProjectMemberComponent implements OnInit {
       return;
     }
     // * 对成员列表进行排序
-    const Owner = wData.filter(it => it.roleName === 'Owner');
-    const Member = wData.filter(it => it.roleName !== 'Owner');
-    this.memberList = Owner.concat(Member);
+    // const Owner = wData.filter(it => it.roleName === 'Owner');
+    // const Member = wData.filter(it => it.roleName !== 'Owner');
+    this.memberList = wData;
+    this.memberList.forEach(member => {
+      member.roleTitle = this.roleMUI.find(val => val.id === member.role.id).title;
+      if (member.id === this.store.getUserProfile.id) {
+        member.myself = true;
+      }
+    });
   }
   async ngOnInit(): Promise<void> {
     this.queryList();
@@ -105,16 +123,21 @@ export class ProjectMemberComponent implements OnInit {
         if (value.trim() === '') {
           return;
         }
-        this.http.api_userSearch({ username: value.trim() }).then(([data, err]: any) => {
-          if (err) {
-            this.userList = [];
-            return;
-          }
-          const memberList = this.memberList.map(it => it.username);
-          this.userList = data.filter(it => {
-            return !memberList.includes(it.username);
+        this.http
+          .api_workspaceSearchMember({
+            workspaceID: this.store.getCurrentWorkspaceID,
+            username: value.trim()
+          })
+          .then(([data, err]: any) => {
+            if (err) {
+              this.userList = [];
+              return;
+            }
+            const memberList = this.memberList.map(it => it.username);
+            this.userList = data.filter(it => {
+              return !memberList.includes(it.username);
+            });
           });
-        });
       },
       { delay: 300 }
     );

@@ -32,9 +32,9 @@ export class EffectService {
       if (this.store.getProjectList.length === 0) {
         this.router.navigate(['/home/workspace/project/list']);
       }
+      this.getProjectPermission();
+      this.getWorkspacePermission();
     });
-    this.changeProject(this.store.getCurrentProjectID);
-    this.changeWorkspace(this.store.getCurrentWorkspaceID);
     reaction(
       () => this.store.isLogin,
       async () => {
@@ -114,6 +114,18 @@ export class EffectService {
       }))
       .concat(apiDataFilters);
   }
+  async getWorkspacePermission() {
+    {
+      // * update workspace auth
+      const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
+      if (err) {
+        return;
+      }
+      console.log('workspace permission list', data);
+      this.store.setAuthMap(data.permissions, 'workspace');
+      this.store.setRole(data.role.name, 'workspace');
+    }
+  }
   async changeWorkspace(workspaceID: number = -1) {
     // * real set workspace
     this.store.setCurrentWorkspaceID(workspaceID);
@@ -128,48 +140,23 @@ export class EffectService {
       this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
     }
     // * update workspace role
-    // {
-    //   const [data, err]: any = await this.http.api_workspaceRoleList({ workspaceID: this.store.getCurrentWorkspaceID });
-    //   if (err) {
-    //     return;
-    //   }
-    //   console.log('workspace role list', data);
-    //   this.store.setRole(data, 'workspace');
-    // }
-    {
-      // * update workspace auth
-      const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
-      if (err) {
-        return;
-      }
-      console.log('workspace permission list', data);
-      this.store.setAuthMap(data.permissions, 'workspace');
-      this.store.setRole(data.role.name, 'workspace');
+    this.getWorkspacePermission();
+  }
+  async getProjectPermission() {
+    // * update project auth
+    const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
+    if (err) {
+      return;
     }
+    this.store.setAuthMap(data.permissions, 'project');
+    this.store.setRole(data.role.name, 'project');
   }
   async changeProject(pid) {
     this.store.setCurrentProjectID(pid);
     this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
     // * update project role
-    // {
-    //   const [data, err]: any = await this.http.api_projectRoleList({ projectID: this.store.getCurrentProjectID });
-    //   if (err) {
-    //     return;
-    //   }
-    //   console.log('project role list', data);
-    //   this.store.setRole(data, 'project');
-    // }
-    {
-      // * update project auth
-      const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
-      if (err) {
-        return;
-      }
-      console.log('project permission list', data);
-      this.store.setAuthMap(data.permissions, 'project');
-      this.store.setRole(data.role.name, 'project');
-    }
+    await this.getProjectPermission();
   }
   async updateWorkspaces() {
     const [list, wErr]: any = await this.http.api_workspaceList({});

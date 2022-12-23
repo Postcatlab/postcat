@@ -18,15 +18,12 @@
   .ant-card {
     @include hover-item;
   }
+}
 
-  ::ng-deep {
-    .ant-list-items {
-      .ant-list-item {
-        @apply rounded-[3px];
-        @include hover-item;
+:host ::ng-deep {
+  .ant-list-item {
+    @apply px-[10px] rounded-[3px];
 
-        border: 1px solid transparent;
-      }
-    }
+    border: 1px solid transparent;
   }
 }
