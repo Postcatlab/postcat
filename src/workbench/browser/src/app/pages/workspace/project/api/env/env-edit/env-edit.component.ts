@@ -129,6 +129,7 @@ export class EnvEditComponent implements OnDestroy {
         hostUri: '',
         parameters: []
       };
+      this.initialModel = eoDeepCopy(this.model);
     } else {
       if (!this.model) {
         const [res, err]: any = await this.getEnv(id);

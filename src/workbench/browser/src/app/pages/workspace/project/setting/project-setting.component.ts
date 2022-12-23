@@ -123,6 +123,7 @@ export class ProjectSettingComponent implements OnInit {
                 resolve(true);
                 return;
               }
+              console.log(status);
               this.message.success($localize`${title} successfully`);
               modal.destroy();
               resolve(true);
