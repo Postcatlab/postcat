@@ -195,7 +195,12 @@ export class ApiComponent implements OnInit, OnDestroy {
   onResizeEnd() {
     this.isDragging = false;
   }
-
+  gotoEnvManager() {
+    // * switch to env
+    this.tabsIndex = 2;
+    // * close select
+    this.isOpen = false;
+  }
   toggleRightBar(operate: 'open' | 'close') {
     if (operate === 'open') {
       let dyWitdth = this.getLocalRightSiderWidth();

@@ -49,7 +49,6 @@ export class ApiTabService {
       pathname: '/home/workspace/project/api/env/edit',
       id: 'project-env',
       type: 'edit',
-      isFixed: true,
       icon: 'application',
       title: $localize`New Environment`
     },
@@ -310,7 +309,11 @@ export class ApiTabService {
     this.updateTab(currentTab, inData);
   }
   handleDataBeforeGetCache = tabsInfo => {
-    // console.log(this.store.getCurrentWorkspaceID, this.store.getCurrentProjectID);
+    if (!tabsInfo?.tabOrder?.[0]) return null;
+    const tab = tabsInfo.tabsByID[tabsInfo.tabOrder[0]];
+    if (!tab) return null;
+    const { wid, pid } = tab.params;
+    if (Number(wid) !== this.store.getCurrentWorkspaceID || Number(pid) !== this.store.getCurrentProjectID) return null;
     return tabsInfo;
   };
   handleDataBeforeCache = tabStorage => {

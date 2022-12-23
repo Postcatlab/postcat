@@ -118,13 +118,18 @@ export class ApiParamsExtraSettingComponent implements OnInit {
     if (this.isEdit && this.model[0] && !this.model[0]?.enum?.length) {
       this.model[0].enum = this.model[0].enum || [];
     }
-    //Set Table preview
-    if (this.isEdit) {
-      this.showLengthTable = ['string'].includes(this.model[0].type);
-      this.showValueTable = ['int', 'float', 'double', 'short', 'long', 'number'].includes(this.model[0].type);
+    //Set Length/Value preview
+    if (this.in !== 'body') {
+      this.showLengthTable = false;
+      this.showValueTable = false;
     } else {
-      this.showLengthTable = !isNil(this.model[0].minLength || this.model[0].maxLength);
-      this.showValueTable = !isNil(this.model[0].minimum || this.model[0].maximum);
+      if (this.isEdit) {
+        this.showLengthTable = ['string'].includes(this.model[0].type);
+        this.showValueTable = ['int', 'float', 'double', 'short', 'long', 'number'].includes(this.model[0].type);
+      } else {
+        this.showLengthTable = !isNil(this.model[0].minLength || this.model[0].maxLength);
+        this.showValueTable = !isNil(this.model[0].minimum || this.model[0].maximum);
+      }
     }
   }
 }

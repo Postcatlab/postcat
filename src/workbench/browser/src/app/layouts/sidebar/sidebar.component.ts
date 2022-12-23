@@ -107,7 +107,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         ]
       : [];
     const settingItem =
-      this.store.role.project === 'admin'
+      this.store.getProjectRole === 'admin'
         ? [
             {
               title: $localize`Setting`,

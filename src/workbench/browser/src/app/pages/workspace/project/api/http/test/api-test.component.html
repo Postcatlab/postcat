@@ -96,7 +96,7 @@
         </ng-template>
         <eo-api-test-query
           class="eo_theme_iblock"
-          [model]="model.request.queryParams"
+          [(model)]="model.request.queryParams"
           (modelChange)="emitChangeFun('queryParams')"
         ></eo-api-test-query>
       </eo-ng-tab>

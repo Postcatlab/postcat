@@ -118,7 +118,7 @@ export class EffectService {
     this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
     await this.updateProjects(workspaceID);
-    this.router.navigate(['**']);
+    await this.router.navigate(['**']);
     if (this.store.getProjectList.length === 0) {
       this.router.navigate(['/home/workspace/project/list']);
     } else {

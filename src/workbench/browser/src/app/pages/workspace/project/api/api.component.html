@@ -116,6 +116,7 @@
           nzDropdownClassName="env-selector-dropdown"
           [(nzOpen)]="isOpen"
           nzPlacement="bottomRight"
+          [nzDropdownRender]="renderTemplate"
           (nzOpenChange)="handleEnvSelectStatus($event)"
           nzAllowClear
           i18n-nzPlaceHolder="Environment Dropdown placeholder"
@@ -123,6 +124,12 @@
           nzPlaceHolder="Environment"
         >
         </eo-ng-select>
+        <ng-template #renderTemplate>
+          <nz-divider *ngIf="!store.isShare"></nz-divider>
+          <a *ngIf="!store.isShare" class="text-sx manager-env" eo-ng-button nzType="link" (click)="gotoEnvManager()" i18n
+            >Manage Environment</a
+          >
+        </ng-template>
       </div>
     </nz-header>
     <!-- Content -->
