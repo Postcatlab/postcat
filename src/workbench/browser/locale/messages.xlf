@@ -187,6 +187,14 @@
           <context context-type="sourcefile">src/app/layouts/navbar/nav-operate.component.ts</context>
           <context context-type="linenumber">43,42</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="3139147897029202869" datatype="html">
         <source>Extensions</source>
@@ -329,7 +337,7 @@
         <source>Member</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">102</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/setting/workspace-setting.component.ts</context>
@@ -340,7 +348,7 @@
         <source>Setting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layouts/sidebar/sidebar.component.ts</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">115</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/list/extension-list.component.html</context>
@@ -913,10 +921,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/list/project-list.component.ts</context>
           <context context-type="linenumber">71</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">243</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/setting/project-setting.component.ts</context>
@@ -1674,6 +1678,133 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/components/edit/workspace-edit.component.ts</context>
           <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="216985062786525780" datatype="html">
+        <source>Search by username</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3249513483374643425" datatype="html">
+        <source>Add</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6732839230973604016" datatype="html">
+        <source>Set <x id="INTERPOLATION" equiv-text="{{ item.role.name === &apos;Owner&apos; ? &apos;Editor&apos; : &apos;Owner&apos; }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4814285799071780083" datatype="html">
+        <source>Remove</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7141735786251040499" datatype="html">
+        <source>Add member failed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4327927887356810079" datatype="html">
+        <source>Add member succssfully</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="231178805899624463" datatype="html">
+        <source>Change role Failed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">158</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="753210079123404983" datatype="html">
+        <source>Change role succssfully</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3193411548204673975" datatype="html">
+        <source>Change role error</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">171</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8626165599185021957" datatype="html">
+        <source>Remove Member succssfully</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">174</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5864248331647469449" datatype="html">
+        <source>You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">181</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5991639870700464283" datatype="html">
+        <source>Quit Failed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">189</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9122178932593325974" datatype="html">
+        <source>Quit succssfully</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/components/member/workspace-member.component.ts</context>
+          <context context-type="linenumber">192</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/workspace/project/member/manage-access/manage-access.component.ts</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6439365426343089851" datatype="html">
@@ -3567,13 +3698,6 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="216985062786525780" datatype="html">
-        <source>Search by username</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7927354222438929134" datatype="html">
         <source> Invite </source>
         <context-group purpose="location">
@@ -3595,32 +3719,18 @@
           <context context-type="linenumber">56,57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8370746762893790920" datatype="html">
-        <source>Could not find a user matching <x id="PH" equiv-text="username"/></source>
+      <trans-unit id="5206859141938172308" datatype="html">
+        <source>Please select a member</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4514148561788509919" datatype="html">
         <source>Add new member success</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">190</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6759205696902713848" datatype="html">
-        <source>Warning</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">240</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2832180029870893530" datatype="html">
-        <source>Are you sure you want to remove the member ?</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/workspace/project/member/project-member.component.ts</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3193976279273491157" datatype="html">
