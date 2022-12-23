@@ -7,14 +7,3 @@
     }
   }
 }
-
-.option {
-  button {
-    visibility: hidden;
-  }
-  &:hover {
-    button {
-      visibility: visible;
-    }
-  }
-}

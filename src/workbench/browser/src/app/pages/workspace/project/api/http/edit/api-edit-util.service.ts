@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { Injectable, ɵɵsetComponentScope } from '@angular/core';
+import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { omit } from 'lodash-es';
 
 import { ModalService } from '../../../../../../shared/services/modal.service';
@@ -19,9 +19,10 @@ export class ApiEditUtilService {
     const result = eoDeepCopy(formData);
     result.groupID = Number(result.groupID === '-1' ? '0' : result.groupID);
     ['requestBody', 'queryParams', 'restParams', 'requestHeaders', 'responseHeaders', 'responseBody'].forEach(tableName => {
-      if (typeof result[tableName] !== 'object') {
+      if (whatType(result[tableName]) !== 'array') {
         return;
       }
+      console.log(result[tableName]);
       result[tableName] = filterTableData(result[tableName], {
         filterFn: filterArrFun
       });

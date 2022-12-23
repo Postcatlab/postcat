@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { makeObservable, observable, reaction } from 'mobx';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { RemoteService } from '../../../../shared/services/storage/remote.service';
+import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
@@ -24,7 +26,7 @@ import { StoreService } from '../../../../shared/store/state.service';
               <span class="font-bold">{{ option.username }}</span>
               <span class="text-tips">{{ option.email }}</span>
             </div>
-            <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add Workspace</button>
+            <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
           </div>
         </eo-ng-option>
       </eo-ng-select>
@@ -63,11 +65,13 @@ import { StoreService } from '../../../../shared/store/state.service';
   styleUrls: ['./workspace-member.component.scss']
 })
 export class WorkspaceMemberComponent implements OnInit {
+  @Input() model;
   @Input() list = [];
   @Input() loading = false;
   @observable searchValue = '';
   userCache;
   userList = [];
+  workspaceID: number;
   roleMUI = [
     {
       title: 'Workspace Owner',
@@ -80,9 +84,16 @@ export class WorkspaceMemberComponent implements OnInit {
       id: 2
     }
   ];
-  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, private remote: RemoteService) {}
+  constructor(
+    public store: StoreService,
+    private message: EoNgFeedbackMessageService,
+    private remote: RemoteService,
+    private modalRef: NzModalRef,
+    private effect: EffectService
+  ) {}
 
   ngOnInit(): void {
+    this.workspaceID = this.model.id;
     this.queryList();
     makeObservable(this);
     reaction(
@@ -111,7 +122,7 @@ export class WorkspaceMemberComponent implements OnInit {
   async queryList() {
     this.loading = true;
     const [data, error]: any = await this.remote.api_workspaceMember({
-      workspaceID: this.store.getCurrentWorkspaceID
+      workspaceID: this.workspaceID
     });
     this.loading = false;
     this.list = data || [];
@@ -123,16 +134,23 @@ export class WorkspaceMemberComponent implements OnInit {
     });
   }
   async addMember(items) {
-    await this.remote.api_workspaceAddMember({
-      workspaceID: this.store.getCurrentWorkspaceID,
+    const [data, err]: any = await this.remote.api_workspaceAddMember({
+      workspaceID: this.workspaceID,
       userIDs: [items.id]
     });
+    if (err) {
+      this.message.error($localize`Add member failed`);
+      return;
+    }
+    this.message.success($localize`Add member succssfully`);
+    this.userList = [];
+    this.userCache = '';
     this.queryList();
   }
   async changeRole(item) {
     const roleID = item.role.id === 1 ? 2 : 1;
     const [data, err]: any = await this.remote.api_workspaceSetRole({
-      workspaceID: this.store.getCurrentWorkspaceID,
+      workspaceID: this.workspaceID,
       roleID: roleID,
       memberID: item.id
     });
@@ -146,7 +164,7 @@ export class WorkspaceMemberComponent implements OnInit {
   }
   async removeMember(item) {
     const [data, err]: any = await this.remote.api_workspaceRemoveMember({
-      workspaceID: this.store.getCurrentWorkspaceID,
+      workspaceID: this.workspaceID,
       userIDs: [item.id]
     });
     if (err) {
@@ -156,7 +174,7 @@ export class WorkspaceMemberComponent implements OnInit {
     this.message.success($localize`Remove Member succssfully`);
     this.queryList();
   }
-  quitWorkspace(item) {
+  async quitWorkspace(item) {
     let memberList = this.list.filter(val => val.role.id === 1);
     if (memberList.length === 1 && memberList[0].myself) {
       this.message.warning(
@@ -164,5 +182,19 @@ export class WorkspaceMemberComponent implements OnInit {
       );
       return;
     }
+    const [data, err]: any = await this.remote.api_workspaceMemberQuit({
+      workspaceID: this.workspaceID
+    });
+    if (err) {
+      this.message.error($localize`Quit Failed`);
+      return;
+    }
+    this.message.success($localize`Quit succssfully`);
+    if (this.store.getCurrentWorkspaceID === this.workspaceID) {
+      await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
+    } else {
+      this.modalRef.close();
+    }
+    this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.workspaceID));
   }
 }

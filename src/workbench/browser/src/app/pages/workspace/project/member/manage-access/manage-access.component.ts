@@ -68,12 +68,14 @@ export class ManageAccessComponent {
     this.eoOnChange.emit(item);
   }
   quitProject(item) {
-    let memberList = this.list.filter(val => val.role.id === 1);
-    if (memberList.length === 1 && memberList[0].myself) {
-      this.message.warning(
-        $localize`You are the only owner of the project, please transfer the ownership to others before leaving the project.`
-      );
+    const [data, err]: any = this.remote.api_projectMemberQuit({
+      projectID: this.store.getCurrentProjectID
+    });
+    if (err) {
+      this.message.error($localize`Quit Failed`);
       return;
     }
+    this.message.success($localize`Quit succssfully`);
+    this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.store.getCurrentWorkspaceID));
   }
 }
