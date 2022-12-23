@@ -59,7 +59,7 @@ export class StoreService {
       VIEW_WORKSPACE: false,
       ADD_WORKSPACE_MEMBER: false,
       UPDATE_WORKSPACE_MEMBER: false,
-      DELETE_WORKSPACE__MEMBER: false
+      DELETE_WORKSPACE_MEMBER: false
     },
     project: {
       /** project */
@@ -71,7 +71,7 @@ export class StoreService {
       EXPORT_PROJECT: false,
       ADD_PROJECT_MEMBER: false,
       UPDATE_PROJECT_MEMBER: false,
-      DELETE_PROJECT__MEMBER: false
+      DELETE_PROJECT_MEMBER: false
     }
   };
 
@@ -276,7 +276,7 @@ export class StoreService {
     });
     console.log('check permission', { ...this.permissions[type] }, permissionsList);
     // * set some true
-    this.permissions[type] = permissionsList.forEach(it => {
+    permissionsList.forEach(it => {
       const name = _.upperCase(it).split(' ').join('_');
       console.log('name', name);
       this.permissions[type][name] = true;
