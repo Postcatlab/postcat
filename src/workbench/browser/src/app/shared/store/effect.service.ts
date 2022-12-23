@@ -202,6 +202,7 @@ export class EffectService {
           });
           this.store.setProjectList(projects);
           this.store.setCurrentProjectID(project.uuid);
+          resolve(true);
         }
       });
     });
