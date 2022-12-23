@@ -123,7 +123,6 @@ export class ImportApiComponent implements OnInit {
       };
       const params = [this.store.getCurrentProjectID, decycle(data)];
       this.storage.run('projectImport', params, (result: StorageRes) => {
-        console.log('projectImport result', JSON.parse(JSON.stringify(result)));
         if (result.status === StorageResStatus.success) {
           callback(true);
           this.router.navigate(['home/workspace/project/api']);

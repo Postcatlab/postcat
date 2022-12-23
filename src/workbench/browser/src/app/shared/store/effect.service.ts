@@ -118,13 +118,18 @@ export class EffectService {
     this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
     await this.updateProjects(workspaceID);
-    await this.router.navigate(['**']);
+    this.router.navigate(['**']);
     if (this.store.getProjectList.length === 0) {
       this.router.navigate(['/home/workspace/project/list']);
     } else {
       // * refresh view
-      this.router.navigate(['/home/workspace/project/api'], { queryParams: { spaceID: this.store.getCurrentWorkspaceID } });
+      this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
     }
+  }
+  changeProject(pid) {
+    this.store.setCurrentProjectID(pid);
+    this.router.navigate(['**']);
+    this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
   }
   async updateWorkspaces() {
     const [list, wErr]: any = await this.http.api_workspaceList({});
