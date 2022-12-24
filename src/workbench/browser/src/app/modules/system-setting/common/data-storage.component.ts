@@ -29,7 +29,7 @@ import { SettingService } from '../settings.service';
       </ng-container>
       <nz-form-item>
         <nz-form-control>
-          <button eo-ng-button nzType="primary" [nzLoading]="loading" i18n>Connect</button>
+          <button eo-ng-button nzType="primary" [disabled]="!validateForm.valid" [nzLoading]="loading" i18n>Connect</button>
         </nz-form-control>
       </nz-form-item>
     </form>
