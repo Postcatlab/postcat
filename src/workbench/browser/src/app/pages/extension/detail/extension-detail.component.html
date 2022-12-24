@@ -1,10 +1,13 @@
 <div class="flex flex-col h-full extension-detail" *ngIf="extensionDetail">
   <div class="top-0 z-50">
     <div class="pb-[16px]">
-      <a eo-ng-button nzType="link" (click)="backToList()" class="flex !pl-[12px] leading-[40px] h-[40px] !text-black">
-        <eo-iconpark-icon name="return" size="16px"></eo-iconpark-icon><span class="ml-[6px]" i18n>Back</span>
-      </a>
-      <div style="border-bottom: 1px solid rgba(237, 237, 237, 1)"></div>
+      <div class="leading-[40px] h-[40px] ml-[5px]">
+        <button eo-ng-button nzType="text" (click)="backToList()" class="flex !pl-[12px]">
+          <eo-iconpark-icon name="return" size="16px"></eo-iconpark-icon><span class="ml-[6px]" i18n>Back</span>
+        </button>
+      </div>
+      <nz-divider class="m-0"></nz-divider>
+      <!-- <div style="border-bottom: 1px solid rgba(237, 237, 237, 1)"></div> -->
       <div class="flex items-center justify-between mt-[20px] px-[20px]">
         <div class="flex items-center">
           <nz-avatar nzSize="small" [nzSize]="30" [nzShape]="'square'" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>

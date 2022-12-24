@@ -167,6 +167,7 @@ export class StoreService {
   }
 
   @computed get getWorkspaceRole() {
+    console.log(this.role.workspace);
     return this.role.workspace;
   }
 

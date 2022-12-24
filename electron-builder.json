@@ -59,8 +59,6 @@
     "entitlementsInherit": "scripts/entitlements.mac.plist",
     "target": ["dmg", "zip"]
   },
-  "includeSubNodeModules": true,
-  "buildDependenciesFromSource": true,
   "dmg": {
     "sign": false
   },

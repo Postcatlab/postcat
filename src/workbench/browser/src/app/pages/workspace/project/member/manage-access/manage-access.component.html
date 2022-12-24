@@ -13,14 +13,14 @@
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
             <span>{{ item.roleTitle }}</span>
-            <div class="operate-btn-list" *ngIf="item.myself || store.getProjectRole === 'admin'">
+            <div class="operate-btn-list" *ngIf="(item.myself || store.getProjectRole === 'Owner') && item.role.id !== 1">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="!item.myself && store.getProjectRole === 'admin'" nz-menu-item i18n (click)="changeRole(item)"
+                  <li *ngIf="!item.myself && store.getProjectRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)"
                     >Set {{ item.role.name === 'Owner' ? 'Editor' : 'Owner' }}
                   </li>
-                  <li *ngIf="!item.myself && store.getProjectRole === 'admin'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
+                  <li *ngIf="!item.myself && store.getProjectRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
                   <li *ngIf="item.myself" nz-menu-item i18n (click)="quitProject(item)">Quit</li>
                 </ul>
               </eo-ng-dropdown-menu>

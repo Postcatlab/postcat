@@ -71,6 +71,16 @@ export class ProjectMemberComponent implements OnInit {
   userList = [];
   roleMUI = [
     {
+      title: 'Workspace Owner',
+      name: 'owner',
+      id: 1
+    },
+    {
+      title: 'Workspace Editor',
+      name: 'editor',
+      id: 2
+    },
+    {
       title: 'Project Owner',
       name: 'owner',
       id: 3

@@ -51,12 +51,12 @@ export class ManageAccessComponent {
       this.message.error($localize`Change role Failed`);
       return;
     }
-    this.message.success($localize`Change role succssfully`);
+    this.message.success($localize`Change role successfully`);
     item.role.id = roleID;
     item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
   }
   async removeMember(item) {
-    const [data, err]: any = await this.remote.api_projectAddMember({
+    const [data, err]: any = await this.remote.api_projectDelMember({
       projectID: this.store.getCurrentProjectID,
       userIDs: [item.id]
     });
@@ -64,7 +64,7 @@ export class ManageAccessComponent {
       this.message.error($localize`Change role error`);
       return;
     }
-    this.message.success($localize`Remove Member succssfully`);
+    this.message.success($localize`Remove Member successfully`);
     this.eoOnChange.emit(item);
   }
   quitProject(item) {
@@ -75,7 +75,7 @@ export class ManageAccessComponent {
       this.message.error($localize`Quit Failed`);
       return;
     }
-    this.message.success($localize`Quit succssfully`);
+    this.message.success($localize`Quit successfully`);
     this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.store.getCurrentWorkspaceID));
   }
 }

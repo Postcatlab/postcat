@@ -121,7 +121,6 @@ export class EffectService {
       if (err) {
         return;
       }
-      console.log('workspace permission list', data);
       this.store.setAuthMap(data.permissions, 'workspace');
       this.store.setRole(data.role.name, 'workspace');
     }
@@ -203,6 +202,7 @@ export class EffectService {
           });
           this.store.setProjectList(projects);
           this.store.setCurrentProjectID(project.uuid);
+          resolve(true);
         }
       });
     });

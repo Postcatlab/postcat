@@ -10,7 +10,7 @@ import { StoreService } from '../../../../shared/store/state.service';
 @Component({
   selector: 'eo-workspace-member',
   template: `<nz-list nzItemLayout="horizontal" [nzLoading]="loading">
-    <nz-list-header *ngIf="store.getWorkspaceRole === 'admin'">
+    <nz-list-header *ngIf="store.getWorkspaceRole === 'Owner'">
       <eo-ng-select
         class="w-full"
         nzAllowClear
@@ -44,14 +44,14 @@ import { StoreService } from '../../../../shared/store/state.service';
         <nz-list-item-action>
           <div class="flex w-[170px] items-center justify-between">
             <span>{{ item.roleTitle }}</span>
-            <div class="operate-btn-list" *ngIf="item.myself || store.getWorkspaceRole === 'admin'">
+            <div class="operate-btn-list" *ngIf="item.myself || store.getWorkspaceRole === 'Owner'">
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'admin'" nz-menu-item i18n (click)="changeRole(item)"
+                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)"
                     >Set {{ item.role.name === 'Owner' ? 'Editor' : 'Owner' }}
                   </li>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'admin'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
+                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
                   <li *ngIf="item.myself" nz-menu-item i18n (click)="quitWorkspace(item)">Quit</li>
                 </ul>
               </eo-ng-dropdown-menu>
@@ -142,7 +142,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Add member failed`);
       return;
     }
-    this.message.success($localize`Add member succssfully`);
+    this.message.success($localize`Add member successfully`);
     this.userList = [];
     this.userCache = '';
     this.queryList();
@@ -158,7 +158,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Change role Failed`);
       return;
     }
-    this.message.success($localize`Change role succssfully`);
+    this.message.success($localize`Change role successfully`);
     item.role.id = roleID;
     item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
   }
@@ -171,7 +171,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Change role error`);
       return;
     }
-    this.message.success($localize`Remove Member succssfully`);
+    this.message.success($localize`Remove Member successfully`);
     this.queryList();
   }
   async quitWorkspace(item) {
@@ -189,7 +189,7 @@ export class WorkspaceMemberComponent implements OnInit {
       this.message.error($localize`Quit Failed`);
       return;
     }
-    this.message.success($localize`Quit succssfully`);
+    this.message.success($localize`Quit successfully`);
     if (this.store.getCurrentWorkspaceID === this.workspaceID) {
       await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
     } else {
