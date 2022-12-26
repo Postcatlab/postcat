@@ -2,16 +2,23 @@ import { Component } from '@angular/core';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
-import { MessageService } from '../../../shared/services/message';
-import { ModalService } from '../../../shared/services/modal.service';
+import { DataSourceService } from '../../../../shared/services/data-source/data-source.service';
+import { MessageService } from '../../../../shared/services/message';
+import { ModalService } from '../../../../shared/services/modal.service';
 
 @Component({
   selector: 'eo-select-workspace',
-  template: ` <a eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
+  template: ` <button
+      nzTrigger="click"
+      eo-ng-button
+      nzType="text"
+      nzOverlayClassName="select-workspace-class"
+      eo-ng-dropdown
+      [nzDropdownMenu]="workspaceMenu"
+    >
       {{ store.getCurrentWorkspace?.title }}
       <eo-iconpark-icon name="down"></eo-iconpark-icon>
-    </a>
+    </button>
     <eo-ng-dropdown-menu #workspaceMenu>
       <ul nz-menu>
         <div class="flex py-[5px] px-[12px]">
@@ -31,7 +38,8 @@ import { ModalService } from '../../../shared/services/modal.service';
         <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.id)">
           <p class="workspace-title text-tips" i18n>LOCAL</p>
           <li
-            [ngClass]="['workspace-item flex items-center', { 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }]"
+            class="workspace-item flex items-center"
+            [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }"
             nz-menu-item
           >
             <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
@@ -56,23 +64,7 @@ import { ModalService } from '../../../shared/services/modal.service';
         </div>
       </ul>
     </eo-ng-dropdown-menu>`,
-  styles: [
-    `
-      .workspace-title {
-        padding: 0 10px;
-        font-size: 12px;
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-      .workspace-item {
-        padding: 0 20px;
-        height: 30px;
-      }
-      .active-item {
-        color: var(--MAIN_THEME_COLOR);
-      }
-    `
-  ]
+  styleUrls: ['./select-workspace.component.scss']
 })
 export class SelectWorkspaceComponent {
   searchValue: string;

@@ -29,7 +29,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
           This link will be updated with the API content. Everyone can access it without logging in
         </p>
         <div class="flex items-center">
-          <span class="truncate flex-1" (click)="handleCopy()" i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip>
+          <span class="truncate flex-1">
             {{ link }}
           </span>
           <button eo-ng-button nzType="text" (click)="handleCopy()"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>

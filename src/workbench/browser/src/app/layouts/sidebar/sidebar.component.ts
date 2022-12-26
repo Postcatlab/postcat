@@ -142,7 +142,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         route: 'home/workspace/project/api/http/test'
       },
       {
-        title: 'Env',
+        title: $localize`Environment`,
         id: '@eo-core-env',
         isOffical: true,
         icon: 'application',

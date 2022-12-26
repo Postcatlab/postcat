@@ -1,11 +1,6 @@
 <div class="h-full overflow-hidden">
   <header class="p-[10px]">
     <form nz-form [formGroup]="validateForm" class="flex">
-      <div>
-        <eo-ng-select class="!w-[106px] no-radius-select" [(ngModel)]="model.request.protocol" formControlName="protocol">
-          <eo-ng-option *ngFor="let item of WS_PROTOCOL" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
-        </eo-ng-select>
-      </div>
       <nz-form-item nz-col class="flex-1">
         <nz-form-control [nzValidateStatus]="validateForm.controls.uri" i18n-nzErrorTip nzErrorTip="Please enter URL">
           <input
@@ -15,7 +10,7 @@
             formControlName="uri"
             (change)="changeUri()"
             [(ngModel)]="model.request.uri"
-            class="rounded-r left-1"
+            class="left-1"
             name="uri"
             eo-ng-input
           />

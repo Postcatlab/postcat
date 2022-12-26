@@ -24,7 +24,7 @@ import { eoDeepCopy } from '../../../../utils/index.utils';
       <nz-divider></nz-divider>
     </div>
     <div class="mb-2 font-bold" i18n>Actions</div>
-    <div class="border">
+    <div class="border rounded">
       <nz-list nzItemLayout="horizontal">
         <nz-list-item *ngFor="let item of overviewList">
           <div class="flex items-center justify-between w-full px-base">

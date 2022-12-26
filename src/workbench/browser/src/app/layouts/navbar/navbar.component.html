@@ -74,7 +74,7 @@
     </button>
     <eo-ng-dropdown-menu #userMenu>
       <ul nz-menu>
-        <li nz-menu-item *ngIf="!store.isLogin" (click)="loginOrSign()" i18n>Sign in for Collaboration</li>
+        <li nz-menu-item *ngIf="!store.isLogin" (click)="loginOrSign()" i18n>Sign in/Up</li>
         <ng-container *ngIf="store.isLogin">
           <li nz-menu-item class="px-[12px] py-[5px] text-neutral-400 font-bold">
             {{ store.getUserProfile?.username }}

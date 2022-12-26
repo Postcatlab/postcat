@@ -125,19 +125,14 @@
         <!-- Child Tab Bar -->
         <eo-ng-tabset class="inside_page_tabset" *ngIf="this.showChildBar" nzLinkRouter>
           <eo-ng-tab *ngFor="let tab of renderTabs">
-            <p *ngIf="web.isWeb && tab.onlyDestop">
-              <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
-            </p>
-            <div *ngIf="!web.isWeb || !tab.onlyDestop">
-              <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
-                {{ tab.title }}
-                <nz-badge
-                  *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
-                  class="ant-badge-theme-color"
-                  nzStatus="default"
-                ></nz-badge>
-              </a>
-            </div>
+            <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
+              {{ tab.title }}
+              <nz-badge
+                *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
+                class="ant-badge-theme-color"
+                nzStatus="default"
+              ></nz-badge>
+            </a>
           </eo-ng-tab>
         </eo-ng-tabset>
         <!-- Get router child component by activate -->
