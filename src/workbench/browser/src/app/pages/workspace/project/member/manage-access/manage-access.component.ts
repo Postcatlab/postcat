@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { MEMBER_MUI } from 'eo/workbench/browser/src/app/shared/models/member.model';
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
@@ -26,18 +27,7 @@ export class ManageAccessComponent {
   @Input() list: UserMeta[] = [];
   @Input() loading = false;
   @Output() readonly eoOnChange = new EventEmitter<UserMeta>();
-  roleMUI = [
-    {
-      title: 'Project Owner',
-      name: 'owner',
-      id: 3
-    },
-    {
-      title: 'Editor',
-      name: 'editor',
-      id: 4
-    }
-  ];
+  roleMUI = MEMBER_MUI;
   constructor(public store: StoreService, private remote: RemoteService, private message: EoNgFeedbackMessageService) {}
 
   async changeRole(item) {
@@ -53,6 +43,7 @@ export class ManageAccessComponent {
     }
     this.message.success($localize`Change role successfully`);
     item.role.id = roleID;
+    item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
     item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
   }
   async removeMember(item) {

@@ -3,6 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { makeObservable, observable, reaction } from 'mobx';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
+import { MEMBER_MUI } from '../../../../shared/models/member.model';
 import { RemoteService } from '../../../../shared/services/storage/remote.service';
 import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
@@ -48,8 +49,19 @@ import { StoreService } from '../../../../shared/store/state.service';
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)" i18n
-                    >Set {{ item.role.name === 'Owner' ? 'Editor' : 'Owner' }}
+                  <li
+                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role.name === 'Owner'"
+                    nz-menu-item
+                    i18n
+                    (click)="changeRole(item)"
+                    >Set Editor
+                  </li>
+                  <li
+                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role.name !== 'Owner'"
+                    nz-menu-item
+                    i18n
+                    (click)="changeRole(item)"
+                    >Set Owner
                   </li>
                   <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
                   <li *ngIf="item.myself" nz-menu-item i18n (click)="quitWorkspace(item)">Quit</li>
@@ -72,18 +84,7 @@ export class WorkspaceMemberComponent implements OnInit {
   userCache;
   userList = [];
   workspaceID: number;
-  roleMUI = [
-    {
-      title: 'Workspace Owner',
-      name: 'owner',
-      id: 1
-    },
-    {
-      title: 'Editor',
-      name: 'editor',
-      id: 2
-    }
-  ];
+  roleMUI = MEMBER_MUI;
   constructor(
     public store: StoreService,
     private message: EoNgFeedbackMessageService,
@@ -160,6 +161,7 @@ export class WorkspaceMemberComponent implements OnInit {
     }
     this.message.success($localize`Change role successfully`);
     item.role.id = roleID;
+    item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
     item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
   }
   async removeMember(item) {

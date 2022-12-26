@@ -1,5 +1,6 @@
 import { ViewChild, ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
@@ -7,9 +8,12 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
+
+import { ModalService } from '../shared/services/modal.service';
+import { StorageRes, StorageResStatus } from '../shared/services/storage/index.model';
+import { StorageService } from '../shared/services/storage/storage.service';
 
 @Component({
   selector: 'eo-user-modal',
@@ -197,8 +201,10 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public eMessage: EoNgFeedbackMessageService,
     public effect: EffectService,
     public dataSource: DataSourceService,
-    public modal: NzModalService,
+    public modal: ModalService,
     public fb: UntypedFormBuilder,
+    private storage: StorageService,
+    private router: Router,
     private web: WebService
   ) {
     this.isSyncModalVisible = false;
@@ -467,6 +473,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         this.eMessage.error($localize`Please check you username or password`);
         return;
       }
+      this.store.clearAuth();
       // * get login form values
       const formData = this.validateLoginForm.value;
       const [data, err]: any = await this.api.api_authLogin(formData);
@@ -506,9 +513,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
       if (!data.isFirstLogin) {
         return;
       }
-
-      // * 唤起弹窗
-      this.isSyncModalVisible = true;
     };
     await btnLoginBtnRunning();
     this.isLoginBtnBtnLoading = false;
@@ -571,13 +575,49 @@ export class UserModalComponent implements OnInit, OnDestroy {
         return;
       }
       this.eMessage.success($localize`New workspace successfully !`);
-
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
       this.message.send({ type: 'update-share-link', data: {} });
       {
-        this.effect.updateWorkspaces();
-        this.effect.changeWorkspace(data.id);
+        await this.effect.updateWorkspaces();
+        await this.effect.changeWorkspace(data.id);
+      }
+      if (this.store.getWorkspaceList.length === 2) {
+        const modal = this.modal.create({
+          stayWhenRouterChange: true,
+          nzTitle: $localize`Upload local data to the cloud`,
+          nzContent: $localize`You have created a cloud workspace, do you need to upload the local data to the new workspace to facilitate team collaboration?<br>
+          If you do not upload it now, you can also manually export the project data and import it into a new workspace later.`,
+          nzFooter: [
+            {
+              label: $localize`Cancel`,
+              onClick: () => {
+                modal.destroy();
+              }
+            },
+            {
+              label: $localize`Sync`,
+              type: 'primary',
+              onClick: () => {
+                return new Promise(resolve => {
+                  this.effect.exportLocalProjectData().then(data => {
+                    this.storage.run('projectImport', [this.store.getCurrentProjectID, data], (result: StorageRes) => {
+                      if (result.status === StorageResStatus.success) {
+                        resolve(true);
+                        this.router.navigate(['**']).then(() => {
+                          this.router.navigate(['/home/workspace/project/api']);
+                        });
+                        modal.destroy();
+                      } else {
+                        resolve(false);
+                      }
+                    });
+                  });
+                });
+              }
+            }
+          ]
+        });
       }
     };
     await btnSaveRunning();
