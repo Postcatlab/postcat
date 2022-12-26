@@ -18,17 +18,14 @@ import { distinct, takeUntil } from 'rxjs/operators';
       [(nzVisible)]="isSyncModalVisible"
       (nzOnCancel)="handleSyncModalCancel()"
       (nzAfterClose)="e7odmm4Callback()"
-      nzTitle="Do you want to upload local data to the cloud ?"
+      nzTitle="Upload local data to the cloud"
       i18n-nzTitle
     >
       <ng-container *nzModalContent>
-        <span i18n> After confirmation, the system will create a cloud space to upload the local data to the cloud. </span>
-        <eo-ng-feedback-alert
-          nzType="warning"
-          nzMessage="Subsequent local space and cloud space are no longer synchronized"
-          i18n-nzMessage
-          nzShowIcon
-        ></eo-ng-feedback-alert>
+        <span i18n
+          >You have created a cloud workspace, do you need to upload the local data to the new workspace to facilitate team collaboration?
+          If you do not upload it now, you can also manually export the project data and import it into a new workspace later.
+        </span>
       </ng-container>
       <ng-template #modalSyncFooter>
         <button eo-ng-button [nzLoading]="isSyncCancelBtnLoading" class="" nzType="default" (click)="btnsgs0ckCallback()" i18n>
@@ -563,7 +560,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       const { newWorkName: title } = this.validateWorkspaceNameForm.value;
       const [data, err]: any = await this.api.api_workspaceCreate({ title });
       if (err) {
-        this.eMessage.error($localize`Add workspace Failed !`);
+        this.eMessage.error($localize`New workspace Failed !`);
         if (err.status === 401) {
           this.message.send({ type: 'clear-user', data: {} });
           if (this.store.isLogin) {
@@ -573,7 +570,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         }
         return;
       }
-      this.eMessage.success($localize`Create new workspace successfully !`);
+      this.eMessage.success($localize`New workspace successfully !`);
 
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;

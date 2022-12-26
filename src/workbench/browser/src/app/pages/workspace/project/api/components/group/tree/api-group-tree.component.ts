@@ -372,14 +372,14 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     return groupModel;
   }
   /**
-   * Create group.
+   * New group.
    */
   addGroup() {
     this.groupModal($localize`Add Group`, { group: this.buildGroupModel(), action: 'new' });
   }
 
   /**
-   * Create sub group.
+   * Add sub group.
    *
    * @param node NzTreeNode
    */

@@ -37,7 +37,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
       <section class="h-4"></section>
     </section>
     <h2 class="text-lg flex justify-between items-center" id="postcat-account-password">
-      <span class="font-bold text-base mb-2" i18n>Password</span>
+      <span class="font-bold text-base mb-2" i18n>Change Password</span>
     </h2>
     <section class="w-1/2">
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
@@ -79,9 +79,9 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
             type="submit"
             nzType="primary"
             (click)="btnn016ppCallback()"
-            i18n
+            i18n="@@btnResetPassword"
           >
-            Reset
+            Save
           </button>
         </section>
       </form>
