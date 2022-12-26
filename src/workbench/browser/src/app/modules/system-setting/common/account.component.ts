@@ -15,7 +15,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
         <nz-form-item>
           <nz-form-label [nzSpan]="24" nzRequired i18n>New password</nz-form-label>
-          <nz-form-control nzErrorTip="Please input your new password;">
+          <nz-form-control nzErrorTip="Please input your new password">
             <input type="password" eo-ng-input formControlName="newPassword" placeholder="" i18n-placeholder />
           </nz-form-control>
         </nz-form-item>
@@ -25,13 +25,13 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
           <nz-form-control [nzErrorTip]="confirmPasswordErrorTpl">
             <input type="password" eo-ng-input formControlName="confirmPassword" placeholder="" i18n-placeholder />
             <ng-template #confirmPasswordErrorTpl let-control>
-              <ng-container *ngIf="control.hasError('required')" i18n> Please input your confirm new password; </ng-container>
+              <ng-container *ngIf="control.hasError('required')" i18n> Please input your confirm new password </ng-container>
 
-              <ng-container *ngIf="control.hasError('isEqual')" i18n> Please confirm your password; </ng-container>
+              <ng-container *ngIf="control.hasError('isEqual')" i18n> Please confirm your password </ng-container>
 
-              <ng-container *ngIf="control.hasError('minlength')" i18n> Min length is 6; </ng-container>
+              <ng-container *ngIf="control.hasError('minlength')" i18n> Min length is 6 </ng-container>
 
-              <ng-container *ngIf="control.hasError('maxlength')" i18n> Max length is 11; </ng-container>
+              <ng-container *ngIf="control.hasError('maxlength')" i18n> Max length is 11 </ng-container>
             </ng-template>
           </nz-form-control>
         </nz-form-item>
@@ -46,7 +46,7 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
             (click)="btnn016ppCallback()"
             i18n
           >
-            Reset
+            Change
           </button>
         </section>
       </form>
