@@ -39,7 +39,7 @@
           {{ tabStorage.tabsByID.get(uuid)?.title }}</span
         >
         <!-- Close/HasEdit -->
-        <div class="flex items-center tab-item-button-group">
+        <div class="flex items-center tab-item-button-group ml-[5px]">
           <nz-badge
             class="tab-has-edit-icon ant-badge-theme-color"
             *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged"

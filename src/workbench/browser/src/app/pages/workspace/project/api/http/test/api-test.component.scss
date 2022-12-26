@@ -56,16 +56,24 @@ div.ant-typography {
 }
 
 :host ::ng-deep {
+  eo-ng-select eo-ng-select-top-control,
+  .main-bg {
+    background-color: var(--BTN_SEC_BG_HOVER) !important;
+    &:focus,
+    &:active,
+    &:target {
+      background-color: var(--MAIN_BG) !important;
+    }
+    &.ant-select-open {
+      background-color: var(--MAIN_BG) !important;
+    }
+  }
+
   .header-container {
     eo-ng-select,
     .ant-input,
     .ant-btn {
       height: 40px;
-    }
-
-    eo-ng-select eo-ng-select-top-control,
-    .ant-input {
-      background-color: var(--BTN_SEC_BG_HOVER) !important;
     }
 
     eo-ng-select {
