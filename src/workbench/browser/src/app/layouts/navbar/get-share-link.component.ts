@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { copy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { interval } from 'rxjs';
 
@@ -12,6 +13,7 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
       nzType="default"
       class="mx-2 btn_scondary"
       nz-popover
+      *ngIf="!store.isShare && store.getUrl.includes('/home/workspace/project/api/http/test')"
       [nzPopoverContent]="contentTemplate"
       nzPopoverPlacement="bottomRight"
       nzPopoverTrigger="click"
@@ -38,7 +40,12 @@ import { DataSourceService } from '../../shared/services/data-source/data-source
 export class GetShareLinkComponent {
   link;
   isCopy = false;
-  constructor(private effect: EffectService, public dataSourceService: DataSourceService, private message: EoNgFeedbackMessageService) {
+  constructor(
+    private effect: EffectService,
+    public store: StoreService,
+    public dataSourceService: DataSourceService,
+    private message: EoNgFeedbackMessageService
+  ) {
     this.link = 'Please wait ...';
   }
   handleCopy() {

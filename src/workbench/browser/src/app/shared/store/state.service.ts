@@ -84,6 +84,11 @@ export class StoreService {
 
   // * computed data
 
+  // ? router
+  @computed get getUrl() {
+    return this.url;
+  }
+
   // ? env
   @computed get getCurrentEnv() {
     const [data] = this.envList.filter(it => it.uuid === this.envUuid);
@@ -193,6 +198,7 @@ export class StoreService {
   // ? router
   @action private routeListener = (event: NavigationEnd) => {
     this.url = event.urlAfterRedirects;
+    console.log(this.url);
   };
 
   // ? env
