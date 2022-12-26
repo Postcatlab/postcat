@@ -21,7 +21,15 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
         </nz-form-item>
 
         <section class="">
-          <button eo-ng-button [nzLoading]="isSaveUsernameBtnLoading" type="submit" nzType="primary" (click)="btnw9ec5mCallback()" i18n>
+          <button
+            eo-ng-button
+            [disabled]="!validateUsernameForm.valid"
+            [nzLoading]="isSaveUsernameBtnLoading"
+            type="submit"
+            nzType="primary"
+            (click)="btnw9ec5mCallback()"
+            i18n
+          >
             Save
           </button>
         </section>
@@ -64,7 +72,15 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
         </nz-form-item>
 
         <section class="">
-          <button eo-ng-button [nzLoading]="isResetBtnBtnLoading" type="submit" nzType="primary" (click)="btnn016ppCallback()" i18n>
+          <button
+            eo-ng-button
+            [nzLoading]="isResetBtnBtnLoading"
+            [disabled]="!validatePasswordForm.valid"
+            type="submit"
+            nzType="primary"
+            (click)="btnn016ppCallback()"
+            i18n
+          >
             Reset
           </button>
         </section>
