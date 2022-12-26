@@ -12,7 +12,7 @@ import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.mode
   template: ` <eo-ng-table-pro [columns]="mockListColumns" [nzData]="mockList"></eo-ng-table-pro>
     <ng-template #urlCell let-item="item" let-index="index">
       <div class="flex items-center">
-        <span class="truncate flex-1" (click)="copyText(item.url)" i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip>
+        <span class="truncate flex-1" (click)="copyText(item.url)">
           {{ item.url }}
         </span>
         <button eo-ng-button nzType="text" (click)="copyText(item.url)"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
