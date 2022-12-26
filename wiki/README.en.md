@@ -4,7 +4,7 @@
   </a>
 </p>
 <div align="center">
-A extensible API tool,Lightweight Core  & Open Source API Ecosystem
+A extensible API tool,Core Lightweight & Open Source API Ecosystem
 </div>
 <hr>
 <p align="center">

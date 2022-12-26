@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiEditQuery, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
@@ -15,7 +15,7 @@ import { ApiEditQuery, ApiTableConf } from 'eo/workbench/browser/src/app/modules
       (nzDataChange)="modelChange.emit($event)"
     ></eo-ng-table-pro>`
 })
-export class ApiEditQueryComponent implements OnInit, AfterViewChecked {
+export class ApiEditQueryComponent implements OnInit {
   @Input() tid: string;
   @Input() model: ApiEditQuery[];
   @Output() readonly modelChange: EventEmitter<any> = new EventEmitter();
@@ -34,14 +34,10 @@ export class ApiEditQueryComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.initListConf();
   }
-  ngAfterViewChecked() {
-    // prevent AngularJS error when dragging and sorting item
-    this.cdRef.detectChanges();
-  }
   private initListConf() {
     const config = this.apiTable.initTable(
       {
-        in: 'header',
+        in: 'query',
         isEdit: true,
         id: this.tid
       },

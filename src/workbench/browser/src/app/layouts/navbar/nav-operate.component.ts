@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ElectronService } from '../../core/services';
 
@@ -51,16 +51,17 @@ export class NavOperateComponent {
   isMaximized = false;
   isElectron = this.electron.isElectron;
   isMac = navigator.platform.toLowerCase().includes('mac');
-  constructor(private electron: ElectronService, private router: Router) {}
+  constructor(private electron: ElectronService, private router: Router, private route: ActivatedRoute) {}
   minimize() {
     this.electron.ipcRenderer.send('message', {
       action: 'minimize'
     });
   }
   async refresh() {
-    const { pathname, hash, searchParams } = new URL(window.location.protocol + window.location.host + this.router.url);
+    const pathname = this.router.url.split('?').at(0);
+    const queryParams = this.route.queryParams;
     await this.router.navigate(['**']);
-    await this.router.navigate([pathname], { queryParams: Object.fromEntries(searchParams.entries()) });
+    await this.router.navigate([pathname], { queryParams });
   }
   toggleMaximize() {
     this.electron.ipcRenderer.send('message', {
