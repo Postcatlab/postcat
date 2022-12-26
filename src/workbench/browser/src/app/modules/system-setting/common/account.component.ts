@@ -14,13 +14,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
     <section class="w-1/2">
       <form nz-form [formGroup]="validatePasswordForm" nzLayout="vertical">
         <nz-form-item>
-          <nz-form-label [nzSpan]="24" nzRequired i18n>Current password</nz-form-label>
-          <nz-form-control nzErrorTip="Please input your current password;">
-            <input type="password" eo-ng-input formControlName="oldPassword" placeholder="" i18n-placeholder />
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
           <nz-form-label [nzSpan]="24" nzRequired i18n>New password</nz-form-label>
           <nz-form-control nzErrorTip="Please input your new password;">
             <input type="password" eo-ng-input formControlName="newPassword" placeholder="" i18n-placeholder />
@@ -79,7 +72,6 @@ export class AccountComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     // * Init Password form
     this.validatePasswordForm = this.fb.group({
-      oldPassword: [null, [Validators.required]],
       newPassword: [null, [Validators.required]],
       confirmPassword: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(11), this.dynamicPasswordValidator]]
     });
@@ -95,7 +87,6 @@ export class AccountComponent implements OnInit {
     // * click event callback
     this.isResetBtnBtnLoading = true;
     const btnResetBtnRunning = async () => {
-      const { oldPassword: oldPassword } = this.validatePasswordForm.value;
       const { newPassword: newPassword } = this.validatePasswordForm.value;
       const [data, err]: any = await this.api.api_userUpdatePsd({
         newPassword
