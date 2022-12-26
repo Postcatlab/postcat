@@ -8,34 +8,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 @Component({
   selector: 'eo-account',
   template: `
-    <h2 class="text-lg flex justify-between items-center" id="postcat-account-username">
-      <span class="font-bold text-base mb-2" i18n>Username</span>
-    </h2>
-    <section class="w-1/2">
-      <form nz-form [formGroup]="validateUsernameForm" nzLayout="vertical">
-        <nz-form-item>
-          <nz-form-label [nzSpan]="24" nzRequired i18n>Username</nz-form-label>
-          <nz-form-control nzErrorTip="Please input your username;">
-            <input type="text" eo-ng-input formControlName="username" placeholder="" i18n-placeholder />
-          </nz-form-control>
-        </nz-form-item>
-
-        <section class="">
-          <button
-            eo-ng-button
-            [disabled]="!validateUsernameForm.valid"
-            [nzLoading]="isSaveUsernameBtnLoading"
-            type="submit"
-            nzType="primary"
-            (click)="btnw9ec5mCallback()"
-            i18n
-          >
-            Save
-          </button>
-        </section>
-      </form>
-      <section class="h-4"></section>
-    </section>
     <h2 class="text-lg flex justify-between items-center" id="postcat-account-password">
       <span class="font-bold text-base mb-2" i18n>Password</span>
     </h2>
@@ -90,7 +62,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
   `
 })
 export class AccountComponent implements OnInit {
-  validateUsernameForm;
   isSaveUsernameBtnLoading;
   validatePasswordForm;
   isResetBtnBtnLoading;
@@ -101,67 +72,17 @@ export class AccountComponent implements OnInit {
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService
   ) {
-    this.validateUsernameForm = UntypedFormGroup;
     this.isSaveUsernameBtnLoading = false;
     this.validatePasswordForm = UntypedFormGroup;
     this.isResetBtnBtnLoading = false;
   }
   async ngOnInit(): Promise<void> {
-    // * Init Username form
-    this.validateUsernameForm = this.fb.group({
-      username: [null, [Validators.required]]
-    });
-
     // * Init Password form
     this.validatePasswordForm = this.fb.group({
       oldPassword: [null, [Validators.required]],
       newPassword: [null, [Validators.required]],
       confirmPassword: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(11), this.dynamicPasswordValidator]]
     });
-
-    // * get Username form values
-    this.validateUsernameForm.patchValue({
-      username: this.store.getUserProfile?.username
-    });
-  }
-  async btnw9ec5mCallback() {
-    // * click event callback
-    this.isSaveUsernameBtnLoading = true;
-    const btnSaveUsernameRunning = async () => {
-      const { username: user } = this.validateUsernameForm.value;
-      console.log({
-        username: user
-      });
-      const [data, err]: any = await this.api.api_userUpdateUserProfile({
-        username: user
-      });
-      if (err) {
-        this.eMessage.error($localize`Sorry, username is already in use`);
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
-      const [pData, pErr]: any = await this.api.api_userReadProfile({});
-      if (pErr) {
-        if (pErr.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
-      this.store.setUserProfile(pData);
-      this.eMessage.success($localize`Username update success !`);
-    };
-    await btnSaveUsernameRunning();
-    this.isSaveUsernameBtnLoading = false;
   }
 
   dynamicPasswordValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
@@ -177,7 +98,6 @@ export class AccountComponent implements OnInit {
       const { oldPassword: oldPassword } = this.validatePasswordForm.value;
       const { newPassword: newPassword } = this.validatePasswordForm.value;
       const [data, err]: any = await this.api.api_userUpdatePsd({
-        oldPassword,
         newPassword
       });
       if (err) {
