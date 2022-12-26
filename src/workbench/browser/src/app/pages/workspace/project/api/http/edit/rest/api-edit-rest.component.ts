@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef, AfterViewChecked, OnChanges, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { ApiTableService } from 'eo/workbench/browser/src/app/modules/api-shared/api-table.service';
 import { ApiEditRest, ApiTableConf } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 
@@ -12,7 +12,7 @@ import { ApiEditRest, ApiTableConf } from 'eo/workbench/browser/src/app/modules/
     (nzDataChange)="modelChange.emit($event)"
   ></eo-ng-table-pro>`
 })
-export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked {
+export class ApiEditRestComponent implements OnInit {
   /**
    * Table ID
    */
@@ -32,17 +32,6 @@ export class ApiEditRestComponent implements OnInit, OnChanges, AfterViewChecked
   constructor(private apiTable: ApiTableService, private cdRef: ChangeDetectorRef) {}
   ngOnInit(): void {
     this.initListConf();
-  }
-  ngAfterViewChecked() {
-    // prevent AngularJS error when dragging and sorting item
-    this.cdRef.detectChanges();
-  }
-  ngOnChanges(changes) {
-    if (changes.model && !changes.model.previousValue && changes.model.currentValue) {
-      if (!this.model.length || this.model[this.model.length - 1].name) {
-        this.model.push({ ...this.itemStructure });
-      }
-    }
   }
   private initListConf() {
     const config = this.apiTable.initTable(

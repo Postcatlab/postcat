@@ -262,7 +262,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     //watch uri
     this.validateForm
       .get('uri')
-      ?.valueChanges.pipe(debounceTime(300), takeUntil(this.destroy$))
+      ?.valueChanges.pipe(debounceTime(800), takeUntil(this.destroy$))
       .subscribe(url => {
         this.resetRestFromUrl(url);
       });

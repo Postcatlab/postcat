@@ -9,7 +9,6 @@ import { ApiEditQuery, ApiEditRest } from '../modules/api-shared/api.model';
  * @returns
  */
 export const getRest = (url = ''): string[] => [...url.replace(/{{(.+?)}}/g, '').matchAll(/{(.+?)}/g)].map(val => val[1]);
-
 export const uniqueSlash = (path: string) =>
   path
     .replace(/:\/{2,}/g, ':::')
@@ -79,9 +78,21 @@ export const transferUrlAndQuery = (
  * Generate Rest Param From Url
  */
 export const generateRestFromUrl = (url, rest): ApiEditRest[] => {
-  const rests = getRest(url);
-  return [
-    ...rests.map(restName => ({ name: restName, required: true, example: '', description: '' })),
-    ...rest.filter(val => !(rests.includes(val.name) || val.required))
-  ];
+  const result: any = [];
+  const newRests = getRest(url);
+  newRests.forEach(newRest => {
+    const hasFind = rest.find((val: ApiEditRest) => val.name === newRest);
+    if (hasFind) {
+      result.push(hasFind);
+      return;
+    }
+    const restItem: ApiEditRest = {
+      name: newRest,
+      required: true,
+      example: '',
+      description: ''
+    };
+    result.splice(result.length - 1, 0, restItem);
+  });
+  return result;
 };
