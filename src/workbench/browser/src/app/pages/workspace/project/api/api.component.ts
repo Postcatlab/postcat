@@ -10,6 +10,7 @@ import { autorun, makeObservable, observable, reaction } from 'mobx';
 import { NzResizeEvent } from 'ng-zorro-antd/resizable';
 import { filter, Subject, takeUntil } from 'rxjs';
 
+import { SidebarService } from '../../../../layouts/sidebar/sidebar.service';
 import StorageUtil from '../../../../utils/storage/Storage';
 import { ApiTabService } from './api-tab.service';
 
@@ -87,6 +88,7 @@ export class ApiComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     public apiTab: ApiTabService,
+    public sidebar: SidebarService,
     private router: Router,
     public web: WebService,
     private extensionService: ExtensionService,
@@ -200,6 +202,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     this.tabsIndex = 2;
     // * close select
     this.isOpen = false;
+    this.sidebar.setModule('@eo-core-env');
   }
   toggleRightBar(operate: 'open' | 'close') {
     if (operate === 'open') {

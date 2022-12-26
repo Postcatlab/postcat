@@ -89,7 +89,7 @@ export class ProjectSettingComponent implements OnInit {
       nzOnOk: () => {
         this.storage.run('projectRemove', [this.store.getCurrentWorkspaceID, this.store.getCurrentProjectID], (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
-            this.router.navigate(['/home/workspace/project/list']);
+            this.router.navigate(['/home/workspace/overview']);
             this.effect.updateProjects(this.store.getCurrentWorkspaceID);
             modal.destroy();
           }

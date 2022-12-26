@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 
-import { WorkspaceSettingComponent } from '../../../pages/workspace/components/setting/workspace-setting.component';
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../../shared/services/message';
 import { ModalService } from '../../../shared/services/modal.service';
@@ -50,11 +49,6 @@ import { ModalService } from '../../../shared/services/modal.service';
               <eo-iconpark-icon class="mr-[5px]" name="link-cloud-sucess"> </eo-iconpark-icon>
               <span class="truncate mw-[250px]"> {{ item.title }}</span>
             </div>
-            <div>
-              <button nzSize="small" eo-ng-button nzType="text" (click)="openSetting($event, item)"
-                ><eo-iconpark-icon name="setting"> </eo-iconpark-icon>
-              </button>
-            </div>
           </li>
         </div>
       </ul>
@@ -96,18 +90,6 @@ export class SelectWorkspaceComponent {
       this.searchValue,
       this.store.getWorkspaceList.filter(val => val.id !== -1)
     );
-  }
-  openSetting($event, workspace) {
-    $event.stopPropagation();
-    this.modal.create({
-      nzClassName: 'eo-workspace-setting-modal',
-      nzTitle: $localize`Workspace Settings`,
-      nzContent: WorkspaceSettingComponent,
-      nzComponentParams: {
-        model: workspace
-      },
-      withoutFooter: true
-    });
   }
   changeWorkspace(workspaceID) {
     this.effect.changeWorkspace(workspaceID);

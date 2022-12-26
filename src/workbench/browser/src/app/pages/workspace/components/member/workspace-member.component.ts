@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { makeObservable, observable, reaction } from 'mobx';
-import { NzModalRef } from 'ng-zorro-antd/modal';
 
+import { MEMBER_MUI } from '../../../../shared/models/member.model';
 import { RemoteService } from '../../../../shared/services/storage/remote.service';
 import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
@@ -15,6 +15,8 @@ import { StoreService } from '../../../../shared/store/state.service';
         class="w-full"
         nzAllowClear
         nzShowSearch
+        auto-focus-form
+        nzAutoFocus="true"
         i18n-placeholder
         placeholder="Search by username"
         [(ngModel)]="userCache"
@@ -48,8 +50,19 @@ import { StoreService } from '../../../../shared/store/state.service';
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)" i18n
-                    >Set {{ item.role.name === 'Owner' ? 'Editor' : 'Owner' }}
+                  <li
+                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name === 'Owner'"
+                    nz-menu-item
+                    i18n
+                    (click)="changeRole(item)"
+                    >Set Editor
+                  </li>
+                  <li
+                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name !== 'Owner'"
+                    nz-menu-item
+                    i18n
+                    (click)="changeRole(item)"
+                    >Set Owner
                   </li>
                   <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
                   <li *ngIf="item.myself" nz-menu-item i18n (click)="quitWorkspace(item)">Quit</li>
@@ -65,35 +78,22 @@ import { StoreService } from '../../../../shared/store/state.service';
   styleUrls: ['./workspace-member.component.scss']
 })
 export class WorkspaceMemberComponent implements OnInit {
-  @Input() model;
   @Input() list = [];
   @Input() loading = false;
   @observable searchValue = '';
   userCache;
   userList = [];
   workspaceID: number;
-  roleMUI = [
-    {
-      title: 'Workspace Owner',
-      name: 'owner',
-      id: 1
-    },
-    {
-      title: 'Editor',
-      name: 'editor',
-      id: 2
-    }
-  ];
+  roleMUI = MEMBER_MUI;
   constructor(
     public store: StoreService,
     private message: EoNgFeedbackMessageService,
     private remote: RemoteService,
-    private modalRef: NzModalRef,
     private effect: EffectService
   ) {}
 
   ngOnInit(): void {
-    this.workspaceID = this.model.id;
+    this.workspaceID = this.store.getCurrentWorkspaceID;
     this.queryList();
     makeObservable(this);
     reaction(
@@ -126,6 +126,7 @@ export class WorkspaceMemberComponent implements OnInit {
     });
     this.loading = false;
     this.list = data || [];
+    console.log(this.list);
     this.list.forEach(member => {
       member.roleTitle = this.roleMUI.find(val => val.id === member.role.id).title;
       if (member.id === this.store.getUserProfile.id) {
@@ -160,6 +161,7 @@ export class WorkspaceMemberComponent implements OnInit {
     }
     this.message.success($localize`Change role successfully`);
     item.role.id = roleID;
+    item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
     item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
   }
   async removeMember(item) {
@@ -192,8 +194,6 @@ export class WorkspaceMemberComponent implements OnInit {
     this.message.success($localize`Quit successfully`);
     if (this.store.getCurrentWorkspaceID === this.workspaceID) {
       await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
-    } else {
-      this.modalRef.close();
     }
     this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.workspaceID));
   }

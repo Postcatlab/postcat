@@ -22,7 +22,6 @@ export class ApiEditUtilService {
       if (whatType(result[tableName]) !== 'array') {
         return;
       }
-      console.log(result[tableName]);
       result[tableName] = filterTableData(result[tableName], {
         filterFn: filterArrFun
       });

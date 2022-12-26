@@ -7,6 +7,8 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
+import { MEMBER_MUI } from '../../../../shared/models/member.model';
+
 @Component({
   selector: 'eo-project-member',
   template: `<nz-modal
@@ -69,28 +71,7 @@ export class ProjectMemberComponent implements OnInit {
   isAddPeopleBtnLoading;
   memberList;
   userList = [];
-  roleMUI = [
-    {
-      title: 'Workspace Owner',
-      name: 'owner',
-      id: 1
-    },
-    {
-      title: 'Workspace Editor',
-      name: 'editor',
-      id: 2
-    },
-    {
-      title: 'Project Owner',
-      name: 'owner',
-      id: 3
-    },
-    {
-      title: 'Editor',
-      name: 'editor',
-      id: 4
-    }
-  ];
+  roleMUI = MEMBER_MUI;
   constructor(
     public modal: NzModalService,
     public store: StoreService,

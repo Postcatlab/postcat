@@ -3,6 +3,6 @@
     <eo-select-workspace></eo-select-workspace>
   </nz-breadcrumb-item>
   <nz-breadcrumb-item *ngIf="level === 'project'" class="underline">
-    <a [routerLink]="['/home/workspace/project/list']" [queryParams]="{ pid: projectID, wid: workspaceID }">{{ projectName }}</a>
+    <a [routerLink]="['/home/workspace/overview']" [queryParams]="{ wid: workspaceID }">{{ projectName }}</a>
   </nz-breadcrumb-item>
 </nz-breadcrumb>

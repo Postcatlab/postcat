@@ -1,23 +1,4 @@
 <div class="project-management">
-  <div class="flex justify-between">
-    <div class="mb-[15px]">
-      <b class="mr-[14px] text-[18px]" i18n>Projects</b>
-    </div>
-    <div class="flex">
-      <eo-ng-button-group class="list-type-switcher">
-        <button eo-ng-button (click)="setListType('card')">
-          <eo-iconpark-icon [ngClass]="{ active: listType === 'card' }" name="page-template"></eo-iconpark-icon>
-        </button>
-        <button eo-ng-button (click)="setListType('list')">
-          <eo-iconpark-icon [ngClass]="{ active: listType === 'list' }" name="list"></eo-iconpark-icon>
-        </button>
-      </eo-ng-button-group>
-      <button class="!ml-[10px]" eo-ng-button nzType="primary" (click)="createProject()">
-        <eo-iconpark-icon name="plus"></eo-iconpark-icon>
-        <span i18n>New</span>
-      </button>
-    </div>
-  </div>
   <nz-empty *ngIf="!initLoading && projectList.length === 0"> </nz-empty>
   <ng-container *ngIf="listType === 'card'">
     <div class="flex flex-wrap">
