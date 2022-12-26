@@ -59,7 +59,7 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
         type: 'btnList',
         btns: [
           {
-            title: $localize`Preview`,
+            title: $localize`:@@MockPreview:Preview`,
             icon: 'preview-open',
             click: item => {
               const modal = this.modal.create({

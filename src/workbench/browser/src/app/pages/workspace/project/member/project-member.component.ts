@@ -45,15 +45,15 @@ import { NzModalService } from 'ng-zorro-antd/modal';
           [disabled]="btnguixdgStatus()"
           i18n
         >
-          Invite
+          Add
         </button>
       </ng-container>
     </nz-modal>
     <section class="py-5 px-10 w-6/12 m-auto">
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Project Members</span
-        ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()" i18n>
-          <eo-iconpark-icon name="plus"></eo-iconpark-icon> Add
+        ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()">
+          <eo-iconpark-icon name="plus"></eo-iconpark-icon><span i18n>Add</span>
         </button>
       </h2>
       <section class="py-5">

@@ -48,7 +48,7 @@ import { StoreService } from '../../../../shared/store/state.service';
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)"
+                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)" i18n
                     >Set {{ item.role.name === 'Owner' ? 'Editor' : 'Owner' }}
                   </li>
                   <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>

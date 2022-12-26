@@ -217,7 +217,7 @@ export interface StorageInterface {
   groupLoadAllByProjectID: (projectID: number | string) => Observable<object>;
   // Api Data
   /**
-   * Create apiData item.
+   * New apiData item.
    *
    * @param item
    */

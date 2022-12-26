@@ -92,7 +92,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return result as ResultType;
   }
   /**
-   * Create item.
+   * New item.
    *
    * @param table
    * @param item
@@ -451,7 +451,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   /**
-   * Create apiTestHistory item.
+   * New apiTestHistory item.
    *
    * @param item
    */
@@ -549,7 +549,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   /**
-   * Create environment item.
+   * New environment item.
    *
    * @param item
    */
@@ -632,7 +632,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   /**
-   * Create group item.
+   * New group item.
    *
    * @param item
    */
@@ -874,7 +874,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   /**
-   * Create project item.
+   * New project item.
    *
    * @param item
    */
@@ -911,7 +911,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   }
 
   /**
-   * Create mock item.
+   * New mock item.
    *
    * @param item
    */
