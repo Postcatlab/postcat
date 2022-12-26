@@ -13,7 +13,7 @@ import { eoDeepCopy } from '../../../../utils/index.utils';
   template: `<form auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
     <nz-form-item>
       <nz-form-label i18n nzFor="title">Workspace Name</nz-form-label>
-      <nz-form-control nzErrorTip="Please input your new work name;">
+      <nz-form-control nzErrorTip="Please input your new work name">
         <input type="text" eo-ng-input id="title" formControlName="title" placeholder="Workspace Name" i18n-placeholder />
       </nz-form-control>
     </nz-form-item>

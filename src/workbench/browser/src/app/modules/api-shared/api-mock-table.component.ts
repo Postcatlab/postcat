@@ -12,7 +12,7 @@ import { ApiData, ApiMockEntity } from '../../shared/services/storage/index.mode
   template: ` <eo-ng-table-pro [columns]="mockListColumns" [nzData]="mockList"></eo-ng-table-pro>
     <ng-template #urlCell let-item="item" let-index="index">
       <div class="flex items-center">
-        <span class="truncate flex-1" (click)="copyText(item.url)" i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip>
+        <span class="truncate flex-1" (click)="copyText(item.url)">
           {{ item.url }}
         </span>
         <button eo-ng-button nzType="text" (click)="copyText(item.url)"><eo-iconpark-icon name="copy"></eo-iconpark-icon></button>
@@ -106,6 +106,11 @@ export class ApiMockTableComponent implements OnInit, OnChanges {
   async ngOnChanges(changes) {
     if (changes?.apiData?.currentValue?.uuid) {
       this.mockList = await this.apiMock.getMocks(this.apiData.uuid);
+      this.mockList.forEach(item => {
+        if (item.createWay === 'system') {
+          item.response = this.apiMock.getMockResponseByAPI(item.response);
+        }
+      });
       this.mockPrefix = this.apiMock.getMockPrefix(this.apiData);
       this.setMocksUrl();
     }

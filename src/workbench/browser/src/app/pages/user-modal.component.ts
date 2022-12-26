@@ -72,15 +72,15 @@ import { StorageService } from '../shared/services/storage/storage.service';
         <section class="my-3">
           <form nz-form [formGroup]="validateLoginForm" nzLayout="vertical">
             <nz-form-item>
-              <nz-form-label i18n nzFor="username">Email/Phone/Username</nz-form-label>
-              <nz-form-control nzErrorTip="Please input your email or phone;">
+              <nz-form-label i18n nzFor="username">Email</nz-form-label>
+              <nz-form-control i18n-nzErrorTip nzErrorTip="Please input your email">
                 <input
                   type="text"
                   #usernameLoginRef
                   eo-ng-input
                   id="username"
                   formControlName="username"
-                  placeholder="Enter Email/Phone/Username"
+                  placeholder="Enter Email"
                   i18n-placeholder
                 />
               </nz-form-control>
@@ -91,9 +91,9 @@ import { StorageService } from '../shared/services/storage/storage.service';
               <nz-form-control [nzErrorTip]="passwordErrorTpl">
                 <input type="password" eo-ng-input formControlName="password" id="password" placeholder="Enter password" i18n-placeholder />
                 <ng-template #passwordErrorTpl let-control>
-                  <ng-container *ngIf="control.hasError('required')" i18n> Please input your password; </ng-container>
+                  <ng-container *ngIf="control.hasError('required')" i18n> Please input your password </ng-container>
 
-                  <ng-container *ngIf="control.hasError('minlength')" i18n> Min length is 6; </ng-container>
+                  <ng-container *ngIf="control.hasError('minlength')" i18n> Min length is 6 </ng-container>
                 </ng-template>
               </nz-form-control>
             </nz-form-item>
@@ -102,6 +102,7 @@ import { StorageService } from '../shared/services/storage/storage.service';
               <button
                 eo-ng-button
                 [nzLoading]="isLoginBtnBtnLoading"
+                [disabled]="!validateLoginForm.valid"
                 type="submit"
                 class="h-10 mt-2"
                 nzType="primary"
@@ -142,7 +143,7 @@ import { StorageService } from '../shared/services/storage/storage.service';
         <form nz-form [formGroup]="validateWorkspaceNameForm" nzLayout="vertical">
           <nz-form-item>
             <nz-form-label i18n nzFor="newWorkName">Workspace Name</nz-form-label>
-            <nz-form-control nzErrorTip="Please input your new work name;">
+            <nz-form-control nzErrorTip="Please input your new work name">
               <input
                 type="text"
                 #newWorkNameWorkspaceNameRef
@@ -478,7 +479,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       const formData = this.validateLoginForm.value;
       const [data, err]: any = await this.api.api_authLogin(formData);
       if (err) {
-        this.eMessage.error($localize`Please check the account/password, the account must be a mobile phone number or email !`);
+        this.eMessage.error($localize`Please check the account/password, the account must be a email !`);
         if ([401, 403].includes(err.status)) {
           this.isLoginBtnBtnLoading = false;
           this.message.send({ type: 'clear-user', data: {} });

@@ -28,6 +28,8 @@ export class EffectService {
     private web: WebService
   ) {
     this.updateWorkspaces();
+    // * update title
+    document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
     this.updateProjects(this.store.getCurrentWorkspaceID).then(() => {
       if (this.store.getProjectList.length === 0) {
         this.router.navigate(['/home/workspace/overview']);
@@ -139,6 +141,8 @@ export class EffectService {
       // * refresh view
       this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
     }
+    // * update title
+    document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
     // * update workspace role
     this.getWorkspacePermission();
   }

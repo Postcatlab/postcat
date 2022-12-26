@@ -25,6 +25,10 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
       [nz-form]:not(.ant-form-inline):not(.ant-form-vertical) {
         max-width: 600px;
       }
+
+      ::ng-deep .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        transition: none;
+      }
     `
   ]
 })
