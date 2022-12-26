@@ -32,13 +32,17 @@ import { ModalService } from '../../../../shared/services/modal.service';
             (click)="addWorkspace()"
             class="ml-3 flex items-center"
           >
-            <eo-iconpark-icon size="16px" name="plus"></eo-iconpark-icon>
+            <eo-iconpark-icon name="plus"></eo-iconpark-icon>
           </button>
         </div>
         <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.id)">
           <p class="workspace-title text-tips" i18n>LOCAL</p>
-          <li class="workspace-item" [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }" nz-menu-item>
-            <eo-iconpark-icon size="16px" class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
+          <li
+            class="workspace-item flex items-center"
+            [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }"
+            nz-menu-item
+          >
+            <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
           >
         </div>
         <nz-divider class="mt-[10px]"></nz-divider>
@@ -52,8 +56,8 @@ import { ModalService } from '../../../../shared/services/modal.service';
             [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === item.id }"
             *ngFor="let item of cloudWorkspaces"
           >
-            <div class="flex items-center">
-              <eo-iconpark-icon size="16px" class="mr-[5px]" name="link-cloud-sucess"> </eo-iconpark-icon>
+            <div class="flex h-full items-center">
+              <eo-iconpark-icon class="mr-[5px]" name="link-cloud-sucess"> </eo-iconpark-icon>
               <span class="truncate mw-[250px]"> {{ item.title }}</span>
             </div>
           </li>
