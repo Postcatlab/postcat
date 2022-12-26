@@ -89,7 +89,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isRequestBodyLoaded = false;
   REQUEST_METHOD = objectToArray(RequestMethod);
-  REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   MAX_TEST_SECONDS = 60;
   isEmpty = isEmpty;
 
@@ -486,7 +485,7 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
       this.model = this.resetModel();
     }
     const controls = {};
-    ['protocol', 'method', 'uri'].forEach(name => {
+    ['method', 'uri'].forEach(name => {
       controls[name] = [this.model.request[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);

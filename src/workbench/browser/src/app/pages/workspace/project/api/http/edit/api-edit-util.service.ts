@@ -1,4 +1,5 @@
 import { Injectable, ɵɵsetComponentScope } from '@angular/core';
+import { RequestProtocol } from 'eo/workbench/browser/src/app/modules/api-shared/api.model';
 import { eoDeepCopy, whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { omit } from 'lodash-es';
 
@@ -11,6 +12,7 @@ export class ApiEditUtilService {
 
   parseApiStorage2UI(apiData) {
     const result = apiData;
+    result.protocol = RequestProtocol.HTTP;
     result.groupID = (result.groupID === 0 ? -1 : result.groupID || -1).toString();
     return result;
   }

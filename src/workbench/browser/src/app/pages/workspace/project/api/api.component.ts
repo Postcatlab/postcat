@@ -74,8 +74,7 @@ export class ApiComponent implements OnInit, OnDestroy {
     },
     {
       routerLink: 'mock',
-      title: 'Mock',
-      onlyDestop: true
+      title: 'Mock'
     }
   ];
   originModel: ApiData | any;
@@ -160,10 +159,6 @@ export class ApiComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-  goDownload($event) {
-    $event.stopPropagation();
-    this.web.jumpToClient($localize`Eoapi Client is required to use Mock.`);
   }
   /**
    * Get current API ID to show content tab

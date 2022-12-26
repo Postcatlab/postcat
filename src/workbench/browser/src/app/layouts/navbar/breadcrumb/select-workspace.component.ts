@@ -8,10 +8,10 @@ import { ModalService } from '../../../shared/services/modal.service';
 
 @Component({
   selector: 'eo-select-workspace',
-  template: ` <a eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
+  template: ` <button eo-ng-button nzType="text" eo-ng-dropdown [nzDropdownMenu]="workspaceMenu">
       {{ store.getCurrentWorkspace?.title }}
       <eo-iconpark-icon name="down"></eo-iconpark-icon>
-    </a>
+    </button>
     <eo-ng-dropdown-menu #workspaceMenu>
       <ul nz-menu>
         <div class="flex py-[5px] px-[12px]">

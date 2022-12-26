@@ -26,7 +26,7 @@ interface testViewModel {
   request: {
     requestHeaders: ApiTestHeaders[];
     uri: string;
-    protocol: 'ws' | 'wss' | string;
+    protocol: 'ws' | string;
     queryParams: ApiTestQuery[];
   };
   response: {
@@ -54,10 +54,7 @@ export class WebsocketComponent implements OnInit, OnDestroy {
   model: testViewModel;
   leaveModal: NzModalRef<any, any>;
   height = 300;
-  WS_PROTOCOL = [
-    { value: 'ws', key: 'WS' },
-    { value: 'wss', key: 'WSS' }
-  ];
+  WS_PROTOCOL = [{ value: 'ws', key: 'WS' }];
   editorConfig = {
     language: 'json'
   };
@@ -398,14 +395,14 @@ export class WebsocketComponent implements OnInit, OnDestroy {
       this.model = this.resetModel();
     }
     const controls = {};
-    ['uri', 'protocol'].forEach(name => {
+    ['uri'].forEach(name => {
       controls[name] = [this.model.request[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);
   }
   private switchEditStatus() {
     const bool = this.wsStatus !== 'disconnect';
-    ['uri', 'protocol'].forEach(name => {
+    ['uri'].forEach(name => {
       if (bool) {
         // wsStatus !== 'disconnect'
         this.validateForm.controls[name].disable();
