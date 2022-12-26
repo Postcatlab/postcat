@@ -10,10 +10,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'list',
-    loadChildren: () => import('./list/project-list.module').then(m => m.ProjectListModule)
-  },
-  {
     path: 'api',
     canActivate: [RedirectProjectID],
     runGuardsAndResolvers: 'always',

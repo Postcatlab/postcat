@@ -12,7 +12,6 @@ import { MessageService } from '../../../../../../shared/services/message';
 })
 export class EnvListComponent implements OnDestroy {
   // @ViewChild('table') table: EoTableComponent; // * child component ref
-  @Output() private readonly statusChange: EventEmitter<any> = new EventEmitter();
   modalTitle = $localize`:@@New Environment:New Environment`;
   id;
   private destroy$: Subject<void> = new Subject<void>();
@@ -35,10 +34,6 @@ export class EnvListComponent implements OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  closeEnv() {
-    this.statusChange.emit();
   }
 
   handleDeleteEnv($event, uuid: string) {

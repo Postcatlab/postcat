@@ -1,13 +1,12 @@
 <div *ngIf="sidebar.visible" class="eo-sidebar p-[8px]" [ngClass]="{ 'eo-sidebar-shrink': sidebar.collapsed }">
   <ng-container *ngFor="let item of this.modules">
-    <nz-divider *ngIf="item.id === '@eo-core-extension'" style="transform: scale(0.8); margin: 5px 0"></nz-divider>
     <a
       (click)="clickModule(item)"
       class="sidebar-item"
       eoNgFeedbackTooltip
       nzTooltipPlacement="right"
       [nzTooltipTitle]="item.title"
-      [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentModule?.id }"
+      [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentID }"
     >
       <i class="icon">
         <img class="app-logo" loading="lazy" *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" />

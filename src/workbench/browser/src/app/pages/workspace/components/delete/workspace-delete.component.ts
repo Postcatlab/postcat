@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
@@ -14,7 +14,7 @@ import { StoreService } from '../../../../shared/store/state.service';
     >
     <button nz-popconfirm class="mt-[15px]" eo-ng-button nzDanger (click)="delete()" type="submit" i18n>Delete Workspace</button>`
 })
-export class WorkspaceDeleteComponent {
+export class WorkspaceDeleteComponent implements OnInit {
   @Input() model: API.Workspace;
   constructor(
     private api: RemoteService,
@@ -24,6 +24,9 @@ export class WorkspaceDeleteComponent {
     private modal: ModalService,
     private modalRef: NzModalRef
   ) {}
+  ngOnInit() {
+    this.model = this.store.getCurrentWorkspace;
+  }
   delete() {
     this.modal.confirm({
       nzTitle: $localize`Are you sure delete this workspace?`,

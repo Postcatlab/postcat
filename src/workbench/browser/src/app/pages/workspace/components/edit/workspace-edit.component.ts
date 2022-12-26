@@ -21,15 +21,13 @@ import { eoDeepCopy } from '../../../../utils/index.utils';
   </form>`
 })
 export class WorkspaceEditComponent implements OnChanges {
-  @Input() model: API.Workspace;
   validateForm: UntypedFormGroup;
   isSaveBtnLoading = false;
   constructor(
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
     private api: RemoteService,
-    private store: StoreService,
-    private modalRef: NzModalRef
+    private store: StoreService
   ) {
     this.initForm();
   }
@@ -39,14 +37,14 @@ export class WorkspaceEditComponent implements OnChanges {
   }
   initForm() {
     this.validateForm = this.fb.group({
-      title: [this.model?.title, [Validators.required]]
+      title: [this.store.getCurrentWorkspace?.title, [Validators.required]]
     });
   }
   async save($event) {
     $event.stopPropagation();
     if (!this.validateForm.valid) return;
     this.isSaveBtnLoading = true;
-    const { id } = this.model;
+    const id = this.store.getCurrentWorkspaceID;
     const { title } = this.validateForm.value;
     const [data, err]: any = await this.api.api_workspaceEdit({
       workspaceID: id,
@@ -59,6 +57,5 @@ export class WorkspaceEditComponent implements OnChanges {
     this.message.success($localize`Edit workspace successfully !`);
     this.store.updateWorkspace(eoDeepCopy(data));
     this.isSaveBtnLoading = false;
-    this.modalRef.destroy();
   }
 }

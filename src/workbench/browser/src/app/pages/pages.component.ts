@@ -27,7 +27,7 @@ export class PagesComponent implements OnInit {
     });
   }
   initSidebarVisible(url: string) {
-    if (['home/workspace/project/list'].find(val => url.includes(val))) {
+    if (['home/workspace/overview'].find(val => url.includes(val))) {
       this.sidebar.visible = false;
     } else {
       this.sidebar.visible = true;

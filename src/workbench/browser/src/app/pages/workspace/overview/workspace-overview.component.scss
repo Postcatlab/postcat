@@ -1,0 +1,11 @@
+:host ::ng-deep {
+  .ant-tabs-tabpane {
+    padding-top: 30px;
+  }
+
+  eo-workspace-member {
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+  }
+}

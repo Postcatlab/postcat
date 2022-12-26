@@ -30,7 +30,7 @@ export class EffectService {
     this.updateWorkspaces();
     this.updateProjects(this.store.getCurrentWorkspaceID).then(() => {
       if (this.store.getProjectList.length === 0) {
-        this.router.navigate(['/home/workspace/project/list']);
+        this.router.navigate(['/home/workspace/overview']);
       }
       this.getProjectPermission();
       this.getWorkspacePermission();
@@ -115,6 +115,7 @@ export class EffectService {
       .concat(apiDataFilters);
   }
   async getWorkspacePermission() {
+    //TODO localworkspace no need to set permission
     {
       // * update workspace auth
       const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
@@ -133,7 +134,7 @@ export class EffectService {
     await this.updateProjects(workspaceID);
     await this.router.navigate(['**']);
     if (this.store.getProjectList.length === 0) {
-      this.router.navigate(['/home/workspace/project/list']);
+      this.router.navigate(['/home/workspace/overview']);
     } else {
       // * refresh view
       this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
@@ -142,6 +143,7 @@ export class EffectService {
     this.getWorkspacePermission();
   }
   async getProjectPermission() {
+    //TODO localworkspace no need to set permission
     // * update project auth
     const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
     if (err) {

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { makeObservable, observable, reaction } from 'mobx';
-import { NzModalRef } from 'ng-zorro-antd/modal';
 
 import { MEMBER_MUI } from '../../../../shared/models/member.model';
 import { RemoteService } from '../../../../shared/services/storage/remote.service';
@@ -50,14 +49,14 @@ import { StoreService } from '../../../../shared/store/state.service';
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
                   <li
-                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role.name === 'Owner'"
+                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name === 'Owner'"
                     nz-menu-item
                     i18n
                     (click)="changeRole(item)"
                     >Set Editor
                   </li>
                   <li
-                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role.name !== 'Owner'"
+                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name !== 'Owner'"
                     nz-menu-item
                     i18n
                     (click)="changeRole(item)"
@@ -77,7 +76,6 @@ import { StoreService } from '../../../../shared/store/state.service';
   styleUrls: ['./workspace-member.component.scss']
 })
 export class WorkspaceMemberComponent implements OnInit {
-  @Input() model;
   @Input() list = [];
   @Input() loading = false;
   @observable searchValue = '';
@@ -89,12 +87,11 @@ export class WorkspaceMemberComponent implements OnInit {
     public store: StoreService,
     private message: EoNgFeedbackMessageService,
     private remote: RemoteService,
-    private modalRef: NzModalRef,
     private effect: EffectService
   ) {}
 
   ngOnInit(): void {
-    this.workspaceID = this.model.id;
+    this.workspaceID = this.store.getCurrentWorkspaceID;
     this.queryList();
     makeObservable(this);
     reaction(
@@ -194,8 +191,6 @@ export class WorkspaceMemberComponent implements OnInit {
     this.message.success($localize`Quit successfully`);
     if (this.store.getCurrentWorkspaceID === this.workspaceID) {
       await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
-    } else {
-      this.modalRef.close();
     }
     this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.workspaceID));
   }
