@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Windows>
+<!-- 完成 -->
+  <VerticalLayout >
+     <VerticalLayout width="480" height="250" roundcorner="5,5" bkimage="file='form\postcat.png'">
+
+	</VerticalLayout>
+	<VerticalLayout bkcolor="#FFFFFFFF" >
+	<Label padding="30,30,0,0" font="8" width="160" normaltextcolor="#ff666666" text="eoapi 已卸载" />
+	<Button name="btnUninstalled" font="6" padding="380,40,0,0" text="完 成"  textcolor="#FFFFFFFF" normalimage="file='public/button/btn_global_green_80x30_normal.png' " hotimage="file='public/button/btn_global_green_80x30_hovered.png'" pushedimage="file='public/button/btn_global_green_80x30_pushed.png'" width="80" height="30"/>
+	</VerticalLayout>
+ </VerticalLayout>
+</Windows>

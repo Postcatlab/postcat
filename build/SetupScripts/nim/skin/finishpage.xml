@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Windows>
+<!-- 完成 -->
+ <VerticalLayout >
+    <VerticalLayout width="480" height="250" roundcorner="5,5" bkimage="file='form\postcat.png'">
+
+	</VerticalLayout>
+	<VerticalLayout bkcolor="#FFFFFFFF" >
+	<Button name="btnRun" padding="160,50,0,0" text="开始使用" font="2" bkcolor="0xFF3BD02C" textcolor="0xFFFFFFFF"  borderround="4,4" height="50" width="160" />
+	</VerticalLayout>
+ </VerticalLayout>
+</Windows>

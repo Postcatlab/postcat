@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window size="480,390" sizebox="0,0,0,0" caption="0,0,0,390" showshadow="true" shadowimage="bk_shadow.png" shadowsize="14" shadowcorner="14,14,14,14">
+  <Font id="0" name="微软雅黑" size="12" bold="false" default="true" />
+  <Font id="1" name="微软雅黑" size="12" bold="true" />
+  <Font id="2" name="微软雅黑" size="24" bold="false" />
+  <Font id="3" name="微软雅黑" size="16" bold="false" />
+  <Font id="4" name="宋体" size="32" bold="false" />
+  <Font id="5" name="微软雅黑" size="14" bold="false" />
+  <Font id="6" name="微软雅黑" size="14" bold="true" />
+  <Font id="7" name="微软雅黑" size="13" bold="false" />
+  <Font id="8" name="微软雅黑" size="18" bold="false" />
+<Include source="default.xml" />
+  <VerticalLayout >  	
+	  <TabLayout name="wizardTab"  >
+	  	<Include source="configpage.xml" />
+	    <Include source="installingpage.xml" />		
+	  	<Include source="finishpage.xml" />
+	  	<Include source="uninstallpage.xml" />
+		<Include source="uninstallingpage.xml" />		
+	  	<Include source="uninstallfinishpage.xml" />
+    </TabLayout>
+	<HorizontalLayout float="true" inset="0,5,5,0" pos="0,0,480,26" >
+      	<Container />
+        <Button name="btnFinishedMin" width="20" height="20" normalimage="file='public\button\btn_wnd_white_min.png' dest='4,4,16,16'" hotimage="file='public\button\btn_wnd_white_min_hovered.png'" pushedimage="file='public\button\btn_wnd_white_min_pushed.png'" />
+        <Control width="5" />
+		<Button name="btnClose" width="20" height="20" normalimage="file='public\button\btn_wnd_white_close.png' dest='4,4,16,16'" hotimage="file='public\button\btn_wnd_close_hovered.png'" pushedimage="file='public\button\btn_wnd_close_pushed.png'" />
+     </HorizontalLayout> 
+  </VerticalLayout>
+</Window>

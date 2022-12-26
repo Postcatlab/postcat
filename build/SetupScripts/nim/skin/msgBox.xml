@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="408,287" sizebox="0,0,0,0" mininfo="408,287" maxinfo="408,287" caption="0,0,0,30" richeditcorner="20,20,20,20">
+  
+  <Font id="0" name="微软雅黑" size="13" bold="false" default="true" shared="true" />
+	<Font id="1" name="微软雅黑" size="14" bold="true" shared="true" />
+  <VerticalLayout width="408" height="287" bkcolor="#FFFFFFFF" inset="1,1,1,1" bordersize="1" bordercolor="0xFFCACACA">
+  	<HorizontalLayout height="30" bkcolor="0xFFCACACA">
+  		<Label name="lblTitle" textpadding="5,0,0,0" text="警告" textcolor="0xff333333" />
+      <HorizontalLayout width="67">
+      	<Container />
+		
+		<!--<Button name="btnFinishedMin" width="28" height="20" normalimage="min_normal.png" hotimage="min_hot.png" pushedimage="min_pushed.png" />-->
+        <Button name="btnClose" width="29" height="26" normalimage="file='close1.png' source='0,0,29,26'" hotimage="file='close1.png' source='0,26,29,52'" pushedimage="file='close1.png' source='0,52,29,78'" />
+      </HorizontalLayout>  		
+  	</HorizontalLayout>
+  	
+  	<Container />
+  	
+  	<HorizontalLayout height="80">
+  		<Container width="40" />
+  		<VerticalLayout width="40" >
+					<Container  />
+					<Label bkimage="msgWarning.png"  height="40"  />
+					<Container />
+			</VerticalLayout>
+			<Container width="10" />
+			<Text name="lblMsg" valign="vcenter" align="left" textcolor="0xFF000000" showhtml="true"/>
+			<Container width="20" />
+  	</HorizontalLayout>
+  	
+  	<Container />
+  	
+    <VerticalLayout height="50">
+   	 <Container height="12" />
+   	 <HorizontalLayout height="30" >
+   		<Container />
+		<Class name="btn_global_green_80x30" value="font=&quot;7&quot; normaltextcolor=&quot;white&quot; normalimage=&quot;file='../public/button/btn_global_green_80x30_normal.png'&quot; hotimage=&quot;file='../public/button/btn_global_green_80x30_hovered.png'&quot; pushedimage=&quot;file='../public/button/btn_global_green_80x30_pushed.png'&quot; disabledimage=&quot;file='../public/button/btn_global_green_80x30_normal.png' fade='80'&quot;"/>
+      <Button name="btnOK" font="1" text="确 定"  textcolor="#FFFFFFFF" normalimage="file='public/button/btn_global_green_80x30_normal.png'" pushedimage="file='public/button/btn_global_green_80x30_normal.png'" hotimage="file='public/button/btn_global_green_80x30_normal.png'" width="80" height="30" />
+      <Control width="10"/>
+	  <HorizontalLayout name="hlCancel" visible="false" width="68">
+	  <Button name="btnCancel" font="1" text="取 消"  textcolor="#FFFFFFFF" normalimage="file='public/button/btn_global_green_80x30_normal.png'" pushedimage="file='public/button/btn_global_green_80x30_normal.png'" hotimage="file='public/button/btn_global_green_80x30_normal.png'" width="80" height="30"  />
+      </HorizontalLayout>
+	  <Container width="20" />
+     </HorizontalLayout>
+    </VerticalLayout>
+	  
+  </VerticalLayout>
+</Window>

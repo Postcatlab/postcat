@@ -39,7 +39,7 @@
     }
   ],
   "win": {
-    "icon": "src/app/common/images/256x256.png",
+    "icon": "src/app/common/images/1024x1024.png",
     "target": [
       {
         "target": "nsis"

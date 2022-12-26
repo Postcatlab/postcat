@@ -29,7 +29,9 @@
     "electron:dev": "npm run electron:tsc && electron . --development",
     "web:start:direct":"yarn workspace postcat-web run start:direct",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
-    "lint:lint-staged": "lint-staged"
+    "lint:lint-staged": "lint-staged",
+    "wininstaller":"cd build && build-nim-nozip.bat",
+"pack:win":"npm run electron:build && npm run wininstaller"
   },
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",

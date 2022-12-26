@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="480,354" caption="0,0,0,34">
+    <VBox bkcolor="bk_wnd_lightcolor" width="480" height="354">
+        <HBox class="caption">
+            <Label class="font_title" name="title" width="stretch" valign="center" normaltextcolor="darkcolor" text="软件许可及服务协议" />
+            <Button class="btn_wnd_close" name="closebtn" margin="10,6,0,0"/>
+        </HBox>
+
+        <VBox height="auto" margin="20,20,20,10">
+            <RichEdit padding="10,1,1,1" bkimage="file='../public/edit/edit0.png'  corner='10,10,10,10'" name="info" font="2" multiline="true" vscrollbar="true" autovscroll="true" enabled="true" rich="true" readonly="true" />
+        </VBox>
+		<Button class="btn_global_green_80x30" name="button_1" halign="right" margin="0,0,20,10" text="我知道了" />
+    </VBox>
+</Window>
