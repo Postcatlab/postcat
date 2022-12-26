@@ -81,7 +81,7 @@ export class ApiMockService {
       });
     });
   }
-  getMockResponseByAPI(apiData) {
-    return JSON.stringify(tree2obj(apiData.responseBody));
+  getMockResponseByAPI(responseBody) {
+    return JSON.stringify(tree2obj(responseBody));
   }
 }

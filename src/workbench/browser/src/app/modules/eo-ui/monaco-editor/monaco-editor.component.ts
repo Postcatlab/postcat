@@ -185,6 +185,8 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     try {
       if (this.$$isBase64) {
         code = window.atob(val);
+      } else if (typeof val === 'object') {
+        code = JSON.stringify(val);
       } else {
         // code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val);
       }
