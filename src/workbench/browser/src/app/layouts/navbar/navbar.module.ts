@@ -3,7 +3,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 import { SharedModule } from '../../shared/shared.module';
 import { NavBreadcrumbComponent } from './breadcrumb/nav-breadcrumb.component';
-import { SelectWorkspaceComponent } from './breadcrumb/select-workspace.component';
+import { SelectWorkspaceComponent } from './breadcrumb/select-workspace/select-workspace.component';
 import { GetShareLinkComponent } from './get-share-link.component';
 import { NavOperateComponent } from './nav-operate.component';
 import { NavbarComponent } from './navbar.component';

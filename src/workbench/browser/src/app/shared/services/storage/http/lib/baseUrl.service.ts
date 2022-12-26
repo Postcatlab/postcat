@@ -61,8 +61,11 @@ export class BaseUrlInterceptor extends SettingService implements HttpIntercepto
       tap((event: any) => {}),
       catchError((err: any) => {
         if (err instanceof HttpErrorResponse) {
-          if (err.status === 401 && this.workspaceID !== -1) {
-            this.messageService.send({ type: 'login', data: {} });
+          if (err.status === 401) {
+            this.store.clearAuth();
+            if (this.store.remoteUrl && !this.store.isLocal) {
+              this.messageService.send({ type: 'login', data: {} });
+            }
           }
           if ([500, 502, 503, 504].includes(err.status)) {
             this.messageService.send({ type: 'server-fail', data: {} });

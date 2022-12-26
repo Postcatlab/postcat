@@ -6,7 +6,7 @@
         <nz-tag [class]="model.protocol">HTTP</nz-tag>
         <eo-api-methods-tag [type]="model.method"></eo-api-methods-tag>
         <div class="flex items-center w-full mt-[10px]">
-          <span class="truncate" (click)="handleCopy(model.uri)" i18n-nzTooltipTitle nzTooltipTitle="Click to Copy" eoNgFeedbackTooltip>
+          <span class="truncate">
             {{ model.uri }}
           </span>
           <button eo-ng-button nzType="text" class="mx-2" (click)="handleCopy(model.uri)"
