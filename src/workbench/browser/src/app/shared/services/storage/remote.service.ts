@@ -1101,15 +1101,7 @@ export class RemoteService {
     })
   }
 
-  api_userUpdatePsd({ oldPassword, newPassword }, prefix = '') {
-    if (!oldPassword) {
-      console.log(
-        '%c Error: user - updatePsd 接口 缺失参数 oldPassword %c',
-        ErrorStyle,
-        ''
-      )
-      return
-    }
+  api_userUpdatePsd({ newPassword }, prefix = '') {
     if (!newPassword) {
       console.log(
         '%c Error: user - updatePsd 接口 缺失参数 newPassword %c',
@@ -1120,21 +1112,19 @@ export class RemoteService {
     }
 
     return new Promise((resolve) => {
-      this.http
-        .put(`${prefix}/user/password`, { oldPassword, newPassword })
-        .subscribe({
-          next: ({ status, data }: any) => {
-            console.log('%c user - updatePsd 接口请求成功 %c', SuccessStyle, '')
-            if (status === 200) {
-              return resolve([data, null])
-            }
-            resolve([null, { status, ...data }])
-          },
-          error: (error) => {
-            console.log('%c user - updatePsd 接口请求失败 %c', ErrorStyle, '')
-            resolve([null, error])
-          },
-        })
+      this.http.put(`${prefix}/user/password`, { newPassword }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c user - updatePsd 接口请求成功 %c', SuccessStyle, '')
+          if (status === 200) {
+            return resolve([data, null])
+          }
+          resolve([null, { status, ...data }])
+        },
+        error: (error) => {
+          console.log('%c user - updatePsd 接口请求失败 %c', ErrorStyle, '')
+          resolve([null, error])
+        },
+      })
     })
   }
 

@@ -1023,15 +1023,7 @@ export default class LocalService extends localStorage {
     })
   }
 
-  api_userUpdatePsd({ oldPassword, newPassword }) {
-    if (!oldPassword) {
-      console.log(
-        '%c Error: user - updatePsd 接口 缺失参数 oldPassword %c',
-        ErrorStyle,
-        ''
-      )
-      return
-    }
+  api_userUpdatePsd({ newPassword }) {
     if (!newPassword) {
       console.log(
         '%c Error: user - updatePsd 接口 缺失参数 newPassword %c',
@@ -1042,7 +1034,7 @@ export default class LocalService extends localStorage {
     }
 
     return new Promise((resolve) => {
-      this.update(this.undefined, { oldPassword, newPassword })
+      this.update(this.undefined, { newPassword })
         .then(({ status, ...data }: any) => {
           console.log('%c user - updatePsd 接口调用成功 %c', SuccessStyle, '')
           if (status === 200) {

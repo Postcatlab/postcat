@@ -52,7 +52,7 @@ const http = {
       data: [
         { 'updateUserProfile @put': '/user/profile' },
         { 'readProfile @get': '/user/profile', query: '...' },
-        { 'updatePsd @put': '/user/password', json: 'oldPassword, newPassword' },
+        { 'updatePsd @put': '/user/password', json: 'newPassword' },
         { 'search @get': '/user/{username}' }
       ]
     },
