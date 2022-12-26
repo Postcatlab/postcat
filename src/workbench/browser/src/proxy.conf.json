@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://localhost:3000",
+    "target": "http://54.255.141.14:3002",
     "secure": false,
     "logLevel": "debug"
   }

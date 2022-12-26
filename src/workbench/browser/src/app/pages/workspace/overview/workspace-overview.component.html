@@ -1,34 +1,40 @@
 <div class="p-[20px]">
   <header class="flex justify-between">
-    <div class="mb-[15px]">
-      <b class="mr-[14px] text-[18px]" i18n>{{ title }}</b>
+    <div class="mb-[15px] flex">
+      <b class="mr-[14px] text-[18px] truncate max-w-[500px]" i18n>{{ title }}</b>
     </div>
     <div class="flex">
-      <eo-ng-button-group class="list-type-switcher">
-        <button eo-ng-button (click)="setListType('card')">
-          <eo-iconpark-icon [ngClass]="{ active: listType === 'card' }" name="page-template"></eo-iconpark-icon>
-        </button>
-        <button eo-ng-button (click)="setListType('list')">
-          <eo-iconpark-icon [ngClass]="{ active: listType === 'list' }" name="list"></eo-iconpark-icon>
-        </button>
-      </eo-ng-button-group>
-      <button class="!ml-[10px]" eo-ng-button nzType="primary" (click)="createProject()">
-        <eo-iconpark-icon name="plus"></eo-iconpark-icon>
-        <span i18n>New</span>
+      <button class="!ml-[10px]" *ngIf="!store.isLocal && store.getWorkspaceRole === 'Owner'" eo-ng-button (click)="invite()">
+        <eo-iconpark-icon class="mr-[5px]" name="plus"></eo-iconpark-icon>
+        <span i18n>Invite Member</span>
+      </button>
+      <button class="!ml-[10px]" eo-ng-button nzType="primary" (click)="eoProjectList.createProject()">
+        <eo-iconpark-icon class="mr-[5px]" name="plus"></eo-iconpark-icon>
+        <span i18n>New Project</span>
       </button>
     </div>
   </header>
   <section>
-    <eo-ng-tabset class="mx-[5px]">
+    <eo-ng-tabset class="mx-[5px]" [(nzSelectedIndex)]="nzSelectedIndex" [nzTabBarExtraContent]="extraTemplate">
       <eo-ng-tab i18n-nzTitle nzTitle="Project">
-        <eo-project-list></eo-project-list>
+        <eo-project-list #eoProjectList></eo-project-list>
       </eo-ng-tab>
-      <eo-ng-tab i18n-nzTitle nzTitle="Member">
-        <eo-workspace-member></eo-workspace-member>
+      <eo-ng-tab *ngIf="!store.isLocal" i18n-nzTitle nzTitle="Members">
+        <eo-workspace-member *ngIf="nzSelectedIndex === 1"></eo-workspace-member>
       </eo-ng-tab>
-      <eo-ng-tab i18n-nzTitle nzTitle="Setting">
-        <eo-workspace-edit></eo-workspace-edit>
+      <eo-ng-tab i18n-nzTitle *ngIf="!store.isLocal && store.getWorkspaceRole === 'Owner'" nzTitle="Setting">
+        <eo-workspace-setting></eo-workspace-setting>
       </eo-ng-tab>
     </eo-ng-tabset>
+    <ng-template #extraTemplate>
+      <div class="list-type-switcher" *ngIf="nzSelectedIndex === 0">
+        <button eo-ng-button nzType="text" (click)="eoProjectList.setListType('card')">
+          <eo-iconpark-icon [ngClass]="{ active: eoProjectList.listType === 'card' }" name="page-template"></eo-iconpark-icon>
+        </button>
+        <button eo-ng-button nzType="text" (click)="eoProjectList.setListType('list')">
+          <eo-iconpark-icon [ngClass]="{ active: eoProjectList.listType === 'list' }" name="list"></eo-iconpark-icon>
+        </button>
+      </div>
+    </ng-template>
   </section>
 </div>

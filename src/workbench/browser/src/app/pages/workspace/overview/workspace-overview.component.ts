@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { autorun } from 'mobx';
 
 import { SettingService } from '../../../modules/system-setting/settings.service';
 import { StoreService } from '../../../shared/store/state.service';
+import { ProjectListComponent } from '../components/project-list/project-list.component';
 
 @Component({
   selector: 'eo-workspace-overview',
@@ -9,13 +11,16 @@ import { StoreService } from '../../../shared/store/state.service';
   styleUrls: ['./workspace-overview.component.scss']
 })
 export class WorkspaceOverviewComponent implements OnInit {
+  @ViewChild('eoProjectList') eoProjectList: ProjectListComponent;
   title = 'Workspaces';
-  listType = this.setting.get('workbench.list.type') || 'list';
-  constructor(private setting: SettingService, private store: StoreService) {}
-
-  ngOnInit(): void {
-    this.title = this.store.getCurrentWorkspace?.title;
+  nzSelectedIndex = 0;
+  constructor(private setting: SettingService, public store: StoreService) {}
+  invite() {
+    this.nzSelectedIndex = 1;
   }
-  setListType(type) {}
-  createProject() {}
+  ngOnInit(): void {
+    autorun(() => {
+      this.title = this.store.getCurrentWorkspace?.title;
+    });
+  }
 }

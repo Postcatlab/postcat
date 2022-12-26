@@ -15,6 +15,8 @@ import { StoreService } from '../../../../shared/store/state.service';
         class="w-full"
         nzAllowClear
         nzShowSearch
+        auto-focus-form
+        nzAutoFocus="true"
         i18n-placeholder
         placeholder="Search by username"
         [(ngModel)]="userCache"
@@ -124,6 +126,7 @@ export class WorkspaceMemberComponent implements OnInit {
     });
     this.loading = false;
     this.list = data || [];
+    console.log(this.list);
     this.list.forEach(member => {
       member.roleTitle = this.roleMUI.find(val => val.id === member.role.id).title;
       if (member.id === this.store.getUserProfile.id) {
