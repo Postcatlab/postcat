@@ -121,7 +121,7 @@ export class EffectService {
       if (err) {
         return;
       }
-      this.store.setAuthMap(data.permissions, 'workspace');
+      this.store.setPermission(data.permissions, 'workspace');
       this.store.setRole(data.role.name, 'workspace');
     }
   }
@@ -147,7 +147,7 @@ export class EffectService {
     if (err) {
       return;
     }
-    this.store.setAuthMap(data.permissions, 'project');
+    this.store.setPermission(data.permissions, 'project');
     this.store.setRole(data.role.name, 'project');
   }
   async changeProject(pid) {

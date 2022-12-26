@@ -273,7 +273,7 @@ export class StoreService {
     this.role[type] = role;
   }
 
-  @action setAuthMap(permissionsList, type) {
+  @action setPermission(permissionsList, type) {
     // TODO rename to setPermission
     if (this.isLocal) {
       // * set all false

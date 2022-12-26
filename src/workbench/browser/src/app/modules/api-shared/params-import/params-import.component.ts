@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { cloneDeep, merge } from 'lodash-es';
+import { cloneDeep, toArray, merge } from 'lodash-es';
 import { computed, observable, makeObservable, reaction } from 'mobx';
 import qs from 'qs';
 
@@ -123,12 +123,36 @@ export class ParamsImportComponent implements OnInit {
       return;
     }
 
+    const array2obj = data => {
+      if (Array.isArray(data)) {
+        return data.map(array2obj).reduce(
+          (total, { name, ...item }) => ({
+            ...total,
+            [name]: item
+          }),
+          {}
+        );
+      }
+      return {
+        ...data,
+        children: data?.children?.length ? array2obj(data.children) : {}
+      };
+    };
+
+    const obj2array = data => {
+      return Object.keys(data).map(name => ({
+        name,
+        ...data[name],
+        children: data?.children?.length ? obj2array(data.children) : []
+      }));
+    };
+
     const combineFunc = {
       overwrite: data => data,
       append: (data, base) => base.concat(data),
       mixin: (data, base) => {
-        console.log('base', base);
-        return merge(base, data);
+        console.log('base', merge(array2obj(base), array2obj(data)));
+        return obj2array(merge(array2obj(base), array2obj(data)));
       }
     };
 

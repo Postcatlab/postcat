@@ -24,7 +24,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     public sidebar: SidebarService,
     private messageService: MessageService,
     private extension: ExtensionService,
-    private store: StoreService
+    public store: StoreService
   ) {}
   toggleCollapsed(): void {
     this.sidebar.toggleCollapsed();
@@ -108,19 +108,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
         ]
       : [];
-    const settingItem =
-      this.store.getProjectRole === 'admin'
-        ? [
-            {
-              title: $localize`Setting`,
-              id: '@eo-core-setting',
-              isOffical: true,
-              icon: 'setting',
-              activeRoute: 'home/workspace/project/setting',
-              route: 'home/workspace/project/setting'
-            }
-          ]
-        : [];
+    const settingItem = ['Owner', 'admin'].includes(this.store.getProjectRole)
+      ? [
+          {
+            title: $localize`Setting`,
+            id: '@eo-core-setting',
+            isOffical: true,
+            icon: 'setting',
+            activeRoute: 'home/workspace/project/setting',
+            route: 'home/workspace/project/setting'
+          }
+        ]
+      : [];
 
     const defaultModule = [
       {
