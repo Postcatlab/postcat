@@ -30,7 +30,10 @@ import { ModalService } from '../../../shared/services/modal.service';
         </div>
         <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.id)">
           <p class="workspace-title text-tips" i18n>LOCAL</p>
-          <li class="workspace-item" [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }" nz-menu-item>
+          <li
+            [ngClass]="['workspace-item flex items-center', { 'active-item': store.getCurrentWorkspace?.id === localWorkspace.id }]"
+            nz-menu-item
+          >
             <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
           >
         </div>
@@ -45,7 +48,7 @@ import { ModalService } from '../../../shared/services/modal.service';
             [ngClass]="{ 'active-item': store.getCurrentWorkspace?.id === item.id }"
             *ngFor="let item of cloudWorkspaces"
           >
-            <div class="flex items-center">
+            <div class="flex h-full items-center">
               <eo-iconpark-icon class="mr-[5px]" name="link-cloud-sucess"> </eo-iconpark-icon>
               <span class="truncate mw-[250px]"> {{ item.title }}</span>
             </div>
