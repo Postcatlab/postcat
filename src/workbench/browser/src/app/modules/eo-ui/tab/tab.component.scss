@@ -8,6 +8,14 @@
   }
 }
 
+::ng-deep {
+  .ant-tabs-dropdown-menu-item {
+    .ant-tabs-tab-remove {
+      display: none;
+    }
+  }
+}
+
 :host ::ng-deep {
   width: 100%;
 

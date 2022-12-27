@@ -111,7 +111,6 @@ import { StorageService } from '../shared/services/storage/storage.service';
       </ng-container>
     </nz-modal>
     <nz-modal
-      [nzFooter]="null"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
       (nzAfterClose)="ebdsz2aCallback()"
@@ -134,25 +133,24 @@ import { StorageService } from '../shared/services/storage/storage.service';
               />
             </nz-form-control>
           </nz-form-item>
-
-          <section class="flex justify-end">
-            <button
-              eo-ng-button
-              [nzLoading]="isCancelBtnLoading"
-              type="button"
-              class="mr-3"
-              nzType="default"
-              (click)="btn66ztjiCallback()"
-              i18n
-            >
-              Cancel
-            </button>
-            <button eo-ng-button [nzLoading]="isSaveBtnLoading" type="submit" class="" nzType="primary" (click)="btnd4wbcjCallback()" i18n>
-              Confirm
-            </button>
-          </section>
         </form>
       </ng-container>
+      <div *nzModalFooter>
+        <button
+          eo-ng-button
+          [nzLoading]="isCancelBtnLoading"
+          type="button"
+          class="mr-3"
+          nzType="default"
+          (click)="btn66ztjiCallback()"
+          i18n
+        >
+          Cancel
+        </button>
+        <button eo-ng-button [nzLoading]="isSaveBtnLoading" type="submit" class="" nzType="primary" (click)="btnd4wbcjCallback()" i18n>
+          Confirm
+        </button>
+      </div>
     </nz-modal>`
 })
 export class UserModalComponent implements OnInit, OnDestroy {
@@ -534,7 +532,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
               }
             },
             {
-              label: $localize`Sync`,
+              label: $localize`Upload`,
               type: 'primary',
               onClick: () => {
                 return new Promise(resolve => {

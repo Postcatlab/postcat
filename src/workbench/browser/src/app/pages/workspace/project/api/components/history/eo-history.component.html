@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between px-[10px] pt-2 h-[40px] flex-shrink-0">
     <span class="font-bold" i18n>History</span>
     <button
-      class="flex items-center justify-center cursor-pointer shrink-0 h-7"
+      class="flex items-center justify-center cursor-pointer shrink-0"
       eo-ng-button
       nzType="text"
       [disabled]="!historyList.length"
@@ -21,9 +21,7 @@
       i18n-nzOkText
       nzOkText="Delete"
     >
-      <span class="flex items-center justify-center icon">
-        <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
-      </span>
+      <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
     </button>
   </div>
   <nz-empty *ngIf="!historyList.length" nzNotFoundImage="simple"> </nz-empty>

@@ -380,7 +380,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/list/extension-list.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/workspace/overview/workspace-overview.component.html</context>
@@ -1412,7 +1412,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/list/extension-list.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">46</context>
         </context-group>
         <target state="translated">介绍</target>
       </trans-unit>
@@ -1528,7 +1528,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/extension/list/extension-list.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <target state="translated">已安装</target>
       </trans-unit>
@@ -1782,13 +1782,13 @@
         <target state="translated">您已创建了一个云端工作空间，是否需要将本地的数据上传到新的工作空间以方便团队协作？&lt;br&gt;
        如果现在不上传，后续您也可以手动导出项目数据并导入到新的工作空间。</target>
       </trans-unit>
-      <trans-unit id="4235505579599675574" datatype="html">
-        <source>Sync</source>
+      <trans-unit id="6932865105766151309" datatype="html">
+        <source>Upload</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/user-modal.component.ts</context>
           <context context-type="linenumber">537</context>
         </context-group>
-        <target state="translated">同步</target>
+        <target state="translated">上传</target>
       </trans-unit>
       <trans-unit id="3620188369327429839" datatype="html">
         <source> Save </source>
