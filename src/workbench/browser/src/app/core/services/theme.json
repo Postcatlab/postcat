@@ -57,7 +57,9 @@
     "textLinkHover": "",
     "textLinkActive": "",
     //Divider
-    "divider": "#000"
+    "divider": "#000",
+    //Tabs
+    "": ""
   },
   "size": {
     "icon": "",

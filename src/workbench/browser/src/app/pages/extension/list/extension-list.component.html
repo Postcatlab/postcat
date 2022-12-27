@@ -1,19 +1,19 @@
 <div class="px-6 overflow-auto extension-list">
   <nz-spin class="w-fit mx-auto my-[30px]" nzSimple *ngIf="loading"></nz-spin>
   <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading && !renderList.length"></nz-empty>
-  <div class="grid gap-6 py-5 2xl:grid-cols-5 xl:grid-cols-3 lg:grid-cols-1 list-block">
+  <div class="grid gap-6 py-5 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-1">
     <div
-      class="border-all w-full min-h-[140px]flex flex-col flex-wrap plugin-block hover:shadow-lg transition-shadow duration-300"
+      class="flex flex-col flex-wrap w-full transition-shadow duration-300 rounded border-all plugin-block hover:shadow-lg"
       *ngFor="let it of renderList"
       (click)="clickExtension($event, it)"
     >
-      <div class="flex w-full h-[200px] p-5">
+      <div class="flex w-full p-5">
         <div class="flex w-full">
           <div class="flex flex-col w-full">
             <div class="flex flex-col w-full">
               <div class="flex items-center justify-between">
                 <div
-                  class="shrink-0 block w-[20px] h-[20px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
+                  class="shrink-0 block w-[30px] h-[30px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
                   [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
                 ></div>
                 <div *ngIf="type !== 'installed'">
@@ -36,7 +36,7 @@
                 </div>
               </div>
               <span class="text-xs text-gray-400">{{ it.author?.name || it.author }}</span>
-              <div class="flex my-1 text-sm desc">{{ it.description }}</div>
+              <div class="flex mt-[15px] text-[12px] desc leading-[1.65]">{{ it.description }}</div>
             </div>
             <div class="btn-group" *ngIf="type === 'installed'">
               <ng-container *ngIf="it.features?.configuration">
