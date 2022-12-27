@@ -14,15 +14,3 @@
     width: 30px;
   }
 }
-
-:host ::ng-deep {
-  .download-btn {
-    button {
-      background-color: rgb(0 120 90 / 20%);
-    }
-
-    .icon {
-      color: var(--GREEN_NORMAL);
-    }
-  }
-}

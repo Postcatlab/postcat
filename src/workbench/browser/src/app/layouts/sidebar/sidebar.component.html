@@ -1,4 +1,4 @@
-<div *ngIf="sidebar.visible" class="eo-sidebar p-[8px]" [ngClass]="{ 'eo-sidebar-shrink': sidebar.collapsed }">
+<div *ngIf="sidebar.visible" class="eo-sidebar" [ngClass]="{ 'eo-sidebar-shrink': sidebar.collapsed }">
   <ng-container *ngFor="let item of this.modules">
     <a
       (click)="clickModule(item)"

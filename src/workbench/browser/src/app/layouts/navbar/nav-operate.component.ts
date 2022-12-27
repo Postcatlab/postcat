@@ -12,6 +12,7 @@ import { ElectronService } from '../../core/services';
     </button>
     <div *ngIf="!isMac">
       <button
+        class="ml-[10px]"
         eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle
@@ -23,6 +24,7 @@ import { ElectronService } from '../../core/services';
         <eo-iconpark-icon name="minus"></eo-iconpark-icon>
       </button>
       <button
+        class="ml-[10px]"
         eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle
@@ -34,6 +36,7 @@ import { ElectronService } from '../../core/services';
         <eo-iconpark-icon [name]="isMaximized ? 'off-screen' : 'full-screen'"></eo-iconpark-icon>
       </button>
       <button
+        class="ml-[10px]"
         eo-ng-button
         eoNgFeedbackTooltip
         i18n-nzTooltipTitle
