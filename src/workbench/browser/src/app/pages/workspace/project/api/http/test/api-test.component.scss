@@ -56,15 +56,17 @@ div.ant-typography {
 }
 
 :host ::ng-deep {
+  .ant-select-open eo-ng-select-top-control {
+    background-color: var(--MAIN_BG) !important;
+  }
+
   eo-ng-select eo-ng-select-top-control,
   .main-bg {
     background-color: var(--BTN_SEC_BG_HOVER) !important;
+
     &:focus,
     &:active,
     &:target {
-      background-color: var(--MAIN_BG) !important;
-    }
-    &.ant-select-open {
       background-color: var(--MAIN_BG) !important;
     }
   }
