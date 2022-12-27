@@ -16,6 +16,13 @@
   width: var(--ICONPARK_SIZE);
 }
 
+.icon {
+  ::ng-deep .iconpark-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 .sidebar-item {
   padding: 8px 0;
   margin-bottom: 10px;
@@ -25,6 +32,7 @@
   justify-content: center;
   border-radius: var(--DEFAULT_BORDER_RADIUS);
   cursor: pointer;
+  color: var(--TIPS_TEXT_COLOR);
 
   &:hover,
   &.sidebar-item-active {
