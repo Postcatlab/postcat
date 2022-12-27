@@ -1,6 +1,58 @@
 {
   "name": "pc-theme-default",
-  "title": "默认主题",
-  "base": {},
-  "button": {}
+  "logoImage": "xxx",
+  "logoText": "xxx",
+  "colors": {
+    "primary": "#1890ff",
+    "primaryHover": "#40a9ff",
+    "primaryActive": "#096dd9",
+    "primaryOutline": "xxxx",
+    "success": "#67C23A",
+    "successHover": "",
+    "successActive": "",
+    "successOutline": "",
+    "warning": "#E6A23C",
+    "warningHover": "",
+    "warningActive": "",
+    "warningOutline": "",
+    "danger": "#F56C6C",
+    "dangerHover": "",
+    "dangerActive": "",
+    "dangerOutline": "",
+    "info": "#F56C6C",
+    "infoHover": "",
+    "infoActive": "",
+    "infoOutline": "",
+    "text": "#303133",
+    "textSecondary": "#606266",
+    "border": "#DCDFE6",
+    "shadow": "",
+    "bodyBackground": "#F5F7FA",
+    "componentBackground": "#F5F7FA",
+    //Disabled
+    "disabled": "",
+    "disabledBackground": "",
+    //Button
+    "buttonText": "",
+    "buttonShadow": "",
+    "buttonPrimaryText": "",
+    "buttonPrimaryBackground": "#1890ff",
+    "buttonPrimaryShadow": "",
+    "buttonDefaultText": "",
+    "buttonDefaultBackground": "#1890ff",
+    "buttonDefaultShadow": "",
+    //Link
+    "link": "",
+    "linkHover": "",
+    "linkActive": "",
+    //Divider
+    "divider": "#000",
+    //Layout-Header
+    "headerBackground": "#fff"
+  },
+  "size": {
+    "icon": "",
+    "borderWidth": "",
+    "borderRadius": ""
+  }
 }
