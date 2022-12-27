@@ -198,7 +198,6 @@ export class StoreService {
   // ? router
   @action private routeListener = (event: NavigationEnd) => {
     this.url = event.urlAfterRedirects;
-    console.log(this.url);
   };
 
   // ? env
