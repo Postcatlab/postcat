@@ -12,7 +12,7 @@ import StorageUtil from '../../../utils/storage/Storage';
 /**
  * Client need min fontend version
  */
-const minFontendVersion = '1.10.0';
+const minFontendVersion = '2.0.0';
 /**
  * @description
  * A message queue global send and get message

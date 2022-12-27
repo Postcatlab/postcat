@@ -22,7 +22,8 @@
               (ngModelChange)="extensionService.toggleEnableExtension(extensionDetail.name, $event)"
             >
             </eo-ng-switch>
-            <span i18n>{{ extensionDetail.enable ? 'Enable' : 'Disable' }}</span>
+            <span *ngIf="!extensionDetail.enable" i18n>Enable</span>
+            <span *ngIf="extensionDetail.enable" i18n>Disable</span>
           </div>
           <button
             eo-ng-button

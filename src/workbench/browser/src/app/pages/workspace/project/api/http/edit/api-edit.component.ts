@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { from, fromEvent, Subject } from 'rxjs';
@@ -47,6 +48,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
+    private store: StoreService,
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private storage: StorageService,
@@ -203,7 +205,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         isLeaf: false
       }
     ];
-    this.storage.run('groupLoadAllByProjectID', [1], (result: StorageRes) => {
+    this.storage.run('groupLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         [].concat(result.data).forEach((item: Group) => {
           delete item.updatedAt;

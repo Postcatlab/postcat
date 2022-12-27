@@ -11,7 +11,7 @@ export class ApiEditService {
   getPureApi({ groupID }) {
     return {
       name: '',
-      projectID: 1,
+      projectID: -1,
       uri: '/',
       groupID,
       protocol: RequestProtocol.HTTP,

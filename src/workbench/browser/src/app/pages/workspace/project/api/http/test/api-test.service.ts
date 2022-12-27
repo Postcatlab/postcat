@@ -12,7 +12,7 @@ export class ApiTestService {
   constructor(private apiService: ProjectApiService, private apiTestUtils: ApiTestUtilService, private storage: StorageService) {}
   async getApi({ id }): Promise<ApiTestData> {
     let result: ApiTestData = {
-      projectID: 1,
+      projectID: -1,
       groupID: 0,
       uri: '',
       protocol: RequestProtocol.HTTP,
@@ -58,7 +58,6 @@ export class ApiTestService {
         'apiTestHistoryCreate',
         [
           {
-            projectID: 1,
             apiDataID: apiID,
             ...history
           }
