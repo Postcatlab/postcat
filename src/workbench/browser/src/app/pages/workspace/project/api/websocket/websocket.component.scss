@@ -1,5 +1,20 @@
 :host {
   overflow: initial;
+
+  ::ng-deep .main-bg {
+    background-color: var(--BTN_SEC_BG_HOVER) !important;
+
+    &:focus,
+    &:active,
+    &:target {
+      background-color: var(--MAIN_BG) !important;
+    }
+  }
+
+  .ant-input,
+  .ant-btn {
+    height: 40px;
+  }
 }
 
 .top-line {
