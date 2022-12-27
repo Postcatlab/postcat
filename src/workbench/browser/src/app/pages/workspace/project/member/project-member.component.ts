@@ -24,8 +24,8 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
           class="w-full"
           nzAllowClear
           nzShowSearch
-          i18n-placeholder
-          placeholder="Search by username"
+          i18n-nzPlaceholder
+          nzPlaceholder="Search"
           [(ngModel)]="userCache"
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"

@@ -34,6 +34,10 @@
   cursor: pointer;
   color: var(--TIPS_TEXT_COLOR);
 
+  &.tiny {
+    padding: 5px 0;
+  }
+
   &:hover,
   &.sidebar-item-active {
     background-color: var(--NAVBAR_BTN_BG);
