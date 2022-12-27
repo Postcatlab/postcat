@@ -19,11 +19,6 @@
       <Include source="uninstallingpage.xml" />
       <Include source="uninstallfinishpage.xml" />
     </TabLayout>
-    <HorizontalLayout float="true" inset="0,5,5,0" pos="0,0,480,26">
-      <Container />
-      <Button name="btnFinishedMin" width="20" height="20" normalimage="file='public\button\btn_wnd_white_min.png' dest='4,4,16,16'" hotimage="file='public\button\btn_wnd_white_min_hovered.png'" pushedimage="file='public\button\btn_wnd_white_min_pushed.png'" />
-      <Control width="5" />
-      <Button name="btnClose" width="20" height="20" normalimage="file='public\button\btn_wnd_white_close.png' dest='4,4,16,16'" hotimage="file='public\button\btn_wnd_close_hovered.png'" pushedimage="file='public\button\btn_wnd_close_pushed.png'" />
-    </HorizontalLayout>
+
   </VerticalLayout>
 </Window>
