@@ -110,7 +110,7 @@ export class EffectService {
       .concat(apiDataFilters);
   }
   async getWorkspacePermission() {
-    //TODO localworkspace no need to set permission
+    // TODO localworkspace no need to set permission
     {
       // * update workspace auth
       const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
@@ -124,7 +124,6 @@ export class EffectService {
   async changeWorkspace(workspaceID: number = -1) {
     // * real set workspace
     this.store.setCurrentWorkspaceID(workspaceID);
-    this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
     await this.updateProjects(workspaceID);
     await this.router.navigate(['**']);
@@ -138,6 +137,7 @@ export class EffectService {
     document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
     // * update workspace role
     this.getWorkspacePermission();
+    this.getProjectPermission();
   }
   async getProjectPermission() {
     //TODO localworkspace no need to set permission
@@ -178,6 +178,7 @@ export class EffectService {
       // * real set workspace
       this.storage.run('projectBulkLoad', [workspaceID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
+          // * select first project automatic
           this.store.setProjectList(result.data);
           resolve([result.data, null]);
           return;
