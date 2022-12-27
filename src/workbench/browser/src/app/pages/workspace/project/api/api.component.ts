@@ -18,7 +18,6 @@ const RIGHT_SIDER_WIDTH_KEY = 'RIGHT_SIDER_WIDTH';
 const LEFT_SIDER_WIDTH_KEY = 'LEFT_SIDER_WIDTH_KEY';
 const DEFAULT_RIGHT_SIDER_WIDTH = 250;
 
-const localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KEY), 10);
 @Component({
   selector: 'eo-api',
   templateUrl: './api.component.html',
@@ -28,8 +27,8 @@ export class ApiComponent implements OnInit, OnDestroy {
   @observable envUuid = '';
   renderEnvList = [];
   isFirstTime = true;
-
-  siderWidth = Math.max(120, Number.isNaN(localSiderWidth) ? 250 : localSiderWidth);
+  private localSiderWidth = Number.parseInt(localStorage.getItem(LEFT_SIDER_WIDTH_KEY), 10);
+  siderWidth = Math.max(120, Number.isNaN(this.localSiderWidth) ? 250 : this.localSiderWidth);
   RIGHT_SIDER_SHRINK_WIDTH = 50;
   isDragging = false;
   animateId = -1;
