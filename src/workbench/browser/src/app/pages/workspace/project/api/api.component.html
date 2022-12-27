@@ -1,6 +1,5 @@
 <nz-layout class="layout">
   <nz-sider
-    nzTheme="light"
     [nzWidth]="siderWidth"
     nz-resizable
     [nzMinWidth]="120"
@@ -9,7 +8,9 @@
     (nzResizeEnd)="onResizeEnd()"
   >
     <nz-content class="api-container-tabs">
+      <eo-env-list class="flex-auto" *ngIf="sidebar.currentID === '@eo-core-env'"></eo-env-list>
       <eo-ng-tabset
+        *ngIf="['@eo-core-share', '@eo-core-apimanger'].includes(sidebar.currentID)"
         class="group-tabset"
         [ngClass]="{ 'share-group-tabset': store.isShare }"
         nzCentered
@@ -44,21 +45,6 @@
             </span>
           </ng-template>
           <eo-history></eo-history>
-        </eo-ng-tab>
-        <eo-ng-tab [nzTitle]="envTitle" *ngIf="!store.isShare">
-          <ng-template #envTitle>
-            <span
-              [nzTooltipMouseLeaveDelay]="0"
-              i18n-nzTooltipTitle="@@Environment Setting"
-              eoNgFeedbackTooltip
-              nzTooltipTitle="Environment Setting"
-              [nzTooltipMouseEnterDelay]="0.4"
-              class="text-lg tab-content"
-            >
-              <eo-iconpark-icon name="application"></eo-iconpark-icon>
-            </span>
-          </ng-template>
-          <eo-env-list class="flex-auto" (statusChange)="toggleRightBar('close')"></eo-env-list>
         </eo-ng-tab>
       </eo-ng-tabset>
       <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
@@ -138,19 +124,14 @@
         <!-- Child Tab Bar -->
         <eo-ng-tabset class="inside_page_tabset" *ngIf="this.showChildBar" nzLinkRouter>
           <eo-ng-tab *ngFor="let tab of renderTabs">
-            <p *ngIf="web.isWeb && tab.onlyDestop">
-              <span *nzTabLink nz-tab-link (click)="goDownload($event)">{{ tab.title }}</span>
-            </p>
-            <div *ngIf="!web.isWeb || !tab.onlyDestop">
-              <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
-                {{ tab.title }}
-                <nz-badge
-                  *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
-                  class="ant-badge-theme-color"
-                  nzStatus="default"
-                ></nz-badge>
-              </a>
-            </div>
+            <a *nzTabLink nz-tab-link [routerLink]="['http/' + tab.routerLink]" queryParamsHandling="merge">
+              {{ tab.title }}
+              <nz-badge
+                *ngIf="apiTabComponent.getCurrentTab()?.extends?.hasChanged?.[tab.routerLink]"
+                class="ant-badge-theme-color"
+                nzStatus="default"
+              ></nz-badge>
+            </a>
           </eo-ng-tab>
         </eo-ng-tabset>
         <!-- Get router child component by activate -->

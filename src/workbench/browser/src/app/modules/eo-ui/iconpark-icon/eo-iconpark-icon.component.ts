@@ -12,8 +12,8 @@ import { Component, Input } from '@angular/core';
         display: inline-flex;
         vertical-align: middle;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class EoIconparkIconComponent {
   @Input() name: string;

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { ApiMockTableComponent } from 'eo/workbench/browser/src/app/modules/api-shared/api-mock-table.component';
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { ApiMockService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/api-mock.service';
@@ -31,9 +32,11 @@ export class ApiMockComponent implements OnInit {
 
   apiDataID = Number(this.route.snapshot.queryParams.uuid);
   apiData: ApiData;
+  titleTips = $localize`Postcat Client is required to use local mock.`;
 
   constructor(
     private route: ActivatedRoute,
+    public web: WebService,
     private apiMock: ApiMockService,
     private modal: ModalService,
     private api: ProjectApiService
@@ -42,6 +45,9 @@ export class ApiMockComponent implements OnInit {
   async ngOnInit() {
     this.apiData = await this.api.get(this.apiDataID);
     this.eoOnInit.emit(this.apiData);
+  }
+  jumpToClient() {
+    this.web.jumpToClient(this.titleTips);
   }
   addMock() {
     const modal = this.modal.create({

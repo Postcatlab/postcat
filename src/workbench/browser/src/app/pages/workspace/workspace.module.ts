@@ -7,20 +7,20 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 
 import { EoSettingModule } from '../../modules/eo-ui/setting/setting.module';
 import { SharedModule } from '../../shared/shared.module';
-import { WorkspaceDeleteComponent } from './components/delete/workspace-delete.component';
-import { WorkspaceEditComponent } from './components/edit/workspace-edit.component';
-import { WorkspaceMemberComponent } from './components/member/workspace-member.component';
-import { WorkspaceSettingComponent } from './components/setting/workspace-setting.component';
 import { WorkspaceComponent } from './workspace.component';
 
 @NgModule({
-  declarations: [WorkspaceSettingComponent, WorkspaceEditComponent, WorkspaceMemberComponent, WorkspaceDeleteComponent, WorkspaceComponent],
+  declarations: [WorkspaceComponent],
   imports: [
     RouterModule.forChild([
       {
         path: '',
         redirectTo: 'project',
         pathMatch: 'full'
+      },
+      {
+        path: 'overview',
+        loadChildren: () => import('./overview/workspace-overview.module').then(m => m.WorkspaceOverviewModule)
       },
       {
         path: '',

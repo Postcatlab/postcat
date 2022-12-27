@@ -1,5 +1,6 @@
 import { ViewChild, ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
@@ -7,34 +8,16 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject } from 'rxjs';
 import { distinct, takeUntil } from 'rxjs/operators';
+
+import { ModalService } from '../shared/services/modal.service';
+import { StorageRes, StorageResStatus } from '../shared/services/storage/index.model';
+import { StorageService } from '../shared/services/storage/storage.service';
 
 @Component({
   selector: 'eo-user-modal',
   template: ` <nz-modal
-      [nzFooter]="modalSyncFooter"
-      [(nzVisible)]="isSyncModalVisible"
-      (nzOnCancel)="handleSyncModalCancel()"
-      (nzAfterClose)="e7odmm4Callback()"
-      nzTitle="Upload local data to the cloud"
-      i18n-nzTitle
-    >
-      <ng-container *nzModalContent>
-        <span i18n
-          >You have created a cloud workspace, do you need to upload the local data to the new workspace to facilitate team collaboration?
-          If you do not upload it now, you can also manually export the project data and import it into a new workspace later.
-        </span>
-      </ng-container>
-      <ng-template #modalSyncFooter>
-        <button eo-ng-button [nzLoading]="isSyncCancelBtnLoading" class="" nzType="default" (click)="btnsgs0ckCallback()" i18n>
-          Cancel
-        </button>
-        <button eo-ng-button [nzLoading]="isSyncSyncBtnLoading" class="" nzType="primary" (click)="btnsf8zsrCallback()" i18n> Sync </button>
-      </ng-template>
-    </nz-modal>
-    <nz-modal
       [nzFooter]="modalCheckConnectFooter"
       [(nzVisible)]="isCheckConnectModalVisible"
       (nzOnCancel)="handleCheckConnectModalCancel()"
@@ -128,7 +111,6 @@ import { distinct, takeUntil } from 'rxjs/operators';
       </ng-container>
     </nz-modal>
     <nz-modal
-      [nzFooter]="null"
       [(nzVisible)]="isAddWorkspaceModalVisible"
       (nzOnCancel)="handleAddWorkspaceModalCancel()"
       (nzAfterClose)="ebdsz2aCallback()"
@@ -151,29 +133,27 @@ import { distinct, takeUntil } from 'rxjs/operators';
               />
             </nz-form-control>
           </nz-form-item>
-
-          <section class="flex justify-end">
-            <button
-              eo-ng-button
-              [nzLoading]="isCancelBtnLoading"
-              type="button"
-              class="mr-3"
-              nzType="default"
-              (click)="btn66ztjiCallback()"
-              i18n
-            >
-              Cancel
-            </button>
-            <button eo-ng-button [nzLoading]="isSaveBtnLoading" type="submit" class="" nzType="primary" (click)="btnd4wbcjCallback()" i18n>
-              Confirm
-            </button>
-          </section>
         </form>
       </ng-container>
+      <div *nzModalFooter>
+        <button
+          eo-ng-button
+          [nzLoading]="isCancelBtnLoading"
+          type="button"
+          class="mr-3"
+          nzType="default"
+          (click)="btn66ztjiCallback()"
+          i18n
+        >
+          Cancel
+        </button>
+        <button eo-ng-button [nzLoading]="isSaveBtnLoading" type="submit" class="" nzType="primary" (click)="btnd4wbcjCallback()" i18n>
+          Confirm
+        </button>
+      </div>
     </nz-modal>`
 })
 export class UserModalComponent implements OnInit, OnDestroy {
-  isSyncModalVisible;
   isSyncCancelBtnLoading;
   isSyncSyncBtnLoading;
   isCheckConnectModalVisible;
@@ -198,11 +178,12 @@ export class UserModalComponent implements OnInit, OnDestroy {
     public eMessage: EoNgFeedbackMessageService,
     public effect: EffectService,
     public dataSource: DataSourceService,
-    public modal: NzModalService,
+    public modal: ModalService,
     public fb: UntypedFormBuilder,
+    private storage: StorageService,
+    private router: Router,
     private web: WebService
   ) {
-    this.isSyncModalVisible = false;
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
     this.isCheckConnectModalVisible = false;
@@ -361,49 +342,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  handleSyncModalCancel(): void {
-    // * 关闭弹窗
-    this.isSyncModalVisible = false;
-  }
   async e7odmm4Callback() {
     // * nzAfterClose event callback
-  }
-  async btnsgs0ckCallback() {
-    // * click event callback
-    this.isSyncCancelBtnLoading = true;
-    const btnSyncCancelRunning = async () => {
-      // * 关闭弹窗
-      this.isSyncModalVisible = false;
-    };
-    await btnSyncCancelRunning();
-    this.isSyncCancelBtnLoading = false;
-  }
-  async btnsf8zsrCallback() {
-    // * click event callback
-    this.isSyncSyncBtnLoading = true;
-    const btnSyncSyncRunning = async () => {
-      const eData = await this.effect.exportLocalProjectData();
-
-      const [data, err]: any = await this.api.api_workspaceUpload(eData);
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
-      const { workspace } = data;
-      this.store.setWorkspaceList([workspace, ...this.store.getWorkspaceList]);
-      this.effect.changeWorkspace(workspace.id);
-
-      // * 关闭弹窗
-      this.isSyncModalVisible = false;
-    };
-    await btnSyncSyncRunning();
-    this.isSyncSyncBtnLoading = false;
   }
   handleCheckConnectModalCancel(): void {
     // * 关闭弹窗
@@ -468,6 +408,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
         this.eMessage.error($localize`Please check you username or password`);
         return;
       }
+      this.store.clearAuth();
       // * get login form values
       const formData = this.validateLoginForm.value;
       const [data, err]: any = await this.api.api_authLogin(formData);
@@ -507,9 +448,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
       if (!data.isFirstLogin) {
         return;
       }
-
-      // * 唤起弹窗
-      this.isSyncModalVisible = true;
     };
     await btnLoginBtnRunning();
     this.isLoginBtnBtnLoading = false;
@@ -558,6 +496,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
     // * click event callback
     this.isSaveBtnLoading = true;
     const btnSaveRunning = async () => {
+      const localProjectID = this.store.getCurrentProjectID;
       const { newWorkName: title } = this.validateWorkspaceNameForm.value;
       const [data, err]: any = await this.api.api_workspaceCreate({ title });
       if (err) {
@@ -572,13 +511,50 @@ export class UserModalComponent implements OnInit, OnDestroy {
         return;
       }
       this.eMessage.success($localize`New workspace successfully !`);
-
       // * 关闭弹窗
       this.isAddWorkspaceModalVisible = false;
       this.message.send({ type: 'update-share-link', data: {} });
       {
-        this.effect.updateWorkspaces();
-        this.effect.changeWorkspace(data.id);
+        await this.effect.updateWorkspaces();
+        await this.effect.changeWorkspace(data.id);
+      }
+      if (this.store.getWorkspaceList.length === 2) {
+        const modal = this.modal.create({
+          stayWhenRouterChange: true,
+          nzTitle: $localize`Upload local data to the cloud`,
+          nzContent: $localize`You have created a cloud workspace, do you need to upload the local data to the new workspace to facilitate team collaboration?<br>
+          If you do not upload it now, you can also manually export the project data and import it into a new workspace later.`,
+          nzFooter: [
+            {
+              label: $localize`Cancel`,
+              onClick: () => {
+                modal.destroy();
+              }
+            },
+            {
+              label: $localize`Upload`,
+              type: 'primary',
+              onClick: () => {
+                return new Promise(resolve => {
+                  this.effect.exportLocalProjectData(localProjectID).then(data => {
+                    console.log(data);
+                    this.storage.run('projectImport', [this.store.getCurrentProjectID, data], (result: StorageRes) => {
+                      if (result.status === StorageResStatus.success) {
+                        resolve(true);
+                        this.router.navigate(['**']).then(() => {
+                          this.router.navigate(['/home/workspace/project/api']);
+                        });
+                        modal.destroy();
+                      } else {
+                        resolve(false);
+                      }
+                    });
+                  });
+                });
+              }
+            }
+          ]
+        });
       }
     };
     await btnSaveRunning();

@@ -71,7 +71,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       if (inArg.type === 'installedExtensionsChange') {
         if (!this.sidebar.visible) return;
         const extensionIDs = Array.isArray(inArg.data) ? inArg.data.map(n => n.name) : [...inArg.data.keys()];
-        this.modules = this.modules.filter(n => n.id.startsWith('@eo-core') || extensionIDs.includes(n.id));
+        this.modules = this.modules.filter(n => n.isOffical || extensionIDs.includes(n.id));
         this.initSidebarViews();
         if (!this.modules.some(val => this.router.url.includes(val.activeRoute))) {
           pcConsole.warn('sidebar activeRoute not found, redirect to home');
@@ -87,10 +87,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
   }
   async clickModule(module) {
-    this.sidebar.currentModule = module;
+    this.sidebar.setModule(module.id);
     const nextApp = this.modules.find(val => val.id === module.id);
-    const route = (nextApp as SidebarModuleInfo).route || '/home/blank';
-    this.router.navigate([route]);
+    const route = (nextApp as SidebarModuleInfo).route;
+    if (route && !this.router.url.includes(nextApp.activeRoute)) {
+      this.router.navigate([route]);
+    }
   }
   ngOnDestroy(): void {
     this.routerSubscribe?.unsubscribe();
@@ -139,6 +141,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/workspace/project/api',
         route: 'home/workspace/project/api/http/test'
       },
+      {
+        title: $localize`Environment`,
+        id: '@eo-core-env',
+        isOffical: true,
+        icon: 'application',
+        activeRoute: 'home/workspace/project/api',
+        route: 'home/workspace/project/api/http/test'
+      },
       ...memberItem,
       ...settingItem
     ];
@@ -149,13 +159,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private getIDFromRoute() {
     if (!this.sidebar.visible) return;
     const urlArr = new URL(this.router.url, 'http://localhost').pathname.split('/');
+    const currentModuleIsValid = this.modules.find(val => {
+      if (val.id === this.sidebar.currentID && val.activeRoute.split('/').every(n => urlArr.includes(n))) {
+        return true;
+      }
+    });
+    if (currentModuleIsValid) return;
     const currentModule = this.modules.find(val => val.activeRoute.split('/').every(n => urlArr.includes(n)));
     if (!currentModule) {
       //route error
-      // this.clickModule(this.modules[0]);
       pcConsole.warn(`[sidebarComponent]: route error,currentModule is [${currentModule}]`, currentModule, urlArr);
       return;
     }
-    this.sidebar.currentModule = currentModule;
+    this.sidebar.currentID = currentModule.id;
   }
 }

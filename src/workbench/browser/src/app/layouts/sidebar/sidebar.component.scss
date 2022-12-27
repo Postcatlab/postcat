@@ -1,6 +1,7 @@
 .eo-sidebar {
   border-right: 1px solid var(--BORDER);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   width: 90px;
   height: 100%;
   transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;
@@ -15,6 +16,13 @@
   width: var(--ICONPARK_SIZE);
 }
 
+.icon {
+  ::ng-deep .iconpark-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 .sidebar-item {
   padding: 8px 0;
   margin-bottom: 10px;
@@ -24,6 +32,11 @@
   justify-content: center;
   border-radius: var(--DEFAULT_BORDER_RADIUS);
   cursor: pointer;
+  color: var(--TIPS_TEXT_COLOR);
+
+  &.tiny {
+    padding: 4px 0 5px;
+  }
 
   &:hover,
   &.sidebar-item-active {

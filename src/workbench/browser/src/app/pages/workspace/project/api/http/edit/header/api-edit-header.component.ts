@@ -5,13 +5,7 @@ import { ApiEditHeaders, ApiTableConf } from 'eo/workbench/browser/src/app/modul
 @Component({
   selector: 'eo-api-edit-header',
   template: `<div class="param-box-header flex items-center h-10">
-      <params-import
-        [(baseData)]="model"
-        (baseDataChange)="changeFn($event)"
-        contentType="header"
-        i18n-modalTitle="@@Header"
-        modalTitle="Header"
-      ></params-import>
+      <params-import [(baseData)]="model" (baseDataChange)="changeFn($event)" contentType="header"></params-import>
     </div>
     <eo-ng-table-pro
       [columns]="listConf.columns"

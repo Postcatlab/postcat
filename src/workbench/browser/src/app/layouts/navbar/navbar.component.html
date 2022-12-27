@@ -5,27 +5,29 @@
     <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
       <img loading="lazy" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
     </a>
-    <eo-nav-breadcrumb class="ml-[15px] electron-can-be-click"></eo-nav-breadcrumb>
+    <eo-nav-breadcrumb *ngIf="!store.isShare" class="ml-[15px] electron-can-be-click"></eo-nav-breadcrumb>
   </div>
   <div class="flex items-center electron-can-be-click">
     <!-- share -->
     <eo-get-share-link *ngIf="!store.isLocal && !store.isShare"></eo-get-share-link>
     <!-- Extension -->
-    <button
-      eo-ng-button
-      nzType="default"
-      class="flex items-center justify-center"
-      i18n-nzTooltipTitle
-      eoNgFeedbackTooltip
-      [nzTooltipMouseEnterDelay]="0.4"
-      nzTooltipPlacement="bottom"
-      nzTooltipTitle="Extensions"
-      (click)="openExtension()"
-      i18n
-    >
-      Extensions
-    </button>
-    <nz-divider nzType="vertical"></nz-divider>
+    <ng-container *ngIf="!store.isShare">
+      <button
+        eo-ng-button
+        nzType="default"
+        class="flex items-center justify-center"
+        i18n-nzTooltipTitle
+        eoNgFeedbackTooltip
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzTooltipPlacement="bottom"
+        nzTooltipTitle="Extensions"
+        (click)="openExtension()"
+        i18n
+      >
+        Extensions
+      </button>
+      <nz-divider nzType="vertical"></nz-divider>
+    </ng-container>
     <!-- Change Language -->
     <ng-container *ngIf="store.isShare">
       <eo-ng-select [(ngModel)]="lang.systemLanguage" nzBorderless (ngModelChange)="handleSwitchLang($event)">
@@ -44,22 +46,23 @@
       <a href="{{ item.href }}" target="_blank" i18n>{{ item.title }}</a>
       <li nz-menu-divider></li>
     </ng-template>
-    <nz-divider nzType="vertical"></nz-divider>
-    <!-- setting -->
-    <button
-      eo-ng-button
-      nzType="text"
-      *ngIf="!store.isShare"
-      class="flex items-center justify-center icon"
-      i18n-nzTooltipTitle
-      eoNgFeedbackTooltip
-      [nzTooltipMouseEnterDelay]="0.4"
-      nzTooltipPlacement="bottom"
-      nzTooltipTitle="Open Settings"
-      (click)="openSettingModal()"
-    >
-      <eo-iconpark-icon name="setting"></eo-iconpark-icon>
-    </button>
+    <ng-container *ngIf="!store.isShare">
+      <nz-divider nzType="vertical"></nz-divider>
+      <!-- setting -->
+      <button
+        eo-ng-button
+        nzType="text"
+        class="flex items-center justify-center icon"
+        i18n-nzTooltipTitle
+        eoNgFeedbackTooltip
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzTooltipPlacement="bottom"
+        nzTooltipTitle="Open Settings"
+        (click)="openSettingModal()"
+      >
+        <eo-iconpark-icon name="setting"></eo-iconpark-icon>
+      </button>
+    </ng-container>
     <!-- User -->
     <button
       eo-ng-button
@@ -68,12 +71,13 @@
       *ngIf="!store.isShare"
       class="flex items-center justify-center icon"
       [nzDropdownMenu]="userMenu"
+      nzPlacement="bottomRight"
     >
       <eo-iconpark-icon name="people"> </eo-iconpark-icon>
     </button>
     <eo-ng-dropdown-menu #userMenu>
       <ul nz-menu>
-        <li nz-menu-item *ngIf="!store.isLogin" (click)="loginOrSign()" i18n>Sign in for Collaboration</li>
+        <li nz-menu-item *ngIf="!store.isLogin" (click)="loginOrSign()" i18n>Sign in/Up</li>
         <ng-container *ngIf="store.isLogin">
           <li nz-menu-item class="px-[12px] py-[5px] text-neutral-400 font-bold">
             {{ store.getUserProfile?.username }}
@@ -88,7 +92,7 @@
       <eo-ng-dropdown class="download-btn" [title]="downloadTitle" [menus]="resourceInfo" [itemTmp]="downloadMenu">
         <ng-template #downloadTitle>
           <div class="flex items-center">
-            <eo-iconpark-icon class="icon" name="arrow-down" size="14px"></eo-iconpark-icon>
+            <eo-iconpark-icon class="icon" name="download" size="14px"></eo-iconpark-icon>
             <span class="ml-1" i18n>Download</span>
           </div>
         </ng-template>

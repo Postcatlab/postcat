@@ -78,11 +78,16 @@ export class StoreService {
   // ? UI
   @observable private rightBarStatus = false;
   @observable private role = {
-    workspace: 'admin',
-    project: 'admin'
+    workspace: 'Owner',
+    project: 'Owner'
   };
 
   // * computed data
+
+  // ? router
+  @computed get getUrl() {
+    return this.url;
+  }
 
   // ? env
   @computed get getCurrentEnv() {
@@ -167,7 +172,6 @@ export class StoreService {
   }
 
   @computed get getWorkspaceRole() {
-    console.log(this.role.workspace);
     return this.role.workspace;
   }
 
@@ -267,7 +271,7 @@ export class StoreService {
 
   @action setRole(role, type) {
     if (this.isLocal) {
-      this.role[type] = 'admin';
+      this.role[type] = 'Owner';
       return;
     }
     this.role[type] = role;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { NzModalService, ModalButtonOptions } from 'ng-zorro-antd/modal';
+import { NzModalService, ModalButtonOptions, NzModalRef } from 'ng-zorro-antd/modal';
 import { filter } from 'rxjs';
 
 export type ModalOptions = {
@@ -15,7 +15,9 @@ export type ModalOptions = {
 export class ModalService {
   constructor(private modal: NzModalService, private router: Router) {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.modal.closeAll();
+      this.modal.openModals.forEach((val: any) => {
+        if (!val?.config?.stayWhenRouterChange) val.close();
+      });
     });
   }
   create = (inOpts: ModalOptions) => {

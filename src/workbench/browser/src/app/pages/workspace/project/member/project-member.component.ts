@@ -7,6 +7,8 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
+import { MEMBER_MUI } from '../../../../shared/models/member.model';
+
 @Component({
   selector: 'eo-project-member',
   template: `<nz-modal
@@ -22,8 +24,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
           class="w-full"
           nzAllowClear
           nzShowSearch
-          i18n-placeholder
-          placeholder="Search by username"
+          i18n-nzPlaceholder
+          nzPlaceholder="Search"
           [(ngModel)]="userCache"
           nzMode="multiple"
           (nzOnSearch)="handleChange($event)"
@@ -53,7 +55,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Project Members</span
         ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()">
-          <eo-iconpark-icon name="plus"></eo-iconpark-icon><span i18n>Add</span>
+          <eo-iconpark-icon name="add" class="mr-[5px]"></eo-iconpark-icon><span i18n>Add</span>
         </button>
       </h2>
       <section class="py-5">
@@ -69,28 +71,7 @@ export class ProjectMemberComponent implements OnInit {
   isAddPeopleBtnLoading;
   memberList;
   userList = [];
-  roleMUI = [
-    {
-      title: 'Workspace Owner',
-      name: 'owner',
-      id: 1
-    },
-    {
-      title: 'Workspace Editor',
-      name: 'editor',
-      id: 2
-    },
-    {
-      title: 'Project Owner',
-      name: 'owner',
-      id: 3
-    },
-    {
-      title: 'Editor',
-      name: 'editor',
-      id: 4
-    }
-  ];
+  roleMUI = MEMBER_MUI;
   constructor(
     public modal: NzModalService,
     public store: StoreService,

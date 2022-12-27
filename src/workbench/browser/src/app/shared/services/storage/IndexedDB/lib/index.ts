@@ -101,6 +101,11 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     if (!item.createdAt) {
       item.createdAt = new Date();
     }
+    //* Add projectID
+    if (['apiData', 'environment', 'group', 'apiTestHistory', 'mock'].includes(table.name)) {
+      //@ts-ignore
+      item.projectID = this.store.getCurrentProjectID;
+    }
     delete item.uuid;
     item.updatedAt = item.createdAt;
     const result = table.add(item);
@@ -359,7 +364,9 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     const result = this.create(this.apiData, item);
     result.subscribe(async ({ status, data }: ResultType<ApiData>) => {
       if (status === 200 && data) {
-        await this.mock.add(this.createMockObj(data, { name: '默认 Mock', createWay: 'system' }));
+        await this.mock.add(
+          this.createMockObj(data, { name: '默认 Mock', createWay: 'system', projectID: this.store.getCurrentProjectID })
+        );
       }
     });
     return result;
@@ -782,7 +789,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   projectBulkCreate(items: Project[]): Observable<object> {
     return this.bulkCreate(this.project, items);
   }
-  projectExport(): Observable<object> {
+  projectExport(projectID: number): Observable<object> {
     return new Observable(obs => {
       const exportCollects = (data: { groups: Group[]; apis: ApiData[]; mock: ApiMockEntity[] }, parentID = 0) => {
         const apiGroupFilters: Group[] = data.groups.filter(child => child.parentID === parentID);
@@ -812,19 +819,20 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
             case 'mock':
             case 'group':
             case 'apiData': {
-              database[tableName] = await this[tableName].toArray();
+              database[tableName] = await this[tableName].where({ projectID }).toArray();
               break;
             }
             case 'project': {
-              result[tableName] = (await this[tableName].toArray())[0];
+              const projects = await this[tableName].where({ uuid: projectID }).toArray();
+              result[tableName] = projects[0];
               break;
             }
             case 'environment': {
-              result.environments = await this[tableName].toArray();
+              result.environments = await this[tableName].where({ projectID }).toArray();
               break;
             }
             default: {
-              result[tableName] = await this[tableName].toArray();
+              result[tableName] = await this[tableName].where({ projectID }).toArray();
               break;
             }
           }

@@ -17,8 +17,19 @@
               <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
               <eo-ng-dropdown-menu #menu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li *ngIf="!item.myself && store.getProjectRole === 'Owner'" nz-menu-item i18n (click)="changeRole(item)" i18n
-                    >Set {{ item.role.name === 'Owner' ? 'Editor' : 'Owner' }}
+                  <li
+                    *ngIf="!item.myself && store.getProjectRole === 'Owner' && item.role.name === 'Owner'"
+                    nz-menu-item
+                    i18n
+                    (click)="changeRole(item)"
+                    >Set Editor
+                  </li>
+                  <li
+                    *ngIf="!item.myself && store.getProjectRole === 'Owner' && item.role.name !== 'Owner'"
+                    nz-menu-item
+                    i18n
+                    (click)="changeRole(item)"
+                    >Set Owner
                   </li>
                   <li *ngIf="!item.myself && store.getProjectRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
                   <li *ngIf="item.myself" nz-menu-item i18n (click)="quitProject(item)">Quit</li>

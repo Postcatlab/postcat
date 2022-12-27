@@ -4,13 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ApiEditService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/edit/api-edit.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { generateRestFromUrl } from 'eo/workbench/browser/src/app/utils/api';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 import { from, fromEvent, Subject } from 'rxjs';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 
 import { ApiParamsNumPipe } from '../../../../../../modules/api-shared/api-param-num.pipe';
-import { ApiEditViewData, RequestProtocol, RequestMethod } from '../../../../../../modules/api-shared/api.model';
+import { ApiEditViewData, RequestMethod } from '../../../../../../modules/api-shared/api.model';
 import { MessageService } from '../../../../../../shared/services/message';
 import { Group, StorageRes, StorageResStatus } from '../../../../../../shared/services/storage/index.model';
 import { eoDeepCopy, isEmptyObj, objectToArray } from '../../../../../../utils/index.utils';
@@ -38,7 +39,6 @@ export class ApiEditComponent implements OnInit, OnDestroy {
   initTimes = 0;
   expandKeys: string[];
   REQUEST_METHOD = objectToArray(RequestMethod);
-  REQUEST_PROTOCOL = objectToArray(RequestProtocol);
   nzSelectedIndex = 1;
   private destroy$: Subject<void> = new Subject<void>();
   private changeGroupID$: Subject<string | number> = new Subject();
@@ -48,6 +48,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiEditUtil: ApiEditUtilService,
     private fb: FormBuilder,
+    private store: StoreService,
     private message: EoNgFeedbackMessageService,
     private messageService: MessageService,
     private storage: StorageService,
@@ -204,7 +205,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
         isLeaf: false
       }
     ];
-    this.storage.run('groupLoadAllByProjectID', [1], (result: StorageRes) => {
+    this.storage.run('groupLoadAllByProjectID', [this.store.getCurrentProjectID], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         [].concat(result.data).forEach((item: Group) => {
           delete item.updatedAt;
@@ -238,7 +239,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
     }, 0);
   }
   /**
-   * Init basic form,such as url,protocol,method
+   * Init basic form,such as url,method
    */
   private initBasicForm() {
     //Prevent init error
@@ -246,7 +247,7 @@ export class ApiEditComponent implements OnInit, OnDestroy {
       this.model = {} as ApiEditViewData;
     }
     const controls = {};
-    ['protocol', 'method', 'uri', 'groupID', 'name'].forEach(name => {
+    ['method', 'uri', 'groupID', 'name'].forEach(name => {
       controls[name] = [this.model[name], [Validators.required]];
     });
     this.validateForm = this.fb.group(controls);

@@ -3,16 +3,16 @@
 
   &:hover {
     border-color: var(--BTN_PRIMARY_BG);
+
+    .operate-btn-list {
+      display: flex;
+    }
   }
 }
 
 :host {
-  @apply block p-[20px];
-
-  .list-type-switcher {
-    .active {
-      color: var(--BTN_PRIMARY_BG);
-    }
+  .operate-btn-list {
+    display: none;
   }
 
   .ant-card {

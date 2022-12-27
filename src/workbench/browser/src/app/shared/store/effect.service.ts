@@ -32,7 +32,7 @@ export class EffectService {
     document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
     this.updateProjects(this.store.getCurrentWorkspaceID).then(() => {
       if (this.store.getProjectList.length === 0) {
-        this.router.navigate(['/home/workspace/project/list']);
+        this.router.navigate(['/home/workspace/overview']);
       }
       this.getProjectPermission();
       this.getWorkspacePermission();
@@ -71,21 +71,14 @@ export class EffectService {
       }
     });
   }
-
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
-      const apiGroupObservable = this.indexedDBStorage.groupLoadAllByProjectID(projectID);
-      apiGroupObservable.subscribe(({ data: apiGroup }: any) => {
-        const apiDataObservable = this.indexedDBStorage.apiDataLoadAllByProjectID(projectID);
-        apiDataObservable.subscribe(({ data: apiData }: any) => {
-          const envObservable = this.indexedDBStorage.environmentLoadAllByProjectID(projectID);
-          envObservable.subscribe(({ data: environments }: any) => {
-            resolve({
-              collections: this.exportCollects(apiGroup, apiData),
-              environments
-            });
-          });
-        });
+      this.storage.run('projectExport', [projectID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        } else {
+          resolve(false);
+        }
       });
     });
   }
@@ -117,6 +110,7 @@ export class EffectService {
       .concat(apiDataFilters);
   }
   async getWorkspacePermission() {
+    // TODO localworkspace no need to set permission
     {
       // * update workspace auth
       const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
@@ -130,12 +124,11 @@ export class EffectService {
   async changeWorkspace(workspaceID: number = -1) {
     // * real set workspace
     this.store.setCurrentWorkspaceID(workspaceID);
-    this.message.send({ type: 'workspaceChange', data: true });
     // * real set workspace
     await this.updateProjects(workspaceID);
     await this.router.navigate(['**']);
     if (this.store.getProjectList.length === 0) {
-      this.router.navigate(['/home/workspace/project/list']);
+      this.router.navigate(['/home/workspace/overview']);
     } else {
       // * refresh view
       this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
@@ -144,8 +137,10 @@ export class EffectService {
     document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
     // * update workspace role
     this.getWorkspacePermission();
+    this.getProjectPermission();
   }
   async getProjectPermission() {
+    //TODO localworkspace no need to set permission
     // * update project auth
     const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
     if (err) {
@@ -183,6 +178,7 @@ export class EffectService {
       // * real set workspace
       this.storage.run('projectBulkLoad', [workspaceID], async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
+          // * select first project automatic
           this.store.setProjectList(result.data);
           resolve([result.data, null]);
           return;

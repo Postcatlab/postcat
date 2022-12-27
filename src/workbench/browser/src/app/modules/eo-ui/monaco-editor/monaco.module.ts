@@ -10,6 +10,6 @@ import { EoMonacoEditorComponent } from './monaco-editor.component';
   declarations: [EoMonacoEditorComponent],
   imports: [CommonModule, FormsModule, EoIconparkIconModule, NzCodeEditorModule],
   exports: [EoMonacoEditorComponent],
-  schemas: [],
+  schemas: []
 })
 export class EoMonacoEditorModule {}

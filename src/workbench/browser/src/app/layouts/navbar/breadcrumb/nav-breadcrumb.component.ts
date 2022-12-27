@@ -28,7 +28,7 @@ export class NavBreadcrumbComponent implements OnDestroy {
   }
   watchRouterChange() {
     this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
-      if (['/home/workspace/project/list'].some(val => this.router.url.includes(val))) {
+      if (['/home/workspace/overview'].some(val => this.router.url.includes(val))) {
         this.level = 'workspace';
       } else {
         this.level = 'project';

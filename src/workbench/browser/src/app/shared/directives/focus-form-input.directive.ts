@@ -4,7 +4,7 @@ import { Directive, ElementRef, HostListener, AfterViewInit, ChangeDetectorRef }
   selector: '[auto-focus-form]'
 })
 export class FormFocusDirective implements AfterViewInit {
-  focusables = ['.ant-input', 'select', 'textarea'];
+  focusables = ['.ant-input', 'select', 'textarea', '.ant-select-selection-search-input'];
 
   constructor(private element: ElementRef, private cdk: ChangeDetectorRef) {}
   ngAfterViewInit() {

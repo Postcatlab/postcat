@@ -35,11 +35,11 @@
           "
         >
         </ng-container>
-        <span class="truncate tab-text flex-1" [title]="tabStorage.tabsByID.get(uuid)?.title">
+        <span class="flex-1 truncate tab-text" [title]="tabStorage.tabsByID.get(uuid)?.title">
           {{ tabStorage.tabsByID.get(uuid)?.title }}</span
         >
         <!-- Close/HasEdit -->
-        <div class="flex items-center tab-item-button-group">
+        <div class="flex items-center tab-item-button-group ml-[5px]">
           <nz-badge
             class="tab-has-edit-icon ant-badge-theme-color"
             *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged"
@@ -68,7 +68,7 @@
       [nzDropdownMenu]="addDropDown"
       class="{{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
     >
-      <eo-iconpark-icon name="plus"></eo-iconpark-icon>
+      <eo-iconpark-icon name="add"></eo-iconpark-icon>
     </button>
     <button eo-ng-button nzType="text" eo-ng-dropdown [nzDropdownMenu]="menu">
       <eo-iconpark-icon name="more"></eo-iconpark-icon>

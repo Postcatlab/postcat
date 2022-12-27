@@ -134,6 +134,9 @@ export enum RequestMethod {
   OPTIONS = 'OPTIONS',
   PATCH = 'PATCH'
 }
+/**
+ * @deprecated auto judge from url
+ */
 export enum RequestProtocol {
   HTTP = 'http',
   HTTPS = 'https'

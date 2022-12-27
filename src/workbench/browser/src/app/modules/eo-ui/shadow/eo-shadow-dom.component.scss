@@ -74,14 +74,6 @@
     font-style: italic;
   }
 
-  .markdown-body h1 {
-    margin: 0.67em 0;
-    font-weight: 600;
-    padding-bottom: 0.3em;
-    font-size: 2em;
-    border-bottom: 1px solid hsl(210deg 18% 87% / 100%);
-  }
-
   .markdown-body mark {
     background-color: #fff8c5;
     color: #24292f;
@@ -258,18 +250,27 @@
     margin-bottom: 16px;
     font-weight: 600;
     line-height: 1.25;
+    border-bottom: none;
+  }
+
+  .markdown-body h1 {
+    border-left: 3px solid #3f5bfb;
+    padding: 0 10px;
+    margin: 0.67em 0;
+    font-weight: 600;
+    padding-bottom: 0.3em;
+    font-size: 26px;
   }
 
   .markdown-body h2 {
     font-weight: 600;
     padding-bottom: 0.3em;
-    font-size: 1.5em;
-    border-bottom: 1px solid hsl(210deg 18% 87% / 100%);
+    font-size: 22px;
   }
 
   .markdown-body h3 {
     font-weight: 600;
-    font-size: 1.25em;
+    font-size: 20px;
   }
 
   .markdown-body h4 {

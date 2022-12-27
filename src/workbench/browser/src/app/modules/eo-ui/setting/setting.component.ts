@@ -18,7 +18,7 @@ export interface SettingItem {
         <eo-ng-tab [nzTitle]="tab.title" *ngIf="checkItemShow(tab)" (nzClick)="this.selectModule(tab.id)"> </eo-ng-tab>
       </div>
     </eo-ng-tabset>
-    <div class="px-[15px] mt-[15px]">
+    <div class="px-[20px] mt-[20px]">
       <ng-template #options></ng-template>
     </div>
   </section> `,

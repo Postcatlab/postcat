@@ -6,7 +6,8 @@ import { isNil } from 'ng-zorro-antd/core/util';
 
 @Component({
   selector: 'eo-api-edit-params-extra-setting',
-  templateUrl: './api-params-extra-setting.component.html'
+  templateUrl: './api-params-extra-setting.component.html',
+  styleUrls: ['./api-params-extra-setting.component.scss']
 })
 export class ApiParamsExtraSettingComponent implements OnInit {
   @Input() model: { type: string | ApiParamsTypeJsonOrXml } & ApiEditBody;

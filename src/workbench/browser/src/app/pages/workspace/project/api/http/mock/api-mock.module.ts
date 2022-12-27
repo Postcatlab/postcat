@@ -5,9 +5,9 @@ import { EoMonacoEditorModule } from 'eo/workbench/browser/src/app/modules/eo-ui
 import { EoTableProModule } from 'eo/workbench/browser/src/app/modules/eo-ui/table-pro/table-pro.module';
 import { ApiMockEditComponent } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/mock/edit/api-mock-edit.component';
 import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import { NzResultModule } from 'ng-zorro-antd/result';
 
 import { ApiMockComponent } from './api-mock.component';
-
 @NgModule({
   declarations: [ApiMockComponent, ApiMockEditComponent],
   imports: [
@@ -17,6 +17,7 @@ import { ApiMockComponent } from './api-mock.component';
         component: ApiMockComponent
       }
     ]),
+    NzResultModule,
     ApiSharedModule,
     EoMonacoEditorModule,
     EoTableProModule,

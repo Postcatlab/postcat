@@ -9,8 +9,6 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 
 import StorageUtil from '../../../utils/storage/Storage';
 
-import { resolve } from 'path';
-
 // const optionList = [
 //   {
 //     value: 'import',

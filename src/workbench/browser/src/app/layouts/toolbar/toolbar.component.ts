@@ -13,6 +13,8 @@ import { SidebarService } from '../sidebar/sidebar.service';
 })
 export class ToolbarComponent implements OnDestroy {
   sideBarCollapsed: boolean;
+  hideSidebar = $localize`Hide Sidebar`;
+  showSidebar = $localize`Show Sidebar`;
   private destroy$: Subject<void> = new Subject<void>();
   constructor(public sidebar: SidebarService, private modal: ModalService) {
     this.sideBarCollapsed = this.sidebar.getCollapsed();

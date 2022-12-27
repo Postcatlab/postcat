@@ -8,6 +8,7 @@ import zh from '@angular/common/locales/zh';
 import { NgModule, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { WarningFill } from '@ant-design/icons-angular/icons';
 import { EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
@@ -18,6 +19,7 @@ import { BaseUrlInterceptor } from 'eo/workbench/browser/src/app/shared/services
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { en_US, NZ_I18N, zh_CN } from 'ng-zorro-antd/i18n';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -37,7 +39,8 @@ registerLocaleData(zh);
     AppRoutingModule,
     NzModalModule,
     EoNgFeedbackTooltipModule,
-    EoNgFeedbackMessageModule
+    EoNgFeedbackMessageModule,
+    NzIconModule.forRoot([WarningFill])
   ],
   providers: [
     MockService,
