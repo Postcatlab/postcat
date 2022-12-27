@@ -1,7 +1,7 @@
 <div class="px-6 overflow-auto extension-list">
   <nz-spin class="w-fit mx-auto my-[30px]" nzSimple *ngIf="loading"></nz-spin>
   <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading && !renderList.length"></nz-empty>
-  <div class="grid gap-6 py-5 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-1 list-block">
+  <div class="grid gap-6 py-5 2xl:grid-cols-5 xl:grid-cols-3 lg:grid-cols-1 list-block">
     <div
       class="border-all w-full min-h-[140px]flex flex-col flex-wrap plugin-block hover:shadow-lg transition-shadow duration-300"
       *ngFor="let it of renderList"
