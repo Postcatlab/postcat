@@ -1,39 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Windows>
-   <!-- 安装目录 -->
-   <VerticalLayout>
-   	<VerticalLayout width="480" height="250" roundcorner="5,5" bkimage="file='form\postcat.png'">
-
-	</VerticalLayout>
-	<VerticalLayout bkcolor="#FFFFFFFF">
-
-	<VerticalLayout name="moreconfiginfo" bkimage="form\bk_down.png" visible="false" height="130">
-	  <Control height="25" />
-	  <Label font="5" textcolor="#FF333333" text="安装路径：" padding="40,0,30,0" />
-	  <HorizontalLayout height="32" padding="40,6,30,0">
-      <RichEdit  name="editDir" text="" textcolor="0xFF000000" inset="5,8,2,2" bkimage="public\edit\edit0.png" autohscroll="false" bordervisible="true"  bordersize="1" bordercolor="0xFFD1D1D1" focusbordercolor="0xFFD1D1D1" wantreturn="false" wantctrlreturn="false" multiline="false" width="360" />
-      <Control width="10" />
-      <Button name="btnSelectDir" width="40" height="32" normalimage="form\btn_path_normal.png" hotimage="form\btn_path_hovered.png" pushedimage="form\btn_path_pressed.png"  />
+<Windows>  <!-- 安装目录 -->
+  <VerticalLayout bkcolor="#FFFFFFFF">
+    <VerticalLayout width="100" height="100" bkimage="file='form\postcat.png'" padding="125,74,0,16">
+    </VerticalLayout>
+    <VerticalLayout>
+      <Label font="6" padding="150,0,0,40" bold="true" text="Postcat" />
+      <HorizontalLayout height="22" padding="90,0,100,44">
+        <Text textcolor="#FF333333" text="Path：" />
+        <Text name="editDir" text="" />
+        <Control width="10" />
+        <Button name="btnSelectDir" width="28" height="22" textcolor="#FF005EFF" text="Edit" />
       </HorizontalLayout>
-
-	 <HorizontalLayout height="23" padding="40,5,80,0">
-        <Label font="0" textcolor="#FF999999" width="150" text="所需空间：30M" />
-		<Label font="0" name="local_space" width="150" textcolor="#FF999999"  />
-		<Control />
-     </HorizontalLayout>
-	</VerticalLayout>
-	<Control />
-	 <HorizontalLayout height="20" padding="95,25,0,0" >
-      <CheckBox name="chkAgree" width="125" heigh="20" font="7" text="我已经阅读并认可" textcolor="#FF333333" selected="true" valign="center" align="left" textpadding="20,0,0,0" normalimage="file='public/CheckBox/check_no.png' dest='0,2,16,18'" normalhotimage="file='public/CheckBox/check_no.png' dest='0,2,16,18'" selectedimage="file='public/CheckBox/check_yes.png' dest='0,2,16,18'" selectedhotimage="file='public/CheckBox/check_yes.png' dest='0,2,16,18'"/>
-      <Button name="btnAgreement" width="180" font="7" text="《软件许可及服务协议》" textpadding="0,0,0,0" textcolor="0xff00bb96" align="left" />
-	  <Control />
-     </HorizontalLayout>
-	 <Button name="btnInstall" padding="95,10,0,30" width="290" height="40" normalimage="form\btn_installation_normal.png" hotimage="form\btn_installation_hovered.png" pushedimage="form\btn_installation_pressed.png" disabledimage="form\btn_installation_disable.png" font="6" textcolor="0xffffffff" disabledtextcolor="0xffffffff" margin="0,10,0,0" text="一键安装" />
-
-	</VerticalLayout>
-	<Button float="true" inset="0,5,5,0" pos="220,230,260,270"  name="btnShowMore" width="40" height="40" normalimage="form\btn_down_normal.png" hotimage="form\btn_down_hovered.png" pushedimage="form\btn_down_pressed.png" />
-	<Button float="true" visible="false" inset="0,5,5,0" pos="220,230,260,270"  name="btnHideMore" width="40" height="40" normalimage="form\btn_up_normal.png" hotimage="form\btn_up_hovered.png" pushedimage="form\btn_up_pressed.png" />
-	<Include source="licensepage.xml" />
-
-   </VerticalLayout>
+      <Control />
+      <CheckBox visible="false" name="chkAgree" width="125" heigh="20" font="7" text="我已经阅读并认可" textcolor="#FF333333" selected="true" valign="center" align="left" textpadding="20,0,0,0" normalimage="file='public/CheckBox/check_no.png' dest='0,2,16,18'" normalhotimage="file='public/CheckBox/check_no.png' dest='0,2,16,18'" selectedimage="file='public/CheckBox/check_yes.png' dest='0,2,16,18'" selectedhotimage="file='public/CheckBox/check_yes.png' dest='0,2,16,18'"/>
+      <Button name="btnInstall" roundcorner="5,5" padding="135,0,0,50" width="80" height="33" bkcolor="#FFFF7433" font="6" textcolor="#FFFFFFFF" text="Install" />
+    </VerticalLayout>
+  </VerticalLayout>
 </Windows>
