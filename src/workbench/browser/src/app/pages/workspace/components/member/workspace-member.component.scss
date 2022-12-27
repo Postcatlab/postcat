@@ -1,4 +1,9 @@
 ::ng-deep {
+  .ant-list-split .ant-list-header {
+    border: none;
+    padding-top: 0;
+  }
+
   .ant-list-items {
     .ant-list-item {
       @apply px-[10px] rounded-[3px];
