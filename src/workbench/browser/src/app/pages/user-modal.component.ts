@@ -18,27 +18,6 @@ import { StorageService } from '../shared/services/storage/storage.service';
 @Component({
   selector: 'eo-user-modal',
   template: ` <nz-modal
-      [nzFooter]="modalSyncFooter"
-      [(nzVisible)]="isSyncModalVisible"
-      (nzOnCancel)="handleSyncModalCancel()"
-      (nzAfterClose)="e7odmm4Callback()"
-      nzTitle="Upload local data to the cloud"
-      i18n-nzTitle
-    >
-      <ng-container *nzModalContent>
-        <span i18n
-          >You have created a cloud workspace, do you need to upload the local data to the new workspace to facilitate team collaboration?
-          If you do not upload it now, you can also manually export the project data and import it into a new workspace later.
-        </span>
-      </ng-container>
-      <ng-template #modalSyncFooter>
-        <button eo-ng-button [nzLoading]="isSyncCancelBtnLoading" class="" nzType="default" (click)="btnsgs0ckCallback()" i18n>
-          Cancel
-        </button>
-        <button eo-ng-button [nzLoading]="isSyncSyncBtnLoading" class="" nzType="primary" (click)="btnsf8zsrCallback()" i18n> Sync </button>
-      </ng-template>
-    </nz-modal>
-    <nz-modal
       [nzFooter]="modalCheckConnectFooter"
       [(nzVisible)]="isCheckConnectModalVisible"
       (nzOnCancel)="handleCheckConnectModalCancel()"
@@ -177,7 +156,6 @@ import { StorageService } from '../shared/services/storage/storage.service';
     </nz-modal>`
 })
 export class UserModalComponent implements OnInit, OnDestroy {
-  isSyncModalVisible;
   isSyncCancelBtnLoading;
   isSyncSyncBtnLoading;
   isCheckConnectModalVisible;
@@ -208,7 +186,6 @@ export class UserModalComponent implements OnInit, OnDestroy {
     private router: Router,
     private web: WebService
   ) {
-    this.isSyncModalVisible = false;
     this.isSyncCancelBtnLoading = false;
     this.isSyncSyncBtnLoading = false;
     this.isCheckConnectModalVisible = false;
@@ -367,49 +344,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  handleSyncModalCancel(): void {
-    // * 关闭弹窗
-    this.isSyncModalVisible = false;
-  }
   async e7odmm4Callback() {
     // * nzAfterClose event callback
-  }
-  async btnsgs0ckCallback() {
-    // * click event callback
-    this.isSyncCancelBtnLoading = true;
-    const btnSyncCancelRunning = async () => {
-      // * 关闭弹窗
-      this.isSyncModalVisible = false;
-    };
-    await btnSyncCancelRunning();
-    this.isSyncCancelBtnLoading = false;
-  }
-  async btnsf8zsrCallback() {
-    // * click event callback
-    this.isSyncSyncBtnLoading = true;
-    const btnSyncSyncRunning = async () => {
-      const eData = await this.effect.exportLocalProjectData();
-
-      const [data, err]: any = await this.api.api_workspaceUpload(eData);
-      if (err) {
-        if (err.status === 401) {
-          this.message.send({ type: 'clear-user', data: {} });
-          if (this.store.isLogin) {
-            return;
-          }
-          this.message.send({ type: 'http-401', data: {} });
-        }
-        return;
-      }
-      const { workspace } = data;
-      this.store.setWorkspaceList([workspace, ...this.store.getWorkspaceList]);
-      this.effect.changeWorkspace(workspace.id);
-
-      // * 关闭弹窗
-      this.isSyncModalVisible = false;
-    };
-    await btnSyncSyncRunning();
-    this.isSyncSyncBtnLoading = false;
   }
   handleCheckConnectModalCancel(): void {
     // * 关闭弹窗
@@ -562,6 +498,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
     // * click event callback
     this.isSaveBtnLoading = true;
     const btnSaveRunning = async () => {
+      const localProjectID = this.store.getCurrentProjectID;
       const { newWorkName: title } = this.validateWorkspaceNameForm.value;
       const [data, err]: any = await this.api.api_workspaceCreate({ title });
       if (err) {
@@ -601,7 +538,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
               type: 'primary',
               onClick: () => {
                 return new Promise(resolve => {
-                  this.effect.exportLocalProjectData().then(data => {
+                  this.effect.exportLocalProjectData(localProjectID).then(data => {
+                    console.log(data);
                     this.storage.run('projectImport', [this.store.getCurrentProjectID, data], (result: StorageRes) => {
                       if (result.status === StorageResStatus.success) {
                         resolve(true);

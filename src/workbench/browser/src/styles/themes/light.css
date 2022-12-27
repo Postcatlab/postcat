@@ -1,5 +1,6 @@
 /**颜色集合**/
 :root {
+  --bar-bg-color: #f2f2f2;
   --MAIN_BG: #ffffff;
   --SEC_BG: #f2f2f2;
   --NAVBAR_BG: #f8f8fa;

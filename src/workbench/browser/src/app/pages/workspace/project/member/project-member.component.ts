@@ -55,7 +55,7 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Project Members</span
         ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()">
-          <eo-iconpark-icon name="plus" class="mr-[5px]"></eo-iconpark-icon><span i18n>Add</span>
+          <eo-iconpark-icon name="add" class="mr-[5px]"></eo-iconpark-icon><span i18n>Add</span>
         </button>
       </h2>
       <section class="py-5">

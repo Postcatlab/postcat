@@ -790,7 +790,6 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
     return this.bulkCreate(this.project, items);
   }
   projectExport(projectID: number): Observable<object> {
-    console.log(projectID);
     return new Observable(obs => {
       const exportCollects = (data: { groups: Group[]; apis: ApiData[]; mock: ApiMockEntity[] }, parentID = 0) => {
         const apiGroupFilters: Group[] = data.groups.filter(child => child.parentID === parentID);
