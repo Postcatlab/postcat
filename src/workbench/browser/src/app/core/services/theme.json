@@ -29,12 +29,17 @@
     "shadow": "",
     "bodyBackground": "#F5F7FA",
     "componentBackground": "#F5F7FA",
+    "itemActiveBackground": "#F5F7FA",
+    "itemHoverBackground": "#F5F7FA",
     //Disabled
     "disabledText": "",
     "disabledBackground": "",
     //Layout-Header
     "layoutHeaderBackground": "#fff",
+    "layoutSiderText": "",
     "layoutSiderBackground": "",
+    "layoutSiderActive": "",
+    "layoutSiderActiveText": "",
     "layoutFooterBackground": "",
     //Icon
     "iconText": "",
