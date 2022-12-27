@@ -8,10 +8,11 @@ import { form2json, xml2json, isXML, json2Table } from '../../../utils/data-tran
 import { whatType } from '../../../utils/index.utils';
 
 const titleHash = new Map()
-  .set('xml', 'XML')
-  .set('json', 'JSON')
-  .set('formData', 'Form-data')
-  .set('header', $localize`Header`);
+  .set('xml', $localize`Import XML`)
+  .set('json', $localize`Import JSON`)
+  .set('formData', $localize`Import Form-data`)
+  .set('header', $localize`Import Header`)
+  .set('query', $localize`Import Query`);
 
 const egHash = new Map()
   .set('xml', '<name>Jack</name>')
@@ -29,15 +30,14 @@ export class ParamsImportComponent implements OnInit {
   @Input() rootType: 'array' | string | 'object' = 'object';
   @Input() contentType: string | 'json' | 'formData' | 'xml' | 'header' | 'query' = 'json';
   @Input() baseData: object[] = [];
-  @Input() modalTitle = '';
   @Output() readonly baseDataChange = new EventEmitter<any>();
   @Output() readonly beforeHandleImport = new EventEmitter<any>();
 
   @observable isVisible = false;
   paramCode = '';
 
-  @computed get contentTypeTitle() {
-    return titleHash.get(this.contentType) || '';
+  @computed get importTitle() {
+    return titleHash.get(this.contentType);
   }
 
   @computed get eg() {

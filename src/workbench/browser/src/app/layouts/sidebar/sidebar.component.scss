@@ -1,6 +1,7 @@
 .eo-sidebar {
   border-right: 1px solid var(--BORDER);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   width: 90px;
   height: 100%;
   transition: width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s;

@@ -5,14 +5,13 @@
       nzType="text"
       *ngIf="sidebar.visible"
       class="flex items-center"
-      i18n-nzTooltipTitle
       eoNgFeedbackTooltip
       [nzTooltipPlacement]="['topLeft', 'leftTop']"
-      nzTooltipTitle="Hide/Show Sidebar"
+      nzTooltipTitle="{{ sidebar.collapsed ? showSidebar : hideSidebar }}"
       (click)="toggleCollapsed()"
     >
-      <eo-iconpark-icon *ngIf="!sidebar.collapsed" name="expand-right"></eo-iconpark-icon>
-      <eo-iconpark-icon *ngIf="sidebar.collapsed" name="expand-left"></eo-iconpark-icon>
+      <eo-iconpark-icon *ngIf="!sidebar.collapsed" name="left-bar-7knckimm"></eo-iconpark-icon>
+      <eo-iconpark-icon *ngIf="sidebar.collapsed" name="right-bar-7knck72c"></eo-iconpark-icon>
     </button>
     <button
       eo-ng-button

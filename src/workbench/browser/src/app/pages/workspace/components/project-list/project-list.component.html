@@ -1,5 +1,5 @@
 <div class="project-management">
-  <nz-empty *ngIf="!initLoading && projectList.length === 0"> </nz-empty>
+  <nz-empty *ngIf="!initLoading && projectList.length === 0" nzNotFoundImage="simple"> </nz-empty>
   <ng-container *ngIf="listType === 'card'">
     <div class="flex flex-wrap">
       <ng-container *ngFor="let item of projectList">

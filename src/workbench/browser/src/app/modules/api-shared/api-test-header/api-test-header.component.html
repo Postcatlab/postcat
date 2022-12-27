@@ -1,12 +1,6 @@
 <fieldset [disabled]="disabled">
-  <div class="param-box-header flex items-center h-10">
-    <params-import
-      [disabled]="disabled"
-      [(baseData)]="model"
-      contentType="header"
-      i18n-modalTitle="@@Header"
-      modalTitle="Header"
-    ></params-import>
+  <div class="flex items-center h-10 param-box-header">
+    <params-import [disabled]="disabled" [(baseData)]="model" contentType="header"></params-import>
   </div>
 </fieldset>
 <eo-ng-table-pro
