@@ -9,72 +9,75 @@ import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',
-  template: `<nz-list nzItemLayout="horizontal" [nzLoading]="loading">
-    <nz-list-header *ngIf="store.getWorkspaceRole === 'Owner'">
-      <eo-ng-select
-        class="w-full"
-        nzAllowClear
-        nzShowSearch
-        auto-focus-form
-        nzAutoFocus="true"
-        i18n-nzPlaceHolder
-        nzPlaceHolder="Search"
-        [(ngModel)]="userCache"
-        (nzOnSearch)="handleChange($event)"
-      >
-        <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
-          <div class="flex w-full justify-between option">
-            <div class="flex flex-col justify-between">
-              <span class="font-bold">{{ option.username }}</span>
-              <span class="text-tips">{{ option.email }}</span>
+  template: `<nz-list nzItemLayout="horizontal">
+      <nz-list-header *ngIf="store.getWorkspaceRole === 'Owner'">
+        <eo-ng-select
+          class="w-full"
+          nzAllowClear
+          nzShowSearch
+          auto-focus-form
+          nzAutoFocus="true"
+          i18n-nzPlaceHolder
+          nzPlaceHolder="Search"
+          [(ngModel)]="userCache"
+          (nzOnSearch)="handleChange($event)"
+        >
+          <eo-ng-option *ngFor="let option of userList" nzCustomContent [nzLabel]="option.username" [nzValue]="option.username">
+            <div class="flex w-full justify-between option">
+              <div class="flex flex-col justify-between">
+                <span class="font-bold">{{ option.username }}</span>
+                <span class="text-tips">{{ option.email }}</span>
+              </div>
+              <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
             </div>
-            <button eo-ng-button nzType="primary" nzSize="small" i18n (click)="addMember(option)">Add</button>
-          </div>
-        </eo-ng-option>
-      </eo-ng-select>
-    </nz-list-header>
-    <nz-list-item *ngFor="let item of list">
-      <nz-list-item-meta>
-        <nz-list-item-meta-title>
-          <div class="flex flex-col">
-            <span class="font-bold link">{{ item.username }}</span>
-            <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
-          </div>
-        </nz-list-item-meta-title>
-      </nz-list-item-meta>
-      <ul nz-list-item-actions>
-        <nz-list-item-action>
-          <div class="flex w-[170px] items-center justify-between">
-            <span>{{ item.roleTitle }}</span>
-            <div class="operate-btn-list" *ngIf="item.myself || store.getWorkspaceRole === 'Owner'">
-              <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
-              <eo-ng-dropdown-menu #menu="nzDropdownMenu">
-                <ul nz-menu>
-                  <li
-                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name === 'Owner'"
-                    nz-menu-item
-                    i18n
-                    (click)="changeRole(item)"
-                    >Set Editor
-                  </li>
-                  <li
-                    *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name !== 'Owner'"
-                    nz-menu-item
-                    i18n
-                    (click)="changeRole(item)"
-                    >Set Owner
-                  </li>
-                  <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)">Remove</li>
-                  <li *ngIf="item.myself" nz-menu-item i18n (click)="quitWorkspace(item)">Quit</li>
-                </ul>
-              </eo-ng-dropdown-menu>
+          </eo-ng-option>
+        </eo-ng-select>
+      </nz-list-header>
+      <nz-list-item *ngFor="let item of list">
+        <nz-list-item-meta>
+          <nz-list-item-meta-title>
+            <div class="flex flex-col">
+              <span class="font-bold link">{{ item.username }}</span>
+              <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
             </div>
-          </div>
-        </nz-list-item-action>
-      </ul>
-    </nz-list-item>
-    <nz-list-empty *ngIf="!loading && list.length === 0"></nz-list-empty>
-  </nz-list> `,
+          </nz-list-item-meta-title>
+        </nz-list-item-meta>
+        <ul nz-list-item-actions>
+          <nz-list-item-action>
+            <div class="flex w-[170px] items-center justify-between">
+              <span>{{ item.roleTitle }}</span>
+              <div class="operate-btn-list" *ngIf="item.myself || store.getWorkspaceRole === 'Owner'">
+                <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
+                <eo-ng-dropdown-menu #menu="nzDropdownMenu">
+                  <ul nz-menu>
+                    <li
+                      *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name === 'Owner'"
+                      nz-menu-item
+                      i18n
+                      (click)="changeRole(item)"
+                      >Set Editor
+                    </li>
+                    <li
+                      *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name !== 'Owner'"
+                      nz-menu-item
+                      i18n
+                      (click)="changeRole(item)"
+                      >Set Owner
+                    </li>
+                    <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)"
+                      >Remove</li
+                    >
+                    <li *ngIf="item.myself" nz-menu-item i18n (click)="quitWorkspace(item)">Quit</li>
+                  </ul>
+                </eo-ng-dropdown-menu>
+              </div>
+            </div>
+          </nz-list-item-action>
+        </ul>
+      </nz-list-item>
+      <nz-list-empty *ngIf="!loading && list.length === 0"></nz-list-empty>
+    </nz-list>
+    <div class="w-full h-[200px] flex items-center justify-center" *ngIf="loading"><nz-spin nzSimple></nz-spin> </div> `,
   styleUrls: ['./workspace-member.component.scss']
 })
 export class WorkspaceMemberComponent implements OnInit {

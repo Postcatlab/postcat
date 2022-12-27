@@ -25,5 +25,17 @@
     @apply px-[10px] rounded-[3px];
 
     border: 1px solid transparent;
+
+    .operate-btn-list {
+      visibility: hidden;
+    }
+
+    &:hover {
+      border: 1px solid var(--MAIN_THEME_COLOR);
+
+      .operate-btn-list {
+        visibility: visible;
+      }
+    }
   }
 }
