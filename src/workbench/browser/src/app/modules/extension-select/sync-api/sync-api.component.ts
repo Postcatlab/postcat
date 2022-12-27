@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
 import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
@@ -8,6 +7,7 @@ import { has } from 'lodash-es';
 
 import packageJson from '../../../../../../../../package.json';
 import { StorageRes, StorageResStatus } from '../../../shared/services/storage/index.model';
+import { StoreService } from '../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-sync-api',
@@ -20,7 +20,7 @@ export class SyncApiComponent implements OnInit {
   constructor(
     private storage: StorageService,
     private extensionService: ExtensionService,
-    private settingService: SettingService,
+    private store: StoreService,
     private eoMessage: EoNgFeedbackMessageService
   ) {}
 
@@ -44,7 +44,8 @@ export class SyncApiComponent implements OnInit {
     const action = feature.action || null;
     const module = await this.extensionService.getExtensionPackage(this.currentExtension);
     if (module?.[action] && typeof module[action] === 'function') {
-      this.storage.run('projectExport', [], async (result: StorageRes) => {
+      const params = [this.store.getCurrentProjectID];
+      this.storage.run('projectExport', params, async (result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           result.data.version = packageJson.version;
           try {

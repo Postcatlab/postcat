@@ -364,7 +364,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
    */
   buildGroupModel(parentID?: string): Group {
     const groupModel: Group = {
-      projectID: 1,
+      projectID: this.store.getCurrentProjectID,
       parentID: parentID ? Number(parentID.replace('group-', '')) : 0,
       weight: 0,
       name: ''
@@ -517,7 +517,7 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   }
   private nodeToGroup(node: NzTreeNode): Group {
     return {
-      projectID: 1,
+      projectID: this.store.getCurrentProjectID,
       uuid: Number(node.origin.key.replace('group-', '')),
       name: node.origin.title,
       parentID: Number(node.origin.parentID.replace('group-', '')),

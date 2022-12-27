@@ -62,6 +62,7 @@ export class ExportApiComponent implements OnInit {
     if (action && module?.[action] && typeof module[action] === 'function') {
       const params = [this.store.getCurrentProjectID];
       this.storage.run('projectExport', params, (result: StorageRes) => {
+        console.log(result);
         if (result.status === StorageResStatus.success) {
           console.log('projectExport result', result.data);
           try {
