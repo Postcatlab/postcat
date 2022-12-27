@@ -71,21 +71,14 @@ export class EffectService {
       }
     });
   }
-
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
-      const apiGroupObservable = this.indexedDBStorage.groupLoadAllByProjectID(projectID);
-      apiGroupObservable.subscribe(({ data: apiGroup }: any) => {
-        const apiDataObservable = this.indexedDBStorage.apiDataLoadAllByProjectID(projectID);
-        apiDataObservable.subscribe(({ data: apiData }: any) => {
-          const envObservable = this.indexedDBStorage.environmentLoadAllByProjectID(projectID);
-          envObservable.subscribe(({ data: environments }: any) => {
-            resolve({
-              collections: this.exportCollects(apiGroup, apiData),
-              environments
-            });
-          });
-        });
+      this.storage.run('projectExport', [projectID], (result: StorageRes) => {
+        if (result.status === StorageResStatus.success) {
+          resolve(result.data);
+        } else {
+          resolve(false);
+        }
       });
     });
   }

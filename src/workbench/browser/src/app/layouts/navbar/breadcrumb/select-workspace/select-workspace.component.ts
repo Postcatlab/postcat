@@ -32,7 +32,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
             (click)="addWorkspace()"
             class="ml-3 flex items-center"
           >
-            <eo-iconpark-icon name="plus"></eo-iconpark-icon>
+            <eo-iconpark-icon name="add"></eo-iconpark-icon>
           </button>
         </div>
         <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.id)">
