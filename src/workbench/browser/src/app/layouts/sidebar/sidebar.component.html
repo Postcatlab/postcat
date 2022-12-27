@@ -6,7 +6,7 @@
       eoNgFeedbackTooltip
       nzTooltipPlacement="right"
       [nzTooltipTitle]="item.title"
-      [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentID }"
+      [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentID, tiny: sidebar.collapsed }"
     >
       <i class="icon">
         <img class="app-logo" loading="lazy" *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" />
