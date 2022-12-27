@@ -17,8 +17,8 @@ import { StoreService } from '../../../../shared/store/state.service';
         nzShowSearch
         auto-focus-form
         nzAutoFocus="true"
-        i18n-placeholder
-        placeholder="Search by username"
+        i18n-nzPlaceHolder
+        nzPlaceHolder="Search"
         [(ngModel)]="userCache"
         (nzOnSearch)="handleChange($event)"
       >
