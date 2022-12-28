@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Windows>  <!-- 卸载页面 -->
   <VerticalLayout bkcolor="#FFFFFFFF">
-    <VerticalLayout width="100" height="100" bkimage="file='form\postcat.png'" padding="125,74,0,16">
-    </VerticalLayout>
+    <Include source="logo.xml" />
+
     <VerticalLayout>
-      <Label font="8" padding="146,0,0,40" bold="true" text="Postcat" />
       <Button name="btnUnInstall" borderround="4,4" padding="135,55,0,50" width="80" height="33" bkcolor="#FFFF7433" font="6" textcolor="#FFFFFFFF" text="Uninstall" />
     </VerticalLayout>
 

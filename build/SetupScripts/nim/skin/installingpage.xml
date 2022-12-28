@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Windows>  <!-- 安装目录 -->
   <VerticalLayout bkcolor="#FFFFFFFF">
-    <VerticalLayout width="100" height="100" bkimage="file='form\postcat.png'" padding="125,74,0,16">
-    </VerticalLayout>
+    <Include source="logo.xml" />
+
     <VerticalLayout>
-      <Label font="6" padding="146,0,0,40" bold="true" text="Postcat" />
-      <Slider name="slrProgress" padding="30,0,30,0" height="3" mouse="false" foreimage="form\fg.png" bkimage="form\bg.png" thumbsize="0,0" bkcolor="#FFD8D8D8" />
-      <Label padding="150,0,100,44" width="40" height="40" bkimage="file='loading.gif'" />
-      <Label font="0" name="progress_tip" padding="146,0,0,50" textcolor="#ff555555" text="Installing" />
+      <GifAnim padding="160,0,100,44" width="30" height="30" bkimage="file='loading.gif'" />
+      <Label font="0" name="progress_tip" padding="146,0,0,50" textcolor="#FF101010" text="Installing" />
     </VerticalLayout>
   </VerticalLayout>
 </Windows>
