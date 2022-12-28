@@ -8,7 +8,7 @@
       <HorizontalLayout height="22" padding="90,0,100,44">
         <Label width="30" textcolor="#FF333333" text="Path：" />
         <Control width="6" />
-        <Label name="editDir" text="" />
+        <Label name="editDir" text="" endellipsis="true" tooltiptext="悬浮提示" />
         <Control width="10" />
         <Button name="btnSelectDir" width="28" height="22" textcolor="#FF005EFF" text="Edit" />
       </HorizontalLayout>
