@@ -29,9 +29,20 @@
     "shadow": "",
     "bodyBackground": "#F5F7FA",
     "componentBackground": "#F5F7FA",
+    "itemActiveBackground": "#F5F7FA",
+    "itemHoverBackground": "#F5F7FA",
     //Disabled
-    "disabled": "",
+    "disabledText": "",
     "disabledBackground": "",
+    //Layout-Header
+    "layoutHeaderBackground": "#fff",
+    "layoutSiderText": "",
+    "layoutSiderBackground": "",
+    "layoutSiderActive": "",
+    "layoutSiderActiveText": "",
+    "layoutFooterBackground": "",
+    //Icon
+    "iconText": "",
     //Button
     "buttonText": "",
     "buttonShadow": "",
@@ -42,13 +53,13 @@
     "buttonDefaultBackground": "#1890ff",
     "buttonDefaultShadow": "",
     //Link
-    "link": "",
-    "linkHover": "",
-    "linkActive": "",
+    "textLink": "",
+    "textLinkHover": "",
+    "textLinkActive": "",
     //Divider
     "divider": "#000",
-    //Layout-Header
-    "headerBackground": "#fff"
+    //Tabs
+    "": ""
   },
   "size": {
     "icon": "",

@@ -15,12 +15,6 @@
   cursor: pointer;
 }
 
-.list-block {
-  > div {
-    border-radius: 3px;
-  }
-}
-
 @media (max-width: 1279.9px) {
   .grid-cols-4 {
     grid-template-columns: repeat(3, minmax(0, 1fr));

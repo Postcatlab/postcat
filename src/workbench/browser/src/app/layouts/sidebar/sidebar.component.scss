@@ -9,6 +9,10 @@
 
 .eo-sidebar-shrink {
   width: 50px;
+
+  .sidebar-item {
+    height: 50px;
+  }
 }
 
 .app-logo {
@@ -24,13 +28,11 @@
 }
 
 .sidebar-item {
-  padding: 8px 0;
-  margin-bottom: 10px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: var(--DEFAULT_BORDER_RADIUS);
   cursor: pointer;
   color: var(--TIPS_TEXT_COLOR);
 
@@ -40,6 +42,7 @@
 
   &:hover,
   &.sidebar-item-active {
+    font-weight: bold;
     background-color: var(--NAVBAR_BTN_BG);
     color: var(--MAIN_TEXT);
 
