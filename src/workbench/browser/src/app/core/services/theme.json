@@ -28,7 +28,7 @@
     "border": "#DCDFE6",
     "shadow": "",
     "bodyBackground": "#F5F7FA",
-    //Inside page sticky bar|Tabs bar
+    //Inside page sticky bar|Tabs bar|menu
     "barBackground": "",
     "componentBackground": "#F5F7FA",
     "itemActiveBackground": "#F5F7FA",
@@ -62,12 +62,49 @@
     //Divider
     "divider": "#000",
     //Tabs
-    "": ""
+    "tabsText": "",
+    "tabsActive": "",
+    "tabsActiveText": "",
     //Cards Tabs
+    "tabsCardBarBackground": "",
+    "tabsCardText": "",
+    "tabsCardBackground": "",
+    "tabsCardActive": "",
+    "tabsCardActiveText": "",
+    "tabsCardActiveBackground": "",
     //Table
+    "tableBackground": "",
+    "tableHeaderText": "",
+    "tableHeaderBackground": "",
+    "tableRowHoverBackground": "",
     //Tree
+    "treeHeaderBackground": "",
+    "treeText": "",
+    "treeBackground": "",
+    "treeSelectedText": "",
+    "treeSelectedBackground": "",
+    "treeHoverText": "",
+    "treeHoverBackground": "",
     //Dropdown
+    "dropdownMenuBackground": "",
+    "dropdownItemHoverBackground": "",
+    //Select
+    "selectBorder": "",
+    "selectBackground": "",
+    "selectDropdownBackground": "",
+    "selectItemSelectedText": "",
+    "selectItemSelectedBackground": "",
+    //Input
+    "inputText": "",
+    "inputBackground": "",
+    "inputIcon": "",
+    "inputBorder": "",
+    "inputPlaceholder": "",
     //Modal
+    "modalHeaderBackground": "",
+    "modalHeaderText": "",
+    "modalContentBackground": "",
+    "modalFooterBackground": ""
   },
   "size": {
     "icon": "",

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
@@ -7,6 +7,8 @@ import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.se
 import { observable, makeObservable, computed, reaction } from 'mobx';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
+import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
+import { MemberService } from '../../../../modules/member-list/member.service';
 import { MEMBER_MUI } from '../../../../shared/models/member.model';
 
 @Component({
@@ -23,6 +25,7 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
         <eo-ng-select
           class="w-full"
           nzAllowClear
+          auto-focus-form
           nzShowSearch
           i18n-nzPlaceholder
           nzPlaceholder="Search"
@@ -58,18 +61,16 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
           <eo-iconpark-icon name="add" class="mr-[5px]"></eo-iconpark-icon><span i18n>Add</span>
         </button>
       </h2>
-      <section class="py-5">
-        <eo-manage-access [list]="memberList" (eoOnChange)="e97uoiuCallback($event)"></eo-manage-access>
-      </section>
+      <section class="py-5"> <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> , </section>
     </section>`
 })
 export class ProjectMemberComponent implements OnInit {
+  @ViewChild('memberList') memberListRef: MemberListComponent;
   @observable searchValue = '';
   userCache;
   isInvateModalVisible;
   isSelectBtnLoading;
   isAddPeopleBtnLoading;
-  memberList;
   userList = [];
   roleMUI = MEMBER_MUI;
   constructor(
@@ -79,66 +80,32 @@ export class ProjectMemberComponent implements OnInit {
     public api: RemoteService,
     public eMessage: EoNgFeedbackMessageService,
     public dataSource: DataSourceService,
-    private http: RemoteService
+    private member: MemberService
   ) {
     this.isInvateModalVisible = false;
     this.isSelectBtnLoading = false;
     this.isAddPeopleBtnLoading = false;
     this.userCache = [];
-    this.memberList = [];
-  }
-  async queryList() {
-    const [wData, wErr]: any = await this.api.api_projectMember({
-      projectID: this.store.getCurrentProjectID
-    });
-    if (wErr) {
-      return;
-    }
-    // * 对成员列表进行排序
-    // const Owner = wData.filter(it => it.roleName === 'Owner');
-    // const Member = wData.filter(it => it.roleName !== 'Owner');
-    this.memberList = wData;
-    this.memberList.forEach(member => {
-      member.roleTitle = this.roleMUI.find(val => val.id === member.role.id).title;
-      if (member.id === this.store.getUserProfile.id) {
-        member.myself = true;
-      }
-    });
   }
   async ngOnInit(): Promise<void> {
-    this.queryList();
     makeObservable(this);
     reaction(
       () => this.searchValue,
-      value => {
+      async value => {
         if (value.trim() === '') {
           return;
         }
-        this.http
-          .api_workspaceSearchMember({
-            workspaceID: this.store.getCurrentWorkspaceID,
-            username: value.trim()
-          })
-          .then(([data, err]: any) => {
-            if (err) {
-              this.userList = [];
-              return;
-            }
-            const memberList = this.memberList.map(it => it.username);
-            this.userList = data.filter(it => {
-              return !memberList.includes(it.username);
-            });
-          });
+        const result = await this.member.searchUser(value);
+        const memberList = this.memberListRef.list.map(it => it.username);
+        this.userList = result.filter(it => {
+          return !memberList.includes(it.username);
+        });
       },
       { delay: 300 }
     );
   }
   handleChange(event) {
     this.searchValue = event;
-  }
-
-  handleAddProject(data) {
-    console.log('option', data);
   }
   handleInvateModalCancel(): void {
     // * 关闭弹窗
@@ -158,10 +125,7 @@ export class ProjectMemberComponent implements OnInit {
         return;
       }
 
-      const [aData, aErr]: any = await this.api.api_projectAddMember({
-        projectID: this.store.getCurrentProjectID,
-        userIDs: userIds
-      });
+      const [aData, aErr]: any = await this.member.addMember(userIds);
       if (aErr) {
         return;
       }
@@ -170,7 +134,7 @@ export class ProjectMemberComponent implements OnInit {
       // * 关闭弹窗
       this.isInvateModalVisible = false;
 
-      this.queryList();
+      this.memberListRef.queryList();
     };
     await btnSelectRunning();
     this.isSelectBtnLoading = false;
@@ -190,9 +154,5 @@ export class ProjectMemberComponent implements OnInit {
     };
     await btnAddPeopleRunning();
     this.isAddPeopleBtnLoading = false;
-  }
-
-  async e97uoiuCallback($event) {
-    this.queryList();
   }
 }

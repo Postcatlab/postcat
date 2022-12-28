@@ -1,16 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { makeObservable, observable, reaction } from 'mobx';
 
-import { MEMBER_MUI } from '../../../../shared/models/member.model';
-import { RemoteService } from '../../../../shared/services/storage/remote.service';
-import { EffectService } from '../../../../shared/store/effect.service';
+import { MemberListComponent } from '../../../../modules/member-list/member-list.component';
+import { MemberService } from '../../../../modules/member-list/member.service';
 import { StoreService } from '../../../../shared/store/state.service';
 
 @Component({
   selector: 'eo-workspace-member',
   template: `<nz-list nzItemLayout="horizontal">
-      <nz-list-header *ngIf="store.getWorkspaceRole === 'Owner'">
+      <nz-list-header *ngIf="member.role === 'Owner'">
         <eo-ng-select
           class="w-full"
           nzAllowClear
@@ -33,87 +32,36 @@ import { StoreService } from '../../../../shared/store/state.service';
           </eo-ng-option>
         </eo-ng-select>
       </nz-list-header>
-      <nz-list-item *ngFor="let item of list">
-        <nz-list-item-meta>
-          <nz-list-item-meta-title>
-            <div class="flex flex-col">
-              <span class="font-bold link">{{ item.username }}</span>
-              <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
-            </div>
-          </nz-list-item-meta-title>
-        </nz-list-item-meta>
-        <ul nz-list-item-actions>
-          <nz-list-item-action>
-            <div class="flex w-[170px] items-center justify-between">
-              <span>{{ item.roleTitle }}</span>
-              <div class="operate-btn-list" *ngIf="item.myself || store.getWorkspaceRole === 'Owner'">
-                <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu"> <eo-iconpark-icon name="more"></eo-iconpark-icon> </button>
-                <eo-ng-dropdown-menu #menu="nzDropdownMenu">
-                  <ul nz-menu>
-                    <li
-                      *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name === 'Owner'"
-                      nz-menu-item
-                      i18n
-                      (click)="changeRole(item)"
-                      >Set Editor
-                    </li>
-                    <li
-                      *ngIf="!item.myself && store.getWorkspaceRole === 'Owner' && item.role?.name !== 'Owner'"
-                      nz-menu-item
-                      i18n
-                      (click)="changeRole(item)"
-                      >Set Owner
-                    </li>
-                    <li *ngIf="!item.myself && store.getWorkspaceRole === 'Owner'" nz-menu-item i18n (click)="removeMember(item)"
-                      >Remove</li
-                    >
-                    <li *ngIf="item.myself" nz-menu-item i18n (click)="quitWorkspace(item)">Quit</li>
-                  </ul>
-                </eo-ng-dropdown-menu>
-              </div>
-            </div>
-          </nz-list-item-action>
-        </ul>
-      </nz-list-item>
-      <nz-list-empty *ngIf="!loading && list.length === 0"></nz-list-empty>
     </nz-list>
-    <div class="w-full h-[200px] flex items-center justify-center" *ngIf="loading"><nz-spin nzSimple></nz-spin> </div> `,
-  styleUrls: ['./workspace-member.component.scss']
+    <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> `,
+  styles: [
+    `
+      .ant-list-split .ant-list-header {
+        border: none;
+        padding-top: 0;
+      }
+    `
+  ]
 })
 export class WorkspaceMemberComponent implements OnInit {
-  @Input() list = [];
-  @Input() loading = false;
+  @ViewChild('memberList') memberListRef: MemberListComponent;
   @observable searchValue = '';
   userCache;
   userList = [];
-  workspaceID: number;
-  roleMUI = MEMBER_MUI;
-  constructor(
-    public store: StoreService,
-    private message: EoNgFeedbackMessageService,
-    private remote: RemoteService,
-    private effect: EffectService
-  ) {}
+  constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
 
   ngOnInit(): void {
-    this.workspaceID = this.store.getCurrentWorkspaceID;
-    this.queryList();
     makeObservable(this);
     reaction(
       () => this.searchValue,
-      value => {
+      async value => {
         if (value.trim() === '') {
           return;
         }
-        this.remote.api_userSearch({ username: value.trim() }).then(([data, err]: any) => {
-          if (err) {
-            this.userList = [];
-            return;
-          }
-          const memberList = this.list.map(it => it.username);
-          this.userList = data.filter(it => {
-            return !memberList.includes(it.username);
-          });
+        const result = await this.member.searchUser(value);
+        const memberList = this.memberListRef.list.map(it => it.username);
+        this.userList = result.filter(it => {
+          return !memberList.includes(it.username);
         });
       },
       { delay: 300 }
@@ -122,26 +70,12 @@ export class WorkspaceMemberComponent implements OnInit {
   handleChange(event) {
     this.searchValue = event;
   }
-  async queryList() {
-    this.loading = true;
-    const [data, error]: any = await this.remote.api_workspaceMember({
-      workspaceID: this.workspaceID
-    });
-    this.loading = false;
-    this.list = data || [];
-    console.log(this.list);
-    this.list.forEach(member => {
-      member.roleTitle = this.roleMUI.find(val => val.id === member.role.id).title;
-      if (member.id === this.store.getUserProfile.id) {
-        member.myself = true;
-      }
-    });
-  }
   async addMember(items) {
-    const [data, err]: any = await this.remote.api_workspaceAddMember({
-      workspaceID: this.workspaceID,
-      userIDs: [items.id]
-    });
+    if (this.store.isLocal) {
+      this.message.warning($localize`You can create a cloud workspace and invite members to collaborate.`);
+      return;
+    }
+    const [data, err]: any = await this.member.addMember([items.id]);
     if (err) {
       this.message.error($localize`Add member failed`);
       return;
@@ -149,55 +83,6 @@ export class WorkspaceMemberComponent implements OnInit {
     this.message.success($localize`Add member successfully`);
     this.userList = [];
     this.userCache = '';
-    this.queryList();
-  }
-  async changeRole(item) {
-    const roleID = item.role.id === 1 ? 2 : 1;
-    const [data, err]: any = await this.remote.api_workspaceSetRole({
-      workspaceID: this.workspaceID,
-      roleID: roleID,
-      memberID: item.id
-    });
-    if (err) {
-      this.message.error($localize`Change role Failed`);
-      return;
-    }
-    this.message.success($localize`Change role successfully`);
-    item.role.id = roleID;
-    item.role.name = item.role.name === 'Owner' ? 'Editor' : 'Owner';
-    item.roleTitle = this.roleMUI.find(val => val.id === roleID).title;
-  }
-  async removeMember(item) {
-    const [data, err]: any = await this.remote.api_workspaceRemoveMember({
-      workspaceID: this.workspaceID,
-      userIDs: [item.id]
-    });
-    if (err) {
-      this.message.error($localize`Change role error`);
-      return;
-    }
-    this.message.success($localize`Remove Member successfully`);
-    this.queryList();
-  }
-  async quitWorkspace(item) {
-    let memberList = this.list.filter(val => val.role.id === 1);
-    if (memberList.length === 1 && memberList[0].myself) {
-      this.message.warning(
-        $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
-      );
-      return;
-    }
-    const [data, err]: any = await this.remote.api_workspaceMemberQuit({
-      workspaceID: this.workspaceID
-    });
-    if (err) {
-      this.message.error($localize`Quit Failed`);
-      return;
-    }
-    this.message.success($localize`Quit successfully`);
-    if (this.store.getCurrentWorkspaceID === this.workspaceID) {
-      await this.effect.changeWorkspace(this.store.getLocalWorkspace.id);
-    }
-    this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.workspaceID));
+    this.memberListRef.queryList();
   }
 }
