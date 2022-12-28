@@ -28,6 +28,8 @@
     "border": "#DCDFE6",
     "shadow": "",
     "bodyBackground": "#F5F7FA",
+    //Inside page sticky bar|Tabs bar
+    "barBackground": "",
     "componentBackground": "#F5F7FA",
     "itemActiveBackground": "#F5F7FA",
     "itemHoverBackground": "#F5F7FA",
@@ -38,8 +40,9 @@
     "layoutHeaderBackground": "#fff",
     "layoutSiderText": "",
     "layoutSiderBackground": "",
-    "layoutSiderActive": "",
     "layoutSiderActiveText": "",
+    "layoutSiderActive": "",
+    "layoutFooterText": "",
     "layoutFooterBackground": "",
     //Icon
     "iconText": "",
@@ -60,6 +63,11 @@
     "divider": "#000",
     //Tabs
     "": ""
+    //Cards Tabs
+    //Table
+    //Tree
+    //Dropdown
+    //Modal
   },
   "size": {
     "icon": "",
