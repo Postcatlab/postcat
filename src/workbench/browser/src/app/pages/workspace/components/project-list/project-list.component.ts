@@ -20,20 +20,19 @@ export class ProjectListComponent implements OnInit {
   projectList: any[] = [];
 
   get WorkspaceID() {
-    return this.storeSerive.getCurrentWorkspaceID;
+    return this.store.getCurrentWorkspaceID;
   }
 
   constructor(
     private storage: StorageService,
-    private store: StoreService,
     private setting: SettingService,
     private effect: EffectService,
-    private storeSerive: StoreService,
+    private store: StoreService,
     private modalService: ModalService
   ) {}
 
-  ngOnInit(): void {
-    this.getProjectList();
+  async ngOnInit(): Promise<void> {
+    await this.getProjectList();
   }
 
   async getProjectList() {
@@ -97,7 +96,7 @@ export class ProjectListComponent implements OnInit {
         model
       },
       nzOnOk: async () => {
-        this.storage.run('projectCreate', [this.storeSerive.getCurrentWorkspace.id, model], (result: StorageRes) => {
+        this.storage.run('projectCreate', [this.store.getCurrentWorkspace.id, model], (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
             this.getProjectList();
             modal.destroy();
