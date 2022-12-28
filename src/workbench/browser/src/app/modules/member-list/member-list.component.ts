@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { autorun } from 'mobx';
 
 import { StoreService } from '../../shared/store/state.service';
 import { MemberService } from './member.service';
@@ -57,7 +58,11 @@ export class MemberListComponent implements OnInit {
   constructor(public store: StoreService, private message: EoNgFeedbackMessageService, public member: MemberService) {}
 
   ngOnInit(): void {
-    this.queryList();
+    autorun(() => {
+      if (this.store.isLogin) {
+        this.queryList();
+      }
+    });
   }
   async queryList() {
     this.loading = true;
@@ -83,6 +88,9 @@ export class MemberListComponent implements OnInit {
   }
   async quitMember() {
     const [data, err]: any = await this.member.quitMember(this.list);
+    if (err === 'warning') {
+      return;
+    }
     if (err) {
       this.message.error($localize`Quit Failed`);
       return;

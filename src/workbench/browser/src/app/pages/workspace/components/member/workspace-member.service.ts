@@ -30,6 +30,9 @@ export class WorkspaceMemberService {
   }
   async queryMember() {
     let result = [];
+    if (!this.store.isLogin) {
+      return result;
+    }
     if (this.store.isLocal) {
       result = [
         {
@@ -65,7 +68,7 @@ export class WorkspaceMemberService {
       this.message.warning(
         $localize`You are the only owner of the workspace, please transfer the ownership to others before leaving the workspace.`
       );
-      return;
+      return [null, 'warning'];
     }
     const [data, err]: any = await this.remote.api_workspaceMemberQuit({
       workspaceID: this.workspaceID
@@ -76,6 +79,7 @@ export class WorkspaceMemberService {
       }
       this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.workspaceID));
     }
+    return [data, err];
   }
   async changeRole(item) {
     const roleID = item.role.id === 1 ? 2 : 1;

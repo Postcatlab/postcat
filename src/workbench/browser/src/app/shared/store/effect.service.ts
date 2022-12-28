@@ -73,7 +73,7 @@ export class EffectService {
   }
   async exportLocalProjectData(projectID = 1) {
     return new Promise(resolve => {
-      this.storage.run('projectExport', [projectID], (result: StorageRes) => {
+      this.indexedDBStorage.projectExport(projectID).subscribe((result: StorageRes) => {
         if (result.status === StorageResStatus.success) {
           resolve(result.data);
         } else {
@@ -127,12 +127,12 @@ export class EffectService {
     // * real set workspace
     await this.updateProjects(workspaceID);
     await this.router.navigate(['**']);
-    if (this.store.getProjectList.length === 0) {
-      this.router.navigate(['/home/workspace/overview']);
-    } else {
-      // * refresh view
-      this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
-    }
+    // if (this.store.getProjectList.length === 1) {
+    this.router.navigate(['/home/workspace/overview']);
+    // } else {
+    //   // * refresh view
+    //   this.router.navigate(['/home/workspace/project/api'], { queryParams: { wid: this.store.getCurrentWorkspaceID } });
+    // }
     // * update title
     document.title = `Postcat - ${this.store.getCurrentWorkspace.title}`;
     // * update workspace role
@@ -150,8 +150,12 @@ export class EffectService {
     this.store.setRole(data.role.name, 'project');
   }
   async changeProject(pid) {
+    if (!pid) {
+      this.router.navigate(['/home/workspace/overview']);
+      return;
+    }
     this.store.setCurrentProjectID(pid);
-    this.router.navigate(['**']);
+    await this.router.navigate(['**']);
     this.router.navigate(['/home/workspace/project/api'], { queryParams: { pid: this.store.getCurrentProjectID } });
     // * update project role
     await this.getProjectPermission();

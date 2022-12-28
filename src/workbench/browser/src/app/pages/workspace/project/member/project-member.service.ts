@@ -4,13 +4,19 @@ import { autorun } from 'mobx';
 
 import { MEMBER_MUI } from '../../../../shared/models/member.model';
 import { RemoteService } from '../../../../shared/services/storage/remote.service';
+import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
 @Injectable()
 export class ProjectMemberService {
   projectID: number;
   role: 'Owner' | 'Editor' | string;
   roleMUI = MEMBER_MUI;
-  constructor(private remote: RemoteService, private store: StoreService, private message: EoNgFeedbackMessageService) {
+  constructor(
+    private remote: RemoteService,
+    private store: StoreService,
+    private message: EoNgFeedbackMessageService,
+    private effect: EffectService
+  ) {
     autorun(() => {
       this.role = this.store.getProjectRole;
       this.projectID = this.store.getCurrentProjectID;
@@ -62,8 +68,10 @@ export class ProjectMemberService {
       projectID: this.projectID
     });
     if (!err) {
-      this.store.setWorkspaceList(this.store.getWorkspaceList.filter(item => item.id !== this.store.getCurrentWorkspaceID));
+      const project = this.store.getProjectList.find(item => item.uuid !== this.store.getCurrentProjectID);
+      this.effect.changeProject(project.uuid);
     }
+    return [data, err];
   }
   async changeRole(item) {
     const roleID = item.role.id === 3 ? 4 : 3;
