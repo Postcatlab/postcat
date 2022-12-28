@@ -17,6 +17,7 @@ export class NavBreadcrumbComponent implements OnDestroy {
   workspaceID;
   private routerSubscribe;
   constructor(private store: StoreService, private router: Router) {
+    this.initLevel();
     this.watchRouterChange();
     autorun(() => {
       if (this.store.getCurrentProject.name) {
@@ -26,13 +27,16 @@ export class NavBreadcrumbComponent implements OnDestroy {
       this.workspaceID = this.store.getCurrentWorkspaceID;
     });
   }
+  initLevel() {
+    if (['/home/workspace/overview'].some(val => this.router.url.includes(val))) {
+      this.level = 'workspace';
+    } else {
+      this.level = 'project';
+    }
+  }
   watchRouterChange() {
     this.routerSubscribe = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
-      if (['/home/workspace/overview'].some(val => this.router.url.includes(val))) {
-        this.level = 'workspace';
-      } else {
-        this.level = 'project';
-      }
+      this.initLevel();
     });
   }
   ngOnDestroy() {
