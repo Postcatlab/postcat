@@ -4,8 +4,8 @@
     <Include source="logo.xml" />
 
     <VerticalLayout>
-      <GifAnim padding="160,0,100,44" width="30" height="30" bkimage="file='loading.gif'" />
-      <Label font="0" name="progress_tip" padding="146,0,0,50" textcolor="#FF101010" text="Installing" />
+      <GifAnim padding="160,0,100,34" width="30" height="30" bkimage="file='loading.gif'" />
+      <Label font="5" name="progress_tip" padding="146,0,0,50" textcolor="#FF101010" text="Installing" />
     </VerticalLayout>
   </VerticalLayout>
 </Windows>
