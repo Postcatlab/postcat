@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';

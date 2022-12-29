@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 
 import { AppearanceType, MainColorType } from '../../modules/system-setting/common/select-theme/theme.model';
 import StorageUtil from '../../utils/storage/Storage';
+import coreThemeJSON from './../../../extensions/core-themes/package.json';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,17 @@ export class ThemeService {
   appearance: AppearanceType = StorageUtil.get(this.module.appearance.storageKey) || this.module.appearance.default;
   mainColor: MainColorType = StorageUtil.get(this.module.mainColor.storageKey) || this.module.mainColor.default;
   constructor(@Inject(DOCUMENT) private document: Document) {}
+  async queryCoreTheme() {
+    const defaultTheme = coreThemeJSON.features.theme;
+    const themes = [];
+    for (var i = 0; i < defaultTheme.length; i++) {
+      const theme = defaultTheme[i];
+      const path = new URL(theme.path, `${window.location.origin}/extensions/core-themes/`).href;
+      const result = await fetch(path).then(res => res.json());
+      themes.push(result);
+    }
+    console.log(themes);
+  }
   initTheme() {
     this.changeAppearance(this.appearance, true);
     this.changeColor(this.mainColor, true);

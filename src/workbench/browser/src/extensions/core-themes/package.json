@@ -1,0 +1,18 @@
+{
+  "name": "postcat-theme",
+  "title": "Postcat Theme",
+  "version": "0.0.1",
+  "description": "Postcat theme",
+  "author": {
+    "name": "Postcat"
+  },
+  "features": {
+    "theme": [
+      {
+        "label": "Light Default",
+        "uiTheme": "pc",
+        "path": "./themes/light-default.json"
+      }
+    ]
+  }
+}
