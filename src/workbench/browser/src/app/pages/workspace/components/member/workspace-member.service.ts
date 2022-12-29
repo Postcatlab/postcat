@@ -1,3 +1,4 @@
+import { compileNgModule } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { autorun } from 'mobx';
@@ -30,9 +31,6 @@ export class WorkspaceMemberService {
   }
   async queryMember() {
     let result = [];
-    if (!this.store.isLogin) {
-      return result;
-    }
     if (this.store.isLocal) {
       result = [
         {

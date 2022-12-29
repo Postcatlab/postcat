@@ -61,6 +61,12 @@ export class MemberListComponent implements OnInit {
     autorun(() => {
       if (this.store.isLogin) {
         this.queryList();
+      } else {
+        this.list = [
+          {
+            username: 'Postcat'
+          }
+        ];
       }
     });
   }
