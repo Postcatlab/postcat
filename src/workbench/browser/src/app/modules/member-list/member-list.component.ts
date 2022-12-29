@@ -11,9 +11,12 @@ import { MemberService } from './member.service';
     <nz-list-item *ngFor="let item of list">
       <nz-list-item-meta>
         <nz-list-item-meta-title>
-          <div class="flex flex-col">
-            <span class="font-bold link">{{ item.username }}</span>
-            <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
+          <div class="flex items-center">
+            <nz-avatar [nzShape]="'square'" [nzSize]="40" nzText="{{ item.username[0] }}" class="mr-[10px]"></nz-avatar>
+            <div class="flex flex-col">
+              <span class="font-bold link">{{ item.username }}</span>
+              <span class="text-tips">{{ item.email || item.mobilePhone }}</span>
+            </div>
           </div>
         </nz-list-item-meta-title>
       </nz-list-item-meta>

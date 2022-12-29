@@ -77,6 +77,13 @@
     "tableHeaderText": "",
     "tableHeaderBackground": "",
     "tableRowHoverBackground": "",
+    "tableFooterBackground": "",
+    "tableFooterText": "",
+    //Pagination
+    "paginationItemBackground": "",
+    "paginationItemActiveBackground": "",
+    //Next page/Pre page
+    "paginationButtonBackground": "",
     //Tree
     "treeHeaderBackground": "",
     "treeText": "",
