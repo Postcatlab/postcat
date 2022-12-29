@@ -60,19 +60,24 @@ export class ApiComponent implements OnInit, OnDestroy {
     {
       routerLink: 'detail',
       isShare: true,
+      //ID fit to the routerLink
+      id: 'api-http-detail',
       title: $localize`:@@API Detail:Preview`
     },
     {
       routerLink: 'edit',
+      id: 'api-http-edit',
       title: $localize`Edit`
     },
     {
       routerLink: 'test',
       isShare: true,
+      id: 'api-http-test',
       title: $localize`Test`
     },
     {
       routerLink: 'mock',
+      id: 'api-http-mock',
       title: 'Mock'
     }
   ];

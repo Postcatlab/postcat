@@ -96,6 +96,7 @@ export class ProjectListComponent implements OnInit {
         model
       },
       nzOnOk: async () => {
+        if (!model.name) return;
         this.storage.run('projectCreate', [this.store.getCurrentWorkspace.id, model], (result: StorageRes) => {
           if (result.status === StorageResStatus.success) {
             this.getProjectList();

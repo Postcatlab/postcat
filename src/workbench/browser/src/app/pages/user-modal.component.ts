@@ -496,8 +496,8 @@ export class UserModalComponent implements OnInit, OnDestroy {
     // * click event callback
     this.isSaveBtnLoading = true;
     const btnSaveRunning = async () => {
-      const localProjectID = this.store.getCurrentProjectID;
       const { newWorkName: title } = this.validateWorkspaceNameForm.value;
+      const localProjects = this.store.getProjectList;
       const [data, err]: any = await this.api.api_workspaceCreate({ title });
       if (err) {
         this.eMessage.error($localize`New workspace Failed !`);
@@ -536,19 +536,45 @@ export class UserModalComponent implements OnInit, OnDestroy {
               type: 'primary',
               onClick: () => {
                 return new Promise(resolve => {
-                  this.effect.exportLocalProjectData(localProjectID).then(data => {
-                    console.log(data);
-                    this.storage.run('projectImport', [this.store.getCurrentProjectID, data], (result: StorageRes) => {
-                      if (result.status === StorageResStatus.success) {
-                        resolve(true);
-                        this.router.navigate(['**']).then(() => {
-                          this.router.navigate(['/home/workspace/project/api']);
-                        });
-                        modal.destroy();
-                      } else {
-                        resolve(false);
+                  const importProject = (project, index) => {
+                    this.storage.run(
+                      'projectCreate',
+                      [
+                        this.store.getCurrentWorkspace.id,
+                        {
+                          name: project.name
+                        }
+                      ],
+                      (result: StorageRes) => {
+                        if (result.status === StorageResStatus.success) {
+                          this.effect.exportLocalProjectData(project.uuid).then(data => {
+                            console.log(data, project.uuid);
+                            this.storage.run('projectImport', [result.data?.uuid, data], (result: StorageRes) => {
+                              if (result.status === StorageResStatus.success) {
+                                if (index === localProjects.length - 1) {
+                                  this.router.navigate(['**']).then(() => {
+                                    this.router.navigate(['/home/workspace/overview']);
+                                  });
+                                  resolve(true);
+                                }
+                                modal.destroy();
+                              } else {
+                                if (index === localProjects.length - 1) {
+                                  resolve(false);
+                                }
+                              }
+                            });
+                          });
+                        } else {
+                          if (index === localProjects.length - 1) {
+                            resolve(false);
+                          }
+                        }
                       }
-                    });
+                    );
+                  };
+                  localProjects.forEach((project, index) => {
+                    importProject(project, index);
                   });
                 });
               }

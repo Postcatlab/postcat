@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
       <nz-form-item>
         <nz-form-label i18n nzFor="name">Project Name</nz-form-label>
         <nz-form-control>
-          <input eo-ng-input required name="name" id="name" type="text" [(ngModel)]="model.name" />
+          <input eo-ng-input name="name" id="name" type="text" [(ngModel)]="model.name" />
         </nz-form-control>
       </nz-form-item>
     </form>

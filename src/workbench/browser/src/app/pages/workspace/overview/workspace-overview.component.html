@@ -20,10 +20,27 @@
         <eo-project-list #eoProjectList></eo-project-list>
       </eo-ng-tab>
       <eo-ng-tab i18n-nzTitle nzTitle="Members">
-        <eo-workspace-member *ngIf="nzSelectedIndex === 1"></eo-workspace-member>
+        <div class="half-part-container">
+          <eo-ng-feedback-alert
+            *ngIf="store.isLocal"
+            class="block mb-[20px]"
+            nzType="info"
+            [nzMessage]="templateRefMsg"
+            nzShowIcon
+          ></eo-ng-feedback-alert>
+          <ng-template #templateRefMsg>
+            <p i18n>Currently using local workspace, unable to invite members. </p>
+            <p class="flex items-center" i18n
+              >You can<button eo-ng-button nzType="default" class="mx-[5px]" nzSize="small" (click)="createWorkspace()"
+                >create a cloud workspace</button
+              >and invite members to collaborate.</p
+            ></ng-template
+          >
+          <eo-workspace-member *ngIf="nzSelectedIndex === 1"></eo-workspace-member>
+        </div>
       </eo-ng-tab>
       <eo-ng-tab i18n-nzTitle *ngIf="!store.isLocal && store.getWorkspaceRole === 'Owner'" nzTitle="Setting">
-        <eo-workspace-setting></eo-workspace-setting>
+        <eo-workspace-setting class="half-part-container"></eo-workspace-setting>
       </eo-ng-tab>
     </eo-ng-tabset>
     <ng-template #extraTemplate>

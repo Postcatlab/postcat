@@ -5,7 +5,7 @@
       class="sidebar-item"
       eoNgFeedbackTooltip
       nzTooltipPlacement="right"
-      [nzTooltipTitle]="item.title"
+      [nzTooltipTitle]="sidebar.collapsed ? item.title : ''"
       [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentID, tiny: sidebar.collapsed }"
     >
       <i class="icon">
