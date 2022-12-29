@@ -35,10 +35,12 @@
       <HorizontalLayout height="30">
         <Container />
         <Class name="btn_global_green_80x30" value="font=&quot;7&quot; normaltextcolor=&quot;white&quot; normalimage=&quot;file='../public/button/btn_global_green_80x30_normal.png'&quot; hotimage=&quot;file='../public/button/btn_global_green_80x30_hovered.png'&quot; pushedimage=&quot;file='../public/button/btn_global_green_80x30_pushed.png'&quot; disabledimage=&quot;file='../public/button/btn_global_green_80x30_normal.png' fade='80'&quot;"/>
-        <Button name="btnOK" font="1" text="确 定" textcolor="#FFFFFFFF" normalimage="file='public/button/btn_global_green_80x30_normal.png'" pushedimage="file='public/button/btn_global_green_80x30_normal.png'" hotimage="file='public/button/btn_global_green_80x30_normal.png'" width="80" height="30" />
+        <Button name="btnOK" borderround="4,4" width="80" height="33" bkcolor="#FFFF7433" font="5" textcolor="#FFFFFFFF" text="OK" />
+
         <Control width="10"/>
         <HorizontalLayout name="hlCancel" visible="false" width="68">
-          <Button name="btnCancel" font="1" text="取 消" textcolor="#FFFFFFFF" normalimage="file='public/button/btn_global_green_80x30_normal.png'" pushedimage="file='public/button/btn_global_green_80x30_normal.png'" hotimage="file='public/button/btn_global_green_80x30_normal.png'" width="80" height="30" />
+          <Button name="btnCancel" borderround="4,4" width="80" height="33" bkcolor="#FFFF7433" font="5" textcolor="#FFFFFFFF" text="Cancel" />
+
         </HorizontalLayout>
         <Container width="20" />
       </HorizontalLayout>

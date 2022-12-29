@@ -4,7 +4,7 @@
     <Include source="logo.xml" />
 
     <VerticalLayout>
-      <Button name="btnUnInstall" borderround="4,4" padding="125,55,0,50" width="100" height="33" bkcolor="#FFFF7433" font="6" textcolor="#FFFFFFFF" text="Uninstalling" />
+      <Button name="btnUnInstall" borderround="4,4" padding="125,55,0,50" width="100" height="33" bkcolor="#FFFF7433" font="5" textcolor="#FFFFFFFF" text="Uninstalling" />
     </VerticalLayout>
 
     <Include source="closeToolbar.xml" />
