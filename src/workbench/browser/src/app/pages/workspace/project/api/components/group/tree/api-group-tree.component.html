@@ -1,4 +1,4 @@
-<header class="flex pt-2 px-[10px]">
+<header class="flex py-[10px] px-[10px]">
   <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
     <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="searchValue" />
   </eo-ng-input-group>
@@ -32,7 +32,7 @@
 </header>
 
 <!-- Custom Group -->
-<div class="group_container group-tree pt-[10px]">
+<div class="group-tree">
   <eo-ng-tree-default
     *ngIf="treeNodes.length"
     [nzData]="treeNodes"

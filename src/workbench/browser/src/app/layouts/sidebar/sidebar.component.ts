@@ -98,18 +98,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.routerSubscribe?.unsubscribe();
   }
   private getModules() {
-    const memberItem = !this.store.isLocal
-      ? [
-          {
-            title: $localize`Member`,
-            id: '@eo-core-member',
-            isOffical: true,
-            icon: 'peoples',
-            activeRoute: 'home/workspace/project/member',
-            route: 'home/workspace/project/member'
-          }
-        ]
-      : [];
     const settingItem = ['Owner'].includes(this.store.getProjectRole)
       ? [
           {
@@ -149,7 +137,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/workspace/project/api',
         route: 'home/workspace/project/api/http/test'
       },
-      ...memberItem,
+      {
+        title: $localize`Member`,
+        id: '@eo-core-member',
+        isOffical: true,
+        icon: 'peoples',
+        activeRoute: 'home/workspace/project/member',
+        route: 'home/workspace/project/member'
+      },
       ...settingItem
     ];
     const isShare = this.store.isShare;

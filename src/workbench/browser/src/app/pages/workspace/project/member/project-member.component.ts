@@ -54,14 +54,32 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
         </button>
       </ng-container>
     </nz-modal>
+
     <section class="py-5 px-10 w-6/12 m-auto">
       <h2 class="text-lg flex justify-between items-center">
         <span class="font-bold" i18n>Project Members</span
-        ><button eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()">
+        ><button *ngIf="!store.isLocal" eo-ng-button [nzLoading]="isAddPeopleBtnLoading" nzType="primary" (click)="btnf5umnoCallback()">
           <eo-iconpark-icon name="add" class="mr-[5px]"></eo-iconpark-icon><span i18n>Add</span>
         </button>
       </h2>
-      <section class="py-5"> <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> , </section>
+      <section class="py-5">
+        <eo-ng-feedback-alert
+          *ngIf="store.isLocal"
+          class="block mb-[20px]"
+          nzType="info"
+          [nzMessage]="templateRefMsg"
+          nzShowIcon
+        ></eo-ng-feedback-alert>
+        <ng-template #templateRefMsg>
+          <p i18n>Currently using local workspace, unable to invite members. </p>
+          <p class="flex items-center" i18n
+            >You can<button eo-ng-button nzType="default" class="mx-[5px]" nzSize="small" (click)="createWorkspace()"
+              >create a cloud workspace</button
+            >and invite members to collaborate.</p
+          ></ng-template
+        >
+        <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> ,
+      </section>
     </section>`
 })
 export class ProjectMemberComponent implements OnInit {
@@ -103,6 +121,11 @@ export class ProjectMemberComponent implements OnInit {
       },
       { delay: 300 }
     );
+  }
+  createWorkspace() {
+    this.dataSource.checkRemoteCanOperate(() => {
+      this.message.send({ type: 'addWorkspace', data: {} });
+    });
   }
   handleChange(event) {
     this.searchValue = event;
