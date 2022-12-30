@@ -7,5 +7,4 @@ export type APP_CONFIG_INSTANT = {
   REMOTE_SOCKET_URL: 'wss://postcat.com';
   SOCKET_PORT: number;
   NODE_SERVER_PORT: number;
-  MOCK_URL: string;
 };

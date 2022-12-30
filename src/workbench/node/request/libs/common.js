@@ -1,6 +1,6 @@
 /**
  * @name 通用方法
- * @author Eoapi
+ * @author Postcat
  */
 'use strict';
 let _LibsDataConstructor = new (require('./data_constructor').core)();
@@ -12,7 +12,7 @@ const LOCAL_REGEXP_CONST = 'eoundefined$';
  * @desc 处理用户脚本允许错误时返回的内容
  * @param {object} input_err 错误对象
  */
-privateFun.execCodeErrWarning = (input_err) => {
+privateFun.execCodeErrWarning = input_err => {
   let tmp_error_row, tmp_error_col, tmp_fn_name;
   if (/<anonymous>:(.*):(.*)\)/.test(input_err.stack)) {
     tmp_error_row = RegExp.$1;
@@ -26,10 +26,7 @@ privateFun.execCodeErrWarning = (input_err) => {
       tmp_error_col = RegExp.$3;
       tmp_error_row--;
     } else if (/eo\.globalFunction\.(.+) \(vm\.js:(.*):(.*)\)/.test(input_err.stack)) {
-      let tmp_stack_text = input_err.stack.substr(
-        input_err.stack.indexOf('eo.globalFunction.'),
-        input_err.stack.length
-      );
+      let tmp_stack_text = input_err.stack.substr(input_err.stack.indexOf('eo.globalFunction.'), input_err.stack.length);
       tmp_fn_name = tmp_stack_text.substr(0, tmp_stack_text.indexOf(' '));
       tmp_error_row = RegExp.$2;
       tmp_error_col = RegExp.$3;
@@ -69,7 +66,7 @@ privateFun.execCodeErrWarning = (input_err) => {
   return {
     row: tmp_error_row,
     col: tmp_error_col,
-    fn: tmp_fn_name,
+    fn: tmp_fn_name
   };
 };
 /**
@@ -103,7 +100,7 @@ privateFun.infiniteLoopDetector = function () {
         'Can only wrap code represented by string, not any other thing at the time! If you want to wrap a function, convert it to string first.'
       );
     }
-    if (codeStr.indexOf('eo.execBsh') > -1) return codeStr;
+    if (codeStr.indexOf('pc.execBsh') > -1) return codeStr;
     // this is not a strong regex, but enough to use at the time
     return codeStr.replace(/for *\(.*\{|while *\(.*\{|do *\{/g, function (loopHead) {
       let id = parseInt(Math.random() * Number.MAX_SAFE_INTEGER);
@@ -141,7 +138,7 @@ privateFun.typeof = function (object) {
     ? 'Date'
     : 'Object';
 };
-privateFun.deepCopy = (inputObject) => {
+privateFun.deepCopy = inputObject => {
   try {
     return JSON.parse(JSON.stringify(inputObject));
   } catch (JSON_STRINGIFY_ERROR) {
@@ -153,11 +150,11 @@ privateFun.deepCopy = (inputObject) => {
  * @param [object] inputData 原始待组合对象
  * @return [object]
  */
-privateFun.parseRequestDataToObj = (inputData) => {
+privateFun.parseRequestDataToObj = inputData => {
   let tmpOutputObj = {
       restParams: inputData.restParams,
       queryParams: inputData.queryParams,
-      requestBody: null,
+      requestBody: null
     },
     tmpRequestBody = inputData.requestBody.body;
   try {
@@ -171,7 +168,7 @@ privateFun.parseRequestDataToObj = (inputData) => {
           tmpRequestBody,
           {
             explicitArray: false,
-            ignoreAttrs: true,
+            ignoreAttrs: true
           },
           function (error, result) {
             if (!error) {
@@ -184,14 +181,14 @@ privateFun.parseRequestDataToObj = (inputData) => {
       case '1': {
         tmpOutputObj.raw = tmpRequestBody;
         tmpRequestBody = {
-          raw: tmpRequestBody,
+          raw: tmpRequestBody
         };
         break;
       }
       case '4': {
         tmpOutputObj.binary = tmpRequestBody;
         tmpRequestBody = {
-          binary: tmpRequestBody,
+          binary: tmpRequestBody
         };
         break;
       }
@@ -204,14 +201,14 @@ privateFun.parseRequestDataToObj = (inputData) => {
 };
 privateFun.bodyQueryToJson = function (inputArray, inputOptions) {
   inputOptions = inputOptions || {
-    apiRequestParamJsonType: 0,
+    apiRequestParamJsonType: 0
   };
   let tmpXmlAttrObj = {};
   let tmpJsonObj = _LibsDataConstructor.eo_define_arr_to_json(inputArray, {}, inputOptions, tmpXmlAttrObj);
   if (inputOptions.isXml) {
     return {
       value: JSON.stringify(tmpJsonObj),
-      attr: tmpXmlAttrObj,
+      attr: tmpXmlAttrObj
     };
   }
   if ((inputOptions.apiRequestParamJsonType || 0).toString() == '1') {
@@ -235,8 +232,8 @@ privateFun.parseEnv = function (env) {
     startup: env.globalBeforeProcess || '',
     teardown: env.globalAfterProcess || '',
     envAuth: env.envAuth || {
-      status: '0',
-    },
+      status: '0'
+    }
   };
   //处理全局变量
   try {
@@ -255,20 +252,20 @@ privateFun.parseEnv = function (env) {
       origin: 'additionalParamList',
       target: 'extraFormDataParam',
       key: 'paramKey',
-      value: 'paramValue',
+      value: 'paramValue'
     },
     {
       origin: 'urlParamList',
       target: 'queryParam',
       key: 'paramKey',
-      value: 'paramValue',
+      value: 'paramValue'
     },
     {
       origin: 'headerList',
       target: 'headerParam',
       key: 'headerName',
-      value: 'headerValue',
-    },
+      value: 'headerValue'
+    }
   ];
   for (let key of tmpProtocolRef) {
     let tmpEnvItem = (tmpIsLessThan780 || key === 'http' ? env : env[key]) || {};
@@ -278,14 +275,14 @@ privateFun.parseEnv = function (env) {
       extraFormDataParam: {},
       queryParam: {},
       requestScript: tmpEnvItem.beforeInject || '',
-      responseScript: tmpEnvItem.afterInject || '',
+      responseScript: tmpEnvItem.afterInject || ''
     };
     if (tmpEnvItem.hasOwnProperty('connectInject')) {
       tmpItem.connectInject = tmpEnvItem.connectInject || '';
     }
-    tmpBuildArr.map((item) => {
+    tmpBuildArr.map(item => {
       if (tmpEnvItem[item.origin]) {
-        tmpEnvItem[item.origin].map((val) => {
+        tmpEnvItem[item.origin].map(val => {
           if (val[item.key]) tmpItem[item.target][val[item.key]] = val[item.value] || '';
         });
       }
@@ -303,8 +300,7 @@ privateFun.parseEnv = function (env) {
 privateFun.mergeObj = (inputTargetItem, inputSourceItem) => {
   let tmpOutputObj = privateFun.deepCopy(inputTargetItem);
   for (let key in inputSourceItem) {
-    if (tmpOutputObj[key] || tmpOutputObj[key] === 0 || tmpOutputObj[key] === null || tmpOutputObj[key] === false)
-      continue;
+    if (tmpOutputObj[key] || tmpOutputObj[key] === 0 || tmpOutputObj[key] === null || tmpOutputObj[key] === false) continue;
     tmpOutputObj[key] = inputSourceItem[key];
   }
   return tmpOutputObj;

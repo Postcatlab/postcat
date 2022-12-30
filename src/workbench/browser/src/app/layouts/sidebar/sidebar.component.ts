@@ -137,14 +137,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         activeRoute: 'home/workspace/project/api',
         route: 'home/workspace/project/api/http/test'
       },
-      {
-        title: $localize`Member`,
-        id: '@eo-core-member',
-        isOffical: true,
-        icon: 'peoples',
-        activeRoute: 'home/workspace/project/member',
-        route: 'home/workspace/project/member'
-      },
+      // {
+      //   title: $localize`Member`,
+      //   id: '@eo-core-member',
+      //   isOffical: true,
+      //   icon: 'peoples',
+      //   activeRoute: 'home/workspace/project/member',
+      //   route: 'home/workspace/project/member'
+      // },
       ...settingItem
     ];
     const isShare = this.store.isShare;

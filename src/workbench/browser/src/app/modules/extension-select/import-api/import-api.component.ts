@@ -129,7 +129,6 @@ export class ImportApiComponent implements OnInit {
           pcConsole.error('Import Error', result.error);
           return;
         }
-        callback(true);
         this.router.navigate(['home/workspace/project/api']);
       });
     } catch (e) {

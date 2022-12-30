@@ -1,6 +1,6 @@
 import http from 'axios';
 import { isNotEmpty } from 'eo/shared/common/common';
-import { MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
+import { HOME_DIR, MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
 import {
   ModuleHandlerResult,
   ModuleInfo,
@@ -12,7 +12,6 @@ import { createServer } from 'http-server/lib/http-server';
 import portfinder from 'portfinder';
 
 import { ELETRON_APP_CONFIG } from '../../../../environment';
-import { DATA_DIR } from '../../../../shared/electron-main/constant';
 import { ModuleHandler } from './handler';
 
 import { promises, readFileSync } from 'fs';
@@ -22,7 +21,7 @@ import path from 'node:path';
 const extServerMap = new Map<string, SidebarView>();
 
 // * npm pkg name
-const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
+const defaultExtension = [{ name: 'postcat-export-openapi' }, { name: 'postcat-import-openapi' }];
 const isExists = async filePath =>
   await promises
     .access(filePath)
@@ -56,6 +55,7 @@ export class ModuleManager {
     this.init();
     this.updateAll();
   }
+
   async getRemoteExtension() {
     const { data } = await http.get(`${ELETRON_APP_CONFIG.EXTENSION_URL}/list`);
     return data.data.map(({ name, version }) => ({ name, version }));
@@ -105,10 +105,10 @@ export class ModuleManager {
     const list = Array.from(this.getModules().values()).map(val => ({ name: val.name, version: val.version }));
     // * get version in remote
     const remoteExtension = await this.getRemoteExtension();
-    const isOK = await isExists(`${DATA_DIR}/debugger.json`);
+    const isOK = await isExists(`${HOME_DIR}/debugger.json`);
     let debugExtension = [];
     if (isOK) {
-      const debuggerExtension = readFileSync(`${DATA_DIR}/debugger.json`, 'utf-8');
+      const debuggerExtension = readFileSync(`${HOME_DIR}/debugger.json`, 'utf-8');
       const { extensions } = JSON.parse(debuggerExtension);
       debugExtension = extensions;
     }

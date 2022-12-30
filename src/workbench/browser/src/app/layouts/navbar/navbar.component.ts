@@ -25,12 +25,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   helpMenus = [
     {
       title: $localize`Document`,
-      href: 'https://docs.eoapi.io',
+      href: 'https://docs.postcat.com',
       click: $event => {}
     },
     {
       title: $localize`Report Issue`,
-      href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
+      href: `https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
       click: $event => {}
     }
   ];

@@ -20,7 +20,7 @@
     "github",
     {
       "provider": "generic",
-      "url": "https://packages.eoapi.io"
+      "url": "https://packages.postcat.com"
     }
   ],
   "generateUpdatesFilesForAllChannels": true,

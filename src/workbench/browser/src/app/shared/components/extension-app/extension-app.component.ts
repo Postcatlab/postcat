@@ -104,8 +104,12 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
         origin
       );
     } else if (data === 'EOAPI_EXT_APP') {
+      //TODO compatible with old version
       this.iframeWin = this.extensionApp?.nativeElement?.contentWindow;
       this.iframeWin.postMessage('EOAPI_MESSAGE', '*');
+    } else if (data === 'POSTCAT_EXT_APP') {
+      this.iframeWin = this.extensionApp?.nativeElement?.contentWindow;
+      this.iframeWin.postMessage('POSTCAT_MESSAGE', '*');
     }
   };
 

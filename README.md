@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/eolinker/eoapi">
+  <a href="https://github.com/eolinker/postcat">
     <img width="200" src="./wiki/images/logo.png">
   </a>
 </p>
@@ -10,27 +10,27 @@
 </div>
 <hr>
 <p align="center">
-  <a href="https://github.com/eolinker/eoapi"><img src="https://img.shields.io/github/license/eolinker/eoapi?sanitize=true" alt="License"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/v/release/eolinker/eoapi?sanitize=true" alt="Version"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/downloads/eolinker/eoapi/total?sanitize=true" alt="Downloads"></a>
+  <a href="https://github.com/eolinker/postcat"><img src="https://img.shields.io/github/license/eolinker/postcat?sanitize=true" alt="License"></a>
+  <a href="https://github.com/eolinker/postcat/releases"><img src="https://img.shields.io/github/v/release/eolinker/postcat?sanitize=true" alt="Version"></a>
+  <a href="https://github.com/eolinker/postcat/releases"><img src="https://img.shields.io/github/downloads/eolinker/postcat/total?sanitize=true" alt="Downloads"></a>
   <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
 </p>
 
 [English](wiki/README.en.md)｜简体中文
 
-![](https://docs.eoapi.io/images/eoapi-demo.png)
+![](https://docs.postcat.com/images/postcat-demo.png)
 # 在线试试！
 
-[https://eoapi.io](https://eoapi.io/)
+[https://postcat.com](https://postcat.com/)
 
 功能体验过程中的数据将储存在 Web 的本地存储（indexedb）。试用后建议下载桌面端体验更佳～
 # 快速开始
 
-- 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
+- 访问 [Releases](https://github.com/eolinker/postcat/releases) 下载 Windows、macOS 安装包。
 
-- 查看 [用户使用文档](https://docs.eoapi.io) 了解功能
+- 查看 [用户使用文档](https://docs.postcat.io) 了解功能
 
-- 查看 [开发者文档](https://developer.eoapi.io) 开发插件
+- 查看 [开发者文档](https://developer.postcat.io) 开发插件
 
 # 功能
 
@@ -53,7 +53,7 @@
 
 🌱 插件集市
 
-💻  [多人协作](https://docs.eoapi.io/docs/collaborate.html)
+💻  [多人协作](https://docs.postcat.com/docs/collaborate.html)
 - 通过部署云端服务实现多人协作
 - API 分享
 - 可本地/内网部署
@@ -118,8 +118,8 @@ yarn add @angular/cli --global
 
 # 支持我们
 
-如果你觉得项目还不错，记得 Star 支持一下噢！你们的支持对 Eoapi 真的很重要！
+如果你觉得项目还不错，记得 Star 支持一下噢！你们的支持对 Postcat 真的很重要！
 
 # 联系我们
 
-如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/eoapi/issues) 联系我们，十分感谢！
+如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/postcat/issues) 联系我们，十分感谢！
