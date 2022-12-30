@@ -27,12 +27,12 @@ export class SystemSettingComponent {
       id: 'theme',
       comp: SelectThemeComponent
     },
-    {
-      title: $localize`:@@Cloud:Cloud Storage`,
-      id: 'data-storage',
-      comp: DataStorageComponent,
-      ifShow: () => !this.webService.isWeb
-    },
+    // {
+    //   title: $localize`:@@Cloud:Cloud Storage`,
+    //   id: 'data-storage',
+    //   comp: DataStorageComponent,
+    //   ifShow: () => !this.webService.isWeb
+    // },
     {
       title: $localize`:@@Language:Language`,
       id: 'language',
