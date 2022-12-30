@@ -5,7 +5,7 @@ WORKDIR /test-server
 # api 测试服务端口
 ENV NODE_SERVER_PORT 4201
 # websocket 测试服务端口
-ENV EOAPI_WEBSOCKET_POST 4202
+ENV POSTCAT_WEBSOCKET_POST 4202
 
 COPY /src/workbench/node /test-server
 
@@ -13,7 +13,7 @@ RUN npm config set registry https://registry.npmmirror.com
 RUN yarn config set registry https://registry.npmmirror.com
 RUN yarn install
 
-EXPOSE $NODE_SERVER_PORT $EOAPI_WEBSOCKET_POST
+EXPOSE $NODE_SERVER_PORT $POSTCAT_WEBSOCKET_POST
 
 CMD ["yarn", "start:all"]
 
@@ -26,7 +26,7 @@ ENV EOAPI_SERVER_PORT 3000
 # api 测试服务端口
 ENV NODE_SERVER_PORT 4201
 # websocket 测试服务端口
-ENV EOAPI_WEBSOCKET_POST 4202
+ENV POSTCAT_WEBSOCKET_POST 4202
 
 COPY ./src/workbench/browser/dist/ /usr/share/nginx/html
 COPY ./default.conf.template /etc/nginx/templates/

@@ -6,7 +6,7 @@ process.on('uncaughtException', err => {
   console.error('uncaughtException', err);
 });
 
-const _post = process.env.EOAPI_WEBSOCKET_POST || 13928;
+const _post = process.env.POSTCAT_WEBSOCKET_POST || 13928;
 
 const socket = (port = _post) => {
   const io = new IO.Server(port, {

@@ -1,6 +1,6 @@
 /**
  * @name 通用方法
- * @author Eoapi
+ * @author Postcat
  */
 'use strict';
 let _LibsDataConstructor = new (require('./data_constructor').core)();

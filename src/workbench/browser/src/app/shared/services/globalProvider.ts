@@ -19,6 +19,7 @@ export class GlobalProvider {
     private setting: SettingService,
     private message: MessageService
   ) {
+    //TODO compatible with old version
     window.__POWERED_BY_EOAPI__ = true;
     window.__POWERED_BY_POSTCAT__ = true;
   }
