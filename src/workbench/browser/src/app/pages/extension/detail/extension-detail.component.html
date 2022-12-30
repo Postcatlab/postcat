@@ -1,75 +1,71 @@
-<div class="h-full py-3 extension-detail" *ngIf="extensionDetail">
-  <div class="sticky top-0 z-50 px-2 bg-white">
-    <div class="pb-3 flex justify-between h-[36px]">
-      <div class="flex items-center">
-        <a nz-button nzType="link" (click)="backToList()">
-          <eo-iconpark-icon name="left" class="anticon" size="16px"></eo-iconpark-icon><span i18n>Back</span>
-        </a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <div class="mr-2">
-          <nz-avatar nzSize="small" class="!w-[20px] !h-[20px]" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
+<div class="flex flex-col h-full extension-detail" *ngIf="extensionDetail">
+  <div class="top-0 z-50">
+    <div class="pb-[16px]">
+      <div class="leading-[40px] h-[40px] ml-[5px]">
+        <button eo-ng-button nzType="text" (click)="backToList()" class="flex !pl-[12px]">
+          <eo-iconpark-icon name="return" size="16px"></eo-iconpark-icon><span class="ml-[6px]" i18n>Back</span>
+        </button>
+      </div>
+      <nz-divider class="m-0"></nz-divider>
+      <div class="flex items-center justify-between mt-[20px] px-[20px]">
+        <div class="flex items-center">
+          <nz-avatar nzSize="small" [nzSize]="30" [nzShape]="'square'" nzSrc="{{ extensionDetail.logo }}"></nz-avatar>
+          <span class="font-bold text-[14px] ml-[12px]">{{ extensionDetail.title }}</span>
         </div>
-        <span class="font-bold text-[14px]">{{ extensionDetail.title || extensionDetail.moduleName }}</span>
-        <ng-container *ngIf="extensionDetail?.installed">
-          <nz-switch
-            [(ngModel)]="isEnable"
-            nzSize="small"
-            class="ml-2.5"
-            (ngModelChange)="handleEnableExtension($event)"
+        <div class="flex items-center">
+          <div *ngIf="extensionDetail?.installed" class="mr-[20px]">
+            <eo-ng-switch
+              class="mr-[3px]"
+              [(ngModel)]="extensionDetail.enable"
+              nzSize="small"
+              (ngModelChange)="extensionService.toggleEnableExtension(extensionDetail.name, $event)"
+            >
+            </eo-ng-switch>
+            <span *ngIf="!extensionDetail.enable" i18n>Enable</span>
+            <span *ngIf="extensionDetail.enable" i18n>Disable</span>
+          </div>
+          <button
+            eo-ng-button
+            nzType="primary"
+            class="h-[30px] w-20"
+            [nzLoading]="isOperating"
+            [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
+            (click)="handleInstall()"
           >
-          </nz-switch>
-        </ng-container>
+            <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
+            <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <section class="h-full px-4 max-w-[80vw] mx-auto flex flex-col">
-    <p class="w-full text-[#888] text-[12px]">{{ extensionDetail.description }}</p>
-    <div>
-      <button
-        nz-button
-        [nzSize]="extensionDetail?.installed ? 'small' : 'default'"
-        [nzType]="extensionDetail?.installed ? 'default' : 'primary'"
-        class="mt-[8px]"
-        [nzLoading]="isOperating"
-        (click)="handleInstall()"
-      >
-        <span *ngIf="extensionDetail?.installed" i18n>Uninstall</span>
-        <span *ngIf="!extensionDetail?.installed" i18n>Install</span>
-      </button>
-    </div>
-
-    <nz-tabset
+  <section class="flex flex-col h-full overflow-hidden">
+    <eo-ng-tabset
       [(nzSelectedIndex)]="nzSelectedIndex"
+      [nzTabBarExtraContent]="extraTemplate"
       [nzAnimated]="false"
       [class]="{ settings: nzSelectedIndex === 0 && extensionDetail?.features?.configuration }"
       (nzSelectChange)="handleTabChange($event)"
     >
-      <!-- CustomTab -->
-      <!-- <nz-tab *ngFor="let item of customTabs " i18n-nzTitle nzTitle="CustomTab">
-        <extension-app [url]="item.url" [name]="extName + '--' + item.name"></extension-app>
-      </nz-tab> -->
       <!-- Setting -->
-      <nz-tab
-        *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed"
-        i18n-nzTitle
-        nzTitle="Settings"
-      >
+      <eo-ng-tab *ngIf="extensionDetail?.features?.configuration && extensionDetail?.installed" i18n-nzTitle nzTitle="Settings">
         <eo-extension-setting
+          class="block tab-content-container"
           [configuration]="extensionDetail?.features?.configuration"
           [extName]="extensionDetail.name"
         ></eo-extension-setting>
-      </nz-tab>
+      </eo-ng-tab>
       <!-- Details -->
-      <nz-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
-        <div class="h-full overflow-auto preview_tab">
+      <eo-ng-tab i18n-nzTitle="@@ExtensionDetail" nzTitle="Details">
+        <div class="h-full overflow-auto tab-content-container pt-[10px]">
           <nz-skeleton [nzLoading]="introLoading" [nzActive]="true">
-            <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }">
-            </eo-shadow-dom>
+            <eo-shadow-dom class="md-preview" [text]="extensionDetail.introduction" [options]="{ html: true }"> </eo-shadow-dom>
           </nz-skeleton>
         </div>
-      </nz-tab>
-      <nz-tab i18n-nzTitle nzTitle="Support">
-        <nz-descriptions [nzColumn]="1" nzTitle="">
+      </eo-ng-tab>
+      <!-- Support -->
+      <eo-ng-tab i18n-nzTitle nzTitle="Support">
+        <nz-descriptions [nzColumn]="1" nzTitle="" class="tab-content-container">
           <nz-descriptions-item i18n-nzTitle nzTitle="Author">{{ extensionDetail.author }}</nz-descriptions-item>
           <nz-descriptions-item i18n-nzTitle nzTitle="Version">{{ extensionDetail.version }} </nz-descriptions-item>
           <nz-descriptions-item *ngIf="extensionDetail.repository?.url" i18n-nzTitle nzTitle="Repository">
@@ -84,17 +80,23 @@
             <a [href]="extensionDetail.bugs.url" target="_blank">{{ extensionDetail.bugs.url }}</a>
           </nz-descriptions-item>
         </nz-descriptions>
-      </nz-tab>
-      <nz-tab *ngIf="changeLog" i18n-nzTitle nzTitle="ChangeLog">
-        <nz-skeleton class="preview_tab" [nzLoading]="changelogLoading" [nzActive]="true">
+      </eo-ng-tab>
+      <!-- ChangeLog -->
+      <eo-ng-tab *ngIf="changeLog" i18n-nzTitle nzTitle="ChangeLog">
+        <nz-skeleton class="tab-content-container" [nzLoading]="changelogLoading" [nzActive]="true">
           <eo-shadow-dom *ngIf="!changeLogNotFound" class="md-preview" [text]="changeLog"> </eo-shadow-dom>
           <nz-result nzStatus="info" i18n-nzTitle nzTitle="Changelog failed to load" *ngIf="changeLogNotFound">
             <div nz-result-extra>
-              <button nz-button nzType="primary" i18n (click)="fetchChangelog()">Reacquire</button>
+              <button eo-ng-button nzType="primary" i18n (click)="fetchChangelog()">Reacquire</button>
             </div>
           </nz-result>
         </nz-skeleton>
-      </nz-tab>
-    </nz-tabset>
+      </eo-ng-tab>
+    </eo-ng-tabset>
+    <ng-template #extraTemplate>
+      <button *ngIf="false" eo-ng-button nzType="primary" class="mr-[20px] h-[30px]" (click)="jumpToClient()">
+        <span i18n>Need Client</span>
+      </button>
+    </ng-template>
   </section>
 </div>

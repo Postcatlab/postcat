@@ -1,0 +1,94 @@
+@import '../../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
+
+@import './../antd.less';
+// Override less variables to here
+//* View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
+//Theme mainColor
+@theme-color: #00785a;
+@border-radius-base: 3px;
+@primary-color-hover: @theme-color;
+@success-color: @theme-color;
+@link-color: @text-color;
+@processing-color: @theme-color;
+@input-number-hover-border-color: @theme-color;
+@primary-color-outline: @theme-color;
+@tree-title-height: 30px;
+
+//Theme Apperance
+@component-background: @body-background;
+@layout-sider-background: @component-background;
+@layout-header-background: @component-background;
+// @table-header-color: @component-background;
+// @table-header-bg: @component-background;
+
+// AntD Base Less
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  padding: 8px 10px 5px 10px;
+}
+.ant-btn-link,
+.ant-btn-link:hover {
+  color: var(--BLUE_DEEPER);
+}
+.ant-divider-horizontal {
+  margin: 15px 0;
+}
+.ant-drawer {
+  .ant-drawer-content-wrapper {
+    height: calc(100vh - 25px);
+    top: 10px;
+  }
+  .ant-drawer-content {
+    border-radius: 3px;
+  }
+  .ant-drawer-title {
+    font-weight: bold;
+  }
+}
+
+.ant-tabs-top {
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
+  .ant-tabs-nav::before {
+    border-color: var(--BORDER);
+  }
+}
+.ant-divider-vertical {
+  border-color: var(--BORDER);
+}
+.ant-radio-group {
+  .ant-radio-wrapper:last-child {
+    margin-right: 0;
+  }
+}
+.ant-modal-footer {
+  padding: 16px 24px;
+}
+p {
+  margin-bottom: 0;
+}
+.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: var(--NAVBAR_BTN_BG);
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  text-shadow: none;
+}
+.ant-tree-switcher {
+  width: 20px;
+}
+.ant-empty-description {
+  color: var(--TIPS_TEXT_COLOR);
+}
+
+.ant-tag-default {
+  color: var(--MAIN_TEXT);
+  border: 0 none;
+  background-color: #66666626;
+  svg {
+    font-size: 12px;
+  }
+}
+.ant-input-number:focus,
+.ant-input-number-focused {
+  box-shadow: none;
+}

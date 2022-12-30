@@ -9,7 +9,7 @@ dist/
 src/**/*.js
 !scripts/*.js
 !src/karma.conf.js
-!src/ng1/**/*.js
+!src/assets/font/*.js
 !src/assets/libs/*.js
 *.js.map
 

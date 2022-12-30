@@ -1,0 +1,13 @@
+<nz-result *ngIf="web.isWeb" nzStatus="warning" [nzTitle]="titleTips">
+  <div nz-result-extra>
+    <button eo-ng-button nzType="primary" (click)="jumpToClient()">To Use</button>
+  </div>
+</nz-result>
+<div *ngIf="!web.isWeb">
+  <ng-container *ngIf="canEdit">
+    <button eo-ng-button nzType="primary" (click)="addMock()" i18n>New Mock</button>
+  </ng-container>
+  <div class="mt-[20px]">
+    <eo-api-mock-table class="table-border-all" #mockTable [apiData]="apiData" isEdit="true"></eo-api-mock-table>
+  </div>
+</div>

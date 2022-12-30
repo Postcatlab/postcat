@@ -1,14 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { EventCenterForMicroApp } from '@micro-zoe/micro-app';
-import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import microApp from '@micro-zoe/micro-app';
-import { ActivatedRoute } from '@angular/router';
-import { GlobalProvider } from './globalProvider';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-
-(window as any).eventCenterForAppNameVite = new EventCenterForMicroApp('appname-extension-app');
-
+import { ActivatedRoute } from '@angular/router';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 @Component({
   selector: 'extension-app',
   template: `
@@ -48,8 +41,8 @@ import { SettingService } from 'eo/workbench/browser/src/app/core/services/setti
       :host ::ng-deep .ant-spin-container {
         height: 100%;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class ExtensionAppComponent implements OnInit, OnDestroy {
   @ViewChild('extensionApp') extensionApp: ElementRef;
@@ -65,15 +58,9 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
 
   microAppData = { msg: '来自基座的数据' };
 
-  constructor(
-    private sanitizer: DomSanitizer,
-    public route: ActivatedRoute,
-    private globalProvider: GlobalProvider,
-    private settingService: SettingService
-  ) {}
+  constructor(private sanitizer: DomSanitizer, public route: ActivatedRoute, private extension: ExtensionService) {}
 
   ngOnInit(): void {
-    this.globalProvider.injectGlobalData();
     this.initSidebarViewByRoute();
 
     window.addEventListener('message', this.receiveMessage, false);
@@ -84,28 +71,26 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
   }
 
   onAppload() {
-    this.isSpinning = false;
+    requestIdleCallback(() => {
+      this.isSpinning = false;
+    });
   }
 
   initSidebarViewByRoute() {
-    this.route.params.subscribe(async (data) => {
-      if (data.extName && window.eo?.getSidebarView) {
+    this.route.params.subscribe(async data => {
+      if (data.extName) {
         this.name = data.extName;
-        const sidebar = await window.eo?.getSidebarView?.(data.extName);
-        console.log('sidebar', sidebar);
+        const sidebar = await this.extension.getSidebarView(data.extName);
         this.url = sidebar.url;
         this.type = sidebar.useIframe ? 'iframe' : 'micro-app';
         if (sidebar.useIframe) {
-          const dynamickUrl = this.settingService.getConfiguration('eoapi-apispace.dynamicUrl');
-          console.log('sidebar 动态配置的地址', dynamickUrl);
-          this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dynamickUrl || this.url);
+          this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
         }
-        console.log('this', this);
       }
     });
   }
 
-  receiveMessage = async (event) => {
+  receiveMessage = async event => {
     const { data, origin } = event;
     const target = data.namePath?.split('.')?.reduce((p, c) => p?.[c], window.eo);
     if (data.msgID) {
@@ -114,13 +99,17 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
       this.iframeWin.postMessage(
         {
           msgID: data.msgID,
-          data: target ? res : `调用路径[${data.namePath}]不存在`,
+          data: target ? res : `调用路径[${data.namePath}]不存在`
         },
         origin
       );
     } else if (data === 'EOAPI_EXT_APP') {
+      //TODO compatible with old version
       this.iframeWin = this.extensionApp?.nativeElement?.contentWindow;
       this.iframeWin.postMessage('EOAPI_MESSAGE', '*');
+    } else if (data === 'POSTCAT_EXT_APP') {
+      this.iframeWin = this.extensionApp?.nativeElement?.contentWindow;
+      this.iframeWin.postMessage('POSTCAT_MESSAGE', '*');
     }
   };
 

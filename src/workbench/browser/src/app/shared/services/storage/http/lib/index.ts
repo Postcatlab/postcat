@@ -1,21 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  Project,
-  Environment,
-  Group,
-  ApiData,
-  ApiTestHistory,
-  StorageInterface,
-  ApiMockEntity,
-} from '../../index.model';
+
+import { Project, Environment, Group, ApiData, ApiTestHistory, StorageInterface, ApiMockEntity } from '../../index.model';
 
 @Injectable()
 export class HttpStorage implements StorageInterface {
-  constructor(private http: HttpClient) {
-    console.log('eoapi http storage start');
-  }
+  constructor(private http: HttpClient) {}
   systemCheck() {
     return this.http.get('/system/status') as Observable<object>;
   }
@@ -23,27 +14,29 @@ export class HttpStorage implements StorageInterface {
   projectImport(uuid: number, item: Project, groupID = 0) {
     return this.http.put(`/project/${uuid}/import`, {
       groupID,
-      ...item,
+      ...item
     }) as Observable<object>;
   }
   // Project collections
   projectCollections(uuid: number) {
     return this.http.get(`/project/${uuid}/collections`) as Observable<object>;
   }
-  projectCreate(item: Project) {
-    return this.http.post(`/project`, item) as Observable<object>;
+  projectCreate(workspaceID: number, item: Project) {
+    return this.http.post(`/${workspaceID}/project`, item) as Observable<object>;
   }
-  projectUpdate(item: Project, uuid: number | string) {
-    return this.http.put(`/project/${uuid}`, item) as Observable<object>;
+  projectUpdate(workspaceID: number, item: Project, uuid: number | string) {
+    return this.http.put(`/${workspaceID}/project/${uuid}`, item) as Observable<object>;
   }
-  projectBulkUpdate: (items: Array<Project>) => Observable<object>;
-  projectRemove(uuid: number | string) {
-    return this.http.delete(`/project/${uuid}`) as Observable<object>;
+  projectBulkUpdate: (items: Project[]) => Observable<object>;
+  projectRemove(workspaceID: number, uuid: number | string) {
+    return this.http.delete(`/${workspaceID}/project/${uuid}`) as Observable<object>;
   }
   projectBulkRemove: (uuids: Array<number | string>) => Observable<object>;
   projectLoad: (uuid: number | string) => Observable<object>;
-  projectBulkLoad: (uuids: Array<number | string>) => Observable<object>;
-  projectExport(projectID) {
+  projectBulkLoad = (workspaceID: number): Observable<object> => {
+    return this.http.get(`/${workspaceID}/project`);
+  };
+  projectExport(projectID: number) {
     return this.http.get(`/project/${projectID}/export`) as Observable<object>;
   }
   // Environment
@@ -53,8 +46,8 @@ export class HttpStorage implements StorageInterface {
   environmentUpdate(item: Environment, uuid: number | string) {
     return this.http.put(`/environment/${uuid}`, item) as Observable<object>;
   }
-  environmentBulkCreate: (items: Array<Environment>) => Observable<object>;
-  environmentBulkUpdate: (items: Array<Environment>) => Observable<object>;
+  environmentBulkCreate: (items: Environment[]) => Observable<object>;
+  environmentBulkUpdate: (items: Environment[]) => Observable<object>;
   environmentRemove(uuid: number | string) {
     return this.http.delete(`/environment/${uuid}`) as Observable<object>;
   }
@@ -73,8 +66,8 @@ export class HttpStorage implements StorageInterface {
   groupUpdate(item: Group, uuid: number | string) {
     return this.http.put(`/group/${uuid}`, item) as Observable<object>;
   }
-  groupBulkCreate: (items: Array<Group>) => Observable<object>;
-  groupBulkUpdate(items: Array<Group>) {
+  groupBulkCreate: (items: Group[]) => Observable<object>;
+  groupBulkUpdate(items: Group[]) {
     return this.http.put(`/group/batch`, items) as Observable<object>;
   }
   groupRemove(uuid: number | string) {
@@ -95,8 +88,8 @@ export class HttpStorage implements StorageInterface {
   apiDataUpdate(item: ApiData, uuid: number | string) {
     return this.http.put(`/api_data/${uuid}`, item) as Observable<object>;
   }
-  apiDataBulkCreate: (items: Array<ApiData>) => Observable<object>;
-  apiDataBulkUpdate(items: Array<ApiData>) {
+  apiDataBulkCreate: (items: ApiData[]) => Observable<object>;
+  apiDataBulkUpdate(items: ApiData[]) {
     return this.http.put(`/api_data/batch`, items) as Observable<object>;
   }
   apiDataRemove(uuid: number | string) {
@@ -119,8 +112,8 @@ export class HttpStorage implements StorageInterface {
     return this.http.post(`/api_test_history`, item) as Observable<object>;
   }
   apiTestHistoryUpdate: (item: ApiTestHistory, uuid: number | string) => Observable<object>;
-  apiTestHistoryBulkCreate: (items: Array<ApiTestHistory>) => Observable<object>;
-  apiTestHistoryBulkUpdate: (items: Array<ApiTestHistory>) => Observable<object>;
+  apiTestHistoryBulkCreate: (items: ApiTestHistory[]) => Observable<object>;
+  apiTestHistoryBulkUpdate: (items: ApiTestHistory[]) => Observable<object>;
   apiTestHistoryRemove(uuid: number | string) {
     return this.http.delete(`/api_test_history?uuids=[${uuid}]`) as Observable<object>;
   }

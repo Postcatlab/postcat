@@ -1,0 +1,23 @@
+<form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your username!">
+      <input formControlName="url" eo-ng-input placeholder="目标地址" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <input formControlName="serviceName" eo-ng-input placeholder="API调用名称" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <input formControlName="methodName" eo-ng-input placeholder="方法名" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control>
+      <button eo-ng-button nzType="primary" [disabled]="!validateForm.valid">Log in</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -1,45 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { NavigationEnd, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 import { Message, MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
+import { filter } from 'rxjs';
+
+import { SidebarService } from '../layouts/sidebar/sidebar.service';
+import { SocketService } from './extension/socket.service';
 
 @Component({
   selector: 'eo-pages',
   templateUrl: './pages.component.html',
-  styleUrls: ['./pages.component.scss'],
+  styleUrls: ['./pages.component.scss']
 })
 export class PagesComponent implements OnInit {
   isShowNotification;
   sidebarViews: any[] = [];
-  constructor(
-    public electron: ElectronService,
-    private messageService: MessageService,
-    private settingService: SettingService,
-    private sanitizer: DomSanitizer
-  ) {
+  constructor(private socket: SocketService, public electron: ElectronService, private router: Router, private sidebar: SidebarService) {
     this.isShowNotification = false;
   }
   ngOnInit(): void {
-    // this.initSidebarViews();
-  }
-  async initSidebarViews() {
-    this.sidebarViews = await window.eo?.getSidebarViews?.();
-    console.log('this.sidebarViews', this.sidebarViews);
-    this.sidebarViews = this.sidebarViews?.filter((item) => {
-      if (item.useIframe) {
-        const dynamickUrl = this.settingService.getConfiguration('eoapi-apispace.dynamicUrl');
-        item.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dynamickUrl || item.url);
-      }
-      return item.useIframe;
+    // * 通过 socketIO 告知 Node 端，建立 grpc 连接
+    this.socket.socket2Node();
+    this.initSidebarVisible(this.router.url);
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: NavigationEnd) => {
+      this.initSidebarVisible(res.url);
     });
   }
-
-  watchLocalExtensionsChange() {
-    this.messageService.get().subscribe((inArg: Message) => {
-      if (inArg.type === 'localExtensionsChange') {
-        this.initSidebarViews();
-      }
-    });
+  initSidebarVisible(url: string) {
+    if (['home/workspace/overview'].find(val => url.includes(val))) {
+      this.sidebar.visible = false;
+    } else {
+      this.sidebar.visible = true;
+    }
   }
 }

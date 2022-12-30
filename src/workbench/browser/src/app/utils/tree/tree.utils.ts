@@ -1,76 +1,67 @@
-import { GroupTreeItem } from '../../shared/models';
-import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
+import omitDeep from 'omit-deep-lodash';
 
+import { GroupTreeItem } from '../../shared/models';
+import { whatType } from '../index.utils';
 export type TreeToObjOpts = {
   key?: string;
   valueKey?: string;
   childKey?: string;
 };
-
-/**
- * Convert old component listBlock array items has level without  parent id to  tree nodes
- *
- * @param list Array<GroupTreeItem>
- */
-export const listToTreeHasLevel = (
-  list,
-  opts: {
-    childKey?: string;
-    filterKeys?: string[];
-  }={}
-) => {
-  if (whatType(list) !== 'array') {
-    return list;
-  }
-  opts.childKey=opts.childKey||'children';
-  const listDepths = [];
-  //delete useless key
-  const filterKeys = ['listDepth', 'isHide', 'isShrink',...(opts.filterKeys||[])];
-  list = list.map((item) => {
-    listDepths.push(item.listDepth);
-    return Object.keys(item).reduce(
-      (pre, itemKey) => (filterKeys.includes(itemKey) ? pre : { ...pre, [itemKey]: item[itemKey] }),
-      {}
-    );
-  });
-
-  const result = [];
-  list.forEach((item, key) => {
-    const listDepth = listDepths[key];
-    if (listDepth === 0) {
-      result.push(item);
-    } else {
-      const parent = list[listDepths.lastIndexOf(listDepth - 1, key)];
-      if (!parent) {
-        console.error(`can't find the parent`);
-      }
-      parent[opts.childKey] = parent[opts.childKey] || [];
-      parent[opts.childKey].push(item);
+export const getTreeTotalCount = (trees): number => {
+  if (whatType(trees) !== 'array') return 0;
+  let result = 0;
+  result += trees.length;
+  trees.forEach(val => {
+    if (val.children?.length) {
+      result += getTreeTotalCount(val.children);
     }
   });
   return result;
 };
-export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (val) => object } = { listDepth: 0 }) => {
-  if (!Array.isArray(tree)) {
-    return [];
+
+const filterTree = (
+  result,
+  filterFn,
+  opts = {
+    childKey: 'children'
   }
-  let result = [];
-  tree.forEach((val) => {
-    val.listDepth = opts.listDepth;
-    if (opts.mapItem) {
-      val = opts.mapItem(val);
+) =>
+  result.filter(item => {
+    const hasKeep = filterFn ? filterFn(item) : true;
+    if (!hasKeep) {
+      return false;
     }
-    result.push(val);
-    if (val.children?.length) {
-      result = result.concat(
-        treeToListHasLevel(val.children, {
-          listDepth: opts.listDepth + 1,
-        })
-      );
-      delete val.children;
+    if (item[opts.childKey]) {
+      item[opts.childKey] = filterTree(item[opts.childKey], filterFn, opts);
     }
+    return true;
   });
-  return result;
+export const filterTableData = (
+  inData: any[],
+  opts: {
+    childKey?: string;
+    primaryKey?: string;
+    pickBy?: string[];
+    omitBy?: string[];
+    filterFn?: (item: any) => boolean;
+  } = {}
+) => {
+  //TODO add pickBy support
+  //Set default Options
+  opts.childKey = opts.childKey || 'children';
+  opts.omitBy = opts.omitBy || ['eoKey'];
+  //Omit useless fieild
+  const result = inData.map(val => omitDeep(val, opts.omitBy));
+  if (!opts.filterFn) {
+    if (!opts.primaryKey) {
+      pcConsole.error('filterTableData need primaryKey');
+    } else {
+      opts.filterFn = item => item[opts.primaryKey];
+    }
+  }
+  return filterTree(result, opts.filterFn, {
+    childKey: opts.childKey
+  });
 };
 
 /**
@@ -80,12 +71,12 @@ export const treeToListHasLevel = (tree, opts: { listDepth: number; mapItem?: (v
  * @param tree Array<GroupTreeItem>
  * @param parentID number|string
  */
-export const listToTree = (list: Array<GroupTreeItem>, tree: Array<GroupTreeItem>, parentID: number | string): void => {
-  list.forEach((data) => {
+export const listToTree = (list: GroupTreeItem[], tree: GroupTreeItem[], parentID: number | string): void => {
+  list.forEach(data => {
     if (data.parentID === parentID) {
       const child = {
         ...data,
-        children: [],
+        children: []
       };
       if (!data.isLeaf) {
         listToTree(list, child.children, data.key);
@@ -97,57 +88,17 @@ export const listToTree = (list: Array<GroupTreeItem>, tree: Array<GroupTreeItem
     }
   });
 };
-export const flatData = (data) => {
+export const flatData = data => {
   // * DFS
   const arr = [];
-  data.forEach((item) => {
+  data.forEach(item => {
     const loop = ({ children = [], ...it }) => {
       arr.push(it);
-      children.forEach((x) => loop(x));
+      children.forEach(x => loop(x));
     };
     loop(item);
   });
   return arr;
-};
-
-export const addKeyInTree = ({ children, ...data }, index = 0, key = '1') => {
-  if (!children) {
-    return {
-      ...data,
-      nodeKey: `${key}-${index}`,
-    };
-  }
-  return {
-    ...data,
-    children: children.map((it, i) => addKeyInTree(it, i, `${key}-${index}`)),
-    nodeKey: `${key}-${index}`,
-  };
-};
-/**
- * Find tree node and give value to it
- *
- * @param _data seach pool tree node
- * @param value value need to be set
- * @param param2 should be find tree node
- */
-export const findDataInTree = (_data: any, value, { nodeId = 'nodeKey', id, key }): any => {
-  const findData = ({ children, ...it }) => {
-    if (it[nodeId] === id) {
-      return {
-        ...it,
-        children,
-        [key]: value,
-      };
-    }
-    if (children?.length) {
-      return {
-        children: children.map((item) => findData(item)),
-        ...it,
-      };
-    }
-    return it;
-  };
-  return findData(_data);
 };
 
 export const getExpandGroupByKey: (component, key) => string[] = (component, key) => {
@@ -197,5 +148,5 @@ export const fieldTypeMap = new Map<string, any>([
   ['object', {}],
   ['number', 0],
   ['null', null],
-  ['string', 'default_value'],
+  ['string', 'default_value']
 ]);

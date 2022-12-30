@@ -1,5 +1,6 @@
-import { ApiTestQuery } from 'eo/workbench/browser/src/app/shared/services/api-test/api-test.model';
-import { ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { ApiTestQuery } from 'eo/workbench/browser/src/app/pages/workspace/project/api/http/test/api-test.model';
+
+import { ApiEditQuery, ApiEditRest } from '../modules/api-shared/api.model';
 
 /**
  * get rest param from url,format like {restName}
@@ -7,10 +8,24 @@ import { ApiEditRest } from 'eo/workbench/browser/src/app/shared/services/storag
  * @param url
  * @returns
  */
-export const getRest: (url: string) => string[] = (url) =>
-  [...url.replace(/{{(.*?)}}/g, '').matchAll(/{(.*?)}/g)].map((val) => val[1]);
-
-export const uniqueSlash = (path: string) => path.replace(/(?<!:)\/{2,}/g, '/');
+export const getRest = (url = ''): string[] => [...url.replace(/{{(.+?)}}/g, '').matchAll(/{(.+?)}/g)].map(val => val[1]);
+export const uniqueSlash = (path: string) =>
+  path
+    .replace(/:\/{2,}/g, ':::')
+    .replace(/\/{2,}/g, '/')
+    .replace(/:{3}/g, '://');
+const jointQuery = (url = '', query: ApiTestQuery[] | ApiEditQuery[]) => {
+  //Joint query
+  let search = '';
+  query.forEach(val => {
+    if (!(val.name && val.required)) {
+      return;
+    }
+    search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
+  });
+  search = search ? `?${search.slice(0, -1)}` : '';
+  return `${url.split('?')[0]}${search}`;
+};
 
 /**
  * URL and Query transfer each other
@@ -25,9 +40,9 @@ export const uniqueSlash = (path: string) => path.replace(/(?<!:)\/{2,}/g, '/');
 export const transferUrlAndQuery = (
   url = '',
   query = [],
-  opts: { base: string; replaceType: string } = {
+  opts: { base: string; replaceType?: string } = {
     base: 'url',
-    replaceType: 'replace',
+    replaceType: 'replace'
   }
 ) => {
   const urlQuery = [];
@@ -37,37 +52,25 @@ export const transferUrlAndQuery = (
     const item: ApiTestQuery = {
       required: true,
       name,
-      value: val,
+      value: val
     };
     urlQuery.push(item);
   });
-  //Get replace result
-  const origin = opts.base === 'url' ? uiQuery : urlQuery;
-  const replace = opts.base === 'url' ? urlQuery : uiQuery;
-  if (opts.replaceType === 'replace') {
-    origin.forEach((val) => (val.name ? (val.required = false) : ''));
-  }
-  const result = [...replace, ...origin];
-  for (let i = 0; i < result.length; ++i) {
-    for (let j = i + 1; j < result.length; ++j) {
-      if (result[i].name === result[j].name) {
-        result.splice(j--, 1);
-      }
+  let result = [];
+  if (opts.replaceType === 'merge') {
+    result = [...urlQuery, ...uiQuery];
+    url = jointQuery(url, result);
+  } else {
+    if (opts.base === 'url') {
+      result = [...urlQuery, ...uiQuery.filter(val => !val.required)];
+    } else {
+      result = uiQuery;
+      url = jointQuery(url, result);
     }
   }
-  //Joint query
-  let search = '';
-  result.forEach((val) => {
-    if (!val.name || !val.required) {
-      return;
-    }
-    search += `${val.name}=${val.value === undefined ? val.example : val.value}&`;
-  });
-  search = search ? `?${search.slice(0, -1)}` : '';
-  url = `${url.split('?')[0]}${search}`;
   return {
     url,
-    query: result,
+    query: result
   };
 };
 
@@ -75,17 +78,19 @@ export const transferUrlAndQuery = (
  * Generate Rest Param From Url
  */
 export const generateRestFromUrl = (url, rest): ApiEditRest[] => {
-  const result = rest;
-  const rests = getRest(url);
-  rests.forEach((newRest) => {
-    if (result.find((val: ApiEditRest) => val.name === newRest)) {
+  const result: any = [];
+  const newRests = getRest(url);
+  newRests.forEach(newRest => {
+    const hasFind = rest.find((val: ApiEditRest) => val.name === newRest);
+    if (hasFind) {
+      result.push(hasFind);
       return;
     }
     const restItem: ApiEditRest = {
       name: newRest,
       required: true,
       example: '',
-      description: '',
+      description: ''
     };
     result.splice(result.length - 1, 0, restItem);
   });

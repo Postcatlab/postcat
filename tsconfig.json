@@ -1,5 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "incremental": true, // TS编译器在第一次编译之后会生成一个存储编译信息的文件，第二次编译会在第一次的基础上进行增量编译，可以提高编译的速度
+    "tsBuildInfoFile": "./buildFile", // 增量编译文件的存储位置
     "allowJs": true,
     "checkJs": false,
     "sourceMap": true,
@@ -15,35 +18,15 @@
     "outDir": "./out",
     "rootDir": "./src",
     "target": "es6",
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "es2017",
-      "es2016",
-      "es2015",
-      "ESNext",
-      "dom"
-    ],
+    "types": ["node"],
+    "lib": ["ESNext", "dom"],
     "baseUrl": ".",
     "paths": {
-      "eo/*": [
-        "./src/*"
-      ]
+      "eo/*": ["./src/*"]
     }
   },
-  "include": [
-    "**/*.d.ts",
-    "./src/**/**.ts",
-    "./src/**/**.js",
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/browser/**/*.js",
-    "**/browser/**/*.ts",
-    "out"
-  ],
+  "include": ["**/*.d.ts", "./src/**/**.ts", "./src/**/**.js", "scripts/build.js"],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/browser/**/*.js", "**/browser/**/*.ts", "out"],
   "angularCompilerOptions": {
     "enableIvy": true
   }

@@ -1,0 +1,58 @@
+<div class="project-management">
+  <nz-empty *ngIf="!initLoading && projectList.length === 0" nzNotFoundImage="simple"> </nz-empty>
+  <ng-container *ngIf="listType === 'card'">
+    <div class="flex flex-wrap">
+      <ng-container *ngFor="let item of projectList">
+        <a class="mr-[20px]" [routerLink]="['/home/workspace/project/api']" (click)="changeProject(item)">
+          <nz-card style="width: 300px">
+            <div class="flex justify-between">
+              <nz-avatar [nzText]="item.name.charAt(0)" nzShape="square"></nz-avatar>
+
+              <div class="operate-btn-list">
+                <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu2" (click)="$event.preventDefault(); $event.stopPropagation()">
+                  <eo-iconpark-icon name="more"></eo-iconpark-icon>
+                </button>
+
+                <eo-ng-dropdown-menu #menu2="nzDropdownMenu">
+                  <ul nz-menu>
+                    <!-- TODO: add auth control -->
+                    <li nz-menu-item i18n (click)="editProject(item)">Edit</li>
+                    <li nz-menu-item i18n (click)="delProject(item)">Delete</li>
+                  </ul>
+                </eo-ng-dropdown-menu>
+              </div>
+            </div>
+            <a eo-ng-button nzType="link" class="!p-0 mt-[10px]">{{ item.name }}</a>
+          </nz-card>
+        </a>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="listType === 'list'">
+    <nz-list [nzLoading]="initLoading">
+      <a *ngFor="let item of projectList" [routerLink]="['/home/workspace/project/api']" (click)="changeProject(item)">
+        <nz-list-item>
+          <div>
+            <nz-avatar [nzText]="item.name.charAt(0)" nzShape="square"></nz-avatar>
+            <b class="ml-[6px]">{{ item.name }}</b>
+          </div>
+
+          <div class="operate-btn-list">
+            <button eo-ng-button eo-ng-dropdown [nzDropdownMenu]="menu2" (click)="$event.preventDefault(); $event.stopPropagation()">
+              <eo-iconpark-icon name="more"></eo-iconpark-icon>
+            </button>
+            <eo-ng-dropdown-menu #menu2="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item i18n (click)="editProject(item)">Edit</li>
+                <li nz-menu-item i18n (click)="delProject(item)">Delete</li>
+              </ul>
+            </eo-ng-dropdown-menu>
+          </div>
+
+          <nz-skeleton *ngIf="item.loading" [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="true"></nz-skeleton>
+        </nz-list-item>
+      </a>
+    </nz-list>
+  </ng-container>
+</div>

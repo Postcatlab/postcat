@@ -1,18 +1,19 @@
 {
-  "name": "eo-test-server",
+  "name": "postcat-test-server",
   "version": "1.0.0",
-  "description": "Recieve eoapi tes config and response http result",
+  "description": "Recieve postcat test config and response http result",
   "main": "./server/main.js",
   "scripts": {
     "dev": "node ./server/main.js",
     "start": "pm2-runtime start ./server/main.js",
     "start:io": "pm2-runtime start ./server/socketio.js",
     "start:all": "yarn start && yarn start:io",
+    "start:all:pm2": "pm2 start ./server/main.js && pm2 start ./server/socketio.js",
     "watch": "pm2 list",
     "stop": "pm2 stop all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "eoapi",
+  "author": "Postcat",
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "3.3.0",
@@ -23,8 +24,12 @@
     "jsdom": "20.0.1",
     "koa": "2.13.4",
     "koa-body": "5.0.0",
+    "ws": "8.8.1",
     "pm2": "5.2.0",
     "socket.io": "4.5.3",
-    "xml2js": "0.4.23"
+    "xml2js": "0.4.23",
+    "iconv-lite": "^0.6.3",
+    "form-data": "^4.0.0",
+    "content-disposition": "^0.5.4"
   }
 }

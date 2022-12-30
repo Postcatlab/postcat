@@ -1,40 +1,27 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "../../../",
     "outDir": "./dist/out-tsc",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "module": "es2020",
+    "skipLibCheck": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
-    "baseUrl": "../../../",
+    "target": "es2020",
+    "lib": ["es2021", "es2020", "dom"],
     "paths": {
-      "eo/*": [
-        "./src/*"
-      ]
+      "eo/*": ["./src/*"]
     },
     "allowJs": true,
-    "target": "es6",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2017",
-      "es2016",
-      "es2015",
-      "ESNext",
-      "dom"
-    ]
+    "typeRoots": ["node_modules/@types"]
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".angular",
-    "src/app/assets"
-  ],
+  "exclude": ["node_modules", "dist", ".angular", "src/app/assets"],
+  "useDefineForClassFields": true,
   "angularCompilerOptions": {
     "enableIvy": true,
     "strictTemplates": true,
@@ -43,6 +30,8 @@
     "strictInjectionParameters": true,
     "skipTemplateCodegen": false,
     "skipMetadataEmit": false,
-    "disableTypeScriptVersionCheck": true
+    "disableTypeScriptVersionCheck": true,
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInputAccessModifiers": true
   }
 }

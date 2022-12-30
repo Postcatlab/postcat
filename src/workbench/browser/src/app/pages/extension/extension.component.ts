@@ -1,100 +1,72 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { GroupTreeItem } from 'eo/workbench/browser/src/app/shared/models';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { NzFormatEmitEvent, NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-import { filter, Subject } from 'rxjs';
+import { observable, makeObservable, computed, action } from 'mobx';
+import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+
 import { ExtensionGroupType } from './extension.model';
 import { ExtensionService } from './extension.service';
 
 @Component({
   selector: 'eo-extension',
   templateUrl: './extension.component.html',
-  styleUrls: ['./extension.component.scss'],
+  styleUrls: ['./extension.component.scss']
 })
 export class ExtensionComponent implements OnInit {
+  @observable extensionName = '';
+  @observable selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
   keyword = '';
-  nzSelectedKeys: (number | string)[] = [];
+  nzSelectedKeys: Array<number | string> = ['all'];
   treeNodes: NzTreeNodeOptions[] = [
+    {
+      key: 'all',
+      title: $localize`All`,
+      icon: 'home ',
+      isLeaf: true
+    },
     {
       key: 'official',
       title: $localize`Official`,
-      isLeaf: true,
+      isLeaf: true
     },
     {
       key: 'installed',
       title: $localize`Installed`,
-      isLeaf: true,
-    },
+      isLeaf: true
+    }
   ];
-  fixedTreeNode: GroupTreeItem[] | NzTreeNode[] = [
-    {
-      title: $localize`All`,
-      key: 'all',
-      weight: 0,
-      parentID: '0',
-      isLeaf: true,
-      isFixed: true,
-    },
-  ];
-  selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
 
-  constructor(
-    public extensionService: ExtensionService,
-    private router: Router,
-    public electron: ElectronService,
-    private route: ActivatedRoute,
-    private messageService: MessageService
-  ) {}
-  clickGroup(id) {
-    this.selectGroup = id;
-    this.router
-      .navigate(['home/extension/list'], {
-        queryParams: { type: id },
-      })
-      .finally();
+  @computed get hasExtension() {
+    return !!this.extensionName;
   }
+
+  @computed get getExtension() {
+    return this.extensionName;
+  }
+
+  constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
+
   ngOnInit(): void {
-    this.watchRouterChange();
-    this.setSelectedKeys();
+    makeObservable(this);
   }
 
-  onSeachChange(keyword) {
-    this.messageService.send({ type: 'searchPluginByKeyword', data: keyword });
+  selectExtension(name = '') {
+    this.setExtension(name);
   }
-
-  private watchRouterChange() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((res: any) => {
-      this.setSelectedKeys();
-    });
-  }
-
   /**
    * Group tree item click.
    *
    * @param event
    */
   clickTreeItem(event: NzFormatEmitEvent): void {
-    const eventName = event.node?.origin.isFixed ? 'clickFixedItem' : 'clickItem';
-
-    switch (eventName) {
-      case 'clickFixedItem': {
-        this.clickGroup(event.node.key);
-        break;
-      }
-      case 'clickItem': {
-        this.clickGroup(event.node.key);
-        break;
-      }
-    }
+    this.selectExtension('');
+    this.setGroup(event.node.key);
   }
 
-  private setSelectedKeys() {
-    if (this.route.snapshot.queryParams.type) {
-      this.nzSelectedKeys = [this.route.snapshot.queryParams.type];
-    } else {
-      this.nzSelectedKeys = [this.fixedTreeNode[0].key];
-    }
+  @action setGroup(data) {
+    this.selectGroup = data;
+  }
+
+  @action setExtension(data = '') {
+    this.extensionName = data;
   }
 }

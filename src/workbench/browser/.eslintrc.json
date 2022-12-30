@@ -1,22 +1,14 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "dist/**/*",
-    "release/**/*"
-  ],
+  "ignorePatterns": ["dist/**/*", "release/**/*"],
   "parserOptions": {
     "ecmaVersion": "latest"
   },
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "./src/tsconfig.app.json",
-          "./src/tsconfig.spec.json"
-        ],
+        "project": ["./src/tsconfig.app.json", "./src/tsconfig.spec.json"],
         "createDefaultProgram": true
       },
       "extends": [
@@ -42,12 +34,8 @@
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/recommended"
-      ],
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
     }
   ]

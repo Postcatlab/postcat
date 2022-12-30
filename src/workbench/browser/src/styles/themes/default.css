@@ -1,0 +1,96 @@
+:root {
+    --ICONPARK_SIZE: 16px;
+    --MR_ICON: 5px;
+    --BLUE_NORMAL: #2878ff;
+    --MAIN_THEME_COLOR: rgba(0, 120, 90, 100);
+    --NAVBAR_BTN_BG: rgba(0, 0, 0, 0.1);
+    --MAIN_TEXT: rgba(0, 0, 0, 0.85);
+    --HOVER_BG: #f5f5f5;
+    --MAIN_BG: #fff;
+    --MAIN_LIGHT_BG: #f0b6db;
+    --MAIN_DISABLED_BG: #f6f6f7;
+    --MAIN_DISABLED_TEXT: #bbbbbb;
+    --MAIN_DISABLED_BORDER: #dedede;
+    --DIVIDER: #f3f3f3;
+    --NAVBAR_BG: #f8f8fa;
+    --TABLE_ACTION_ICON_BTN_BG: #2878ff;
+    --BTN_SEC_BORDER: #dcdcdc;
+    --GREEN_LIGHT: #0aa07a;
+    --GREEN_NORMAL: #00785a;
+    --BTN_TEXT: #ffffff;
+  
+    --BTN_TEXT_RED: var(--RED_NORMAL);
+  
+    --BTN_TEXT_BLUE: var(--BLUE_NORMAL);
+  
+    --BTN_PRIMARY_TEXT: #ffffff;
+  
+    --BTN_PRIMARY_TEXT_HOVER: #ffffff;
+  
+    --BTN_PRIMARY_BG: var(--MAIN_THEME_COLOR);
+  
+    --BTN_PRIMARY_BG_HOVER: rgba(0, 120, 90, 0.8);
+  
+    --BTN_PRIMARY_MORE_BG: #2196f3;
+  
+    --BTN_PRIMARY_MORE_BG_HOVER: #03a9f4;
+  
+    --BTN_PRIMARY_BORDER: transparent;
+  
+    --BTN_PRIMARY_BORDER_HOVER: transparent;
+    --BTN_LIGHT_TEXT: var(--BLUE_NORMAL);
+  
+    --BTN_LIGHT_TEXT_HOVER: var(--BLUE_LIGHT);
+  
+    --BTN_LIGHT_BG: var(--MAIN_THEME_COLOR);
+  
+    --BTN_LIGHT_BG_HOVER: var(--HOVER_BG);
+  
+    --BTN_LIGHT_BORDER: var(--MAIN_THEME_COLOR);
+  
+    --BTN_LIGHT_BORDER_HOVER: var(--MAIN_THEME_COLOR);
+    --RED_NORMAL: red;
+  
+    --BTN_FONT_SIZE: 14px;
+    --BTN_LIGHT_HEIGHT: 22px;
+    --LABEL_TEXT_FONT_SIZE: 10px;
+    --TIPS_TEXT_FONT_SIZE: 11px;
+    --TABLE_TEXT_FONT_SIZE: 12px;
+    --NORMAL_FONT_SIZE: 14px;
+    --TITLE_FONT_SIZE: 16px;
+  
+    --MODAL_SHADOW: 0px 10px 15px 15px;
+    --MAIN_BOX_SHADOW: 0px 1px 6px 0px rgba(217, 217, 217, 50);
+  
+    --NAV_TEXT_COLOR: #000;
+    --NAV_BG_COLOR: #fff;
+    --NAV_TEXT_COLOR_CHECKED: var(--MAIN_BG);
+    --NAV_BG_COLOR_CHECKED: #fff;
+    --NAV_TEXT_COLOR_DISABLED: #999999;
+    --NAV_BG_COLOR_DISABLED: #f6f6f7;
+  
+    --DEFAULT_BORDER_RADIUS: 4px;
+    --PADDING: 15px 20px;
+    --PADDING_X: 20px;
+    --PADDING_Y: 15px;
+  
+    --PADDING_BTN: 10px;
+    --PADDING_BTN_X: 10px;
+    --PADDING_BTN_Y: 10px;
+    --MARGIN: 20px;
+  
+    --BORDER: rgba(217, 217, 217, 100);
+    --NAV_BOTTOM: 3px;
+  
+    --ICON_BTN_COLOR: #666;
+  
+    --TIPS_TEXT_COLOR: #999;
+    --NEW_WARNING_COLOR: #ff3b34;
+    --LABEL_TEXT_COLOR: #5a5a5a;
+    --DISABLE_BG: #f3f3f3;
+    --STATUS-FULFILLED: #00785a;
+    --STATUS-PENDING: #d8830c;
+    --STATUS-REJECT: #c2161b;
+  
+    --BLUE_TAG_BG: #2196f3;
+  }

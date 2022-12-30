@@ -1,0 +1,21 @@
+<nz-empty *ngIf="!model || !model.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+  <ng-template #contentTpl>
+    <span i18n>No Request Body</span>
+  </ng-template>
+</nz-empty>
+<div *ngIf="model && model.length">
+  <!-- Formdata -->
+  <ul class="p-base" *ngIf="modelType !== 'string'">
+    <li *ngFor="let item of model">
+      <span class="text-tips fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
+    </li>
+  </ul>
+  <!-- JSON / XML / Raw -->
+  <eo-monaco-editor
+    *ngIf="modelType === 'string'"
+    class="mt20"
+    [(code)]="model"
+    [config]="{ readOnly: true }"
+    [eventList]="['type', 'format', 'copy', 'search']"
+  ></eo-monaco-editor>
+</div>

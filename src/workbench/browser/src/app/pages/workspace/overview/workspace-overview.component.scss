@@ -1,0 +1,22 @@
+:host ::ng-deep {
+  .ant-tabs-tabpane {
+    padding-top: 15px;
+  }
+
+  .half-part-container {
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .ant-tabs-content {
+    height: calc(var(--body-height) - 121px);
+    overflow: auto;
+  }
+}
+
+.list-type-switcher {
+  .active {
+    color: var(--BTN_PRIMARY_BG);
+  }
+}

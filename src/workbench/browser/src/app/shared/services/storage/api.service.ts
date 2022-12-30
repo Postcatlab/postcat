@@ -55,6 +55,55 @@ export class ApiService {
     return this.remote.api_projectExport(params)
   }
 
+  api_projectAddMember(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectAddMember(params)
+    }
+    return this.remote.api_projectAddMember(params)
+  }
+
+  api_projectDelMember(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectDelMember(params)
+    }
+    return this.remote.api_projectDelMember(params)
+  }
+
+  api_projectMember(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectMember(params)
+    }
+    return this.remote.api_projectMember(params)
+  }
+
+  api_projectMemberQuit(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectMemberQuit(params)
+    }
+    return this.remote.api_projectMemberQuit(params)
+  }
+
+  api_projectSetRole(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectSetRole(params)
+    }
+    return this.remote.api_projectSetRole(params)
+  }
+
+  api_projectRoleList(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectRoleList(params)
+    }
+    return this.remote.api_projectRoleList(params)
+  }
+
+  api_projectPermission(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_projectPermission(params)
+    }
+    return this.remote.api_projectPermission(params)
+  }
+
   api_workspaceCreate(params) {
     if (this.dataSourceType === 'local') {
       return this.local.api_workspaceCreate(params)
@@ -104,6 +153,13 @@ export class ApiService {
     return this.remote.api_workspaceMember(params)
   }
 
+  api_workspaceSearchMember(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_workspaceSearchMember(params)
+    }
+    return this.remote.api_workspaceSearchMember(params)
+  }
+
   api_workspaceAddMember(params) {
     if (this.dataSourceType === 'local') {
       return this.local.api_workspaceAddMember(params)
@@ -116,6 +172,34 @@ export class ApiService {
       return this.local.api_workspaceRemoveMember(params)
     }
     return this.remote.api_workspaceRemoveMember(params)
+  }
+
+  api_workspaceMemberQuit(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_workspaceMemberQuit(params)
+    }
+    return this.remote.api_workspaceMemberQuit(params)
+  }
+
+  api_workspaceSetRole(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_workspaceSetRole(params)
+    }
+    return this.remote.api_workspaceSetRole(params)
+  }
+
+  api_workspaceRoleList(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_workspaceRoleList(params)
+    }
+    return this.remote.api_workspaceRoleList(params)
+  }
+
+  api_workspacePermission(params) {
+    if (this.dataSourceType === 'local') {
+      return this.local.api_workspacePermission(params)
+    }
+    return this.remote.api_workspacePermission(params)
   }
 
   api_shareCreateShare(params) {

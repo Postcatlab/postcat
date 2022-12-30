@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Windows>  <!-- 卸载页面 -->
+  <VerticalLayout bkcolor="#FFFFFFFF">
+    <Include source="logo.xml" />
+
+    <VerticalLayout>
+      <Button borderround="4,4" padding="125,55,0,50" width="100" height="33" bkcolor="#FFFF7433" font="5" textcolor="#FFFFFFFF" text="Uninstalling" />
+    </VerticalLayout>
+
+    <Include source="closeToolbar.xml" />
+  </VerticalLayout>
+</Windows>

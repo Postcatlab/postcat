@@ -1,37 +1,36 @@
 <p align="center">
-  <a href="https://github.com/eolinker/eoapi">
+  <a href="https://github.com/eolinker/postcat">
     <img width="200" src="./wiki/images/logo.png">
   </a>
 </p>
 </p>
 
 <div align="center">
-一个可拓展的 API 工具，简单（Easy） & 开源（OpenSource）的 API 生态系统
+一个可拓展的 API 工具，核心轻量且开源的 API 生态系统
 </div>
 <hr>
 <p align="center">
-  <a href="https://github.com/eolinker/eoapi"><img src="https://img.shields.io/github/license/eolinker/eoapi?sanitize=true" alt="License"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/v/release/eolinker/eoapi?sanitize=true" alt="Version"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/downloads/eolinker/eoapi/total?sanitize=true" alt="Downloads"></a>
+  <a href="https://github.com/eolinker/postcat"><img src="https://img.shields.io/github/license/eolinker/postcat?sanitize=true" alt="License"></a>
+  <a href="https://github.com/eolinker/postcat/releases"><img src="https://img.shields.io/github/v/release/eolinker/postcat?sanitize=true" alt="Version"></a>
+  <a href="https://github.com/eolinker/postcat/releases"><img src="https://img.shields.io/github/downloads/eolinker/postcat/total?sanitize=true" alt="Downloads"></a>
   <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
 </p>
 
 [English](wiki/README.en.md)｜简体中文
 
-![](https://docs.eoapi.io/images/eoapi-demo.png)
-> Eoapi（发音：一欧 API）
+![](https://docs.postcat.com/images/postcat-demo.png)
 # 在线试试！
 
-[https://eoapi.io](https://eoapi.io/)
+[https://postcat.com](https://postcat.com/)
 
 功能体验过程中的数据将储存在 Web 的本地存储（indexedb）。试用后建议下载桌面端体验更佳～
 # 快速开始
 
-- 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
+- 访问 [Releases](https://github.com/eolinker/postcat/releases) 下载 Windows、macOS 安装包。
 
-- 查看 [用户使用文档](https://docs.eoapi.io) 了解功能
+- 查看 [用户使用文档](https://docs.postcat.io) 了解功能
 
-- 查看 [开发者文档](https://developer.eoapi.io) 开发插件
+- 查看 [开发者文档](https://developer.postcat.io) 开发插件
 
 # 功能
 
@@ -68,8 +67,15 @@
 
 我们在开发和构建时使用 [yarn](https://yarnpkg.com/) 作为包管理工具，强烈建议你也这么做，但如果您希望使用 npm 也完全没问题，只是在安装依赖时可能需要多花一些时间。
 
+如果你想要跑桌面端版本：
 ```
 yarn install
+yarn start
+```
+
+如果你只是想运行浏览器的代码，你可以：
+```
+cd src/workbench&&npm install
 yarn start
 ```
 
@@ -86,8 +92,8 @@ yarn add @angular/cli --global
 | 命令                  | 描述                                 |
 | --------------------- | ------------------------------------ |
 | `yarn start`          | 开发模式下，同时运行在浏览器和桌面端 |
-| `yarn serve:web`      | 仅运行在浏览器                       |
-| `yarn electron:serve` | 仅运行在桌面端                       |
+| `yarn start:web`      | 仅运行在浏览器,同时开启后端代理     |
+| `yarn start:electron` | 仅运行在桌面端                       |
 
 ### 打包构建
 
@@ -107,8 +113,8 @@ yarn add @angular/cli --global
 
 # 支持我们
 
-如果你觉得项目还不错，记得 Star 支持一下噢！你们的支持对 Eoapi 真的很重要！
+如果你觉得项目还不错，记得 Star 支持一下噢！你们的支持对 Postcat 真的很重要！
 
 # 联系我们
 
-如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/eoapi/issues) 联系我们，十分感谢！
+如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/postcat/issues) 联系我们，十分感谢！

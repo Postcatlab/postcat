@@ -1,0 +1,115 @@
+.tab-text {
+  // max-width: 90px;
+}
+
+.has-edit-tab-item-container {
+  .tab-text {
+    max-width: 83px;
+  }
+}
+
+::ng-deep {
+  .ant-tabs-dropdown-menu-item {
+    .ant-tabs-tab-remove {
+      display: none;
+    }
+  }
+}
+
+:host ::ng-deep {
+  width: 100%;
+
+  .ant-tabs-card.ant-tabs-top {
+    > .ant-tabs-nav {
+      margin: 0;
+
+      .ant-tabs-tab {
+        max-width: 185px;
+        min-width: 145px;
+        border-radius: 0;
+        margin-left: 0;
+        border-left: 0 none;
+        border-top-width: 2px;
+        border-top-color: transparent;
+
+        &:hover {
+          .tab-has-edit-icon {
+            display: none;
+          }
+
+          .ant-tabs-tab-remove {
+            display: flex;
+            color: var(--MAIN_TEXT);
+          }
+        }
+
+        &.ant-tabs-tab-active {
+          border-top: 2px solid var(--MAIN_THEME_COLOR);
+
+          .ant-tabs-tab-btn {
+            color: var(--MAIN_TEXT);
+          }
+        }
+
+        .ant-tabs-tab-btn {
+          width: 100%;
+          font-size: 12px;
+          display: flex;
+        }
+      }
+
+      .ant-tabs-nav-wrap {
+        max-width: calc(100% - 135px);
+        flex: none;
+      }
+
+      .ant-tabs-tab-remove {
+        display: none;
+      }
+    }
+  }
+
+  .tab-item-container {
+    // Operate width
+    width: calc(100% - 10px);
+    font-style: italic;
+
+    .tab-has-edit-icon {
+      .ant-badge-status-dot {
+        width: 8px;
+        height: 8px;
+      }
+
+      .ant-badge-status-text {
+        display: none;
+      }
+    }
+
+    .tab-item-button-group {
+      position: absolute;
+      margin-right: 10px;
+      margin-bottom: 2px;
+      right: 0;
+    }
+
+    .ant-tabs-tab-remove {
+      padding: 0;
+
+      eo-iconpark-icon {
+        padding: 3px;
+        vertical-align: middle;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        eo-iconpark-icon {
+          background: var(--NAVBAR_BTN_BG);
+        }
+      }
+    }
+  }
+
+  .fixed-tab-item-container {
+    font-style: initial;
+  }
+}

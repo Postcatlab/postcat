@@ -1,10 +1,10 @@
 import { Injectable, Injector } from '@angular/core';
-import { StorageResStatus } from './index.model';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+
 import { IndexedDBStorage } from './IndexedDB/lib';
 import { HttpStorage } from './http/lib';
-import { getSettings, SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
+import { StorageResStatus } from './index.model';
 
-export type DataSourceType = 'local' | 'http';
 /** is show local data source tips */
 export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFICATION';
 
@@ -14,67 +14,42 @@ export const IS_SHOW_REMOTE_SERVER_NOTIFICATION = 'IS_SHOW_REMOTE_SERVER_NOTIFIC
  */
 @Injectable({ providedIn: 'root' })
 export class StorageService {
-  private instance;
-  get dataSourceType(): DataSourceType {
-    return getSettings()['eoapi-common.dataStorage'] || 'local';
-  }
-  constructor(
-    private injector: Injector,
-    private settingService: SettingService,
-    private indexedDBStorage: IndexedDBStorage
-  ) {
-    console.log('StorageService init');
-    this.setStorage( this.dataSourceType);
+  private localInstance;
+  private httpInstance;
+  constructor(private injector: Injector, private store: StoreService, private indexedDBStorage: IndexedDBStorage) {
+    this.localInstance = this.indexedDBStorage;
+    this.httpInstance = this.injector.get(HttpStorage);
   }
   /**
    * Handle data from IndexedDB
    *
    * @param args
    */
-  run(action: string, params: Array<any>, callback): void {
+  run(action: string, params: any[], callback): void {
     const handleResult = {
       status: StorageResStatus.invalid,
       data: undefined,
-      callback,
+      error: null,
+      callback
     };
-    // console.log('this.instance', this.instance, action);
-    if (!this.instance[action]) {
+    const instance = this.store.isLocal ? this.localInstance : this.httpInstance;
+    // console.log('this.instance', instance, action);
+    if (!instance[action]) {
       throw Error(`Lack request API: ${action}`);
     }
-    this.instance[action](...params).subscribe(
+    instance[action](...params).subscribe(
       (res: any) => {
         handleResult.status = res.status;
         handleResult.data = res.data;
+        handleResult.error = res.error;
         callback(handleResult);
       },
       (error: any) => {
-        console.log('EOERROR:', action, error);
+        console.log('EOERROR:', action);
         handleResult.status = StorageResStatus.error;
+        handleResult.error = error;
         callback(handleResult);
       }
     );
-  }
-  setStorage = (type: DataSourceType = 'local', options = {}) => {
-    switch (type) {
-      case 'local': {
-        this.instance = this.indexedDBStorage;
-        break;
-      }
-      case 'http': {
-        this.instance = this.injector.get(HttpStorage);
-        break;
-      }
-    }
-
-    this.setDataStorage(type);
-  };
-  toggleDataSource = (options: any = {}) => {
-    const { dataSourceType } = options;
-    this.setStorage(dataSourceType ?? (this.dataSourceType === 'http' ? 'local' : 'http'), options);
-  };
-  setDataStorage(value) {
-    this.settingService.putSettings({
-      'eoapi-common.dataStorage': value,
-    });
   }
 }

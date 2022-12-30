@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ExtensionDetailComponent } from './detail/extension-detail.component';
-import { ExtensionListComponent } from './list/extension-list.component';
+// import { ExtensionDetailComponent } from './detail/extension-detail.component';
 import { ExtensionComponent } from './extension.component';
+import { ExtensionListComponent } from './list/extension-list.component';
 
 const routes: Routes = [
   {
@@ -13,22 +13,22 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'list',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'list',
-        component: ExtensionListComponent,
-      },
-      {
-        path: 'detail',
-        component: ExtensionDetailComponent,
-      },
-    ],
-  },
+        component: ExtensionListComponent
+      }
+      // {
+      //   path: 'detail',
+      //   component: ExtensionDetailComponent,
+      // },
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class ExtensionRoutingModule {}

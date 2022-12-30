@@ -1,0 +1,32 @@
+.env-main {
+  height: 100%;
+}
+
+.env-list {
+  height: calc(100% - 40px);
+  overflow: auto;
+}
+
+.env-item:hover,
+.env-item-active {
+  background-color: rgb(0 0 0 / 10%);
+}
+
+.env-item {
+  cursor: pointer;
+  height: 40px;
+
+  .env-operate {
+    display: none;
+  }
+
+  &:hover {
+    .env-operate {
+      display: inherit;
+    }
+
+    a {
+      opacity: 1;
+    }
+  }
+}

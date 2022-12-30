@@ -3,7 +3,11 @@
   display: -webkit-box;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 4;
+}
+
+.extension-list {
+  height: 70vh;
 }
 
 .plugin-block {
@@ -11,13 +15,6 @@
   cursor: pointer;
 }
 
-.list-block {
-  height: calc(100% - 65px);
-  overflow: auto;
-  > div {
-    border-radius: 3px;
-  }
-}
 @media (max-width: 1279.9px) {
   .grid-cols-4 {
     grid-template-columns: repeat(3, minmax(0, 1fr));

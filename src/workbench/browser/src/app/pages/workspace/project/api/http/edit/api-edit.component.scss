@@ -1,0 +1,20 @@
+.ant-input-group.ant-input-group-compact {
+  display: flex;
+}
+
+.ant-select {
+  height: 32px;
+}
+
+eo-api-edit-header,
+eo-api-edit-body,
+eo-api-edit-query,
+eo-api-edit-rest {
+  display: block;
+}
+
+::ng-deep {
+  .group-select.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-radius: var(--DEFAULT_BORDER_RADIUS) 0 0 var(--DEFAULT_BORDER_RADIUS);
+  }
+}

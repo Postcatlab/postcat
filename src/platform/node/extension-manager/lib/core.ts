@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { ModuleHandlerOptions, ModuleInfo } from '../types';
+import { ModuleHandlerOptions, ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { fileExists, readFile, readJson } from 'eo/shared/node/file';
 import { getLocaleData } from 'eo/platform/node/i18n';
 import { LanguageService } from 'eo/app/electron-main/language.service';

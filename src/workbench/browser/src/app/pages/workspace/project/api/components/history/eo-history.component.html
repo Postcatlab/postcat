@@ -1,0 +1,46 @@
+<div class="flex flex-col history-body">
+  <div class="flex items-center justify-between px-[10px] pt-2 h-[40px] flex-shrink-0">
+    <span class="font-bold" i18n>History</span>
+    <button
+      class="flex items-center justify-center cursor-pointer shrink-0"
+      eo-ng-button
+      nzType="text"
+      [disabled]="!historyList.length"
+      i18n-nzTooltipTitle
+      nzTooltipTitle="Clear All"
+      eoNgFeedbackTooltip
+      nz-popconfirm
+      i18n-nzPopconfirmTitle
+      [nzTooltipMouseEnterDelay]="0.4"
+      [nzPopconfirmTrigger]="historyList.length ? 'click' : null"
+      nzPopconfirmTitle="Are you sure delete all history?"
+      (nzOnConfirm)="clearAllHistory()"
+      (nzOnCancel)="cancel()"
+      nzPopconfirmPlacement="leftTop"
+      [nzOkDanger]="true"
+      i18n-nzOkText
+      nzOkText="Delete"
+    >
+      <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
+    </button>
+  </div>
+  <nz-empty *ngIf="!historyList.length" nzNotFoundImage="simple"> </nz-empty>
+  <eo-ng-tree-default
+    [nzData]="historyList"
+    [nzSelectedKeys]="nzSelectedKeys"
+    nzBlockNode
+    (nzClick)="gotoTestHistory($event)"
+    [nzTreeTemplate]="nzFixedTreeTemplate"
+    class="overflow-auto pt-[10px]"
+  ></eo-ng-tree-default>
+  <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
+    <div class="flex items-center w-full cursor-pointer px-[6px]">
+      <b
+        class="block w-12 method_type"
+        [ngClass]="'method_text_' + (origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol])"
+        >{{ origin.request?.method || TEXT_BY_PROTOCOL[origin?.request?.protocol] }}</b
+      >
+      <span class="flex-1 overflow-hidden text-[12px] truncate">{{ origin.request?.uri }}</span>
+    </div>
+  </ng-template>
+</div>

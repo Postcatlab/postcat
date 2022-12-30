@@ -1,0 +1,33 @@
+.p-base {
+  padding: var(--PADDING_Y) var(--PADDING_X);
+}
+
+.px-base {
+  padding-left: var(--PADDING_X);
+  padding-right: var(--PADDING_X);
+}
+
+.border {
+  border: 1px solid var(--BORDER);
+}
+
+.debug-border {
+  // * use it only for debug, not prod
+  border: 1px solid red;
+}
+
+.rounded-r {
+  border-radius: 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS) 0 !important;
+}
+
+.rounded-l {
+  border-radius: var(--DEFAULT_BORDER_RADIUS) 0 0 var(--DEFAULT_BORDER_RADIUS) !important;
+}
+
+.text-tips {
+  color: var(--TIPS_TEXT_COLOR);
+}
+
+.text-main-color {
+  color: var(--MAIN_THEME_COLOR);
+}

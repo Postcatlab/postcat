@@ -1,47 +1,34 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { EoNgSwitchModule } from 'eo-ng-switch';
+import { EoNgTabsModule } from 'eo-ng-tabs';
+import { EoNgTreeModule } from 'eo-ng-tree';
+import { ExtensionDetailComponent } from 'eo/workbench/browser/src/app/pages/extension/detail/extension-detail.component';
+import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzResultModule } from 'ng-zorro-antd/result';
 
-import { ExtensionRoutingModule } from './extension-routing.module';
+// import { ExtensionRoutingModule } from './extension-routing.module';
+import { ShadowDomEncapsulationModule } from '../../modules/eo-ui/shadow/shadow-dom-encapsulation.module';
+import { ExtensionSettingComponent } from './detail/components/extensions-settings.component';
 import { ExtensionComponent } from './extension.component';
 import { ExtensionListComponent } from './list/extension-list.component';
-import { ExtensionDetailModule } from './detail/extension-detail.module';
 
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzTreeModule } from 'ng-zorro-antd/tree';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
-import { SharedModule } from 'eo/workbench/browser/src/app/shared/shared.module';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 @NgModule({
   imports: [
     SharedModule,
-    FormsModule,
-    NzTabsModule,
-    NzToolTipModule,
-    NzTagModule,
     NzDescriptionsModule,
-    NzInputModule,
-    NzButtonModule,
-    ExtensionRoutingModule,
-    CommonModule,
-    NzDividerModule,
-    NzTreeModule,
-    NzSwitchModule,
-    NzDropDownModule,
-    NzSkeletonModule,
+    NzInputNumberModule,
     NzCardModule,
     NzAvatarModule,
-    ExtensionDetailModule,
+    EoNgTabsModule,
+    EoNgSwitchModule,
+    EoNgTreeModule,
+    NzResultModule,
+    ShadowDomEncapsulationModule
   ],
-  declarations: [ExtensionComponent, ExtensionListComponent],
+  declarations: [ExtensionComponent, ExtensionSettingComponent, ExtensionListComponent, ExtensionDetailComponent]
 })
 export class ExtensionModule {}

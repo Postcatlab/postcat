@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
-import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
+import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
 import { PROTOCOL } from 'eo/workbench/browser/src/app/shared/constants/protocol';
 import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal.service';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class WebService {
   isWeb = !this.electronService.isElectron;
-  isVercel = window.location.href.includes('vercel') || window.location.host.includes('eoapi.io');
+  isVercel = window.location.href.includes('vercel');
   resourceInfo = [
     {
       id: 'win',
@@ -18,37 +18,33 @@ export class WebService {
       icon: 'windows',
       keyword: 'Setup',
       suffix: 'exe',
-      link: '',
+      link: ''
     },
     {
       id: 'mac',
       name: $localize`MacOS(Intel) Client`,
       icon: 'mac',
       suffix: 'dmg',
-      link: '',
+      link: ''
     },
     {
       id: 'mac',
       name: $localize`MacOS(M1) Client`,
       icon: 'mac',
       suffix: 'arm64.dmg',
-      link: '',
-    },
+      link: ''
+    }
   ];
-  constructor(
-    private modalService: ModalService,
-    private settingService: SettingService,
-    private electronService: ElectronService
-  ) {
+  constructor(private modalService: ModalService, private settingService: SettingService, private electronService: ElectronService) {
     if (this.isWeb) {
-      this.settingService.putSettings({ 'eoapi-common.remoteServer.url': window.location.origin });
+      this.settingService.putSettings({ 'backend.url': window.location.origin });
     }
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {
     let result = '';
     const assetIndex = assets.findIndex(
-      (asset) =>
+      asset =>
         new RegExp(`${item.suffix}$`, 'g').test(asset.browser_download_url) &&
         (!item.keyword || asset.browser_download_url.includes(item.keyword))
     );
@@ -62,7 +58,7 @@ export class WebService {
 
   private findLink(allAssets, item) {
     let result = '';
-    allAssets.some((assets) => {
+    allAssets.some(assets => {
       result = this.findLinkInSingleAssets(assets, item);
       return result;
     });
@@ -70,14 +66,14 @@ export class WebService {
   }
 
   private getClientResource() {
-    fetch('https://api.github.com/repos/eolinker/eoapi/releases')
-      .then((response) => response.json())
+    fetch('https://api.github.com/repos/eolinker/postcat/releases')
+      .then(response => response.json())
       .then((data = []) => {
         [...this.resourceInfo]
           .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
-          .forEach((item) => {
+          .forEach(item => {
             item.link = this.findLink(
-              data.map((val) => val.assets),
+              data.map(val => val.assets),
               item
             );
           });
@@ -85,14 +81,13 @@ export class WebService {
   }
 
   async protocolCheck(): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (this.electronService.isElectron) {
         return resolve(true);
       }
       (window as any).protocolCheck(
         PROTOCOL,
         () => {
-          // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
           resolve(false);
         },
         () => {
@@ -108,7 +103,7 @@ export class WebService {
       nzContent: DownloadClienteComponent,
       nzOnOk() {
         modal.destroy();
-      },
+      }
     });
     return modal;
   }
@@ -117,7 +112,6 @@ export class WebService {
     return new Promise(async (resolve, reject) => {
       const isInstalled = await this.protocolCheck();
       if (!isInstalled) {
-        // alert("检测到您电脑Eoapi Client本地客户端未安装 请下载");
         this.showDownloadClientModal(modalTitle);
         resolve(false);
       } else {

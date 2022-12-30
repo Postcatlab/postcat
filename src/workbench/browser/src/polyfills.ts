@@ -59,3 +59,7 @@ import 'zone.js'; // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 import '@angular/localize/init';
+
+/** more see: https://github.com/zloirock/core-js */
+import 'core-js/actual/array/at';
+import 'core-js/actual/structured-clone';

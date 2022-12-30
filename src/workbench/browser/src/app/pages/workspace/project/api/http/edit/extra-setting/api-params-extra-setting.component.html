@@ -1,0 +1,50 @@
+<!-- {{ model | json }} -->
+<eo-ng-table-pro class="table-border-all" [nzData]="model" [columns]="listConfBasicInfo" [nzScroll]="{ x: '800px' }"> </eo-ng-table-pro>
+<eo-ng-table-pro
+  class="table-border-all mt-[15px]"
+  *ngIf="showLengthTable"
+  [nzData]="model"
+  [columns]="listConfLenthInterval"
+  [setting]="{ manualAdd: true }"
+>
+</eo-ng-table-pro>
+<eo-ng-table-pro
+  class="table-border-all mt-[15px]"
+  *ngIf="showValueTable"
+  [nzData]="model"
+  [columns]="listConfValueInterval"
+  [setting]="{ manualAdd: true }"
+>
+</eo-ng-table-pro>
+
+<eo-ng-table-pro
+  *ngIf="!['null', 'boolean'].includes(model[0].type) && (isEdit || model[0].enum?.length)"
+  class="table-border-all mt-[15px]"
+  [nzData]="model[0].enum"
+  [nzDataItem]="itemStructureEnums"
+  [columns]="listConfEnums"
+  [setting]="{ primaryKey: 'value' }"
+>
+</eo-ng-table-pro>
+
+<div class="mt-[20px] ant-table" *ngIf="isEdit || model[0].example">
+  <table class="border-all">
+    <thead class="ant-table-thead">
+      <tr class="ant-table-row">
+        <th class="ant-table-cell" i18n>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="p-[10px]">
+          <eo-monaco-editor
+            class="border-all"
+            [(code)]="model[0].example"
+            [config]="{ readOnly: !isEdit }"
+            [eventList]="['format', 'copy', 'search', 'replace']"
+          ></eo-monaco-editor>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

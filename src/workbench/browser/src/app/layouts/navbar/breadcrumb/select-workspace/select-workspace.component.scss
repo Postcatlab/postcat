@@ -1,0 +1,27 @@
+::ng-deep {
+  //   .cdk-overlay-container {
+  //     * {
+  //       transition: none !important;
+  //     }
+  //   }
+  //   .select-workspace-class {
+  //     .iconpark-icon {
+  //     }
+  //   }
+}
+
+.workspace-title {
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.workspace-item {
+  padding: 0 20px;
+  height: 30px;
+}
+
+.active-item {
+  color: var(--MAIN_THEME_COLOR);
+}

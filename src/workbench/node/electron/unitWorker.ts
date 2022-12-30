@@ -1,5 +1,6 @@
-import * as child_process from 'child_process';
 import { BrowserView } from 'electron';
+
+import * as child_process from 'child_process';
 export class UnitWorker {
   instance: child_process.ChildProcess;
   view: BrowserView;
@@ -21,7 +22,7 @@ export class UnitWorker {
   private watch() {
     this.instance.on('message', (message: any) => {
       switch (message.action) {
-        case 'finish':{
+        case 'finish': {
           this.finish(message.data);
           break;
         }

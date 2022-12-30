@@ -1,18 +1,18 @@
+import { BrowserView, ipcMain } from 'electron';
+import Store from 'electron-store';
 import express from 'express';
-
 import type { Response } from 'express';
 import portfinder from 'portfinder';
+
 // import { createProxyMiddleware } from 'http-proxy-middleware';
-import { BrowserView, ipcMain } from 'electron';
 import type { Server } from 'http';
 import type { AddressInfo } from 'net';
-import { Configuration } from 'eo/platform/node/configuration/lib';
-import Store from 'electron-store';
+
 const store = new Store();
 
 const protocolReg = new RegExp('^/(http|https)://');
 // Solve object circular reference problem
-const jsonStringify = (obj) => {
+const jsonStringify = obj => {
   let cache = [];
   const str = JSON.stringify(obj, (key, value) => {
     if (typeof value === 'object' && value !== null) {
@@ -33,7 +33,6 @@ export class MockServer {
   private app: ReturnType<typeof express>;
   private server: Server;
   private view: BrowserView;
-  private configuration = new Configuration();
   // private apiProxy: ReturnType<typeof createProxyMiddleware>;
   /** mock server url */
   private mockUrl = '';
@@ -98,6 +97,7 @@ export class MockServer {
 
   /**
    * start mock server
+   *
    * @param port mock server port
    */
   async start(view: BrowserView, port = store.get('mock_port') || 3040) {
@@ -115,8 +115,8 @@ export class MockServer {
           console.log(`mock service is started: ${this.mockUrl}`);
           resolve(this.mockUrl);
         })
-        .on('error', (error) => {
-          console.error('mock is failed to start: ' + error);
+        .on('error', error => {
+          console.error(`mock is failed to start: ${error}`);
           reject(error);
         });
     });
@@ -131,6 +131,7 @@ export class MockServer {
 
   /**
    * get mock server url
+   *
    * @returns mock server url
    */
   getMockUrl() {
@@ -145,7 +146,7 @@ export class MockServer {
     res.send({
       code: 404,
       message: response.message || '没有该API或缺少mockID',
-      tips: '未匹配到文档中的API，请检查请求方式、请求URL或mockID是否正确。',
+      tips: '未匹配到文档中的API，请检查请求方式、请求URL或mockID是否正确。'
       // tips: isMatchType
       //   ? '未匹配到文档中的API，请检查请求方式和请求URL是否正确'
       //   : '当前未开启匹配请求方式, 开启后，系统会匹配和 API 文档请求方式（GET、POST...）一致的 Mock',
