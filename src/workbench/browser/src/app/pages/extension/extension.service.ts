@@ -17,7 +17,7 @@ export class ExtensionService {
   ignoreList = ['default'];
   disabledExtensionNames: string[] = this.getDisableExtensionNames();
   extensionIDs: string[] = [];
-  HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
+  HOST = APP_CONFIG.EXTENSION_URL;
   installedList: ModuleInfo[] = [];
   installedMap: Map<string, ModuleInfo>;
   constructor(
