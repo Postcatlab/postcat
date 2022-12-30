@@ -25,15 +25,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
   helpMenus = [
     {
       title: $localize`Document`,
-      href: 'https://docs.eoapi.io',
-      click: $event => {}
+      href: 'https://docs.postcat.com',
+      itemClick: $event => {}
     },
     {
       title: $localize`Report Issue`,
-      href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
-      click: $event => {}
+      href: `https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
+      itemClick: $event => {}
     }
   ];
+  issueEnvironment = this.getEnvironment();
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
@@ -49,7 +50,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public dataSourceService: DataSourceService,
     private effect: EffectService
   ) {}
-
   async ngOnInit(): Promise<void> {
     this.message
       .get()

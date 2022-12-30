@@ -1,30 +1,30 @@
 version: '3'
 
 services:
-  eoapi:
+  postcat:
     # build: 从当前路径构建镜像
     build:
       context: .
       dockerfile: Dockerfile
       target: production
-    image: eolinker/eoapi:${VERSION}
-    container_name: eoapi
+    image: eolinker/postcat:${VERSION}
+    container_name: postcat
     restart: always
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     ports:
       - '8000:80'
     networks:
-      - eoapi_net
+      - postcat_net
 
-  eoapi-test-server:
+  postcat-test-server:
     # build: 从当前路径构建镜像
     build:
       context: .
       dockerfile: Dockerfile
       target: builder
-    image: eolinker/eoapi-test-server:${VERSION}
-    container_name: eoapi-test-server
+    image: eolinker/postcat-test-server:${VERSION}
+    container_name: postcat-test-server
     restart: always
     extra_hosts:
       - 'host.docker.internal:host-gateway'
@@ -32,8 +32,8 @@ services:
       - '4201:4201'
       - '4202:4202'
     networks:
-      - eoapi_net
+      - postcat_net
 
 networks:
-  eoapi_net:
-    name: eoapi_net
+  postcat_net:
+    name: postcat_net

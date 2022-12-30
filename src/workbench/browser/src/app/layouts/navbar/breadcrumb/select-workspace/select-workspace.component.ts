@@ -21,7 +21,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
     </button>
     <eo-ng-dropdown-menu #workspaceMenu>
       <ul nz-menu>
-        <div class="flex py-[5px] px-[12px]">
+        <!-- <div class="flex py-[5px] px-[12px]">
           <input eo-ng-input type="text" class="flex-1 px-3" i18n-placeholder placeholder="Search" [(ngModel)]="searchValue" />
           <button
             eoNgFeedbackTooltip
@@ -34,7 +34,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
           >
             <eo-iconpark-icon name="add"></eo-iconpark-icon>
           </button>
-        </div>
+        </div> -->
         <div class="mt-[10px]" *ngIf="localWorkspace" (click)="changeWorkspace(localWorkspace.id)">
           <p class="workspace-title text-tips" i18n>LOCAL</p>
           <li
@@ -45,8 +45,8 @@ import { ModalService } from '../../../../shared/services/modal.service';
             <eo-iconpark-icon class="mr-[5px]" name="home"> </eo-iconpark-icon>{{ localWorkspace.title }}</li
           >
         </div>
-        <nz-divider class="mt-[10px]"></nz-divider>
-        <div class="my-[10px]">
+        <!-- <nz-divider class="mt-[10px]"></nz-divider> -->
+        <!-- <div class="my-[10px]">
           <p class="workspace-title text-tips" i18n>CLOUD</p>
           <p i18n *ngIf="!cloudWorkspaces.length" class="text-tips px-base mt-[10px] mx-[5px] text-[12px]">No cloud workspace</p>
           <li
@@ -61,7 +61,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
               <span class="truncate mw-[250px]"> {{ item.title }}</span>
             </div>
           </li>
-        </div>
+        </div> -->
       </ul>
     </eo-ng-dropdown-menu>`,
   styleUrls: ['./select-workspace.component.scss']

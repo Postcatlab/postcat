@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import Dexie, { Table } from 'dexie';
-import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
-import { MockService } from 'eo/workbench/browser/src/app/services/mock.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { uniqueSlash } from 'eo/workbench/browser/src/app/utils/api';
 import { tree2obj } from 'eo/workbench/browser/src/app/utils/tree/tree.utils';
@@ -43,7 +41,7 @@ export class IndexedDBStorage extends Dexie implements StorageInterface {
   mock!: Table<ApiMockEntity, number | string>;
 
   constructor(private store: StoreService) {
-    super('eoapi_core');
+    super('postcat_core');
     this.version(2).stores({
       project: '++uuid, name',
       environment: '++uuid, name, projectID',

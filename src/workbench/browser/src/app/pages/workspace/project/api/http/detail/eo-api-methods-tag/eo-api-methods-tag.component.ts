@@ -28,7 +28,7 @@ const DEFAULT_TYPE = 'GET';
   template: `<nz-tag *ngIf="type" [class]="[text | lowercase, _background && 'ignore']">{{ text | uppercase }}</nz-tag> `,
   styleUrls: ['./eo-api-methods-tag.component.scss']
 })
-export class EoApiMethodsTagComponent implements OnChanges {
+export class PcApiMethodsTagComponent implements OnChanges {
   _background = false;
   @Input() type: APIMethodsType = DEFAULT_TYPE;
 

@@ -37,7 +37,25 @@
       <nz-divider nzType="vertical"></nz-divider>
     </ng-container>
     <!-- Help -->
-    <eo-ng-dropdown class="mr-[10px]" btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus">
+    <button eo-ng-button nzType="text" class="flex items-center justify-center" eo-ng-dropdown [nzDropdownMenu]="helpMenu">
+      <eo-iconpark-icon name="help"> </eo-iconpark-icon>
+    </button>
+    <eo-ng-dropdown-menu #helpMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <a href="https://docs.postcat.com" target="_blank" nz-menu-item i18n>Document</a>
+        <li nz-menu-divider></li>
+        <a
+          href="https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
+            issueEnvironment
+          }}"
+          target="_blank"
+          nz-menu-item
+          i18n
+          >Report Issue</a
+        >
+      </ul>
+    </eo-ng-dropdown-menu>
+    <!-- <eo-ng-dropdown class="mr-[10px]" btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus">
       <ng-template #helpTitle>
         <eo-iconpark-icon name="help"></eo-iconpark-icon>
       </ng-template>
@@ -45,13 +63,13 @@
     <ng-template #helpTemplateItem let-item="item">
       <a href="{{ item.href }}" target="_blank" i18n>{{ item.title }}</a>
       <li nz-menu-divider></li>
-    </ng-template>
+    </ng-template> -->
     <ng-container *ngIf="!store.isShare">
       <!-- setting -->
       <button
         eo-ng-button
         nzType="text"
-        class="flex items-center justify-center icon mr-[10px]"
+        class="flex items-center justify-center icon"
         i18n-nzTooltipTitle
         eoNgFeedbackTooltip
         [nzTooltipMouseEnterDelay]="0.4"
@@ -63,12 +81,12 @@
       </button>
     </ng-container>
     <!-- User -->
-    <button
+    <!-- <button
       eo-ng-button
       nzType="text"
       eo-ng-dropdown
       *ngIf="!store.isShare"
-      class="flex items-center justify-center icon"
+      class="flex items-center justify-center icon ml-[10px]"
       [nzDropdownMenu]="userMenu"
       nzPlacement="bottomRight"
     >
@@ -85,19 +103,26 @@
           <li nz-menu-item (click)="loginOut()" i18n>Sign Out</li>
         </ng-container>
       </ul>
-    </eo-ng-dropdown-menu>
+    </eo-ng-dropdown-menu> -->
     <!-- Web download client -->
-    <div class="ml-[10px]" *ngIf="!electron.isElectron && !store.isShare">
-      <eo-ng-dropdown [title]="downloadTitle" btnType="primary" [menus]="resourceInfo" [itemTmp]="downloadMenu">
-        <ng-template #downloadTitle>
-          <eo-iconpark-icon class="mr-[5px]" name="download" size="14px"></eo-iconpark-icon>
-          <span i18n>Download</span>
-        </ng-template>
-      </eo-ng-dropdown>
-      <ng-template #downloadMenu let-item="item">
-        <a [href]="item.link">{{ item.name }}</a>
-      </ng-template>
-    </div>
+    <button
+      eo-ng-button
+      nzType="primary"
+      class="ml-[10px]"
+      *ngIf="!electron.isElectron && !store.isShare"
+      eo-ng-dropdown
+      [nzDropdownMenu]="download"
+    >
+      <eo-iconpark-icon class="mr-[5px]" name="download" size="14px"></eo-iconpark-icon>
+      <span i18n>Download</span>
+    </button>
+    <eo-ng-dropdown-menu #download="nzDropdownMenu">
+      <ul nz-menu>
+        <ng-container *ngFor="let item of resourceInfo; let index = index">
+          <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+        </ng-container>
+      </ul>
+    </eo-ng-dropdown-menu>
     <!--  PC system operate -->
     <eo-nav-operate></eo-nav-operate>
   </div>

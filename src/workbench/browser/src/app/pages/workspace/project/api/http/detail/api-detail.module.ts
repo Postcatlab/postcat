@@ -14,11 +14,11 @@ import { ApiSharedModule } from '../../../../../../modules/api-shared/api-shared
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { ApiDetailComponent } from './api-detail.component';
 import { ApiDetailBodyComponent } from './body/api-detail-body.component';
-import { EoApiMethodsTagComponent } from './eo-api-methods-tag/eo-api-methods-tag.component';
+import { PcApiMethodsTagComponent } from './eo-api-methods-tag/eo-api-methods-tag.component';
 import { ApiDetailFormComponent } from './form/api-detail-form.component';
 
 const NZ_COMPONETS = [EoNgButtonModule, NzTagModule, NzModalModule, NzFormModule, NzToolTipModule, NzCollapseModule];
-const COMPONENTS = [ApiDetailComponent, ApiDetailFormComponent, ApiDetailBodyComponent, EoApiMethodsTagComponent];
+const COMPONENTS = [ApiDetailComponent, ApiDetailFormComponent, ApiDetailBodyComponent, PcApiMethodsTagComponent];
 @NgModule({
   declarations: [...COMPONENTS],
   imports: [

@@ -9,7 +9,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom, map } from 'rxjs';
-const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
+const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +17,7 @@ export class ExtensionService {
   ignoreList = ['default'];
   disabledExtensionNames: string[] = this.getDisableExtensionNames();
   extensionIDs: string[] = [];
-  HOST = this.electron.isElectron ? APP_CONFIG.EXTENSION_URL : APP_CONFIG.MOCK_URL;
+  HOST = APP_CONFIG.EXTENSION_URL;
   installedList: ModuleInfo[] = [];
   installedMap: Map<string, ModuleInfo>;
   constructor(

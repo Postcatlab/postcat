@@ -8,6 +8,7 @@
     "start": "pm2-runtime start ./server/main.js",
     "start:io": "pm2-runtime start ./server/socketio.js",
     "start:all": "yarn start && yarn start:io",
+    "start:all:pm2": "pm2 start ./server/main.js && pm2 start ./server/socketio.js",
     "watch": "pm2 list",
     "stop": "pm2 stop all",
     "test": "echo \"Error: no test specified\" && exit 1"

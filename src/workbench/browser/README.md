@@ -1,5 +1,5 @@
-# Eoapi Workbench
-Eoapi browser code
+# Postcat Workbench
+Postcat browser code
 # Run
 
 | Command                  | Desc                                 |

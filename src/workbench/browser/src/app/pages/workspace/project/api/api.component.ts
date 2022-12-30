@@ -119,12 +119,6 @@ export class ApiComponent implements OnInit, OnDestroy {
       }, []);
       this.rightExtras.push(...rightExtra);
     });
-    this.rightExtras.forEach(val => {
-      //TODO remove after 2023.02
-      if (val.icon === 'file-text-one') {
-        val.icon = 'file-text';
-      }
-    });
     // console.log('this.rightExtras', this.rightExtras);
   }
   /**
