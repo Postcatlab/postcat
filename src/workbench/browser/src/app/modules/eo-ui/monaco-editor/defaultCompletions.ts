@@ -1,6 +1,6 @@
 import type { languages } from 'monaco-editor';
 
-// https://docs.eoapi.io/docs/script-function.html
+// https://docs.postcat.com/docs/script-function.html
 // 自动根据页面中片段生成数组
 // $('.language-').querySelector('code').innerText.split(';').map(n => {
 //   const [_, comment = '', label, call] = n.match(/\/\/(.*)\n(.*)(\(.*)/) || []

@@ -57,7 +57,7 @@ export class DataSourceService {
           nzTitle: $localize`The version of the cloud service is too low`,
           nzContent:
             $localize`Requires cloud service at least version ${minFontendVersion}.<br>` +
-            $localize`Please update the local version to the latest version <a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
+            $localize`Please update the local version to the latest version <a href="https://docs.postcat.com/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
         });
         return true;
       }
@@ -76,14 +76,7 @@ export class DataSourceService {
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
     if (this.web.isVercel) {
-      this.modal.info({
-        nzTitle: $localize`Need to deploy cloud services`,
-        nzContent:
-          `<span>${$localize`Store data on the cloud for team collaboration and product use across devices.`}</span>` +
-          `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo-link">${$localize`Learn more..`}</a>`,
-        nzOnOk: () => console.log('Info OK'),
-        nzMaskClosable: true
-      });
+      pcConsole.error(`Vercel can't operate remote data`);
       return;
     }
     if (this.web.isWeb) {

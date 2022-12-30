@@ -479,8 +479,6 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
         }
       }
     };
-  //TODO compatible with old version
-  tmpSanboxObj.eo = tmpSanboxObj.pc;
   const tmpVm = new NodeVM({
       sandbox: tmpSanboxObj,
       require: {
@@ -502,9 +500,9 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       // }
       if (!inputData.isReturnSoonWhenExecCode && tmpNeedToExecRequestScript) {
         tmpNowIsExecuteEnvScript = true;
-        tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.requestScript || '', 'eo.infiniteLoopDetector'));
+        tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.requestScript || '', 'pc.infiniteLoopDetector'));
       }
-      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
+      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'pc.infiniteLoopDetector'));
     } catch (Err) {
       switch (Err) {
         case 'info':
@@ -516,7 +514,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
           switch (Err) {
             case 'info': {
               tmpStatus = 'info';
-              tmpErrorContent = 'eo.info 触发中断';
+              tmpErrorContent = 'pc.info 触发中断';
               break;
             }
             case 'interrupt': {
@@ -809,7 +807,7 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
     tmpCodeEvalObj = tmpVm._context;
   tmpCodeEvalObj.pc = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
   privateFun.setTypesRefFns(
-    tmpCodeEvalObj.eo,
+    tmpCodeEvalObj.pc,
     Object.assign({}, inputOpts, {
       response: inputData
     }),
@@ -820,10 +818,10 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
   if (inputScript || tmpTargetTypeEnv.responseScript) {
     try {
       // _LibsCommon.execFnDefine(inputOpts.functionCode || [], tmpVm, tmpCodeEvalObj.eo);
-      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
+      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'pc.infiniteLoopDetector'));
       if (!inputOpts.isReturnSoonWhenExecCode) {
         tmpNowIsExecuteEnvScript = true;
-        tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.responseScript || '', 'eo.infiniteLoopDetector'));
+        tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.responseScript || '', 'pc.infiniteLoopDetector'));
       }
     } catch (Err) {
       switch (Err) {
@@ -836,7 +834,7 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
           switch (Err) {
             case 'info': {
               tmpStatus = 'info';
-              tmpErrorContent = 'eo.info 触发中断';
+              tmpErrorContent = 'pc.info 触发中断';
               break;
             }
             case 'interrupt': {

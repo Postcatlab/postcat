@@ -58,7 +58,7 @@
     "http_code_is_not_match": "状态码不匹配，匹配规则为: ? ，实际返回: ?",
     "response_header_is_not_exist": "返回头部 ? 不存在",
     "response_header_is_not_match": "返回头部 ? 结果不匹配，内容校验为 ? ?，实际返回 ?",
-    "assertError": "`触发${tmpTitle||'自定义校验规则'}中eo.error()函数`",
+    "assertError": "`触发${tmpTitle||'自定义校验规则'}中pc.error()函数`",
     "unfoundErr": "不存在",
     "sqlExecuteErrMsg": "执行异常，错误原因：?",
     "fnCodeExecuteErrMsg": "运行错误，请检查代码${tmpErrorLine?`（${tmpErrorLine}行，${tmpErrorColumn}列）`:``}，错误信息：${Err.message}",
@@ -69,14 +69,14 @@
     "responsePreReduceErrMsg": "${tmpTitle||'后置脚本'}运行错误，请检查代码${tmpErrorLine?`（${tmpErrorLine}行，${tmpErrorColumn}列）`:``}，错误信息：${Err.message}",
     "63be68fa-31fc-498c-b49c-d3b6db10a95b": "暂且不提供访问本地，若想继续，请使用官方所提供的测试增强插件！",
     "d6fa1d73-6a43-477f-a6df-6752661c9df3": "请求地址非法！",
-    "a589da5d-3c96-487c-8aaa-645acb3bd8f6": "`触发${tmpTitle||'返回数据生成代码'}中eo.stop()函数，请求终止`",
+    "a589da5d-3c96-487c-8aaa-645acb3bd8f6": "`触发${tmpTitle||'返回数据生成代码'}中pc.stop()函数，请求终止`",
     "a89c785a-6075-4c04-8a60-28436f04e1f9": "[binary]${filename}解析错误",
     "152df5bb-290c-4672-8173-0dae3fa4540f": "数据库无法连接，请检查数据库连接信息是否正确，或者是否为EOLINKER设置访问白名单",
     "d9b74e6f-6071-4708-83b6-7db662d27502": "触发函数中止",
     "213d3b0f-b267-4d5c-9512-0a06e2a5a522": "jwt签名构造失败",
-    "42c487b2-4b68-4dd1-834e-e1c978c8ea51": "`触发${tmpTitle||'自定义校验规则'}中eo.stop()函数，请求终止`",
+    "42c487b2-4b68-4dd1-834e-e1c978c8ea51": "`触发${tmpTitle||'自定义校验规则'}中pc.stop()函数，请求终止`",
     "40867a93-0dad-49ce-971c-5da427f1d817": "解析错误",
     "144010a7-f39a-4fc6-be20-31df96f36c0b": "`根据JSON Path匹配规则，${inputOptions.paramKey} 找到匹配值为：${JSON.stringify(inputResponseData).replace(/^\\[/,'').replace(/\\]$/,'')}，不符合校验规则：${CONST_MATCH_STR[inputOptions.matchRule]}${tmpOriginalTextStr}`",
-    "86acaf28-2e2e-d8c4-82be-3db350d83e9d": "触发eo.error()函数"
+    "86acaf28-2e2e-d8c4-82be-3db350d83e9d": "触发pc.error()函数"
   }
 }

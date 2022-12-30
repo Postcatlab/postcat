@@ -10,7 +10,7 @@ import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal
 })
 export class WebService {
   isWeb = !this.electronService.isElectron;
-  isVercel = window.location.href.includes('vercel') || window.location.host.includes('eoapi.io');
+  isVercel = window.location.href.includes('vercel');
   resourceInfo = [
     {
       id: 'win',

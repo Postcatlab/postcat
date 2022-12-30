@@ -22,7 +22,7 @@ import path from 'node:path';
 const extServerMap = new Map<string, SidebarView>();
 
 // * npm pkg name
-const defaultExtension = [{ name: 'eoapi-export-openapi' }, { name: 'eoapi-import-openapi' }];
+const defaultExtension = [{ name: 'postcat-export-openapi' }, { name: 'postcat-import-openapi' }];
 const isExists = async filePath =>
   await promises
     .access(filePath)

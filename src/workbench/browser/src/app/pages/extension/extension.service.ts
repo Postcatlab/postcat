@@ -9,7 +9,7 @@ import { MessageService } from 'eo/workbench/browser/src/app/shared/services/mes
 import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom, map } from 'rxjs';
-const defaultExtensions = ['eoapi-export-openapi', 'eoapi-import-openapi'];
+const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
 @Injectable({
   providedIn: 'root'
 })
