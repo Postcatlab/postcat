@@ -1,5 +1,4 @@
-build/** linguist-language=ts
-build/** linguist-vendored
+build/** linguist-vendored=true
 * text=auto eol=lf
 *.ts linguist-detectable=false
 *.css linguist-detectable=false
