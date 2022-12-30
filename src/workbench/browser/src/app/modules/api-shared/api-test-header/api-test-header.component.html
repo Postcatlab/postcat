@@ -1,0 +1,12 @@
+<fieldset [disabled]="disabled">
+  <div class="flex items-center h-10 param-box-header">
+    <params-import [disabled]="disabled" [(baseData)]="model" contentType="header"></params-import>
+  </div>
+</fieldset>
+<eo-ng-table-pro
+  [columns]="listConf.columns"
+  [nzDataItem]="itemStructure"
+  [setting]="listConf.setting"
+  [(nzData)]="model"
+  (nzDataChange)="modelChange.emit($event)"
+></eo-ng-table-pro>

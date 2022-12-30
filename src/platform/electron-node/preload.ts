@@ -1,3 +1,0 @@
-globalThis.eo = {
-  getExtensionSetting() {},
-};

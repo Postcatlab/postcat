@@ -46,7 +46,7 @@ server {
 
   # websocket测试服务
   location ~/socket.io/(.*) {
-    proxy_pass http://eoapi-test-server:$EOAPI_WEBSOCKET_POST; # 转发规则
+    proxy_pass http://eoapi-test-server:$POSTCAT_WEBSOCKET_POST; # 转发规则
 
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;

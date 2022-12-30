@@ -1,0 +1,42 @@
+<div class="mb-4">
+  <ng-container *ngIf="extensionList.length; else empty">
+    <div class="grid grid-cols-4 gap-4">
+      <div *ngFor="let item of extensionList" class="w-full h-14" (click)="selectExtension(item)">
+        <div
+          [class.active]="extension === item.key"
+          class="relative flex items-center justify-center w-full h-full border rounded-md extension"
+          nzTooltipPlacement="bottom"
+          [nzTooltipTitle]="item.title || item.label"
+          eoNgFeedbackTooltip
+          [nzTooltipMouseEnterDelay]="0.4"
+        >
+          <span *ngIf="!item.icon">{{ item.title || item.label }}</span>
+          <i class="logobg absolute left-1.5 right-1.5 top-0 bottom-0" [ngStyle]="{ 'background-image': 'url(' + item.icon + ')' }"></i>
+          <eo-iconpark-icon name="check" class="absolute bottom-0 right-0 check" size="18px"></eo-iconpark-icon>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<ng-template #empty>
+  <div class="mb-4 text" i18n>
+    This feature requires plugin support, please open <a class="eo-link" (click)="openExtension()"> Extensions Hub </a>
+    download or open exist extensions.
+  </div>
+</ng-template>
+
+<div class="py-2 my-2" *ngIf="optionList.length">
+  <eo-ng-radio-group [ngModel]="currentOption" (ngModelChange)="selectOption($event)" class="w-full">
+    <div class="grid grid-cols-3 gap-2">
+      <label class="text" eo-ng-radio [nzValue]="item.value" *ngFor="let item of optionList">{{ item.label }}</label>
+    </div>
+  </eo-ng-radio-group>
+</div>
+
+<div class="mt-4" *ngIf="allowDrag && extensionList.length">
+  <nz-upload nzType="drag" [nzBeforeUpload]="parserFile">
+    <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
+    <p class="ant-upload-hint" i18n>Only supports importing a single file</p>
+  </nz-upload>
+  <div class="h-4 my-2 text">{{ filename }}</div>
+</div>

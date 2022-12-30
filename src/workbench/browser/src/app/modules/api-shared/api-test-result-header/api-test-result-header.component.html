@@ -1,0 +1,10 @@
+<nz-empty *ngIf="!model || !model.length" nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+  <ng-template #contentTpl>
+    <span i18n>No Headers</span>
+  </ng-template>
+</nz-empty>
+<ul class="leading-7 p-0" *ngIf="model && model.length">
+  <li *ngFor="let item of model">
+    <span class="text-tips fwb">{{ item.name }}: </span><span>{{ item.value }}</span>
+  </li>
+</ul>

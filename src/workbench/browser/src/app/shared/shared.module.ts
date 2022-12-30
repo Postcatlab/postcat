@@ -1,120 +1,63 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PageNotFoundComponent, ToolbarComponent, SidebarComponent } from './components';
-import { ClickStopPropagationDirective } from './directives';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { WujieModule } from '@xmagic/ngx-wujie';
-
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { NzTabsModule } from 'ng-zorro-antd/tabs';
-import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzResultModule } from 'ng-zorro-antd/result';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { NzCodeEditorModule } from 'ng-zorro-antd/code-editor';
-import { NzResizableModule } from 'ng-zorro-antd/resizable';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzTypographyModule } from 'ng-zorro-antd/typography';
-import { NzListModule } from 'ng-zorro-antd/list';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-
-import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NzMessageModule } from 'ng-zorro-antd/message';
-import { ApiParamsNumPipe } from './pipes/api-param-num.pipe';
-import { PageBlankComponent } from './components/page-blank/page-blank.component';
 import { RouterModule } from '@angular/router';
-import { ShadowDomEncapsulationComponent } from 'eo/workbench/browser/src/app/shared/components/shadow/shadow-dom-encapsulation.component';
-import { EoIconparkIconModule } from 'eo/workbench/browser/src/app/eoui/iconpark-icon/eo-iconpark-icon.module';
-import { ApiScriptComponent } from './components/api-script/api-script.component';
-import { EouiModule } from 'eo/workbench/browser/src/app/eoui/eoui.module';
-import { NzTreeModule } from 'ng-zorro-antd/tree';
-import { EnvListComponent } from 'eo/workbench/browser/src/app/shared/components/env-list/env-list.component';
-import { SplitPanelComponent } from 'eo/workbench/browser/src/app/shared/components/split-panel/split.panel.component';
-import { SplitXComponent } from 'eo/workbench/browser/src/app/shared/components/split-x/split-x.component';
-import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/shared/components/monaco-editor/monaco-editor.component';
+import { EoNgAutoCompleteModule } from 'eo-ng-auto-complete';
+import { EoNgButtonModule } from 'eo-ng-button';
+import { EoNgCheckboxModule } from 'eo-ng-checkbox';
+import { EoNgDropdownModule } from 'eo-ng-dropdown';
+import { EoNgFeedbackAlertModule, EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
+import { EoNgInputModule } from 'eo-ng-input';
+import { EoNgRadioModule } from 'eo-ng-radio';
+import { EoNgSelectModule } from 'eo-ng-select';
+import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/shared/components/download-client.component';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { DownloadClienteComponent } from 'eo/workbench/browser/src/app/core/services/web/download-client.component';
-import { LocalWorkspaceTipComponent } from './components/local-workspace-tip/local-workspace-tip.component';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+
+import { EoIconparkIconModule } from '../modules/eo-ui/iconpark-icon/eo-iconpark-icon.module';
 import { ExtensionAppComponent } from './components/extension-app/extension-app.component';
+import { ClickStopPropagationDirective, FormFocusDirective } from './directives';
 
-const COMPONENTS = [
-  ToolbarComponent,
-  ShadowDomEncapsulationComponent,
-  SidebarComponent,
-  PageNotFoundComponent,
-  ApiScriptComponent,
-  SplitPanelComponent,
-  SplitXComponent,
-  EoMonacoEditorComponent,
-  EnvListComponent,
-  SplitPanelComponent,
-  EoMonacoEditorComponent,
-  DownloadClienteComponent,
-  LocalWorkspaceTipComponent,
-  ExtensionAppComponent,
-];
-
-const SHARED_MODULE = [
-  CommonModule,
-  FormsModule,
-  RouterModule,
-  ReactiveFormsModule,
+const COMPONENTS = [DownloadClienteComponent, ExtensionAppComponent];
+const DIRECTIVES = [ClickStopPropagationDirective, FormFocusDirective];
+const SHARED_UI_MODULE = [
   NzFormModule,
-  NzDrawerModule,
-  NzRadioModule,
-  NzButtonModule,
-  NzToolTipModule,
-  NzResultModule,
-  NzDropDownModule,
-  NzSpinModule,
-  NzCardModule,
-  NzNotificationModule,
-  NzEmptyModule,
-  NzMessageModule,
-  NzDescriptionsModule,
-  NzInputModule,
-  NzCheckboxModule,
-  EouiModule,
-  NzTreeModule,
-  NzAvatarModule,
-  NzTabsModule,
-  NzSkeletonModule,
-  NzPopoverModule,
-  NzCodeEditorModule,
-  NzResizableModule,
+  EoNgButtonModule,
+  EoNgCheckboxModule,
+  EoNgSelectModule,
+  EoNgInputModule,
+  EoNgDropdownModule,
+  EoNgRadioModule,
+  EoNgAutoCompleteModule,
+  EoNgFeedbackMessageModule,
+  EoNgFeedbackAlertModule,
+  EoNgFeedbackTooltipModule,
   EoIconparkIconModule,
-  NzInputNumberModule,
-  NzSwitchModule,
-  NzDividerModule,
-  NzModalModule,
+  NzSkeletonModule,
   NzTypographyModule,
+  NzPopoverModule,
+  NzDividerModule,
+  NzSpinModule,
+  NzEmptyModule,
+  NzModalModule,
   NzListModule,
-  NzCollapseModule,
-  NzTagModule,
-  NzPopconfirmModule,
+  NzPopconfirmModule
 ] as const;
+const SHARED_MODULE = [CommonModule, FormsModule, RouterModule, ReactiveFormsModule] as const;
 
 @NgModule({
-  imports: [...SHARED_MODULE, WujieModule],
-  declarations: [...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe, PageBlankComponent, EnvListComponent],
+  imports: [...SHARED_MODULE, ...SHARED_UI_MODULE],
+  declarations: [...COMPONENTS, ...DIRECTIVES],
   providers: [],
-  exports: [...SHARED_MODULE, ...COMPONENTS, ClickStopPropagationDirective, ApiParamsNumPipe],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [...SHARED_MODULE, ...COMPONENTS, ...SHARED_UI_MODULE, ...DIRECTIVES],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule {}

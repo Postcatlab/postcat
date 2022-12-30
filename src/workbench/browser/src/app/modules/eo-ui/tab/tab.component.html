@@ -1,0 +1,96 @@
+<!-- {{ getConsoleTabs() | json }} -->
+<eo-ng-tabset
+  [(nzSelectedIndex)]="tabOperate.selectedIndex"
+  nzType="editable-card"
+  [nzHideAdd]="true"
+  [nzCanDeactivate]="canDeactivate"
+  (nzSelectChange)="selectChange($event)"
+  [nzTabBarExtraContent]="extraTemplate"
+>
+  <eo-ng-tab *ngFor="let uuid of tabStorage.tabOrder; let i = index" [nzTitle]="titleTemplate">
+    <ng-template #titleTemplate>
+      <div
+        (dblclick)="doubleClickTab($event, uuid)"
+        class="flex items-center tab-item-container h-100"
+        [ngClass]="{
+          'fixed-tab-item-container': tabStorage.tabsByID.get(uuid)?.isFixed,
+          'has-edit-tab-item-container': tabStorage.tabsByID.get(uuid)?.hasChanged
+        }"
+      >
+        <!-- loading -->
+        <nz-spin nzSimple class="mr10" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid)?.isLoading"></nz-spin>
+        <eo-iconpark-icon
+          class="mr-[5px] h-[16px]"
+          name="{{ tabStorage.tabsByID.get(uuid)?.icon }}"
+          size="14px"
+          *ngIf="tabStorage.tabsByID.get(uuid)?.icon"
+        ></eo-iconpark-icon>
+        <!-- {{ tabStorage.tabsByID.get(uuid) | json }} -->
+        <ng-container
+          *nzStringTemplateOutlet="
+            titleLabel;
+            context: {
+              item: tabStorage.tabsByID.get(uuid)
+            }
+          "
+        >
+        </ng-container>
+        <span class="flex-1 truncate tab-text" [title]="tabStorage.tabsByID.get(uuid)?.title">
+          {{ tabStorage.tabsByID.get(uuid)?.title }}</span
+        >
+        <!-- Close/HasEdit -->
+        <div class="flex items-center tab-item-button-group ml-[5px]">
+          <nz-badge
+            class="tab-has-edit-icon ant-badge-theme-color"
+            *ngIf="tabStorage.tabsByID.get(uuid)?.hasChanged"
+            nzStatus="default"
+          ></nz-badge>
+          <button
+            aria-label="Close tab"
+            eo-ng-button
+            (click)="closeTab({ $event: $event, index: i, tab: tabStorage.tabsByID.get(uuid) })"
+            class="ant-tabs-tab-remove"
+          >
+            <eo-iconpark-icon name="close"></eo-iconpark-icon>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </eo-ng-tab>
+</eo-ng-tabset>
+<ng-template #extraTemplate>
+  <div class="flex items-center ml-[10px] h-full">
+    <button
+      eo-ng-button
+      nzType="text"
+      (click)="newTab()"
+      eo-ng-dropdown
+      [nzDropdownMenu]="addDropDown"
+      class="{{ tabStorage.tabOrder.length >= MAX_TAB_LIMIT ? 'hidden' : '' }}"
+    >
+      <eo-iconpark-icon name="add"></eo-iconpark-icon>
+    </button>
+    <button eo-ng-button nzType="text" eo-ng-dropdown [nzDropdownMenu]="menu">
+      <eo-iconpark-icon name="more"></eo-iconpark-icon>
+    </button>
+    <eo-ng-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="closeTabByOperate('closeOther')" [nzDisabled]="tabStorage.tabOrder.length === 1" i18n>
+          Close Other Tags (excluding current tabs)
+        </li>
+        <li nz-menu-item (click)="closeTabByOperate('closeAll')" i18n>Close All Tabs</li>
+        <li nz-menu-item (click)="closeTabByOperate('closeLeft')" [nzDisabled]="tabOperate.selectedIndex === 0" i18n>
+          Close Tabs To the Left
+        </li>
+        <li
+          nz-menu-item
+          [nzDisabled]="tabStorage.tabOrder.length - 1 === tabOperate.selectedIndex"
+          (click)="closeTabByOperate('closeRight')"
+          i18n
+        >
+          Close Tabs to the Right
+        </li>
+      </ul>
+    </eo-ng-dropdown-menu>
+  </div>
+</ng-template>

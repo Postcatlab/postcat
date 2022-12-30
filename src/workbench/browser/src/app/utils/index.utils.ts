@@ -1,3 +1,18 @@
+window.pcConsole = {
+  log(...args) {
+    console.log('%c EO_LOG: ', 'background-color:#2a4073; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
+  },
+  warn(...args) {
+    console.warn('%c EO_WARN:', 'background-color:#ffd900;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
+  },
+  error(...args) {
+    console.error(
+      '%c EO_ERROR: ',
+      'background-color: #a73836; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;',
+      ...args
+    );
+  }
+};
 export const uuid = (): string => Math.random().toString(36).slice(-8);
 
 // const DOMAIN_REGEX =
@@ -57,7 +72,7 @@ export const whatTextType = (tmpText): 'xml' | 'json' | 'html' | 'text' => {
  *
  * @param obj
  */
-export const reverseObj = (obj) =>
+export const reverseObj = obj =>
   Object.keys(obj).reduce((acc, key) => {
     acc[obj[key]] = key;
     return acc;
@@ -67,32 +82,31 @@ export const reverseObj = (obj) =>
  *
  * @param obj
  */
-export const objectToArray = (obj) =>
-  Object.keys(obj).map((val) => ({
+export const objectToArray = obj =>
+  Object.keys(obj).map(val => ({
     key: val,
-    value: obj[val],
+    value: obj[val]
   }));
-export const isEmptyObj = (obj) =>
-  obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
-export const isEmptyValue = (obj) => {
+export const isEmptyObj = obj => obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
+export const isEmptyValue = obj => {
   const list = Object.keys(obj);
-  const emptyList = list.filter((it) => !obj[it]);
+  const emptyList = list.filter(it => !obj[it]);
   // * If they length are equal, means each value of obj is empty. like { name: '', value: '' }
   return emptyList.length === list.length;
 };
-export const transferFileToDataUrl = (file) =>
-  new Promise((resolve) => {
+export const transferFileToDataUrl = file =>
+  new Promise(resolve => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = (ev) => {
+    reader.onload = ev => {
       resolve({ name: file.name, content: ev.target.result });
     };
   });
 export const parserJsonFile = (file, type = 'UTF-8') =>
-  new Promise((resolve) => {
+  new Promise(resolve => {
     const reader = new FileReader();
     reader.readAsText(file, type);
-    reader.onload = (ev) => {
+    reader.onload = ev => {
       const fileString: string = ev.target.result as string;
       const json = JSON.parse(fileString);
       resolve({ name: file.name, content: json });
@@ -103,12 +117,12 @@ export const getDefaultValue = (list: any[], key) => {
   if (list.length === 0) {
     return '';
   }
-  const [target] = list.filter((it) => it.default);
+  const [target] = list.filter(it => it.default);
   return target[key] || '';
 };
 
-export const parserProperties = (properties) => Object.keys(properties).map((it) => ({ value: it, ...properties[it] }));
-const base64ToUint8Array = (inputBase64String) => {
+export const parserProperties = properties => Object.keys(properties).map(it => ({ value: it, ...properties[it] }));
+const base64ToUint8Array = inputBase64String => {
   const tmpPadding = '='.repeat((4 - (inputBase64String.length % 4)) % 4);
   const tmpBase64 = (inputBase64String + tmpPadding).replace(/\-/g, '+').replace(/_/g, '/');
 
@@ -120,7 +134,7 @@ const base64ToUint8Array = (inputBase64String) => {
   return tmpOutputArray;
 };
 // 字符串转ArrayBuffer
-const s2ab = (s) => {
+const s2ab = s => {
   const buf = new ArrayBuffer(s.length);
   const view = new Uint8Array(buf);
   for (let i = 0; i !== s.length; ++i) {
@@ -135,11 +149,10 @@ export const getBlobUrl = (inputStream, inputFileType) => {
     // inputStream = base64ToUint8Array(inputStream);
     if (typeof window.Blob === 'function') {
       tmpBlob = new Blob([s2ab(inputStream)], {
-        type: inputFileType,
+        type: inputFileType
       });
     } else {
-      const tmpBlobBuilder =
-        window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder;
+      const tmpBlobBuilder = window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder;
       const tmpBlobClass = new tmpBlobBuilder();
       tmpBlobClass.append(inputStream);
       tmpBlob = tmpBlobClass.getBlob(inputFileType);
@@ -178,7 +191,6 @@ export function debounce(fn, wait = 50) {
   // 触发事件回调时执行这个返回函数
   return function (...args) {
     // this保存给context
-    const context = this;
     // 如果已经设定过定时器就清空上一次的定时器
     if (timer) {
       clearTimeout(timer);
@@ -186,7 +198,7 @@ export function debounce(fn, wait = 50) {
 
     // 开始设定一个新的定时器，定时器结束后执行传入的函数 fn
     timer = setTimeout(() => {
-      fn.apply(context, args);
+      fn.apply(this, args);
     }, wait);
   };
 }
@@ -204,7 +216,7 @@ export function throttle(fn, gap) {
   };
 }
 
-export const eoDeepCopy = (obj) => {
+export const eoDeepCopy = obj => {
   if (structuredClone) {
     return structuredClone(obj);
   }
@@ -257,9 +269,7 @@ export function isBase64(str) {
   }
 }
 
-export const version2Number = (version) => Number(version.replace(/[v.]/g, ''));
-
-export const copy = (text) => {
+export const copy = text => {
   const el = document.createElement('input');
   el.setAttribute('value', text);
   document.body.appendChild(el);
@@ -267,4 +277,12 @@ export const copy = (text) => {
   const flag = document.execCommand('copy');
   document.body.removeChild(el);
   return !!flag;
+};
+
+export const compareVersion = (v1, v2) => {
+  const _v1 = v1.split('.');
+  const _v2 = v2.split('.');
+  const _r = parseInt(_v1[0] || 0, 10) - parseInt(_v2[0] || 0, 10);
+
+  return _r === 0 && v1 !== v2 ? compareVersion(_v1.splice(1).join('.'), _v2.splice(1).join('.')) : _r;
 };

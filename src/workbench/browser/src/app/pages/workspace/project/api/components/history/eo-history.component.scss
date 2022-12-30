@@ -1,0 +1,15 @@
+@import '../group/tree/api-group-tree.component';
+
+.history-body {
+  height: 100%;
+}
+
+eo-ng-tree-default {
+  height: calc(100% - 40px);
+}
+
+:host {
+  ::ng-deep nz-tree-node-title {
+    width: 0 !important;
+  }
+}

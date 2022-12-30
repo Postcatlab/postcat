@@ -1,25 +1,17 @@
 ::: env_manage {
 
-find(<):
-    [select 'Environment'] = sel
+find:
+    [label 'Environment'] = sel
 
-sel -> 'Manage Environment'
+sel -> click
 
-find(<):
+find:
     [img] [label 'New'] = newLabel
 
 newLabel -> click
 
 }
 
-::: modal_layout {
-
-find: 
-    [input] = envName
-    [input] = host
-    [input] = name [input] = value [input] = desc [img]
-    [button 'Save']=save
-}
 
 ::: add_data {
 name -> '{$1}'
@@ -33,9 +25,22 @@ desc -> '{$3}'
 
 goto 'http://localhost:4200'
 
---- env_manage
+find:
+    [label 'Environment'] = env
 
---- modal_layout
+env -> click
+
+find: 
+    [label 'Environment'] [button { width: 32px }] = add
+
+add -> click
+
+find: 
+    [button 'Save'] = save
+    [input] = envName
+    [label 'Host']
+    [input] = host
+    [input] = name [input] = value [input] = desc 
 
 envName -> 'myEnv'
 host -> 'https://youtube.com'
@@ -44,10 +49,7 @@ host -> 'https://youtube.com'
 
 save -> click
 
-find(<):
-    [label 'myEnv']
-
-find(<):
+find:
     [select 'Environment'] = sel
 
 sel -> 'myEnv'
@@ -55,34 +57,45 @@ sel -> 'myEnv'
 find: 
     [label 'myEnv'] [input]
 
+capture
+
 
 
 --- del case
 
 goto 'http://localhost:4200'
 
---- env_manage
+find:
+    [label 'Environment'] = env
 
---- modal_layout
+env -> click
+
+find: 
+    [label 'Environment'] [button { width: 32px }] = add
+
+add -> click
+
+find: 
+    [button 'Save'] = save
+    [input] = envName
+    [label 'Host']
+    [input] = host
+    [input] = name [input] = value [input] = desc 
 
 envName -> 'myEnv'
 host -> 'https://youtube.com'
 
---- add_data :a:b:c
+--- add_data :a :b :c
 
-# 保存
 save -> click
 
-sel -> 'myEnv'
-
 find: 
-    [label 'New']
     [label 'myEnv'] = env
 
 env -> hover
 
 find: 
-    [label 'New']
+    [label 'Environment'] [button]
     [label 'myEnv'] [img] = delIcon
 
 delIcon -> click
@@ -91,8 +104,5 @@ find:
     [label 'Cancel'] [label 'OK']=ok
     
 ok -> click
-
-find: (!)
-    [label 'myEnv']
 
 capture

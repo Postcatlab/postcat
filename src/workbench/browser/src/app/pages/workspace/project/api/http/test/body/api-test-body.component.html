@@ -1,0 +1,67 @@
+<div class="flex items-center justify-start h-10 param-box-header">
+  <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
+    <label *ngFor="let item of CONST.API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
+  </eo-ng-radio-group>
+  <nz-divider *ngIf="['formData', 'raw'].includes(bodyType)" nzType="vertical"></nz-divider>
+  <!--Select content-type-->
+
+  <div *ngIf="['raw'].includes(bodyType)">
+    <span class="text-[12px]">Content-Type：</span>
+    <eo-ng-select
+      class="text-[12px]"
+      [nzDropdownMatchSelectWidth]="false"
+      (ngModelChange)="changeContentType($event)"
+      [(ngModel)]="contentType"
+      nzBorderless
+    >
+      <eo-ng-option *ngFor="let item of CONST.CONTENT_TYPE" [nzValue]="item.value" [nzLabel]="item.title"></eo-ng-option>
+    </eo-ng-select>
+  </div>
+
+  <!-- Import -->
+  <div *ngIf="['formData'].includes(bodyType)" class="inline-flex items-center">
+    <params-import [baseData]="model" [contentType]="bodyType" (baseDataChange)="handleParamsImport($event)"> </params-import>
+  </div>
+</div>
+<!-- FormData -->
+<eo-ng-table-pro
+  *ngIf="['formData'].includes(bodyType)"
+  [columns]="listConf.columns"
+  [nzDataItem]="itemStructure"
+  [setting]="listConf.setting"
+  [(nzData)]="model"
+  (nzDataChange)="emitModelChange()"
+></eo-ng-table-pro>
+<ng-template #formValue let-item="item" let-index="index">
+  <div [ngSwitch]="item.type">
+    <input *ngSwitchDefault eo-ng-input [(ngModel)]="item.value" (ngModelChange)="emitModelChange()" />
+    <div *ngSwitchCase="'file'">
+      <label class="ant-btn ant-btn-sm" for="file_{{ index }}" i18n>Choose Files</label>
+      <span class="ml-[10px]" i18n>{{ item.files?.length ? item.files?.length + ' files selected' : 'No file chosen' }}</span>
+      <input id="file_{{ index }}" multiple type="file" class="invisible" (change)="formdataSelectFiles($event.target, item)" />
+    </div>
+  </div>
+</ng-template>
+<!-- JSON -->
+<!-- XML -->
+<!-- Raw -->
+<eo-monaco-editor
+  [(code)]="model"
+  (codeChange)="rawDataChange($event)"
+  *ngIf="bodyType === 'raw'"
+  [editorType]="editorType"
+  [config]="editorConfig"
+  [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+>
+</eo-monaco-editor>
+<!-- Binary -->
+<div class="px-5 min-h-[60%]" *ngIf="bodyType === 'binary'">
+  <nz-upload
+    nzType="drag"
+    [nzBeforeUpload]="uploadBinary"
+    [nzShowUploadList]="{ showDownloadIcon: false, showRemoveIcon: true }"
+    [(nzFileList)]="binaryFiles"
+  >
+    <p class="ant-upload-text" i18n>Tap or drag files directly to this area</p>
+  </nz-upload>
+</div>

@@ -1,0 +1,135 @@
+/**
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
+ */
+
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Host,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Output,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { collapseMotion } from 'ng-zorro-antd/core/animation';
+import { NzConfigKey, NzConfigService, WithConfig } from 'ng-zorro-antd/core/config';
+import { NzNoAnimationDirective } from 'ng-zorro-antd/core/no-animation';
+import { NzDestroyService } from 'ng-zorro-antd/core/services';
+import { BooleanInput } from 'ng-zorro-antd/core/types';
+import { InputBoolean } from 'ng-zorro-antd/core/util';
+import { fromEvent } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+
+import { EoNgCollapseComponent } from './collapse.component';
+
+const NZ_CONFIG_MODULE_NAME: NzConfigKey = 'collapsePanel';
+
+@Component({
+  selector: 'nz-collapse-panel',
+  exportAs: 'nzCollapsePanel',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  animations: [collapseMotion],
+  template: `
+    <div #collapseHeader role="button" [attr.aria-expanded]="nzActive" class="ant-collapse-header ">
+      <div *ngIf="nzShowArrow" class="flex items-center">
+        <ng-container *nzStringTemplateOutlet="nzExpandedIcon; let expandedIcon">
+          <svg class="iconpark-icon w-[18px] h-[18px] mr-icofn" *ngIf="!nzActive"><use href="#down"></use></svg>
+          <svg class="iconpark-icon  w-[18px] h-[18px] mr-icofn" *ngIf="nzActive"><use href="#up"></use></svg>
+        </ng-container>
+      </div>
+      <ng-container *nzStringTemplateOutlet="nzHeader">{{ nzHeader }}</ng-container>
+      <div class="ant-collapse-extra" *ngIf="nzExtra">
+        <ng-container *nzStringTemplateOutlet="nzExtra">{{ nzExtra }}</ng-container>
+      </div>
+    </div>
+    <div
+      class="ant-collapse-content"
+      [class.ant-collapse-content-active]="nzActive"
+      [@.disabled]="noAnimation?.nzNoAnimation"
+      [@collapseMotion]="nzActive ? 'expanded' : 'hidden'"
+    >
+      <div class="ant-collapse-content-box">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  `,
+
+  host: {
+    class: 'ant-collapse-item',
+    '[class.ant-collapse-no-arrow]': '!nzShowArrow',
+    '[class.ant-collapse-item-active]': 'nzActive',
+    '[class.ant-collapse-item-disabled]': 'nzDisabled',
+  },
+  providers: [NzDestroyService],
+})
+export class EoNgCollapsePanelComponent implements OnInit, OnDestroy {
+  readonly _nzModuleName: NzConfigKey = NZ_CONFIG_MODULE_NAME;
+  static ngAcceptInputType_nzActive: BooleanInput;
+  static ngAcceptInputType_nzDisabled: BooleanInput;
+  static ngAcceptInputType_nzShowArrow: BooleanInput;
+
+  @Input() @InputBoolean() nzActive = false;
+  @Input() @InputBoolean() nzDisabled = false;
+  @Input() @WithConfig() @InputBoolean() nzShowArrow: boolean = true;
+  @Input() nzExtra?: string | TemplateRef<void>;
+  @Input() nzHeader?: string | TemplateRef<void>;
+  @Input() nzExpandedIcon?: string | TemplateRef<void>;
+  @Output() readonly nzActiveChange = new EventEmitter<boolean>();
+
+  @ViewChild('collapseHeader', { static: true }) collapseHeader!: ElementRef<HTMLElement>;
+
+  markForCheck(): void {
+    this.cdr.markForCheck();
+  }
+
+  constructor(
+    public nzConfigService: NzConfigService,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef,
+    private destroy$: NzDestroyService,
+    @Host() private nzCollapseComponent: EoNgCollapseComponent,
+    @Optional() public noAnimation?: NzNoAnimationDirective
+  ) {
+    this.nzConfigService
+      .getConfigChangeEventForComponent(NZ_CONFIG_MODULE_NAME)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.cdr.markForCheck();
+      });
+  }
+
+  ngOnInit(): void {
+    //@ts-ignore
+    this.nzCollapseComponent.addPanel(this);
+
+    this.ngZone.runOutsideAngular(() =>
+      fromEvent(this.collapseHeader.nativeElement, 'click')
+        .pipe(
+          filter(() => !this.nzDisabled),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(() => {
+          this.ngZone.run(() => {
+            //@ts-ignore
+            this.nzCollapseComponent.click(this);
+            this.cdr.markForCheck();
+          });
+        })
+    );
+  }
+
+  ngOnDestroy(): void {
+    //@ts-ignore
+    this.nzCollapseComponent.removePanel(this);
+  }
+}

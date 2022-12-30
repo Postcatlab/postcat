@@ -1,0 +1,20 @@
+<div *ngIf="sidebar.visible" class="eo-sidebar" [ngClass]="{ 'eo-sidebar-shrink': sidebar.collapsed }">
+  <ng-container *ngFor="let item of this.modules">
+    <a
+      (click)="clickModule(item)"
+      class="sidebar-item"
+      eoNgFeedbackTooltip
+      nzTooltipPlacement="right"
+      [nzTooltipTitle]="sidebar.collapsed ? item.title : ''"
+      [ngClass]="{ 'sidebar-item-active': item.id === sidebar.currentID, tiny: sidebar.collapsed }"
+    >
+      <i class="icon">
+        <img class="app-logo" loading="lazy" *ngIf="item.icon?.startsWith('http'); else icon" [src]="item.icon" />
+        <ng-template #icon>
+          <eo-iconpark-icon [name]="item.icon"></eo-iconpark-icon>
+        </ng-template>
+      </i>
+      <span class="mt-[2px] text-[12px]" *ngIf="!sidebar.collapsed">{{ item.title }}</span>
+    </a>
+  </ng-container>
+</div>

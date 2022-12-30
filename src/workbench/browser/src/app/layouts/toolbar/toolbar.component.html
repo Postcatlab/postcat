@@ -1,0 +1,29 @@
+<div class="flex app_toolbar">
+  <div class="flex">
+    <button
+      eo-ng-button
+      nzType="text"
+      *ngIf="sidebar.visible"
+      class="flex items-center"
+      eoNgFeedbackTooltip
+      [nzTooltipPlacement]="['topLeft', 'leftTop']"
+      nzTooltipTitle="{{ sidebar.collapsed ? showSidebar : hideSidebar }}"
+      (click)="toggleCollapsed()"
+    >
+      <eo-iconpark-icon *ngIf="!sidebar.collapsed" name="left-bar"></eo-iconpark-icon>
+      <eo-iconpark-icon *ngIf="sidebar.collapsed" name="right-bar"></eo-iconpark-icon>
+    </button>
+    <button
+      eo-ng-button
+      nzType="text"
+      class="flex items-center"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      [nzTooltipPlacement]="['topLeft', 'leftTop']"
+      nzTooltipTitle="Change Theme"
+      (click)="changeTheme()"
+    >
+      <eo-iconpark-icon name="theme"></eo-iconpark-icon>
+    </button>
+  </div>
+</div>

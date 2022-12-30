@@ -1,0 +1,31 @@
+<div class="flex justify-center w-full p-base">
+  <div class="w-[50%] min-w-[600px] flex flex-col">
+    <form nz-form nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label class="font-bold" [nzSpan]="24" i18n>Project Name</nz-form-label>
+        <nz-form-control nzErrorTip="Please input your projectName">
+          <input eo-ng-input placeholder="Project Name" name="projectName" required [(ngModel)]="projectName" />
+        </nz-form-control>
+      </nz-form-item>
+      <button eo-ng-button nzType="primary" i18n (click)="handleChangeProjectName(projectName)" [nzLoading]="isLoading" i18n>Save</button>
+    </form>
+    <div class="my-2">
+      <nz-divider></nz-divider>
+    </div>
+    <div class="mb-2 font-bold" i18n>Actions</div>
+    <div class="border rounded">
+      <nz-list nzItemLayout="horizontal">
+        <nz-list-item *ngFor="let item of overviewList">
+          <div class="flex items-center justify-between w-full px-base">
+            <span class="w-1/12">{{ item.title }}</span>
+            <span class="w-6/12 text-tips">{{ item.desc }}</span>
+            <button class="w-24" eo-ng-button nzType="default" [nzDanger]="item.type === 'delete'" (click)="clickItem($event, item)">{{
+              item.title
+            }}</button>
+          </div>
+        </nz-list-item>
+        <nz-list-empty *ngIf="overviewList.length === 0"></nz-list-empty>
+      </nz-list>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<!-- <span class="color-[#999]">nzData:</span>
+<div class="mx-2">{{ nzData | json }}</div> -->
+<!-- <span class="color-[#999]">nzDataItem:</span>
+<div class="mx-2">{{ nzDataItem | json }}</div> -->
+<!-- {{ setting | json }} -->
+<!-- {{columnVisibleStatus|json}} -->
+<!-- {{ nzScroll | json }} -->
+<eo-ng-table
+  [ngClass]="{ 'show-btn-when-hover-row': setting.showBtnWhenHoverRow }"
+  class="{{ randomClass }}"
+  [nzDataItem]="nzDataItem"
+  [(nzData)]="nzData"
+  [nzIsLevel]="setting.isLevel"
+  [nzDraggable]="setting.rowSortable"
+  [nzTbody]="tbodyConf"
+  [nzExpand]="nzExpand"
+  [nzPrimaryKey]="setting.primaryKey"
+  [nzChildKey]="tableConfig.childKey"
+  [nzScroll]="nzScroll"
+  [nzCheckAddRow]="nzCheckAddRow"
+  [nzDragCheck]="nzDragCheck"
+  [nzTrClick]="nzTrClick"
+  (nzDataChange)="handleDataChange($event)"
+  [nzThead]="theadConf"
+>
+</eo-ng-table>
+<!-- Enum template -->
+<ng-template #enumsTmp let-item="item" let-rowItem="rowItem">
+  <div class="{{ rowItem.enums[item[rowItem.keyName]]?.class }}">
+    {{ rowItem.enums[item[rowItem.keyName]]?.title }}
+  </div>
+</ng-template>
+<!-- Row Operation Button -->
+<div *ngFor="let btnItem of iconBtns">
+  <ng-template #iconBtnTmp let-item="item" let-apis="apis" let-index="index">
+    <button
+      *ngIf="btnItem.showFn ? btnItem.showFn(item, index, apis) : true"
+      eo-ng-button
+      nzType="text"
+      nz-popconfirm
+      i18n-nzPopconfirmTitle
+      [nzPopconfirmTitle]="btnItem.confirmTitle"
+      [nzCondition]="!btnItem.confirm"
+      (nzOnConfirm)="btnClick(btnItem, index, item, apis)"
+      eoNgFeedbackTooltip
+      i18n-nzTooltipTitle
+      nzTooltipTitle="{{ btnItem.title }}"
+      class="mr-btnbase eo-list-btn"
+    >
+      <svg class="iconpark-icon">
+        <use [attr.href]="'#' + btnItem.icon"></use>
+      </svg>
+    </button>
+  </ng-template>
+</div>
+<!-- Tool Button -->
+<ng-template #toolBtnTmp dir="rtl">
+  <div class="eo-table-tool-bar">
+    <!-- Show Column -->
+    <button
+      eo-ng-dropdown
+      eo-ng-button
+      nzType="text"
+      i18n-nzTooltipTitle
+      eoNgFeedbackTooltip
+      [nzTooltipTitle]="tableConfig.columnVisibleTitle"
+      *ngIf="setting?.toolButton?.columnVisible"
+      [nzDropdownMenu]="dropdownMenTmp"
+    >
+      <svg class="iconpark-icon">
+        <use [attr.href]="'#' + tableConfig.columnVisibleIcon"></use>
+      </svg>
+    </button>
+    <eo-ng-dropdown-menu #dropdownMenTmp>
+      <ul nz-menu>
+        <li nz-menu-item *ngFor="let item of columnVisibleMenus" (ngModelChange)="toggleColumnVisible(item, $event)">
+          <label (click)="$event.stopPropagation()" eo-ng-checkbox [(ngModel)]="item.checked" (ngModelChange)="toggleColumnVisible(item)">{{
+            item.title
+          }}</label>
+        </li>
+      </ul>
+    </eo-ng-dropdown-menu>
+    <!-- Full screen -->
+    <button
+      eoNgFeedbackTooltip
+      i18n-nzTooltipTitle
+      [nzTooltipTitle]="tableConfig.fullScreenTitle"
+      *ngIf="setting?.toolButton?.fullScreen"
+      eo-ng-button
+      nzType="text"
+      (click)="screenAll()"
+    >
+      <svg class="iconpark-icon">
+        <use [attr.href]="'#' + tableConfig.fullScreenIcon"></use>
+      </svg>
+    </button>
+  </div>
+</ng-template>
+
+<!-- Input Number -->
+<ng-template #numberInput let-item="item" let-rowItem="rowItem">
+  <nz-input-number class="w-full" (change)="handleDataChange($event)" min="0" [(ngModel)]="item[rowItem.keyName]"> </nz-input-number>
+</ng-template>

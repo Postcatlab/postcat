@@ -1,6 +1,7 @@
 import { app } from 'electron';
-import { LANGUAGES } from '../../workbench/browser/src/app/core/services/language/language.model';
 import Store from 'electron-store';
+
+import { LANGUAGES } from '../../workbench/browser/src/app/core/services/language/language.model';
 const store = new Store();
 class LanguageInstance {
   private static _instance: LanguageInstance;
@@ -14,7 +15,7 @@ class LanguageInstance {
   }
   getPath() {
     const systemLanguage = this.get();
-    return LANGUAGES.find((val) => val.value === systemLanguage).path;
+    return LANGUAGES.find(val => val.value === systemLanguage).path;
   }
   set(localeID) {
     store.set('language', localeID);

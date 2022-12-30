@@ -1,40 +1,53 @@
-<div class="px-3">
-  <div class="grid grid-cols-2 gap-6 py-5 list-block">
+<div class="px-6 overflow-auto extension-list">
+  <nz-spin class="w-fit mx-auto my-[30px]" nzSimple *ngIf="loading"></nz-spin>
+  <nz-empty class="w-fit mx-auto my-[30px]" *ngIf="!loading && !renderList.length"></nz-empty>
+  <div class="grid gap-6 py-5 2xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-1">
     <div
-      class="bd_all w-full min-h-[140px] p-5 flex flex-col flex-wrap plugin-block hover:border-green-700 hover:shadow-lg transition-shadow duration-300"
-      *ngFor="let it of renderList" (click)="clickExtension($event, it)">
-      <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzAvatar]="true">
-        <div class="flex justify-between w-full">
-          <div class="flex">
-            <div class="shrink-0 block w-[40px] h-[40px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
-              [ngClass]="{ 'bg-gray-100': it.logo }" [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }">
-            </div>
-            <div class="flex flex-col">
-              <div class="flex flex-col flex-auto">
-                <span class="text-lg font-bold">{{ it.title || it.moduleName }}</span>
-                <span class="my-2 text-gray-400">{{ it.author }}</span>
-                <span class="my-1 desc">{{ it.description }}</span>
+      class="flex flex-col flex-wrap w-full transition-shadow duration-300 rounded border-all plugin-block hover:shadow-lg"
+      *ngFor="let it of renderList"
+      (click)="clickExtension($event, it)"
+    >
+      <div class="flex w-full p-5">
+        <div class="flex w-full">
+          <div class="flex flex-col w-full">
+            <div class="flex flex-col w-full">
+              <div class="flex items-center justify-between">
+                <div
+                  class="shrink-0 block w-[30px] h-[30px] rounded-lg bg-[length:90%] bg-center bg-no-repeat mr-[20px]"
+                  [ngStyle]="{ 'background-image': 'url(' + (it.logo || '') + ')' }"
+                ></div>
+                <div *ngIf="type !== 'installed'">
+                  <span
+                    *ngIf="extensionService.installedMap.has(it.name)"
+                    class="p-1 text-xs text-green-700 rounded-sm border-all whitespace-nowrap"
+                    i18n
+                    >Installed</span
+                  >
+                </div>
               </div>
-              <div class="btn-group" *ngIf="type === 'installed'">
-                <ng-container *ngIf="it.features?.configuration">
-                  <a nz-button nzType="link" i18n>Setting</a>
-                  <nz-divider nzType="vertical"></nz-divider>
-                </ng-container>
-                <a nz-button nzType="link"><span data-id="details" i18n="@@ExtensionDetail">Details</span></a>
+              <div class="flex justify-between text-lg">
+                <span class="mt-2 mb-1 text-base font-bold">{{ it.title }}</span>
+                <div *ngIf="type === 'installed'">
+                  <eo-ng-switch
+                    click-stop-propagation
+                    [(ngModel)]="it.enable"
+                    (ngModelChange)="extensionService.toggleEnableExtension(it.name, $event)"
+                  ></eo-ng-switch>
+                </div>
               </div>
+              <span class="text-xs text-gray-400">{{ it.author?.name || it.author }}</span>
+              <div class="flex mt-[15px] text-[12px] desc leading-[1.65]">{{ it.description }}</div>
             </div>
-          </div>
-          <div *ngIf="type === 'installed'">
-            <nz-switch click-stop-propagation [(ngModel)]="it.isEnable"
-              (ngModelChange)="handleEnableExtension($event, it)"></nz-switch>
-          </div>
-          <div *ngIf="type !== 'installed'">
-            <span *ngIf="extensionService.localExtensions.has(it.name)"
-              class="p-1 text-xs text-green-700 border-green-700 rounded-sm bd_all whitespace-nowrap"
-              i18n>Installed</span>
+            <div class="btn-group" *ngIf="type === 'installed'">
+              <ng-container *ngIf="it.features?.configuration">
+                <a eo-ng-button nzType="link" i18n>Setting</a>
+                <nz-divider nzType="vertical"></nz-divider>
+              </ng-container>
+              <a eo-ng-button nzType="link"><span data-id="details" i18n="@@ExtensionDetail">Details</span></a>
+            </div>
           </div>
         </div>
-      </nz-skeleton>
+      </div>
     </div>
   </div>
 </div>

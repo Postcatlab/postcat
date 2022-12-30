@@ -1,0 +1,13 @@
+.remote-notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--remote-notification-height, 0);
+  overflow: hidden;
+}
+
+::ng-deep {
+  .eo-theme-dark eo-local-workspace-tip button {
+    border: 1px solid rgb(255 255 255 / 30%);
+  }
+}

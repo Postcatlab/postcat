@@ -1,0 +1,129 @@
+<div class="flex items-center justify-between eo-navbar">
+  <div class="flex items-center">
+    <img loading="lazy" class="logo" src="assets/images/{{ theme.appearance === 'dark' ? 'logo.svg' : 'logo.svg' }}" />
+    <!-- Star -->
+    <a href="https://github.com/eolinker/eoapi" target="_blank" class="flex items-center ml-[15px] electron-can-be-click">
+      <img loading="lazy" src="https://img.shields.io/github/stars/eolinker/eoapi?style=social" alt="" />
+    </a>
+    <eo-nav-breadcrumb *ngIf="!store.isShare" class="ml-[15px] electron-can-be-click"></eo-nav-breadcrumb>
+  </div>
+  <div class="flex items-center electron-can-be-click">
+    <!-- share -->
+    <eo-get-share-link *ngIf="!store.isLocal && !store.isShare"></eo-get-share-link>
+    <!-- Extension -->
+    <ng-container *ngIf="!store.isShare">
+      <button
+        eo-ng-button
+        nzType="default"
+        class="flex items-center justify-center"
+        i18n-nzTooltipTitle
+        eoNgFeedbackTooltip
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzTooltipPlacement="bottom"
+        nzTooltipTitle="Extensions"
+        (click)="openExtension()"
+        i18n
+      >
+        Extensions
+      </button>
+      <nz-divider nzType="vertical"></nz-divider>
+    </ng-container>
+    <!-- Change Language -->
+    <ng-container *ngIf="store.isShare">
+      <eo-ng-select [(ngModel)]="lang.systemLanguage" nzBorderless (ngModelChange)="handleSwitchLang($event)">
+        <eo-ng-option nzValue="en-US" nzLabel="English"></eo-ng-option>
+        <eo-ng-option nzValue="zh-Hans" nzLabel="简体中文"></eo-ng-option>
+      </eo-ng-select>
+      <nz-divider nzType="vertical"></nz-divider>
+    </ng-container>
+    <!-- Help -->
+    <button eo-ng-button nzType="text" class="flex items-center justify-center" eo-ng-dropdown [nzDropdownMenu]="helpMenu">
+      <eo-iconpark-icon name="help"> </eo-iconpark-icon>
+    </button>
+    <eo-ng-dropdown-menu #helpMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <a href="https://docs.postcat.com" target="_blank" nz-menu-item i18n>Document</a>
+        <li nz-menu-divider></li>
+        <a
+          href="https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment={{
+            issueEnvironment
+          }}"
+          target="_blank"
+          nz-menu-item
+          i18n
+          >Report Issue</a
+        >
+      </ul>
+    </eo-ng-dropdown-menu>
+    <!-- <eo-ng-dropdown class="mr-[10px]" btnType="text" [title]="helpTitle" [itemTmp]="helpTemplateItem" [menus]="helpMenus">
+      <ng-template #helpTitle>
+        <eo-iconpark-icon name="help"></eo-iconpark-icon>
+      </ng-template>
+    </eo-ng-dropdown>
+    <ng-template #helpTemplateItem let-item="item">
+      <a href="{{ item.href }}" target="_blank" i18n>{{ item.title }}</a>
+      <li nz-menu-divider></li>
+    </ng-template> -->
+    <ng-container *ngIf="!store.isShare">
+      <!-- setting -->
+      <button
+        eo-ng-button
+        nzType="text"
+        class="flex items-center justify-center icon"
+        i18n-nzTooltipTitle
+        eoNgFeedbackTooltip
+        [nzTooltipMouseEnterDelay]="0.4"
+        nzTooltipPlacement="bottom"
+        nzTooltipTitle="Open Settings"
+        (click)="openSettingModal()"
+      >
+        <eo-iconpark-icon name="setting"></eo-iconpark-icon>
+      </button>
+    </ng-container>
+    <!-- User -->
+    <!-- <button
+      eo-ng-button
+      nzType="text"
+      eo-ng-dropdown
+      *ngIf="!store.isShare"
+      class="flex items-center justify-center icon ml-[10px]"
+      [nzDropdownMenu]="userMenu"
+      nzPlacement="bottomRight"
+    >
+      <eo-iconpark-icon name="people"> </eo-iconpark-icon>
+    </button>
+    <eo-ng-dropdown-menu #userMenu>
+      <ul nz-menu>
+        <li nz-menu-item *ngIf="!store.isLogin" (click)="loginOrSign()" i18n>Sign in/Up</li>
+        <ng-container *ngIf="store.isLogin">
+          <li nz-menu-item class="px-[12px] py-[5px] text-neutral-400 font-bold">
+            {{ store.getUserProfile?.username }}
+          </li>
+          <li nz-menu-item (click)="openSettingModal()" i18n>Account Setting</li>
+          <li nz-menu-item (click)="loginOut()" i18n>Sign Out</li>
+        </ng-container>
+      </ul>
+    </eo-ng-dropdown-menu> -->
+    <!-- Web download client -->
+    <button
+      eo-ng-button
+      nzType="primary"
+      class="ml-[10px]"
+      *ngIf="!electron.isElectron && !store.isShare"
+      eo-ng-dropdown
+      [nzDropdownMenu]="download"
+    >
+      <eo-iconpark-icon class="mr-[5px]" name="download" size="14px"></eo-iconpark-icon>
+      <span i18n>Download</span>
+    </button>
+    <eo-ng-dropdown-menu #download="nzDropdownMenu">
+      <ul nz-menu>
+        <ng-container *ngFor="let item of resourceInfo; let index = index">
+          <a [href]="item.link" nz-menu-item>{{ item.name }}</a>
+        </ng-container>
+      </ul>
+    </eo-ng-dropdown-menu>
+    <!--  PC system operate -->
+    <eo-nav-operate></eo-nav-operate>
+  </div>
+</div>

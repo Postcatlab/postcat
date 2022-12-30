@@ -7,7 +7,7 @@ describe('StorageService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers:[StorageService]
+      providers: [StorageService],
     });
     service = TestBed.inject(StorageService);
   });

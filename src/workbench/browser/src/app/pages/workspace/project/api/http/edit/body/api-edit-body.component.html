@@ -1,0 +1,56 @@
+<div class="flex items-center justify-start h-10 param-box-header">
+  <div class="flex items-center h-full">
+    <eo-ng-radio-group [(ngModel)]="bodyType" (ngModelChange)="changeBodyType()">
+      <label *ngFor="let item of CONST.API_BODY_TYPE" eo-ng-radio [nzValue]="item.value">{{ item.key }}</label>
+    </eo-ng-radio-group>
+  </div>
+  <div *ngIf="['formData', 'json', 'xml'].includes(bodyType)">
+    <nz-divider nzType="vertical"></nz-divider>
+    <params-import
+      [baseData]="model"
+      [contentType]="bodyType"
+      (baseDataChange)="handleParamsImport($event)"
+      (beforeHandleImport)="beforeHandleImport($event)"
+      [rootType]="jsonRootType"
+    ></params-import>
+  </div>
+</div>
+<div *ngIf="bodyType === 'json'" class="px-4 py-2">
+  <eo-ng-select class="w-[100px] mb10" [(ngModel)]="jsonRootType" (ngModelChange)="jsonRootTypeDataChange(jsonRootType)">
+    <eo-ng-option *ngFor="let item of CONST.JSON_ROOT_TYPE" [nzLabel]="item.key" [nzValue]="item.value"></eo-ng-option>
+  </eo-ng-select>
+</div>
+<!-- FormData -->
+<!-- JSON -->
+<!-- XML -->
+<eo-ng-table-pro
+  *ngIf="['formData', 'json', 'xml'].includes(bodyType)"
+  [columns]="listConf.columns"
+  [nzDataItem]="itemStructure"
+  [setting]="listConf.setting"
+  [nzCheckAddRow]="checkAddRow"
+  [nzDragCheck]="nzDragCheck"
+  [(nzData)]="model"
+  (nzDataChange)="tableChange($event)"
+></eo-ng-table-pro>
+<!-- [nzScroll]="{ y: '300px' }" -->
+<!-- Raw -->
+<eo-monaco-editor
+  *ngIf="bodyType === 'raw'"
+  [(code)]="model"
+  [eventList]="['type', 'format', 'copy', 'search', 'replace']"
+  [autoType]="true"
+  (codeChange)="rawChange($event)"
+>
+</eo-monaco-editor>
+<!-- Binary -->
+<div class="p-[10px]" *ngIf="bodyType === 'binary'">
+  <textarea
+    rows="4"
+    i18n-placeholder
+    (ngModelChange)="rawChange($event)"
+    placeholder="Binary Description"
+    eo-ng-input
+    [(ngModel)]="model"
+  ></textarea>
+</div>

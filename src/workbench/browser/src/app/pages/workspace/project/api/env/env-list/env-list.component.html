@@ -1,0 +1,38 @@
+<div class="flex flex-col flex-1 env-main">
+  <header class="flex items-center justify-between px-[10px] pt-2 h-[40px] flex-shrink-0">
+    <span class="font-bold" i18n>Environment</span>
+    <div>
+      <button eo-ng-button nzType="primary" (click)="addEnv()">
+        <eo-iconpark-icon name="add"></eo-iconpark-icon>
+      </button>
+    </div>
+  </header>
+  <section class="pt-[10px] env-list">
+    <div
+      *ngFor="let item of store.getEnvList"
+      class="flex items-center justify-between px-2 py-1 env-item"
+      (click)="editEnv(item)"
+      [ngClass]="{ 'env-item-active': item.uuid === id }"
+    >
+      <span class="flex-1 name truncate">{{ item.name }}</span>
+      <div class="env-operate">
+        <button
+          class="delete-btn"
+          eo-ng-button
+          nzType="text"
+          i18n-nzTooltipTitle
+          nzTooltipTitle="Delete"
+          (click)="$event.stopPropagation()"
+          eoNgFeedbackTooltip
+          nz-popconfirm
+          i18n-nzPopconfirmTitle
+          nzPopconfirmTitle="Are you sure you want to delete?"
+          (nzOnConfirm)="handleDeleteEnv($event, item.uuid)"
+        >
+          <eo-iconpark-icon name="delete"> </eo-iconpark-icon>
+        </button>
+      </div>
+    </div>
+    <nz-empty *ngIf="!store.getEnvList.length" nzNotFoundImage="simple"> </nz-empty>
+  </section>
+</div>

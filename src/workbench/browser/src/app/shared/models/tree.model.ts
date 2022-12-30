@@ -17,6 +17,13 @@ export interface GroupTreeItem {
   key: string;
 
   /**
+   * Api uri
+   *
+   * @type {string}
+   */
+  uri?: string;
+
+  /**
    * Weight
    *
    * @type {number}
@@ -58,13 +65,13 @@ export interface GroupTreeItem {
    *
    * @type {GroupTreeItem}
    */
-  children?: Array<GroupTreeItem>;
+  children?: GroupTreeItem[];
 }
 
 /**
  * Group & Api Data
  */
 export interface GroupApiDataModel {
-  group: Array<any>;
-  api: Array<any>;
+  group: any[];
+  api: any[];
 }

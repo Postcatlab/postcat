@@ -1,0 +1,99 @@
+:host ::ng-deep {
+  display: block;
+  height: 100%;
+
+  .ant-skeleton-content {
+    padding: 10px;
+  }
+
+  .group-tree {
+    overflow: hidden auto;
+    height: calc(100% - 40px);
+  }
+
+  eo-ng-tree-default-node:hover {
+    background-color: rgb(0 0 0 / 10%);
+  }
+
+  .ant-tree-treenode {
+    padding: initial;
+    align-items: center;
+    margin: 0;
+    border-radius: initial;
+    height: 40px;
+  }
+
+  eo-ng-tree-default-node:active {
+    background-color: rgb(0 0 0 / 10%);
+  }
+
+  .ant-tree-node-content-wrapper {
+    @apply h-[40px] leading-[40px];
+
+    flex: auto;
+
+    &:hover {
+      background-color: initial;
+    }
+  }
+
+  nz-tree-node-title {
+    background-color: initial;
+    position: relative;
+  }
+
+  .ant-tree-treenode-selected {
+    background-color: rgb(0 0 0 / 10%);
+  }
+
+  .dragging::after {
+    display: none;
+    animation: initial;
+  }
+
+  .ant-tree-indent-unit {
+    width: 24px;
+  }
+
+  .ant-tree-switcher {
+    width: 24px;
+  }
+
+  .width-box {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.ant-dropdown-menu {
+  min-width: 100px;
+}
+
+.method_text {
+  max-width: 50px;
+  min-width: 32px;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.more-btn {
+  padding: 3px;
+  height: 20px;
+}
+
+.tree-node {
+  height: 100%;
+  font-size: 12px;
+  white-space: nowrap;
+
+  .tree-node_operate {
+    font-size: 14px;
+    font-weight: bold;
+    display: none;
+  }
+
+  &:hover .tree-node_operate {
+    display: initial;
+  }
+}

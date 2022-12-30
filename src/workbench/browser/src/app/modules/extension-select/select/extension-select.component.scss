@@ -1,0 +1,36 @@
+.text {
+  color: var(--TEXT_TITLE_SEC);
+}
+
+.extension {
+  cursor: pointer;
+  color: rgb(0 0 0 / 50%);
+  border-color: rgb(0 0 0 / 10%);
+  box-shadow: 0 0 3px rgb(0 0 0 / 5%);
+  transition: all 0.3s ease;
+
+  .logobg {
+    background-repeat: no-repeat;
+    background-size: 45px;
+    background-position: center center;
+  }
+
+  &:hover {
+    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+    background-color: #fff;
+  }
+
+  &.active {
+    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+    background-color: #fff;
+
+    eo-iconpark-icon {
+      color: #158565;
+      display: flex;
+    }
+  }
+
+  eo-iconpark-icon {
+    display: none;
+  }
+}

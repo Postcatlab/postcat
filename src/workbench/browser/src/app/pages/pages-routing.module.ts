@@ -1,9 +1,10 @@
-import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-
-import { PagesComponent } from './pages.component';
-import { PageBlankComponent } from '../shared/components/page-blank/page-blank.component';
+import { RouterModule, Routes } from '@angular/router';
 import { ExtensionAppComponent } from 'eo/workbench/browser/src/app/shared/components/extension-app/extension-app.component';
+
+import { PageBlankComponent } from '../layouts/page-blank/page-blank.component';
+import { PagesComponent } from './pages.component';
+import { RedirectSharedID, RedirectWorkspace } from './services/redirect.services';
 
 const routes: Routes = [
   {
@@ -12,52 +13,40 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'api',
-        pathMatch: 'full',
+        redirectTo: 'workspace',
+        pathMatch: 'full'
       },
       {
         path: 'blank',
-        component: PageBlankComponent,
-      },
-      {
-        path: 'api',
-        loadChildren: () => import('./api/api.module').then((m) => m.ApiModule),
+        component: PageBlankComponent
       },
       {
         path: 'workspace',
-        loadChildren: () => import('./workspace.module').then((m) => m.WorkspaceModule),
+        canActivate: [RedirectWorkspace],
+        runGuardsAndResolvers: 'always',
+        loadChildren: () => import('./workspace/workspace.module').then(m => m.WorkspaceModule)
       },
       {
         path: 'share',
-        loadChildren: () => import('./share.module').then((m) => m.ShareModule),
-      },
-      {
-        path: 'member',
-        loadChildren: () => import('./member.module').then((m) => m.MemberModule),
+        canActivate: [RedirectSharedID],
+        runGuardsAndResolvers: 'always',
+        loadChildren: () => import('./share-project/share-project.module').then(m => m.ShareProjectModule)
       },
       {
         path: 'extension',
-        loadChildren: () => import('./extension/extension.module').then((m) => m.ExtensionModule),
+        loadChildren: () => import('./extension/extension.module').then(m => m.ExtensionModule)
       },
       {
         path: 'extensionSidebarView/:extName',
-        component: ExtensionAppComponent,
-      },
-      // {
-      //   path: 'app-vue3',
-      //   children: [
-      //     {
-      //       path: '**',
-      //       component: Vue3Component,
-      //     },
-      //   ],
-      // },
-    ],
-  },
+        component: ExtensionAppComponent
+      }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  providers: [RedirectSharedID, RedirectWorkspace],
+  exports: [RouterModule]
 })
 export class PagesRoutingModule {}

@@ -1,0 +1,37 @@
+:host {
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+}
+
+:host ::ng-deep {
+  .eo-api-script {
+    .ant-tree-switcher {
+      width: 0;
+    }
+
+    .ant-tree-treenode-switcher-open {
+      .ant-tree-indent {
+        width: 0;
+      }
+
+      .ant-tree-switcher {
+        width: 20px;
+      }
+    }
+
+    .ant-tree-treenode-switcher-close {
+      .ant-tree-indent {
+        width: 0;
+      }
+
+      .ant-tree-switcher {
+        width: 20px;
+      }
+    }
+  }
+
+  .ant-tree-indent {
+    width: 20px;
+  }
+}

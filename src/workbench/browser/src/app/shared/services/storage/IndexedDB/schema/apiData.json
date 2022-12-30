@@ -101,10 +101,6 @@
     },
     "ParamsEnum": {
       "properties": {
-        "default": {
-          "description": "is default param value",
-          "type": "boolean"
-        },
         "description": {
           "description": "param value description",
           "type": "string"

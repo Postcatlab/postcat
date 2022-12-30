@@ -1,12 +1,14 @@
 <eo-navbar></eo-navbar>
 <eo-user-modal></eo-user-modal>
-<eo-extensions></eo-extensions>
-<div class="page-body" [ngClass]="{ 'web-page-body': !electron.isElectron, 'pc-page-body': electron.isElectron }"
-  [style.--remote-notification-height]="isShowNotification ? '40px' : '0px'">
+<div
+  class="page-body"
+  [ngClass]="{ 'web-page-body': !electron.isElectron, 'pc-page-body': electron.isElectron }"
+  [style.--remote-notification-height]="isShowNotification ? '40px' : '0px'"
+>
   <eo-local-workspace-tip [(isShow)]="isShowNotification"></eo-local-workspace-tip>
-  <div class="home_container f_row">
+  <div class="flex home-container">
     <eo-sidebar></eo-sidebar>
-    <div class="home fg1">
+    <div class="flex-1 home">
       <router-outlet></router-outlet>
       <!-- 缓存 iframe -->
       <!-- <ng-container *ngFor="let n of sidebarViews">

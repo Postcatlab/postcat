@@ -1,5 +1,4 @@
 :host {
-  --body-height: calc(100vh - var(--NAV_TOP) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0px));
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -10,51 +9,25 @@
   height: var(--body-height);
 }
 
-.home_container {
+.home-container {
   height: 100%;
-  // height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--remote-notification-height, 0px) - 1px);
 }
+
 .home {
   background-color: var(--MAIN_BG);
   color: var(--MAIN_TEXT);
   overflow: hidden;
-
-  ::ng-deep {
-      eo-workspace, eo-member {
-      display: block;
-      overflow: auto;
-      height: 100%;
-    }
-  }
 }
 
-::ng-deep {
-  eo-api {
-    height: 100%;
+:host ::ng-deep {
+  .home-container {
+    --body-height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0));
 
     router-outlet + * {
       display: block;
-      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - var(--API_TABS_HEIGHT));
-      overflow: auto;
-    }
-    router-outlet + eo-api-test {
-      overflow: unset;
-    }
+      height: var(--body-height);
 
-    .has_tab_page + * {
-      router-outlet + * {
-        height: calc(
-          100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height) - 74px
-        );
-      }
-    }
-  }
-  eo-extension {
-    router-outlet + * {
-      display: block;
-      height: calc(100vh - var(--NAVBAR_HEIGHT) - var(--FOOTER_HEIGHT) - var(--remote-notification-height));
-      overflow: auto;
+      // overflow: hidden auto;
     }
   }
 }
-

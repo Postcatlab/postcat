@@ -1,0 +1,37 @@
+<div class="top-save-bar px-[20px] py-[10px]">
+  <button type="submit" eo-ng-button nzType="primary" (click)="saveEnv()" i18n>Save</button>
+</div>
+<section class="save-container p-base" *ngIf="model">
+  <form auto-focus-form nz-form [formGroup]="validateForm" nzLayout="vertical">
+    <nz-form-item>
+      <nz-form-label nzFor="name" i18n nzRequired>Name</nz-form-label>
+      <nz-form-control [nzValidateStatus]="this.validateForm.controls.name" i18n-nzErrorTip nzErrorTip="Please enter name">
+        <input eo-ng-input formControlName="name" id="name" (ngModelChange)="emitChange($event)" type="text" [(ngModel)]="model.name" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzFor="hostUri">Host</nz-form-label>
+      <nz-form-control>
+        <input
+          eo-ng-input
+          id="hostUri"
+          formControlName="hostUri"
+          (ngModelChange)="emitChange($event)"
+          type="text"
+          [(ngModel)]="model.hostUri"
+        />
+      </nz-form-control>
+    </nz-form-item>
+    <p class="mb-[8px]" i18n> Global variable: API Documentation/Test can use {{ varName }} to refer to the global variable </p>
+    <eo-ng-table-pro
+      class="table-border-all"
+      [columns]="envListColumns"
+      [nzDataItem]="envDataItem"
+      [setting]="{ primaryKey: 'name' }"
+      #envParams
+      (nzDataChange)="emitChange($event)"
+      [nzData]="model.parameters"
+    >
+    </eo-ng-table-pro>
+  </form>
+</section>

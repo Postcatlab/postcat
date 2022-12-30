@@ -1,26 +1,29 @@
 require('@bqy/node-module-alias/register');
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
-import { EoUpdater } from './updater';
-import * as path from 'path';
-import * as os from 'os';
-import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
-import { ModuleManagerInterface } from '../../platform/node/extension-manager';
-import { processEnv } from '../../platform/node/constant';
-import { proxyOpenExternal } from '../../shared/common/browserView';
-import { deleteFile, readJson } from '../../shared/node/file';
-import { STORAGE_TEMP as storageTemp } from '../../shared/electron-main/constant';
-import { UnitWorkerModule } from '../../workbench/node/electron/main';
-import Configuration from '../../platform/node/configuration/lib';
-import { ConfigurationInterface } from 'src/platform/node/configuration';
-import { MockServer } from 'eo/platform/node/mock-server';
-import socket from '../../workbench/node/server/socketio';
+import Store from 'electron-store';
 import { LanguageService } from 'eo/app/electron-main/language.service';
+import { MockServer } from 'eo/platform/node/mock-server';
 import portfinder from 'portfinder';
+
+import { processEnv } from '../../platform/node/constant';
+import { ModuleManager } from '../../platform/node/extension-manager/lib/manager';
+import { proxyOpenExternal } from '../../shared/common/browserView';
+import { UnitWorkerModule } from '../../workbench/node/electron/main';
+import socket from '../../workbench/node/server/socketio';
+import { EoUpdater } from './updater';
+
+import * as os from 'os';
+import * as path from 'path';
 
 export const subView = {
   appView: null,
-  mainView: null,
+  mainView: null
 };
+const windowConfig = {
+  width: 1280,
+  height: 700
+};
+const store = new Store();
 
 // 获取单实例锁
 const gotTheLock = app.requestSingleInstanceLock();
@@ -46,10 +49,9 @@ let websocketPort = 13928;
   // * start SocketIO
   socket(websocketPort);
 })();
-const moduleManager: ModuleManagerInterface = new ModuleManager();
-const configuration: ConfigurationInterface = Configuration();
+const moduleManager = new ModuleManager();
 global.shareObject = {
-  storageResult: null,
+  storageResult: null
 };
 let eoBrowserWindow: EoBrowserWindow = null;
 class EoBrowserWindow {
@@ -64,7 +66,7 @@ class EoBrowserWindow {
   // Start unit test function
   private startUnitTest() {
     UnitWorkerModule.setup({
-      view: this.win,
+      view: this.win
     });
   }
   //Watch win event
@@ -74,7 +76,17 @@ class EoBrowserWindow {
       console.error('did-fail-load', errorCode);
       this.loadURL();
     });
-    this.win.on('closed', () => {
+    this.win.on('resize', () => {
+      Object.assign(
+        windowConfig,
+        {
+          isMaximized: this.win.isMaximized()
+        },
+        this.win.getNormalBounds()
+      );
+      store.set('winConf', windowConfig);
+    });
+    this.win.on('closed', $event => {
       // Dereference the window object, usually you would store window
       // in an array if your app supports multi windows, this is the time
       // when you should delete the corresponding element.
@@ -86,37 +98,30 @@ class EoBrowserWindow {
     const file: string =
       processEnv === 'development'
         ? 'http://localhost:4200'
-        : `file://${path.join(
-            __dirname,
-            `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`
-          )}`;
+        : `file://${path.join(__dirname, `../../../src/workbench/browser/dist/${LanguageService.getPath()}/index.html`)}`;
     this.win.loadURL(file);
     if (['development'].includes(processEnv)) {
       this.win.webContents.openDevTools({
-        mode: 'undocked',
+        mode: 'undocked'
       });
     }
   }
+
   public create(): BrowserWindow {
-    const size = screen.getPrimaryDisplay().workAreaSize;
-    const width = Math.floor(size.width * 0.85);
-    const height = Math.floor(size.height * 0.85);
     // Create the browser window.
-    this.win = new BrowserWindow({
-      width,
-      height,
-      minWidth: Math.floor(size.width * 0.5),
-      minHeight: Math.floor(size.height * 0.5),
+    const opts = {
       useContentSize: true, // 这个要设置，不然计算显示区域尺寸不准
       frame: os.type() === 'Darwin' ? true : false, //mac use default frame
       webPreferences: {
         webSecurity: false,
         preload: path.join(__dirname, '../../', 'platform', 'electron-browser', 'preload.js'),
         nodeIntegration: true,
-        allowRunningInsecureContent: processEnv === 'development' ? true : false,
-        contextIsolation: false, // false if you want to run e2e test with Spectron
-      },
-    });
+        contextIsolation: false,
+        allowRunningInsecureContent: processEnv === 'development' ? true : false
+      }
+    };
+    Object.assign(opts, windowConfig, store.get('winConf'));
+    this.win = new BrowserWindow(opts);
 
     proxyOpenExternal(this.win);
     this.loadURL();
@@ -188,7 +193,7 @@ try {
     }
   });
   // 这里可以封装成类+方法匹配调用，不用多个if else
-  ['on', 'handle'].forEach((eventName) =>
+  ['on', 'handle'].forEach(eventName =>
     ipcMain[eventName]('eo-sync', async (event, arg) => {
       let returnValue: any;
       if (arg.action === 'getModules') {
@@ -201,20 +206,10 @@ try {
       } else if (arg.action === 'uninstallModule') {
         const data = await moduleManager.uninstall(arg.data);
         returnValue = Object.assign(data, { modules: moduleManager.getModules() });
-      } else if (arg.action === 'getFeatures') {
-        returnValue = moduleManager.getFeatures();
+      } else if (arg.action === 'getExtensionPackage') {
+        returnValue = await moduleManager.getExtensionPackage(arg.data.feature, arg.data.params);
       } else if (arg.action === 'getFeature') {
         returnValue = moduleManager.getFeature(arg.data.featureKey);
-      } else if (arg.action === 'saveSettings') {
-        returnValue = configuration.saveSettings(arg.data);
-      } else if (arg.action === 'saveModuleSettings') {
-        returnValue = configuration.saveModuleSettings(arg.data.moduleID, arg.data.settings);
-      } else if (arg.action === 'deleteModuleSettings') {
-        returnValue = configuration.deleteModuleSettings(arg.data.moduleID);
-      } else if (arg.action === 'getSettings') {
-        returnValue = configuration.getSettings();
-      } else if (arg.action === 'getExtensionSettings') {
-        returnValue = configuration.getExtensionSettings(arg.data.moduleID);
       } else if (arg.action === 'getMockUrl') {
         // 获取mock服务地址
         returnValue = mockServer.getMockUrl();
@@ -226,7 +221,7 @@ try {
       } else if (arg.action === 'getSidebarView') {
         returnValue = moduleManager.getSidebarView(arg.data.extName);
       } else if (arg.action === 'getSidebarViews') {
-        returnValue = moduleManager.getSidebarViews(arg.data.extName);
+        returnValue = moduleManager.getSidebarViews();
       } else {
         returnValue = 'Invalid data';
       }
@@ -234,11 +229,11 @@ try {
       return returnValue;
     })
   );
-  ipcMain.on('get-system-info', (event) => {
+  ipcMain.on('get-system-info', event => {
     const systemInfo = {
       homeDir: path.dirname(app.getPath('exe')),
       ...process.versions,
-      os: `${os.type()} ${os.arch()} ${os.release()}`,
+      os: `${os.type()} ${os.arch()} ${os.release()}`
     };
     event.returnValue = systemInfo;
   });

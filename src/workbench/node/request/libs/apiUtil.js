@@ -1,6 +1,6 @@
 /**
  * @name 返回通用方法
- * @author Eoapi
+ * @author Postcat
  */
 let _LIB_WORKER_THREAD = require('./exec_worker_thread');
 let CryptoJS = require('crypto-js');
@@ -16,7 +16,7 @@ const DOMAIN_REGEX =
   ')))|((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(localhost))((\\/)|(\\?)|(:)|($)))';
 const TIMINGSUMMARY = {
   NS_PER_SEC: 1e9,
-  MS_PER_NS: 1e6,
+  MS_PER_NS: 1e6
 };
 const { NodeVM } = require('./vm2/index');
 const querystring = require('querystring');
@@ -33,14 +33,10 @@ const window = document.defaultView,
 privateFun.resetEnv = (inputBaiscEnv, inputSanboxVar) => {
   let tmpResult = Object.assign({}, inputBaiscEnv);
   tmpResult.envParam = _LibsCommon.deepCopy(inputSanboxVar.envParam);
-  ['http'].map((val) => {
+  ['http'].map(val => {
     tmpResult[val] = {};
     for (let itemKey in inputSanboxVar[val]) {
-      if (
-        ['extraFormDataParam', 'queryParam', 'headerParam', 'baseUrlParam', 'requestScript', 'responseScript'].indexOf(
-          itemKey
-        ) > -1
-      ) {
+      if (['extraFormDataParam', 'queryParam', 'headerParam', 'baseUrlParam', 'requestScript', 'responseScript'].indexOf(itemKey) > -1) {
         tmpResult[val][itemKey] = inputSanboxVar[val][itemKey];
       }
     }
@@ -68,18 +64,15 @@ privateFun.getMicrosToMs = (inputStartTime, inputEndTime) => {
     return tmpOutput;
   }
 };
-privateFun.getHttpTiming = (timingSummary) => {
+privateFun.getHttpTiming = timingSummary => {
   return {
     dnsTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.startAt, timingSummary.dnsTiming),
     tcpTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.dnsTiming || timingSummary.startAt, timingSummary.tcpTiming),
     tlsTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.tcpTiming, timingSummary.tlsTiming),
-    requestSentTiming: _LibsEncrypt.getMicrosToMsStr(
-      timingSummary.tlsTiming || timingSummary.tcpTiming,
-      timingSummary.firstByteTiming
-    ),
+    requestSentTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.tlsTiming || timingSummary.tcpTiming, timingSummary.firstByteTiming),
     firstByteTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.startAt, timingSummary.firstByteTiming),
     contentDeliveryTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.firstByteTiming, timingSummary.endAt),
-    responseTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.startAt, timingSummary.endAt),
+    responseTiming: _LibsEncrypt.getMicrosToMsStr(timingSummary.startAt, timingSummary.endAt)
   };
 };
 privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
@@ -118,11 +111,11 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
      * 输出错误信息并停止继续执行任何代码
      * @param {string} info 输出信息体
      */
-    throw_err: (tmpInputMsg) => {
+    throw_err: tmpInputMsg => {
       throw `codeError_${tmpInputMsg}`;
     },
     globals: {
-      get: (inputKey) => {
+      get: inputKey => {
         return global.eoTestGlobals[inputKey];
       },
       set: (inputKey, inputVal) => {
@@ -141,7 +134,7 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
           }
         }
       },
-      unset: (inputKey) => {
+      unset: inputKey => {
         delete global.eoTestGlobals[inputKey];
       },
       clear: () => {
@@ -149,10 +142,10 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
       },
       all: () => {
         return global.eoTestGlobals || '';
-      },
+      }
     },
     env: {
-      envParam: inputEnv.envParam,
+      envParam: inputEnv.envParam
     },
     crypt: {
       md5: _LibsEncrypt.md5,
@@ -175,7 +168,7 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
       aesEncrypt: _LibsEncrypt.aesEncrypt,
       aesDecrypt: _LibsEncrypt.aesDecrypt,
       desEncrypt: _LibsEncrypt.desEncrypt,
-      desDecrypt: _LibsEncrypt.desDecrypt,
+      desDecrypt: _LibsEncrypt.desDecrypt
     },
     json: {
       encode(inputObj) {
@@ -187,13 +180,13 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
         } catch (JSON_PARSE_ERR) {
           throw `codeError_${JSON_PARSE_ERR.stack}`;
         }
-      },
+      }
     },
     xml: {
       encode(inputObj) {
         return new xml2json.Builder().buildObject(inputObj);
       },
-      decode: _LibsCommon.xmlParse,
+      decode: _LibsCommon.xmlParse
     },
     base64: {
       encode(inputData) {
@@ -201,7 +194,7 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
       },
       decode(inputData) {
         return Buffer.from(inputData, 'base64').toString();
-      },
+      }
     },
     urlEncode(inputData) {
       return encodeURIComponent(inputData);
@@ -222,7 +215,7 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
         inputFileName = global._FILEOBJ[tmpFileUUID].fileName || tmpFileUUID;
       } catch (PARSE_ERR) {}
       return privateFun.filePath(inputFilePath, inputFileName);
-    },
+    }
     // gzip: {
     //   zip: _LibsZlib.fnGzip,
     //   unzip: _LibsZlib.fnGunzip,
@@ -232,7 +225,7 @@ privateFun.getBaiscEoFn = (inputSanboxVar, inputEnv = {}) => {
     //   unzip: _LibsZlib.fnInflate,
     // },
   };
-  ['http'].map((val) => {
+  ['http'].map(val => {
     tmpResult.env[val] = _LibsCommon.deepCopy(inputEnv[val]) || {};
   });
   return tmpResult;
@@ -249,21 +242,24 @@ privateFun.setExecWorkerThread = (inputPostMsg, inputMsgCallback) => {
  */
 privateFun.constructUiCodeBasicFn = (inputSanboxVar, inputEnv, inputOpts = {}) => {
   inputOpts = inputOpts || {};
-  let tmpResult = Object.assign({}, inputSanboxVar.eo, privateFun.getBaiscEoFn(inputSanboxVar, inputEnv));
-  tmpResult.execute = (tmpInputTestData) => {
+  let tmpResult = Object.assign({}, inputSanboxVar.pc, privateFun.getBaiscEoFn(inputSanboxVar, inputEnv));
+  tmpResult.execute = tmpInputTestData => {
     return privateFun.setExecWorkerThread({
       opr: 'exec_http',
       data: tmpInputTestData,
-      env: Object.assign({}, inputSanboxVar.eo.env, {
+      env: Object.assign({}, inputSanboxVar.pc.env, {
         envAuth: inputEnv.envAuth,
-        http: Object.assign({}, {
-          requestScript: '',
-          responseScript: '',
-        }),
+        http: Object.assign(
+          {},
+          {
+            requestScript: '',
+            responseScript: ''
+          }
+        )
       }),
       opts: {
-        globalHeader: inputOpts.globalHeader,
-      },
+        globalHeader: inputOpts.globalHeader
+      }
     });
   };
   return tmpResult;
@@ -303,9 +299,9 @@ privateFun.setTypesRefFns = (inputSanboxVar, inputInitialData, inputIsResponse) 
       headerParam: inputInitialData.headers || {},
       restParam: inputInitialData.rest || {},
       responseParam: inputInitialData.response || '',
-      responseHeaderParam: inputInitialData.responseHeaders || {},
+      responseHeaderParam: inputInitialData.responseHeaders || {}
     };
-  tmpTypes.map((val) => {
+  tmpTypes.map(val => {
     inputSanboxVar[val] = _LibsCommon.deepCopy(tmpBasicConf);
     inputSanboxVar[val].url = {
       parse() {
@@ -314,86 +310,86 @@ privateFun.setTypesRefFns = (inputSanboxVar, inputInitialData, inputIsResponse) 
             baseUrlParam: inputSanboxVar[val].baseUrlParam,
             queryParam: inputSanboxVar[val].queryParam,
             apiUrl: inputSanboxVar[val].apiUrl,
-            restParam: inputSanboxVar[val].restParam,
+            restParam: inputSanboxVar[val].restParam
           },
           {
             baseUrlParam: inputSanboxVar.env[val].baseUrlParam,
             queryParam: inputSanboxVar.env[val].queryParam,
-            envParam: inputSanboxVar.env.envParam,
+            envParam: inputSanboxVar.env.envParam
           }
         );
       },
       get: () => {
         return inputSanboxVar[val].apiUrl;
       },
-      set: (inputVal) => {
+      set: inputVal => {
         inputSanboxVar[val].apiUrl = inputVal;
-      },
+      }
     };
     inputSanboxVar[val].query = {
-      get: (inputKey) => {
+      get: inputKey => {
         return inputSanboxVar[val].queryParam[inputKey];
       },
       set: (inputKey, inputVal) => {
         inputSanboxVar[val].queryParam[inputKey] = inputVal;
       },
-      unset: (inputKey) => {
+      unset: inputKey => {
         delete inputSanboxVar[val].queryParam[inputKey];
       },
       clear: () => {
         inputSanboxVar[val].queryParam = {};
-      },
+      }
     };
     inputSanboxVar[val].header = {
-      get: (inputKey) => {
+      get: inputKey => {
         return inputSanboxVar[val].headerParam[inputKey];
       },
       set: (inputKey, inputVal) => {
         inputSanboxVar[val].headerParam[inputKey] = inputVal;
       },
-      unset: (inputKey) => {
+      unset: inputKey => {
         delete inputSanboxVar[val].headerParam[inputKey];
       },
       clear: () => {
         inputSanboxVar[val].headerParam = {};
-      },
+      }
     };
     inputSanboxVar[val].rest = {
-      get: (inputKey) => {
+      get: inputKey => {
         return inputSanboxVar[val].restParam[inputKey];
       },
       set: (inputKey, inputVal) => {
         inputSanboxVar[val].restParam[inputKey] = inputVal;
       },
-      unset: (inputKey) => {
+      unset: inputKey => {
         delete inputSanboxVar[val].restParam[inputKey];
       },
       clear: () => {
         inputSanboxVar[val].restParam = {};
-      },
+      }
     };
     if (inputIsResponse) {
       inputSanboxVar[val].response = {
         get: () => {
           return inputSanboxVar[val].responseParam;
         },
-        set: (inputVal) => {
+        set: inputVal => {
           inputSanboxVar[val].responseParam = inputVal;
-        },
+        }
       };
       inputSanboxVar[val].responseHeader = {
-        get: (inputKey) => {
+        get: inputKey => {
           return inputSanboxVar[val].responseHeaderParam[inputKey];
         },
         set: (inputKey, inputVal) => {
           inputSanboxVar[val].responseHeaderParam[inputKey] = inputVal;
         },
-        unset: (inputKey) => {
+        unset: inputKey => {
           delete inputSanboxVar[val].responseHeaderParam[inputKey];
         },
         clear: () => {
           inputSanboxVar[val].responseHeaderParam = {};
-        },
+        }
       };
     }
   });
@@ -425,7 +421,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       $: $,
       window: window,
       document: document,
-      eo: {
+      pc: {
         info: (tmpInputMsg, tmpInputType) => {
           let tmpInputMsgType = ['[object Date]'].includes(Object.prototype.toString.call(tmpInputMsg));
 
@@ -441,10 +437,10 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
           }
           tmpReportList.push({
             content: tmpText,
-            type: tmpInputType || 'throw',
+            type: tmpInputType || 'throw'
           });
         },
-        error: (tmpInputMsg) => {
+        error: tmpInputMsg => {
           let tmpInputMsgType = ['[object Date]'].includes(Object.prototype.toString.call(tmpInputMsg));
           let tmpText;
           try {
@@ -458,12 +454,12 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
           }
           tmpReportList.push({
             content: tmpText,
-            type: 'assert_error',
+            type: 'assert_error'
           });
           tmpErrorContent = eval(global.eoLang['assertError']);
           tmpStatus = 'assertError';
         },
-        stop: (tmpInputMsg) => {
+        stop: tmpInputMsg => {
           let tmpInputMsgType = ['[object Date]'].includes(Object.prototype.toString.call(tmpInputMsg));
           let tmpText;
           try {
@@ -477,24 +473,24 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
           }
           tmpReportList.push({
             content: tmpText,
-            type: 'interrupt',
+            type: 'interrupt'
           });
           throw 'interrupt';
-        },
-      },
+        }
+      }
     };
   const tmpVm = new NodeVM({
       sandbox: tmpSanboxObj,
       require: {
         external: true,
-        builtin: ['crypto'],
-      },
+        builtin: ['crypto']
+      }
     }),
     tmpCodeEvalObj = tmpVm._context;
-  tmpCodeEvalObj.eo = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
-  privateFun.setTypesRefFns(tmpCodeEvalObj.eo, inputData);
-  let tmpTargetTypeData = tmpCodeEvalObj.eo[tmpApiType],
-    tmpTargetTypeEnv = tmpCodeEvalObj.eo.env[tmpApiType],
+  tmpCodeEvalObj.pc = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
+  privateFun.setTypesRefFns(tmpCodeEvalObj.pc, inputData);
+  let tmpTargetTypeData = tmpCodeEvalObj.pc[tmpApiType],
+    tmpTargetTypeEnv = tmpCodeEvalObj.pc.env[tmpApiType],
     tmpNeedToExecRequestScript = tmpTargetTypeEnv.requestScript && !inputData.ingnoreRequestScript;
   if (inputScript || tmpNeedToExecRequestScript) {
     try {
@@ -504,11 +500,9 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       // }
       if (!inputData.isReturnSoonWhenExecCode && tmpNeedToExecRequestScript) {
         tmpNowIsExecuteEnvScript = true;
-        tmpVm.run(
-          _LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.requestScript || '', 'eo.infiniteLoopDetector')
-        );
+        tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.requestScript || '', 'pc.infiniteLoopDetector'));
       }
-      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
+      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'pc.infiniteLoopDetector'));
     } catch (Err) {
       switch (Err) {
         case 'info':
@@ -520,7 +514,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
           switch (Err) {
             case 'info': {
               tmpStatus = 'info';
-              tmpErrorContent = 'eo.info 触发中断';
+              tmpErrorContent = 'pc.info 触发中断';
               break;
             }
             case 'interrupt': {
@@ -557,8 +551,8 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
         url: tmpTargetTypeData.url.parse(),
         headers: tmpTargetTypeData.headerParam,
         params: tmpTargetTypeData.bodyParseParam || tmpTargetTypeData.bodyParam,
-        env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
-        reportList: tmpReportList,
+        env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.pc.env),
+        reportList: tmpReportList
       };
     }
   }
@@ -567,8 +561,8 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       url: tmpTargetTypeData.apiUrl,
       headers: {},
       params: null,
-      env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
-      reportList: tmpReportList,
+      env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.pc.env),
+      reportList: tmpReportList
     },
     tmpParams,
     tmpHeaders;
@@ -599,26 +593,19 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
       }
       case '1': {
         tmpParams =
-          typeof tmpTargetTypeData.bodyParam === 'string'
-            ? tmpTargetTypeData.bodyParam
-            : JSON.stringify(tmpTargetTypeData.bodyParam);
+          typeof tmpTargetTypeData.bodyParam === 'string' ? tmpTargetTypeData.bodyParam : JSON.stringify(tmpTargetTypeData.bodyParam);
         break;
       }
     }
-    let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, tmpCodeEvalObj.eo.env.envParam || {});
+    let tmpEnvGlobals = Object.assign({}, global.eoTestGlobals || {}, tmpCodeEvalObj.pc.env.envParam || {});
     for (let key in tmpEnvGlobals) {
       let val = tmpEnvGlobals[key];
       let templateParamObject = {};
       let templateHeaderObject = {};
       for (let tmp_query_param_key in tmp_query_param_obj) {
-        let tmp_query_param_val = _LibsCommon.replaceAll(
-          '{{' + key + '}}',
-          val || '',
-          tmp_query_param_obj[tmp_query_param_key]
-        );
+        let tmp_query_param_val = _LibsCommon.replaceAll('{{' + key + '}}', val || '', tmp_query_param_obj[tmp_query_param_key]);
         delete tmp_query_param_obj[tmp_query_param_key];
-        tmp_query_param_obj[_LibsCommon.replaceAll('{{' + key + '}}', val || '', tmp_query_param_key)] =
-          tmp_query_param_val;
+        tmp_query_param_obj[_LibsCommon.replaceAll('{{' + key + '}}', val || '', tmp_query_param_key)] = tmp_query_param_val;
       }
       tmpOutput.url = _LibsCommon.replaceAll('{{' + key + '}}', val || '', tmpOutput.url);
       for (let childKey in tmpHeaders) {
@@ -681,7 +668,7 @@ privateFun.parseBeforeCode = function (inputData, inputScript, inputOpts = {}) {
                       } else {
                         templateParamObject[tmpHadReplaceString] = [
                           templateParamObject[tmpHadReplaceString],
-                          tmpParams[tmpHadReplaceString],
+                          tmpParams[tmpHadReplaceString]
                         ];
                       }
                       break;
@@ -774,10 +761,10 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
             }
             tmpReportList.push({
               content: tmpText,
-              type: tmpInputType || 'throw',
+              type: tmpInputType || 'throw'
             });
           },
-          error: (tmpInputMsg) => {
+          error: tmpInputMsg => {
             let tmpText;
             try {
               tmpText = typeof tmpInputMsg === 'object' ? JSON.stringify(tmpInputMsg) : tmpInputMsg;
@@ -786,12 +773,12 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
             }
             tmpReportList.push({
               content: tmpText,
-              type: 'assert_error',
+              type: 'assert_error'
             });
             tmpErrorContent = eval(global.eoLang['assertError']);
             tmpStatus = 'assertError';
           },
-          stop: (tmpInputMsg) => {
+          stop: tmpInputMsg => {
             let tmpText;
             try {
               tmpText = typeof tmpInputMsg === 'object' ? JSON.stringify(tmpInputMsg) : tmpInputMsg;
@@ -800,43 +787,41 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
             }
             tmpReportList.push({
               content: tmpText,
-              type: 'interrupt',
+              type: 'interrupt'
             });
             throw 'interrupt';
-          },
+          }
         },
         requestBody: tmpBindObj.requestBody || {},
         requestHeaders: tmpBindObj.requestHeaders || {},
         restParams: tmpBindObj.restParams || {},
         queryParams: tmpBindObj.queryParams || {},
         response: tmpBindObj.response || {},
-        responseHeaders: (inputOpts || {}).responseHeaders,
+        responseHeaders: (inputOpts || {}).responseHeaders
       },
       require: {
         external: true,
-        builtin: ['crypto'],
-      },
+        builtin: ['crypto']
+      }
     }),
     tmpCodeEvalObj = tmpVm._context;
-  tmpCodeEvalObj.eo = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
+  tmpCodeEvalObj.pc = privateFun.constructUiCodeBasicFn(tmpCodeEvalObj, tmpBasicEnv, inputOpts);
   privateFun.setTypesRefFns(
-    tmpCodeEvalObj.eo,
+    tmpCodeEvalObj.pc,
     Object.assign({}, inputOpts, {
-      response: inputData,
+      response: inputData
     }),
     true
   );
-  let tmpTargetTypeData = tmpCodeEvalObj.eo[tmpApiType],
+  let tmpTargetTypeData = tmpCodeEvalObj.pc[tmpApiType],
     tmpTargetTypeEnv = tmpBasicEnv[tmpApiType];
   if (inputScript || tmpTargetTypeEnv.responseScript) {
     try {
       // _LibsCommon.execFnDefine(inputOpts.functionCode || [], tmpVm, tmpCodeEvalObj.eo);
-      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'eo.infiniteLoopDetector'));
+      tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(inputScript || '', 'pc.infiniteLoopDetector'));
       if (!inputOpts.isReturnSoonWhenExecCode) {
         tmpNowIsExecuteEnvScript = true;
-        tmpVm.run(
-          _LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.responseScript || '', 'eo.infiniteLoopDetector')
-        );
+        tmpVm.run(_LibsCommon.infiniteLoopDetector.wrap(tmpTargetTypeEnv.responseScript || '', 'pc.infiniteLoopDetector'));
       }
     } catch (Err) {
       switch (Err) {
@@ -849,7 +834,7 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
           switch (Err) {
             case 'info': {
               tmpStatus = 'info';
-              tmpErrorContent = 'eo.info 触发中断';
+              tmpErrorContent = 'pc.info 触发中断';
               break;
             }
             case 'interrupt': {
@@ -883,27 +868,26 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
       return {
         status: tmpStatus,
         errorReason: tmpErrorContent,
-        env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
-        reportList: tmpReportList,
+        env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.pc.env),
+        reportList: tmpReportList
       };
     }
   }
-
   return {
     status: 'finish',
     content: tmpTargetTypeData.responseParam,
-    env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.eo.env),
-    reportList: tmpReportList,
+    env: privateFun.resetEnv(tmpBasicEnv, tmpCodeEvalObj.pc.env),
+    reportList: tmpReportList
   };
 };
 privateFun.requestPreReduceByPromise = (inputData, inputCode, inputOptions) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     let tmpResponse = privateFun.parseBeforeCode(inputData, inputCode, inputOptions);
     resolve(tmpResponse);
   });
 };
 privateFun.responsePreReduceByPromise = (inputData, inputCode, inputEnv, inputOptions) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     let tmpResponse = privateFun.parseAfterCode(inputData, inputCode, inputEnv, inputOptions);
     resolve(tmpResponse);
   });

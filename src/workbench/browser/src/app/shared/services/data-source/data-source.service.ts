@@ -1,56 +1,40 @@
 import { Injectable } from '@angular/core';
-import { DataSourceType } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
-import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { SettingService } from 'eo/workbench/browser/src/app/core/services/settings/settings.service';
-import { UserService } from 'eo/workbench/browser/src/app/shared/services/user/user.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
+import { SettingService } from 'eo/workbench/browser/src/app/modules/system-setting/settings.service';
+import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
+import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { compareVersion } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
+import StorageUtil from '../../../utils/storage/Storage';
+
+/**
+ * Client need min fontend version
+ */
+const minFontendVersion = '2.0.0';
 /**
  * @description
  * A message queue global send and get message
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DataSourceService {
-  isConnectRemote = false;
-  /** data source type @type { DataSourceType }  */
-  get dataSourceType(): DataSourceType {
-    return this.settingService.settings['eoapi-common.dataStorage'] ?? 'local';
-  }
-  /** Is it a remote data source */
-  get isRemote() {
-    return this.dataSourceType === 'http';
-  }
-  /** get mock url */
-  get mockUrl() {
-    return window.eo?.getMockUrl?.();
-  }
+  lowLevelTipsHasShow = false;
   get remoteServerUrl() {
-    return this.settingService.getConfiguration('eoapi-common.remoteServer.url');
+    return this.settingService.getConfiguration('backend.url');
   }
 
   constructor(
     private messageService: MessageService,
     private settingService: SettingService,
-    private user: UserService,
+    private store: StoreService,
     private modal: NzModalService,
     private http: RemoteService,
     private web: WebService
   ) {
     this.pingCloudServerUrl();
-  }
-
-  getApiUrl(apiData: ApiData) {
-    const url = new URL(`${this.mockUrl}/${apiData.uri}`.replace(/(?<!:)\/{2,}/g, '/'), 'https://github.com/');
-    if (apiData) {
-      url.searchParams.set('mockID', apiData.uuid + '');
-    }
-    // console.log('getApiUrl', decodeURIComponent(url.toString()));
-    return decodeURIComponent(url.toString());
   }
 
   /**
@@ -61,17 +45,24 @@ export class DataSourceService {
     if (!remoteUrl) {
       return false;
     }
-    const [, err]: any = await this.http.api_systemStatus({}, remoteUrl);
+    const [data, err]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
     if (err) {
-      // ! TODO delete the retry
-      const [, nErr]: any = await this.http.api_systemStatus({}, `${remoteUrl}/api`);
-      if (nErr) {
-        this.isConnectRemote = false;
-        return false;
+      return false;
+    } else {
+      StorageUtil.set('server_version', data);
+      if (!this.lowLevelTipsHasShow && compareVersion(data, minFontendVersion) < 0) {
+        if (this.store.isLocal) return true;
+        this.lowLevelTipsHasShow = true;
+        this.modal.warning({
+          nzTitle: $localize`The version of the cloud service is too low`,
+          nzContent:
+            $localize`Requires cloud service at least version ${minFontendVersion}.<br>` +
+            $localize`Please update the local version to the latest version <a href="https://docs.postcat.com/docs/storage.html" target="_blank" class="eo-link">Learn more..</a>`
+        });
+        return true;
       }
     }
-    this.isConnectRemote = true;
-    return this.isConnectRemote;
+    return true;
   }
 
   async checkRemoteAndTipModal() {
@@ -85,17 +76,11 @@ export class DataSourceService {
 
   async checkRemoteCanOperate(canOperateCallback?, isLocalSpace = false) {
     if (this.web.isVercel) {
-      this.modal.info({
-        nzTitle: $localize`Need to deploy cloud services`,
-        nzContent: `<span>`+$localize`Store data on the cloud for team collaboration and product use across devices.`+`</span>`+
-      `<a i18n href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo_link">`+$localize`Learn more..`+`</a>`,
-        nzOnOk: () => console.log('Info OK'),
-        nzMaskClosable: true
-      });
+      pcConsole.error(`Vercel can't operate remote data`);
       return;
     }
     if (this.web.isWeb) {
-      if (!this.user.isLogin) {
+      if (!this.store.isLogin) {
         this.messageService.send({ type: 'login', data: {} });
         return;
       }
@@ -106,7 +91,7 @@ export class DataSourceService {
       const isSuccess = await this.pingCloudServerUrl();
       // 3.1 如果ping成功，则应该去登陆
       if (isSuccess) {
-        if (!this.user.isLogin) {
+        if (!this.store.isLogin) {
           !isLocalSpace && this.messageService.send({ type: 'login', data: {} });
         } else {
           canOperateCallback?.();
@@ -142,7 +127,7 @@ export class DataSourceService {
     }
 
     const keys = Object.keys(localSettings);
-    const filterKeys = keys.filter((n) => n.startsWith(keyPath));
+    const filterKeys = keys.filter(n => n.startsWith(keyPath));
     if (filterKeys.length) {
       return filterKeys.reduce((pb, ck) => {
         const keyArr = ck.replace(`${keyPath}.`, '').split('.');

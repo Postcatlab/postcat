@@ -1,35 +1,15 @@
 <section class="flex-shrink-0 p-0 left">
-  <div class="mb-2">
-    <input
-      type="text"
-      nz-input
-      class="flex-1 w-full px-3 eo-search-input"
-      i18n-placeholder="@@Search"
-      placeholder="Search"
-      [(ngModel)]="keyword"
-      (ngModelChange)="onSeachChange($event)"
-    />
+  <div class="m-[10px]">
+    <eo-ng-input-group [nzPrefix]="prefixTemplateUser" class="!rounded-full">
+      <input type="text" eo-ng-input class="flex-1 w-full px-3" i18n-placeholder="@@Search" placeholder="Search" [(ngModel)]="keyword" />
+    </eo-ng-input-group>
+    <ng-template #prefixTemplateUser
+      ><svg class="iconpark-icon">
+        <use href="#search"></use></svg
+    ></ng-template>
   </div>
   <!-- Fixed Group -->
-  <div class="group_container">
-    <nz-tree
-      [nzData]="fixedTreeNode"
-      [nzSelectedKeys]="nzSelectedKeys"
-      nzBlockNode
-      (nzClick)="clickTreeItem($event)"
-      [nzTreeTemplate]="nzFixedTreeTemplate"
-    ></nz-tree>
-    <ng-template #nzFixedTreeTemplate let-node let-origin="origin">
-      <div class="pl-[18px] tree_node" *ngIf="node.origin?.isFixed">
-        <div class="f_row_ac">
-          <eo-iconpark-icon name="home" class="mr10"></eo-iconpark-icon>
-          <span class="text_omit node_title">{{ node.title }}</span>
-        </div>
-      </div>
-    </ng-template>
-  </div>
-  <nz-divider class="!mt-[5px] !mb-[7px]"></nz-divider>
-  <nz-tree
+  <eo-ng-tree-default
     [nzData]="treeNodes"
     [nzSelectedKeys]="nzSelectedKeys"
     #apiGroup
@@ -37,19 +17,22 @@
     (nzClick)="clickTreeItem($event)"
     nzBlockNode
     [nzTreeTemplate]="nzTreeTemplate"
-  ></nz-tree>
+  ></eo-ng-tree-default>
   <ng-template #nzTreeTemplate let-node let-origin="origin">
-    <div class="pl-[18px]">
-      <div class="tree_node f_row f_js_ac" *ngIf="!node.origin?.isFixed && node.isLeaf">
-        <div class="overflow-hidden f_row_ac text-ellipsis">
-          <span class="text_omit node_title">{{ node.title }}</span>
-        </div>
+    <div class="pl-[18px] w-full">
+      <div class="flex items-center tree-node" *ngIf="!node.origin?.isFixed && node.isLeaf">
+        <eo-iconpark-icon *ngIf="node.icon" [name]="node.icon" class="mr-2 h-[14px] mt-[-4px]"></eo-iconpark-icon>
+        <span class="truncate node_title">{{ node.title }}</span>
       </div>
     </div>
-    <!-- <div *ngIf="node.component?.showIndicator" class="ant-tree-drop-indicator ng-star-inserted"
-      style="bottom: -3px; left: 4px; right: 0px;"></div> -->
   </ng-template>
 </section>
-<section class="px-4 right fg1">
-  <router-outlet></router-outlet>
+<section class="flex-1 min-w-0">
+  <eo-extension-list
+    *ngIf="!hasExtension"
+    [keyword]="keyword"
+    [type]="selectGroup"
+    (selectChange)="selectExtension($event)"
+  ></eo-extension-list>
+  <eo-extension-detail *ngIf="hasExtension" [extensionData]="getExtension" (goBack)="selectExtension()"></eo-extension-detail>
 </section>

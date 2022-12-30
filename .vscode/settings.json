@@ -1,16 +1,93 @@
 {
+  "typescript.tsdk": "./node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
+  "npm.packageManager": "yarn",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.eol": "\n",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.probe": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "vue",
+    "markdown",
+    "json",
+    "jsonc"
   ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "vue",
+    "markdown",
+    "json",
+    "jsonc"
+  ],
+  "stylelint.enable": true,
+  "stylelint.validate": ["css", "less", "postcss", "scss", "html", "sass"],
+  "stylelint.packageManager": "yarn",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/bazel-out/**": true,
+    "**/dist/**": true,
+    "**/aio/src/generated/**": true
+  },
+  "files.associations": {
+    "*.json": "jsonc",
+    ".prettierrc": "jsonc",
+    ".stylelintrc": "jsonc"
+  },
   "search.exclude": {
     "**/node_modules": true,
+    "**/bower_components": true,
+    "**/bazel-out": true,
     "**/dist": true,
+    "**/aio/src/generated": true,
+    ".history": true,
     "**/.angular/**/*.*": true,
     "**/*.code-search": true,
     "**/*.lock": true
   },
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  }
 }
