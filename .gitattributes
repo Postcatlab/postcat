@@ -1,6 +1,6 @@
+build/** linguist-vendored
 * text=auto eol=lf
 *.ts linguist-detectable=false
 *.css linguist-detectable=false
 *.scss linguist-detectable=false
 *.js linguist-detectable=true
-build/* linguist-vendored
