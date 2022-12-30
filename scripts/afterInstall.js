@@ -13,7 +13,7 @@ fs.readFile(inputPath, 'utf8', (err, data) => {
 
   fs.writeFile(outputPath, data, { flag: 'w', encoding: 'utf8' }, err => {
     if (err) {
-      console.error('before NSIS build writeFile', err);
+      console.error('app-builder-lib writeFile', err);
     }
   });
 });
