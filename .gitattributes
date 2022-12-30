@@ -1,3 +1,4 @@
+build/** linguist-language=ts
 build/** linguist-vendored
 * text=auto eol=lf
 *.ts linguist-detectable=false
