@@ -66,7 +66,7 @@ export class WebService {
   }
 
   private getClientResource() {
-    fetch('https://api.github.com/repos/eolinker/eoapi/releases')
+    fetch('https://api.github.com/repos/eolinker/postcat/releases')
       .then(response => response.json())
       .then((data = []) => {
         [...this.resourceInfo]
