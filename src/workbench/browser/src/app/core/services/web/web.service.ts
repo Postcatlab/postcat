@@ -56,6 +56,15 @@ export class WebService {
     return result;
   }
 
+  private findLink(allAssets, item) {
+    let result = '';
+    allAssets.some(assets => {
+      result = this.findLinkInSingleAssets(assets, item);
+      return result;
+    });
+    return result;
+  }
+
   private getClientResource() {
     fetch('https://api.github.com/repos/eolinker/eoapi/releases')
       .then(response => response.json())
@@ -63,7 +72,10 @@ export class WebService {
         [...this.resourceInfo]
           .sort((a1, a2) => a2.suffix.length - a1.suffix.length)
           .forEach(item => {
-            item.link = data?.map?.(val => val.assets).some(assets => this.findLinkInSingleAssets(assets, item));
+            item.link = this.findLink(
+              data.map(val => val.assets),
+              item
+            );
           });
       });
   }

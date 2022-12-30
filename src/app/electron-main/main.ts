@@ -73,7 +73,7 @@ class EoBrowserWindow {
   private watch() {
     // Reload page when load page url error
     this.win.webContents.on('did-fail-load', (event, errorCode) => {
-      console.error('did-fail-load', event, errorCode);
+      console.error('did-fail-load', errorCode);
       this.loadURL();
     });
     this.win.on('resize', () => {
