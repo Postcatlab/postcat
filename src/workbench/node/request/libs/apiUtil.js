@@ -813,7 +813,7 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
     }),
     true
   );
-  let tmpTargetTypeData = tmpCodeEvalObj.eo[tmpApiType],
+  let tmpTargetTypeData = tmpCodeEvalObj.pc[tmpApiType],
     tmpTargetTypeEnv = tmpBasicEnv[tmpApiType];
   if (inputScript || tmpTargetTypeEnv.responseScript) {
     try {
@@ -873,7 +873,6 @@ privateFun.parseAfterCode = function (inputData, inputScript, inputEnv, inputOpt
       };
     }
   }
-
   return {
     status: 'finish',
     content: tmpTargetTypeData.responseParam,
