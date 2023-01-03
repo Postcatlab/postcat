@@ -59,6 +59,7 @@
       <eo-monaco-editor
         class="mt-[20px] border-all"
         [autoFormat]="true"
+        [autoType]="true"
         [code]="model.body"
         [config]="{ readOnly: true }"
         [isBase64]="['longText', 'stream'].includes(model.responseType)"

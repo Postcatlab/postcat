@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { EoMonacoEditorComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/monaco-editor/monaco-editor.component';
-import { getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
+import { b64DecodeUnicode, getBlobUrl } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 
 import { ApiTestUtilService } from '../../../../../../../modules/api-shared/api-test-util.service';
@@ -44,7 +44,7 @@ export class ApiTestResultResponseComponent implements OnChanges {
     let code = this.model.body;
     try {
       if (['longText', 'stream'].includes(this.model.responseType)) {
-        code = window.atob(code);
+        code = b64DecodeUnicode(code);
       } else {
         code = JSON.stringify(typeof code === 'string' ? JSON.parse(code) : code, null, 4);
       }
