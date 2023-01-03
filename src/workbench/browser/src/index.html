@@ -28,7 +28,11 @@
       </svg>
     </div>
   </body>
-
+  <script>
+    if (window.location.hostname === 'www.postcat.com') {
+      window.location.href = 'https://postcat.com';
+    }
+  </script>
   <script>
     const rootEl = document.querySelector('eo-root');
     const loadingEl = document.querySelector('#first-screen-loading-container');
