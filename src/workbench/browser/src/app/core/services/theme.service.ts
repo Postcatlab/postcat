@@ -42,8 +42,8 @@ export class ThemeService {
   }
   changeEditorTheme(theme?) {
     theme = theme || this.getEditorTheme(this.appearance);
-    if (window.monaco?.editor) {
-      window.monaco?.editor.setTheme(theme);
+    if (monaco?.editor) {
+      monaco?.editor.setTheme(theme);
     }
   }
   changeAppearance(name: AppearanceType, firstLoad = false) {

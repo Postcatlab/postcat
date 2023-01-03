@@ -147,5 +147,5 @@ export const completions: Array<Omit<languages.CompletionItem, 'range' | 'kind'>
 export const getDefaultCompletions = (): Array<Omit<languages.CompletionItem, 'range'>> =>
   completions.map(item => ({
     ...item,
-    kind: window.monaco.languages.CompletionItemKind.Function
+    kind: monaco.languages.CompletionItemKind.Function
   }));

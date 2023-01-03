@@ -12,7 +12,9 @@ import { WebService } from 'eo/workbench/browser/src/app/core/services';
   `
 })
 export class DownloadClienteComponent {
-  resourceInfo = this.web.resourceInfo;
+  resourceInfo;
 
-  constructor(public web: WebService) {}
+  constructor(public web: WebService) {
+    this.resourceInfo = this.web.resourceInfo;
+  }
 }

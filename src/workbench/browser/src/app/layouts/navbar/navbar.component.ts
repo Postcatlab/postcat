@@ -21,7 +21,7 @@ import { ModalService } from '../../shared/services/modal.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
-  resourceInfo = this.web.resourceInfo;
+  resourceInfo;
   helpMenus = [
     {
       title: $localize`Document`,
@@ -49,7 +49,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public store: StoreService,
     public dataSourceService: DataSourceService,
     private effect: EffectService
-  ) {}
+  ) {
+    this.resourceInfo = this.web.resourceInfo;
+  }
   async ngOnInit(): Promise<void> {
     this.message
       .get()
@@ -137,8 +139,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
   private getEnvironment(): string {
     let result = '';
-    const systemInfo = this.electron.getSystemInfo();
-    systemInfo.forEach(val => {
+    const systemInfo = this.electron?.getSystemInfo();
+    systemInfo?.forEach(val => {
       if (['homeDir'].includes(val.id)) {
         return;
       }

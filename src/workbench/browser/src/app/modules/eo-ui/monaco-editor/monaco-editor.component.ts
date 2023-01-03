@@ -2,14 +2,12 @@ import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, OnDes
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services/electron/electron.service';
 import type { editor, IDisposable } from 'monaco-editor';
-import type MonacoEditor from 'monaco-editor';
 import type { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 
 import { ThemeService } from '../../../core/services/theme.service';
 import { debounce, whatTextType } from '../../../utils/index.utils';
 import { getDefaultCompletions } from './defaultCompletions';
 
-declare const monaco: typeof MonacoEditor;
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
 const eventHash = new Map()
   .set('format', {
@@ -138,12 +136,14 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     // * update root type
     if (this.eventList.includes('type') && !this.hiddenList.includes('type')) {
       requestAnimationFrame(() => {
+        if (!this.codeEdtor) return;
+
         if (this.autoType) {
           const type = whatTextType(this.$$code || '');
           this.editorType = type;
-          window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
+          monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), type);
         } else {
-          window.monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), this.editorType);
+          monaco?.editor.setModelLanguage(this.codeEdtor.getModel(), this.editorType);
         }
       });
     }
@@ -204,7 +204,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
   private initMonacoEditorEvent() {
     if (this.completions?.length) {
-      this.completionItemProvider = window.monaco.languages.registerCompletionItemProvider('javascript', {
+      this.completionItemProvider = monaco.languages.registerCompletionItemProvider('javascript', {
         provideCompletionItems: (model, position) => {
           // find out if we are completing a property in the 'dependencies' object.
           const textUntilPosition = model.getValueInRange({
@@ -240,7 +240,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
     this.codeEdtor.onDidBlurEditorText(e => {
       this.handleBlur();
     });
-
     let prevHeight = 0;
 
     const updateEditorHeight = () => {
@@ -279,19 +278,27 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   rerenderEditor = () => {
     this.codeEdtor?.layout?.();
   };
-  updateReadOnlyCode(callback) {
-    this.codeEdtor?.updateOptions({ readOnly: false });
-    callback();
-    this.codeEdtor?.updateOptions({ readOnly: this.config.readOnly });
+  updateReadOnlyCode(callback, originReadOnly = this.config.readOnly) {
+    // this.codeEdtor?.updateOptions({ readOnly: false });
+    this.config.readOnly = false;
+    requestAnimationFrame(async () => {
+      const isReadOnly = this.codeEdtor.getOption(monaco.editor.EditorOption.readOnly);
+      if (isReadOnly === false) {
+        await callback();
+        requestAnimationFrame(() => (this.config.readOnly = originReadOnly));
+      } else {
+        this.updateReadOnlyCode(callback, originReadOnly);
+      }
+    });
   }
   formatCode() {
     return new Promise<string>(resolve => {
       requestAnimationFrame(async () => {
         if (this.codeEdtor) {
           this.updateReadOnlyCode(async () => {
-            await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
-            resolve(this.codeEdtor?.getValue() || '');
-          });
+            await this.codeEdtor.getAction('editor.action.formatDocument').run();
+            resolve(this.codeEdtor.getValue() || '');
+          }, this.config.readOnly);
         } else {
           resolve(await this.formatCode());
         }

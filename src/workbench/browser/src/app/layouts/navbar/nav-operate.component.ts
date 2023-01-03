@@ -52,9 +52,11 @@ import { ElectronService } from '../../core/services';
 })
 export class NavOperateComponent {
   isMaximized = false;
-  isElectron = this.electron.isElectron;
+  isElectron: boolean;
   isMac = navigator.platform.toLowerCase().includes('mac');
-  constructor(private electron: ElectronService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private electron: ElectronService, private router: Router, private route: ActivatedRoute) {
+    this.isElectron = this.electron.isElectron;
+  }
   minimize() {
     this.electron.ipcRenderer.send('message', {
       action: 'minimize'

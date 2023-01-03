@@ -60,7 +60,7 @@
         class="mt-[20px] border-all"
         [autoFormat]="true"
         [code]="model.body"
-        [config]="{ readOnly: false }"
+        [config]="{ readOnly: true }"
         [isBase64]="['longText', 'stream'].includes(model.responseType)"
         [eventList]="['type', 'format', 'copy', 'search']"
       ></eo-monaco-editor>
