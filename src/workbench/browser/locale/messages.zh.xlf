@@ -4299,12 +4299,12 @@
         <target state="translated">需要云端服务至少版本 <x id="PH" equiv-text="minFontendVersion"/>。&lt;br&gt;</target>
       </trans-unit>
       <trans-unit id="5758810834018339800" datatype="html">
-        <source>Please update the local version to the latest version &lt;a href=&quot;https://docs.eoapi.io/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo-link&quot;&gt;Learn more..&lt;/a&gt;</source>
+        <source>Please update the local version to the latest version &lt;a href=&quot;https://docs.postcat.com/docs/storage.html&quot; target=&quot;_blank&quot; class=&quot;eo-link&quot;&gt;Learn more..&lt;/a&gt;</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/services/data-source/data-source.service.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
-        <target state="translated">请升级到最新版本 &lt;a href="https://docs.eoapi.io/docs/storage.html" target="_blank" class="eo-link"&gt;了解更多..&lt;/a&gt;</target>
+        <target state="translated">请升级到最新版本 &lt;a href="https://docs.postcat.com/docs/storage.html" target="_blank" class="eo-link"&gt;了解更多..&lt;/a&gt;</target>
       </trans-unit>
       <trans-unit id="2684546755759864807" datatype="html">
         <source>Need to deploy cloud services</source>

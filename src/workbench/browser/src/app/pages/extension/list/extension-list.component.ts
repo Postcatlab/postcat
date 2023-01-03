@@ -2,8 +2,8 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { autorun, observable, makeObservable } from 'mobx';
 
-import { ExtensionService } from '../../../shared/services/extensions/extension.service';
 import { ExtensionGroupType } from '../extension.model';
+import { ExtensionService } from '../extension.service';
 
 const extensionSearch = list => keyword => list.filter(it => it.name.includes(keyword) || it.keywords?.includes(keyword));
 
@@ -37,7 +37,7 @@ export class ExtensionListComponent implements OnInit {
         return extensionSearch(list)(keyword);
       },
       official: async () => {
-        const authorName = ['Postcat', 'Eoapi'];
+        const authorName = ['Postcat'];
         const { data }: any = await this.extensionService.requestList();
         return extensionSearch(data.filter(it => authorName.includes(it.author)))(keyword);
       },

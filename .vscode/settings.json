@@ -86,5 +86,8 @@
     "**/.angular/**/*.*": true,
     "**/*.code-search": true,
     "**/*.lock": true
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
   }
 }

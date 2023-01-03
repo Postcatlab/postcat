@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { has } from 'lodash-es';
 

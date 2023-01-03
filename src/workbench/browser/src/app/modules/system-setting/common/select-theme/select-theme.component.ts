@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ThemeService } from '../../../../core/services/theme.service';
+import { ThemeService } from '../../../../core/services/theme/theme.service';
 import { APPEARANCE, THEMES } from './theme.model';
 
 @Component({

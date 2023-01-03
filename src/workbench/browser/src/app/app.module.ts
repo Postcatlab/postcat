@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WarningFill } from '@ant-design/icons-angular/icons';
 import { EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
@@ -24,7 +24,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ThemeService } from './core/services/theme.service';
+import { ThemeService } from './core/services/theme/theme.service';
 import { TABLE_PRO_CONFIG } from './modules/eo-ui/table-pro/table-pro.token';
 import { MockService } from './services/mock.service';
 registerLocaleData(en);

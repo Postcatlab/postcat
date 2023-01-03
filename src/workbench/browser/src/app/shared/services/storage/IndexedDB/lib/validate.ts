@@ -3,8 +3,8 @@ import { ApiBodyType } from 'eo/workbench/browser/src/app/modules/api-shared/api
 import { whatType } from 'eo/workbench/browser/src/app/utils/index.utils';
 
 import { ApiData, Environment, Group } from '../../index.model';
-import apiDataSchema from '../schema/apiData.json';
-import envSchema from '../schema/env.json';
+import apiDataSchema from '../schema/apiData.schema.json';
+import envSchema from '../schema/env.schema.json';
 export const parseAndCheckApiData = (apiData): { validate: boolean; data?: ApiData; error?: any } => {
   const ajv = new Ajv({
     useDefaults: true,

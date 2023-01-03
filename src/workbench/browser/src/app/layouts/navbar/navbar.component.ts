@@ -11,8 +11,9 @@ import { interval, Subject, takeUntil } from 'rxjs';
 import { distinct } from 'rxjs/operators';
 
 import { ElectronService, WebService } from '../../core/services';
+import { FeatureControlService } from '../../core/services/feature-control/feature-control.service';
 import { LanguageService } from '../../core/services/language/language.service';
-import { ThemeService } from '../../core/services/theme.service';
+import { ThemeService } from '../../core/services/theme/theme.service';
 import { SystemSettingComponent } from '../../modules/system-setting/system-setting.component';
 import { ModalService } from '../../shared/services/modal.service';
 @Component({
@@ -25,15 +26,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
   helpMenus = [
     {
       title: $localize`Document`,
-      href: 'https://docs.eoapi.io',
-      click: $event => {}
+      href: 'https://docs.postcat.com',
+      itemClick: $event => {}
     },
     {
       title: $localize`Report Issue`,
-      href: `https://github.com/eolinker/eoapi/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
-      click: $event => {}
+      href: `https://github.com/eolinker/postcat/issues/new?assignees=&labels=&template=bug_report.yml&environment=${this.getEnvironment()}`,
+      itemClick: $event => {}
     }
   ];
+  issueEnvironment = this.getEnvironment();
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public electron: ElectronService,
@@ -47,9 +49,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public lang: LanguageService,
     public store: StoreService,
     public dataSourceService: DataSourceService,
-    private effect: EffectService
+    public feature: FeatureControlService
   ) {}
-
   async ngOnInit(): Promise<void> {
     this.message
       .get()

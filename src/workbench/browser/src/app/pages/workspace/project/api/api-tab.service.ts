@@ -67,13 +67,6 @@ export class ApiTabService {
   BASIC_TABS: Array<Partial<TabItem>>;
   tabStorageKey: string;
   constructor(private messageService: MessageService, private router: Router, private store: StoreService) {
-    //TODO compatible with old version,DELETE at
-    for (var i = 0; i < localStorage.length; i++) {
-      const keyName = localStorage.key(i);
-      if (keyName.includes('_TabCache')) {
-        localStorage.removeItem(keyName);
-      }
-    }
     this.changeContent$.pipe(debounceTime(150)).subscribe(inData => {
       this.afterContentChanged(inData);
     });

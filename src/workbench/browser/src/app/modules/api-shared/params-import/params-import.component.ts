@@ -139,21 +139,17 @@ export class ParamsImportComponent implements OnInit {
       };
     };
 
-    const obj2array = data => {
-      return Object.keys(data).map(name => ({
+    const obj2array = data =>
+      Object.entries(data).map(([name, value]: any[]) => ({
         name,
-        ...data[name],
-        children: data?.children?.length ? obj2array(data.children) : []
+        ...value,
+        children: value?.children ? obj2array(value.children) : []
       }));
-    };
 
     const combineFunc = {
       overwrite: data => data,
       append: (data, base) => base.concat(data),
-      mixin: (data, base) => {
-        console.log('base', merge(array2obj(base), array2obj(data)));
-        return obj2array(merge(array2obj(base), array2obj(data)));
-      }
+      mixin: (data, base) => obj2array(merge(array2obj(base), array2obj(data)))
     };
 
     const { data } = res;

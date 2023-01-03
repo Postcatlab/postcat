@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { autorun } from 'mobx';
 
+import { FeatureControlService } from '../../../core/services/feature-control/feature-control.service';
 import { SettingService } from '../../../modules/system-setting/settings.service';
 import { DataSourceService } from '../../../shared/services/data-source/data-source.service';
 import { MessageService } from '../../../shared/services/message';
@@ -16,7 +17,12 @@ export class WorkspaceOverviewComponent implements OnInit {
   @ViewChild('eoProjectList') eoProjectList: ProjectListComponent;
   title = 'Workspaces';
   nzSelectedIndex = 0;
-  constructor(private dataSourceService: DataSourceService, private message: MessageService, public store: StoreService) {}
+  constructor(
+    private dataSourceService: DataSourceService,
+    private message: MessageService,
+    public store: StoreService,
+    public feature: FeatureControlService
+  ) {}
   invite() {
     this.nzSelectedIndex = 1;
   }

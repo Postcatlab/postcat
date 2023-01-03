@@ -1,19 +1,11 @@
 :host {
   overflow: initial;
 
-  ::ng-deep .main-bg {
-    background-color: var(--BTN_SEC_BG_HOVER) !important;
-
-    &:focus,
-    &:active,
-    &:target {
-      background-color: var(--MAIN_BG) !important;
+  .websocket-header {
+    .ant-input,
+    .ant-btn {
+      height: 40px;
     }
-  }
-
-  .ant-input,
-  .ant-btn {
-    height: 40px;
   }
 }
 
@@ -70,6 +62,16 @@
 }
 
 :host ::ng-deep {
+  .main-bg {
+    background-color: var(--BTN_SEC_BG_HOVER) !important;
+
+    &:focus,
+    &:active,
+    &:target {
+      background-color: var(--MAIN_BG) !important;
+    }
+  }
+
   .no-radius-select {
     .ant-select-selector {
       border-top-right-radius: 0 !important;

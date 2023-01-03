@@ -24,19 +24,19 @@ export const TABLE_PRO_DEFUALT_CONFIG: TableProConfig = {
   fullScreenTitle: $localize`Full Screen`,
   columnVisibleTitle: $localize`Column Visible`,
   columnVisibleIcon: 'view-list-781pg17c',
-  btnAddRowIcon: 'plus',
+  btnAddRowIcon: 'add',
   btnAddRowTitle: $localize`Add Row`,
-  btnAddChildRowIcon: 'plus',
+  btnAddChildRowIcon: 'add',
   btnAddChildRowTitle: $localize`Add Child Row`,
-  btnInsertRowIcon: 'arrow-down',
+  btnInsertRowIcon: 'down-small',
   btnInsertRowTitle: $localize`Add Row Down`,
   btnEditRowIcon: 'edit',
   btnEditRowTitle: $localize`Edit`,
   btnDeleteRowIcon: 'delete',
   btnDeleteRowTitle: $localize`Delete`,
-  btnDeleteRowConfirmTitle: $localize`Are you sure you want to delete?`,
+  btnDeleteRowConfirmTitle: $localize`Are you sure you want to delete?`
 };
 export const TABLE_PRO_CONFIG = new InjectionToken<TableProConfig>('table-pro-config', {
   providedIn: 'root',
-  factory: () => TABLE_PRO_DEFUALT_CONFIG,
+  factory: () => TABLE_PRO_DEFUALT_CONFIG
 });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ThemeService } from 'eo/workbench/browser/src/app/core/services/theme.service';
+import { ThemeService } from 'eo/workbench/browser/src/app/core/services/theme/theme.service';
 
 import { ElectronService } from '../../../core/services';
 @Component({

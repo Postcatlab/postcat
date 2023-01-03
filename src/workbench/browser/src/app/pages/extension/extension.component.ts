@@ -3,8 +3,8 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { observable, makeObservable, computed, action } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
-import { ExtensionService } from '../../shared/services/extensions/extension.service';
 import { ExtensionGroupType } from './extension.model';
+import { ExtensionService } from './extension.service';
 
 @Component({
   selector: 'eo-extension',

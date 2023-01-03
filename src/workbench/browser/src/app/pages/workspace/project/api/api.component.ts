@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { EoTabComponent } from 'eo/workbench/browser/src/app/modules/eo-ui/tab/tab.component';
-import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
@@ -118,12 +118,6 @@ export class ApiComponent implements OnInit, OnDestroy {
         return prev;
       }, []);
       this.rightExtras.push(...rightExtra);
-    });
-    this.rightExtras.forEach(val => {
-      //TODO remove after 2023.02
-      if (val.icon === 'file-text-one') {
-        val.icon = 'file-text';
-      }
     });
     // console.log('this.rightExtras', this.rightExtras);
   }

@@ -4,8 +4,8 @@ import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 
 import { WebService } from '../../../core/services/web/web.service';
-import { ExtensionService } from '../../../shared/services/extensions/extension.service';
 import { EoExtensionInfo } from '../extension.model';
+import { ExtensionService } from '../extension.service';
 
 @Component({
   selector: 'eo-extension-detail',

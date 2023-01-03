@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Windows>  <!-- 安装目录 -->
+  <VerticalLayout bkcolor="#FFFFFFFF">
+    <Include source="logo.xml" />
+
+    <VerticalLayout>
+      <GifAnim padding="160,0,100,34" width="30" height="30" bkimage="file='loading.gif'" />
+      <Label font="5" name="progress_tip" padding="146,0,0,50" textcolor="#FF101010" text="Installing" />
+    </VerticalLayout>
+  </VerticalLayout>
+</Windows>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 import { ModuleInfo, FeatureInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';

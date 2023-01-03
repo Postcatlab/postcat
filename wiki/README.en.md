@@ -1,64 +1,51 @@
-<p align="center">
-  <a href="https://github.com/eolinker/eoapi">
-    <img width="200" src="./images/logo.png">
-  </a>
-</p>
-<div align="center">
-A extensible API tool,Core Lightweight & Open Source API Ecosystem
-</div>
-<hr>
-<p align="center">
-  <a href="https://github.com/eolinker/eoapi"><img src="https://img.shields.io/github/license/eolinker/eoapi?sanitize=true" alt="License"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/v/release/eolinker/eoapi?sanitize=true" alt="Version"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/downloads/eolinker/eoapi/total?sanitize=true" alt="Downloads"></a>
-  <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
-</p>
+# Postcat API Client
 
-English | [简体中文](README.md)
+![Postcat API Client](http://data.eolinker.com/course/QbLMSaJ7f3dcd0b075a7031b31f8acb486e0a090f1bdc8d.jpeg)
+<p align="center"><span>English</span> | <a href="/README.md">简体中文</a></p>
 
-![](https://docs.eoapi.io/images/eoapi-demo-en.png)
+Postcat is a powerful open source, cross-platform (Windows, Mac, Linux, Browsers...) API development and testing tool that supports REST, Websocket and other protocols (soon to support GraphQL, gRPC, TCP, UDP), helping you speed up the completion of API Development and testing work.
 
-# Try it!
+While ensuring that Postcat is light and flexible, we also designed a powerful plug-in system for Postcat, allowing you to use plug-ins developed by others to enhance Postcat's functions with one click, or develop Postcat plug-ins by yourself, so Postcat is theoretically a As an API product with infinite possibilities, we also visually added a cape to Postcat's cat, representing its infinite possibilities.
 
-[https://eoapi.io](https://eoapi.io/)
+</br>
 
-The data will be stored locally(indexedb) on the web page.I suggest that you should install and try it out for the best demo experience.
+![Postcat UI](http://data.eolinker.com/course/7UYEmJb7b87f58cc42b9528058c673ff41bd96da6a77d71.png)
 
-# Getting started
+![Postcat Extensions](http://data.eolinker.com/course/Q9jIAtIc498a3fa46199654df2ffb7b4fdb48b2ebb88ba3.png)
 
-- You can download it on [Releases](https://github.com/eolinker/eoapi/releases) available for macOS, Windows
+## Download and use online
 
-- Read our [User Manual](https://docs.eoapi.io) for more features
-- Read our [developer documentation](https://developer.eoapi.io) to develop extensions
+Postcat now supports Windows, Mac, Linux and other systems, you can access and download it through the following address. At the same time, we also provide a web terminal, which is convenient for you to use on any browser.
 
-# Featue
+**[https://postcat.com/](https://postcat.com//)**
 
-📃 API Documentation
+If you feel good after trying it out, please give our cat a Star and Fork~ Your support is our motivation to keep improving our products!
 
-- HTTP,Websocket protocol
-- Various formats of request body: FormData, XML, JSON, Raw,Binary
+## Roadmap
 
-⚡ API Test
+- 🚀 Multi-protocol support
+-- Implemented: HTTP REST, Websocket
+-- Coming soon: GraphQL, TCP, UDP, gRPC
+- 📕 API Documentation
+- ✨ API Design
+- ⚡ API Test
+- 🎭 Mock
+- 🙌 Collaboration
+- 🎈 Document Sharing
+- 🗺 Environment
+- 🧶 Global variables
+- 🧩 Custom theme style
+- 🌐 Multilingual support: Chinese, English
 
-- Quickly test the API
-- Test local API
+Learn more：[Github Project](https://github.com/orgs/eolinker/projects/1/views/16)
 
-🎭 Mock
+## Bug and Feature Request
 
-- Mock API document response
+If you'd like to contact us, please create a [Github issue](https://github.com/eolinker/postcat/issues). Thank you!
 
-🌐 Test environment management
+## Document
 
-📶 Available offline
-
-🌱 Extension Marketplace
-
-💻 [Collaboration](https://docs.eoapi.io/docs/collaborate.html)
-
-- Collaboration via [self-hosted cloud server](https://github.com/eolinker/eoapi-remote-server)
-- API Share
-
-🌐 Internationalization
+[Postcat User Document](https://docs.postcat.com/)
 
 # Build and run
 
@@ -103,11 +90,3 @@ yarn add @angular/cli --global
 | Command     | Description        |
 | ----------- | ------------------ |
 | `yarn test` | Execute unit tests |
-
-# License
-
-This project is licensed under the Apache-2.0 License - see the [LICENSE.md](LICENSE) file for details
-
-# Contact us
-
-If you'd like to contact us, please create a [Github issue](https://github.com/eolinker/eoapi/issues). Thank you!

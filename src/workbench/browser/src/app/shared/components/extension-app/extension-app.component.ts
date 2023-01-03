@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
 @Component({
   selector: 'extension-app',
   template: `
@@ -104,8 +104,12 @@ export class ExtensionAppComponent implements OnInit, OnDestroy {
         origin
       );
     } else if (data === 'EOAPI_EXT_APP') {
+      //TODO compatible with old version
       this.iframeWin = this.extensionApp?.nativeElement?.contentWindow;
       this.iframeWin.postMessage('EOAPI_MESSAGE', '*');
+    } else if (data === 'POSTCAT_EXT_APP') {
+      this.iframeWin = this.extensionApp?.nativeElement?.contentWindow;
+      this.iframeWin.postMessage('POSTCAT_MESSAGE', '*');
     }
   };
 

@@ -1,88 +1,90 @@
-<p align="center">
-  <a href="https://github.com/eolinker/eoapi">
-    <img width="200" src="./wiki/images/logo.png">
-  </a>
-</p>
-</p>
+# Postcat API 客户端（Client）
 
-<div align="center">
-一个可拓展的 API 工具，核心轻量且开源的 API 生态系统
-</div>
-<hr>
-<p align="center">
-  <a href="https://github.com/eolinker/eoapi"><img src="https://img.shields.io/github/license/eolinker/eoapi?sanitize=true" alt="License"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/v/release/eolinker/eoapi?sanitize=true" alt="Version"></a>
-  <a href="https://github.com/eolinker/eoapi/releases"><img src="https://img.shields.io/github/downloads/eolinker/eoapi/total?sanitize=true" alt="Downloads"></a>
-  <a href="https://discord.gg/W3uk39zJCR"><img src="https://img.shields.io/badge/chat-on%20discord-7289da.svg?sanitize=true" alt="Chat"></a>
-</p>
+![Postcat API Client](http://data.eolinker.com/course/QbLMSaJ7f3dcd0b075a7031b31f8acb486e0a090f1bdc8d.jpeg)
+<p align="center"><a href="wiki/README.en.md">English</a> | <span>简体中文</span></p>
 
-[English](wiki/README.en.md)｜简体中文
+Postcat 是一个强大的开源、跨平台（Windows、Mac、Linux、Browsers...）的 API 开发测试工具，支持 REST、Websocket 等协议（即将支持 GraphQL、gRPC、TCP、UDP），帮助你加速完成API开发和测试工作。
 
-![](https://docs.eoapi.io/images/eoapi-demo.png)
-# 在线试试！
+我们在保证 Postcat 轻巧灵活的同时，还为 Postcat 设计了一个强大的插件系统，让你一键使用其他人开发好的插件来增强 Postcat 的功能，或者自行开发 Postcat 插件，因此 Postcat 理论上是一个拥有无限可能的 API 产品，我们也形象地为 Postcat 的猫咪加上了一件披风，代表它的无限可能。
 
-[https://eoapi.io](https://eoapi.io/)
+</br>
 
-功能体验过程中的数据将储存在 Web 的本地存储（indexedb）。试用后建议下载桌面端体验更佳～
-# 快速开始
+![Postcat UI](http://data.eolinker.com/course/7UYEmJb7b87f58cc42b9528058c673ff41bd96da6a77d71.png)
 
-- 访问 [Releases](https://github.com/eolinker/eoapi/releases) 下载 Windows、macOS 安装包。
+![Postcat Extensions](http://data.eolinker.com/course/Q9jIAtIc498a3fa46199654df2ffb7b4fdb48b2ebb88ba3.png)
 
-- 查看 [用户使用文档](https://docs.eoapi.io) 了解功能
+## 下载和在线使用
 
-- 查看 [开发者文档](https://developer.eoapi.io) 开发插件
+Postcat 现在已经支持 Windows、Mac、Linux等系统，你可以通过以下地址访问并下载。同时我们也提供了 Web 端，方便你在任何浏览器上使用。
 
-# 功能
+**[https://postcat.com/](https://postcat.com//)**
 
-📃 API 文档
+如果你试用之后觉得不错，请给我们的猫咪一个 Star 和 Fork~ 你的支持是我们不断改进产品的动力！
 
-- HTTP、Websocket 协议
-- 各种格式请求体：FormData、XML、JSON、Raw、Binary
+## 功能特性和迭代计划（Roadmap）
 
-⚡ API 测试
+- 🚀 多协议支持
+-- 已实现：HTTP REST、Websocket
+-- 即将实现：GraphQL、TCP、UDP、gRPC
+- 📕 API 文档
+- ✨ API 设计
+- ⚡ API 测试
+- 🎭 Mock
+- 🙌 团队协作
+- 🎈 文档分享
+- 🗺 环境
+- 🧶 全局变量
+- 🧩 自定义主题风格
+- 🌐 多语言支持：中文、English
 
-- 快速对 API 发起测试
-- 支持本地测试
+了解更多具体迭代计划：[Github Project](https://github.com/orgs/eolinker/projects/1/views/16)
 
-🎭 Mock
-- 模拟文档接口返回值
+## Bug 和需求反馈
 
-📖 环境管理
+如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/postcat/issues) 联系我们，十分感谢！
 
-📶 可离线使用
+如果你希望和 Postcat 团队近距离交流，讨论产品使用技巧以及了解更多产品最新进展，欢迎加入以下渠道。
 
-🌱 插件集市
+- QQ群号码：981965807
+- QQ群链接：[加入Postcat 用户群](https://jq.qq.com/?_wv=1027&k=Kej1qTUy)
 
-💻  [多人协作](https://docs.eoapi.io/docs/collaborate.html)
-- 通过部署云端服务实现多人协作
-- API 分享
-- 可本地/内网部署
+- 微信群：
 
-🌐 国际化
-# 功能规划
-[Github 项目看板](https://github.com/orgs/eolinker/projects/1/views/16)
-# 源码运行/构建
+![](http://data.eolinker.com/course/NKhRRF668370911c8b8ea8a0887b5d62e71b0f1a22ad76a.png)
 
-## 环境
+## 文档
+
+[Postcat 文档](https://docs.postcat.com/)
+
+## 开发 Postcat
+
+<details>
+<summary>运行代码</summary>
+
+</br>
+
+请确保你已经部署好所需的开发环境：
 
 - Node.js >= 14.17.x
 - yarn >= 1.22.x
 
-## 运行代码
+我们在开发和构建时使用 yarn 作为包管理工具，强烈建议你也这么做，但如果您希望使用 npm 也完全没问题，只是在安装依赖时可能需要多花一些时间。
 
-我们在开发和构建时使用 [yarn](https://yarnpkg.com/) 作为包管理工具，强烈建议你也这么做，但如果您希望使用 npm 也完全没问题，只是在安装依赖时可能需要多花一些时间。
+### 运行桌面端程序
 
-如果你想要跑桌面端版本：
-```
+```shell
 yarn install
 yarn start
 ```
 
-如果你只是想运行浏览器的代码，你可以：
-```
+### 运行浏览器程序
+
+```shell
 cd src/workbench&&npm install
 yarn start
 ```
+
+### 提高效率
 
 如果想提高开发效率，可以安装 Angular 官方提供的命令行 Angular-cli 快速生成组件、服务等模板。
 
@@ -90,36 +92,29 @@ yarn start
 yarn add @angular/cli --global
 ```
 
-## 命令
+</details>
 
-### 运行
+<details>
+<summary>内置命令</summary>
 
-| 命令                  | 描述                                 |
-| --------------------- | ------------------------------------ |
-| `yarn start`          | 开发模式下，同时运行在浏览器和桌面端 |
-| `yarn start:web`      | 仅运行在浏览器,同时开启后端代理     |
-| `yarn start:electron` | 仅运行在桌面端                       |
+### 运行命令
+
+|命令				|描述									|
+| ------------ | ------------ |
+|yarn start			|开发模式下，同时运行在浏览器和桌面端	|
+|yarn start:web		|仅运行在浏览器,同时开启后端代理		|
+|yarn start:electron|仅运行在桌面端							|
 
 ### 打包构建
 
-| 命令              | 描述                     |
-| ----------------- | ------------------------ |
-| `sudo yarn build` | 各系统打包 Electron 应用 |
+|命令			|描述						|
+| ------------ | ------------ |
+|sudo yarn build|各系统打包 Electron 应用	|
 
 ### 运行测试
 
-| 命令        | 描述         |
-| ----------- | ------------ |
-| `yarn test` | 执行单元测试 |
+|命令		|描述			|
+| ------------ | ------------ |
+|yarn test	|执行单元测试	|
 
-# 协议
-
-本项目采用 Apache-2.0 协议，可查看 [LICENSE.md](LICENSE) 了解更详细内容。
-
-# 支持我们
-
-如果你觉得项目还不错，记得 Star 支持一下噢！你们的支持对 Eoapi 真的很重要！
-
-# 联系我们
-
-如果想要反馈 Bug、提供产品意见，可以创建一个 [Github issue](https://github.com/eolinker/eoapi/issues) 联系我们，十分感谢！
+</details>

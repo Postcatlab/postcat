@@ -26,7 +26,8 @@
     router-outlet + * {
       display: block;
       height: var(--body-height);
-      overflow: hidden auto;
+
+      // overflow: hidden auto;
     }
   }
 }

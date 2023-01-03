@@ -1,9 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 
-import { AppearanceType, MainColorType } from '../../modules/system-setting/common/select-theme/theme.model';
-import StorageUtil from '../../utils/storage/Storage';
-import coreThemeJSON from './../../../extensions/core-themes/package.json';
+import { AppearanceType, MainColorType } from '../../../modules/system-setting/common/select-theme/theme.model';
+import StorageUtil from '../../../utils/storage/Storage';
+import coreThemeJSON from './../../../../extensions/core-themes/package.json';
 
 @Injectable({
   providedIn: 'root'

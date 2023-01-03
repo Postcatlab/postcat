@@ -15,9 +15,7 @@ import { SocketService } from './extension/socket.service';
 export class PagesComponent implements OnInit {
   isShowNotification;
   sidebarViews: any[] = [];
-  constructor(private socket: SocketService, public electron: ElectronService, private router: Router, private sidebar: SidebarService) {
-    this.isShowNotification = false;
-  }
+  constructor(private socket: SocketService, public electron: ElectronService, private router: Router, private sidebar: SidebarService) {}
   ngOnInit(): void {
     // * 通过 socketIO 告知 Node 端，建立 grpc 连接
     this.socket.socket2Node();
