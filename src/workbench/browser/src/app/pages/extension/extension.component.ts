@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { observable, makeObservable, computed, action } from 'mobx';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
@@ -12,7 +13,7 @@ import { ExtensionService } from './extension.service';
   styleUrls: ['./extension.component.scss']
 })
 export class ExtensionComponent implements OnInit {
-  @observable extensionName = '';
+  @observable currentExtension: ModuleInfo | null = null;
   @observable selectGroup: ExtensionGroupType | string = ExtensionGroupType.all;
   keyword = '';
   nzSelectedKeys: Array<number | string> = ['all'];
@@ -36,11 +37,11 @@ export class ExtensionComponent implements OnInit {
   ];
 
   @computed get hasExtension() {
-    return !!this.extensionName;
+    return !!this.currentExtension;
   }
 
   @computed get getExtension() {
-    return this.extensionName;
+    return this.currentExtension;
   }
 
   constructor(public extensionService: ExtensionService, public electron: ElectronService) {}
@@ -49,8 +50,8 @@ export class ExtensionComponent implements OnInit {
     makeObservable(this);
   }
 
-  selectExtension(name = '') {
-    this.setExtension(name);
+  selectExtension(ext = null) {
+    this.setExtension(ext);
   }
   /**
    * Group tree item click.
@@ -66,7 +67,7 @@ export class ExtensionComponent implements OnInit {
     this.selectGroup = data;
   }
 
-  @action setExtension(data = '') {
-    this.extensionName = data;
+  @action setExtension(data = null) {
+    this.currentExtension = data;
   }
 }

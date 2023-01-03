@@ -15,7 +15,7 @@ type ListType = 'list' | 'card';
   styleUrls: ['./project-list.component.scss']
 })
 export class ProjectListComponent implements OnInit {
-  listType: ListType = this.setting.get('workbench.list.type') || 'list';
+  listType: ListType;
   initLoading = true; // bug
   projectList: any[] = [];
 
@@ -29,7 +29,9 @@ export class ProjectListComponent implements OnInit {
     private effect: EffectService,
     private store: StoreService,
     private modalService: ModalService
-  ) {}
+  ) {
+    this.listType = this.setting.get('workbench.list.type') || 'list';
+  }
 
   async ngOnInit(): Promise<void> {
     await this.getProjectList();

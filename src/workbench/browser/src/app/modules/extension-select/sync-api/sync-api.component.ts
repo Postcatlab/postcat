@@ -16,13 +16,15 @@ import { StoreService } from '../../../shared/store/state.service';
 export class SyncApiComponent implements OnInit {
   currentExtension = '';
   supportList: any[] = [];
-  featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
+  featureMap: Map<string, FeatureInfo>;
   constructor(
     private storage: StorageService,
     private extensionService: ExtensionService,
     private store: StoreService,
     private eoMessage: EoNgFeedbackMessageService
-  ) {}
+  ) {
+    this.featureMap = this.extensionService.getValidExtensionsByFature('syncAPI');
+  }
 
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {

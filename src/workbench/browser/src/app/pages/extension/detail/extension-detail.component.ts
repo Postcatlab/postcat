@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
+import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 
 import { WebService } from '../../../core/services/web/web.service';
 import { EoExtensionInfo } from '../extension.model';
@@ -13,7 +14,7 @@ import { ExtensionService } from '../extension.service';
   styleUrls: ['./extension-detail.component.scss']
 })
 export class ExtensionDetailComponent implements OnInit {
-  @Input() extensionData = '';
+  @Input() extensionData: ModuleInfo | null = null;
   @Output() readonly goBack: EventEmitter<any> = new EventEmitter();
   isOperating = false;
   introLoading = false;
@@ -43,8 +44,9 @@ export class ExtensionDetailComponent implements OnInit {
   }
 
   async getDetail() {
+    this.extensionDetail = { ...this.extensionDetail, ...this.extensionData };
     if (this.electron.isElectron) {
-      this.isOperating = window.electron.getInstallingExtension(this.extensionData, ({ type, status }) => {
+      this.isOperating = window.electron.getInstallingExtension(this.extensionData?.name, ({ type, status }) => {
         if (type === 'install' && status === 'success') {
           this.extensionDetail.installed = true;
         }
@@ -54,7 +56,7 @@ export class ExtensionDetailComponent implements OnInit {
         this.isOperating = false;
       });
     }
-    this.extensionDetail = await this.extensionService.getDetail(this.extensionData, this.extensionData);
+    this.extensionDetail = await this.extensionService.getDetail(this.extensionData?.name, this.extensionData?.name);
 
     if (!this.extensionDetail?.installed || this.webService.isWeb) {
       await this.fetchReadme(this.language.systemLanguage);

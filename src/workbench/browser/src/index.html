@@ -7,6 +7,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script async src="assets/font/iconpark.js"></script>
     <link rel="icon" type="image/x-icon" href="assets/icons/icon.ico" />
+    <style>
+      #mask {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 99999;
+        display: none;
+      }
+
+      .loading-container {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .loading-container img {
+        width: 100px;
+      }
+
+      .loading-container .iconpark-icon.loading-icon {
+        margin-top: 15px;
+        height: 25px;
+        width: 25px;
+        vertical-align: middle;
+        animation: loadingCircle 1s infinite linear;
+      }
+      @keyframes loadingCircle {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <!-- Angular Cli need for node modules -->
   <script>
@@ -28,6 +66,34 @@
       </svg>
     </div>
   </body>
+  <script>
+    if (window.location.hostname === 'www.postcat.com') {
+      window.location.href = 'https://postcat.com';
+    }
+  </script>
+  <script type="text/javascript" async>
+    if (window.location.hostname.includes('postcat.com')) {
+      !(function (e, t, n, g, i) {
+        (e[i] =
+          e[i] ||
+          function () {
+            (e[i].q = e[i].q || []).push(arguments);
+          }),
+          (n = t.createElement('script')),
+          (tag = t.getElementsByTagName('script')[0]),
+          (n.async = 1),
+          (n.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + g),
+          tag.parentNode.insertBefore(n, tag);
+      })(window, document, 'script', 'assets.giocdn.com/2.1/gio.js', 'gio');
+      gio('init', 'bd7645ddc19400a8', {});
+
+      //custom page code begin here
+
+      //custom page code end here
+
+      gio('send');
+    }
+  </script>
 
   <script>
     const rootEl = document.querySelector('eo-root');
@@ -50,42 +116,4 @@
     // 以上述配置开始观察目标节点
     observer.observe(rootEl, config);
   </script>
-  <style>
-    #mask {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      z-index: 99999;
-      display: none;
-    }
-
-    .loading-container {
-      position: absolute;
-      top: 40%;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .loading-container img {
-      width: 100px;
-    }
-
-    .loading-container .iconpark-icon.loading-icon {
-      margin-top: 15px;
-      height: 25px;
-      width: 25px;
-      vertical-align: middle;
-      animation: loadingCircle 1s infinite linear;
-    }
-    @keyframes loadingCircle {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
 </html>

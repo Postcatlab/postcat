@@ -6,14 +6,15 @@ class webPlatformBuilder {
   }
   resetBuildConfig(json) {
     delete json.projects.eoapi.i18n.sourceLocale.baseHref;
-    Object.keys(json.projects.eoapi.i18n.locales).forEach((val) => {
+    Object.keys(json.projects.eoapi.i18n.locales).forEach(val => {
       delete json.projects.eoapi.i18n.locales[val].baseHref;
     });
     return json;
   }
   executeBuild() {
-    //！ Can't use pathname to redirect,will cause the dead loop;
+    //! Can't use pathname to redirect,will cause the dead loop;
     execSync(`ng build -c ${this.environment}`, { stdio: 'inherit' });
+    //! For vercel redirect
     fs.writeFile(
       './dist/index.html',
       `<!DOCTYPE html>
@@ -47,7 +48,7 @@ class webPlatformBuilder {
 class appPlatformBuilder {
   resetBuildConfig(json) {
     json.projects.eoapi.i18n.sourceLocale.baseHref = '';
-    Object.keys(json.projects.eoapi.i18n.locales).forEach((val) => {
+    Object.keys(json.projects.eoapi.i18n.locales).forEach(val => {
       json.projects.eoapi.i18n.locales[val].baseHref = '';
     });
     return json;

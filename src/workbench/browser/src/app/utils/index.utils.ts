@@ -286,3 +286,17 @@ export const compareVersion = (v1, v2) => {
 
   return _r === 0 && v1 !== v2 ? compareVersion(_v1.splice(1).join('.'), _v2.splice(1).join('.')) : _r;
 };
+
+// more see https://developer.mozilla.org/zh-CN/docs/Glossary/Base64#solution_4_%E2%80%93_escaping_the_string_before_encoding_it
+export const b64DecodeUnicode = (str: string) => {
+  // Going backwards: from bytestream, to percent-encoding, to original string.
+  return decodeURIComponent(
+    window
+      .atob(str)
+      .split('')
+      .map(function (c) {
+        return `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`;
+      })
+      .join('')
+  );
+};

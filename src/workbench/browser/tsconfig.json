@@ -5,15 +5,15 @@
     "outDir": "./dist/out-tsc",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "module": "es2020",
+    "module": "esnext",
     "skipLibCheck": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
-    "target": "es2020",
-    "lib": ["es2021", "es2020", "dom"],
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
     "paths": {
       "eo/*": ["./src/*"]
     },
@@ -21,6 +21,7 @@
     "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["node_modules", "dist", ".angular", "src/app/assets"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
   "useDefineForClassFields": true,
   "angularCompilerOptions": {
     "enableIvy": true,
