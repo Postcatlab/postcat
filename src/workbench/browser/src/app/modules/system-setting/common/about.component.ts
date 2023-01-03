@@ -9,7 +9,7 @@ import { ElectronService } from '../../../core/services';
       <img
         loading="lazy"
         class="logo mt-[30px] w-[150px] h-[150px]"
-        src="assets/images/{{ theme.appearance === 'dark' ? 'logo.svg' : 'logo.svg' }}"
+        src="assets/images/{{ theme.baseTheme === 'dark' ? 'logo.svg' : 'logo.svg' }}"
       />
       <p class="font-bold mt-[15px] text-[16px]">Postcat</p>
       <p class="">V{{ versionInfo?.version }}</p>

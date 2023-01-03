@@ -47,7 +47,7 @@ export const THEMES = [
 ] as const;
 export type MainColorType = typeof THEMES[number]['value'];
 
-export const APPEARANCE = [
+export const BASE_UI_THEME = [
   {
     title: $localize`Light`,
     icon: 'link-cloud-sucess',
@@ -59,4 +59,4 @@ export const APPEARANCE = [
     value: 'dark'
   }
 ] as const;
-export type AppearanceType = typeof APPEARANCE[number]['value'];
+export type BaseUIThemeType = typeof BASE_UI_THEME[number]['value'];

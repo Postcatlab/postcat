@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 
 import { ThemeService } from '../../../../core/services/theme/theme.service';
-import { APPEARANCE, THEMES } from './theme.model';
+import { BASE_UI_THEME, THEMES } from './theme.model';
 
 @Component({
   selector: 'eo-select-theme',
   template: `<div class="grid grid-cols-4 gap-2.5	rounded">
     <div
       class="cursor-pointer theme-container"
-      [ngClass]="{ 'theme-container-active': (theme.appearance === 'dark' ? 'dark-' : '') + theme.mainColor === option.value }"
+      [ngClass]="{ 'theme-container-active': (theme.baseTheme === 'dark' ? 'dark-' : '') + theme.coreTheme === option.value }"
       (click)="theme.changeTheme(option.value)"
       *ngFor="let option of THEMES"
     >
@@ -30,6 +30,6 @@ import { APPEARANCE, THEMES } from './theme.model';
 })
 export class SelectThemeComponent {
   THEMES = THEMES;
-  APPEARANCE = APPEARANCE;
+  APPEARANCE = BASE_UI_THEME;
   constructor(public theme: ThemeService) {}
 }

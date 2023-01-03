@@ -41,7 +41,6 @@ export class LocalWorkspaceTipComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.isShow = StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION) !== 'false';
-    console.log(StorageUtil.get(IS_SHOW_REMOTE_SERVER_NOTIFICATION), this.isShow);
     autorun(() => {
       const status = this.store.isLocal && this.store.isLogin && this.isShow;
       Promise.resolve().then(() => {
