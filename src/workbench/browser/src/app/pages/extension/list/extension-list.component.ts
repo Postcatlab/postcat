@@ -27,7 +27,7 @@ export class ExtensionListComponent implements OnInit {
     });
   }
   clickExtension(event, item) {
-    this.selectChange.emit(item.name);
+    this.selectChange.emit(item);
   }
   async searchPlugin(groupType, keyword = '') {
     this.loading = true;
