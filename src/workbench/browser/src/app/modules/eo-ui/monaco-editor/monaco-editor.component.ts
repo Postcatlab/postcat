@@ -279,13 +279,22 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   rerenderEditor = () => {
     this.codeEdtor?.layout?.();
   };
+  updateReadOnlyCode(callback) {
+    this.codeEdtor?.updateOptions({ readOnly: false });
+    callback();
+    this.codeEdtor?.updateOptions({ readOnly: this.config.readOnly });
+  }
   formatCode() {
     return new Promise<string>(resolve => {
       requestAnimationFrame(async () => {
-        this.codeEdtor?.updateOptions({ readOnly: false });
-        await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
-        this.codeEdtor?.updateOptions({ readOnly: this.config.readOnly });
-        resolve(this.codeEdtor?.getValue() || '');
+        if (this.codeEdtor) {
+          this.updateReadOnlyCode(async () => {
+            await this.codeEdtor?.getAction('editor.action.formatDocument')?.run();
+            resolve(this.codeEdtor?.getValue() || '');
+          });
+        } else {
+          resolve(await this.formatCode());
+        }
       });
     });
   }
@@ -296,7 +305,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
         // const value = session.getValue();
         // const code = this.formatCode();
         // session.setValue(code);
-        this.formatCode(); //自动格式化代码
+        await this.formatCode(); //自动格式化代码
         break;
       }
       case 'copy': {
