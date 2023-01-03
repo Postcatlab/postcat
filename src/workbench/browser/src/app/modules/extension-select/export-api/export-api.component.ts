@@ -15,8 +15,10 @@ import { StorageRes, StorageResStatus } from '../../../shared/services/storage/i
 export class ExportApiComponent implements OnInit {
   currentExtension = StorageUtil.get('export_api_modal');
   supportList: any[] = [];
-  featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
-  constructor(private storage: StorageService, private store: StoreService, private extensionService: ExtensionService) {}
+  featureMap: Map<string, FeatureInfo>;
+  constructor(private storage: StorageService, private store: StoreService, private extensionService: ExtensionService) {
+    this.featureMap = this.extensionService.getValidExtensionsByFature('exportAPI');
+  }
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({

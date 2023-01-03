@@ -9,7 +9,7 @@ import { ModalService } from 'eo/workbench/browser/src/app/shared/services/modal
   providedIn: 'root'
 })
 export class WebService {
-  isWeb = !this.electronService.isElectron;
+  isWeb: boolean;
   isVercel = window.location.href.includes('vercel');
   resourceInfo = [
     {
@@ -39,6 +39,7 @@ export class WebService {
     if (this.isWeb) {
       this.settingService.putSettings({ 'backend.url': window.location.origin });
     }
+    this.isWeb = !this.electronService.isElectron;
     this.getClientResource();
   }
   private findLinkInSingleAssets(assets, item) {

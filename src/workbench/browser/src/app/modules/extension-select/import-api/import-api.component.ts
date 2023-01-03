@@ -53,14 +53,16 @@ export class ImportApiComponent implements OnInit {
   supportList: any[] = [];
   currentExtension = StorageUtil.get('import_api_modal');
   uploadData = null;
-  featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
+  featureMap: Map<string, FeatureInfo>;
   constructor(
     private router: Router,
     private storage: StorageService,
     private eoMessage: EoNgFeedbackMessageService,
     private extensionService: ExtensionService,
     private store: StoreService
-  ) {}
+  ) {
+    this.featureMap = this.extensionService.getValidExtensionsByFature('importAPI');
+  }
   ngOnInit(): void {
     this.featureMap?.forEach((data: FeatureInfo, key: string) => {
       this.supportList.push({
