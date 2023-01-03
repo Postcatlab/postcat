@@ -55,6 +55,9 @@
     "buttonDefaultText": "",
     "buttonDefaultBackground": "#1890ff",
     "buttonDefaultShadow": "",
+    "buttonDangerText": "",
+    "buttonDangerBackground": "#1890ff",
+    "buttonDangerShadow": "",
     //Link
     "textLink": "",
     "textLinkHover": "",

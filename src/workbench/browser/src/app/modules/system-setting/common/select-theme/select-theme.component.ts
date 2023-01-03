@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ThemeService } from '../../../../core/services/theme/theme.service';
-import { BASE_UI_THEME, THEMES } from './theme.model';
+import { BASE_UI_THEME } from './theme.model';
 
 @Component({
   selector: 'eo-select-theme',
@@ -9,15 +9,19 @@ import { BASE_UI_THEME, THEMES } from './theme.model';
     <div
       class="cursor-pointer theme-container"
       [ngClass]="{ 'theme-container-active': (theme.baseTheme === 'dark' ? 'dark-' : '') + theme.coreTheme === option.value }"
-      (click)="theme.changeTheme(option.value)"
-      *ngFor="let option of THEMES"
+      (click)="theme.changeTheme(option)"
+      *ngFor="let option of theme.themes"
     >
       <div class="border-all theme-block">
-        <header class="navbar h-[15px]" [style.background]="option.navBackgroud"></header>
+        <header class="navbar h-[15px]" [style.background]="option.previewColors.layoutHeaderBackground"></header>
         <section class="flex h-[35px]">
-          <div class="sidebar w-[35px]" [style.background]="option.sidebarBackground" [style.borderColor]="option.borderColor"></div>
-          <div class="content flex-1 flex items-center justify-center" [style.background]="option.contentBackground">
-            <div class="main-color w-[30px]  h-[15px]" [style.background]="option.primaryColor"></div>
+          <div
+            class="sidebar w-[35px]"
+            [style.background]="option.previewColors.layoutSiderBackground"
+            [style.borderColor]="option.previewColors.border"
+          ></div>
+          <div class="content flex-1 flex items-center justify-center" [style.background]="option.previewColors.bodyBackground">
+            <div class="main-color w-[30px]  h-[15px]" [style.background]="option.previewColors.primary"></div>
           </div>
         </section>
       </div>
@@ -29,7 +33,6 @@ import { BASE_UI_THEME, THEMES } from './theme.model';
   styleUrls: ['./select-theme.component.scss']
 })
 export class SelectThemeComponent {
-  THEMES = THEMES;
   APPEARANCE = BASE_UI_THEME;
   constructor(public theme: ThemeService) {}
 }

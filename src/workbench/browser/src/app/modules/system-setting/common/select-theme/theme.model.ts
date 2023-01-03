@@ -1,52 +1,20 @@
-export const THEMES = [
+export const FEATURES_THEME = [
   {
-    title: $localize`Default`,
-    value: 'default',
-    navBackgroud: '#f8f8fa',
-    sidebarBackground: '#ffffff',
-    contentBackground: '#ffffff',
-    borderColor: '#e8e8e8',
-    primaryColor: '#00785a'
+    label: $localize`Light Default`,
+    id: 'pc',
+    //* relative path
+    //src/extensions/core-themes/themes/light-default.json
+    path: './themes/light-default.json'
   },
   {
-    title: $localize`Orange`,
-    value: 'orange',
-    navBackgroud: '#f8f8fa',
-    sidebarBackground: '#ffffff',
-    contentBackground: '#ffffff',
-    borderColor: '#e8e8e8',
-    primaryColor: '#f47023'
-  },
-  {
-    title: $localize`Blue`,
-    navBackgroud: '#f8f8fa',
-    sidebarBackground: '#ffffff',
-    contentBackground: '#ffffff',
-    borderColor: '#e8e8e8',
-    value: 'blue',
-    primaryColor: '#2878ff'
-  },
-  {
-    title: $localize`Purple`,
-    navBackgroud: '#f8f8fa',
-    sidebarBackground: '#ffffff',
-    contentBackground: '#ffffff',
-    borderColor: '#e8e8e8',
-    value: 'purple',
-    primaryColor: '#673ab7'
-  },
-  {
-    title: $localize`Dark-Purple`,
-    navBackgroud: '#222222',
-    sidebarBackground: '#333333',
-    contentBackground: '#333333',
-    borderColor: '#464646',
-    value: 'dark-purple',
-    primaryColor: '#673ab7'
+    label: $localize`Light Blue`,
+    id: 'pc-blue',
+    baseTheme: 'pc',
+    //* relative path
+    //src/extensions/core-themes/themes/light-default.json
+    path: './themes/light-blue.json'
   }
-] as const;
-export type MainColorType = typeof THEMES[number]['value'];
-
+];
 export const BASE_UI_THEME = [
   {
     title: $localize`Light`,
