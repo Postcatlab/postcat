@@ -152,12 +152,21 @@ export class ParamsImportComponent implements OnInit {
       mixin: (data, base) => obj2array(merge(array2obj(base), array2obj(data)))
     };
 
+    const endParse = (data, type) => {
+      if (['xml'].includes(type)) {
+        return [data.at(0)];
+      }
+      return data;
+    };
+
     const { data } = res;
     // * this.baseData.reverse().slice(1).reverse() for filter the last empty row
     const emptyRow = this.baseData.slice(-1);
-    const resultData = cloneDeep(this.baseData.reverse().slice(1).reverse());
+    const resultData = cloneDeep(['xml'].includes(this.contentType) ? this.baseData : this.baseData.reverse().slice(1).reverse());
     const result = combineFunc[type](json2Table(data), resultData);
-    this.baseDataChange.emit([...result, ...emptyRow]);
+    // * 后处理
+    const finalData = endParse([...result, ...emptyRow], this.contentType);
+    this.baseDataChange.emit(finalData);
     this.handleCancel();
   }
 }

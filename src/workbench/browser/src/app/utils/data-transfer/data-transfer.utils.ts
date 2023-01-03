@@ -163,8 +163,7 @@ export const xml2json = text => {
       }),
       {}
     );
-  const result = deep(data.slice(0, 1));
-  return result;
+  return deep(data);
 };
 /**
  * Json object 2 xml
