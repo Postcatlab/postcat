@@ -6,7 +6,7 @@ class webPlatformBuilder {
   }
   resetBuildConfig(json) {
     delete json.projects.eoapi.i18n.sourceLocale.baseHref;
-    Object.keys(json.projects.eoapi.i18n.locales).forEach((val) => {
+    Object.keys(json.projects.eoapi.i18n.locales).forEach(val => {
       delete json.projects.eoapi.i18n.locales[val].baseHref;
     });
     return json;
@@ -14,40 +14,12 @@ class webPlatformBuilder {
   executeBuild() {
     //！ Can't use pathname to redirect,will cause the dead loop;
     execSync(`ng build -c ${this.environment}`, { stdio: 'inherit' });
-    fs.writeFile(
-      './dist/index.html',
-      `<!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8" />
-        <title>Eoapi - Easy &amp; Open Source API Ecosystem</title>
-        <script>
-         let lang=window.location.href.includes("/en")?'en':'zh';
-         try{
-          lang=JSON.parse(window.localStorage.getItem("LOCAL_SETTINGS_KEY"))["eoapi-language"]=='en-US'?'en':'zh';
-         }catch(e){
-
-         }
-         let baseDir="/"+lang+'/';
-         let search={};
-         if(window.location.search){
-          window.location.href=baseDir+window.location.search;
-         }else{
-         window.location.href=baseDir;
-         }
-        </script>
-      </head>
-      <body></body>
-    </html>
-    `,
-      () => {}
-    );
   }
 }
 class appPlatformBuilder {
   resetBuildConfig(json) {
     json.projects.eoapi.i18n.sourceLocale.baseHref = '';
-    Object.keys(json.projects.eoapi.i18n.locales).forEach((val) => {
+    Object.keys(json.projects.eoapi.i18n.locales).forEach(val => {
       json.projects.eoapi.i18n.locales[val].baseHref = '';
     });
     return json;
