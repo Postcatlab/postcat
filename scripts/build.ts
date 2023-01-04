@@ -85,17 +85,18 @@ const config: Configuration = {
   }
 };
 
+const createTarget = {
+  darwin: Platform.MAC.createTarget,
+  win32: Platform.WINDOWS.createTarget,
+  linux: Platform.LINUX.createTarget
+}[process.platform] as Platform['createTarget'];
+
 Promise.all([
-  process.platform === 'darwin'
-    ? build({
-        config,
-        targets: Platform.MAC.createTarget()
-      })
-    : Promise.resolve(),
   build({
     config,
-    targets: Platform.WINDOWS.createTarget()
+    targets: createTarget()
   })
 ]).then(() => {
   console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+  process.exit();
 });
