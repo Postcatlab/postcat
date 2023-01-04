@@ -287,7 +287,7 @@ export const compareVersion = (v1, v2) => {
   return _r === 0 && v1 !== v2 ? compareVersion(_v1.splice(1).join('.'), _v2.splice(1).join('.')) : _r;
 };
 
-// more see https://developer.mozilla.org/zh-CN/docs/Glossary/Base64#solution_4_%E2%80%93_escaping_the_string_before_encoding_it
+// more see https://developer.mozilla.org/zh-CN/docs/Glossary/Base64#solution_4_–_escaping_the_string_before_encoding_it
 export const b64DecodeUnicode = (str: string) => {
   // Going backwards: from bytestream, to percent-encoding, to original string.
   return decodeURIComponent(
@@ -299,4 +299,8 @@ export const b64DecodeUnicode = (str: string) => {
       })
       .join('')
   );
+};
+
+export const decodeUnicode = (str: string) => {
+  return unescape(str.replace(/\\u/gi, '%u'));
 };

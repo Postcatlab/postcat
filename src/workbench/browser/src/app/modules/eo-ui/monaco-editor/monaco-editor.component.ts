@@ -5,7 +5,7 @@ import type { editor, IDisposable } from 'monaco-editor';
 import type { JoinedEditorOptions } from 'ng-zorro-antd/code-editor';
 
 import { ThemeService } from '../../../core/services/theme.service';
-import { b64DecodeUnicode, debounce, whatTextType } from '../../../utils/index.utils';
+import { debounce, whatTextType } from '../../../utils/index.utils';
 import { getDefaultCompletions } from './defaultCompletions';
 
 type EventType = 'format' | 'copy' | 'search' | 'replace' | 'type' | 'download' | 'newTab';
@@ -35,12 +35,6 @@ const eventHash = new Map()
 export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() eventList: EventType[] = [];
   @Input() hiddenList: string[] = [];
-  @Input() set isBase64(val) {
-    this.$$isBase64 = val;
-    if (val) {
-      this.setCode(b64DecodeUnicode(this.$$code));
-    }
-  }
   @Input() set code(val) {
     this.setCode(val);
   }
@@ -54,7 +48,6 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
   @Input() completions = [];
   @Output() readonly codeChange = new EventEmitter<string>();
   $$code = '';
-  $$isBase64 = false;
   isFirstFormat = true;
   codeEdtor: editor.IStandaloneCodeEditor;
   completionItemProvider: IDisposable;
@@ -187,9 +180,7 @@ export class EoMonacoEditorComponent implements AfterViewInit, OnInit, OnChanges
 
     let code = val;
     try {
-      if (this.$$isBase64) {
-        code = b64DecodeUnicode(val);
-      } else if (typeof val === 'object') {
+      if (typeof val === 'object') {
         code = JSON.stringify(val);
       } else {
         // code = JSON.stringify(typeof val === 'string' ? JSON.parse(val) : val);
