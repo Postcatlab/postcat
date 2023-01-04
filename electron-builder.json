@@ -62,7 +62,6 @@
     "sign": false
   },
   "afterSign": "scripts/notarize.js",
-  "afterPack": "./scripts/afterPackHook.js",
   "linux": {
     "icon": "src/app/common/images/",
     "target": ["AppImage"]
