@@ -4,6 +4,7 @@ import type { Configuration, BuildResult } from 'electron-builder';
 import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { platform } from 'process';
 
 // mac 系统删除 release 目录
 if (process.platform === 'darwin') {
@@ -89,7 +90,7 @@ const createTarget = {
   darwin: Platform.MAC.createTarget,
   win32: Platform.WINDOWS.createTarget,
   linux: Platform.LINUX.createTarget
-}[process.platform] as Platform['createTarget'];
+}[platform] as Platform['createTarget'];
 
 Promise.all([
   build({
