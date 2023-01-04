@@ -2,40 +2,51 @@
 
 --- add
 
-goto 'http://localhost:4200'
+goto "http://localhost:4200"
 
 find:
-    [label 'New Request'] [img] = plus [img] [img]
+    [label "New Request"] [img] = plus [img]
 
 plus -> hover
-wait 500
+wait
 
 find: 
-    [label 'HTTP']
-    [label 'Websocket'] = ws
+    [label "HTTP"]
+    [label "Websocket"] = ws
 
 ws -> click
 
 find: 
-    [select 'WS'] [input] = urlInput [button 'Connect'] = connect
+    [input] = urlInput [button "Connect"] = connect
 
-urlInput -> 'wss://echo-websocket.hoppscotch.io'
+urlInput -> "wss://echo-websocket.hoppscotch.io"
 connect -> click
 
-wait 1000
+wait 5000
 
 find: 
-    [button 'Disconnect'] = disconnect
-    [input 'body > eo-root > eo-pages > div > div > div > eo-api > nz-layout > nz-layout > nz-content > div > section > websocket-content > div > eo-split-panel > div > div.flex-shrink-0.scalable > div > nz-tabset > div > div > div.ant-tabs-tabpane.ant-tabs-tabpane-active.ng-star-inserted > div > eo-monaco-editor > nz-code-editor > div > div.overflow-guard > div.monaco-scrollable-element.editor-scrollable.vs.mac > div.lines-content.monaco-editor-background > div.view-lines.monaco-mouse-cursor-text'] = text
-    [button 'Send'] = sendBtn
-
-text -> 'hello'
-sendBtn -> click
-
-wait 3000
+    [button "Disconnect"] = disconnect
 
 disconnect -> click
 
-capture
+find: 
+    [label "Disconnect from wss://echo-websocket.hoppscotch.io"] = disconnectSuccess
+    [label "Connected to wss://echo-websocket.hoppscotch.io"] = connectSuccess
 
+# check history
 
+find: 
+    [img] [img] = historyIcon [label "New Request"] = newRequest
+
+newRequest -> click
+historyIcon -> click
+
+find:
+    [label "History"]
+    [label "wss://echo-websocket.hoppscotch.io"] = targetHistory
+    
+targetHistory -> click
+
+find: 
+    [label "Disconnect from wss://echo-websocket.hoppscotch.io"] = disconnectSuccess
+    [label "Connected to wss://echo-websocket.hoppscotch.io"] = connectSuccess
