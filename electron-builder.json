@@ -40,12 +40,12 @@
   ],
   "win": {
     "icon": "src/app/common/images/logo.ico",
-    "target": [
-      {
-        "target": "nsis"
-      },
-      "portable"
-    ]
+    "verifyUpdateCodeSignature": false,
+    "signingHashAlgorithms": ["sha256"],
+    "signDlls": false,
+    "certificateSubjectName": "OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization",
+    "artifactName": "${productName}.${ext}",
+    "target": ["nsis"]
   },
   "portable": {
     "splashImage": "src/app/common/images/postcat.bmp"
@@ -63,6 +63,7 @@
     "sign": false
   },
   "afterSign": "scripts/notarize.js",
+  "afterPack": "./scripts/afterPackHook.js",
   "linux": {
     "icon": "src/app/common/images/",
     "target": ["AppImage"]
