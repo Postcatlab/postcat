@@ -1,12 +1,12 @@
 ::: env_manage {
 
 find:
-    [label 'Environment'] = sel
+    [label "Environment"] = sel
 
 sel -> click
 
 find:
-    [img] [label 'New'] = newLabel
+    [img] [label "New"] = newLabel
 
 newLabel -> click
 
@@ -14,95 +14,106 @@ newLabel -> click
 
 
 ::: add_data {
-name -> '{$1}'
-value -> '{$2}'
-desc -> '{$3}'
+name -> "{$1}"
+value -> "{$2}"
+desc -> "{$3}"
 }
 
 === Env 
 
 --- add case
 
-goto 'http://localhost:4200'
+goto "http://localhost:4200"
 
 find:
-    [label 'Environment'] = env
+    [label "Environment"] = env
 
 env -> click
 
 find: 
-    [label 'Environment'] [button { width: 32px }] = add
+    [label "Environment"] [button { width: 32px }] = add
 
 add -> click
 
 find: 
-    [button 'Save'] = save
+    [button "Save"] = save
     [input] = envName
-    [label 'Host']
+    [label "Host"]
     [input] = host
     [input] = name [input] = value [input] = desc 
 
-envName -> 'myEnv'
-host -> 'https://youtube.com'
+envName -> "myEnv"
+host -> "https://youtube.com"
 
 --- add_data :a :b :c
 
 save -> click
 
 find:
-    [select 'Environment'] = sel
+    [img]
+    [label "API"] = apiMenu
 
-sel -> 'myEnv'
+apiMenu -> click
 
 find: 
-    [label 'myEnv'] [input]
+    [label "Get City Weather Today"] = weatherApi
 
-capture
+weatherApi -> click
 
+find:
+    [label "Preview"] [label "Edit"] [label "Test"] = testTab
+
+testTab -> click
+
+find:
+    [img] [select "Environment"] = sel
+
+sel -> "myEnv"
+
+find:
+    [label "https://youtube.com"] = target [input { height: 40px }]
 
 
 --- del case
 
-goto 'http://localhost:4200'
+goto "http://localhost:4200"
 
 find:
-    [label 'Environment'] = env
+    [label "Environment"] = env
 
 env -> click
 
 find: 
-    [label 'Environment'] [button { width: 32px }] = add
+    [label "Environment"] [button { width: 32px }] = add
 
 add -> click
 
 find: 
-    [button 'Save'] = save
+    [button "Save"] = save
     [input] = envName
-    [label 'Host']
+    [label "Host"]
     [input] = host
     [input] = name [input] = value [input] = desc 
 
-envName -> 'myEnv'
-host -> 'https://youtube.com'
+envName -> "myEnv"
+host -> "https://youtube.com"
 
 --- add_data :a :b :c
 
 save -> click
 
 find: 
-    [label 'myEnv'] = env
+    [label "myEnv"] = env
 
 env -> hover
 
 find: 
-    [label 'Environment'] [button]
-    [label 'myEnv'] [img] = delIcon
+    [label "Environment"] [button { width: 32px }]
+    [label "myEnv"] [img { height: 16px }] = delIcon [button "Save"]
 
 delIcon -> click
 
 find: 
-    [label 'Cancel'] [label 'OK']=ok
+    [button "Cancel"] [button "OK"]=ok
     
 ok -> click
-
-capture
