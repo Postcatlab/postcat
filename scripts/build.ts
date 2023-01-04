@@ -1,10 +1,10 @@
 import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 
-import { exec } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import { platform } from 'process';
+import { exec } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { exit, platform } from 'node:process';
 
 // mac 系统删除 release 目录
 if (process.platform === 'darwin') {
@@ -85,19 +85,18 @@ const config: Configuration = {
     target: ['AppImage']
   }
 };
-
-const createTarget = {
-  darwin: Platform.MAC.createTarget,
-  win32: Platform.WINDOWS.createTarget,
-  linux: Platform.LINUX.createTarget
-}[platform] as Platform['createTarget'];
+const targetPlatform: Platform = {
+  darwin: Platform.MAC,
+  win32: Platform.WINDOWS,
+  linux: Platform.LINUX
+}[platform];
 
 Promise.all([
   build({
     config,
-    targets: createTarget()
+    targets: targetPlatform.createTarget()
   })
 ]).then(() => {
   console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
-  process.exit();
+  exit();
 });
