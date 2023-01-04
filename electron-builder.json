@@ -23,7 +23,6 @@
       "url": "https://packages.postcat.com"
     }
   ],
-  "afterPack": "./scripts/afterPackHook.js",
   "generateUpdatesFilesForAllChannels": true,
   "nsis": {
     "oneClick": false,
