@@ -4,3 +4,6 @@ build/** linguist-vendored=true
 *.css linguist-detectable=false
 *.scss linguist-detectable=false
 *.js linguist-detectable=true
+
+*.bat       text eol=crlf
+# 无格式的文本文件,保证 Windows 的批处理文件在 checkout 至工作区时，始终被转换为 CRLF 风格的换行符；
