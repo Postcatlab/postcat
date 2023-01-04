@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ThemeService } from 'eo/workbench/browser/src/app/core/services/theme/theme.service';
 
 import { ElectronService } from '../../../core/services';
 @Component({
   selector: 'eo-about',
   template: `
     <div class="about flex flex-col justify-center items-center">
-      <img
-        loading="lazy"
-        class="logo mt-[30px] w-[150px] h-[150px]"
-        src="assets/images/{{ theme.baseTheme === 'dark' ? 'logo.svg' : 'logo.svg' }}"
-      />
+      <img loading="lazy" class="logo mt-[30px] w-[150px] h-[150px]" src="assets/images/logo.svg" />
       <p class="font-bold mt-[15px] text-[16px]">Postcat</p>
       <p class="">V{{ versionInfo?.version }}</p>
       <!-- star -->
@@ -35,7 +30,7 @@ export class AboutComponent implements OnInit {
   list;
   versionInfo;
 
-  constructor(private electron: ElectronService, public theme: ThemeService) {}
+  constructor(private electron: ElectronService) {}
 
   ngOnInit(): void {
     const result = this.electron.getSystemInfo();

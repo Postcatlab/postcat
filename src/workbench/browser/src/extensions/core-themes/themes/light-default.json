@@ -1,9 +1,9 @@
 {
   "colors": {
-    "primary": "rgba(0, 120, 90, 100)",
+    "primary": "#00785a",
     "primaryHover": "rgba(0, 120, 90, 0.8)",
-    "shadow": "rgba(217, 217, 217, 50)",
-    "text": "rgba(0, 0, 0, 0.85)",
+    "shadow": "#d9d9d9",
+    "text": "#333",
     "textSecondary": "#999",
     "success": "#00785a",
     "successHover": "#0aa07a",
@@ -12,23 +12,22 @@
     "dangerHover": "#ff625a",
     "info": "#2878ff",
     "infoHover": "#498cff",
-    "border": "#DCDFE6",
+    "border": "#d9d9d9",
     "background": "#fff",
     "barBackground": "#f2f2f2",
     "itemActiveBackground": "rgba(0, 0, 0, 0.1)",
+    "itemHoverBackground": "#d9d9d9",
     "disabledText": "#ccc",
     "disabledBackground": "#f3f3f3",
     "layoutHeaderBackground": "#fff",
     "layoutSiderText": "#fff",
     "layoutSiderBackground": "#fff",
-    "layoutSiderActiveText": "",
-    "layoutSiderActive": "",
     "layoutFooterText": "",
     "layoutFooterBackground": "",
-    "buttonText": "",
-    "textLink": "",
-    "textLinkHover": "",
-    "textLinkActive": "",
-    "divider": "#000"
+    "textLink": "#1890ff",
+    "textLinkHover": "#40a9ff",
+    "textLinkActive": "#096dd9",
+    "divider": "rgba(0,0,0,.06)",
+    "alertDefaultBackground": "rgba(149,149,149,.1)"
   }
 }

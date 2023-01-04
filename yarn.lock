@@ -2316,6 +2316,25 @@
   dependencies:
     "@types/node" "*"
 
+"@types/color-convert@*":
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/@types/color-convert/-/color-convert-2.0.0.tgz#8f5ee6b9e863dcbee5703f5a517ffb13d3ea4e22"
+  integrity sha512-m7GG7IKKGuJUXvkZ1qqG3ChccdIM/qBBo913z+Xft0nKCX4hAU/IxKwZBU4cpRZ7GS5kV4vOblUkILtSShCPXQ==
+  dependencies:
+    "@types/color-name" "*"
+
+"@types/color-name@*":
+  version "1.1.1"
+  resolved "https://registry.npmmirror.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
+  integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
+"@types/color@3.0.3":
+  version "3.0.3"
+  resolved "https://registry.npmmirror.com/@types/color/-/color-3.0.3.tgz#e6d8d72b7aaef4bb9fe80847c26c7c786191016d"
+  integrity sha512-X//qzJ3d3Zj82J9sC/C18ZY5f43utPbAJ6PhYt/M7uG6etcF6MRpKdN880KBy43B0BMzSfeT96MzrsNjFI3GbA==
+  dependencies:
+    "@types/color-convert" "*"
+
 "@types/connect-history-api-fallback@^1.3.5":
   version "1.3.5"
   resolved "https://registry.npmmirror.com/@types/connect-history-api-fallback/-/connect-history-api-fallback-1.3.5.tgz#d1f7a8a09d0ed5a57aee5ae9c18ab9b803205dae"
@@ -4636,15 +4655,31 @@ color-name@1.1.3:
   resolved "https://registry.npmmirror.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==
 
-color-name@^1.1.4, color-name@~1.1.4:
+color-name@^1.0.0, color-name@^1.1.4, color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.npmmirror.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+color-string@^1.9.0:
+  version "1.9.1"
+  resolved "https://registry.npmmirror.com/color-string/-/color-string-1.9.1.tgz#4467f9146f036f855b764dfb5bf8582bf342c7a4"
+  integrity sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
 
 color-support@^1.1.3:
   version "1.1.3"
   resolved "https://registry.npmmirror.com/color-support/-/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
   integrity sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
+
+color@4.2.3:
+  version "4.2.3"
+  resolved "https://registry.npmmirror.com/color/-/color-4.2.3.tgz#d781ecb5e57224ee43ea9627560107c0e0c6463a"
+  integrity sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==
+  dependencies:
+    color-convert "^2.0.1"
+    color-string "^1.9.0"
 
 colord@^2.9.3:
   version "2.9.3"
@@ -6258,10 +6293,10 @@ eo-ng-dropdown@0.0.110:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-feedback@0.0.111:
-  version "0.0.111"
-  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.0.111.tgz#bc0607379008fce23c2285b0a89161b14cce8c70"
-  integrity sha512-9gKhFJVgiGQ4htpgz/wCPf8X4GWk4p/0nHSmkhguTsIQurRAohWUdqp7VEwYGYwpt11pAx+56ghWpqHp74hLiA==
+eo-ng-feedback@0.0.112:
+  version "0.0.112"
+  resolved "https://registry.npmmirror.com/eo-ng-feedback/-/eo-ng-feedback-0.0.112.tgz#82754ece8b9e42118139ff875a6331d3a713265b"
+  integrity sha512-84NOdpTc0mFGksY2DqBoGY43EHPHJpD/aKsiJeq9YxyG0IT79r14KFzgLnmFRLv489c/OKop8tYUzGiovvhMRA==
   dependencies:
     tslib "^2.3.0"
 
@@ -6279,10 +6314,10 @@ eo-ng-radio@0.0.111:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-select@0.0.113:
-  version "0.0.113"
-  resolved "https://registry.npmmirror.com/eo-ng-select/-/eo-ng-select-0.0.113.tgz#382e81e22997f537fa0a91c9c5e773e02fd7dc7a"
-  integrity sha512-clz7s+vWakzBa0EdEuzreJlZmM+N0L8tN2g771ZxqQwZT0+SMalqk5lhVRqNpqK3phtFg/PLcImlN/DAtdK/JA==
+eo-ng-select@0.0.114:
+  version "0.0.114"
+  resolved "https://registry.npmmirror.com/eo-ng-select/-/eo-ng-select-0.0.114.tgz#9cc51fedaac23a2b8fb2ebcb49de60e052932f6b"
+  integrity sha512-YgSsFceq0jNGN9lyZrj008oCEeqBf439j2bl8GJfGaNuH6LqZvph2XUKbf0uhLMtY3bFpNnmOMhCHg2/Hy7Sjg==
   dependencies:
     tslib "^2.3.0"
 
@@ -6300,10 +6335,10 @@ eo-ng-table@0.0.112:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-tabs@0.0.111:
-  version "0.0.111"
-  resolved "https://registry.npmmirror.com/eo-ng-tabs/-/eo-ng-tabs-0.0.111.tgz#4829cd829a52c01de2e43dbf0685653fe2c25da6"
-  integrity sha512-3mhoRAY8RBbHWsx2ucL72sIMJj0T6DtCr3kHeqrpX9PSk4q3PN5xF/Fbink+L257Xb4e/tH2ktM6pV0uF7HJPw==
+eo-ng-tabs@0.0.112:
+  version "0.0.112"
+  resolved "https://registry.npmmirror.com/eo-ng-tabs/-/eo-ng-tabs-0.0.112.tgz#c3ad9f12108d22baac700b8daf4bebae4488ac9f"
+  integrity sha512-fxcS0REwbW83pz0W6J5ZO6Mf22de6HJ3fYK6DCf/5HpYu7UkOZEFeCfv2m5fwU0mWE38xiYvWghjjT4reo+ZxA==
   dependencies:
     tslib "^2.3.0"
 
@@ -8629,6 +8664,11 @@ is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmmirror.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==
+
+is-arrayish@^0.3.1:
+  version "0.3.2"
+  resolved "https://registry.npmmirror.com/is-arrayish/-/is-arrayish-0.3.2.tgz#4574a2ae56f7ab206896fb431eaeed066fdf8f03"
+  integrity sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==
 
 is-bigint@^1.0.1:
   version "1.0.4"
@@ -13899,6 +13939,13 @@ signal-exit@^3.0.0, signal-exit@^3.0.2, signal-exit@^3.0.3, signal-exit@^3.0.7:
   version "3.0.7"
   resolved "https://registry.npmmirror.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
+
+simple-swizzle@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.npmmirror.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
+  integrity sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==
+  dependencies:
+    is-arrayish "^0.3.1"
 
 simple-update-notifier@^1.0.7:
   version "1.1.0"
