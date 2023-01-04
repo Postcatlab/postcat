@@ -8,10 +8,11 @@ const _LibsCommon = require('../request/libs/common.js');
 const koaBody = require('koa-body');
 const Koa = require('koa');
 const cors = require('@koa/cors');
-const socketio = require('./socketio');
+const socketio = require('./socketio.js');
 
 const app = new Koa();
 const port = process.env.TEST_SERVER_PORT || 4201;
+console.log(port);
 
 app.use(cors());
 app.use(koaBody());
