@@ -2,24 +2,12 @@ import { sign, doSign, CustomWindowsSign } from 'app-builder-lib/out/codeSign/wi
 import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 
-import { exec, spawn } from 'node:child_process';
-import fs, { copyFileSync } from 'node:fs';
+import { exec } from 'node:child_process';
+import { copyFileSync } from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
 
 let signOptions: Parameters<CustomWindowsSign>;
-
-const runCmd = (cmd, args, callback) => {
-  const child = spawn(cmd, args);
-  let resp = '';
-
-  child.stdout.on('data', buffer => {
-    resp += buffer.toString();
-  });
-  child.stdout.on('end', () => {
-    callback(resp);
-  });
-};
 
 // mac 系统删除 release 目录
 if (process.platform === 'darwin') {
@@ -79,7 +67,7 @@ const config: Configuration = {
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
     target: ['nsis'],
     sign(configuration, packager) {
-      console.log('configuration', configuration);
+      // console.log('configuration', configuration);
       signOptions = [configuration, packager];
       return doSign(configuration, packager!);
     }
@@ -133,10 +121,11 @@ Promise.all([
     );
 
     exec(`yarn wininstaller`);
+
     setTimeout(async () => {
       signOptions[0] = {
         ...signOptions[0],
-        path: 'D:\\git\\postcat\\release\\Postcat Setup 0.0.1-beta.exe'
+        path: 'D:\\git\\postcat\\release\\Postcat-Setup-0.0.1-beta.exe'
       };
       // @ts-ignore
       await sign(...signOptions);
