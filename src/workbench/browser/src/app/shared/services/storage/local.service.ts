@@ -30,7 +30,7 @@ export default class LocalService extends localStorage {
   apiTestHistory!: Table<ApiTestHistory, number | string>;
   mock!: Table<ApiMockEntity, number | string>;
   constructor() {
-    super('postcat_core');
+    super('eoapi_core');
     this.version(2).stores({
       project: '++uuid, name',
       environment: '++uuid, name, projectID',
@@ -748,23 +748,6 @@ export default class LocalService extends localStorage {
     });
   }
 
-  api_userUpdateUserProfile(params) {
-    return new Promise(resolve => {
-      this.update(this.undefined, params)
-        .then(({ status, ...data }: any) => {
-          console.log('%c user - updateUserProfile 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c user - updateUserProfile 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
   api_userReadProfile({ ...items }) {
     return new Promise(resolve => {
       this.load(this.undefined, { ...items })
@@ -847,23 +830,6 @@ export default class LocalService extends localStorage {
         })
         .catch(error => {
           console.log('%c auth - login 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
-  api_authRefresh(params) {
-    return new Promise(resolve => {
-      this.update(this.undefined, params)
-        .then(({ status, ...data }: any) => {
-          console.log('%c auth - refresh 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c auth - refresh 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
@@ -952,50 +918,6 @@ export default class LocalService extends localStorage {
     });
   }
 
-  api_envLoad({ uuid }) {
-    if (!uuid) {
-      console.log('%c Error: env - load 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.load(this.environment, { uuid })
-        .then(({ status, ...data }: any) => {
-          console.log('%c env - load 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c env - load 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
-  api_envSearch({ projectID }) {
-    if (!projectID) {
-      console.log('%c Error: env - search 接口 缺失参数 projectID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.search(this.environment, { projectID })
-        .then(({ status, ...data }: any) => {
-          console.log('%c env - search 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c env - search 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
   api_groupCreate(params) {
     return new Promise(resolve => {
       this.create(this.group, params)
@@ -1035,23 +957,6 @@ export default class LocalService extends localStorage {
     });
   }
 
-  api_groupBulkUpdate(params) {
-    return new Promise(resolve => {
-      this.update(this.group, params)
-        .then(({ status, ...data }: any) => {
-          console.log('%c group - bulkUpdate 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c group - bulkUpdate 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
   api_groupDelete({ uuid }) {
     if (!uuid) {
       console.log('%c Error: group - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
@@ -1069,28 +974,6 @@ export default class LocalService extends localStorage {
         })
         .catch(error => {
           console.log('%c group - delete 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
-  api_groupLoadAll({ projectID }) {
-    if (!projectID) {
-      console.log('%c Error: group - loadAll 接口 缺失参数 projectID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.load(this.group, { projectID })
-        .then(({ status, ...data }: any) => {
-          console.log('%c group - loadAll 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c group - loadAll 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
@@ -1130,23 +1013,6 @@ export default class LocalService extends localStorage {
         })
         .catch(error => {
           console.log('%c api - update 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
-  api_apiBulkUpdate(params) {
-    return new Promise(resolve => {
-      this.update(this.apiData, params)
-        .then(({ status, ...data }: any) => {
-          console.log('%c api - bulkUpdate 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c api - bulkUpdate 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
@@ -1196,28 +1062,6 @@ export default class LocalService extends localStorage {
     });
   }
 
-  api_apiLoadAllByProjectId({ projectID }) {
-    if (!projectID) {
-      console.log('%c Error: api - LoadAllByProjectID 接口 缺失参数 projectID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.load(this.apiData, { projectID })
-        .then(({ status, ...data }: any) => {
-          console.log('%c api - LoadAllByProjectID 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c api - LoadAllByProjectID 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
   api_testCreate(params) {
     return new Promise(resolve => {
       this.create(this.apiTestHistory, params)
@@ -1252,28 +1096,6 @@ export default class LocalService extends localStorage {
         })
         .catch(error => {
           console.log('%c test - delete 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
-  api_testLoadAll({ apiDataID }) {
-    if (!apiDataID) {
-      console.log('%c Error: test - LoadAll 接口 缺失参数 apiDataID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.load(this.apiTestHistory, { apiDataID })
-        .then(({ status, ...data }: any) => {
-          console.log('%c test - LoadAll 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c test - LoadAll 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
@@ -1357,28 +1179,6 @@ export default class LocalService extends localStorage {
         })
         .catch(error => {
           console.log('%c mock - update 接口调用失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        });
-    });
-  }
-
-  api_mockLoadAll({ apiDataID }) {
-    if (!apiDataID) {
-      console.log('%c Error: mock - loadAll 接口 缺失参数 apiDataID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.load(this.mock, { apiDataID })
-        .then(({ status, ...data }: any) => {
-          console.log('%c mock - loadAll 接口调用成功 %c', SuccessStyle, '');
-          if (status === 200) {
-            return resolve([data, null]);
-          }
-          resolve([null, data]);
-        })
-        .catch(error => {
-          console.log('%c mock - loadAll 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
