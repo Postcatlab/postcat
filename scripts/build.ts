@@ -1,4 +1,4 @@
-import { sign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
+import { sign, CustomWindowsSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 
@@ -6,6 +6,8 @@ import { exec, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
+
+let signOptions: Parameters<CustomWindowsSign>;
 
 const runCmd = (cmd, args, callback) => {
   const child = spawn(cmd, args);
@@ -78,7 +80,8 @@ const config: Configuration = {
     target: ['nsis'],
     sign(configuration, packager) {
       console.log('configuration', configuration);
-      return sign(configuration, packager!);
+      signOptions = [configuration, packager];
+      return Promise.resolve();
     }
   },
   portable: {
@@ -116,6 +119,14 @@ Promise.all([
 ])
   .then(() => {
     console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+    runCmd('yarn', ['wininstaller'], () => {
+      signOptions[0] = {
+        ...signOptions[0],
+        path: 'D:\\git\\postcat\\release\\Postcat Setup 0.0.1-beta.exe'
+      };
+      // @ts-ignore
+      sign(...signOptions);
+    });
     exit();
   })
   .catch(error => {
