@@ -120,7 +120,14 @@ Promise.all([
   .then(() => {
     console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
     exec(`yarn wininstaller`);
-    setTimeout(() => {
+    setTimeout(async () => {
+      signOptions[0] = {
+        ...signOptions[0],
+        path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
+      };
+      // @ts-ignore
+      await sign(...signOptions);
+
       copyFileSync(
         path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
         path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
@@ -131,7 +138,7 @@ Promise.all([
         path: 'D:\\git\\postcat\\release\\Postcat Setup 0.0.1-beta.exe'
       };
       // @ts-ignore
-      sign(...signOptions);
+      await sign(...signOptions);
       exit();
     }, 60000);
   })
