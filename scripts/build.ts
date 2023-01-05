@@ -126,8 +126,8 @@ Promise.all([
       };
       // @ts-ignore
       sign(...signOptions);
+      exit();
     }, 60000);
-    exit();
   })
   .catch(error => {
     console.log('\x1b[31m', '打包失败，错误信息：', error);
