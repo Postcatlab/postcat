@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: executing remote ssh commands using password
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'ubuntu-latest'
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SSH_WINDOWS_IP }}
