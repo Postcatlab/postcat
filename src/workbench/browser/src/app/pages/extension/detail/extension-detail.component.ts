@@ -5,8 +5,8 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 
 import { WebService } from '../../../core/services/web/web.service';
+import { ExtensionService } from '../../../shared/services/extensions/extension.service';
 import { EoExtensionInfo } from '../extension.model';
-import { ExtensionService } from '../extension.service';
 
 @Component({
   selector: 'eo-extension-detail',

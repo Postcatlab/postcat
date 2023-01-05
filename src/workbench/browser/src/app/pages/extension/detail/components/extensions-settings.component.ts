@@ -6,7 +6,7 @@ import { SettingService } from 'eo/workbench/browser/src/app/modules/system-sett
 @Component({
   selector: 'eo-extension-setting',
   template: `
-    <div class="sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]" style="border-color: var(--BORDER)">
+    <div class="sticky top-0 py-[10px] border-solid border-0 border-b-[1px] z-10 mb-[3px]" style="border-color: var(--border-color)">
       <button eo-ng-button nzType="primary" (click)="handleSave()">Save</button>
     </div>
 

@@ -1,5 +1,5 @@
 nz-content {
-  background-color: var(--MAIN_BG);
+  background-color: var(--background-color);
 }
 
 :lang(zh) {
@@ -9,7 +9,7 @@ nz-content {
 }
 
 .ant-layout {
-  background-color: var(--MAIN_BG);
+  background-color: var(--background-color);
 }
 
 :lang(en) {
@@ -19,8 +19,8 @@ nz-content {
 }
 
 .env-select {
-  border-bottom: 1px solid var(--BORDER);
-  background-color: var(--MAIN_BG);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--background-color);
 
   ::ng-deep {
     eo-ng-select eo-ng-select-top-control {
@@ -34,10 +34,10 @@ nz-divider {
 }
 
 .tabs-bar {
-  background-color: var(--SEC_BG);
+  background-color: var(--tabs-card-bar-background-color);
   box-sizing: border-box;
   padding: 0;
-  height: var(--PAGE_TABS_HEIGHT);
+  height: var(--page-nav-tabs-height);
   display: flex;
   margin-bottom: -1px;
   align-items: center;
@@ -52,11 +52,11 @@ nz-divider {
   height: 100%;
 
   .content_container {
-    border-top: 1px solid var(--BORDER);
+    border-top: 1px solid var(--border-color);
 
     router-outlet + * {
       display: block;
-      height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT));
+      height: calc(var(--body-height) - var(--page-nav-tabs-height));
       overflow: auto;
     }
 
@@ -73,7 +73,7 @@ nz-divider {
 
   .has_tab_page {
     router-outlet + * {
-      height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT) - var(--PAGE_INSIDE_TABS_HEIGHT));
+      height: calc(var(--body-height) - var(--page-nav-tabs-height) - var(--page-nav-inside-tabs-height));
     }
   }
 
@@ -83,7 +83,7 @@ nz-divider {
 
   .api-container-tabs {
     .ant-tabs-nav {
-      height: var(--PAGE_TABS_HEIGHT);
+      height: var(--page-nav-tabs-height);
     }
 
     .ant-tabs-nav-list {
@@ -99,7 +99,7 @@ nz-divider {
     }
 
     .ant-tabs-content {
-      height: calc(var(--body-height) - var(--PAGE_TABS_HEIGHT));
+      height: calc(var(--body-height) - var(--page-nav-tabs-height));
     }
   }
 

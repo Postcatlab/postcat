@@ -5,7 +5,7 @@
 }
 
 .button-list {
-  border-bottom: 1px solid var(--BORDER);
+  border-bottom: 1px solid var(--border-color);
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   width: 100%;
@@ -24,7 +24,7 @@
     height: 30px;
     padding: 10px;
     cursor: pointer;
-    color: var(--MAIN_TEXT);
+    color: var(--text-color);
 
     &:hover {
       color: var(--BLUE_NORMAL);

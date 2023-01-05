@@ -24,7 +24,7 @@ export class ThemeVariableService {
         action: 'replace',
         targets: [
           'layoutSiderText',
-          'layoutSiderActiveText',
+          'layoutSiderItemActiveText',
           'layoutFooterText',
           'iconText',
           'alertDefaultIcon',
@@ -46,34 +46,44 @@ export class ThemeVariableService {
           'checkboxCheckedText',
           'radioText',
           'radioCheckedText',
-          'switchCardText'
+          'switchCardText',
+          'menuItemText'
         ]
       },
       border: {
         action: 'replace',
-        targets: ['selectBorder', 'inputBorder', 'checkboxBorder', 'radioBorder', 'switchCardBorder']
+        targets: ['selectBorder', 'inputBorder', 'checkboxBorder', 'radioBorder', 'switchCardBorder', 'disabledBorder']
       },
       textSecondary: {
         action: 'replace',
-        targets: ['tableHeaderText', 'disabledText']
+        targets: ['tableHeaderText', 'disabledText', 'menuItemGroupTitleText']
       },
       disabledText: {
         action: 'replace',
         targets: ['inputPlaceholder', 'inputIcon']
       },
-      primary: {
-        action: 'replace',
-        targets: [
-          'switchActive',
-          'tabsCardActive',
-          'tabsActive',
-          'buttonPrimaryBackground',
-          'checkboxCheckedBackground',
-          'radioCheckedBackground',
-          'selectBorder',
-          'inputBorder'
-        ]
-      },
+      primary: [
+        {
+          action: 'replace',
+          targets: [
+            'menuItemActiveText',
+            'menuItemActive',
+            'switchActive',
+            'tabsCardActive',
+            'tabsActive',
+            'buttonPrimaryBackground',
+            'checkboxCheckedBackground',
+            'radioCheckedBackground',
+            'selectBorder',
+            'inputBorder'
+          ]
+        },
+        {
+          action: 'filter',
+          alpha: 0.2,
+          targets: ['menuItemActiveBackground']
+        }
+      ],
       shadow: {
         action: 'replace',
         targets: [
@@ -92,6 +102,7 @@ export class ThemeVariableService {
         targets: [
           'switchCardBackground',
           'switchBakcground',
+          'menuBackground',
           'layoutHeaderBackground',
           'layoutSiderBackground',
           'layoutFooterBackground',
@@ -120,11 +131,11 @@ export class ThemeVariableService {
       },
       barBackground: {
         action: 'replace',
-        targets: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBarBackground']
+        targets: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBarBackground', 'menuInlineSubmenuBackground']
       },
       itemActiveBackground: {
         action: 'replace',
-        targets: ['treeSelectedBackground', 'selectItemSelectedBackground', 'layoutSiderActive']
+        targets: ['treeSelectedBackground', 'selectItemSelectedBackground', 'layoutSiderItemActive', 'itemHoverBackground']
       },
       itemHoverBackground: {
         action: 'replace',

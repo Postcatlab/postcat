@@ -1,10 +1,10 @@
 .sidebar {
-  border-right: 1px solid var(--BORDER);
+  border-right: 1px solid var(--border-color);
 }
 
 .theme-container-active {
   .theme-block {
-    border-color: var(--MAIN_THEME_COLOR);
+    border-color: var(--primary-color);
     box-shadow: 0 0 10px rgb(0 0 0 / 20%);
   }
 }

@@ -62,6 +62,7 @@ export type ThemeColors = {
   //Disabled
   disabledText?: string;
   disabledBackground: string;
+  disabledBorder?: string;
   //Scroller-bar
   scrollbarTrackBackground?: string;
   scrollbarThumbBackground?: string;
@@ -69,8 +70,8 @@ export type ThemeColors = {
   layoutHeaderBackground?: string;
   layoutSiderText?: string;
   layoutSiderBackground?: string;
-  layoutSiderActiveText?: string;
-  layoutSiderActive?: string;
+  layoutSiderItemActiveText?: string;
+  layoutSiderItemActive?: string;
   layoutFooterText?: string;
   layoutFooterBackground?: string;
   //Icon
@@ -117,6 +118,14 @@ export type ThemeColors = {
   //Dropdow
   dropdownMenuBackground?: string;
   dropdownItemHoverBackground?: string;
+  //Menu
+  menuBackground?: string;
+  menuItemText?: string;
+  menuItemGroupTitleText?: string;
+  menuItemActiveBackground?: string;
+  menuItemActive?: string;
+  menuItemActiveText?: string;
+  menuInlineSubmenuBackground?: string;
   //Select
   selectBorder?: string;
   selectBackground?: string;

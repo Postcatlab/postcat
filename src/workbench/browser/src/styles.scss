@@ -47,7 +47,7 @@ object {
 }
 
 .method_text_DELETE {
-  color: var(--RED_NORMAL);
+  color: var(--danger-color);
 }
 
 .method_text_HEAD {
@@ -81,14 +81,14 @@ object {
 
 ::-webkit-scrollbar-thumb {
   background-clip: content-box;
-  background-color: var(--SCROLL_BAR);
+  background-color: var(--scrollbar-thumb-background-color);
   border-color: #eee0;
   border-style: solid;
   border-radius: 50px;
 }
 
 ::-webkit-scrollbar-track {
-  // background-color: var(--SCROLL_BAR_BG);
+  // background-color: var(--scrollbar-thumb-background-color_BG);
   border-color: transparent;
   border-style: solid;
   border-left-width: 0 0 0 1px;
@@ -103,10 +103,10 @@ nz-resize-handle.container-draggable {
   flex: none;
   top: 0;
   z-index: 10;
-  background-color: var(--BORDER);
+  background-color: var(--border-color);
 
   &:hover {
-    background-color: var(--MAIN_THEME_COLOR);
+    background-color: var(--primary-color);
   }
 
   &.vertical {
@@ -139,19 +139,19 @@ nz-resize-handle.container-draggable {
 
 .table-border-all {
   .eo-ng-table {
-    border: 1px solid var(--BORDER);
+    border: 1px solid var(--border-color);
   }
 }
 
 .border-all {
-  border: 1px solid var(--BORDER);
+  border: 1px solid var(--border-color);
 }
 
 .top-save-bar {
   @apply sticky top-0 z-10 py-2.5;
 
-  background-color: var(--BTN_SEC_BG_HOVER);
-  border-bottom: 1px solid var(--BORDER);
+  background-color: var(--button-default-background-color_HOVER);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .save-container {

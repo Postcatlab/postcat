@@ -19,13 +19,13 @@
 }
 
 .code_yellow {
-  background-color: var(--RED_NORMAL);
+  background-color: var(--danger-color);
   border-color: var(--RED_LIGHT);
 }
 
 .code_red {
-  background-color: var(--RED_NORMAL);
-  border-color: var(--RED_NORMAL);
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
 }
 
 :host ::ng-deep {

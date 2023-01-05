@@ -14,14 +14,14 @@
 }
 
 .home {
-  background-color: var(--MAIN_BG);
-  color: var(--MAIN_TEXT);
+  background-color: var(--background-color);
+  color: var(--text-color);
   overflow: hidden;
 }
 
 :host ::ng-deep {
   .home-container {
-    --body-height: calc(100vh - var(--page-navbar-height) - var(--FOOTER_HEIGHT) - var(--remote-notification-height, 0));
+    --body-height: calc(100vh - var(--page-navbar-height) - var(--page-footer-toolbar-height) - var(--remote-notification-height, 0));
 
     router-outlet + * {
       display: block;

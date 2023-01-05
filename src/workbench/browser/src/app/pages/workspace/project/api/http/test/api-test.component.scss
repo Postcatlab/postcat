@@ -46,7 +46,7 @@ eo-api-test-rest {
   align-items: center;
   padding: 0 10px;
   background-color: var(--TABLE_HEADER_BG);
-  border: 1px solid var(--BORDER);
+  border: 1px solid var(--border-color);
   box-sizing: border-box;
   flex-shrink: 0;
 }
@@ -57,17 +57,17 @@ div.ant-typography {
 
 :host ::ng-deep {
   .ant-select-open eo-ng-select-top-control {
-    background-color: var(--MAIN_BG) !important;
+    background-color: var(--background-color) !important;
   }
 
   eo-ng-select eo-ng-select-top-control,
   .main-bg {
-    background-color: var(--BTN_SEC_BG_HOVER) !important;
+    background-color: var(--button-default-background-color_HOVER) !important;
 
     &:focus,
     &:active,
     &:target {
-      background-color: var(--MAIN_BG) !important;
+      background-color: var(--background-color) !important;
     }
   }
 

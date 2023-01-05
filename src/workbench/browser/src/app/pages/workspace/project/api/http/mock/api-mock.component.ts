@@ -15,7 +15,7 @@ import { ApiData } from '../../../../../../shared/services/storage/index.model';
   styles: [
     `
       :host {
-        padding: var(--PADDING);
+        padding: var(--padding);
       }
     `
   ]

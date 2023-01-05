@@ -10,11 +10,11 @@
 }
 
 .top-line {
-  border-top: 1px solid var(--BORDER);
+  border-top: 1px solid var(--border-color);
 }
 
 .bottom-line {
-  border-bottom: 1px solid var(--BORDER);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .left-1 {
@@ -63,12 +63,12 @@
 
 :host ::ng-deep {
   .main-bg {
-    background-color: var(--BTN_SEC_BG_HOVER) !important;
+    background-color: var(--button-default-background-color_HOVER) !important;
 
     &:focus,
     &:active,
     &:target {
-      background-color: var(--MAIN_BG) !important;
+      background-color: var(--background-color) !important;
     }
   }
 

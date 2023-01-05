@@ -6,8 +6,8 @@
   left: 0;
   top: 0;
   padding: 0 8px;
-  background-color: var(--NAVBAR_BG);
-  border-bottom: 1px solid var(--BORDER);
+  background-color: var(--nav-background-color);
+  border-bottom: 1px solid var(--border-color);
   height: var(--page-navbar-height);
 
   .logo {

@@ -1,30 +1,28 @@
-.ant-collapse {
-  border-radius: var(--DEFAULT_BORDER_RADIUS);
-}
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   align-items: center;
 }
+
 .ant-collapse-item:last-child .ant-collapse-content,
 .ant-collapse-item:last-child,
 .ant-collapse-item:last-child .ant-collapse-header {
-  border-radius: 0 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
-.ant-collapse-item:last-child .ant-collapse-content,
-.ant-collapse-item:last-child,
-.ant-collapse-item:last-child .ant-collapse-header {
-  border-radius: 0 0 var(--DEFAULT_BORDER_RADIUS) var(--DEFAULT_BORDER_RADIUS);
-}
+
 .ant-collapse-content {
-  color: var(--MAIN_TEXT);
-  background-color: var(--MAIN_BG);
-  border-top: 1px solid var(--BORDER);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  border-top: 1px solid var(--border-color);
+
   > .ant-collapse-content-box {
-    padding: 0px;
+    padding: 0;
   }
 }
+
 .ant-collapse > .ant-collapse-item {
-  border-bottom-color: var(--BORDER);
+  border-bottom-color: var(--border-color);
 }
+
 .ant-collapse {
-  border-color: var(--BORDER);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
 }

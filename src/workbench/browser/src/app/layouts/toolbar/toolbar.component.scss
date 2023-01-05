@@ -1,20 +1,23 @@
 :host {
   z-index: 10;
 }
+
 .app_toolbar {
-  height: var(--FOOTER_HEIGHT);
+  height: var(--page-footer-toolbar-height);
   border-top-width: 1px;
   border-top-style: solid;
-  border-color: var(--BORDER);
-  background-color: var(--FOOTER_BG);
+  border-color: var(--border-color);
+  background-color: var(--layout-footer-background-color);
   width: 100%;
   z-index: 20;
-  color: var(--FOOTER_TEXT);
+  color: var(-- --layout-footer-text-color);
+
   i {
     font-size: 24px;
-    color: rgba(0,0,0,.5);
+    color: rgb(0 0 0 / 50%);
   }
 }
-.iconfont{
+
+.iconfont {
   line-height: 22px;
 }

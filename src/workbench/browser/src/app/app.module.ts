@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WarningFill } from '@ant-design/icons-angular/icons';
 import { EoNgFeedbackTooltipModule, EoNgFeedbackMessageModule } from 'eo-ng-feedback';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
-import { ExtensionService } from 'eo/workbench/browser/src/app/pages/extension/extension.service';
+import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { GlobalProvider } from 'eo/workbench/browser/src/app/shared/services/globalProvider';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib/';
 import { HttpStorage } from 'eo/workbench/browser/src/app/shared/services/storage/http/lib';
