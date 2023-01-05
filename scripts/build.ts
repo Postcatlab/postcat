@@ -96,7 +96,11 @@ Promise.all([
     config,
     targets: targetPlatform.createTarget()
   })
-]).then(() => {
-  console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
-  exit();
-});
+])
+  .then(() => {
+    console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+    exit();
+  })
+  .catch(error => {
+    console.log('\x1b[31m', '打包失败，错误信息：', error);
+  });
