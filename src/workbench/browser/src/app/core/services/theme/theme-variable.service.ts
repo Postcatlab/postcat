@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as Color from 'color';
-import { capitalize, has, isNull } from 'lodash-es';
+import { capitalize, has, isNull, isUndefined, omitBy } from 'lodash-es';
 
 import { eoDeepCopy, whatType } from '../../../utils/index.utils';
 import _allThemeColors from './theme-colors.json';
@@ -230,6 +230,7 @@ export class ThemeVariableService {
     });
     return result;
   }
+
   /**
    * Get all colors by basic colors
    *
@@ -241,10 +242,24 @@ export class ThemeVariableService {
     const colorsRule = this.initColorRule();
     //Set custom colors
     Object.keys(customColors).forEach(colorKey => {
-      if (!has(allThemeColors, colorKey)) return;
+      if (!has(allThemeColors, colorKey)) {
+        pcConsole.warn(`Color ${colorKey} is not exist!`);
+        return;
+      }
       result[colorKey] = customColors[colorKey];
     });
+    //Generate colors by rule
     result = this.getColorsByRule(colorsRule, result);
+    //Use custom colors to replace default colors
+    Object.assign(
+      result,
+      omitBy(customColors, v => isUndefined(v) || isNull(v) || v === '')
+    );
+    //Check all colors is exist
+    let allColorVariableIsExist = Object.keys(allThemeColors).every(keyName => result[keyName]);
+    if (!allColorVariableIsExist) {
+      pcConsole.error('Lack of theme variables!', result);
+    }
     pcConsole.log('getColors', result);
     return result;
   }

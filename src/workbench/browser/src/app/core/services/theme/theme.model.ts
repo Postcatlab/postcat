@@ -1,22 +1,38 @@
-export const SYSTEM_THEME = [
+import lightDefault from '../../../../extensions/core-themes/themes/light-default.json';
+export const SYSTEM_THEME: Array<{
+  label: string;
+  id: string;
+  baseTheme?: string;
+  customColors: Partial<ThemeColors>;
+  core?: boolean;
+  colors?: ThemeColors;
+  path?: string;
+}> = [
   {
     label: $localize`Light Default`,
     id: 'pc',
     baseTheme: '',
-    //* relative path
-    //src/extensions/core-themes/themes/light-default.json
-    path: './themes/light-default.json'
+    core: true,
+    customColors: lightDefault.colors
   },
   {
     label: $localize`Light Blue`,
     id: 'pc-blue',
     baseTheme: 'pc',
+    customColors: {},
     //* relative path
-    //src/extensions/core-themes/themes/light-default.json
+    //src/extensions/core-themes/themes/light-blue.json
     path: './themes/light-blue.json'
   }
-] as const;
+];
 export type SsystemUIThemeType = typeof SYSTEM_THEME[number]['id'];
+export type ThemeItems = {
+  title: string;
+  id: string;
+  baseTheme: string;
+  previewColors: Partial<ThemeColors>;
+  colors: ThemeColors;
+};
 export type ThemeColors = {
   text: string;
   textSecondary: string;

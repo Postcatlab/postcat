@@ -1,37 +1,26 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
+import { kebabCase } from 'lodash-es';
 
-import lightDefault from '../../../../extensions/core-themes/themes/light-default.json';
-import StorageUtil from '../../../utils/storage/Storage';
+import { SettingService } from '../../../modules/system-setting/settings.service';
 import { ThemeVariableService } from './theme-variable.service';
-import { SsystemUIThemeType, SYSTEM_THEME, ThemeColors } from './theme.model';
+import { SsystemUIThemeType, SYSTEM_THEME, ThemeColors, ThemeItems } from './theme.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  themes = [];
+  themes: ThemeItems[] = [];
   /**
-   * @description system inject theme,provide baseTheme for extension themes
+   * @description core inject theme,provide baseTheme for extension themes
    */
-  private coreThemes = [
-    {
-      id: 'pc',
-      colors: {},
-      customColors: lightDefault.colors
-    },
-    {
-      id: 'pc-dark',
-      colors: {},
-      customColors: lightDefault.colors
-    }
-  ];
+  private baseThemes = SYSTEM_THEME.filter(val => val.core);
   private module = {
     baseTheme: {
       path: '',
       injectDirection: 'prepend',
       key: 'theme_base', //for storage and id prefix
-      default: 'light' as SsystemUIThemeType
+      default: 'pc' as SsystemUIThemeType
     },
     theme: {
       path: './assets/theme/',
@@ -41,42 +30,35 @@ export class ThemeService {
     }
   };
   /**
-   * @description system inject theme
+   * @description current selected system inject theme
    */
-  baseTheme: SsystemUIThemeType = StorageUtil.get(this.module.baseTheme.key) || this.module.baseTheme.default;
+  baseTheme: SsystemUIThemeType;
   /**
    * @description user select color theme
    */
-  currentTheme = StorageUtil.get(this.module.theme.key) || this.module.theme.default;
-  constructor(@Inject(DOCUMENT) private document: Document, private themeVariable: ThemeVariableService) {
-    this.initCoreThemes();
-    this.querySystemTheme();
+  currentThemeID: string;
+  constructor(@Inject(DOCUMENT) private document: Document, private themeVariable: ThemeVariableService, private setting: SettingService) {
+    this.baseTheme = this.setting.get('workbench.colorTheme') || this.module.baseTheme.default;
+    this.currentThemeID = this.setting.get('workbench.baseTheme') || this.module.theme.default;
   }
-  initCoreThemes() {
-    this.coreThemes.forEach(theme => {
-      const themeColors: ThemeColors = theme.customColors;
-      //Colors defalut value rule
-      theme.colors = this.themeVariable.getColors(themeColors);
-    });
+  async initTheme() {
+    await this.querySystemTheme();
+    console.log(this.themes);
+    this.injectVaribale(this.themes[0].colors);
   }
-  initCssConfig() {
-    let variables = '--MAIN_THEME_COLOR: #000;\n';
-    for (var i = 0; i < 1000; i++) {
-      variables += `--MAIN_THEME_COLOR_${i}:#000;\n`;
-    }
-    const content = `
-    :root{
-       ${variables}
-    }
-    `;
-    this.injectCss(content);
+  changeTheme(theme) {}
+  private getEditorTheme(baseTheme) {
+    //Default Theme: https://microsoft.github.io/monaco-editor/index.html
+    //'vs', 'vs-dark' or 'hc-black'
+    return baseTheme === 'dark' ? 'vs-dark' : 'vs';
   }
-  async querySystemTheme() {
+  private async querySystemTheme() {
+    this.initBaseThemes();
     const defaultTheme = SYSTEM_THEME;
     for (var i = 0; i < defaultTheme.length; i++) {
       const theme = defaultTheme[i];
       let result;
-      const systemTheme = this.coreThemes.find(val => val.id === theme.id);
+      const systemTheme = this.baseThemes.find(val => val.id === theme.id);
       if (systemTheme) {
         //* Support Offiline,Base theme inject code in index.html
         result = {
@@ -101,20 +83,14 @@ export class ThemeService {
         ...result
       });
     }
-    console.log(this.themes);
+    console.log(this.themes, this.baseThemes);
   }
-  initTheme() {
-    this.changeBaseTheme(this.baseTheme, true);
-    this.changeCoreTheme(this.currentTheme, true);
-  }
-  changeTheme(theme) {
-    this.changeBaseTheme(theme.baseTheme);
-    this.changeCoreTheme(theme.name);
-  }
-  private getEditorTheme(baseTheme) {
-    //Default Theme: https://microsoft.github.io/monaco-editor/index.html
-    //'vs', 'vs-dark' or 'hc-black'
-    return baseTheme === 'dark' ? 'vs-dark' : 'vs';
+  private initBaseThemes() {
+    this.baseThemes.forEach(theme => {
+      const themeColors: Partial<ThemeColors> = theme.customColors;
+      //Colors defalut value rule
+      theme.colors = this.themeVariable.getColors(themeColors);
+    });
   }
   changeEditorTheme(theme?) {
     theme = theme || this.getEditorTheme(this.baseTheme);
@@ -122,76 +98,16 @@ export class ThemeService {
       window.monaco?.editor.setTheme(theme);
     }
   }
-  changeBaseTheme(name: SsystemUIThemeType, firstLoad = false) {
-    if (!firstLoad && (!name || name === this.baseTheme)) {
-      return;
-    }
-    const module = this.module.baseTheme;
-    const href = `${module.path}${name}.css`;
-    const className = `pc-base-theme-${name}`;
-    this.loadCss(href, name, module.injectDirection)
-      .then(() => {
-        if (!firstLoad) {
-          this.removeCss(this.baseTheme);
-          this.baseTheme = name;
-        }
-        this.changeEditorTheme(this.getEditorTheme(name));
-        this.document.documentElement.classList.add(className);
-        StorageUtil.set(module.key, name);
-      })
-      .catch(e => {});
-  }
-
-  changeCoreTheme(name, firstLoad = false) {
-    if (!firstLoad && (!name || name === this.currentTheme)) {
-      return;
-    }
-    const module = this.module.theme;
-    const href = `${module.path}${name}.css`;
-    const className = `pc-theme-${name}`;
-    if (name === 'default') {
-      this.removeCss(this.currentTheme);
-      this.currentTheme = name;
-      this.document.documentElement.classList.add(className);
-      StorageUtil.set(module.key, name);
-      return;
-    }
-    this.loadCss(href, name, module.injectDirection)
-      .then(() => {
-        if (!firstLoad) {
-          this.removeCss(this.currentTheme);
-          this.currentTheme = name;
-        }
-        this.document.documentElement.classList.add(className);
-        StorageUtil.set(module.key, name);
-      })
-      .catch(e => {});
-  }
-  private removeCss(theme): void {
-    const removedThemeStyle = this.document.querySelectorAll(`[id=core_theme_${theme}]`);
-    this.document.documentElement.classList.remove(`pc-theme-${theme}`);
-    if (!removedThemeStyle?.length) {
-      return;
-    }
-    removedThemeStyle.forEach(dom => {
-      this.document.head.removeChild(dom);
+  private injectVaribale(colors) {
+    let variables = '';
+    Object.keys(colors).forEach(colorKey => {
+      variables += `--${kebabCase(colorKey)}-color:${colors[colorKey]};\n`;
     });
-  }
-  private loadCss(href, id: string, injectDirection): Promise<Event> {
-    return new Promise((resolve, reject) => {
-      const dom = this.document.createElement('link');
-      dom.rel = 'stylesheet';
-      dom.href = href;
-      dom.id = `core_theme_${id}`;
-      this.document.head[injectDirection](dom);
-      dom.onload = resolve;
-      dom.onerror = e => {
-        console.log('theme change error:', e);
-        reject();
-      };
-    });
-  }
-  private injectCss(content) {
+    const content = `
+    :root{
+       ${variables}
+    }
+    `;
     let style = document.createElement('style');
     style.innerHTML = content;
     document.getElementsByTagName('head')[0].appendChild(style);

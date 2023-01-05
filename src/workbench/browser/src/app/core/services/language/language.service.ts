@@ -39,6 +39,7 @@ export class LanguageService {
       });
     } else {
       const url = window.location.href;
+      this.setting.set('system.language', localeID);
       window.location.replace(url.replace(/\/(zh|en)\/home\//, `/${this.langHashMap.get(localeID)}/home/`));
     }
   }

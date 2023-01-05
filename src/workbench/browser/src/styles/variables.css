@@ -1,0 +1,17 @@
+:root {
+  --NAVBAR_HEIGHT: 50px;
+  --FOOTER_HEIGHT: 30px;
+  --PAGE_TABS_HEIGHT: 43px;
+  --PAGE_INSIDE_TABS_HEIGHT: 43px;
+  --ICONPARK_SIZE: 16px;
+  /* Button icon right  */
+  --MR_ICON: 5px;
+  --TABLE_TEXT_FONT_SIZE: 12px;
+  --DEFAULT_BORDER_RADIUS: 4px;
+  --PADDING: 15px 20px;
+  --PADDING_X: 20px;
+  --PADDING_Y: 15px;
+
+  --MARGIN: 20px;
+  --NAV_BOTTOM: 3px;
+}

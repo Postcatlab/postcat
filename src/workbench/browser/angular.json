@@ -28,11 +28,7 @@
               "src/extensions",
               { "glob": "**/*", "input": "../../../node_modules/monaco-editor/min/vs", "output": "/assets/vs/" }
             ],
-            "styles": [
-              { "input": "src/styles/light.less", "bundleName": "light", "inject": false },
-              { "input": "src/styles/dark.less", "bundleName": "dark", "inject": false },
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles/antd.less", "src/styles.scss"],
             "stylePreprocessorOptions": { "includePaths": ["src/styles/themes"] },
             "scripts": ["src/assets/libs/protocolcheck.js"],
             "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true },
