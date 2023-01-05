@@ -1,10 +1,23 @@
+import { doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 
-import { exec } from 'node:child_process';
+import { exec, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
+
+const runCmd = (cmd, args, callback) => {
+  const child = spawn(cmd, args);
+  let resp = '';
+
+  child.stdout.on('data', buffer => {
+    resp += buffer.toString();
+  });
+  child.stdout.on('end', () => {
+    callback(resp);
+  });
+};
 
 // mac 系统删除 release 目录
 if (process.platform === 'darwin') {
@@ -62,7 +75,10 @@ const config: Configuration = {
     signingHashAlgorithms: ['sha256'],
     signDlls: false,
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
-    target: ['nsis']
+    target: ['nsis'],
+    sign(configuration, packager) {
+      return doSign(configuration, packager!);
+    }
   },
   portable: {
     splashImage: 'src/app/common/images/postcat.bmp'
