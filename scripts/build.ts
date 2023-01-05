@@ -3,7 +3,7 @@ import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 
 import { exec, spawn } from 'node:child_process';
-import fs from 'node:fs';
+import fs, { copyFileSync } from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
 
@@ -121,6 +121,11 @@ Promise.all([
     console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
     exec(`yarn wininstaller`);
     setTimeout(() => {
+      copyFileSync(
+        path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
+        path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
+      );
+
       signOptions[0] = {
         ...signOptions[0],
         path: 'D:\\git\\postcat\\release\\Postcat Setup 0.0.1-beta.exe'
