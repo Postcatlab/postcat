@@ -77,6 +77,7 @@ const config: Configuration = {
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
     target: ['nsis'],
     sign(configuration, packager) {
+      console.log('configuration', configuration);
       return doSign(configuration, packager!);
     }
   },
