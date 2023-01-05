@@ -31,7 +31,8 @@
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "lint:lint-staged": "lint-staged",
     "wininstaller": "node scripts/beforeNSISBuild.js && cd build && build-nim-nozip.bat",
-    "pack:win": "npm run electron:build && npm run wininstaller"
+    "pack:win": "npm run electron:build && npm run wininstaller",
+    "testd": "node scripts/test.js"
   },
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",

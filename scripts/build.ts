@@ -3,13 +3,17 @@ import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 import minimist from 'minimist';
 
-import { exec } from 'node:child_process';
+import { exec, spawn } from 'node:child_process';
 import { copyFileSync } from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
 
+// 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
 let signOptions: Parameters<CustomWindowsSign>;
+// 参数同 electron-builder cli 命令行参数
 const argv = minimist(process.argv.slice(2));
+// https://nodejs.org/docs/latest/api/util.html#util_class_util_textdecoder
+const decoder = new TextDecoder('gbk');
 
 // mac 系统删除 release 目录
 if (process.platform === 'darwin') {
@@ -95,11 +99,53 @@ const config: Configuration = {
     target: ['AppImage']
   }
 };
+
+// 要打包的目标平台
 const targetPlatform: Platform = {
   darwin: Platform.MAC,
   win32: Platform.WINDOWS,
   linux: Platform.LINUX
 }[platform];
+
+// 针对 Windows 签名
+const signWindows = () => {
+  if (process.platform !== 'win32') return;
+
+  // 给卸载程序签名
+  signOptions[0] = {
+    ...signOptions[0],
+    path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
+  };
+  // @ts-ignore
+  await sign(...signOptions);
+
+  copyFileSync(
+    path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
+    path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
+  );
+  // 生成 自定义安装包
+  exec(`yarn wininstaller`);
+
+  const ls = spawn('yarn', ['wininstaller'], {
+    // 仅在当前运行环境为 Windows 时，才使用 shell
+    shell: process.platform === 'win32'
+  });
+
+  ls.stdout.on('data', data => {
+    if (decoder.decode(data).includes('请按任意键继续')) {
+      // 给自定义安装包签名
+      signOptions[0] = {
+        ...signOptions[0],
+        path: 'D:\\git\\postcat\\release\\Postcat-Setup-0.0.1-beta.exe'
+      };
+      // @ts-ignore
+      await sign(...signOptions);
+
+      console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+      exit();
+    }
+  });
+};
 
 Promise.all([
   build({
@@ -108,32 +154,8 @@ Promise.all([
     ...argv
   })
 ])
-  .then(async () => {
-    console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
-
-    signOptions[0] = {
-      ...signOptions[0],
-      path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
-    };
-    // @ts-ignore
-    await sign(...signOptions);
-
-    copyFileSync(
-      path.join(__dirname, '../build', 'Uninstall Postcat.exe'),
-      path.join(__dirname, '../release/win-unpacked', 'Uninstall Postcat.exe')
-    );
-
-    exec(`yarn wininstaller`);
-
-    setTimeout(async () => {
-      signOptions[0] = {
-        ...signOptions[0],
-        path: 'D:\\git\\postcat\\release\\Postcat-Setup-0.0.1-beta.exe'
-      };
-      // @ts-ignore
-      await sign(...signOptions);
-      exit();
-    }, 60000);
+  .then(() => {
+    signWindows();
   })
   .catch(error => {
     console.log('\x1b[31m', '打包失败，错误信息：', error);
