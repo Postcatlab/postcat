@@ -32,7 +32,7 @@
     "lint:lint-staged": "lint-staged",
     "wininstaller": "node scripts/beforeNSISBuild.js && cd build && build-nim-nozip.bat",
     "pack:win": "npm run electron:build && npm run wininstaller",
-    "testd": "node scripts/test.js"
+    "deployWindows": "node scripts/deployWindows.js"
   },
   "dependencies": {
     "@bqy/node-module-alias": "^1.0.1",
@@ -88,6 +88,7 @@
     "postcss-html": "1.5.0",
     "postcss-scss": "4.0.6",
     "prettier": "^2.7.1",
+    "ssh2": "1.11.0",
     "style-loader": "3.3.1",
     "stylelint": "^14.10.0",
     "stylelint-config-html": "1.1.0",
