@@ -5,30 +5,34 @@
 goto "http://localhost:4200"
 
 find: 
+    [img { width: 16px }] [img { width: 16px }] = history [label "New Request"]
     [select "POST"] = method  [input] = input [button "Send"] = sendBtn 
     [label "Headers"] = header
 
 method -> "GET"
 input -> "https://weibo.com/ajax/side/cards/sideInterested?count=60"
 sendBtn -> click
-wait 5000
+wait 3000
 
 find:
     [label "Response"]=res
 
 res -> click
-
-# TODO 查看测试历史
-
 capture
 
+history -> click
+
+find:
+    [label "https://weibo.com/ajax/side/cards/sideInterested?count=60"] = target
+
+wait
 
 --- add New
 
 goto "http://localhost:4200"
 
 find:
-    [input "Search"] [button]=addBtn
+    [input "Search"] [button { width: 32px }]=addBtn
 
 addBtn -> hover
 
