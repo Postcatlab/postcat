@@ -5,18 +5,11 @@ on:
     branches: [test/windows_sign]
 
 jobs:
-  release:
-    name: build and release electron app
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, macos-latest, macos-12, ubuntu-latest]
-
+  build:
+    name: Build
+    runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
-        if: matrix.os == 'ubuntu-latest'
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SSH_WINDOWS_IP }}
