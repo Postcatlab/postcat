@@ -119,6 +119,7 @@ Promise.all([
 ])
   .then(() => {
     console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
+    exec(`yarn wininstaller`);
     setTimeout(() => {
       signOptions[0] = {
         ...signOptions[0],
