@@ -103,7 +103,6 @@ const variables = {
   '--BTN_PRIMARY_TEXT': '--button-primary-text-color',
   '--BTN_PRIMARY_BG_HOVER': '--primary-hover-color:',
   '--BTN_PRIMARY_BG': '--button-primary-background-color',
-  '--BTN_LIGHT_BG_HOVER': '--item-hover-background-color',
   '--BTN_LIGHT_BG': '--primary-color',
   '--RED_NORMAL': '--danger-color',
   '--MODAL_SHADOW': '--modal-mask-background-color',
@@ -116,6 +115,7 @@ const variables = {
   '--MARGIN': '--margin',
   '--MR_ICON': '--btn-icon-margin'
 };
+console.log(sortByKeylength(variables));
 searchFilesInDirectoryAsync(['../src/workbench/browser/src'], sortByKeylength(variables));
 //Lazy to await
 setTimeout(() => {
