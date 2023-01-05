@@ -1,6 +1,7 @@
 import { sign, doSign, CustomWindowsSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
+import minimist from 'minimist';
 
 import { exec } from 'node:child_process';
 import { copyFileSync } from 'node:fs';
@@ -8,6 +9,7 @@ import path from 'node:path';
 import { exit, platform } from 'node:process';
 
 let signOptions: Parameters<CustomWindowsSign>;
+const argv = minimist(process.argv.slice(2));
 
 // mac 系统删除 release 目录
 if (process.platform === 'darwin') {
@@ -102,7 +104,8 @@ const targetPlatform: Platform = {
 Promise.all([
   build({
     config,
-    targets: targetPlatform.createTarget()
+    targets: targetPlatform.createTarget(),
+    ...argv
   })
 ])
   .then(async () => {

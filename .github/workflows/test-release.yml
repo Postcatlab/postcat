@@ -1,0 +1,25 @@
+name: TestRelease
+
+on:
+  push:
+    branches: [test/windows_sign]
+
+jobs:
+  release:
+    name: build and release electron app
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, macos-12, ubuntu-latest]
+
+    steps:
+      - name: executing remote ssh commands using password
+        if: matrix.os == 'windows-latest'
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_WINDOWS_IP }}
+          username: ${{ secrets.SSH_WINDOWS_USERNAME }}
+          password: ${{ secrets.SSH_WINDOWS_PASSWORD }}
+          script: nvm ls

@@ -1,7 +1,7 @@
 {
   "name": "postcat",
   "souceLocale": "zh-Hans",
-  "version": "0.0.1-beta",
+  "version": "0.0.2-beta",
   "main": "out/app/electron-main/main.js",
   "description": "A lightweight, extensible API tool",
   "homepage": "https://github.com/eolinker/postcat.git",
@@ -20,8 +20,8 @@
     "build:web": "yarn workspace postcat-web run build",
     "docker:build:web": "yarn workspace postcat-web run build:docker:web",
     "electron:static": "npm run electron:tsc && electron .",
-    "release": "npm-run-all -s build:web electron:tsc && electron-builder --publish=always",
-    "release:m1": "npm-run-all -s build:web electron:tsc && electron-builder -m=dmg --arm64 -p onTagOrDraft",
+    "release": "npm-run-all -s build:web electron:tsc && npx esno ./scripts/build.ts --publish=always",
+    "release:m1": "npm-run-all -s build:web electron:tsc && npx esno ./scripts/build.ts -m=dmg --arm64 -p onTagOrDraft",
     "test": "npm-run-all --serial test:*",
     "e2e": "yarn build:prod && npx playwright test -c e2e/playwright.config.ts e2e/",
     "clear:electron:tsc": "tsc --build --clean",
@@ -30,8 +30,7 @@
     "web:start:direct": "yarn workspace postcat-web run start:direct",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r -0",
     "lint:lint-staged": "lint-staged",
-    "wininstaller": "cd build && build-nim-nozip.bat",
-    "wininstaller2": "node scripts/beforeNSISBuild.js && cd build && build-nim-nozip.bat",
+    "wininstaller": "node scripts/beforeNSISBuild.js && cd build && build-nim-nozip.bat",
     "pack:win": "npm run electron:build && npm run wininstaller"
   },
   "dependencies": {
@@ -83,6 +82,7 @@
     "eslint-plugin-prettier": "~4.2.1",
     "husky": "8.0.2",
     "lint-staged": "~12.5.0",
+    "minimist": "1.2.7",
     "npm-run-all": "4.1.5",
     "postcss-html": "1.5.0",
     "postcss-scss": "4.0.6",
