@@ -1,4 +1,4 @@
-import { doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
+import { sign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 
@@ -78,7 +78,7 @@ const config: Configuration = {
     target: ['nsis'],
     sign(configuration, packager) {
       console.log('configuration', configuration);
-      return doSign(configuration, packager!);
+      return sign(configuration, packager!);
     }
   },
   portable: {
