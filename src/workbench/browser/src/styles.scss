@@ -38,7 +38,7 @@ object {
 }
 
 .eo-link {
-  color: var(--BLUE_DEEPER);
+  color: var(--text-link-color);
 }
 
 .method_text_POST {
@@ -51,7 +51,7 @@ object {
 }
 
 .method_text_HEAD {
-  color: var(--YELLOW_NORMAL);
+  color: var(--warning-colo);
 }
 
 .method_text_WS {
@@ -88,7 +88,7 @@ object {
 }
 
 ::-webkit-scrollbar-track {
-  // background-color: var(--scrollbar-thumb-background-color_BG);
+  // background-color: var( --scrollbar-track-background-color);
   border-color: transparent;
   border-style: solid;
   border-left-width: 0 0 0 1px;
@@ -150,7 +150,7 @@ nz-resize-handle.container-draggable {
 .top-save-bar {
   @apply sticky top-0 z-10 py-2.5;
 
-  background-color: var(--button-default-background-color_HOVER);
+  background-color: var(--bar-background-color);
   border-bottom: 1px solid var(--border-color);
 }
 

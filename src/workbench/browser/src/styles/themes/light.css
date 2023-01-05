@@ -26,7 +26,7 @@
   --GREEN_LIGHT: #0aa07a;
   --GREEN_DEEP: #05654d;
   --GREEN_DEEPER: #085542;
-  --BLUE_NORMAL: #2878ff;
+  --info-color: #2878ff;
   --BLUE_LIGHT: #498cff;
   --BLUE_DEEP: #2a6cde;
   --BLUE_DEEPER: #265fc2;
@@ -37,7 +37,7 @@
   --button-default-text-color: #000000;
   --button-default-text-color_HOVER: #000000;
   --button-default-background-color: #ffffff;
-  --button-default-background-color_HOVER: #f8f8f8;
+  --bar-background-color: #f8f8f8;
   --BTN_SEC_MORE_BG: #ffffff;
   --BTN_SEC_MORE_BG_HOVER: #f8f8f8;
   --BTN_SEC_BORDER: #dcdcdc;

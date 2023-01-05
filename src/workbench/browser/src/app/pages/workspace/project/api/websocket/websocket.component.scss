@@ -63,7 +63,7 @@
 
 :host ::ng-deep {
   .main-bg {
-    background-color: var(--button-default-background-color_HOVER) !important;
+    background-color: var(--bar-background-color) !important;
 
     &:focus,
     &:active,

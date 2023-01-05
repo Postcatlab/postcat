@@ -9,7 +9,7 @@
   <!-- Status Bar -->
   <div
     *ngIf="model?.statusCode"
-    class="mb-[15px] basic_info_bar  flex justify-between {{ model.statusCode ? codeStatus.class : 'code_red' }}"
+    class="mb-[15px] basic_info_bar  flex justify-between {{ model.statusCode ? codeStatus.class : 'test-error' }}"
   >
     <div class="fs16" id="statusCode">{{ model.statusCode || 'No Response' }}</div>
     <div class="flex items-center text-[12px]">

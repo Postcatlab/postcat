@@ -28,6 +28,15 @@ async function getFilesInDirectoryAsync(dir, ext) {
 
   return files;
 }
+function sortByKeylength(data) {
+  const result = {};
+  const keyArray = Object.keys(data);
+  keyArray.sort();
+  keyArray.forEach(item => {
+    result[item] = data[item];
+  });
+  return result;
+}
 async function searchFilesInDirectoryAsync(dirs, filter, ext) {
   let targetFileArr = [];
   for (var i = 0; i < dirs.length; i++) {
@@ -60,16 +69,20 @@ function replaceFileContent(file, filter) {
     });
   });
 }
-const variable = {
+const variables = {
   '--NAVBAR_BG': '--nav-background-color',
   '--TIPS_TEXT_COLOR': '--text-secondary-color',
   '--MASK': '--modal-mask-background-color',
-  '--SCROLL_BAR': '--scrollbar-thumb-background-color',
+  '--GREEN_NORMAL': '--success-color',
+  '--YELLOW_NORMAL': '--warning-colo',
+  '--BLUE_NORMAL': '--info-color',
   '--SCROLL_BAR_BG': '--scrollbar-track-background-color',
+  '--SCROLL_BAR': '--scrollbar-thumb-background-color',
   '--DEFAULT_BORDER_RADIUS': '--border-radius',
   '--BORDER': '--border-color',
   '--NAV_BOTTOM': '--nav-item-border-size',
   '--ICONPARK_SIZE': '--icon-size',
+  '--BTN_SEC_BG_HOVER': '--bar-background-color',
   '--BAR_BG_COLOR': '--bar-background-color',
   '--DISABLE_BG': '--disabled-background-color',
   '--DISABLE_TEXT': '--disabled-text-color',
@@ -83,27 +96,28 @@ const variable = {
   '--MAIN_BG': '--background-color',
   '--DIVIDER': '--divider-color',
   '--BTN_SEC_TEXT': '--button-default-text-color',
+  '--BTN_SEC_BG_HOVER': '--bar-background-color',
   '--BTN_SEC_BG': '--button-default-background-color',
   '--BTN_TEXT': '--button-primary-text-color',
   '--BTN_TEXT_RED': '--button-danger-text-color',
   '--BTN_PRIMARY_TEXT': '--button-primary-text-color',
-  '--BTN_PRIMARY_BG': '--button-primary-background-color',
   '--BTN_PRIMARY_BG_HOVER': '--primary-hover-color:',
-  '--BTN_LIGHT_BG': '--primary-color',
+  '--BTN_PRIMARY_BG': '--button-primary-background-color',
   '--BTN_LIGHT_BG_HOVER': '--item-hover-background-color',
+  '--BTN_LIGHT_BG': '--primary-color',
   '--RED_NORMAL': '--danger-color',
   '--MODAL_SHADOW': '--modal-mask-background-color',
-  '--NAVBAR_BTN_BG': '--item-active-background-color',
   '--NAVBAR_BTN_BG_HOVER': '--item-hover-background-color',
+  '--NAVBAR_BTN_BG': '--item-active-background-color',
   '--NAV_BOTTOM': '--nav-item-border-size',
-  '--PADDING': '--padding',
   '--PADDING_X': '--padding-x',
   '--PADDING_Y': '--padding-y',
+  '--PADDING': '--padding',
   '--MARGIN': '--margin',
   '--MR_ICON': '--btn-icon-margin'
 };
-searchFilesInDirectoryAsync(['../src/workbench/browser/src'], variable);
-//Lazy to
+searchFilesInDirectoryAsync(['../src/workbench/browser/src'], sortByKeylength(variables));
+//Lazy to await
 setTimeout(() => {
   console.log('Replaced Success!\n', replaceSuccess);
 }, 1000);

@@ -24,7 +24,7 @@
   --GREEN_LIGHT: #0aa07a;
   --GREEN_DEEP: #05654d;
   --GREEN_DEEPER: #085542;
-  --BLUE_NORMAL: #7da7ef;
+  --info-color: #7da7ef;
   --BLUE_LIGHT: #94b7f3;
   --BLUE_DEEP: #4c87eb;
   --BLUE_DEEPER: #3c7ce9;
@@ -35,7 +35,7 @@
   --button-default-text-color: var(--button-primary-text-color);
   --button-default-text-color_HOVER: var(--button-primary-text-color);
   --button-default-background-color: #646464;
-  --button-default-background-color_HOVER: #787878;
+  --bar-background-color: #787878;
   --BTN_SEC_MORE_BG: #646464;
   --BTN_SEC_MORE_BG_HOVER: #787878;
   --BTN_SEC_BORDER: transparent;
