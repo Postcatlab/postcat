@@ -1,5 +1,3 @@
-const { readFileSync } = require('fs');
-
 const { Client } = require('ssh2');
 
 const conn = new Client();
@@ -17,7 +15,7 @@ conn
         })
         .on('data', data => {
           console.log(data.toString());
-          if (data.toString().includes('ssh操作完成啦')) {
+          if (data.toString().includes('Windows打包发布完成!')) {
             conn.end();
             process.exit();
           }
@@ -30,7 +28,7 @@ conn
             'nvm use 16.13.2',
             'yarn build:static',
             'nvm use 12.22.10',
-            'echo ssh操作完成啦'
+            'echo Windows打包发布完成!'
           ].join('\r\n')
         );
     });
