@@ -72,7 +72,7 @@ const config: Configuration = {
   ],
   win: {
     icon: 'src/app/common/images/logo.ico',
-    timeStampServer: 'http://timestamp.globalsign.com/scripts/timstamp.dll',
+    rfc3161TimeStampServer: 'http://timestamp.sectigo.com/?td=sha256',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
     signDlls: false,
