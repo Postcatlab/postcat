@@ -8,6 +8,8 @@ import { copyFileSync } from 'node:fs';
 import path from 'node:path';
 import { exit, platform } from 'node:process';
 
+// 当前 postcat 版本
+const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
 let signOptions: Parameters<CustomWindowsSign>;
 // 参数同 electron-builder cli 命令行参数
@@ -139,7 +141,7 @@ const signWindows = async () => {
       // 给自定义安装包签名
       signOptions[0] = {
         ...signOptions[0],
-        path: 'D:\\git\\postcat\\release\\Postcat-Setup-0.0.1-beta.exe'
+        path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
       };
       // @ts-ignore
       await sign(...signOptions);
