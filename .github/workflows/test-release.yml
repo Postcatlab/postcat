@@ -1,0 +1,28 @@
+name: TestRelease
+
+on:
+  push:
+    branches: [test/windows_sign]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Connect to VPN
+        uses: 'kota65535/github-openvpn-connect-action@v2'
+        with:
+          config_file: ./github/workflows/client.ovpn
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_WINDOWS_IP }}
+          username: ${{ secrets.SSH_WINDOWS_USERNAME }}
+          password: ${{ secrets.SSH_WINDOWS_PASSWORD }}
+          script: nvm ls
