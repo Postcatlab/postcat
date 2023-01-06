@@ -1,4 +1,4 @@
-import { sign, doSign, CustomWindowsSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
+import { sign, doSign } from 'app-builder-lib/out/codeSign/windowsCodeSign';
 import { build, Platform } from 'electron-builder';
 import type { Configuration, BuildResult } from 'electron-builder';
 import minimist from 'minimist';
@@ -11,7 +11,7 @@ import { exit, platform } from 'node:process';
 // 当前 postcat 版本
 const version = process.env.npm_package_version;
 // 保存签名时的参数，供签名后面生成的 自定义安装界面 安装包
-let signOptions: Parameters<CustomWindowsSign>;
+let signOptions: Parameters<typeof sign>;
 // 参数同 electron-builder cli 命令行参数
 const argv = minimist(process.argv.slice(2));
 // https://nodejs.org/docs/latest/api/util.html#util_class_util_textdecoder
@@ -74,15 +74,14 @@ const config: Configuration = {
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
-    rfc3161TimeStampServer: 'http://tsa.startssl.com/rfc3161',
     signDlls: false,
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
-    target: ['nsis'],
-    sign(configuration, packager) {
-      // console.log('configuration', configuration);
-      signOptions = [configuration, packager];
-      return doSign(configuration, packager!);
-    }
+    target: ['nsis']
+    // sign(configuration, packager) {
+    //   // console.log('configuration', configuration);
+    //   signOptions = [configuration, packager!];
+    //   return doSign(configuration, packager!);
+    // }
   },
   portable: {
     splashImage: 'src/app/common/images/postcat.bmp'
@@ -122,7 +121,6 @@ const signWindows = async () => {
     ...signOptions[0],
     path: 'D:\\git\\postcat\\build\\Uninstall Postcat.exe'
   };
-  // @ts-ignore
   await sign(...signOptions);
 
   copyFileSync(
@@ -144,7 +142,6 @@ const signWindows = async () => {
         ...signOptions[0],
         path: `D:\\git\\postcat\\release\\Postcat-Setup-${version}.exe`
       };
-      // @ts-ignore
       await sign(...signOptions);
 
       console.log('\x1b[32m', '打包完成🎉🎉🎉你要的都在 release 目录里🤪🤪🤪');
@@ -163,7 +160,7 @@ Promise.all([
   })
 ])
   .then(() => {
-    signWindows();
+    // signWindows();
   })
   .catch(error => {
     console.log('\x1b[31m', '打包失败，错误信息：', error);
