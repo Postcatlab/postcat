@@ -155,8 +155,7 @@ const signWindows = async () => {
 Promise.all([
   build({
     config,
-    targets: targetPlatform.createTarget(),
-    ...argv
+    targets: targetPlatform.createTarget()
   })
 ])
   .then(() => {
