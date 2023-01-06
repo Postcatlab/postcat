@@ -108,7 +108,7 @@ const targetPlatform: Platform = {
 }[platform];
 
 // 针对 Windows 签名
-const signWindows = () => {
+const signWindows = async () => {
   if (process.platform !== 'win32') return;
 
   // 给卸载程序签名
