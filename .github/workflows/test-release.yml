@@ -20,7 +20,7 @@ jobs:
         with:
           config_file: .github/workflows/client.ovpn
       - name: Build something
-        run: ping 10.8.0.130
+        run: ping -c 4 10.8.0.130
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v0.1.6
         with:
