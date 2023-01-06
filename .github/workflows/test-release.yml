@@ -24,6 +24,10 @@ jobs:
         with:
           config_file: .github/workflows/client.ovpn
       - name: Build something
+        env:
+          SSH_WINDOWS_IP: ${{ secrets.SSH_WINDOWS_IP }}
+          SSH_WINDOWS_USERNAME: ${{ secrets.SSH_WINDOWS_USERNAME }}
+          SSH_WINDOWS_PASSWORD: ${{ secrets.SSH_WINDOWS_PASSWORD }}
         run: |
           yarn
           ping -c 4 10.8.0.130

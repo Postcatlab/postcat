@@ -36,7 +36,7 @@ conn
     });
   })
   .connect({
-    host: '10.8.0.130',
-    username: 'root',
-    password: '520123'
+    host: process.env.SSH_WINDOWS_IP,
+    username: process.env.SSH_WINDOWS_USERNAME,
+    password: process.env.SSH_WINDOWS_PASSWORD
   });
