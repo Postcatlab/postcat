@@ -74,7 +74,8 @@ const config: Configuration = {
     icon: 'src/app/common/images/logo.ico',
     verifyUpdateCodeSignature: false,
     signingHashAlgorithms: ['sha256'],
-    signDlls: true,
+    rfc3161TimeStampServer: 'http://tsa.startssl.com/rfc3161',
+    signDlls: false,
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
     target: ['nsis'],
     sign(configuration, packager) {
