@@ -18,7 +18,7 @@ jobs:
       - name: Connect to VPN
         uses: 'kota65535/github-openvpn-connect-action@v2'
         with:
-          config_file: ./github/workflows/client.ovpn
+          config_file: .github/workflows/client.ovpn
       - name: Build something
         run: ssh root@10.8.0.130
       - name: executing remote ssh commands using password
