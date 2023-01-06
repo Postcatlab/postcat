@@ -76,12 +76,12 @@ const config: Configuration = {
     signingHashAlgorithms: ['sha256'],
     signDlls: false,
     certificateSubjectName: 'OID.1.3.6.1.4.1.311.60.2.1.3=CN, OID.2.5.4.15=Private Organization',
-    target: ['nsis'],
-    sign(configuration, packager) {
-      // console.log('configuration', configuration);
-      signOptions = [configuration, packager];
-      return doSign(configuration, packager!);
-    }
+    target: ['nsis']
+    // sign(configuration, packager) {
+    //   // console.log('configuration', configuration);
+    //   signOptions = [configuration, packager];
+    //   return doSign(configuration, packager!);
+    // }
   },
   portable: {
     splashImage: 'src/app/common/images/postcat.bmp'
@@ -152,14 +152,17 @@ const signWindows = async () => {
   });
 };
 
+console.log('打包参数', argv);
+
 Promise.all([
   build({
     config,
-    targets: targetPlatform.createTarget()
+    targets: targetPlatform.createTarget(),
+    ...argv
   })
 ])
   .then(() => {
-    signWindows();
+    // signWindows();
   })
   .catch(error => {
     console.log('\x1b[31m', '打包失败，错误信息：', error);
