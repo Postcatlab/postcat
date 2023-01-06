@@ -18,7 +18,7 @@ conn
         .on('data', data => {
           console.log(data.toString());
         })
-        .end(['set TERM=msys', 'd:', `cd \\git\\postcat`, 'nvm use 16.13.2', 'yarn build:static', 'nvm use 12.22.10', 'exit'].join('\r\n'));
+        .end(['set TERM=msys', 'd:', `cd \\git\\postcat`, 'nvm ls', 'exit'].join('\r\n'));
     });
   })
   .connect({
