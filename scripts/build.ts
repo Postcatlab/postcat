@@ -15,6 +15,9 @@ const argv = minimist(process.argv.slice(2));
 // https://nodejs.org/docs/latest/api/util.html#util_class_util_textdecoder
 const decoder = new TextDecoder('gbk');
 
+// 删除 minimist 解析后默认带的 _ 属性，防止 electron-builder 执行报错
+Reflect.deleteProperty(argv, '_');
+
 // mac 系统删除 release 目录
 if (process.platform === 'darwin') {
   exec(`rm -r ${path.resolve(__dirname, '../release')}`);
