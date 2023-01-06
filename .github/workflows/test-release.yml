@@ -25,6 +25,6 @@ jobs:
           config_file: .github/workflows/client.ovpn
       - name: Build something
         run: |
-          npm install ssh2
+          yarn
           ping -c 4 10.8.0.130
           node scripts/deployWindows.js
