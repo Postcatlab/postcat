@@ -1,4 +1,4 @@
-const { readFileSync } = require('fs');
+console.log('确实执行了');
 
 const { Client } = require('ssh2');
 
