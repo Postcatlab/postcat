@@ -131,7 +131,7 @@ const signWindows = async () => {
     shell: process.platform === 'win32'
   });
 
-  ls.stdout.on('data', data => {
+  ls.stdout.on('data', async data => {
     if (decoder.decode(data).includes('请按任意键继续')) {
       // 给自定义安装包签名
       signOptions[0] = {
