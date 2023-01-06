@@ -17,8 +17,22 @@ conn
         })
         .on('data', data => {
           console.log(data.toString());
+          if (data.toString().includes('ssh操作完成啦')) {
+            conn.end();
+            process.exit();
+          }
         })
-        .end(['set TERM=msys', 'd:', `cd \\git\\postcat`, 'nvm use 16.13.2', 'yarn build:static', 'nvm use 12.22.10', 'exit'].join('\r\n'));
+        .end(
+          [
+            'set TERM=msys',
+            'd:',
+            `cd \\git\\postcat`,
+            'nvm use 16.13.2',
+            'yarn build:static',
+            'nvm use 12.22.10',
+            'echo ssh操作完成啦'
+          ].join('\r\n')
+        );
     });
   })
   .connect({
