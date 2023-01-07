@@ -26,6 +26,20 @@ export const SYSTEM_THEME: Array<{
     path: './themes/light-blue.json'
   },
   {
+    label: $localize`Light Green`,
+    id: 'pc-green',
+    baseTheme: 'pc',
+    customColors: {},
+    path: './themes/light-green.json'
+  },
+  {
+    label: $localize`Light Orange`,
+    id: 'pc-orange',
+    baseTheme: 'pc',
+    customColors: {},
+    path: './themes/light-orange.json'
+  },
+  {
     label: $localize`Dark Default`,
     id: 'pc-dark',
     baseTheme: '',

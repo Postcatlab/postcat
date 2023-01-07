@@ -12,7 +12,11 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
       *ngFor="let option of theme.themes"
     >
       <div class="border-all theme-block">
-        <header class="navbar h-[15px]" [style.background]="option.colors.layoutHeaderBackground"></header>
+        <header
+          class="navbar h-[15px]"
+          [style.background]="option.colors.layoutHeaderBackground"
+          [style.borderColor]="option.colors.border"
+        ></header>
         <section class="flex h-[35px]">
           <div
             class="sidebar w-[35px]"

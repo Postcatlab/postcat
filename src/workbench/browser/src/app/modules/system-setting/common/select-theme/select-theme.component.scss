@@ -2,6 +2,10 @@
   border-right: 1px solid var(--border-color);
 }
 
+.navbar {
+  border-bottom: 1px solid var(--border-color);
+}
+
 .theme-container-active {
   .theme-block {
     border-color: var(--primary-color);

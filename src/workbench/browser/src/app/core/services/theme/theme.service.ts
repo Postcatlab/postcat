@@ -36,17 +36,28 @@ export class ThemeService {
    */
   currentThemeID: string;
   constructor(@Inject(DOCUMENT) private document: Document, private themeVariable: ThemeVariableService, private setting: SettingService) {
-    this.currentThemeID = this.setting.get('workbench.baseTheme') || this.module.theme.default;
+    this.currentThemeID = this.setting.get('workbench.colorTheme') || this.module.theme.default;
   }
   async initTheme() {
     await this.querySystemTheme();
-    this.currentTheme = StorageUtil.get('pc_theme') || this.themes[0];
-    this.changeTheme(this.currentTheme);
+    let currentTheme = StorageUtil.get('pc_theme') || this.themes[0];
+    //check currentThemeID valid
+    let validTheme = this.themes.find(theme => theme.id === this.currentThemeID);
+    if (!validTheme) {
+      validTheme = this.themes.find(theme => theme.id === this.module.theme.default);
+    }
+    //Current theme storage is not equal to the current theme id
+    const themeStorageError = validTheme.id !== currentTheme.id;
+    const themeHasUpdate = JSON.stringify(currentTheme) !== JSON.stringify(validTheme);
+    if (themeStorageError || themeHasUpdate) {
+      currentTheme = validTheme;
+    }
+    this.changeTheme(currentTheme);
   }
   changeTheme(theme) {
     this.currentThemeID = theme.id;
     StorageUtil.set('pc_theme', theme);
-    this.setting.set('workbench.baseTheme', theme.id);
+    this.setting.set('workbench.colorTheme', theme.id);
     this.injectVaribale(theme.colors);
   }
   private getEditorTheme(baseTheme) {
@@ -71,7 +82,6 @@ export class ThemeService {
         result = await fetch(path).then(res => res.json());
       }
       const baseTheme = this.baseThemes.find(val => val.id === theme.baseTheme || val.id === theme.id);
-      console.log(baseTheme);
       this.themes.push({
         title: theme.label,
         id: theme.id,

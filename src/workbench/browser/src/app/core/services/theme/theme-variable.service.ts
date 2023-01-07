@@ -298,22 +298,24 @@ export class ThemeVariableService {
     });
     return colorsDefaultRule;
   }
-  private getColorsBySingleRule(colorKey: string, rule: ThemeColorRule, colors: ThemeColors) {
-    const result = colors;
+  private getColorsBySingleRule(rule: ThemeColorRule, opts: { colors: ThemeColors; customColors: Partial<ThemeColors>; colorKey: string }) {
+    const result = opts.customColors;
+    const colorKey = opts.colorKey;
+    const colorValue = opts.customColors[colorKey] || opts.colors[colorKey];
     switch (rule.action) {
       case 'replace': {
         rule.target.forEach(keyName => {
           if (result[keyName]) return;
-          result[keyName] = colors[colorKey];
+          result[keyName] = colorValue;
         });
         break;
       }
       case 'filter': {
-        if (!colors[colorKey]) {
+        if (!colorValue) {
           pcConsole.error(`colors can't find ${colorKey} value`);
           break;
         }
-        const color = Color(colors[colorKey]);
+        const color = Color(colorValue);
         rule.target.forEach(keyName => {
           if (result[keyName]) return;
           result[keyName] = color.alpha(rule.alpha).string();
@@ -324,19 +326,26 @@ export class ThemeVariableService {
     }
     return result;
   }
-  private getColorsByRule(rules, colors: ThemeColors) {
-    const result = colors;
+  private getColorsByRule(rules, customColors: Partial<ThemeColors>, colors: ThemeColors): ThemeColors {
+    const result = customColors;
     rules.forEach(singleRule => {
       if (singleRule.default && !result[singleRule.target]) {
         result[singleRule.target] = singleRule.default;
       }
       if (singleRule.rule) {
-        singleRule.rule.forEach(val => {
-          Object.assign(result, this.getColorsBySingleRule(singleRule.source, val, result));
+        singleRule.rule.forEach(rule => {
+          Object.assign(
+            result,
+            this.getColorsBySingleRule(rule, {
+              colorKey: singleRule.source,
+              customColors: result,
+              colors
+            })
+          );
         });
       }
     });
-    return result;
+    return result as ThemeColors;
   }
 
   /**
@@ -346,23 +355,17 @@ export class ThemeVariableService {
    * @param baseColors  base theme colors
    */
   getColors(customColors, baseColors = allThemeColors) {
-    let result = eoDeepCopy(baseColors);
     const colorsRule = this.initColorRule();
-    //Set custom colors
-    Object.keys(customColors).forEach(colorKey => {
-      if (!has(allThemeColors, colorKey)) {
-        pcConsole.warn(`Color ${colorKey} is not exist!`);
-        return;
-      }
-      result[colorKey] = customColors[colorKey];
-    });
     //Generate colors by rule
-    result = this.getColorsByRule(colorsRule, result);
-    //Check all colors is exist
-    let allColorVariableIsExist = Object.keys(allThemeColors).every(keyName => result[keyName]);
-    if (!allColorVariableIsExist) {
-      pcConsole.error('Lack of theme variables!', result);
-    }
+    const result = this.getColorsByRule(colorsRule, eoDeepCopy(customColors), baseColors);
+
+    //Use default color if not set
+    Object.keys(baseColors).forEach(colorKey => {
+      if (!result[colorKey]) {
+        result[colorKey] = baseColors[colorKey];
+      }
+    });
+    pcConsole.log('getColors:', result);
     return result;
   }
   private replaceKey(origin, replaceValue, replaceKey = '${key}') {
