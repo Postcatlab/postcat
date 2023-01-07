@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { kebabCase } from 'lodash-es';
 
 import { SettingService } from '../../../modules/system-setting/settings.service';
+import StorageUtil from '../../../utils/storage/Storage';
 import { ThemeVariableService } from './theme-variable.service';
 import { SsystemUIThemeType, SYSTEM_THEME, ThemeColors, ThemeItems } from './theme.model';
 
@@ -29,23 +30,25 @@ export class ThemeService {
       default: 'pc-theme-default'
     }
   };
-  /**
-   * @description current selected system inject theme
-   */
-  baseTheme: SsystemUIThemeType;
+  currentTheme;
   /**
    * @description user select color theme
    */
   currentThemeID: string;
   constructor(@Inject(DOCUMENT) private document: Document, private themeVariable: ThemeVariableService, private setting: SettingService) {
-    this.baseTheme = this.setting.get('workbench.colorTheme') || this.module.baseTheme.default;
     this.currentThemeID = this.setting.get('workbench.baseTheme') || this.module.theme.default;
   }
   async initTheme() {
     await this.querySystemTheme();
-    this.injectVaribale(this.themes[2].colors);
+    this.currentTheme = StorageUtil.get('pc_theme') || this.themes[0];
+    this.changeTheme(this.currentTheme);
   }
-  changeTheme(theme) {}
+  changeTheme(theme) {
+    this.currentThemeID = theme.id;
+    StorageUtil.set('pc_theme', theme);
+    this.setting.set('workbench.baseTheme', theme.id);
+    this.injectVaribale(theme.colors);
+  }
   private getEditorTheme(baseTheme) {
     //Default Theme: https://microsoft.github.io/monaco-editor/index.html
     //'vs', 'vs-dark' or 'hc-black'
@@ -87,7 +90,7 @@ export class ThemeService {
     });
   }
   changeEditorTheme(theme?) {
-    theme = theme || this.getEditorTheme(this.baseTheme);
+    // theme = theme || this.getEditorTheme(this.baseTheme);
     if (window.monaco?.editor) {
       window.monaco?.editor.setTheme(theme);
     }
@@ -102,8 +105,15 @@ export class ThemeService {
        ${variables}
     }
     `;
-    let style = document.createElement('style');
-    style.innerHTML = content;
-    document.getElementsByTagName('head')[0].appendChild(style);
+    const domID = 'pc-theme-variable';
+    let dom = document.getElementById(domID);
+    if (dom) {
+      dom.innerHTML = content;
+    } else {
+      dom = document.createElement('style');
+      dom.id = domID;
+      dom.innerHTML = content;
+      document.getElementsByTagName('head')[0].appendChild(dom);
+    }
   }
 }
