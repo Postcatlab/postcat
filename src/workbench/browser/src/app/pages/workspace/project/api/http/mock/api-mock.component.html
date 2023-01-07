@@ -1,6 +1,6 @@
 <nz-result *ngIf="web.isWeb" nzStatus="warning" [nzTitle]="titleTips">
   <div nz-result-extra>
-    <button eo-ng-button nzType="primary" (click)="jumpToClient()">To Use</button>
+    <button eo-ng-button nzType="primary" (click)="jumpToClient()" i18n>To Use</button>
   </div>
 </nz-result>
 <div *ngIf="!web.isWeb">

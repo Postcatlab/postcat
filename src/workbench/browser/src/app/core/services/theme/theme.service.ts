@@ -43,8 +43,7 @@ export class ThemeService {
   }
   async initTheme() {
     await this.querySystemTheme();
-    console.log(this.themes);
-    this.injectVaribale(this.themes[0].colors);
+    this.injectVaribale(this.themes[2].colors);
   }
   changeTheme(theme) {}
   private getEditorTheme(baseTheme) {
@@ -68,22 +67,17 @@ export class ThemeService {
         const path = new URL(theme.path, `${window.location.origin}/extensions/core-themes/`).href;
         result = await fetch(path).then(res => res.json());
       }
-
+      const baseTheme = this.baseThemes.find(val => val.id === theme.baseTheme || val.id === theme.id);
+      console.log(baseTheme);
       this.themes.push({
         title: theme.label,
         id: theme.id,
         baseTheme: theme.baseTheme,
-        previewColors: {
-          layoutHeaderBackground: '#f8f8fa',
-          layoutSiderBackground: '#ffffff',
-          bodyBackground: 'rgb(255, 255, 255)',
-          border: '#e8e8e8',
-          primary: '#00785a'
-        },
-        ...result
+        ...result,
+        colors: this.themeVariable.getColors(result.colors, baseTheme.colors)
       });
+      console.log(this.themes);
     }
-    console.log(this.themes, this.baseThemes);
   }
   private initBaseThemes() {
     this.baseThemes.forEach(theme => {

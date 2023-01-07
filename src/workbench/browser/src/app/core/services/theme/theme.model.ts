@@ -1,3 +1,4 @@
+import darkDefault from '../../../../extensions/core-themes/themes/dark-default.json';
 import lightDefault from '../../../../extensions/core-themes/themes/light-default.json';
 export const SYSTEM_THEME: Array<{
   label: string;
@@ -23,6 +24,13 @@ export const SYSTEM_THEME: Array<{
     //* relative path
     //src/extensions/core-themes/themes/light-blue.json
     path: './themes/light-blue.json'
+  },
+  {
+    label: $localize`Dark Default`,
+    id: 'pc-dark',
+    baseTheme: '',
+    core: true,
+    customColors: darkDefault.colors
   }
 ];
 export type SsystemUIThemeType = typeof SYSTEM_THEME[number]['id'];
@@ -46,6 +54,7 @@ export type ThemeColors = {
   successHover?: string;
   successShadow?: string;
   warning: string;
+  warningHover?: string;
   warningShadow?: string;
   danger: string;
   dangerHover?: string;
@@ -70,8 +79,6 @@ export type ThemeColors = {
   layoutHeaderBackground?: string;
   layoutSiderText?: string;
   layoutSiderBackground?: string;
-  layoutSiderItemActiveText?: string;
-  layoutSiderItemActive?: string;
   layoutFooterText?: string;
   layoutFooterBackground?: string;
   //Icon
@@ -97,10 +104,10 @@ export type ThemeColors = {
   tabsCardBarBackground?: string;
   tabsCardText?: string;
   tabsCardBackground?: string;
-  tabsCardActive?: string;
   tabsCardActiveText?: string;
   tabsCardActiveBackground?: string;
   //Table
+  tableText?: string;
   tableBackground?: string;
   tableHeaderText?: string;
   tableHeaderBackground?: string;
@@ -127,8 +134,12 @@ export type ThemeColors = {
   menuItemActiveText?: string;
   menuInlineSubmenuBackground?: string;
   //Select
+  selectText?: string;
   selectBorder?: string;
+  selectHoverBorder?: string;
+  selectActiveBorder?: string;
   selectBackground?: string;
+  selectDropdownText?: string;
   selectDropdownBackground?: string;
   selectItemSelectedText?: string;
   selectItemSelectedBackground?: string;
@@ -137,12 +148,16 @@ export type ThemeColors = {
   inputBackground?: string;
   inputIcon?: string;
   inputBorder?: string;
+  inputHoverBorder?: string;
+  inputActiveBorder?: string;
   inputPlaceholder?: string;
   //Modal
   modalHeaderBackground?: string;
   modalHeaderText?: string;
   modalContentBackground?: string;
+  modalContentText?: string;
   modalFooterBackground?: string;
+  modalFooterText?: string;
   modalMaskBackground?: string;
   //Pagination
   paginationItemBackground?: string;
@@ -203,9 +218,17 @@ export type ThemeColors = {
   //Collapse
   collapseHeaderBackground?: string;
   collapseContentbackground?: string;
+  //Popover background
+  popoverBackground?: string;
+  popoverText?: string;
+  //Progress
+  progressDefault?: string;
+  progressSuccess?: string;
+  progressException?: string;
 };
 export type ThemeColorRule = {
   action: 'replace' | 'filter';
   alpha?: number;
-  targets: string[];
+  source?: string;
+  target: string[];
 };

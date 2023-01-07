@@ -4,4 +4,9 @@
       margin-left: 3px;
     }
   }
+
+  .ant-breadcrumb > nz-breadcrumb-item:last-child,
+  .ant-breadcrumb-separator {
+    color: var(--text-color);
+  }
 }

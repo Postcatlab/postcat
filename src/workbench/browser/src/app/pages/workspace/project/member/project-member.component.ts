@@ -78,7 +78,7 @@ import { MEMBER_MUI } from '../../../../shared/models/member.model';
             >and invite members to collaborate.</p
           ></ng-template
         >
-        <eo-member-list class="block mt-[10px]" #memberList></eo-member-list> ,
+        <eo-member-list class="block mt-[10px]" #memberList></eo-member-list>
       </section>
     </section>`
 })

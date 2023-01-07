@@ -1,8 +1,8 @@
 @import './variables.css';
 @import '../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.less';
-@import '../../../../../../node_modules/ng-zorro-antd/src/style/themes/default.less';
-@import '../../../../../../node_modules/ng-zorro-antd/code-editor/style/entry.less';
-
+@link-color: var(--text-color);
+@border-radius-base:var (--border-radius);
+@tree-title-height: 30px;
 //From EOUI
 .ant-tabs-tab {
   padding: 8px 0;
@@ -86,4 +86,99 @@
 }
 .ant-form-item-label {
   font-weight: bold;
+}
+
+// AntD Base Less
+.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  padding: 8px 10px 5px 10px;
+}
+.ant-btn-link,
+.ant-btn-link:hover {
+  color: var(--text-link-color);
+}
+.ant-divider-horizontal {
+  margin: 15px 0;
+}
+.ant-drawer {
+  .ant-drawer-content-wrapper {
+    height: calc(100vh - 25px);
+    top: 10px;
+  }
+  .ant-drawer-content {
+    border-radius: 3px;
+  }
+  .ant-drawer-title {
+    font-weight: bold;
+  }
+}
+
+.ant-tabs-top {
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
+  .ant-tabs-nav::before {
+    border-color: var(--border-color);
+  }
+}
+.ant-divider-vertical {
+  border-color: var(--border-color);
+}
+.ant-radio-group {
+  .ant-radio-wrapper:last-child {
+    margin-right: 0;
+  }
+}
+.ant-modal-footer {
+  padding: 16px 24px;
+}
+p {
+  margin-bottom: 0;
+}
+.ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background-color: var(--item-active-background-color);
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  text-shadow: none;
+}
+.ant-tree-switcher {
+  width: 20px;
+}
+.ant-empty-description {
+  color: var(--text-secondary-color);
+}
+
+.ant-tag-default {
+  color: var(--text-color);
+  border: 0 none;
+  background-color: #66666626;
+  svg {
+    font-size: 12px;
+  }
+}
+.ant-input-number:focus,
+.ant-input-number-focused {
+  box-shadow: none;
+}
+
+.ant-result-title,
+.ant-list-item,
+.ant-form,
+.ant-form-item-label > label,
+.ant-list-item-meta-title {
+  color: var(--text-color);
+}
+.ant-list-split .ant-list-item {
+  border-color: var(--border-color);
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-color);
+}
+
+.ant-typography {
+  color: var(--text-color);
 }

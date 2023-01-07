@@ -12,205 +12,313 @@ const allThemeColors: ThemeColors = _allThemeColors;
 export class ThemeVariableService {
   constructor() {}
   private initColorRule() {
-    const colorsDefaultRule = {
-      buttonPrimaryText: '#fff',
-      modalMaskBackground: 'rgba(0, 0, 0, 0.35)',
-      checkboxCheckedBorder: 'transparent',
-      switchText: '#fff',
-      scrollbarThumbBackground: 'rgba(0, 0, 0, 0.2)',
-      scrollbarTrackBackground: 'rgba(255, 255, 255, 0.05)',
-      radioCheckedBorder: 'transparent',
-      text: {
-        action: 'replace',
-        targets: [
-          'layoutSiderText',
-          'layoutSiderItemActiveText',
-          'layoutFooterText',
-          'iconText',
-          'alertDefaultIcon',
-          'buttonDefaultText',
-          'buttonDangerText',
-          'tabsText',
-          'tabsActiveText',
-          'tabsCardText',
-          'tabsCardActiveText',
-          'tableFooterText',
-          'treeText',
-          'treeSelectedText',
-          'treeHoverText',
-          'selectItemSelectedText',
-          'inputText',
-          'modalHeaderText',
-          'alertDefaultText',
-          'checkboxText',
-          'checkboxCheckedText',
-          'radioText',
-          'radioCheckedText',
-          'switchCardText',
-          'menuItemText'
+    const colorsDefaultRule = [
+      {
+        target: 'buttonPrimaryText',
+        default: '#fff'
+      },
+      {
+        target: 'checkboxCheckedBorder',
+        default: 'transparent'
+      },
+      {
+        target: 'modalMaskBackground',
+        default: 'rgba(0, 0, 0, 0.35)'
+      },
+      {
+        target: 'popoverBackground',
+        default: 'rgba(0,0,0,.75)'
+      },
+      {
+        target: 'popoverText',
+        default: '#fff'
+      },
+      {
+        target: 'switchText',
+        default: '#fff'
+      },
+      {
+        target: 'scrollbarThumbBackground',
+        default: 'rgba(0, 0, 0, 0.2)'
+      },
+      {
+        target: 'scrollbarTrackBackground',
+        default: 'rgba(255, 255, 255, 0.05)'
+      },
+      {
+        target: 'progressSuccess',
+        default: '#52c41a'
+      },
+      {
+        target: 'toastSuccessText',
+        default: '#2ca641'
+      },
+      {
+        target: 'alertSuccessText',
+        default: '#2ca641'
+      },
+      {
+        source: 'text',
+        rule: [
+          {
+            action: 'replace',
+            target: [
+              'tableText',
+              'selectText',
+              'layoutSiderText',
+              'layoutFooterText',
+              'iconText',
+              'alertDefaultIcon',
+              'buttonDefaultText',
+              'tabsText',
+              'tabsActiveText',
+              'tabsCardText',
+              'tabsCardActiveText',
+              'tableFooterText',
+              'treeText',
+              'treeSelectedText',
+              'treeHoverText',
+              'selectItemSelectedText',
+              'selectDropdownText',
+              'inputText',
+              'modalHeaderText',
+              'modalContentText',
+              'modalFooterText',
+              'alertDefaultText',
+              'checkboxText',
+              'checkboxCheckedText',
+              'radioText',
+              'radioCheckedText',
+              'switchCardText',
+              'menuItemText',
+              'menuItemActiveText'
+            ]
+          }
         ]
       },
-      border: {
-        action: 'replace',
-        targets: ['selectBorder', 'inputBorder', 'checkboxBorder', 'radioBorder', 'switchCardBorder', 'disabledBorder']
-      },
-      textSecondary: {
-        action: 'replace',
-        targets: ['tableHeaderText', 'disabledText', 'menuItemGroupTitleText']
-      },
-      disabledText: {
-        action: 'replace',
-        targets: ['inputPlaceholder', 'inputIcon']
-      },
-      primary: [
-        {
-          action: 'replace',
-          targets: [
-            'menuItemActiveText',
-            'menuItemActive',
-            'switchActive',
-            'tabsCardActive',
-            'tabsActive',
-            'buttonPrimaryBackground',
-            'checkboxCheckedBackground',
-            'radioCheckedBackground',
-            'selectBorder',
-            'inputBorder'
-          ]
-        },
-        {
-          action: 'filter',
-          alpha: 0.2,
-          targets: ['menuItemActiveBackground']
-        }
-      ],
-      shadow: {
-        action: 'replace',
-        targets: [
-          'successShadow',
-          'warningShadow',
-          'dangerShadow',
-          'infoShadow',
-          'buttonShadow',
-          'buttonPrimaryShadow',
-          'buttonDefaultShadow',
-          'buttonDangerShadow'
+      {
+        source: 'border',
+        rule: [
+          {
+            action: 'replace',
+            target: ['checkboxBorder', 'radioBorder', 'switchCardBorder', 'disabledBorder', 'inputBorder', 'selectBorder']
+          }
         ]
       },
-      background: {
-        action: 'replace',
-        targets: [
-          'switchCardBackground',
-          'switchBakcground',
-          'menuBackground',
-          'layoutHeaderBackground',
-          'layoutSiderBackground',
-          'layoutFooterBackground',
-          'buttonDefaultBackground',
-          'buttonDangerBackground',
-          'tabsCardBackground',
-          'tabsCardActiveBackground',
-          'tableBackground',
-          'tableFooterBackground',
-          'treeHeaderBackground',
-          'treeBackground',
-          'dropdownMenuBackground',
-          'selectBackground',
-          'selectDropdownBackground',
-          'inputBackground',
-          'modalHeaderBackground',
-          'modalContentBackground',
-          'modalFooterBackground',
-          'paginationItemBackground',
-          'paginationItemActiveBackground',
-          'paginationButtonBackground',
-          'checkboxBackground',
-          'radioBackground',
-          'collapseContentbackground'
+      {
+        source: 'textSecondary',
+        rule: [
+          {
+            action: 'replace',
+            target: ['tableHeaderText', 'disabledText', 'menuItemGroupTitleText']
+          }
         ]
       },
-      barBackground: {
-        action: 'replace',
-        targets: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBarBackground', 'menuInlineSubmenuBackground']
+      {
+        source: 'disabledText',
+        rule: [
+          {
+            action: 'replace',
+            target: ['inputPlaceholder']
+          }
+        ]
       },
-      itemActiveBackground: {
-        action: 'replace',
-        targets: ['treeSelectedBackground', 'selectItemSelectedBackground', 'layoutSiderItemActive', 'itemHoverBackground']
+      {
+        source: 'primary',
+        rule: [
+          {
+            action: 'replace',
+            target: [
+              'menuItemActive',
+              'switchActive',
+              'tabsActive',
+              'buttonPrimaryBackground',
+              'checkboxCheckedBackground',
+              'radioCheckedBorder',
+              'radioCheckedBackground',
+              'checkboxCheckedBorder',
+              'inputHoverBorder',
+              'inputActiveBorder',
+              'selectHoverBorder',
+              'selectActiveBorder'
+            ]
+          },
+          {
+            action: 'filter',
+            alpha: 0.8,
+            target: ['primaryHover']
+          }
+        ]
       },
-      itemHoverBackground: {
-        action: 'replace',
-        targets: ['dropdownItemHoverBackground', 'tableRowHoverBackground', 'treeHoverBackground']
+      {
+        source: 'shadow',
+        rule: [
+          {
+            action: 'replace',
+            target: [
+              'successShadow',
+              'warningShadow',
+              'dangerShadow',
+              'infoShadow',
+              'buttonShadow',
+              'buttonPrimaryShadow',
+              'buttonDefaultShadow',
+              'buttonDangerShadow'
+            ]
+          }
+        ]
+      },
+      {
+        source: 'background',
+        rule: [
+          {
+            action: 'replace',
+            target: [
+              'switchCardBackground',
+              'switchBakcground',
+              'menuBackground',
+              'layoutHeaderBackground',
+              'layoutSiderBackground',
+              'layoutFooterBackground',
+              'buttonDefaultBackground',
+              'buttonDangerBackground',
+              'tabsCardBackground',
+              'tabsCardActiveBackground',
+              'tableBackground',
+              'tableFooterBackground',
+              'treeHeaderBackground',
+              'treeBackground',
+              'dropdownMenuBackground',
+              'selectBackground',
+              'selectDropdownBackground',
+              'inputBackground',
+              'modalHeaderBackground',
+              'modalContentBackground',
+              'modalFooterBackground',
+              'paginationItemBackground',
+              'paginationItemActiveBackground',
+              'paginationButtonBackground',
+              'checkboxBackground',
+              'radioBackground',
+              'collapseContentbackground'
+            ]
+          }
+        ]
+      },
+      {
+        source: 'barBackground',
+        rule: [
+          {
+            action: 'replace',
+            target: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBarBackground', 'menuInlineSubmenuBackground']
+          }
+        ]
+      },
+      {
+        source: 'itemActiveBackground',
+        rule: [
+          {
+            action: 'replace',
+            target: ['treeSelectedBackground', 'selectItemSelectedBackground', 'itemHoverBackground', 'menuItemActiveBackground']
+          }
+        ]
+      },
+      {
+        source: 'itemHoverBackground',
+        rule: [
+          {
+            action: 'replace',
+            target: ['dropdownItemHoverBackground', 'tableRowHoverBackground', 'treeHoverBackground']
+          }
+        ]
       }
-    };
+    ];
     const multipleColors: ThemeColorRule[] = [
       {
         action: 'replace',
-        targets: ['toast${key}Text', 'button${key}Text', 'toast${key}Icon', 'alert${key}Text', 'alert${key}Icon']
-      },
-      {
-        action: 'filter',
-        alpha: 0.1,
-        targets: ['toast${key}Background', 'alert${key}Background']
+        target: ['toast${key}Text', 'button${key}Text', 'alert${key}Text']
       },
       {
         action: 'filter',
         alpha: 0.6,
-        targets: ['${key}Hover']
+        target: ['${key}Hover']
       }
     ];
-    const replaceKey = '${key}';
     ['success', 'danger', 'warning', 'info'].forEach(colorKey => {
-      const rule = JSON.stringify(multipleColors, (k, v) => {
-        if (typeof v !== 'string') return v;
-        let result = v;
-        if (v.startsWith(replaceKey)) {
-          result = v.replace(replaceKey, colorKey);
+      let rule: any = this.replaceKey(multipleColors, colorKey);
+      rule = JSON.parse(rule);
+      switch (colorKey) {
+        case 'danger': {
+          rule[0].target = [...rule[0].target, 'alertErrorText', 'toastErrorText', 'progressException', 'buttonDangerText'];
+          break;
         }
-        if (v.includes(replaceKey)) {
-          result = v.replace(replaceKey, capitalize(colorKey));
+        case 'info': {
+          rule[0].target.push('progressDefault');
+          break;
         }
-        if (result !== v && !has(allThemeColors, result)) {
-          return;
-        }
-        return result;
-      });
-      colorsDefaultRule[colorKey] = JSON.parse(rule);
-      if (colorKey === 'danger') {
-        colorsDefaultRule[colorKey][0].targets = [
-          ...colorsDefaultRule[colorKey][0].targets,
-          'alertErrorText',
-          'toastErrorIcon',
-          'toastErrorText',
-          'alertErrorIcon'
-        ];
-        colorsDefaultRule[colorKey][1].targets = [
-          ...colorsDefaultRule[colorKey][1].targets,
-          'alertErrorBackground',
-          'toastErrorBackground'
-        ];
       }
-      colorsDefaultRule[colorKey].forEach((val, key) => {
-        val.targets = val.targets.filter(val => !isNull(val));
+      rule.forEach((val, key) => {
+        val.target = val.target.filter(val => !isNull(val));
       });
-      colorsDefaultRule[colorKey] = colorsDefaultRule[colorKey].filter(val => val.targets?.length);
+      rule = rule.filter(val => val.target?.length);
+      colorsDefaultRule.push({
+        source: colorKey,
+        rule: rule
+      });
+    });
+    //Toast/Alert
+    const alertColors: ThemeColorRule[] = [
+      {
+        action: 'replace',
+        target: ['${key}Icon']
+      },
+      {
+        action: 'filter',
+        alpha: 0.1,
+        target: ['${key}Background']
+      }
+    ];
+    ['alert', 'toast'].forEach(component => {
+      let rules = eoDeepCopy(alertColors);
+      rules.forEach(val => {
+        val.target = val.target.map(val => `${component}${val}`);
+      });
+      ['success', 'error', 'warning', 'info'].forEach(colorKey => {
+        let rule: any = this.replaceKey(rules, colorKey);
+        rule = JSON.parse(rule);
+        rule.forEach(val => {
+          val.target = val.target.filter(val => !isNull(val));
+        });
+        rule = rule.filter(val => val.target?.length);
+        colorsDefaultRule.push({
+          source: `${component}${capitalize(colorKey)}Text`,
+          rule: rule
+        });
+      });
     });
     return colorsDefaultRule;
   }
   private getColorsBySingleRule(colorKey: string, rule: ThemeColorRule, colors: ThemeColors) {
-    const result = {};
+    const result = colors;
     switch (rule.action) {
       case 'replace': {
-        rule.targets.forEach(keyName => {
+        rule.target.forEach(keyName => {
+          if (result[keyName]) return;
           result[keyName] = colors[colorKey];
         });
         break;
       }
       case 'filter': {
+        if (!colors[colorKey]) {
+          pcConsole.error(`colors can't find ${colorKey} value`);
+          break;
+        }
         const color = Color(colors[colorKey]);
-        rule.targets.forEach(keyName => {
-          result[keyName] = color.fade(rule.alpha).string();
+        rule.target.forEach(keyName => {
+          if (result[keyName]) return;
+          result[keyName] = color.alpha(rule.alpha).string();
         });
-        // console.log('%c FILTER_COLOR:', `background:${color.fade(rule.alpha).string()}`);
+        // console.log('%c FILTER_COLOR:', `background:${color.alpha(rule.alpha).string()}`, color.alpha(rule.alpha).string());
         break;
       }
     }
@@ -218,25 +326,14 @@ export class ThemeVariableService {
   }
   private getColorsByRule(rules, colors: ThemeColors) {
     const result = colors;
-    Object.keys(rules).forEach(colorKey => {
-      const rule = rules[colorKey];
-      const type = whatType(rule);
-      switch (type) {
-        case 'string': {
-          //Default value
-          result[colorKey] = rule;
-          break;
-        }
-        case 'object': {
-          Object.assign(result, this.getColorsBySingleRule(colorKey, rule, colors));
-          break;
-        }
-        case 'array': {
-          rule.forEach(val => {
-            Object.assign(result, this.getColorsBySingleRule(colorKey, val, colors));
-          });
-          break;
-        }
+    rules.forEach(singleRule => {
+      if (singleRule.default && !result[singleRule.target]) {
+        result[singleRule.target] = singleRule.default;
+      }
+      if (singleRule.rule) {
+        singleRule.rule.forEach(val => {
+          Object.assign(result, this.getColorsBySingleRule(singleRule.source, val, result));
+        });
       }
     });
     return result;
@@ -261,17 +358,28 @@ export class ThemeVariableService {
     });
     //Generate colors by rule
     result = this.getColorsByRule(colorsRule, result);
-    //Use custom colors to replace default colors
-    Object.assign(
-      result,
-      omitBy(customColors, v => isUndefined(v) || isNull(v) || v === '')
-    );
     //Check all colors is exist
     let allColorVariableIsExist = Object.keys(allThemeColors).every(keyName => result[keyName]);
     if (!allColorVariableIsExist) {
       pcConsole.error('Lack of theme variables!', result);
     }
-    pcConsole.log('getColors', result);
     return result;
+  }
+  private replaceKey(origin, replaceValue, replaceKey = '${key}') {
+    const rule = JSON.stringify(origin, (k, v) => {
+      if (typeof v !== 'string') return v;
+      let result = v;
+      if (v.startsWith(replaceKey)) {
+        result = v.replace(replaceKey, replaceValue);
+      } else if (v.includes(replaceKey)) {
+        result = v.replace(replaceKey, capitalize(replaceValue));
+      }
+      //Repalce key is not color key
+      if (result !== v && !has(allThemeColors, result)) {
+        return;
+      }
+      return result;
+    });
+    return rule;
   }
 }

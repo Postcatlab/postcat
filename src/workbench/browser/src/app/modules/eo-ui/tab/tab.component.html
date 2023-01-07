@@ -18,7 +18,7 @@
         }"
       >
         <!-- loading -->
-        <nz-spin nzSimple class="mr10" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid)?.isLoading"></nz-spin>
+        <nz-spin nzSimple class="mr-[10px]" [nzSize]="'small'" *ngIf="tabStorage.tabsByID.get(uuid)?.isLoading"></nz-spin>
         <eo-iconpark-icon
           class="mr-[5px] h-[16px]"
           name="{{ tabStorage.tabsByID.get(uuid)?.icon }}"

@@ -70,7 +70,7 @@ function replaceFileContent(file, filter) {
   });
 }
 const variables = {
-  '--NAVBAR_BG': '--nav-background-color',
+  '--NAVBAR_BG': '--layout-header-background-color',
   '--TIPS_TEXT_COLOR': '--text-secondary-color',
   '--MASK': '--modal-mask-background-color',
   '--GREEN_NORMAL': '--success-color',

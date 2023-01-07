@@ -12,15 +12,15 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
       *ngFor="let option of theme.themes"
     >
       <div class="border-all theme-block">
-        <header class="navbar h-[15px]" [style.background]="option.previewColors.layoutHeaderBackground"></header>
+        <header class="navbar h-[15px]" [style.background]="option.colors.layoutHeaderBackground"></header>
         <section class="flex h-[35px]">
           <div
             class="sidebar w-[35px]"
-            [style.background]="option.previewColors.layoutSiderBackground"
-            [style.borderColor]="option.previewColors.border"
+            [style.background]="option.colors.layoutSiderBackground"
+            [style.borderColor]="option.colors.border"
           ></div>
-          <div class="content flex-1 flex items-center justify-center" [style.background]="option.previewColors.background">
-            <div class="main-color w-[30px]  h-[15px]" [style.background]="option.previewColors.primary"></div>
+          <div class="content flex-1 flex items-center justify-center" [style.background]="option.colors.background">
+            <div class="main-color w-[30px]  h-[15px]" [style.background]="option.colors.primary"></div>
           </div>
         </section>
       </div>

@@ -1,5 +1,5 @@
-<nz-layout class="layout">
-  <nz-sider
+<eo-ng-layout class="layout">
+  <eo-ng-sider
     [nzWidth]="siderWidth"
     nz-resizable
     [nzMinWidth]="120"
@@ -7,7 +7,7 @@
     (nzResize)="onSideResize($event)"
     (nzResizeEnd)="onResizeEnd()"
   >
-    <nz-content class="api-container-tabs">
+    <eo-ng-content class="api-container-tabs">
       <eo-env-list class="flex-auto" *ngIf="sidebar.currentID === '@eo-core-env'"></eo-env-list>
       <eo-ng-tabset
         *ngIf="['@eo-core-share', '@eo-core-apimanger'].includes(sidebar.currentID)"
@@ -48,11 +48,11 @@
         </eo-ng-tab>
       </eo-ng-tabset>
       <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>
-    </nz-content>
-  </nz-sider>
-  <nz-content class="inner-content">
+    </eo-ng-content>
+  </eo-ng-sider>
+  <eo-ng-content class="inner-content">
     <!--Tab Bar -->
-    <nz-header class="flex items-center tabs-bar">
+    <eo-ng-header class="flex items-center tabs-bar">
       <eo-tab
         class="flex-1"
         [list]="apiTab.BASIC_TABS"
@@ -117,10 +117,10 @@
           >
         </ng-template>
       </div>
-    </nz-header>
+    </eo-ng-header>
     <!-- Content -->
-    <nz-layout class="content_container {{ this.showChildBar ? 'has_tab_page' : '' }}">
-      <nz-layout>
+    <eo-ng-layout class="content_container {{ this.showChildBar ? 'has_tab_page' : '' }}">
+      <eo-ng-layout>
         <!-- Child Tab Bar -->
         <eo-ng-tabset class="inside_page_tabset" *ngIf="this.showChildBar" nzLinkRouter>
           <eo-ng-tab *ngFor="let tab of renderTabs">
@@ -136,9 +136,9 @@
         </eo-ng-tabset>
         <!-- Get router child component by activate -->
         <router-outlet (activate)="onActivate($event)"></router-outlet>
-      </nz-layout>
+      </eo-ng-layout>
       <!-- Right Sider -->
-      <nz-sider
+      <eo-ng-sider
         *ngIf="!store.isShare && rightExtras.length"
         nz-resizable
         [nzWidth]="rightSiderWidth"
@@ -160,7 +160,7 @@
             </button>
           </ng-container>
         </div>
-      </nz-sider>
-    </nz-layout>
-  </nz-content>
-</nz-layout>
+      </eo-ng-sider>
+    </eo-ng-layout>
+  </eo-ng-content>
+</eo-ng-layout>

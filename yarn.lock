@@ -6307,6 +6307,13 @@ eo-ng-input@0.0.110:
   dependencies:
     tslib "^2.3.0"
 
+eo-ng-layout@0.0.110:
+  version "0.0.110"
+  resolved "https://registry.npmmirror.com/eo-ng-layout/-/eo-ng-layout-0.0.110.tgz#1c1f0affcd0e133fc8e1599683907c565c9a59f1"
+  integrity sha512-bBZ/CuZZAHXjSVM8YKILCjuDkx5CVF/Z7aLUuXoJ7kfQHD9MRCf2Ef4atuCIsfFctQ1b1WzPLcIZnNknQikA0Q==
+  dependencies:
+    tslib "^2.3.0"
+
 eo-ng-radio@0.0.111:
   version "0.0.111"
   resolved "https://registry.npmmirror.com/eo-ng-radio/-/eo-ng-radio-0.0.111.tgz#2d6bad085fdf7d9ce5d1f3efeaa4ea1edfc631cf"

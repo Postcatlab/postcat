@@ -3,7 +3,7 @@
 }
 
 .env-list {
-  height: calc(100% - 40px);
+  height: calc(100% - var(--tree-item-height));
   overflow: auto;
 }
 
@@ -14,7 +14,7 @@
 
 .env-item {
   cursor: pointer;
-  height: 40px;
+  height: var(--tree-item-height);
 
   .env-operate {
     display: none;

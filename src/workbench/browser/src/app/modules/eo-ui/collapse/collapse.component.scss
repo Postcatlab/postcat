@@ -1,3 +1,7 @@
+.ant-collapse-header {
+  background-color: var(--collapse-header-background-color);
+}
+
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   align-items: center;
 }
@@ -5,6 +9,7 @@
 .ant-collapse-item:last-child .ant-collapse-content,
 .ant-collapse-item:last-child,
 .ant-collapse-item:last-child .ant-collapse-header {
+  color: var(--text-color);
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
@@ -24,5 +29,6 @@
 
 .ant-collapse {
   border-color: var(--border-color);
+  background-color: var(--background-color);
   border-radius: var(--border-radius);
 }

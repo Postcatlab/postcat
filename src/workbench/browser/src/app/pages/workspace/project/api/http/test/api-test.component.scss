@@ -39,14 +39,14 @@ eo-api-test-rest {
   }
 }
 
-.env_front_uri {
+.env-front-uri {
   max-width: 240px;
   height: 40px;
   display: flex;
   align-items: center;
   padding: 0 10px;
-
-  // background-color: var(--TABLE_HEADER_BG);
+  color: var(--disabled-text-color);
+  background-color: var(--disabled-background-color);
   border: 1px solid var(--border-color);
   box-sizing: border-box;
   flex-shrink: 0;

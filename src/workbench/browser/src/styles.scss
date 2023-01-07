@@ -12,13 +12,16 @@
 @import '../../../node_modules/eo-ng-tabs/styles';
 @import '../../../node_modules/eo-ng-tree/styles';
 @import '../../../node_modules/eo-ng-table/styles';
+@import '../../../node_modules/eo-ng-layout/styles';
 @import '../../../node_modules/eo-ng-feedback/styles';
+@import '../../../node_modules/eo-ng-dropdown/styles';
 
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: var(--background-color);
   font-family: Arial, Helvetica, sans-serif, 'Source Sans Pro', 'Helvetica Neue';
 }
 
@@ -33,45 +36,44 @@ object {
   vertical-align: unset;
 }
 
-.method_text_GET {
-  color: var(--BLUE_TAG_BG);
-}
-
 .eo-link {
   color: var(--text-link-color);
 }
 
-.method_text_POST {
-  // color: var(--GREEN_TAG_BG);
-  @apply text-green-700;
+.method-text-GET {
+  color: var(--info-color);
 }
 
-.method_text_DELETE {
+.method-text-POST {
+  color: var(--success-color);
+}
+
+.method-text-DELETE {
   color: var(--danger-color);
 }
 
-.method_text_HEAD {
-  color: var(--warning-colo);
+.method-text-HEAD {
+  color: var(--warning-color);
 }
 
-.method_text_WS {
+.method-text-WS {
   color: #507ea4;
 }
 
-.method_text_WSS {
+.method-text-WSS {
   color: #165e83;
 }
 
-.method_text_PATCH {
-  color: var(--ORANGE_TAG_BG);
+.method-text-PATCH {
+  color: var(--warning-color);
 }
 
-.method_text_PUT {
+.method-text-PUT {
   color: #82ae46;
 }
 
-.method_text_OPTIONS {
-  color: var(--BLACK_TAG_BG);
+.method-text-OPTIONS {
+  color: #507ea4;
 }
 
 ::-webkit-scrollbar {

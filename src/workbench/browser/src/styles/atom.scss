@@ -13,7 +13,7 @@
 
 .debug-border {
   // * use it only for debug, not prod
-  border: 1px solid red;
+  border: 1px solid var(--danger-color);
 }
 
 .rounded-r {

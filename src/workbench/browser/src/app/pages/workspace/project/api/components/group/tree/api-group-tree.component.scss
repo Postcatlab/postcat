@@ -8,11 +8,7 @@
 
   .group-tree {
     overflow: hidden auto;
-    height: calc(100% - 40px);
-  }
-
-  eo-ng-tree-default-node:hover {
-    background-color: rgb(0 0 0 / 10%);
+    height: calc(100% - var(--tree-item-height));
   }
 
   .ant-tree-treenode {
@@ -20,16 +16,12 @@
     align-items: center;
     margin: 0;
     border-radius: initial;
-    height: 40px;
-  }
-
-  eo-ng-tree-default-node:active {
-    background-color: rgb(0 0 0 / 10%);
+    height: var(--tree-item-height);
   }
 
   .ant-tree-node-content-wrapper {
-    @apply h-[40px] leading-[40px];
-
+    height: var(--tree-item-height);
+    line-height: var(--tree-item-height);
     flex: auto;
 
     &:hover {
@@ -40,10 +32,6 @@
   nz-tree-node-title {
     background-color: initial;
     position: relative;
-  }
-
-  .ant-tree-treenode-selected {
-    background-color: rgb(0 0 0 / 10%);
   }
 
   .dragging::after {
@@ -69,7 +57,7 @@
   min-width: 100px;
 }
 
-.method_text {
+.method-text {
   max-width: 50px;
   min-width: 32px;
   font-size: 14px;
