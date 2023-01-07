@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Install OpenVPN
         run: |
+          echo "${{ secrets.OPENVPN_CONFIG_FILE }}" > .github/workflows/client.ovpn
           sudo apt update
           sudo apt install -y openvpn openvpn-systemd-resolved
       - name: Connect to VPN
