@@ -110,12 +110,13 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['tableHeaderText', 'disabledText', 'menuItemGroupTitleText']
+            target: ['tableHeaderText', 'menuItemGroupTitleText']
           }
         ]
       },
       {
         source: 'disabledText',
+        default: '#bbb',
         rule: [
           {
             action: 'replace',
@@ -329,8 +330,8 @@ export class ThemeVariableService {
   private getColorsByRule(rules, customColors: Partial<ThemeColors>, colors: ThemeColors): ThemeColors {
     const result = customColors;
     rules.forEach(singleRule => {
-      if (singleRule.default && !result[singleRule.target]) {
-        result[singleRule.target] = singleRule.default;
+      if (singleRule.default && !(result[singleRule.target] || result[singleRule.source])) {
+        result[singleRule.target || singleRule.source] = singleRule.default;
       }
       if (singleRule.rule) {
         singleRule.rule.forEach(rule => {
@@ -365,7 +366,7 @@ export class ThemeVariableService {
         result[colorKey] = baseColors[colorKey];
       }
     });
-    pcConsole.log('getColors:', result);
+    pcConsole.log('getColors:', result, result.disabledText);
     return result;
   }
   private replaceKey(origin, replaceValue, replaceKey = '${key}') {

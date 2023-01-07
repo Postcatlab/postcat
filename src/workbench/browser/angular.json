@@ -1,18 +1,15 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics",
-    "cache": {
-      "enabled": false
-    }
-  },
+  "cli": { "analytics": false, "defaultCollection": "@angular-eslint/schematics", "cache": { "enabled": false } },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "postcat": {
       "root": "",
-      "i18n": { "sourceLocale": { "code": "en" }, "locales": { "zh": { "translation": "locale/messages.zh.xlf" } } },
+      "i18n": {
+        "sourceLocale": { "code": "en", "baseHref": "" },
+        "locales": { "zh": { "translation": "locale/messages.zh.xlf", "baseHref": "" } }
+      },
       "sourceRoot": "src",
       "projectType": "application",
       "schematics": { "@schematics/angular:application": { "strict": true } },
