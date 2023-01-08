@@ -22,7 +22,7 @@ import { getExpandGroupByKey, listToTree } from '../../../../../../../utils/tree
 import { ApiGroupEditComponent } from '../edit/api-group-edit.component';
 
 @Component({
-  selector: 'eo-api-group-tree',
+  selector: 'pc-api-group-tree',
   templateUrl: './api-group-tree.component.html',
   styleUrls: ['./api-group-tree.component.scss']
 })

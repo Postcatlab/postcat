@@ -8,7 +8,7 @@ import { MessageService } from '../../../../../../../shared/services/message';
 import { Group, StorageRes, StorageResStatus } from '../../../../../../../shared/services/storage/index.model';
 
 @Component({
-  selector: 'eo-api-group-edit',
+  selector: 'pc-api-group-edit',
   templateUrl: './api-group-edit.component.html',
   styleUrls: ['./api-group-edit.component.scss']
 })

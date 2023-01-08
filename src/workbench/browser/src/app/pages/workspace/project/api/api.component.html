@@ -8,7 +8,7 @@
     (nzResizeEnd)="onResizeEnd()"
   >
     <eo-ng-content class="api-container-tabs">
-      <eo-env-list class="flex-auto" *ngIf="sidebar.currentID === '@eo-core-env'"></eo-env-list>
+      <eo-env-list class="flex-auto block tree-sider" *ngIf="sidebar.currentID === '@eo-core-env'"></eo-env-list>
       <eo-ng-tabset
         *ngIf="['@eo-core-share', '@eo-core-apimanger'].includes(sidebar.currentID)"
         class="group-tabset"
@@ -30,7 +30,7 @@
               <eo-iconpark-icon name="folder-open"></eo-iconpark-icon>
             </span>
           </ng-template>
-          <eo-api-group-tree></eo-api-group-tree>
+          <pc-api-group-tree class="tree-sider"></pc-api-group-tree>
         </eo-ng-tab>
         <eo-ng-tab [nzTitle]="historyTitle" *ngIf="!store.isShare">
           <ng-template #historyTitle>
@@ -44,7 +44,7 @@
               <eo-iconpark-icon name="history"></eo-iconpark-icon>
             </span>
           </ng-template>
-          <eo-history></eo-history>
+          <eo-history class="tree-sider"></eo-history>
         </eo-ng-tab>
       </eo-ng-tabset>
       <nz-resize-handle class="vertical container-draggable" nzDirection="right"> </nz-resize-handle>

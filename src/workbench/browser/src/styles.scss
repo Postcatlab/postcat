@@ -160,3 +160,12 @@ nz-resize-handle.container-draggable {
   overflow: auto;
   height: calc(100% - 56px);
 }
+
+.tree-sider {
+  background-color: var(--tree-background-color);
+
+  &,
+  .ant-btn-text {
+    color: var(--tree-text-color);
+  }
+}

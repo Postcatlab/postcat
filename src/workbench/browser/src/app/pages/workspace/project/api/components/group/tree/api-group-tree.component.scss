@@ -8,6 +8,7 @@
 
   .group-tree {
     overflow: hidden auto;
+    background-color: var(--tree-background-color);
     height: calc(100% - 52px);
   }
 
