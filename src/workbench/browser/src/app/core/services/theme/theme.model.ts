@@ -1,5 +1,5 @@
-import darkDefault from '../../../../extensions/core-themes/themes/dark-default.json';
-import lightDefault from '../../../../extensions/core-themes/themes/light-default.json';
+import darkDefault from '../../../../extensions/core-themes/themes/dark.json';
+import lightDefault from '../../../../extensions/core-themes/themes/light.json';
 export const SYSTEM_THEME: Array<{
   label: string;
   id: string;
@@ -23,21 +23,21 @@ export const SYSTEM_THEME: Array<{
     customColors: {},
     //* relative path
     //src/extensions/core-themes/themes/light-blue.json
-    path: './themes/light-blue.json'
+    path: './themes/blue.json'
   },
   {
     label: $localize`Light Green`,
     id: 'pc-green',
     baseTheme: 'pc',
     customColors: {},
-    path: './themes/light-green.json'
+    path: './themes/green.json'
   },
   {
     label: $localize`Light Orange`,
     id: 'pc-orange',
     baseTheme: 'pc',
     customColors: {},
-    path: './themes/light-orange.json'
+    path: './themes/orange.json'
   },
   {
     label: $localize`Dark Default`,
@@ -45,6 +45,27 @@ export const SYSTEM_THEME: Array<{
     baseTheme: '',
     core: true,
     customColors: darkDefault.colors
+  },
+  {
+    label: $localize`Dark Blue`,
+    id: 'pc-dark-blue',
+    baseTheme: 'pc-dark',
+    customColors: {},
+    path: './themes/blue.json'
+  },
+  {
+    label: $localize`Dark Green`,
+    id: 'pc-dark-green',
+    baseTheme: 'pc-dark',
+    customColors: {},
+    path: './themes/green.json'
+  },
+  {
+    label: $localize`Dark Orange`,
+    id: 'pc-dark-orange',
+    baseTheme: 'pc-dark',
+    customColors: {},
+    path: './themes/orange.json'
   }
 ];
 export type SsystemUIThemeType = typeof SYSTEM_THEME[number]['id'];
