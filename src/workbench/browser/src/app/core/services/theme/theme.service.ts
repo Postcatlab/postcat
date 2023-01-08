@@ -68,7 +68,6 @@ export class ThemeService {
   }
   private async querySystemThemes() {
     const systemThemes = SYSTEM_THEME;
-    console.log(systemThemes);
     //Init Core theme
     const coreThemes = systemThemes.filter(val => val.core);
     coreThemes.forEach(theme => {
@@ -88,12 +87,17 @@ export class ThemeService {
           //Same path use cache
           result = themeCache[theme.path];
         } else {
-          const path = new URL(theme.path, `${window.location.origin}/extensions/core-themes/`).href;
-          result = await fetch(path)
-            .then(res => res.json())
-            .catch(e => {
-              result = null;
-            });
+          try {
+            const path = new URL(theme.path, `${window.location.origin}/extensions/core-themes/`).href.replace(
+              `${window.location.origin}/`,
+              ''
+            );
+            result = await fetch(path)
+              .then(res => res.json())
+              .catch(e => {
+                result = null;
+              });
+          } catch (e) {}
         }
 
         //* Request theme error
@@ -119,7 +123,6 @@ export class ThemeService {
   private queryExtensionThemes() {
     this.extension.getValidExtensionsByFature('theme').forEach(feature => {
       feature.theme.forEach(theme => {
-        console.log(theme);
         this.themes.push({
           label: theme.label,
           id: theme.id,
