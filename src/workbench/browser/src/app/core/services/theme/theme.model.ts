@@ -11,6 +11,8 @@ export type ThemeColors = {
   shadow: string;
   background: string;
   barBackground: string;
+  divider?: string;
+
   primary: string;
   primaryHover?: string;
   success: string;
@@ -25,68 +27,71 @@ export type ThemeColors = {
   info: string;
   infoHover?: string;
   infoShadow?: string;
+
   itemActiveBackground: string;
   itemHoverBackground: string;
-  //Link
+
   textLink: string;
   textLinkHover?: string;
   textLinkActive?: string;
-  //Disabled
+
   disabledText?: string;
   disabledBackground: string;
   disabledBorder?: string;
-  //Scroller-bar
+
   scrollbarTrackBackground?: string;
   scrollbarThumbBackground?: string;
-  //Layout-Header
+
+  layoutHeaderText?: string;
   layoutHeaderBackground?: string;
   layoutSiderText?: string;
   layoutSiderBackground?: string;
   layoutFooterText?: string;
   layoutFooterBackground?: string;
-  //Icon
+
   iconText?: string;
-  //Button
+
   buttonBorder?: string;
   buttonShadow?: string;
+  buttonTextHoverBackground?: string;
   buttonPrimaryText?: string;
   buttonPrimaryBorder?: string;
-  buttonPrimaryHoverBorder?: string;
-  buttonPrimaryActiveBorder?: string;
   buttonPrimaryBackground?: string;
+  buttonPrimaryHoverBorder?: string;
   buttonPrimaryHoverBackground?: string;
+  buttonPrimaryActiveBorder?: string;
   buttonPrimaryActiveBackground?: string;
   buttonPrimaryShadow?: string;
   buttonDefaultText?: string;
   buttonDefaultBorder?: string;
-  buttonDefaultHoverBorder?: string;
-  buttonDefaultActiveBorder?: string;
   buttonDefaultBackground?: string;
+  buttonDefaultHoverText?: string;
+  buttonDefaultHoverBorder?: string;
   buttonDefaultHoverBackground?: string;
+  buttonDefaultActiveBorder?: string;
   buttonDefaultActiveBackground?: string;
   buttonDefaultShadow?: string;
   buttonDangerText?: string;
-  buttonDangerHoverText?: string;
   buttonDangerBorder?: string;
-  buttonDangerHoverBorder?: string;
-  buttonDangerActiveBorder?: string;
   buttonDangerBackground?: string;
+  buttonDangerHoverText?: string;
+  buttonDangerHoverBorder?: string;
   buttonDangerHoverBackground?: string;
+  buttonDangerActiveBorder?: string;
   buttonDangerActiveBackground?: string;
   buttonDangerShadow?: string;
-  //Divider
-  divider?: string;
-  //Tabs
+
   tabsText?: string;
   tabsActive?: string;
   tabsActiveText?: string;
-  //Cards Tabs
+
   tabsCardBarBackground?: string;
   tabsCardText?: string;
   tabsCardBackground?: string;
+  tabsCardActive?: string;
   tabsCardActiveText?: string;
   tabsCardActiveBackground?: string;
-  //Table
+
   tableText?: string;
   tableBackground?: string;
   tableHeaderText?: string;
@@ -94,7 +99,7 @@ export type ThemeColors = {
   tableRowHoverBackground?: string;
   tableFooterBackground?: string;
   tableFooterText?: string;
-  //Tree
+
   treeHeaderBackground?: string;
   treeText?: string;
   treeBackground?: string;
@@ -102,10 +107,10 @@ export type ThemeColors = {
   treeSelectedBackground?: string;
   treeHoverText?: string;
   treeHoverBackground?: string;
-  //Dropdow
+
   dropdownMenuBackground?: string;
   dropdownItemHoverBackground?: string;
-  //Menu
+
   menuBackground?: string;
   menuItemText?: string;
   menuItemGroupTitleText?: string;
@@ -113,7 +118,7 @@ export type ThemeColors = {
   menuItemActive?: string;
   menuItemActiveText?: string;
   menuInlineSubmenuBackground?: string;
-  //Select
+
   selectText?: string;
   selectBorder?: string;
   selectHoverBorder?: string;
@@ -123,7 +128,7 @@ export type ThemeColors = {
   selectDropdownBackground?: string;
   selectItemSelectedText?: string;
   selectItemSelectedBackground?: string;
-  //Input
+
   inputText?: string;
   inputBackground?: string;
   inputIcon?: string;
@@ -131,7 +136,7 @@ export type ThemeColors = {
   inputHoverBorder?: string;
   inputActiveBorder?: string;
   inputPlaceholder?: string;
-  //Modal
+
   modalHeaderBackground?: string;
   modalHeaderText?: string;
   modalContentBackground?: string;
@@ -139,12 +144,11 @@ export type ThemeColors = {
   modalFooterBackground?: string;
   modalFooterText?: string;
   modalMaskBackground?: string;
-  //Pagination
+
   paginationItemBackground?: string;
   paginationItemActiveBackground?: string;
-  //Next page/Pre page
   paginationButtonBackground?: string;
-  //Toast message
+
   toastSuccessText?: string;
   toastSuccessIcon?: string;
   toastSuccessBackground?: string;
@@ -157,7 +161,7 @@ export type ThemeColors = {
   toastErrorText?: string;
   toastErrorIcon?: string;
   toastErrorBackground?: string;
-  //Alert
+
   alertDefaultText?: string;
   alertDefaultIcon?: string;
   alertDefaultBackground: string;
@@ -173,35 +177,35 @@ export type ThemeColors = {
   alertWarningText?: string;
   alertWarningIcon?: string;
   alertWarningBackground?: string;
-  //Checkbox
+
   checkboxText?: string;
   checkboxBorder?: string;
   checkboxBackground?: string;
   checkboxCheckedBackground?: string;
   checkboxCheckedBorder?: string;
   checkboxCheckedText?: string;
-  //Radio
+
   radioText?: string;
   radioBorder?: string;
   radioBackground?: string;
-  radioCheckedBackground?: string;
-  radioCheckedBorder?: string;
   radioCheckedText?: string;
-  //Switch
+  radioCheckedBorder?: string;
+  radioCheckedBackground?: string;
+
   switchActive?: string;
   switchBakcground?: string;
   switchText?: string;
-  //Switch Card
+
   switchCardBorder?: string;
   switchCardBackground?: string;
   switchCardText?: string;
-  //Collapse
+
   collapseHeaderBackground?: string;
   collapseContentbackground?: string;
-  //Popover background
+
   popoverBackground?: string;
   popoverText?: string;
-  //Progress
+
   progressDefault?: string;
   progressSuccess?: string;
   progressException?: string;

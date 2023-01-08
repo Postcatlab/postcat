@@ -66,6 +66,7 @@ export class ThemeVariableService {
               'tableText',
               'selectText',
               'layoutSiderText',
+              'layoutHeaderText',
               'layoutFooterText',
               'iconText',
               'alertDefaultIcon',
@@ -78,6 +79,7 @@ export class ThemeVariableService {
               'treeText',
               'treeSelectedText',
               'treeHoverText',
+              'buttonDefaultHoverText',
               'selectItemSelectedText',
               'selectDropdownText',
               'inputText',
@@ -125,6 +127,24 @@ export class ThemeVariableService {
         ]
       },
       {
+        source: 'inputHoverBorder',
+        rule: [
+          {
+            action: 'replace',
+            target: ['inputActiveBorder']
+          }
+        ]
+      },
+      {
+        source: 'radioCheckedBackground',
+        rule: [
+          {
+            action: 'replace',
+            target: ['radioCheckedBorder']
+          }
+        ]
+      },
+      {
         source: 'primary',
         rule: [
           {
@@ -148,6 +168,15 @@ export class ThemeVariableService {
             action: 'filter',
             alpha: 0.8,
             target: ['primaryHover']
+          }
+        ]
+      },
+      {
+        source: 'tabsActive',
+        rule: [
+          {
+            action: 'replace',
+            target: ['tabsCardActive']
           }
         ]
       },
@@ -252,7 +281,13 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['dropdownItemHoverBackground', 'tableRowHoverBackground', 'treeHoverBackground', 'buttonDefaultHoverBackground']
+            target: [
+              'dropdownItemHoverBackground',
+              'tableRowHoverBackground',
+              'treeHoverBackground',
+              'buttonDefaultHoverBackground',
+              'buttonTextHoverBackground'
+            ]
           }
         ]
       },
@@ -425,7 +460,7 @@ export class ThemeVariableService {
         pcConsole.error(`Colors can't find ${colorKey} value`);
       }
     });
-    pcConsole.log('getColors:', result);
+    // pcConsole.log('getColors:', result);
     return result;
   }
   private replaceKey(origin, replaceValue, replaceKey = '${key}') {

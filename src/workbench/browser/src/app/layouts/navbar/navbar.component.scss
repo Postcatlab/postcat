@@ -6,11 +6,18 @@
   left: 0;
   top: 0;
   padding: 0 8px;
+  color: var(--layout-header-text-color);
   background-color: var(--layout-header-background-color);
   border-bottom: 1px solid var(--border-color);
   height: var(--page-navbar-height);
 
   .logo {
     width: 30px;
+  }
+}
+
+:host ::ng-deep {
+  .ant-btn-text {
+    color: var(--layout-header-text-color);
   }
 }

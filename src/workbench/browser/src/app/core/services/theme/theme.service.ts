@@ -68,6 +68,7 @@ export class ThemeService {
   }
   private async querySystemThemes() {
     const systemThemes = SYSTEM_THEME;
+    console.log(systemThemes);
     //Init Core theme
     const coreThemes = systemThemes.filter(val => val.core);
     coreThemes.forEach(theme => {
@@ -164,7 +165,6 @@ export class ThemeService {
     //remove origin theme
     const removes = [];
     this.document.documentElement.classList.forEach(name => {
-      console.log(name);
       if (name.includes('pc-theme-') || name.includes('pc-base-theme-')) {
         removes.push(name);
       }

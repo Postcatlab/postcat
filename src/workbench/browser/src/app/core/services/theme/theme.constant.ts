@@ -1,4 +1,5 @@
 import { ThemeColors } from 'eo/workbench/browser/src/app/core/services/theme/theme.model';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import darkDefault from '../../../../extensions/core-themes/themes/dark.json';
 import lightDefault from '../../../../extensions/core-themes/themes/light.json';
@@ -72,6 +73,16 @@ export const SYSTEM_THEME: Array<{
     id: 'pc-dark-orange',
     baseTheme: 'pc-dark',
     path: './themes/orange.json'
-  }
+  },
+  ...(APP_CONFIG.production
+    ? []
+    : [
+        {
+          label: $localize`Debug Theme`,
+          id: 'pc-debug',
+          baseTheme: 'pc',
+          path: './themes/debug.json'
+        }
+      ])
 ];
-export type SystemUIThemeType = typeof SYSTEM_THEME[number]['id'];
+export type SystemUIThemeType = (typeof SYSTEM_THEME)[number]['id'];

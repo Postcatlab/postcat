@@ -1,4 +1,5 @@
 .eo-sidebar {
+  background-color: var(--layout-sider-background-color);
   border-right: 1px solid var(--border-color);
   overflow-y: auto;
   overflow-x: hidden;
@@ -34,7 +35,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--text-secondary-color);
+  color: var(--layout-sider-text-color);
 
   &.tiny {
     padding: 4px 0 5px;
@@ -44,7 +45,7 @@
   &.sidebar-item-active {
     font-weight: bold;
     background-color: var(--item-active-background-color);
-    color: var(--text-color);
+    color: var(--layout-sider-text-color);
 
     i.icon {
       color: var(--text-color);

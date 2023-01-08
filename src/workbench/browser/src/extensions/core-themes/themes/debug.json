@@ -1,0 +1,29 @@
+{
+  "colors": {
+    "primary": "#2da44e",
+    "text": "#24292f",
+    "textSecondary": "#57606a",
+    "shadow": "hsla(210,18%,87%,1)",
+    "border": "rgba(27,31,36,0.15)",
+    "danger": "#cf222e",
+    "success": "#1a7f37",
+    "warning": "#d4a72c",
+    "info": "#54aeff",
+    "barBackground": "#f6f8fa",
+    "layoutHeaderBackground": "#24292f",
+    "layoutHeaderText": "#fff",
+    "tabsActive": "#fd8c73",
+    "itemHoverBackground": "#f6f8fa",
+    "inputHoverBorder": "#0969da",
+    "checkboxCheckedBackground": "#2e75ff",
+    "buttonPrimaryHoverBackground": "#2c974b",
+    "buttonDefaultBackground": "#f6f8fa",
+    "buttonDefaultHoverBackground": "#fff",
+    "buttonDefaultHoverText": "#0969da",
+    "layoutSiderText": "#24292f",
+    "alertInfoBackground": "#ddf4ff",
+    "alertInfoText": "#24292f",
+    "buttonTextHoverBackground": "transparent",
+    "radioCheckedBackground": "#0969da"
+  }
+}
