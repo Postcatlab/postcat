@@ -29,8 +29,8 @@ export class ExtensionService {
   ) {}
   async init() {
     if (!this.electron.isElectron) {
-      //Install  extensions
-      const { data } = await lastValueFrom<any>(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
+      //Install newest extensions
+      const { data } = await this.requestList();
       for (let i = 0; i < this.webExtensionService.installedList.length; i++) {
         const target = data.find(m => m.name === this.webExtensionService.installedList[i].name);
         if (target) {
@@ -78,7 +78,10 @@ export class ExtensionService {
     return this.installedList.includes(name);
   }
   public async requestList() {
-    const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`));
+    const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`), {
+      defaultValue: []
+    });
+
     result.data = [
       ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
       //Local debug package

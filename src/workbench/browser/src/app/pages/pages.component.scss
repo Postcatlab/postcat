@@ -16,7 +16,7 @@
 .home {
   background-color: var(--background-color);
   color: var(--text-color);
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 :host ::ng-deep {

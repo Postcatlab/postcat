@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as Color from 'color';
-import { capitalize, has, isNull, isUndefined, omitBy } from 'lodash-es';
+import { capitalize, has, isNull } from 'lodash-es';
 
-import { eoDeepCopy, whatType } from '../../../utils/index.utils';
+import { eoDeepCopy } from '../../../utils/index.utils';
 import _allThemeColors from './theme-colors.json';
 import { ThemeColorRule, ThemeColors } from './theme.model';
 const allThemeColors: ThemeColors = _allThemeColors;
@@ -101,7 +101,7 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['checkboxBorder', 'radioBorder', 'switchCardBorder', 'disabledBorder', 'inputBorder', 'selectBorder']
+            target: ['checkboxBorder', 'buttonBorder', 'radioBorder', 'switchCardBorder', 'disabledBorder', 'inputBorder', 'selectBorder']
           }
         ]
       },
@@ -152,6 +152,20 @@ export class ThemeVariableService {
         ]
       },
       {
+        source: 'primaryHover',
+        rule: [
+          {
+            action: 'replace',
+            target: [
+              'buttonPrimaryHoverBackground',
+              'buttonPrimaryActiveBackground',
+              'buttonPrimaryHoverBorder',
+              'buttonPrimaryActiveBorder'
+            ]
+          }
+        ]
+      },
+      {
         source: 'shadow',
         rule: [
           {
@@ -183,6 +197,8 @@ export class ThemeVariableService {
               'layoutFooterBackground',
               'buttonDefaultBackground',
               'buttonDangerBackground',
+              'buttonDangerHoverBackground',
+              'buttonDangerActiveBackground',
               'tabsCardBackground',
               'tabsCardActiveBackground',
               'tableBackground',
@@ -220,7 +236,14 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['treeSelectedBackground', 'selectItemSelectedBackground', 'itemHoverBackground', 'menuItemActiveBackground']
+            target: [
+              'treeSelectedBackground',
+              'selectItemSelectedBackground',
+              'itemHoverBackground',
+              'menuItemActiveBackground',
+              'buttonDefaultActiveBorder',
+              'buttonDefaultActiveBackground'
+            ]
           }
         ]
       },
@@ -229,7 +252,17 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['dropdownItemHoverBackground', 'tableRowHoverBackground', 'treeHoverBackground']
+            target: ['dropdownItemHoverBackground', 'tableRowHoverBackground', 'treeHoverBackground', 'buttonDefaultHoverBackground']
+          }
+        ]
+      },
+      {
+        source: 'buttonBorder',
+        rule: [
+          {
+            action: 'replace',
+
+            target: ['buttonPrimaryBorder', 'buttonDefaultHoverBorder', 'buttonDefaultBorder', 'buttonDefaultActiveBorder']
           }
         ]
       }
@@ -237,20 +270,27 @@ export class ThemeVariableService {
     const multipleColors: ThemeColorRule[] = [
       {
         action: 'replace',
-        target: ['toast${key}Text', 'button${key}Text', 'alert${key}Text']
+        target: ['toast${key}Text', 'button${key}Text', 'button${key}Border', 'alert${key}Text']
       },
       {
         action: 'filter',
-        alpha: 0.6,
+        alpha: 0.8,
         target: ['${key}Hover']
       }
     ];
     ['success', 'danger', 'warning', 'info'].forEach(colorKey => {
       let rule: any = this.replaceKey(multipleColors, colorKey);
-      rule = JSON.parse(rule);
       switch (colorKey) {
         case 'danger': {
-          rule[0].target = [...rule[0].target, 'alertErrorText', 'toastErrorText', 'progressException', 'buttonDangerText'];
+          rule[0].target = [
+            ...rule[0].target,
+            'alertErrorText',
+            'toastErrorText',
+            'progressException',
+            'buttonDangerText',
+            'buttonDangerHoverBorder',
+            'buttonDangerActiveBorder'
+          ];
           break;
         }
         case 'info': {
@@ -267,6 +307,16 @@ export class ThemeVariableService {
         rule: rule
       });
     });
+    colorsDefaultRule.push({
+      source: 'dangerHover',
+      rule: [
+        {
+          action: 'replace',
+          target: ['buttonDangerHoverText']
+        }
+      ]
+    });
+
     //Toast/Alert
     const alertColors: ThemeColorRule[] = [
       {
@@ -286,7 +336,6 @@ export class ThemeVariableService {
       });
       ['success', 'error', 'warning', 'info'].forEach(colorKey => {
         let rule: any = this.replaceKey(rules, colorKey);
-        rule = JSON.parse(rule);
         rule.forEach(val => {
           val.target = val.target.filter(val => !isNull(val));
         });
@@ -316,12 +365,17 @@ export class ThemeVariableService {
           pcConsole.error(`colors can't find ${colorKey} value`);
           break;
         }
-        const color = Color(colorValue);
-        rule.target.forEach(keyName => {
-          if (result[keyName]) return;
-          result[keyName] = color.alpha(rule.alpha).string();
-        });
-        // console.log('%c FILTER_COLOR:', `background:${color.alpha(rule.alpha).string()}`, color.alpha(rule.alpha).string());
+        try {
+          const color = Color(colorValue);
+          rule.target.forEach(keyName => {
+            if (result[keyName]) return;
+            result[keyName] = color.alpha(rule.alpha).string();
+          });
+          // console.log('%c FILTER_COLOR:', `background:${color.alpha(rule.alpha).string()}`, color.alpha(rule.alpha).string());
+        } catch (e) {
+          pcConsole.error(`Colors can't ${colorKey} value parse error`);
+        }
+
         break;
       }
     }
@@ -358,15 +412,20 @@ export class ThemeVariableService {
   getColors(customColors, baseColors = allThemeColors) {
     const colorsRule = this.initColorRule();
     //Generate colors by rule
-    const result = this.getColorsByRule(colorsRule, eoDeepCopy(customColors), baseColors);
-
+    const colors = this.getColorsByRule(colorsRule, eoDeepCopy(customColors), baseColors);
+    const result = {} as ThemeColors;
     //Use default color if not set
-    Object.keys(baseColors).forEach(colorKey => {
-      if (!result[colorKey]) {
+    Object.keys(allThemeColors).forEach(colorKey => {
+      if (!colors[colorKey]) {
         result[colorKey] = baseColors[colorKey];
+      } else {
+        result[colorKey] = colors[colorKey];
+      }
+      if (!result[colorKey]) {
+        pcConsole.error(`Colors can't find ${colorKey} value`);
       }
     });
-    pcConsole.log('getColors:', result, result.disabledText);
+    pcConsole.log('getColors:', result);
     return result;
   }
   private replaceKey(origin, replaceValue, replaceKey = '${key}') {
@@ -384,6 +443,6 @@ export class ThemeVariableService {
       }
       return result;
     });
-    return rule;
+    return JSON.parse(rule);
   }
 }

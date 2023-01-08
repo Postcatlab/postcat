@@ -1,6 +1,6 @@
 import http from 'axios';
 import { isNotEmpty } from 'eo/shared/common/common';
-import { HOME_DIR, MODULE_DIR as baseDir } from 'eo/shared/electron-main/constant';
+import { HOME_DIR } from 'eo/shared/electron-main/constant';
 import {
   ModuleHandlerResult,
   ModuleInfo,
@@ -49,7 +49,7 @@ export class ModuleManager {
   private readonly features: Map<string, Map<string, FeatureInfo>>;
 
   constructor() {
-    this.moduleHandler = new ModuleHandler({ baseDir: baseDir });
+    this.moduleHandler = new ModuleHandler({ baseDir: HOME_DIR });
     this.modules = new Map();
     this.features = new Map();
     this.init();
@@ -208,11 +208,26 @@ export class ModuleManager {
    */
   private setFeatures(moduleInfo: ModuleInfo) {
     if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
-      Object.entries(moduleInfo.features).forEach(([key, value]) => {
+      Object.entries(moduleInfo.features).forEach(([key, featureVal]) => {
         if (!this.features.has(key)) {
           this.features.set(key, new Map());
         }
-        this.features.get(key).set(moduleInfo.name, { extensionID: moduleInfo.name, ...value });
+        switch (key) {
+          case 'theme': {
+            if (!(featureVal instanceof Array)) {
+              return;
+            }
+            featureVal.forEach((theme: any) => {
+              Object.assign(theme, require(path.join(moduleInfo.baseDir, theme.path)));
+            });
+            this.features.get(key).set(moduleInfo.name, { extensionID: moduleInfo.name, theme: featureVal } as any);
+            break;
+          }
+          default: {
+            this.features.get(key).set(moduleInfo.name, { extensionID: moduleInfo.name, ...featureVal });
+            break;
+          }
+        }
       });
     }
   }
@@ -260,7 +275,6 @@ export class ModuleManager {
   private init() {
     const names: string[] = this.moduleHandler.list();
     names.forEach((name: string) => {
-      // 这里要加上try catch，避免异常
       const moduleInfo: ModuleInfo = this.moduleHandler.info(name);
       this.setup(moduleInfo);
     });
@@ -300,7 +314,6 @@ export class ModuleManager {
         }
         const port = await portfinder.getPortPromise();
         const pageDir = path.parse(path.join(extPath, feature?.url)).dir;
-        console.log('extension pageDir', pageDir);
         const server = createServer({ root: pageDir });
         server.listen(port);
         const url = `http://127.0.0.1:${port}`;

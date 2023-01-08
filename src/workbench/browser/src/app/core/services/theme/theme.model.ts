@@ -1,79 +1,7 @@
-import darkDefault from '../../../../extensions/core-themes/themes/dark.json';
-import lightDefault from '../../../../extensions/core-themes/themes/light.json';
-export const SYSTEM_THEME: Array<{
+export type ThemeItems = {
   label: string;
   id: string;
-  baseTheme?: string;
-  customColors: Partial<ThemeColors>;
-  core?: boolean;
-  colors?: ThemeColors;
-  path?: string;
-}> = [
-  {
-    label: $localize`Light Default`,
-    id: 'pc',
-    baseTheme: '',
-    core: true,
-    customColors: lightDefault.colors
-  },
-  {
-    label: $localize`Light Blue`,
-    id: 'pc-blue',
-    baseTheme: 'pc',
-    customColors: {},
-    //* relative path
-    //src/extensions/core-themes/themes/light-blue.json
-    path: './themes/blue.json'
-  },
-  {
-    label: $localize`Light Green`,
-    id: 'pc-green',
-    baseTheme: 'pc',
-    customColors: {},
-    path: './themes/green.json'
-  },
-  {
-    label: $localize`Light Orange`,
-    id: 'pc-orange',
-    baseTheme: 'pc',
-    customColors: {},
-    path: './themes/orange.json'
-  },
-  {
-    label: $localize`Dark Default`,
-    id: 'pc-dark',
-    baseTheme: '',
-    core: true,
-    customColors: darkDefault.colors
-  },
-  {
-    label: $localize`Dark Blue`,
-    id: 'pc-dark-blue',
-    baseTheme: 'pc-dark',
-    customColors: {},
-    path: './themes/blue.json'
-  },
-  {
-    label: $localize`Dark Green`,
-    id: 'pc-dark-green',
-    baseTheme: 'pc-dark',
-    customColors: {},
-    path: './themes/green.json'
-  },
-  {
-    label: $localize`Dark Orange`,
-    id: 'pc-dark-orange',
-    baseTheme: 'pc-dark',
-    customColors: {},
-    path: './themes/orange.json'
-  }
-];
-export type SsystemUIThemeType = typeof SYSTEM_THEME[number]['id'];
-export type ThemeItems = {
-  title: string;
-  id: string;
   baseTheme: string;
-  previewColors: Partial<ThemeColors>;
   colors: ThemeColors;
 };
 export type ThemeColors = {
@@ -119,15 +47,32 @@ export type ThemeColors = {
   //Icon
   iconText?: string;
   //Button
+  buttonBorder?: string;
   buttonShadow?: string;
   buttonPrimaryText?: string;
+  buttonPrimaryBorder?: string;
+  buttonPrimaryHoverBorder?: string;
+  buttonPrimaryActiveBorder?: string;
   buttonPrimaryBackground?: string;
+  buttonPrimaryHoverBackground?: string;
+  buttonPrimaryActiveBackground?: string;
   buttonPrimaryShadow?: string;
   buttonDefaultText?: string;
+  buttonDefaultBorder?: string;
+  buttonDefaultHoverBorder?: string;
+  buttonDefaultActiveBorder?: string;
   buttonDefaultBackground?: string;
+  buttonDefaultHoverBackground?: string;
+  buttonDefaultActiveBackground?: string;
   buttonDefaultShadow?: string;
   buttonDangerText?: string;
+  buttonDangerHoverText?: string;
+  buttonDangerBorder?: string;
+  buttonDangerHoverBorder?: string;
+  buttonDangerActiveBorder?: string;
   buttonDangerBackground?: string;
+  buttonDangerHoverBackground?: string;
+  buttonDangerActiveBackground?: string;
   buttonDangerShadow?: string;
   //Divider
   divider?: string;
@@ -264,6 +209,6 @@ export type ThemeColors = {
 export type ThemeColorRule = {
   action: 'replace' | 'filter';
   alpha?: number;
-  source?: string;
-  target: string[];
+  source?: keyof ThemeColors;
+  target: Array<keyof ThemeColors> | string[];
 };

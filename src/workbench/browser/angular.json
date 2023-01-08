@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": { "analytics": false, "defaultCollection": "@angular-eslint/schematics", "cache": { "enabled": false } },
+  "cli": { "analytics": false, "defaultCollection": "@angular-eslint/schematics", "cache": { "enabled": true } },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -63,6 +63,7 @@
               "fileReplacements": [{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.dev.ts" }]
             },
             "production": {
+              "preserveSymlinks": false,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,

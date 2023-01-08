@@ -1,11 +1,13 @@
-import * as path from 'path';
-import { ModuleHandlerOptions, ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
-import { fileExists, readFile, readJson } from 'eo/shared/node/file';
-import { getLocaleData } from 'eo/platform/node/i18n';
 import { LanguageService } from 'eo/app/electron-main/language.service';
 import { TranslateService } from 'eo/platform/common/i18n';
+import { getLocaleData } from 'eo/platform/node/i18n';
+import { fileExists, readFile, readJson } from 'eo/shared/node/file';
+import { ModuleHandlerOptions, ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+
+import * as path from 'path';
 /**
  * 核心模块管理器
+ *
  * @class CoreHandler
  */
 export class CoreHandler {
@@ -28,9 +30,9 @@ export class CoreHandler {
       throw new Error(`Package file [${packageJsonFile}] does not exist.`);
     }
   }
-
   /**
    * 获取模块package.json信息
+   *
    * @param {string} name 模块名称
    */
   info(name: string): ModuleInfo {
@@ -50,16 +52,15 @@ export class CoreHandler {
         }
       }
       // Check that the file exists locally
-      moduleInfo.introduction =
-        readFile(path.join(baseDir, `README.${lang}.md`)) || readFile(path.join(baseDir, `README.md`));
-      if(moduleInfo.main){
-        moduleInfo.main = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.main);
+      moduleInfo.introduction = readFile(path.join(baseDir, `README.${lang}.md`)) || readFile(path.join(baseDir, `README.md`));
+      if (moduleInfo.main) {
+        moduleInfo.main = `file://${path.join(moduleInfo.baseDir, moduleInfo.main)}`;
       }
-      if(moduleInfo.node){
-        moduleInfo.node = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.node);
+      if (moduleInfo.node) {
+        moduleInfo.node = `file://${path.join(moduleInfo.baseDir, moduleInfo.node)}`;
       }
       if (moduleInfo.logo?.length > 0 && !moduleInfo.logo.startsWith('http') && !moduleInfo.logo.includes('icon-')) {
-        moduleInfo.logo = 'file://' + path.join(moduleInfo.baseDir, moduleInfo.logo);
+        moduleInfo.logo = `file://${path.join(moduleInfo.baseDir, moduleInfo.logo)}`;
       }
       if (typeof moduleInfo.author === 'object') {
         moduleInfo.author = moduleInfo.author['name'] || '';
@@ -73,6 +74,7 @@ export class CoreHandler {
 
   /**
    * 获取模块目录
+   *
    * @param name
    * @returns
    */

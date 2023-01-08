@@ -1,19 +1,24 @@
+import type { ThemeItems } from 'eo/workbench/browser/src/app/core/services/theme/theme.model';
 //@ts-ignore
 import { createServer } from 'http-server/lib/http-server';
 
 export type FeatureInfo = {
   icon: string;
-  title: string;
+  label: string;
   description: string;
   //Function name
   action: string;
+
   //ExportAPI.Filename
   filename?: string;
 
+  /**
+   * Theme ID
+   */
+  theme?: ThemeItems[];
+
   //*Field for browser generate by code,not actually in package.json
   extensionID: string;
-  //!Will deprecated
-  label: string;
   rightExtra: any[];
 };
 

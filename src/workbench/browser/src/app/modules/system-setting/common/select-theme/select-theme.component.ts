@@ -29,7 +29,7 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
         </section>
       </div>
       <div class="flex items-center justify-center mt-[10px]">
-        <p class="">{{ option.title }}</p>
+        <p class="">{{ option.label }}</p>
       </div>
     </div>
   </div>`,
