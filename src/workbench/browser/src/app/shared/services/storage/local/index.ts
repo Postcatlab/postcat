@@ -10,4 +10,4 @@ export const db = {
   environment: new EnvironmentService(),
   project: new ProjectService(),
   apiTestHistory: new ApiTestHistoryService()
-};
+} as const;

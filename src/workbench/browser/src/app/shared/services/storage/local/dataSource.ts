@@ -20,12 +20,12 @@ export class DataSource extends Dexie {
   constructor() {
     super('postcat_core');
     this.version(2).stores({
-      project: '++uuid, name',
-      environment: '++uuid, name, projectID',
+      project: '++id, &projectUuid, name',
+      environment: '++id, name, projectUuid, workSpaceUuid',
       group: '++id, projectUuid, workSpaceUuid, parentId, name',
       apiData: '++id, &apiUuid, projectUuid, workSpaceUuid, name',
       apiTestHistory: '++uuid, projectID, apiDataID',
-      mock: '++uuid, name, apiDataID, projectID, createWay'
+      mock: '++id, name, projectUuid, workSpaceUuid'
     });
     this.open();
     this.on('populate', () => this.populate());

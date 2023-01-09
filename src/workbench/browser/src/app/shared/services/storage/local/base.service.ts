@@ -1,13 +1,17 @@
-import type { Table } from 'dexie';
+import type { IndexableType, Table } from 'dexie';
 
-export class BaseService<T> {
+export abstract class BaseService<T> {
   constructor(readonly db: Table<T>) {}
+
+  afterCreate?(params: IndexableType): void;
 
   read(params) {
     return this.db.get(params);
   }
-  create(params) {
-    return this.db.add(params);
+  async create(params) {
+    const result = await this.db.add(params);
+    this.afterCreate(result);
+    return result;
   }
   update(params) {
     return this.db.put(params);
