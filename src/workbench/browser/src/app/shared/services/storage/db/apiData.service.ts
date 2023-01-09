@@ -8,8 +8,11 @@ export class ApiDataService extends BaseService<ApiData> {
     super(dataSource.apiData);
   }
 
-  // create(params): Promise<IndexableType> {
-  //   console.log('afterCreate', params);
-  //   return Promise.resolve(12);
-  // }
+  beforeRead(params) {
+    console.log('beforeRead', params);
+  }
+
+  afterRead(params) {
+    console.log('afterRead', params);
+  }
 }
