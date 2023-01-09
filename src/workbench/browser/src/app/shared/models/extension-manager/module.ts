@@ -1,7 +1,13 @@
-import type { ThemeItems } from 'eo/workbench/browser/src/app/core/services/theme/theme.model';
 //@ts-ignore
 import { createServer } from 'http-server/lib/http-server';
 
+import { ThemeColors } from '../../../core/services/theme/theme.model';
+type ThemeItems = {
+  label: string;
+  id: string;
+  baseTheme: string;
+  colors: Partial<ThemeColors>;
+};
 export type FeatureInfo = {
   icon: string;
   label: string;

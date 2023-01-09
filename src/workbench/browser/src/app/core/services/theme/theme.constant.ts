@@ -3,27 +3,7 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 
 import darkDefault from '../../../../extensions/core-themes/themes/dark.json';
 import lightDefault from '../../../../extensions/core-themes/themes/light.json';
-export const SYSTEM_THEME: Array<{
-  label: string;
-  id: string;
-  /**
-   * If custom color is empty, it will be used as default value
-   */
-  baseTheme?: string;
-  /**
-   * Core theme can be used as base theme
-   */
-  core?: boolean;
-  /**
-   * User custom color
-   */
-  customColors?: Partial<ThemeColors>;
-  /**
-   * Theme all color
-   */
-  colors?: ThemeColors;
-  path?: string;
-}> = [
+export const SYSTEM_THEME: SystemThemeItems[] = [
   {
     label: $localize`Light Default`,
     id: 'pc',
@@ -85,4 +65,38 @@ export const SYSTEM_THEME: Array<{
         }
       ])
 ];
+export type SystemThemeItems = {
+  label: string;
+  id: string;
+  /**
+   * If custom color is empty, it will be used as default value
+   */
+  baseTheme?: string;
+  /**
+   * Core theme can be used as base theme
+   */
+  core?: boolean;
+  /**
+   * User custom color
+   */
+  customColors?: Partial<ThemeColors>;
+  /**
+   * Theme all color
+   */
+  colors?: ThemeColors;
+  path?: string;
+};
 export type SystemUIThemeType = (typeof SYSTEM_THEME)[number]['id'];
+export const DEFAULT_THEME_COLORS = {
+  alertSuccessText: '#2ca641',
+  toastSuccessText: '#2ca641',
+  progressSuccess: '#52c41a',
+  scrollbarTrackBackground: 'rgba(255, 255, 255, 0.05)',
+  scrollbarThumbBackground: 'rgba(0, 0, 0, 0.2)',
+  switchText: '#fff',
+  popoverText: '#fff',
+  popoverBackground: 'rgba(0,0,0,.75)',
+  modalMaskBackground: 'rgba(0, 0, 0, 0.35)',
+  checkboxCheckedBorder: 'transparent',
+  buttonPrimaryText: '#fff'
+};

@@ -168,4 +168,48 @@ nz-resize-handle.container-draggable {
   .ant-btn-text {
     color: var(--tree-text-color);
   }
+
+  .ant-tree-treenode {
+    padding: initial;
+    align-items: center;
+    margin: 0;
+    border-radius: initial;
+    height: var(--tree-item-height);
+  }
+
+  .ant-tree-node-content-wrapper {
+    height: var(--tree-item-height);
+    line-height: var(--tree-item-height);
+    flex: auto;
+
+    &:hover {
+      background-color: initial;
+    }
+  }
+
+  .tree-item-btn {
+    padding: 3px;
+    height: calc(var(--tree-item-height) - 10px);
+  }
+
+  .tree-node {
+    height: 100%;
+    font-size: 12px;
+    white-space: nowrap;
+
+    .tree-node-operate {
+      font-size: 14px;
+      font-weight: bold;
+      display: none;
+    }
+
+    &:hover .tree-node-operate {
+      display: initial;
+    }
+  }
+
+  nz-tree-node-title {
+    // prevent operate shrink
+    position: relative;
+  }
 }

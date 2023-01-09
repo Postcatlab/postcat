@@ -4,7 +4,9 @@ import { capitalize, has, isNull } from 'lodash-es';
 
 import { eoDeepCopy } from '../../../utils/index.utils';
 import _allThemeColors from './theme-colors.json';
-import { ThemeColorRule, ThemeColors } from './theme.model';
+import { DEFAULT_THEME_COLORS, SystemThemeItems } from './theme.constant';
+import { ThemeColorRule, ThemeColors, ThemeColorSingleRule } from './theme.model';
+
 const allThemeColors: ThemeColors = _allThemeColors;
 @Injectable({
   providedIn: 'root'
@@ -12,51 +14,7 @@ const allThemeColors: ThemeColors = _allThemeColors;
 export class ThemeVariableService {
   constructor() {}
   private initColorRule() {
-    const colorsDefaultRule = [
-      {
-        target: 'buttonPrimaryText',
-        default: '#fff'
-      },
-      {
-        target: 'checkboxCheckedBorder',
-        default: 'transparent'
-      },
-      {
-        target: 'modalMaskBackground',
-        default: 'rgba(0, 0, 0, 0.35)'
-      },
-      {
-        target: 'popoverBackground',
-        default: 'rgba(0,0,0,.75)'
-      },
-      {
-        target: 'popoverText',
-        default: '#fff'
-      },
-      {
-        target: 'switchText',
-        default: '#fff'
-      },
-      {
-        target: 'scrollbarThumbBackground',
-        default: 'rgba(0, 0, 0, 0.2)'
-      },
-      {
-        target: 'scrollbarTrackBackground',
-        default: 'rgba(255, 255, 255, 0.05)'
-      },
-      {
-        target: 'progressSuccess',
-        default: '#52c41a'
-      },
-      {
-        target: 'toastSuccessText',
-        default: '#2ca641'
-      },
-      {
-        target: 'alertSuccessText',
-        default: '#2ca641'
-      },
+    const colorsDefaultRule: ThemeColorRule[] = [
       {
         source: 'text',
         rule: [
@@ -71,6 +29,8 @@ export class ThemeVariableService {
               'iconText',
               'alertDefaultIcon',
               'buttonDefaultText',
+              'buttonTextText',
+              'buttonTextHoverText',
               'tabsText',
               'tabsActiveText',
               'tabsCardText',
@@ -95,6 +55,15 @@ export class ThemeVariableService {
               'menuItemText',
               'menuItemActiveText'
             ]
+          }
+        ]
+      },
+      {
+        source: 'buttonTextText',
+        rule: [
+          {
+            action: 'replace',
+            target: ['buttonTextHoverText']
           }
         ]
       },
@@ -302,7 +271,7 @@ export class ThemeVariableService {
         ]
       }
     ];
-    const multipleColors: ThemeColorRule[] = [
+    const multipleColors: ThemeColorSingleRule[] = [
       {
         action: 'replace',
         target: ['toast${key}Text', 'button${key}Text', 'button${key}Border', 'alert${key}Text']
@@ -353,7 +322,7 @@ export class ThemeVariableService {
     });
 
     //Toast/Alert
-    const alertColors: ThemeColorRule[] = [
+    const alertColors: ThemeColorSingleRule[] = [
       {
         action: 'replace',
         target: ['${key}Icon']
@@ -383,10 +352,14 @@ export class ThemeVariableService {
     });
     return colorsDefaultRule;
   }
-  private getColorsBySingleRule(rule: ThemeColorRule, opts: { colors: ThemeColors; customColors: Partial<ThemeColors>; colorKey: string }) {
+  private getColorsBySingleRule(rule: ThemeColorSingleRule, opts: { customColors: Partial<ThemeColors>; colorKey: string }) {
     const result = opts.customColors;
     const colorKey = opts.colorKey;
-    const colorValue = opts.customColors[colorKey] || opts.colors[colorKey];
+    const colorValue = opts.customColors[colorKey];
+    if (!colorValue) {
+      // pcConsole.warn(`GetColorsBySingleRule colors can't find ${colorKey} value`);
+      return result;
+    }
     switch (rule.action) {
       case 'replace': {
         rule.target.forEach(keyName => {
@@ -396,10 +369,6 @@ export class ThemeVariableService {
         break;
       }
       case 'filter': {
-        if (!colorValue) {
-          pcConsole.error(`colors can't find ${colorKey} value`);
-          break;
-        }
         try {
           const color = Color(colorValue);
           rule.target.forEach(keyName => {
@@ -416,8 +385,9 @@ export class ThemeVariableService {
     }
     return result;
   }
-  private getColorsByRule(rules, customColors: Partial<ThemeColors>, colors: ThemeColors): ThemeColors {
-    const result = customColors;
+  private getColorsByCustomColors(customColors: Partial<ThemeColors>): ThemeColors {
+    const rules = this.initColorRule();
+    const result = eoDeepCopy(customColors);
     rules.forEach(singleRule => {
       if (singleRule.default && !(result[singleRule.target] || result[singleRule.source])) {
         result[singleRule.target || singleRule.source] = singleRule.default;
@@ -428,8 +398,7 @@ export class ThemeVariableService {
             result,
             this.getColorsBySingleRule(rule, {
               colorKey: singleRule.source,
-              customColors: result,
-              colors
+              customColors: result
             })
           );
         });
@@ -442,17 +411,25 @@ export class ThemeVariableService {
    * Get all colors by basic colors
    *
    * @param customColors  custom theme colors
-   * @param baseColors  base theme colors
+   * @param baseTheme  base theme colors
    */
-  getColors(customColors, baseColors = allThemeColors) {
-    const colorsRule = this.initColorRule();
-    //Generate colors by rule
-    const colors = this.getColorsByRule(colorsRule, eoDeepCopy(customColors), baseColors);
+  getColors(
+    customColors,
+    baseTheme: Partial<SystemThemeItems> = {
+      customColors: {},
+      colors: allThemeColors
+    }
+  ) {
+    //* customRule > baseTheme.rule > system default
+    customColors = { ...DEFAULT_THEME_COLORS, ...baseTheme.customColors, ...customColors };
+
+    //Generate colors by custom colors
+    const colors = this.getColorsByCustomColors(customColors);
     const result = {} as ThemeColors;
     //Use default color if not set
     Object.keys(allThemeColors).forEach(colorKey => {
       if (!colors[colorKey]) {
-        result[colorKey] = baseColors[colorKey];
+        result[colorKey] = baseTheme.colors[colorKey];
       } else {
         result[colorKey] = colors[colorKey];
       }

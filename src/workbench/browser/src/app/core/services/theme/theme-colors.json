@@ -5,6 +5,8 @@
   "shadow": "",
   "background": "",
   "barBackground": "",
+  "divider": "",
+
   "primary": "",
   "primaryHover": "",
   "success": "",
@@ -19,25 +21,34 @@
   "info": "",
   "infoHover": "",
   "infoShadow": "",
+
   "itemActiveBackground": "",
   "itemHoverBackground": "",
+
   "textLink": "",
   "textLinkHover": "",
   "textLinkActive": "",
+
   "disabledText": "",
   "disabledBackground": "",
   "disabledBorder": "",
+
   "scrollbarTrackBackground": "",
   "scrollbarThumbBackground": "",
+
   "layoutHeaderText": "",
   "layoutHeaderBackground": "",
   "layoutSiderText": "",
   "layoutSiderBackground": "",
   "layoutFooterText": "",
   "layoutFooterBackground": "",
+
   "iconText": "",
+
   "buttonBorder": "",
   "buttonShadow": "",
+  "buttonTextText": "",
+  "buttonTextHoverText": "",
   "buttonTextHoverBackground": "",
   "buttonPrimaryText": "",
   "buttonPrimaryBorder": "",
@@ -65,16 +76,18 @@
   "buttonDangerActiveBorder": "",
   "buttonDangerActiveBackground": "",
   "buttonDangerShadow": "",
-  "divider": "",
+
   "tabsText": "",
   "tabsActive": "",
   "tabsActiveText": "",
+
   "tabsCardBarBackground": "",
   "tabsCardText": "",
   "tabsCardBackground": "",
   "tabsCardActive": "",
   "tabsCardActiveText": "",
   "tabsCardActiveBackground": "",
+
   "tableText": "",
   "tableBackground": "",
   "tableHeaderText": "",
@@ -82,6 +95,7 @@
   "tableRowHoverBackground": "",
   "tableFooterBackground": "",
   "tableFooterText": "",
+
   "treeHeaderBackground": "",
   "treeText": "",
   "treeBackground": "",
@@ -89,8 +103,10 @@
   "treeSelectedBackground": "",
   "treeHoverText": "",
   "treeHoverBackground": "",
+
   "dropdownMenuBackground": "",
   "dropdownItemHoverBackground": "",
+
   "menuBackground": "",
   "menuItemText": "",
   "menuItemGroupTitleText": "",
@@ -98,6 +114,7 @@
   "menuItemActive": "",
   "menuItemActiveText": "",
   "menuInlineSubmenuBackground": "",
+
   "selectText": "",
   "selectBorder": "",
   "selectHoverBorder": "",
@@ -107,6 +124,7 @@
   "selectDropdownBackground": "",
   "selectItemSelectedText": "",
   "selectItemSelectedBackground": "",
+
   "inputText": "",
   "inputBackground": "",
   "inputIcon": "",
@@ -114,6 +132,7 @@
   "inputHoverBorder": "",
   "inputActiveBorder": "",
   "inputPlaceholder": "",
+
   "modalHeaderBackground": "",
   "modalHeaderText": "",
   "modalContentBackground": "",
@@ -121,9 +140,11 @@
   "modalFooterBackground": "",
   "modalFooterText": "",
   "modalMaskBackground": "",
+
   "paginationItemBackground": "",
   "paginationItemActiveBackground": "",
   "paginationButtonBackground": "",
+
   "toastSuccessText": "",
   "toastSuccessIcon": "",
   "toastSuccessBackground": "",
@@ -136,6 +157,7 @@
   "toastErrorText": "",
   "toastErrorIcon": "",
   "toastErrorBackground": "",
+
   "alertDefaultText": "",
   "alertDefaultIcon": "",
   "alertDefaultBackground": "",
@@ -151,28 +173,35 @@
   "alertWarningText": "",
   "alertWarningIcon": "",
   "alertWarningBackground": "",
+
   "checkboxText": "",
   "checkboxBorder": "",
   "checkboxBackground": "",
   "checkboxCheckedBackground": "",
   "checkboxCheckedBorder": "",
   "checkboxCheckedText": "",
+
   "radioText": "",
   "radioBorder": "",
   "radioBackground": "",
-  "radioCheckedBackground": "",
-  "radioCheckedBorder": "",
   "radioCheckedText": "",
+  "radioCheckedBorder": "",
+  "radioCheckedBackground": "",
+
   "switchActive": "",
   "switchBakcground": "",
   "switchText": "",
+
   "switchCardBorder": "",
   "switchCardBackground": "",
   "switchCardText": "",
+
   "collapseHeaderBackground": "",
   "collapseContentbackground": "",
+
   "popoverBackground": "",
   "popoverText": "",
+
   "progressDefault": "",
   "progressSuccess": "",
   "progressException": ""

@@ -11,6 +11,6 @@
   --padding-x: 20px;
   --padding-y: 15px;
   --margin: 20px;
-  --nav-item-border-size: 3px;
-  --tree-item-height: 40px;
+  --nav-item-border-width: 3px;
+  --tree-item-height: 30px;
 }

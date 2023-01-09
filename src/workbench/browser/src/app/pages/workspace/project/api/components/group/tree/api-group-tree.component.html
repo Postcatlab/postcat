@@ -61,9 +61,9 @@
             </svg>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
-          <span class="flex tree-node_operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
+          <span class="flex tree-node-operate" *ngIf="isEdit" (click)="$event.stopPropagation()">
             <ng-container *ngIf="isEdit">
-              <button eo-ng-button nzType="text" class="more-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
+              <button eo-ng-button nzType="text" class="tree-item-btn" nzTrigger="click" eo-ng-dropdown [nzDropdownMenu]="groupMenu">
                 <eo-iconpark-icon name="more" size="16px"></eo-iconpark-icon>
               </button>
               <eo-ng-dropdown-menu #groupMenu="nzDropdownMenu">
@@ -85,10 +85,10 @@
             }}</b>
             <span class="text-[12px] truncate">{{ node.title }}</span>
           </div>
-          <div class="flex tree-node_operate">
+          <div class="flex tree-node-operate">
             <ng-container *ngIf="isEdit">
               <button
-                class="more-btn"
+                class="tree-item-btn"
                 eo-ng-button
                 nzType="text"
                 eo-ng-dropdown

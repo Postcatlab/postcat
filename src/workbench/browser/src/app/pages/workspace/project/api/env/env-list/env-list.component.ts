@@ -2,6 +2,7 @@ import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
+import { autorun, values } from 'mobx';
 import { filter, Subject } from 'rxjs';
 
 import { MessageService } from '../../../../../../shared/services/message';
@@ -14,6 +15,7 @@ export class EnvListComponent implements OnDestroy {
   // @ViewChild('table') table: EoTableComponent; // * child component ref
   modalTitle = $localize`:@@New Environment:New Environment`;
   id;
+  envList = [];
   private destroy$: Subject<void> = new Subject<void>();
   constructor(
     public store: StoreService,
@@ -22,6 +24,12 @@ export class EnvListComponent implements OnDestroy {
     private effect: EffectService,
     private message: MessageService
   ) {
+    autorun(() => {
+      if (this.store.getEnvList) {
+        console.log(values(this.store.getEnvList));
+        this.envList = (this.store.getEnvList || []).map(n => ({ ...n, title: n.name, key: n.uuid }));
+      }
+    });
     this.getIDFromRoute();
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((res: any) => {
       this.getIDFromRoute();
@@ -47,9 +55,9 @@ export class EnvListComponent implements OnDestroy {
       }
     });
   }
-  editEnv(item) {
+  editEnv($event) {
     this.router.navigate(['/home/workspace/project/api/env/edit'], {
-      queryParams: { uuid: item.uuid }
+      queryParams: { uuid: $event.node.key }
     });
   }
   addEnv(pid = 1) {

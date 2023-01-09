@@ -17,6 +17,7 @@
     "barBackground": "#fafafa",
     "itemActiveBackground": "#f3f3f3",
     "itemHoverBackground": "#f2f2f2",
+    "buttonTextHoverBackground": "#f3f3f3",
     "disabledText": "#bbbbbb",
     "disabledBackground": "#f6f6f6",
     "textLink": "#1890ff",

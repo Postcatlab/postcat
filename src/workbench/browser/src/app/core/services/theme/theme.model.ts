@@ -1,9 +1,3 @@
-export type ThemeItems = {
-  label: string;
-  id: string;
-  baseTheme: string;
-  colors: ThemeColors;
-};
 export type ThemeColors = {
   text: string;
   textSecondary: string;
@@ -53,6 +47,8 @@ export type ThemeColors = {
 
   buttonBorder?: string;
   buttonShadow?: string;
+  buttonTextText?: string;
+  buttonTextHoverText?: string;
   buttonTextHoverBackground?: string;
   buttonPrimaryText?: string;
   buttonPrimaryBorder?: string;
@@ -210,9 +206,15 @@ export type ThemeColors = {
   progressSuccess?: string;
   progressException?: string;
 };
+
 export type ThemeColorRule = {
-  action: 'replace' | 'filter';
+  source?: keyof ThemeColors | string;
+  target?: string;
+  default?: string;
+  rule?: ThemeColorSingleRule[];
+};
+export type ThemeColorSingleRule = {
+  action?: 'replace' | 'filter' | string;
   alpha?: number;
-  source?: keyof ThemeColors;
-  target: Array<keyof ThemeColors> | string[];
+  target?: Array<keyof ThemeColors> | string[];
 };

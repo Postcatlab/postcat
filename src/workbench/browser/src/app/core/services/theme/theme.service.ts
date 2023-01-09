@@ -6,14 +6,14 @@ import { kebabCase } from 'lodash-es';
 import { SettingService } from '../../../modules/system-setting/settings.service';
 import StorageUtil from '../../../utils/storage/Storage';
 import { ThemeVariableService } from './theme-variable.service';
-import { SYSTEM_THEME, SystemUIThemeType } from './theme.constant';
-import { ThemeColors, ThemeItems } from './theme.model';
+import { SYSTEM_THEME, SystemUIThemeType, SystemThemeItems } from './theme.constant';
+import { ThemeColors } from './theme.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  themes: ThemeItems[] = [];
+  themes: SystemThemeItems[] = [];
   private module = {
     baseTheme: {
       path: '',
@@ -27,7 +27,7 @@ export class ThemeService {
       default: 'pc'
     }
   };
-  coreThemes: Array<Partial<ThemeItems>>;
+  coreThemes: SystemThemeItems[];
   /**
    * @description user select color theme
    */
@@ -55,6 +55,7 @@ export class ThemeService {
     if (themeStorageError || themeHasUpdate) {
       currentTheme = validTheme;
     }
+    console.log(currentTheme);
     this.changeTheme(currentTheme);
   }
 
@@ -115,7 +116,7 @@ export class ThemeService {
         ...result,
         colors: this.themeVariable.getColors(
           result.colors,
-          coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id).colors
+          coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id)
         )
       });
     }
@@ -129,7 +130,7 @@ export class ThemeService {
           baseTheme: theme.baseTheme,
           colors: this.themeVariable.getColors(
             theme.colors,
-            this.coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id).colors
+            this.coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id)
           )
         });
       });
