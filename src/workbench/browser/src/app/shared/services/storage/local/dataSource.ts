@@ -22,8 +22,8 @@ export class DataSource extends Dexie {
     this.version(2).stores({
       project: '++uuid, name',
       environment: '++uuid, name, projectID',
-      group: '++uuid, name, projectID, parentID',
-      apiData: '++uuid, name, projectID, groupID',
+      group: '++id, projectUuid, workSpaceUuid, parentId, name',
+      apiData: '++id, &apiUuid, projectUuid, workSpaceUuid, name',
       apiTestHistory: '++uuid, projectID, apiDataID',
       mock: '++uuid, name, apiDataID, projectID, createWay'
     });
