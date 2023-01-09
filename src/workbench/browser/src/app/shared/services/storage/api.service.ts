@@ -146,16 +146,20 @@ export class ApiService {
     this.remote.api_userLogout(params);
   }
 
-  api_envCreate(params) {
-    return this.store.isLocal ? this.local.api_envCreate(params) : this.remote.api_envCreate(params);
+  api_userSearch(params) {
+    this.remote.api_userSearch(params);
   }
 
-  api_envUpdate(params) {
-    this.remote.api_envUpdate(params);
+  api_environmentCreate(params) {
+    return this.store.isLocal ? this.local.api_environmentCreate(params) : this.remote.api_environmentCreate(params);
   }
 
-  api_envDelete(params) {
-    this.remote.api_envDelete(params);
+  api_environmentUpdate(params) {
+    this.remote.api_environmentUpdate(params);
+  }
+
+  api_environmentDelete(params) {
+    this.remote.api_environmentDelete(params);
   }
 
   api_groupCreate(params) {

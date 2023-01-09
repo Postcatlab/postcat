@@ -825,64 +825,82 @@ export class RemoteService {
     });
   }
 
-  api_envCreate(params, prefix = '') {
+  api_userSearch(params, prefix = '') {
     return new Promise(resolve => {
-      this.http.post(`${prefix}/environment`, params).subscribe({
+      this.http.post(`${prefix}/search`, params).subscribe({
         next: ({ status, data }: any) => {
-          console.log('%c env:create - api_envCreate 接口请求成功 %c', SuccessStyle, '');
+          console.log('%c user:search - api_userSearch 接口请求成功 %c', SuccessStyle, '');
           if ([200, 201].includes(status)) {
             return resolve([data, null]);
           }
           resolve([null, { status, ...data }]);
         },
         error: error => {
-          console.log('%c env:create - api_envCreate 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c user:search - api_userSearch 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });
     });
   }
 
-  api_envUpdate({ uuid, ...items }, prefix = '') {
+  api_environmentCreate(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/environment`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c environment:create - api_environmentCreate 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c environment:create - api_environmentCreate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_environmentUpdate({ uuid, ...items }, prefix = '') {
     if (!uuid) {
-      console.log('%c Error: env - update 接口 缺失参数 uuid %c', ErrorStyle, '');
+      console.log('%c Error: environment - update 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise(resolve => {
       this.http.put(`${prefix}/environment/${uuid}`, { ...items }).subscribe({
         next: ({ status, data }: any) => {
-          console.log('%c env:update - api_envUpdate 接口请求成功 %c', SuccessStyle, '');
+          console.log('%c environment:update - api_environmentUpdate 接口请求成功 %c', SuccessStyle, '');
           if ([200, 201].includes(status)) {
             return resolve([data, null]);
           }
           resolve([null, { status, ...data }]);
         },
         error: error => {
-          console.log('%c env:update - api_envUpdate 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c environment:update - api_environmentUpdate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });
     });
   }
 
-  api_envDelete({ uuid }, prefix = '') {
+  api_environmentDelete({ uuid }, prefix = '') {
     if (!uuid) {
-      console.log('%c Error: env - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
+      console.log('%c Error: environment - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise(resolve => {
       this.http.delete(`${prefix}/environment/${uuid}`, {}).subscribe({
         next: ({ status, data }: any) => {
-          console.log('%c env:delete - api_envDelete 接口请求成功 %c', SuccessStyle, '');
+          console.log('%c environment:delete - api_environmentDelete 接口请求成功 %c', SuccessStyle, '');
           if ([200, 201].includes(status)) {
             return resolve([data, null]);
           }
           resolve([null, { status, ...data }]);
         },
         error: error => {
-          console.log('%c env:delete - api_envDelete 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c environment:delete - api_environmentDelete 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });

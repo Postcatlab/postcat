@@ -5,7 +5,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { WebService } from 'eo/workbench/browser/src/app/core/services';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message/message.service';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { interval, Subject } from 'rxjs';
@@ -174,7 +174,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
   constructor(
     public store: StoreService,
     public message: MessageService,
-    public api: RemoteService,
+    public api: ApiService,
     public eMessage: EoNgFeedbackMessageService,
     public effect: EffectService,
     public dataSource: DataSourceService,
@@ -411,7 +411,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
       this.store.clearAuth();
       // * get login form values
       const formData = this.validateLoginForm.value;
-      const [data, err]: any = await this.api.api_authLogin(formData);
+      const [data, err]: any = await this.api.api_userLogin(formData);
       if (err) {
         this.eMessage.error($localize`Please check the account/password, the account must be a email !`);
         if ([401, 403].includes(err.status)) {
@@ -431,7 +431,7 @@ export class UserModalComponent implements OnInit, OnDestroy {
 
       this.message.send({ type: 'update-share-link', data: {} });
       {
-        const [data, err]: any = await this.api.api_userReadProfile({});
+        const [data, err]: any = await this.api.api_userReadInfo({});
         if (err) {
           if (err.status === 401) {
             this.message.send({ type: 'clear-user', data: {} });

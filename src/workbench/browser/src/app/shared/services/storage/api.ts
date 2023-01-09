@@ -53,11 +53,12 @@ const http = {
         { 'updatePassword @post': '/common/user/change-password', body: 'password, ...' }, // 更改个人密码
         { 'login @post': '/common/sso/login', body: 'client, type, appType, ...' },
         { 'refreshToken @post': '/common/sso/refresh' }, // 刷新token
-        { 'logout @post': '/common/sso/logout' }
+        { 'logout @post': '/common/sso/logout' },
+        { 'search @post': '/search' } // TODO replace to new api
       ]
     },
     {
-      name: 'env',
+      name: 'environment',
       data: [
         { 'create @post@create': '/environment' },
         { 'update @put': '/environment/{uuid}', json: '...' },

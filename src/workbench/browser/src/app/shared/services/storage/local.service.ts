@@ -12,16 +12,16 @@ const SuccessStyle = 'background-color: #316745; color: #fff;padding:3px;box-siz
 export class LocalService {
   constructor() {}
 
-  api_envCreate(params) {
+  api_environmentCreate(params) {
     return new Promise(resolve => {
-      db.env
+      db.environment
         .create(params)
         .then(({ status, data }: any) => {
-          console.log('%c env - create 接口调用成功 %c', SuccessStyle, '');
+          console.log('%c environment - create 接口调用成功 %c', SuccessStyle, '');
           return resolve([data, null]);
         })
         .catch(error => {
-          console.log('%c env - create 接口调用失败 %c', ErrorStyle, '');
+          console.log('%c environment - create 接口调用失败 %c', ErrorStyle, '');
           resolve([null, error]);
         });
     });
