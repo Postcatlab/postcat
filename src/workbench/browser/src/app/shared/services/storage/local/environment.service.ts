@@ -1,0 +1,9 @@
+import { Environment } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/local/base.service';
+import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/local/dataSource';
+
+export class EnvironmentService extends BaseService<Environment> {
+  constructor() {
+    super(dataSource.environment);
+  }
+}
