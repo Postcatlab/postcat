@@ -45,24 +45,21 @@ const http = {
       ]
     },
     {
+      // * user 模块已经完成替换
       name: 'user',
       data: [
-        { 'readProfile @get': '/user/profile', query: '...' },
-        { 'updatePsd @put': '/user/password', json: 'newPassword' },
-        { 'search @get': '/user/{username}' }
-      ]
-    },
-    {
-      name: 'auth',
-      data: [
-        { 'login @post': '/auth/login', json: 'username, password' },
-        { 'logout @post': '/auth/logout', json: 'refreshToken' }
+        { 'readInfo @post': '/common/user/info' }, // 查看个人信息
+        { 'updateInfo @post': '/common/user/update-userinfo' }, // 更新个人资料
+        { 'updatePassword @post': '/common/user/change-password', body: 'password, ...' }, // 更改个人密码
+        { 'login @post': '/common/sso/login', body: 'client, type, appType, ...' },
+        { 'refreshToken @post': '/common/sso/refresh' }, // 刷新token
+        { 'logout @post': '/common/sso/logout' }
       ]
     },
     {
       name: 'env',
       data: [
-        { 'create @post': '/environment' },
+        { 'create @post@create': '/environment' },
         { 'update @put': '/environment/{uuid}', json: '...' },
         { 'delete @delete': '/environment/{uuid}' }
       ]

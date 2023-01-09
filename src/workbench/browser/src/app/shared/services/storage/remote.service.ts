@@ -324,24 +324,6 @@ export class RemoteService {
     });
   }
 
-  api_workspaceUpload(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/workspace/upload`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:upload - api_workspaceUpload 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:upload - api_workspaceUpload 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
   api_workspaceEdit({ workspaceID, title }, prefix = '') {
     if (!workspaceID) {
       console.log('%c Error: workspace - edit 接口 缺失参数 workspaceID %c', ErrorStyle, '');
@@ -386,29 +368,6 @@ export class RemoteService {
         },
         error: error => {
           console.log('%c workspace:delete - api_workspaceDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceGetInfo({ workspaceID }, prefix = '') {
-    if (!workspaceID) {
-      console.log('%c Error: workspace - getInfo 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/workspace/${workspaceID}`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:getInfo - api_workspaceGetInfo 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:getInfo - api_workspaceGetInfo 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });
@@ -582,29 +541,6 @@ export class RemoteService {
     });
   }
 
-  api_workspaceRoleList({ workspaceID }, prefix = '') {
-    if (!workspaceID) {
-      console.log('%c Error: workspace - roleList 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/workspace/${workspaceID}/roles`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:roleList - api_workspaceRoleList 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:roleList - api_workspaceRoleList 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
   api_workspacePermission({ workspaceID }, prefix = '') {
     if (!workspaceID) {
       console.log('%c Error: workspace - permission 接口 缺失参数 workspaceID %c', ErrorStyle, '');
@@ -755,118 +691,134 @@ export class RemoteService {
     });
   }
 
-  api_userReadProfile({ ...items }, prefix = '') {
+  api_userReadInfo(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/common/user/info`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c user:readInfo - api_userReadInfo 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c user:readInfo - api_userReadInfo 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_userUpdateInfo(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/common/user/update-userinfo`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c user:updateInfo - api_userUpdateInfo 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c user:updateInfo - api_userUpdateInfo 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_userUpdatePassword({ password, ...items }, prefix = '') {
+    if (!password) {
+      console.log('%c Error: user - updatePassword 接口 缺失参数 password %c', ErrorStyle, '');
+      return;
+    }
+
     return new Promise(resolve => {
       this.http
-        .get(`${prefix}/user/profile`, {
-          params: { ...items }
+        .post(`${prefix}/common/user/change-password`, {
+          body: { password, ...items }
         })
         .subscribe({
           next: ({ status, data }: any) => {
-            console.log('%c user:readProfile - api_userReadProfile 接口请求成功 %c', SuccessStyle, '');
+            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求成功 %c', SuccessStyle, '');
             if ([200, 201].includes(status)) {
               return resolve([data, null]);
             }
             resolve([null, { status, ...data }]);
           },
           error: error => {
-            console.log('%c user:readProfile - api_userReadProfile 接口请求失败 %c', ErrorStyle, '');
+            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求失败 %c', ErrorStyle, '');
             resolve([null, error]);
           }
         });
     });
   }
 
-  api_userUpdatePsd({ newPassword }, prefix = '') {
-    if (!newPassword) {
-      console.log('%c Error: user - updatePsd 接口 缺失参数 newPassword %c', ErrorStyle, '');
+  api_userLogin({ client, type, appType, ...items }, prefix = '') {
+    if (!client) {
+      console.log('%c Error: user - login 接口 缺失参数 client %c', ErrorStyle, '');
+      return;
+    }
+    if (!type) {
+      console.log('%c Error: user - login 接口 缺失参数 type %c', ErrorStyle, '');
+      return;
+    }
+    if (!appType) {
+      console.log('%c Error: user - login 接口 缺失参数 appType %c', ErrorStyle, '');
       return;
     }
 
     return new Promise(resolve => {
-      this.http.put(`${prefix}/user/password`, { newPassword }).subscribe({
+      this.http
+        .post(`${prefix}/common/sso/login`, {
+          body: { client, type, appType, ...items }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c user:login - api_userLogin 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c user:login - api_userLogin 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_userRefreshToken(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/common/sso/refresh`, params).subscribe({
         next: ({ status, data }: any) => {
-          console.log('%c user:updatePsd - api_userUpdatePsd 接口请求成功 %c', SuccessStyle, '');
+          console.log('%c user:refreshToken - api_userRefreshToken 接口请求成功 %c', SuccessStyle, '');
           if ([200, 201].includes(status)) {
             return resolve([data, null]);
           }
           resolve([null, { status, ...data }]);
         },
         error: error => {
-          console.log('%c user:updatePsd - api_userUpdatePsd 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c user:refreshToken - api_userRefreshToken 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });
     });
   }
 
-  api_userSearch({ username }, prefix = '') {
-    if (!username) {
-      console.log('%c Error: user - search 接口 缺失参数 username %c', ErrorStyle, '');
-      return;
-    }
-
+  api_userLogout(params, prefix = '') {
     return new Promise(resolve => {
-      this.http.get(`${prefix}/user/${username}`, {}).subscribe({
+      this.http.post(`${prefix}/common/sso/logout`, params).subscribe({
         next: ({ status, data }: any) => {
-          console.log('%c user:search - api_userSearch 接口请求成功 %c', SuccessStyle, '');
+          console.log('%c user:logout - api_userLogout 接口请求成功 %c', SuccessStyle, '');
           if ([200, 201].includes(status)) {
             return resolve([data, null]);
           }
           resolve([null, { status, ...data }]);
         },
         error: error => {
-          console.log('%c user:search - api_userSearch 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_authLogin({ username, password }, prefix = '') {
-    if (!username) {
-      console.log('%c Error: auth - login 接口 缺失参数 username %c', ErrorStyle, '');
-      return;
-    }
-    if (!password) {
-      console.log('%c Error: auth - login 接口 缺失参数 password %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/auth/login`, { username, password }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c auth:login - api_authLogin 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c auth:login - api_authLogin 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_authLogout({ refreshToken }, prefix = '') {
-    if (!refreshToken) {
-      console.log('%c Error: auth - logout 接口 缺失参数 refreshToken %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/auth/logout`, { refreshToken }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c auth:logout - api_authLogout 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c auth:logout - api_authLogout 接口请求失败 %c', ErrorStyle, '');
+          console.log('%c user:logout - api_userLogout 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });

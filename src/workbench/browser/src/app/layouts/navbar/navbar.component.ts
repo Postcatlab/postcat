@@ -3,8 +3,7 @@ import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
 import { ExtensionComponent } from 'eo/workbench/browser/src/app/pages/extension/extension.component';
 import { DataSourceService } from 'eo/workbench/browser/src/app/shared/services/data-source/data-source.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
-import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.service';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { interval, Subject, takeUntil } from 'rxjs';
@@ -44,11 +43,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private eMessage: EoNgFeedbackMessageService,
     public theme: ThemeService,
     private message: MessageService,
-    private api: RemoteService,
+    private api: ApiService,
     public lang: LanguageService,
     public store: StoreService,
-    public dataSourceService: DataSourceService,
-    private effect: EffectService
+    public dataSourceService: DataSourceService
   ) {
     this.resourceInfo = this.web.resourceInfo;
   }
@@ -95,7 +93,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     const refreshToken = this.store.getLoginInfo.refreshToken;
     this.store.clearAuth();
     {
-      const [data, err]: any = await this.api.api_authLogout({
+      const [data, err]: any = await this.api.api_userLogout({
         refreshToken
       });
       if (err) {
