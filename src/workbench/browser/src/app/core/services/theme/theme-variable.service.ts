@@ -16,6 +16,15 @@ export class ThemeVariableService {
   private initColorRule() {
     const colorsDefaultRule: ThemeColorRule[] = [
       {
+        source: 'layoutSiderText',
+        rule: [
+          {
+            action: 'replace',
+            target: ['menuItemText']
+          }
+        ]
+      },
+      {
         source: 'text',
         rule: [
           {
@@ -27,14 +36,16 @@ export class ThemeVariableService {
               'layoutHeaderText',
               'layoutFooterText',
               'iconText',
+              'icon',
               'alertDefaultIcon',
               'buttonDefaultText',
               'buttonTextText',
               'buttonTextHoverText',
+              'menuItemText',
               'tabsText',
               'tabsActiveText',
               'tabsCardText',
-              'tabsCardActiveText',
+              'tabsCardItemActiveText',
               'tableFooterText',
               'treeText',
               'treeSelectedText',
@@ -44,7 +55,7 @@ export class ThemeVariableService {
               'selectDropdownText',
               'inputText',
               'modalHeaderText',
-              'modalContentText',
+              'modalBodyText',
               'modalFooterText',
               'alertDefaultText',
               'checkboxText',
@@ -52,8 +63,9 @@ export class ThemeVariableService {
               'radioText',
               'radioCheckedText',
               'switchCardText',
-              'menuItemText',
-              'menuItemActiveText'
+              'menuItemActiveText',
+              'dropdownItemText',
+              'dropdownItemHoverText'
             ]
           }
         ]
@@ -72,7 +84,17 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['checkboxBorder', 'buttonBorder', 'radioBorder', 'switchCardBorder', 'disabledBorder', 'inputBorder', 'selectBorder']
+            target: [
+              'checkboxBorder',
+              'tableBorder',
+              'collapseBorder',
+              'buttonBorder',
+              'radioBorder',
+              'switchCardBorder',
+              'disabledBorder',
+              'inputBorder',
+              'selectBorder'
+            ]
           }
         ]
       },
@@ -105,6 +127,33 @@ export class ThemeVariableService {
         ]
       },
       {
+        source: 'hoverBorder',
+        rule: [
+          {
+            action: 'replace',
+            target: ['inputHoverBorder', 'selectHoverBorder']
+          }
+        ]
+      },
+      {
+        source: 'activeBorder',
+        rule: [
+          {
+            action: 'replace',
+            target: ['inputActiveBorder', 'selectActiveBorder']
+          }
+        ]
+      },
+      {
+        source: 'checkboxCheckedBackground',
+        rule: [
+          {
+            action: 'replace',
+            target: ['checkboxCheckedBorder']
+          }
+        ]
+      },
+      {
         source: 'radioCheckedBackground',
         rule: [
           {
@@ -128,6 +177,8 @@ export class ThemeVariableService {
               'radioCheckedBackground',
               'checkboxCheckedBorder',
               'inputHoverBorder',
+              'hoverBorder',
+              'activeBorder',
               'inputActiveBorder',
               'selectHoverBorder',
               'selectActiveBorder'
@@ -145,7 +196,7 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['tabsCardActive']
+            target: ['tabsCardItemActive']
           }
         ]
       },
@@ -197,8 +248,8 @@ export class ThemeVariableService {
               'buttonDangerBackground',
               'buttonDangerHoverBackground',
               'buttonDangerActiveBackground',
-              'tabsCardBackground',
-              'tabsCardActiveBackground',
+              'tabsCardItemBackground',
+              'tabsCardItemActiveBackground',
               'tableBackground',
               'tableFooterBackground',
               'treeHeaderBackground',
@@ -208,14 +259,15 @@ export class ThemeVariableService {
               'selectDropdownBackground',
               'inputBackground',
               'modalHeaderBackground',
-              'modalContentBackground',
+              'modalBodyBackground',
               'modalFooterBackground',
               'paginationItemBackground',
               'paginationItemActiveBackground',
               'paginationButtonBackground',
               'checkboxBackground',
               'radioBackground',
-              'collapseContentbackground'
+              'collapseContentbackground',
+              'tabsBackground'
             ]
           }
         ]
@@ -225,7 +277,7 @@ export class ThemeVariableService {
         rule: [
           {
             action: 'replace',
-            target: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBarBackground', 'menuInlineSubmenuBackground']
+            target: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBackground', 'menuInlineSubmenuBackground']
           }
         ]
       },
@@ -239,7 +291,6 @@ export class ThemeVariableService {
               'selectItemSelectedBackground',
               'itemHoverBackground',
               'menuItemActiveBackground',
-              'buttonDefaultActiveBorder',
               'buttonDefaultActiveBackground'
             ]
           }
@@ -261,12 +312,22 @@ export class ThemeVariableService {
         ]
       },
       {
+        source: 'buttonDefaultBorder',
+        rule: [
+          {
+            action: 'replace',
+
+            target: ['buttonDefaultActiveBorder', 'buttonDefaultHoverBorder']
+          }
+        ]
+      },
+      {
         source: 'buttonBorder',
         rule: [
           {
             action: 'replace',
 
-            target: ['buttonPrimaryBorder', 'buttonDefaultHoverBorder', 'buttonDefaultBorder', 'buttonDefaultActiveBorder']
+            target: ['buttonPrimaryBorder', 'buttonDefaultBorder', 'buttonDefaultHoverBorder', 'buttonDefaultActiveBorder']
           }
         ]
       }
@@ -421,15 +482,15 @@ export class ThemeVariableService {
     }
   ) {
     //* customRule > baseTheme.rule > system default
-    customColors = { ...DEFAULT_THEME_COLORS, ...baseTheme.customColors, ...customColors };
-
+    customColors = { ...baseTheme.customColors, ...customColors };
+    // ...DEFAULT_THEME_COLORS,
     //Generate colors by custom colors
     const colors = this.getColorsByCustomColors(customColors);
     const result = {} as ThemeColors;
     //Use default color if not set
     Object.keys(allThemeColors).forEach(colorKey => {
       if (!colors[colorKey]) {
-        result[colorKey] = baseTheme.colors[colorKey];
+        result[colorKey] = baseTheme.colors[colorKey] || DEFAULT_THEME_COLORS[colorKey];
       } else {
         result[colorKey] = colors[colorKey];
       }
@@ -437,6 +498,7 @@ export class ThemeVariableService {
         pcConsole.error(`Colors can't find ${colorKey} value`);
       }
     });
+    result['systemBorder'] = result.border === 'transparent' ? baseTheme.customColors.border : result.border;
     // pcConsole.log('getColors:', result);
     return result;
   }

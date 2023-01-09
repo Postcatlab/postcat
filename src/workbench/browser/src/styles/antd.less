@@ -1,15 +1,22 @@
 @import './variables.css';
 @import '../../../../../node_modules/ng-zorro-antd/ng-zorro-antd.less';
-@link-color: var(--text-color);
-@border-radius-base:var (--border-radius);
-@tree-title-height: 30px;
+
 //From EOUI
 .ant-tabs-tab {
   padding: 8px 0;
 }
-
+.ant-form-item-explain-error {
+  color: var(--danger-color);
+}
+.ant-divider {
+  border-color: var(--divider-color);
+}
 .ant-tabs-tab {
   margin: 0 0 0 var(--padding); //编剧调整为主题的 padding
+}
+.ant-card-bordered {
+  background-color: var(--background-color);
+  border-color: var(--input-border-color);
 }
 .ant-tabs-tab + .ant-tabs-tab {
   margin: 0 0 0 14px;

@@ -1,7 +1,3 @@
-.ant-collapse-header {
-  background-color: var(--collapse-header-background-color);
-}
-
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   align-items: center;
 }
@@ -13,10 +9,14 @@
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
+.ant-collapse-header {
+  background-color: var(--collapse-header-background-color);
+}
+
 .ant-collapse-content {
   color: var(--text-color);
-  background-color: var(--background-color);
-  border-top: 1px solid var(--border-color);
+  background-color: var(--collapse-content-background-color);
+  border-top: 1px solid var(--collapse-border-color);
 
   > .ant-collapse-content-box {
     padding: 0;
@@ -24,11 +24,11 @@
 }
 
 .ant-collapse > .ant-collapse-item {
-  border-bottom-color: var(--border-color);
+  border-bottom-color: var(--collapse-border-color);
 }
 
 .ant-collapse {
-  border-color: var(--border-color);
+  border-color: var(--collapse-border-color);
   background-color: var(--background-color);
   border-radius: var(--border-radius);
 }

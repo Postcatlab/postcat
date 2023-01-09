@@ -139,14 +139,14 @@
     </div>
     <ul class="p-2 overflow-auto" style="height: calc(100% - 55px)">
       <li *ngFor="let item of model.response?.responseBody; let index = index" class="block w-full">
-        <div (click)="expandMessage(index)" class="flex flex-col w-full text-gray-500 top-line">
-          <div *ngIf="item.type === 'send'" class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer">
+        <div (click)="expandMessage(index)" class="flex flex-col w-full top-line">
+          <div *ngIf="item.type === 'send'" class="message-item">
             <span class="flex items-center justify-center w-4 h-4 rounded shrink-0 send_icon">
               <eo-iconpark-icon name="up-small" size="16"></eo-iconpark-icon>
             </span>
             <div class="px-2">{{ item.msg }}</div>
           </div>
-          <div *ngIf="item.type === 'get'" class="inline-flex items-center px-2 py-3 truncate hover:bg-gray-100 hover:cursor-pointer">
+          <div *ngIf="item.type === 'get'" class="message-item">
             <eo-iconpark-icon
               class="box-border flex items-center justify-center w-4 h-4 rounded-full get_icon"
               name="down-small"
@@ -154,7 +154,7 @@
             ></eo-iconpark-icon>
             <div class="px-2">{{ item.msg }}</div>
           </div>
-          <div *ngIf="item.type === 'start'" class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
+          <div *ngIf="item.type === 'start'" class="message-item">
             <eo-iconpark-icon
               class="box-border flex items-center justify-center w-4 h-4 rounded-full start_icon"
               name="check"
@@ -162,7 +162,7 @@
             ></eo-iconpark-icon>
             <div class="px-2">{{ item.title }}</div>
           </div>
-          <div *ngIf="item.type === 'end'" class="inline-flex items-center px-2 py-3 hover:bg-gray-100 hover:cursor-pointer">
+          <div *ngIf="item.type === 'end'" class="message-item">
             <eo-iconpark-icon
               class="box-border flex items-center justify-center w-4 h-4 rounded-full end_icon"
               name="close"

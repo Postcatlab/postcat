@@ -1,8 +1,8 @@
 .extension {
   cursor: pointer;
-  color: rgb(0 0 0 / 50%);
-  border-color: rgb(0 0 0 / 10%);
-  box-shadow: 0 0 3px rgb(0 0 0 / 5%);
+  color: var(--text-color);
+  border-color: var(--border-color);
+  box-shadow: 0 0 3px var(--shadow-color);
   transition: all 0.3s ease;
 
   .logobg {
@@ -12,16 +12,14 @@
   }
 
   &:hover {
-    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
-    background-color: #fff;
+    box-shadow: 0 0 10px var(--shadow-color);
   }
 
   &.active {
-    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
-    background-color: #fff;
+    box-shadow: 0 0 10px var(--shadow-color);
 
     eo-iconpark-icon {
-      color: #158565;
+      color: var(--success-color);
       display: flex;
     }
   }

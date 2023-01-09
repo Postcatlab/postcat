@@ -39,17 +39,18 @@
 
           .ant-tabs-tab-remove {
             display: flex;
-            color: var(--text-color);
+
+            // color: var(--tabs-text-color);
             background: transparent;
           }
         }
 
         &.ant-tabs-tab-active {
-          border-top: 2px solid var(--tabs-card-active-color);
+          border-top: 2px solid var(--tabs-card-item-active-color);
 
-          .ant-tabs-tab-btn {
-            color: var(--text-color);
-          }
+          // .ant-tabs-tab-btn {
+          //   color: var(--tabs-text-color);
+          // }
         }
 
         .ant-tabs-tab-btn {

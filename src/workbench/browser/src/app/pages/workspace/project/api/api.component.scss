@@ -1,15 +1,7 @@
-nz-content {
-  background-color: var(--background-color);
-}
-
 :lang(zh) {
   .ant-select {
     width: 132px;
   }
-}
-
-.ant-layout {
-  background-color: var(--background-color);
 }
 
 :lang(en) {
@@ -19,8 +11,9 @@ nz-content {
 }
 
 .env-select {
+  --select-background-color: --background-color;
+
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--background-color);
 
   ::ng-deep {
     eo-ng-select eo-ng-select-top-control {
@@ -82,6 +75,8 @@ nz-divider {
   }
 
   .api-container-tabs {
+    --tabs-background-color: var(--tree-background-color);
+
     .ant-tabs-nav {
       height: var(--page-nav-tabs-height);
     }
@@ -98,8 +93,12 @@ nz-divider {
       }
     }
 
-    .tree-sider {
+    eo-ng-tabset .tree-sider {
       height: calc(var(--body-height) - var(--page-nav-tabs-height));
+    }
+
+    .tree-sider {
+      height: calc(var(--body-height));
     }
   }
 

@@ -116,7 +116,7 @@ export class ThemeService {
         ...result,
         colors: this.themeVariable.getColors(
           result.colors,
-          coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id)
+          coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id) || coreThemes[0]
         )
       });
     }
@@ -130,7 +130,7 @@ export class ThemeService {
           baseTheme: theme.baseTheme,
           colors: this.themeVariable.getColors(
             theme.colors,
-            this.coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id)
+            this.coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id) || this.coreThemes[0]
           )
         });
       });
@@ -169,7 +169,7 @@ export class ThemeService {
     //remove origin theme
     const removes = [];
     this.document.documentElement.classList.forEach(name => {
-      if (name.includes('pc-theme-') || name.includes('pc-base-theme-')) {
+      if (name.includes('theme-')) {
         removes.push(name);
       }
     });

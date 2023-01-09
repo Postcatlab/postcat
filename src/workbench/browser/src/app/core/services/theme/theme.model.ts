@@ -1,7 +1,11 @@
 export type ThemeColors = {
   text: string;
   textSecondary: string;
+
   border: string;
+  hoverBorder?: string;
+  activeBorder?: string;
+
   shadow: string;
   background: string;
   barBackground: string;
@@ -40,9 +44,11 @@ export type ThemeColors = {
   layoutHeaderBackground?: string;
   layoutSiderText?: string;
   layoutSiderBackground?: string;
+
   layoutFooterText?: string;
   layoutFooterBackground?: string;
 
+  icon?: string;
   iconText?: string;
 
   buttonBorder?: string;
@@ -77,18 +83,20 @@ export type ThemeColors = {
   buttonDangerActiveBackground?: string;
   buttonDangerShadow?: string;
 
+  tabsBackground?: string;
   tabsText?: string;
   tabsActive?: string;
   tabsActiveText?: string;
 
-  tabsCardBarBackground?: string;
   tabsCardText?: string;
   tabsCardBackground?: string;
-  tabsCardActive?: string;
-  tabsCardActiveText?: string;
-  tabsCardActiveBackground?: string;
+  tabsCardItemBackground?: string;
+  tabsCardItemActive?: string;
+  tabsCardItemActiveText?: string;
+  tabsCardItemActiveBackground?: string;
 
   tableText?: string;
+  tableBorder?: string;
   tableBackground?: string;
   tableHeaderText?: string;
   tableHeaderBackground?: string;
@@ -105,6 +113,8 @@ export type ThemeColors = {
   treeHoverBackground?: string;
 
   dropdownMenuBackground?: string;
+  dropdownItemText?: string;
+  dropdownItemHoverText?: string;
   dropdownItemHoverBackground?: string;
 
   menuBackground?: string;
@@ -135,8 +145,8 @@ export type ThemeColors = {
 
   modalHeaderBackground?: string;
   modalHeaderText?: string;
-  modalContentBackground?: string;
-  modalContentText?: string;
+  modalBodyBackground?: string;
+  modalBodyText?: string;
   modalFooterBackground?: string;
   modalFooterText?: string;
   modalMaskBackground?: string;
@@ -197,6 +207,7 @@ export type ThemeColors = {
   switchCardText?: string;
 
   collapseHeaderBackground?: string;
+  collapseBorder?: string;
   collapseContentbackground?: string;
 
   popoverBackground?: string;

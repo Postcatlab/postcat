@@ -1,3 +1,9 @@
 .ant-table-thead > tr > th {
-  color: #999;
+  color: var(--table-header-text-color);
+  background-color: var(--table-header-background-color);
+  border-color: var(--table-border-color);
+}
+
+.example-container {
+  border: 1px solid var(--table-border-color);
 }

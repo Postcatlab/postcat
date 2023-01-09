@@ -19,14 +19,16 @@
   </button>
   <eo-ng-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
-        <a i18n="@@AddAPI">New API</a>
-      </li>
-      <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
+      <a nz-menu-item>
+        <li i18n="@@AddAPI" (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">New API </li>
+      </a>
+      <a nz-menu-item>
+        <li i18n (click)="addGroup()">New Group</li>
+      </a>
       <li nz-menu-divider></li>
-      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'importAPI' })">
-        <a i18n>Import API</a>
-      </li>
+      <a nz-menu-item>
+        <li i18n (click)="operateApiEvent({ event: $event, eventName: 'importAPI' })"> Import API </li>
+      </a>
     </ul>
   </eo-ng-dropdown-menu>
 </header>

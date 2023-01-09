@@ -1,7 +1,11 @@
 {
   "text": "",
   "textSecondary": "",
+
   "border": "",
+  "hoverBorder": "",
+  "activeBorder": "",
+
   "shadow": "",
   "background": "",
   "barBackground": "",
@@ -43,6 +47,7 @@
   "layoutFooterText": "",
   "layoutFooterBackground": "",
 
+  "icon": "",
   "iconText": "",
 
   "buttonBorder": "",
@@ -77,18 +82,20 @@
   "buttonDangerActiveBackground": "",
   "buttonDangerShadow": "",
 
+  "tabsBackground": "",
   "tabsText": "",
   "tabsActive": "",
   "tabsActiveText": "",
 
-  "tabsCardBarBackground": "",
   "tabsCardText": "",
   "tabsCardBackground": "",
-  "tabsCardActive": "",
-  "tabsCardActiveText": "",
-  "tabsCardActiveBackground": "",
+  "tabsCardItemBackground": "",
+  "tabsCardItemActive": "",
+  "tabsCardItemActiveText": "",
+  "tabsCardItemActiveBackground": "",
 
   "tableText": "",
+  "tableBorder": "",
   "tableBackground": "",
   "tableHeaderText": "",
   "tableHeaderBackground": "",
@@ -105,6 +112,8 @@
   "treeHoverBackground": "",
 
   "dropdownMenuBackground": "",
+  "dropdownItemText": "",
+  "dropdownItemHoverText": "",
   "dropdownItemHoverBackground": "",
 
   "menuBackground": "",
@@ -135,8 +144,8 @@
 
   "modalHeaderBackground": "",
   "modalHeaderText": "",
-  "modalContentBackground": "",
-  "modalContentText": "",
+  "modalBodyBackground": "",
+  "modalBodyText": "",
   "modalFooterBackground": "",
   "modalFooterText": "",
   "modalMaskBackground": "",
@@ -197,6 +206,7 @@
   "switchCardText": "",
 
   "collapseHeaderBackground": "",
+  "collapseBorder": "",
   "collapseContentbackground": "",
 
   "popoverBackground": "",

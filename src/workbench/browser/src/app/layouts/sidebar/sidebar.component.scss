@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--layout-sider-text-color);
+  color: var(--menu-item-text-color);
 
   &.tiny {
     padding: 4px 0 5px;
@@ -44,11 +44,11 @@
   &:hover,
   &.sidebar-item-active {
     font-weight: bold;
-    background-color: var(--item-active-background-color);
-    color: var(--layout-sider-text-color);
+    background-color: var(--menu-item-active-background-color);
+    color: var(--menu-item-active-text-color);
 
     i.icon {
-      color: var(--text-color);
+      color: inherit;
     }
   }
 }

@@ -24,6 +24,8 @@
     "textLinkHover": "#40a9ff",
     "textLinkActive": "#096dd9",
     "divider": "rgba(0,0,0,.06)",
-    "alertDefaultBackground": "rgba(149,149,149,.1)"
+    "alertDefaultBackground": "rgba(149,149,149,.1)",
+    "scrollbarTrackBackground": "rgba(255, 255, 255, 0.05)",
+    "scrollbarThumbBackground": "rgba(0, 0, 0, 0.2)"
   }
 }

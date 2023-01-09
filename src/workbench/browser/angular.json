@@ -32,7 +32,6 @@
               { "glob": "**/*", "input": "../../../node_modules/monaco-editor/min/vs", "output": "/assets/vs/" }
             ],
             "styles": ["src/styles/antd.less", "src/styles.scss"],
-            "stylePreprocessorOptions": { "includePaths": ["src/styles/themes"] },
             "scripts": ["src/assets/libs/protocolcheck.js"],
             "customWebpackConfig": { "path": "./angular.webpack.js", "replaceDuplicatePlugins": true },
             "allowedCommonJsDependencies": ["brace", "qs", "rxjs"]

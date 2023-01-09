@@ -60,7 +60,7 @@ export const SYSTEM_THEME: SystemThemeItems[] = [
         {
           label: $localize`Debug Theme`,
           id: 'pc-debug',
-          baseTheme: 'pc',
+          baseTheme: 'pc-dark',
           path: './themes/debug.json'
         }
       ])
@@ -87,16 +87,16 @@ export type SystemThemeItems = {
   path?: string;
 };
 export type SystemUIThemeType = (typeof SYSTEM_THEME)[number]['id'];
+/**
+ * Color value,set default value
+ */
 export const DEFAULT_THEME_COLORS = {
   alertSuccessText: '#2ca641',
   toastSuccessText: '#2ca641',
   progressSuccess: '#52c41a',
-  scrollbarTrackBackground: 'rgba(255, 255, 255, 0.05)',
-  scrollbarThumbBackground: 'rgba(0, 0, 0, 0.2)',
   switchText: '#fff',
   popoverText: '#fff',
   popoverBackground: 'rgba(0,0,0,.75)',
   modalMaskBackground: 'rgba(0, 0, 0, 0.35)',
-  checkboxCheckedBorder: 'transparent',
   buttonPrimaryText: '#fff'
 };
