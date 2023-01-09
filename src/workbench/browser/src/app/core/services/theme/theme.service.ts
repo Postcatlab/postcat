@@ -42,7 +42,6 @@ export class ThemeService {
   }
   async initTheme() {
     await this.querySystemThemes();
-    this.queryExtensionThemes();
     let currentTheme = StorageUtil.get('pc_theme') || this.themes[0];
     //check currentThemeID valid
     let validTheme = this.themes.find(theme => theme.id === this.currentThemeID);
@@ -55,7 +54,6 @@ export class ThemeService {
     if (themeStorageError || themeHasUpdate) {
       currentTheme = validTheme;
     }
-    console.log(currentTheme);
     this.changeTheme(currentTheme);
   }
 
@@ -121,9 +119,9 @@ export class ThemeService {
       });
     }
   }
-  private queryExtensionThemes() {
+  queryExtensionThemes() {
     this.extension.getValidExtensionsByFature('theme').forEach(feature => {
-      feature.theme.forEach(theme => {
+      feature.themes.forEach(theme => {
         this.themes.push({
           label: theme.label,
           id: theme.id,

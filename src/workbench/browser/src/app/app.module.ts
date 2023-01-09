@@ -88,13 +88,19 @@ export class AppModule {
     private lang: LanguageService,
     private mockService: MockService,
     private global: GlobalProvider,
+    private theme: ThemeService,
     private extensionService: ExtensionService
   ) {
-    this.extensionService.init();
+    this.init();
     this.mockService.init();
     this.global.injectGlobalData();
     if (APP_CONFIG.production) {
       this.lang.init();
     }
+  }
+  async init() {
+    await this.extensionService.init();
+    console.log(this.extensionService.installedList);
+    this.theme.queryExtensionThemes();
   }
 }

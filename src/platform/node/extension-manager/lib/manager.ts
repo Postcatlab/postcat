@@ -220,7 +220,7 @@ export class ModuleManager {
             featureVal.forEach((theme: any) => {
               Object.assign(theme, require(path.join(moduleInfo.baseDir, theme.path)));
             });
-            this.features.get(key).set(moduleInfo.name, { extensionID: moduleInfo.name, theme: featureVal } as any);
+            this.features.get(key).set(moduleInfo.name, { extensionID: moduleInfo.name, themes: featureVal } as any);
             break;
           }
           default: {

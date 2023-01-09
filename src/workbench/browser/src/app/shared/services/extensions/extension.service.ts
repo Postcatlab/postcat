@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from 'eo/platform/common/i18n';
-import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
+import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { FeatureInfo, ModuleInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { WebExtensionService } from 'eo/workbench/browser/src/app/shared/services/web-extension/webExtension.service';
+import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom, map } from 'rxjs';
+
+import { WebExtensionService } from './webExtension.service';
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
 @Injectable({
   providedIn: 'root'
@@ -20,34 +22,49 @@ export class ExtensionService {
   HOST = APP_CONFIG.EXTENSION_URL;
   installedList: ModuleInfo[] = [];
   installedMap: Map<string, ModuleInfo>;
+  private debugExtensions;
   constructor(
     private http: HttpClient,
+    private web: WebService,
     private electron: ElectronService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService,
     private messageService: MessageService
-  ) {}
+  ) {
+    this.debugExtensions = !APP_CONFIG.production || this.web.isVercel ? ['vscode-postcat-theme'] : [];
+  }
   async init() {
     if (!this.electron.isElectron) {
       //Install newest extensions
       const { data } = await this.requestList();
-      for (let i = 0; i < this.webExtensionService.installedList.length; i++) {
-        const target = data.find(m => m.name === this.webExtensionService.installedList[i].name);
-        if (target) {
-          this.installExtension({
-            name: target.name
-          });
-        }
-      }
+      const installedName = [];
+
+      //ReInstall Newest extension
+      this.webExtensionService.installedList.forEach(val => {
+        const target = data.find(m => m.name === val.name);
+        if (!target) return;
+        installedName.push(target.name);
+      });
+
       //Install default extensions
       defaultExtensions.forEach(name => {
         const target = data.find(m => m.name === name);
-        if (target && !this.installedList.some(m => m.name === target.name)) {
-          this.installExtension({
-            name: target.name
-          });
-        }
+        if (!target || this.installedList.some(m => m.name === target.name)) return;
+        installedName.push(target.name);
       });
+
+      //Install debug extensions
+      this.debugExtensions.forEach(name => {
+        //* install every time
+        installedName.push(name);
+      });
+
+      for (let i = 0; i < installedName.length; i++) {
+        const name = installedName[i];
+        await this.installExtension({
+          name
+        });
+      }
     } else {
       this.updateInstalledInfo(this.getExtensions());
     }
@@ -192,15 +209,7 @@ export class ExtensionService {
     if (this.electron.isElectron) {
       extensions = window.electron.getExtensionsByFeature(featureKey);
     } else {
-      this.installedList.forEach(item => {
-        const feature: T = item.features?.[featureKey];
-        if (feature) {
-          extensions.set(item.name, {
-            extensionID: item.name,
-            ...feature
-          });
-        }
-      });
+      extensions = this.webExtensionService.getExtensionsByFeature(featureKey, this.installedList);
     }
     return extensions || new Map();
   }

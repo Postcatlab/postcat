@@ -21,7 +21,7 @@ export type FeatureInfo = {
   /**
    * Theme ID
    */
-  theme?: ThemeItems[];
+  themes?: ThemeItems[];
 
   //*Field for browser generate by code,not actually in package.json
   extensionID: string;
