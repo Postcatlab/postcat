@@ -1,34 +1,39 @@
-import type { IndexableType, Table } from 'dexie';
+import type { Table } from 'dexie';
 
-export abstract class BaseService<T> {
+import { ApiOkResponse } from './decorators/api-response.decorator';
+export class BaseService<T> {
   constructor(readonly db: Table<T>) {}
-
-  afterCreate?(params: IndexableType): void;
-
+  @ApiOkResponse()
   read(params) {
     return this.db.get(params);
   }
+  @ApiOkResponse()
   async create(params) {
-    const result = await this.db.add(params);
-    this.afterCreate(result);
-    return result;
+    const id = await this.db.add(params);
+    return this.read(id);
   }
-  update(params) {
+  @ApiOkResponse()
+  async update(params) {
     return this.db.put(params);
   }
-  delete(params) {
+  @ApiOkResponse()
+  async delete(params) {
     return this.db.delete(params);
   }
 
-  bulkRead(params) {
+  @ApiOkResponse()
+  async bulkRead(params) {
     return this.db.bulkGet(params);
   }
-  bulkUpdate(params) {
+  @ApiOkResponse()
+  async bulkUpdate(params) {
     return this.db.bulkPut(params);
   }
+  @ApiOkResponse()
   bulkDelete(params) {
     return this.db.bulkDelete(params);
   }
+  @ApiOkResponse()
   bulkCreate(params) {
     return this.db.bulkAdd(params);
   }

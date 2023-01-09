@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import microApp from '@micro-zoe/micro-app';

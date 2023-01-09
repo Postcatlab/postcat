@@ -3,28 +3,15 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "",
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "DOM",
-      "ESNext"
-    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": ["node"],
+    "lib": ["DOM", "ESNext"],
     "paths": {
-      "eo/*": [
-        "../../../../src/*"
-      ]
+      "eo/*": ["../../../../src/*"]
     }
   },
-  "files": [
-    "main.ts",
-    "polyfills.ts"
-  ],
-  "include": [
-    "**/*.d.ts"
-  ],
-  "exclude": [
-    "**/*.spec.ts",
-    "./app/views/*"
-  ]
+  "files": ["main.ts", "polyfills.ts"],
+  "include": ["**/*.d.ts"],
+  "exclude": ["**/*.spec.ts", "./app/views/*"]
 }

@@ -21,7 +21,7 @@ export class DataSource extends Dexie {
     super('postcat_core_test');
     this.version(1).stores({
       workspace: '++id, &workSpaceUuid, name',
-      project: '++id, &projectUuid, name',
+      project: '++id, &projectUuid, workSpaceUuid, name',
       environment: '++id, name, projectUuid, workSpaceUuid',
       group: '++id, projectUuid, workSpaceUuid, parentId, name',
       apiData: '++id, &apiUuid, projectUuid, workSpaceUuid, name',
@@ -33,7 +33,7 @@ export class DataSource extends Dexie {
   }
 
   private async populate() {
-    await this.project.add({ uuid: 1, name: 'Default' });
+    await this.project.add({ id: 1, name: 'Default' });
     await this.apiData.bulkAdd(sampleApiData, { allKeys: true });
   }
 }
