@@ -1,4 +1,4 @@
-type ApiResponseOptions<T = any> = {
+export type ApiResponseOptions<T = any> = {
   success?: boolean;
   code?: number;
   message?: string;
@@ -9,7 +9,7 @@ export enum HttpStatus {
   OK = 0
 }
 
-const genRes = (data, options: ApiResponseOptions = {}) => {
+export const genRes = (data, options: ApiResponseOptions = {}) => {
   return {
     success: true,
     code: 0,

@@ -3,8 +3,6 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "baseUrl": "",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "types": ["node"],
     "lib": ["DOM", "ESNext"],
     "paths": {
