@@ -1,7 +1,8 @@
 {
-  "/api": {
-    "target": "http://localhost:3000",
+  "/user": {
+    "target": "https://mockapi.eolink.com/Dr31QyT4b832495fe945fb9420215f167e33b2dc1fb4f27",
     "secure": false,
+    "changeOrigin": true,
     "logLevel": "debug"
   }
 }
