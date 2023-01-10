@@ -6,6 +6,14 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.tree {
+  border-right: 1px solid var(--border-color);
+}
+
+.footer {
+  border-top: 1px solid var(--border-color);
+}
+
 .theme-container-active {
   .theme-block {
     border-color: var(--primary-color);

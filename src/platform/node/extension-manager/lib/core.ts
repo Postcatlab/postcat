@@ -2,7 +2,7 @@ import { LanguageService } from 'eo/app/electron-main/language.service';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { getLocaleData } from 'eo/platform/node/i18n';
 import { fileExists, readFile, readJson } from 'eo/shared/node/file';
-import { ModuleHandlerOptions, ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { ModuleHandlerOptions, ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 
 import * as path from 'path';
 /**
@@ -35,41 +35,38 @@ export class CoreHandler {
    *
    * @param {string} name 模块名称
    */
-  info(name: string): ModuleInfo {
-    let moduleInfo: ModuleInfo;
+  info(name: string): ExtensionInfo {
+    let extensionInfo: ExtensionInfo;
     try {
       const baseDir: string = this.getModuleDir(name);
-      moduleInfo = readJson(path.join(baseDir, 'package.json')) as ModuleInfo;
-      moduleInfo.baseDir = baseDir;
+      extensionInfo = readJson(path.join(baseDir, 'package.json')) as ExtensionInfo;
+      extensionInfo.baseDir = baseDir;
       // Get language locale
       //!Warn:baseDir must be set before get locale file
       const lang = LanguageService.get();
-      if (moduleInfo.features?.i18n) {
-        const locale = getLocaleData(moduleInfo, lang);
+      if (extensionInfo.features?.i18n) {
+        const locale = getLocaleData(extensionInfo, lang);
         if (locale) {
-          let translateService = new TranslateService(moduleInfo, locale);
-          moduleInfo = translateService.translate();
+          let translateService = new TranslateService(extensionInfo, locale);
+          extensionInfo = translateService.translate();
         }
       }
       // Check that the file exists locally
-      moduleInfo.introduction = readFile(path.join(baseDir, `README.${lang}.md`)) || readFile(path.join(baseDir, `README.md`));
-      if (moduleInfo.main) {
-        moduleInfo.main = `file://${path.join(moduleInfo.baseDir, moduleInfo.main)}`;
+      extensionInfo.introduction = readFile(path.join(baseDir, `README.${lang}.md`)) || readFile(path.join(baseDir, `README.md`));
+      if (extensionInfo.main) {
+        extensionInfo.main = `file://${path.join(extensionInfo.baseDir, extensionInfo.main)}`;
       }
-      if (moduleInfo.node) {
-        moduleInfo.node = `file://${path.join(moduleInfo.baseDir, moduleInfo.node)}`;
+      if (extensionInfo.node) {
+        extensionInfo.node = `file://${path.join(extensionInfo.baseDir, extensionInfo.node)}`;
       }
-      if (moduleInfo.logo?.length > 0 && !moduleInfo.logo.startsWith('http') && !moduleInfo.logo.includes('icon-')) {
-        moduleInfo.logo = `file://${path.join(moduleInfo.baseDir, moduleInfo.logo)}`;
-      }
-      if (typeof moduleInfo.author === 'object') {
-        moduleInfo.author = moduleInfo.author['name'] || '';
+      if (extensionInfo.logo?.length > 0 && !extensionInfo.logo.startsWith('http') && !extensionInfo.logo.includes('icon-')) {
+        extensionInfo.logo = `file://${path.join(extensionInfo.baseDir, extensionInfo.logo)}`;
       }
     } catch (e) {
-      console.log(`Get module ${moduleInfo?.name} error:${e}`);
-      moduleInfo = {} as ModuleInfo;
+      console.log(`Get module ${extensionInfo?.name} error:${e}`);
+      extensionInfo = {} as ExtensionInfo;
     }
-    return moduleInfo;
+    return extensionInfo;
   }
 
   /**

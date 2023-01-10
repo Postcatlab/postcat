@@ -22,16 +22,20 @@ export type FeatureInfo = {
    * Theme ID
    */
   themes?: ThemeItems[];
-
   //*Field for browser generate by code,not actually in package.json
   extensionID: string;
   rightExtra: any[];
 };
 
+export type I18nLocale = {
+  locale: string;
+  package: any | object;
+};
+
 /**
  * 模块信息接口
  */
-export interface ModuleInfo {
+export interface ExtensionInfo {
   //Unique npm package name
   name: string;
   version: string;
@@ -50,7 +54,7 @@ export interface ModuleInfo {
   //Contribution Feature
   features?: {
     configuration: ModuleConfiguration;
-    i18n?: I18nLocale;
+    i18n?: FeatureI18nLocale;
     extensionTabView: ExtensionTabView[];
     sidebarView: SidebarView;
     importAPI: FeatureInfo;
@@ -66,12 +70,11 @@ export interface ModuleInfo {
   introduction: string;
   //file location
   baseDir: string;
+  //Is open
+  enable?: boolean;
 
   //*Only exist in HTTP request(from extension server) moduleInfo
-  i18n: Array<{
-    locale: string;
-    package: any | object;
-  }>;
+  i18n: I18nLocale[];
 }
 
 /**
@@ -109,7 +112,7 @@ export type SidebarView = {
   server?: HttpServer;
 };
 
-export interface I18nLocale {
+export interface FeatureI18nLocale {
   sourceLocale: string;
   locales: string[];
 }

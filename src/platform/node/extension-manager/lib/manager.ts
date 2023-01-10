@@ -3,7 +3,7 @@ import { isNotEmpty } from 'eo/shared/common/common';
 import { HOME_DIR } from 'eo/shared/electron-main/constant';
 import {
   ModuleHandlerResult,
-  ModuleInfo,
+  ExtensionInfo,
   ModuleManagerInfo,
   SidebarView,
   FeatureInfo
@@ -41,7 +41,7 @@ export class ModuleManager {
   /**
    * 模块集合
    */
-  private readonly modules: Map<string, ModuleInfo>;
+  private readonly modules: Map<string, ExtensionInfo>;
 
   /**
    * 功能点集合
@@ -74,7 +74,7 @@ export class ModuleManager {
   async install(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
     const result = await this.moduleHandler.install([module], module?.isLocal || false);
     if (result.code === 0) {
-      const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
+      const moduleInfo: ExtensionInfo = this.moduleHandler.info(module.name);
       this.set(moduleInfo);
     }
     return result;
@@ -86,7 +86,7 @@ export class ModuleManager {
    * @param module
    */
   async uninstall(module: ModuleManagerInfo): Promise<ModuleHandlerResult> {
-    const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
+    const moduleInfo: ExtensionInfo = this.moduleHandler.info(module.name);
     const result = await this.moduleHandler.uninstall([{ name: module.name }], module.isLocal || false);
     if (result.code === 0) {
       this.delete(moduleInfo);
@@ -128,7 +128,7 @@ export class ModuleManager {
    * @param module
    */
   refresh(module: ModuleManagerInfo): void {
-    const moduleInfo: ModuleInfo = this.moduleHandler.info(module.name);
+    const moduleInfo: ExtensionInfo = this.moduleHandler.info(module.name);
     this.set(moduleInfo);
   }
   /**
@@ -149,7 +149,7 @@ export class ModuleManager {
    *
    * @param belongs
    */
-  getModules(): Map<string, ModuleInfo> {
+  getModules(): Map<string, ExtensionInfo> {
     return this.modules;
   }
   /**
@@ -176,7 +176,7 @@ export class ModuleManager {
    *
    * @param belongs
    */
-  getModule(id: string): ModuleInfo {
+  getModule(id: string): ExtensionInfo {
     return this.modules.get(id);
   }
 
@@ -195,7 +195,7 @@ export class ModuleManager {
    *
    * @param moduleInfo
    */
-  private set(moduleInfo: ModuleInfo) {
+  private set(moduleInfo: ExtensionInfo) {
     // 避免重置
     this.modules.set(moduleInfo.name, moduleInfo);
     this.setFeatures(moduleInfo);
@@ -206,7 +206,7 @@ export class ModuleManager {
    *
    * @param moduleInfo
    */
-  private setFeatures(moduleInfo: ModuleInfo) {
+  private setFeatures(moduleInfo: ExtensionInfo) {
     if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
       Object.entries(moduleInfo.features).forEach(([key, featureVal]) => {
         if (!this.features.has(key)) {
@@ -237,7 +237,7 @@ export class ModuleManager {
    *
    * @param moduleInfo
    */
-  private delete(moduleInfo: ModuleInfo) {
+  private delete(moduleInfo: ExtensionInfo) {
     // 避免删除核心
     this.modules.delete(moduleInfo.name);
     this.deleteFeatures(moduleInfo);
@@ -248,7 +248,7 @@ export class ModuleManager {
    *
    * @param moduleInfo
    */
-  private deleteFeatures(moduleInfo: ModuleInfo) {
+  private deleteFeatures(moduleInfo: ExtensionInfo) {
     if (moduleInfo.features && typeof moduleInfo.features === 'object' && isNotEmpty(moduleInfo.features)) {
       for (const key in moduleInfo.features) {
         if (this.features.has(key)) {
@@ -263,7 +263,7 @@ export class ModuleManager {
    *
    * @param moduleInfo
    */
-  private setup(moduleInfo: ModuleInfo) {
+  private setup(moduleInfo: ExtensionInfo) {
     if (moduleInfo && isNotEmpty(moduleInfo.name)) {
       this.set(moduleInfo);
     }
@@ -275,12 +275,12 @@ export class ModuleManager {
   private init() {
     const names: string[] = this.moduleHandler.list();
     names.forEach((name: string) => {
-      const moduleInfo: ModuleInfo = this.moduleHandler.info(name);
+      const moduleInfo: ExtensionInfo = this.moduleHandler.info(name);
       this.setup(moduleInfo);
     });
   }
 
-  getExtFeatures(extName: string): ModuleInfo['features'] {
+  getExtFeatures(extName: string): ExtensionInfo['features'] {
     const extPath = this.moduleHandler.getModuleDir(extName);
     return require(path.join(extPath, 'package.json')).features;
   }

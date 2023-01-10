@@ -28,6 +28,11 @@ import { ThemeService } from '../../../../core/services/theme/theme.service';
             <div class="main-color w-[30px]  h-[15px]" [style.background]="option.colors.primary"></div>
           </div>
         </section>
+        <div
+          class="footer h-[10px]"
+          [style.borderColor]="option.colors.border"
+          [style.background]="option.colors.layoutFooterBackground"
+        ></div>
       </div>
       <div class="flex items-center justify-center mt-[10px]">
         <p class="">{{ option.label }}</p>

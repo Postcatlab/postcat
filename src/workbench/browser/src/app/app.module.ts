@@ -62,12 +62,6 @@ registerLocaleData(zh);
     },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
     {
-      provide: APP_INITIALIZER,
-      useFactory: (themeService: ThemeService) => () => themeService.initTheme(),
-      deps: [ThemeService],
-      multi: true
-    },
-    {
       provide: NZ_I18N,
       useFactory: (localId: string) => {
         switch (localId) {
@@ -99,8 +93,12 @@ export class AppModule {
     }
   }
   async init() {
+    const promiseSystem = this.theme.initTheme();
     await this.extensionService.init();
-    console.log(this.extensionService.installedList);
-    this.theme.queryExtensionThemes();
+    const promiseExtensions = this.theme.queryExtensionThemes();
+    Promise.all([promiseSystem, promiseExtensions]).then(() => {
+      console.log('fixedThemeIfNotValid');
+      this.theme.afterAllThemeLoad();
+    });
   }
 }

@@ -10,14 +10,14 @@ import { Environment } from '../../../../../../shared/services/storage/index.mod
   template: ` <div style="width:400px" class="preview pb-4">
     <span class="flex items-center px-6 h-12 title" i18n>Global variable</span>
     <div *ngIf="gloablParams.length" class="flex items-center justify-between px-6 h-8 content">
-      <span class="px-1 w-1/3 text-gray-400" i18n>Name</span>
-      <span class="px-1 w-2/3 text-gray-400" i18n>Value</span>
+      <span class="px-1 w-1/3 text-tips" i18n>Name</span>
+      <span class="px-1 w-2/3 text-tips" i18n>Value</span>
     </div>
     <div *ngFor="let it of gloablParams" class="flex items-center justify-between px-6 h-8">
       <span class="px-1 w-1/3  text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>
       <span class="px-1 w-2/3  text-ellipsis overflow-hidden" [title]="it.value">{{ it.value }}</span>
     </div>
-    <span *ngIf="!gloablParams.length" class="flex items-center px-6 h-12 text-gray-400" i18n>No Global variables</span>
+    <span *ngIf="!gloablParams.length" class="flex items-center px-6 h-12 text-tips" i18n>No Global variables</span>
     <div *ngIf="renderEnv?.uuid">
       <div *ngIf="renderEnv.hostUri">
         <span class="flex items-center px-6 h-12 title" i18n>Environment Host</span>
@@ -27,8 +27,8 @@ import { Environment } from '../../../../../../shared/services/storage/index.mod
       </div>
       <span class="flex items-center px-6 h-12 title" *ngIf="renderEnv.parameters?.length" i18n>Environment Global variable</span>
       <div class="flex items-center justify-between px-6 h-8">
-        <span class="px-1 w-1/3 text-gray-400" i18n>Name</span>
-        <span class="px-1 w-2/3 text-gray-400" i18n>Value</span>
+        <span class="px-1 w-1/3 text-tips" i18n>Name</span>
+        <span class="px-1 w-2/3 text-tips" i18n>Value</span>
       </div>
       <div *ngFor="let it of renderEnv.parameters" class="flex items-center justify-between px-6 h-8 content">
         <span class="px-1 w-1/3 text-ellipsis overflow-hidden" [title]="it.name">{{ it.name }}</span>

@@ -1,4 +1,4 @@
-import { ModuleInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { I18nLocale, ExtensionInfo } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 interface LooseObject {
   [key: string]: any;
 }
@@ -9,14 +9,14 @@ const localeStorage: LooseObject = {};
  * @param module
  * @returns json
  */
-function getLocaleFile(module: ModuleInfo, lang): Object {
+function getLocaleFile(module: ExtensionInfo, lang): Object {
   let result = {};
   try {
     result = require(`${module.baseDir}/i18n/${lang}.json`);
   } catch (e) {}
   return result;
 }
-function getSupportLang(module: ModuleInfo) {
+function getSupportLang(module: ExtensionInfo) {
   return [module.features.i18n.sourceLocale, ...module.features.i18n.locales].filter(val => val);
 }
 /**
@@ -24,7 +24,7 @@ function getSupportLang(module: ModuleInfo) {
  *
  * @returns json
  */
-export function getLocaleData(module: ModuleInfo, lang): Object | null {
+export function getLocaleData(module: ExtensionInfo, lang) {
   let supportLang = getSupportLang(module);
   if (!supportLang.includes(lang)) {
     console.error(`Error: extension ${module.title} can't find the i18n package ${lang}`);

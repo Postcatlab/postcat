@@ -1,7 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PACKAGE_ROOT_URL } from '@angular/core';
+import { TranslateService } from 'eo/platform/common/i18n';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import StorageUtil from 'eo/workbench/browser/src/app/utils/storage/Storage';
+import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
+
+import { WebService } from '../../../core/services';
+import { LanguageService } from '../../../core/services/language/language.service';
+import { ExtensionInfo } from '../../models/extension-manager';
 
 type ExtensionItem = {
   name: string;
@@ -19,20 +25,23 @@ const extKey = 'ext_installed_list';
   providedIn: 'root'
 })
 export class WebExtensionService {
+  debugExtensions;
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
   disabledExtensionNames = [];
   resourceUrl = 'https://unpkg.com';
-  constructor() {}
+  constructor(private web: WebService, private language: LanguageService) {
+    this.debugExtensions = !APP_CONFIG.production || this.web.isVercel ? ['vscode-postcat-theme'] : [];
+  }
   async installExtension(extName: string, version = 'latest', entry = '') {
     const url = `${extName}@${version}${entry ? `/${entry}` : entry}`;
     const fullPath = new URL(url, this.resourceUrl);
     const res = await fetch(fullPath);
     const data = await res.text();
-    const install = pkgJson => {
-      const pkgObj = typeof pkgJson === 'object' ? pkgJson : JSON.parse(pkgJson);
-      const oldIndex = this.installedList.findIndex(n => n.name === extName);
+    const install = async pkgJson => {
+      let pkgObj: ExtensionInfo = typeof pkgJson === 'object' ? pkgJson : JSON.parse(pkgJson);
       if (pkgObj.features instanceof Object) {
-        Object.entries(pkgObj.features).forEach(([featureKey, featureVal]) => {
+        for (let featureKey in pkgObj.features) {
+          const featureVal = pkgObj.features[featureKey];
           switch (featureKey) {
             case 'theme': {
               if (!(featureVal instanceof Array)) {
@@ -40,7 +49,8 @@ export class WebExtensionService {
               }
 
               try {
-                featureVal.forEach(async (theme: any) => {
+                for (var i = 0; i < featureVal.length; i++) {
+                  const theme = featureVal[i];
                   const path = new URL(theme.path, `${this.resourceUrl}/${pkgObj.name}/package.json`).href.replace(
                     `${window.location.origin}/`,
                     ''
@@ -55,22 +65,40 @@ export class WebExtensionService {
                     return;
                   }
                   Object.assign(theme, colors);
-                });
-                pcConsole.log(pkgJson);
-                pkgObj.features[featureKey] = {
-                  extensionID: pkgObj.name,
-                  themes: eoDeepCopy(featureVal)
-                };
-              } catch (e) {}
+                }
+                pkgObj.features[featureKey] = featureVal;
+              } catch (e) {
+                console.error(e);
+              }
               break;
             }
             default: {
               break;
             }
           }
-        });
+        }
+      }
+      if (this.debugExtensions.includes(extName)) {
+        //Transalte debug module
+        try {
+          const lang = this.language.systemLanguage;
+          const path = new URL(`${this.resourceUrl}/${pkgObj.name}/i18n/${lang}.json`);
+          let localePackage = await fetch(path)
+            .then(res => res.json())
+            .catch(e => {});
+          pkgObj.i18n = [
+            {
+              locale: lang,
+              package: localePackage
+            }
+          ];
+          pkgObj = this.translateModule(pkgObj);
+        } catch (e) {
+          console.error(e);
+        }
       }
 
+      const oldIndex = this.installedList.findIndex(n => n.name === extName);
       this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
         name: extName,
         disable: false,
@@ -101,10 +129,21 @@ export class WebExtensionService {
     installedList.forEach(item => {
       let feature = eoDeepCopy(item.features?.[featureKey]);
       if (!feature) return;
-      extensions.set(item.name, {
-        extensionID: item.name,
-        ...feature
-      });
+      switch (featureKey) {
+        case 'theme': {
+          extensions.set(item.name, {
+            extensionID: item.name,
+            themes: feature
+          });
+          break;
+        }
+        default: {
+          extensions.set(item.name, {
+            extensionID: item.name,
+            ...feature
+          });
+        }
+      }
     });
     return extensions;
   }
@@ -148,5 +187,17 @@ export class WebExtensionService {
   async getPkgInfo(extName: string, version = 'latest') {
     const res = await fetch(`${this.resourceUrl}/${extName}@${version}/package.json`);
     return res.status === 200 ? res.json() : '';
+  }
+  translateModule(module: ExtensionInfo) {
+    const lang = this.language.systemLanguage;
+    //If extension from web,transalte package content from http moduleInfo
+    //Locale extension will translate from local i18n file
+
+    const locale = module.i18n?.find(val => val.locale === lang)?.package;
+    if (!locale) {
+      return module;
+    }
+    module = new TranslateService(module, locale).translate();
+    return module;
   }
 }

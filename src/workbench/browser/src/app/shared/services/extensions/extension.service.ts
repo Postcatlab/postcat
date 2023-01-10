@@ -1,14 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TranslateService } from 'eo/platform/common/i18n';
-import { ElectronService, WebService } from 'eo/workbench/browser/src/app/core/services';
+import { ElectronService } from 'eo/workbench/browser/src/app/core/services';
 import { LanguageService } from 'eo/workbench/browser/src/app/core/services/language/language.service';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
-import { FeatureInfo, ModuleInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
+import { FeatureInfo, ExtensionInfo, SidebarView } from 'eo/workbench/browser/src/app/shared/models/extension-manager';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
-import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
-import { lastValueFrom, map } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 import { WebExtensionService } from './webExtension.service';
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
@@ -20,19 +18,15 @@ export class ExtensionService {
   disabledExtensionNames: string[] = this.getDisableExtensionNames();
   extensionIDs: string[] = [];
   HOST = APP_CONFIG.EXTENSION_URL;
-  installedList: ModuleInfo[] = [];
-  installedMap: Map<string, ModuleInfo>;
-  private debugExtensions;
+  installedList: ExtensionInfo[] = [];
+  installedMap: Map<string, ExtensionInfo>;
   constructor(
     private http: HttpClient,
-    private web: WebService,
     private electron: ElectronService,
     private language: LanguageService,
     private webExtensionService: WebExtensionService,
     private messageService: MessageService
-  ) {
-    this.debugExtensions = !APP_CONFIG.production || this.web.isVercel ? ['vscode-postcat-theme'] : [];
-  }
+  ) {}
   async init() {
     if (!this.electron.isElectron) {
       //Install newest extensions
@@ -54,7 +48,8 @@ export class ExtensionService {
       });
 
       //Install debug extensions
-      this.debugExtensions.forEach(name => {
+      this.webExtensionService.debugExtensions.forEach(name => {
+        if (this.disabledExtensionNames.includes(name)) return;
         //* install every time
         installedName.push(name);
       });
@@ -103,23 +98,32 @@ export class ExtensionService {
       ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
       //Local debug package
       ...this.installedList.map(module => {
-        if (this.installedList.find(it => it.name === module.name)) {
-          module.i18n = result.data.find(it => it.name === module.name)?.i18n;
+        const extension = result.data.find(it => it.name === module.name);
+        if (extension) {
+          module.i18n = extension.i18n;
         }
         return module;
       })
     ];
-    result.data = result.data.map(module => this.translateModule(module));
+    //Handle featue data
+    result.data = result.data.map(module => {
+      let result = this.webExtensionService.translateModule(module);
+      if (typeof result.author === 'object') {
+        result.author = result.author['name'] || '';
+      }
+      return result;
+    });
     return result;
   }
-  async getDetail(id, name): Promise<any> {
-    let result = {} as ModuleInfo;
+  async getDetail(name): Promise<any> {
+    let result = {} as ExtensionInfo;
     const { code, data }: any = await this.requestDetail(name);
     Object.assign(result, data);
-    if (this.installedMap.has(id)) {
-      Object.assign(result, this.installedMap.get(id), { installed: true, enable: this.isEnable(result.name) });
+    if (this.installedMap.has(name)) {
+      Object.assign(result, this.installedMap.get(name), { installed: true });
+      result.enable = this.isEnable(result.name);
     }
-    result = this.translateModule(result);
+    result = this.webExtensionService.translateModule(result);
     return result;
   }
   /**
@@ -251,17 +255,5 @@ export class ExtensionService {
     return Array.from(this.installedMap.keys())
       .filter(it => it)
       .filter(it => !this.ignoreList.includes(it));
-  }
-  private translateModule(module: ModuleInfo) {
-    const lang = this.language.systemLanguage;
-
-    //If extension from web,transalte package content from http moduleInfo
-    //Locale extension will translate from local i18n file
-    const locale = module.i18n?.find(val => val.locale === lang)?.package;
-    if (!locale) {
-      return module;
-    }
-    module = new TranslateService(module, locale).translate();
-    return module;
   }
 }
