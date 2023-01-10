@@ -11,3 +11,5 @@ export const db = {
   project: new ProjectService(),
   apiTestHistory: new ApiTestHistoryService()
 } as const;
+
+queueMicrotask(async () => await import('./tests/index'));
