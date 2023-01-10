@@ -48,6 +48,9 @@ export class ThemeService {
     await this.querySystemThemes();
     let currentTheme = StorageUtil.get('pc_theme') || this.themes.find(val => val.id === this.module.theme.default);
     this.changeTheme(currentTheme);
+    if (currentTheme.id === 'pc-debug') {
+      this.fixedThemeIfNotValid();
+    }
   }
   afterAllThemeLoad() {
     this.fixedThemeIfNotValid();

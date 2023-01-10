@@ -60,7 +60,7 @@ export const SYSTEM_THEME: SystemThemeItems[] = [
         {
           label: $localize`Debug Theme`,
           id: 'pc-debug',
-          baseTheme: 'pc',
+          baseTheme: 'pc-dark',
           path: './themes/debug.json'
         }
       ])

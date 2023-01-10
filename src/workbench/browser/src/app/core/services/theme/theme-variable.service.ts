@@ -266,7 +266,7 @@ export class ThemeVariableService {
               'paginationButtonBackground',
               'checkboxBackground',
               'radioBackground',
-              'collapseContentbackground',
+              'collapseContentBackground',
               'tabsBackground'
             ]
           }

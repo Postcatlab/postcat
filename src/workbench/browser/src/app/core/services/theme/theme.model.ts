@@ -208,7 +208,7 @@ export type ThemeColors = {
 
   collapseHeaderBackground?: string;
   collapseBorder?: string;
-  collapseContentbackground?: string;
+  collapseContentBackground?: string;
 
   popoverBackground?: string;
   popoverText?: string;
