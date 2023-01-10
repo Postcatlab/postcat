@@ -1,5 +1,11 @@
-export interface ApiData {
-  id?: number;
+export interface ApiDataDto {
+  apiList: ApiList[];
+  projectUuid: string;
+  workSpaceUuid: string;
+}
+
+export interface ApiList {
+  id: number;
   groupId: number;
   groupName: string;
   projectId: number;

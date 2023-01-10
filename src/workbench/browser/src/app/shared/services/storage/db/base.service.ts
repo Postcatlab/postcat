@@ -1,54 +1,54 @@
 import type { Table } from 'dexie';
-import { HookFactory } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/base-hook.decorator';
+import { HookGenerator } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/base-hook.decorator';
 
 import { ApiOkResponse } from './decorators/api-response.decorator';
 export class BaseService<T> {
   constructor(readonly db: Table<T>) {}
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
-  read(params) {
-    return this.db.get(params);
+  read(params: Record<string, any> = {}) {
+    return this.db.where(params).first();
   }
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
   async create(params) {
     const id = await this.db.add(params);
-    return this.read(id);
+    return this.read({ id });
   }
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
   async update(params) {
     return this.db.put(params);
   }
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
   async delete(params) {
     return this.db.delete(params);
   }
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
-  async bulkRead(params) {
-    return this.db.bulkGet(params);
+  async bulkRead(params: Record<string, any> = {}) {
+    return this.db.where(params).toArray();
   }
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
   async bulkUpdate(params) {
     return this.db.bulkPut(params);
   }
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
   bulkDelete(params) {
     return this.db.bulkDelete(params);
   }
 
-  @HookFactory()
+  @HookGenerator()
   @ApiOkResponse()
   bulkCreate(params) {
     return this.db.bulkAdd(params);
