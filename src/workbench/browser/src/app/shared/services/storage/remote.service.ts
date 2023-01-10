@@ -30,7 +30,7 @@ export class RemoteService {
   }
 
   api_projectUpdate({ uuid, ...items }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: project - update 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -53,7 +53,7 @@ export class RemoteService {
   }
 
   api_projectDelete({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: project - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -94,11 +94,11 @@ export class RemoteService {
   }
 
   api_projectAddMember({ projectID, userIDs }, prefix = '') {
-    if (!projectID) {
+    if (projectID == null) {
       console.log('%c Error: project - addMember 接口 缺失参数 projectID %c', ErrorStyle, '');
       return;
     }
-    if (!userIDs) {
+    if (userIDs == null) {
       console.log('%c Error: project - addMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
       return;
     }
@@ -121,11 +121,11 @@ export class RemoteService {
   }
 
   api_projectDelMember({ projectID, userIDs }, prefix = '') {
-    if (!projectID) {
+    if (projectID == null) {
       console.log('%c Error: project - delMember 接口 缺失参数 projectID %c', ErrorStyle, '');
       return;
     }
-    if (!userIDs) {
+    if (userIDs == null) {
       console.log('%c Error: project - delMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
       return;
     }
@@ -152,7 +152,7 @@ export class RemoteService {
   }
 
   api_projectMember({ projectID }, prefix = '') {
-    if (!projectID) {
+    if (projectID == null) {
       console.log('%c Error: project - member 接口 缺失参数 projectID %c', ErrorStyle, '');
       return;
     }
@@ -175,7 +175,7 @@ export class RemoteService {
   }
 
   api_projectMemberQuit({ projectID }, prefix = '') {
-    if (!projectID) {
+    if (projectID == null) {
       console.log('%c Error: project - memberQuit 接口 缺失参数 projectID %c', ErrorStyle, '');
       return;
     }
@@ -198,15 +198,15 @@ export class RemoteService {
   }
 
   api_projectSetRole({ projectID, roleID, memberID }, prefix = '') {
-    if (!projectID) {
+    if (projectID == null) {
       console.log('%c Error: project - setRole 接口 缺失参数 projectID %c', ErrorStyle, '');
       return;
     }
-    if (!roleID) {
+    if (roleID == null) {
       console.log('%c Error: project - setRole 接口 缺失参数 roleID %c', ErrorStyle, '');
       return;
     }
-    if (!memberID) {
+    if (memberID == null) {
       console.log('%c Error: project - setRole 接口 缺失参数 memberID %c', ErrorStyle, '');
       return;
     }
@@ -234,7 +234,7 @@ export class RemoteService {
   }
 
   api_projectRoleList({ projectID }, prefix = '') {
-    if (!projectID) {
+    if (projectID == null) {
       console.log('%c Error: project - roleList 接口 缺失参数 projectID %c', ErrorStyle, '');
       return;
     }
@@ -257,7 +257,7 @@ export class RemoteService {
   }
 
   api_projectPermission({ projectID }, prefix = '') {
-    if (!projectID) {
+    if (projectID == null) {
       console.log('%c Error: project - permission 接口 缺失参数 projectID %c', ErrorStyle, '');
       return;
     }
@@ -280,7 +280,7 @@ export class RemoteService {
   }
 
   api_workspaceCreate({ title }, prefix = '') {
-    if (!title) {
+    if (title == null) {
       console.log('%c Error: workspace - create 接口 缺失参数 title %c', ErrorStyle, '');
       return;
     }
@@ -325,11 +325,11 @@ export class RemoteService {
   }
 
   api_workspaceEdit({ workspaceID, title }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - edit 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
-    if (!title) {
+    if (title == null) {
       console.log('%c Error: workspace - edit 接口 缺失参数 title %c', ErrorStyle, '');
       return;
     }
@@ -352,7 +352,7 @@ export class RemoteService {
   }
 
   api_workspaceDelete({ workspaceID }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - delete 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
@@ -375,7 +375,7 @@ export class RemoteService {
   }
 
   api_workspaceMember({ workspaceID }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - member 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
@@ -398,11 +398,11 @@ export class RemoteService {
   }
 
   api_workspaceSearchMember({ workspaceID, username }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - searchMember 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
-    if (!username) {
+    if (username == null) {
       console.log('%c Error: workspace - searchMember 接口 缺失参数 username %c', ErrorStyle, '');
       return;
     }
@@ -425,11 +425,11 @@ export class RemoteService {
   }
 
   api_workspaceAddMember({ workspaceID, userIDs }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - addMember 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
-    if (!userIDs) {
+    if (userIDs == null) {
       console.log('%c Error: workspace - addMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
       return;
     }
@@ -452,11 +452,11 @@ export class RemoteService {
   }
 
   api_workspaceRemoveMember({ workspaceID, userIDs }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - removeMember 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
-    if (!userIDs) {
+    if (userIDs == null) {
       console.log('%c Error: workspace - removeMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
       return;
     }
@@ -483,7 +483,7 @@ export class RemoteService {
   }
 
   api_workspaceMemberQuit({ workspaceID }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - memberQuit 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
@@ -506,15 +506,15 @@ export class RemoteService {
   }
 
   api_workspaceSetRole({ workspaceID, roleID, memberID }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - setRole 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
-    if (!roleID) {
+    if (roleID == null) {
       console.log('%c Error: workspace - setRole 接口 缺失参数 roleID %c', ErrorStyle, '');
       return;
     }
-    if (!memberID) {
+    if (memberID == null) {
       console.log('%c Error: workspace - setRole 接口 缺失参数 memberID %c', ErrorStyle, '');
       return;
     }
@@ -542,7 +542,7 @@ export class RemoteService {
   }
 
   api_workspacePermission({ workspaceID }, prefix = '') {
-    if (!workspaceID) {
+    if (workspaceID == null) {
       console.log('%c Error: workspace - permission 接口 缺失参数 workspaceID %c', ErrorStyle, '');
       return;
     }
@@ -619,7 +619,7 @@ export class RemoteService {
   }
 
   api_shareDocGetAllApi({ uniqueID }, prefix = '') {
-    if (!uniqueID) {
+    if (uniqueID == null) {
       console.log('%c Error: shareDoc - getAllAPI 接口 缺失参数 uniqueID %c', ErrorStyle, '');
       return;
     }
@@ -642,11 +642,11 @@ export class RemoteService {
   }
 
   api_shareDocGetApiDetail({ uniqueID, apiDataUUID }, prefix = '') {
-    if (!uniqueID) {
+    if (uniqueID == null) {
       console.log('%c Error: shareDoc - getApiDetail 接口 缺失参数 uniqueID %c', ErrorStyle, '');
       return;
     }
-    if (!apiDataUUID) {
+    if (apiDataUUID == null) {
       console.log('%c Error: shareDoc - getApiDetail 接口 缺失参数 apiDataUUID %c', ErrorStyle, '');
       return;
     }
@@ -669,7 +669,7 @@ export class RemoteService {
   }
 
   api_shareDocGetEnv({ uniqueID }, prefix = '') {
-    if (!uniqueID) {
+    if (uniqueID == null) {
       console.log('%c Error: shareDoc - getEnv 接口 缺失参数 uniqueID %c', ErrorStyle, '');
       return;
     }
@@ -728,7 +728,7 @@ export class RemoteService {
   }
 
   api_userUpdatePassword({ password, ...items }, prefix = '') {
-    if (!password) {
+    if (password == null) {
       console.log('%c Error: user - updatePassword 接口 缺失参数 password %c', ErrorStyle, '');
       return;
     }
@@ -754,24 +754,20 @@ export class RemoteService {
     });
   }
 
-  api_userLogin({ client, type, appType, ...items }, prefix = '') {
-    if (!client) {
-      console.log('%c Error: user - login 接口 缺失参数 client %c', ErrorStyle, '');
+  api_userLogin({ username, password }, prefix = '') {
+    if (username == null) {
+      console.log('%c Error: user - login 接口 缺失参数 username %c', ErrorStyle, '');
       return;
     }
-    if (!type) {
-      console.log('%c Error: user - login 接口 缺失参数 type %c', ErrorStyle, '');
-      return;
-    }
-    if (!appType) {
-      console.log('%c Error: user - login 接口 缺失参数 appType %c', ErrorStyle, '');
+    if (password == null) {
+      console.log('%c Error: user - login 接口 缺失参数 password %c', ErrorStyle, '');
       return;
     }
 
     return new Promise(resolve => {
       this.http
         .post(`${prefix}/common/sso/login`, {
-          body: { client, type, appType, ...items }
+          body: { username, password }
         })
         .subscribe({
           next: ({ status, data }: any) => {
@@ -862,7 +858,7 @@ export class RemoteService {
   }
 
   api_environmentUpdate({ uuid, ...items }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: environment - update 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -885,7 +881,7 @@ export class RemoteService {
   }
 
   api_environmentDelete({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: environment - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -926,7 +922,7 @@ export class RemoteService {
   }
 
   api_groupUpdate({ uuid, ...items }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: group - update 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -949,7 +945,7 @@ export class RemoteService {
   }
 
   api_groupDelete({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: group - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -990,7 +986,7 @@ export class RemoteService {
   }
 
   api_apiUpdate({ uuid, ...items }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: api - update 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -1013,7 +1009,7 @@ export class RemoteService {
   }
 
   api_apiDelete({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: api - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -1036,7 +1032,7 @@ export class RemoteService {
   }
 
   api_apiLoadApi({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: api - loadApi 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -1077,7 +1073,7 @@ export class RemoteService {
   }
 
   api_testDelete({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: test - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -1118,7 +1114,7 @@ export class RemoteService {
   }
 
   api_mockLoad({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: mock - load 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -1141,7 +1137,7 @@ export class RemoteService {
   }
 
   api_mockDelete({ uuid }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: mock - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -1164,7 +1160,7 @@ export class RemoteService {
   }
 
   api_mockUpdate({ uuid, ...items }, prefix = '') {
-    if (!uuid) {
+    if (uuid == null) {
       console.log('%c Error: mock - update 接口 缺失参数 uuid %c', ErrorStyle, '');
       return;
     }
@@ -1180,24 +1176,6 @@ export class RemoteService {
         },
         error: error => {
           console.log('%c mock:update - api_mockUpdate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_systemStatus(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/system/status`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c system:status - api_systemStatus 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c system:status - api_systemStatus 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });

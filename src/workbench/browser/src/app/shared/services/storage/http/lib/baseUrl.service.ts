@@ -17,43 +17,43 @@ const noPrefix = ['https://', 'http://'];
 // implements StorageInterface
 @Injectable()
 export class BaseUrlInterceptor extends SettingService implements HttpInterceptor {
-  get projectID() {
-    return this.store.getCurrentProjectID;
-  }
-  get workspaceID() {
-    return this.store.getCurrentWorkspaceID;
-  }
-  get apiPrefix() {
-    return `/${this.workspaceID}/${this.projectID}/`;
-  }
+  // get projectID() {
+  //   return this.store.getCurrentProjectID;
+  // }
+  // get workspaceID() {
+  //   return this.store.getCurrentWorkspaceID;
+  // }
+  // get apiPrefix() {
+  //   return `/${this.workspaceID}/${this.projectID}/`;
+  // }
   constructor(private store: StoreService, private messageService: MessageService, private web: WebService) {
     super();
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const url = this.getConfiguration('backend.url') || '';
-    const token = StorageUtil.get('accessToken') || '';
-    let targetUrl;
-    if ((targetUrl = sharePaths.find(n => req.url.startsWith(n)))) {
-      //Share page
-      req = req.clone({
-        url: req.url.replace(targetUrl, `/api${targetUrl}`)
-      });
-    } else if ((targetUrl = interceptorPaths.find(n => req.url.startsWith(n)))) {
-      req = req.clone({
-        url: req.url.replace(targetUrl, `${this.apiPrefix}${targetUrl}`)
-      });
-    } else if ((targetUrl = needWorkspaceIDPrefixPaths.find(n => req.url.startsWith(n)))) {
-      req = req.clone({
-        url: req.url.replace(targetUrl, `/${this.workspaceID}/${targetUrl}`)
-      });
-    }
-    req = req.clone({
-      url: noPrefix.find(n => req.url.startsWith(n)) ? req.url : uniqueSlash(`${url}/api/${req.url}`).replace(/(\/api){1,}/g, '/api'),
-      headers: new HttpHeaders({
-        Authorization: token
-      })
-    });
+    // const url = this.getConfiguration('backend.url') || '';
+    // const token = StorageUtil.get('accessToken') || '';
+    // let targetUrl;
+    // if ((targetUrl = sharePaths.find(n => req.url.startsWith(n)))) {
+    //   //Share page
+    //   req = req.clone({
+    //     url: req.url.replace(targetUrl, `/api${targetUrl}`)
+    //   });
+    // } else if ((targetUrl = interceptorPaths.find(n => req.url.startsWith(n)))) {
+    //   req = req.clone({
+    //     url: req.url.replace(targetUrl, `${this.apiPrefix}${targetUrl}`)
+    //   });
+    // } else if ((targetUrl = needWorkspaceIDPrefixPaths.find(n => req.url.startsWith(n)))) {
+    //   req = req.clone({
+    //     url: req.url.replace(targetUrl, `/${this.workspaceID}/${targetUrl}`)
+    //   });
+    // }
+    // req = req.clone({
+    //   url: noPrefix.find(n => req.url.startsWith(n)) ? req.url : uniqueSlash(`${url}/api/${req.url}`).replace(/(\/api){1,}/g, '/api'),
+    //   headers: new HttpHeaders({
+    //     Authorization: token
+    //   })
+    // });
 
     return next.handle(req).pipe(
       filter(event => event instanceof HttpResponse && [200, 201].includes(event.status)),

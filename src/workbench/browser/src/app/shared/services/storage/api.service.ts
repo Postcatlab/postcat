@@ -213,8 +213,4 @@ export class ApiService {
   api_mockUpdate(params) {
     this.remote.api_mockUpdate(params);
   }
-
-  api_systemStatus(params) {
-    this.remote.api_systemStatus(params);
-  }
 }
