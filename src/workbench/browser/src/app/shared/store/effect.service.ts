@@ -252,4 +252,36 @@ export class EffectService {
       });
     });
   }
+
+  // * history
+  private loadHistory() {
+    // TODO load history with IO
+    this.store.setHistory([]);
+  }
+  addHistory() {
+    // TODO add history
+    this.store.setHistory([]);
+  }
+  deleteHistory() {
+    // TODO delete history with IO
+    this.store.setHistory([]);
+  }
+  // * update api
+  updateAPI() {
+    // * update mock
+  }
+  // * delete api
+  async deleteAPI() {
+    // * delete API
+    // * update history
+    // * update mock
+  }
+  async deleteGroup() {
+    // * delete group
+    // * call deleteAPI()
+  }
+  async deleteMock() {
+    // * delete mock
+    // * update API
+  }
 }

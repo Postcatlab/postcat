@@ -113,11 +113,11 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private apiService: ProjectApiService,
     private nzModalService: NzModalService,
-    private http: RemoteService,
-    private effect: EffectService
+    private http: RemoteService
   ) {}
   ngOnInit(): void {
     this.isEdit = !this.store.isShare;
+    // * get group data from store
     this.buildGroupTreeData();
     this.watchApiAction();
     this.watchRouterChange();
@@ -125,9 +125,6 @@ export class ApiGroupTreeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-  setParentStyle(node) {
-    // console.log('node', node);
   }
   onSearchFunc: NzTreeComponent['nzSearchFunc'] = node => {
     const origin = this.apiGroup.getTreeNodeByKey(node.key).origin;

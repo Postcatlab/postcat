@@ -21,6 +21,13 @@ export const IS_SHOW_DATA_SOURCE_TIP = 'IS_SHOW_DATA_SOURCE_TIP';
 })
 export class StoreService {
   // * observable data
+  // ? api & group(includes api) & mock
+  @observable.shallow private currentAPI = {};
+  @observable.shallow private currentMock = {};
+  @observable.shallow private currentGroup = {};
+
+  // ? history
+  @observable private testHistory = [];
 
   // ? router
   @observable private url = '';
@@ -83,6 +90,19 @@ export class StoreService {
   };
 
   // * computed data
+  // ? api & group(includes api) & mock
+  @computed get getCurrentAPI() {
+    return this.currentAPI;
+  }
+  @computed get getCurrentGroup() {
+    return this.currentGroup;
+  }
+  @computed get getCurrentMock() {
+    return this.currentMock;
+  }
+  @computed get getTestHistory() {
+    return this.testHistory.reverse().map(n => ({ ...n, title: n.request?.uri, key: n.uuid }));
+  }
 
   // ? router
   @computed get getUrl() {
@@ -195,6 +215,11 @@ export class StoreService {
   }
 
   // * actions
+  // ? history
+  @action setHistory(data = []) {
+    this.testHistory = data;
+  }
+
   // ? router
   @action private routeListener = (event: NavigationEnd) => {
     this.url = event.urlAfterRedirects;

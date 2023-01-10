@@ -353,7 +353,6 @@ export class ApiTestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   private async addHistory(histoy: ApiTestHistoryFrame, id) {
     await this.apiTest.addHistory(histoy, id);
-    this.messageService.send({ type: 'updateHistory', data: {} });
   }
   /**
    * Receive Test Server Message
