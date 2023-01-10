@@ -1,7 +1,7 @@
 import type { Table } from 'dexie';
 import { HookGenerator } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/base-hook.decorator';
 
-import { ApiOkResponse } from './decorators/api-response.decorator';
+import { ApiOkResponse } from '../decorators/api-response.decorator';
 export class BaseService<T> {
   constructor(readonly db: Table<T>) {}
 
@@ -26,8 +26,8 @@ export class BaseService<T> {
 
   @HookGenerator()
   @ApiOkResponse()
-  async delete(params) {
-    return this.db.delete(params);
+  async delete(params: Record<string, any> = {}) {
+    return this.db.where(params).delete();
   }
 
   @HookGenerator()
@@ -44,8 +44,8 @@ export class BaseService<T> {
 
   @HookGenerator()
   @ApiOkResponse()
-  bulkDelete(params) {
-    return this.db.bulkDelete(params);
+  bulkDelete(params: Record<string, any> = {}) {
+    return this.db.where(params).delete();
   }
 
   @HookGenerator()

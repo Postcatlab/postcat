@@ -1,5 +1,11 @@
-export interface ApiDataDto {
+export interface ApiDataBulkCreateDto {
   apiList: ApiList[];
+  projectUuid: string;
+  workSpaceUuid: string;
+}
+
+export interface ApiDataDeleteDto {
+  apiUuid: string;
   projectUuid: string;
   workSpaceUuid: string;
 }

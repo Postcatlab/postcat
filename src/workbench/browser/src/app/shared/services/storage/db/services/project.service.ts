@@ -1,8 +1,8 @@
-import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/base.service';
 import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource';
 import { ApiOkResponse } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
 import { ProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { ApiData, Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
+import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
 
 export class ProjectService extends BaseService<Project> {
   apiDataTable = dataSource.apiData;

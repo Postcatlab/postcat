@@ -1,8 +1,8 @@
-import { ApiDataService } from './apiData.service';
-import { ApiTestHistoryService } from './apiTestHistory.service';
-import { EnvironmentService } from './environment.service';
-import { GroupService } from './group.service';
-import { ProjectService } from './project.service';
+import { ApiDataService } from './services/apiData.service';
+import { ApiTestHistoryService } from './services/apiTestHistory.service';
+import { EnvironmentService } from './services/environment.service';
+import { GroupService } from './services/group.service';
+import { ProjectService } from './services/project.service';
 
 export const db = {
   apiData: new ApiDataService(),
