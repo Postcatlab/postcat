@@ -1,4 +1,4 @@
-export interface ProjectDto {
+export interface ProjectBulkCreateDto {
   projectMsgs: ProjectMsg[];
   workSpaceUuid: string;
 }
@@ -6,4 +6,8 @@ export interface ProjectDto {
 export interface ProjectMsg {
   name: string;
   description: string;
+}
+
+export interface ProjectDeleteDto {
+  projectUuids: string[];
 }

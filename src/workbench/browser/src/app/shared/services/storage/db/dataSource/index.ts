@@ -46,7 +46,7 @@ export class DataSource extends Dexie {
     this.tables.forEach(table => {
       const isDefUuid = table.schema.idxByName.uuid?.keyPath;
       table.hook('creating', (primKey, obj) => {
-        // 如果表 schema 定义了 uuid 则自动生成
+        // dexie 貌似没有直接提供自动生成 uuid 功能，所以这里简单实现一下
         if (isDefUuid) {
           obj['uuid'] = crypto.randomUUID();
         }

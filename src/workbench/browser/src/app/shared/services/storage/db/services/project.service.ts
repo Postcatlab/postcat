@@ -1,6 +1,6 @@
 import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource';
 import { ApiOkResponse } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
-import { ProjectDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
+import { ProjectBulkCreateDto, ProjectDeleteDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { ApiData, Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
 
@@ -25,7 +25,7 @@ export class ProjectService extends BaseService<Project> {
     ];
   }
 
-  bulkCreateParamTransformer(params: ProjectDto) {
+  bulkCreateParamTransformer(params: ProjectBulkCreateDto) {
     const { projectMsgs, workSpaceUuid } = params;
 
     return [
@@ -42,5 +42,11 @@ export class ProjectService extends BaseService<Project> {
     const apiGroups = await this.apiGroupTable.where({ projectUuid }).sortBy('sort');
 
     return this.genApiGroupTree(apiGroups, apiDatas, 0);
+  }
+
+  /** 删除 API 前转换参数名 */
+  bulkDeleteParamTransformer(params: ProjectDeleteDto) {
+    params['uuid'] = params['apiUuid'];
+    return [params];
   }
 }
