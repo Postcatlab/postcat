@@ -77,7 +77,7 @@ export class StoreService {
 
   // ? UI
   @observable private rightBarStatus = false;
-  @observable private role = {
+  @observable.shallow private role = {
     workspace: 'Owner',
     project: 'Owner'
   };
