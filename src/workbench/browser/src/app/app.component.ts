@@ -8,7 +8,7 @@ import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
 export class AppComponent {
   constructor() {
     setTimeout(async () => {
-      const d = await db.apiData.read(1);
+      const d = await db.apiData.create({ name: '测试', projectUuid: crypto.randomUUID() });
       console.log('dddd', d);
     });
   }
