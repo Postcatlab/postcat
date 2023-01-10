@@ -13,8 +13,8 @@ export class ProjectService extends BaseService<Project> {
   }
 
   private genApiGroupTree(apiGroups: Group[], apiDatas: ApiData[], groupId: number) {
-    const apiDataFilters = apiDatas.filter(apiData => apiData.groupId === groupId).sort((a, b) => a.orderNum - b.orderNum);
-    const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId).sort((a, b) => a.sort - b.sort);
+    const apiDataFilters = apiDatas.filter(apiData => apiData.groupId === groupId);
+    const apiGroupFilters = apiGroups.filter(n => n.parentId === groupId);
 
     return [
       ...apiGroupFilters.map(group => ({
@@ -38,8 +38,8 @@ export class ProjectService extends BaseService<Project> {
 
   @ApiOkResponse()
   async collections(projectUuid: string) {
-    const apiDatas = await this.apiDataTable.where({ projectUuid }).toArray();
-    const apiGroups = await this.apiGroupTable.where({ projectUuid }).toArray();
+    const apiDatas = await this.apiDataTable.where({ projectUuid }).sortBy('orderNum');
+    const apiGroups = await this.apiGroupTable.where({ projectUuid }).sortBy('sort');
 
     return this.genApiGroupTree(apiGroups, apiDatas, 0);
   }
