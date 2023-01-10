@@ -766,7 +766,7 @@ export class RemoteService {
 
     return new Promise(resolve => {
       this.http
-        .post(`${prefix}/common/sso/login`, {
+        .post(`${prefix}/user/login`, {
           body: { username, password }
         })
         .subscribe({
@@ -821,21 +821,30 @@ export class RemoteService {
     });
   }
 
-  api_userSearch(params, prefix = '') {
+  api_userSearch({ username }, prefix = '') {
+    if (username == null) {
+      console.log('%c Error: user - search 接口 缺失参数 username %c', ErrorStyle, '');
+      return;
+    }
+
     return new Promise(resolve => {
-      this.http.post(`${prefix}/search`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c user:search - api_userSearch 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .post(`${prefix}/user`, {
+          params: { username }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c user:search - api_userSearch 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c user:search - api_userSearch 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c user:search - api_userSearch 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 

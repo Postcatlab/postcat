@@ -51,10 +51,10 @@ const http = {
         { 'readInfo @post': '/common/user/info' }, // 查看个人信息
         { 'updateInfo @post': '/common/user/update-userinfo' }, // 更新个人资料
         { 'updatePassword @post': '/common/user/change-password', body: 'password, ...' }, // 更改个人密码
-        { 'login @post': '/common/sso/login', body: 'username, password' },
+        { 'login @post': '/user/login', body: 'username, password' },
         { 'refreshToken @post': '/common/sso/refresh' }, // 刷新token
-        { 'logout @post': '/common/sso/logout' },
-        { 'search @post': '/search' } // TODO replace to new api
+        { 'logout @post': '/common/sso/logout' }, // 退出登录
+        { 'search @post': '/user', query: 'username' } // 搜索用户
       ]
     },
     {
