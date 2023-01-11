@@ -1,6 +1,6 @@
 import type { Table } from 'dexie';
 
-import { ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
+import { ApiPageResponsePromise, ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
 export class BaseService<T> {
   constructor(readonly db: Table<T>) {
     return this;
@@ -62,5 +62,23 @@ export class BaseService<T> {
   async bulkCreate(params) {
     const keys = await this.db.bulkAdd(params, { allKeys: true });
     return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
+  }
+
+  @ApiResponse()
+  async page(params) {
+    const filterRows = this.filterData(params);
+    const total = await filterRows.count();
+    const { page = 0, pageSize = total, ...restParams } = params;
+    const items = await filterRows.offset(page).limit(pageSize).toArray();
+
+    const paginator = {
+      page,
+      total,
+      size: pageSize
+    };
+    return {
+      paginator,
+      items
+    } as unknown as ApiPageResponsePromise<T[]>;
   }
 }

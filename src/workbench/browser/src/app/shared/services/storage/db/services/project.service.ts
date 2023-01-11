@@ -2,7 +2,7 @@ import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage
 import { ApiResponse } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
 import {
   ProjectBulkCreateDto,
-  ProjectBulkReadDto,
+  ProjectPageDto,
   ProjectDeleteDto,
   ProjectUpdateDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
@@ -61,10 +61,10 @@ export class ProjectService extends BaseService<Project> {
     return result;
   }
   /** 获取项目列表  */
-  bulkRead(params: ProjectBulkReadDto) {
-    const { projectUuidS, ...rest } = params;
-    rest['uuid'] = projectUuidS;
-    return this.baseService.bulkRead(rest);
+  page(params: ProjectPageDto) {
+    const { projectUuids, ...rest } = params;
+    rest['uuid'] = projectUuids;
+    return this.baseService.page(rest);
   }
 
   /** 删除项目之后，将会删除与被删除的项目相关的所有数据 */

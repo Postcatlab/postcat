@@ -1,4 +1,18 @@
+/** 普通响应 promise */
 export type ApiResponsePromise<T> = Promise<ApiResponseOptions<T>>;
+/** 分页 promise */
+export type ApiPageResponsePromise<T> = Promise<ApiResponseOptions<ApiPageData<T>>>;
+
+export type Pageintor = {
+  page: number;
+  size: number;
+  total: number;
+};
+
+export type ApiPageData<T> = {
+  paginator: Pageintor;
+  items: T;
+};
 
 export type ApiResponseOptions<T = any> = {
   success?: boolean;

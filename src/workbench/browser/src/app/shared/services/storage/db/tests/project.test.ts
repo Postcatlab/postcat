@@ -24,12 +24,12 @@ if (projects.length === 2) {
   pcConsole.error('[批量创建项目]: 测试不通过');
 }
 
-// 获取项目列表
-const { data: projectList } = await table.bulkRead({ projectUuidS: projects.map(({ uuid }) => uuid), workSpaceUuid });
-if (projectList.length === projects.length) {
-  pcConsole.success('[获取项目列表]: 测试通过');
+// 分页获取项目列表
+const { data: projectPage } = await table.page({ projectUuids: projects.map(({ uuid }) => uuid), workSpaceUuid });
+if (projectPage.items.length === projects.length) {
+  pcConsole.success('[分页获取项目列表]: 测试通过', projectPage);
 } else {
-  pcConsole.error('[获取项目列表]: 测试不通过');
+  pcConsole.error('[分页获取项目列表]: 测试不通过', projectPage);
 }
 
 // 修改项目信息

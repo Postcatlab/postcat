@@ -1,3 +1,5 @@
+import { PageDto } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/common.dto';
+
 export interface ProjectBulkCreateDto {
   projectMsgs: ProjectMsg[];
   workSpaceUuid: string;
@@ -17,7 +19,7 @@ export interface ProjectUpdateDto {
   name: string;
   description?: string;
 }
-export interface ProjectBulkReadDto {
-  workSpaceUuid?: string;
-  projectUuidS?: string[];
+
+export interface ProjectPageDto extends PageDto {
+  projectUuids?: string[];
 }
