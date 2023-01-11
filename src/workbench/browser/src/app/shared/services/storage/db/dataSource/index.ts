@@ -1,10 +1,17 @@
 import Dexie, { Table } from 'dexie';
 import { db } from 'eo/workbench/browser/src/app/shared/services/storage/db';
 import { genSimpleApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/initData/apiData';
-import { Workspace, Project, Group, ApiData } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
-import { Mock, ApiTestHistory, Environment } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
+import {
+  Workspace,
+  Project,
+  Group,
+  ApiData,
+  Environment,
+  ApiTestHistory,
+  Mock
+} from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 
-export class DataSource extends Dexie {
+class DataSource extends Dexie {
   workspace!: Table<Workspace, number | string>;
   project!: Table<Project, number | string>;
   group!: Table<Group, number | string>;
