@@ -1,3 +1,5 @@
+export type ApiResponsePromise<T> = Promise<ApiResponseOptions<T>>;
+
 export type ApiResponseOptions<T = any> = {
   success?: boolean;
   code?: number;

@@ -15,7 +15,7 @@ export interface ProjectDeleteDto {
 export interface ProjectUpdateDto {
   projectUuid: string;
   name: string;
-  description: string;
+  description?: string;
 }
 export interface ProjectBulkReadDto {
   workSpaceUuid?: string;

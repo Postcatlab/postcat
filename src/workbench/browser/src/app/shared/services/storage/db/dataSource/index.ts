@@ -46,6 +46,7 @@ class DataSource extends Dexie {
     const params = { workSpaceUuid: workspace.uuid, projectUuid: project.uuid };
 
     const sampleApiData = genSimpleApiData(params);
+    // @ts-ignore
     await db.apiData.bulkCreate(sampleApiData);
   }
 

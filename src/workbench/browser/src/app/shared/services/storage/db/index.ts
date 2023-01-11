@@ -3,12 +3,14 @@ import { ApiTestHistoryService } from './services/apiTestHistory.service';
 import { EnvironmentService } from './services/environment.service';
 import { GroupService } from './services/group.service';
 import { ProjectService } from './services/project.service';
+import { WorkspaceService } from './services/workspace.service';
 
 export const db = {
   apiData: new ApiDataService(),
   group: new GroupService(),
   environment: new EnvironmentService(),
   project: new ProjectService(),
+  workspace: new WorkspaceService(),
   apiTestHistory: new ApiTestHistoryService()
 } as const;
 

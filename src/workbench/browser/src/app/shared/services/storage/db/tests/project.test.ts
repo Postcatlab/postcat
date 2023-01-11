@@ -42,8 +42,8 @@ if (projectUpdateRes.name === name) {
 }
 
 // 批量删除项目
-const { data: delCount } = await table.bulkDelete({ projectUuids: projects.map(n => n.uuid) });
-if (delCount === 2) {
+const { data: delKeys } = await table.bulkDelete({ projectUuids: projects.map(n => n.uuid) });
+if (delKeys === 2) {
   pcConsole.success('[批量删除项目]: 测试通过');
 } else {
   pcConsole.error('[批量删除项目]: 测试不通过');
