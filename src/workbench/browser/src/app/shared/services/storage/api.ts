@@ -1,47 +1,52 @@
 const http = {
   api: [
     {
-      name: 'project',
+      name: 'apiData',
       data: [
-        { 'create @post': '/project' },
-        { 'update @put': '/project/{uuid}', json: '...' },
-        { 'delete @delete': '/project/{uuid}' },
-        { 'export @get': '/project/export' },
-        { 'addMember @post': '/project/{projectID}/member/add', json: 'userIDs' },
-        { 'delMember @delete': '/project/{projectID}/member/remove', body: 'userIDs' },
-        { 'member @get': '/project/{projectID}/member/list' },
-        { 'memberQuit @post': '/project/{projectID}/member/leave' },
-        { 'setRole @post': '/project/{projectID}/member/setRole', json: 'roleID, memberID' },
-        { 'roleList @get': '/project/{projectID}/roles' },
-        { 'permission @get': '/project/{projectID}/rolePermission' }
+        { 'create @post @create': '/api', json: 'apiList, projectUuid, workSpaceUuid' },
+        { 'update @put @update': '/api', json: 'api, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/api/remove', json: 'apiUuid, projectUuid, workSpaceUuid' },
+        { 'detail @get @read': '/api', query: 'projectUuid, workSpaceUuid' },
+        { 'list @get @bulkRead': '/api/list', json: 'api, projectUuid, workSpaceUuid' }
       ]
     },
     {
-      name: 'workspace',
+      name: 'mock',
       data: [
-        { 'create @post': '/workspace', json: 'title' },
-        { 'list @get': '/workspace/list', query: '...' },
-        { 'edit @put': '/workspace/{workspaceID}', json: 'title' },
-        { 'delete @delete': '/workspace/{workspaceID}' },
-        { 'member @get': '/workspace/{workspaceID}/member/list' },
-        { 'searchMember @get': '/workspace/{workspaceID}/member/list/{username}' },
-        { 'addMember @post': '/workspace/{workspaceID}/member/add', json: 'userIDs' },
-        { 'removeMember @delete': '/workspace/{workspaceID}/member/remove', body: 'userIDs' },
-        { 'memberQuit @post': '/workspace/{workspaceID}/member/leave' },
-        { 'setRole @post': '/workspace/{workspaceID}/member/setRole', json: 'roleID, memberID' },
-        { 'permission @get': '/workspace/{workspaceID}/rolePermission' }
+        { 'create @post @create': '/mock', json: 'name, apiUuid, createWay, response, projectUuid, workSpaceUuid, ...' },
+        { 'update @put @update': '/mock', json: 'id, projectUuid, workSpaceUuid, ...' },
+        { 'list @get @bulkRead': '/mock/list', json: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
+        { 'detail @get @read': '/mock', json: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/mock', json: 'id, projectUuid, workSpaceUuid' }
       ]
     },
     {
-      name: 'share',
-      data: [{ 'createShare @post': '/shared' }, { 'getShareList @get': '/shared' }, { 'deleteShare @delete': '/shared' }]
+      name: 'group',
+      data: [
+        { 'create @post @create': '/group', json: 'module, type, name, projectUuid, workSpaceUuid, ...' },
+        { 'update @put @update': '/group', json: 'id, projectUuid, workSpaceUuid, ...' },
+        { 'delete @delete @delete': '/group', json: 'id, projectUuid, workSpaceUuid' },
+        { 'detail @get @read': '/group', json: 'id, projectUuid, workSpaceUuid' },
+        { 'list @get @bulkRead': '/group/list', query: 'projectUuid, workSpaceUuid' }
+      ]
     },
     {
-      name: 'shareDoc',
+      name: 'apiTestHistory',
       data: [
-        { 'getAllAPI @get': '/shared-docs/{uniqueID}/collections' },
-        { 'getApiDetail @get': '/shared-docs/{uniqueID}/api/{apiDataUUID}' },
-        { 'getEnv @get': '/shared-docs/{uniqueID}/environments' }
+        { 'create @post @create': '/api/history', json: 'apiUuid, general, request, response, projectUuid, workSpaceUuid' },
+        { 'list @get @bulkRead': '/api/history/list', json: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
+        { 'detail @get @read': '/api/history', json: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @bulkDelete': '/api/history', json: 'projectUuid, workSpaceUuid' }
+      ]
+    },
+    {
+      name: 'environment',
+      data: [
+        { 'create @post @create': '/environment', json: 'name, projectUuid, workSpaceUuid, ...' },
+        { 'update @put @update': '/environment', json: 'id, name, projectUuid, workSpaceUuid, ...' },
+        { 'delete @delete @delete': '/environment', json: 'id, projectUuid, workSpaceUuid' },
+        { 'detail @get @read': '/environment', query: 'id, projectUuid, workSpaceUuid' },
+        { 'list @get @bulkRead': '/environment/list', query: 'projectUuid, workSpaceUuid' }
       ]
     },
     {
@@ -58,37 +63,47 @@ const http = {
       ]
     },
     {
-      name: 'environment',
+      name: 'workspace',
       data: [
-        { 'create @post@create': '/environment' },
-        { 'update @put': '/environment/{uuid}', json: '...' },
-        { 'delete @delete': '/environment/{uuid}' }
+        { 'create @post @create': '/workspaces', json: 'titles' }, // 批量创建空间
+        { 'update @put @update': '/workspaces', json: 'title, workSpaceUuid' },
+        { 'delete @delete @delete': '/workspaces', json: 'workSpaceUuids' },
+        { 'searchMember @get': '/workspaces/users', query: 'username, page, pageSize, workSpaceUuid' },
+        { 'addMember @post': '/workspaces/users', json: 'userIds, workSpaceUuid' },
+        { 'removeMember @delete': '/workspaces/users', json: 'userIds, workSpaceUuid' },
+        { 'memberQuit @delete': '/workspaces/users/quit', json: 'workSpaceUuid' },
+        { 'addMemberRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' },
+        { 'searchMember @get': '/workspaces/users/roles', json: 'workSpaceUuid' },
+        { 'list @get @bulkRead': '/workspaces' }
       ]
     },
     {
-      name: 'group',
-      data: [{ 'create @post': '/group' }, { 'update @put': '/group/{uuid}', json: '...' }, { 'delete @delete': '/group?uuids=[{uuid}]' }]
-    },
-    {
-      name: 'api',
+      name: 'project',
       data: [
-        { 'create @post': '/api_data' },
-        { 'update @put': '/api_data/{uuid}', json: '...' },
-        { 'delete @delete': '/api_data?uuids=[{uuid}]' },
-        { 'loadApi @get': '/api_data/{uuid}' }
+        { 'create @post': '/project' },
+        { 'update @put': '/project/{uuid}', json: '...' },
+        { 'delete @delete': '/project/{uuid}' },
+        { 'export @get': '/project/export' },
+        { 'addMember @post': '/project/{projectID}/member/add', json: 'userIDs' },
+        { 'delMember @delete': '/project/{projectID}/member/remove', body: 'userIDs' },
+        { 'member @get': '/project/{projectID}/member/list' },
+        { 'memberQuit @post': '/project/{projectID}/member/leave' },
+        { 'setRole @post': '/project/{projectID}/member/setRole', json: 'roleID, memberID' },
+        { 'roleList @get': '/project/{projectID}/roles' },
+        { 'permission @get': '/project/{projectID}/rolePermission' }
       ]
     },
+
     {
-      name: 'test',
-      data: [{ 'create @post': '/api_test_history' }, { 'delete @delete': '/api_test_history?uuids=[{uuid}]' }]
+      name: 'share',
+      data: [{ 'createShare @post': '/shared' }, { 'getShareList @get': '/shared' }, { 'deleteShare @delete': '/shared' }]
     },
     {
-      name: 'mock',
+      name: 'shareDoc',
       data: [
-        { 'create @post': '/mock' },
-        { 'load @get': '/mock/{uuid}' },
-        { 'delete @delete': '/mock/{uuid}' },
-        { 'update @put': '/mock/{uuid}', json: '...' }
+        { 'getAllAPI @get': '/shared-docs/{uniqueID}/collections' },
+        { 'getApiDetail @get': '/shared-docs/{uniqueID}/api/{apiDataUUID}' },
+        { 'getEnv @get': '/shared-docs/{uniqueID}/environments' }
       ]
     }
   ]

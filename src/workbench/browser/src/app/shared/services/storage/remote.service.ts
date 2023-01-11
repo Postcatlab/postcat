@@ -11,6 +11,1275 @@ const SuccessStyle = 'background-color: #316745; color: #fff;padding:3px;box-siz
 export class RemoteService {
   constructor(private http: HttpClient) {}
 
+  api_apiDataCreate({ apiList, projectUuid, workSpaceUuid }, prefix = '') {
+    if (apiList == null) {
+      console.log('%c Error: apiData - create 接口 缺失参数 apiList %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiData - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiData - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/api`, { apiList, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c apiData:create - api_apiDataCreate 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c apiData:create - api_apiDataCreate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_apiDataUpdate({ api, projectUuid, workSpaceUuid }, prefix = '') {
+    if (api == null) {
+      console.log('%c Error: apiData - update 接口 缺失参数 api %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiData - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiData - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.put(`${prefix}/api`, { api, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c apiData:update - api_apiDataUpdate 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c apiData:update - api_apiDataUpdate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_apiDataDelete({ apiUuid, projectUuid, workSpaceUuid }, prefix = '') {
+    if (apiUuid == null) {
+      console.log('%c Error: apiData - delete 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiData - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiData - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/api/remove`, { apiUuid, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c apiData:delete - api_apiDataDelete 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c apiData:delete - api_apiDataDelete 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_apiDataDetail({ projectUuid, workSpaceUuid }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: apiData - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiData - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .get(`${prefix}/api`, {
+          params: { projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c apiData:detail - api_apiDataDetail 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c apiData:detail - api_apiDataDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiDataList({ api, projectUuid, workSpaceUuid }, prefix = '') {
+    if (api == null) {
+      console.log('%c Error: apiData - list 接口 缺失参数 api %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiData - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiData - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.get(`${prefix}/api/list`, { api, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c apiData:list - api_apiDataList 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c apiData:list - api_apiDataList 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_mockCreate({ name, apiUuid, createWay, response, projectUuid, workSpaceUuid, ...items }, prefix = '') {
+    if (name == null) {
+      console.log('%c Error: mock - create 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (apiUuid == null) {
+      console.log('%c Error: mock - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (createWay == null) {
+      console.log('%c Error: mock - create 接口 缺失参数 createWay %c', ErrorStyle, '');
+      return;
+    }
+    if (response == null) {
+      console.log('%c Error: mock - create 接口 缺失参数 response %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: mock - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: mock - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .post(`${prefix}/mock`, {
+          name,
+          apiUuid,
+          createWay,
+          response,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c mock:create - api_mockCreate 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c mock:create - api_mockCreate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_mockUpdate({ id, projectUuid, workSpaceUuid, ...items }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: mock - update 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: mock - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: mock - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.put(`${prefix}/mock`, { id, projectUuid, workSpaceUuid, ...items }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c mock:update - api_mockUpdate 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c mock:update - api_mockUpdate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_mockList({ apiUuid, projectUuid, workSpaceUuid, page, pageSize }, prefix = '') {
+    if (apiUuid == null) {
+      console.log('%c Error: mock - list 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: mock - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: mock - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (page == null) {
+      console.log('%c Error: mock - list 接口 缺失参数 page %c', ErrorStyle, '');
+      return;
+    }
+    if (pageSize == null) {
+      console.log('%c Error: mock - list 接口 缺失参数 pageSize %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .get(`${prefix}/mock/list`, {
+          apiUuid,
+          projectUuid,
+          workSpaceUuid,
+          page,
+          pageSize
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c mock:list - api_mockList 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c mock:list - api_mockList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_mockDetail({ id, projectUuid, workSpaceUuid }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: mock - detail 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: mock - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: mock - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.get(`${prefix}/mock`, { id, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c mock:detail - api_mockDetail 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c mock:detail - api_mockDetail 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_mockDelete({ id, projectUuid, workSpaceUuid }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: mock - delete 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: mock - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: mock - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/mock`, { id, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c mock:delete - api_mockDelete 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c mock:delete - api_mockDelete 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_groupCreate({ module, type, name, projectUuid, workSpaceUuid, ...items }, prefix = '') {
+    if (module == null) {
+      console.log('%c Error: group - create 接口 缺失参数 module %c', ErrorStyle, '');
+      return;
+    }
+    if (type == null) {
+      console.log('%c Error: group - create 接口 缺失参数 type %c', ErrorStyle, '');
+      return;
+    }
+    if (name == null) {
+      console.log('%c Error: group - create 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: group - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: group - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .post(`${prefix}/group`, {
+          module,
+          type,
+          name,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c group:create - api_groupCreate 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c group:create - api_groupCreate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_groupUpdate({ id, projectUuid, workSpaceUuid, ...items }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: group - update 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: group - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: group - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.put(`${prefix}/group`, { id, projectUuid, workSpaceUuid, ...items }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c group:update - api_groupUpdate 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c group:update - api_groupUpdate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_groupDelete({ id, projectUuid, workSpaceUuid }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: group - delete 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: group - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: group - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/group`, { id, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c group:delete - api_groupDelete 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c group:delete - api_groupDelete 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_groupDetail({ id, projectUuid, workSpaceUuid }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: group - detail 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: group - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: group - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.get(`${prefix}/group`, { id, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c group:detail - api_groupDetail 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c group:detail - api_groupDetail 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_groupList({ projectUuid, workSpaceUuid }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: group - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: group - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .get(`${prefix}/group/list`, {
+          params: { projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c group:list - api_groupList 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c group:list - api_groupList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiTestHistoryCreate({ apiUuid, general, request, response, projectUuid, workSpaceUuid }, prefix = '') {
+    if (apiUuid == null) {
+      console.log('%c Error: apiTestHistory - create 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (general == null) {
+      console.log('%c Error: apiTestHistory - create 接口 缺失参数 general %c', ErrorStyle, '');
+      return;
+    }
+    if (request == null) {
+      console.log('%c Error: apiTestHistory - create 接口 缺失参数 request %c', ErrorStyle, '');
+      return;
+    }
+    if (response == null) {
+      console.log('%c Error: apiTestHistory - create 接口 缺失参数 response %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiTestHistory - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiTestHistory - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .post(`${prefix}/api/history`, {
+          apiUuid,
+          general,
+          request,
+          response,
+          projectUuid,
+          workSpaceUuid
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c apiTestHistory:create - api_apiTestHistoryCreate 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c apiTestHistory:create - api_apiTestHistoryCreate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiTestHistoryList({ apiUuid, projectUuid, workSpaceUuid, page, pageSize }, prefix = '') {
+    if (apiUuid == null) {
+      console.log('%c Error: apiTestHistory - list 接口 缺失参数 apiUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiTestHistory - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiTestHistory - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (page == null) {
+      console.log('%c Error: apiTestHistory - list 接口 缺失参数 page %c', ErrorStyle, '');
+      return;
+    }
+    if (pageSize == null) {
+      console.log('%c Error: apiTestHistory - list 接口 缺失参数 pageSize %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .get(`${prefix}/api/history/list`, {
+          apiUuid,
+          projectUuid,
+          workSpaceUuid,
+          page,
+          pageSize
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c apiTestHistory:list - api_apiTestHistoryList 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c apiTestHistory:list - api_apiTestHistoryList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_apiTestHistoryDetail({ id, projectUuid, workSpaceUuid }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: apiTestHistory - detail 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: apiTestHistory - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiTestHistory - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.get(`${prefix}/api/history`, { id, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_apiTestHistoryDelete({ projectUuid, workSpaceUuid }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: apiTestHistory - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: apiTestHistory - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/api/history`, { projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_environmentCreate({ name, projectUuid, workSpaceUuid, ...items }, prefix = '') {
+    if (name == null) {
+      console.log('%c Error: environment - create 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: environment - create 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: environment - create 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .post(`${prefix}/environment`, {
+          name,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c environment:create - api_environmentCreate 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c environment:create - api_environmentCreate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_environmentUpdate({ id, name, projectUuid, workSpaceUuid, ...items }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: environment - update 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (name == null) {
+      console.log('%c Error: environment - update 接口 缺失参数 name %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: environment - update 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: environment - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .put(`${prefix}/environment`, {
+          id,
+          name,
+          projectUuid,
+          workSpaceUuid,
+          ...items
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c environment:update - api_environmentUpdate 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c environment:update - api_environmentUpdate 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_environmentDelete({ id, projectUuid, workSpaceUuid }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: environment - delete 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: environment - delete 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: environment - delete 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/environment`, { id, projectUuid, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c environment:delete - api_environmentDelete 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c environment:delete - api_environmentDelete 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_environmentDetail({ id, projectUuid, workSpaceUuid }, prefix = '') {
+    if (id == null) {
+      console.log('%c Error: environment - detail 接口 缺失参数 id %c', ErrorStyle, '');
+      return;
+    }
+    if (projectUuid == null) {
+      console.log('%c Error: environment - detail 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: environment - detail 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .get(`${prefix}/environment`, {
+          params: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c environment:detail - api_environmentDetail 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c environment:detail - api_environmentDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_environmentList({ projectUuid, workSpaceUuid }, prefix = '') {
+    if (projectUuid == null) {
+      console.log('%c Error: environment - list 接口 缺失参数 projectUuid %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: environment - list 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .get(`${prefix}/environment/list`, {
+          params: { projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c environment:list - api_environmentList 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c environment:list - api_environmentList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_userReadInfo(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/common/user/info`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c user:readInfo - api_userReadInfo 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c user:readInfo - api_userReadInfo 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_userUpdateInfo(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/common/user/update-userinfo`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c user:updateInfo - api_userUpdateInfo 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c user:updateInfo - api_userUpdateInfo 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_userUpdatePassword({ password, ...items }, prefix = '') {
+    if (password == null) {
+      console.log('%c Error: user - updatePassword 接口 缺失参数 password %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .post(`${prefix}/common/user/change-password`, {
+          body: { password, ...items }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_userLogin({ username, password }, prefix = '') {
+    if (username == null) {
+      console.log('%c Error: user - login 接口 缺失参数 username %c', ErrorStyle, '');
+      return;
+    }
+    if (password == null) {
+      console.log('%c Error: user - login 接口 缺失参数 password %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .post(`${prefix}/user/login`, {
+          body: { username, password }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c user:login - api_userLogin 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c user:login - api_userLogin 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_userRefreshToken(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/common/sso/refresh`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c user:refreshToken - api_userRefreshToken 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c user:refreshToken - api_userRefreshToken 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_userLogout(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/common/sso/logout`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c user:logout - api_userLogout 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c user:logout - api_userLogout 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_userSearch({ username }, prefix = '') {
+    if (username == null) {
+      console.log('%c Error: user - search 接口 缺失参数 username %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .post(`${prefix}/user`, {
+          params: { username }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c user:search - api_userSearch 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c user:search - api_userSearch 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_workspaceCreate({ titles }, prefix = '') {
+    if (titles == null) {
+      console.log('%c Error: workspace - create 接口 缺失参数 titles %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/workspaces`, { titles }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:create - api_workspaceCreate 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:create - api_workspaceCreate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceUpdate({ title, workSpaceUuid }, prefix = '') {
+    if (title == null) {
+      console.log('%c Error: workspace - update 接口 缺失参数 title %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - update 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.put(`${prefix}/workspaces`, { title, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:update - api_workspaceUpdate 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:update - api_workspaceUpdate 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceDelete({ workSpaceUuids }, prefix = '') {
+    if (workSpaceUuids == null) {
+      console.log('%c Error: workspace - delete 接口 缺失参数 workSpaceUuids %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/workspaces`, { workSpaceUuids }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:delete - api_workspaceDelete 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:delete - api_workspaceDelete 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceSearchMember({ username, page, pageSize, workSpaceUuid }, prefix = '') {
+    if (username == null) {
+      console.log('%c Error: workspace - searchMember 接口 缺失参数 username %c', ErrorStyle, '');
+      return;
+    }
+    if (page == null) {
+      console.log('%c Error: workspace - searchMember 接口 缺失参数 page %c', ErrorStyle, '');
+      return;
+    }
+    if (pageSize == null) {
+      console.log('%c Error: workspace - searchMember 接口 缺失参数 pageSize %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - searchMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http
+        .get(`${prefix}/workspaces/users`, {
+          params: { username, page, pageSize, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
+          }
+        });
+    });
+  }
+
+  api_workspaceAddMember({ userIds, workSpaceUuid }, prefix = '') {
+    if (userIds == null) {
+      console.log('%c Error: workspace - addMember 接口 缺失参数 userIds %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - addMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/workspaces/users`, { userIds, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:addMember - api_workspaceAddMember 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:addMember - api_workspaceAddMember 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceRemoveMember({ userIds, workSpaceUuid }, prefix = '') {
+    if (userIds == null) {
+      console.log('%c Error: workspace - removeMember 接口 缺失参数 userIds %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - removeMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/workspaces/users`, { userIds, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceMemberQuit({ workSpaceUuid }, prefix = '') {
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - memberQuit 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.delete(`${prefix}/workspaces/users/quit`, { workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceAddMemberRole({ userRole, workSpaceUuid }, prefix = '') {
+    if (userRole == null) {
+      console.log('%c Error: workspace - addMemberRole 接口 缺失参数 userRole %c', ErrorStyle, '');
+      return;
+    }
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - addMemberRole 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.post(`${prefix}/workspaces/users/roles`, { userRole, workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:addMemberRole - api_workspaceAddMemberRole 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceSearchMember({ workSpaceUuid }, prefix = '') {
+    if (workSpaceUuid == null) {
+      console.log('%c Error: workspace - searchMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      return;
+    }
+
+    return new Promise(resolve => {
+      this.http.get(`${prefix}/workspaces/users/roles`, { workSpaceUuid }).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceList(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.get(`${prefix}/workspaces`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:list - api_workspaceList 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:list - api_workspaceList 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
   api_projectCreate(params, prefix = '') {
     return new Promise(resolve => {
       this.http.post(`${prefix}/project`, params).subscribe({
@@ -279,291 +1548,6 @@ export class RemoteService {
     });
   }
 
-  api_workspaceCreate({ title }, prefix = '') {
-    if (title == null) {
-      console.log('%c Error: workspace - create 接口 缺失参数 title %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/workspace`, { title }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:create - api_workspaceCreate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:create - api_workspaceCreate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceList({ ...items }, prefix = '') {
-    return new Promise(resolve => {
-      this.http
-        .get(`${prefix}/workspace/list`, {
-          params: { ...items }
-        })
-        .subscribe({
-          next: ({ status, data }: any) => {
-            console.log('%c workspace:list - api_workspaceList 接口请求成功 %c', SuccessStyle, '');
-            if ([200, 201].includes(status)) {
-              return resolve([data, null]);
-            }
-            resolve([null, { status, ...data }]);
-          },
-          error: error => {
-            console.log('%c workspace:list - api_workspaceList 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_workspaceEdit({ workspaceID, title }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - edit 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-    if (title == null) {
-      console.log('%c Error: workspace - edit 接口 缺失参数 title %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.put(`${prefix}/workspace/${workspaceID}`, { title }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:edit - api_workspaceEdit 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:edit - api_workspaceEdit 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceDelete({ workspaceID }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - delete 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.delete(`${prefix}/workspace/${workspaceID}`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:delete - api_workspaceDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:delete - api_workspaceDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceMember({ workspaceID }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - member 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/workspace/${workspaceID}/member/list`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:member - api_workspaceMember 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:member - api_workspaceMember 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceSearchMember({ workspaceID, username }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - searchMember 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-    if (username == null) {
-      console.log('%c Error: workspace - searchMember 接口 缺失参数 username %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/workspace/${workspaceID}/member/list/${username}`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceAddMember({ workspaceID, userIDs }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - addMember 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-    if (userIDs == null) {
-      console.log('%c Error: workspace - addMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/workspace/${workspaceID}/member/add`, { userIDs }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:addMember - api_workspaceAddMember 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:addMember - api_workspaceAddMember 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceRemoveMember({ workspaceID, userIDs }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - removeMember 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-    if (userIDs == null) {
-      console.log('%c Error: workspace - removeMember 接口 缺失参数 userIDs %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http
-        .delete(`${prefix}/workspace/${workspaceID}/member/remove`, {
-          body: { userIDs }
-        })
-        .subscribe({
-          next: ({ status, data }: any) => {
-            console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求成功 %c', SuccessStyle, '');
-            if ([200, 201].includes(status)) {
-              return resolve([data, null]);
-            }
-            resolve([null, { status, ...data }]);
-          },
-          error: error => {
-            console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_workspaceMemberQuit({ workspaceID }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - memberQuit 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/workspace/${workspaceID}/member/leave`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_workspaceSetRole({ workspaceID, roleID, memberID }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - setRole 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-    if (roleID == null) {
-      console.log('%c Error: workspace - setRole 接口 缺失参数 roleID %c', ErrorStyle, '');
-      return;
-    }
-    if (memberID == null) {
-      console.log('%c Error: workspace - setRole 接口 缺失参数 memberID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http
-        .post(`${prefix}/workspace/${workspaceID}/member/setRole`, {
-          roleID,
-          memberID
-        })
-        .subscribe({
-          next: ({ status, data }: any) => {
-            console.log('%c workspace:setRole - api_workspaceSetRole 接口请求成功 %c', SuccessStyle, '');
-            if ([200, 201].includes(status)) {
-              return resolve([data, null]);
-            }
-            resolve([null, { status, ...data }]);
-          },
-          error: error => {
-            console.log('%c workspace:setRole - api_workspaceSetRole 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_workspacePermission({ workspaceID }, prefix = '') {
-    if (workspaceID == null) {
-      console.log('%c Error: workspace - permission 接口 缺失参数 workspaceID %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/workspace/${workspaceID}/rolePermission`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:permission - api_workspacePermission 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:permission - api_workspacePermission 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
   api_shareCreateShare(params, prefix = '') {
     return new Promise(resolve => {
       this.http.post(`${prefix}/shared`, params).subscribe({
@@ -685,506 +1669,6 @@ export class RemoteService {
         },
         error: error => {
           console.log('%c shareDoc:getEnv - api_shareDocGetEnv 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_userReadInfo(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/common/user/info`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c user:readInfo - api_userReadInfo 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c user:readInfo - api_userReadInfo 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_userUpdateInfo(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/common/user/update-userinfo`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c user:updateInfo - api_userUpdateInfo 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c user:updateInfo - api_userUpdateInfo 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_userUpdatePassword({ password, ...items }, prefix = '') {
-    if (password == null) {
-      console.log('%c Error: user - updatePassword 接口 缺失参数 password %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http
-        .post(`${prefix}/common/user/change-password`, {
-          body: { password, ...items }
-        })
-        .subscribe({
-          next: ({ status, data }: any) => {
-            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求成功 %c', SuccessStyle, '');
-            if ([200, 201].includes(status)) {
-              return resolve([data, null]);
-            }
-            resolve([null, { status, ...data }]);
-          },
-          error: error => {
-            console.log('%c user:updatePassword - api_userUpdatePassword 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_userLogin({ username, password }, prefix = '') {
-    if (username == null) {
-      console.log('%c Error: user - login 接口 缺失参数 username %c', ErrorStyle, '');
-      return;
-    }
-    if (password == null) {
-      console.log('%c Error: user - login 接口 缺失参数 password %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http
-        .post(`${prefix}/user/login`, {
-          body: { username, password }
-        })
-        .subscribe({
-          next: ({ status, data }: any) => {
-            console.log('%c user:login - api_userLogin 接口请求成功 %c', SuccessStyle, '');
-            if ([200, 201].includes(status)) {
-              return resolve([data, null]);
-            }
-            resolve([null, { status, ...data }]);
-          },
-          error: error => {
-            console.log('%c user:login - api_userLogin 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_userRefreshToken(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/common/sso/refresh`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c user:refreshToken - api_userRefreshToken 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c user:refreshToken - api_userRefreshToken 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_userLogout(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/common/sso/logout`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c user:logout - api_userLogout 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c user:logout - api_userLogout 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_userSearch({ username }, prefix = '') {
-    if (username == null) {
-      console.log('%c Error: user - search 接口 缺失参数 username %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http
-        .post(`${prefix}/user`, {
-          params: { username }
-        })
-        .subscribe({
-          next: ({ status, data }: any) => {
-            console.log('%c user:search - api_userSearch 接口请求成功 %c', SuccessStyle, '');
-            if ([200, 201].includes(status)) {
-              return resolve([data, null]);
-            }
-            resolve([null, { status, ...data }]);
-          },
-          error: error => {
-            console.log('%c user:search - api_userSearch 接口请求失败 %c', ErrorStyle, '');
-            resolve([null, error]);
-          }
-        });
-    });
-  }
-
-  api_environmentCreate(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/environment`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c environment:create - api_environmentCreate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c environment:create - api_environmentCreate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_environmentUpdate({ uuid, ...items }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: environment - update 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.put(`${prefix}/environment/${uuid}`, { ...items }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c environment:update - api_environmentUpdate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c environment:update - api_environmentUpdate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_environmentDelete({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: environment - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.delete(`${prefix}/environment/${uuid}`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c environment:delete - api_environmentDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c environment:delete - api_environmentDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_groupCreate(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/group`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c group:create - api_groupCreate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c group:create - api_groupCreate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_groupUpdate({ uuid, ...items }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: group - update 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.put(`${prefix}/group/${uuid}`, { ...items }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c group:update - api_groupUpdate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c group:update - api_groupUpdate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_groupDelete({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: group - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.delete(`${prefix}/group?uuids=[${uuid}]`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c group:delete - api_groupDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c group:delete - api_groupDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_apiCreate(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/api_data`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c api:create - api_apiCreate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c api:create - api_apiCreate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_apiUpdate({ uuid, ...items }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: api - update 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.put(`${prefix}/api_data/${uuid}`, { ...items }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c api:update - api_apiUpdate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c api:update - api_apiUpdate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_apiDelete({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: api - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.delete(`${prefix}/api_data?uuids=[${uuid}]`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c api:delete - api_apiDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c api:delete - api_apiDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_apiLoadApi({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: api - loadApi 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/api_data/${uuid}`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c api:loadApi - api_apiLoadApi 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c api:loadApi - api_apiLoadApi 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_testCreate(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/api_test_history`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c test:create - api_testCreate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c test:create - api_testCreate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_testDelete({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: test - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.delete(`${prefix}/api_test_history?uuids=[${uuid}]`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c test:delete - api_testDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c test:delete - api_testDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_mockCreate(params, prefix = '') {
-    return new Promise(resolve => {
-      this.http.post(`${prefix}/mock`, params).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c mock:create - api_mockCreate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c mock:create - api_mockCreate 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_mockLoad({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: mock - load 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.get(`${prefix}/mock/${uuid}`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c mock:load - api_mockLoad 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c mock:load - api_mockLoad 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_mockDelete({ uuid }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: mock - delete 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.delete(`${prefix}/mock/${uuid}`, {}).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c mock:delete - api_mockDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c mock:delete - api_mockDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
-    });
-  }
-
-  api_mockUpdate({ uuid, ...items }, prefix = '') {
-    if (uuid == null) {
-      console.log('%c Error: mock - update 接口 缺失参数 uuid %c', ErrorStyle, '');
-      return;
-    }
-
-    return new Promise(resolve => {
-      this.http.put(`${prefix}/mock/${uuid}`, { ...items }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c mock:update - api_mockUpdate 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
-          }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c mock:update - api_mockUpdate 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });

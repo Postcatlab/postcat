@@ -265,6 +265,7 @@ export class EffectService {
     // * delete API
     // * update mock
   }
+  // * delete group and api
   async deleteGroup(group) {
     // * delete group
     // * call deleteAPI()
