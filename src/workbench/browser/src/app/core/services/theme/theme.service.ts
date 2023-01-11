@@ -237,7 +237,6 @@ export class ThemeService {
             const themeID = extension.features.theme[0].id;
             const id = this.getExtensionID(name, themeID);
             const theme = this.themes.find(val => val.id === id);
-            console.log(theme);
             if (!theme) return;
             this.changeTheme(theme);
             break;
