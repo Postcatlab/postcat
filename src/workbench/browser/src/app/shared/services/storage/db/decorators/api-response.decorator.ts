@@ -13,7 +13,7 @@ export enum HttpStatus {
 
 export class ResObj<T> {
   success = true;
-  code = 0;
+  code = HttpStatus.OK;
   message = '';
   data: T;
   constructor(data, options: ApiResponseOptions = {}) {
@@ -22,27 +22,25 @@ export class ResObj<T> {
   }
 }
 
-export function ApiResponse(options: ApiResponseOptions): MethodDecorator {
+export function ApiResponse(options: ApiResponseOptions = {}): MethodDecorator {
   return function (target: object, propertyKey?: string | symbol, descriptor?: TypedPropertyDescriptor<any>) {
     const original = descriptor.value;
 
     if (typeof original === 'function') {
       descriptor.value = async function (...args) {
-        // 模拟 network，使用 JSON.stringify 将数据序列化
-        const data = await original.apply(this, JSON.parse(JSON.stringify(args)));
-        if (data instanceof ResObj) {
-          return new ResObj(data.data, options);
-        } else {
-          return new ResObj(data, options);
+        try {
+          // 模拟 network，使用 JSON.stringify 将数据序列化
+          const data = await original.apply(this, JSON.parse(JSON.stringify(args)));
+          if (data instanceof ResObj) {
+            return new ResObj(data.data, options);
+          } else {
+            return new ResObj(data, options);
+          }
+        } catch (error) {
+          new ResObj(error, { ...options, code: 1 });
         }
       };
     }
     return descriptor;
   };
 }
-
-export const ApiOkResponse = (options: ApiResponseOptions = {}) =>
-  ApiResponse({
-    ...options,
-    code: HttpStatus.OK
-  });

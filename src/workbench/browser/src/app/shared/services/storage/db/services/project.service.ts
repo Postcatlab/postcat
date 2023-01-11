@@ -1,5 +1,5 @@
 import { dataSource } from 'eo/workbench/browser/src/app/shared/services/storage/db/dataSource';
-import { ApiOkResponse } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
+import { ApiResponse } from 'eo/workbench/browser/src/app/shared/services/storage/db/decorators/api-response.decorator';
 import {
   ProjectBulkCreateDto,
   ProjectBulkReadDto,
@@ -79,7 +79,7 @@ export class ProjectService extends BaseService<Project> {
   }
 
   /** 获取所有 API 及分组 */
-  @ApiOkResponse()
+  @ApiResponse()
   async collections(projectUuid: string) {
     const apiDatas = await this.apiDataTable.where({ projectUuid }).sortBy('orderNum');
     const apiGroups = await this.apiGroupTable.where({ projectUuid }).sortBy('sort');
@@ -88,7 +88,7 @@ export class ProjectService extends BaseService<Project> {
   }
 
   /** 导出整个项目 */
-  @ApiOkResponse()
+  @ApiResponse()
   async exports(projectUuid: string) {
     return {};
   }

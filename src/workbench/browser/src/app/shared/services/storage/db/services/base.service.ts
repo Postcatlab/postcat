@@ -1,6 +1,6 @@
 import type { Table } from 'dexie';
 
-import { ApiOkResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
+import { ApiResponse, ApiResponsePromise } from '../decorators/api-response.decorator';
 export class BaseService<T> {
   constructor(readonly db: Table<T>) {
     return this;
@@ -19,46 +19,46 @@ export class BaseService<T> {
     });
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   read(params: Record<string, any> = {}) {
     return this.db.where(params).first() as ApiResponsePromise<T>;
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   async create(params) {
     const id = await this.db.add(params);
     return this.read({ id }) as ApiResponsePromise<T>;
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   async update(params: Record<string, any> = {}) {
     const { id, ...rest } = params;
     await this.db.update(id, rest);
     return this.read({ id }) as ApiResponsePromise<T>;
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   async delete(params: Record<string, any> = {}) {
     return this.db.where(params).delete() as ApiResponsePromise<number>;
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   async bulkRead(params: Record<string, any>) {
     return this.filterData(params).toArray() as ApiResponsePromise<T[]>;
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   async bulkUpdate(params) {
     const keys = await this.db.bulkPut(params, { allKeys: true });
     return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   bulkDelete(params: Record<string, any> = {}) {
     return this.filterData(params).delete() as ApiResponsePromise<number>;
   }
 
-  @ApiOkResponse()
+  @ApiResponse()
   async bulkCreate(params) {
     const keys = await this.db.bulkAdd(params, { allKeys: true });
     return this.bulkRead({ id: keys }) as ApiResponsePromise<T[]>;
