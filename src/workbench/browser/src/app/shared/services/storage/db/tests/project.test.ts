@@ -33,7 +33,7 @@ if (projectList.length === projects.length) {
 }
 
 // 修改项目信息
-const name = `${projects.at(0).uuid}`;
+const name = `${projects.at(0).uuid}-修改项目信息`;
 const { data: projectUpdateRes } = await table.update({ projectUuid: projects.at(0).uuid, name });
 if (projectUpdateRes.name === name) {
   pcConsole.success('[修改项目信息]: 测试通过');

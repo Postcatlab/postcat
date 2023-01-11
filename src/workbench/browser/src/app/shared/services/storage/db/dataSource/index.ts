@@ -53,9 +53,9 @@ class DataSource extends Dexie {
     this.tables.forEach(table => {
       const isDefUuid = table.schema.idxByName.uuid?.keyPath;
       table.hook('creating', (primKey, obj) => {
-        // dexie 貌似没有直接提供自动生成 uuid 功能，所以这里简单实现一下
-        // 官方默认的语法支持：https://dexie.org/docs/Version/Version.stores()#schema-syntax
         if (isDefUuid) {
+          // dexie 貌似没有直接提供自动生成 uuid 功能，所以这里简单实现一下
+          // 官方默认的语法支持：https://dexie.org/docs/Version/Version.stores()#schema-syntax
           obj['uuid'] = crypto.randomUUID();
         }
       });

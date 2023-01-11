@@ -3,7 +3,8 @@ import { ApiOkResponse } from 'eo/workbench/browser/src/app/shared/services/stor
 import {
   ProjectBulkCreateDto,
   ProjectBulkReadDto,
-  ProjectDeleteDto
+  ProjectDeleteDto,
+  ProjectUpdateDto
 } from 'eo/workbench/browser/src/app/shared/services/storage/db/dto/project.dto';
 import { ApiData, Group, Project } from 'eo/workbench/browser/src/app/shared/services/storage/db/models';
 import { BaseService } from 'eo/workbench/browser/src/app/shared/services/storage/db/services/base.service';
@@ -42,6 +43,13 @@ export class ProjectService extends BaseService<Project> {
         workSpaceUuid
       }))
     ];
+  }
+  /** 更新项目 前转换参数名 */
+  async updateParamTransformer(params: ProjectUpdateDto) {
+    const { projectUuid, ...rest } = params;
+    const { data } = await this.read({ uuid: projectUuid });
+    rest['id'] = data.id;
+    return [rest];
   }
   /** 删除项目 前转换参数名 */
   bulkDeleteParamTransformer(params: ProjectDeleteDto) {

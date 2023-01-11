@@ -11,6 +11,12 @@ export interface ProjectMsg {
 export interface ProjectDeleteDto {
   projectUuids: string[];
 }
+
+export interface ProjectUpdateDto {
+  projectUuid: string;
+  name: string;
+  description: string;
+}
 export interface ProjectBulkReadDto {
   workSpaceUuid?: string;
   projectUuidS?: string[];

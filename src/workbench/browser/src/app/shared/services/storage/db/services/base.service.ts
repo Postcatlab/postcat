@@ -33,9 +33,10 @@ export class BaseService<T> {
 
   @HookGenerator()
   @ApiOkResponse()
-  async update(params) {
-    const key = await this.db.put(params);
-    return this.read({ id: key }) as ApiResponseOptions<T>;
+  async update(params: Record<string, any> = {}) {
+    const { id, ...rest } = params;
+    await this.db.update(id, rest);
+    return this.read({ id }) as ApiResponseOptions<T>;
   }
 
   @HookGenerator()
