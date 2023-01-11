@@ -12,4 +12,9 @@ export const db = {
   apiTestHistory: new ApiTestHistoryService()
 } as const;
 
-queueMicrotask(async () => await import('./tests/index'));
+if (process.env.NODE_ENV === 'development') {
+  queueMicrotask(async () => {
+    const module = await import('./tests/index');
+    module.setupTest();
+  });
+}

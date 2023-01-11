@@ -1,5 +1,7 @@
 export interface ApiData {
   id?: number;
+  uuid?: string;
+  projectUuid?: string;
   groupId: number;
   groupName: string;
   projectId: number;

@@ -5,6 +5,9 @@ window.pcConsole = {
   warn(...args) {
     console.warn('%c EO_WARN:', 'background-color:#ffd900;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
   },
+  success(...args) {
+    console.log('%c EO_SUCCESS: ', 'background-color:#52c41a; color: #fff;padding:3px;box-sizing: border-box;border-radius: 3px;', ...args);
+  },
   error(...args) {
     console.error(
       '%c EO_ERROR: ',
