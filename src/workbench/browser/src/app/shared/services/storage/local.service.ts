@@ -29,9 +29,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiData
         .create({ apiList, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c apiData - create 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiData - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiData - create 接口调用失败 %c', ErrorStyle, '');
@@ -57,9 +60,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiData
         .update({ api, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c apiData - update 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiData - update 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiData - update 接口调用失败 %c', ErrorStyle, '');
@@ -85,9 +91,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiData
         .delete({ apiUuid, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c apiData - delete 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiData - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiData - delete 接口调用失败 %c', ErrorStyle, '');
@@ -109,9 +118,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiData
         .read({ projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c apiData - detail 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiData - detail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiData - detail 接口调用失败 %c', ErrorStyle, '');
@@ -137,9 +149,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiData
         .bulkRead({ api, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c apiData - list 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiData - list 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiData - list 接口调用失败 %c', ErrorStyle, '');
@@ -185,9 +200,12 @@ export class LocalService {
           workSpaceUuid,
           ...items
         })
-        .then(({ status, data }: any) => {
-          console.log('%c mock - create 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c mock - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c mock - create 接口调用失败 %c', ErrorStyle, '');
@@ -213,9 +231,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.mock
         .update({ id, projectUuid, workSpaceUuid, ...items })
-        .then(({ status, data }: any) => {
-          console.log('%c mock - update 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c mock - update 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c mock - update 接口调用失败 %c', ErrorStyle, '');
@@ -249,9 +270,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.mock
         .bulkRead({ apiUuid, projectUuid, workSpaceUuid, page, pageSize })
-        .then(({ status, data }: any) => {
-          console.log('%c mock - list 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c mock - list 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c mock - list 接口调用失败 %c', ErrorStyle, '');
@@ -277,9 +301,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.mock
         .read({ id, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c mock - detail 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c mock - detail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c mock - detail 接口调用失败 %c', ErrorStyle, '');
@@ -305,9 +332,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.mock
         .delete({ id, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c mock - delete 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c mock - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c mock - delete 接口调用失败 %c', ErrorStyle, '');
@@ -341,9 +371,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.group
         .create({ module, type, name, projectUuid, workSpaceUuid, ...items })
-        .then(({ status, data }: any) => {
-          console.log('%c group - create 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c group - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c group - create 接口调用失败 %c', ErrorStyle, '');
@@ -369,9 +402,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.group
         .update({ id, projectUuid, workSpaceUuid, ...items })
-        .then(({ status, data }: any) => {
-          console.log('%c group - update 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c group - update 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c group - update 接口调用失败 %c', ErrorStyle, '');
@@ -397,9 +433,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.group
         .delete({ id, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c group - delete 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c group - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c group - delete 接口调用失败 %c', ErrorStyle, '');
@@ -425,9 +464,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.group
         .read({ id, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c group - detail 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c group - detail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c group - detail 接口调用失败 %c', ErrorStyle, '');
@@ -449,9 +491,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.group
         .bulkRead({ projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c group - list 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c group - list 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c group - list 接口调用失败 %c', ErrorStyle, '');
@@ -496,9 +541,12 @@ export class LocalService {
           projectUuid,
           workSpaceUuid
         })
-        .then(({ status, data }: any) => {
-          console.log('%c apiTestHistory - create 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiTestHistory - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiTestHistory - create 接口调用失败 %c', ErrorStyle, '');
@@ -532,9 +580,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiTestHistory
         .bulkRead({ apiUuid, projectUuid, workSpaceUuid, page, pageSize })
-        .then(({ status, data }: any) => {
-          console.log('%c apiTestHistory - list 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiTestHistory - list 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiTestHistory - list 接口调用失败 %c', ErrorStyle, '');
@@ -560,9 +611,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiTestHistory
         .read({ id, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c apiTestHistory - detail 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiTestHistory - detail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiTestHistory - detail 接口调用失败 %c', ErrorStyle, '');
@@ -584,9 +638,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.apiTestHistory
         .bulkDelete({ projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c apiTestHistory - delete 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c apiTestHistory - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c apiTestHistory - delete 接口调用失败 %c', ErrorStyle, '');
@@ -612,9 +669,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.environment
         .create({ name, projectUuid, workSpaceUuid, ...items })
-        .then(({ status, data }: any) => {
-          console.log('%c environment - create 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c environment - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c environment - create 接口调用失败 %c', ErrorStyle, '');
@@ -644,9 +704,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.environment
         .update({ id, name, projectUuid, workSpaceUuid, ...items })
-        .then(({ status, data }: any) => {
-          console.log('%c environment - update 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c environment - update 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c environment - update 接口调用失败 %c', ErrorStyle, '');
@@ -672,9 +735,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.environment
         .delete({ id, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c environment - delete 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c environment - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c environment - delete 接口调用失败 %c', ErrorStyle, '');
@@ -700,9 +766,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.environment
         .read({ id, projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c environment - detail 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c environment - detail 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c environment - detail 接口调用失败 %c', ErrorStyle, '');
@@ -724,9 +793,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.environment
         .bulkRead({ projectUuid, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c environment - list 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c environment - list 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c environment - list 接口调用失败 %c', ErrorStyle, '');
@@ -744,9 +816,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.workspace
         .create({ titles })
-        .then(({ status, data }: any) => {
-          console.log('%c workspace - create 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c workspace - create 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c workspace - create 接口调用失败 %c', ErrorStyle, '');
@@ -768,9 +843,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.workspace
         .update({ title, workSpaceUuid })
-        .then(({ status, data }: any) => {
-          console.log('%c workspace - update 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c workspace - update 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c workspace - update 接口调用失败 %c', ErrorStyle, '');
@@ -788,9 +866,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.workspace
         .delete({ workSpaceUuids })
-        .then(({ status, data }: any) => {
-          console.log('%c workspace - delete 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c workspace - delete 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c workspace - delete 接口调用失败 %c', ErrorStyle, '');
@@ -803,9 +884,12 @@ export class LocalService {
     return new Promise(resolve => {
       db.workspace
         .bulkRead(params)
-        .then(({ status, data }: any) => {
-          console.log('%c workspace - list 接口调用成功 %c', SuccessStyle, '');
-          return resolve([data, null]);
+        .then(({ code, data }: any) => {
+          if (code === 0) {
+            console.log('%c workspace - list 接口调用成功 %c', SuccessStyle, '');
+            return resolve([data, null]);
+          }
+          return resolve([null, { code, data }]);
         })
         .catch(error => {
           console.log('%c workspace - list 接口调用失败 %c', ErrorStyle, '');
