@@ -13,18 +13,18 @@
     eo-ng-dropdown
     [nzDropdownMenu]="menu"
     nzPlacement="bottomRight"
-    (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })"
+    (click)="addAPI({})"
   >
     <eo-iconpark-icon name="add"></eo-iconpark-icon>
   </button>
   <eo-ng-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
-      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'addAPI' })">
+      <li nz-menu-item (click)="addAPI({})">
         <a i18n="@@AddAPI">New API</a>
       </li>
-      <li nz-menu-item (click)="addGroup()"><a i18n>New Group</a></li>
+      <li nz-menu-item (click)="addGroup(null)"><a i18n>New Group</a></li>
       <li nz-menu-divider></li>
-      <li nz-menu-item (click)="operateApiEvent({ event: $event, eventName: 'importAPI' })">
+      <li nz-menu-item (click)="importAPI()">
         <a i18n>Import API</a>
       </li>
     </ul>
@@ -49,7 +49,7 @@
     (nzOnDrop)="treeItemDrop($event)"
     [nzTreeTemplate]="nzTreeTemplate"
   ></eo-ng-tree-default>
-  <nz-skeleton [nzLoading]="apiDataLoading && !treeNodes.length" [nzActive]="true">
+  <nz-skeleton [nzLoading]="isLoading && !treeNodes.length" [nzActive]="true">
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <div class="h-full" [style.--tree-level]="node.level" apiGroupTree [node]="node">
         <!-- Folder -->
@@ -100,7 +100,7 @@
               </button>
               <eo-ng-dropdown-menu #apiMenu="nzDropdownMenu">
                 <ul nz-menu>
-                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click({ group: node, api: apiDataItems[node.key] })">
+                  <li nz-menu-item *ngFor="let item of apiItemsMenu" (click)="item.click({ group: node })">
                     {{ item.title }}
                   </li>
                 </ul>

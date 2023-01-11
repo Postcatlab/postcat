@@ -66,7 +66,6 @@ export class ApiGroupEditComponent implements OnInit {
     this.storage.run('groupCreate', [this.group], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.modalRef.destroy();
-        this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
         console.error(result.data);
       }
@@ -77,7 +76,6 @@ export class ApiGroupEditComponent implements OnInit {
     this.storage.run('groupUpdate', [this.group, this.group.uuid], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         this.modalRef.destroy();
-        this.messageService.send({ type: 'updateGroupSuccess', data: { group: result.data } });
       } else {
         console.error(result.data);
       }
@@ -113,11 +111,6 @@ export class ApiGroupEditComponent implements OnInit {
     this.storage.run('groupBulkRemove', [data.group], (result: StorageRes) => {
       if (result.status === StorageResStatus.success) {
         //delete group api
-        if (data.api.length > 0) {
-          this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: data.api } });
-        } else {
-          this.messageService.send({ type: 'updateGroupSuccess', data: {} });
-        }
       }
     });
   }

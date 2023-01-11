@@ -253,35 +253,64 @@ export class EffectService {
     });
   }
 
-  // * history
-  private loadHistory() {
-    // TODO load history with IO
-    this.store.setHistory([]);
-  }
-  addHistory() {
-    // TODO add history
-    this.store.setHistory([]);
-  }
+  // *** data engine
+
+  // ? delete
   deleteHistory() {
     // TODO delete history with IO
     this.store.setHistory([]);
   }
-  // * update api
-  updateAPI() {
-    // * update mock
-  }
   // * delete api
   async deleteAPI() {
     // * delete API
-    // * update history
     // * update mock
   }
-  async deleteGroup() {
+  async deleteGroup(group) {
     // * delete group
     // * call deleteAPI()
   }
   async deleteMock() {
     // * delete mock
     // * update API
+  }
+
+  // ? create
+  createHistory() {
+    // TODO add history
+    this.store.setHistory([]);
+  }
+  createGroup() {
+    // * update group
+  }
+  createMock() {
+    // * update API
+  }
+
+  // ? get
+  private getHistory() {
+    // TODO load history with IO
+    this.store.setHistory([]);
+  }
+  getGroupList() {
+    // * get group list data
+    // * get api list data
+    // * merge data
+  }
+  getAPI() {
+    // * get API data
+  }
+
+  // ? update
+  updateAPI() {
+    // * update api
+    // * update api list (for group)
+    // * update mock
+  }
+  updateMock() {
+    // * update mock
+  }
+  updateGroup() {
+    // * update group
+    // * update api list
   }
 }

@@ -57,20 +57,11 @@ export class ProjectApiService {
     this.router.navigate(['/home/workspace/project/api/http/edit'], {
       queryParams: { pageID: Date.now(), uuid: result.data.uuid }
     });
-    this.messageService.send({ type: 'copyApiSuccess', data: { uuids: [uuid] } });
   }
   delete(uuid): void {
-    this.storage.run('apiDataRemove', [uuid], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: [uuid] } });
-      }
-    });
+    this.storage.run('apiDataRemove', [uuid], (result: StorageRes) => {});
   }
   bulkDelete(apis) {
-    this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {
-      if (result.status === StorageResStatus.success) {
-        this.messageService.send({ type: 'deleteApiSuccess', data: { uuids: apis } });
-      }
-    });
+    this.storage.run('apiDataBulkRemove', [apis], (result: StorageRes) => {});
   }
 }
