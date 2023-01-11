@@ -72,7 +72,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.messageService.get().subscribe((inArg: Message) => {
       if (inArg.type === 'installedExtensionsChange') {
         if (!this.sidebar.visible) return;
-        const extensionIDs = Array.isArray(inArg.data) ? inArg.data.map(n => n.name) : [...inArg.data.keys()];
+        const installedMap = inArg.data.installedMap;
+        const extensionIDs = Array.isArray(installedMap) ? installedMap.map(n => n.name) : [...installedMap.keys()];
         this.modules = this.modules.filter(n => n.isOffical || extensionIDs.includes(n.id));
         this.initSidebarViews();
         if (!this.modules.some(val => this.router.url.includes(val.activeRoute))) {

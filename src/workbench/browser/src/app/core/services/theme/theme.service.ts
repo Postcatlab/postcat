@@ -4,6 +4,7 @@ import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/e
 import { kebabCase } from 'lodash-es';
 
 import { SettingService } from '../../../modules/system-setting/settings.service';
+import { ExtensionInfo } from '../../../shared/models/extension-manager';
 import { Message, MessageService } from '../../../shared/services/message';
 import StorageUtil from '../../../utils/storage/Storage';
 import { ThemeVariableService } from './theme-variable.service';
@@ -42,7 +43,7 @@ export class ThemeService {
     private message: MessageService
   ) {
     this.currentThemeID = this.setting.get('workbench.colorTheme') || this.module.theme.default;
-    this.initCoreThemes();
+    this.coreThemes = this.getCoreThemes();
   }
   async initTheme() {
     await this.querySystemThemes();
@@ -52,6 +53,9 @@ export class ThemeService {
       this.fixedThemeIfNotValid();
     }
   }
+  /**
+   * Sort theme or fixed invalid theme after query all theme
+   * */
   afterAllThemeLoad() {
     this.fixedThemeIfNotValid();
     this.sortThemes();
@@ -66,14 +70,18 @@ export class ThemeService {
     this.injectVaribale(theme.colors);
     this.changeEditorTheme(theme);
   }
-
   queryExtensionThemes() {
+    const extensions = this.getExtensionThemes();
+    this.themes.push(...extensions);
+  }
+  private getExtensionThemes() {
+    const result = [];
     const features = this.extension.getValidExtensionsByFature('theme');
     features.forEach((feature, extensionID) => {
-      feature.themes.forEach(theme => {
-        this.themes.push({
+      feature.theme.forEach(theme => {
+        result.push({
           label: theme.label,
-          id: `${extensionID}_${theme.id}`,
+          id: this.getExtensionID(extensionID, theme.id),
           isExtension: true,
           baseTheme: theme.baseTheme,
           colors: this.themeVariable.getColors(
@@ -83,6 +91,7 @@ export class ThemeService {
         });
       });
     });
+    return result;
   }
   changeEditorTheme(currentTheme = StorageUtil.get('pc_theme')) {
     const baseTheme = currentTheme.baseTheme || currentTheme.id;
@@ -91,7 +100,7 @@ export class ThemeService {
       window.monaco?.editor.setTheme(editorTheme);
     }
   }
-  private initCoreThemes() {
+  private getCoreThemes() {
     const systemThemes = SYSTEM_THEME;
     //Init Core theme
     const coreThemes = systemThemes.filter(val => val.core);
@@ -100,7 +109,7 @@ export class ThemeService {
       //Colors defalut value rule
       theme.colors = this.themeVariable.getColors(themeColors);
     });
-    this.coreThemes = coreThemes;
+    return coreThemes;
   }
   private sortThemes() {
     this.themes.sort((a: SystemThemeItems, b: SystemThemeItems) => {
@@ -213,11 +222,34 @@ export class ThemeService {
     if (this.subscribe) return;
     this.subscribe = this.message.get().subscribe((inArg: Message) => {
       if (inArg.type === 'installedExtensionsChange') {
-        //Select valid theme while extension disabled
+        //Get the newest theme list
         this.themes = this.themes.filter(val => !val.isExtension);
         this.queryExtensionThemes();
         this.afterAllThemeLoad();
+        switch (inArg.data.action) {
+          case 'enable':
+          case 'install': {
+            const name = inArg.data.name;
+            const extension: ExtensionInfo = inArg.data.installedMap.get(name);
+            if (!extension?.features?.theme?.length) break;
+
+            //Change theme after install/enable extension
+            const themeID = extension.features.theme[0].id;
+            const id = this.getExtensionID(name, themeID);
+            const theme = this.themes.find(val => val.id === id);
+            console.log(theme);
+            if (!theme) return;
+            this.changeTheme(theme);
+            break;
+          }
+          default: {
+            break;
+          }
+        }
       }
     });
+  }
+  getExtensionID(name, themeID) {
+    return `${name}_${themeID}`;
   }
 }

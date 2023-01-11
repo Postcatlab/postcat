@@ -95,8 +95,8 @@ export class AppModule {
   async init() {
     const promiseSystem = this.theme.initTheme();
     await this.extensionService.init();
-    const promiseExtensions = this.theme.queryExtensionThemes();
-    Promise.all([promiseSystem, promiseExtensions]).then(() => {
+    this.theme.queryExtensionThemes();
+    Promise.all([promiseSystem]).then(() => {
       console.log('fixedThemeIfNotValid');
       this.theme.afterAllThemeLoad();
     });

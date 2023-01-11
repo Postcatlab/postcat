@@ -6,7 +6,7 @@ type ThemeItems = {
   label: string;
   id: string;
   baseTheme: string;
-  colors: Partial<ThemeColors>;
+  colors?: Partial<ThemeColors>;
 };
 export type FeatureInfo = {
   icon: string;
@@ -18,10 +18,8 @@ export type FeatureInfo = {
   //ExportAPI.Filename
   filename?: string;
 
-  /**
-   * Theme ID
-   */
-  themes?: ThemeItems[];
+  //theme
+  theme: ThemeItems[];
   //*Field for browser generate by code,not actually in package.json
   extensionID: string;
   rightExtra: any[];
@@ -60,7 +58,7 @@ export interface ExtensionInfo {
     importAPI: FeatureInfo;
     exportAPI: FeatureInfo;
     syncAPI: FeatureInfo;
-
+    theme: ThemeItems[];
     //Random feature
     [index: string]: any;
   };

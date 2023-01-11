@@ -9,6 +9,8 @@ import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
 import { lastValueFrom } from 'rxjs';
 
 import { WebExtensionService } from './webExtension.service';
+
+import { version } from 'os';
 const defaultExtensions = ['postcat-export-openapi', 'postcat-import-openapi'];
 @Injectable({
   providedIn: 'root'
@@ -47,13 +49,6 @@ export class ExtensionService {
         installedName.push(target.name);
       });
 
-      //Install debug extensions
-      this.webExtensionService.debugExtensions.forEach(name => {
-        if (this.disabledExtensionNames.includes(name)) return;
-        //* install every time
-        installedName.push(name);
-      });
-
       for (let i = 0; i < installedName.length; i++) {
         const name = installedName[i];
         await this.installExtension({
@@ -61,7 +56,9 @@ export class ExtensionService {
         });
       }
     } else {
-      this.updateInstalledInfo(this.getExtensions());
+      this.updateInstalledInfo(this.getExtensions(), {
+        action: 'init'
+      });
     }
   }
   getExtensions() {
@@ -77,14 +74,20 @@ export class ExtensionService {
   getInstalledList() {
     return this.installedList;
   }
-  updateInstalledInfo(data) {
+  updateInstalledInfo(data, opts) {
     this.installedMap = data;
     this.installedMap.forEach((val, key) => {
       val['enable'] = this.isEnable(val.name);
     });
     this.extensionIDs = this.updateExtensionIDs();
     this.installedList = Array.from(this.installedMap.values()).filter(it => this.extensionIDs.includes(it.name));
-    this.emitInstalledExtensionsChangeEvent();
+    this.messageService.send({
+      type: 'installedExtensionsChange',
+      data: {
+        installedMap: this.installedMap,
+        ...opts
+      }
+    });
   }
   isInstalled(name) {
     return this.installedList.includes(name);
@@ -93,7 +96,13 @@ export class ExtensionService {
     const result: any = await lastValueFrom(this.http.get(`${this.HOST}/list?locale=${this.language.systemLanguage}`), {
       defaultValue: []
     });
-
+    const debugExtensions = [];
+    for (let i = 0; i < this.webExtensionService.debugExtensionNames.length; i++) {
+      const name = this.webExtensionService.debugExtensionNames[i];
+      const hasExist = this.installedList.some(val => val.name === name);
+      if (hasExist) continue;
+      debugExtensions.push(await this.webExtensionService.getDebugExtensionsPkgInfo(name));
+    }
     result.data = [
       ...result.data.filter(val => this.installedList.every(childVal => childVal.name !== val.name)),
       //Local debug package
@@ -103,8 +112,10 @@ export class ExtensionService {
           module.i18n = extension.i18n;
         }
         return module;
-      })
+      }),
+      ...debugExtensions
     ];
+
     //Handle featue data
     result.data = result.data.map(module => {
       let result = this.webExtensionService.translateModule(module);
@@ -113,6 +124,9 @@ export class ExtensionService {
       }
       return result;
     });
+
+    //Get debug extensions
+    this.webExtensionService.debugExtensions = result.data.filter(val => val.isDebug);
     return result;
   }
   async getDetail(name): Promise<any> {
@@ -134,7 +148,10 @@ export class ExtensionService {
    */
   async installExtension({ name, version = 'latest', main = '' }): Promise<boolean> {
     const successCallback = () => {
-      this.updateInstalledInfo(this.getExtensions());
+      this.updateInstalledInfo(this.getExtensions(), {
+        action: 'install',
+        name
+      });
       if (!this.isEnable(name)) {
         this.toggleEnableExtension(name, true);
       }
@@ -157,10 +174,16 @@ export class ExtensionService {
     }
   }
   async uninstallExtension(name): Promise<boolean> {
+    const successCallback = () => {
+      this.updateInstalledInfo(this.getExtensions(), {
+        action: 'uninstall',
+        name
+      });
+    };
     if (this.electron.isElectron) {
       const { code, data, modules } = await window.electron.uninstallExtension(name);
       if (code === 0) {
-        this.updateInstalledInfo(this.getExtensions());
+        successCallback();
         return true;
       }
       console.error(data);
@@ -168,7 +191,7 @@ export class ExtensionService {
     } else {
       const isSuccess = await this.webExtensionService.unInstallExtension(name);
       if (isSuccess) {
-        this.updateInstalledInfo(this.getExtensions());
+        successCallback();
       }
       return isSuccess;
     }
@@ -183,7 +206,10 @@ export class ExtensionService {
     } else {
       this.disableExtension(id);
     }
-    this.updateInstalledInfo(this.installedMap);
+    this.updateInstalledInfo(this.installedMap, {
+      action: isEnable ? 'enable' : 'disable',
+      name: id
+    });
   }
   private enableExtension(names: string | string[]) {
     const enableNames = Array().concat(names) as string[];
@@ -245,10 +271,14 @@ export class ExtensionService {
       return [];
     }
   }
-  private emitInstalledExtensionsChangeEvent() {
-    this.messageService.send({ type: 'installedExtensionsChange', data: this.installedMap });
-  }
   private async requestDetail(id) {
+    const debugExtension = this.webExtensionService.debugExtensions.find(val => val.name === id);
+    if (debugExtension) {
+      return {
+        code: 0,
+        data: debugExtension
+      };
+    }
     return await lastValueFrom(this.http.get(`${this.HOST}/detail/${id}?locale=${this.language.systemLanguage}`)).catch(err => [0, err]);
   }
   private updateExtensionIDs() {

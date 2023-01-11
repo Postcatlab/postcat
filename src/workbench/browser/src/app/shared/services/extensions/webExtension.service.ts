@@ -1,4 +1,4 @@
-import { Injectable, PACKAGE_ROOT_URL } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TranslateService } from 'eo/platform/common/i18n';
 import { DISABLE_EXTENSION_NAMES } from 'eo/workbench/browser/src/app/shared/constants/storageKeys';
 import { eoDeepCopy } from 'eo/workbench/browser/src/app/utils/index.utils';
@@ -25,18 +25,17 @@ const extKey = 'ext_installed_list';
   providedIn: 'root'
 })
 export class WebExtensionService {
-  debugExtensions;
   installedList: ExtensionItem[] = StorageUtil.get(extKey, []);
   disabledExtensionNames = [];
+  debugExtensions = [];
+  debugExtensionNames;
   resourceUrl = 'https://unpkg.com';
   constructor(private web: WebService, private language: LanguageService) {
-    this.debugExtensions = !APP_CONFIG.production || this.web.isVercel ? ['vscode-postcat-theme'] : [];
+    this.debugExtensionNames = !APP_CONFIG.production || this.web.isVercel ? ['vscode-postcat-theme', 'github-postcat-theme'] : [];
   }
   async installExtension(extName: string, version = 'latest', entry = '') {
     const url = `${extName}@${version}${entry ? `/${entry}` : entry}`;
     const fullPath = new URL(url, this.resourceUrl);
-    const res = await fetch(fullPath);
-    const data = await res.text();
     const install = async pkgJson => {
       let pkgObj: ExtensionInfo = typeof pkgJson === 'object' ? pkgJson : JSON.parse(pkgJson);
       if (pkgObj.features instanceof Object) {
@@ -47,7 +46,6 @@ export class WebExtensionService {
               if (!(featureVal instanceof Array)) {
                 return;
               }
-
               try {
                 for (var i = 0; i < featureVal.length; i++) {
                   const theme = featureVal[i];
@@ -78,27 +76,8 @@ export class WebExtensionService {
           }
         }
       }
-      if (this.debugExtensions.includes(extName)) {
-        //Transalte debug module
-        try {
-          const lang = this.language.systemLanguage;
-          const path = new URL(`${this.resourceUrl}/${pkgObj.name}/i18n/${lang}.json`);
-          let localePackage = await fetch(path)
-            .then(res => res.json())
-            .catch(e => {});
-          pkgObj.i18n = [
-            {
-              locale: lang,
-              package: localePackage
-            }
-          ];
-          pkgObj = this.translateModule(pkgObj);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
       const oldIndex = this.installedList.findIndex(n => n.name === extName);
+      pkgObj = this.translateModule(pkgObj);
       this.installedList.splice(oldIndex, oldIndex === -1 ? 0 : 1, {
         name: extName,
         disable: false,
@@ -108,19 +87,26 @@ export class WebExtensionService {
       });
       StorageUtil.set(extKey, this.installedList);
     };
+
+    const res = await fetch(fullPath);
+    let pkgJson;
+    if (!this.debugExtensionNames.includes(extName)) {
+      pkgJson = await this.getPkgInfo(extName, version);
+    } else {
+      pkgJson = await this.getDebugExtensionsPkgInfo(extName, version);
+    }
     if (res.status === 200) {
+      const data = await res.text();
       this.insertScript(data);
-      const pkgJson = await this.getPkgInfo(extName, version);
-      install(pkgJson);
+      await install(pkgJson);
       return true;
     } else {
-      const pkgJson = await this.getPkgInfo(extName, version);
       if (!pkgJson) {
-        pcConsole.error(`[Install package] ${data}`);
+        pcConsole.error(`[Install package] ${extName} error`);
         // this.message.info(data);
         return false;
       }
-      install(pkgJson);
+      await install(pkgJson);
       return true;
     }
   }
@@ -133,7 +119,7 @@ export class WebExtensionService {
         case 'theme': {
           extensions.set(item.name, {
             extensionID: item.name,
-            themes: feature
+            theme: feature
           });
           break;
         }
@@ -149,6 +135,27 @@ export class WebExtensionService {
   }
   getExtensions() {
     return this.installedList.map(n => [n.name, n.pkgInfo]);
+  }
+  async getDebugExtensionsPkgInfo(extName, version = 'latest') {
+    let result = await this.getPkgInfo(extName, version);
+    //Transalte debug module
+    try {
+      const lang = this.language.systemLanguage;
+      const path = new URL(`${this.resourceUrl}/${result.name}/i18n/${lang}.json`);
+      let localePackage = await fetch(path)
+        .then(res => res.json())
+        .catch(e => {});
+      result.i18n = [
+        {
+          locale: lang,
+          package: localePackage
+        }
+      ];
+      result.isDebug = true;
+    } catch (e) {
+      console.error(e);
+    }
+    return result;
   }
   unInstallExtension(extName: string): boolean {
     this.installedList = this.installedList.filter(n => n.name !== extName);

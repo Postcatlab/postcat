@@ -6300,10 +6300,10 @@ eo-ng-auto-complete@0.0.112:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-button@0.0.113:
-  version "0.0.113"
-  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.113.tgz#9f164bae392fa2da7eb07fb41ad4d48e7b84b08e"
-  integrity sha512-EXVhFT65zFrCp5Wbt7fUBroQdAjisx8BPG7Xf42e1PZgE2drcJfUr7TkbYGYuS2Qg+vSi5bmxBGVXrDdFpG+BQ==
+eo-ng-button@0.0.114:
+  version "0.0.114"
+  resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.114.tgz#00085b97d56d252944ad1c70f16564b74e9eae5a"
+  integrity sha512-/YEiLL/KNvrTUFA5AwqiTO7MVBfFxPkaEwvXaRq/ERI1boCfL5U178E95QrsqwtK3ardLiiCzqWAVhwXNcnb4w==
   dependencies:
     tslib "^2.3.0"
 
@@ -6335,17 +6335,17 @@ eo-ng-input@0.0.112:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-layout@0.0.113:
-  version "0.0.113"
-  resolved "https://registry.npmmirror.com/eo-ng-layout/-/eo-ng-layout-0.0.113.tgz#33f8ef317d1265c48bca8ee01c7420685c214e34"
-  integrity sha512-jieyxLWl7cZARsWYyzrnFhvxPd4itACJN5/pTRZGvrAtHdPchApZNpwV97IWoLluDVgV+b7gjcyGW/PWbriUkQ==
+eo-ng-layout@0.0.114:
+  version "0.0.114"
+  resolved "https://registry.npmmirror.com/eo-ng-layout/-/eo-ng-layout-0.0.114.tgz#1dfbffdfe27e70e49bdef5c2b21a5fcbb91a2692"
+  integrity sha512-Nr1j1BFG5ShocYOHurA+/V8sCBorkSxcQcv8Ic0jel6+fbgcnW/RxavIprM2vaP/0Rze4ZuCEe3EwtvrasLEdg==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-menu@0.0.112:
-  version "0.0.112"
-  resolved "https://registry.npmmirror.com/eo-ng-menu/-/eo-ng-menu-0.0.112.tgz#5f543d1963e5f15b4dbe1013460d474d3a4fa11d"
-  integrity sha512-zA1ZktL807EXD1dMcxAuFbBGpCyVvWYm6BT9hzDr+WqnFayoBZKyudw10dVfn6jBdZH21GC8vfKKQ6ZWZEJs4Q==
+eo-ng-menu@0.0.113:
+  version "0.0.113"
+  resolved "https://registry.npmmirror.com/eo-ng-menu/-/eo-ng-menu-0.0.113.tgz#ae80720db8cac1cffd92f57bfbbe7f9b74b812c7"
+  integrity sha512-Jqtnd2p020n5+02uWPJLX+6k/fn4+0/8tGcWxLvcTkvYrUNqTX8hx83pbIm53u4OsJ8iwaUekO5MKE9zRXlLSA==
   dependencies:
     tslib "^2.3.0"
 
@@ -6370,17 +6370,17 @@ eo-ng-switch@0.0.111:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-table@0.0.114:
-  version "0.0.114"
-  resolved "https://registry.npmmirror.com/eo-ng-table/-/eo-ng-table-0.0.114.tgz#1bed6515186065ae731f4df8ee769a81ab47ddd5"
-  integrity sha512-xcollY6CV9X12MO8jZ67g5ldeZoiFhvu3KSmXv6lX8uJNlrIYrUjmB+SNaYDHZTMR46KJib7qDeN0ohQlgx2GQ==
+eo-ng-table@0.0.115:
+  version "0.0.115"
+  resolved "https://registry.npmmirror.com/eo-ng-table/-/eo-ng-table-0.0.115.tgz#11bde5972ab436634ba9659358145ea4f1d58f2e"
+  integrity sha512-93wmevTWDjxHkg0Y6DL1EWM5JTgxSznTfVFeQQU1ixaMEEEMs/hAugjODgK+dSGz9eBSeYDyUqosGMNV1NrBPw==
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-tabs@0.0.114:
-  version "0.0.114"
-  resolved "https://registry.npmmirror.com/eo-ng-tabs/-/eo-ng-tabs-0.0.114.tgz#1aec33627224bf57d3b369500676e5f90b9d22ca"
-  integrity sha512-A+8OQezRy06mSCJzwZ/+cV044PMmjeiNbcdXjRAdd4DlfwwntZEdxuTyXgEiCkOsSvy/T6YDsC1YZBblghBa5A==
+eo-ng-tabs@0.0.115:
+  version "0.0.115"
+  resolved "https://registry.npmmirror.com/eo-ng-tabs/-/eo-ng-tabs-0.0.115.tgz#35e1e97729c8a284de98c8e51bbbfd2546701cf4"
+  integrity sha512-YyotPJ3W12cx0lOe0HJKUwswr7jW0DKGZAxsrIpBFVHinTlhKCTh05hrZl+LckZF5NN1iaJ9XiWKv0mItVNg3A==
   dependencies:
     tslib "^2.3.0"
 

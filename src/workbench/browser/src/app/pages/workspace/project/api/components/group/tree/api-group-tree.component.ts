@@ -9,8 +9,8 @@ import { EffectService } from 'eo/workbench/browser/src/app/shared/store/effect.
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { debounce } from 'eo/workbench/browser/src/app/utils/index.utils';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { NzTreeComponent, NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { NzTreeComponent, NzFormatEmitEvent, NzTreeNode, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
+import { delay, filter, Observable, of, Subject, takeUntil } from 'rxjs';
 
 import { ElectronService } from '../../../../../../../core/services';
 import { GroupTreeItem, GroupApiDataModel } from '../../../../../../../shared/models';
