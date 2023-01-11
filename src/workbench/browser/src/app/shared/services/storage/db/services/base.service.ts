@@ -66,10 +66,16 @@ export class BaseService<T> {
 
   @ApiResponse()
   async page(params) {
-    const filterRows = this.filterData(params);
+    let { page = 1, pageSize, ...restParams } = params;
+    const filterRows = this.filterData(restParams);
     const total = await filterRows.count();
-    const { page = 0, pageSize = total, ...restParams } = params;
-    const items = await filterRows.offset(page).limit(pageSize).toArray();
+
+    pageSize ??= total;
+
+    const items = await filterRows
+      .offset(Math.max(0, page - 1))
+      .limit(pageSize)
+      .toArray();
 
     const paginator = {
       page,
