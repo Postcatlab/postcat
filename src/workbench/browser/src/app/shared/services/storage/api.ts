@@ -5,9 +5,9 @@ const http = {
       data: [
         { 'create @post @create': '/api', json: 'apiList, projectUuid, workSpaceUuid' },
         { 'update @put @update': '/api', json: 'api, projectUuid, workSpaceUuid' },
-        { 'delete @delete @delete': '/api/remove', json: 'apiUuid, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/api/remove', body: 'apiUuid, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/api', query: 'projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/list', json: 'api, projectUuid, workSpaceUuid' }
+        { 'list @get @bulkRead': '/api/list', query: 'api, projectUuid, workSpaceUuid' }
       ]
     },
     {
@@ -15,9 +15,9 @@ const http = {
       data: [
         { 'create @post @create': '/mock', json: 'name, apiUuid, createWay, response, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/mock', json: 'id, projectUuid, workSpaceUuid, ...' },
-        { 'list @get @bulkRead': '/mock/list', json: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
-        { 'detail @get @read': '/mock', json: 'id, projectUuid, workSpaceUuid' },
-        { 'delete @delete @delete': '/mock', json: 'id, projectUuid, workSpaceUuid' }
+        { 'list @get @bulkRead': '/mock/list', query: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
+        { 'detail @get @read': '/mock', query: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/mock', body: 'id, projectUuid, workSpaceUuid' }
       ]
     },
     {
@@ -25,8 +25,8 @@ const http = {
       data: [
         { 'create @post @create': '/group', json: 'module, type, name, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/group', json: 'id, projectUuid, workSpaceUuid, ...' },
-        { 'delete @delete @delete': '/group', json: 'id, projectUuid, workSpaceUuid' },
-        { 'detail @get @read': '/group', json: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/group', body: 'id, projectUuid, workSpaceUuid' },
+        { 'detail @get @read': '/group', query: 'id, projectUuid, workSpaceUuid' },
         { 'list @get @bulkRead': '/group/list', query: 'projectUuid, workSpaceUuid' }
       ]
     },
@@ -34,9 +34,9 @@ const http = {
       name: 'apiTestHistory',
       data: [
         { 'create @post @create': '/api/history', json: 'apiUuid, general, request, response, projectUuid, workSpaceUuid' },
-        { 'list @get @bulkRead': '/api/history/list', json: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
-        { 'detail @get @read': '/api/history', json: 'id, projectUuid, workSpaceUuid' },
-        { 'delete @delete @bulkDelete': '/api/history', json: 'projectUuid, workSpaceUuid' }
+        { 'list @get @bulkRead': '/api/history/list', query: 'apiUuid, projectUuid, workSpaceUuid, page, pageSize' },
+        { 'detail @get @read': '/api/history', query: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @bulkDelete': '/api/history', body: 'projectUuid, workSpaceUuid' }
       ]
     },
     {
@@ -44,7 +44,7 @@ const http = {
       data: [
         { 'create @post @create': '/environment', json: 'name, projectUuid, workSpaceUuid, ...' },
         { 'update @put @update': '/environment', json: 'id, name, projectUuid, workSpaceUuid, ...' },
-        { 'delete @delete @delete': '/environment', json: 'id, projectUuid, workSpaceUuid' },
+        { 'delete @delete @delete': '/environment', body: 'id, projectUuid, workSpaceUuid' },
         { 'detail @get @read': '/environment', query: 'id, projectUuid, workSpaceUuid' },
         { 'list @get @bulkRead': '/environment/list', query: 'projectUuid, workSpaceUuid' }
       ]
@@ -67,14 +67,15 @@ const http = {
       data: [
         { 'create @post @create': '/workspaces', json: 'titles' }, // 批量创建空间
         { 'update @put @update': '/workspaces', json: 'title, workSpaceUuid' },
-        { 'delete @delete @delete': '/workspaces', json: 'workSpaceUuids' },
+        { 'delete @delete @delete': '/workspaces', body: 'workSpaceUuids' },
         { 'searchMember @get': '/workspaces/users', query: 'username, page, pageSize, workSpaceUuid' },
         { 'addMember @post': '/workspaces/users', json: 'userIds, workSpaceUuid' },
-        { 'removeMember @delete': '/workspaces/users', json: 'userIds, workSpaceUuid' },
-        { 'memberQuit @delete': '/workspaces/users/quit', json: 'workSpaceUuid' },
+        { 'removeMember @delete': '/workspaces/users', body: 'userIds, workSpaceUuid' },
+        { 'memberQuit @delete': '/workspaces/users/quit', body: 'workSpaceUuid' },
         { 'addMemberRole @post': '/workspaces/users/roles', json: 'userRole, workSpaceUuid' },
-        { 'searchMember @get': '/workspaces/users/roles', json: 'workSpaceUuid' },
-        { 'list @get @bulkRead': '/workspaces' }
+        { 'getMemberPermiss @get': '/workspaces/users/roles', query: 'workSpaceUuid' },
+        { 'list @get @bulkRead': '/workspaces' },
+        { 'unkown @get': '/workspaces' }
       ]
     },
     {

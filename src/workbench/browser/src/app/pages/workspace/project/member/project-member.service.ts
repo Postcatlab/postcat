@@ -91,8 +91,10 @@ export class ProjectMemberService {
     return new Promise(resolve => {
       this.remote
         .api_workspaceSearchMember({
-          workspaceID: this.store.getCurrentWorkspaceID,
-          username: search.trim()
+          workSpaceUuid: this.store.getCurrentWorkspaceID,
+          username: search.trim(),
+          page: 1,
+          pageSize: 20
         })
         .then(([data, err]: any) => {
           if (err) {

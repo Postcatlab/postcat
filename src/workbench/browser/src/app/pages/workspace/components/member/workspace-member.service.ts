@@ -1,6 +1,7 @@
 import { compileNgModule } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { autorun } from 'mobx';
 
 import { MEMBER_MUI } from '../../../../shared/models/member.model';
@@ -13,7 +14,7 @@ export class WorkspaceMemberService {
   role: 'Owner' | 'Editor' | string;
   roleMUI = MEMBER_MUI;
   constructor(
-    private remote: RemoteService,
+    private api: ApiService,
     private store: StoreService,
     private effect: EffectService,
     private message: EoNgFeedbackMessageService
@@ -24,7 +25,7 @@ export class WorkspaceMemberService {
     });
   }
   async addMember(ids) {
-    return await this.remote.api_workspaceAddMember({
+    return await this.api.api_workspaceAddMember({
       workspaceID: this.workspaceID,
       userIDs: ids
     });
@@ -41,7 +42,7 @@ export class WorkspaceMemberService {
         }
       ];
     } else {
-      const [data, error]: any = await this.remote.api_workspaceMember({
+      const [data, error]: any = await this.api.api_workspaceSearchMember({
         workspaceID: this.workspaceID
       });
       result = data || [];
@@ -55,7 +56,7 @@ export class WorkspaceMemberService {
     return result;
   }
   async removeMember(item) {
-    return await this.remote.api_workspaceRemoveMember({
+    return await this.api.api_workspaceRemoveMember({
       workspaceID: this.workspaceID,
       userIDs: [item.id]
     });
@@ -68,7 +69,7 @@ export class WorkspaceMemberService {
       );
       return [null, 'warning'];
     }
-    const [data, err]: any = await this.remote.api_workspaceMemberQuit({
+    const [data, err]: any = await this.api.api_workspaceMemberQuit({
       workspaceID: this.workspaceID
     });
     if (!err) {
@@ -81,7 +82,7 @@ export class WorkspaceMemberService {
   }
   async changeRole(item) {
     const roleID = item.role.id === 1 ? 2 : 1;
-    const [data, err]: any = await this.remote.api_workspaceSetRole({
+    const [data, err]: any = await this.api.api_workspaceUnkown({
       workspaceID: this.workspaceID,
       roleID: roleID,
       memberID: item.id
@@ -95,7 +96,7 @@ export class WorkspaceMemberService {
   }
   searchUser(search) {
     return new Promise(resolve => {
-      this.remote.api_userSearch({ username: search.trim() }).then(([data, err]: any) => {
+      this.api.api_userSearch({ username: search.trim() }).then(([data, err]: any) => {
         if (err) {
           resolve([]);
           return;

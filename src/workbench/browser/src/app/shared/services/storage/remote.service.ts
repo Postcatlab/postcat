@@ -88,19 +88,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/api/remove`, { apiUuid, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c apiData:delete - api_apiDataDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/api/remove`, {
+          body: { apiUuid, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c apiData:delete - api_apiDataDelete 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c apiData:delete - api_apiDataDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c apiData:delete - api_apiDataDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -150,19 +154,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.get(`${prefix}/api/list`, { api, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c apiData:list - api_apiDataList 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .get(`${prefix}/api/list`, {
+          params: { api, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c apiData:list - api_apiDataList 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c apiData:list - api_apiDataList 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c apiData:list - api_apiDataList 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -275,11 +283,7 @@ export class RemoteService {
     return new Promise(resolve => {
       this.http
         .get(`${prefix}/mock/list`, {
-          apiUuid,
-          projectUuid,
-          workSpaceUuid,
-          page,
-          pageSize
+          params: { apiUuid, projectUuid, workSpaceUuid, page, pageSize }
         })
         .subscribe({
           next: ({ status, data }: any) => {
@@ -312,19 +316,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.get(`${prefix}/mock`, { id, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c mock:detail - api_mockDetail 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .get(`${prefix}/mock`, {
+          params: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c mock:detail - api_mockDetail 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c mock:detail - api_mockDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c mock:detail - api_mockDetail 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -343,19 +351,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/mock`, { id, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c mock:delete - api_mockDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/mock`, {
+          body: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c mock:delete - api_mockDelete 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c mock:delete - api_mockDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c mock:delete - api_mockDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -453,19 +465,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/group`, { id, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c group:delete - api_groupDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/group`, {
+          body: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c group:delete - api_groupDelete 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c group:delete - api_groupDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c group:delete - api_groupDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -484,19 +500,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.get(`${prefix}/group`, { id, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c group:detail - api_groupDetail 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .get(`${prefix}/group`, {
+          params: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c group:detail - api_groupDetail 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c group:detail - api_groupDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c group:detail - api_groupDetail 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -608,11 +628,7 @@ export class RemoteService {
     return new Promise(resolve => {
       this.http
         .get(`${prefix}/api/history/list`, {
-          apiUuid,
-          projectUuid,
-          workSpaceUuid,
-          page,
-          pageSize
+          params: { apiUuid, projectUuid, workSpaceUuid, page, pageSize }
         })
         .subscribe({
           next: ({ status, data }: any) => {
@@ -645,19 +661,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.get(`${prefix}/api/history`, { id, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .get(`${prefix}/api/history`, {
+          params: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c apiTestHistory:detail - api_apiTestHistoryDetail 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -672,19 +692,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/api/history`, { projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/api/history`, {
+          body: { projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c apiTestHistory:delete - api_apiTestHistoryDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -784,19 +808,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/environment`, { id, projectUuid, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c environment:delete - api_environmentDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/environment`, {
+          body: { id, projectUuid, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c environment:delete - api_environmentDelete 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c environment:delete - api_environmentDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c environment:delete - api_environmentDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -1080,19 +1108,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/workspaces`, { workSpaceUuids }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:delete - api_workspaceDelete 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/workspaces`, {
+          body: { workSpaceUuids }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c workspace:delete - api_workspaceDelete 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c workspace:delete - api_workspaceDelete 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:delete - api_workspaceDelete 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -1173,19 +1205,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/workspaces/users`, { userIds, workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/workspaces/users`, {
+          body: { userIds, workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:removeMember - api_workspaceRemoveMember 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -1196,19 +1232,23 @@ export class RemoteService {
     }
 
     return new Promise(resolve => {
-      this.http.delete(`${prefix}/workspaces/users/quit`, { workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .delete(`${prefix}/workspaces/users/quit`, {
+          body: { workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:memberQuit - api_workspaceMemberQuit 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -1239,26 +1279,30 @@ export class RemoteService {
     });
   }
 
-  api_workspaceSearchMember({ workSpaceUuid }, prefix = '') {
+  api_workspaceGetMemberPermiss({ workSpaceUuid }, prefix = '') {
     if (workSpaceUuid == null) {
-      console.log('%c Error: workspace - searchMember 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
+      console.log('%c Error: workspace - getMemberPermiss 接口 缺失参数 workSpaceUuid %c', ErrorStyle, '');
       return;
     }
 
     return new Promise(resolve => {
-      this.http.get(`${prefix}/workspaces/users/roles`, { workSpaceUuid }).subscribe({
-        next: ({ status, data }: any) => {
-          console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求成功 %c', SuccessStyle, '');
-          if ([200, 201].includes(status)) {
-            return resolve([data, null]);
+      this.http
+        .get(`${prefix}/workspaces/users/roles`, {
+          params: { workSpaceUuid }
+        })
+        .subscribe({
+          next: ({ status, data }: any) => {
+            console.log('%c workspace:getMemberPermiss - api_workspaceGetMemberPermiss 接口请求成功 %c', SuccessStyle, '');
+            if ([200, 201].includes(status)) {
+              return resolve([data, null]);
+            }
+            resolve([null, { status, ...data }]);
+          },
+          error: error => {
+            console.log('%c workspace:getMemberPermiss - api_workspaceGetMemberPermiss 接口请求失败 %c', ErrorStyle, '');
+            resolve([null, error]);
           }
-          resolve([null, { status, ...data }]);
-        },
-        error: error => {
-          console.log('%c workspace:searchMember - api_workspaceSearchMember 接口请求失败 %c', ErrorStyle, '');
-          resolve([null, error]);
-        }
-      });
+        });
     });
   }
 
@@ -1274,6 +1318,24 @@ export class RemoteService {
         },
         error: error => {
           console.log('%c workspace:list - api_workspaceList 接口请求失败 %c', ErrorStyle, '');
+          resolve([null, error]);
+        }
+      });
+    });
+  }
+
+  api_workspaceUnkown(params, prefix = '') {
+    return new Promise(resolve => {
+      this.http.get(`${prefix}/workspaces`, params).subscribe({
+        next: ({ status, data }: any) => {
+          console.log('%c workspace:unkown - api_workspaceUnkown 接口请求成功 %c', SuccessStyle, '');
+          if ([200, 201].includes(status)) {
+            return resolve([data, null]);
+          }
+          resolve([null, { status, ...data }]);
+        },
+        error: error => {
+          console.log('%c workspace:unkown - api_workspaceUnkown 接口请求失败 %c', ErrorStyle, '');
           resolve([null, error]);
         }
       });

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EoNgFeedbackMessageService } from 'eo-ng-feedback';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { autorun } from 'mobx';
 
 import { ModalService } from '../../../../shared/services/modal.service';
-import { RemoteService } from '../../../../shared/services/storage/remote.service';
 import { EffectService } from '../../../../shared/store/effect.service';
 import { StoreService } from '../../../../shared/store/state.service';
 import { eoDeepCopy } from '../../../../utils/index.utils';
@@ -53,7 +53,7 @@ export class WorkspaceSettingComponent {
   constructor(
     private fb: FormBuilder,
     private message: EoNgFeedbackMessageService,
-    private api: RemoteService,
+    private api: ApiService,
     private store: StoreService,
     private modal: ModalService,
     private effect: EffectService
@@ -90,7 +90,7 @@ export class WorkspaceSettingComponent {
       nzOkDanger: true,
       nzOnOk: async () => {
         const [data, err]: any = await this.api.api_workspaceDelete({
-          workspaceID: wid
+          workSpaceUuids: wid
         });
         if (err) {
           this.message.error($localize`Delete failed !`);
@@ -108,7 +108,7 @@ export class WorkspaceSettingComponent {
     this.isSaveBtnLoading = true;
     const id = this.store.getCurrentWorkspaceID;
     const { title } = this.validateForm.value;
-    const [data, err]: any = await this.api.api_workspaceEdit({
+    const [data, err]: any = await this.api.api_workspaceUpdate({
       workspaceID: id,
       title
     });

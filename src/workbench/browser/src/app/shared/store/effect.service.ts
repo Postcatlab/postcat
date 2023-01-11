@@ -5,8 +5,8 @@ import { LanguageService } from 'eo/workbench/browser/src/app/core/services/lang
 import { ProjectApiService } from 'eo/workbench/browser/src/app/pages/workspace/project/api/api.service';
 import { MessageService } from 'eo/workbench/browser/src/app/shared/services/message';
 import { IndexedDBStorage } from 'eo/workbench/browser/src/app/shared/services/storage/IndexedDB/lib';
+import { ApiService } from 'eo/workbench/browser/src/app/shared/services/storage/api.service';
 import { StorageRes, StorageResStatus } from 'eo/workbench/browser/src/app/shared/services/storage/index.model';
-import { RemoteService } from 'eo/workbench/browser/src/app/shared/services/storage/remote.service';
 import { StorageService } from 'eo/workbench/browser/src/app/shared/services/storage/storage.service';
 import { StoreService } from 'eo/workbench/browser/src/app/shared/store/state.service';
 import { APP_CONFIG } from 'eo/workbench/browser/src/environments/environment';
@@ -21,7 +21,7 @@ export class EffectService {
     private storage: StorageService,
     private indexedDBStorage: IndexedDBStorage,
     private store: StoreService,
-    private http: RemoteService,
+    private api: ApiService,
     private message: MessageService,
     private router: Router,
     private lang: LanguageService,
@@ -113,7 +113,7 @@ export class EffectService {
     // TODO localworkspace no need to set permission
     {
       // * update workspace auth
-      const [data, err]: any = await this.http.api_workspacePermission({ workspaceID: this.store.getCurrentWorkspaceID });
+      const [data, err]: any = await this.api.api_workspaceUnkown({ workspaceID: this.store.getCurrentWorkspaceID });
       if (err) {
         return;
       }
@@ -142,7 +142,7 @@ export class EffectService {
   async getProjectPermission() {
     //TODO localworkspace no need to set permission
     // * update project auth
-    const [data, err]: any = await this.http.api_projectPermission({ projectID: this.store.getCurrentProjectID });
+    const [data, err]: any = await this.api.api_projectPermission({ projectID: this.store.getCurrentProjectID });
     if (err) {
       return;
     }
@@ -161,7 +161,7 @@ export class EffectService {
     await this.getProjectPermission();
   }
   async updateWorkspaces() {
-    const [list, wErr]: any = await this.http.api_workspaceList({});
+    const [list, wErr]: any = await this.api.api_workspaceList({});
     if (wErr) {
       if (wErr.status === 401) {
         this.message.send({ type: 'clear-user', data: {} });
@@ -214,7 +214,7 @@ export class EffectService {
 
   async updateShareLink(): Promise<string> {
     // * update share link
-    const [res, err]: any = await this.http.api_shareCreateShare({});
+    const [res, err]: any = await this.api.api_shareCreateShare({});
     if (err) {
       return 'Error ... ';
     }
@@ -230,7 +230,7 @@ export class EffectService {
   updateEnvList() {
     return new Promise(resolve => {
       if (this.store.isShare) {
-        this.http
+        this.api
           .api_shareDocGetEnv({
             uniqueID: this.store.getShareID
           })

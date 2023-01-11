@@ -107,31 +107,31 @@ export class ApiService {
   }
 
   api_userReadInfo(params) {
-    this.remote.api_userReadInfo(params);
+    return this.remote.api_userReadInfo(params);
   }
 
   api_userUpdateInfo(params) {
-    this.remote.api_userUpdateInfo(params);
+    return this.remote.api_userUpdateInfo(params);
   }
 
   api_userUpdatePassword(params) {
-    this.remote.api_userUpdatePassword(params);
+    return this.remote.api_userUpdatePassword(params);
   }
 
   api_userLogin(params) {
-    this.remote.api_userLogin(params);
+    return this.remote.api_userLogin(params);
   }
 
   api_userRefreshToken(params) {
-    this.remote.api_userRefreshToken(params);
+    return this.remote.api_userRefreshToken(params);
   }
 
   api_userLogout(params) {
-    this.remote.api_userLogout(params);
+    return this.remote.api_userLogout(params);
   }
 
   api_userSearch(params) {
-    this.remote.api_userSearch(params);
+    return this.remote.api_userSearch(params);
   }
 
   api_workspaceCreate(params) {
@@ -147,98 +147,102 @@ export class ApiService {
   }
 
   api_workspaceSearchMember(params) {
-    this.remote.api_workspaceSearchMember(params);
+    return this.remote.api_workspaceSearchMember(params);
   }
 
   api_workspaceAddMember(params) {
-    this.remote.api_workspaceAddMember(params);
+    return this.remote.api_workspaceAddMember(params);
   }
 
   api_workspaceRemoveMember(params) {
-    this.remote.api_workspaceRemoveMember(params);
+    return this.remote.api_workspaceRemoveMember(params);
   }
 
   api_workspaceMemberQuit(params) {
-    this.remote.api_workspaceMemberQuit(params);
+    return this.remote.api_workspaceMemberQuit(params);
   }
 
   api_workspaceAddMemberRole(params) {
-    this.remote.api_workspaceAddMemberRole(params);
+    return this.remote.api_workspaceAddMemberRole(params);
   }
 
-  api_workspaceSearchMember(params) {
-    this.remote.api_workspaceSearchMember(params);
+  api_workspaceGetMemberPermiss(params) {
+    return this.remote.api_workspaceGetMemberPermiss(params);
   }
 
   api_workspaceList(params) {
     return this.store.isLocal ? this.local.api_workspaceList(params) : this.remote.api_workspaceList(params);
   }
 
+  api_workspaceUnkown(params) {
+    return this.remote.api_workspaceUnkown(params);
+  }
+
   api_projectCreate(params) {
-    this.remote.api_projectCreate(params);
+    return this.remote.api_projectCreate(params);
   }
 
   api_projectUpdate(params) {
-    this.remote.api_projectUpdate(params);
+    return this.remote.api_projectUpdate(params);
   }
 
   api_projectDelete(params) {
-    this.remote.api_projectDelete(params);
+    return this.remote.api_projectDelete(params);
   }
 
   api_projectExport(params) {
-    this.remote.api_projectExport(params);
+    return this.remote.api_projectExport(params);
   }
 
   api_projectAddMember(params) {
-    this.remote.api_projectAddMember(params);
+    return this.remote.api_projectAddMember(params);
   }
 
   api_projectDelMember(params) {
-    this.remote.api_projectDelMember(params);
+    return this.remote.api_projectDelMember(params);
   }
 
   api_projectMember(params) {
-    this.remote.api_projectMember(params);
+    return this.remote.api_projectMember(params);
   }
 
   api_projectMemberQuit(params) {
-    this.remote.api_projectMemberQuit(params);
+    return this.remote.api_projectMemberQuit(params);
   }
 
   api_projectSetRole(params) {
-    this.remote.api_projectSetRole(params);
+    return this.remote.api_projectSetRole(params);
   }
 
   api_projectRoleList(params) {
-    this.remote.api_projectRoleList(params);
+    return this.remote.api_projectRoleList(params);
   }
 
   api_projectPermission(params) {
-    this.remote.api_projectPermission(params);
+    return this.remote.api_projectPermission(params);
   }
 
   api_shareCreateShare(params) {
-    this.remote.api_shareCreateShare(params);
+    return this.remote.api_shareCreateShare(params);
   }
 
   api_shareGetShareList(params) {
-    this.remote.api_shareGetShareList(params);
+    return this.remote.api_shareGetShareList(params);
   }
 
   api_shareDeleteShare(params) {
-    this.remote.api_shareDeleteShare(params);
+    return this.remote.api_shareDeleteShare(params);
   }
 
   api_shareDocGetAllApi(params) {
-    this.remote.api_shareDocGetAllApi(params);
+    return this.remote.api_shareDocGetAllApi(params);
   }
 
   api_shareDocGetApiDetail(params) {
-    this.remote.api_shareDocGetApiDetail(params);
+    return this.remote.api_shareDocGetApiDetail(params);
   }
 
   api_shareDocGetEnv(params) {
-    this.remote.api_shareDocGetEnv(params);
+    return this.remote.api_shareDocGetEnv(params);
   }
 }
