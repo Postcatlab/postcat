@@ -6300,7 +6300,7 @@ eo-ng-auto-complete@0.0.112:
   dependencies:
     tslib "^2.3.0"
 
-eo-ng-button@0.0.114:
+eo-ng-button@0.0.115:
   version "0.0.114"
   resolved "https://registry.npmmirror.com/eo-ng-button/-/eo-ng-button-0.0.114.tgz#00085b97d56d252944ad1c70f16564b74e9eae5a"
   integrity sha512-/YEiLL/KNvrTUFA5AwqiTO7MVBfFxPkaEwvXaRq/ERI1boCfL5U178E95QrsqwtK3ardLiiCzqWAVhwXNcnb4w==

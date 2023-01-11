@@ -5,7 +5,7 @@ import { registerLocaleData } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
-import { NgModule, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WarningFill } from '@ant-design/icons-angular/icons';
@@ -97,8 +97,8 @@ export class AppModule {
     await this.extensionService.init();
     this.theme.queryExtensionThemes();
     Promise.all([promiseSystem]).then(() => {
-      console.log('fixedThemeIfNotValid');
       this.theme.afterAllThemeLoad();
+      this.theme.watchInstalledExtensionsChange();
     });
   }
 }

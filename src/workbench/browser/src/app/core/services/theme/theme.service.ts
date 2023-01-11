@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { ExtensionService } from 'eo/workbench/browser/src/app/shared/services/extensions/extension.service';
 import { kebabCase } from 'lodash-es';
 
 import { SettingService } from '../../../modules/system-setting/settings.service';
 import { ExtensionInfo } from '../../../shared/models/extension-manager';
 import { Message, MessageService } from '../../../shared/services/message';
 import StorageUtil from '../../../utils/storage/Storage';
+import { ThemeExtensionService } from './theme-extension.service';
 import { ThemeVariableService } from './theme-variable.service';
 import { SYSTEM_THEME, SystemUIThemeType, SystemThemeItems } from './theme.constant';
 import { ThemeColors } from './theme.model';
@@ -16,38 +16,26 @@ import { ThemeColors } from './theme.model';
 })
 export class ThemeService {
   themes: SystemThemeItems[] = [];
-  private module = {
-    baseTheme: {
-      path: '',
-      injectDirection: 'prepend',
-      key: 'theme_base' //for storage and id prefix
-    },
-    theme: {
-      path: './assets/theme/',
-      injectDirection: 'append',
-      key: 'theme_core',
-      default: 'pc'
-    }
-  };
   coreThemes: SystemThemeItems[];
   /**
    * @description user select color theme
    */
   currentThemeID: SystemUIThemeType;
-  subscribe;
+  private systemThemePath = '/extensions/themes/';
+  private defaultTheme = 'pc';
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private extension: ExtensionService,
+    private themeExtension: ThemeExtensionService,
     private themeVariable: ThemeVariableService,
     private setting: SettingService,
     private message: MessageService
   ) {
-    this.currentThemeID = this.setting.get('workbench.colorTheme') || this.module.theme.default;
+    this.currentThemeID = this.setting.get('workbench.colorTheme') || this.defaultTheme;
     this.coreThemes = this.getCoreThemes();
   }
   async initTheme() {
     await this.querySystemThemes();
-    let currentTheme = StorageUtil.get('pc_theme') || this.themes.find(val => val.id === this.module.theme.default);
+    let currentTheme = StorageUtil.get('pc_theme') || this.themes.find(val => val.id === this.defaultTheme);
     this.changeTheme(currentTheme);
     if (currentTheme.id === 'pc-debug') {
       this.fixedThemeIfNotValid();
@@ -59,7 +47,6 @@ export class ThemeService {
   afterAllThemeLoad() {
     this.fixedThemeIfNotValid();
     this.sortThemes();
-    this.watchInstalledExtensionsChange();
   }
 
   changeTheme(theme) {
@@ -71,27 +58,8 @@ export class ThemeService {
     this.changeEditorTheme(theme);
   }
   queryExtensionThemes() {
-    const extensions = this.getExtensionThemes();
+    const extensions = this.themeExtension.getExtensionThemes(this.coreThemes);
     this.themes.push(...extensions);
-  }
-  private getExtensionThemes() {
-    const result = [];
-    const features = this.extension.getValidExtensionsByFature('theme');
-    features.forEach((feature, extensionID) => {
-      feature.theme.forEach(theme => {
-        result.push({
-          label: theme.label,
-          id: this.getExtensionID(extensionID, theme.id),
-          isExtension: true,
-          baseTheme: theme.baseTheme,
-          colors: this.themeVariable.getColors(
-            theme.colors,
-            this.coreThemes.find(val => val.id === theme.baseTheme || val.id === theme.id) || this.coreThemes[0]
-          )
-        });
-      });
-    });
-    return result;
   }
   changeEditorTheme(currentTheme = StorageUtil.get('pc_theme')) {
     const baseTheme = currentTheme.baseTheme || currentTheme.id;
@@ -131,7 +99,7 @@ export class ThemeService {
           result = themeCache[theme.path];
         } else {
           try {
-            const path = new URL(theme.path, `${window.location.origin}/extensions/core-themes/`).href.replace(
+            const path = new URL(theme.path, `${window.location.origin}${this.systemThemePath}`).href.replace(
               `${window.location.origin}/`,
               ''
             );
@@ -207,7 +175,7 @@ export class ThemeService {
     //check currentThemeID valid
     let validTheme = this.themes.find(theme => theme.id === this.currentThemeID);
     if (!validTheme) {
-      validTheme = this.themes.find(theme => theme.id === this.module.theme.default);
+      validTheme = this.themes.find(theme => theme.id === this.defaultTheme);
     }
 
     //Current theme storage is not equal to the current theme id
@@ -218,14 +186,14 @@ export class ThemeService {
       this.changeTheme(currentTheme);
     }
   }
-  private watchInstalledExtensionsChange() {
-    if (this.subscribe) return;
-    this.subscribe = this.message.get().subscribe((inArg: Message) => {
+  watchInstalledExtensionsChange() {
+    this.message.get().subscribe((inArg: Message) => {
       if (inArg.type === 'installedExtensionsChange') {
-        //Get the newest theme list
+        //Rest newest theme list
         this.themes = this.themes.filter(val => !val.isExtension);
         this.queryExtensionThemes();
         this.afterAllThemeLoad();
+
         switch (inArg.data.action) {
           case 'enable':
           case 'install': {
@@ -235,7 +203,7 @@ export class ThemeService {
 
             //Change theme after install/enable extension
             const themeID = extension.features.theme[0].id;
-            const id = this.getExtensionID(name, themeID);
+            const id = this.themeExtension.getExtensionID(name, themeID);
             const theme = this.themes.find(val => val.id === id);
             if (!theme) return;
             this.changeTheme(theme);
@@ -247,8 +215,5 @@ export class ThemeService {
         }
       }
     });
-  }
-  getExtensionID(name, themeID) {
-    return `${name}_${themeID}`;
   }
 }

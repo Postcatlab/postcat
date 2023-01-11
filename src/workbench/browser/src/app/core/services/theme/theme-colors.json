@@ -44,8 +44,10 @@
   "layoutHeaderBackground": "",
   "layoutSidebarText": "",
   "layoutSidebarBackground": "",
+
   "layoutFooterText": "",
   "layoutFooterBackground": "",
+  "layoutFooterItemHoverBackground": "",
 
   "icon": "",
   "iconText": "",

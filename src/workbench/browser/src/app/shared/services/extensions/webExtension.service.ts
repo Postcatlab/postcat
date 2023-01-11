@@ -9,6 +9,8 @@ import { WebService } from '../../../core/services';
 import { LanguageService } from '../../../core/services/language/language.service';
 import { ExtensionInfo } from '../../models/extension-manager';
 
+import { resolveObjectURL } from 'buffer';
+
 type ExtensionItem = {
   name: string;
   version: string;
@@ -145,6 +147,7 @@ export class WebExtensionService {
       let localePackage = await fetch(path)
         .then(res => res.json())
         .catch(e => {});
+      if (!result) return result;
       result.i18n = [
         {
           locale: lang,

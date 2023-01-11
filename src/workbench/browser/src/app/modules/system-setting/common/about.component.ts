@@ -5,7 +5,7 @@ import { ElectronService } from '../../../core/services';
   selector: 'eo-about',
   template: `
     <div class="about flex flex-col justify-center items-center">
-      <img loading="lazy" class="logo mt-[30px] w-[150px] h-[150px]" src="assets/images/logo.svg" />
+      <eo-logo class="logo mt-[30px] w-[150px] h-[150px]"></eo-logo>
       <p class="font-bold mt-[15px] text-[16px]">Postcat</p>
       <p class="">V{{ versionInfo?.version }}</p>
       <!-- star -->

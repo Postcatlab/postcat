@@ -12,7 +12,11 @@ const allThemeColors: ThemeColors = _allThemeColors;
   providedIn: 'root'
 })
 export class ThemeVariableService {
-  constructor() {}
+  constructor() {
+    // let color = Color('#fafafa').darken(0.03);
+    // console.log('%c FILTER_COLOR:', `background:${'#fafafa'}`, '#fafafa');
+    // console.log('%c FILTER_COLOR:', `background:${color.rgb().string()}`, color.rgb().string());
+  }
   private initColorRule() {
     const colorsDefaultRule: ThemeColorRule[] = [
       {
@@ -21,6 +25,16 @@ export class ThemeVariableService {
           {
             action: 'replace',
             target: ['menuItemText']
+          }
+        ]
+      },
+      {
+        source: 'layoutFooterText',
+        rule: [
+          {
+            action: 'filter',
+            alpha: 0.2,
+            target: ['layoutFooterItemHoverBackground']
           }
         ]
       },
@@ -278,7 +292,8 @@ export class ThemeVariableService {
           {
             action: 'replace',
             target: ['tableHeaderBackground', 'collapseHeaderBackground', 'tabsCardBackground', 'menuInlineSubmenuBackground']
-          }
+          },
+          { action: 'darken', alpha: 0.03, target: ['itemHoverBackground', 'itemActiveBackground', 'layoutFooterItemHoverBackground'] }
         ]
       },
       {
@@ -306,6 +321,7 @@ export class ThemeVariableService {
               'tableRowHoverBackground',
               'treeHoverBackground',
               'buttonDefaultHoverBackground',
+              'layoutFooterItemHoverBackground',
               'buttonTextHoverBackground'
             ]
           }
@@ -381,7 +397,6 @@ export class ThemeVariableService {
         }
       ]
     });
-
     //Toast/Alert
     const alertColors: ThemeColorSingleRule[] = [
       {
@@ -429,6 +444,19 @@ export class ThemeVariableService {
         });
         break;
       }
+      case 'darken': {
+        try {
+          const color = Color(colorValue);
+          rule.target.forEach(keyName => {
+            if (result[keyName]) return;
+            result[keyName] = color.darken(rule.alpha).string();
+          });
+          // console.log('%c FILTER_COLOR:', `background:${color.alpha(rule.alpha).string()}`, color.alpha(rule.alpha).string());
+        } catch (e) {
+          pcConsole.error(`Colors can't ${colorKey} value parse error`);
+        }
+        break;
+      }
       case 'filter': {
         try {
           const color = Color(colorValue);
@@ -452,6 +480,9 @@ export class ThemeVariableService {
     rules.forEach(singleRule => {
       if (singleRule.default && !(result[singleRule.target] || result[singleRule.source])) {
         result[singleRule.target || singleRule.source] = singleRule.default;
+      }
+      if (singleRule.source === 'barBackground' && result.primary === '#264653') {
+        pcConsole.log(singleRule, eoDeepCopy(result));
       }
       if (singleRule.rule) {
         singleRule.rule.forEach(rule => {

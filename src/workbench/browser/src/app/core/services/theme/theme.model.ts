@@ -47,6 +47,7 @@ export type ThemeColors = {
 
   layoutFooterText?: string;
   layoutFooterBackground?: string;
+  layoutFooterItemHoverBackground?: string;
 
   icon?: string;
   iconText?: string;

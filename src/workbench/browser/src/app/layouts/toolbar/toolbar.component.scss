@@ -12,12 +12,11 @@
   z-index: 20;
   color: var(--layout-footer-text-color);
 
-  i {
-    font-size: 24px;
-    color: rgb(0 0 0 / 50%);
-  }
-}
+  .ant-btn-text {
+    color: var(--layout-footer-text-color);
 
-.iconfont {
-  line-height: 22px;
+    &:hover {
+      background-color: var(--layout-footer-item-hover-background-color);
+    }
+  }
 }
